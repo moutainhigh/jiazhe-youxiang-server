@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.web.controller;
 
+import com.jiazhe.youxiang.base.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -22,22 +23,9 @@ import java.io.IOException;
  */
 @Controller
 @RequestMapping("/main")
-public class MainController {
+public class MainController extends BaseController{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
-
-    @RequestMapping("/error")
-    public String login(String username, String password, HttpSession session, HttpServletResponse response) throws IOException {
-        LOGGER.info("error");
-        return "/error/403";
-    }
-
-    @RequestMapping("/index")
-    public String index(){
-        LOGGER.info("index");
-        return "/login/index";
-    }
-
 
     @RequestMapping(value = "/main")
     public String main() {
