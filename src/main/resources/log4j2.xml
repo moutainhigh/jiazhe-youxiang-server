@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" packages="org.apache.logging.log4j.core,net.kencochrane.raven.log4j2">
+    <Appenders>
+        <Raven name="Sentry">
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY" />
+            <dsn>
+                ${sentry.dsn}
+            </dsn>
+        </Raven>
+        <Console name="Stdout" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
+        </Console>
+        <RollingFile name="AllLog" fileName="${jetty.logs}/all.log" filePattern="${jetty.logs}/all.log.%d{yyyy-MM-dd}.gz">
+            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+        <RollingFile name="Error" fileName="${jetty.logs}/error.log" filePattern="${jetty.logs}/error.log.%d{yyyy-MM-dd}.gz">
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY" />
+            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="DB" fileName="${jetty.logs}/db.log" filePattern="${jetty.logs}/db.log.%d{yyyy-MM-dd}.gz">
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY" />
+            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="JMonitor" fileName="${jetty.logs}/jmonitor.log" filePattern="${jetty.logs}/jmonitor.log.%d{yyyy-MM-dd}.gz">
+            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="JMonitorStore" fileName="${jetty.logs}/jmonitor.logstore.log" filePattern="${jetty.logs}/jmonitor.logstore.log.%d{yyyy-MM-dd}.gz">
+            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="XuanWu" fileName="${jetty.logs}/xuanwu.log" filePattern="${jetty.logs}/xuanwu.log.%d{yyyy-MM-dd}.gz">
+            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="Out_Request" fileName="${jetty.logs}/outRequest.log" filePattern="${jetty.logs}/outRequest.log.%d{yyyy-MM-dd}.gz">
+            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="Dubbo" fileName="${jetty.logs}/dubbo.log" filePattern="${jetty.logs}/dubbo.log.%d{yyyy-MM-dd}.gz">
+            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="ScheduleJob" fileName="${jetty.logs}/schedulejob.log" filePattern="${jetty.logs}/schedulejob.log.%d{yyyy-MM-dd}.gz">
+            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+
+        <MmqAppender name="mmqAppender" env="${log.group}">
+            <XuanwuLayout/>
+        </MmqAppender>
+
+    </Appenders>
+
+    <Loggers>
+        <Root level="INFO" includeLocation="true">
+            <AppenderRef ref="Stdout" />
+            <AppenderRef ref="Error" />
+            <AppenderRef ref="Sentry" />
+            <AppenderRef ref="AllLog" />
+            <AppenderRef ref="catAppender" />
+            <AppenderRef ref="mmqAppender"/>
+        </Root>
+
+        <Logger name="db" level="INFO" includeLocation="true" additivity="false">
+            <AppenderRef ref="DB" />
+            <AppenderRef ref="Sentry" />
+        </Logger>
+
+        <Logger name="jmonitor" level="INFO" includeLocation="true" additivity="false">
+            <AppenderRef ref="JMonitor" />
+        </Logger>
+
+        <Logger name="jmonitorlogstore" level="INFO" includeLocation="true" additivity="false">
+            <AppenderRef ref="JMonitorStore" />
+        </Logger>
+
+        <Logger name="com.maoyan.xuanwu.hanlinyuan.server.dao" level="DEBUG" includeLocation="true" additivity="false">
+            <AppenderRef ref="Stdout"/>
+        </Logger>
+
+        <Logger name="xuanwu" level="INFO" includeLocation="true" additivity="false">
+            <AppenderRef ref="Xuanwu" />
+            <AppenderRef ref="Stdout"/>
+            <AppenderRef ref="Sentry" />
+            <AppenderRef ref="mmqAppender"/>
+        </Logger>
+        <Logger name="Out_Request" level="INFO" includeLocation="true" additivity="false">
+            <AppenderRef ref="Out_Request" />
+            <AppenderRef ref="Stdout"/>
+            <AppenderRef ref="Sentry" />
+            <AppenderRef ref="mmqAppender"/>
+        </Logger>
+
+        <Logger name="com.alibaba.dubbo" level="INFO" includeLocation="true" additivity="false">
+            <AppenderRef ref="Dubbo" />
+        </Logger>
+
+        <Logger name="com.xxl.job" level="Error" additivity="false">
+            <AppenderRef ref="ScheduleJob"/>
+        </Logger>
+
+    </Loggers>
+</Configuration>

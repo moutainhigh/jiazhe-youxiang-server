@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <title>CRM首页</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <!-- CSS -->
+    <link rel="stylesheet" href="../static/init.css"/>
+
+    <!-- Javascript -->
+    <script src="../static/init.js"></script>
+    <style>
+        input{
+            height: 30px;
+        }
+
+        /*用readonly使人员选择input不能手动输入，用这个样式使其背景色和其他可修改input一致*/
+        #bossName[readonly] {
+            color: #939192;
+            background: #ffffff !important;
+            cursor: default;
+        }
+        #bossName[disabled] {
+            color: #848484!important;
+            background-color: #EEEEEE!important;
+        }
+    </style>
+
+</head>
+
+<body class="no-skin">
+
+<div class="main-container ace-save-state" id="main-container">
+    <script type="text/javascript">
+        try{ace.settings.loadState('main-container')}catch(e){}
+    </script>
+
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a href="../main/main_center">主页</a>
+                    </li>
+                    <li>
+                        <a href="#">系统管理</a>
+                    </li>
+                    <li>
+                        <a href="../operator/index">用户管理</a>
+                    </li>
+                    <li class="active">
+                        <!--【0添加，1修改，2查看】-->
+                        <span th:text="${type=='2'}?'查看':(${#strings.isEmpty(id)}?'添加':'修改')"></span>
+                    </li>
+                </ul><!-- /.breadcrumb -->
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xs-12" style="padding-top:40px">
+                        <form class="form-horizontal" role="form" id="addOrEditForm">
+                            <input type="hidden" name="id" th:value="${id}">
+
+                            <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <label class="col-sm-1 control-label no-padding-right" for="loginName">登录名</label>
+                                <div class="col-sm-2">
+                                    <input type="text" id="loginName" name="loginName" th:value="${operator}?${operator.loginName}:''" th:readonly="${operator}" th:disabled="${type=='2'}" class="form-control" />
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right" for="displayName">用户姓名</label>
+                                <div class="col-sm-2">
+                                    <input type="text" id="displayName" name="displayName" th:value="${operator}?${operator.displayName}:''" th:disabled="${type=='2'}" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <label class="col-sm-1 control-label no-padding-right" for="password">密码</label>
+                                <div class="col-sm-2">
+                                    <input type="password" id="password" name="password" th:value="${operator}?${operator.password}:''" th:disabled="${type=='2'}" class="form-control" />
+                                </div>
+
+                                <label class="col-sm-1 control-label no-padding-right" for="password1">确认密码</label>
+                                <div class="col-sm-2">
+                                    <input type="password" id="password1" name="password1" th:value="${operator}?${operator.password}:''" th:disabled="${type=='2'}" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <label class="col-sm-1 control-label no-padding-right">性别</label>
+                                <div class="col-sm-2">
+                                    <div class="radio">
+                                        <label>
+                                            <input name="sex" type="radio" value="1" class="ace" th:checked="${operator}?${'1' == operator.sex}:true" th:disabled="${type=='2'}"/>
+                                            <span class="lbl"> 男</span>
+                                        </label>
+                                        <label>
+                                            <input name="sex" type="radio" value="2" class="ace" th:checked="${operator}?${'2' == operator.sex}:false" th:disabled="${type=='2'}"/>
+                                            <span class="lbl"> 女</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <label class="col-sm-1 control-label no-padding-right" for="birthday">生日</label>
+                                <div class="col-sm-2">
+                                    <div class="input-group">
+                                        <input class="form-control date-picker" id="birthday" name="birthday" type="text" th:value="${operator}?(${operator.birthday}?${#strings.substring(operator.birthday,0,10)}:''):''" data-date-format="yyyy-mm-dd" th:disabled="${type=='2'}"/>
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <label class="col-sm-1 control-label no-padding-right" for="telephone">联系电话</label>
+                                <div class="col-sm-2">
+                                    <input type="text" id="telephone" name="telephone" th:value="${operator}?${operator.telephone}:''" th:disabled="${type=='2'}" class="form-control" />
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right" for="cellphone">个人手机</label>
+                                <div class="col-sm-2">
+                                    <input type="text" id="cellphone" name="cellphone" th:value="${operator}?${operator.cellphone}" th:disabled="${type=='2'}" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <label class="col-sm-1 control-label no-padding-right">部门</label>
+                                <div class="col-sm-2">
+                                    <select id="department" name="department" class="form-control" th:disabled="${type=='2'}">
+                                        <option value="">  </option>
+                                        <option  th:each="d:${departments}" th:value="${d.id}" th:text="${d.nameCN}" th:selected="${operator}?${d.id == operator.departmentId}:false"></option>
+                                    </select>
+                                </div>
+
+                                <label class="col-sm-1 control-label no-padding-right">职位</label>
+                                <div class="col-sm-2">
+                                    <select id="position" name="position" class="form-control" th:disabled="${type=='2'}">
+                                        <option value="">  </option>
+                                        <option  th:each="p:${positions}" th:value="${p.id}" th:text="${p.name}" th:selected="${operator}?${p.id == operator.positionId}:false"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <label class="col-sm-1 control-label no-padding-right">角色</label>
+                                <div class="col-sm-2">
+                                    <select id="role" name="role" class="form-control" th:disabled="${type=='2'}">
+                                        <option value="">  </option>
+                                        <option  th:each="r:${roles}" th:value="${r.id}" th:text="${r.name}" th:selected="${operator}?${r.id == operator.roleId}:false"></option>
+                                    </select>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right" for="boss">直接上级</label>
+                                <div class="col-sm-2">
+                                    <input type="hidden" id="boss" name="boss" th:value="${operator}?${operator.bossId}:''"/>
+                                    <input type="text" id="bossName" name="bossName" th:value="${operator}?${operator.bossName}:''" class="form-control" th:disabled="${type=='2'}" onclick="showChooseOperatorModal('#boss','#bossName');" readonly/>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <label class="col-sm-1 control-label no-padding-right">状态</label>
+                                <div class="col-sm-2">
+                                    <div class="radio">
+                                        <label>
+                                            <input name="state" type="radio" value="1" class="ace" th:checked="${operator}?${operator.state}:true" th:disabled="${type=='2'}"/>
+                                            <span class="lbl"> 启用</span>
+                                        </label>
+                                        <label>
+                                            <input name="state" type="radio" value="0" class="ace" th:checked="${operator}?${!operator.state}:false" th:disabled="${type=='2'}"/>
+                                            <span class="lbl"> 禁用</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <label class="col-sm-1 control-label no-padding-right" for="entryTime">入职日期</label>
+                                <div class="col-sm-2">
+                                    <div class="input-group">
+                                        <input class="form-control date-picker" id="entryTime" name="entryTime" type="text" th:value="${operator}?(${operator.entryTime}?${#strings.substring(operator.entryTime,0,10)}:''):''" data-date-format="yyyy-mm-dd" th:disabled="${type=='2'}"/>
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <label class="col-sm-1 control-label no-padding-right">地址</label>
+                                <div class="col-sm-5">
+                                    <div class="col-sm-4" style="padding-left:0px;padding-right:1px">
+                                        <select id="province" name="province" class="form-control" th:disabled="${type=='2'}" onchange="provinceChange()">
+                                            <option value="">    </option>
+                                            <option  th:each="p:${provinces}" th:value="${p.id}" th:text="${p.name}" th:selected="${operator}?${p.id == operator.provinceId}:false"></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-4" style="padding-left:1px;padding-right:1px">
+                                        <select id="city" name="city" class="form-control" th:disabled="${type=='2'}" onchange="cityChange()">
+                                            <option value="">  </option>
+                                            <option  th:each="c:${citys}" th:value="${c.id}" th:text="${c.name}" th:selected="${operator}?${c.id == operator.cityId}:false"></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-4" style="padding-left:1px;padding-right:0px">
+                                        <select id="county" name="county" th:disabled="${type=='2'}" class="form-control">
+                                            <option value="">  </option>
+                                            <option  th:each="c:${countys}" th:value="${c.id}" th:text="${c.name}" th:selected="${operator}?${c.id == operator.countyId}:false"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <label class="col-sm-1 control-label no-padding-right" for="detailAddress">详细地址</label>
+                                <div class="col-sm-5">
+                                    <input type="text" id="detailAddress" name="detailAddress" th:value="${operator}?${operator.detailAddress}:''" class="form-control" th:disabled="${type=='2'}"/>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <label class="col-sm-1 control-label no-padding-right" for="remark">备注</label>
+                                <div class="col-sm-5">
+                                    <textarea class="form-control" id="remark" name="remark" th:text="${operator}?${operator.remark}:''" style="resize:none" th:disabled="${type=='2'}"></textarea>
+                                </div>
+                            </div>
+                            <div class="space-4"></div>
+
+                            <div class="form-group" style="text-align: center">
+                                    <button class="btn btn-info btn-sm" type="button" onclick="save()" th:unless="${type=='2'}">
+                                        <i class="ace-icon fa fa-check bigger-110"></i>
+                                        保存
+                                    </button>
+                                    <button class="btn btn-default btn-sm" type="reset" th:unless="${type=='2'}">
+                                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                                        重置
+                                    </button>
+                                    <a class="btn btn-success btn-sm" href="../operator/index">
+                                        <i class="ace-icon fa fa-arrow-left bigger-110"></i>
+                                        返回
+                                   </a>
+                            </div>
+                        </form>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+
+    <!--<div class="footer">
+        <div class="footer-inner">
+            <div class="footer-content" style="padding: 0px;">
+						<span class="bigger-120">
+							<span class="blue bolder"></span>
+							中国通广电子有限公司CRM管理系统 &copy; 2018
+						</span>
+                &nbsp; &nbsp;
+            </div>
+        </div>
+    </div>-->
+</div><!-- /.main-container -->
+<div id="chooseOperator">
+
+</div>
+</body>
+<script type="text/javascript">
+    $('#chooseOperator').load('../pageimport/chooseoperator');
+    $('.date-picker').datepicker({
+        language: 'zh-CN',//选择语言
+        autoclose: true,
+        todayHighlight: true
+    }).next().on(ace.click_event, function(){
+        $(this).prev().focus();
+    });
+
+    function save(){
+        $.ajax({
+            url:"../operator/save",    //请求的url地址
+            dataType:"json",
+            async:false,
+            data:transformToJson($('#addOrEditForm').serializeArray()),
+            type:"GET",
+            success:function(result){
+                switch (result.code){
+                    case '000000':
+                        window.location.href = "../operator/index";
+                        break;
+                    case "000001":
+                        parent.location.href = "../system/index";
+                        break;
+                    case "000002":
+                        window.location.href = "../system/403";
+                        break;
+                    default :
+                        bootboxalert(result.msg);
+                        break;
+                }
+            },
+            error:function(){
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+    function provinceChange(){
+        var provinceId = $("#province").val();
+        $("#city").empty();
+        $("#city").append(citysToOptions(provinceId));
+        $("#county").empty();
+    }
+
+    function cityChange(cityId){
+        var cityId = $("#city").val();
+        $("#county").empty();
+        $("#county").append(citysToOptions(cityId));
+    }
+</script>
+</html>
+
