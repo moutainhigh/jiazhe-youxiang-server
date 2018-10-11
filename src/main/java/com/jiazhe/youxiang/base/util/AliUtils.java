@@ -19,8 +19,8 @@ import com.aliyuncs.profile.IClientProfile;
 
 //该类用于阿里短信服务
 public class AliUtils {
-	//发送验证短信【type=1表示后台验证短信，type=2表示客户登录短信】
-	public static SendSmsResponse sendSignInMsg(int type ,String phone) throws ServerException, ClientException{
+	//发送验证短信
+	public static SendSmsResponse sendMsg(String phone) throws ServerException, ClientException{
 		//设置超时时间-可自行调整
 	    System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
 	    System.setProperty("sun.net.client.defaultReadTimeout", "10000");
@@ -34,17 +34,11 @@ public class AliUtils {
 	    request.setMethod(MethodType.POST);
 	    //必填:待发送手机号。支持以逗号分隔的形式进行批量调用，批量上限为1000个手机号码,批量调用相对于单条调用及时性稍有延迟,验证码类型的短信推荐使用单条调用的方式
 	    request.setPhoneNumbers(phone);
-	    if(type==1){//后台短信登录模板，待审核通过需要修改
-			request.setSignName("悠享到家");//必填:短信签名-可在短信控制台中找到
-			request.setTemplateCode("SMS_129762580");//必填:短信模板-可在短信控制台中找到
-		}
-		if(type==2){
-			request.setSignName("悠享到家");
-			request.setTemplateCode("SMS_129762580");
-		}
+		request.setSignName("悠享");//必填:短信签名-可在短信控制台中找到
+		request.setTemplateCode("SMS_147418355");//必填:短信模板-可在短信控制台中找到
 	    //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
 	    //友情提示:如果JSON中需要带换行符,请参照标准的JSON协议对换行符的要求,比如短信内容中包含\r\n的情况在JSON中需要表示成\\r\\n,否则会导致JSON在服务端解析失败
-	    request.setTemplateParam("{\"code\":\""+RandomUtil.generateVerifyCode(6)+"\"}");
+	    request.setTemplateParam("{\"code\":\""+RandomUtil.generateVerifyCode(4)+"\"}");
 	    //可选-上行短信扩展码(扩展码字段控制在7位或以下，无特殊需求用户请忽略此字段)
 	    //request.setSmsUpExtendCode("90997");
 	    //可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
@@ -91,7 +85,7 @@ public class AliUtils {
 			String content = smsSendDetailDTOList.get(smsSendDetailDTOList.size()-1).getContent();
 			if(content.contains(code)) {//短信内容包含该验证码
 				long receiveTime = MyDateUtils.strToMinutes(smsSendDetailDTOList.get(smsSendDetailDTOList.size() - 1).getReceiveDate()).getTime();
-				if (new Date().getTime() - receiveTime < 5 * 60 * 1000) {//短信验证码在有效期内
+				if (new Date().getTime() - receiveTime < 5 * 60 * 1000) {//短信验证码在有5分钟有效期内
 					return true;
 				}
 			}

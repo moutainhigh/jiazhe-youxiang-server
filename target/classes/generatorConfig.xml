@@ -70,7 +70,7 @@
         <table tableName="sys_city" domainObjectName="SysCityPO"/>
         <table tableName="sys_log" domainObjectName="SysLogPO"/>
         <table tableName="sys_role" domainObjectName="SysRolePO"/>
-        <table tableName="sys_role_permission" domainObjectName="SysRolePermission"/>
+        <table tableName="sys_role_permission" domainObjectName="SysRolePermissionPO"/>
         <table tableName="sys_user" domainObjectName="SysUserPO"/>
         <table tableName="sys_user_role" domainObjectName="SysUserRolePO"/>
         <table tableName="voucher" domainObjectName="VoucherPO"/>

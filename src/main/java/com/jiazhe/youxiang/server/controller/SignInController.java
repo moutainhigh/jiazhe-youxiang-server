@@ -39,31 +39,39 @@ public class SignInController {
     @Autowired
     private SysUserPOMapper sysUserPOMapper;
 
-    //后台登录，请求发送验证码
+    //后台有登录请求，则发送验证码
     @RequestMapping(value = "/sendsignincode")
     public void sendIdentifyingCode(HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException {
         String code = "";
         String msg = "" ;
         JSONObject data = new JSONObject();
-        String phone = request.getParameter("phone");
+        String name = request.getParameter("name");
+        String password = request.getParameter("password");
         SysUserPOExample sysUserPOExample = new SysUserPOExample();
         SysUserPOExample.Criteria criteria = sysUserPOExample.createCriteria();
-        criteria.andMobileEqualTo(phone);
+        criteria.andNameEqualTo(name);
+        criteria.andPasswordEqualTo(password);
         criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
         List<SysUserPO> sysUserPOList = sysUserPOMapper.selectByExample(sysUserPOExample);
-        if(sysUserPOList.size() >= 1){//是我们的后台用户则发送验证码
-            SendSmsResponse res = AliUtils.sendSignInMsg(1,phone);
-            if(res.getCode() != null && res.getCode().equals("OK")){
-                code = "000000";
-                msg = "发送验证码成功";
-                data.put("bizId", res.getBizId());
-            }else{
+        if(sysUserPOList.size() == 1){//根据用户名和密码判断，是否有该用户，有该用户，给该用户手机发验证短信
+            if(!ValidateUtils.phoneValidate(sysUserPOList.get(0).getMobile())){//判断该用户的绑定的手机号是否合法
                 code = "000001";
-                msg = "发送短信失败，原因：" + res.getMessage();//发送失败的原因
+                msg = "您还没有绑定合法的手机号码，请联系后台管理员";
+            }else{//合法发送验证码
+                SendSmsResponse res = AliUtils.sendMsg(sysUserPOList.get(0).getMobile());
+                if(res.getCode() != null && res.getCode().equals("OK")){
+                    code = "000000";
+                    msg = "发送验证码成功";
+                    data.put("bizId", res.getBizId());
+                    data.put("phone",sysUserPOList.get(0).getMobile());
+                }else{
+                    code = "000001";
+                    msg = "发送短信失败，原因：" + res.getMessage();//发送失败的原因
+                }
             }
         }else{
             code = "000001";
-            msg = "未经授权的手机号";
+            msg = "用户名或密码错误";
         }
         ResponseUtil.responseUtils(response, ResultPackage.resultPackage(code, data, msg));
     }

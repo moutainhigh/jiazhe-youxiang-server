@@ -16,7 +16,7 @@ public class PropertyUtils {
         props = new Properties();
         InputStream in = null;
         try {
-            in = PropertyUtils.class.getClassLoader().getResourceAsStream("config/ali.properties");
+            in = PropertyUtils.class.getClassLoader().getResourceAsStream("ali.properties");
             props.load(in);
         } catch (FileNotFoundException e) {
             System.out.println("ali.properties文件未找到");
