@@ -11,16 +11,19 @@ public class RandomUtil {
             'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
+    private static char[] NumSequence = {
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+
     /*
-    生成四位随机验证码
+    生成n位随机验证码【全数字】
     param n:验证码位数
      */
     public static String generateVerifyCode(int n) {
         StringBuilder verifyCode = new StringBuilder("");
-        int length = codeSequence.length;//随机数生成范围【0-length】之间
+        int length = NumSequence.length;
         for(int i=0;i<n;i++){
             int random = (int)(Math.random()*length);
-            verifyCode.append(codeSequence[random]);
+            verifyCode.append(NumSequence[random]);
         }
         return verifyCode.toString();
     }

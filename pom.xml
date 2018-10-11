@@ -93,6 +93,18 @@
 			<version>1.1.10</version>
 		</dependency>
 
+		<!--阿里云的短信服务SDK-->
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-core</artifactId>
+			<version>3.7.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+
 		<!--权限管理jar包start-->
 		<dependency>
 			<groupId>org.apache.shiro</groupId>

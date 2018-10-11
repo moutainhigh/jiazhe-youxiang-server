@@ -1,4 +1,4 @@
-package com.coupon.util;
+package com.jiazhe.youxiang.base.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

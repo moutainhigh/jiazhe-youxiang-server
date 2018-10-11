@@ -1,4 +1,4 @@
-package com.coupon.util;
+package com.jiazhe.youxiang.base.util;
 
 public class ConstantFetchUtil {
 	

@@ -1,4 +1,4 @@
-package com.coupon.util;
+package com.jiazhe.youxiang.base.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,15 +17,14 @@ import com.aliyuncs.profile.IClientProfile;
 
 //该类用于阿里短信服务
 public class AliUtils {
-	
-	public static SendSmsResponse sendMsg(String phone) throws ServerException, ClientException{
-	    String code = GenerateFileName.random4();
+	//发送登陆验证短信
+	public static SendSmsResponse sendSignInMsg(String phone) throws ServerException, ClientException{
 		//设置超时时间-可自行调整
 	    System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
 	    System.setProperty("sun.net.client.defaultReadTimeout", "10000");
 	    //初始化ascClient,暂时不支持多region（请勿修改）
 	    IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", PropertyUtils.getProperty("accessKeyId"),PropertyUtils.getProperty("accessKeySecret"));
-	    DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", PropertyUtils.getProperty("product"), PropertyUtils.getProperty("domain"));
+	    DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", "Dysmsapi", "dysmsapi.aliyuncs.com");
 	    IAcsClient acsClient = new DefaultAcsClient(profile);
 	    //组装请求对象
 	    SendSmsRequest request = new SendSmsRequest();
@@ -39,7 +38,7 @@ public class AliUtils {
 	    request.setTemplateCode("SMS_129762580");
 	    //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
 	    //友情提示:如果JSON中需要带换行符,请参照标准的JSON协议对换行符的要求,比如短信内容中包含\r\n的情况在JSON中需要表示成\\r\\n,否则会导致JSON在服务端解析失败
-	    request.setTemplateParam("{\"code\":\""+code+"\"}");
+	    request.setTemplateParam("{\"code\":\""+RandomUtil.generateVerifyCode(6)+"\"}");
 	    //可选-上行短信扩展码(扩展码字段控制在7位或以下，无特殊需求用户请忽略此字段)
 	    //request.setSmsUpExtendCode("90997");
 	    //可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
@@ -55,8 +54,7 @@ public class AliUtils {
 	public static QuerySendDetailsResponse querySendDetails(String phone,String bizId) throws ServerException, ClientException{  
         //可自助调整超时时间  
         System.setProperty("sun.net.client.defaultConnectTimeout", "60000");  
-        System.setProperty("sun.net.client.defaultReadTimeout", "60000");  
-  
+        System.setProperty("sun.net.client.defaultReadTimeout", "60000");
         //初始化acsClient,暂不支持region化  
         IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", PropertyUtils.getProperty("accessKeyId"),PropertyUtils.getProperty("accessKeySecret"));
 	    DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", PropertyUtils.getProperty("product"), PropertyUtils.getProperty("domain"));
