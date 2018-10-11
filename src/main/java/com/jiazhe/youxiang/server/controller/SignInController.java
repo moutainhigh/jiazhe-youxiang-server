@@ -86,6 +86,8 @@ public class SignInController {
                         subject.login(new UsernamePasswordToken(phone, ""));
                         subject.getSession().setTimeout(ConstantFetchUtil.hour_8);// 将seesion过期时间设置为8小时
                         CookieUtil.addCookie(response, "phone", phone);
+                        code = "000000";
+                        msg = "登陆成功";
                     }catch (AuthenticationException e) {
 
                     }
