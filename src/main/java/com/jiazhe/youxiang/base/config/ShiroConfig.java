@@ -54,8 +54,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/system/index", "anon"); //登录页url匿名访问
         filterChainDefinitionMap.put("/system/login", "anon");//登陆系统匿名访问
         filterChainDefinitionMap.put("/system/logout", "anon");//退出系统匿名访问
-        filterChainDefinitionMap.put("/signin/sendsignincode", "anon");//发送验证码匿名访问
-        filterChainDefinitionMap.put("/signin/signin", "anon");//后台登陆请求
+        filterChainDefinitionMap.put("api/signin/sendsignincode", "anon");//发送验证码匿名访问
+        filterChainDefinitionMap.put("api/signin/signin", "anon");//后台登陆请求
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/templates/**", "anon");
         filterChainDefinitionMap.put("/swagger-ui.html", "anon");
@@ -63,7 +63,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/v2/**", "anon");
         filterChainDefinitionMap.put("/swagger-resource/**", "anon");
 
-        filterChainDefinitionMap.put("/**", "anon");//表示所有url必须通过认证才能访问
+        filterChainDefinitionMap.put("/**", "authc");//表示所有url必须通过认证才能访问
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }

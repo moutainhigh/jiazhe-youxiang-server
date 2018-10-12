@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @created 2018/8/13
  */
 @RestController
-@RequestMapping("server/demo")
+@RequestMapping("api/demo")
 public class DemoController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DemoController.class);
