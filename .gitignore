@@ -1,7 +1,7 @@
 *.idea/
 *.iml
 */target/
-${jetty.logs}
+${jetty.logs}git rm -r --cached .
 *.DS_Store
 src/main/resources/ali.properties
 src/main/resources/application-dev.properties
