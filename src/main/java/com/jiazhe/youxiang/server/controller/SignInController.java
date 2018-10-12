@@ -1,8 +1,8 @@
 package com.jiazhe.youxiang.server.controller;
 
-import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsResponse;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
+import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.*;
 import com.jiazhe.youxiang.server.dao.mapper.SysUserPOMapper;
 import com.jiazhe.youxiang.server.domain.po.SysUserPO;
@@ -11,6 +11,7 @@ import net.sf.json.JSONObject;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.Subject;
@@ -24,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,7 +32,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/signin")
-public class SignInController {
+public class SignInController extends BaseController{
 
     @Autowired
     SessionDAO sessionDAO;
@@ -43,7 +43,7 @@ public class SignInController {
     @RequestMapping(value = "/sendsignincode")
     public void sendIdentifyingCode(HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException {
         String code = "";
-        String msg = "" ;
+        String msg = "";
         JSONObject data = new JSONObject();
         String name = request.getParameter("name");
         String password = request.getParameter("password");
@@ -53,23 +53,23 @@ public class SignInController {
         criteria.andPasswordEqualTo(password);
         criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
         List<SysUserPO> sysUserPOList = sysUserPOMapper.selectByExample(sysUserPOExample);
-        if(sysUserPOList.size() == 1){//根据用户名和密码判断，是否有该用户，有该用户，给该用户手机发验证短信
-            if(!ValidateUtils.phoneValidate(sysUserPOList.get(0).getMobile())){//判断该用户的绑定的手机号是否合法
+        if (sysUserPOList.size() == 1) {//根据用户名和密码判断，是否有该用户，有该用户，给该用户手机发验证短信
+            if (!ValidateUtils.phoneValidate(sysUserPOList.get(0).getMobile())) {//判断该用户的绑定的手机号是否合法
                 code = "000001";
                 msg = "您还没有绑定合法的手机号码，请联系后台管理员";
-            }else{//合法发送验证码
+            } else {//合法发送验证码
                 SendSmsResponse res = AliUtils.sendMsg(sysUserPOList.get(0).getMobile());
-                if(res.getCode() != null && res.getCode().equals("OK")){
+                if (res.getCode() != null && res.getCode().equals("OK")) {
                     code = "000000";
                     msg = "发送验证码成功";
                     data.put("bizId", res.getBizId());
-                    data.put("phone",sysUserPOList.get(0).getMobile());
-                }else{
+                    data.put("phone", sysUserPOList.get(0).getMobile());
+                } else {
                     code = "000001";
                     msg = "发送短信失败，原因：" + res.getMessage();//发送失败的原因
                 }
             }
-        }else{
+        } else {
             code = "000001";
             msg = "用户名或密码错误";
         }
@@ -80,12 +80,13 @@ public class SignInController {
     @RequestMapping(value = "/signin")
     public void sigin(HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
         String code = "";
-        String msg = "" ;
+        String msg = "";
+        String name = request.getParameter("name");
+        String password = request.getParameter("password");
         String phone = request.getParameter("phone");
         String identifyingCode = request.getParameter("code");
         String bizId = request.getParameter("bizId");
-        String password = request.getParameter("password");
-        if(AliUtils.isVerified(phone,identifyingCode,bizId)){//短信验证码验证通过
+        if (AliUtils.isVerified(phone, identifyingCode, bizId)) {//短信验证码验证通过
             Subject subject = SecurityUtils.getSubject();
             try {
                 Collection<Session> sessions = sessionDAO.getActiveSessions();
@@ -99,18 +100,30 @@ public class SignInController {
                         }
                     }
                 }
-                subject.login(new UsernamePasswordToken(phone, password));
+                subject.login(new UsernamePasswordToken(name, password));
                 subject.getSession().setTimeout(ConstantFetchUtil.hour_8);// 将seesion过期时间设置为8小时
-                CookieUtil.addCookie(response, "phone", phone);
+                CookieUtil.addCookie(response, "name", name);
                 code = "000000";
                 msg = "登陆成功";
-            }catch (AuthenticationException e) {
+            } catch (AuthenticationException e) {
 
             }
-        }else {
+        } else {
             code = "000001";
             msg = "验证码错误";
         }
         ResponseUtil.responseUtils(response, ResultPackage.resultPackage(code, new JSONObject(), msg));
+    }
+
+    @RequiresPermissions("test:pagetest")
+    @RequestMapping(value = "/pagetest")
+    public String pageTest(HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
+        return null;
+    }
+
+    @RequiresPermissions("test:ajaxtest")
+    @RequestMapping(value = "/ajaxtest")
+    public void ajaxTest(HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
+
     }
 }

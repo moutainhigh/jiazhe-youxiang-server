@@ -30,7 +30,7 @@ public abstract class BaseController {
             return null;
         } else {
             System.out.println("BaseController：页面跳转，无权限");
-            return "redirect:/system/403";
+            return "redirect:../system/403";
         }
     }
 }

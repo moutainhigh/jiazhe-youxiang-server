@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.base.realm;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
+import com.jiazhe.youxiang.base.util.ProjectUtil;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;

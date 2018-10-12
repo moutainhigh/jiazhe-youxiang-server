@@ -75,7 +75,7 @@ public class AuthRealm extends AuthorizingRealm{
             }else{
                 SysRolePermissionPOExample sysRolePermissionPOExample = new SysRolePermissionPOExample();
                 SysRolePermissionPOExample.Criteria criteria1 = sysRolePermissionPOExample.createCriteria();
-                criteria1.andRoleIdEqualTo(sysUserPO.getId());
+                criteria1.andRoleIdEqualTo(sysRolePO.getId());
                 criteria1.andIsDeletedEqualTo(Byte.valueOf("0"));
                 //每个Role对应Role_Permission_list
                 List<SysRolePermissionPO> sysRolePermissionPOList = sysRolePermissionPOMapper.selectByExample(sysRolePermissionPOExample);

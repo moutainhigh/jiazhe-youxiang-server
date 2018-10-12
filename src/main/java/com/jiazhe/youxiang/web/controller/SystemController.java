@@ -33,4 +33,10 @@ public class SystemController extends BaseController{
         subject.logout();
         return "login/index";
     }
+
+    //无权限
+    @RequestMapping("/403")
+    public String noPermission() {
+        return "error/403";
+    }
 }
