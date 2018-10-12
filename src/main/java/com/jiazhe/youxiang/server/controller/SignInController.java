@@ -15,6 +15,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.apache.shiro.util.ByteSource;
@@ -62,7 +63,7 @@ public class SignInController extends BaseController{
                     code = "000001";
                     msg = "您还没有绑定合法的手机号码，请联系后台管理员";
                 } else {//合法发送验证码
-                    SendSmsResponse res = AliUtils.sendMsg(sysUserPOList.get(0).getMobile());
+                   /* SendSmsResponse res = AliUtils.sendMsg(sysUserPOList.get(0).getMobile());
                     if (res.getCode() != null && res.getCode().equals("OK")) {
                         code = "000000";
                         msg = "发送验证码成功";
@@ -71,7 +72,9 @@ public class SignInController extends BaseController{
                     } else {
                         code = "000001";
                         msg = "发送短信失败，原因：" + res.getMessage();//发送失败的原因
-                    }
+                    }*/
+                    code = "000000";
+                    msg = "发送验证码成功";
                 }
             }else{
                 code = "000001";
@@ -98,10 +101,13 @@ public class SignInController extends BaseController{
             Subject subject = SecurityUtils.getSubject();
             try {
                 Collection<Session> sessions = sessionDAO.getActiveSessions();
+                System.out.println(sessions.size());
                 for (Session session : sessions) {
                     if (null != session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)) {
                         System.out.println("登录用户" + session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY));
-                        if (phone.equals(session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY).toString())) {
+                        SimplePrincipalCollection simplePrincipalCollection = (SimplePrincipalCollection)session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
+                        SysUserPO sysUserPO = (SysUserPO) simplePrincipalCollection.getPrimaryPrincipal();
+                        if (name.equals(sysUserPO.getName())) {
                             // session.setTimeout(0); //这里就把session清除
                             System.out.println("删除用户seesion" + session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY).toString());
                             sessionDAO.delete(session); // session清除，

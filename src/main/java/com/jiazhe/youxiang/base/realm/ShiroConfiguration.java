@@ -14,7 +14,9 @@ import org.apache.shiro.session.SessionException;
 import org.apache.shiro.session.mgt.SessionContext;
 import org.apache.shiro.session.mgt.SessionKey;
 import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -22,6 +24,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.SubjectContext;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -48,6 +51,7 @@ public class ShiroConfiguration {
         Map<String,Filter> filters = bean.getFilters();
         filters.put("shiroLoginFilter",new ShiroLoginFilter());
         bean.setFilters(filters);
+        bean.setLoginUrl("../system/index");
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         filterChainDefinitionMap.put("/system/index", "anon"); //登录页url匿名访问
         filterChainDefinitionMap.put("/system/login", "anon");//登陆系统匿名访问
@@ -59,15 +63,6 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/**", "authc");//表示所有url必须通过认证才能访问
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
-    }
-
-    //配置核心安全事务管理器
-    @Bean(name = "securityManager")
-    public SecurityManager securityManager(@Qualifier("authRealm") AuthRealm authRealm) {
-        System.err.println("--------------shiro已经加载----------------");
-        DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
-        manager.setRealm(authRealm);
-        return manager;
     }
 
     //配置自定义的权限登录器
@@ -116,9 +111,28 @@ public class ShiroConfiguration {
         return shiroLoginFilter;
     }
 
-    @Bean
-    MemorySessionDAO memorySessionDAO(){
+    @Bean(name = "sessionDAO")
+    public MemorySessionDAO memorySessionDAO(){
         return new MemorySessionDAO();
+    }
+
+    @Bean(name = "securityManager")
+    public DefaultWebSecurityManager defaultWebSecurityManager(@Qualifier("authRealm") AuthRealm authRealm ,@Qualifier("sessionManager") SessionManager sessionManager){
+        DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager();
+        defaultWebSecurityManager.setRealm(authRealm);
+        defaultWebSecurityManager.setSessionManager(sessionManager);
+        return defaultWebSecurityManager;
+    }
+
+    @Bean(name = "sessionManager")
+    public DefaultWebSessionManager defaultWebSessionManager(@Qualifier("sessionDAO") SessionDAO sessionDao){
+        DefaultWebSessionManager defaultWebSessionManager = new DefaultWebSessionManager();
+        defaultWebSessionManager.setGlobalSessionTimeout(1800000);
+        defaultWebSessionManager.setDeleteInvalidSessions(true);
+        defaultWebSessionManager.setSessionValidationSchedulerEnabled(true);
+        defaultWebSessionManager.setSessionValidationInterval(1800000);
+        defaultWebSessionManager.setSessionDAO(sessionDao);
+        return defaultWebSessionManager;
     }
 
 }
