@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.base.util.ProjectUtil;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.mgt.SecurityManager;
@@ -74,6 +75,8 @@ public class ShiroConfiguration {
     public AuthRealm authRealm(@Qualifier("credentialsMatcher") CredentialsMatcher matcher) {
         AuthRealm authRealm = new AuthRealm();
         authRealm.setCredentialsMatcher(matcher);
+        authRealm.setCachingEnabled(true);
+        authRealm.setAuthenticationCachingEnabled(false);
         return authRealm;
     }
 
