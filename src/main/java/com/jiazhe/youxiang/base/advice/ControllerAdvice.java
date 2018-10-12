@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package com.jiazhe.youxiang.server.advice;
+package com.jiazhe.youxiang.base.advice;
 
 import com.google.common.collect.Maps;
 import com.jiazhe.youxiang.server.vo.BaseVO;
