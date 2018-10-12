@@ -7,20 +7,20 @@ document.write("<script language='javascript' src='/static/jquery-confirm-master
 document.write("<script language='javascript' src='/static/easyui-1.5/jquery.easyui.min.js'></script>");*/
 
 /*ace admin js*/
-document.write("<script language='javascript' src='/static/ace-master/js/ace-extra.min.js'></script>");
-document.write("<script language='javascript' src='/static/ace-master/js/html5shiv.min.js'></script>");
-document.write("<script language='javascript' src='/static/ace-master/js/respond.min.js'></script>");
-document.write("<script language='javascript' src='/static/ace-master/js/jquery-2.1.4.min.js'></script>");
-document.write("<script language='javascript' src='/static/ace-master/js/jquery-1.11.3.min.js'></script>");
-document.write("<script language='javascript' src='/static/ace-master/js/bootstrap.min.js'></script>");
-document.write("<script language='javascript' src='/static/ace-master/js/ace-elements.min.js'></script>");
-document.write("<script language='javascript' src='/static/ace-master/js/ace.min.js'></script>");
-document.write("<script language='javascript' src='/static/ace-master/js/bootbox.js'></script>");
-document.write("<script language='javascript' src='/static/ace-master/js/bootstrap-datepicker.min.js'></script>");
-document.write("<script language='javascript' src='/static/ace-master/js/bootstrap-datepicker.zh-CN.js'></script>");
-document.write("<script language='javascript' src='/static/ace-master/js/jquery.jqGrid.min.js'></script>");
-document.write("<script language='javascript' src='/static/ace-master/js/grid.locale-cn.js'></script>");
-document.write("<script language='javascript' src='/static/ace-master/js/tree.min.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/ace-extra.min.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/html5shiv.min.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/respond.min.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/jquery-2.1.4.min.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/jquery-1.11.3.min.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/bootstrap.min.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/ace-elements.min.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/ace.min.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/bootbox.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/bootstrap-datepicker.min.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/bootstrap-datepicker.zh-CN.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/jquery.jqGrid.min.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/grid.locale-cn.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/tree.min.js'></script>");
 
 /*将form通过$('#operatorSearchForm').serializeArray()方式获得的formData【形如：
 [{"name":"user","value":"hpc"},{"name":"pwd","value":"123"},{"name":"sex","value":"M"},{"name":"age","value":"100"}]】格式
@@ -39,7 +39,7 @@ function bootboxalert(message){
         buttons: {
             ok: {
                 label: '确定',
-                className: 'btn-myStyle'
+                className: 'btn-primary'
             }
         },
         message: message,

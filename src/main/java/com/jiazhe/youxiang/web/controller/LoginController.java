@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.web.controller;
 
+import com.jiazhe.youxiang.base.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
@@ -19,13 +20,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/login")
-public class LoginController {
+public class LoginController extends BaseController{
 
-    @RequestMapping("/index")
-    public String index(){
+    //系统登陆
+    @RequestMapping("/login")
+    public String login() {
         return "login/index";
     }
 
+    //系统退出
     @RequestMapping("/logout")
     public String logout() {
         Subject subject = SecurityUtils.getSubject();
