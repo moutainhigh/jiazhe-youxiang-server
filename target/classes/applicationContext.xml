@@ -45,7 +45,6 @@
     </context:component-scan>
 
 
-
     <import resource="classpath:applicationContext-datasource.xml"/>
 
 </beans>
