@@ -7,9 +7,9 @@
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <!-- CSS -->
-    <link rel="stylesheet" th:href="@{/static/init.css}"/><!--通用的css-->
+    <link rel="stylesheet" href="../static/init.css"/>
     <!-- Javascript -->
-    <script th:src="@{/static/init.js}"></script><!--通用的js-->
+    <script src="../static/init.js"></script><!--通用的js-->
 </head>
 
 <body class="no-skin">
@@ -64,7 +64,7 @@
         <ul class="nav nav-list">
 
             <li class="">
-                <a th:href="@{/signin/pagetest}" target="iframeCenter">
+                <a href="../api/signin/pagetest" target="iframeCenter">
                     <i class="menu-icon fa fa-desktop"></i>
                     <span class="menu-text"> 权限测试页面 </span>
                 </a>

@@ -100,7 +100,7 @@
                         showCodePrompt();
 					}else{//没发送验证码，就发送验证码
                         $.ajax({
-                            url:"../signin/sendsignincode", //此处登陆，其实是请求验证码
+                            url:"../api/signin/sendsignincode", //此处登陆，其实是请求验证码
                             dataType:"json",
                             async:false,
                             data:{
@@ -150,7 +150,7 @@
                     callback: function(result){
 						if(result!=null){
                             $.ajax({
-                                url:"../signin/signin", //确定为登陆
+                                url:"../api/signin/signin", //确定为登陆
                                 dataType:"json",
                                 async:false,
                                 data:{

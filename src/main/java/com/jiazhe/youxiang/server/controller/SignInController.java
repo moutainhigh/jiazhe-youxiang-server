@@ -34,7 +34,7 @@ import java.util.List;
  * Created by TU on 2018/10/11.
  */
 @Controller
-@RequestMapping("/signin")
+@RequestMapping("api/signin")
 public class SignInController extends BaseController{
 
     @Autowired
