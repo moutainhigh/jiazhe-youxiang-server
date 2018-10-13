@@ -16,8 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * 在这里编写类的功能描述
- *
+ * 用于首页iframe每个部分页面的转发
  * @author niexiao
  * @created 2018/9/28
  */

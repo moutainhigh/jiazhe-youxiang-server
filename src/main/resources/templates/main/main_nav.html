@@ -7,9 +7,9 @@
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <!-- CSS -->
-    <link rel="stylesheet" href="../static/init.css"/>
+    <link rel="stylesheet" th:href="@{/static/init.css}"/>
     <!-- Javascript -->
-    <script src="../static/init.js"></script><!--通用的js-->
+    <script th:src="@{/static/init.js}"></script><!--通用的js-->
 </head>
 
 <body class="no-skin">
@@ -73,11 +73,49 @@
             </li>
 
             <li class="">
+                <a th:href="@{/customer/index}" target="iframeCenter">
+                    <i class="menu-icon fa fa-user"></i>
+                    <span class="menu-text"> 客户管理 </span>
+                </a>
+                <b class="arrow"></b>
+            </li>
+
+            <li class="">
+                <a th:href="@{/product/index}" target="iframeCenter">
+                    <i class="menu-icon fa fa-product-hunt"></i>
+                    <span class="menu-text"> 商品管理 </span>
+                </a>
+                <b class="arrow"></b>
+            </li>
+
+            <li class="">
+                <a th:href="@{/record/index}" target="iframeCenter">
+                    <i class="menu-icon fa fa-list-ul"></i>
+                    <span class="menu-text"> 订单管理 </span>
+                </a>
+                <b class="arrow"></b>
+            </li>
+
+            <li class="">
+                <a th:href="@{/project/index}" target="iframeCenter">
+                    <i class="menu-icon fa fa-book"></i>
+                    <span class="menu-text"> 项目管理 </span>
+                </a>
+                <b class="arrow"></b>
+            </li>
+
+            <li class="">
+                <a th:href="@{/audit/index}" target="iframeCenter">
+                    <i class="menu-icon fa fa-check"></i>
+                    <span class="menu-text"> 审核管理 </span>
+                </a>
+                <b class="arrow"></b>
+            </li>
+
+            <li class="">
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-cog"></i>
-                    <span class="menu-text">
-								系统管理
-							</span>
+                    <span class="menu-text">系统管理</span>
                     <b class="arrow fa fa-angle-down"></b>
                 </a>
 
@@ -85,477 +123,48 @@
 
                 <ul class="submenu">
                     <li class="">
-                        <a href="../department/index" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            部门管理
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-
-                    <li class="">
-                        <a href="../position/index" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            职位管理
+                        <a th:href="@{/vouchercode/index}" target="iframeCenter">
+                            代金券兑换码管理
                         </a>
                         <b class="arrow"></b>
                     </li>
 
-
-                    <shiro:hasPermission name="operator:list">
                     <li class="">
-                        <a href="../operator/index" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            用户管理
+                        <a th:href="@{/rechargecode/index}" target="iframeCenter">
+                            充值卡兑换码管理
                         </a>
                         <b class="arrow"></b>
                     </li>
-                    </shiro:hasPermission>
 
-                    <shiro:hasPermission name="role:list">
                     <li class="">
-                        <a href="../role/index" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
+                        <a th:href="@{/productcode/index}" target="iframeCenter">
+                            商品兑换码管理
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
+                        <a th:href="@{/syscity/index}" target="iframeCenter">
+                            城市管理
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
+                        <a th:href="@{/sysuser/index}" target="iframeCenter">
+                            员工管理
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
+                        <a th:href="@{/sysrole/index}" target="iframeCenter">
                             角色管理
                         </a>
                         <b class="arrow"></b>
                     </li>
-                    </shiro:hasPermission>
-
-                    <li class="">
-                        <a href="../sysdictionary/index" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            系统字典
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            工作流字典
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
                 </ul>
             </li>
-
-            <li class="">
-                <a href="#" class="dropdown-toggle">
-                    <i class="menu-icon fa fa-key"></i>
-                    <span class="menu-text">
-								权限管理
-							</span>
-                    <b class="arrow fa fa-angle-down"></b>
-                </a>
-
-                <b class="arrow"></b>
-
-                <ul class="submenu">
-                    <li class="">
-                        <a href="../test/test" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            用户权限管理
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                           仓库权限管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="">
-                <a href="#" class="dropdown-toggle">
-                    <i class="menu-icon fa fa-key"></i>
-                    <span class="menu-text">
-								项目备案管理
-							</span>
-                    <b class="arrow fa fa-angle-down"></b>
-                </a>
-                <b class="arrow"></b>
-
-                <ul class="submenu">
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目备案
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="../cooperationcompany/index" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            合作单位
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="">
-                <a href="#" class="dropdown-toggle">
-                    <i class="menu-icon fa fa-key"></i>
-                    <span class="menu-text">
-								投标保证金
-							</span>
-                    <b class="arrow fa fa-angle-down"></b>
-                </a>
-
-                <b class="arrow"></b>
-
-                <ul class="submenu">
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            往来款收入
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            退回往来款
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            投标保证金/押金支出
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            退回投标保证金/押金
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            投标保证金支出审批
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            投标保证金利息收入
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            退回往来款审批
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            合作单位余额统计
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            投标保证金利息收入
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            投标项目往来资金统计
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="">
-                <a href="#" class="dropdown-toggle">
-                    <i class="menu-icon fa fa-key"></i>
-                    <span class="menu-text">
-								项目立项概算
-							</span>
-                    <b class="arrow fa fa-angle-down"></b>
-                </a>
-
-                <b class="arrow"></b>
-
-                <ul class="submenu">
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            财务立项
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目概算申请
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            已作废财务立项
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="">
-                <a href="#" class="dropdown-toggle">
-                    <i class="menu-icon fa fa-key"></i>
-                    <span class="menu-text">
-								合同管理
-							</span>
-                    <b class="arrow fa fa-angle-down"></b>
-                </a>
-
-                <b class="arrow"></b>
-
-                <ul class="submenu">
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            合同信息录入
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            合同作废终止变更审批
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            合同作废终止变更申请
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            合同待审批信息管理
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            合同信息管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            合同信息查询管理
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            零星合同信息管理
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            虚拟合同信息管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="">
-                <a href="#" class="dropdown-toggle">
-                    <i class="menu-icon fa fa-key"></i>
-                    <span class="menu-text">
-								项目预算管理
-							</span>
-                    <b class="arrow fa fa-angle-down"></b>
-                </a>
-
-                <b class="arrow"></b>
-
-                <ul class="submenu">
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目市场费用预算单
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目实施费用预算单
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目设备成本预算单
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                           项目预算待汇总
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目预算已汇总
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                           项目设备成本预算增加
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目实施费用预算增加
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目市场费用预算增加
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                           项目预算增加审批
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目其他费用预算增加
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目咨询费用预算增加
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目市场费用预算单管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目实施费用预算单管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目设备成本预算单管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目预算管理费查询
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-                </ul>
-            </li>
-
         </ul><!-- /.nav-list -->
     </div>
 </div><!-- /.main-container -->

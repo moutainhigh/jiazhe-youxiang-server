@@ -138,6 +138,6 @@ public class SignInController extends BaseController{
     @RequiresPermissions("test:ajaxtest")
     @RequestMapping(value = "/ajaxtest")
     public void ajaxTest(HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
-
+        ResponseUtil.responseUtils(response, ResultPackage.resultPackage("000000", new JSONObject(), "ajax有权限访问，测试成功"));
     }
 }
