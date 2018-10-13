@@ -8,6 +8,10 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.Permission;
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.CacheException;
+import org.apache.shiro.cache.CacheManager;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.SessionException;
@@ -27,6 +31,8 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.ehcache.EhCacheCache;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -51,7 +57,7 @@ public class ShiroConfiguration {
         Map<String,Filter> filters = bean.getFilters();
         filters.put("shiroLoginFilter",new ShiroLoginFilter());
         bean.setFilters(filters);
-        bean.setLoginUrl("../system/index");
+       /* bean.setLoginUrl("../system/index");*/
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         filterChainDefinitionMap.put("/system/index", "anon"); //登录页url匿名访问
         filterChainDefinitionMap.put("/system/login", "anon");//登陆系统匿名访问
@@ -67,11 +73,13 @@ public class ShiroConfiguration {
 
     //配置自定义的权限登录器
     @Bean(name = "authRealm")
-    public AuthRealm authRealm(@Qualifier("credentialsMatcher") CredentialsMatcher matcher) {
+    public AuthRealm authRealm(@Qualifier("credentialsMatcher") CredentialsMatcher matcher,@Qualifier("cacheManager") CacheManager cacheManager) {
         AuthRealm authRealm = new AuthRealm();
         authRealm.setCredentialsMatcher(matcher);
-        authRealm.setCachingEnabled(true);
-        authRealm.setAuthenticationCachingEnabled(false);
+        /*authRealm.setCachingEnabled(true);
+        authRealm.setAuthenticationCachingEnabled(false);*/
+        authRealm.setAuthorizationCacheName("shiro-authorizationCache");
+        authRealm.setCacheManager(cacheManager);
         return authRealm;
     }
 
@@ -133,6 +141,12 @@ public class ShiroConfiguration {
         defaultWebSessionManager.setSessionValidationInterval(1800000);
         defaultWebSessionManager.setSessionDAO(sessionDao);
         return defaultWebSessionManager;
+    }
+
+    @Bean(name = "cacheManager")
+    public EhCacheManager ehCacheManager(){
+        EhCacheManager ehCacheManager = new EhCacheManager();
+        return ehCacheManager;
     }
 
 }
