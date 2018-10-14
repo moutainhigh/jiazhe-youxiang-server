@@ -7,10 +7,10 @@
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <!-- CSS -->
-    <link rel="stylesheet" href="../static/init.css"/>
+    <link rel="stylesheet" th:href="@{/static/init.css}"/>
 
     <!-- Javascript -->
-    <script src="../static/init.js"></script>
+    <script th:src="@{/static/init.js}"></script>
 
     <style>
         .form-group {
@@ -35,7 +35,7 @@
                 <ul class="breadcrumb">
                     <li>
                         <i class="ace-icon fa fa-home home-icon"></i>
-                        <a href="../main/main_center">主页</a>
+                        <a th:href="@{/main/main_center}">主页</a>
                     </li>
                     <li>
                         <a href="#">系统管理</a>
@@ -53,12 +53,6 @@
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
                                         <input id="name" name="name" class="form-control" type="text" style="height:30px"/>
-                                    </div>
-                                </div>
-                                <label class="col-sm-1 control-label no-padding-right">排序：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <input id="priority" name="priority" class="form-control" type="text" style="height:30px"/>
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
@@ -162,7 +156,8 @@
 </div>
 </body>
 <script type="text/javascript">
-    var permission = getCookie("permission");
+    /*var permission = getCookie("permission");*/
+    var permission = "12324";
     if(permission.indexOf("role-add")== -1){//如果没有添加按钮，则给查询form和表格之间加一个padding-top值
         $("#buttonDiv").addClass("buttonDiv");
     }
@@ -170,11 +165,11 @@
     var pager_selector = "#grid-pager";
     jQuery(grid_selector).jqGrid({
         subGrid : false, // 此处设置为true时可以打开子项,子项用不到已删除
-        url : "../role/list",// 获取数据的地址
+        url : "../api/sysrole/list",// 获取数据的地址
         postData: transformToJson($('#roleSearchForm').serializeArray()),
         rownumbers : true,
         datatype : "json",
-        mtype : "POST",
+        mtype : "GET",
         hidegrid : false,//收缩列表按钮
         prmNames : {
             page : "pageNum",
@@ -183,12 +178,12 @@
         width:"100%",
         autowidth:true,
         height:350,
-        colNames : ['','角色名称','排序序号', '备注','操作'],
+        colNames : ['','角色名称','最高权限','排序序号','操作'],
         colModel : [
             {name:'id',index:'id',sortable:false,hidden:true},
             {name:'name',index:'name',sortable:false},
+            {name:'isSuper',index:'isSuper',sortable:false},
             {name:'priority',index:'priority',sortable:false},
-            {name:'remark',index:'remark',sortable:false},
             {name:'_action',index:'_action',sortable:false,formatter:customFormatter}
         ],
         rowNum : 10,
@@ -251,7 +246,7 @@
 
     function search(){
         jQuery(grid_selector).setGridParam({
-            url : "../role/list",// 获取数据的地址
+            url : "../api/sysrole/list",// 获取数据的地址
             postData: transformToJson($('#roleSearchForm').serializeArray()),
         }).trigger("reloadGrid",[{ page: 1}]);
         return false;

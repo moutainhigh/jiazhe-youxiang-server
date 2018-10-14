@@ -1,6 +1,5 @@
 package com.jiazhe.youxiang.server.controller;
 
-import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.*;
@@ -20,8 +19,8 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,12 +32,12 @@ import java.util.List;
 /**
  * Created by TU on 2018/10/11.
  */
-@Controller
+@RestController
 @RequestMapping("api/signin")
 public class SignInController extends BaseController{
 
     @Autowired
-    SessionDAO sessionDAO;
+    private SessionDAO sessionDAO;
     @Autowired
     private SysUserPOMapper sysUserPOMapper;
 
@@ -56,19 +55,20 @@ public class SignInController extends BaseController{
         criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
         List<SysUserPO> sysUserPOList = sysUserPOMapper.selectByExample(sysUserPOExample);
         if (sysUserPOList.size() == 1) {//根据用户名和密码判断，是否有该用户，有该用户，给该用户手机发验证短信
+            SysUserPO sysUserPO = sysUserPOList.get(0);
             ByteSource salt = ByteSource.Util.bytes(sysUserPOList.get(0).getSalt());
             String saltPassword = new SimpleHash("MD5",password,salt,1024).toString();
-            if(saltPassword.equals(sysUserPOList.get(0).getPassword())){//密码加密后一致
-                if (!ValidateUtils.phoneValidate(sysUserPOList.get(0).getMobile())) {//判断该用户的绑定的手机号是否合法
+            if(saltPassword.equals(sysUserPO.getPassword())){//密码加密后一致
+                if (!ValidateUtils.phoneValidate(sysUserPO.getMobile())) {//判断该用户的绑定的手机号是否合法
                     code = "000001";
                     msg = "您还没有绑定合法的手机号码，请联系后台管理员";
                 } else {//合法发送验证码
-                   /* SendSmsResponse res = AliUtils.sendMsg(sysUserPOList.get(0).getMobile());
+                   /* SendSmsResponse res = AliUtils.sendMsg(sysUserPO.getMobile());
                     if (res.getCode() != null && res.getCode().equals("OK")) {
                         code = "000000";
                         msg = "发送验证码成功";
                         data.put("bizId", res.getBizId());
-                        data.put("phone", sysUserPOList.get(0).getMobile());
+                        data.put("phone", sysUserPO.getMobile());
                     } else {
                         code = "000001";
                         msg = "发送短信失败，原因：" + res.getMessage();//发送失败的原因
