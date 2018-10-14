@@ -12,12 +12,13 @@
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
 
+    <!--权限树 -->
+    <link rel="stylesheet" th:href="@{/static/ztree/css/metroStyle.css}" type="text/css">
+    <script th:src="@{/static/ztree/js/jquery.ztree.all.min.js}"></script>
+
     <style>
         .form-group {
             margin-bottom: 0px;
-        }
-        .buttonDiv{
-            padding-top:32px;
         }
     </style>
 </head>
@@ -66,11 +67,11 @@
                     </div><!-- /.col -->
                     <div class="col-xs-12" style="text-align: right" id="buttonDiv">
                         <p style="margin:1px;">
-                            <shiro:hasPermission name="role:add">
+<!--                            <shiro:hasPermission name="sysrole:add">-->
                                 <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form" data-toggle="modal" onclick="openNew()">
                                     <i class="ace-icon fa fa-plus"></i>新建
                                 </a>
-                            </shiro:hasPermission>
+                            <!--</shiro:hasPermission>-->
                         </p>
                     </div><!-- /.col -->
                     <div class="col-xs-12">
@@ -90,7 +91,7 @@
                                         <div class="col-xs-12 col-sm-1"></div>
                                         <div class="col-xs-12 col-sm-9">
                                             <form id="roleSaveForm" class="form-horizontal" role="form">
-                                                <input type="hidden" name="id" id="roleId">
+                                                <input type="hidden" name="id" id="roleId" value="0">
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">角色名称：</label>
                                                     <div class="col-sm-8">
@@ -110,10 +111,27 @@
                                                 </div>
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">备注：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">是否有所有权限：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <textarea class="form-control" id="saveRemark" name="remark" style="resize:none"></textarea>
+                                                            <label class="radio-inline ">
+                                                                <input id="notSuper" type="radio" name="isSuper" value="false" checked="checked"/>否
+                                                            </label>
+                                                            <label class="radio-inline" >
+                                                                <input id="isSuper" type="radio" name="isSuper" value="true"/>是
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">分配权限：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <div id="menuContent" style="border:1px solid rgb(170,170,170);z-index:10;">
+                                                                <ul id="treeDemo" class="ztree" style="margin-top:0; width:100%; height:auto;"></ul>
+                                                            </div>
+                                                            <input type="hidden" id="perms" placeholder="" class="col-xs-10 col-sm-5" name="perms" value="">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -158,9 +176,99 @@
 <script type="text/javascript">
     /*var permission = getCookie("permission");*/
     var permission = "12324";
-    if(permission.indexOf("role-add")== -1){//如果没有添加按钮，则给查询form和表格之间加一个padding-top值
-        $("#buttonDiv").addClass("buttonDiv");
+    var setting = {
+        view: {
+            selectedMulti: true
+        },
+        check: {
+            enable: true
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        edit: {
+            enable: false
+        }
+    };
+    var zNodes = [
+        { id: 1, pId: 0, name: "客户管理", perm:"customer-index"},
+        { id: 2, pId: 0, name: "商品管理", perm:"product-index"},
+        { id: 3, pId: 0, name: "订单管理", perm:"record-index"},
+        { id: 4, pId: 0, name: "项目管理", perm:"project-index"},
+        { id: 5, pId: 0, name: "审核管理", perm:"audit-index"},
+        { id: 6, pId: 0, name: "系统管理", perm:"system-index"},
+        { id: 61, pId: 6, name: "代金券兑换码管理", perm:"vouchercode-index"},
+        { id: 62, pId: 6, name: "充值卡兑换码管理", perm:"rechargecode-index"},
+        { id: 63, pId: 6, name: "商品兑换码管理", perm:"productcode-index"},
+        { id: 64, pId: 6, name: "城市管理", perm:"syscity-index"},
+        { id: 65, pId: 6, name: "员工管理", perm:"sysuser-index"},
+        { id: 66, pId: 6, name: "角色管理", perm:"sysrole-index"}
+    ];
+
+    //初始化权限树
+    permsTree=$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    function submitNodes(){
+        var nodes = permsTree.getCheckedNodes(true);
+        var str = "";
+        var perms = "";
+        for(var i=0;i<nodes.length;i++){
+            if(nodes[i].perm!=null){
+                str += nodes[i].id+ ",";
+                perms += nodes[i].perm+ ",";
+            }
+        }
+        if(perms.length>0) {
+            perms = perms.substring(0,perms.length-1);
+        }
+        $("#perms").val(perms);
     }
+
+    function disablePerms() {
+        var nodes = permsTree.getNodes();
+        if($("input[name=isSuper]:checked").val()=="true") {
+            permsTree.checkAllNodes(true);
+            for(var i=0;i<nodes.length;i++){
+                permsTree.setChkDisabled(nodes[i], true,false,true);
+            }
+        } else {
+            for(var i=0;i<nodes.length;i++){
+                permsTree.setChkDisabled(nodes[i], false,false,true);
+            }
+            permsTree.checkAllNodes(false);
+        }
+    }
+
+    //标识选中状态
+    function checkNodes(perms){
+        var nodes = permsTree.getCheckedNodes(false);
+        for(var i=0;i<nodes.length;i++){
+            if(nodes[i].perm!=null){
+                var nodePerms=nodes[i].perm.split(",");
+                if(perms.indexOf(nodes[i].perm)!=-1){
+                    //单菜单权限节点
+                    permsTree.checkNode(nodes[i], true, false);
+                }else if((nodePerms.length>1&&perms.indexOf(nodePerms[0])!=-1)&&nodes[i].id!=1){
+                    //alert(nodes[i].perm);
+                    //除根节点的带多个权限菜单的节点
+                    permsTree.checkNode(nodes[i], true, false);
+                }
+            }
+        }
+    }
+
+    $(function(){
+        //重新修改表格宽度
+        $(window).resize(function(){
+            $("#grid-table").setGridWidth($(window).width()*0.96);
+        });
+        //为isSuper的radio按钮添加响应事件
+        $("input[name=isSuper]").bind("change",function(){
+            disablePerms();
+        });
+    });
+
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
     jQuery(grid_selector).jqGrid({
@@ -178,7 +286,7 @@
         width:"100%",
         autowidth:true,
         height:350,
-        colNames : ['','角色名称','最高权限','排序序号','操作'],
+        colNames : ['','角色名称','拥有所有权限','排序序号','操作'],
         colModel : [
             {name:'id',index:'id',sortable:false,hidden:true},
             {name:'name',index:'name',sortable:false},
@@ -210,18 +318,6 @@
     });
     $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
 
-    //navButtons
-    jQuery(grid_selector).jqGrid('navGrid',pager_selector,
-        { 	//navbar options
-            edit: false,
-            add: false,
-            del: false,
-            search: false,
-            refresh: false,
-            view: false,
-        }
-    )
-
     //replace icons with FontAwesome icons like above
     function updatePagerIcons(table) {
         var replacement =
@@ -237,12 +333,6 @@
             if($class in replacement) icon.attr('class', 'ui-icon '+replacement[$class]);
         })
     }
-
-    $(function(){
-        $(window).resize(function(){
-            $("#grid-table").setGridWidth($(window).width()*0.96);
-        });
-    });
 
     function search(){
         jQuery(grid_selector).setGridParam({
@@ -269,7 +359,7 @@
             callback: function(result) {
                 if(result) {
                     $.ajax({
-                        url:"../role/delete",    //请求的url地址
+                        url:"../api/sysrole/delete",    //请求的url地址
                         dataType:"json",
                         async:false,
                         data:{
@@ -299,16 +389,12 @@
 
     function customFormatter(cellvalue, options, rowObject){
         var str = "";
-        if(permission.indexOf("role-delete")!= -1){
-            str = str +"<a class='btn btn-minier btn-danger' href=\"javascript:deleteOne('"+rowObject[0]+"')\">" +
-                "<i class='ace-icon fa fa-trash'></i>" +
-                "</a>&nbsp;&nbsp;";
-        }
-        if(permission.indexOf("role-edit")!= -1){
-            str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('"+rowObject[0]+"')\">" +
-                "<i class='ace-icon fa fa-pencil'></i>" +
-                "</a>&nbsp;&nbsp;";
-        }
+        str = str +"<a class='btn btn-minier btn-danger' href=\"javascript:deleteOne('"+rowObject[0]+"')\">" +
+            "<i class='ace-icon fa fa-trash'></i>" +
+            "</a>&nbsp;&nbsp;";
+        str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('"+rowObject[0]+"')\">" +
+            "<i class='ace-icon fa fa-pencil'></i>" +
+            "</a>&nbsp;&nbsp;";
         str = str + "<a class='btn btn-minier btn-success' href=\"javascript:openShow('"+rowObject[0]+"')\">" +
             "<i class='ace-icon fa fa-eye'></i>" +
             "</a>";
@@ -317,83 +403,46 @@
 
     function openNew() {
         $("#modal-title").html("角色信息-添加");
-        $("#roleSaveForm input").val("");
-        $("#roleSaveForm textarea").val("");
+        $("#roleSaveForm #saveName").val("");
+        $("#roleSaveForm #savePriority").val("");
+        $("#notSuper").prop('checked',true);
+        disablePerms();
         $(".modal-footer-btn").show();
-        $('input,select,textarea',$('#roleSaveForm')).removeAttr('disabled');
+        $('input,select',$('#roleSaveForm')).removeAttr('disabled');
+        $('#treeDemo').removeAttr('disabled');
     }
 
     function openEdit(id){
         $("#modal-title").html("角色信息-修改");
         $(".modal-footer-btn").show();
+        $('input,select',$('#roleSaveForm')).removeAttr('disabled');
+        $('#treeDemo').removeAttr('disabled');
+        permsTree.checkAllNodes(false);
         huixian(id);
-        $('input,select,textarea',$('#roleSaveForm')).removeAttr('disabled');
     }
 
     function openShow(id){
         $("#modal-title").html("角色信息-查看");
         $(".modal-footer-btn").hide();
+        $('input,select',$('#roleSaveForm')).attr('disabled','disabled');
+        $('#treeDemo').attr('disabled');
+        permsTree.checkAllNodes(false);
         huixian(id);
-        $('input,select,textarea',$('#roleSaveForm')).attr('disabled','disabled');
-    }
-
-    function  deleteOne(id){
-        bootbox.confirm({
-            buttons: {
-                confirm: {
-                    label: '确认',
-                    className: 'btn-myStyle'
-                },
-                cancel: {
-                    label: '取消',
-                    className: 'btn-default'
-                }
-            },
-            title: "提示信息",
-            message: '确定要删除该角色吗？',
-            callback: function(result) {
-                if(result) {
-                    $.ajax({
-                        url:"../role/delete",    //请求的url地址
-                        dataType:"json",
-                        async:false,
-                        data:{
-                            id: id
-                        },
-                        type:"GET",
-                        success:function(result){
-                            switch (result.code){
-                                case '000000':
-                                    $("#modal-form").modal('hide');
-                                    jQuery(grid_selector).setGridParam({
-                                    }).trigger("reloadGrid");
-                                    break;
-                                case "000001":
-                                    parent.location.href = "../system/index";
-                                    break;
-                                case "000002":
-                                    window.location.href = "../system/403";
-                                    break;
-                                default :
-                                    bootboxalert(result.msg);
-                                    break;
-                            }
-                        },
-                        error:function(){
-                            bootboxalert("服务器异常，请联系管理员");
-                        }
-                    });
-                }
-            },
-        });
     }
 
     function save(){
+        submitNodes();
         $.ajax({
-            url:"../role/save",    //请求的url地址
+            url:"../api/sysrole/save",    //请求的url地址
             dataType:"json",
             async:false,
-            data:transformToJson($('#roleSaveForm').serializeArray()),
+            data:{
+                id:$("#roleId").val(),
+                name:$("#saveName").val(),
+                isSuper:$("input[name=isSuper]:checked").val(),
+                priority:$("#savePriority").val(),
+                perms:$("#perms").val()
+            },
             type:"GET",
             success:function(result){
                 switch (result.code){
@@ -421,7 +470,7 @@
 
     function huixian(id){
         $.ajax({
-            url:"../role/getJsonById",    //请求的url地址
+            url:"../api/sysrole/getbyid",    //请求的url地址
             dataType:"json",
             async:false,
             data:{
@@ -429,13 +478,19 @@
             },
             type:"GET",
             success:function(result){
-                var data = result.data;
                 switch (result.code){
                     case '000000':
-                        $("#roleId").val(data.id);
-                        $("#savePriority").val(data.priority);
-                        $("#saveName").val(data.name);
-                        $("#saveRemark").val(data.remark);
+                        $("#roleId").val(result.id);
+                        $("#savePriority").val(result.priority);
+                        $("#saveName").val(result.name);
+                        if(result.isSuper=="true"){
+                            $("#isSuper").prop('checked',true);
+                            disablePerms();
+                        }else{
+                            $("#notSuper").prop('checked',true);
+                            disablePerms();
+                            checkNodes(result.permsStr);
+                        }
                         break;
                     case "000001":
                         parent.location.href = "../system/index";
@@ -454,6 +509,7 @@
             }
         });
     }
+
 </script>
 </html>
 

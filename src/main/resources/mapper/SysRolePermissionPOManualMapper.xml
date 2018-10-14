@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.SysRolePermissionPOManualMapper" >
+  <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+    INSERT into sys_role_permission (role_id,perm_url,ext_info,is_deleted,add_time,mod_time) VALUES
+    <foreach collection="list" item="item" separator=",">
+      (#{item.roleId},#{item.permUrl},#{item.extInfo},${item.isDeleted},#{item.addTime},#{item.modTime})
+    </foreach>
+  </insert>
+
+  <update id="batchUpdate"  parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+      update sys_role_permission
+      <set>
+        is_deleted = #{item.isDeleted},mod_time = #{item.modTime}
+      </set>
+      where id = ${item.id}
+    </foreach>
+  </update>
+
+</mapper>

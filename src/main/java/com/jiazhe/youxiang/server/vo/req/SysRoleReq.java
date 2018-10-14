@@ -13,11 +13,21 @@ public class SysRoleReq extends BaseVO {
     private int pageNum;
     @ApiModelProperty("每页数量")
     private int pageSize;
+    @ApiModelProperty("偏移量")
+    private int offset;
+    @ApiModelProperty("条数")
+    private int limit;
+
+    @ApiModelProperty("角色id")
+    private int id;
     @ApiModelProperty("角色名称")
     private String name;
-
-    private int offset;
-    private int limit;
+    @ApiModelProperty("是否是管理员")
+    private String isSuper;
+    @ApiModelProperty("排序")
+    private int priority;
+    @ApiModelProperty("权限字符串，用逗号连接")
+    private String perms;
 
     public int getPageNum() {
         return pageNum;
@@ -49,5 +59,37 @@ public class SysRoleReq extends BaseVO {
 
     public int getLimit() {
         return pageSize;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getIsSuper() {
+        return isSuper;
+    }
+
+    public void setIsSuper(String isSuper) {
+        this.isSuper = isSuper;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    public String getPerms() {
+        return perms;
+    }
+
+    public void setPerms(String perms) {
+        this.perms = perms;
     }
 }

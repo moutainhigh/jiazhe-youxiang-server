@@ -20,4 +20,13 @@
           and name=#{name}
       </if>
   </select>
+
+    <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.SysRolePO" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_role (id, name, is_super,
+        priority, ext_info, is_deleted,
+        add_time, mod_time)
+        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{isSuper,jdbcType=TINYINT},
+        #{priority,jdbcType=INTEGER}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT},
+        #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
+    </insert>
 </mapper>
