@@ -53,29 +53,29 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <!--<table tableName="audit_record" domainObjectName="AuditRecordPO"/>-->
-        <!--<table tableName="customer" domainObjectName="CustomerPO"/>-->
-        <!--<table tableName="customer_address" domainObjectName="CustomerAddressPO"/>-->
-        <!--<table tableName="order_info" domainObjectName="OrderInfoPO"/>-->
-        <!--<table tableName="order_payment" domainObjectName="OrderPaymentPO"/>-->
-        <!--<table tableName="order_refund" domainObjectName="OrderRefundPO"/>-->
-        <!--<table tableName="product" domainObjectName="ProductPO"/>-->
-        <!--<table tableName="product_price" domainObjectName="ProductPricePO"/>-->
-        <!--<table tableName="product_type" domainObjectName="ProductTypePO"/>-->
-        <!--<table tableName="project" domainObjectName="ProjectPO"/>-->
-        <!--<table tableName="recharge_card" domainObjectName="RechargeCardPO"/>-->
-        <!--<table tableName="recharge_card_exchange_code" domainObjectName="RechargeCardExchangeCodePO"/>-->
-        <!--<table tableName="recharge_card_exchange_code_batch" domainObjectName="RechargeCardExchangeCodeBatchPO"/>-->
-        <!--<table tableName="recharge_card_exchange_record" domainObjectName="RechargeCardExchangeRecordPO"/>-->
-        <!--<table tableName="sys_city" domainObjectName="SysCityPO"/>-->
-        <!--<table tableName="sys_log" domainObjectName="SysLogPO"/>-->
-        <!--<table tableName="sys_role" domainObjectName="SysRolePO"/>-->
-        <!--<table tableName="sys_role_permission" domainObjectName="SysRolePermissionPO"/>-->
-        <!--<table tableName="sys_user" domainObjectName="SysUserPO"/>-->
-        <!--<table tableName="sys_user_role" domainObjectName="SysUserRolePO"/>-->
-        <!--<table tableName="voucher" domainObjectName="VoucherPO"/>-->
-        <!--<table tableName="voucher_exchange_code" domainObjectName="VoucherExchangeCodePO"/>-->
-        <!--<table tableName="voucher_exchange_code_batch" domainObjectName="VoucherExchangeCodeBatchPO"/>-->
-        <!--<table tableName="voucher_exchange_record" domainObjectName="VoucherExchangeRecordPO"/>-->
+       <table tableName="audit_record" domainObjectName="AuditRecordPO"/>
+        <table tableName="customer" domainObjectName="CustomerPO"/>
+        <table tableName="customer_address" domainObjectName="CustomerAddressPO"/>
+        <table tableName="order_info" domainObjectName="OrderInfoPO"/>
+        <table tableName="order_payment" domainObjectName="OrderPaymentPO"/>
+        <table tableName="order_refund" domainObjectName="OrderRefundPO"/>
+        <table tableName="product" domainObjectName="ProductPO"/>
+        <table tableName="product_price" domainObjectName="ProductPricePO"/>
+        <table tableName="product_type" domainObjectName="ProductTypePO"/>
+        <table tableName="project" domainObjectName="ProjectPO"/>
+        <table tableName="recharge_card" domainObjectName="RechargeCardPO"/>
+        <table tableName="recharge_card_exchange_code" domainObjectName="RechargeCardExchangeCodePO"/>
+        <table tableName="recharge_card_exchange_code_batch" domainObjectName="RechargeCardExchangeCodeBatchPO"/>
+        <table tableName="recharge_card_exchange_record" domainObjectName="RechargeCardExchangeRecordPO"/>
+        <table tableName="sys_city" domainObjectName="SysCityPO"/>
+        <table tableName="sys_log" domainObjectName="SysLogPO"/>
+        <table tableName="sys_role" domainObjectName="SysRolePO"/>
+        <table tableName="sys_role_permission" domainObjectName="SysRolePermissionPO"/>
+        <table tableName="sys_user" domainObjectName="SysUserPO"/>
+        <table tableName="sys_user_role" domainObjectName="SysUserRolePO"/>
+        <table tableName="voucher" domainObjectName="VoucherPO"/>
+        <table tableName="voucher_exchange_code" domainObjectName="VoucherExchangeCodePO"/>
+        <table tableName="voucher_exchange_code_batch" domainObjectName="VoucherExchangeCodeBatchPO"/>
+        <table tableName="voucher_exchange_record" domainObjectName="VoucherExchangeRecordPO"/>
     </context>
 </generatorConfiguration>

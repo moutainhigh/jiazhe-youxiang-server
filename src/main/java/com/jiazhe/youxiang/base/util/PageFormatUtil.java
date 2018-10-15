@@ -1,6 +1,12 @@
 package com.jiazhe.youxiang.base.util;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import springfox.documentation.spring.web.json.Json;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 /*import org.springframework.data.domain.Page;*/
 
 /**
@@ -9,12 +15,20 @@ import net.sf.json.JSONObject;
 public class PageFormatUtil {
 
 
-  /*  public static JSONObject format(Page page) {
-        JSONObject data = new JSONObject();
-        data.put("totalCount",page.getTotalElements());//总记录数
-        data.put("totalPage",page.getTotalPages());//总页数
-        data.put("dataRows",page.getContent());
-        data.put("currPage",Integer.valueOf(page.getNumber())+1);
-        return data;
-    }*/
+  public static JSONArray format(List<Map> Map) {
+       JSONArray jsonArray = new JSONArray();
+       for(Map temp:Map){
+           JSONArray jsonArrayTemp = new JSONArray();
+           JSONObject json = JSONObject.fromObject(temp);
+           Iterator<String> it = json.keys();
+           while(it.hasNext()){
+               String key = it.next();
+               String value = json.getString(key);
+               jsonArrayTemp.add(value);
+           }
+           jsonArray.add(jsonArrayTemp);
+       }
+       return jsonArray;
+    }
+
 }

@@ -9,8 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * 在这里编写类的功能描述
- *
+ * 用于系统登录、退出、无权限相关页面转发
  * @author niexiao
  * @created 2018/9/29
  */
