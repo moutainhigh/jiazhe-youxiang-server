@@ -13,8 +13,8 @@ import java.util.Map;
  * Created by TU on 2018/8/30.
  */
 public class PageFormatUtil {
-
-
+  //将[{key1:value1,key2:value2},{key3:value3,key4:value4},{key5:value5,key6:value6}]格式的数据
+  // 转为[[value1,value2],[value3,value4],[value5,value6]]，方便前台表格显示！！！
   public static JSONArray format(List<Map> Map) {
        JSONArray jsonArray = new JSONArray();
        for(Map temp:Map){
