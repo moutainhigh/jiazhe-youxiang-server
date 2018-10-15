@@ -5,7 +5,7 @@
  */
 package com.jiazhe.youxiang.server.common.exceptions;
 
-import com.jiazhe.youxiang.server.common.enums.CommonCodesEnum;
+import com.jiazhe.youxiang.server.common.enums.CommonCodeEnum;
 import com.jiazhe.youxiang.server.vo.ResponseMsg;
 
 /**
@@ -27,7 +27,7 @@ public class CommonException extends RuntimeException {
         this.message = message;
     }
 
-    public CommonException(CommonCodesEnum codeEnum) {
+    public CommonException(CommonCodeEnum codeEnum) {
         super(codeEnum.getMessage());
         this.code = codeEnum.getCode();
         this.type = codeEnum.getType();
@@ -38,7 +38,7 @@ public class CommonException extends RuntimeException {
         this(responseMsg.getCode(), responseMsg.getType(), responseMsg.getMessage());
     }
 
-    public CommonException(CommonCodesEnum codeEnum, Throwable cause) {
+    public CommonException(CommonCodeEnum codeEnum, Throwable cause) {
         super(codeEnum.getMessage(), cause);
         this.code = codeEnum.getCode();
         this.type = codeEnum.getType();
