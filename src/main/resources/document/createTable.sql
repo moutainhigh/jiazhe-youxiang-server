@@ -286,6 +286,22 @@ CREATE TABLE `product` (
     PRIMARY KEY (`id`)
 )  ENGINE=INNODB COMMENT='商品信息';
 
+drop table if exists electronic_product_exchange_record;
+CREATE TABLE `electronic_product_exchange_record` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
+    `product_id` INT(10) UNSIGNED NOT NULL COMMENT '商品id',
+    `order_id` INT(10) UNSIGNED NOT NULL COMMENT '订单ID，未使用时为空字符串',
+    `order_code` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '订单编号，未使用时为空字符串',
+    `code` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '兑换码（卡号）',
+    `keyt` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '密钥',
+    `status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '状态：0:未使用,1:已使用',
+    `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
+    `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
+    `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+    PRIMARY KEY (`id`)
+)  ENGINE=INNODB COMMENT='电子商品兑换码信息';
+
 drop table if exists product_price;
 CREATE TABLE `product_price` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
