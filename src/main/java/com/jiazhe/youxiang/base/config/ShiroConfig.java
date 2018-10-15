@@ -69,10 +69,6 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/api/signin/signin", "anon");//后台登陆请求
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/templates/**", "anon");
-        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
-        filterChainDefinitionMap.put("/webjars/**", "anon");
-        filterChainDefinitionMap.put("/v2/**", "anon");
-        filterChainDefinitionMap.put("/swagger-resource/**", "anon");
 
         filterChainDefinitionMap.put("/**", "authc");//表示所有url必须通过认证才能访问
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);

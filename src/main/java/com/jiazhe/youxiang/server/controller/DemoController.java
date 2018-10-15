@@ -5,6 +5,8 @@
  */
 package com.jiazhe.youxiang.server.controller;
 
+import com.jiazhe.youxiang.server.common.enums.DemoCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.DemoException;
 import com.jiazhe.youxiang.server.vo.req.DemoReq;
 import com.jiazhe.youxiang.server.vo.resp.DemoResp;
 import io.swagger.annotations.ApiOperation;
@@ -46,6 +48,10 @@ public class DemoController {
         DemoResp result = new DemoResp();
         result.setParam1("sfsdf");
         result.setParam2("resp" + req.getParam2());
+        boolean error = false;
+        if (error) {
+            throw new DemoException(DemoCodeEnum.INSERT_GOODS_ACTIVITY_ERROR);
+        }
         return result;
     }
 }
