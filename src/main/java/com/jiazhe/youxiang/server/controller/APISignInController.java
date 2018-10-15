@@ -3,9 +3,9 @@ package com.jiazhe.youxiang.server.controller;
 import com.aliyuncs.exceptions.ClientException;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.*;
-import com.jiazhe.youxiang.server.dao.mapper.SysUserPOMapper;
 import com.jiazhe.youxiang.server.domain.po.SysUserPO;
 import com.jiazhe.youxiang.server.domain.po.SysUserPOExample;
+import com.jiazhe.youxiang.server.service.SysUserService;
 import net.sf.json.JSONObject;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -18,6 +18,8 @@ import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.apache.shiro.util.ByteSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,12 +36,14 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("api/signin")
-public class SignInController extends BaseController{
+public class APISignInController extends BaseController{
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(APISignInController.class);
 
     @Autowired
     private SessionDAO sessionDAO;
     @Autowired
-    private SysUserPOMapper sysUserPOMapper;
+    private SysUserService sysUserService;
 
     //后台有登录请求，则发送验证码
     @RequestMapping(value = "/sendsignincode")
@@ -53,7 +57,7 @@ public class SignInController extends BaseController{
         SysUserPOExample.Criteria criteria = sysUserPOExample.createCriteria();
         criteria.andNameEqualTo(name);
         criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
-        List<SysUserPO> sysUserPOList = sysUserPOMapper.selectByExample(sysUserPOExample);
+        List<SysUserPO> sysUserPOList = sysUserService.selectByExample(sysUserPOExample);
         if (sysUserPOList.size() == 1) {//根据用户名和密码判断，是否有该用户，有该用户，给该用户手机发验证短信
             SysUserPO sysUserPO = sysUserPOList.get(0);
             ByteSource salt = ByteSource.Util.bytes(sysUserPOList.get(0).getSalt());

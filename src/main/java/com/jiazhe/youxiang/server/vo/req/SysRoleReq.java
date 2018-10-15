@@ -25,7 +25,7 @@ public class SysRoleReq extends BaseVO {
     @ApiModelProperty("是否是管理员")
     private String isSuper;
     @ApiModelProperty("排序")
-    private int priority;
+    private String priority;
     @ApiModelProperty("权限字符串，用逗号连接")
     private String perms;
 
@@ -77,11 +77,11 @@ public class SysRoleReq extends BaseVO {
         this.isSuper = isSuper;
     }
 
-    public int getPriority() {
+    public String getPriority() {
         return priority;
     }
 
-    public void setPriority(int priority) {
+    public void setPriority(String priority) {
         this.priority = priority;
     }
 

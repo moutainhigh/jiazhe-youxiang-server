@@ -204,7 +204,8 @@
         { id: 63, pId: 6, name: "商品兑换码管理", perm:"productcode-index"},
         { id: 64, pId: 6, name: "城市管理", perm:"syscity-index"},
         { id: 65, pId: 6, name: "员工管理", perm:"sysuser-index"},
-        { id: 66, pId: 6, name: "角色管理", perm:"sysrole-index"}
+        { id: 66, pId: 6, name: "角色管理", perm:"sysrole-index"},
+        { id: 67, pId: 6, name: "日志管理", perm:"syslog-index"}
     ];
 
     //初始化权限树
@@ -403,6 +404,7 @@
 
     function openNew() {
         $("#modal-title").html("角色信息-添加");
+        $("#roleId").val(0);
         $("#roleSaveForm #saveName").val("");
         $("#roleSaveForm #savePriority").val("");
         $("#notSuper").prop('checked',true);
