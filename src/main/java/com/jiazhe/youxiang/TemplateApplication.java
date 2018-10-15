@@ -1,4 +1,4 @@
-package com.jiazhe.youxiang.server;
+package com.jiazhe.youxiang;
 
 import com.google.common.collect.Sets;
 import org.springframework.boot.SpringApplication;
