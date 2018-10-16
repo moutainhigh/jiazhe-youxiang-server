@@ -26,7 +26,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("api/sysrole")
-public class APISysRoleController extends BaseController{
+public class APISysRoleController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(APISysRoleController.class);
 
@@ -46,7 +46,7 @@ public class APISysRoleController extends BaseController{
         result.setDataRows(PageFormatUtil.format(maps));
         result.setCurrPage(req.getPageNum());
         result.setTotalCount(count);
-        result.setTotalPage((int) Math.ceil(count*1.0/req.getPageSize()));
+        result.setTotalPage((int) Math.ceil(count * 1.0 / req.getPageSize()));
         return result;
     }
 
@@ -54,31 +54,31 @@ public class APISysRoleController extends BaseController{
     @RequestMapping(value = "/save", method = RequestMethod.GET)
     public Object save(@ModelAttribute SysRoleReq req) {
         SysRoleResp result = new SysRoleResp();//返回
-        SysRolePO sysRolePO ;
+        SysRolePO sysRolePO;
         List<SysRolePermissionPO> oldPerms = new ArrayList<SysRolePermissionPO>();
         List<SysRolePermissionPO> newPerms = new ArrayList<SysRolePermissionPO>();
-        boolean isAdd ;
+        boolean isAdd;
         String code = "000000";
         String msg = "";
-        try{
+        try {
             req.setPerms(req.getPerms().trim());//去空格
-            if((req.getIsSuper().equals("false")&&req.getPerms().length()<1)||req.getName().equals("")){
+            if ((req.getIsSuper().equals("false") && req.getPerms().length() < 1) || req.getName().equals("")) {
                 msg = "信息填写不完整";
                 throw new Exception(msg);
             }
-            if(!ValidateUtils.isNumeric(req.getPriority())){
+            if (!ValidateUtils.isNumeric(req.getPriority())) {
                 msg = "排序项必为整数类型";
                 throw new Exception(msg);
             }
-            String[] perms = req.getPerms().length()<1?null:req.getPerms().split(",");//新的权限字符串
-            if(req.getId()==0){//新建
+            String[] perms = req.getPerms().length() < 1 ? null : req.getPerms().split(",");//新的权限字符串
+            if (req.getId() == 0) {//新建
                 isAdd = true;
                 sysRolePO = new SysRolePO();
                 sysRolePO.setExtInfo("");
                 sysRolePO.setIsDeleted(Byte.valueOf("0"));
                 sysRolePO.setAddTime(new Date());
-                if(req.getIsSuper().equals("false")){//非管理员，添加role_permission
-                    for(String perm : perms){
+                if (req.getIsSuper().equals("false")) {//非管理员，添加role_permission
+                    for (String perm : perms) {
                         SysRolePermissionPO sysRolePermissionPO = new SysRolePermissionPO();
                         sysRolePermissionPO.setPermUrl(perm);
                         sysRolePermissionPO.setExtInfo("");
@@ -88,7 +88,7 @@ public class APISysRoleController extends BaseController{
                         newPerms.add(sysRolePermissionPO);
                     }
                 }
-            }else{//修改
+            } else {//修改
                 isAdd = false;
                 sysRolePO = sysRoleService.findById(req.getId());
                 SysRolePermissionPOExample sysRolePermissionPOExample = new SysRolePermissionPOExample();
@@ -97,15 +97,15 @@ public class APISysRoleController extends BaseController{
                 criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
                 //修改前的权限
                 oldPerms = sysRolePermissionService.selectByExample(sysRolePermissionPOExample);
-                if(null != perms){
-                    for(String perm : perms){//遍历新的权限String[]
+                if (null != perms) {
+                    for (String perm : perms) {//遍历新的权限String[]
                         boolean has = false;
-                        for(SysRolePermissionPO temp : oldPerms){//判断该权限是否已经存在
-                            if(temp.getPermUrl().equals(perm)){//已经存在
+                        for (SysRolePermissionPO temp : oldPerms) {//判断该权限是否已经存在
+                            if (temp.getPermUrl().equals(perm)) {//已经存在
                                 Iterator<SysRolePermissionPO> iterator = oldPerms.iterator();
-                                while(iterator.hasNext()){
+                                while (iterator.hasNext()) {
                                     SysRolePermissionPO temp1 = iterator.next();
-                                    if(temp.getId().equals(temp1.getId())){
+                                    if (temp.getId().equals(temp1.getId())) {
                                         iterator.remove();//将未修改的移出来
                                     }
                                 }
@@ -113,7 +113,7 @@ public class APISysRoleController extends BaseController{
                                 break;
                             }
                         }
-                        if(!has){
+                        if (!has) {
                             SysRolePermissionPO sysRolePermissionPO = new SysRolePermissionPO();
                             sysRolePermissionPO.setRoleId(req.getId());
                             sysRolePermissionPO.setPermUrl(perm);
@@ -127,13 +127,13 @@ public class APISysRoleController extends BaseController{
                 }
             }
             sysRolePO.setName(req.getName());
-            sysRolePO.setIsSuper(Byte.valueOf(req.getIsSuper().equals("true")?"1":"0"));
+            sysRolePO.setIsSuper(Byte.valueOf(req.getIsSuper().equals("true") ? "1" : "0"));
             sysRolePO.setPriority(Integer.valueOf(req.getPriority()));
             sysRolePO.setModTime(new Date());
-            int count = sysRoleBiz.save(isAdd,sysRolePO,newPerms,oldPerms);
-        }catch(Exception e){
+            int count = sysRoleBiz.save(isAdd, sysRolePO, newPerms, oldPerms);
+        } catch (Exception e) {
             code = "000003";
-        }finally {
+        } finally {
             result.setCode(code);
             result.setMsg(msg);
         }
@@ -154,17 +154,17 @@ public class APISysRoleController extends BaseController{
         criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
         List<SysRolePermissionPO> perms = sysRolePermissionService.selectByExample(sysRolePermissionPOExample);
         StringBuilder permsStr = new StringBuilder();
-        for(SysRolePermissionPO perm : perms){
-            permsStr.append(perm.getPermUrl()+",");
+        for (SysRolePermissionPO perm : perms) {
+            permsStr.append(perm.getPermUrl() + ",");
         }
-        if(perms.size()>0){
-            permsStr.deleteCharAt(permsStr.length()-1);
+        if (perms.size() > 0) {
+            permsStr.deleteCharAt(permsStr.length() - 1);
         }
         result.setId(sysRolePO.getId());
         result.setName(sysRolePO.getName());
         result.setPriority(sysRolePO.getPriority());
         result.setPermsStr(permsStr.toString());
-        result.setIsSuper(sysRolePO.getIsSuper()==Byte.valueOf("1")?"true":"false");
+        result.setIsSuper(sysRolePO.getIsSuper() == Byte.valueOf("1") ? "true" : "false");
         return result;
     }
 
@@ -183,12 +183,12 @@ public class APISysRoleController extends BaseController{
         criteria.andRoleIdEqualTo(req.getId());
         criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
         List<SysRolePermissionPO> perms = sysRolePermissionService.selectByExample(sysRolePermissionPOExample);
-        for(SysRolePermissionPO temp : perms){
+        for (SysRolePermissionPO temp : perms) {
             temp.setIsDeleted(Byte.valueOf("1"));
             temp.setModTime(new Date());
         }
         sysRoleService.update(sysRolePO);
-        if(perms.size()>0){
+        if (perms.size() > 0) {
             sysRolePermissionService.batchUpdate(perms);
         }
         return result;

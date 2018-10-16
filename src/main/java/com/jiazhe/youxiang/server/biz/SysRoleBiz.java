@@ -28,29 +28,29 @@ public class SysRoleBiz {
     //保存角色信息，新建或修改
     public int save(boolean isAdd, SysRolePO sysRolePO, List<SysRolePermissionPO> newPerms, List<SysRolePermissionPO> oldPerms) {
         int count = 0;
-        try{
-            if(isAdd){//新建角色
+        try {
+            if (isAdd) {//新建角色
                 sysRoleService.insert(sysRolePO);
-                for(SysRolePermissionPO temp : newPerms){
+                for (SysRolePermissionPO temp : newPerms) {
                     temp.setRoleId(sysRolePO.getId());
                 }
-            }else{//修改角色
+            } else {//修改角色
                 sysRoleService.update(sysRolePO);
             }
-            if(newPerms!=null && newPerms.size()>0){
+            if (newPerms != null && newPerms.size() > 0) {
                 sysRolePermissionService.batchInsert(newPerms);
             }
-            if(newPerms!=null && oldPerms.size()>0){//把剩下的old给删除了
-                for(SysRolePermissionPO old : oldPerms){
+            if (newPerms != null && oldPerms.size() > 0) {//把剩下的old给删除了
+                for (SysRolePermissionPO old : oldPerms) {
                     old.setIsDeleted(Byte.valueOf("1"));
                     old.setModTime(new Date());
                 }
                 sysRolePermissionService.batchUpdate(oldPerms);
             }
             count = 1;
-        }catch(Exception e){
-            LOGGER.warn("保存角色出错，错误消息："+e.getMessage());
+        } catch (Exception e) {
+            LOGGER.warn("保存角色出错，错误消息：" + e.getMessage());
         }
-            return count;
+        return count;
     }
 }

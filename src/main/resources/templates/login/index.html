@@ -1,181 +1,185 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-		<meta charset="utf-8" />
-		<title>登录页面</title>
-		<link rel="shortcut icon" th:href="@{/static/images/icon/logo.jpg}" type="image/x-icon" />
-		<meta name="description" content="User login page" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-		<!-- CSS -->
-		<link rel="stylesheet" th:href="@{/static/init.css}"/>
-		<!-- Javascript -->
-		<script th:src="@{/static/init.js}"></script><!--通用的js-->
-	</head>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title>登录页面</title>
+    <link rel="shortcut icon" th:href="@{/static/images/icon/logo.jpg}" type="image/x-icon"/>
+    <meta name="description" content="User login page"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/static/init.css}"/>
+    <!-- Javascript -->
+    <script th:src="@{/static/init.js}"></script><!--通用的js-->
+</head>
 
-	<body class="login-layout" style="padding-bottom:70px">
-		<div class="main-container">
-			<div class="main-content">
-				<div class="row">
-					<div class="col-sm-10 col-sm-offset-1">
-						<div class="login-container" style="padding-top:30px">
-							<div class="center">
-								<h1>
-									<i class="ace-icon fa fa-leaf green"></i>
-									<span class="red"><!--悠享后台管理系统--></span>
-								</h1>
-								<h4 class="blue" id="id-company-text"><!--北京悠享互联信息技术有限公司--></h4>
-							</div>
+<body class="login-layout" style="padding-bottom:70px">
+<div class="main-container">
+    <div class="main-content">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <div class="login-container" style="padding-top:30px">
+                    <div class="center">
+                        <h1>
+                            <i class="ace-icon fa fa-leaf green"></i>
+                            <span class="red"><!--悠享后台管理系统--></span>
+                        </h1>
+                        <h4 class="blue" id="id-company-text"><!--北京悠享互联信息技术有限公司--></h4>
+                    </div>
 
-							<div class="space-6" style="padding-top:30px"></div>
+                    <div class="space-6" style="padding-top:30px"></div>
 
-							<div class="position-relative">
-								<div id="login-box" class="login-box visible widget-box no-border">
-									<div class="widget-body">
-										<div class="widget-main">
-											<h4 class="header blue lighter bigger">
-												<i class="ace-icon fa fa-coffee green"></i>
-												请输入用户名和密码
-											</h4>
+                    <div class="position-relative">
+                        <div id="login-box" class="login-box visible widget-box no-border">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <h4 class="header blue lighter bigger">
+                                        <i class="ace-icon fa fa-coffee green"></i>
+                                        请输入用户名和密码
+                                    </h4>
 
-											<div class="space-6"></div>
+                                    <div class="space-6"></div>
 
-											<form id="loginForm">
-												<input type="hidden" id="bizId" name="bizId">
-												<input type="hidden" id="phone" name="phone">
-												<fieldset>
-													<label class="block clearfix">
+                                    <form id="loginForm">
+                                        <input type="hidden" id="bizId" name="bizId">
+                                        <input type="hidden" id="phone" name="phone">
+                                        <fieldset>
+                                            <label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input id="name" name="name" type="text" class="form-control" placeholder="用户名" />
+															<input id="name" name="name" type="text"
+                                                                   class="form-control" placeholder="用户名"/>
 															<i class="ace-icon fa fa-user"></i>
 														</span>
-													</label>
+                                            </label>
 
-													<label class="block clearfix">
+                                            <label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input id="password" name="password" type="password" class="form-control" placeholder="密码" />
+															<input id="password" name="password" type="password"
+                                                                   class="form-control" placeholder="密码"/>
 															<i class="ace-icon fa fa-lock"></i>
 														</span>
-													</label>
+                                            </label>
 
-													<div class="space"></div>
+                                            <div class="space"></div>
 
-													<div class="clearfix">
-														<button type="button" class="width-35 pull-right btn btn-sm btn-primary" id="login-btn">
-															<i class="ace-icon fa fa-key"></i>
-															<span class="bigger-110">登陆</span>
-														</button>
-													</div>
+                                            <div class="clearfix">
+                                                <button type="button" class="width-35 pull-right btn btn-sm btn-primary"
+                                                        id="login-btn">
+                                                    <i class="ace-icon fa fa-key"></i>
+                                                    <span class="bigger-110">登陆</span>
+                                                </button>
+                                            </div>
 
-													<div class="space-4"></div>
-												</fieldset>
-											</form>
-										</div><!-- /.widget-main -->
-									</div><!-- /.widget-body -->
-								</div><!-- /.login-box -->
+                                            <div class="space-4"></div>
+                                        </fieldset>
+                                    </form>
+                                </div><!-- /.widget-main -->
+                            </div><!-- /.widget-body -->
+                        </div><!-- /.login-box -->
 
-								<div class="center" style="padding-top:10px">
-									<h6 class="blue"><!--北京悠享互联信息技术有限公司版权所有--></h6>
-									<h6 class="blue"><!--Copyright &copy; 2018 Beijing ue-link Internet Information Technology Co., Ltd.--></h6>
-								</div>
-							</div><!-- /.position-relative -->
-						</div>
-					</div><!-- /.col -->
-				</div><!-- /.row -->
-			</div><!-- /.main-content -->
-		</div><!-- /.main-container -->
+                        <div class="center" style="padding-top:10px">
+                            <h6 class="blue"><!--北京悠享互联信息技术有限公司版权所有--></h6>
+                            <h6 class="blue">
+                                <!--Copyright &copy; 2018 Beijing ue-link Internet Information Technology Co., Ltd.--></h6>
+                        </div>
+                    </div><!-- /.position-relative -->
+                </div>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.main-content -->
+</div><!-- /.main-container -->
 
-		<!-- inline scripts related to this page -->
-		<script type="text/javascript">
-			var hasSentCode = false;//默认没有发送验证码
-			$(function () {
-				$("#login-btn").click(function () {
-					var name = $("#name").val();
-					var password = $("#password").val();
-					if(name==""||password==""){
-                        bootboxalert("请将信息填写完整后再登录");
-                		return false;
-					}
-					if(hasSentCode){//已经发送验证码
-                        showCodePrompt();
-					}else{//没发送验证码，就发送验证码
-                        $.ajax({
-                            url:"../api/signin/sendsignincode", //此处登陆，其实是请求验证码
-                            dataType:"json",
-                            async:false,
-                            data:{
-                                name:name,
-                                password:password
-                            },
-                            type:"GET",
-                            success:function(result){
-                                if(result.code=='000000'){//验证码获取成功
-                                    hasSentCode = true;
-                                    window.setTimeout(function(){//一分钟之后可以重新发送验证码
-                                        hasSentCode = false;
-                                    },300000);
-                                    $("#bizId").val(result.data.bizId);
-                                    $("#phone").val(result.data.phone);
-                                    showCodePrompt();
-                                }else{
-                                    bootboxalert(result.msg);
-                                }
-                            },
-                            error:function(){
-                                bootboxalert("服务器异常，请联系管理员");
-                            }
-                        });
-					}
-				});
-			})
-
-			function showCodePrompt(){
-                var name = $("#name").val();
-                var password = $("#password").val();
-                var bizId = $("#bizId").val();
-                var phone = $("#phone").val();
-                bootbox.prompt({
-                    size: "small",
-                    title: "请输入登录验证码",
-                    buttons: {
-                        confirm: {
-                            label: '登录',
-                            className: 'btn-primary'
-                        },
-						cancel: {
-                            label: '取消',
-                            className: 'btn-default'
-						}
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+    var hasSentCode = false;//默认没有发送验证码
+    $(function () {
+        $("#login-btn").click(function () {
+            var name = $("#name").val();
+            var password = $("#password").val();
+            if (name == "" || password == "") {
+                bootboxalert("请将信息填写完整后再登录");
+                return false;
+            }
+            if (hasSentCode) {//已经发送验证码
+                showCodePrompt();
+            } else {//没发送验证码，就发送验证码
+                $.ajax({
+                    url: "../api/signin/sendsignincode", //此处登陆，其实是请求验证码
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        name: name,
+                        password: password
                     },
-                    callback: function(result){
-						if(result!=null){
-                            $.ajax({
-                                url:"../api/signin/signin", //确定为登陆
-                                dataType:"json",
-                                async:false,
-                                data:{
-                                    name:name,
-                                    password:password,
-									phone:phone,
-									bizId:bizId,
-									code:result
-                                },
-                                type:"GET",
-                                success:function(result){
-                                    if(result.code == "000000"){
-                                        window.location.href = "../main/main";
-									}else{
-                                        bootboxalert(result.msg);
-									}
-                                },
-                                error:function(){
-                                    bootboxalert("服务器异常，请联系管理员");
-                                }
-                            });
-						}
+                    type: "GET",
+                    success: function (result) {
+                        if (result.code == '000000') {//验证码获取成功
+                            hasSentCode = true;
+                            window.setTimeout(function () {//一分钟之后可以重新发送验证码
+                                hasSentCode = false;
+                            }, 300000);
+                            $("#bizId").val(result.data.bizId);
+                            $("#phone").val(result.data.phone);
+                            showCodePrompt();
+                        } else {
+                            bootboxalert(result.msg);
+                        }
+                    },
+                    error: function () {
+                        bootboxalert("服务器异常，请联系管理员");
                     }
-                })
-			}
-		</script>
-	</body>
+                });
+            }
+        });
+    })
+
+    function showCodePrompt() {
+        var name = $("#name").val();
+        var password = $("#password").val();
+        var bizId = $("#bizId").val();
+        var phone = $("#phone").val();
+        bootbox.prompt({
+            size: "small",
+            title: "请输入登录验证码",
+            buttons: {
+                confirm: {
+                    label: '登录',
+                    className: 'btn-primary'
+                },
+                cancel: {
+                    label: '取消',
+                    className: 'btn-default'
+                }
+            },
+            callback: function (result) {
+                if (result != null) {
+                    $.ajax({
+                        url: "../api/signin/signin", //确定为登陆
+                        dataType: "json",
+                        async: false,
+                        data: {
+                            name: name,
+                            password: password,
+                            phone: phone,
+                            bizId: bizId,
+                            code: result
+                        },
+                        type: "GET",
+                        success: function (result) {
+                            if (result.code == "000000") {
+                                window.location.href = "../main/main";
+                            } else {
+                                bootboxalert(result.msg);
+                            }
+                        },
+                        error: function () {
+                            bootboxalert("服务器异常，请联系管理员");
+                        }
+                    });
+                }
+            }
+        })
+    }
+</script>
+</body>
 </html>

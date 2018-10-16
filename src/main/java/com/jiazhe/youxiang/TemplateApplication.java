@@ -10,8 +10,8 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerA
 import java.util.Set;
 
 @SpringBootApplication
-@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class,
-        DataSourceTransactionManagerAutoConfiguration.class, })
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class,
+        DataSourceTransactionManagerAutoConfiguration.class,})
 
 public class TemplateApplication {
 
