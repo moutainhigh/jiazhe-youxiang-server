@@ -70,11 +70,12 @@ CREATE TABLE `sys_user_role` (
 drop table if exists sys_city;
 CREATE TABLE `sys_city` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
-    `city_code` VARCHAR(255) NOT NULL COMMENT '城市编码',
-    `city_name` VARCHAR(255) NOT NULL COMMENT '城市名称',
-    `city_pinyin` VARCHAR(255) NOT NULL COMMENT '城市拼音',
+    `city_code` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '城市编码',
+    `city_name` VARCHAR(255) NOT NULL DEFAULT ''  COMMENT '城市名称',
+    `city_pinyin` VARCHAR(255) NOT NULL DEFAULT '0'  COMMENT '城市拼音',
     `city_level` INT(10) NOT NULL COMMENT '城市等级',
     `priority` INT(10) NOT NULL DEFAULT '0' COMMENT '排序序号',
+    `parent_code` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '上级城市编码，没有值表示为根节点',
     `status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '状态：0:未启用,1:启用',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',

@@ -6,7 +6,7 @@
 package com.jiazhe.youxiang.server.vo;
 
 /**
- * 返回值信息
+ * 返回值信息，通常是返回成功，或者异常信息
  *
  * @author niexiao
  * @created 2018/10/15

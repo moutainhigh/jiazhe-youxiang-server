@@ -1,9 +1,18 @@
-package com.jiazhe.youxiang.server.domain.po;
+/*
+ * Copyright (c) 2017 maoyan.com
+ * All rights reserved.
+ *
+ */
+package com.jiazhe.youxiang.server.dto.syscity;
 
-import java.io.Serializable;
-import java.util.Date;
+/**
+ * 城市信息DTO
+ *
+ * @author niexiao
+ * @created 2018/10/16
+ */
+public class SysCityDTO {
 
-public class SysCityPO implements Serializable {
     private Integer id;
 
     private String cityCode;
@@ -20,16 +29,6 @@ public class SysCityPO implements Serializable {
 
     private Byte status;
 
-    private String extInfo;
-
-    private Byte isDeleted;
-
-    private Date addTime;
-
-    private Date modTime;
-
-    private static final long serialVersionUID = 1L;
-
     public Integer getId() {
         return id;
     }
@@ -43,7 +42,7 @@ public class SysCityPO implements Serializable {
     }
 
     public void setCityCode(String cityCode) {
-        this.cityCode = cityCode == null ? null : cityCode.trim();
+        this.cityCode = cityCode;
     }
 
     public String getCityName() {
@@ -51,7 +50,7 @@ public class SysCityPO implements Serializable {
     }
 
     public void setCityName(String cityName) {
-        this.cityName = cityName == null ? null : cityName.trim();
+        this.cityName = cityName;
     }
 
     public String getCityPinyin() {
@@ -59,7 +58,7 @@ public class SysCityPO implements Serializable {
     }
 
     public void setCityPinyin(String cityPinyin) {
-        this.cityPinyin = cityPinyin == null ? null : cityPinyin.trim();
+        this.cityPinyin = cityPinyin;
     }
 
     public Integer getCityLevel() {
@@ -83,7 +82,7 @@ public class SysCityPO implements Serializable {
     }
 
     public void setParentCode(String parentCode) {
-        this.parentCode = parentCode == null ? null : parentCode.trim();
+        this.parentCode = parentCode;
     }
 
     public Byte getStatus() {
@@ -92,37 +91,5 @@ public class SysCityPO implements Serializable {
 
     public void setStatus(Byte status) {
         this.status = status;
-    }
-
-    public String getExtInfo() {
-        return extInfo;
-    }
-
-    public void setExtInfo(String extInfo) {
-        this.extInfo = extInfo == null ? null : extInfo.trim();
-    }
-
-    public Byte getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(Byte isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
-    public Date getAddTime() {
-        return addTime;
-    }
-
-    public void setAddTime(Date addTime) {
-        this.addTime = addTime;
-    }
-
-    public Date getModTime() {
-        return modTime;
-    }
-
-    public void setModTime(Date modTime) {
-        this.modTime = modTime;
     }
 }

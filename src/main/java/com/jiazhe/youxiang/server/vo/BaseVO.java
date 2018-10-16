@@ -6,7 +6,7 @@
 package com.jiazhe.youxiang.server.vo;
 
 /**
- * 在这里编写类的功能描述
+ * 所有req和Resp的父类
  *
  * @author niexiao
  * @created 2018/9/30
