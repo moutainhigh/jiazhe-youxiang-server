@@ -18,7 +18,7 @@ public class SysCityListReq extends BaseVO {
 
     private static final long serialVersionUID = 8343280757693372496L;
     @ApiModelProperty("上级城市Code，可空，为空时查询所有一级城市")
-    private String parentCode = "";
+    private String parentCode ;
 
     public String getParentCode() {
         return parentCode;
