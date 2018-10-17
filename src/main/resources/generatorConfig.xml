@@ -16,9 +16,9 @@
 
         <!-- 数据库链接URL、用户名、密码 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/coupon_app?useUnicode=true&amp;characterEncoding=UTF8&amp;connectTimeout=1000&amp;socketTimeout=3000"
+                        connectionURL="jdbc:mysql://cdb-21q33fb6.bj.tencentcdb.com:10018/youxiang?useUnicode=true&amp;characterEncoding=UTF8&amp;connectTimeout=1000&amp;socketTimeout=3000"
                         userId="root"
-                        password="root">
+                        password="rewq4321$#@!">
         </jdbcConnection>
 
         <!--
@@ -53,29 +53,29 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-       <table tableName="audit_record" domainObjectName="AuditRecordPO"/>
-        <table tableName="customer" domainObjectName="CustomerPO"/>
-        <table tableName="customer_address" domainObjectName="CustomerAddressPO"/>
-        <table tableName="order_info" domainObjectName="OrderInfoPO"/>
-        <table tableName="order_payment" domainObjectName="OrderPaymentPO"/>
-        <table tableName="order_refund" domainObjectName="OrderRefundPO"/>
-        <table tableName="product" domainObjectName="ProductPO"/>
-        <table tableName="product_price" domainObjectName="ProductPricePO"/>
-        <table tableName="product_type" domainObjectName="ProductTypePO"/>
-        <table tableName="project" domainObjectName="ProjectPO"/>
-        <table tableName="recharge_card" domainObjectName="RechargeCardPO"/>
-        <table tableName="recharge_card_exchange_code" domainObjectName="RechargeCardExchangeCodePO"/>
-        <table tableName="recharge_card_exchange_code_batch" domainObjectName="RechargeCardExchangeCodeBatchPO"/>
-        <table tableName="recharge_card_exchange_record" domainObjectName="RechargeCardExchangeRecordPO"/>
+       <!--<table tableName="audit_record" domainObjectName="AuditRecordPO"/>-->
+        <!--<table tableName="customer" domainObjectName="CustomerPO"/>-->
+        <!--<table tableName="customer_address" domainObjectName="CustomerAddressPO"/>-->
+        <!--<table tableName="order_info" domainObjectName="OrderInfoPO"/>-->
+        <!--<table tableName="order_payment" domainObjectName="OrderPaymentPO"/>-->
+        <!--<table tableName="order_refund" domainObjectName="OrderRefundPO"/>-->
+        <!--<table tableName="product" domainObjectName="ProductPO"/>-->
+        <!--<table tableName="product_price" domainObjectName="ProductPricePO"/>-->
+        <!--<table tableName="product_type" domainObjectName="ProductTypePO"/>-->
+        <!--<table tableName="project" domainObjectName="ProjectPO"/>-->
+        <!--<table tableName="recharge_card" domainObjectName="RechargeCardPO"/>-->
+        <!--<table tableName="recharge_card_exchange_code" domainObjectName="RechargeCardExchangeCodePO"/>-->
+        <!--<table tableName="recharge_card_exchange_code_batch" domainObjectName="RechargeCardExchangeCodeBatchPO"/>-->
+        <!--<table tableName="recharge_card_exchange_record" domainObjectName="RechargeCardExchangeRecordPO"/>-->
         <table tableName="sys_city" domainObjectName="SysCityPO"/>
-        <table tableName="sys_log" domainObjectName="SysLogPO"/>
-        <table tableName="sys_role" domainObjectName="SysRolePO"/>
-        <table tableName="sys_role_permission" domainObjectName="SysRolePermissionPO"/>
-        <table tableName="sys_user" domainObjectName="SysUserPO"/>
-        <table tableName="sys_user_role" domainObjectName="SysUserRolePO"/>
-        <table tableName="voucher" domainObjectName="VoucherPO"/>
-        <table tableName="voucher_exchange_code" domainObjectName="VoucherExchangeCodePO"/>
-        <table tableName="voucher_exchange_code_batch" domainObjectName="VoucherExchangeCodeBatchPO"/>
-        <table tableName="voucher_exchange_record" domainObjectName="VoucherExchangeRecordPO"/>
+        <!--<table tableName="sys_log" domainObjectName="SysLogPO"/>-->
+        <!--<table tableName="sys_role" domainObjectName="SysRolePO"/>-->
+        <!--<table tableName="sys_role_permission" domainObjectName="SysRolePermissionPO"/>-->
+        <!--<table tableName="sys_user" domainObjectName="SysUserPO"/>-->
+        <!--<table tableName="sys_user_role" domainObjectName="SysUserRolePO"/>-->
+        <!--<table tableName="voucher" domainObjectName="VoucherPO"/>-->
+        <!--<table tableName="voucher_exchange_code" domainObjectName="VoucherExchangeCodePO"/>-->
+        <!--<table tableName="voucher_exchange_code_batch" domainObjectName="VoucherExchangeCodeBatchPO"/>-->
+        <!--<table tableName="voucher_exchange_record" domainObjectName="VoucherExchangeRecordPO"/>-->
     </context>
 </generatorConfiguration>
