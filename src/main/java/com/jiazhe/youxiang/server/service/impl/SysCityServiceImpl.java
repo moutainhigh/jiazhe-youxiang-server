@@ -8,6 +8,7 @@ package com.jiazhe.youxiang.server.service.impl;
 import com.jiazhe.youxiang.server.adapter.SysCityAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.dao.mapper.SysCityPOMapper;
+import com.jiazhe.youxiang.server.dao.mapper.manual.SysCityPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.SysCityPO;
 import com.jiazhe.youxiang.server.domain.po.SysCityPOExample;
 import com.jiazhe.youxiang.server.dto.syscity.SysCityDTO;
@@ -31,6 +32,9 @@ public class SysCityServiceImpl implements SysCityService {
     @Autowired
     private SysCityPOMapper sysCityPOMapper;
 
+    @Autowired
+    private SysCityPOManualMapper sysCityPOManualMapper;
+
     @Override
     public List<SysCityDTO> getList(String parentCode) {
         SysCityPOExample sysCityPOExample = new SysCityPOExample();
@@ -44,4 +48,15 @@ public class SysCityServiceImpl implements SysCityService {
         criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
         return sysCityPOList.stream().map(SysCityAdapter::sysCityPO2DTO).collect(Collectors.toList());
     }
+
+    @Override
+    public void updateStatusByParentCode(String parentCode, Byte status) {
+        sysCityPOManualMapper.updateStatusByParentCode(parentCode, status);
+    }
+
+    @Override
+    public void updateStatusByCityCodes(List<String> cityCodes, Byte status) {
+        sysCityPOManualMapper.updateStatusByCityCodes(cityCodes, status);
+    }
+
 }

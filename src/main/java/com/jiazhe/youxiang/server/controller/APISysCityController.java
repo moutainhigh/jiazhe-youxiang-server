@@ -10,7 +10,8 @@ import com.jiazhe.youxiang.server.adapter.SysCityAdapter;
 import com.jiazhe.youxiang.server.biz.SysCityBiz;
 import com.jiazhe.youxiang.server.dto.syscity.SysCityDTO;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
-import com.jiazhe.youxiang.server.vo.req.syscity.OpenCityReq;
+import com.jiazhe.youxiang.server.vo.req.syscity.CityCodeReq;
+import com.jiazhe.youxiang.server.vo.req.syscity.CityCodesReq;
 import com.jiazhe.youxiang.server.vo.req.syscity.SysCityListReq;
 import com.jiazhe.youxiang.server.vo.resp.syscity.SysCityResp;
 import io.swagger.annotations.ApiOperation;
@@ -61,16 +62,61 @@ public class APISysCityController extends BaseController {
     }
 
     /**
-     * 获取城市列表信息
+     * 开通省份（其下级城市全部开通）
      *
      * @return
      */
-    @ApiOperation(value = "开通城市", httpMethod = "POST", notes = "开通城市")
-    @RequestMapping(value = "opencity", method = RequestMethod.POST)
-    public Object openCity(@ModelAttribute OpenCityReq req) {
+    @ApiOperation(value = "开通省份（其下级城市全部开通）", httpMethod = "POST", notes = "开通省份（其下级城市全部开通）")
+    @RequestMapping(value = "openprovince", method = RequestMethod.POST)
+    public Object openProvince(@ModelAttribute CityCodeReq req) {
         //TODO niexiao 参数验证
         //调用BIZ方法
-        sysCityBiz.openCity(req.getCityIds());
+        sysCityBiz.openProvince(req.getCityCode());
+        //用ResponseFactory将返回值包装,简单的返回成功
+        return ResponseFactory.buildSuccess();
+    }
+
+    /**
+     * 关闭省份（其下级城市全部关闭）
+     *
+     * @return
+     */
+    @ApiOperation(value = "关闭省份（其下级城市全部关闭）", httpMethod = "POST", notes = "关闭省份（其下级城市全部关闭）")
+    @RequestMapping(value = "closeprovince", method = RequestMethod.POST)
+    public Object closeProvince(@ModelAttribute CityCodeReq req) {
+        //TODO niexiao 参数验证
+        //调用BIZ方法
+        sysCityBiz.closeProvince(req.getCityCode());
+        //用ResponseFactory将返回值包装,简单的返回成功
+        return ResponseFactory.buildSuccess();
+    }
+
+    /**
+     * 批量开通城市
+     *
+     * @return
+     */
+    @ApiOperation(value = "批量开通城市", httpMethod = "POST", notes = "批量开通城市")
+    @RequestMapping(value = "opencities", method = RequestMethod.POST)
+    public Object openCities(@ModelAttribute CityCodesReq req) {
+        //TODO niexiao 参数验证
+        //调用BIZ方法
+        sysCityBiz.openCities(req.getCityCodes());
+        //用ResponseFactory将返回值包装,简单的返回成功
+        return ResponseFactory.buildSuccess();
+    }
+
+    /**
+     * 批量关闭城市
+     *
+     * @return
+     */
+    @ApiOperation(value = "批量关闭城市", httpMethod = "POST", notes = "批量关闭城市")
+    @RequestMapping(value = "closecities", method = RequestMethod.POST)
+    public Object closeCities(@ModelAttribute CityCodesReq req) {
+        //TODO niexiao 参数验证
+        //调用BIZ方法
+        sysCityBiz.closeCities(req.getCityCodes());
         //用ResponseFactory将返回值包装,简单的返回成功
         return ResponseFactory.buildSuccess();
     }

@@ -17,4 +17,8 @@ import java.util.List;
  */
 public interface SysCityService {
     List<SysCityDTO> getList(String parentCode);
+
+    void updateStatusByCityCodes(List<String> cityCodes, Byte status);
+
+    void updateStatusByParentCode(String parentCode, Byte status);
 }
