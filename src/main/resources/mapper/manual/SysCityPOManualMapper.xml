@@ -29,6 +29,6 @@
     update sys_city
     set
     status = #{status,jdbcType=TINYINT}
-    where parent_code = #{parentCode,jdbcType=VARCHAR}
+    where parent_code = #{parentCode,jdbcType=VARCHAR} or city_code = #{parentCode,jdbcType=VARCHAR}
   </update>
 </mapper>
