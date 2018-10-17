@@ -12,7 +12,7 @@ CREATE TABLE `sys_log` (
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
     PRIMARY KEY (`id`)
-)  ENGINE=INNODB COMMENT='后台用户表';
+)  ENGINE=INNODB COMMENT='日志信息表';
 
 drop table if exists sys_user;
 CREATE TABLE `sys_user` (
