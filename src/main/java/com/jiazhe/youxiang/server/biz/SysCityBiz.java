@@ -5,6 +5,8 @@
  */
 package com.jiazhe.youxiang.server.biz;
 
+import com.google.common.collect.Lists;
+import com.jiazhe.youxiang.server.common.enums.CityStatusEnum;
 import com.jiazhe.youxiang.server.dto.syscity.SysCityDTO;
 import com.jiazhe.youxiang.server.service.impl.SysCityServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,21 @@ public class SysCityBiz {
         return sysCityService.getList(parentCode);
     }
 
-    public void openCity(List<Integer> cityIds) {
+    public void openProvince(String cityCode) {
+        sysCityService.updateStatusByCityCodes(Lists.newArrayList(cityCode), CityStatusEnum.OPEN.getId().byteValue());
+        sysCityService.updateStatusByParentCode(cityCode, CityStatusEnum.OPEN.getId().byteValue());
+    }
 
+    public void closeProvince(String cityCode) {
+        sysCityService.updateStatusByCityCodes(Lists.newArrayList(cityCode), CityStatusEnum.CLOSE.getId().byteValue());
+        sysCityService.updateStatusByParentCode(cityCode, CityStatusEnum.CLOSE.getId().byteValue());
+    }
+
+    public void openCities(List<String> cityCodes) {
+        sysCityService.updateStatusByCityCodes(cityCodes, CityStatusEnum.OPEN.getId().byteValue());
+    }
+
+    public void closeCities(List<String> cityCodes) {
+        sysCityService.updateStatusByCityCodes(cityCodes, CityStatusEnum.CLOSE.getId().byteValue());
     }
 }

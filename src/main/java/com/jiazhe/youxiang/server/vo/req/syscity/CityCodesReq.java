@@ -6,8 +6,9 @@
 package com.jiazhe.youxiang.server.vo.req.syscity;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
-import com.sun.tools.javac.util.List;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.List;
 
 /**
  * 在这里编写类的功能描述
@@ -15,17 +16,17 @@ import io.swagger.annotations.ApiModelProperty;
  * @author niexiao
  * @created 2018/10/16
  */
-public class OpenCityReq extends BaseVO {
+public class CityCodesReq extends BaseVO {
 
     private static final long serialVersionUID = 6769706536153569478L;
-    @ApiModelProperty("要开通的城市ID")
-    private List<Integer> cityIds;
+    @ApiModelProperty("城市Code集合")
+    private List<String> cityCodes;
 
-    public List<Integer> getCityIds() {
-        return cityIds;
+    public List<String> getCityCodes() {
+        return cityCodes;
     }
 
-    public void setCityIds(List<Integer> cityIds) {
-        this.cityIds = cityIds;
+    public void setCityCodes(List<String> cityCodes) {
+        this.cityCodes = cityCodes;
     }
 }
