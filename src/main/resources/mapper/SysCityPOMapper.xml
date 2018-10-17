@@ -8,6 +8,7 @@
     <result column="city_pinyin" property="cityPinyin" jdbcType="VARCHAR" />
     <result column="city_level" property="cityLevel" jdbcType="INTEGER" />
     <result column="priority" property="priority" jdbcType="INTEGER" />
+    <result column="parent_code" property="parentCode" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
@@ -73,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, city_code, city_name, city_pinyin, city_level, priority, status, ext_info, is_deleted, 
-    add_time, mod_time
+    id, city_code, city_name, city_pinyin, city_level, priority, parent_code, status, 
+    ext_info, is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.SysCityPOExample" >
     select
@@ -109,12 +110,14 @@
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.SysCityPO" >
     insert into sys_city (id, city_code, city_name, 
       city_pinyin, city_level, priority, 
-      status, ext_info, is_deleted, 
-      add_time, mod_time)
+      parent_code, status, ext_info, 
+      is_deleted, add_time, mod_time
+      )
     values (#{id,jdbcType=INTEGER}, #{cityCode,jdbcType=VARCHAR}, #{cityName,jdbcType=VARCHAR}, 
       #{cityPinyin,jdbcType=VARCHAR}, #{cityLevel,jdbcType=INTEGER}, #{priority,jdbcType=INTEGER}, 
-      #{status,jdbcType=TINYINT}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
-      #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
+      #{parentCode,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{extInfo,jdbcType=VARCHAR}, 
+      #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.SysCityPO" >
     insert into sys_city
@@ -136,6 +139,9 @@
       </if>
       <if test="priority != null" >
         priority,
+      </if>
+      <if test="parentCode != null" >
+        parent_code,
       </if>
       <if test="status != null" >
         status,
@@ -171,6 +177,9 @@
       </if>
       <if test="priority != null" >
         #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="parentCode != null" >
+        #{parentCode,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         #{status,jdbcType=TINYINT},
@@ -216,6 +225,9 @@
       <if test="record.priority != null" >
         priority = #{record.priority,jdbcType=INTEGER},
       </if>
+      <if test="record.parentCode != null" >
+        parent_code = #{record.parentCode,jdbcType=VARCHAR},
+      </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=TINYINT},
       </if>
@@ -244,6 +256,7 @@
       city_pinyin = #{record.cityPinyin,jdbcType=VARCHAR},
       city_level = #{record.cityLevel,jdbcType=INTEGER},
       priority = #{record.priority,jdbcType=INTEGER},
+      parent_code = #{record.parentCode,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=TINYINT},
       ext_info = #{record.extInfo,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=TINYINT},
@@ -271,6 +284,9 @@
       <if test="priority != null" >
         priority = #{priority,jdbcType=INTEGER},
       </if>
+      <if test="parentCode != null" >
+        parent_code = #{parentCode,jdbcType=VARCHAR},
+      </if>
       <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
       </if>
@@ -296,6 +312,7 @@
       city_pinyin = #{cityPinyin,jdbcType=VARCHAR},
       city_level = #{cityLevel,jdbcType=INTEGER},
       priority = #{priority,jdbcType=INTEGER},
+      parent_code = #{parentCode,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
       ext_info = #{extInfo,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=TINYINT},

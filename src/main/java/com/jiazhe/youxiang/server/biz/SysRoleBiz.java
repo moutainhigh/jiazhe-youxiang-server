@@ -1,8 +1,5 @@
 package com.jiazhe.youxiang.server.biz;
 
-import com.jiazhe.youxiang.server.dao.mapper.SysRolePOManualMapper;
-import com.jiazhe.youxiang.server.dao.mapper.SysRolePOMapper;
-import com.jiazhe.youxiang.server.dao.mapper.SysRolePermissionPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.SysRolePO;
 import com.jiazhe.youxiang.server.domain.po.SysRolePermissionPO;
 import com.jiazhe.youxiang.server.service.SysRolePermissionService;

@@ -5,7 +5,7 @@
  */
 package com.jiazhe.youxiang.server.vo.resp;
 
-import com.jiazhe.youxiang.server.vo.BaseObject;
+import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -14,7 +14,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author niexiao
  * @created 2018/9/30
  */
-public class DemoResp extends BaseObject {
+public class DemoResp extends BaseVO {
 
     private static final long serialVersionUID = -7442998035625783167L;
     @ApiModelProperty("参数1")

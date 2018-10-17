@@ -1,6 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl;
 
-import com.jiazhe.youxiang.server.dao.mapper.SysRolePOManualMapper;
+import com.jiazhe.youxiang.server.dao.mapper.manual.SysRolePOManualMapper;
 import com.jiazhe.youxiang.server.dao.mapper.SysRolePOMapper;
 import com.jiazhe.youxiang.server.domain.po.SysRolePO;
 import com.jiazhe.youxiang.server.service.SysRoleService;

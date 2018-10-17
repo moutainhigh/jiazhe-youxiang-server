@@ -1,4 +1,4 @@
-package com.jiazhe.youxiang.server.dao.mapper;
+package com.jiazhe.youxiang.server.dao.mapper.manual;
 
 import com.jiazhe.youxiang.server.domain.po.SysRolePermissionPO;
 import com.jiazhe.youxiang.server.vo.req.SysRoleReq;

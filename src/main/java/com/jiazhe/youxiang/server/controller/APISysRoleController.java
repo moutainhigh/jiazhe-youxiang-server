@@ -43,10 +43,10 @@ public class APISysRoleController extends BaseController{
         SysRoleResp result = new SysRoleResp();
         int count = sysRoleService.count(req);
         List<Map> maps = sysRoleService.getPageContent(req);
-        result.setDataRows(PageFormatUtil.format(maps));
-        result.setCurrPage(req.getPageNum());
-        result.setTotalCount(count);
-        result.setTotalPage((int) Math.ceil(count*1.0/req.getPageSize()));
+//        result.setDataRows(PageFormatUtil.format(maps));
+//        result.setCurrPage(req.getPageNum());
+//        result.setTotalCount(count);
+//        result.setTotalPage((int) Math.ceil(count*1.0/req.getPageSize()));
         return result;
     }
 
