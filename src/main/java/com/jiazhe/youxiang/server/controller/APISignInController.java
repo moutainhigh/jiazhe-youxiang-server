@@ -36,7 +36,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("api/signin")
-public class APISignInController extends BaseController{
+public class APISignInController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(APISignInController.class);
 
@@ -61,8 +61,8 @@ public class APISignInController extends BaseController{
         if (sysUserPOList.size() == 1) {//根据用户名和密码判断，是否有该用户，有该用户，给该用户手机发验证短信
             SysUserPO sysUserPO = sysUserPOList.get(0);
             ByteSource salt = ByteSource.Util.bytes(sysUserPOList.get(0).getSalt());
-            String saltPassword = new SimpleHash("MD5",password,salt,1024).toString();
-            if(saltPassword.equals(sysUserPO.getPassword())){//密码加密后一致
+            String saltPassword = new SimpleHash("MD5", password, salt, 1024).toString();
+            if (saltPassword.equals(sysUserPO.getPassword())) {//密码加密后一致
                 if (!ValidateUtils.phoneValidate(sysUserPO.getMobile())) {//判断该用户的绑定的手机号是否合法
                     code = "000001";
                     msg = "您还没有绑定合法的手机号码，请联系后台管理员";
@@ -80,9 +80,9 @@ public class APISignInController extends BaseController{
                     code = "000000";
                     msg = "发送验证码成功";
                 }
-            }else{
+            } else {
                 code = "000001";
-                msg = "密码错误" ;//发送失败的原因
+                msg = "密码错误";//发送失败的原因
             }
         } else {
             code = "000001";
@@ -109,7 +109,7 @@ public class APISignInController extends BaseController{
                 for (Session session : sessions) {
                     if (null != session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)) {
                         System.out.println("登录用户" + session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY));
-                        SimplePrincipalCollection simplePrincipalCollection = (SimplePrincipalCollection)session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
+                        SimplePrincipalCollection simplePrincipalCollection = (SimplePrincipalCollection) session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
                         SysUserPO sysUserPO = (SysUserPO) simplePrincipalCollection.getPrimaryPrincipal();
                         if (name.equals(sysUserPO.getName())) {
                             // session.setTimeout(0); //这里就把session清除
