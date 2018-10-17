@@ -8,6 +8,8 @@ package com.jiazhe.youxiang.server.controller;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.server.adapter.SysLogAdapter;
 import com.jiazhe.youxiang.server.biz.SysLogBiz;
+import com.jiazhe.youxiang.server.common.enums.CommonCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.CommonException;
 import com.jiazhe.youxiang.server.dto.syslog.SysLogDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +34,8 @@ import java.util.stream.Collectors;
  * @author niexiao
  * @created 2018/10/17
  */
+@RestController
+@RequestMapping("api/syslog")
 public class APISysLogController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(APISysLogController.class);
@@ -50,12 +55,13 @@ public class APISysLogController extends BaseController {
         Paging paging = new Paging();
         paging.setOffset(req.getOffset());
         paging.setLimit(req.getLimit());
-        //调用BIZ方法
-        List<SysLogDTO> sysLogDTOList = SysLogBiz.getList(req.getType(), paging);
-        //将DTO转成VO
-        List<SysLogResp> result = sysLogDTOList.stream().map(SysLogAdapter::sysLogDTO2VO).collect(Collectors.toList());
-
-        //用ResponseFactory将返回值包装
-        return ResponseFactory.buildPaginationResponse(result, paging);
+        throw new CommonException(CommonCodeEnum.INTERNAL_ERROR);
+//        //调用BIZ方法
+//        List<SysLogDTO> sysLogDTOList = SysLogBiz.getList(req.getType(), paging);
+//        //将DTO转成VO
+//        List<SysLogResp> result = sysLogDTOList.stream().map(SysLogAdapter::sysLogDTO2VO).collect(Collectors.toList());
+//
+//        //用ResponseFactory将返回值包装
+//        return ResponseFactory.buildPaginationResponse(result, paging);
     }
 }
