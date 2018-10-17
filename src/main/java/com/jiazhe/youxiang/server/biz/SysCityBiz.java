@@ -31,12 +31,10 @@ public class SysCityBiz {
     }
 
     public void openProvince(String cityCode) {
-        sysCityService.updateStatusByCityCodes(Lists.newArrayList(cityCode), CityStatusEnum.OPEN.getId().byteValue());
         sysCityService.updateStatusByParentCode(cityCode, CityStatusEnum.OPEN.getId().byteValue());
     }
 
     public void closeProvince(String cityCode) {
-        sysCityService.updateStatusByCityCodes(Lists.newArrayList(cityCode), CityStatusEnum.CLOSE.getId().byteValue());
         sysCityService.updateStatusByParentCode(cityCode, CityStatusEnum.CLOSE.getId().byteValue());
     }
 
