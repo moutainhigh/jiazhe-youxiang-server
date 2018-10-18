@@ -1,12 +1,11 @@
 package com.jiazhe.youxiang.server.vo.resp.sysrole;
 
-import com.jiazhe.youxiang.server.vo.BaseObject;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * Created by tujia on 2018/10/14.
+ * Created by TU on 2018/10/18.
  */
-public class SysRoleResp extends BaseObject{
+public class RoleWithPermResp {
 
     @ApiModelProperty("角色id")
     private int id;
@@ -19,6 +18,9 @@ public class SysRoleResp extends BaseObject{
 
     @ApiModelProperty("角色排序")
     private int priority;
+
+    @ApiModelProperty("权限字符串，用逗号连接")
+    private String permsStr;
 
     public String getName() {
         return name;
@@ -34,6 +36,14 @@ public class SysRoleResp extends BaseObject{
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    public String getPermsStr() {
+        return permsStr;
+    }
+
+    public void setPermsStr(String permsStr) {
+        this.permsStr = permsStr;
     }
 
     public Byte getIsSuper() {

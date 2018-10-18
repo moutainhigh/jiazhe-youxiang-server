@@ -1,19 +1,9 @@
-/*
- * Copyright (c) 2017 maoyan.com
- * All rights reserved.
- *
- */
 package com.jiazhe.youxiang.server.dto.sysrole;
 
-import java.util.Date;
-
 /**
- * 角色信息DTO
- *
- * @author  tujian
- * @created 2018/10/17
+ * Created by TU on 2018/10/18.
  */
-public class SysRoleDTO {
+public class RoleWithPermDTO {
 
     private Integer id;
 
@@ -22,6 +12,8 @@ public class SysRoleDTO {
     private Byte isSuper;
 
     private Integer priority;
+
+    private String permsStr;
 
     public Integer getId() {
         return id;
@@ -55,4 +47,11 @@ public class SysRoleDTO {
         this.priority = priority;
     }
 
+    public String getPermsStr() {
+        return permsStr;
+    }
+
+    public void setPermsStr(String permsStr) {
+        this.permsStr = permsStr;
+    }
 }
