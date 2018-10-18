@@ -3,7 +3,7 @@
 <mapper namespace="com.jiazhe.youxiang.server.dao.mapper.ProductPOMapper" >
   <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.ProductPO" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="product_type_id" property="productTypeId" jdbcType="INTEGER" />
+    <result column="product_category_id" property="productCategoryId" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="delay_days" property="delayDays" jdbcType="INTEGER" />
@@ -78,7 +78,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, product_type_id, name, description, delay_days, thumbnail_url, detail_img_url, 
+    id, product_category_id, name, description, delay_days, thumbnail_url, detail_img_url, 
     product_type, product_price_id, unit_name, last_num, status, ext_info, is_deleted, 
     add_time, mod_time
   </sql>
@@ -113,13 +113,13 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.ProductPO" >
-    insert into product (id, product_type_id, name, 
+    insert into product (id, product_category_id, name, 
       description, delay_days, thumbnail_url, 
       detail_img_url, product_type, product_price_id, 
       unit_name, last_num, status, 
       ext_info, is_deleted, add_time, 
       mod_time)
-    values (#{id,jdbcType=INTEGER}, #{productTypeId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{productCategoryId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{description,jdbcType=VARCHAR}, #{delayDays,jdbcType=INTEGER}, #{thumbnailUrl,jdbcType=VARCHAR}, 
       #{detailImgUrl,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER}, #{productPriceId,jdbcType=INTEGER}, 
       #{unitName,jdbcType=VARCHAR}, #{lastNum,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, 
@@ -132,8 +132,8 @@
       <if test="id != null" >
         id,
       </if>
-      <if test="productTypeId != null" >
-        product_type_id,
+      <if test="productCategoryId != null" >
+        product_category_id,
       </if>
       <if test="name != null" >
         name,
@@ -182,8 +182,8 @@
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="productTypeId != null" >
-        #{productTypeId,jdbcType=INTEGER},
+      <if test="productCategoryId != null" >
+        #{productCategoryId,jdbcType=INTEGER},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
@@ -241,8 +241,8 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.productTypeId != null" >
-        product_type_id = #{record.productTypeId,jdbcType=INTEGER},
+      <if test="record.productCategoryId != null" >
+        product_category_id = #{record.productCategoryId,jdbcType=INTEGER},
       </if>
       <if test="record.name != null" >
         name = #{record.name,jdbcType=VARCHAR},
@@ -294,7 +294,7 @@
   <update id="updateByExample" parameterType="map" >
     update product
     set id = #{record.id,jdbcType=INTEGER},
-      product_type_id = #{record.productTypeId,jdbcType=INTEGER},
+      product_category_id = #{record.productCategoryId,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR},
       delay_days = #{record.delayDays,jdbcType=INTEGER},
@@ -316,8 +316,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jiazhe.youxiang.server.domain.po.ProductPO" >
     update product
     <set >
-      <if test="productTypeId != null" >
-        product_type_id = #{productTypeId,jdbcType=INTEGER},
+      <if test="productCategoryId != null" >
+        product_category_id = #{productCategoryId,jdbcType=INTEGER},
       </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
@@ -366,7 +366,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jiazhe.youxiang.server.domain.po.ProductPO" >
     update product
-    set product_type_id = #{productTypeId,jdbcType=INTEGER},
+    set product_category_id = #{productCategoryId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       delay_days = #{delayDays,jdbcType=INTEGER},

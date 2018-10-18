@@ -5,8 +5,10 @@
  */
 package com.jiazhe.youxiang.server.adapter;
 
-import com.jiazhe.youxiang.server.dto.product.ProductTypeDTO;
-import com.jiazhe.youxiang.server.vo.resp.product.ProductTypeResp;
+import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
+import com.jiazhe.youxiang.server.dto.product.ProductDTO;
+import com.jiazhe.youxiang.server.vo.resp.product.ProductCategoryResp;
+import com.jiazhe.youxiang.server.vo.resp.product.ProductResp;
 
 /**
  * 在这里编写类的功能描述
@@ -16,11 +18,11 @@ import com.jiazhe.youxiang.server.vo.resp.product.ProductTypeResp;
  */
 public class ProductAdapter {
 
-    public static ProductTypeResp productTypeDTO2VO(ProductTypeDTO dto) {
+    public static ProductCategoryResp productCategoryDTO2VO(ProductCategoryDTO dto) {
         if (dto == null) {
             return null;
         }
-        ProductTypeResp productTypeResp = new ProductTypeResp();
+        ProductCategoryResp productTypeResp = new ProductCategoryResp();
         productTypeResp.setId(dto.getId());
         productTypeResp.setName(dto.getName());
         productTypeResp.setDescription(dto.getDescription());
@@ -29,5 +31,24 @@ public class ProductAdapter {
         productTypeResp.setPriority(dto.getPriority());
         productTypeResp.setStatus(dto.getStatus());
         return productTypeResp;
+    }
+
+    public static ProductResp productDTO2VO(ProductDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+        ProductResp productResp = new ProductResp();
+        productResp.setId(dto.getId());
+        productResp.setProductCategory(productCategoryDTO2VO(dto.getProductCategory()));
+        productResp.setName(dto.getName());
+        productResp.setDescription(dto.getDescription());
+        productResp.setDelayDays(dto.getDelayDays());
+        productResp.setThumbnailUrl(dto.getThumbnailUrl());
+        productResp.setDetailImgUrl(dto.getDetailImgUrl());
+        productResp.setProductType(dto.getProductType());
+        productResp.setUnitName(dto.getUnitName());
+        productResp.setLastNum(dto.getLastNum());
+        productResp.setStatus(dto.getStatus());
+        return productResp;
     }
 }

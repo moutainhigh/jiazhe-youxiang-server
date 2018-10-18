@@ -3,9 +3,9 @@
  * All rights reserved.
  *
  */
-package com.jiazhe.youxiang.server.vo.resp.product;
+package com.jiazhe.youxiang.server.vo.req.product;
 
-import com.jiazhe.youxiang.server.vo.BaseVO;
+import com.jiazhe.youxiang.server.vo.req.IdReq;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -14,13 +14,8 @@ import io.swagger.annotations.ApiModelProperty;
  * @author niexiao
  * @created 2018/10/18
  */
-public class ProductResp extends BaseVO {
-
-    private static final long serialVersionUID = 6160741992157786143L;
-    @ApiModelProperty("商品ID")
-    private Integer id;
-    @ApiModelProperty("商品类别")
-    private ProductCategoryResp productCategory;
+public class ProductUpdateReq extends IdReq {
+    private static final long serialVersionUID = -1932886455653721882L;
     @ApiModelProperty("商品名称")
     private String name;
     @ApiModelProperty("商品描述")
@@ -37,24 +32,6 @@ public class ProductResp extends BaseVO {
     private String unitName;
     @ApiModelProperty("最少购买数量")
     private Integer lastNum;
-    @ApiModelProperty("状态：0:下架,1:上架")
-    private Byte status;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public ProductCategoryResp getProductCategory() {
-        return productCategory;
-    }
-
-    public void setProductCategory(ProductCategoryResp productCategory) {
-        this.productCategory = productCategory;
-    }
 
     public String getName() {
         return name;
@@ -118,13 +95,5 @@ public class ProductResp extends BaseVO {
 
     public void setLastNum(Integer lastNum) {
         this.lastNum = lastNum;
-    }
-
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
     }
 }

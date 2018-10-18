@@ -3,10 +3,7 @@
  * All rights reserved.
  *
  */
-package com.jiazhe.youxiang.server.vo.resp.product;
-
-import com.jiazhe.youxiang.server.vo.BaseVO;
-import io.swagger.annotations.ApiModelProperty;
+package com.jiazhe.youxiang.server.dto.product;
 
 /**
  * 在这里编写类的功能描述
@@ -14,30 +11,52 @@ import io.swagger.annotations.ApiModelProperty;
  * @author niexiao
  * @created 2018/10/18
  */
-public class ProductResp extends BaseVO {
+public class ProductDTO {
 
-    private static final long serialVersionUID = 6160741992157786143L;
-    @ApiModelProperty("商品ID")
+
+    /**
+     * 商品ID
+     */
     private Integer id;
-    @ApiModelProperty("商品类别")
-    private ProductCategoryResp productCategory;
-    @ApiModelProperty("商品名称")
+    /**
+     * 商品类别
+     */
+    private ProductCategoryDTO productCategory;
+    /**
+     * 商品名称
+     */
     private String name;
-    @ApiModelProperty("商品描述")
+    /**
+     * 商品描述
+     */
     private String description;
-    @ApiModelProperty("商品延迟购买天数")
+    /**
+     * 商品延迟购买天数
+     */
     private Integer delayDays;
-    @ApiModelProperty("商品缩略图url")
+    /**
+     * 商品缩略图url
+     */
     private String thumbnailUrl;
-    @ApiModelProperty("商品详情图url")
+    /**
+     * 商品详情图url
+     */
     private String detailImgUrl;
-    @ApiModelProperty("商品分类，0-服务，1-电子卡")
+    /**
+     * 商品分类，0-服务，1-电子卡
+     */
     private Integer productType;
-    @ApiModelProperty("单位名称")
+    /**
+     * 单位名称
+     */
     private String unitName;
-    @ApiModelProperty("最少购买数量")
+    /**
+     * 最少购买数量
+     */
     private Integer lastNum;
-    @ApiModelProperty("状态：0:下架,1:上架")
+    /**
+     * 状态：0:下架,1:上架
+     */
     private Byte status;
 
     public Integer getId() {
@@ -48,11 +67,11 @@ public class ProductResp extends BaseVO {
         this.id = id;
     }
 
-    public ProductCategoryResp getProductCategory() {
+    public ProductCategoryDTO getProductCategory() {
         return productCategory;
     }
 
-    public void setProductCategory(ProductCategoryResp productCategory) {
+    public void setProductCategory(ProductCategoryDTO productCategory) {
         this.productCategory = productCategory;
     }
 

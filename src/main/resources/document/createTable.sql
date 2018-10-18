@@ -270,7 +270,7 @@ CREATE TABLE `project` (
 drop table if exists product;
 CREATE TABLE `product` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
-    `product_type_id` INT(10) UNSIGNED NOT NULL COMMENT '商品分类Id',
+    `product_category_id` INT(10) UNSIGNED NOT NULL COMMENT '商品分类Id',
     `name` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '商品名称',
     `description` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '商品描述信息',
     `delay_days` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '需提前预定的天数',
@@ -317,8 +317,8 @@ CREATE TABLE `product_price` (
     PRIMARY KEY (`id`)
 )  ENGINE=INNODB COMMENT='商品价格信息表';
 
-drop table if exists product_type;
-CREATE TABLE `product_type` (
+drop table if exists product_category;
+CREATE TABLE `product_category` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
     `name` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '商品分类名称',
     `description` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '商品分类描述信息',

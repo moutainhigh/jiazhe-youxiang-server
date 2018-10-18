@@ -165,63 +165,63 @@ public class ProductPOExample {
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeIdIsNull() {
-            addCriterion("product_type_id is null");
+        public Criteria andProductCategoryIdIsNull() {
+            addCriterion("product_category_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeIdIsNotNull() {
-            addCriterion("product_type_id is not null");
+        public Criteria andProductCategoryIdIsNotNull() {
+            addCriterion("product_category_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeIdEqualTo(Integer value) {
-            addCriterion("product_type_id =", value, "productTypeId");
+        public Criteria andProductCategoryIdEqualTo(Integer value) {
+            addCriterion("product_category_id =", value, "productCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeIdNotEqualTo(Integer value) {
-            addCriterion("product_type_id <>", value, "productTypeId");
+        public Criteria andProductCategoryIdNotEqualTo(Integer value) {
+            addCriterion("product_category_id <>", value, "productCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeIdGreaterThan(Integer value) {
-            addCriterion("product_type_id >", value, "productTypeId");
+        public Criteria andProductCategoryIdGreaterThan(Integer value) {
+            addCriterion("product_category_id >", value, "productCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("product_type_id >=", value, "productTypeId");
+        public Criteria andProductCategoryIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("product_category_id >=", value, "productCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeIdLessThan(Integer value) {
-            addCriterion("product_type_id <", value, "productTypeId");
+        public Criteria andProductCategoryIdLessThan(Integer value) {
+            addCriterion("product_category_id <", value, "productCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeIdLessThanOrEqualTo(Integer value) {
-            addCriterion("product_type_id <=", value, "productTypeId");
+        public Criteria andProductCategoryIdLessThanOrEqualTo(Integer value) {
+            addCriterion("product_category_id <=", value, "productCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeIdIn(List<Integer> values) {
-            addCriterion("product_type_id in", values, "productTypeId");
+        public Criteria andProductCategoryIdIn(List<Integer> values) {
+            addCriterion("product_category_id in", values, "productCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeIdNotIn(List<Integer> values) {
-            addCriterion("product_type_id not in", values, "productTypeId");
+        public Criteria andProductCategoryIdNotIn(List<Integer> values) {
+            addCriterion("product_category_id not in", values, "productCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeIdBetween(Integer value1, Integer value2) {
-            addCriterion("product_type_id between", value1, value2, "productTypeId");
+        public Criteria andProductCategoryIdBetween(Integer value1, Integer value2) {
+            addCriterion("product_category_id between", value1, value2, "productCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("product_type_id not between", value1, value2, "productTypeId");
+        public Criteria andProductCategoryIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("product_category_id not between", value1, value2, "productCategoryId");
             return (Criteria) this;
         }
 

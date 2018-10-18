@@ -5,7 +5,7 @@
  */
 package com.jiazhe.youxiang.server.vo.req.product;
 
-import com.jiazhe.youxiang.server.vo.BaseVO;
+import com.jiazhe.youxiang.server.vo.req.IdReq;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -14,11 +14,9 @@ import io.swagger.annotations.ApiModelProperty;
  * @author niexiao
  * @created 2018/10/18
  */
-public class ProductTypeUpdateReq extends BaseVO {
+public class ProductCategoryUpdateReq extends IdReq {
 
     private static final long serialVersionUID = -8395554053259564961L;
-    @ApiModelProperty("商品分类ID")
-    private Integer id;
     @ApiModelProperty("商品分类名称")
     private String name;
     @ApiModelProperty("商品分类描述")
@@ -29,16 +27,6 @@ public class ProductTypeUpdateReq extends BaseVO {
     private String detailImgUrl;
     @ApiModelProperty("排序")
     private Integer priority;
-    @ApiModelProperty("商品分类上架状态 0:下架,1:上架")
-    private Byte status;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -80,11 +68,4 @@ public class ProductTypeUpdateReq extends BaseVO {
         this.priority = priority;
     }
 
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
 }

@@ -5,7 +5,8 @@
  */
 package com.jiazhe.youxiang.server.biz;
 
-import com.jiazhe.youxiang.server.dto.product.ProductTypeDTO;
+import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
+import com.jiazhe.youxiang.server.dto.product.ProductDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
 import java.util.List;
@@ -20,17 +21,39 @@ public class ProductBiz {
 
     /*************商品分类相关******************/
 
-    public static ProductTypeDTO getTypeById(Integer id) {
+    public static ProductCategoryDTO getCategoryById(Integer id) {
         return null;
     }
 
-    public static List<ProductTypeDTO> getTypeList(String name, Paging paging) {
+    public static List<ProductCategoryDTO> getCategoryList(String name, Paging paging) {
         return null;
     }
 
-    public static void updateType(Integer id, String name, String description, String thumbnailUrl, String detailImgUrl, Integer priority, Byte status) {
+    public static void deleteCategory(Integer id) {
     }
 
-    public static void deleteType(Integer id) {
+    public static void updateCategory(Integer id, String name, String description, String thumbnailUrl, String detailImgUrl, Integer priority) {
+    }
+
+    public static void updateCategoryStatus(Integer id, Byte status) {
+    }
+
+    /*************商品相关******************/
+    public static ProductDTO getById(Integer id) {
+        return null;
+    }
+
+    public static List<ProductDTO> getList(Integer productCategoryId, String name, Integer productType, Integer status, Paging paging) {
+        return null;
+    }
+
+    public static void update(Integer id, String name, String description, Integer delayDays, String thumbnailUrl, String detailImgUrl, Integer productType, String unitName, Integer lastNum) {
+    }
+
+    public static void delete(Integer id) {
+
+    }
+
+    public static void updateStatus(Integer id, Byte status) {
     }
 }

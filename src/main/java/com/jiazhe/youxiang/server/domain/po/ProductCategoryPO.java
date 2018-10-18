@@ -3,7 +3,7 @@ package com.jiazhe.youxiang.server.domain.po;
 import java.io.Serializable;
 import java.util.Date;
 
-public class ProductTypePO implements Serializable {
+public class ProductCategoryPO implements Serializable {
     private Integer id;
 
     private String name;

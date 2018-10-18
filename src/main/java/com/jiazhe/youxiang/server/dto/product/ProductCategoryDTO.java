@@ -3,33 +3,43 @@
  * All rights reserved.
  *
  */
-package com.jiazhe.youxiang.server.vo.resp.product;
-
-import com.jiazhe.youxiang.server.vo.BaseVO;
-import io.swagger.annotations.ApiModelProperty;
+package com.jiazhe.youxiang.server.dto.product;
 
 /**
- * 商品大类Resp
+ * 商品分类DTO
  *
  * @author niexiao
  * @created 2018/10/18
  */
-public class ProductTypeResp extends BaseVO {
+public class ProductCategoryDTO {
 
-    private static final long serialVersionUID = -1302754758059505012L;
-    @ApiModelProperty("商品分类ID")
+    /**
+     * 商品分类ID
+     */
     private Integer id;
-    @ApiModelProperty("商品分类名称")
+    /**
+     * 商品分类名称
+     */
     private String name;
-    @ApiModelProperty("商品分类描述")
+    /**
+     * 商品分类描述
+     */
     private String description;
-    @ApiModelProperty("缩略图url")
+    /**
+     * 缩略图url
+     */
     private String thumbnailUrl;
-    @ApiModelProperty("详情图url")
+    /**
+     * 详情图url
+     */
     private String detailImgUrl;
-    @ApiModelProperty("排序")
+    /**
+     * 排序
+     */
     private Integer priority;
-    @ApiModelProperty("商品分类上架状态 0:下架,1:上架")
+    /**
+     * 商品分类上架状态 0:下架,1:上架
+     */
     private Byte status;
 
     public Integer getId() {

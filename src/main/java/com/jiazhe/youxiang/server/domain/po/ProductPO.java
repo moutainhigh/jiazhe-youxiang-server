@@ -6,7 +6,7 @@ import java.util.Date;
 public class ProductPO implements Serializable {
     private Integer id;
 
-    private Integer productTypeId;
+    private Integer productCategoryId;
 
     private String name;
 
@@ -46,12 +46,12 @@ public class ProductPO implements Serializable {
         this.id = id;
     }
 
-    public Integer getProductTypeId() {
-        return productTypeId;
+    public Integer getProductCategoryId() {
+        return productCategoryId;
     }
 
-    public void setProductTypeId(Integer productTypeId) {
-        this.productTypeId = productTypeId;
+    public void setProductCategoryId(Integer productCategoryId) {
+        this.productCategoryId = productCategoryId;
     }
 
     public String getName() {
