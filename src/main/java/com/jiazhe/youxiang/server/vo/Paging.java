@@ -18,7 +18,7 @@ public class Paging {
 
     private Integer total;
 
-    private Boolean hasMore;
+    private Boolean hasMore = true;
 
     public Paging() {
         // 默认构造函数也给出来

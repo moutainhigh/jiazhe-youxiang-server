@@ -44,6 +44,7 @@ public class SysLogBiz {
      * @param operate
      * @param level
      * @param ip
+     * @param detail
      */
     public static void insert(String moduleName, String operate, int level, String ip, String detail) {
         executorService.execute(() -> {
@@ -53,6 +54,7 @@ public class SysLogBiz {
                     sysLogDTO.setModuleName(moduleName);
                     sysLogDTO.setOperate(operate);
                     sysLogDTO.setLevel(level);
+                    //todo niexiao 获取当前登录人信息
                     sysLogDTO.setOperatorId(0);
                     sysLogDTO.setOperatorName("test");
                     sysLogDTO.setIp(ip);
@@ -68,8 +70,8 @@ public class SysLogBiz {
 
     }
 
-    public static List<SysLogDTO> getList(Integer type, Paging paging) {
+    public static List<SysLogDTO> getList(String moduleName, String operate, Integer level, Paging paging) {
         //这里面给paging的hasMore和total赋值
-        return null;
+        return sysLogService.getList(moduleName, operate, level, paging);
     }
 }

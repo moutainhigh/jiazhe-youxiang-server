@@ -48,7 +48,7 @@ public class APISysLogController extends BaseController {
      *
      * @return
      */
-    @CustomLog(moduleName = "日志管理",operate = "日志查询",level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = "日志管理", operate = "日志查询", level = LogLevelEnum.LEVEL_1)
     @ApiOperation(value = "查询日志信息", httpMethod = "GET", response = SysCityResp.class, responseContainer = "List", notes = "查询日志信息")
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
     public Object getList(@ModelAttribute SysLogListReq req) {
@@ -56,13 +56,12 @@ public class APISysLogController extends BaseController {
         Paging paging = new Paging();
         paging.setOffset(req.getOffset());
         paging.setLimit(req.getLimit());
-        return ResponseFactory.buildSuccess();
-//        //调用BIZ方法
-//        List<SysLogDTO> sysLogDTOList = SysLogBiz.getList(req.getType(), paging);
-//        //将DTO转成VO
-//        List<SysLogResp> result = sysLogDTOList.stream().map(SysLogAdapter::sysLogDTO2VO).collect(Collectors.toList());
-//
-//        //用ResponseFactory将返回值包装
-//        return ResponseFactory.buildPaginationResponse(result, paging);
+        //调用BIZ方法
+        List<SysLogDTO> sysLogDTOList = SysLogBiz.getList(req.getModuleName(), req.getOperate(), req.getLevel(), paging);
+        //将DTO转成VO
+        List<SysLogResp> result = sysLogDTOList.stream().map(SysLogAdapter::sysLogDTO2VO).collect(Collectors.toList());
+
+        //用ResponseFactory将返回值包装
+        return ResponseFactory.buildPaginationResponse(result, paging);
     }
 }

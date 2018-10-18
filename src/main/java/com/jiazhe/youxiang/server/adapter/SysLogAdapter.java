@@ -50,4 +50,21 @@ public class SysLogAdapter {
         sysLogPO.setAddTime(dto.getAddTime());
         return sysLogPO;
     }
+
+    public static SysLogDTO sysLogPO2DTO(SysLogPO po) {
+        if (po == null) {
+            return null;
+        }
+        SysLogDTO sysLogDTO = new SysLogDTO();
+        sysLogDTO.setId(po.getId());
+        sysLogDTO.setModuleName(po.getModuleName());
+        sysLogDTO.setOperate(po.getOperate());
+        sysLogDTO.setLevel(po.getLevel());
+        sysLogDTO.setOperatorId(po.getOperatorId());
+        sysLogDTO.setOperatorName(po.getOperatorName());
+        sysLogDTO.setIp(po.getIp());
+        sysLogDTO.setDetail(po.getDetail());
+        sysLogDTO.setAddTime(po.getAddTime());
+        return sysLogDTO;
+    }
 }

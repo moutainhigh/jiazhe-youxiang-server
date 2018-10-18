@@ -6,6 +6,9 @@
 package com.jiazhe.youxiang.server.service;
 
 import com.jiazhe.youxiang.server.dto.syslog.SysLogDTO;
+import com.jiazhe.youxiang.server.vo.Paging;
+
+import java.util.List;
 
 /**
  * 日志服务
@@ -16,4 +19,6 @@ import com.jiazhe.youxiang.server.dto.syslog.SysLogDTO;
 public interface SysLogService {
 
     int insert(SysLogDTO log);
+
+    List<SysLogDTO> getList(String moduleName, String operate, Integer level, Paging paging);
 }
