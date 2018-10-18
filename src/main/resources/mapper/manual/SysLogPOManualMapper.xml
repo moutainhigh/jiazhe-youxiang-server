@@ -36,6 +36,7 @@
             AND is_deleted = 0
         </where>
         limit #{offset},#{limit}
+        order by add_time desc
     </select>
 
     <select id="count" resultType="java.lang.Integer">
