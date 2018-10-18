@@ -68,7 +68,7 @@
         <!--<table tableName="recharge_card_exchange_code_batch" domainObjectName="RechargeCardExchangeCodeBatchPO"/>-->
         <!--<table tableName="recharge_card_exchange_record" domainObjectName="RechargeCardExchangeRecordPO"/>-->
         <!--<table tableName="sys_city" domainObjectName="SysCityPO"/>-->
-        <table tableName="sys_log" domainObjectName="SysLogPO"/>
+        <!--<table tableName="sys_log" domainObjectName="SysLogPO"/>-->
         <!--<table tableName="sys_role" domainObjectName="SysRolePO"/>-->
         <!--<table tableName="sys_role_permission" domainObjectName="SysRolePermissionPO"/>-->
         <!--<table tableName="sys_user" domainObjectName="SysUserPO"/>-->

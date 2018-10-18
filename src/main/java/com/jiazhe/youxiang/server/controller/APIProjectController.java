@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @RequestMapping("api/project")
 public class APIProjectController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(APISysLogController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(APIProjectController.class);
 
     @Autowired
     private ProjectBiz projectBiz;
@@ -51,7 +51,6 @@ public class APIProjectController {
     @ApiOperation(value = "获得某一具体项目信息", httpMethod = "GET", response = ProjectResp.class, notes = "获得某一具体项目信息")
     @RequestMapping(value = "getbyid", method = RequestMethod.GET)
     public Object getById(@ModelAttribute IdReq req) {
-        //TODO niexiao 参数验证
         CommonValidator.validateId(req);
         //调用BIZ方法
         ProjectDTO projectDTO = projectBiz.getById(req.getId());
@@ -104,7 +103,6 @@ public class APIProjectController {
     @ApiOperation(value = "删除项目", httpMethod = "GET", notes = "删除项目")
     @RequestMapping(value = "delete", method = RequestMethod.GET)
     public Object delete(@ModelAttribute IdReq req) {
-        //TODO niexiao 参数验证
         CommonValidator.validateId(req);
         //调用BIZ方法
         projectBiz.delete(req.getId());

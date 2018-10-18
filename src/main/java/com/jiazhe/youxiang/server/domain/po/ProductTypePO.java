@@ -12,7 +12,7 @@ public class ProductTypePO implements Serializable {
 
     private String thumbnailUrl;
 
-    private String detailsImgUrl;
+    private String detailImgUrl;
 
     private Integer priority;
 
@@ -60,12 +60,12 @@ public class ProductTypePO implements Serializable {
         this.thumbnailUrl = thumbnailUrl == null ? null : thumbnailUrl.trim();
     }
 
-    public String getDetailsImgUrl() {
-        return detailsImgUrl;
+    public String getDetailImgUrl() {
+        return detailImgUrl;
     }
 
-    public void setDetailsImgUrl(String detailsImgUrl) {
-        this.detailsImgUrl = detailsImgUrl == null ? null : detailsImgUrl.trim();
+    public void setDetailImgUrl(String detailImgUrl) {
+        this.detailImgUrl = detailImgUrl == null ? null : detailImgUrl.trim();
     }
 
     public Integer getPriority() {
