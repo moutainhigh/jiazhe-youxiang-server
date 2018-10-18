@@ -1,16 +1,13 @@
 package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
-import com.jiazhe.youxiang.base.util.PageFormatUtil;
-import com.jiazhe.youxiang.base.util.ValidateUtils;
 import com.jiazhe.youxiang.server.adapter.SysRoleAdapter;
 import com.jiazhe.youxiang.server.biz.SysRoleBiz;
+import com.jiazhe.youxiang.server.common.enums.CommonCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.RoleCodeEnum;
-import com.jiazhe.youxiang.server.domain.po.*;
+import com.jiazhe.youxiang.server.common.exceptions.CommonException;
 import com.jiazhe.youxiang.server.dto.sysrole.RoleWithPermDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
-import com.jiazhe.youxiang.server.service.SysRolePermissionService;
-import com.jiazhe.youxiang.server.service.SysRoleService;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.SysRoleReq;
 import com.jiazhe.youxiang.server.vo.req.sysrole.RoleIdReq;
@@ -27,8 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
-
 /**
  * 后台所有关于角色的接口
  * Created by tujia on 2018/10/14.
@@ -41,10 +36,6 @@ public class APISysRoleController extends BaseController {
 
     @Autowired
     private SysRoleBiz sysRoleBiz;
-    @Autowired
-    private SysRoleService sysRoleService;
-    @Autowired
-    private SysRolePermissionService sysRolePermissionService;
 
     @ApiOperation(value = "list", httpMethod = "GET", response = SysRoleResp.class, notes = "查询角色列表，并分页")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -65,14 +56,18 @@ public class APISysRoleController extends BaseController {
     public Object save(@ModelAttribute RoleSaveReq req) {
         /*参数检查*/
         if (null == req || Strings.isBlank(req.getName())) {
-            return ResponseFactory.buildFailure(RoleCodeEnum.ROLE_INCOMPLETE_INFO.getCode(), RoleCodeEnum.ROLE_INCOMPLETE_INFO.getType(), RoleCodeEnum.ROLE_INCOMPLETE_INFO.getMessage());
+            throw new CommonException(CommonCodeEnum.INTERNAL_ERROR.getCode(), CommonCodeEnum.INTERNAL_ERROR.getType(), "信息填写不完整");
+        }
+        /*非管理员，还不带权限字符串*/
+        if (req.getIsSuper() == 0 && null == req.getPermsStr()) {
+            throw new CommonException(RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getCode(),RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getType(), RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getMessage());
         }
         /*判断是否重名*/
-        List<SysRoleDTO> sysRoleDTOList = sysRoleBiz.findByName(req.getName());
-        boolean roleHasExisted = 2 == sysRoleDTOList.size() || (sysRoleDTOList.size() == 1 && sysRoleDTOList.get(0).getId() != req.getId());
+        SysRoleDTO sysRoleDto = SysRoleAdapter.roleSaveReq2SysRoleDTO(req);
+        boolean roleHasExisted = sysRoleBiz.roleHasExisted(sysRoleDto);
         /*角色是否已经存在*/
         if (roleHasExisted) {
-            return ResponseFactory.buildFailure(RoleCodeEnum.ROLE_HAS_EXISTED.getCode(), RoleCodeEnum.ROLE_HAS_EXISTED.getType(), RoleCodeEnum.ROLE_HAS_EXISTED.getMessage());
+            throw new CommonException(RoleCodeEnum.ROLE_HAS_EXISTED.getCode(), RoleCodeEnum.ROLE_HAS_EXISTED.getType(), RoleCodeEnum.ROLE_HAS_EXISTED.getMessage());
         }
         if(null == req.getPermsStr()){
             req.setPermsStr("");

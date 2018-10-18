@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.service;
 
 import com.jiazhe.youxiang.server.domain.po.SysRolePermissionPO;
 import com.jiazhe.youxiang.server.domain.po.SysRolePermissionPOExample;
+import com.jiazhe.youxiang.server.dto.sysrole.SysRolePermissionDTO;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface SysRolePermissionService {
 
     //根据list批量插入perms
     int batchInsert(List<SysRolePermissionPO> newPerms);
+
+    List<SysRolePermissionDTO> findByRoleId(Integer roleId);
 }

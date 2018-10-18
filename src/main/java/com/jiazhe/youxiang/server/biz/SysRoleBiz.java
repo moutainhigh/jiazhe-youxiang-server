@@ -1,18 +1,14 @@
 package com.jiazhe.youxiang.server.biz;
 
-import com.jiazhe.youxiang.server.adapter.SysRoleAdapter;
-import com.jiazhe.youxiang.server.domain.po.SysRolePO;
-import com.jiazhe.youxiang.server.domain.po.SysRolePermissionPO;
-import com.jiazhe.youxiang.server.domain.po.SysRolePermissionPOExample;
 import com.jiazhe.youxiang.server.dto.sysrole.RoleWithPermDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
+import com.jiazhe.youxiang.server.dto.sysrole.SysRolePermissionDTO;
 import com.jiazhe.youxiang.server.service.SysRolePermissionService;
 import com.jiazhe.youxiang.server.service.SysRoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -39,116 +35,97 @@ public class SysRoleBiz {
     }
 
     /**
-     * 根据角色id，查询角色信息
-     */
-    public SysRoleDTO findById(Integer roleId) {
-        return sysRoleService.findById(roleId);
-    }
-
-    /**
-     * 根据角色名称，查询角色列表信息
-     */
-    public List<SysRoleDTO> findByName(String name) {
-        return sysRoleService.findByName(name);
-    }
-
-    /**
      * 保存角色信息，新建或修改（带权限字符串）
      */
     public int saveRoleWithPerm(RoleWithPermDTO roleWithPermDTO) {
         /*判断是新建还是修改，id=0为新建，其他为修改*/
         boolean isAdd = roleWithPermDTO.getId() == 0;
-        /*角色信息*/
-        SysRolePO sysRolePO;
-        /*新添加的权限*/
-        List<SysRolePermissionPO> newPerms = new ArrayList<SysRolePermissionPO>();
-        /*修改后减少的权限*/
-        List<SysRolePermissionPO> oldPerms = new ArrayList<SysRolePermissionPO>();
+        /*角色信息DTO*/
+        SysRoleDTO sysRoleDTO;
+        /*新添加的权限DTO*/
+        List<SysRolePermissionDTO> newPerms = new ArrayList<SysRolePermissionDTO>();
+        /*修改后减少的权限DTO*/
+        List<SysRolePermissionDTO> oldPerms = new ArrayList<SysRolePermissionDTO>();
         String[] perms = roleWithPermDTO.getPermsStr().length() < 1 ? null : roleWithPermDTO.getPermsStr().split(",");
         if (isAdd) {
-            sysRolePO = new SysRolePO();
-            sysRolePO.setExtInfo("");
-            sysRolePO.setIsDeleted(Byte.valueOf("0"));
-            sysRolePO.setAddTime(new Date());
+            sysRoleDTO = new SysRoleDTO();
             if (roleWithPermDTO.getIsSuper() == 0) {
                 for (String perm : perms) {
-                    SysRolePermissionPO sysRolePermissionPO = new SysRolePermissionPO();
-                    sysRolePermissionPO.setPermUrl(perm);
-                    sysRolePermissionPO.setExtInfo("");
-                    sysRolePermissionPO.setIsDeleted(Byte.valueOf("0"));
-                    sysRolePermissionPO.setAddTime(new Date());
-                    sysRolePermissionPO.setModTime(new Date());
-                    newPerms.add(sysRolePermissionPO);
+                    SysRolePermissionDTO sysRolePermissionDTO = new SysRolePermissionDTO();
+                    sysRolePermissionDTO.setPermUrl(perm);
+                    sysRolePermissionDTO.setExtInfo("");
+                    sysRolePermissionDTO.setIsDeleted(Byte.valueOf("0"));
+                    sysRolePermissionDTO.setAddTime(new Date());
+                    sysRolePermissionDTO.setModTime(new Date());
+                    newPerms.add(sysRolePermissionDTO);
                 }
             }
         } else {
-            SysRoleDTO sysRoleDTO = sysRoleService.findById(roleWithPermDTO.getId());
-            sysRolePO = SysRoleAdapter.sysRoleDTO2SysRolePO(sysRoleDTO);
-            SysRolePermissionPOExample sysRolePermissionPOExample = new SysRolePermissionPOExample();
-            SysRolePermissionPOExample.Criteria criteria = sysRolePermissionPOExample.createCriteria();
-            criteria.andRoleIdEqualTo(roleWithPermDTO.getId());
-            criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
-                /*修改前的权限*/
-            oldPerms = sysRolePermissionService.selectByExample(sysRolePermissionPOExample);
-            if (null != perms) {
-                    /*遍历新的权限String[]*/
-                for (String perm : perms) {
-                    boolean has = false;
-                        /*判断该权限是否已经存在*/
-                    for (SysRolePermissionPO temp : oldPerms) {
-                        if (temp.getPermUrl().equals(perm)) {
+            sysRoleDTO = sysRoleService.findById(roleWithPermDTO.getId());
+            /*修改前的权限*/
+            oldPerms = sysRolePermissionService.findByRoleId(roleWithPermDTO.getId());
+            if(roleWithPermDTO.getIsSuper() == 0) {
+                if (null != perms) {
+                        /*遍历新的权限String[]*/
+                    for (String perm : perms) {
+                        boolean has = false;
+                            /*判断该权限是否已经存在*/
+                        for (SysRolePermissionDTO temp : oldPerms) {
+                            if (temp.getPermUrl().equals(perm)) {
                                 /*已经存在，则移除*/
-                            Iterator<SysRolePermissionPO> iterator = oldPerms.iterator();
-                            while (iterator.hasNext()) {
-                                SysRolePermissionPO temp1 = iterator.next();
-                                if (temp.getId().equals(temp1.getId())) {
-                                    iterator.remove();
+                                Iterator<SysRolePermissionDTO> iterator = oldPerms.iterator();
+                                while (iterator.hasNext()) {
+                                    SysRolePermissionDTO temp1 = iterator.next();
+                                    if (temp.getId().equals(temp1.getId())) {
+                                        iterator.remove();
+                                    }
                                 }
+                                has = true;
+                                break;
                             }
-                            has = true;
-                            break;
                         }
-                    }
-                    if (!has) {
-                        SysRolePermissionPO sysRolePermissionPO = new SysRolePermissionPO();
-                        sysRolePermissionPO.setRoleId(roleWithPermDTO.getId());
-                        sysRolePermissionPO.setPermUrl(perm);
-                        sysRolePermissionPO.setExtInfo("");
-                        sysRolePermissionPO.setIsDeleted(Byte.valueOf("0"));
-                        sysRolePermissionPO.setAddTime(new Date());
-                        sysRolePermissionPO.setModTime(new Date());
-                        newPerms.add(sysRolePermissionPO);
+                        if (!has) {
+                            SysRolePermissionDTO sysRolePermissionDTO = new SysRolePermissionDTO();
+                            sysRolePermissionDTO.setRoleId(roleWithPermDTO.getId());
+                            sysRolePermissionDTO.setPermUrl(perm);
+                            sysRolePermissionDTO.setExtInfo("");
+                            sysRolePermissionDTO.setIsDeleted(Byte.valueOf("0"));
+                            sysRolePermissionDTO.setAddTime(new Date());
+                            sysRolePermissionDTO.setModTime(new Date());
+                            newPerms.add(sysRolePermissionDTO);
+                        }
                     }
                 }
             }
         }
-        sysRolePO.setName(roleWithPermDTO.getName());
-        sysRolePO.setIsSuper(Byte.valueOf(roleWithPermDTO.getIsSuper()));
-        sysRolePO.setPriority(Integer.valueOf(roleWithPermDTO.getPriority()));
-        sysRolePO.setModTime(new Date());
-        return sysRoleService.saveRoleWithPerm(isAdd, sysRolePO, newPerms, oldPerms);
+        sysRoleDTO.setName(roleWithPermDTO.getName());
+        sysRoleDTO.setIsSuper(Byte.valueOf(roleWithPermDTO.getIsSuper()));
+        sysRoleDTO.setPriority(Integer.valueOf(roleWithPermDTO.getPriority()));
+        sysRoleDTO.setModTime(new Date());
+        return sysRoleService.saveRoleWithPerm(isAdd, sysRoleDTO, newPerms, oldPerms);
     }
 
     /**
      * 根据id软删除角色，同时软删除所有的权限信息
+     *
      * @param roleId
      * @return
      */
     public int softDeleteById(Integer roleId) {
         SysRoleDTO sysRoleDTO = sysRoleService.findById(roleId);
-        SysRolePO sysRolePO = SysRoleAdapter.sysRoleDTO2SysRolePO(sysRoleDTO);
-        sysRolePO.setIsDeleted(Byte.valueOf("1"));
-        sysRolePO.setModTime(new Date());
+        sysRoleDTO.setIsDeleted(Byte.valueOf("1"));
+        sysRoleDTO.setModTime(new Date());
         //查询所有权限字符串
-        SysRolePermissionPOExample sysRolePermissionPOExample = new SysRolePermissionPOExample();
-        SysRolePermissionPOExample.Criteria criteria = sysRolePermissionPOExample.createCriteria();
-        criteria.andRoleIdEqualTo(roleId);
-        criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
-        List<SysRolePermissionPO> perms = sysRolePermissionService.selectByExample(sysRolePermissionPOExample);
-        for (SysRolePermissionPO temp : perms) {
+        List<SysRolePermissionDTO> perms = sysRolePermissionService.findByRoleId(roleId);
+        for (SysRolePermissionDTO temp : perms) {
             temp.setIsDeleted(Byte.valueOf("1"));
             temp.setModTime(new Date());
         }
-        return sysRoleService.softDeleteById(sysRolePO,perms);
+        return sysRoleService.softDeleteById(sysRoleDTO, perms);
+    }
+
+    public boolean roleHasExisted(SysRoleDTO sysRoleDto) {
+        List<SysRoleDTO> sysRoleDTOList = sysRoleService.findByName(sysRoleDto.getName());
+        return 2 == sysRoleDTOList.size() || (sysRoleDTOList.size() == 1 && sysRoleDTOList.get(0).getId() != sysRoleDto.getId());
     }
 }

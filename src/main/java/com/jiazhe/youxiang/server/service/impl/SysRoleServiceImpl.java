@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.service.impl;
 
 import com.jiazhe.youxiang.server.adapter.SysRoleAdapter;
+import com.jiazhe.youxiang.server.adapter.SysRolePermissionAdapter;
 import com.jiazhe.youxiang.server.dao.mapper.SysRolePermissionPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.SysRolePOManualMapper;
 import com.jiazhe.youxiang.server.dao.mapper.SysRolePOMapper;
@@ -11,8 +12,10 @@ import com.jiazhe.youxiang.server.domain.po.SysRolePermissionPO;
 import com.jiazhe.youxiang.server.domain.po.SysRolePermissionPOExample;
 import com.jiazhe.youxiang.server.dto.sysrole.RoleWithPermDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
+import com.jiazhe.youxiang.server.dto.sysrole.SysRolePermissionDTO;
 import com.jiazhe.youxiang.server.service.SysRoleService;
 import com.jiazhe.youxiang.server.vo.req.SysRoleReq;
+import org.apache.shiro.util.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +27,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**@author Tu
- * Created by TU on 2018/10/15.
+/**
+ * @author Tu
+ *         Created by TU on 2018/10/15.
  */
 @Service("sysRoleService")
 public class SysRoleServiceImpl implements SysRoleService {
@@ -47,11 +51,6 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
-    public List<Map> getPageContent(SysRoleReq req) {
-        return sysRolePOManualMapper.getPageContent(req);
-    }
-
-    @Override
     public SysRoleDTO findById(int id) {
         SysRolePO sysRolePO = sysRolePOMapper.selectByPrimaryKey(id);
         SysRoleDTO sysRoleDto = SysRoleAdapter.sysRolePO2SysRoleDTO(sysRolePO);
@@ -69,43 +68,52 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
-    public int saveRoleWithPerm(boolean isAdd, SysRolePO sysRolePO, List<SysRolePermissionPO> newPerms,List<SysRolePermissionPO> oldPerms) {
+    public int saveRoleWithPerm(boolean isAdd, SysRoleDTO sysRoleDTO, List<SysRolePermissionDTO> newPerms, List<SysRolePermissionDTO> oldPerms) {
+        SysRolePO sysRolePO = SysRoleAdapter.sysRoleDTO2SysRolePO(sysRoleDTO);
+        List<SysRolePermissionPO> newPermsPO = newPerms.stream().map(SysRolePermissionAdapter::DTO2PO).collect(Collectors.toList());
+        List<SysRolePermissionPO> oldPermsPO = oldPerms.stream().map(SysRolePermissionAdapter::DTO2PO).collect(Collectors.toList());
         if (isAdd) {
+            sysRolePO.setExtInfo("");
+            sysRolePO.setAddTime(new Date());
+            sysRolePO.setModTime(new Date());
+            sysRolePO.setIsDeleted(Byte.valueOf("0"));
             sysRolePOManualMapper.insert(sysRolePO);
-            for (SysRolePermissionPO temp : newPerms) {
-                temp.setRoleId(sysRolePO.getId());
+            for (SysRolePermissionPO temp : newPermsPO) {
+                temp.setRoleId(sysRoleDTO.getId());
             }
         } else {
+            sysRolePO.setModTime(new Date());
             sysRolePOMapper.updateByPrimaryKeySelective(sysRolePO);
         }
-        if (newPerms != null && newPerms.size() > 0) {
-            sysRolePermissionPOManualMapper.batchInsert(newPerms);
+        if (!CollectionUtils.isEmpty(newPermsPO)) {
+            for (SysRolePermissionPO newPO : newPermsPO) {
+                newPO.setRoleId(sysRolePO.getId());
+                newPO.setIsDeleted(Byte.valueOf("0"));
+                newPO.setExtInfo("");
+                newPO.setAddTime(new Date());
+                newPO.setModTime(new Date());
+            }
+            sysRolePermissionPOManualMapper.batchInsert(newPermsPO);
         }
-        if (newPerms != null && oldPerms.size() > 0) {
-            for (SysRolePermissionPO old : oldPerms) {
+        if (!CollectionUtils.isEmpty(oldPermsPO)) {
+            for (SysRolePermissionPO old : oldPermsPO) {
                 old.setIsDeleted(Byte.valueOf("1"));
                 old.setModTime(new Date());
             }
-            sysRolePermissionPOManualMapper.batchUpdate(oldPerms);
+            sysRolePermissionPOManualMapper.batchUpdate(oldPermsPO);
         }
         return 1;
     }
 
     @Override
-    public int update(SysRolePO sysRolePO) {
-        return sysRolePOMapper.updateByPrimaryKeySelective(sysRolePO);
-    }
-
-    @Override
-    public int insert(SysRolePO sysRolePO) {
-        return sysRolePOManualMapper.insert(sysRolePO);
-    }
-
-    @Override
-    public int softDeleteById(SysRolePO sysRolePO, List<SysRolePermissionPO> perms) {
-        if(null!=perms&&perms.size()>0){
-            sysRolePermissionPOManualMapper.batchUpdate(perms);
+    public int softDeleteById(SysRoleDTO sysRoleDTO, List<SysRolePermissionDTO> perms) {
+        if (!CollectionUtils.isEmpty(perms)) {
+            List<SysRolePermissionPO> sysRolePermissionPOList = perms.stream().map(SysRolePermissionAdapter::DTO2PO).collect(Collectors.toList());
+            sysRolePermissionPOManualMapper.batchUpdate(sysRolePermissionPOList);
         }
+        SysRolePO sysRolePO = SysRoleAdapter.sysRoleDTO2SysRolePO(sysRoleDTO);
+        sysRolePO.setIsDeleted(Byte.valueOf("1"));
+        sysRolePO.setModTime(new Date());
         return sysRolePOMapper.updateByPrimaryKeySelective(sysRolePO);
     }
 
@@ -125,12 +133,12 @@ public class SysRoleServiceImpl implements SysRoleService {
         if (sysRolePermissionPOList.size() > 0) {
             perms.deleteCharAt(perms.length() - 1);
         }
-        RoleWithPermDTO roleAndPermissionDTO = new RoleWithPermDTO();
-        roleAndPermissionDTO.setId(sysRolePO.getId());
-        roleAndPermissionDTO.setIsSuper(sysRolePO.getIsSuper());
-        roleAndPermissionDTO.setName(sysRolePO.getName());
-        roleAndPermissionDTO.setPriority(sysRolePO.getPriority());
-        roleAndPermissionDTO.setPermsStr(perms.toString());
-        return roleAndPermissionDTO;
+        RoleWithPermDTO roleWithPermDTO = new RoleWithPermDTO();
+        roleWithPermDTO.setId(sysRolePO.getId());
+        roleWithPermDTO.setIsSuper(sysRolePO.getIsSuper());
+        roleWithPermDTO.setName(sysRolePO.getName());
+        roleWithPermDTO.setPriority(sysRolePO.getPriority());
+        roleWithPermDTO.setPermsStr(perms.toString());
+        return roleWithPermDTO;
     }
 }

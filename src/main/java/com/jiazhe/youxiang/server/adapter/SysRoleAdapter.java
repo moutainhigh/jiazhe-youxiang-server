@@ -63,4 +63,16 @@ public class SysRoleAdapter {
         sysRolePO.setPriority(dto.getPriority());
         return sysRolePO;
     }
+
+    public static SysRoleDTO roleSaveReq2SysRoleDTO(RoleSaveReq roleSaveReq) {
+        if (roleSaveReq == null) {
+            return null;
+        }
+        SysRoleDTO sysRoleDTO = new SysRoleDTO();
+        sysRoleDTO.setId(roleSaveReq.getId());
+        sysRoleDTO.setName(roleSaveReq.getName());
+        sysRoleDTO.setIsSuper(roleSaveReq.getIsSuper());
+        sysRoleDTO.setPriority(roleSaveReq.getPriority());
+        return sysRoleDTO;
+    }
 }

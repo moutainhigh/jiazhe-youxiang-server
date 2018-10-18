@@ -23,6 +23,14 @@ public class SysRoleDTO {
 
     private Integer priority;
 
+    private String extInfo;
+
+    private Byte isDeleted;
+
+    private Date addTime;
+
+    private Date modTime;
+
     public Integer getId() {
         return id;
     }
@@ -55,4 +63,35 @@ public class SysRoleDTO {
         this.priority = priority;
     }
 
+    public String getExtInfo() {
+        return extInfo;
+    }
+
+    public void setExtInfo(String extInfo) {
+        this.extInfo = extInfo;
+    }
+
+    public Byte getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Byte isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public Date getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
+    }
+
+    public Date getModTime() {
+        return modTime;
+    }
+
+    public void setModTime(Date modTime) {
+        this.modTime = modTime;
+    }
 }
