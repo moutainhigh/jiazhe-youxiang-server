@@ -99,7 +99,6 @@ public class ControllerAdvice {
     }
 
 
-
     /**
      * 记录日志
      *
@@ -116,7 +115,7 @@ public class ControllerAdvice {
             CustomLog customLog = method.getAnnotation(CustomLog.class);
             if (customLog != null) {
                 //异步插入数据库日志记录
-                SysLogBiz.insert(customLog.moduleName(), customLog.operate(), customLog.level().getId(), IpAdrressUtil.getIpAdrress(request), detail);
+                SysLogBiz.insert(customLog.moduleName().getName(), customLog.operate(), customLog.level().getId(), IpAdrressUtil.getIpAdrress(request), detail);
             }
         }
     }

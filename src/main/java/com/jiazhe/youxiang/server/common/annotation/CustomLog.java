@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.server.common.annotation;
 
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
+import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -25,7 +26,7 @@ public @interface CustomLog {
     /**
      * 模块名称
      */
-    String moduleName() default "";
+    ModuleEnum moduleName() default ModuleEnum.LOG;
 
     /**
      * 操作
