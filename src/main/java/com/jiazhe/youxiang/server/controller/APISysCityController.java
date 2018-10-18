@@ -8,6 +8,8 @@ package com.jiazhe.youxiang.server.controller;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.server.adapter.SysCityAdapter;
 import com.jiazhe.youxiang.server.biz.SysCityBiz;
+import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.dto.syscity.SysCityDTO;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.syscity.CityCodeReq;
@@ -48,6 +50,7 @@ public class APISysCityController extends BaseController {
      */
     @ApiOperation(value = "获取城市列表信息", httpMethod = "GET", response = SysCityResp.class, responseContainer = "List", notes = "获取城市列表信息")
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
+    @CustomLog(moduleName = "城市管理",operate = "城市查询",level = LogLevelEnum.LEVEL_1)
     public Object getList(@ModelAttribute SysCityListReq req) {
         //TODO niexiao 参数验证
         if (null == req) {

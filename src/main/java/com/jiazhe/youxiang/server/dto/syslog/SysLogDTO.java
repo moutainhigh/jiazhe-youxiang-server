@@ -20,13 +20,19 @@ public class SysLogDTO {
      */
     private Integer id;
     /**
-     * 操作动作
+     * 模块名称
      */
-    private String action;
+    private String moduleName;
+
     /**
-     * 日志类型
+     * 操作
      */
-    private Integer type;
+    private String operate;
+
+    /**
+     * 日志级别
+     */
+    private Integer level;
     /**
      * 操作人ID
      */
@@ -56,20 +62,28 @@ public class SysLogDTO {
         this.id = id;
     }
 
-    public String getAction() {
-        return action;
+    public String getModuleName() {
+        return moduleName;
     }
 
-    public void setAction(String action) {
-        this.action = action;
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
     }
 
-    public Integer getType() {
-        return type;
+    public String getOperate() {
+        return operate;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setOperate(String operate) {
+        this.operate = operate;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
     public Integer getOperatorId() {

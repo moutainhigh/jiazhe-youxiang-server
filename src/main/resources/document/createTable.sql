@@ -1,8 +1,9 @@
 drop table if exists sys_log;
 CREATE TABLE `sys_log` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
-    `action` VARCHAR(100) NOT NULL COMMENT '操作动作',
-    `type` INT(10) NOT NULL DEFAULT '0' COMMENT '操作类型',
+    `module_name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '模块名称',
+    `operate` VARCHAR(100) NOT NULL COMMENT '操作动作',
+    `level` INT(10) NOT NULL DEFAULT '0' COMMENT '日志级别',
     `operator_id` INT(10) UNSIGNED NOT NULL COMMENT '操作人id',
     `operator_name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '操作人名称',
     `ip` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '操作的ip地址',

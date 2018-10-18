@@ -3,8 +3,9 @@
 <mapper namespace="com.jiazhe.youxiang.server.dao.mapper.SysLogPOMapper" >
   <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.SysLogPO" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="action" property="action" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="module_name" property="moduleName" jdbcType="VARCHAR" />
+    <result column="operate" property="operate" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="INTEGER" />
     <result column="operator_id" property="operatorId" jdbcType="INTEGER" />
     <result column="operator_name" property="operatorName" jdbcType="VARCHAR" />
     <result column="ip" property="ip" jdbcType="VARCHAR" />
@@ -73,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, action, type, operator_id, operator_name, ip, detail, ext_info, is_deleted, add_time, 
-    mod_time
+    id, module_name, operate, level, operator_id, operator_name, ip, detail, ext_info, 
+    is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.SysLogPOExample" >
     select
@@ -107,14 +108,16 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.SysLogPO" >
-    insert into sys_log (id, action, type, 
-      operator_id, operator_name, ip, 
-      detail, ext_info, is_deleted, 
-      add_time, mod_time)
-    values (#{id,jdbcType=INTEGER}, #{action,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
-      #{operatorId,jdbcType=INTEGER}, #{operatorName,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, 
-      #{detail,jdbcType=VARCHAR}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
-      #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
+    insert into sys_log (id, module_name, operate, 
+      level, operator_id, operator_name, 
+      ip, detail, ext_info, 
+      is_deleted, add_time, mod_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{moduleName,jdbcType=VARCHAR}, #{operate,jdbcType=VARCHAR}, 
+      #{level,jdbcType=INTEGER}, #{operatorId,jdbcType=INTEGER}, #{operatorName,jdbcType=VARCHAR}, 
+      #{ip,jdbcType=VARCHAR}, #{detail,jdbcType=VARCHAR}, #{extInfo,jdbcType=VARCHAR}, 
+      #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.SysLogPO" >
     insert into sys_log
@@ -122,11 +125,14 @@
       <if test="id != null" >
         id,
       </if>
-      <if test="action != null" >
-        action,
+      <if test="moduleName != null" >
+        module_name,
       </if>
-      <if test="type != null" >
-        type,
+      <if test="operate != null" >
+        operate,
+      </if>
+      <if test="level != null" >
+        level,
       </if>
       <if test="operatorId != null" >
         operator_id,
@@ -157,11 +163,14 @@
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="action != null" >
-        #{action,jdbcType=VARCHAR},
+      <if test="moduleName != null" >
+        #{moduleName,jdbcType=VARCHAR},
       </if>
-      <if test="type != null" >
-        #{type,jdbcType=INTEGER},
+      <if test="operate != null" >
+        #{operate,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
       </if>
       <if test="operatorId != null" >
         #{operatorId,jdbcType=INTEGER},
@@ -201,11 +210,14 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.action != null" >
-        action = #{record.action,jdbcType=VARCHAR},
+      <if test="record.moduleName != null" >
+        module_name = #{record.moduleName,jdbcType=VARCHAR},
       </if>
-      <if test="record.type != null" >
-        type = #{record.type,jdbcType=INTEGER},
+      <if test="record.operate != null" >
+        operate = #{record.operate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.level != null" >
+        level = #{record.level,jdbcType=INTEGER},
       </if>
       <if test="record.operatorId != null" >
         operator_id = #{record.operatorId,jdbcType=INTEGER},
@@ -239,8 +251,9 @@
   <update id="updateByExample" parameterType="map" >
     update sys_log
     set id = #{record.id,jdbcType=INTEGER},
-      action = #{record.action,jdbcType=VARCHAR},
-      type = #{record.type,jdbcType=INTEGER},
+      module_name = #{record.moduleName,jdbcType=VARCHAR},
+      operate = #{record.operate,jdbcType=VARCHAR},
+      level = #{record.level,jdbcType=INTEGER},
       operator_id = #{record.operatorId,jdbcType=INTEGER},
       operator_name = #{record.operatorName,jdbcType=VARCHAR},
       ip = #{record.ip,jdbcType=VARCHAR},
@@ -256,11 +269,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jiazhe.youxiang.server.domain.po.SysLogPO" >
     update sys_log
     <set >
-      <if test="action != null" >
-        action = #{action,jdbcType=VARCHAR},
+      <if test="moduleName != null" >
+        module_name = #{moduleName,jdbcType=VARCHAR},
       </if>
-      <if test="type != null" >
-        type = #{type,jdbcType=INTEGER},
+      <if test="operate != null" >
+        operate = #{operate,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=INTEGER},
       </if>
       <if test="operatorId != null" >
         operator_id = #{operatorId,jdbcType=INTEGER},
@@ -291,8 +307,9 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jiazhe.youxiang.server.domain.po.SysLogPO" >
     update sys_log
-    set action = #{action,jdbcType=VARCHAR},
-      type = #{type,jdbcType=INTEGER},
+    set module_name = #{moduleName,jdbcType=VARCHAR},
+      operate = #{operate,jdbcType=VARCHAR},
+      level = #{level,jdbcType=INTEGER},
       operator_id = #{operatorId,jdbcType=INTEGER},
       operator_name = #{operatorName,jdbcType=VARCHAR},
       ip = #{ip,jdbcType=VARCHAR},

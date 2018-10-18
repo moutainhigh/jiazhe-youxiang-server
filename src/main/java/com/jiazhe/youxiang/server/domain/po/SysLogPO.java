@@ -6,9 +6,11 @@ import java.util.Date;
 public class SysLogPO implements Serializable {
     private Integer id;
 
-    private String action;
+    private String moduleName;
 
-    private Integer type;
+    private String operate;
+
+    private Integer level;
 
     private Integer operatorId;
 
@@ -36,20 +38,28 @@ public class SysLogPO implements Serializable {
         this.id = id;
     }
 
-    public String getAction() {
-        return action;
+    public String getModuleName() {
+        return moduleName;
     }
 
-    public void setAction(String action) {
-        this.action = action == null ? null : action.trim();
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName == null ? null : moduleName.trim();
     }
 
-    public Integer getType() {
-        return type;
+    public String getOperate() {
+        return operate;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setOperate(String operate) {
+        this.operate = operate == null ? null : operate.trim();
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
     public Integer getOperatorId() {

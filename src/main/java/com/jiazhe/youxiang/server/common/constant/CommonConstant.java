@@ -38,4 +38,7 @@ public class CommonConstant {
 
 
     public static final Byte CODE_NOT_DELETED = Byte.valueOf("0");
+
+    public static final String DEFAULT_TAG_CLIENT_IP = "clientIp";
+
 }
