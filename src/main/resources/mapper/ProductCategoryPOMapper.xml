@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.ProductTypePOMapper" >
-  <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.ProductTypePO" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.ProductCategoryPOMapper" >
+  <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.ProductCategoryPO" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR" />
-    <result column="details_img_url" property="detailsImgUrl" jdbcType="VARCHAR" />
+    <result column="detail_img_url" property="detailImgUrl" jdbcType="VARCHAR" />
     <result column="priority" property="priority" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
@@ -73,16 +73,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, name, description, thumbnail_url, details_img_url, priority, status, ext_info, 
+    id, name, description, thumbnail_url, detail_img_url, priority, status, ext_info, 
     is_deleted, add_time, mod_time
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.ProductTypePOExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.ProductCategoryPOExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from product_type
+    from product_category
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -93,31 +93,31 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from product_type
+    from product_category
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from product_type
+    delete from product_category
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jiazhe.youxiang.server.domain.po.ProductTypePOExample" >
-    delete from product_type
+  <delete id="deleteByExample" parameterType="com.jiazhe.youxiang.server.domain.po.ProductCategoryPOExample" >
+    delete from product_category
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.ProductTypePO" >
-    insert into product_type (id, name, description, 
-      thumbnail_url, details_img_url, priority, 
+  <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.ProductCategoryPO" >
+    insert into product_category (id, name, description, 
+      thumbnail_url, detail_img_url, priority, 
       status, ext_info, is_deleted, 
       add_time, mod_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
-      #{thumbnailUrl,jdbcType=VARCHAR}, #{detailsImgUrl,jdbcType=VARCHAR}, #{priority,jdbcType=INTEGER}, 
+      #{thumbnailUrl,jdbcType=VARCHAR}, #{detailImgUrl,jdbcType=VARCHAR}, #{priority,jdbcType=INTEGER}, 
       #{status,jdbcType=TINYINT}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
       #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.ProductTypePO" >
-    insert into product_type
+  <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.ProductCategoryPO" >
+    insert into product_category
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -131,8 +131,8 @@
       <if test="thumbnailUrl != null" >
         thumbnail_url,
       </if>
-      <if test="detailsImgUrl != null" >
-        details_img_url,
+      <if test="detailImgUrl != null" >
+        detail_img_url,
       </if>
       <if test="priority != null" >
         priority,
@@ -166,8 +166,8 @@
       <if test="thumbnailUrl != null" >
         #{thumbnailUrl,jdbcType=VARCHAR},
       </if>
-      <if test="detailsImgUrl != null" >
-        #{detailsImgUrl,jdbcType=VARCHAR},
+      <if test="detailImgUrl != null" >
+        #{detailImgUrl,jdbcType=VARCHAR},
       </if>
       <if test="priority != null" >
         #{priority,jdbcType=INTEGER},
@@ -189,14 +189,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jiazhe.youxiang.server.domain.po.ProductTypePOExample" resultType="java.lang.Integer" >
-    select count(*) from product_type
+  <select id="countByExample" parameterType="com.jiazhe.youxiang.server.domain.po.ProductCategoryPOExample" resultType="java.lang.Integer" >
+    select count(*) from product_category
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update product_type
+    update product_category
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
@@ -210,8 +210,8 @@
       <if test="record.thumbnailUrl != null" >
         thumbnail_url = #{record.thumbnailUrl,jdbcType=VARCHAR},
       </if>
-      <if test="record.detailsImgUrl != null" >
-        details_img_url = #{record.detailsImgUrl,jdbcType=VARCHAR},
+      <if test="record.detailImgUrl != null" >
+        detail_img_url = #{record.detailImgUrl,jdbcType=VARCHAR},
       </if>
       <if test="record.priority != null" >
         priority = #{record.priority,jdbcType=INTEGER},
@@ -237,12 +237,12 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update product_type
+    update product_category
     set id = #{record.id,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR},
       thumbnail_url = #{record.thumbnailUrl,jdbcType=VARCHAR},
-      details_img_url = #{record.detailsImgUrl,jdbcType=VARCHAR},
+      detail_img_url = #{record.detailImgUrl,jdbcType=VARCHAR},
       priority = #{record.priority,jdbcType=INTEGER},
       status = #{record.status,jdbcType=TINYINT},
       ext_info = #{record.extInfo,jdbcType=VARCHAR},
@@ -253,8 +253,8 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jiazhe.youxiang.server.domain.po.ProductTypePO" >
-    update product_type
+  <update id="updateByPrimaryKeySelective" parameterType="com.jiazhe.youxiang.server.domain.po.ProductCategoryPO" >
+    update product_category
     <set >
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
@@ -265,8 +265,8 @@
       <if test="thumbnailUrl != null" >
         thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
       </if>
-      <if test="detailsImgUrl != null" >
-        details_img_url = #{detailsImgUrl,jdbcType=VARCHAR},
+      <if test="detailImgUrl != null" >
+        detail_img_url = #{detailImgUrl,jdbcType=VARCHAR},
       </if>
       <if test="priority != null" >
         priority = #{priority,jdbcType=INTEGER},
@@ -289,12 +289,12 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jiazhe.youxiang.server.domain.po.ProductTypePO" >
-    update product_type
+  <update id="updateByPrimaryKey" parameterType="com.jiazhe.youxiang.server.domain.po.ProductCategoryPO" >
+    update product_category
     set name = #{name,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
-      details_img_url = #{detailsImgUrl,jdbcType=VARCHAR},
+      detail_img_url = #{detailImgUrl,jdbcType=VARCHAR},
       priority = #{priority,jdbcType=INTEGER},
       status = #{status,jdbcType=TINYINT},
       ext_info = #{extInfo,jdbcType=VARCHAR},

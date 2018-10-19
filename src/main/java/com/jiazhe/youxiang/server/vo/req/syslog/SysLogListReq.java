@@ -17,15 +17,34 @@ import io.swagger.annotations.ApiModelProperty;
 public class SysLogListReq extends OffsetLimitReq {
 
     private static final long serialVersionUID = 8827889561488904043L;
-    @ApiModelProperty("日志类型")
-    private Integer type;
+    @ApiModelProperty("模块名称")
+    private String moduleName;
+    @ApiModelProperty("操作")
+    private String operate;
+    @ApiModelProperty("日志级别")
+    private Integer level;
 
-    public Integer getType() {
-
-        return type;
+    public String getModuleName() {
+        return moduleName;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
+    }
+
+    public String getOperate() {
+        return operate;
+    }
+
+    public void setOperate(String operate) {
+        this.operate = operate;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 }

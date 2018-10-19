@@ -1,8 +1,9 @@
 drop table if exists sys_log;
 CREATE TABLE `sys_log` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
-    `action` VARCHAR(100) NOT NULL COMMENT '操作动作',
-    `type` INT(10) NOT NULL DEFAULT '0' COMMENT '操作类型',
+    `module_name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '模块名称',
+    `operate` VARCHAR(100) NOT NULL COMMENT '操作动作',
+    `level` INT(10) NOT NULL DEFAULT '0' COMMENT '日志级别',
     `operator_id` INT(10) UNSIGNED NOT NULL COMMENT '操作人id',
     `operator_name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '操作人名称',
     `ip` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '操作的ip地址',
@@ -269,12 +270,12 @@ CREATE TABLE `project` (
 drop table if exists product;
 CREATE TABLE `product` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
-    `product_type_id` INT(10) UNSIGNED NOT NULL COMMENT '商品分类Id',
+    `product_category_id` INT(10) UNSIGNED NOT NULL COMMENT '商品分类Id',
     `name` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '商品名称',
     `description` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '商品描述信息',
     `delay_days` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '需提前预定的天数',
     `thumbnail_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '缩略图url',
-    `details_img_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '详情图url',
+    `detail_img_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '详情图url',
     `product_type` INT(10) NOT NULL DEFAULT '0' COMMENT '0-服务，1-电子卡',
     `product_price_id` INT(10) UNSIGNED NOT NULL COMMENT '商品价格id',
     `unit_name` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '计量单位名称',
@@ -320,13 +321,13 @@ CREATE TABLE `product_price` (
     PRIMARY KEY (`id`)
 )  ENGINE=INNODB COMMENT='商品价格信息表';
 
-drop table if exists product_type;
-CREATE TABLE `product_type` (
+drop table if exists product_category;
+CREATE TABLE `product_category` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
     `name` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '商品分类名称',
     `description` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '商品分类描述信息',
     `thumbnail_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '缩略图url',
-    `details_img_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '详情图url',
+    `detail_img_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '详情图url',
     `priority` INT(10) NOT NULL DEFAULT '0' COMMENT '排序序号',
     `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '状态：0:下架,1:上架',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
