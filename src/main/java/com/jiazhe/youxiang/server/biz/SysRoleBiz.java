@@ -43,7 +43,7 @@ public class SysRoleBiz {
 
     public boolean roleHasExisted(RoleWithPermDTO roleWithPermDTO) {
         List<SysRoleDTO> sysRoleDTOList = sysRoleService.findByName(roleWithPermDTO.getName());
-        return 2 == sysRoleDTOList.size() || (sysRoleDTOList.size() == 1 && sysRoleDTOList.get(0).getId().equals(roleWithPermDTO.getId()));
+        return (2 == sysRoleDTOList.size()) || (sysRoleDTOList.size() == 1 && !sysRoleDTOList.get(0).getId().equals(roleWithPermDTO.getId()));
     }
 
     public int saveRoleWithPerm(RoleWithPermDTO roleWithPermDTO) {

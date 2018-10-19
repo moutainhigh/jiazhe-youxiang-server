@@ -114,7 +114,6 @@ public class SysRoleServiceImpl implements SysRoleService {
             sysRolePO.setIsDeleted(Byte.valueOf("0"));
             sysRolePOManualMapper.insert(sysRolePO);
         } else {
-            sysRolePO.setIsDeleted(Byte.valueOf("1"));
             sysRolePOMapper.updateByPrimaryKeySelective(sysRolePO);
         }
         if (!CollectionUtils.isEmpty(newPermsPO)) {
@@ -151,9 +150,12 @@ public class SysRoleServiceImpl implements SysRoleService {
         Integer count = sysRolePOManualMapper.count(name);
         List<SysRolePO> sysRolePOList = sysRolePOManualMapper.query(name , paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
-        if (!org.apache.commons.collections.CollectionUtils.isNotEmpty(sysRolePOList)) {
+        if(paging.getLimit() + paging.getOffset() >= count){
             paging.setHasMore(false);
         }
+        /*if (!org.apache.commons.collections.CollectionUtils.isNotEmpty(sysRolePOList)) {
+            paging.setHasMore(false);
+        }*/
         return sysRolePOList.stream().map(SysRoleAdapter::PO2DTO).collect(Collectors.toList());
     }
 }

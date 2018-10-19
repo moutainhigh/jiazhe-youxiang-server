@@ -92,14 +92,14 @@ public class APISysRoleController extends BaseController {
         if (req.getIsSuper() == 0 && null == req.getPermsStr()) {
             throw new CommonException(RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getCode(), RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getType(), RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getMessage());
         }
+        if (Strings.isBlank(req.getName())) {
+            req.setPermsStr("");
+        }
         /*判断是否重名，要将新建和修改区分开*/
         RoleWithPermDTO roleWithPermDTO = SysRoleAdapter.roleSaveReq2RoleWithPremDTO(req);
         boolean roleHasExisted = sysRoleBiz.roleHasExisted(roleWithPermDTO);
         if (roleHasExisted) {
             throw new CommonException(RoleCodeEnum.ROLE_HAS_EXISTED.getCode(), RoleCodeEnum.ROLE_HAS_EXISTED.getType(), RoleCodeEnum.ROLE_HAS_EXISTED.getMessage());
-        }
-        if (null == req.getPermsStr()) {
-            req.setPermsStr("");
         }
         sysRoleBiz.saveRoleWithPerm(roleWithPermDTO);
         return ResponseFactory.buildSuccess();
