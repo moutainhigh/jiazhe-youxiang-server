@@ -7,6 +7,7 @@ package com.jiazhe.youxiang.server.biz;
 
 import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
  * @author niexiao
  * @created 2018/10/18
  */
+@Service("projectBiz")
 public class ProjectBiz {
 
     public List<ProjectDTO> getList(Integer name, Paging paging) {

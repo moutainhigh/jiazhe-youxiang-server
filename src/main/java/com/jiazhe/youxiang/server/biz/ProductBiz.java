@@ -8,6 +8,7 @@ package com.jiazhe.youxiang.server.biz;
 import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
  * @author niexiao
  * @created 2018/10/18
  */
+@Service("productBiz")
 public class ProductBiz {
 
     /*************商品分类相关******************/

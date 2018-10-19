@@ -4,10 +4,13 @@ import com.jiazhe.youxiang.server.vo.BaseObject;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * Created by tujia on 2018/10/14.
+ * @author TU
+ * @date 2018/10/19
  */
-public class SysRoleResp extends BaseObject{
+public class SysRoleResp extends BaseObject {
 
+    private static final long serialVersionUID = -8161107313653321193L;
+    
     @ApiModelProperty("角色id")
     private int id;
 

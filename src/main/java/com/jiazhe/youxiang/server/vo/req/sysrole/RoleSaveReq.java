@@ -4,12 +4,14 @@ import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- *角色添加、修改请求参数
- * Created by TU on 2018/10/18.
+ * @author TU
+ * @desciption 角色添加、修改请求参数
+ * @date 2018/10/19
  */
 public class RoleSaveReq extends BaseVO {
 
-    private static final long serialVersionUID = -1419040182146202370L;
+    private static final long serialVersionUID = 2874917878062407932L;
+
     @ApiModelProperty("角色id")
     private int id;
 
