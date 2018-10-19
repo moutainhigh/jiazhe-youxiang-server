@@ -13,18 +13,17 @@ import com.jiazhe.youxiang.server.domain.po.SysRolePermissionPOExample;
 import com.jiazhe.youxiang.server.dto.sysrole.RoleWithPermDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRolePermissionDTO;
+import com.jiazhe.youxiang.server.service.SysRolePermissionService;
 import com.jiazhe.youxiang.server.service.SysRoleService;
-import com.jiazhe.youxiang.server.vo.req.SysRoleReq;
 import org.apache.shiro.util.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
+
 import java.util.stream.Collectors;
 
 /**
@@ -34,27 +33,53 @@ import java.util.stream.Collectors;
 @Service("sysRoleService")
 public class SysRoleServiceImpl implements SysRoleService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SysRoleServiceImpl.class);
-
     @Autowired
     private SysRolePOMapper sysRolePOMapper;
-    @Autowired
-    private SysRolePermissionPOMapper sysRolePermissionPOMapper;
     @Autowired
     private SysRolePOManualMapper sysRolePOManualMapper;
     @Autowired
     private SysRolePermissionPOManualMapper sysRolePermissionPOManualMapper;
+    @Autowired
+    private SysRolePermissionService sysRolePermissionService;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SysRoleServiceImpl.class);
 
     @Override
-    public int count(SysRoleReq req) {
-        return sysRolePOManualMapper.count(req);
+    public int deleteRoleWithPerms(Integer roleId) {
+        List<SysRolePermissionDTO> sysRolePermissionDTOList = sysRolePermissionService.findByRoleId(roleId);
+        List<SysRolePermissionPO> sysRolePermissionPOList = sysRolePermissionDTOList.stream().map(SysRolePermissionAdapter::DTO2PO).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(sysRolePermissionPOList)) {
+            sysRolePermissionService.batchDelete(sysRolePermissionPOList);
+        }
+        SysRolePO sysRolePO = sysRolePOMapper.selectByPrimaryKey(roleId);
+        return delete(sysRolePO);
     }
 
     @Override
-    public SysRoleDTO findById(int id) {
-        SysRolePO sysRolePO = sysRolePOMapper.selectByPrimaryKey(id);
-        SysRoleDTO sysRoleDto = SysRoleAdapter.sysRolePO2SysRoleDTO(sysRolePO);
-        return sysRoleDto;
+    public int delete(SysRolePO sysRolePO) {
+        sysRolePO.setIsDeleted(Byte.valueOf("1"));
+        sysRolePO.setModTime(new Date());
+        return sysRolePOMapper.updateByPrimaryKeySelective(sysRolePO);
+    }
+
+    @Override
+    public RoleWithPermDTO findRoleWithPermById(Integer roleId) {
+        SysRolePO sysRolePO = sysRolePOMapper.selectByPrimaryKey(roleId);
+        List<SysRolePermissionDTO> sysRolePermissionDTOList = sysRolePermissionService.findByRoleId(roleId);
+        StringBuilder perms = new StringBuilder();
+        for (SysRolePermissionDTO dto : sysRolePermissionDTOList) {
+            perms.append(dto.getPermUrl() + ",");
+        }
+        if (sysRolePermissionDTOList.size() > 0) {
+            perms.deleteCharAt(perms.length() - 1);
+        }
+        RoleWithPermDTO roleWithPermDTO = new RoleWithPermDTO();
+        roleWithPermDTO.setId(sysRolePO.getId());
+        roleWithPermDTO.setIsSuper(sysRolePO.getIsSuper());
+        roleWithPermDTO.setName(sysRolePO.getName());
+        roleWithPermDTO.setPriority(sysRolePO.getPriority());
+        roleWithPermDTO.setPermsStr(perms.toString());
+        return roleWithPermDTO;
     }
 
     @Override
@@ -64,25 +89,28 @@ public class SysRoleServiceImpl implements SysRoleService {
         criteria.andNameEqualTo(name);
         criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
         List<SysRolePO> sysRolePOList = sysRolePOMapper.selectByExample(sysRolePOExample);
-        return sysRolePOList.stream().map(SysRoleAdapter::sysRolePO2SysRoleDTO).collect(Collectors.toList());
+        return sysRolePOList.stream().map(SysRoleAdapter::PO2DTO).collect(Collectors.toList());
     }
 
     @Override
-    public int saveRoleWithPerm(boolean isAdd, SysRoleDTO sysRoleDTO, List<SysRolePermissionDTO> newPerms, List<SysRolePermissionDTO> oldPerms) {
-        SysRolePO sysRolePO = SysRoleAdapter.sysRoleDTO2SysRolePO(sysRoleDTO);
-        List<SysRolePermissionPO> newPermsPO = newPerms.stream().map(SysRolePermissionAdapter::DTO2PO).collect(Collectors.toList());
-        List<SysRolePermissionPO> oldPermsPO = oldPerms.stream().map(SysRolePermissionAdapter::DTO2PO).collect(Collectors.toList());
+    public SysRoleDTO findById(int id) {
+        SysRolePO sysRolePO = sysRolePOMapper.selectByPrimaryKey(id);
+        return SysRoleAdapter.PO2DTO(sysRolePO);
+    }
+
+    @Override
+    public int saveRoleWithPerm(boolean isAdd, SysRoleDTO sysRoleDTO, List<SysRolePermissionDTO> newPermsDto, List<SysRolePermissionDTO> oldPermsDto) {
+        SysRolePO sysRolePO = SysRoleAdapter.DTO2PO(sysRoleDTO);
+        sysRolePO.setModTime(new Date());
+        List<SysRolePermissionPO> newPermsPO = newPermsDto.stream().map(SysRolePermissionAdapter::DTO2PO).collect(Collectors.toList());
+        List<SysRolePermissionPO> oldPermsPO = oldPermsDto.stream().map(SysRolePermissionAdapter::DTO2PO).collect(Collectors.toList());
         if (isAdd) {
             sysRolePO.setExtInfo("");
             sysRolePO.setAddTime(new Date());
-            sysRolePO.setModTime(new Date());
             sysRolePO.setIsDeleted(Byte.valueOf("0"));
             sysRolePOManualMapper.insert(sysRolePO);
-            for (SysRolePermissionPO temp : newPermsPO) {
-                temp.setRoleId(sysRoleDTO.getId());
-            }
         } else {
-            sysRolePO.setModTime(new Date());
+            sysRolePO.setIsDeleted(Byte.valueOf("1"));
             sysRolePOMapper.updateByPrimaryKeySelective(sysRolePO);
         }
         if (!CollectionUtils.isEmpty(newPermsPO)) {
@@ -103,42 +131,5 @@ public class SysRoleServiceImpl implements SysRoleService {
             sysRolePermissionPOManualMapper.batchUpdate(oldPermsPO);
         }
         return 1;
-    }
-
-    @Override
-    public int softDeleteById(SysRoleDTO sysRoleDTO, List<SysRolePermissionDTO> perms) {
-        if (!CollectionUtils.isEmpty(perms)) {
-            List<SysRolePermissionPO> sysRolePermissionPOList = perms.stream().map(SysRolePermissionAdapter::DTO2PO).collect(Collectors.toList());
-            sysRolePermissionPOManualMapper.batchUpdate(sysRolePermissionPOList);
-        }
-        SysRolePO sysRolePO = SysRoleAdapter.sysRoleDTO2SysRolePO(sysRoleDTO);
-        sysRolePO.setIsDeleted(Byte.valueOf("1"));
-        sysRolePO.setModTime(new Date());
-        return sysRolePOMapper.updateByPrimaryKeySelective(sysRolePO);
-    }
-
-
-    @Override
-    public RoleWithPermDTO findRoleWithPermById(Integer roleId) {
-        SysRolePO sysRolePO = sysRolePOMapper.selectByPrimaryKey(roleId);
-        SysRolePermissionPOExample sysRolePermissionPOExample = new SysRolePermissionPOExample();
-        SysRolePermissionPOExample.Criteria criteria = sysRolePermissionPOExample.createCriteria();
-        criteria.andRoleIdEqualTo(roleId);
-        criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
-        List<SysRolePermissionPO> sysRolePermissionPOList = sysRolePermissionPOMapper.selectByExample(sysRolePermissionPOExample);
-        StringBuilder perms = new StringBuilder();
-        for (SysRolePermissionPO sysRolePermissionPO : sysRolePermissionPOList) {
-            perms.append(sysRolePermissionPO.getPermUrl() + ",");
-        }
-        if (sysRolePermissionPOList.size() > 0) {
-            perms.deleteCharAt(perms.length() - 1);
-        }
-        RoleWithPermDTO roleWithPermDTO = new RoleWithPermDTO();
-        roleWithPermDTO.setId(sysRolePO.getId());
-        roleWithPermDTO.setIsSuper(sysRolePO.getIsSuper());
-        roleWithPermDTO.setName(sysRolePO.getName());
-        roleWithPermDTO.setPriority(sysRolePO.getPriority());
-        roleWithPermDTO.setPermsStr(perms.toString());
-        return roleWithPermDTO;
     }
 }

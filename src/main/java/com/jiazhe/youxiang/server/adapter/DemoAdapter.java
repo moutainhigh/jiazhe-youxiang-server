@@ -6,7 +6,6 @@
 package com.jiazhe.youxiang.server.adapter;
 
 import com.jiazhe.youxiang.server.dto.DemoDTO;
-import com.jiazhe.youxiang.server.vo.req.SysRoleReq;
 
 /**
  * 在这里编写类的功能描述
@@ -16,7 +15,7 @@ import com.jiazhe.youxiang.server.vo.req.SysRoleReq;
  */
 public class DemoAdapter {
 
-    public static DemoDTO sysRoleReq2DTO(SysRoleReq req) {
+   /* public static DemoDTO sysRoleReq2DTO(SysRoleReq req) {
         //仅仅是示范，这里就是做一个req到DTO的转换，一般都很简单
         if (req == null) {
             return null;
@@ -32,6 +31,6 @@ public class DemoAdapter {
         demoDTO.setPriority(req.getPriority());
         demoDTO.setPerms(req.getPerms());
         return demoDTO;
-    }
+    }*/
 
 }

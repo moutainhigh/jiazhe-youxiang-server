@@ -1,11 +1,15 @@
 package com.jiazhe.youxiang.server.vo.resp.sysrole;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
+ * @author TU
  * Created by TU on 2018/10/18.
  */
-public class RoleWithPermResp {
+public class RoleWithPermResp extends BaseObject {
+
+    private static final long serialVersionUID = 4676120583567426861L;
 
     @ApiModelProperty("角色id")
     private int id;

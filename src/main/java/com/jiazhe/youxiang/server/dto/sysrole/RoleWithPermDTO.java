@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.dto.sysrole;
 
 /**
+ * @author TU
  * Created by TU on 2018/10/18.
  */
 public class RoleWithPermDTO {

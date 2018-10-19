@@ -5,11 +5,13 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  *角色添加、修改请求参数
+ * @author TU
  * Created by TU on 2018/10/18.
  */
 public class RoleSaveReq extends BaseVO {
 
-    private static final long serialVersionUID = -1419040182146202370L;
+    private static final long serialVersionUID = 2874917878062407932L;
+
     @ApiModelProperty("角色id")
     private int id;
 

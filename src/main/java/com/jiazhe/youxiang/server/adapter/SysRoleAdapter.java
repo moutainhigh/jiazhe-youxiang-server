@@ -5,7 +5,6 @@ import com.jiazhe.youxiang.server.dto.sysrole.RoleWithPermDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
 import com.jiazhe.youxiang.server.vo.req.sysrole.RoleSaveReq;
 import com.jiazhe.youxiang.server.vo.resp.sysrole.RoleWithPermResp;
-import com.jiazhe.youxiang.server.vo.resp.sysrole.SysRoleResp;
 
 /**
  * @author tu
@@ -18,28 +17,16 @@ public class SysRoleAdapter {
         if (dto == null) {
             return null;
         }
-        RoleWithPermResp roleAndPermissionResp = new RoleWithPermResp();
-        roleAndPermissionResp.setId(dto.getId());
-        roleAndPermissionResp.setName(dto.getName());
-        roleAndPermissionResp.setIsSuper(dto.getIsSuper());
-        roleAndPermissionResp.setPriority(dto.getPriority());
-        roleAndPermissionResp.setPermsStr(dto.getPermsStr());
-        return roleAndPermissionResp;
+        RoleWithPermResp roleWithPermResp = new RoleWithPermResp();
+        roleWithPermResp.setId(dto.getId());
+        roleWithPermResp.setName(dto.getName());
+        roleWithPermResp.setIsSuper(dto.getIsSuper());
+        roleWithPermResp.setPriority(dto.getPriority());
+        roleWithPermResp.setPermsStr(dto.getPermsStr());
+        return roleWithPermResp;
     }
 
-    public static SysRoleDTO sysRolePO2SysRoleDTO(SysRolePO po) {
-        if (po == null) {
-            return null;
-        }
-        SysRoleDTO sysRoleDTO = new SysRoleDTO();
-        sysRoleDTO.setId(po.getId());
-        sysRoleDTO.setName(po.getName());
-        sysRoleDTO.setIsSuper(po.getIsSuper());
-        sysRoleDTO.setPriority(po.getPriority());
-        return sysRoleDTO;
-    }
-
-    public static RoleWithPermDTO roleSaveVO2RoleWithPermDTO(RoleSaveReq req) {
+    public static RoleWithPermDTO roleSaveReq2RoleWithPremDTO(RoleSaveReq req) {
         if (req == null) {
             return null;
         }
@@ -52,27 +39,27 @@ public class SysRoleAdapter {
         return roleWithPermDTO;
     }
 
-    public static SysRolePO sysRoleDTO2SysRolePO(SysRoleDTO dto) {
-        if (dto == null) {
+    public static SysRolePO DTO2PO(SysRoleDTO sysRoleDTO) {
+        if (sysRoleDTO == null) {
             return null;
         }
         SysRolePO sysRolePO = new SysRolePO();
-        sysRolePO.setId(dto.getId());
-        sysRolePO.setName(dto.getName());
-        sysRolePO.setIsSuper(dto.getIsSuper());
-        sysRolePO.setPriority(dto.getPriority());
+        sysRolePO.setId(sysRoleDTO.getId());
+        sysRolePO.setName(sysRoleDTO.getName());
+        sysRolePO.setIsSuper(sysRoleDTO.getIsSuper());
+        sysRolePO.setPriority(sysRoleDTO.getPriority());
         return sysRolePO;
     }
 
-    public static SysRoleDTO roleSaveReq2SysRoleDTO(RoleSaveReq roleSaveReq) {
-        if (roleSaveReq == null) {
+    public static SysRoleDTO PO2DTO(SysRolePO sysRolePO) {
+        if (sysRolePO == null) {
             return null;
         }
         SysRoleDTO sysRoleDTO = new SysRoleDTO();
-        sysRoleDTO.setId(roleSaveReq.getId());
-        sysRoleDTO.setName(roleSaveReq.getName());
-        sysRoleDTO.setIsSuper(roleSaveReq.getIsSuper());
-        sysRoleDTO.setPriority(roleSaveReq.getPriority());
+        sysRoleDTO.setId(sysRolePO.getId());
+        sysRoleDTO.setName(sysRolePO.getName());
+        sysRoleDTO.setIsSuper(sysRolePO.getIsSuper());
+        sysRoleDTO.setPriority(sysRolePO.getPriority());
         return sysRoleDTO;
     }
 }

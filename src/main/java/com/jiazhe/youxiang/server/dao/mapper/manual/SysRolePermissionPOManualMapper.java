@@ -1,18 +1,28 @@
 package com.jiazhe.youxiang.server.dao.mapper.manual;
 
 import com.jiazhe.youxiang.server.domain.po.SysRolePermissionPO;
-import com.jiazhe.youxiang.server.vo.req.SysRoleReq;
+
 import java.util.List;
-import java.util.Map;
 
 
 /**
+ * @author TU
  * Created by tujia on 2018/10/14.
  */
 public interface SysRolePermissionPOManualMapper {
 
+    /**
+     * 批量插入
+     * @param sysRolePermissionPOList
+     * @return
+     */
     int batchInsert(List<SysRolePermissionPO> sysRolePermissionPOList);
 
+    /**
+     * 批量更新
+     * @param sysRolePermissionPOList
+     * @return
+     */
     int batchUpdate(List<SysRolePermissionPO> sysRolePermissionPOList);
 
 }
