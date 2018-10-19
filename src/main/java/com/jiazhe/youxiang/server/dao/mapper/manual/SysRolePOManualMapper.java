@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.dao.mapper.manual;
 
 import com.jiazhe.youxiang.server.domain.po.SysRolePO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,21 @@ public interface SysRolePOManualMapper {
      * @param sysRolePO
      * @return
      */
-    int insert(SysRolePO sysRolePO);
+    Integer insert(SysRolePO sysRolePO);
 
+    /**
+     * 计数
+     * @param name
+     * @return
+     */
+    Integer count(String name);
 
+    /**
+     * 根据参数查询分页结果
+     * @param name
+     * @param offset
+     * @param limit
+     * @return
+     */
+    List<SysRolePO> query(@Param("name") String name,@Param("offset") Integer offset,@Param("limit") Integer limit);
 }

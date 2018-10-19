@@ -7,8 +7,11 @@ import com.jiazhe.youxiang.server.common.enums.CommonCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.RoleCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.CommonException;
 import com.jiazhe.youxiang.server.dto.sysrole.RoleWithPermDTO;
+import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
+import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
+import com.jiazhe.youxiang.server.vo.req.sysrole.RolePageReq;
 import com.jiazhe.youxiang.server.vo.req.sysrole.RoleSaveReq;
 import com.jiazhe.youxiang.server.vo.resp.sysrole.RoleWithPermResp;
 import com.jiazhe.youxiang.server.vo.resp.sysrole.SysRoleResp;
@@ -22,10 +25,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * 后台所有关于角色的接口
+ *
  * @author TU
- * Created by tujia on 2018/10/14.
+ *         Created by tujia on 2018/10/14.
  */
 @RestController
 @RequestMapping("api/sysrole")
@@ -36,11 +43,29 @@ public class APISysRoleController extends BaseController {
     @Autowired
     private SysRoleBiz sysRoleBiz;
 
+    @ApiOperation(value = "listall", httpMethod = "GET", response = SysRoleResp.class, notes = "查询所有角色信息")
+    @RequestMapping(value = "/listall", method = RequestMethod.GET)
+    public Object listAll() {
+        List<SysRoleDTO> sysRoleDTOList = sysRoleBiz.findAll();
+        return ResponseFactory.buildResponse(sysRoleDTOList);
+    }
+
+    @ApiOperation(value = "listpage", httpMethod = "GET", response = SysRoleResp.class, notes = "分页查询角色信息")
+    @RequestMapping(value = "/listpage", method = RequestMethod.GET)
+    public Object listPage(@ModelAttribute RolePageReq req) {
+        Paging paging = new Paging();
+        paging.setOffset(req.getOffset());
+        paging.setLimit(req.getLimit());
+        List<SysRoleDTO> sysRoleDTOList = sysRoleBiz.findByName(req.getName(),paging);
+        List<SysRoleResp> sysRoleRespList = sysRoleDTOList.stream().map(SysRoleAdapter::DTO2RespVO).collect(Collectors.toList());
+        return ResponseFactory.buildPaginationResponse(sysRoleRespList,paging);
+    }
+
     @ApiOperation(value = "delete", httpMethod = "GET", response = SysRoleResp.class, notes = "根据id删除角色信息（包含权限）")
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public Object delete(@ModelAttribute IdReq req) {
         int count = sysRoleBiz.deleteRoleWithPerms(req.getId());
-        if(count != 1){
+        if (count != 1) {
             throw new CommonException(CommonCodeEnum.INTERNAL_ERROR.getCode(), CommonCodeEnum.INTERNAL_ERROR.getType(), "删除失败");
         }
         return ResponseFactory.buildSuccess();
@@ -65,7 +90,7 @@ public class APISysRoleController extends BaseController {
         }
         /*非管理员，还不带权限字符串*/
         if (req.getIsSuper() == 0 && null == req.getPermsStr()) {
-            throw new CommonException(RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getCode(),RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getType(), RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getMessage());
+            throw new CommonException(RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getCode(), RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getType(), RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getMessage());
         }
         /*判断是否重名，要将新建和修改区分开*/
         RoleWithPermDTO roleWithPermDTO = SysRoleAdapter.roleSaveReq2RoleWithPremDTO(req);
@@ -73,7 +98,7 @@ public class APISysRoleController extends BaseController {
         if (roleHasExisted) {
             throw new CommonException(RoleCodeEnum.ROLE_HAS_EXISTED.getCode(), RoleCodeEnum.ROLE_HAS_EXISTED.getType(), RoleCodeEnum.ROLE_HAS_EXISTED.getMessage());
         }
-        if(null == req.getPermsStr()){
+        if (null == req.getPermsStr()) {
             req.setPermsStr("");
         }
         sysRoleBiz.saveRoleWithPerm(roleWithPermDTO);

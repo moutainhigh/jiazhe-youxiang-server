@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRolePermissionDTO;
 import com.jiazhe.youxiang.server.service.SysRolePermissionService;
 import com.jiazhe.youxiang.server.service.SysRoleService;
+import com.jiazhe.youxiang.server.vo.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,5 +103,13 @@ public class SysRoleBiz {
         sysRoleDTO.setIsSuper(Byte.valueOf(roleWithPermDTO.getIsSuper()));
         sysRoleDTO.setPriority(Integer.valueOf(roleWithPermDTO.getPriority()));
         return sysRoleService.saveRoleWithPerm(isAdd, sysRoleDTO, newPermsDto, oldPermsDto);
+    }
+
+    public List<SysRoleDTO> findAll() {
+        return sysRoleService.findAll();
+    }
+
+    public List<SysRoleDTO> findByName(String name, Paging paging) {
+        return sysRoleService.findByName(name,paging);
     }
 }

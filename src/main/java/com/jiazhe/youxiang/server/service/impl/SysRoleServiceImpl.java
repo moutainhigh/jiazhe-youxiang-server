@@ -15,6 +15,8 @@ import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRolePermissionDTO;
 import com.jiazhe.youxiang.server.service.SysRolePermissionService;
 import com.jiazhe.youxiang.server.service.SysRoleService;
+import com.jiazhe.youxiang.server.vo.Paging;
+import org.apache.logging.log4j.util.Strings;
 import org.apache.shiro.util.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,7 +88,9 @@ public class SysRoleServiceImpl implements SysRoleService {
     public List<SysRoleDTO> findByName(String name) {
         SysRolePOExample sysRolePOExample = new SysRolePOExample();
         SysRolePOExample.Criteria criteria = sysRolePOExample.createCriteria();
-        criteria.andNameEqualTo(name);
+        if(!Strings.isEmpty(name)){
+            criteria.andNameEqualTo(name);
+        }
         criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
         List<SysRolePO> sysRolePOList = sysRolePOMapper.selectByExample(sysRolePOExample);
         return sysRolePOList.stream().map(SysRoleAdapter::PO2DTO).collect(Collectors.toList());
@@ -131,5 +135,25 @@ public class SysRoleServiceImpl implements SysRoleService {
             sysRolePermissionPOManualMapper.batchUpdate(oldPermsPO);
         }
         return 1;
+    }
+
+    @Override
+    public List<SysRoleDTO> findAll() {
+        SysRolePOExample sysRolePOExample = new SysRolePOExample();
+        SysRolePOExample.Criteria criteria = sysRolePOExample.createCriteria();
+        criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
+        List<SysRolePO> sysRolePOList = sysRolePOMapper.selectByExample(sysRolePOExample);
+        return sysRolePOList.stream().map(SysRoleAdapter::PO2DTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SysRoleDTO> findByName(String name, Paging paging) {
+        Integer count = sysRolePOManualMapper.count(name);
+        List<SysRolePO> sysRolePOList = sysRolePOManualMapper.query(name , paging.getOffset(), paging.getLimit());
+        paging.setTotal(count);
+        if (!org.apache.commons.collections.CollectionUtils.isNotEmpty(sysRolePOList)) {
+            paging.setHasMore(false);
+        }
+        return sysRolePOList.stream().map(SysRoleAdapter::PO2DTO).collect(Collectors.toList());
     }
 }

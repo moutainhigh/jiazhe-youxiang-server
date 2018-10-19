@@ -4,6 +4,7 @@ import com.jiazhe.youxiang.server.domain.po.SysRolePO;
 import com.jiazhe.youxiang.server.dto.sysrole.RoleWithPermDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRolePermissionDTO;
+import com.jiazhe.youxiang.server.vo.Paging;
 
 import java.util.List;
 
@@ -41,7 +42,6 @@ public interface SysRoleService {
      */
     List<SysRoleDTO> findByName(String name);
 
-
     /**
      * 根据id查询角色信息（不包含权限字符串）
      * @param id
@@ -60,4 +60,17 @@ public interface SysRoleService {
      */
     int saveRoleWithPerm(boolean isAdd, SysRoleDTO sysRoleDTO, List<SysRolePermissionDTO> newPermsDto, List<SysRolePermissionDTO> oldPermsDto);
 
+    /**
+     * 查询所有角色信息
+     * @return
+     */
+    List<SysRoleDTO> findAll();
+
+    /**
+     * 传入分页信息，查询实体信息
+     * @param name
+     * @param paging
+     * @return
+     */
+    List<SysRoleDTO> findByName(String name, Paging paging);
 }

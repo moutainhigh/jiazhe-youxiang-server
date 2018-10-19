@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.server.dto.sysrole.RoleWithPermDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
 import com.jiazhe.youxiang.server.vo.req.sysrole.RoleSaveReq;
 import com.jiazhe.youxiang.server.vo.resp.sysrole.RoleWithPermResp;
+import com.jiazhe.youxiang.server.vo.resp.sysrole.SysRoleResp;
 
 /**
  * @author tu
@@ -61,5 +62,17 @@ public class SysRoleAdapter {
         sysRoleDTO.setIsSuper(sysRolePO.getIsSuper());
         sysRoleDTO.setPriority(sysRolePO.getPriority());
         return sysRoleDTO;
+    }
+
+    public static SysRoleResp DTO2RespVO(SysRoleDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+        SysRoleResp sysRoleResp = new SysRoleResp();
+        sysRoleResp.setId(dto.getId());
+        sysRoleResp.setName(dto.getName());
+        sysRoleResp.setIsSuper(dto.getIsSuper());
+        sysRoleResp.setPriority(dto.getPriority());
+        return sysRoleResp;
     }
 }
