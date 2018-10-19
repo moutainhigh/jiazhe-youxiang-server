@@ -1,14 +1,12 @@
 package com.jiazhe.youxiang.server.service;
 
 import com.jiazhe.youxiang.server.domain.po.SysRolePermissionPO;
-import com.jiazhe.youxiang.server.domain.po.SysRolePermissionPOExample;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRolePermissionDTO;
-
 import java.util.List;
 
 /**
  * @author TU
- *         Created by TU on 2018/10/15.
+ * Created by TU on 2018/10/15.
  */
 public interface SysRolePermissionService {
     /**
@@ -20,10 +18,18 @@ public interface SysRolePermissionService {
     List<SysRolePermissionDTO> findByRoleId(Integer roleId);
 
     /**
-     * 根据实体列表删除角色权限信息
+     * 根据ids删除角色权限信息
      *
-     * @param sysRolePermissionPOList
+     * @param ids
      * @return
      */
-    int batchDelete(List<SysRolePermissionPO> sysRolePermissionPOList);
+    int batchDelete(List<Integer> ids);
+
+    /**
+     * 根据实体批量插入
+     * @param newPermsPO
+     * @return
+     */
+    int batchInsert(List<SysRolePermissionPO> newPermsPO);
+
 }

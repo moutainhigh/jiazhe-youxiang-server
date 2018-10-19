@@ -2,14 +2,11 @@ package com.jiazhe.youxiang.server.service.impl;
 
 import com.jiazhe.youxiang.server.adapter.SysRoleAdapter;
 import com.jiazhe.youxiang.server.adapter.SysRolePermissionAdapter;
-import com.jiazhe.youxiang.server.dao.mapper.SysRolePermissionPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.SysRolePOManualMapper;
 import com.jiazhe.youxiang.server.dao.mapper.SysRolePOMapper;
-import com.jiazhe.youxiang.server.dao.mapper.manual.SysRolePermissionPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.SysRolePO;
 import com.jiazhe.youxiang.server.domain.po.SysRolePOExample;
 import com.jiazhe.youxiang.server.domain.po.SysRolePermissionPO;
-import com.jiazhe.youxiang.server.domain.po.SysRolePermissionPOExample;
 import com.jiazhe.youxiang.server.dto.sysrole.RoleWithPermDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRolePermissionDTO;
@@ -40,8 +37,6 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Autowired
     private SysRolePOManualMapper sysRolePOManualMapper;
     @Autowired
-    private SysRolePermissionPOManualMapper sysRolePermissionPOManualMapper;
-    @Autowired
     private SysRolePermissionService sysRolePermissionService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SysRoleServiceImpl.class);
@@ -49,19 +44,16 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Override
     public int deleteRoleWithPerms(Integer roleId) {
         List<SysRolePermissionDTO> sysRolePermissionDTOList = sysRolePermissionService.findByRoleId(roleId);
-        List<SysRolePermissionPO> sysRolePermissionPOList = sysRolePermissionDTOList.stream().map(SysRolePermissionAdapter::DTO2PO).collect(Collectors.toList());
-        if (!CollectionUtils.isEmpty(sysRolePermissionPOList)) {
-            sysRolePermissionService.batchDelete(sysRolePermissionPOList);
+        List<Integer> ids = sysRolePermissionDTOList.stream().map(SysRolePermissionDTO::getId).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(sysRolePermissionDTOList)) {
+            sysRolePermissionService.batchDelete(ids);
         }
-        SysRolePO sysRolePO = sysRolePOMapper.selectByPrimaryKey(roleId);
-        return delete(sysRolePO);
+        return delete(roleId);
     }
 
     @Override
-    public int delete(SysRolePO sysRolePO) {
-        sysRolePO.setIsDeleted(Byte.valueOf("1"));
-        sysRolePO.setModTime(new Date());
-        return sysRolePOMapper.updateByPrimaryKeySelective(sysRolePO);
+    public int delete(Integer id) {
+        return sysRolePOManualMapper.delete(id);
     }
 
     @Override
@@ -88,7 +80,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     public List<SysRoleDTO> findByName(String name) {
         SysRolePOExample sysRolePOExample = new SysRolePOExample();
         SysRolePOExample.Criteria criteria = sysRolePOExample.createCriteria();
-        if(!Strings.isEmpty(name)){
+        if (!Strings.isEmpty(name)) {
             criteria.andNameEqualTo(name);
         }
         criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
@@ -107,7 +99,6 @@ public class SysRoleServiceImpl implements SysRoleService {
         SysRolePO sysRolePO = SysRoleAdapter.DTO2PO(sysRoleDTO);
         sysRolePO.setModTime(new Date());
         List<SysRolePermissionPO> newPermsPO = newPermsDto.stream().map(SysRolePermissionAdapter::DTO2PO).collect(Collectors.toList());
-        List<SysRolePermissionPO> oldPermsPO = oldPermsDto.stream().map(SysRolePermissionAdapter::DTO2PO).collect(Collectors.toList());
         if (isAdd) {
             sysRolePO.setExtInfo("");
             sysRolePO.setAddTime(new Date());
@@ -124,14 +115,11 @@ public class SysRoleServiceImpl implements SysRoleService {
                 newPO.setAddTime(new Date());
                 newPO.setModTime(new Date());
             }
-            sysRolePermissionPOManualMapper.batchInsert(newPermsPO);
+            sysRolePermissionService.batchInsert(newPermsPO);
         }
-        if (!CollectionUtils.isEmpty(oldPermsPO)) {
-            for (SysRolePermissionPO old : oldPermsPO) {
-                old.setIsDeleted(Byte.valueOf("1"));
-                old.setModTime(new Date());
-            }
-            sysRolePermissionPOManualMapper.batchUpdate(oldPermsPO);
+        if (!CollectionUtils.isEmpty(oldPermsDto)) {
+            List<Integer> oldIds = oldPermsDto.stream().map(SysRolePermissionDTO::getId).collect(Collectors.toList());
+            sysRolePermissionService.batchDelete(oldIds);
         }
         return 1;
     }
@@ -148,14 +136,11 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Override
     public List<SysRoleDTO> findByName(String name, Paging paging) {
         Integer count = sysRolePOManualMapper.count(name);
-        List<SysRolePO> sysRolePOList = sysRolePOManualMapper.query(name , paging.getOffset(), paging.getLimit());
+        List<SysRolePO> sysRolePOList = sysRolePOManualMapper.query(name, paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
-        if(paging.getLimit() + paging.getOffset() >= count){
+        if (paging.getLimit() + paging.getOffset() >= count) {
             paging.setHasMore(false);
         }
-        /*if (!org.apache.commons.collections.CollectionUtils.isNotEmpty(sysRolePOList)) {
-            paging.setHasMore(false);
-        }*/
         return sysRolePOList.stream().map(SysRoleAdapter::PO2DTO).collect(Collectors.toList());
     }
 }

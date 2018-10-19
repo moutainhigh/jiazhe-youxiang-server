@@ -35,4 +35,11 @@ public interface SysRolePOManualMapper {
      * @return
      */
     List<SysRolePO> query(@Param("name") String name,@Param("offset") Integer offset,@Param("limit") Integer limit);
+
+    /**
+     * 单个删除角色，不删除权限
+     * @param id
+     * @return
+     */
+    int delete(Integer id);
 }

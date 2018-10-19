@@ -3,9 +3,9 @@ package com.jiazhe.youxiang.server.biz;
 import com.jiazhe.youxiang.server.dto.sysrole.RoleWithPermDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRolePermissionDTO;
-import com.jiazhe.youxiang.server.service.SysRolePermissionService;
 import com.jiazhe.youxiang.server.service.SysRoleService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class SysRoleBiz {
     @Autowired
     private SysRoleService sysRoleService;
     @Autowired
-    private SysRolePermissionService sysRolePermissionService;
+    private SysRolePermissionBiz sysRolePermissionBiz;
 
     /**
      * 根据角色id删除角色和权限
@@ -55,7 +55,7 @@ public class SysRoleBiz {
         List<SysRolePermissionDTO> newPermsDto = new ArrayList<SysRolePermissionDTO>();
         /*修改后减少的权限DTO*/
         List<SysRolePermissionDTO> oldPermsDto = new ArrayList<SysRolePermissionDTO>();
-        String[] perms = roleWithPermDTO.getPermsStr().length() < 1 ? null : roleWithPermDTO.getPermsStr().split(",");
+        String[] perms = Strings.isBlank(roleWithPermDTO.getPermsStr()) ? null : roleWithPermDTO.getPermsStr().split(",");
         if (isAdd) {
             sysRoleDTO = new SysRoleDTO();
             if (roleWithPermDTO.getIsSuper() == 0) {
@@ -68,7 +68,7 @@ public class SysRoleBiz {
         } else {
             sysRoleDTO = sysRoleService.findById(roleWithPermDTO.getId());
             /*修改前的权限*/
-            oldPermsDto = sysRolePermissionService.findByRoleId(roleWithPermDTO.getId());
+            oldPermsDto = sysRolePermissionBiz.findByRoleId(roleWithPermDTO.getId());
             if(roleWithPermDTO.getIsSuper() == 0) {
                 if (null != perms) {
                         /*遍历新的权限String[]*/

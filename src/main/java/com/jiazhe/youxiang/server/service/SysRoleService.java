@@ -22,11 +22,11 @@ public interface SysRoleService {
     int deleteRoleWithPerms(Integer roleId);
 
     /**
-     * 根据实体删除角色（不包括权限）
-     * @param sysRolePO
+     * 根据id删除角色（不包括权限）
+     * @param id
      * @return
      */
-    int delete(SysRolePO sysRolePO);
+    int delete(Integer id);
 
     /**
      * 根据角色id查找角色信息，包括权限

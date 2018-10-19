@@ -48,4 +48,8 @@
         #{priority,jdbcType=INTEGER}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT},
         #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
     </insert>
+
+    <update id="delete">
+        update sys_role set is_deleted = 1 , mod_time = DATE_FORMAT(NOW(),'%Y-%m-%d %H:%m:%s') where id = #{id}
+    </update>
 </mapper>
