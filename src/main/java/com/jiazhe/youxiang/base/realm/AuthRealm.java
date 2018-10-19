@@ -60,7 +60,7 @@ public class AuthRealm extends AuthorizingRealm{
     //用户授权
     @Override
     public AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal) {
-        System.out.println("=========进入用户授权============");
+        /*System.out.println("=========进入用户授权============");
         //用户一个
         SysUserPO sysUserPO = (SysUserPO) principal.getPrimaryPrincipal();
         List<String> permissionList = new ArrayList<String>();
@@ -94,6 +94,7 @@ public class AuthRealm extends AuthorizingRealm{
         }
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.addStringPermissions(permissionList);//将权限放入shiro中.
-        return info;
+        return info;*/
+        return null;
     }
 }
