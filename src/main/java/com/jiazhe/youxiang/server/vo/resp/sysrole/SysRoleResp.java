@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author TU
- *         Created by tujia on 2018/10/14.
+ * @date 2018/10/19
  */
 public class SysRoleResp extends BaseObject {
 

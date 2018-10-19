@@ -875,6 +875,136 @@ public class ProductPOExample {
             return (Criteria) this;
         }
 
+        public Criteria andSmsTemplateIsNull() {
+            addCriterion("sms_template is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsTemplateIsNotNull() {
+            addCriterion("sms_template is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsTemplateEqualTo(String value) {
+            addCriterion("sms_template =", value, "smsTemplate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsTemplateNotEqualTo(String value) {
+            addCriterion("sms_template <>", value, "smsTemplate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsTemplateGreaterThan(String value) {
+            addCriterion("sms_template >", value, "smsTemplate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsTemplateGreaterThanOrEqualTo(String value) {
+            addCriterion("sms_template >=", value, "smsTemplate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsTemplateLessThan(String value) {
+            addCriterion("sms_template <", value, "smsTemplate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsTemplateLessThanOrEqualTo(String value) {
+            addCriterion("sms_template <=", value, "smsTemplate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsTemplateLike(String value) {
+            addCriterion("sms_template like", value, "smsTemplate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsTemplateNotLike(String value) {
+            addCriterion("sms_template not like", value, "smsTemplate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsTemplateIn(List<String> values) {
+            addCriterion("sms_template in", values, "smsTemplate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsTemplateNotIn(List<String> values) {
+            addCriterion("sms_template not in", values, "smsTemplate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsTemplateBetween(String value1, String value2) {
+            addCriterion("sms_template between", value1, value2, "smsTemplate");
+            return (Criteria) this;
+        }
+
+        public Criteria andSmsTemplateNotBetween(String value1, String value2) {
+            addCriterion("sms_template not between", value1, value2, "smsTemplate");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveDaysIsNull() {
+            addCriterion("effective_days is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveDaysIsNotNull() {
+            addCriterion("effective_days is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveDaysEqualTo(Integer value) {
+            addCriterion("effective_days =", value, "effectiveDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveDaysNotEqualTo(Integer value) {
+            addCriterion("effective_days <>", value, "effectiveDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveDaysGreaterThan(Integer value) {
+            addCriterion("effective_days >", value, "effectiveDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveDaysGreaterThanOrEqualTo(Integer value) {
+            addCriterion("effective_days >=", value, "effectiveDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveDaysLessThan(Integer value) {
+            addCriterion("effective_days <", value, "effectiveDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveDaysLessThanOrEqualTo(Integer value) {
+            addCriterion("effective_days <=", value, "effectiveDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveDaysIn(List<Integer> values) {
+            addCriterion("effective_days in", values, "effectiveDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveDaysNotIn(List<Integer> values) {
+            addCriterion("effective_days not in", values, "effectiveDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveDaysBetween(Integer value1, Integer value2) {
+            addCriterion("effective_days between", value1, value2, "effectiveDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveDaysNotBetween(Integer value1, Integer value2) {
+            addCriterion("effective_days not between", value1, value2, "effectiveDays");
+            return (Criteria) this;
+        }
+
         public Criteria andExtInfoIsNull() {
             addCriterion("ext_info is null");
             return (Criteria) this;

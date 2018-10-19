@@ -4,10 +4,9 @@ import java.util.Date;
 
 /**
  * @author TU
- * Created by tujia on 2018/10/18.
+ * @date 2018/10/19
  */
 public class SysRolePermissionDTO {
-
 
     private Integer id;
 

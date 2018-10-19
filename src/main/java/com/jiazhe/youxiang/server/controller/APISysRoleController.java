@@ -43,22 +43,22 @@ public class APISysRoleController extends BaseController {
     @Autowired
     private SysRoleBiz sysRoleBiz;
 
-    @ApiOperation(value = "listall", httpMethod = "GET", response = SysRoleResp.class, notes = "查询所有角色信息")
+    @ApiOperation(value = "listall", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List",notes = "查询所有角色信息")
     @RequestMapping(value = "/listall", method = RequestMethod.GET)
     public Object listAll() {
         List<SysRoleDTO> sysRoleDTOList = sysRoleBiz.findAll();
         return ResponseFactory.buildResponse(sysRoleDTOList);
     }
 
-    @ApiOperation(value = "listpage", httpMethod = "GET", response = SysRoleResp.class, notes = "分页查询角色信息")
+    @ApiOperation(value = "listpage", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List",notes = "分页查询角色信息")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute RolePageReq req) {
         Paging paging = new Paging();
         paging.setOffset(req.getOffset());
         paging.setLimit(req.getLimit());
-        List<SysRoleDTO> sysRoleDTOList = sysRoleBiz.findByName(req.getName(),paging);
+        List<SysRoleDTO> sysRoleDTOList = sysRoleBiz.findByName(req.getName(), paging);
         List<SysRoleResp> sysRoleRespList = sysRoleDTOList.stream().map(SysRoleAdapter::DTO2RespVO).collect(Collectors.toList());
-        return ResponseFactory.buildPaginationResponse(sysRoleRespList,paging);
+        return ResponseFactory.buildPaginationResponse(sysRoleRespList, paging);
     }
 
     @ApiOperation(value = "delete", httpMethod = "GET", response = SysRoleResp.class, notes = "根据id删除角色信息（包含权限）")
@@ -92,9 +92,6 @@ public class APISysRoleController extends BaseController {
         if (req.getIsSuper() == 0 && null == req.getPermsStr()) {
             throw new CommonException(RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getCode(), RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getType(), RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getMessage());
         }
-       /* if (Strings.isBlank(req.getPermsStr())) {
-            req.setPermsStr("");
-        }*/
         /*判断是否重名，要将新建和修改区分开*/
         RoleWithPermDTO roleWithPermDTO = SysRoleAdapter.roleSaveReq2RoleWithPremDTO(req);
         boolean roleHasExisted = sysRoleBiz.roleHasExisted(roleWithPermDTO);

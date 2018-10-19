@@ -8,12 +8,13 @@ import java.util.List;
 
 /**
  * @author TU
- * Created by tujia on 2018/10/14.
+ * @date 2018/10/19
  */
 public interface SysRolePermissionPOManualMapper {
 
     /**
      * 批量插入
+     *
      * @param sysRolePermissionPOList
      * @return
      */
@@ -21,6 +22,7 @@ public interface SysRolePermissionPOManualMapper {
 
     /**
      * 批量删除
+     *
      * @param ids
      * @return
      */

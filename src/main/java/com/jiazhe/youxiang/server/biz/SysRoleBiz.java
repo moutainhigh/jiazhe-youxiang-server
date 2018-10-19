@@ -10,13 +10,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 /**
  * @author TU
- * Created by TU on 2018/10/15.
+ * @date 2018/10/15
  */
 @Service("sysRoleBiz")
 public class SysRoleBiz {
@@ -30,6 +31,7 @@ public class SysRoleBiz {
 
     /**
      * 根据角色id删除角色和权限
+     *
      * @param roleId
      * @return
      */
@@ -69,7 +71,7 @@ public class SysRoleBiz {
             sysRoleDTO = sysRoleService.findById(roleWithPermDTO.getId());
             /*修改前的权限*/
             oldPermsDto = sysRolePermissionBiz.findByRoleId(roleWithPermDTO.getId());
-            if(roleWithPermDTO.getIsSuper() == 0) {
+            if (roleWithPermDTO.getIsSuper() == 0) {
                 if (null != perms) {
                         /*遍历新的权限String[]*/
                     for (String perm : perms) {
@@ -110,6 +112,6 @@ public class SysRoleBiz {
     }
 
     public List<SysRoleDTO> findByName(String name, Paging paging) {
-        return sysRoleService.findByName(name,paging);
+        return sysRoleService.findByName(name, paging);
     }
 }

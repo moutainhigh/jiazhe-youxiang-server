@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author TU
- * Created by TU on 2018/10/18.
+ * @date 2018/10/19
  */
 public class RoleWithPermResp extends BaseObject {
 

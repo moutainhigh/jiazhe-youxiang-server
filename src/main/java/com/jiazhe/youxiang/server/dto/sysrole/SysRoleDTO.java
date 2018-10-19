@@ -9,8 +9,8 @@ import java.util.Date;
 
 /**
  * 角色信息DTO
- * @author  tujian
- * @created 2018/10/17
+ * @author  tu
+ * @date 2018/10/17
  */
 public class SysRoleDTO {
 

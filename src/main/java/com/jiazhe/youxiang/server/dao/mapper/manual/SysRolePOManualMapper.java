@@ -9,12 +9,13 @@ import java.util.Map;
 
 /**
  * @author TU
- * Created by tujia on 2018/10/14.
+ * @date 2018/10/19
  */
 public interface SysRolePOManualMapper {
 
     /**
      * 插入实体，并将id返回到sysRolePO中
+     *
      * @param sysRolePO
      * @return
      */
@@ -22,6 +23,7 @@ public interface SysRolePOManualMapper {
 
     /**
      * 计数
+     *
      * @param name
      * @return
      */
@@ -29,15 +31,17 @@ public interface SysRolePOManualMapper {
 
     /**
      * 根据参数查询分页结果
+     *
      * @param name
      * @param offset
      * @param limit
      * @return
      */
-    List<SysRolePO> query(@Param("name") String name,@Param("offset") Integer offset,@Param("limit") Integer limit);
+    List<SysRolePO> query(@Param("name") String name, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
     /**
      * 单个删除角色，不删除权限
+     *
      * @param id
      * @return
      */

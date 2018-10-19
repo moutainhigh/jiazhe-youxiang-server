@@ -4,9 +4,9 @@ import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- *角色添加、修改请求参数
  * @author TU
- * Created by TU on 2018/10/18.
+ * @desciption 角色添加、修改请求参数
+ * @date 2018/10/19
  */
 public class RoleSaveReq extends BaseVO {
 
