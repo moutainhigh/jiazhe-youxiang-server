@@ -10,15 +10,22 @@ import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.biz.ProductBiz;
 import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
+import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
+import com.jiazhe.youxiang.server.vo.req.product.ProductAddReq;
+import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryAddReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryListReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductListReq;
+import com.jiazhe.youxiang.server.vo.req.product.ProductPriceAddReq;
+import com.jiazhe.youxiang.server.vo.req.product.ProductPriceListReq;
+import com.jiazhe.youxiang.server.vo.req.product.ProductPriceUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.product.StatusReq;
 import com.jiazhe.youxiang.server.vo.resp.product.ProductCategoryResp;
+import com.jiazhe.youxiang.server.vo.resp.product.ProductPriceResp;
 import com.jiazhe.youxiang.server.vo.resp.product.ProductResp;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -48,6 +55,23 @@ public class APIProductController {
     private ProductBiz productBiz;
 
     /*************商品分类相关******************/
+
+
+    /**
+     * 添加商品分类
+     *
+     * @return
+     */
+    @ApiOperation(value = "添加商品分类", httpMethod = "POST", notes = "添加商品分类")
+    @RequestMapping(value = "addcategory", method = RequestMethod.POST)
+    public Object addCategory(@ModelAttribute ProductCategoryAddReq req) {
+        //TODO niexiao 参数验证
+        ProductCategoryDTO productCategoryDTO = ProductAdapter.productCategoryAddReq2DTO(req);
+        //调用BIZ方法
+        ProductBiz.addCategory(productCategoryDTO);
+        //用ResponseFactory将返回值包装
+        return ResponseFactory.buildSuccess();
+    }
 
     /**
      * 获得某一商品分类
@@ -94,8 +118,9 @@ public class APIProductController {
     public Object updateCategory(@ModelAttribute ProductCategoryUpdateReq req) {
         //TODO niexiao 参数验证
         CommonValidator.validateId(req);
+        ProductCategoryDTO productCategoryDTO = ProductAdapter.productCategoryUpdateReq2DTO(req);
         //调用BIZ方法
-        ProductBiz.updateCategory(req.getId(), req.getName(), req.getDescription(), req.getThumbnailUrl(), req.getDetailImgUrl(), req.getPriority());
+        ProductBiz.updateCategory(productCategoryDTO);
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -111,7 +136,7 @@ public class APIProductController {
         //TODO niexiao 参数验证
         validateStatus(req);
         //调用BIZ方法
-        ProductBiz.updateCategoryStatus(req.getId(),req.getStatus());
+        ProductBiz.updateCategoryStatus(req.getId(), req.getStatus());
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -131,6 +156,22 @@ public class APIProductController {
     }
 
     /*************商品相关******************/
+
+    /**
+     * 添加商品
+     *
+     * @return
+     */
+    @ApiOperation(value = "添加商品", httpMethod = "POST", notes = "添加商品")
+    @RequestMapping(value = "add", method = RequestMethod.POST)
+    public Object add(@ModelAttribute ProductAddReq req) {
+        //TODO niexiao 参数验证
+        ProductDTO productDTO = ProductAdapter.productAddReq2DTO(req);
+        //调用BIZ方法
+        ProductBiz.add(productDTO);
+        //用ResponseFactory将返回值包装
+        return ResponseFactory.buildSuccess();
+    }
 
     /**
      * 获得某一商品
@@ -177,8 +218,9 @@ public class APIProductController {
     public Object update(@ModelAttribute ProductUpdateReq req) {
         //TODO niexiao 参数验证
         CommonValidator.validateId(req);
+        ProductDTO productDTO = ProductAdapter.productUpdateReq2DTO(req);
         //调用BIZ方法
-        ProductBiz.update(req.getId(), req.getName(), req.getDescription(), req.getDelayDays(), req.getThumbnailUrl(), req.getDetailImgUrl(), req.getProductType(), req.getUnitName(), req.getLastNum());
+        ProductBiz.update(productDTO);
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -194,7 +236,7 @@ public class APIProductController {
         //TODO niexiao 参数验证
         validateStatus(req);
         //调用BIZ方法
-        ProductBiz.updateStatus(req.getId(),req.getStatus());
+        ProductBiz.updateStatus(req.getId(), req.getStatus());
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -213,8 +255,77 @@ public class APIProductController {
         return ResponseFactory.buildSuccess();
     }
 
+    /*************商品价格相关******************/
 
+    /**
+     * 添加商品价格
+     *
+     * @return
+     */
+    @ApiOperation(value = "添加商品价格", httpMethod = "POST", notes = "添加商品价格")
+    @RequestMapping(value = "addprice", method = RequestMethod.POST)
+    public Object addPrice(@ModelAttribute ProductPriceAddReq req) {
+        //TODO niexiao 参数验证
+        ProductPriceDTO productPriceDTO = ProductAdapter.productPriceAddReq2DTO(req);
+        //调用BIZ方法
+        ProductBiz.addPrice(productPriceDTO);
+        //用ResponseFactory将返回值包装
+        return ResponseFactory.buildSuccess();
+    }
 
+    /**
+     * 获得某一商品价格
+     *
+     * @return
+     */
+    @ApiOperation(value = "获得某一商品价格", httpMethod = "GET", response = ProductPriceResp.class, notes = "获得某一商品价格")
+    @RequestMapping(value = "getpricebyid", method = RequestMethod.GET)
+    public Object getPriceById(@ModelAttribute IdReq req) {
+        CommonValidator.validateId(req);
+        //调用BIZ方法
+        ProductPriceDTO productPriceDTO = ProductBiz.getPriceById(req.getId());
+        //用ResponseFactory将返回值包装
+        return ResponseFactory.buildResponse(ProductAdapter.productPriceDTO2VO(productPriceDTO));
+    }
+
+    /**
+     * 修改商品的价格列表
+     *
+     * @return
+     */
+    @ApiOperation(value = "获得商品的价格列表", httpMethod = "GET", response = ProductPriceResp.class, responseContainer = "List", notes = "获得商品的价格列表")
+    @RequestMapping(value = "getpricelistbyproductid", method = RequestMethod.GET)
+    public Object getPriceListByProductId(@ModelAttribute ProductPriceListReq req) {
+        CommonValidator.validateId(req.getProductId());
+        //调用BIZ方法
+        List<ProductPriceDTO> productPriceDTOList = ProductBiz.getPriceListByProductId(req.getProductId());
+        //用ResponseFactory将返回值包装
+        return ResponseFactory.buildResponse(productPriceDTOList.stream().map(ProductAdapter::productPriceDTO2VO).collect(Collectors.toList()));
+    }
+
+    /**
+     * 编辑商品的价格
+     *
+     * @return
+     */
+    @ApiOperation(value = "编辑商品的价格", httpMethod = "POST", notes = "编辑商品的价格")
+    @RequestMapping(value = "updatePrice", method = RequestMethod.POST)
+    public Object updatePrice(@ModelAttribute ProductPriceUpdateReq req) {
+        //TODO niexiao 参数验证
+        CommonValidator.validateId(req);
+        //调用BIZ方法
+        ProductBiz.updatePrice(req.getId(), req.getPrice());
+        //用ResponseFactory将返回值包装
+        return ResponseFactory.buildSuccess();
+    }
+
+    /*************通用方法******************/
+
+    /**
+     * 状态验证
+     *
+     * @param req
+     */
     private void validateStatus(StatusReq req) {
         CommonValidator.validateId(req);
         //TODO niexiao 参数验证

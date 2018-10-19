@@ -12,8 +12,6 @@ package com.jiazhe.youxiang.server.dto.product;
  * @created 2018/10/18
  */
 public class ProductDTO {
-
-
     /**
      * 商品ID
      */
