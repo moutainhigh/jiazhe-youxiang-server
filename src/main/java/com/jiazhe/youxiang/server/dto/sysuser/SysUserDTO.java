@@ -17,6 +17,10 @@ public class SysUserDTO {
 
     private Date lastLoginTime;
 
+    private String salt;
+
+    private String password;
+
     public Integer getId() {
         return id;
     }
@@ -47,5 +51,21 @@ public class SysUserDTO {
 
     public void setLastLoginTime(Date lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

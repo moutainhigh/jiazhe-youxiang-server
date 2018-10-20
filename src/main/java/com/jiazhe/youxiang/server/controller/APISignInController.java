@@ -3,8 +3,10 @@ package com.jiazhe.youxiang.server.controller;
 import com.aliyuncs.exceptions.ClientException;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.*;
+import com.jiazhe.youxiang.server.biz.SysUserBiz;
 import com.jiazhe.youxiang.server.domain.po.SysUserPO;
 import com.jiazhe.youxiang.server.domain.po.SysUserPOExample;
+import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.SysUserService;
 import net.sf.json.JSONObject;
 import org.apache.shiro.SecurityUtils;
@@ -43,31 +45,28 @@ public class APISignInController extends BaseController {
     @Autowired
     private SessionDAO sessionDAO;
     @Autowired
-    private SysUserService sysUserService;
+    private SysUserBiz sysUserBiz;
 
-    //后台有登录请求，则发送验证码
     @RequestMapping(value = "/sendsignincode")
     public void sendIdentifyingCode(HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException {
-       /* String code = "";
+        String code = "";
         String msg = "";
         JSONObject data = new JSONObject();
         String name = request.getParameter("name");
         String password = request.getParameter("password");
-        SysUserPOExample sysUserPOExample = new SysUserPOExample();
-        SysUserPOExample.Criteria criteria = sysUserPOExample.createCriteria();
-        criteria.andNameEqualTo(name);
-        criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
-        List<SysUserPO> sysUserPOList = sysUserService.selectByExample(sysUserPOExample);
-        if (sysUserPOList.size() == 1) {//根据用户名和密码判断，是否有该用户，有该用户，给该用户手机发验证短信
-            SysUserPO sysUserPO = sysUserPOList.get(0);
-            ByteSource salt = ByteSource.Util.bytes(sysUserPOList.get(0).getSalt());
-            String saltPassword = new SimpleHash("MD5", password, salt, 1024).toString();
-            if (saltPassword.equals(sysUserPO.getPassword())) {//密码加密后一致
-                if (!ValidateUtils.phoneValidate(sysUserPO.getMobile())) {//判断该用户的绑定的手机号是否合法
+        List<SysUserDTO> sysUserDTOList = sysUserBiz.findByName(name);
+        if (sysUserDTOList.size() == 1) {
+            //根据用户名和密码判断，是否有该用户，有该用户，给该用户手机发验证短信
+            SysUserDTO sysUserDTO = sysUserDTOList.get(0);
+            String saltPassword = EncryptPasswordUtil.encrypt(sysUserDTO.getSalt(),password);
+            if (saltPassword.equals(sysUserDTO.getPassword())) {
+                //密码加密后一致
+                if (!ValidateUtils.phoneValidate(sysUserDTO.getMobile())) {
+                    //判断该用户的绑定的手机号是否合法
                     code = "000001";
                     msg = "您还没有绑定合法的手机号码，请联系后台管理员";
                 } else {//合法发送验证码
-                   *//* SendSmsResponse res = AliUtils.sendMsg(sysUserPO.getMobile());
+                   /*SendSmsResponse res = AliUtils.sendMsg(sysUserPO.getMobile());
                     if (res.getCode() != null && res.getCode().equals("OK")) {
                         code = "000000";
                         msg = "发送验证码成功";
@@ -76,25 +75,25 @@ public class APISignInController extends BaseController {
                     } else {
                         code = "000001";
                         msg = "发送短信失败，原因：" + res.getMessage();//发送失败的原因
-                    }*//*
+                    }*/
                     code = "000000";
                     msg = "发送验证码成功";
                 }
             } else {
                 code = "000001";
-                msg = "密码错误";//发送失败的原因
+                msg = "密码错误";
             }
         } else {
             code = "000001";
             msg = "用户不存在";
         }
-        ResponseUtil.responseUtils(response, ResultPackage.resultPackage(code, data, msg));*/
+        ResponseUtil.responseUtils(response, ResultPackage.resultPackage(code, data, msg));
     }
 
     //后台用户通过验证码和密码登录
     @RequestMapping(value = "/signin")
     public void sigin(HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
-       /* String code = "";
+        String code = "";
         String msg = "";
         String name = request.getParameter("name");
         String password = request.getParameter("password");
@@ -130,7 +129,7 @@ public class APISignInController extends BaseController {
             code = "000001";
             msg = "验证码错误";
         }
-        ResponseUtil.responseUtils(response, ResultPackage.resultPackage(code, new JSONObject(), msg));*/
+        ResponseUtil.responseUtils(response, ResultPackage.resultPackage(code, new JSONObject(), msg));
     }
 
     @RequiresPermissions("test:pagetest")

@@ -17,6 +17,8 @@ public class UserSaveReq extends BaseVO {
 
     private String password;
 
+    private String roleIds;
+
     public Integer getId() {
         return id;
     }
@@ -48,4 +50,13 @@ public class UserSaveReq extends BaseVO {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getRoleIds() {
+        return roleIds;
+    }
+
+    public void setRoleIds(String roleIds) {
+        this.roleIds = roleIds;
+    }
+
 }

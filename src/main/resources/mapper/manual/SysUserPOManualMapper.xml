@@ -45,7 +45,7 @@
             useGeneratedKeys="true">
         insert into sys_user ( id, mobile,name,salt,password,last_login_time,remark, ext_info, is_deleted,add_time, mod_time)
         values (#{id,jdbcType=INTEGER}, #{mobile,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{salt,jdbcType=VARCHAR},
-        #{password,jdbcType=VARCHAR},#{lastLoginTime,jdbcType=TIMESTAMP}),#{remark,jdbcType=VARCHAR}, #{extInfo,jdbcType=VARCHAR},
+        #{password,jdbcType=VARCHAR},#{lastLoginTime,jdbcType=TIMESTAMP},#{remark,jdbcType=VARCHAR}, #{extInfo,jdbcType=VARCHAR},
         #{isDeleted,jdbcType=TINYINT},#{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
     </insert>
 

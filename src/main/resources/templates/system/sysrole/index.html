@@ -125,11 +125,11 @@
                                                         <div class="pos-rel">
                                                             <label class="radio-inline ">
                                                                 <input id="notSuper" type="radio" name="isSuper"
-                                                                       value="false" checked="checked"/>否
+                                                                       value="0" checked="checked"/>否
                                                             </label>
                                                             <label class="radio-inline">
                                                                 <input id="isSuper" type="radio" name="isSuper"
-                                                                       value="true"/>是
+                                                                       value="1"/>是
                                                             </label>
                                                         </div>
                                                     </div>
@@ -242,7 +242,7 @@
 
     function disablePerms() {
         var nodes = permsTree.getNodes();
-        if ($("input[name=isSuper]:checked").val() == "true") {
+        if ($("input[name=isSuper]:checked").val() == "1") {
             permsTree.checkAllNodes(true);
             for (var i = 0; i < nodes.length; i++) {
                 permsTree.setChkDisabled(nodes[i], true, false, true);
@@ -288,7 +288,7 @@
     var pager_selector = "#grid-pager";
     jQuery(grid_selector).jqGrid({
         subGrid: false, // 此处设置为true时可以打开子项,子项用不到已删除
-        url: "../api/sysrole/list",// 获取数据的地址
+        url: "../api/sysrole/listpage",// 获取数据的地址
         postData: transformToJson($('#roleSearchForm').serializeArray()),
         rownumbers: true,
         datatype: "json",
@@ -351,7 +351,7 @@
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/sysrole/list",// 获取数据的地址
+            url: "../api/sysrole/listpage",// 获取数据的地址
             postData: transformToJson($('#roleSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
@@ -456,9 +456,9 @@
                 name: $("#saveName").val(),
                 isSuper: $("input[name=isSuper]:checked").val(),
                 priority: $("#savePriority").val(),
-                perms: $("#perms").val()
+                permsStr: $("#perms").val()
             },
-            type: "GET",
+            type: "POST",
             success: function (result) {
                 switch (result.code) {
                     case '000000':

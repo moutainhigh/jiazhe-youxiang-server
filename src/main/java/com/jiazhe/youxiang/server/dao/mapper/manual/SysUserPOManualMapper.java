@@ -16,4 +16,7 @@ public interface SysUserPOManualMapper {
 
     List<SysUserPO> query(@Param("name")String name, @Param("offset")Integer offset, @Param("limit")Integer limit);
 
+    int delete(Integer id);
+
+    int insert(SysUserPO sysUserPO);
 }

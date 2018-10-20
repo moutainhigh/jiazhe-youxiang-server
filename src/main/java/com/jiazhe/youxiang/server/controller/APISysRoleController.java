@@ -62,8 +62,8 @@ public class APISysRoleController extends BaseController {
         return ResponseFactory.buildPaginationResponse(sysRoleRespList, paging);
     }
 
-    @ApiOperation(value = "delete", httpMethod = "GET", response = SysRoleResp.class, notes = "根据id删除角色信息（包含权限）")
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
+    @ApiOperation(value = "delete", httpMethod = "POST", response = SysRoleResp.class, notes = "根据id删除角色信息（包含权限）")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public Object delete(@ModelAttribute IdReq req) {
         int count = sysRoleBiz.deleteRoleWithPerms(req.getId());
         if (count != 1) {

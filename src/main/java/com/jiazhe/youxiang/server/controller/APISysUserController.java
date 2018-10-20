@@ -5,15 +5,24 @@ import com.jiazhe.youxiang.server.adapter.SysRoleAdapter;
 import com.jiazhe.youxiang.server.adapter.SysUserAdapter;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
 import com.jiazhe.youxiang.server.biz.SysUserRoleBiz;
+import com.jiazhe.youxiang.server.common.enums.CommonCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.RoleCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.UserCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.CommonException;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
+import com.jiazhe.youxiang.server.dto.sysuser.UserWithRoleDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
+import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.sysrole.RolePageReq;
 import com.jiazhe.youxiang.server.vo.req.sysuser.UserPageReq;
+import com.jiazhe.youxiang.server.vo.req.sysuser.UserSaveReq;
 import com.jiazhe.youxiang.server.vo.resp.sysrole.SysRoleResp;
 import com.jiazhe.youxiang.server.vo.resp.sysuser.SysUserResp;
+import com.jiazhe.youxiang.server.vo.resp.sysuser.UserWithRoleResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,5 +64,42 @@ public class APISysUserController extends BaseController{
         List<SysUserDTO> sysUserDTOList = sysUserBiz.findByName(req.getName(), paging);
         List<SysUserResp> sysUserRespList = sysUserDTOList.stream().map(SysUserAdapter::DTO2RespVO).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(sysUserRespList, paging);
+    }
+
+    @ApiOperation(value = "delete", httpMethod = "POST", response = SysUserResp.class, notes = "根据id删除用户信息（包含对应角色）")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public Object delete(@ModelAttribute IdReq req) {
+        int count = sysUserBiz.deleteUserWithRole(req.getId());
+        if (count != 1) {
+            throw new CommonException(CommonCodeEnum.INTERNAL_ERROR.getCode(), CommonCodeEnum.INTERNAL_ERROR.getType(), "删除失败");
+        }
+        return ResponseFactory.buildSuccess();
+    }
+
+    @ApiOperation(value = "getbyid", httpMethod = "GET", response = SysUserResp.class, notes = "根据id获取用户信息（包含角色）")
+    @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
+    public Object getById(@ModelAttribute IdReq req) {
+        //当前用户信息(包括角色字符串）DTO
+        UserWithRoleDTO dto = sysUserBiz.findUserWithRoleById(req.getId());
+        //将DTO转为respVO返回
+        UserWithRoleResp result = SysUserAdapter.userWithRoleDTO2UserWithRoleResp(dto);
+        return ResponseFactory.buildResponse(result);
+    }
+
+    @ApiOperation(value = "save", httpMethod = "POST", response = SysRoleResp.class, notes = "保存用户信息")
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public Object save(@ModelAttribute UserSaveReq req) {
+        /*参数检查*/
+        if (null == req || Strings.isBlank(req.getName())) {
+            throw new CommonException(CommonCodeEnum.INTERNAL_ERROR.getCode(), CommonCodeEnum.INTERNAL_ERROR.getType(), "信息填写不完整");
+        }
+        /*判断是否重名，要将新建和修改区分开*/
+        UserWithRoleDTO userWithRoleDTO = SysUserAdapter.userSaveReq2UserWithDTO(req);
+        boolean roleHasExisted = sysUserBiz.userHasExisted(userWithRoleDTO);
+        if (roleHasExisted) {
+            throw new CommonException(UserCodeEnum.USER_HAS_EXISTED.getCode(),UserCodeEnum.USER_HAS_EXISTED.getType(), UserCodeEnum.USER_HAS_EXISTED.getMessage());
+        }
+        sysUserBiz.saveRoleWithPerm(userWithRoleDTO);
+        return ResponseFactory.buildSuccess();
     }
 }
