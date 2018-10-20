@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
  * 后台所有关于角色的接口
  *
  * @author TU
- *         Created by tujia on 2018/10/14.
+ * @date 2018/10/14.
  */
 @RestController
 @RequestMapping("api/sysrole")
@@ -47,7 +47,8 @@ public class APISysRoleController extends BaseController {
     @RequestMapping(value = "/listall", method = RequestMethod.GET)
     public Object listAll() {
         List<SysRoleDTO> sysRoleDTOList = sysRoleBiz.findAll();
-        return ResponseFactory.buildResponse(sysRoleDTOList);
+        List<SysRoleResp> sysRoleRespList = sysRoleDTOList.stream().map(SysRoleAdapter::DTO2RespVO).collect(Collectors.toList());
+        return ResponseFactory.buildResponse(sysRoleRespList);
     }
 
     @ApiOperation(value = "listpage", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List",notes = "分页查询角色信息")

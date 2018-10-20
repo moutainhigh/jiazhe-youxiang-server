@@ -48,7 +48,7 @@ public class APISignInController extends BaseController {
     //后台有登录请求，则发送验证码
     @RequestMapping(value = "/sendsignincode")
     public void sendIdentifyingCode(HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException {
-        String code = "";
+       /* String code = "";
         String msg = "";
         JSONObject data = new JSONObject();
         String name = request.getParameter("name");
@@ -67,7 +67,7 @@ public class APISignInController extends BaseController {
                     code = "000001";
                     msg = "您还没有绑定合法的手机号码，请联系后台管理员";
                 } else {//合法发送验证码
-                   /* SendSmsResponse res = AliUtils.sendMsg(sysUserPO.getMobile());
+                   *//* SendSmsResponse res = AliUtils.sendMsg(sysUserPO.getMobile());
                     if (res.getCode() != null && res.getCode().equals("OK")) {
                         code = "000000";
                         msg = "发送验证码成功";
@@ -76,7 +76,7 @@ public class APISignInController extends BaseController {
                     } else {
                         code = "000001";
                         msg = "发送短信失败，原因：" + res.getMessage();//发送失败的原因
-                    }*/
+                    }*//*
                     code = "000000";
                     msg = "发送验证码成功";
                 }
@@ -88,13 +88,13 @@ public class APISignInController extends BaseController {
             code = "000001";
             msg = "用户不存在";
         }
-        ResponseUtil.responseUtils(response, ResultPackage.resultPackage(code, data, msg));
+        ResponseUtil.responseUtils(response, ResultPackage.resultPackage(code, data, msg));*/
     }
 
     //后台用户通过验证码和密码登录
     @RequestMapping(value = "/signin")
     public void sigin(HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
-        String code = "";
+       /* String code = "";
         String msg = "";
         String name = request.getParameter("name");
         String password = request.getParameter("password");
@@ -130,7 +130,7 @@ public class APISignInController extends BaseController {
             code = "000001";
             msg = "验证码错误";
         }
-        ResponseUtil.responseUtils(response, ResultPackage.resultPackage(code, new JSONObject(), msg));
+        ResponseUtil.responseUtils(response, ResultPackage.resultPackage(code, new JSONObject(), msg));*/
     }
 
     @RequiresPermissions("test:pagetest")

@@ -25,8 +25,4 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
     @Autowired
     private SysUserRolePOMapper sysUserRolePOMapper;
 
-    @Override
-    public List<SysUserRolePO> selectByExample(SysUserRolePOExample sysUserRolePOExample) {
-        return sysUserRolePOMapper.selectByExample(sysUserRolePOExample);
-    }
 }

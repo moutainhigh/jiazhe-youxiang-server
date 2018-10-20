@@ -17,14 +17,14 @@
     </sql>
 
     <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.SysRolePO">
-        select
+        SELECT
         <include refid="Base_Column_List"/>
-        from sys_role
+        FROM sys_role
         <where>
             <if test="name != null">
                 AND name = #{name}
             </if>
-            AND is_deleted = 0 order by add_time desc
+            AND is_deleted = 0 ORDER BY priority ASC
         </where>
         limit #{offset},#{limit}
 
