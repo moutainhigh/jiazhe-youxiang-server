@@ -35,8 +35,8 @@ public class SysUserBiz {
         return  sysUserDTOList;
     }
 
-    public List<SysUserDTO> findByName(String name, Paging paging) {
-        return sysUserService.findByName(name,paging);
+    public List<SysUserDTO> getList(String name, Paging paging) {
+        return sysUserService.getList(name,paging);
     }
 
     public int deleteUserWithRole(Integer userId) {

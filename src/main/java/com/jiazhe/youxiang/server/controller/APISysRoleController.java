@@ -57,7 +57,7 @@ public class APISysRoleController extends BaseController {
         Paging paging = new Paging();
         paging.setOffset((req.getPageNum()-1)*req.getPageSize());
         paging.setLimit(req.getPageSize());
-        List<SysRoleDTO> sysRoleDTOList = sysRoleBiz.findByName(req.getName(), paging);
+        List<SysRoleDTO> sysRoleDTOList = sysRoleBiz.getList(req.getName(), paging);
         List<SysRoleResp> sysRoleRespList = sysRoleDTOList.stream().map(SysRoleAdapter::DTO2RespVO).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(sysRoleRespList, paging);
     }
@@ -90,7 +90,7 @@ public class APISysRoleController extends BaseController {
             throw new CommonException(RoleCodeEnum.ROLE_INCOMPLETE_INFO.getCode(),RoleCodeEnum.ROLE_INCOMPLETE_INFO.getType(), RoleCodeEnum.ROLE_INCOMPLETE_INFO.getMessage());
         }
         /*非管理员，还不带权限字符串*/
-        if (req.getIsSuper() == 0 && null == req.getPermsStr()) {
+        if (req.getIsSuper() == 0 && Strings.isBlank(req.getPermsStr())) {
             throw new CommonException(RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getCode(), RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getType(), RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getMessage());
         }
         /*判断是否重名，要将新建和修改区分开*/

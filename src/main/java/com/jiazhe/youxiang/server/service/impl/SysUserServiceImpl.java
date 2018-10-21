@@ -53,7 +53,7 @@ public class SysUserServiceImpl implements SysUserService{
     }
 
     @Override
-    public List<SysUserDTO> findByName(String name, Paging paging) {
+    public List<SysUserDTO> getList(String name, Paging paging) {
         Integer count = sysUserPOManualMapper.count(name);
         List<SysUserPO> sysUserPOList = sysUserPOManualMapper.query(name,paging.getOffset(),paging.getLimit());
         paging.setTotal(count);

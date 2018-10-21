@@ -137,7 +137,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
-    public List<SysRoleDTO> findByName(String name, Paging paging) {
+    public List<SysRoleDTO> getList(String name, Paging paging) {
         Integer count = sysRolePOManualMapper.count(name);
         List<SysRolePO> sysRolePOList = sysRolePOManualMapper.query(name, paging.getOffset(), paging.getLimit());
         paging.setTotal(count);

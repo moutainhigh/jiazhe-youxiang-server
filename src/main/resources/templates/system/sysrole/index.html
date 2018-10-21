@@ -304,7 +304,9 @@
         colModel: [
             {name: 'id', index: 'id', sortable: false, hidden: true},
             {name: 'name', index: 'name', sortable: false},
-            {name: 'isSuper', index: 'isSuper', sortable: false},
+            {name: 'isSuper', index: 'isSuper', sortable: false,formatter:function (cellvalue, options, rowObject) {
+                return rowObject.isSuper==1?'是':'否';
+            }},
             {name: 'priority', index: 'priority', sortable: false},
             {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
         ],

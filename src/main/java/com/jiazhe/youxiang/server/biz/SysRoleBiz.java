@@ -112,8 +112,8 @@ public class SysRoleBiz {
         return sysRoleService.findAll();
     }
 
-    public List<SysRoleDTO> findByName(String name, Paging paging) {
-        return sysRoleService.findByName(name, paging);
+    public List<SysRoleDTO> getList(String name, Paging paging) {
+        return sysRoleService.getList(name, paging);
     }
 
     public SysRoleDTO findById(Integer id) {

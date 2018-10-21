@@ -17,7 +17,7 @@ public interface SysUserService {
 
     List<SysUserDTO> findAll();
 
-    List<SysUserDTO> findByName(String name, Paging paging);
+    List<SysUserDTO> getList(String name, Paging paging);
 
     int deleteUserWithRole(Integer userId);
 
