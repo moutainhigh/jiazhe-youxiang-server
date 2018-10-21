@@ -21,7 +21,7 @@
         <include refid="Base_Column_List"/>
         FROM sys_role
         <where>
-            <if test="name != null">
+            <if test="name != null  and name != ''">
                 AND name = #{name}
             </if>
             AND is_deleted = 0 ORDER BY priority ASC
@@ -31,11 +31,12 @@
     </select>
 
     <select id="count" resultType="java.lang.Integer">
-        select count(*) from sys_role where is_deleted = 0
+        select count(*) from sys_role
         <where>
-            <if test="name != null">
+            <if test="name != null  and name != ''">
                 AND name = #{name}
             </if>
+           AND is_deleted = 0
         </where>
     </select>
 

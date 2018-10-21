@@ -24,7 +24,7 @@
         <include refid="Base_Column_List"/>
         FROM sys_user
         <where>
-            <if test="name != null">
+            <if test="name != null and name != ''">
                 AND name = #{name}
             </if>
             AND is_deleted = 0 ORDER BY last_login_time DESC
@@ -33,12 +33,13 @@
     </select>
 
     <select id="count" resultType="java.lang.Integer">
-        select count(*) from sys_user where is_deleted = 0
+        select count(*) from sys_user
         <where>
             <if test="name != null">
                 AND name = #{name}
             </if>
         </where>
+       AND is_deleted = 0
     </select>
 
     <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.SysUserPO" keyProperty="id"

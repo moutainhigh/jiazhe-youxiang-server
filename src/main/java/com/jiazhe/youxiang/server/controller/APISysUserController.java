@@ -59,8 +59,8 @@ public class APISysUserController extends BaseController{
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute UserPageReq req) {
         Paging paging = new Paging();
-        paging.setOffset(req.getOffset());
-        paging.setLimit(req.getLimit());
+        paging.setOffset((req.getPageNum()-1)*req.getPageSize());
+        paging.setLimit(req.getPageSize());
         List<SysUserDTO> sysUserDTOList = sysUserBiz.findByName(req.getName(), paging);
         List<SysUserResp> sysUserRespList = sysUserDTOList.stream().map(SysUserAdapter::DTO2RespVO).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(sysUserRespList, paging);
@@ -92,6 +92,9 @@ public class APISysUserController extends BaseController{
         /*参数检查*/
         if (null == req || Strings.isBlank(req.getName())) {
             throw new CommonException(CommonCodeEnum.INTERNAL_ERROR.getCode(), CommonCodeEnum.INTERNAL_ERROR.getType(), "信息填写不完整");
+        }
+        if(Strings.isBlank((req.getRoleIds()))){
+            throw new CommonException(UserCodeEnum.USER_Role_NOTCHOOSE.getCode(), UserCodeEnum.USER_Role_NOTCHOOSE.getType(), UserCodeEnum.USER_Role_NOTCHOOSE.getMessage());
         }
         /*判断是否重名，要将新建和修改区分开*/
         UserWithRoleDTO userWithRoleDTO = SysUserAdapter.userSaveReq2UserWithDTO(req);

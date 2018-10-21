@@ -146,4 +146,11 @@ public class SysUserServiceImpl implements SysUserService{
         }
         return 1;
     }
+
+    @Override
+    public int updateLaseLoginTime(Integer id) {
+        SysUserPO sysUserPO = sysUserPOMapper.selectByPrimaryKey(id);
+        sysUserPO.setLastLoginTime(new Date());
+        return sysUserPOMapper.updateByPrimaryKeySelective(sysUserPO);
+    }
 }

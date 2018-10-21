@@ -30,4 +30,6 @@ public interface SysUserService {
     SysUserDTO findById(Integer id);
 
     int saveUserWithRole(boolean isAdd, SysUserDTO sysUserDTO, List<SysUserRoleDTO> newRolesDto, List<SysUserRoleDTO> oldRolesDto);
+
+    int updateLaseLoginTime(Integer id);
 }

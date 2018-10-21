@@ -8,12 +8,16 @@ import io.swagger.annotations.ApiModelProperty;
  * @description 分页查询参数
  * @date 2018/10/19.
  */
-public class RolePageReq extends OffsetLimitReq {
+public class RolePageReq{
 
     private static final long serialVersionUID = 6694925201108152597L;
 
     @ApiModelProperty("角色名称")
     private String name;
+
+    private Integer pageSize;
+
+    private Integer pageNum;
 
     public String getName() {
         return name;
@@ -21,5 +25,21 @@ public class RolePageReq extends OffsetLimitReq {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public Integer getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(Integer pageNum) {
+        this.pageNum = pageNum;
     }
 }

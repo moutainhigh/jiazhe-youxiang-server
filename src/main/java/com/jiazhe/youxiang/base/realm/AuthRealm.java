@@ -14,6 +14,8 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -24,6 +26,8 @@ import java.util.List;
  * @date 2018/10/20
  */
 public class AuthRealm extends AuthorizingRealm {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthRealm.class);
 
     @Autowired
     private SysUserBiz sysUserBiz;
@@ -43,7 +47,7 @@ public class AuthRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        System.out.println("=========进入用户登录验证============");
+        logger.info("=========进入用户登录验证============");
         try {
             /*获取用户输入的token*/
             UsernamePasswordToken utoken = (UsernamePasswordToken) token;
@@ -71,7 +75,7 @@ public class AuthRealm extends AuthorizingRealm {
      */
     @Override
     public AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal) {
-        System.out.println("=========进入用户授权============");
+        logger.info("=========进入用户授权============");
         //用户一个
         SysUserDTO sysUserDTO = (SysUserDTO) principal.getPrimaryPrincipal();
         List<String> permissionList = new ArrayList<String>();

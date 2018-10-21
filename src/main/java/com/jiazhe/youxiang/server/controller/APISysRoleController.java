@@ -55,8 +55,8 @@ public class APISysRoleController extends BaseController {
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute RolePageReq req) {
         Paging paging = new Paging();
-        paging.setOffset(req.getOffset());
-        paging.setLimit(req.getLimit());
+        paging.setOffset((req.getPageNum()-1)*req.getPageSize());
+        paging.setLimit(req.getPageSize());
         List<SysRoleDTO> sysRoleDTOList = sysRoleBiz.findByName(req.getName(), paging);
         List<SysRoleResp> sysRoleRespList = sysRoleDTOList.stream().map(SysRoleAdapter::DTO2RespVO).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(sysRoleRespList, paging);
@@ -87,7 +87,7 @@ public class APISysRoleController extends BaseController {
     public Object save(@ModelAttribute RoleSaveReq req) {
         /*参数检查*/
         if (null == req || Strings.isBlank(req.getName())) {
-            throw new CommonException(CommonCodeEnum.INTERNAL_ERROR.getCode(), CommonCodeEnum.INTERNAL_ERROR.getType(), "信息填写不完整");
+            throw new CommonException(RoleCodeEnum.ROLE_INCOMPLETE_INFO.getCode(),RoleCodeEnum.ROLE_INCOMPLETE_INFO.getType(), RoleCodeEnum.ROLE_INCOMPLETE_INFO.getMessage());
         }
         /*非管理员，还不带权限字符串*/
         if (req.getIsSuper() == 0 && null == req.getPermsStr()) {

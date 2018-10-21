@@ -188,8 +188,7 @@
 </div>
 </body>
 <script type="text/javascript">
-    /*var permission = getCookie("permission");*/
-    var permission = "12324";
+    var permission = getCookie("permission");
     var setting = {
         view: {
             selectedMulti: true
@@ -316,6 +315,9 @@
         viewrecords: true,
         emptyrecords: "0条数据",
         loadComplete: function (data) {
+            data.currPage = data.paging.offset / data.paging.limit;
+            data.totalPage = data.paging.total / data.paging.limit;
+            data.totalCount = data.paging.total;
             var table = this;
             setTimeout(function () {
                 $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
@@ -323,11 +325,11 @@
             }, 0);
         },
         jsonReader: { // jsonReader来跟服务器端返回的数据做对应
-            root: "dataRows", // 包含实际数据的数组
+            root: "data", // 包含实际数据的数组
             page: "currPage", // 当前页
             total: "totalPage",// 总页数
             records: "totalCount", // 查询出的记录数
-            repeatitems: true
+            repeatitems: false
         },
         caption: "角色列表"
     });
@@ -380,16 +382,12 @@
                         data: {
                             id: id
                         },
-                        type: "GET",
-                        success: function (result) {
-                            if (result.code == '000000') {
+                        type: "POST",
+                        success: function (data) {
+                            if ('error' in data) {
+                                bootboxalert(data.error.message);
+                            } else {
                                 jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                            }
-                            if (result.code == '000001') {
-                                parent.location.href = "../system/index";
-                            }
-                            if (result.code == '000002') {
-                                window.location.href = "../system/403";
                             }
                         },
                         error: function () {
@@ -403,13 +401,13 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:deleteOne('" + rowObject[0] + "')\">" +
+        str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:deleteOne('" + rowObject.id + "')\">" +
             "<i class='ace-icon fa fa-trash'></i>" +
             "</a>&nbsp;&nbsp;";
-        str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject[0] + "')\">" +
+        str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
             "<i class='ace-icon fa fa-pencil'></i>" +
             "</a>&nbsp;&nbsp;";
-        str = str + "<a class='btn btn-minier btn-success' href=\"javascript:openShow('" + rowObject[0] + "')\">" +
+        str = str + "<a class='btn btn-minier btn-success' href=\"javascript:openShow('" + rowObject.id + "')\">" +
             "<i class='ace-icon fa fa-eye'></i>" +
             "</a>";
         return str;
@@ -459,21 +457,12 @@
                 permsStr: $("#perms").val()
             },
             type: "POST",
-            success: function (result) {
-                switch (result.code) {
-                    case '000000':
-                        $("#modal-form").modal('hide');
-                        jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                        break;
-                    case "000001":
-                        parent.location.href = "../system/index";
-                        break;
-                    case "000002":
-                        window.location.href = "../system/403";
-                        break;
-                    default :
-                        bootboxalert(result.msg);
-                        break;
+            success: function (data) {
+                if('error' in data){
+                    bootboxalert(data.error.message);
+                }else{
+                    $("#modal-form").modal('hide');
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                 }
             },
             error: function () {
@@ -491,32 +480,24 @@
                 id: id
             },
             type: "GET",
-            success: function (result) {
-                switch (result.code) {
-                    case '000000':
-                        $("#roleId").val(result.id);
-                        $("#savePriority").val(result.priority);
-                        $("#saveName").val(result.name);
-                        if (result.isSuper == "true") {
-                            $("#isSuper").prop('checked', true);
-                            disablePerms();
-                        } else {
-                            $("#notSuper").prop('checked', true);
-                            disablePerms();
-                            checkNodes(result.permsStr);
-                        }
-                        break;
-                    case "000001":
-                        parent.location.href = "../system/index";
-                        break;
-                    case "000002":
-                        window.location.href = "../system/403";
-                        break;
-                    default :
-                        bootboxalert(result.msg);
-                        break;
+            success: function (data) {
+                if('error' in data){
+                    bootboxalert(data.error.message);
+                }else{
+                    var result = data.data;
+                    $("#roleId").val(result.id);
+                    $("#savePriority").val(result.priority);
+                    $("#saveName").val(result.name);
+                    if (result.isSuper == 1) {
+                        $("#isSuper").prop('checked', true);
+                        disablePerms();
+                    } else {
+                        $("#notSuper").prop('checked', true);
+                        disablePerms();
+                        checkNodes(result.permsStr);
+                    }
+                    $("#modal-form").modal('show');
                 }
-                $("#modal-form").modal('show');
             },
             error: function () {
                 bootboxalert("服务器异常，请联系管理员");

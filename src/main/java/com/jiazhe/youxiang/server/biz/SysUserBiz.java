@@ -64,6 +64,9 @@ public class SysUserBiz {
         String[] roleIds = Strings.isBlank(userWithRoleDTO.getRoleIds()) ? null : userWithRoleDTO.getRoleIds().split(",");
         if (isAdd){
             sysUserDTO = new SysUserDTO();
+            String salt = RandomUtil.generateSalt(6);
+            sysUserDTO.setSalt(salt);
+            sysUserDTO.setPassword(EncryptPasswordUtil.encrypt(salt,userWithRoleDTO.getPassword()));
             for (String roleId : roleIds) {
                 SysUserRoleDTO sysUserRoleDTO = new SysUserRoleDTO();
                 sysUserRoleDTO.setRoleId(Integer.valueOf(roleId));
@@ -101,9 +104,6 @@ public class SysUserBiz {
                 }
             }
         }
-        String salt = RandomUtil.generateSalt(6);
-        sysUserDTO.setSalt(salt);
-        sysUserDTO.setPassword(EncryptPasswordUtil.encrypt(salt,userWithRoleDTO.getPassword()));
         sysUserDTO.setMobile(userWithRoleDTO.getMobile());
         sysUserDTO.setName(userWithRoleDTO.getName());
         return sysUserService.saveUserWithRole(isAdd, sysUserDTO, newRolesDto, oldRolesDto);
@@ -111,5 +111,9 @@ public class SysUserBiz {
 
     public List<SysUserDTO> findByName(String name) {
         return sysUserService.findByName(name);
+    }
+
+    public int updateLastLoginTime(Integer id) {
+        return sysUserService.updateLaseLoginTime(id);
     }
 }
