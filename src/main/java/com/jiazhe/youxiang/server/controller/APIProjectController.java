@@ -87,7 +87,7 @@ public class APIProjectController {
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public Object update(@ModelAttribute ProjectUpdateReq req) {
         //TODO niexiao 参数验证
-        CommonValidator.validate(req);
+        CommonValidator.validateNull(req);
         CommonValidator.validateId(req.getId());
         //调用BIZ方法
         projectBiz.update(req.getId(), req.getName(), req.getDescription(), req.getPriority(), req.getStatus());

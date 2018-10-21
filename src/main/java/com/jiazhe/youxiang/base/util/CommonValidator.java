@@ -18,21 +18,21 @@ import com.jiazhe.youxiang.server.vo.req.IdReq;
  */
 public class CommonValidator {
 
-    public static void validate(BaseVO req) {
+    public static void validateNull(BaseVO req) {
         if (req == null) {
-            throw new CommonException(CommonCodeEnum.INTERNAL_ERROR.getCode(), CommonCodeEnum.INTERNAL_ERROR.getType(), "参数不能为空");
+            throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "参数不能为空");
         }
     }
 
     public static void validateId(Integer id) {
         if (id == null || id < 0) {
-            throw new CommonException(CommonCodeEnum.INTERNAL_ERROR.getCode(), CommonCodeEnum.INTERNAL_ERROR.getType(), "ID不合法");
+            throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "ID不合法");
         }
     }
 
     public static void validateId(IdReq id) {
         if (id == null || id.getId() == null || id.getId() < 0) {
-            throw new CommonException(CommonCodeEnum.INTERNAL_ERROR.getCode(), CommonCodeEnum.INTERNAL_ERROR.getType(), "ID不合法");
+            throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "ID不合法");
         }
     }
 }

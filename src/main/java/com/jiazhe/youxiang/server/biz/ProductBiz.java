@@ -73,6 +73,11 @@ public class ProductBiz {
     }
 
     public static ProductPriceDTO getPriceById(Integer id) {
+        return null;
+    }
+
+    public static ProductPriceDTO getPriceByCity(Integer productId, Integer productId1) {
+        return null;
     }
 
     public static List<ProductPriceDTO> getPriceListByProductId(Integer productId) {
@@ -81,4 +86,9 @@ public class ProductBiz {
 
     public static void updatePrice(Integer id, BigDecimal price) {
     }
+
+    public static void deletePrice(Integer id) {
+    }
+
+
 }

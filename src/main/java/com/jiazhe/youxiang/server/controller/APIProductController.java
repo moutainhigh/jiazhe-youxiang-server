@@ -14,6 +14,7 @@ import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
+import com.jiazhe.youxiang.server.vo.req.product.GetProductPriceByCity;
 import com.jiazhe.youxiang.server.vo.req.product.ProductAddReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryAddReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryListReq;
@@ -289,6 +290,21 @@ public class APIProductController {
     }
 
     /**
+     * 获得某一商品在某城市的价格
+     *
+     * @return
+     */
+    @ApiOperation(value = "获得某一商品在某城市的价格", httpMethod = "GET", response = ProductPriceResp.class, notes = "获得某一商品在某城市的价格")
+    @RequestMapping(value = "getpricebycity", method = RequestMethod.GET)
+    public Object getPriceByCity(@ModelAttribute GetProductPriceByCity req) {
+        CommonValidator.validateNull(req);
+        //调用BIZ方法
+        ProductPriceDTO productPriceDTO = ProductBiz.getPriceByCity(req.getProductId(), req.getProductId());
+        //用ResponseFactory将返回值包装
+        return ResponseFactory.buildResponse(ProductAdapter.productPriceDTO2VO(productPriceDTO));
+    }
+
+    /**
      * 修改商品的价格列表
      *
      * @return
@@ -318,6 +334,21 @@ public class APIProductController {
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
+
+    /**
+     * 删除商品价格
+     *
+     * @return
+     */
+    @ApiOperation(value = "删除商品价格", httpMethod = "GET", notes = "删除商品价格")
+    @RequestMapping(value = "delete", method = RequestMethod.GET)
+    public Object deletePrice(@ModelAttribute IdReq req) {
+        CommonValidator.validateId(req);
+        //调用BIZ方法
+        ProductBiz.deletePrice(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
 
     /*************通用方法******************/
 
