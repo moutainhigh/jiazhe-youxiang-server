@@ -4,11 +4,13 @@ import com.jiazhe.youxiang.base.util.GenerateCode;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeBatchAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.dao.mapper.RechargeCardExchangeCodeBatchPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCExchangeCodeBatchPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeSaveDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchAddDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchListDTO;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeService;
@@ -30,6 +32,8 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
 
     @Autowired
     private RCExchangeCodeBatchPOManualMapper rcExchangeCodeBatchPOManualMapper;
+    @Autowired
+    private RechargeCardExchangeCodeBatchPOMapper rechargeCardExchangeCodeBatchPOMapper;
     @Autowired
     private RCExchangeCodeService rcExchangeCodeService;
 
@@ -73,5 +77,27 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         }
         List<RechargeCardExchangeCodePO> rechargeCardExchangeCodePOList = rcExchangeCodeSaveDTOS.stream().map(RCExchangeCodeAdapter::DTOSave2PO).collect(Collectors.toList());
         return rcExchangeCodeService.batchSave(rechargeCardExchangeCodePOList);
+    }
+
+    @Override
+    public RCExchangeCodeBatchEditDTO getById(Integer id) {
+        RechargeCardExchangeCodeBatchPO rechargeCardExchangeCodeBatchPO = rechargeCardExchangeCodeBatchPOMapper.selectByPrimaryKey(id);
+        RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = RCExchangeCodeAdapter.PO2DTOEdit(rechargeCardExchangeCodeBatchPO);
+        return rcExchangeCodeBatchEditDTO;
+    }
+
+    @Override
+    public int editSave(RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO) {
+        //是否修改该批次下的兑换码相关信息
+        return 0;
+    }
+
+    @Override
+    public int changeBatchStatus(Integer id, Byte status) {
+        //修改改批次下的兑换码启用停用状态
+        RechargeCardExchangeCodeBatchPO rechargeCardExchangeCodeBatchPO = rechargeCardExchangeCodeBatchPOMapper.selectByPrimaryKey(id);
+        rechargeCardExchangeCodeBatchPO.setStatus(status);
+        rechargeCardExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(rechargeCardExchangeCodeBatchPO);
+        return 0;
     }
 }

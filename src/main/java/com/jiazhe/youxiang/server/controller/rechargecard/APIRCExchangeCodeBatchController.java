@@ -4,12 +4,15 @@ import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeBatchAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCExchangeCodeBatchBiz;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchAddDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchListDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
+import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchAddReq;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditReq;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchPageReq;
+import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditResp;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchListResp;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -57,14 +60,40 @@ public class APIRCExchangeCodeBatchController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
+    @ApiOperation(value = "editshow", httpMethod = "GET",notes = "修改批次信息回显")
+    @RequestMapping(value = "/editshow", method = RequestMethod.POST)
+    public Object editShow(@ModelAttribute IdReq req) {
+        //参数检查
+        RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchBiz.getById(req.getId());
+        RCExchangeCodeBatchEditResp rcExchangeCodeBatchEditResp = RCExchangeCodeBatchAdapter.DTOEdit2RespEdit(rcExchangeCodeBatchEditDTO);
+        return ResponseFactory.buildResponse(rcExchangeCodeBatchEditResp);
+    }
+
     @ApiOperation(value = "editsave", httpMethod = "POST",notes = "【修改】保存批次信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     public Object editSave(@ModelAttribute RCExchangeCodeBatchEditReq req) {
-
-
+        //参数检查
+        RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = RCExchangeCodeBatchAdapter.ReqEdit2DTOEdit(req);
+        rcExchangeCodeBatchBiz.editSave(rcExchangeCodeBatchEditDTO);
         return ResponseFactory.buildSuccess();
     }
 
+
+    @ApiOperation(value = "startusing", httpMethod = "POST",notes = "启用批次【同时改变批次下兑换码状态】")
+    @RequestMapping(value = "/startusing", method = RequestMethod.POST)
+    public Object startUsing(@ModelAttribute IdReq req) {
+        //参数检查
+        rcExchangeCodeBatchBiz.startUsing(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
+    @ApiOperation(value = "stopusing", httpMethod = "POST",notes = "停用批次【同时改变批次下兑换码状态】")
+    @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
+    public Object stopUsing(@ModelAttribute IdReq req) {
+        //参数检查
+        rcExchangeCodeBatchBiz.stopUsing(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
 
 
 

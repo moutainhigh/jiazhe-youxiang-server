@@ -1,6 +1,8 @@
 package com.jiazhe.youxiang.server.biz.rechargecard;
 
+import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchAddDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchListDTO;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -29,5 +31,21 @@ public class RCExchangeCodeBatchBiz {
 
     public int addSave(RCExchangeCodeBatchAddDTO rcExchangeCodeBatchAddDTO) {
        return rcExchangeCodeBatchService.addSave(rcExchangeCodeBatchAddDTO);
+    }
+
+    public RCExchangeCodeBatchEditDTO getById(Integer id) {
+        return rcExchangeCodeBatchService.getById(id);
+    }
+
+    public int editSave(RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO) {
+        return rcExchangeCodeBatchService.editSave(rcExchangeCodeBatchEditDTO);
+    }
+
+    public int startUsing(Integer id) {
+        return rcExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
+    }
+
+    public int stopUsing(Integer id) {
+        return rcExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
     }
 }

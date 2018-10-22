@@ -1,15 +1,15 @@
-package com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch;
+package com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
 
 import java.util.Date;
 
 /**
- * @author tu
- * @description：充值卡兑换码批次信息修改请求参数
- * @date 2018/10/21
+ * @author TU
+ * @description
+ * @date 2018/10/22.
  */
-public class RCExchangeCodeBatchEditReq extends BaseVO{
+public class RCExchangeCodeBatchEditResp extends BaseVO {
 
     private Integer id;
 

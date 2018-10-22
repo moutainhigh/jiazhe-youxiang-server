@@ -1,15 +1,14 @@
-package com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch;
+package com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch;
 
-import com.jiazhe.youxiang.server.vo.BaseVO;
-
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * @author tu
- * @description：充值卡兑换码批次信息修改请求参数
+ * @description：
  * @date 2018/10/21
  */
-public class RCExchangeCodeBatchEditReq extends BaseVO{
+public class RCExchangeCodeBatchEditDTO {
 
     private Integer id;
 
