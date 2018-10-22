@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch;
 
+import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
@@ -10,7 +11,7 @@ import java.util.Date;
  * @description：充值卡兑换码批次信息新建请求参数
  * @date 2018/10/21
  */
-public class RCExchangeCodeBatchSaveReq {
+public class RCExchangeCodeBatchAddReq extends BaseVO {
 
     @ApiModelProperty("批次名称")
     private String name;

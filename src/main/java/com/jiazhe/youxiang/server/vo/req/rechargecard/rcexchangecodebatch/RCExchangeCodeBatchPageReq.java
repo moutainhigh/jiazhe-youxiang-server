@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -8,7 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @description：充值卡兑换码批次（分页）请求参数
  * @date 2018/10/21
  */
-public class RCExchangeCodeBatchPageReq extends BaseVO{
+public class RCExchangeCodeBatchPageReq extends PageSizeNumReq {
 
     private static final long serialVersionUID = -894330229162919879L;
 
@@ -17,10 +18,6 @@ public class RCExchangeCodeBatchPageReq extends BaseVO{
 
     @ApiModelProperty("批次名称")
     private String name;
-
-    private Integer pageSize;
-
-    private Integer pageNum;
 
     public Integer getProjectId() {
         return projectId;
@@ -38,19 +35,4 @@ public class RCExchangeCodeBatchPageReq extends BaseVO{
         this.name = name;
     }
 
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public Integer getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(Integer pageNum) {
-        this.pageNum = pageNum;
-    }
 }

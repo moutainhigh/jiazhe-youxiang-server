@@ -28,4 +28,11 @@ public interface RCExchangeCodeBatchPOManualMapper {
      * @return
      */
     Integer count(@Param("projectId")Integer projectId,@Param("name") String name);
+
+    /**
+     * 插入充值卡兑换码批次信息，并将id返回到实体中
+     * @param rcExchangeCodeBatchPO
+     * @return
+     */
+    int insert(RechargeCardExchangeCodeBatchPO rcExchangeCodeBatchPO);
 }

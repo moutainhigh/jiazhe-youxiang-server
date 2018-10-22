@@ -3,13 +3,13 @@ package com.jiazhe.youxiang.server.controller.rechargecard;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeBatchAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCExchangeCodeBatchBiz;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchListDTO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchAddReq;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditReq;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchPageReq;
-import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveReq;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchListResp;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -50,16 +50,18 @@ public class APIRCExchangeCodeBatchController extends BaseController{
 
     @ApiOperation(value = "addsave", httpMethod = "POST",notes = "【新建】保存批次信息")
     @RequestMapping(value = "/addsave", method = RequestMethod.POST)
-    public Object addSave(@ModelAttribute RCExchangeCodeBatchSaveReq req) {
+    public Object addSave(@ModelAttribute RCExchangeCodeBatchAddReq req) {
         //参数检查
-        RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO = RCExchangeCodeBatchAdapter.ReqSave2DTOSave(req);
-        rcExchangeCodeBatchBiz.addSave(rcExchangeCodeBatchSaveDTO);
+        RCExchangeCodeBatchAddDTO rcExchangeCodeBatchAddDTO = RCExchangeCodeBatchAdapter.ReqAdd2DTOAdd(req);
+        rcExchangeCodeBatchBiz.addSave(rcExchangeCodeBatchAddDTO);
         return ResponseFactory.buildSuccess();
     }
 
     @ApiOperation(value = "editsave", httpMethod = "POST",notes = "【修改】保存批次信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     public Object editSave(@ModelAttribute RCExchangeCodeBatchEditReq req) {
+
+
         return ResponseFactory.buildSuccess();
     }
 
