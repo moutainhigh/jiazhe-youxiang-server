@@ -41,4 +41,16 @@ public class CommonConstant {
 
     public static final String DEFAULT_TAG_CLIENT_IP = "clientIp";
 
+    /**
+     * 充值卡兑换码前缀
+     */
+    public static final String RC_EXCHANGE_CODE_PREFIX = "0";
+
+    /**
+     * 代金券兑换码前缀
+     */
+    public static final String VOUCHER_EXCHANGE_CODE_PREFIX = "1";
+
+
+
 }

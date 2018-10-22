@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.biz.rechargecard;
 
 import com.jiazhe.youxiang.base.util.GenerateCode;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeSaveDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchListDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
@@ -31,8 +32,15 @@ public class RCExchangeCodeBatchBiz {
 
     public int addSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {
         List<RCExchangeCodeSaveDTO> rcExchangeCodeSaveDTOS = new ArrayList<RCExchangeCodeSaveDTO>();
-        String[][] codeAndKeyts = GenerateCode.generateCode("0",rcExchangeCodeBatchSaveDTO.getAmount());
+        Integer amount = rcExchangeCodeBatchSaveDTO.getAmount();
+        String[][] codeAndKeyts = GenerateCode.generateCode(CommonConstant.RC_EXCHANGE_CODE_PREFIX,amount);
         //保存批次信息，并保存批次下的兑换码
+        for(int i=0;i<amount;i++){
+            RCExchangeCodeSaveDTO rcExchangeCodeSaveDTO = new RCExchangeCodeSaveDTO();
+            rcExchangeCodeSaveDTO.setBatchName(rcExchangeCodeBatchSaveDTO.getName());
+            rcExchangeCodeSaveDTO.setCode(codeAndKeyts[0][i]);
+            rcExchangeCodeSaveDTO.setKeyt(codeAndKeyts[1][i]);
+        }
         return 1;
        /*return rcExchangeCodeBatchService.addSave(rcExchangeCodeBatchSaveDTO);*/
     }
