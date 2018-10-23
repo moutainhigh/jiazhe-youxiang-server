@@ -4,6 +4,7 @@ import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCExchangeCodeBiz;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecode.CustomerSelfChargeReq;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecode.ExpiryTimeEditReq;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -51,4 +52,21 @@ public class APIRCExchangeCodeController extends BaseController{
         rcExchangeCodeBiz.changeExpiryTime(req.getId(),req.getExpiryTime());
         return ResponseFactory.buildSuccess();
     }
+
+    @ApiOperation(value = "customerselfcodecharge", httpMethod = "POST",notes = "客户用兑换码自行充值")
+    @RequestMapping(value = "/customerselfcodecharge", method = RequestMethod.POST)
+    public Object customerSelfCodeCharge(@ModelAttribute CustomerSelfChargeReq req) {
+        //参数检查
+        rcExchangeCodeBiz.customerSelfCharge(req.getCustomerId(),req.getKeyt());
+        return ResponseFactory.buildSuccess();
+    }
+
+    @ApiOperation(value = "backstagecodecharge", httpMethod = "POST",notes = "后台用兑换码进行充值")
+    @RequestMapping(value = "/backstagecodecharge", method = RequestMethod.POST)
+    public Object customerSelfCharge(@ModelAttribute CustomerSelfChargeReq req) {
+        //参数检查
+        rcExchangeCodeBiz.backstageCodeCharge(req.getCustomerId(),req.getKeyt());
+        return ResponseFactory.buildSuccess();
+    }
+
 }

@@ -51,6 +51,8 @@ public class CommonConstant {
      */
     public static final String VOUCHER_EXCHANGE_CODE_PREFIX = "1";
 
+    public static final Integer ONE_DAY = 24 * 3600 *1000 ;
+
 
 
 }

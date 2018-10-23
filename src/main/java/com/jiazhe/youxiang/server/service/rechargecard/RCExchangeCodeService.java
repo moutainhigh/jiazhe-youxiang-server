@@ -21,10 +21,32 @@ public interface RCExchangeCodeService {
     /**
      * 修改兑换码启用停用状态
      * @param id
-     * @param b
+     * @param status
      * @return
      */
     int changeCodeStatus(Integer id, Byte status);
 
+    /**
+     * 修改充值卡兑换码过期时间
+     * @param id
+     * @param expiryTime
+     * @return
+     */
     int changeExpiryTime(Integer id, Date expiryTime);
+
+
+    /**
+     * 通过充值卡兑换码密钥查找
+     * @param keyt
+     * @return
+     */
+    RechargeCardExchangeCodePO findByKeyt(String keyt);
+
+    /**
+     * 用兑换码进行充值【type=0表示后台兑换码充值的，1表示客户自行兑换码充值的】
+     * @param customerId
+     * @param keyt
+     * @return
+     */
+    int codeCharge(Integer type, Integer customerId, String keyt);
 }

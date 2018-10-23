@@ -29,4 +29,12 @@ public class RCExchangeCodeBiz {
     public int changeExpiryTime(Integer id, Date expiryTime) {
         return rcExchangeCodeService.changeExpiryTime(id,expiryTime);
     }
+
+    public int customerSelfCharge(Integer customerId, String keyt) {
+        return rcExchangeCodeService.codeCharge(1,customerId,keyt);
+    }
+
+    public int backstageCodeCharge(Integer customerId, String keyt) {
+        return rcExchangeCodeService.codeCharge(0,customerId,keyt);
+    }
 }

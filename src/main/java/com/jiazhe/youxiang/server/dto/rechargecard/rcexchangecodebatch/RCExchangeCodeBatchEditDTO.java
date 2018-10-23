@@ -14,6 +14,8 @@ public class RCExchangeCodeBatchEditDTO {
 
     private String name;
 
+    private BigDecimal faceValue;
+
     private String description;
 
     private Integer projectId;
@@ -108,5 +110,13 @@ public class RCExchangeCodeBatchEditDTO {
 
     public void setExpiryType(Byte expiryType) {
         this.expiryType = expiryType;
+    }
+
+    public BigDecimal getFaceValue() {
+        return faceValue;
+    }
+
+    public void setFaceValue(BigDecimal faceValue) {
+        this.faceValue = faceValue;
     }
 }
