@@ -51,7 +51,22 @@ public class CommonConstant {
      */
     public static final String VOUCHER_EXCHANGE_CODE_PREFIX = "1";
 
+    /**
+     * 一天的毫秒数
+     */
     public static final Integer ONE_DAY = 24 * 3600 *1000 ;
+
+    /**
+     * 订单状态【1代付款，2待派单，3待服务，4已完成，5取消待审核，6取消】
+     */
+    public static final Integer ORDER_UNPAID = 1;
+    public static final Integer ORDER_UNSENT = 2;
+    public static final Integer ORDER_UNSERVICE = 3;
+    public static final Integer ORDER_COMPLETE = 4;
+    public static final Integer ORDER_CANCELWATINGCHECK = 5;
+    public static final Integer ORDER_CANCEL = 6;
+
+
 
 
 
