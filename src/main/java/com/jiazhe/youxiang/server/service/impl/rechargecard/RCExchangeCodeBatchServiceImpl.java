@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -88,8 +89,8 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
 
     @Override
     public int editSave(RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO) {
-        //是否修改该批次下的兑换码相关信息
-        return 0;
+        //是否修改该批次下的兑换码相关信息？？？
+        return 1;
     }
 
     @Override
@@ -97,7 +98,8 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         //修改改批次下的兑换码启用停用状态
         RechargeCardExchangeCodeBatchPO rechargeCardExchangeCodeBatchPO = rechargeCardExchangeCodeBatchPOMapper.selectByPrimaryKey(id);
         rechargeCardExchangeCodeBatchPO.setStatus(status);
+        rechargeCardExchangeCodeBatchPO.setModTime(new Date());
         rechargeCardExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(rechargeCardExchangeCodeBatchPO);
-        return 0;
+        return 1;
     }
 }

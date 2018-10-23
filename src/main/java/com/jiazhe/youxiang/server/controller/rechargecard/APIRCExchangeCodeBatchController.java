@@ -40,7 +40,7 @@ public class APIRCExchangeCodeBatchController extends BaseController{
     @Autowired
     private RCExchangeCodeBatchBiz rcExchangeCodeBatchBiz;
 
-    @ApiOperation(value = "listpage", httpMethod = "GET", response = RCExchangeCodeBatchListResp.class, responseContainer = "List",notes = "分页查询批次信息（根据项目和批次名称查询）")
+    @ApiOperation(value = "listpage", httpMethod = "GET", response = RCExchangeCodeBatchListResp.class, responseContainer = "List",notes = "分页查询充值卡兑换码批次信息（根据项目和批次名称查询）")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute RCExchangeCodeBatchPageReq req) {
         Paging paging = new Paging();
@@ -51,7 +51,7 @@ public class APIRCExchangeCodeBatchController extends BaseController{
         return ResponseFactory.buildPaginationResponse(rcExchangeCodeBatchListResps, paging);
     }
 
-    @ApiOperation(value = "addsave", httpMethod = "POST",notes = "【新建】保存批次信息")
+    @ApiOperation(value = "addsave", httpMethod = "POST",notes = "【新建】保存充值卡兑换码批次信息")
     @RequestMapping(value = "/addsave", method = RequestMethod.POST)
     public Object addSave(@ModelAttribute RCExchangeCodeBatchAddReq req) {
         //参数检查
@@ -60,7 +60,7 @@ public class APIRCExchangeCodeBatchController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "editshow", httpMethod = "GET",notes = "修改批次信息回显")
+    @ApiOperation(value = "editshow", httpMethod = "GET",notes = "【修改】充值卡兑换码批次信息回显")
     @RequestMapping(value = "/editshow", method = RequestMethod.POST)
     public Object editShow(@ModelAttribute IdReq req) {
         //参数检查
@@ -69,7 +69,7 @@ public class APIRCExchangeCodeBatchController extends BaseController{
         return ResponseFactory.buildResponse(rcExchangeCodeBatchEditResp);
     }
 
-    @ApiOperation(value = "editsave", httpMethod = "POST",notes = "【修改】保存批次信息")
+    @ApiOperation(value = "editsave", httpMethod = "POST",notes = "【修改】保存充值卡兑换码批次信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     public Object editSave(@ModelAttribute RCExchangeCodeBatchEditReq req) {
         //参数检查
