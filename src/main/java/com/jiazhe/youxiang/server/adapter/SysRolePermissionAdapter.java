@@ -4,6 +4,7 @@ import com.jiazhe.youxiang.server.domain.po.SysRolePermissionPO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRolePermissionDTO;
 
 /**
+ * @author TU
  * Created by tujia on 2018/10/18.
  */
 public class SysRolePermissionAdapter {
@@ -16,10 +17,6 @@ public class SysRolePermissionAdapter {
         sysRolePermissionDTO.setId(po.getId());
         sysRolePermissionDTO.setRoleId(po.getRoleId());
         sysRolePermissionDTO.setPermUrl(po.getPermUrl());
-        sysRolePermissionDTO.setExtInfo(po.getExtInfo());
-        sysRolePermissionDTO.setIsDeleted(po.getIsDeleted());
-        sysRolePermissionDTO.setAddTime(po.getAddTime());
-        sysRolePermissionDTO.setModTime(po.getModTime());
         return sysRolePermissionDTO;
     }
 
@@ -31,10 +28,6 @@ public class SysRolePermissionAdapter {
         sysRolePermissionPO.setId(dto.getId());
         sysRolePermissionPO.setRoleId(dto.getRoleId());
         sysRolePermissionPO.setPermUrl(dto.getPermUrl());
-        sysRolePermissionPO.setExtInfo(dto.getExtInfo());
-        sysRolePermissionPO.setIsDeleted(dto.getIsDeleted());
-        sysRolePermissionPO.setAddTime(dto.getAddTime());
-        sysRolePermissionPO.setModTime(dto.getModTime());
         return sysRolePermissionPO;
     }
 }

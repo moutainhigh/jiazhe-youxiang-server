@@ -1,24 +1,49 @@
 package com.jiazhe.youxiang.server.dao.mapper.manual;
 
 import com.jiazhe.youxiang.server.domain.po.SysRolePO;
-import com.jiazhe.youxiang.server.vo.req.SysRoleReq;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
 
 /**
- * Created by tujia on 2018/10/14.
+ * @author TU
+ * @date 2018/10/19
  */
 public interface SysRolePOManualMapper {
 
-    //根据条件查询记录条数
-    int count(SysRoleReq req);
+    /**
+     * 插入实体，并将id返回到sysRolePO中
+     *
+     * @param sysRolePO
+     * @return
+     */
+    Integer insert(SysRolePO sysRolePO);
 
-    //根据条件查询，返回分页结果
-    List<Map> getPageContent(SysRoleReq req);
+    /**
+     * 计数
+     *
+     * @param name
+     * @return
+     */
+    Integer count(@Param("name") String name);
 
-    //插入实体，并隐式返回id
-    int insert(SysRolePO sysRolePO);
+    /**
+     * 根据参数查询分页结果
+     *
+     * @param name
+     * @param offset
+     * @param limit
+     * @return
+     */
+    List<SysRolePO> query(@Param("name") String name, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
-
+    /**
+     * 单个删除角色，不删除权限
+     *
+     * @param id
+     * @return
+     */
+    int delete(Integer id);
 }

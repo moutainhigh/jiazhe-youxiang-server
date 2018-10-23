@@ -58,41 +58,15 @@ function getCookie(key) {
     }
 }
 
-//将获取的json格式的city转为options标签，需登录，无权限限制
-function citysToOptions(fatherId){
-    var html = "<option value=''>  </option>";
-    $.ajax({
-        url:"/city/findNextCitys",    //请求的url地址
-        dataType:"json",
-        async:false,
-        data:{
-            "fatherId":fatherId
-        },
-        type:"GET",
-        success:function(result){
-            switch (result.code){
-                case '000000':
-                    var data = result.data;
-                    for(var i=0;i<data.length;i++){
-                        html = html + "<option value='"+data[i].id+"'>" +data[i].name+ "</option>"
-                    }
-                    break;
-                case "000001":
-                    parent.location.href = "/system/index";
-                    break;
-                case "000002":
-                    window.location.href = "/system/403";
-                    break;
-                default :
-                    bootboxalert(result.msg);
-                    break;
-            }
-        },
-        error:function(){
-            bootboxalert("服务器异常，请联系管理员");
-        }
-    });
-    return html;
+function timeFormat(time){
+    var d = new Date(time);
+    var year = d.getFullYear();
+    var month = (d.getMonth()+1)>9?(d.getMonth()+1):'0'+(d.getMonth());
+    var date = d.getDate()>9?d.getDate():'0'+d.getDate();
+    var hours = d.getHours()>9?d.getHours():'0'+d.getHours();
+    var minutes = d.getMinutes()>9?d.getMinutes():'0'+d.getMinutes();
+    var seconds = d.getSeconds()>9?d.getSeconds():'0'+d.getSeconds();
+    return year + '-' + month+ '-' + date + ' ' + hours + ':' + minutes + ':' + seconds;
 }
 
 

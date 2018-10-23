@@ -37,6 +37,7 @@
 			<array>
 				<value>classpath:mapper/*.xml</value>
 				<value>classpath:mapper/manual/*.xml</value>
+				<value>classpath:mapper/manual/*/*.xml</value>
 			</array>
 		</property>
 	</bean>

@@ -28,6 +28,10 @@ public class ProductPO implements Serializable {
 
     private Byte status;
 
+    private String smsTemplate;
+
+    private Integer effectiveDays;
+
     private String extInfo;
 
     private Byte isDeleted;
@@ -132,6 +136,22 @@ public class ProductPO implements Serializable {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getSmsTemplate() {
+        return smsTemplate;
+    }
+
+    public void setSmsTemplate(String smsTemplate) {
+        this.smsTemplate = smsTemplate == null ? null : smsTemplate.trim();
+    }
+
+    public Integer getEffectiveDays() {
+        return effectiveDays;
+    }
+
+    public void setEffectiveDays(Integer effectiveDays) {
+        this.effectiveDays = effectiveDays;
     }
 
     public String getExtInfo() {
