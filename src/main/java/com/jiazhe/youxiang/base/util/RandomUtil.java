@@ -14,9 +14,9 @@ public class RandomUtil {
     private static char[] NumSequence = {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
-    /*
-    生成n位随机验证码【全数字】
-    param n:验证码位数
+    /**
+    *生成n位随机验证码【全数字】
+    *param n:验证码位数
      */
     public static String generateVerifyCode(int n) {
         StringBuilder verifyCode = new StringBuilder("");
@@ -28,4 +28,16 @@ public class RandomUtil {
         return verifyCode.toString();
     }
 
+    /**
+    *生成n位盐值
+     */
+    public static String generateSalt(int n) {
+        StringBuilder saltCode = new StringBuilder("");
+        int length = codeSequence.length;
+        for(int i=0;i<n;i++){
+            int random = (int)(Math.random()*length);
+            saltCode.append(codeSequence[random]);
+        }
+        return saltCode.toString();
+    }
 }

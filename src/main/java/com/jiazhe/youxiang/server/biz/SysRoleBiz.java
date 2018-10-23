@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.biz;
 import com.jiazhe.youxiang.server.dto.sysrole.RoleWithPermDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRolePermissionDTO;
+import com.jiazhe.youxiang.server.dto.sysuser.SysUserRoleDTO;
 import com.jiazhe.youxiang.server.service.SysRoleService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.logging.log4j.util.Strings;
@@ -111,7 +112,11 @@ public class SysRoleBiz {
         return sysRoleService.findAll();
     }
 
-    public List<SysRoleDTO> findByName(String name, Paging paging) {
-        return sysRoleService.findByName(name, paging);
+    public List<SysRoleDTO> getList(String name, Paging paging) {
+        return sysRoleService.getList(name, paging);
+    }
+
+    public SysRoleDTO findById(Integer id) {
+        return sysRoleService.findById(id);
     }
 }

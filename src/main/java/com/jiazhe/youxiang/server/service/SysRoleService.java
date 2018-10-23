@@ -72,5 +72,5 @@ public interface SysRoleService {
      * @param paging
      * @return
      */
-    List<SysRoleDTO> findByName(String name, Paging paging);
+    List<SysRoleDTO> getList(String name, Paging paging);
 }

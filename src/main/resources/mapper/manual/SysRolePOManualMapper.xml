@@ -17,25 +17,26 @@
     </sql>
 
     <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.SysRolePO">
-        select
+        SELECT
         <include refid="Base_Column_List"/>
-        from sys_role
+        FROM sys_role
         <where>
-            <if test="name != null">
+            <if test="name != null  and name != ''">
                 AND name = #{name}
             </if>
-            AND is_deleted = 0 order by add_time desc
+            AND is_deleted = 0 ORDER BY priority ASC
         </where>
         limit #{offset},#{limit}
 
     </select>
 
     <select id="count" resultType="java.lang.Integer">
-        select count(*) from sys_role where is_deleted = 0
+        select count(*) from sys_role
         <where>
-            <if test="name != null">
+            <if test="name != null  and name != ''">
                 AND name = #{name}
             </if>
+           AND is_deleted = 0
         </where>
     </select>
 

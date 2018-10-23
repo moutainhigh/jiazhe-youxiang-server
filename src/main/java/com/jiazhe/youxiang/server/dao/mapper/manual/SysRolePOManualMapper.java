@@ -27,7 +27,7 @@ public interface SysRolePOManualMapper {
      * @param name
      * @return
      */
-    Integer count(String name);
+    Integer count(@Param("name") String name);
 
     /**
      * 根据参数查询分页结果

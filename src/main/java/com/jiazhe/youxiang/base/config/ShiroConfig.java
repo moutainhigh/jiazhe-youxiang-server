@@ -60,7 +60,7 @@ public class ShiroConfig {
         Map<String,Filter> filters = bean.getFilters();
         filters.put("shiroLoginFilter",new ShiroLoginFilter());
         bean.setFilters(filters);
-       /* bean.setLoginUrl("../system/index");*/
+        /*bean.setLoginUrl("../system/index");*/
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         filterChainDefinitionMap.put("/system/index", "anon"); //登录页url匿名访问
         filterChainDefinitionMap.put("/system/login", "anon");//登陆系统匿名访问
@@ -69,7 +69,10 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/api/signin/signin", "anon");//后台登陆请求
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/templates/**", "anon");
-
+/*        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
+        filterChainDefinitionMap.put("/swagger-resources*//**", "anon");
+        filterChainDefinitionMap.put("/webjars*//**", "anon");
+        filterChainDefinitionMap.put("/v2*//**", "anon");*/
         filterChainDefinitionMap.put("/**", "anon");//表示所有url必须通过认证才能访问
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;

@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.req.sysrole;
 
 import com.jiazhe.youxiang.server.vo.req.OffsetLimitReq;
+import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -8,7 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @description 分页查询参数
  * @date 2018/10/19.
  */
-public class RolePageReq extends OffsetLimitReq {
+public class RolePageReq extends PageSizeNumReq {
 
     private static final long serialVersionUID = 6694925201108152597L;
 

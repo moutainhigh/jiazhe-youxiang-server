@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
  * 后台所有关于角色的接口
  *
  * @author TU
- *         Created by tujia on 2018/10/14.
+ * @date 2018/10/14.
  */
 @RestController
 @RequestMapping("api/sysrole")
@@ -47,22 +47,23 @@ public class APISysRoleController extends BaseController {
     @RequestMapping(value = "/listall", method = RequestMethod.GET)
     public Object listAll() {
         List<SysRoleDTO> sysRoleDTOList = sysRoleBiz.findAll();
-        return ResponseFactory.buildResponse(sysRoleDTOList);
+        List<SysRoleResp> sysRoleRespList = sysRoleDTOList.stream().map(SysRoleAdapter::DTO2RespVO).collect(Collectors.toList());
+        return ResponseFactory.buildResponse(sysRoleRespList);
     }
 
     @ApiOperation(value = "listpage", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List",notes = "分页查询角色信息")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute RolePageReq req) {
         Paging paging = new Paging();
-        paging.setOffset(req.getOffset());
-        paging.setLimit(req.getLimit());
-        List<SysRoleDTO> sysRoleDTOList = sysRoleBiz.findByName(req.getName(), paging);
+        paging.setOffset((req.getPageNum()-1)*req.getPageSize());
+        paging.setLimit(req.getPageSize());
+        List<SysRoleDTO> sysRoleDTOList = sysRoleBiz.getList(req.getName(), paging);
         List<SysRoleResp> sysRoleRespList = sysRoleDTOList.stream().map(SysRoleAdapter::DTO2RespVO).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(sysRoleRespList, paging);
     }
 
-    @ApiOperation(value = "delete", httpMethod = "GET", response = SysRoleResp.class, notes = "根据id删除角色信息（包含权限）")
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
+    @ApiOperation(value = "delete", httpMethod = "POST", response = SysRoleResp.class, notes = "根据id删除角色信息（包含权限）")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public Object delete(@ModelAttribute IdReq req) {
         int count = sysRoleBiz.deleteRoleWithPerms(req.getId());
         if (count != 1) {
@@ -86,10 +87,10 @@ public class APISysRoleController extends BaseController {
     public Object save(@ModelAttribute RoleSaveReq req) {
         /*参数检查*/
         if (null == req || Strings.isBlank(req.getName())) {
-            throw new CommonException(CommonCodeEnum.INTERNAL_ERROR.getCode(), CommonCodeEnum.INTERNAL_ERROR.getType(), "信息填写不完整");
+            throw new CommonException(RoleCodeEnum.ROLE_INCOMPLETE_INFO.getCode(),RoleCodeEnum.ROLE_INCOMPLETE_INFO.getType(), RoleCodeEnum.ROLE_INCOMPLETE_INFO.getMessage());
         }
         /*非管理员，还不带权限字符串*/
-        if (req.getIsSuper() == 0 && null == req.getPermsStr()) {
+        if (req.getIsSuper() == 0 && Strings.isBlank(req.getPermsStr())) {
             throw new CommonException(RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getCode(), RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getType(), RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getMessage());
         }
         /*判断是否重名，要将新建和修改区分开*/

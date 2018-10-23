@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -130,11 +131,13 @@ public class SysRoleServiceImpl implements SysRoleService {
         SysRolePOExample.Criteria criteria = sysRolePOExample.createCriteria();
         criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
         List<SysRolePO> sysRolePOList = sysRolePOMapper.selectByExample(sysRolePOExample);
-        return sysRolePOList.stream().map(SysRoleAdapter::PO2DTO).collect(Collectors.toList());
+        List<SysRoleDTO> sysRoleDTOList = sysRolePOList.stream().map(SysRoleAdapter::PO2DTO).collect(Collectors.toList());
+        List<SysRoleDTO> listSorted = sysRoleDTOList.stream().sorted(Comparator.comparing(SysRoleDTO::getPriority)).collect(Collectors.toList());
+        return listSorted;
     }
 
     @Override
-    public List<SysRoleDTO> findByName(String name, Paging paging) {
+    public List<SysRoleDTO> getList(String name, Paging paging) {
         Integer count = sysRolePOManualMapper.count(name);
         List<SysRolePO> sysRolePOList = sysRolePOManualMapper.query(name, paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
