@@ -180,7 +180,7 @@ public class APIProductController {
      * @return
      */
     @ApiOperation(value = "获得某一商品", httpMethod = "GET", response = ProductResp.class, notes = "获得某一商品")
-    @RequestMapping(value = "getById", method = RequestMethod.GET)
+    @RequestMapping(value = "getbyid", method = RequestMethod.GET)
     public Object getById(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
@@ -325,7 +325,7 @@ public class APIProductController {
      * @return
      */
     @ApiOperation(value = "编辑商品的价格", httpMethod = "POST", notes = "编辑商品的价格")
-    @RequestMapping(value = "updatePrice", method = RequestMethod.POST)
+    @RequestMapping(value = "updateprice", method = RequestMethod.POST)
     public Object updatePrice(@ModelAttribute ProductPriceUpdateReq req) {
         //TODO niexiao 参数验证
         CommonValidator.validateId(req);
@@ -341,7 +341,7 @@ public class APIProductController {
      * @return
      */
     @ApiOperation(value = "删除商品价格", httpMethod = "GET", notes = "删除商品价格")
-    @RequestMapping(value = "delete", method = RequestMethod.GET)
+    @RequestMapping(value = "deleteprice", method = RequestMethod.GET)
     public Object deletePrice(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
