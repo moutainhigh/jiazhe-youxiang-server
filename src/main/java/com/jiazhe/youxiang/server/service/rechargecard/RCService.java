@@ -49,14 +49,14 @@ public interface RCService {
      * @param customerId
      * @return
      */
-    List<RCDTO> findAllByCustomerId(Integer customerId);
+    List<RCDTO> findUnexpiredByCustomerId(Integer customerId);
 
     /**
      * 后台直接充值任意面额
-     * @param customerId  客户id
+     * @param mobile  客户手机
      * @param batchId  批次信息
      * @param faceValue  面额
      * @return
      */
-    int directCharge(Integer customerId,Integer batchId, BigDecimal faceValue);
+    int directCharge(String mobile ,Integer batchId, BigDecimal faceValue);
 }

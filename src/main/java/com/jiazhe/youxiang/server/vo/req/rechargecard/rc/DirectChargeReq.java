@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.req.rechargecard.rc;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 
@@ -11,18 +12,21 @@ import java.math.BigDecimal;
  */
 public class DirectChargeReq extends BaseVO {
 
-    Integer customerId;
+    @ApiModelProperty("充值客户手机号")
+    String mobile;
 
+    @ApiModelProperty("批次id")
     Integer batchId;
 
+    @ApiModelProperty("充值分数")
     BigDecimal faceValue;
 
-    public Integer getCustomerId() {
-        return customerId;
+    public String getMobile() {
+        return mobile;
     }
 
-    public void setCustomerId(Integer customerId) {
-        this.customerId = customerId;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public Integer getBatchId() {

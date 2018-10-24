@@ -2,8 +2,10 @@ package com.jiazhe.youxiang.server.adapter.rechargecard;
 
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeListDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeSaveDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
+import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecode.RCExchangeCodeListResp;
 
 /**
  * @author tu
@@ -50,5 +52,13 @@ public class RCExchangeCodeAdapter {
         rCExchangeCodeBatchEditDTO.setValidityPeriod(rechargeCardExchangeCodeBatchPO.getValidityPeriod());
         rCExchangeCodeBatchEditDTO.setExpiryType(rechargeCardExchangeCodeBatchPO.getExpiryType());
         return rCExchangeCodeBatchEditDTO;
+    }
+
+    public static RCExchangeCodeListResp DTOList2RespList(RCExchangeCodeListDTO rcExchangeCodeListDTO) {
+        if (rcExchangeCodeListDTO == null) {
+            return null;
+        }
+        RCExchangeCodeListResp rCExchangeCodeListResp = new RCExchangeCodeListResp();
+        return rCExchangeCodeListResp;
     }
 }

@@ -44,9 +44,9 @@ public interface RCExchangeCodeService {
 
     /**
      * 用兑换码进行充值【type=0表示后台兑换码充值的，1表示客户自行兑换码充值的】
-     * @param customerId
+     * @param mobile
      * @param keyt
      * @return
      */
-    int codeCharge(Integer type, Integer customerId, String keyt);
+    int codeCharge(Integer type, String mobile, String keyt);
 }

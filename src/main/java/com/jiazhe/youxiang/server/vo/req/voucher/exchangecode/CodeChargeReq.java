@@ -1,13 +1,13 @@
-package com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecode;
+package com.jiazhe.youxiang.server.vo.req.voucher.exchangecode;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
 
 /**
  * @author TU
  * @description
- * @date 2018/10/23.
+ * @date 2018/10/24.
  */
-public class CustomerSelfChargeReq extends BaseVO {
+public class CodeChargeReq extends BaseVO{
 
     String keyt ;
 

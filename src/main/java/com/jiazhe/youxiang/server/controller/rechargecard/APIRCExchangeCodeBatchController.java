@@ -40,7 +40,7 @@ public class APIRCExchangeCodeBatchController extends BaseController{
     @Autowired
     private RCExchangeCodeBatchBiz rcExchangeCodeBatchBiz;
 
-    @ApiOperation(value = "listpage", httpMethod = "GET", response = RCExchangeCodeBatchListResp.class, responseContainer = "List",notes = "分页查询充值卡兑换码批次信息（根据项目和批次名称查询）")
+    @ApiOperation(value = "分页查询充值卡兑换码批次信息（根据项目和批次名称查询）", httpMethod = "GET", response = RCExchangeCodeBatchListResp.class, responseContainer = "List",notes = "分页查询充值卡兑换码批次信息（根据项目和批次名称查询）")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute RCExchangeCodeBatchPageReq req) {
         Paging paging = new Paging();
@@ -51,7 +51,7 @@ public class APIRCExchangeCodeBatchController extends BaseController{
         return ResponseFactory.buildPaginationResponse(rcExchangeCodeBatchListResps, paging);
     }
 
-    @ApiOperation(value = "addsave", httpMethod = "POST",notes = "【新建】保存充值卡兑换码批次信息")
+    @ApiOperation(value = "【新建】保存充值卡兑换码批次信息", httpMethod = "POST",notes = "【新建】保存充值卡兑换码批次信息")
     @RequestMapping(value = "/addsave", method = RequestMethod.POST)
     public Object addSave(@ModelAttribute RCExchangeCodeBatchAddReq req) {
         //参数检查
@@ -60,16 +60,16 @@ public class APIRCExchangeCodeBatchController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "editshow", httpMethod = "GET",notes = "【修改】充值卡兑换码批次信息回显")
-    @RequestMapping(value = "/editshow", method = RequestMethod.POST)
-    public Object editShow(@ModelAttribute IdReq req) {
+    @ApiOperation(value = "充值卡兑换码批次信息回显", httpMethod = "GET", response = RCExchangeCodeBatchEditResp.class,notes = "充值卡兑换码批次信息回显")
+    @RequestMapping(value = "/getbyid", method = RequestMethod.POST)
+    public Object getById(@ModelAttribute IdReq req) {
         //参数检查
         RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchBiz.getById(req.getId());
         RCExchangeCodeBatchEditResp rcExchangeCodeBatchEditResp = RCExchangeCodeBatchAdapter.DTOEdit2RespEdit(rcExchangeCodeBatchEditDTO);
         return ResponseFactory.buildResponse(rcExchangeCodeBatchEditResp);
     }
 
-    @ApiOperation(value = "editsave", httpMethod = "POST",notes = "【修改】保存充值卡兑换码批次信息")
+    @ApiOperation(value = "【修改】保存充值卡兑换码批次信息", httpMethod = "POST",notes = "【修改】保存充值卡兑换码批次信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     public Object editSave(@ModelAttribute RCExchangeCodeBatchEditReq req) {
         //参数检查
@@ -79,7 +79,7 @@ public class APIRCExchangeCodeBatchController extends BaseController{
     }
 
 
-    @ApiOperation(value = "startusing", httpMethod = "POST",notes = "启用批次【同时改变批次下兑换码状态】")
+    @ApiOperation(value = "启用批次【同时改变批次下兑换码状态】", httpMethod = "POST",notes = "启用批次【同时改变批次下兑换码状态】")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     public Object startUsing(@ModelAttribute IdReq req) {
         //参数检查
@@ -87,7 +87,7 @@ public class APIRCExchangeCodeBatchController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "stopusing", httpMethod = "POST",notes = "停用批次【同时改变批次下兑换码状态】")
+    @ApiOperation(value = "停用批次【同时改变批次下兑换码状态】", httpMethod = "POST",notes = "停用批次【同时改变批次下兑换码状态】")
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     public Object stopUsing(@ModelAttribute IdReq req) {
         //参数检查

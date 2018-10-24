@@ -6,6 +6,7 @@ import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardPO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
 import com.jiazhe.youxiang.server.service.rechargecard.RCService;
+import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,12 +38,18 @@ public class RCBiz {
         return rcService.changeExpiryTime(id,expiryTime);
     }
 
-    public List<RCDTO> findAllByCustomerId(Integer customerId) {
-        List<RCDTO> rcdtoList =rcService.findAllByCustomerId(customerId);
-        return rcdtoList;
+
+    public int directCharge(String mobile , Integer batchId, BigDecimal faceValue) {
+        return rcService.directCharge(mobile,batchId,faceValue);
     }
 
-    public int directCharge(Integer customerId , Integer batchId, BigDecimal faceValue) {
-        return rcService.directCharge(customerId,batchId,faceValue);
+    public List<RCDTO> getList(Integer customerId, Paging paging) {
+        return null ;
+    }
+
+
+    public List<RCDTO> findUnexpiredByCustomerId(Integer customerId) {
+        List<RCDTO> rcdtoList =rcService.findUnexpiredByCustomerId(customerId);
+        return rcdtoList;
     }
 }

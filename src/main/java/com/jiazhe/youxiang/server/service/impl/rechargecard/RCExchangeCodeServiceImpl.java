@@ -57,8 +57,9 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
     }
 
     @Override
-    public int codeCharge(Integer type,Integer customerId, String keyt) {
+    public int codeCharge(Integer type,String mobile, String keyt) {
         RechargeCardExchangeCodePO rechargeCardExchangeCodePO = findByKeyt(keyt);
+        CustomerPO customerPO = null;
         RechargeCardPO rechargeCardPO = new RechargeCardPO();
         //直接指定过期时间
         if(rechargeCardExchangeCodePO.getExpiryType().equals(Byte.valueOf("0"))){
@@ -73,7 +74,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         rechargeCardPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
         rechargeCardPO.setProjectId(rechargeCardExchangeCodePO.getProjectId());
         rechargeCardPO.setName(rechargeCardExchangeCodePO.getBatchName());
-        rechargeCardPO.setCustomerId(customerId);
+        rechargeCardPO.setCustomerId(customerPO.getId());
         rechargeCardPO.setCityIds(rechargeCardExchangeCodePO.getCityIds());
         rechargeCardPO.setProductIds(rechargeCardExchangeCodePO.getProductIds());
         rcService.insert(rechargeCardPO);

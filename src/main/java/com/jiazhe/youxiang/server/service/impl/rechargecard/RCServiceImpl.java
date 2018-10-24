@@ -69,18 +69,19 @@ public class RCServiceImpl implements RCService {
     }
 
     @Override
-    public List<RCDTO> findAllByCustomerId(Integer customerId) {
+    public List<RCDTO> findUnexpiredByCustomerId(Integer customerId) {
         RechargeCardPOExample rechargeCardPOExample = new RechargeCardPOExample();
         RechargeCardPOExample.Criteria criteria = rechargeCardPOExample.createCriteria();
-        criteria.andExpiryTimeGreaterThanOrEqualTo(new Date());
         criteria.andCustomerIdEqualTo(customerId);
+        criteria.andExpiryTimeGreaterThanOrEqualTo(new Date());
         List<RechargeCardPO> rechargeCardPOList = rechargeCardPOMapper.selectByExample(rechargeCardPOExample);
         List<RCDTO> rcdtoList = rechargeCardPOList.stream().map(RCAdapter::PO2DTO).collect(Collectors.toList());
         return rcdtoList;
     }
 
     @Override
-    public int directCharge(Integer customerId, Integer batchId, BigDecimal faceValue) {
+    public int directCharge(String mobile, Integer batchId, BigDecimal faceValue) {
+        CustomerPO customerPO = null;
         RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchService.getById(batchId);
         RechargeCardPO rechargeCardPO = new RechargeCardPO();
         //直接指定过期时间
@@ -96,7 +97,7 @@ public class RCServiceImpl implements RCService {
         rechargeCardPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
         rechargeCardPO.setProjectId(rcExchangeCodeBatchEditDTO.getProjectId());
         rechargeCardPO.setName(rcExchangeCodeBatchEditDTO.getName());
-        rechargeCardPO.setCustomerId(customerId);
+        rechargeCardPO.setCustomerId(customerPO.getId());
         rechargeCardPO.setCityIds(rcExchangeCodeBatchEditDTO.getCityIds());
         rechargeCardPO.setProductIds(rcExchangeCodeBatchEditDTO.getProductIds());
         rcService.insert(rechargeCardPO);
