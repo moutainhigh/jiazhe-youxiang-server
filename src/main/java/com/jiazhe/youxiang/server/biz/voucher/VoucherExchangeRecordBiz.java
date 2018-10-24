@@ -1,6 +1,6 @@
 package com.jiazhe.youxiang.server.biz.voucher;
 
-import com.jiazhe.youxiang.server.dto.voucher.exchangerecord.VoucherExchangeRecordListDTO;
+import com.jiazhe.youxiang.server.dto.voucher.exchangerecord.VoucherExchangeRecordDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Service("voucherExchangeRecordBiz")
 public class VoucherExchangeRecordBiz {
-    public List<VoucherExchangeRecordListDTO> getList(Date beginDate, Date endDate, String code, String keyt, Paging paging) {
+    public List<VoucherExchangeRecordDTO> getList(Date beginDate, Date endDate, String code, String keyt, Paging paging) {
         return null;
     }
 }

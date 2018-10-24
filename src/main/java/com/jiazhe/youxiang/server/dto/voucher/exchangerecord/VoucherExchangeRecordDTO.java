@@ -1,15 +1,11 @@
-package com.jiazhe.youxiang.server.vo.resp.voucher.exchangerecord;
-
-import com.jiazhe.youxiang.server.vo.BaseObject;
-
-import java.util.Date;
+package com.jiazhe.youxiang.server.dto.voucher.exchangerecord;
 
 /**
  * @author TU
  * @description
  * @date 2018/10/24.
  */
-public class VoucherExchangeRecordListResp extends BaseObject{
+public class VoucherExchangeRecordDTO {
 
     private Integer id;
 

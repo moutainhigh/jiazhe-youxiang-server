@@ -1,15 +1,15 @@
-package com.jiazhe.youxiang.server.dto.voucher.exchangerecord;
+package com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord;
+
+import java.util.Date;
 
 /**
  * @author TU
  * @description
  * @date 2018/10/24.
  */
-public class VoucherExchangeRecordListDTO {
+public class RCExchangeRecordDTO {
 
     private Integer id;
-
-    private Integer voucherId;
 
     private Integer exchangeCodeId;
 
@@ -17,20 +17,14 @@ public class VoucherExchangeRecordListDTO {
 
     private String operatorName;
 
+    private Date addTime;
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getVoucherId() {
-        return voucherId;
-    }
-
-    public void setVoucherId(Integer voucherId) {
-        this.voucherId = voucherId;
     }
 
     public Integer getExchangeCodeId() {
@@ -56,4 +50,13 @@ public class VoucherExchangeRecordListDTO {
     public void setOperatorName(String operatorName) {
         this.operatorName = operatorName;
     }
+
+    public Date getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
+    }
+
 }

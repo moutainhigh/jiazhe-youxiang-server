@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.controller.voucher;
 
+import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherAdapter;
 
 import com.jiazhe.youxiang.server.biz.voucher.VoucherBiz;
@@ -8,7 +9,7 @@ import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
-import com.jiazhe.youxiang.server.vo.req.voucher.voucher.ExpiryTimeEditReq;
+import com.jiazhe.youxiang.server.vo.req.ExpiryTimeEditReq;
 import com.jiazhe.youxiang.server.vo.resp.voucher.voucher.VoucherResp;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("api/voucher")
-public class APIVoucherController {
+public class APIVoucherController extends BaseController{
 
     @Autowired
     private VoucherBiz voucherBiz;

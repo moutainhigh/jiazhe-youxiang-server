@@ -2,11 +2,11 @@ package com.jiazhe.youxiang.server.controller.voucher;
 
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherExchangeRecordAdapter;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherExchangeRecordBiz;
-import com.jiazhe.youxiang.server.dto.voucher.exchangerecord.VoucherExchangeRecordListDTO;
+import com.jiazhe.youxiang.server.dto.voucher.exchangerecord.VoucherExchangeRecordDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
-import com.jiazhe.youxiang.server.vo.req.voucher.exchangerecord.VoucherExchangeRecordListReq;
-import com.jiazhe.youxiang.server.vo.resp.voucher.exchangerecord.VoucherExchangeRecordListResp;
+import com.jiazhe.youxiang.server.vo.req.voucher.exchangerecord.VoucherExchangeRecordPageReq;
+import com.jiazhe.youxiang.server.vo.resp.voucher.exchangerecord.VoucherExchangeRecordResp;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -29,14 +29,14 @@ public class APIVoucherExchangeRecordController {
     @Autowired
     private VoucherExchangeRecordBiz voucherExchangeRecordBiz;
 
-    @ApiOperation(value = "【组合条件】分页查询代金券兑换记录", httpMethod = "GET", response = VoucherExchangeRecordListResp.class, responseContainer = "List",notes = "【组合条件】分页查询代金券兑换记录")
+    @ApiOperation(value = "【组合条件】分页查询代金券兑换记录", httpMethod = "GET", response = VoucherExchangeRecordResp.class, responseContainer = "List",notes = "【组合条件】分页查询代金券兑换记录")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
-    public Object listPage(@ModelAttribute VoucherExchangeRecordListReq req) {
+    public Object listPage(@ModelAttribute VoucherExchangeRecordPageReq req) {
         Paging paging = new Paging();
         paging.setOffset((req.getPageNum()-1)*req.getPageSize());
         paging.setLimit(req.getPageSize());
-        List<VoucherExchangeRecordListDTO> voucherExchangeCodeBatchListDTOS = voucherExchangeRecordBiz.getList(req.getBeginDate(),req.getEndDate(),req.getCode(),req.getKeyt(),paging);
-        List<VoucherExchangeRecordListResp> voucherExchangeCodeBatchListResps = voucherExchangeCodeBatchListDTOS.stream().map(VoucherExchangeRecordAdapter::DTOList2RespList).collect(Collectors.toList());
-        return ResponseFactory.buildPaginationResponse(voucherExchangeCodeBatchListResps, paging);
+        List<VoucherExchangeRecordDTO> voucherExchangeCodeBatchDTOList = voucherExchangeRecordBiz.getList(req.getBeginDate(),req.getEndDate(),req.getCode(),req.getKeyt(),paging);
+        List<VoucherExchangeRecordResp> voucherExchangeCodeBatchRespList = voucherExchangeCodeBatchDTOList.stream().map(VoucherExchangeRecordAdapter::DTO2Resp).collect(Collectors.toList());
+        return ResponseFactory.buildPaginationResponse(voucherExchangeCodeBatchRespList, paging);
     }
 }

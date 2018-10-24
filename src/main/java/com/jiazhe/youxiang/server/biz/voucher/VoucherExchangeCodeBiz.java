@@ -1,6 +1,6 @@
 package com.jiazhe.youxiang.server.biz.voucher;
 
-import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeListDTO;
+import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Service("voucherExchangeCodeBiz")
 public class VoucherExchangeCodeBiz {
-    public List<VoucherExchangeCodeListDTO> getList(Integer batchId, String code, String keyt, Paging paging) {
+    public List<VoucherExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Paging paging) {
         return null;
     }
 

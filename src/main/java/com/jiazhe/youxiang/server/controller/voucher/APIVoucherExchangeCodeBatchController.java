@@ -4,16 +4,16 @@ import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherExchangeCodeBatchAdapter;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherExchangeCodeBatchBiz;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchAddDTO;
+import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchEditDTO;
-import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchListDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.voucher.exchangecodebatch.VoucherExchangeCodeBatchAddReq;
 import com.jiazhe.youxiang.server.vo.req.voucher.exchangecodebatch.VoucherExchangeCodeBatchEditReq;
-import com.jiazhe.youxiang.server.vo.req.voucher.exchangecodebatch.VoucherExchangeCodeBatchListReq;
+import com.jiazhe.youxiang.server.vo.req.voucher.exchangecodebatch.VoucherExchangeCodeBatchPageReq;
 import com.jiazhe.youxiang.server.vo.resp.voucher.exchangecodebatch.VoucherExchangeCodeBatchEditResp;
-import com.jiazhe.youxiang.server.vo.resp.voucher.exchangecodebatch.VoucherExchangeCodeBatchListResp;
+import com.jiazhe.youxiang.server.vo.resp.voucher.exchangecodebatch.VoucherExchangeCodeBatchResp;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,15 +40,15 @@ public class APIVoucherExchangeCodeBatchController extends BaseController{
     @Autowired
     private VoucherExchangeCodeBatchBiz voucherExchangeCodeBatchBiz;
 
-    @ApiOperation(value = "分页查询代金券兑换码批次信息（根据项目和批次名称查询）", httpMethod = "GET", response = VoucherExchangeCodeBatchListResp.class, responseContainer = "List",notes = "分页查询代金券兑换码批次信息（根据项目和批次名称查询）")
+    @ApiOperation(value = "分页查询代金券兑换码批次信息（根据项目和批次名称查询）", httpMethod = "GET", response = VoucherExchangeCodeBatchResp.class, responseContainer = "List",notes = "分页查询代金券兑换码批次信息（根据项目和批次名称查询）")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
-    public Object listPage(@ModelAttribute VoucherExchangeCodeBatchListReq req) {
+    public Object listPage(@ModelAttribute VoucherExchangeCodeBatchPageReq req) {
         Paging paging = new Paging();
         paging.setOffset((req.getPageNum()-1)*req.getPageSize());
         paging.setLimit(req.getPageSize());
-        List<VoucherExchangeCodeBatchListDTO> voucherExchangeCodeBatchBizList = voucherExchangeCodeBatchBiz.getList(req.getProjectId(),req.getName(),paging);
-        List<VoucherExchangeCodeBatchListResp> voucherExchangeCodeBatchListRespList = voucherExchangeCodeBatchBizList.stream().map(VoucherExchangeCodeBatchAdapter::DTOList2RespList).collect(Collectors.toList());
-        return ResponseFactory.buildPaginationResponse(voucherExchangeCodeBatchListRespList, paging);
+        List<VoucherExchangeCodeBatchDTO> voucherExchangeCodeBatchDTOList = voucherExchangeCodeBatchBiz.getList(req.getProjectId(),req.getName(),paging);
+        List<VoucherExchangeCodeBatchResp> voucherExchangeCodeBatchRespList = voucherExchangeCodeBatchDTOList.stream().map(VoucherExchangeCodeBatchAdapter::DTO2Resp).collect(Collectors.toList());
+        return ResponseFactory.buildPaginationResponse(voucherExchangeCodeBatchRespList, paging);
     }
 
     @ApiOperation(value = "【新建】保存代金券兑换码批次信息", httpMethod = "POST",notes = "【新建】保存代金券兑换码批次信息")

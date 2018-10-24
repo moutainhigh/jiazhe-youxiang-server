@@ -1,4 +1,4 @@
-package com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangerecord;
+package com.jiazhe.youxiang.server.vo.req.voucher.exchangerecord;
 
 import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,21 +7,21 @@ import java.util.Date;
 
 /**
  * @author TU
- * @description 组合条件查询充值卡兑换记录
+ * @description
  * @date 2018/10/24.
  */
-public class RCExchangeRecordListReq extends PageSizeNumReq {
+public class VoucherExchangeRecordPageReq extends PageSizeNumReq{
 
-    @ApiModelProperty("充值起始时间")
+    @ApiModelProperty("兑换起始时间")
     private Date beginDate;
 
-    @ApiModelProperty("充值结束时间")
+    @ApiModelProperty("兑换结束时间")
     private Date endDate;
 
     @ApiModelProperty("兑换码")
     private String code;
 
-    @ApiModelProperty("密钥")
+    @ApiModelProperty("兑换密钥")
     private String keyt;
 
     public Date getBeginDate() {

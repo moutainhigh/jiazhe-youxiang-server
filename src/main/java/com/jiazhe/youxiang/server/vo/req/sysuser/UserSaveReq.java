@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class UserSaveReq extends BaseVO {
 
+    private static final long serialVersionUID = 4733145743578207329L;
+
     @ApiModelProperty("员工id，新增时为0")
     private Integer id;
 

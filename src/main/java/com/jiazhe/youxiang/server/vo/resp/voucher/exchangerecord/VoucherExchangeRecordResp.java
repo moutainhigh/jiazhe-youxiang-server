@@ -1,4 +1,7 @@
-package com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord;
+package com.jiazhe.youxiang.server.vo.resp.voucher.exchangerecord;
+
+import com.jiazhe.youxiang.server.vo.BaseObject;
+import com.jiazhe.youxiang.server.vo.BaseVO;
 
 import java.util.Date;
 
@@ -7,8 +10,11 @@ import java.util.Date;
  * @description
  * @date 2018/10/24.
  */
-public class RCExchangeRecordListDTO {
+public class VoucherExchangeRecordResp extends BaseVO{
+
     private Integer id;
+
+    private Integer voucherId;
 
     private Integer exchangeCodeId;
 
@@ -16,14 +22,20 @@ public class RCExchangeRecordListDTO {
 
     private String operatorName;
 
-    private Date addTime;
-
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getVoucherId() {
+        return voucherId;
+    }
+
+    public void setVoucherId(Integer voucherId) {
+        this.voucherId = voucherId;
     }
 
     public Integer getExchangeCodeId() {
@@ -49,13 +61,4 @@ public class RCExchangeRecordListDTO {
     public void setOperatorName(String operatorName) {
         this.operatorName = operatorName;
     }
-
-    public Date getAddTime() {
-        return addTime;
-    }
-
-    public void setAddTime(Date addTime) {
-        this.addTime = addTime;
-    }
-
 }

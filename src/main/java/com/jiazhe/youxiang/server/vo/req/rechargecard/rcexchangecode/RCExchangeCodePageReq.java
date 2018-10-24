@@ -8,15 +8,15 @@ import io.swagger.annotations.ApiModelProperty;
  * @description
  * @date 2018/10/24.
  */
-public class RCExchangeCodeListReq extends PageSizeNumReq{
+public class RCExchangeCodePageReq extends PageSizeNumReq{
 
     @ApiModelProperty("批次id")
     private Integer batchId;
 
-    @ApiModelProperty("充值卡码")
+    @ApiModelProperty("充值卡兑换码")
     private String code ;
 
-    @ApiModelProperty("充值卡密钥")
+    @ApiModelProperty("充值卡兑换密钥")
     private String keyt;
 
     public Integer getBatchId() {

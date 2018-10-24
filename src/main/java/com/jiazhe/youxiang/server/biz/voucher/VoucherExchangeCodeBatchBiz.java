@@ -1,8 +1,8 @@
 package com.jiazhe.youxiang.server.biz.voucher;
 
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchAddDTO;
+import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchEditDTO;
-import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchListDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Service("voucherExchangeCodeBatchBiz")
 public class VoucherExchangeCodeBatchBiz {
-    public List<VoucherExchangeCodeBatchListDTO> getList(Integer projectId, String name, Paging paging) {
+    public List<VoucherExchangeCodeBatchDTO> getList(Integer projectId, String name, Paging paging) {
         return null ;
     }
 

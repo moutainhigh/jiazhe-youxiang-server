@@ -1,8 +1,5 @@
-package com.jiazhe.youxiang.server.vo.resp.voucher.exchangecode;
+package com.jiazhe.youxiang.server.dto.voucher.exchangecode;
 
-import com.jiazhe.youxiang.server.vo.BaseObject;
-
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -10,7 +7,7 @@ import java.util.Date;
  * @description
  * @date 2018/10/24.
  */
-public class VoucherExchangeCodeListResp extends BaseObject{
+public class VoucherExchangeCodeDTO {
 
     private Integer id;
 

@@ -1,12 +1,12 @@
 package com.jiazhe.youxiang.server.adapter.voucher;
 
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchAddDTO;
+import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchEditDTO;
-import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchListDTO;
 import com.jiazhe.youxiang.server.vo.req.voucher.exchangecodebatch.VoucherExchangeCodeBatchAddReq;
 import com.jiazhe.youxiang.server.vo.req.voucher.exchangecodebatch.VoucherExchangeCodeBatchEditReq;
 import com.jiazhe.youxiang.server.vo.resp.voucher.exchangecodebatch.VoucherExchangeCodeBatchEditResp;
-import com.jiazhe.youxiang.server.vo.resp.voucher.exchangecodebatch.VoucherExchangeCodeBatchListResp;
+import com.jiazhe.youxiang.server.vo.resp.voucher.exchangecodebatch.VoucherExchangeCodeBatchResp;
 
 /**
  * @author TU
@@ -14,18 +14,18 @@ import com.jiazhe.youxiang.server.vo.resp.voucher.exchangecodebatch.VoucherExcha
  * @date 2018/10/24.
  */
 public class VoucherExchangeCodeBatchAdapter {
-    public static VoucherExchangeCodeBatchListResp DTOList2RespList(VoucherExchangeCodeBatchListDTO voucherExchangeCodeBatchListDTO) {
-        if (voucherExchangeCodeBatchListDTO == null) {
+    public static VoucherExchangeCodeBatchResp DTO2Resp(VoucherExchangeCodeBatchDTO dto) {
+        if (dto == null) {
             return null;
         }
-        VoucherExchangeCodeBatchListResp voucherExchangeCodeBatchListResp = new VoucherExchangeCodeBatchListResp();
-        voucherExchangeCodeBatchListResp.setId(voucherExchangeCodeBatchListDTO.getId());
-        voucherExchangeCodeBatchListResp.setName(voucherExchangeCodeBatchListDTO.getName());
-        voucherExchangeCodeBatchListResp.setAmount(voucherExchangeCodeBatchListDTO.getAmount());
-        voucherExchangeCodeBatchListResp.setCount(voucherExchangeCodeBatchListDTO.getCount());
-        voucherExchangeCodeBatchListResp.setExpiryTime(voucherExchangeCodeBatchListDTO.getExpiryTime());
-        voucherExchangeCodeBatchListResp.setStatus(voucherExchangeCodeBatchListDTO.getStatus());
-        return voucherExchangeCodeBatchListResp;
+        VoucherExchangeCodeBatchResp voucherExchangeCodeBatchResp = new VoucherExchangeCodeBatchResp();
+        voucherExchangeCodeBatchResp.setId(dto.getId());
+        voucherExchangeCodeBatchResp.setName(dto.getName());
+        voucherExchangeCodeBatchResp.setAmount(dto.getAmount());
+        voucherExchangeCodeBatchResp.setCount(dto.getCount());
+        voucherExchangeCodeBatchResp.setExpiryTime(dto.getExpiryTime());
+        voucherExchangeCodeBatchResp.setStatus(dto.getStatus());
+        return voucherExchangeCodeBatchResp;
     }
 
     public static VoucherExchangeCodeBatchAddDTO ReqAdd2DTOAdd(VoucherExchangeCodeBatchAddReq req) {

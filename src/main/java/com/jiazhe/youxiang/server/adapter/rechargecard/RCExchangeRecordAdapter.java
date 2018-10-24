@@ -1,7 +1,7 @@
 package com.jiazhe.youxiang.server.adapter.rechargecard;
 
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord.RCExchangeRecordListDTO;
-import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangerecord.RCExchangeRecordListResp;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord.RCExchangeRecordDTO;
+import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangerecord.RCExchangeRecordResp;
 
 /**
  * @author tu
@@ -9,16 +9,16 @@ import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangerecord.RCExchan
  * @date 2018/10/21
  */
 public class RCExchangeRecordAdapter {
-    public static RCExchangeRecordListResp DTOList2RespList(RCExchangeRecordListDTO rcExchangeRecordListDTO) {
-        if (rcExchangeRecordListDTO == null) {
+    public static RCExchangeRecordResp DTO2Resp(RCExchangeRecordDTO dto) {
+        if (dto == null) {
             return null;
         }
-        RCExchangeRecordListResp rCExchangeRecordListResp = new RCExchangeRecordListResp();
-        rCExchangeRecordListResp.setId(rcExchangeRecordListDTO.getId());
-        rCExchangeRecordListResp.setExchangeCodeId(rcExchangeRecordListDTO.getExchangeCodeId());
-        rCExchangeRecordListResp.setExchangeType(rcExchangeRecordListDTO.getExchangeType());
-        rCExchangeRecordListResp.setOperatorName(rcExchangeRecordListDTO.getOperatorName());
-        rCExchangeRecordListResp.setAddTime(rcExchangeRecordListDTO.getAddTime());
+        RCExchangeRecordResp rCExchangeRecordListResp = new RCExchangeRecordResp();
+        rCExchangeRecordListResp.setId(dto.getId());
+        rCExchangeRecordListResp.setExchangeCodeId(dto.getExchangeCodeId());
+        rCExchangeRecordListResp.setExchangeType(dto.getExchangeType());
+        rCExchangeRecordListResp.setOperatorName(dto.getOperatorName());
+        rCExchangeRecordListResp.setAddTime(dto.getAddTime());
         return rCExchangeRecordListResp;
     }
 }

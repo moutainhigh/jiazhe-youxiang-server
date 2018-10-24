@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @description
  * @date 2018/10/24.
  */
-public class VoucherExchangeCodeBatchListReq extends PageSizeNumReq {
+public class VoucherExchangeCodeBatchPageReq extends PageSizeNumReq {
 
     @ApiModelProperty("项目id")
     Integer projectId;

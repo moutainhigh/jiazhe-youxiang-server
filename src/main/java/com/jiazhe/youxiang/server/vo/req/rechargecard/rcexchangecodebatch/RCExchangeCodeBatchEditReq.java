@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
@@ -11,24 +12,34 @@ import java.util.Date;
  */
 public class RCExchangeCodeBatchEditReq extends BaseVO{
 
+    @ApiModelProperty("充值卡兑换码批次id")
     private Integer id;
 
+    @ApiModelProperty("批次名称")
     private String name;
 
+    @ApiModelProperty("批次描述")
     private String description;
 
+    @ApiModelProperty("项目id")
     private Integer projectId;
 
+    @ApiModelProperty("城市ids，用逗号连接")
     private String cityIds;
 
+    @ApiModelProperty("商品ds，用逗号连接")
     private String productIds;
 
+    @ApiModelProperty("过期时间")
     private Date expiryTime;
 
+    @ApiModelProperty("兑换后，充值卡过期时间")
     private Date rechargeCardExpiryTime;
 
+    @ApiModelProperty("自兑换之日起，***天有效")
     private Integer validityPeriod;
 
+    @ApiModelProperty("充值卡过期类型")
     private Byte expiryType;
 
     public Integer getId() {

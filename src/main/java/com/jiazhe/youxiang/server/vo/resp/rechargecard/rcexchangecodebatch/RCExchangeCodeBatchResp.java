@@ -1,15 +1,18 @@
-package com.jiazhe.youxiang.server.vo.resp.voucher.exchangecodebatch;
+package com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch;
 
-import com.jiazhe.youxiang.server.vo.BaseObject;
+import com.jiazhe.youxiang.server.vo.BaseVO;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @author TU
- * @description
- * @date 2018/10/24.
+ * @author tu
+ * @description：
+ * @date 2018/10/21
  */
-public class VoucherExchangeCodeBatchListResp extends BaseObject {
+public class RCExchangeCodeBatchResp extends BaseVO{
+
+    private static final long serialVersionUID = -2706189259377017376L;
 
     private Integer id;
 
@@ -17,7 +20,7 @@ public class VoucherExchangeCodeBatchListResp extends BaseObject {
 
     private Integer amount;
 
-    private Integer count;
+    private BigDecimal faceValue;
 
     private Date expiryTime;
 
@@ -47,12 +50,12 @@ public class VoucherExchangeCodeBatchListResp extends BaseObject {
         this.amount = amount;
     }
 
-    public Integer getCount() {
-        return count;
+    public BigDecimal getFaceValue() {
+        return faceValue;
     }
 
-    public void setCount(Integer count) {
-        this.count = count;
+    public void setFaceValue(BigDecimal faceValue) {
+        this.faceValue = faceValue;
     }
 
     public Date getExpiryTime() {

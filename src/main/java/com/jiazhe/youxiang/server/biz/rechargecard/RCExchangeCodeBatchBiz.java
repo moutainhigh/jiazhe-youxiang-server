@@ -2,8 +2,8 @@ package com.jiazhe.youxiang.server.biz.rechargecard;
 
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchAddDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchListDTO;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class RCExchangeCodeBatchBiz {
     @Autowired
     private RCExchangeCodeBiz rcExchangeCodeBiz;
 
-    public List<RCExchangeCodeBatchListDTO> getList(Integer projectId, String name, Paging paging) {
+    public List<RCExchangeCodeBatchDTO> getList(Integer projectId, String name, Paging paging) {
         return rcExchangeCodeBatchService.getList(projectId,name,paging);
     }
 
@@ -47,5 +47,13 @@ public class RCExchangeCodeBatchBiz {
 
     public int stopUsing(Integer id) {
         return rcExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
+    }
+
+    public List<RCExchangeCodeBatchDTO> getList(Integer projectId, String name) {
+        return null;
+    }
+
+    public int delete(Integer id) {
+        return 0;
     }
 }

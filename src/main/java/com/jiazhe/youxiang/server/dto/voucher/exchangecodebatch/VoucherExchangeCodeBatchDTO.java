@@ -1,14 +1,13 @@
-package com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch;
+package com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @author tu
- * @description：
- * @date 2018/10/21
+ * @author TU
+ * @description
+ * @date 2018/10/24.
  */
-public class RCExchangeCodeBatchListDTO {
+public class VoucherExchangeCodeBatchDTO {
 
     private Integer id;
 
@@ -16,7 +15,7 @@ public class RCExchangeCodeBatchListDTO {
 
     private Integer amount;
 
-    private BigDecimal faceValue;
+    private Integer count;
 
     private Date expiryTime;
 
@@ -46,12 +45,12 @@ public class RCExchangeCodeBatchListDTO {
         this.amount = amount;
     }
 
-    public BigDecimal getFaceValue() {
-        return faceValue;
+    public Integer getCount() {
+        return count;
     }
 
-    public void setFaceValue(BigDecimal faceValue) {
-        this.faceValue = faceValue;
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
     public Date getExpiryTime() {

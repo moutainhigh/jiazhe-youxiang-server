@@ -9,7 +9,7 @@ import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.DirectChargeReq;
-import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.ExpiryTimeEditReq;
+import com.jiazhe.youxiang.server.vo.req.ExpiryTimeEditReq;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rc.RCResp;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,19 +57,19 @@ public class APIRCController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "根据客户id分页查询所有充值卡", httpMethod = "GET",response = RCResp.class, responseContainer = "List",notes = "根据客户id分页查询所有充值卡")
-    @RequestMapping(value = "/getlist", method = RequestMethod.POST)
-    public Object getList(@ModelAttribute IdReq reqId, @ModelAttribute PageSizeNumReq req) {
+    @ApiOperation(value = "【后台展示】根据客户id查询所有充值卡，【分页】", httpMethod = "GET",response = RCResp.class, responseContainer = "List",notes = "【后台展示】根据客户id查询所有充值卡，【分页】")
+    @RequestMapping(value = "/listpage", method = RequestMethod.POST)
+    public Object listPage(@ModelAttribute IdReq idReq, @ModelAttribute PageSizeNumReq pageReq) {
         //参数检查
         Paging paging = new Paging();
-        paging.setOffset((req.getPageNum()-1)*req.getPageSize());
-        paging.setLimit(req.getPageSize());
-        List<RCDTO> rcDTOList = rcBiz.getList(reqId.getId(),paging);
+        paging.setOffset((pageReq.getPageNum()-1)*pageReq.getPageSize());
+        paging.setLimit(pageReq.getPageSize());
+        List<RCDTO> rcDTOList = rcBiz.getList(idReq.getId(),paging);
         List<RCResp> rcRespList = rcDTOList.stream().map(RCAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildResponse(rcRespList);
     }
 
-    @ApiOperation(value = "根据客户id查询所有【未过期】充值卡", httpMethod = "GET",response = RCResp.class, responseContainer = "List",notes = "根据客户id查询所有【未过期】充值卡")
+    @ApiOperation(value = "【app端使用】根据客户id查询所有【未过期】充值卡", httpMethod = "GET",response = RCResp.class, responseContainer = "List",notes = "根据客户id查询所有【未过期】充值卡")
     @RequestMapping(value = "/findunexpiredbycustomerid", method = RequestMethod.POST)
     public Object changeExpiryTime(@ModelAttribute IdReq req) {
         //参数检查
@@ -78,7 +78,7 @@ public class APIRCController extends BaseController{
         return ResponseFactory.buildResponse(rcRespList);
     }
 
-    @ApiOperation(value = "后台直接给客户充值【任意分数】", httpMethod = "POST",notes = "后台直接给客户充值【任意分数】")
+    @ApiOperation(value = "后台直接给客户充值任意分数", httpMethod = "POST",notes = "后台直接给客户充值任意分数")
     @RequestMapping(value = "/directcharge", method = RequestMethod.POST)
     public Object directCharge(@ModelAttribute DirectChargeReq req) {
         //参数检查

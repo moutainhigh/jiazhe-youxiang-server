@@ -9,7 +9,9 @@ import java.util.Date;
  * @description
  * @date 2018/10/24.
  */
-public class RCExchangeRecordListResp extends BaseVO{
+public class RCExchangeRecordResp extends BaseVO{
+
+    private static final long serialVersionUID = 1698163218039110811L;
 
     private Integer id;
 

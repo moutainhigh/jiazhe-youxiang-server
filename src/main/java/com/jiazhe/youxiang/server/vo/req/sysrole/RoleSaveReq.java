@@ -12,7 +12,7 @@ public class RoleSaveReq extends BaseVO {
 
     private static final long serialVersionUID = 2874917878062407932L;
 
-    @ApiModelProperty("角色id")
+    @ApiModelProperty("角色id，新增时为0")
     private int id;
 
     @ApiModelProperty("角色名称")

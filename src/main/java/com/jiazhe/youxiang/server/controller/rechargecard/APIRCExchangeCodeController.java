@@ -3,14 +3,14 @@ package com.jiazhe.youxiang.server.controller.rechargecard;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCExchangeCodeBiz;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeListDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecode.CodeChargeReq;
-import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecode.ExpiryTimeEditReq;
-import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecode.RCExchangeCodeListReq;
-import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecode.RCExchangeCodeListResp;
+import com.jiazhe.youxiang.server.vo.req.ExpiryTimeEditReq;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecode.RCExchangeCodePageReq;
+import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecode.RCExchangeCodeResp;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,15 +37,15 @@ public class APIRCExchangeCodeController extends BaseController{
     @Autowired
     private RCExchangeCodeBiz rcExchangeCodeBiz;
 
-    @ApiOperation(value = "分页查询充值卡兑换码（根据批次id和兑换码的码和密钥查询）", httpMethod = "GET", response = RCExchangeCodeListResp.class, responseContainer = "List",notes = "分页查询充值卡兑换码（根据批次id和兑换码的码和密钥查询）")
+    @ApiOperation(value = "分页查询充值卡兑换码（根据批次id和兑换码的码和密钥查询）", httpMethod = "GET", response = RCExchangeCodeResp.class, responseContainer = "List",notes = "分页查询充值卡兑换码（根据批次id和兑换码的码和密钥查询）")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
-    public Object listPage(@ModelAttribute RCExchangeCodeListReq req) {
+    public Object listPage(@ModelAttribute RCExchangeCodePageReq req) {
         Paging paging = new Paging();
         paging.setOffset((req.getPageNum()-1)*req.getPageSize());
         paging.setLimit(req.getPageSize());
-        List<RCExchangeCodeListDTO> rcExchangeCodeListDTOS = rcExchangeCodeBiz.getList(req.getBatchId(),req.getCode(),req.getKeyt(),paging);
-        List<RCExchangeCodeListResp> rcExchangeCodeBatchListResps = rcExchangeCodeListDTOS.stream().map(RCExchangeCodeAdapter::DTOList2RespList).collect(Collectors.toList());
-        return ResponseFactory.buildPaginationResponse(rcExchangeCodeBatchListResps, paging);
+        List<RCExchangeCodeDTO> rcExchangeCodeDTOList = rcExchangeCodeBiz.getList(req.getBatchId(),req.getCode(),req.getKeyt(),paging);
+        List<RCExchangeCodeResp> rcExchangeCodeBatchRespList = rcExchangeCodeDTOList.stream().map(RCExchangeCodeAdapter::DTO2Resp).collect(Collectors.toList());
+        return ResponseFactory.buildPaginationResponse(rcExchangeCodeBatchRespList, paging);
     }
 
     @ApiOperation(value = "启用充值卡兑换码", httpMethod = "POST",notes = "启用充值卡兑换码")
@@ -72,7 +72,7 @@ public class APIRCExchangeCodeController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "客户用兑换码自行充值", httpMethod = "POST",notes = "客户用兑换码自行充值")
+    @ApiOperation(value = "客户用用兑换码自行充值", httpMethod = "POST",notes = "客户用用兑换码自行充值")
     @RequestMapping(value = "/customerselfcodecharge", method = RequestMethod.POST)
     public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) {
         //参数检查

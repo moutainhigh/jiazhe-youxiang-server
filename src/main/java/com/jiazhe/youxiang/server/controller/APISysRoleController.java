@@ -29,8 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 后台所有关于角色的接口
- *
+ * 所有关于角色的接口
  * @author TU
  * @date 2018/10/14.
  */

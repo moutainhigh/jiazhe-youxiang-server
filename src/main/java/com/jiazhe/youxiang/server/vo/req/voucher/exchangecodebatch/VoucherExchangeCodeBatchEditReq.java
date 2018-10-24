@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.server.vo.req.voucher.exchangecodebatch;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 /**
@@ -9,22 +11,31 @@ import java.util.Date;
  */
 public class VoucherExchangeCodeBatchEditReq {
 
+    @ApiModelProperty("代金券兑换码批次id")
     private Integer id;
 
+    @ApiModelProperty("代金券兑换码批次名称")
     private String name;
 
+    @ApiModelProperty("描述信息")
     private String description;
 
+    @ApiModelProperty("城市ids，用逗号连接")
     private String cityIds;
 
+    @ApiModelProperty("商品ids，用逗号连接")
     private String productIds;
 
+    @ApiModelProperty("代金券兑换码批次过期时间")
     private Date expiryTime;
 
+    @ApiModelProperty("兑换后，代金券过期时间")
     private Date voucherExpiryTime;
 
+    @ApiModelProperty("自兑换之日起，代金券***天内有效")
     private Integer validityPeriod;
 
+    @ApiModelProperty("代金券过期类型")
     private Byte expiryType;
 
     public Integer getId() {

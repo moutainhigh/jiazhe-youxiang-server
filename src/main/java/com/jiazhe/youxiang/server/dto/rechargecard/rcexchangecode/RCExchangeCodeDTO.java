@@ -1,5 +1,6 @@
-package com.jiazhe.youxiang.server.dto.voucher.exchangecode;
+package com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Date;
  * @description
  * @date 2018/10/24.
  */
-public class VoucherExchangeCodeListDTO {
+public class RCExchangeCodeDTO {
 
     private Integer id;
 
@@ -16,6 +17,8 @@ public class VoucherExchangeCodeListDTO {
     private String code;
 
     private String keyt;
+
+    private BigDecimal faceValue;
 
     private Date expiryTime;
 
@@ -53,6 +56,14 @@ public class VoucherExchangeCodeListDTO {
 
     public void setKeyt(String keyt) {
         this.keyt = keyt;
+    }
+
+    public BigDecimal getFaceValue() {
+        return faceValue;
+    }
+
+    public void setFaceValue(BigDecimal faceValue) {
+        this.faceValue = faceValue;
     }
 
     public Date getExpiryTime() {

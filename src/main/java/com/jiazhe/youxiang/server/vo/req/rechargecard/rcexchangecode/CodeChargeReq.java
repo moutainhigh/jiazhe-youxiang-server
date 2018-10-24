@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecode;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author TU
@@ -9,8 +10,10 @@ import com.jiazhe.youxiang.server.vo.BaseVO;
  */
 public class CodeChargeReq extends BaseVO {
 
+    @ApiModelProperty("密钥")
     String keyt ;
 
+    @ApiModelProperty("客户手机号")
     String mobile;
 
     public String getKeyt() {

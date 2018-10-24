@@ -13,14 +13,16 @@ import java.util.Date;
  */
 public class RCExchangeCodeBatchAddReq extends BaseVO {
 
+    private static final long serialVersionUID = 4463662904507337273L;
+
     @ApiModelProperty("批次名称")
     private String name;
 
-    @ApiModelProperty("描述信息")
-    private String description;
-
     @ApiModelProperty("兑换码数量")
     private Integer amount;
+
+    @ApiModelProperty("面额")
+    private BigDecimal faceValue;
 
     @ApiModelProperty("对应项目id")
     private Integer projectId;
@@ -31,20 +33,21 @@ public class RCExchangeCodeBatchAddReq extends BaseVO {
     @ApiModelProperty("对应商品id")
     private String productIds;
 
-    @ApiModelProperty("面额")
-    private BigDecimal faceValue;
-
     @ApiModelProperty("批次过期时间")
     private Date expiryTime;
 
     @ApiModelProperty("充值卡过期时间")
     private Date rechargeCardExpiryTime;
 
-    @ApiModelProperty("充值卡过期跨度")
+    @ApiModelProperty("自兑换之日起，***天有效")
     private Integer validityPeriod;
 
     @ApiModelProperty("充值卡过期类型")
     private Byte expiryType;
+
+    @ApiModelProperty("描述信息")
+    private String description;
+
 
     public String getName() {
         return name;

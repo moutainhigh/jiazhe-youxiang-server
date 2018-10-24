@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecode;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -8,7 +10,7 @@ import java.util.Date;
  * @description
  * @date 2018/10/24.
  */
-public class RCExchangeCodeListResp {
+public class RCExchangeCodeResp extends BaseObject {
 
     private Integer id;
 

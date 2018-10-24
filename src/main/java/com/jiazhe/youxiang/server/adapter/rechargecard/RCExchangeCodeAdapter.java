@@ -2,10 +2,10 @@ package com.jiazhe.youxiang.server.adapter.rechargecard;
 
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeListDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeSaveDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
-import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecode.RCExchangeCodeListResp;
+import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecode.RCExchangeCodeResp;
 
 /**
  * @author tu
@@ -54,11 +54,19 @@ public class RCExchangeCodeAdapter {
         return rCExchangeCodeBatchEditDTO;
     }
 
-    public static RCExchangeCodeListResp DTOList2RespList(RCExchangeCodeListDTO rcExchangeCodeListDTO) {
-        if (rcExchangeCodeListDTO == null) {
+    public static RCExchangeCodeResp DTO2Resp(RCExchangeCodeDTO dto) {
+        if (dto == null) {
             return null;
         }
-        RCExchangeCodeListResp rCExchangeCodeListResp = new RCExchangeCodeListResp();
-        return rCExchangeCodeListResp;
+        RCExchangeCodeResp rCExchangeCodeResp = new RCExchangeCodeResp();
+        rCExchangeCodeResp.setId(dto.getId());
+        rCExchangeCodeResp.setBatchName(dto.getBatchName());
+        rCExchangeCodeResp.setCode(dto.getCode());
+        rCExchangeCodeResp.setKeyt(dto.getKeyt());
+        rCExchangeCodeResp.setFaceValue(dto.getFaceValue());
+        rCExchangeCodeResp.setExpiryTime(dto.getExpiryTime());
+        rCExchangeCodeResp.setStatus(dto.getStatus());
+        rCExchangeCodeResp.setUsed(dto.getUsed());
+        return rCExchangeCodeResp;
     }
 }

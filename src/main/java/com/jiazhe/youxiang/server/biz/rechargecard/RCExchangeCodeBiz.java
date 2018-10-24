@@ -1,7 +1,7 @@
 package com.jiazhe.youxiang.server.biz.rechargecard;
 
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeListDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class RCExchangeCodeBiz {
         return rcExchangeCodeService.codeCharge(0,mobile,keyt);
     }
 
-    public List<RCExchangeCodeListDTO> getList(Integer batchId, String code, String keyt, Paging paging) {
+    public List<RCExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Paging paging) {
         return null;
     }
 }

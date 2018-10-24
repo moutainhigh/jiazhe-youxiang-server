@@ -1,7 +1,7 @@
 package com.jiazhe.youxiang.server.adapter.voucher;
 
-import com.jiazhe.youxiang.server.dto.voucher.exchangerecord.VoucherExchangeRecordListDTO;
-import com.jiazhe.youxiang.server.vo.resp.voucher.exchangerecord.VoucherExchangeRecordListResp;
+import com.jiazhe.youxiang.server.dto.voucher.exchangerecord.VoucherExchangeRecordDTO;
+import com.jiazhe.youxiang.server.vo.resp.voucher.exchangerecord.VoucherExchangeRecordResp;
 
 /**
  * @author TU
@@ -9,16 +9,16 @@ import com.jiazhe.youxiang.server.vo.resp.voucher.exchangerecord.VoucherExchange
  * @date 2018/10/24.
  */
 public class VoucherExchangeRecordAdapter {
-    public static VoucherExchangeRecordListResp DTOList2RespList(VoucherExchangeRecordListDTO voucherExchangeRecordListDTO) {
-        if (voucherExchangeRecordListDTO == null) {
+    public static VoucherExchangeRecordResp DTO2Resp(VoucherExchangeRecordDTO dto) {
+        if (dto == null) {
             return null;
         }
-        VoucherExchangeRecordListResp voucherExchangeRecordListResp = new VoucherExchangeRecordListResp();
-        voucherExchangeRecordListResp.setId(voucherExchangeRecordListDTO.getId());
-        voucherExchangeRecordListResp.setVoucherId(voucherExchangeRecordListDTO.getVoucherId());
-        voucherExchangeRecordListResp.setExchangeCodeId(voucherExchangeRecordListDTO.getExchangeCodeId());
-        voucherExchangeRecordListResp.setExchangeType(voucherExchangeRecordListDTO.getExchangeType());
-        voucherExchangeRecordListResp.setOperatorName(voucherExchangeRecordListDTO.getOperatorName());
-        return voucherExchangeRecordListResp;
+        VoucherExchangeRecordResp voucherExchangeRecordResp = new VoucherExchangeRecordResp();
+        voucherExchangeRecordResp.setId(dto.getId());
+        voucherExchangeRecordResp.setVoucherId(dto.getVoucherId());
+        voucherExchangeRecordResp.setExchangeCodeId(dto.getExchangeCodeId());
+        voucherExchangeRecordResp.setExchangeType(dto.getExchangeType());
+        voucherExchangeRecordResp.setOperatorName(dto.getOperatorName());
+        return voucherExchangeRecordResp;
     }
 }
