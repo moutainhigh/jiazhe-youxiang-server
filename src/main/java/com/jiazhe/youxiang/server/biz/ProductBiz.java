@@ -26,70 +26,70 @@ public class ProductBiz {
 
     /*************商品分类相关******************/
 
-    public static void addCategory(ProductCategoryDTO productCategoryDTO) {
+    public void addCategory(ProductCategoryDTO productCategoryDTO) {
     }
 
-    public static ProductCategoryDTO getCategoryById(Integer id) {
+    public ProductCategoryDTO getCategoryById(Integer id) {
         return null;
     }
 
-    public static List<ProductCategoryDTO> getCategoryList(String name, Paging paging) {
+    public List<ProductCategoryDTO> getCategoryList(String name, Paging paging) {
         return null;
     }
 
-    public static void deleteCategory(Integer id) {
+    public void deleteCategory(Integer id) {
     }
 
-    public static void updateCategory(ProductCategoryDTO productCategoryDTO) {
+    public void updateCategory(ProductCategoryDTO productCategoryDTO) {
     }
 
-    public static void updateCategoryStatus(Integer id, Byte status) {
+    public void updateCategoryStatus(Integer id, Byte status) {
     }
 
     /*************商品相关******************/
 
-    public static void add(ProductDTO productDTO) {
+    public void add(ProductDTO productDTO) {
     }
 
-    public static ProductDTO getById(Integer id) {
+    public ProductDTO getById(Integer id) {
         return null;
     }
 
-    public static List<ProductDTO> getList(Integer productCategoryId, String name, Integer productType, Integer status, Paging paging) {
+    public List<ProductDTO> getList(Integer productCategoryId, String name, Integer productType, Integer status, Paging paging) {
         return null;
     }
 
-    public static void update(ProductDTO productDTO) {
+    public void update(ProductDTO productDTO) {
     }
 
-    public static void delete(Integer id) {
+    public void delete(Integer id) {
 
     }
 
-    public static void updateStatus(Integer id, Byte status) {
+    public void updateStatus(Integer id, Byte status) {
     }
 
     /*************商品价格相关******************/
 
-    public static void addPrice(ProductPriceDTO productPriceDTO) {
+    public void addPrice(ProductPriceDTO productPriceDTO) {
     }
 
-    public static ProductPriceDTO getPriceById(Integer id) {
+    public ProductPriceDTO getPriceById(Integer id) {
         return null;
     }
 
-    public static ProductPriceDTO getPriceByCity(Integer productId, Integer productId1) {
+    public ProductPriceDTO getPriceByCity(Integer productId, Integer productId1) {
         return null;
     }
 
-    public static List<ProductPriceDTO> getPriceListByProductId(Integer productId) {
+    public List<ProductPriceDTO> getPriceListByProductId(Integer productId) {
         return Lists.newArrayList();
     }
 
-    public static void updatePrice(Integer id, BigDecimal price) {
+    public void updatePrice(Integer id, BigDecimal price) {
     }
 
-    public static void deletePrice(Integer id) {
+    public void deletePrice(Integer id) {
     }
 
 

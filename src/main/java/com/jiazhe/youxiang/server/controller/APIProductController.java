@@ -69,7 +69,7 @@ public class APIProductController {
         //TODO niexiao 参数验证
         ProductCategoryDTO productCategoryDTO = ProductAdapter.productCategoryAddReq2DTO(req);
         //调用BIZ方法
-        ProductBiz.addCategory(productCategoryDTO);
+        productBiz.addCategory(productCategoryDTO);
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -84,7 +84,7 @@ public class APIProductController {
     public Object getCategoryById(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
-        ProductCategoryDTO productCategoryDTO = ProductBiz.getCategoryById(req.getId());
+        ProductCategoryDTO productCategoryDTO = productBiz.getCategoryById(req.getId());
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildResponse(ProductAdapter.productCategoryDTO2VO(productCategoryDTO));
     }
@@ -102,7 +102,7 @@ public class APIProductController {
         paging.setOffset(req.getOffset());
         paging.setLimit(req.getLimit());
         //调用BIZ方法
-        List<ProductCategoryDTO> productCategoryDTOList = ProductBiz.getCategoryList(req.getName(), paging);
+        List<ProductCategoryDTO> productCategoryDTOList = productBiz.getCategoryList(req.getName(), paging);
         //将DTO转成VO
         List<ProductCategoryResp> result = productCategoryDTOList.stream().map(ProductAdapter::productCategoryDTO2VO).collect(Collectors.toList());
         //用ResponseFactory将返回值包装
@@ -121,7 +121,7 @@ public class APIProductController {
         CommonValidator.validateId(req);
         ProductCategoryDTO productCategoryDTO = ProductAdapter.productCategoryUpdateReq2DTO(req);
         //调用BIZ方法
-        ProductBiz.updateCategory(productCategoryDTO);
+        productBiz.updateCategory(productCategoryDTO);
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -137,7 +137,7 @@ public class APIProductController {
         //TODO niexiao 参数验证
         validateStatus(req);
         //调用BIZ方法
-        ProductBiz.updateCategoryStatus(req.getId(), req.getStatus());
+        productBiz.updateCategoryStatus(req.getId(), req.getStatus());
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -152,7 +152,7 @@ public class APIProductController {
     public Object deleteCategory(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
-        ProductBiz.deleteCategory(req.getId());
+        productBiz.deleteCategory(req.getId());
         return ResponseFactory.buildSuccess();
     }
 
@@ -169,7 +169,7 @@ public class APIProductController {
         //TODO niexiao 参数验证
         ProductDTO productDTO = ProductAdapter.productAddReq2DTO(req);
         //调用BIZ方法
-        ProductBiz.add(productDTO);
+        productBiz.add(productDTO);
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -184,7 +184,7 @@ public class APIProductController {
     public Object getById(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
-        ProductDTO productDTO = ProductBiz.getById(req.getId());
+        ProductDTO productDTO = productBiz.getById(req.getId());
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildResponse(ProductAdapter.productDTO2VO(productDTO));
     }
@@ -202,7 +202,7 @@ public class APIProductController {
         paging.setOffset(req.getOffset());
         paging.setLimit(req.getLimit());
         //调用BIZ方法
-        List<ProductDTO> productDTOList = ProductBiz.getList(req.getProductCategoryId(), req.getName(), req.getProductType(), req.getStatus(), paging);
+        List<ProductDTO> productDTOList = productBiz.getList(req.getProductCategoryId(), req.getName(), req.getProductType(), req.getStatus(), paging);
         //将DTO转成VO
         List<ProductResp> result = productDTOList.stream().map(ProductAdapter::productDTO2VO).collect(Collectors.toList());
         //用ResponseFactory将返回值包装
@@ -221,7 +221,7 @@ public class APIProductController {
         CommonValidator.validateId(req);
         ProductDTO productDTO = ProductAdapter.productUpdateReq2DTO(req);
         //调用BIZ方法
-        ProductBiz.update(productDTO);
+        productBiz.update(productDTO);
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -237,7 +237,7 @@ public class APIProductController {
         //TODO niexiao 参数验证
         validateStatus(req);
         //调用BIZ方法
-        ProductBiz.updateStatus(req.getId(), req.getStatus());
+        productBiz.updateStatus(req.getId(), req.getStatus());
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -252,7 +252,7 @@ public class APIProductController {
     public Object delete(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
-        ProductBiz.delete(req.getId());
+        productBiz.delete(req.getId());
         return ResponseFactory.buildSuccess();
     }
 
@@ -269,7 +269,7 @@ public class APIProductController {
         //TODO niexiao 参数验证
         ProductPriceDTO productPriceDTO = ProductAdapter.productPriceAddReq2DTO(req);
         //调用BIZ方法
-        ProductBiz.addPrice(productPriceDTO);
+        productBiz.addPrice(productPriceDTO);
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -284,7 +284,7 @@ public class APIProductController {
     public Object getPriceById(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
-        ProductPriceDTO productPriceDTO = ProductBiz.getPriceById(req.getId());
+        ProductPriceDTO productPriceDTO = productBiz.getPriceById(req.getId());
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildResponse(ProductAdapter.productPriceDTO2VO(productPriceDTO));
     }
@@ -299,7 +299,7 @@ public class APIProductController {
     public Object getPriceByCity(@ModelAttribute GetProductPriceByCity req) {
         CommonValidator.validateNull(req);
         //调用BIZ方法
-        ProductPriceDTO productPriceDTO = ProductBiz.getPriceByCity(req.getProductId(), req.getProductId());
+        ProductPriceDTO productPriceDTO = productBiz.getPriceByCity(req.getProductId(), req.getProductId());
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildResponse(ProductAdapter.productPriceDTO2VO(productPriceDTO));
     }
@@ -314,7 +314,7 @@ public class APIProductController {
     public Object getPriceListByProductId(@ModelAttribute ProductPriceListReq req) {
         CommonValidator.validateId(req.getProductId());
         //调用BIZ方法
-        List<ProductPriceDTO> productPriceDTOList = ProductBiz.getPriceListByProductId(req.getProductId());
+        List<ProductPriceDTO> productPriceDTOList = productBiz.getPriceListByProductId(req.getProductId());
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildResponse(productPriceDTOList.stream().map(ProductAdapter::productPriceDTO2VO).collect(Collectors.toList()));
     }
@@ -330,7 +330,7 @@ public class APIProductController {
         //TODO niexiao 参数验证
         CommonValidator.validateId(req);
         //调用BIZ方法
-        ProductBiz.updatePrice(req.getId(), req.getPrice());
+        productBiz.updatePrice(req.getId(), req.getPrice());
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -345,7 +345,7 @@ public class APIProductController {
     public Object deletePrice(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
-        ProductBiz.deletePrice(req.getId());
+        productBiz.deletePrice(req.getId());
         return ResponseFactory.buildSuccess();
     }
 
