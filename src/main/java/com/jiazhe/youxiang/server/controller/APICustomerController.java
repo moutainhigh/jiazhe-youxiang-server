@@ -67,7 +67,7 @@ public class APICustomerController {
      * @return
      */
     @ApiOperation(value = "查询某一用户信息", httpMethod = "GET", response = CustomerResp.class, notes = "查询某一用户信息")
-    @RequestMapping(value = "getById", method = RequestMethod.GET)
+    @RequestMapping(value = "getbyid", method = RequestMethod.GET)
     public Object getById(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
@@ -76,21 +76,21 @@ public class APICustomerController {
         return ResponseFactory.buildResponse(CustomerAdapter.customerDTO2VO(customerDTO));
     }
 
-
-    /**
-     * 查询用户充值卡信息
-     *
-     * @return
-     */
-    @ApiOperation(value = "查询某一用户信息", httpMethod = "GET", response = CustomerDetailResp.class, notes = "查询某一用户信息")
-    @RequestMapping(value = "getrechargecardbycustomerid", method = RequestMethod.GET)
-    public Object getRechargeCardByCustomerId(@ModelAttribute IdReq req) {
-        CommonValidator.validateId(req);
-        //调用BIZ方法
-        CustomerDTO customerDTO = customerBiz.getById(req.getId());
-        //用ResponseFactory将返回值包装
-        return ResponseFactory.buildResponse(CustomerAdapter.customerDTO2VO(customerDTO));
-    }
+//
+//    /**
+//     * 查询用户充值卡信息
+//     *
+//     * @return
+//     */
+//    @ApiOperation(value = "查询某一用户信息", httpMethod = "GET", response = CustomerDetailResp.class, notes = "查询某一用户信息")
+//    @RequestMapping(value = "getrechargecardbycustomerid", method = RequestMethod.GET)
+//    public Object getRechargeCardByCustomerId(@ModelAttribute IdReq req) {
+//        CommonValidator.validateId(req);
+//        //调用BIZ方法
+//        CustomerDTO customerDTO = customerBiz.getById(req.getId());
+//        //用ResponseFactory将返回值包装
+//        return ResponseFactory.buildResponse(CustomerAdapter.customerDTO2VO(customerDTO));
+//    }
 
     /**
      * 查询客户列表
