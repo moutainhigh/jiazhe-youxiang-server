@@ -10,8 +10,8 @@ import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeSaveDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchAddDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchListDTO;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeService;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -39,14 +39,14 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
     private RCExchangeCodeService rcExchangeCodeService;
 
     @Override
-    public List<RCExchangeCodeBatchListDTO> getList(Integer projectId, String name, Paging paging) {
+    public List<RCExchangeCodeBatchDTO> getList(Integer projectId, String name, Paging paging) {
         Integer count = rcExchangeCodeBatchPOManualMapper.count(projectId,name);
         List<RechargeCardExchangeCodeBatchPO> rechargeCardExchangeCodeBatchPOList = rcExchangeCodeBatchPOManualMapper.query(projectId,name,paging.getOffset(),paging.getLimit());
         paging.setTotal(count);
         if (paging.getLimit() + paging.getOffset() >= count) {
             paging.setHasMore(false);
         }
-        return rechargeCardExchangeCodeBatchPOList.stream().map(RCExchangeCodeBatchAdapter::PO2DTOList).collect(Collectors.toList());
+        return rechargeCardExchangeCodeBatchPOList.stream().map(RCExchangeCodeBatchAdapter::PO2DTO).collect(Collectors.toList());
     }
 
     @Override

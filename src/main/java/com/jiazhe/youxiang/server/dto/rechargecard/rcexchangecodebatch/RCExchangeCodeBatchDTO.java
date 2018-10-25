@@ -8,7 +8,7 @@ import java.util.Date;
  * @description：
  * @date 2018/10/21
  */
-public class RCExchangeCodeBatchListDTO {
+public class RCExchangeCodeBatchDTO {
 
     private Integer id;
 

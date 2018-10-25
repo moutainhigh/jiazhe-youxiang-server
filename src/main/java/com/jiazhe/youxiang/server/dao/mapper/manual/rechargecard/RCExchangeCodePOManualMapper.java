@@ -12,4 +12,6 @@ import java.util.List;
 public interface RCExchangeCodePOManualMapper {
 
     int batchSave(List<RechargeCardExchangeCodePO> rechargeCardExchangeCodePOList);
+
+    RechargeCardExchangeCodePO findByKeyt(String keyt);
 }

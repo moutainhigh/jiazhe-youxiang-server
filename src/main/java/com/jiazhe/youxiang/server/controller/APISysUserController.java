@@ -48,14 +48,14 @@ public class APISysUserController extends BaseController{
     @Autowired
     private SysUserBiz sysUserBiz;
 
-    @ApiOperation(value = "listall", httpMethod = "GET", response = SysUserResp.class, responseContainer = "List",notes = "查询所有用户信息")
+    @ApiOperation(value = "查询所有员工信息", httpMethod = "GET", response = SysUserResp.class, responseContainer = "List",notes = "查询所有员工信息")
     @RequestMapping(value = "/listall", method = RequestMethod.GET)
     public Object listAll() {
         List<SysUserDTO> sysUserDTOList = sysUserBiz.findAll();
         return ResponseFactory.buildResponse(sysUserDTOList);
     }
 
-    @ApiOperation(value = "listpage", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List",notes = "分页查询用户信息")
+    @ApiOperation(value = "分页查询员工信息", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List",notes = "分页查询员工信息")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute UserPageReq req) {
         Paging paging = new Paging();
@@ -66,7 +66,7 @@ public class APISysUserController extends BaseController{
         return ResponseFactory.buildPaginationResponse(sysUserRespList, paging);
     }
 
-    @ApiOperation(value = "delete", httpMethod = "POST", response = SysUserResp.class, notes = "根据id删除用户信息（包含对应角色）")
+    @ApiOperation(value = "根据id删除员工信息（包含对应角色）", httpMethod = "POST", notes = "根据id删除员工信息（包含对应角色）")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public Object delete(@ModelAttribute IdReq req) {
         int count = sysUserBiz.deleteUserWithRole(req.getId());
@@ -76,17 +76,17 @@ public class APISysUserController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "getbyid", httpMethod = "GET", response = SysUserResp.class, notes = "根据id获取用户信息（包含角色）")
+    @ApiOperation(value = "根据id获取员工信息（包含角色）", httpMethod = "GET", response = UserWithRoleResp.class, notes = "根据id获取员工信息（包含角色）")
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
     public Object getById(@ModelAttribute IdReq req) {
-        //当前用户信息(包括角色字符串）DTO
+        //当前员工信息(包括角色字符串）DTO
         UserWithRoleDTO dto = sysUserBiz.findUserWithRoleById(req.getId());
         //将DTO转为respVO返回
         UserWithRoleResp result = SysUserAdapter.userWithRoleDTO2UserWithRoleResp(dto);
         return ResponseFactory.buildResponse(result);
     }
 
-    @ApiOperation(value = "save", httpMethod = "POST", response = SysRoleResp.class, notes = "保存用户信息")
+    @ApiOperation(value = "【新建、修改】保存员工信息", httpMethod = "POST", notes = "【新建、修改】保存员工信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Object save(@ModelAttribute UserSaveReq req) {
         /*参数检查*/

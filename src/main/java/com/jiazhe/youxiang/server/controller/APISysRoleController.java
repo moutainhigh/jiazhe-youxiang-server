@@ -29,8 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 后台所有关于角色的接口
- *
+ * 所有关于角色的接口
  * @author TU
  * @date 2018/10/14.
  */
@@ -43,7 +42,7 @@ public class APISysRoleController extends BaseController {
     @Autowired
     private SysRoleBiz sysRoleBiz;
 
-    @ApiOperation(value = "listall", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List",notes = "查询所有角色信息")
+    @ApiOperation(value = "查询所有角色信息", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List",notes = "查询所有角色信息")
     @RequestMapping(value = "/listall", method = RequestMethod.GET)
     public Object listAll() {
         List<SysRoleDTO> sysRoleDTOList = sysRoleBiz.findAll();
@@ -51,7 +50,7 @@ public class APISysRoleController extends BaseController {
         return ResponseFactory.buildResponse(sysRoleRespList);
     }
 
-    @ApiOperation(value = "listpage", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List",notes = "分页查询角色信息")
+    @ApiOperation(value = "分页查询角色信息", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List",notes = "分页查询角色信息")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute RolePageReq req) {
         Paging paging = new Paging();
@@ -62,7 +61,7 @@ public class APISysRoleController extends BaseController {
         return ResponseFactory.buildPaginationResponse(sysRoleRespList, paging);
     }
 
-    @ApiOperation(value = "delete", httpMethod = "POST", response = SysRoleResp.class, notes = "根据id删除角色信息（包含权限）")
+    @ApiOperation(value = "根据id删除角色信息（包含权限）", httpMethod = "POST",notes = "根据id删除角色信息（包含权限）")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public Object delete(@ModelAttribute IdReq req) {
         int count = sysRoleBiz.deleteRoleWithPerms(req.getId());
@@ -72,7 +71,7 @@ public class APISysRoleController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "getbyid", httpMethod = "GET", response = SysRoleResp.class, notes = "根据id获取角色信息（包含权限）")
+    @ApiOperation(value = "根据id获取角色信息（包含权限）", httpMethod = "GET", response = RoleWithPermResp.class, notes = "根据id获取角色信息（包含权限）")
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
     public Object getById(@ModelAttribute IdReq req) {
         //当前角色信息(包括权限字符串）DTO
@@ -82,7 +81,7 @@ public class APISysRoleController extends BaseController {
         return ResponseFactory.buildResponse(result);
     }
 
-    @ApiOperation(value = "save", httpMethod = "POST", response = SysRoleResp.class, notes = "保存角色信息")
+    @ApiOperation(value = "【新建、修改】保存角色信息", httpMethod = "POST", notes = "【新建、修改】保存角色信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Object save(@ModelAttribute RoleSaveReq req) {
         /*参数检查*/

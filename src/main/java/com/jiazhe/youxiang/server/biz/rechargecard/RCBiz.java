@@ -1,12 +1,19 @@
 package com.jiazhe.youxiang.server.biz.rechargecard;
 
+import com.jiazhe.youxiang.server.adapter.rechargecard.RCAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
+import com.jiazhe.youxiang.server.domain.po.RechargeCardPO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
 import com.jiazhe.youxiang.server.service.rechargecard.RCService;
+import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author tu
@@ -29,5 +36,20 @@ public class RCBiz {
 
     public int changeExpiryTime(Integer id, Date expiryTime) {
         return rcService.changeExpiryTime(id,expiryTime);
+    }
+
+
+    public int directCharge(String mobile , Integer batchId, BigDecimal faceValue) {
+        return rcService.directCharge(mobile,batchId,faceValue);
+    }
+
+    public List<RCDTO> getList(Integer customerId, Paging paging) {
+        return null ;
+    }
+
+
+    public List<RCDTO> findUnexpiredByCustomerId(Integer customerId) {
+        List<RCDTO> rcdtoList =rcService.findUnexpiredByCustomerId(customerId);
+        return rcdtoList;
     }
 }
