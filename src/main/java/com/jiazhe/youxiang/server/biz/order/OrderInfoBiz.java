@@ -1,7 +1,6 @@
 package com.jiazhe.youxiang.server.biz.order;
 
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
-import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoListDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerPlaceOrderReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserPlaceOrderReq;
@@ -20,7 +19,7 @@ import java.util.List;
 @Service("orderInfoBiz")
 public class OrderInfoBiz {
 
-    public List<OrderInfoListDTO> getList(String mobile, Byte status, Paging paging) {
+    public List<OrderInfoDTO> getList(String mobile, Byte status, Paging paging) {
         return null ;
     }
 
@@ -56,11 +55,11 @@ public class OrderInfoBiz {
         return 0;
     }
 
-    public int customerPlaceOrder(UserPlaceOrderReq req) {
+    public int customerPlaceOrder(CustomerPlaceOrderReq req) {
         return 0;
     }
 
-    public int userPlaceOrder(CustomerPlaceOrderReq req) {
+    public int userPlaceOrder(UserPlaceOrderReq req) {
         return 0;
     }
 
@@ -70,5 +69,13 @@ public class OrderInfoBiz {
 
     public OrderInfoDTO getById(Integer id) {
         return null;
+    }
+
+    public Integer getUnsentOrderCount() {
+        return 0;
+    }
+
+    public Integer getUnauditOrderCount() {
+        return 0;
     }
 }

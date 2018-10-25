@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.req.order.orderinfo;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -12,51 +13,35 @@ import java.util.Date;
  */
 public class CustomerPlaceOrderReq  extends BaseVO {
 
-    private Integer id;
-
-    private String orderCode;
-
+    @ApiModelProperty("客户id")
     private Integer customerId;
 
+    @ApiModelProperty("商品id")
     private Integer productId;
 
+    @ApiModelProperty("商品价格")
     private Integer productPrice;
 
+    @ApiModelProperty("下单数量")
     private Integer count;
 
+    @ApiModelProperty("订单地址")
     private String customerAddress;
 
+    @ApiModelProperty("服务接收电话")
     private String customerMobile;
 
+    @ApiModelProperty("服务接收人姓名")
     private String customerName;
 
+    @ApiModelProperty("下单人留言")
     private String customerRemark;
 
-    private Date orderTime;
-
+    @ApiModelProperty("客户预约服务时间")
     private Date serviceTime;
 
-    private Integer payVoucher;
-
-    private String comments;
-
-    private Byte type;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getOrderCode() {
-        return orderCode;
-    }
-
-    public void setOrderCode(String orderCode) {
-        this.orderCode = orderCode;
-    }
+    @ApiModelProperty("使用的代金券id，空为未使用代金券")
+    private Integer voucherId;
 
     public Integer getCustomerId() {
         return customerId;
@@ -122,14 +107,6 @@ public class CustomerPlaceOrderReq  extends BaseVO {
         this.customerRemark = customerRemark;
     }
 
-    public Date getOrderTime() {
-        return orderTime;
-    }
-
-    public void setOrderTime(Date orderTime) {
-        this.orderTime = orderTime;
-    }
-
     public Date getServiceTime() {
         return serviceTime;
     }
@@ -138,27 +115,11 @@ public class CustomerPlaceOrderReq  extends BaseVO {
         this.serviceTime = serviceTime;
     }
 
-    public Integer getPayVoucher() {
-        return payVoucher;
+    public Integer getVoucherId() {
+        return voucherId;
     }
 
-    public void setPayVoucher(Integer payVoucher) {
-        this.payVoucher = payVoucher;
-    }
-
-    public String getComments() {
-        return comments;
-    }
-
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
-
-    public Byte getType() {
-        return type;
-    }
-
-    public void setType(Byte type) {
-        this.type = type;
+    public void setVoucherId(Integer voucherId) {
+        this.voucherId = voucherId;
     }
 }

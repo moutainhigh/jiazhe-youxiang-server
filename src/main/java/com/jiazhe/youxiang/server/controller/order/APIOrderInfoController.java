@@ -4,13 +4,11 @@ import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.order.OrderInfoBiz;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
-import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoListDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.*;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
-import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoListResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,18 +32,18 @@ public class APIOrderInfoController extends BaseController {
     @Autowired
     private OrderInfoBiz orderInfoBiz ;
 
-    @ApiOperation(value = "分页查询订单信息", httpMethod = "GET", response = OrderInfoListResp.class, responseContainer = "List", notes = "分页查询订单信息")
+    @ApiOperation(value = "【前后台共用】分页查询订单信息", httpMethod = "GET", response = OrderInfoResp.class, responseContainer = "List", notes = "【前后台共用】分页查询订单信息")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute OrderInfoPageReq req) {
         Paging paging = new Paging();
         paging.setOffset((req.getPageNum() - 1) * req.getPageSize());
         paging.setLimit(req.getPageSize());
-        List<OrderInfoListDTO> sysUserDTOList = orderInfoBiz.getList(req.getMobile(),req.getStatus(),paging);
-        List<OrderInfoListResp> sysUserRespList = sysUserDTOList.stream().map(OrderInfoAdapter::DTOList2RespList).collect(Collectors.toList());
-        return ResponseFactory.buildPaginationResponse(sysUserRespList, paging);
+        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getMobile(),req.getStatus(),paging);
+        List<OrderInfoResp> orderInfoRespList = orderInfoDTOList.stream().map(OrderInfoAdapter::DTO2Resp).collect(Collectors.toList());
+        return ResponseFactory.buildPaginationResponse(orderInfoRespList, paging);
     }
 
-    @ApiOperation(value = "客户自行取消订单", httpMethod = "POST", response = OrderInfoListResp.class, responseContainer = "List", notes = "客户自行取消订单")
+    @ApiOperation(value = "客户自行取消订单", httpMethod = "POST", notes = "客户自行取消订单")
     @RequestMapping(value = "/customercancelorder", method = RequestMethod.GET)
     public Object customerCancelOrder(@ModelAttribute IdReq req) {
         orderInfoBiz.customerCancelOrder(req.getId());
@@ -73,7 +71,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "员工完成订单", httpMethod = "POST", notes = "员工完成")
+    @ApiOperation(value = "员工完成订单", httpMethod = "POST", notes = "员工完成订单")
     @RequestMapping(value = "/usercompleteorder", method = RequestMethod.POST)
     public Object userCompleteOrder(@ModelAttribute IdReq req) {
         orderInfoBiz.userCompleteOrder(req.getId());
@@ -83,14 +81,14 @@ public class APIOrderInfoController extends BaseController {
 
     @ApiOperation(value = "客户下单", httpMethod = "POST", notes = "客户下单")
     @RequestMapping(value = "/customerplaceorder", method = RequestMethod.POST)
-    public Object customerPlaceOrder(@ModelAttribute UserPlaceOrderReq req) {
+    public Object customerPlaceOrder(@ModelAttribute CustomerPlaceOrderReq req) {
         orderInfoBiz.customerPlaceOrder(req);
         return ResponseFactory.buildSuccess();
     }
 
     @ApiOperation(value = "员工下单", httpMethod = "POST", notes = "员工下单")
     @RequestMapping(value = "/userplaceorder", method = RequestMethod.POST)
-    public Object userPlaceOrder(@ModelAttribute CustomerPlaceOrderReq req) {
+    public Object userPlaceOrder(@ModelAttribute UserPlaceOrderReq req) {
         orderInfoBiz.userPlaceOrder(req);
         return ResponseFactory.buildSuccess();
     }
@@ -131,5 +129,18 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildResponse(orderInfoResp);
     }
 
+    @ApiOperation(value = "待预约订单数量", httpMethod = "GET",notes = "待预约订单数量")
+    @RequestMapping(value = "/getunsentordercount", method = RequestMethod.POST)
+    public Object getUnsentOrderCount() {
+        Integer count = orderInfoBiz.getUnsentOrderCount();
+        return ResponseFactory.buildResponse(count);
+    }
+
+    @ApiOperation(value = "【客户取消】待审核订单数量", httpMethod = "GET",notes = "【客户取消】待审核订单数量")
+    @RequestMapping(value = "/get", method = RequestMethod.POST)
+    public Object getUnauditOrderCount() {
+        Integer count = orderInfoBiz.getUnauditOrderCount();
+        return ResponseFactory.buildResponse(count);
+    }
 
 }

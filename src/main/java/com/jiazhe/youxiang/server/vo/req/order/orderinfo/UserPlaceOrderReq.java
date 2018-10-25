@@ -1,44 +1,53 @@
 package com.jiazhe.youxiang.server.vo.req.order.orderinfo;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * @author tu
- * @description：
+ * @description：客户下单请求参数
  * @date 2018/10/24
  */
 public class UserPlaceOrderReq extends BaseVO {
 
+    @ApiModelProperty("客户id")
     private Integer customerId;
 
+    @ApiModelProperty("商品id")
     private Integer productId;
 
+    @ApiModelProperty("商品价格")
     private Integer productPrice;
 
+    @ApiModelProperty("下单数量")
     private Integer count;
 
+    @ApiModelProperty("订单地址")
     private String customerAddress;
 
+    @ApiModelProperty("订单联系电话")
     private String customerMobile;
 
+    @ApiModelProperty("订单接收人")
     private String customerName;
 
+    @ApiModelProperty("客户留言")
     private String customerRemark;
 
+    @ApiModelProperty("提供服务人员")
     private String workerName;
 
+    @ApiModelProperty("服务人员电话")
     private String workerMobile;
 
-    private Date orderTime;
-
+    @ApiModelProperty("服务时间")
     private Date realServiceTime;
 
-    private String comments;
-
-    private Byte type;
+    @ApiModelProperty("代金券id")
+    private Integer voucherId;
 
     public Integer getCustomerId() {
         return customerId;
@@ -120,14 +129,6 @@ public class UserPlaceOrderReq extends BaseVO {
         this.workerMobile = workerMobile;
     }
 
-    public Date getOrderTime() {
-        return orderTime;
-    }
-
-    public void setOrderTime(Date orderTime) {
-        this.orderTime = orderTime;
-    }
-
     public Date getRealServiceTime() {
         return realServiceTime;
     }
@@ -136,19 +137,11 @@ public class UserPlaceOrderReq extends BaseVO {
         this.realServiceTime = realServiceTime;
     }
 
-    public String getComments() {
-        return comments;
+    public Integer getVoucherId() {
+        return voucherId;
     }
 
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
-
-    public Byte getType() {
-        return type;
-    }
-
-    public void setType(Byte type) {
-        this.type = type;
+    public void setVoucherId(Integer voucherId) {
+        this.voucherId = voucherId;
     }
 }

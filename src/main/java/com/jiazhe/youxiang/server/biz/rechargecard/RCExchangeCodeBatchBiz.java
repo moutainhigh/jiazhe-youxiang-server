@@ -56,4 +56,8 @@ public class RCExchangeCodeBatchBiz {
     public int delete(Integer id) {
         return 0;
     }
+
+    public List<RCExchangeCodeBatchDTO> getByProjectId(Integer projectId) {
+        return null;
+    }
 }

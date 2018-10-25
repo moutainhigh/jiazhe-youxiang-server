@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.req.order.orderinfo;
 
 import com.jiazhe.youxiang.server.vo.req.IdReq;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 
@@ -11,8 +12,10 @@ import java.math.BigDecimal;
  */
 public class CustomerPayReq extends IdReq {
 
+    @ApiModelProperty("现金、微信、支付宝支付金额")
     private BigDecimal payCash;
 
+    @ApiModelProperty("充值卡支付金额")
     private BigDecimal payRechargeCard;
 
     public BigDecimal getPayCash() {

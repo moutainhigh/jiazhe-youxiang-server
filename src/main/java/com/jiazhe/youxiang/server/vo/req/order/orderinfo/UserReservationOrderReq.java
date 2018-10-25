@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.vo.req.order.orderinfo;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -13,23 +14,14 @@ import java.util.Date;
  */
 public class UserReservationOrderReq extends IdReq {
 
-    private Integer id;
-
+    @ApiModelProperty("服务人员姓名")
     private String workerName;
 
+    @ApiModelProperty("服务人联系方式")
     private String workerMobile;
 
+    @ApiModelProperty("真实服务时间")
     private Date realServiceTime;
-
-    @Override
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getWorkerName() {
         return workerName;

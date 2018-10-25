@@ -1,8 +1,6 @@
 package com.jiazhe.youxiang.server.adapter.order;
 
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
-import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoListDTO;
-import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoListResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
 
 /**
@@ -11,41 +9,33 @@ import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
  * @date 2018/10/23.
  */
 public class OrderInfoAdapter {
-    public static OrderInfoListResp DTOList2RespList(OrderInfoListDTO orderInfoListDTO) {
-        if (orderInfoListDTO == null) {
-            return null;
-        }
-        OrderInfoListResp orderInfoListResp = new OrderInfoListResp();
-        orderInfoListResp.setId(orderInfoListDTO.getId());
-        orderInfoListResp.setOrderCode(orderInfoListDTO.getOrderCode());
-        orderInfoListResp.setCustomerId(orderInfoListDTO.getCustomerId());
-        orderInfoListResp.setProductId(orderInfoListDTO.getProductId());
-        orderInfoListResp.setProductPrice(orderInfoListDTO.getProductPrice());
-        orderInfoListResp.setCount(orderInfoListDTO.getCount());
-        orderInfoListResp.setCustomerAddress(orderInfoListDTO.getCustomerAddress());
-        orderInfoListResp.setCustomerMobile(orderInfoListDTO.getCustomerMobile());
-        orderInfoListResp.setCustomerName(orderInfoListDTO.getCustomerName());
-        orderInfoListResp.setCustomerRemark(orderInfoListDTO.getCustomerRemark());
-        orderInfoListResp.setWorkerName(orderInfoListDTO.getWorkerName());
-        orderInfoListResp.setWorkerMobile(orderInfoListDTO.getWorkerMobile());
-        orderInfoListResp.setOrderTime(orderInfoListDTO.getOrderTime());
-        orderInfoListResp.setServiceTime(orderInfoListDTO.getServiceTime());
-        orderInfoListResp.setRealServiceTime(orderInfoListDTO.getRealServiceTime());
-        orderInfoListResp.setPayRechargeCard(orderInfoListDTO.getPayRechargeCard());
-        orderInfoListResp.setPayVoucher(orderInfoListDTO.getPayVoucher());
-        orderInfoListResp.setPayCash(orderInfoListDTO.getPayCash());
-        orderInfoListResp.setTotalCost(orderInfoListDTO.getTotalCost());
-        orderInfoListResp.setComments(orderInfoListDTO.getComments());
-        orderInfoListResp.setType(orderInfoListDTO.getType());
-        orderInfoListResp.setStatus(orderInfoListDTO.getStatus());
-        return orderInfoListResp;
-    }
-
-    public static OrderInfoResp DTO2Resp(OrderInfoDTO orderInfoDTO) {
-        if (orderInfoDTO == null) {
+    public static OrderInfoResp DTO2Resp(OrderInfoDTO dto) {
+        if (dto == null) {
             return null;
         }
         OrderInfoResp orderInfoResp = new OrderInfoResp();
+        orderInfoResp.setId(dto.getId());
+        orderInfoResp.setOrderCode(dto.getOrderCode());
+        orderInfoResp.setCustomerId(dto.getCustomerId());
+        orderInfoResp.setProductId(dto.getProductId());
+        orderInfoResp.setProductPrice(dto.getProductPrice());
+        orderInfoResp.setCount(dto.getCount());
+        orderInfoResp.setCustomerAddress(dto.getCustomerAddress());
+        orderInfoResp.setCustomerMobile(dto.getCustomerMobile());
+        orderInfoResp.setCustomerName(dto.getCustomerName());
+        orderInfoResp.setCustomerRemark(dto.getCustomerRemark());
+        orderInfoResp.setWorkerName(dto.getWorkerName());
+        orderInfoResp.setWorkerMobile(dto.getWorkerMobile());
+        orderInfoResp.setOrderTime(dto.getOrderTime());
+        orderInfoResp.setServiceTime(dto.getServiceTime());
+        orderInfoResp.setRealServiceTime(dto.getRealServiceTime());
+        orderInfoResp.setPayRechargeCard(dto.getPayRechargeCard());
+        orderInfoResp.setPayVoucher(dto.getPayVoucher());
+        orderInfoResp.setPayCash(dto.getPayCash());
+        orderInfoResp.setTotalCost(dto.getTotalCost());
+        orderInfoResp.setComments(dto.getComments());
+        orderInfoResp.setType(dto.getType());
+        orderInfoResp.setStatus(dto.getStatus());
         return orderInfoResp;
     }
 }
