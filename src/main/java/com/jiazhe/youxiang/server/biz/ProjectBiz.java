@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.server.biz;
 
+import com.jiazhe.youxiang.server.dto.project.ProjectAddDTO;
 import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,9 @@ import java.util.List;
 @Service("projectBiz")
 public class ProjectBiz {
 
+    public void add(ProjectAddDTO projectAddDTO) {
+    }
+
     public List<ProjectDTO> getList(Integer name, Paging paging) {
         return null;
     }
@@ -33,4 +37,6 @@ public class ProjectBiz {
 
     public void delete(Integer id) {
     }
+
+
 }

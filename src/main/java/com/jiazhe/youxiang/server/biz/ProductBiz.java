@@ -5,11 +5,14 @@
  */
 package com.jiazhe.youxiang.server.biz;
 
+import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
+import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -23,39 +26,71 @@ public class ProductBiz {
 
     /*************商品分类相关******************/
 
-    public static ProductCategoryDTO getCategoryById(Integer id) {
+    public void addCategory(ProductCategoryDTO productCategoryDTO) {
+    }
+
+    public ProductCategoryDTO getCategoryById(Integer id) {
         return null;
     }
 
-    public static List<ProductCategoryDTO> getCategoryList(String name, Paging paging) {
+    public List<ProductCategoryDTO> getCategoryList(String name, Paging paging) {
         return null;
     }
 
-    public static void deleteCategory(Integer id) {
+    public void deleteCategory(Integer id) {
     }
 
-    public static void updateCategory(Integer id, String name, String description, String thumbnailUrl, String detailImgUrl, Integer priority) {
+    public void updateCategory(ProductCategoryDTO productCategoryDTO) {
     }
 
-    public static void updateCategoryStatus(Integer id, Byte status) {
+    public void updateCategoryStatus(Integer id, Byte status) {
     }
 
     /*************商品相关******************/
-    public static ProductDTO getById(Integer id) {
+
+    public void add(ProductDTO productDTO) {
+    }
+
+    public ProductDTO getById(Integer id) {
         return null;
     }
 
-    public static List<ProductDTO> getList(Integer productCategoryId, String name, Integer productType, Integer status, Paging paging) {
+    public List<ProductDTO> getList(Integer productCategoryId, String name, Integer productType, Integer status, Paging paging) {
         return null;
     }
 
-    public static void update(Integer id, String name, String description, Integer delayDays, String thumbnailUrl, String detailImgUrl, Integer productType, String unitName, Integer lastNum) {
+    public void update(ProductDTO productDTO) {
     }
 
-    public static void delete(Integer id) {
+    public void delete(Integer id) {
 
     }
 
-    public static void updateStatus(Integer id, Byte status) {
+    public void updateStatus(Integer id, Byte status) {
     }
+
+    /*************商品价格相关******************/
+
+    public void addPrice(ProductPriceDTO productPriceDTO) {
+    }
+
+    public ProductPriceDTO getPriceById(Integer id) {
+        return null;
+    }
+
+    public ProductPriceDTO getPriceByCity(Integer productId, Integer productId1) {
+        return null;
+    }
+
+    public List<ProductPriceDTO> getPriceListByProductId(Integer productId) {
+        return Lists.newArrayList();
+    }
+
+    public void updatePrice(Integer id, BigDecimal price) {
+    }
+
+    public void deletePrice(Integer id) {
+    }
+
+
 }

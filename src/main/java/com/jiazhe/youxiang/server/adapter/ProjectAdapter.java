@@ -5,7 +5,9 @@
  */
 package com.jiazhe.youxiang.server.adapter;
 
+import com.jiazhe.youxiang.server.dto.project.ProjectAddDTO;
 import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
+import com.jiazhe.youxiang.server.vo.req.project.ProjectAddReq;
 import com.jiazhe.youxiang.server.vo.resp.project.ProjectResp;
 
 /**
@@ -26,5 +28,16 @@ public class ProjectAdapter {
         projectResp.setPriority(dto.getPriority());
         projectResp.setStatus(dto.getStatus());
         return projectResp;
+    }
+
+    public static ProjectAddDTO projectAddReq2DTO(ProjectAddReq req) {
+        if (req == null) {
+            return null;
+        }
+        ProjectAddDTO projectAddDTO = new ProjectAddDTO();
+        projectAddDTO.setName(req.getName());
+        projectAddDTO.setDescription(req.getDescription());
+        projectAddDTO.setPriority(req.getPriority());
+        return projectAddDTO;
     }
 }

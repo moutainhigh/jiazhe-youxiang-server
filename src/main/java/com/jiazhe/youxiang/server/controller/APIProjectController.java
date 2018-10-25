@@ -6,12 +6,17 @@
 package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
 import com.jiazhe.youxiang.server.adapter.ProjectAdapter;
 import com.jiazhe.youxiang.server.biz.ProjectBiz;
+import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
+import com.jiazhe.youxiang.server.dto.project.ProjectAddDTO;
 import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
+import com.jiazhe.youxiang.server.vo.req.customer.CustomerAddReq;
+import com.jiazhe.youxiang.server.vo.req.project.ProjectAddReq;
 import com.jiazhe.youxiang.server.vo.req.project.ProjectListReq;
 import com.jiazhe.youxiang.server.vo.req.project.ProjectUpdateReq;
 import com.jiazhe.youxiang.server.vo.resp.project.ProjectResp;
@@ -42,6 +47,22 @@ public class APIProjectController {
     @Autowired
     private ProjectBiz projectBiz;
 
+
+    /**
+     * 添加项目
+     *
+     * @return
+     */
+    @ApiOperation(value = "添加项目", httpMethod = "POST", notes = "添加项目")
+    @RequestMapping(value = "add", method = RequestMethod.POST)
+    public Object add(@ModelAttribute ProjectAddReq req) {
+        //TODO niexiao 参数验证
+        ProjectAddDTO projectAddDTO = ProjectAdapter.projectAddReq2DTO(req);
+        //调用BIZ方法
+        projectBiz.add(projectAddDTO);
+        //用ResponseFactory将返回值包装
+        return ResponseFactory.buildSuccess();
+    }
 
     /**
      * 获得某一具体项目信息
@@ -87,7 +108,7 @@ public class APIProjectController {
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public Object update(@ModelAttribute ProjectUpdateReq req) {
         //TODO niexiao 参数验证
-        CommonValidator.validate(req);
+        CommonValidator.validateNull(req);
         CommonValidator.validateId(req.getId());
         //调用BIZ方法
         projectBiz.update(req.getId(), req.getName(), req.getDescription(), req.getPriority(), req.getStatus());
