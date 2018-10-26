@@ -24,6 +24,7 @@
     <result column="comments" property="comments" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="TINYINT" />
     <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="audit_reason" property="auditReason" jdbcType="VARCHAR" />
     <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
     <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
@@ -91,7 +92,7 @@
     id, order_code, customer_id, product_id, product_price, count, customer_address, 
     customer_mobile, customer_name, customer_remark, worker_name, worker_mobile, order_time, 
     service_time, real_service_time, pay_recharge_card, pay_voucher, pay_cash, total_cost, 
-    comments, type, status, ext_info, is_deleted, add_time, mod_time
+    comments, type, status, audit_reason, ext_info, is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.OrderInfoPOExample" >
     select
@@ -131,8 +132,9 @@
       order_time, service_time, real_service_time, 
       pay_recharge_card, pay_voucher, pay_cash, 
       total_cost, comments, type, 
-      status, ext_info, is_deleted, 
-      add_time, mod_time)
+      status, audit_reason, ext_info, 
+      is_deleted, add_time, mod_time
+      )
     values (#{id,jdbcType=INTEGER}, #{orderCode,jdbcType=VARCHAR}, #{customerId,jdbcType=INTEGER}, 
       #{productId,jdbcType=INTEGER}, #{productPrice,jdbcType=INTEGER}, #{count,jdbcType=INTEGER}, 
       #{customerAddress,jdbcType=VARCHAR}, #{customerMobile,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, 
@@ -140,8 +142,9 @@
       #{orderTime,jdbcType=TIMESTAMP}, #{serviceTime,jdbcType=TIMESTAMP}, #{realServiceTime,jdbcType=TIMESTAMP}, 
       #{payRechargeCard,jdbcType=DECIMAL}, #{payVoucher,jdbcType=INTEGER}, #{payCash,jdbcType=DECIMAL}, 
       #{totalCost,jdbcType=DECIMAL}, #{comments,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
-      #{status,jdbcType=TINYINT}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
-      #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
+      #{status,jdbcType=TINYINT}, #{auditReason,jdbcType=VARCHAR}, #{extInfo,jdbcType=VARCHAR}, 
+      #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.OrderInfoPO" >
     insert into order_info
@@ -211,6 +214,9 @@
       </if>
       <if test="status != null" >
         status,
+      </if>
+      <if test="auditReason != null" >
+        audit_reason,
       </if>
       <if test="extInfo != null" >
         ext_info,
@@ -291,6 +297,9 @@
       </if>
       <if test="status != null" >
         #{status,jdbcType=TINYINT},
+      </if>
+      <if test="auditReason != null" >
+        #{auditReason,jdbcType=VARCHAR},
       </if>
       <if test="extInfo != null" >
         #{extInfo,jdbcType=VARCHAR},
@@ -381,6 +390,9 @@
       <if test="record.status != null" >
         status = #{record.status,jdbcType=TINYINT},
       </if>
+      <if test="record.auditReason != null" >
+        audit_reason = #{record.auditReason,jdbcType=VARCHAR},
+      </if>
       <if test="record.extInfo != null" >
         ext_info = #{record.extInfo,jdbcType=VARCHAR},
       </if>
@@ -422,6 +434,7 @@
       comments = #{record.comments,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=TINYINT},
       status = #{record.status,jdbcType=TINYINT},
+      audit_reason = #{record.auditReason,jdbcType=VARCHAR},
       ext_info = #{record.extInfo,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=TINYINT},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
@@ -496,6 +509,9 @@
       <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
       </if>
+      <if test="auditReason != null" >
+        audit_reason = #{auditReason,jdbcType=VARCHAR},
+      </if>
       <if test="extInfo != null" >
         ext_info = #{extInfo,jdbcType=VARCHAR},
       </if>
@@ -534,6 +550,7 @@
       comments = #{comments,jdbcType=VARCHAR},
       type = #{type,jdbcType=TINYINT},
       status = #{status,jdbcType=TINYINT},
+      audit_reason = #{auditReason,jdbcType=VARCHAR},
       ext_info = #{extInfo,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=TINYINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},

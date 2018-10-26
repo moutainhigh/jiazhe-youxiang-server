@@ -4,10 +4,12 @@
   <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.SysUserPO" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="loginName" property="loginname" jdbcType="VARCHAR" />
+    <result column="displayName" property="displayname" jdbcType="VARCHAR" />
     <result column="salt" property="salt" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+    <result column="last_login_ip" property="lastLoginIp" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
@@ -73,8 +75,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, mobile, name, salt, password, last_login_time, remark, ext_info, is_deleted, 
-    add_time, mod_time
+    id, mobile, loginName, displayName, salt, password, last_login_time, last_login_ip, 
+    remark, ext_info, is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.SysUserPOExample" >
     select
@@ -107,14 +109,16 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.SysUserPO" >
-    insert into sys_user (id, mobile, name, 
-      salt, password, last_login_time, 
-      remark, ext_info, is_deleted, 
-      add_time, mod_time)
-    values (#{id,jdbcType=INTEGER}, #{mobile,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{salt,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{lastLoginTime,jdbcType=TIMESTAMP}, 
-      #{remark,jdbcType=VARCHAR}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
-      #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
+    insert into sys_user (id, mobile, loginName, 
+      displayName, salt, password, 
+      last_login_time, last_login_ip, remark, 
+      ext_info, is_deleted, add_time, 
+      mod_time)
+    values (#{id,jdbcType=INTEGER}, #{mobile,jdbcType=VARCHAR}, #{loginname,jdbcType=VARCHAR}, 
+      #{displayname,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{lastLoginTime,jdbcType=TIMESTAMP}, #{lastLoginIp,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.SysUserPO" >
     insert into sys_user
@@ -125,8 +129,11 @@
       <if test="mobile != null" >
         mobile,
       </if>
-      <if test="name != null" >
-        name,
+      <if test="loginname != null" >
+        loginName,
+      </if>
+      <if test="displayname != null" >
+        displayName,
       </if>
       <if test="salt != null" >
         salt,
@@ -136,6 +143,9 @@
       </if>
       <if test="lastLoginTime != null" >
         last_login_time,
+      </if>
+      <if test="lastLoginIp != null" >
+        last_login_ip,
       </if>
       <if test="remark != null" >
         remark,
@@ -160,8 +170,11 @@
       <if test="mobile != null" >
         #{mobile,jdbcType=VARCHAR},
       </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
+      <if test="loginname != null" >
+        #{loginname,jdbcType=VARCHAR},
+      </if>
+      <if test="displayname != null" >
+        #{displayname,jdbcType=VARCHAR},
       </if>
       <if test="salt != null" >
         #{salt,jdbcType=VARCHAR},
@@ -171,6 +184,9 @@
       </if>
       <if test="lastLoginTime != null" >
         #{lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastLoginIp != null" >
+        #{lastLoginIp,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
@@ -204,8 +220,11 @@
       <if test="record.mobile != null" >
         mobile = #{record.mobile,jdbcType=VARCHAR},
       </if>
-      <if test="record.name != null" >
-        name = #{record.name,jdbcType=VARCHAR},
+      <if test="record.loginname != null" >
+        loginName = #{record.loginname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.displayname != null" >
+        displayName = #{record.displayname,jdbcType=VARCHAR},
       </if>
       <if test="record.salt != null" >
         salt = #{record.salt,jdbcType=VARCHAR},
@@ -215,6 +234,9 @@
       </if>
       <if test="record.lastLoginTime != null" >
         last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastLoginIp != null" >
+        last_login_ip = #{record.lastLoginIp,jdbcType=VARCHAR},
       </if>
       <if test="record.remark != null" >
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -240,10 +262,12 @@
     update sys_user
     set id = #{record.id,jdbcType=INTEGER},
       mobile = #{record.mobile,jdbcType=VARCHAR},
-      name = #{record.name,jdbcType=VARCHAR},
+      loginName = #{record.loginname,jdbcType=VARCHAR},
+      displayName = #{record.displayname,jdbcType=VARCHAR},
       salt = #{record.salt,jdbcType=VARCHAR},
       password = #{record.password,jdbcType=VARCHAR},
       last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
+      last_login_ip = #{record.lastLoginIp,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       ext_info = #{record.extInfo,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=TINYINT},
@@ -259,8 +283,11 @@
       <if test="mobile != null" >
         mobile = #{mobile,jdbcType=VARCHAR},
       </if>
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
+      <if test="loginname != null" >
+        loginName = #{loginname,jdbcType=VARCHAR},
+      </if>
+      <if test="displayname != null" >
+        displayName = #{displayname,jdbcType=VARCHAR},
       </if>
       <if test="salt != null" >
         salt = #{salt,jdbcType=VARCHAR},
@@ -270,6 +297,9 @@
       </if>
       <if test="lastLoginTime != null" >
         last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastLoginIp != null" >
+        last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
@@ -292,10 +322,12 @@
   <update id="updateByPrimaryKey" parameterType="com.jiazhe.youxiang.server.domain.po.SysUserPO" >
     update sys_user
     set mobile = #{mobile,jdbcType=VARCHAR},
-      name = #{name,jdbcType=VARCHAR},
+      loginName = #{loginname,jdbcType=VARCHAR},
+      displayName = #{displayname,jdbcType=VARCHAR},
       salt = #{salt,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       ext_info = #{extInfo,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=TINYINT},

@@ -130,14 +130,14 @@ public class APIOrderInfoController extends BaseController {
     }
 
     @ApiOperation(value = "待预约订单数量", httpMethod = "GET",notes = "待预约订单数量")
-    @RequestMapping(value = "/getunsentordercount", method = RequestMethod.POST)
+    @RequestMapping(value = "/getunsentordercount", method = RequestMethod.GET)
     public Object getUnsentOrderCount() {
         Integer count = orderInfoBiz.getUnsentOrderCount();
         return ResponseFactory.buildResponse(count);
     }
 
     @ApiOperation(value = "【客户取消】待审核订单数量", httpMethod = "GET",notes = "【客户取消】待审核订单数量")
-    @RequestMapping(value = "/get", method = RequestMethod.POST)
+    @RequestMapping(value = "/getunauditordercount", method = RequestMethod.GET)
     public Object getUnauditOrderCount() {
         Integer count = orderInfoBiz.getUnauditOrderCount();
         return ResponseFactory.buildResponse(count);

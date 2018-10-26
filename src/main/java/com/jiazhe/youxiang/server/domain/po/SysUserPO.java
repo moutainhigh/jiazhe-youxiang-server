@@ -8,13 +8,17 @@ public class SysUserPO implements Serializable {
 
     private String mobile;
 
-    private String name;
+    private String loginname;
+
+    private String displayname;
 
     private String salt;
 
     private String password;
 
     private Date lastLoginTime;
+
+    private String lastLoginIp;
 
     private String remark;
 
@@ -44,12 +48,20 @@ public class SysUserPO implements Serializable {
         this.mobile = mobile == null ? null : mobile.trim();
     }
 
-    public String getName() {
-        return name;
+    public String getLoginname() {
+        return loginname;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setLoginname(String loginname) {
+        this.loginname = loginname == null ? null : loginname.trim();
+    }
+
+    public String getDisplayname() {
+        return displayname;
+    }
+
+    public void setDisplayname(String displayname) {
+        this.displayname = displayname == null ? null : displayname.trim();
     }
 
     public String getSalt() {
@@ -74,6 +86,14 @@ public class SysUserPO implements Serializable {
 
     public void setLastLoginTime(Date lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
+    }
+
+    public String getLastLoginIp() {
+        return lastLoginIp;
+    }
+
+    public void setLastLoginIp(String lastLoginIp) {
+        this.lastLoginIp = lastLoginIp == null ? null : lastLoginIp.trim();
     }
 
     public String getRemark() {
