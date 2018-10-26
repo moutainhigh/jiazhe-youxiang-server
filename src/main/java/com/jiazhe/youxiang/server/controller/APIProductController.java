@@ -10,9 +10,11 @@ import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.biz.ProductBiz;
 import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
+import com.jiazhe.youxiang.server.dto.product.ProductPriceBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
+import com.jiazhe.youxiang.server.vo.req.IdListReq;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.product.GetProductPriceByCity;
 import com.jiazhe.youxiang.server.vo.req.product.ProductAddReq;
@@ -20,9 +22,9 @@ import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryAddReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryListReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductListReq;
-import com.jiazhe.youxiang.server.vo.req.product.ProductPriceAddReq;
+import com.jiazhe.youxiang.server.vo.req.product.ProductPriceBatchAddReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductPriceListReq;
-import com.jiazhe.youxiang.server.vo.req.product.ProductPriceUpdateReq;
+import com.jiazhe.youxiang.server.vo.req.product.ProductPriceBatchUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.product.StatusReq;
 import com.jiazhe.youxiang.server.vo.resp.product.ProductCategoryResp;
@@ -202,7 +204,7 @@ public class APIProductController {
         paging.setOffset(req.getOffset());
         paging.setLimit(req.getLimit());
         //调用BIZ方法
-        List<ProductDTO> productDTOList = productBiz.getList(req.getProductCategoryId(), req.getName(), req.getProductType(), req.getStatus(), paging);
+        List<ProductDTO> productDTOList = productBiz.getList(req.getProductCategoryId(), req.getName(), req.getProductType(), req.getCityIds(), req.getStatus(), paging);
         //将DTO转成VO
         List<ProductResp> result = productDTOList.stream().map(ProductAdapter::productDTO2VO).collect(Collectors.toList());
         //用ResponseFactory将返回值包装
@@ -259,17 +261,17 @@ public class APIProductController {
     /*************商品价格相关******************/
 
     /**
-     * 添加商品价格
+     * 批量添加商品价格
      *
      * @return
      */
-    @ApiOperation(value = "添加商品价格", httpMethod = "POST", notes = "添加商品价格")
-    @RequestMapping(value = "addprice", method = RequestMethod.POST)
-    public Object addPrice(@ModelAttribute ProductPriceAddReq req) {
+    @ApiOperation(value = "批量添加商品价格", httpMethod = "POST", notes = "批量添加商品价格")
+    @RequestMapping(value = "batchaddprice", method = RequestMethod.POST)
+    public Object batchAddPrice(@ModelAttribute ProductPriceBatchAddReq req) {
         //TODO niexiao 参数验证
-        ProductPriceDTO productPriceDTO = ProductAdapter.productPriceAddReq2DTO(req);
+        ProductPriceBatchAddDTO productPriceBatchAddDTO = ProductAdapter.productPriceBatchAddReq2DTO(req);
         //调用BIZ方法
-        productBiz.addPrice(productPriceDTO);
+        productBiz.batchAddPrice(productPriceBatchAddDTO);
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -320,32 +322,31 @@ public class APIProductController {
     }
 
     /**
-     * 编辑商品的价格
+     * 批量编辑商品的价格
      *
      * @return
      */
-    @ApiOperation(value = "编辑商品的价格", httpMethod = "POST", notes = "编辑商品的价格")
-    @RequestMapping(value = "updateprice", method = RequestMethod.POST)
-    public Object updatePrice(@ModelAttribute ProductPriceUpdateReq req) {
+    @ApiOperation(value = "批量编辑商品的价格", httpMethod = "POST", notes = "批量编辑商品的价格")
+    @RequestMapping(value = "batchupdateprice", method = RequestMethod.POST)
+    public Object batchUpdatePrice(@ModelAttribute ProductPriceBatchUpdateReq req) {
         //TODO niexiao 参数验证
-        CommonValidator.validateId(req);
         //调用BIZ方法
-        productBiz.updatePrice(req.getId(), req.getPrice());
+        productBiz.batchUpdatePrice(req.getCityIds(), req.getPrice());
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
 
     /**
-     * 删除商品价格
+     * 批量删除商品价格
      *
      * @return
      */
-    @ApiOperation(value = "删除商品价格", httpMethod = "GET", notes = "删除商品价格")
-    @RequestMapping(value = "deleteprice", method = RequestMethod.GET)
-    public Object deletePrice(@ModelAttribute IdReq req) {
-        CommonValidator.validateId(req);
+    @ApiOperation(value = "批量删除商品价格", httpMethod = "GET", notes = "批量删除商品价格")
+    @RequestMapping(value = "batchdeleteprice", method = RequestMethod.GET)
+    public Object batchDeletePrice(@ModelAttribute IdListReq req) {
+        CommonValidator.validateIdList(req);
         //调用BIZ方法
-        productBiz.deletePrice(req.getId());
+        productBiz.batchDeletePrice(req.getIds());
         return ResponseFactory.buildSuccess();
     }
 

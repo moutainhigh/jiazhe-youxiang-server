@@ -8,6 +8,8 @@ package com.jiazhe.youxiang.server.vo.req.product;
 import com.jiazhe.youxiang.server.vo.req.OffsetLimitReq;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.util.List;
+
 /**
  * 在这里编写类的功能描述
  *
@@ -23,6 +25,8 @@ public class ProductListReq extends OffsetLimitReq {
     private String name;
     @ApiModelProperty("商品分类，0-服务，1-电子卡")
     private Integer productType;
+    @ApiModelProperty("商品分类，0-服务，1-电子卡")
+    private List<Integer> cityIds;
     @ApiModelProperty("状态：0:下架,1:上架")
     private Integer status;
 
@@ -48,6 +52,14 @@ public class ProductListReq extends OffsetLimitReq {
 
     public void setProductType(Integer productType) {
         this.productType = productType;
+    }
+
+    public List<Integer> getCityIds() {
+        return cityIds;
+    }
+
+    public void setCityIds(List<Integer> cityIds) {
+        this.cityIds = cityIds;
     }
 
     public Integer getStatus() {

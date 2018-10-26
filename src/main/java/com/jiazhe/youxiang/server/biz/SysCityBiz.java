@@ -45,4 +45,8 @@ public class SysCityBiz {
     public void closeCities(List<String> cityCodes) {
         sysCityService.updateStatusByCityCodes(cityCodes, CityStatusEnum.CLOSE.getId().byteValue());
     }
+
+    public List<SysCityDTO> getOpenList() {
+       return sysCityService.getOpenList();
+    }
 }
