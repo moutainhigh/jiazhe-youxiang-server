@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.resp.sysuser;
 
 import com.jiazhe.youxiang.server.vo.BaseObject;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
@@ -11,12 +12,19 @@ import java.util.Date;
  */
 public class SysUserResp extends BaseObject {
 
+    @ApiModelProperty("员工id")
     private Integer id;
 
+    @ApiModelProperty("员工电话")
     private String mobile;
 
-    private String name;
+    @ApiModelProperty("员工登陆名")
+    private String loginName;
 
+    @ApiModelProperty("员工显示名")
+    private String displayName;
+
+    @ApiModelProperty("最后登录时间")
     private Date lastLoginTime;
 
     public Integer getId() {
@@ -35,12 +43,20 @@ public class SysUserResp extends BaseObject {
         this.mobile = mobile;
     }
 
-    public String getName() {
-        return name;
+    public String getLoginName() {
+        return loginName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public Date getLastLoginTime() {

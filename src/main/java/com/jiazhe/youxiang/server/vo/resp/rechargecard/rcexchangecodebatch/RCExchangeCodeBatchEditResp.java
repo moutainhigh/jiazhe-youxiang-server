@@ -15,6 +15,10 @@ public class RCExchangeCodeBatchEditResp extends BaseVO {
 
     private String name;
 
+    private String rechargeCardName;
+
+    private Byte isVirtual;
+
     private String description;
 
     private Integer projectId;
@@ -109,5 +113,21 @@ public class RCExchangeCodeBatchEditResp extends BaseVO {
 
     public void setExpiryType(Byte expiryType) {
         this.expiryType = expiryType;
+    }
+
+    public String getRechargeCardName() {
+        return rechargeCardName;
+    }
+
+    public void setRechargeCardName(String rechargeCardName) {
+        this.rechargeCardName = rechargeCardName;
+    }
+
+    public Byte getIsVirtual() {
+        return isVirtual;
+    }
+
+    public void setIsVirtual(Byte isVirtual) {
+        this.isVirtual = isVirtual;
     }
 }

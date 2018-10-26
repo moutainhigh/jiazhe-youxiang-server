@@ -60,6 +60,14 @@ public class APIVoucherExchangeCodeBatchController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
+    @ApiOperation(value = "生成代金券兑换码", httpMethod = "POST",notes = "生成代金券兑换码")
+    @RequestMapping(value = "/generatecode", method = RequestMethod.POST)
+    public Object generateCode(@ModelAttribute IdReq req) {
+        //参数检查
+        voucherExchangeCodeBatchBiz.generaterCode(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
     @ApiOperation(value = "代金券兑换码批次信息回显", httpMethod = "GET", response = VoucherExchangeCodeBatchEditResp.class,notes = "代金券兑换码批次信息回显")
     @RequestMapping(value = "/getbyid", method = RequestMethod.POST)
     public Object getById(@ModelAttribute IdReq req) {

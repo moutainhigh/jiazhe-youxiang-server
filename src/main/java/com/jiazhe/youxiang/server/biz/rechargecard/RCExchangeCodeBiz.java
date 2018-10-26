@@ -41,7 +41,7 @@ public class RCExchangeCodeBiz {
         return rcExchangeCodeService.codeCharge(0,mobile,keyt);
     }
 
-    public List<RCExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Paging paging) {
+    public List<RCExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Byte status, Byte used, Paging paging) {
         return null;
     }
 }

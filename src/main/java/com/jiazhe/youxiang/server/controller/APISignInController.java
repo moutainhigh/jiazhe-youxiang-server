@@ -124,7 +124,7 @@ public class APISignInController extends BaseController {
                         logger.info("登录用户" + session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY));
                         SimplePrincipalCollection simplePrincipalCollection = (SimplePrincipalCollection) session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
                         SysUserDTO sysUserDTO = (SysUserDTO) simplePrincipalCollection.getPrimaryPrincipal();
-                        if (name.equals(sysUserDTO.getName())) {
+                        if (name.equals(sysUserDTO.getLoginName())) {
                             // session.setTimeout(0); //这里就把session清除
                             logger.info(("删除用户seesion" + session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY).toString()));
                             // session清除，

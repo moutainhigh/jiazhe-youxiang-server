@@ -38,4 +38,8 @@ public class VoucherExchangeCodeBatchBiz {
     public VoucherExchangeCodeBatchEditDTO getById(Integer id) {
         return null;
     }
+
+    public int generaterCode(Integer id) {
+        return 0;
+    }
 }

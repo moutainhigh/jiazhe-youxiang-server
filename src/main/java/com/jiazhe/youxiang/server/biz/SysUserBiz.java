@@ -48,7 +48,7 @@ public class SysUserBiz {
     }
 
     public boolean userHasExisted(UserWithRoleDTO userWithRoleDTO) {
-        List<SysUserDTO> sysUserDTOList = sysUserService.findByName(userWithRoleDTO.getName());
+        List<SysUserDTO> sysUserDTOList = sysUserService.findByName(userWithRoleDTO.getLoginName());
         return (2 == sysUserDTOList.size()) || (sysUserDTOList.size() == 1 && !sysUserDTOList.get(0).getId().equals(userWithRoleDTO.getId()));
     }
 
@@ -105,7 +105,8 @@ public class SysUserBiz {
             }
         }
         sysUserDTO.setMobile(userWithRoleDTO.getMobile());
-        sysUserDTO.setName(userWithRoleDTO.getName());
+        sysUserDTO.setDisplayName(userWithRoleDTO.getDisplayName());
+        sysUserDTO.setLoginName(userWithRoleDTO.getLoginName());
         return sysUserService.saveUserWithRole(isAdd, sysUserDTO, newRolesDto, oldRolesDto);
     }
 
