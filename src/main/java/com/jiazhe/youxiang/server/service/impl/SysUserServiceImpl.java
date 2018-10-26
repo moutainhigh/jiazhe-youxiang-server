@@ -92,7 +92,7 @@ public class SysUserServiceImpl implements SysUserService{
         UserWithRoleDTO userWithRoleDTO = new UserWithRoleDTO();
         userWithRoleDTO.setId(sysUserPO.getId());
         userWithRoleDTO.setMobile(sysUserPO.getMobile());
-        userWithRoleDTO.setName(sysUserPO.getName());
+        /*userWithRoleDTO.setName(sysUserPO.getName());*/
         userWithRoleDTO.setRoleIds(roleIds.toString());
         return userWithRoleDTO;
     }
@@ -102,7 +102,7 @@ public class SysUserServiceImpl implements SysUserService{
         SysUserPOExample sysUserPOExample = new SysUserPOExample();
         SysUserPOExample.Criteria criteria = sysUserPOExample.createCriteria();
         if (!Strings.isEmpty(name)) {
-            criteria.andNameEqualTo(name);
+            /*criteria.andNameEqualTo(name);*/
         }
         criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
         List<SysUserPO> sysUserPOList = sysUserPOMapper.selectByExample(sysUserPOExample);

@@ -53,7 +53,7 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="audit_record" domainObjectName="AuditRecordPO"/>
+       <!-- <table tableName="audit_record" domainObjectName="AuditRecordPO"/>
         <table tableName="customer" domainObjectName="CustomerPO"/>
         <table tableName="customer_address" domainObjectName="CustomerAddressPO"/>
         <table tableName="electronic_product_exchange_code" domainObjectName="ElectronicProductExchangeCodePO"/>
@@ -77,6 +77,6 @@
         <table tableName="voucher" domainObjectName="VoucherPO"/>
         <table tableName="voucher_exchange_code" domainObjectName="VoucherExchangeCodePO"/>
         <table tableName="voucher_exchange_code_batch" domainObjectName="VoucherExchangeCodeBatchPO"/>
-        <table tableName="voucher_exchange_record" domainObjectName="VoucherExchangeRecordPO"/>
+        <table tableName="voucher_exchange_record" domainObjectName="VoucherExchangeRecordPO"/>-->
     </context>
 </generatorConfiguration>
