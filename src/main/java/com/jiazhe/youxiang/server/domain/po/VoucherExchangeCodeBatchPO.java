@@ -8,6 +8,8 @@ public class VoucherExchangeCodeBatchPO implements Serializable {
 
     private String name;
 
+    private String voucherName;
+
     private String description;
 
     private Integer amount;
@@ -52,6 +54,14 @@ public class VoucherExchangeCodeBatchPO implements Serializable {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public String getVoucherName() {
+        return voucherName;
+    }
+
+    public void setVoucherName(String voucherName) {
+        this.voucherName = voucherName == null ? null : voucherName.trim();
     }
 
     public String getDescription() {

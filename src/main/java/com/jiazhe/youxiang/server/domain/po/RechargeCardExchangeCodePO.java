@@ -11,6 +11,8 @@ public class RechargeCardExchangeCodePO implements Serializable {
 
     private String batchName;
 
+    private String rechargeCardName;
+
     private String batchDescription;
 
     private Integer projectId;
@@ -37,7 +39,7 @@ public class RechargeCardExchangeCodePO implements Serializable {
 
     private Byte used;
 
-    private String customerId;
+    private Integer customerId;
 
     private String extInfo;
 
@@ -71,6 +73,14 @@ public class RechargeCardExchangeCodePO implements Serializable {
 
     public void setBatchName(String batchName) {
         this.batchName = batchName == null ? null : batchName.trim();
+    }
+
+    public String getRechargeCardName() {
+        return rechargeCardName;
+    }
+
+    public void setRechargeCardName(String rechargeCardName) {
+        this.rechargeCardName = rechargeCardName == null ? null : rechargeCardName.trim();
     }
 
     public String getBatchDescription() {
@@ -177,12 +187,12 @@ public class RechargeCardExchangeCodePO implements Serializable {
         this.used = used;
     }
 
-    public String getCustomerId() {
+    public Integer getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId == null ? null : customerId.trim();
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 
     public String getExtInfo() {

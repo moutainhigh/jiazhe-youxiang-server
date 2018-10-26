@@ -10,6 +10,8 @@ public class VoucherExchangeCodePO implements Serializable {
 
     private String batchName;
 
+    private String voucherName;
+
     private String batchDescription;
 
     private Integer projectId;
@@ -30,7 +32,7 @@ public class VoucherExchangeCodePO implements Serializable {
 
     private Byte used;
 
-    private String customerId;
+    private Integer customerId;
 
     private String extInfo;
 
@@ -64,6 +66,14 @@ public class VoucherExchangeCodePO implements Serializable {
 
     public void setBatchName(String batchName) {
         this.batchName = batchName == null ? null : batchName.trim();
+    }
+
+    public String getVoucherName() {
+        return voucherName;
+    }
+
+    public void setVoucherName(String voucherName) {
+        this.voucherName = voucherName == null ? null : voucherName.trim();
     }
 
     public String getBatchDescription() {
@@ -146,12 +156,12 @@ public class VoucherExchangeCodePO implements Serializable {
         this.used = used;
     }
 
-    public String getCustomerId() {
+    public Integer getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId == null ? null : customerId.trim();
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 
     public String getExtInfo() {

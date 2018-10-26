@@ -21,7 +21,7 @@ public class SysUserAdapter {
         SysUserDTO sysUserDTO = new SysUserDTO();
         sysUserDTO.setId(sysUserPO.getId());
         sysUserDTO.setMobile(sysUserPO.getMobile());
-        sysUserDTO.setName(sysUserPO.getName());
+        /*sysUserDTO.setName(sysUserPO.getName());*/
         sysUserDTO.setLastLoginTime(sysUserPO.getLastLoginTime());
         sysUserDTO.setSalt(sysUserPO.getSalt());
         sysUserDTO.setPassword(sysUserPO.getPassword());
@@ -35,7 +35,7 @@ public class SysUserAdapter {
         SysUserPO sysUserPO = new SysUserPO();
         sysUserPO.setId(sysUserDTO.getId());
         sysUserPO.setMobile(sysUserDTO.getMobile());
-        sysUserPO.setName(sysUserDTO.getName());
+        /*sysUserPO.setName(sysUserDTO.getName());*/
         sysUserPO.setLastLoginTime(sysUserDTO.getLastLoginTime());
         sysUserPO.setSalt(sysUserDTO.getSalt());
         sysUserPO.setPassword(sysUserDTO.getPassword());

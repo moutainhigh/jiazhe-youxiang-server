@@ -13,6 +13,8 @@ public class ProductPricePO implements Serializable {
 
     private BigDecimal price;
 
+    private Byte status;
+
     private String extInfo;
 
     private Byte isDeleted;
@@ -53,6 +55,14 @@ public class ProductPricePO implements Serializable {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 
     public String getExtInfo() {

@@ -6,6 +6,7 @@
     <result column="city_id" property="cityId" jdbcType="INTEGER" />
     <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="TINYINT" />
     <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
     <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
@@ -70,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, city_id, product_id, price, ext_info, is_deleted, add_time, mod_time
+    id, city_id, product_id, price, status, ext_info, is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.ProductPricePOExample" >
     select
@@ -104,11 +105,13 @@
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.ProductPricePO" >
     insert into product_price (id, city_id, product_id, 
-      price, ext_info, is_deleted, 
-      add_time, mod_time)
+      price, status, ext_info, 
+      is_deleted, add_time, mod_time
+      )
     values (#{id,jdbcType=INTEGER}, #{cityId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, 
-      #{price,jdbcType=DECIMAL}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
-      #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
+      #{price,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, #{extInfo,jdbcType=VARCHAR}, 
+      #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.ProductPricePO" >
     insert into product_price
@@ -124,6 +127,9 @@
       </if>
       <if test="price != null" >
         price,
+      </if>
+      <if test="status != null" >
+        status,
       </if>
       <if test="extInfo != null" >
         ext_info,
@@ -150,6 +156,9 @@
       </if>
       <if test="price != null" >
         #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
       </if>
       <if test="extInfo != null" >
         #{extInfo,jdbcType=VARCHAR},
@@ -186,6 +195,9 @@
       <if test="record.price != null" >
         price = #{record.price,jdbcType=DECIMAL},
       </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
       <if test="record.extInfo != null" >
         ext_info = #{record.extInfo,jdbcType=VARCHAR},
       </if>
@@ -209,6 +221,7 @@
       city_id = #{record.cityId,jdbcType=INTEGER},
       product_id = #{record.productId,jdbcType=INTEGER},
       price = #{record.price,jdbcType=DECIMAL},
+      status = #{record.status,jdbcType=TINYINT},
       ext_info = #{record.extInfo,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=TINYINT},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
@@ -228,6 +241,9 @@
       </if>
       <if test="price != null" >
         price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
       </if>
       <if test="extInfo != null" >
         ext_info = #{extInfo,jdbcType=VARCHAR},
@@ -249,6 +265,7 @@
     set city_id = #{cityId,jdbcType=INTEGER},
       product_id = #{productId,jdbcType=INTEGER},
       price = #{price,jdbcType=DECIMAL},
+      status = #{status,jdbcType=TINYINT},
       ext_info = #{extInfo,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=TINYINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},

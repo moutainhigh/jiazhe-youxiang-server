@@ -9,6 +9,10 @@ public class RechargeCardExchangeCodeBatchPO implements Serializable {
 
     private String name;
 
+    private String rechargeCardName;
+
+    private Byte isVirtual;
+
     private String description;
 
     private Integer amount;
@@ -55,6 +59,22 @@ public class RechargeCardExchangeCodeBatchPO implements Serializable {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public String getRechargeCardName() {
+        return rechargeCardName;
+    }
+
+    public void setRechargeCardName(String rechargeCardName) {
+        this.rechargeCardName = rechargeCardName == null ? null : rechargeCardName.trim();
+    }
+
+    public Byte getIsVirtual() {
+        return isVirtual;
+    }
+
+    public void setIsVirtual(Byte isVirtual) {
+        this.isVirtual = isVirtual;
     }
 
     public String getDescription() {

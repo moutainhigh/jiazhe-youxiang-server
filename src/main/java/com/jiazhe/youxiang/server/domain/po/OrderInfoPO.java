@@ -49,6 +49,8 @@ public class OrderInfoPO implements Serializable {
 
     private Byte status;
 
+    private String auditReason;
+
     private String extInfo;
 
     private Byte isDeleted;
@@ -233,6 +235,14 @@ public class OrderInfoPO implements Serializable {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getAuditReason() {
+        return auditReason;
+    }
+
+    public void setAuditReason(String auditReason) {
+        this.auditReason = auditReason == null ? null : auditReason.trim();
     }
 
     public String getExtInfo() {
