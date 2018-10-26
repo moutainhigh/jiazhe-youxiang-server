@@ -18,6 +18,12 @@ public class RCExchangeCodeBatchAddReq extends BaseVO {
     @ApiModelProperty("批次名称")
     private String name;
 
+    @ApiModelProperty("兑换成充值卡的名称")
+    private String rechargeCardName;
+
+    @ApiModelProperty("是否是虚拟批次")
+    private Byte isVirtual;
+
     @ApiModelProperty("兑换码数量")
     private Integer amount;
 
@@ -27,10 +33,10 @@ public class RCExchangeCodeBatchAddReq extends BaseVO {
     @ApiModelProperty("对应项目id")
     private Integer projectId;
 
-    @ApiModelProperty("对应城市id")
+    @ApiModelProperty("对应城市ids")
     private String cityIds;
 
-    @ApiModelProperty("对应商品id")
+    @ApiModelProperty("对应商品ids")
     private String productIds;
 
     @ApiModelProperty("批次过期时间")
@@ -39,7 +45,7 @@ public class RCExchangeCodeBatchAddReq extends BaseVO {
     @ApiModelProperty("充值卡过期时间")
     private Date rechargeCardExpiryTime;
 
-    @ApiModelProperty("自兑换之日起，***天有效")
+    @ApiModelProperty("自兑换之日起，充值卡**天内有效")
     private Integer validityPeriod;
 
     @ApiModelProperty("充值卡过期类型")
@@ -135,5 +141,21 @@ public class RCExchangeCodeBatchAddReq extends BaseVO {
 
     public void setExpiryType(Byte expiryType) {
         this.expiryType = expiryType;
+    }
+
+    public String getRechargeCardName() {
+        return rechargeCardName;
+    }
+
+    public void setRechargeCardName(String rechargeCardName) {
+        this.rechargeCardName = rechargeCardName;
+    }
+
+    public Byte getIsVirtual() {
+        return isVirtual;
+    }
+
+    public void setIsVirtual(Byte isVirtual) {
+        this.isVirtual = isVirtual;
     }
 }

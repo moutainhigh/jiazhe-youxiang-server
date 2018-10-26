@@ -53,7 +53,7 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <!--<table tableName="audit_record" domainObjectName="AuditRecordPO"/>
+       <!-- <table tableName="audit_record" domainObjectName="AuditRecordPO"/>
         <table tableName="customer" domainObjectName="CustomerPO"/>
         <table tableName="customer_address" domainObjectName="CustomerAddressPO"/>
         <table tableName="electronic_product_exchange_code" domainObjectName="ElectronicProductExchangeCodePO"/>

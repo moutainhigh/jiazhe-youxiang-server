@@ -90,8 +90,8 @@ public class RCServiceImpl implements RCService {
         }else{
             rechargeCardPO.setExpiryTime(new Date(System.currentTimeMillis()+rcExchangeCodeBatchEditDTO.getValidityPeriod()* CommonConstant.ONE_DAY));
         }
-        rechargeCardPO.setFaceValue(rcExchangeCodeBatchEditDTO.getFaceValue());
-        rechargeCardPO.setBalance(rcExchangeCodeBatchEditDTO.getFaceValue());
+        /*rechargeCardPO.setFaceValue(rcExchangeCodeBatchEditDTO.getFaceValue());
+        rechargeCardPO.setBalance(rcExchangeCodeBatchEditDTO.getFaceValue());*/
         //暂时置为0，等生成了兑换记录再修改
         rechargeCardPO.setExchangeRecordId(0);
         rechargeCardPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());

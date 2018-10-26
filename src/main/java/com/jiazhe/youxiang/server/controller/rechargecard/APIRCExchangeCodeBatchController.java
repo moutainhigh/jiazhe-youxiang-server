@@ -68,6 +68,15 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @ApiOperation(value = "生成批次下的充值卡兑换码", httpMethod = "POST", notes = "生成批次下的充值卡兑换码")
+    @RequestMapping(value = "/generatecode", method = RequestMethod.POST)
+    public Object generateCode(@ModelAttribute IdReq req) {
+        //参数检查,检查是否是虚拟批次，检查该批次是否已经生成过兑换码
+
+        rcExchangeCodeBatchBiz.generateCode(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
     @ApiOperation(value = "充值卡兑换码批次信息回显", httpMethod = "GET", response = RCExchangeCodeBatchEditResp.class, notes = "充值卡兑换码批次信息回显")
     @RequestMapping(value = "/getbyid", method = RequestMethod.POST)
     public Object getById(@ModelAttribute IdReq req) {
@@ -87,7 +96,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
     }
 
 
-    @ApiOperation(value = "启用批次【同时改变批次下兑换码状态】", httpMethod = "POST", notes = "启用批次【同时改变批次下兑换码状态】")
+    @ApiOperation(value = "启用批次【同时改变批次下兑换码，充值卡状态】", httpMethod = "POST", notes = "启用批次【同时改变批次下兑换码，充值卡状态】")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     public Object startUsing(@ModelAttribute IdReq req) {
         //参数检查
@@ -95,19 +104,11 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "停用批次【同时改变批次下兑换码状态】", httpMethod = "POST", notes = "停用批次【同时改变批次下兑换码状态】")
+    @ApiOperation(value = "停用批次【同时改变批次下兑换码，充值卡状态】", httpMethod = "POST", notes = "停用批次【同时改变批次下兑换码，充值卡状态】")
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     public Object stopUsing(@ModelAttribute IdReq req) {
         //参数检查
         rcExchangeCodeBatchBiz.stopUsing(req.getId());
-        return ResponseFactory.buildSuccess();
-    }
-
-    @ApiOperation(value = "删除批次【同时删除批次下所有兑换码】", httpMethod = "POST", notes = "删除批次【同时删除批次下所有兑换码】")
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public Object delete(@ModelAttribute IdReq req) {
-        //参数检查
-        rcExchangeCodeBatchBiz.delete(req.getId());
         return ResponseFactory.buildSuccess();
     }
 

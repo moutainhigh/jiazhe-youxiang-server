@@ -10,6 +10,7 @@ import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.DirectChargeReq;
 import com.jiazhe.youxiang.server.vo.req.ExpiryTimeEditReq;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.RCPageReq;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rc.RCResp;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,23 +58,14 @@ public class APIRCController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "【后台展示】根据客户id查询所有充值卡，【分页】", httpMethod = "GET",response = RCResp.class, responseContainer = "List",notes = "【后台展示】根据客户id查询所有充值卡，【分页】")
+    @ApiOperation(value = "根据客户id,充值卡状态，查询所有充值卡，【分页】", httpMethod = "GET",response = RCResp.class, responseContainer = "List",notes = "根据客户id，充值卡状态查询所有充值卡，【分页】")
     @RequestMapping(value = "/listpage", method = RequestMethod.POST)
-    public Object listPage(@ModelAttribute IdReq idReq, @ModelAttribute PageSizeNumReq pageReq) {
+    public Object listPage(@ModelAttribute RCPageReq req) {
         //参数检查
         Paging paging = new Paging();
-        paging.setOffset((pageReq.getPageNum()-1)*pageReq.getPageSize());
-        paging.setLimit(pageReq.getPageSize());
-        List<RCDTO> rcDTOList = rcBiz.getList(idReq.getId(),paging);
-        List<RCResp> rcRespList = rcDTOList.stream().map(RCAdapter::DTO2Resp).collect(Collectors.toList());
-        return ResponseFactory.buildResponse(rcRespList);
-    }
-
-    @ApiOperation(value = "【app端使用】根据客户id查询所有【未过期】充值卡", httpMethod = "GET",response = RCResp.class, responseContainer = "List",notes = "根据客户id查询所有【未过期】充值卡")
-    @RequestMapping(value = "/findunexpiredbycustomerid", method = RequestMethod.POST)
-    public Object changeExpiryTime(@ModelAttribute IdReq req) {
-        //参数检查
-        List<RCDTO> rcDTOList = rcBiz.findUnexpiredByCustomerId(req.getId());
+        paging.setOffset((req.getPageNum()-1)*req.getPageSize());
+        paging.setLimit(req.getPageSize());
+        List<RCDTO> rcDTOList = rcBiz.getList(req.getCustomerId(),req.getStatus(),paging);
         List<RCResp> rcRespList = rcDTOList.stream().map(RCAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildResponse(rcRespList);
     }

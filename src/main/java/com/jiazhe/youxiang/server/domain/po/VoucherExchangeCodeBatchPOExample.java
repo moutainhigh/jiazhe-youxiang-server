@@ -235,6 +235,76 @@ public class VoucherExchangeCodeBatchPOExample {
             return (Criteria) this;
         }
 
+        public Criteria andVoucherNameIsNull() {
+            addCriterion("voucher_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNameIsNotNull() {
+            addCriterion("voucher_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNameEqualTo(String value) {
+            addCriterion("voucher_name =", value, "voucherName");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNameNotEqualTo(String value) {
+            addCriterion("voucher_name <>", value, "voucherName");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNameGreaterThan(String value) {
+            addCriterion("voucher_name >", value, "voucherName");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNameGreaterThanOrEqualTo(String value) {
+            addCriterion("voucher_name >=", value, "voucherName");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNameLessThan(String value) {
+            addCriterion("voucher_name <", value, "voucherName");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNameLessThanOrEqualTo(String value) {
+            addCriterion("voucher_name <=", value, "voucherName");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNameLike(String value) {
+            addCriterion("voucher_name like", value, "voucherName");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNameNotLike(String value) {
+            addCriterion("voucher_name not like", value, "voucherName");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNameIn(List<String> values) {
+            addCriterion("voucher_name in", values, "voucherName");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNameNotIn(List<String> values) {
+            addCriterion("voucher_name not in", values, "voucherName");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNameBetween(String value1, String value2) {
+            addCriterion("voucher_name between", value1, value2, "voucherName");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNameNotBetween(String value1, String value2) {
+            addCriterion("voucher_name not between", value1, value2, "voucherName");
+            return (Criteria) this;
+        }
+
         public Criteria andDescriptionIsNull() {
             addCriterion("description is null");
             return (Criteria) this;

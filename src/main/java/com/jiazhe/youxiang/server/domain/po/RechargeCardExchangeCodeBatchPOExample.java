@@ -236,6 +236,136 @@ public class RechargeCardExchangeCodeBatchPOExample {
             return (Criteria) this;
         }
 
+        public Criteria andRechargeCardNameIsNull() {
+            addCriterion("recharge_card_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameIsNotNull() {
+            addCriterion("recharge_card_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameEqualTo(String value) {
+            addCriterion("recharge_card_name =", value, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameNotEqualTo(String value) {
+            addCriterion("recharge_card_name <>", value, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameGreaterThan(String value) {
+            addCriterion("recharge_card_name >", value, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameGreaterThanOrEqualTo(String value) {
+            addCriterion("recharge_card_name >=", value, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameLessThan(String value) {
+            addCriterion("recharge_card_name <", value, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameLessThanOrEqualTo(String value) {
+            addCriterion("recharge_card_name <=", value, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameLike(String value) {
+            addCriterion("recharge_card_name like", value, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameNotLike(String value) {
+            addCriterion("recharge_card_name not like", value, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameIn(List<String> values) {
+            addCriterion("recharge_card_name in", values, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameNotIn(List<String> values) {
+            addCriterion("recharge_card_name not in", values, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameBetween(String value1, String value2) {
+            addCriterion("recharge_card_name between", value1, value2, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameNotBetween(String value1, String value2) {
+            addCriterion("recharge_card_name not between", value1, value2, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVirtualIsNull() {
+            addCriterion("is_virtual is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVirtualIsNotNull() {
+            addCriterion("is_virtual is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVirtualEqualTo(Byte value) {
+            addCriterion("is_virtual =", value, "isVirtual");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVirtualNotEqualTo(Byte value) {
+            addCriterion("is_virtual <>", value, "isVirtual");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVirtualGreaterThan(Byte value) {
+            addCriterion("is_virtual >", value, "isVirtual");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVirtualGreaterThanOrEqualTo(Byte value) {
+            addCriterion("is_virtual >=", value, "isVirtual");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVirtualLessThan(Byte value) {
+            addCriterion("is_virtual <", value, "isVirtual");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVirtualLessThanOrEqualTo(Byte value) {
+            addCriterion("is_virtual <=", value, "isVirtual");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVirtualIn(List<Byte> values) {
+            addCriterion("is_virtual in", values, "isVirtual");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVirtualNotIn(List<Byte> values) {
+            addCriterion("is_virtual not in", values, "isVirtual");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVirtualBetween(Byte value1, Byte value2) {
+            addCriterion("is_virtual between", value1, value2, "isVirtual");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVirtualNotBetween(Byte value1, Byte value2) {
+            addCriterion("is_virtual not between", value1, value2, "isVirtual");
+            return (Criteria) this;
+        }
+
         public Criteria andDescriptionIsNull() {
             addCriterion("description is null");
             return (Criteria) this;

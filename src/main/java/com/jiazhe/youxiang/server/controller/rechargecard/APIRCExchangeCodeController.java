@@ -43,7 +43,7 @@ public class APIRCExchangeCodeController extends BaseController{
         Paging paging = new Paging();
         paging.setOffset((req.getPageNum()-1)*req.getPageSize());
         paging.setLimit(req.getPageSize());
-        List<RCExchangeCodeDTO> rcExchangeCodeDTOList = rcExchangeCodeBiz.getList(req.getBatchId(),req.getCode(),req.getKeyt(),paging);
+        List<RCExchangeCodeDTO> rcExchangeCodeDTOList = rcExchangeCodeBiz.getList(req.getBatchId(),req.getCode(),req.getKeyt(),req.getStatus(),req.getUsed(),paging);
         List<RCExchangeCodeResp> rcExchangeCodeBatchRespList = rcExchangeCodeDTOList.stream().map(RCExchangeCodeAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(rcExchangeCodeBatchRespList, paging);
     }

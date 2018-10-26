@@ -296,6 +296,76 @@ public class RechargeCardExchangeCodePOExample {
             return (Criteria) this;
         }
 
+        public Criteria andRechargeCardNameIsNull() {
+            addCriterion("recharge_card_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameIsNotNull() {
+            addCriterion("recharge_card_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameEqualTo(String value) {
+            addCriterion("recharge_card_name =", value, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameNotEqualTo(String value) {
+            addCriterion("recharge_card_name <>", value, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameGreaterThan(String value) {
+            addCriterion("recharge_card_name >", value, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameGreaterThanOrEqualTo(String value) {
+            addCriterion("recharge_card_name >=", value, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameLessThan(String value) {
+            addCriterion("recharge_card_name <", value, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameLessThanOrEqualTo(String value) {
+            addCriterion("recharge_card_name <=", value, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameLike(String value) {
+            addCriterion("recharge_card_name like", value, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameNotLike(String value) {
+            addCriterion("recharge_card_name not like", value, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameIn(List<String> values) {
+            addCriterion("recharge_card_name in", values, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameNotIn(List<String> values) {
+            addCriterion("recharge_card_name not in", values, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameBetween(String value1, String value2) {
+            addCriterion("recharge_card_name between", value1, value2, "rechargeCardName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardNameNotBetween(String value1, String value2) {
+            addCriterion("recharge_card_name not between", value1, value2, "rechargeCardName");
+            return (Criteria) this;
+        }
+
         public Criteria andBatchDescriptionIsNull() {
             addCriterion("batch_description is null");
             return (Criteria) this;
@@ -1136,62 +1206,52 @@ public class RechargeCardExchangeCodePOExample {
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdEqualTo(String value) {
+        public Criteria andCustomerIdEqualTo(Integer value) {
             addCriterion("customer_id =", value, "customerId");
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdNotEqualTo(String value) {
+        public Criteria andCustomerIdNotEqualTo(Integer value) {
             addCriterion("customer_id <>", value, "customerId");
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdGreaterThan(String value) {
+        public Criteria andCustomerIdGreaterThan(Integer value) {
             addCriterion("customer_id >", value, "customerId");
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdGreaterThanOrEqualTo(String value) {
+        public Criteria andCustomerIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("customer_id >=", value, "customerId");
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdLessThan(String value) {
+        public Criteria andCustomerIdLessThan(Integer value) {
             addCriterion("customer_id <", value, "customerId");
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdLessThanOrEqualTo(String value) {
+        public Criteria andCustomerIdLessThanOrEqualTo(Integer value) {
             addCriterion("customer_id <=", value, "customerId");
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdLike(String value) {
-            addCriterion("customer_id like", value, "customerId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCustomerIdNotLike(String value) {
-            addCriterion("customer_id not like", value, "customerId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCustomerIdIn(List<String> values) {
+        public Criteria andCustomerIdIn(List<Integer> values) {
             addCriterion("customer_id in", values, "customerId");
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdNotIn(List<String> values) {
+        public Criteria andCustomerIdNotIn(List<Integer> values) {
             addCriterion("customer_id not in", values, "customerId");
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdBetween(String value1, String value2) {
+        public Criteria andCustomerIdBetween(Integer value1, Integer value2) {
             addCriterion("customer_id between", value1, value2, "customerId");
             return (Criteria) this;
         }
 
-        public Criteria andCustomerIdNotBetween(String value1, String value2) {
+        public Criteria andCustomerIdNotBetween(Integer value1, Integer value2) {
             addCriterion("customer_id not between", value1, value2, "customerId");
             return (Criteria) this;
         }

@@ -55,7 +55,7 @@ public class APISysUserController extends BaseController{
         return ResponseFactory.buildResponse(sysUserDTOList);
     }
 
-    @ApiOperation(value = "分页查询员工信息", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List",notes = "分页查询员工信息")
+    @ApiOperation(value = "分页查询员工信息", httpMethod = "GET", response = SysUserResp.class, responseContainer = "List",notes = "分页查询员工信息")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute UserPageReq req) {
         Paging paging = new Paging();
@@ -90,7 +90,7 @@ public class APISysUserController extends BaseController{
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Object save(@ModelAttribute UserSaveReq req) {
         /*参数检查*/
-        if (null == req || Strings.isBlank(req.getName())) {
+        if (null == req || Strings.isBlank(req.getLoginName())||Strings.isBlank(req.getDisplayName())) {
             throw new CommonException(CommonCodeEnum.INTERNAL_ERROR.getCode(), CommonCodeEnum.INTERNAL_ERROR.getType(), "信息填写不完整");
         }
         if(Strings.isBlank((req.getRoleIds()))){

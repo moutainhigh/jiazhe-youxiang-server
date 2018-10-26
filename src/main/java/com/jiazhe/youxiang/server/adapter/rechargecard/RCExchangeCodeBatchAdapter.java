@@ -89,6 +89,8 @@ public class RCExchangeCodeBatchAdapter {
         RCExchangeCodeBatchEditResp rCExchangeCodeBatchEditResp = new RCExchangeCodeBatchEditResp();
         rCExchangeCodeBatchEditResp.setId(rcExchangeCodeBatchEditDTO.getId());
         rCExchangeCodeBatchEditResp.setName(rcExchangeCodeBatchEditDTO.getName());
+        rCExchangeCodeBatchEditResp.setRechargeCardName(rcExchangeCodeBatchEditDTO.getRechargeCardName());
+        rCExchangeCodeBatchEditResp.setIsVirtual(rcExchangeCodeBatchEditDTO.getIsVirtual());
         rCExchangeCodeBatchEditResp.setDescription(rcExchangeCodeBatchEditDTO.getDescription());
         rCExchangeCodeBatchEditResp.setProjectId(rcExchangeCodeBatchEditDTO.getProjectId());
         rCExchangeCodeBatchEditResp.setCityIds(rcExchangeCodeBatchEditDTO.getCityIds());
@@ -107,6 +109,8 @@ public class RCExchangeCodeBatchAdapter {
         RCExchangeCodeBatchEditDTO rCExchangeCodeBatchEditDTO = new RCExchangeCodeBatchEditDTO();
         rCExchangeCodeBatchEditDTO.setId(req.getId());
         rCExchangeCodeBatchEditDTO.setName(req.getName());
+        rCExchangeCodeBatchEditDTO.setRechargeCardName(req.getRechargeCardName());
+        rCExchangeCodeBatchEditDTO.setIsVirtual(req.getIsVirtual());
         rCExchangeCodeBatchEditDTO.setDescription(req.getDescription());
         rCExchangeCodeBatchEditDTO.setProjectId(req.getProjectId());
         rCExchangeCodeBatchEditDTO.setCityIds(req.getCityIds());

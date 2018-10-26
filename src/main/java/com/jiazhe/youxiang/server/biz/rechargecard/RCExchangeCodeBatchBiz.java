@@ -60,4 +60,8 @@ public class RCExchangeCodeBatchBiz {
     public List<RCExchangeCodeBatchDTO> getByProjectId(Integer projectId) {
         return null;
     }
+
+    public int generateCode(Integer id) {
+        return 0;
+    }
 }

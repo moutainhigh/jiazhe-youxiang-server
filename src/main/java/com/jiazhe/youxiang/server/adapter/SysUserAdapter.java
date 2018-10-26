@@ -21,7 +21,7 @@ public class SysUserAdapter {
         SysUserDTO sysUserDTO = new SysUserDTO();
         sysUserDTO.setId(sysUserPO.getId());
         sysUserDTO.setMobile(sysUserPO.getMobile());
-        sysUserDTO.setName(sysUserPO.getName());
+        /*sysUserDTO.setName(sysUserPO.getName());*/
         sysUserDTO.setLastLoginTime(sysUserPO.getLastLoginTime());
         sysUserDTO.setSalt(sysUserPO.getSalt());
         sysUserDTO.setPassword(sysUserPO.getPassword());
@@ -35,7 +35,7 @@ public class SysUserAdapter {
         SysUserPO sysUserPO = new SysUserPO();
         sysUserPO.setId(sysUserDTO.getId());
         sysUserPO.setMobile(sysUserDTO.getMobile());
-        sysUserPO.setName(sysUserDTO.getName());
+        /*sysUserPO.setName(sysUserDTO.getName());*/
         sysUserPO.setLastLoginTime(sysUserDTO.getLastLoginTime());
         sysUserPO.setSalt(sysUserDTO.getSalt());
         sysUserPO.setPassword(sysUserDTO.getPassword());
@@ -49,7 +49,8 @@ public class SysUserAdapter {
         SysUserResp sysUserResp = new SysUserResp();
         sysUserResp.setId(sysUserDTO.getId());
         sysUserResp.setMobile(sysUserDTO.getMobile());
-        sysUserResp.setName(sysUserDTO.getName());
+        sysUserResp.setLoginName(sysUserDTO.getLoginName());
+        sysUserResp.setDisplayName(sysUserDTO.getDisplayName());
         sysUserResp.setLastLoginTime(sysUserDTO.getLastLoginTime());
         return sysUserResp;
     }
@@ -61,7 +62,8 @@ public class SysUserAdapter {
         UserWithRoleResp userWithRoleResp = new UserWithRoleResp();
         userWithRoleResp.setId(dto.getId());
         userWithRoleResp.setMobile(dto.getMobile());
-        userWithRoleResp.setName(dto.getName());
+        userWithRoleResp.setLoginName(dto.getLoginName());
+        userWithRoleResp.setDisplayName(dto.getDisplayName());
         userWithRoleResp.setRoleIds(dto.getRoleIds());
         return userWithRoleResp;
     }
@@ -73,7 +75,8 @@ public class SysUserAdapter {
         UserWithRoleDTO userWithRoleDTO = new UserWithRoleDTO();
         userWithRoleDTO.setId(req.getId());
         userWithRoleDTO.setMobile(req.getMobile());
-        userWithRoleDTO.setName(req.getName());
+        userWithRoleDTO.setLoginName(req.getLoginName());
+        userWithRoleDTO.setDisplayName(req.getDisplayName());
         userWithRoleDTO.setPassword(req.getPassword());
         userWithRoleDTO.setRoleIds(req.getRoleIds());
         return userWithRoleDTO;

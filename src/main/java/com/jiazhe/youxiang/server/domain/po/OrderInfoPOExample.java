@@ -1506,6 +1506,76 @@ public class OrderInfoPOExample {
             return (Criteria) this;
         }
 
+        public Criteria andAuditReasonIsNull() {
+            addCriterion("audit_reason is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditReasonIsNotNull() {
+            addCriterion("audit_reason is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditReasonEqualTo(String value) {
+            addCriterion("audit_reason =", value, "auditReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditReasonNotEqualTo(String value) {
+            addCriterion("audit_reason <>", value, "auditReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditReasonGreaterThan(String value) {
+            addCriterion("audit_reason >", value, "auditReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditReasonGreaterThanOrEqualTo(String value) {
+            addCriterion("audit_reason >=", value, "auditReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditReasonLessThan(String value) {
+            addCriterion("audit_reason <", value, "auditReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditReasonLessThanOrEqualTo(String value) {
+            addCriterion("audit_reason <=", value, "auditReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditReasonLike(String value) {
+            addCriterion("audit_reason like", value, "auditReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditReasonNotLike(String value) {
+            addCriterion("audit_reason not like", value, "auditReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditReasonIn(List<String> values) {
+            addCriterion("audit_reason in", values, "auditReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditReasonNotIn(List<String> values) {
+            addCriterion("audit_reason not in", values, "auditReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditReasonBetween(String value1, String value2) {
+            addCriterion("audit_reason between", value1, value2, "auditReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditReasonNotBetween(String value1, String value2) {
+            addCriterion("audit_reason not between", value1, value2, "auditReason");
+            return (Criteria) this;
+        }
+
         public Criteria andExtInfoIsNull() {
             addCriterion("ext_info is null");
             return (Criteria) this;

@@ -13,7 +13,9 @@ public class UserWithRoleDTO {
 
     private String mobile;
 
-    private String name;
+    private String loginName;
+
+    private String displayName;
 
     private String password;
 
@@ -37,12 +39,20 @@ public class UserWithRoleDTO {
         this.mobile = mobile;
     }
 
-    public String getName() {
-        return name;
+    public String getLoginName() {
+        return loginName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public String getRoleIds() {

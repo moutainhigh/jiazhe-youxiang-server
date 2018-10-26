@@ -19,10 +19,12 @@ drop table if exists sys_user;
 CREATE TABLE `sys_user` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
     `mobile` VARCHAR(100) NOT NULL COMMENT '登录手机号',
-    `name` VARCHAR(100) NOT NULL COMMENT '姓名',
+    `loginName` VARCHAR(100) NOT NULL COMMENT '登录名',
+    `displayName` VARCHAR(100) NOT NULL COMMENT '显示名',
     `salt` VARCHAR(100) NOT NULL COMMENT '运算的salt',
     `password` VARCHAR(100) NOT NULL DEFAULT '0' COMMENT '对前端传过来的密码经过salt再次加密后的登录密码',
     `last_login_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '上一次登录时间',
+    `last_login_ip` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '上一次登录IP',
     `remark` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '备注信息',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
@@ -112,6 +114,8 @@ drop table if exists recharge_card_exchange_code_batch;
 CREATE TABLE `recharge_card_exchange_code_batch` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
     `name` VARCHAR(255) NOT NULL COMMENT '批次名称',
+    `recharge_card_name` VARCHAR(255) NOT NULL COMMENT '兑换成充值卡的卡名',
+    `is_virtual` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否是虚拟批次,0:否,1:是',
     `description` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '充值卡详细信息',
     `amount` INT(10) NOT NULL DEFAULT '0' COMMENT '充值卡数量',
     `project_id` INT(10) COMMENT '对应项目id，为空表示无对应项目',
@@ -135,6 +139,7 @@ CREATE TABLE `recharge_card_exchange_code` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
     `batch_id` INT(10) UNSIGNED NOT NULL COMMENT '批次id',
     `batch_name` VARCHAR(255) NOT NULL COMMENT '批次名称',
+    `recharge_card_name` VARCHAR(255) NOT NULL COMMENT '兑换成充值卡的卡名',
     `batch_description` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '充值卡详细信息',
     `project_id` INT(10) COMMENT '对应项目id，为空表示无对应项目',
     `city_ids` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '适用城市ID集合，粒度到2级城市，以逗号隔开',
@@ -148,7 +153,7 @@ CREATE TABLE `recharge_card_exchange_code` (
     `expiry_type` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '过期时间类型 0-充值卡过期时间，1-兑换之日起多少天有效',
     `status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '状态：0:停用,1:启用',
     `used` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '0-未使用，1-已使用',
-    `customer_id` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '兑换客户的id',
+    `customer_id` INT(10) UNSIGNED NOT NULL COMMENT '客户id',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -198,6 +203,7 @@ drop table if exists voucher_exchange_code_batch;
 CREATE TABLE `voucher_exchange_code_batch` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
     `name` VARCHAR(255) NOT NULL COMMENT '批次名称',
+    `voucher_name` VARCHAR(255) NOT NULL COMMENT '兑换成代金券后的名称',
     `description` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '代金券详细信息',
     `amount` INT(10) NOT NULL DEFAULT '0' COMMENT '代金券数量',
     `city_ids` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '适用城市ID集合，粒度到2级城市，以逗号隔开',
@@ -220,6 +226,7 @@ CREATE TABLE `voucher_exchange_code` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
     `batch_id` INT(10) UNSIGNED NOT NULL COMMENT '批次id',
     `batch_name` VARCHAR(255) NOT NULL COMMENT '批次名称',
+    `voucher_name` VARCHAR(255) NOT NULL COMMENT '兑换成代金券后的名称',
     `batch_description` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '代金券详细信息',
     `project_id` INT(10) COMMENT '对应项目id，为空表示无对应项目',
     `code` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '兑换码',
@@ -230,7 +237,7 @@ CREATE TABLE `voucher_exchange_code` (
     `expiry_type` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '过期时间类型 0-代金券过期时间，1-兑换之日起多少天有效',
     `status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '状态：0:停用,1:启用',
     `used` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '0-未兑换，1-已兑换',
-    `customer_id` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '兑换客户的id',
+    `customer_id` INT(10) UNSIGNED NOT NULL COMMENT '客户id',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -280,7 +287,7 @@ CREATE TABLE `product` (
     `product_price_id` INT(10) UNSIGNED NOT NULL COMMENT '商品价格id',
     `unit_name` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '计量单位名称',
     `last_num` INT(10) NOT NULL DEFAULT '1' COMMENT '最少购买数量',
-    `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '状态：0:下架,1:上架',
+    `status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '状态：0:下架,1:上架',
     `sms_template` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '短信发送模板',
     `effective_days` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '有效期天数',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
@@ -290,8 +297,8 @@ CREATE TABLE `product` (
     PRIMARY KEY (`id`)
 )  ENGINE=INNODB COMMENT='商品信息';
 
-drop table if exists electronic_product_exchange_record;
-CREATE TABLE `electronic_product_exchange_record` (
+drop table if exists electronic_product_exchange_code;
+CREATE TABLE `electronic_product_exchange_code` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
     `product_id` INT(10) UNSIGNED NOT NULL COMMENT '商品id',
     `batch_name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '批次名称',
@@ -314,6 +321,7 @@ CREATE TABLE `product_price` (
     `city_id` INT(10) UNSIGNED NOT NULL COMMENT '城市id',
     `product_id` INT(10) UNSIGNED NOT NULL COMMENT '商品id',
     `price` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '商品价格',
+    `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '状态：0:未生效,1:已生效',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -329,7 +337,7 @@ CREATE TABLE `product_category` (
     `thumbnail_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '缩略图url',
     `detail_img_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '详情图url',
     `priority` INT(10) NOT NULL DEFAULT '0' COMMENT '排序序号',
-    `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '状态：0:下架,1:上架',
+    `status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '状态：0:下架,1:上架',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -342,6 +350,7 @@ CREATE TABLE `customer` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
     `mobile` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '客户手机号',
     `name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '客户姓名',
+    `password` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '密码',
     `remark` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '备注信息',
     `default_address_id` INT(10) UNSIGNED COMMENT '默认地址id',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
@@ -393,6 +402,7 @@ CREATE TABLE `order_info` (
     `comments` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '订单备注信息',
     `type` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '订单类型',
     `status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '订单状态：待确认',
+    `audit_reason` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '订单取消时，审核理由',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

@@ -13,6 +13,12 @@ public class RCExchangeCodePageReq extends PageSizeNumReq{
     @ApiModelProperty("批次id")
     private Integer batchId;
 
+    @ApiModelProperty("启用停用状态")
+    private Byte status;
+
+    @ApiModelProperty("使用状态")
+    private Byte used;
+
     @ApiModelProperty("充值卡兑换码")
     private String code ;
 
@@ -41,5 +47,21 @@ public class RCExchangeCodePageReq extends PageSizeNumReq{
 
     public void setKeyt(String keyt) {
         this.keyt = keyt;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public Byte getUsed() {
+        return used;
+    }
+
+    public void setUsed(Byte used) {
+        this.used = used;
     }
 }
