@@ -6,16 +6,13 @@
 package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.util.CommonValidator;
-import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
 import com.jiazhe.youxiang.server.adapter.ProjectAdapter;
 import com.jiazhe.youxiang.server.biz.ProjectBiz;
-import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.project.ProjectAddDTO;
 import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
-import com.jiazhe.youxiang.server.vo.req.customer.CustomerAddReq;
 import com.jiazhe.youxiang.server.vo.req.project.ProjectAddReq;
 import com.jiazhe.youxiang.server.vo.req.project.ProjectListReq;
 import com.jiazhe.youxiang.server.vo.req.project.ProjectUpdateReq;
@@ -57,6 +54,8 @@ public class APIProjectController {
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public Object add(@ModelAttribute ProjectAddReq req) {
         //TODO niexiao 参数验证
+        CommonValidator.validateNull(req);
+        CommonValidator.validateNull(req.getName());
         ProjectAddDTO projectAddDTO = ProjectAdapter.projectAddReq2DTO(req);
         //调用BIZ方法
         projectBiz.add(projectAddDTO);
