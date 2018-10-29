@@ -41,7 +41,7 @@ import java.util.List;
 
 /**
  * @author TU
- *         Created by TU on 2018/10/11.
+ * @date 2018/10/11.
  */
 @RestController
 @RequestMapping("api/signin")
@@ -65,6 +65,9 @@ public class APISignInController extends BaseController {
         String bizId = req.getBizId();
         List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(loginName);
         //首先判断用户是否存在且唯一
+        if(Strings.isBlank(loginName)||Strings.isBlank(password)){
+            throw new CommonException(LoginEnum.LOGIN_USER_ILLEGAL.getCode(), LoginEnum.LOGIN_USER_ILLEGAL.getType(), LoginEnum.LOGIN_USER_ILLEGAL.getMessage());
+        }
         if (sysUserDTOList.size() != 1) {
             throw new CommonException(LoginEnum.LOGIN_USER_ILLEGAL.getCode(), LoginEnum.LOGIN_USER_ILLEGAL.getType(), LoginEnum.LOGIN_USER_ILLEGAL.getMessage());
         }
@@ -81,6 +84,9 @@ public class APISignInController extends BaseController {
             //判断有没有短信bizId传过来
             if (Strings.isEmpty(bizId)) {
                 throw new CommonException(LoginEnum.LOGIN_DIFFERENT_CLIENT.getCode(), LoginEnum.LOGIN_DIFFERENT_CLIENT.getType(), LoginEnum.LOGIN_DIFFERENT_CLIENT.getMessage());
+            }
+            if (Strings.isEmpty(identifyingCode)) {
+                throw new CommonException(LoginEnum.LOGIN_IDENTIFYING_CODE_EMPTY.getCode(), LoginEnum.LOGIN_IDENTIFYING_CODE_EMPTY.getType(), LoginEnum.LOGIN_IDENTIFYING_CODE_EMPTY.getMessage());
             }
             //判断验证码是否正确
             if (AliUtils.isVerified(sysUserDTO.getMobile(), identifyingCode, bizId)) {
@@ -116,10 +122,14 @@ public class APISignInController extends BaseController {
     @RequestMapping(value = "/sendcode")
     public Object sendCode(@ModelAttribute SendMsgReq req) throws ClientException {
         List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(req.getLoginname());
-        if (ValidateUtils.phoneValidate(sysUserDTOList.get(0).getMobile())) {
+        if (!ValidateUtils.phoneValidate(sysUserDTOList.get(0).getMobile())) {
             throw new CommonException(LoginEnum.LOGIN_MOBILE_ILLEGAL.getCode(), LoginEnum.LOGIN_MOBILE_ILLEGAL.getType(), LoginEnum.LOGIN_MOBILE_ILLEGAL.getMessage());
         }
         SendSmsResponse res = AliUtils.sendMsg(sysUserDTOList.get(0).getMobile());
+        if(res.getCode() == null || !res.getCode().equals("OK")){
+            logger.error("发送验证码失败，原因："+res.getMessage());
+            throw new CommonException(LoginEnum.LOGIN_MOBILE_ILLEGAL.getCode(), LoginEnum.LOGIN_MOBILE_ILLEGAL.getType(), LoginEnum.LOGIN_MOBILE_ILLEGAL.getMessage());
+        }
         SendMsgResp sendMsgResp = new SendMsgResp();
         sendMsgResp.setBizId(res.getBizId());
         return ResponseFactory.buildResponse(sendMsgResp);
