@@ -7,11 +7,12 @@ package com.jiazhe.youxiang.server.adapter;
 
 import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
+import com.jiazhe.youxiang.server.dto.product.ProductPriceBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
 import com.jiazhe.youxiang.server.vo.req.product.ProductAddReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryAddReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryUpdateReq;
-import com.jiazhe.youxiang.server.vo.req.product.ProductPriceAddReq;
+import com.jiazhe.youxiang.server.vo.req.product.ProductPriceBatchAddReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductUpdateReq;
 import com.jiazhe.youxiang.server.vo.resp.product.ProductCategoryResp;
 import com.jiazhe.youxiang.server.vo.resp.product.ProductPriceResp;
@@ -111,15 +112,15 @@ public class ProductAdapter {
         return productDTO;
     }
 
-    public static ProductPriceDTO productPriceAddReq2DTO(ProductPriceAddReq req) {
+    public static ProductPriceBatchAddDTO productPriceBatchAddReq2DTO(ProductPriceBatchAddReq req) {
         if (req == null) {
             return null;
         }
-        ProductPriceDTO productPriceDTO = new ProductPriceDTO();
-        productPriceDTO.setCityId(req.getCityId());
-        productPriceDTO.setProductId(req.getProductId());
-        productPriceDTO.setPrice(req.getPrice());
-        return productPriceDTO;
+        ProductPriceBatchAddDTO productPriceBatchAddDTO = new ProductPriceBatchAddDTO();
+        productPriceBatchAddDTO.setCityIds(req.getCityIds());
+        productPriceBatchAddDTO.setProductId(req.getProductId());
+        productPriceBatchAddDTO.setPrice(req.getPrice());
+        return productPriceBatchAddDTO;
     }
 
     public static ProductPriceResp productPriceDTO2VO(ProductPriceDTO dto) {

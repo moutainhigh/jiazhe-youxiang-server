@@ -44,8 +44,19 @@ public class SysCityServiceImpl implements SysCityService {
         } else {
             criteria.andParentCodeEqualTo(parentCode);
         }
-        List<SysCityPO> sysCityPOList = sysCityPOMapper.selectByExample(sysCityPOExample);
         criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+        List<SysCityPO> sysCityPOList = sysCityPOMapper.selectByExample(sysCityPOExample);
+
+        return sysCityPOList.stream().map(SysCityAdapter::sysCityPO2DTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SysCityDTO> getOpenList() {
+        SysCityPOExample sysCityPOExample = new SysCityPOExample();
+        SysCityPOExample.Criteria criteria = sysCityPOExample.createCriteria();
+        criteria.andStatusEqualTo(CommonConstant.CODE_CITY_OPEN);
+        criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+        List<SysCityPO> sysCityPOList = sysCityPOMapper.selectByExample(sysCityPOExample);
         return sysCityPOList.stream().map(SysCityAdapter::sysCityPO2DTO).collect(Collectors.toList());
     }
 
@@ -53,6 +64,7 @@ public class SysCityServiceImpl implements SysCityService {
     public void updateStatusByParentCode(String parentCode, Byte status) {
         sysCityPOManualMapper.updateStatusByParentCode(parentCode, status);
     }
+
 
     @Override
     public void updateStatusByCityCodes(List<String> cityCodes, Byte status) {

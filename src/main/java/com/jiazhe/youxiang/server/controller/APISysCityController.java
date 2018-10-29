@@ -66,6 +66,22 @@ public class APISysCityController extends BaseController {
     }
 
     /**
+     * 获取已开通城市列表
+     *
+     * @return
+     */
+    @ApiOperation(value = "获取已开通城市列表", httpMethod = "GET", response = SysCityResp.class, responseContainer = "List", notes = "获取已开通城市列表")
+    @RequestMapping(value = "getopenlist", method = RequestMethod.GET)
+    public Object getOpenList() {
+        //调用BIZ方法
+        List<SysCityDTO> sysCityDTOS = sysCityBiz.getOpenList();
+        //将DTO转成VO
+        List<SysCityResp> result = sysCityDTOS.stream().map(SysCityAdapter::sysCityDTO2VO).collect(Collectors.toList());
+        //用ResponseFactory将返回值包装
+        return ResponseFactory.buildResponse(result);
+    }
+
+    /**
      * 开通省份（其下级城市全部开通）
      *
      * @return

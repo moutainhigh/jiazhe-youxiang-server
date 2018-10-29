@@ -8,7 +8,9 @@ package com.jiazhe.youxiang.base.util;
 import com.jiazhe.youxiang.server.common.enums.CommonCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.CommonException;
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import com.jiazhe.youxiang.server.vo.req.IdListReq;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
+import org.apache.commons.collections.CollectionUtils;
 
 /**
  * 通用参数验证器
@@ -33,6 +35,12 @@ public class CommonValidator {
     public static void validateId(IdReq id) {
         if (id == null || id.getId() == null || id.getId() < 0) {
             throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "ID不合法");
+        }
+    }
+
+    public static void validateIdList(IdListReq idList) {
+        if (idList == null || CollectionUtils.isEmpty(idList.getIds())) {
+            throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "ID集合不能为空");
         }
     }
 }
