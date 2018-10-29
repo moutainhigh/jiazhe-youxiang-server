@@ -1,4 +1,6 @@
-package com.jiazhe.youxiang.server.vo;
+package com.jiazhe.youxiang.server.vo.resp.login;
+
+import com.jiazhe.youxiang.server.vo.BaseVO;
 
 /**
  * @author TU
