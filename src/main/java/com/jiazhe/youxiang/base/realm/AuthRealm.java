@@ -51,8 +51,8 @@ public class AuthRealm extends AuthorizingRealm {
         try {
             /*获取用户输入的token*/
             UsernamePasswordToken utoken = (UsernamePasswordToken) token;
-            String loginName = utoken.getUsername();
-            List<SysUserDTO> sysUserDTOList = sysUserBiz.findByName(loginName);
+            String loginname = utoken.getUsername();
+            List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(loginname);
             if (sysUserDTOList.size() == 1) {
                 SysUserDTO sysUserDTO = sysUserDTOList.get(0);
                 //若存在，将此用户存放到登录认证info中，无需自己做密码对比，Shiro会为我们进行密码对比校验

@@ -148,8 +148,19 @@ public class SysUserServiceImpl implements SysUserService{
     }
 
     @Override
-    public int updateLaseLoginTime(Integer id) {
-        SysUserPO sysUserPO = sysUserPOMapper.selectByPrimaryKey(id);
+    public List<SysUserDTO> findByLoginName(String loginName) {
+        SysUserPOExample sysUserPOExample = new SysUserPOExample();
+        SysUserPOExample.Criteria criteria = sysUserPOExample.createCriteria();
+        criteria.andLoginnameEqualTo(loginName);
+        criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
+        List<SysUserPO> sysUserPOList = sysUserPOMapper.selectByExample(sysUserPOExample);
+        return sysUserPOList.stream().map(SysUserAdapter::PO2DTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public int updateLaseLoginInfo(Integer userId, String ipAdrress) {
+        SysUserPO sysUserPO = sysUserPOMapper.selectByPrimaryKey(userId);
+        sysUserPO.setLastLoginIp(ipAdrress);
         sysUserPO.setLastLoginTime(new Date());
         return sysUserPOMapper.updateByPrimaryKeySelective(sysUserPO);
     }

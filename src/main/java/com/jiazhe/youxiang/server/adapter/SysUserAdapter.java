@@ -21,10 +21,11 @@ public class SysUserAdapter {
         SysUserDTO sysUserDTO = new SysUserDTO();
         sysUserDTO.setId(sysUserPO.getId());
         sysUserDTO.setMobile(sysUserPO.getMobile());
-        /*sysUserDTO.setName(sysUserPO.getName());*/
+        sysUserDTO.setLoginName(sysUserPO.getLoginname());
         sysUserDTO.setLastLoginTime(sysUserPO.getLastLoginTime());
         sysUserDTO.setSalt(sysUserPO.getSalt());
         sysUserDTO.setPassword(sysUserPO.getPassword());
+        sysUserDTO.setLastLoginIp(sysUserPO.getLastLoginIp());
         return sysUserDTO;
     }
 

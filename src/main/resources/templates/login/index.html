@@ -42,22 +42,34 @@
 
                                     <form id="loginForm">
                                         <input type="hidden" id="bizId" name="bizId">
-                                        <input type="hidden" id="phone" name="phone">
                                         <fieldset>
                                             <label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input id="name" name="name" type="text"
-                                                                   class="form-control" placeholder="用户名"/>
-															<i class="ace-icon fa fa-user"></i>
-														</span>
+                                                <span class="block input-icon input-icon-right">
+                                                    <input id="loginname" name="loginname" type="text"
+                                                           class="form-control" placeholder="用户名"/>
+                                                    <i class="ace-icon fa fa-user"></i>
+                                                </span>
                                             </label>
 
                                             <label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input id="password" name="password" type="password"
-                                                                   class="form-control" placeholder="密码"/>
-															<i class="ace-icon fa fa-lock"></i>
-														</span>
+                                                <span class="block input-icon input-icon-right">
+                                                    <input id="password" name="password" type="password"
+                                                           class="form-control" placeholder="密码"/>
+                                                    <i class="ace-icon fa fa-lock"></i>
+                                                </span>
+                                            </label>
+
+                                            <label id="identifyingCodeLabel" class="clearfix" style="display: none">
+                                                <span class="block input-icon input-icon-right">
+                                                    <input id="identifyingCode" name="identifyingCode" type="text"
+                                                           class="form-control" placeholder="验证码"/>
+                                                    <i class="ace-icon" id="identifyingCodeButton" onclick="getCode()">
+                                                        获取验证码
+                                                    </i>
+                                                    <i class="ace-icon" id="identifyingCodeBadge" style="display: none">
+                                                        <span class="badge badge-danger">60</span>
+                                                    </i>
+                                                </span>
                                             </label>
 
                                             <div class="space"></div>
@@ -66,7 +78,7 @@
                                                 <button type="button" class="width-35 pull-right btn btn-sm btn-primary"
                                                         id="login-btn">
                                                     <i class="ace-icon fa fa-key"></i>
-                                                    <span class="bigger-110">登陆</span>
+                                                    <span class="bigger-110">登录</span>
                                                 </button>
                                             </div>
 
@@ -91,95 +103,86 @@
 
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
-    var hasSentCode = false;//默认没有发送验证码
+    var countdown=60;
+
+    function settime(val) {
+        if (countdown == 0) {
+            $("#identifyingCodeBadge").css("display","none");
+            $("#identifyingCodeButton").css("display","");
+            countdown = 60;
+        } else {
+            countdown--;
+            $("#identifyingCodeBadge").find("span").text(countdown);
+            setTimeout(function() {
+                settime(val)
+            },1000);
+        }
+    }
+
+    function getCode(){
+        var loginname = $("#loginname").val();
+        $.ajax({
+            url: "../api/signin/sendcode", //登陆请求
+            dataType: "json",
+            async: false,
+            data: {
+                loginname: loginname,
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data){//错误
+                    bootboxalert(data.error.message);
+                }else{//发送验证码成功
+                    $("#bizId").val(data.data.bizId);
+                    $("#identifyingCodeBadge").css("display","");
+                    $("#identifyingCodeButton").css("display","none");
+                    settime(60);
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
     $(function () {
+
         $("#login-btn").click(function () {
-            var name = $("#name").val();
+            var loginname = $("#loginname").val();
             var password = $("#password").val();
-            if (name == "" || password == "") {
+            var identifyingCode = $("#identifyingCode").val();
+            var bizId = $("#bizId").val()
+            if (loginname == "" || password == "") {
                 bootboxalert("请将信息填写完整后再登录");
                 return false;
             }
-            if (hasSentCode) {//已经发送验证码
-                showCodePrompt();
-            } else {//没发送验证码，就发送验证码
-                $.ajax({
-                    url: "../api/signin/sendsignincode", //此处登陆，其实是请求验证码
-                    dataType: "json",
-                    async: false,
-                    data: {
-                        name: name,
-                        password: password
-                    },
-                    type: "GET",
-                    success: function (result) {
-                        if (result.code == '000000') {//验证码获取成功
-                            hasSentCode = true;
-                            window.setTimeout(function () {//一分钟之后可以重新发送验证码
-                                hasSentCode = false;
-                            }, 300000);
-                            $("#bizId").val(result.data.bizId);
-                            $("#phone").val(result.data.phone);
-                            showCodePrompt();
-                        } else {
-                            bootboxalert(result.msg);
+            $.ajax({
+                url: "../api/signin/signin", //登陆请求
+                dataType: "json",
+                async: false,
+                data: {
+                    loginname: loginname,
+                    password: password,
+                    identifyingCode : identifyingCode,
+                    bizId:bizId
+                },
+                type: "GET",
+                success: function (data) {
+                    if ('error' in data){//异客户端登陆了
+                        if(data.error.code == 400003 ){//发送了验证码
+                            $('#identifyingCodeLabel').css("display","block");
+                        }else{
+                            bootboxalert(data.error.message);
                         }
-                    },
-                    error: function () {
-                        bootboxalert("服务器异常，请联系管理员");
+                    }else{//登陆成功
+                       window.location.href = "../main/main";
                     }
-                });
-            }
+                },
+                error: function () {
+                    bootboxalert("服务器异常，请联系管理员");
+                }
+            });
         });
     })
-
-    function showCodePrompt() {
-        var name = $("#name").val();
-        var password = $("#password").val();
-        var bizId = $("#bizId").val();
-        var phone = $("#phone").val();
-        bootbox.prompt({
-            size: "small",
-            title: "请输入登录验证码",
-            buttons: {
-                confirm: {
-                    label: '登录',
-                    className: 'btn-primary'
-                },
-                cancel: {
-                    label: '取消',
-                    className: 'btn-default'
-                }
-            },
-            callback: function (result) {
-                if (result != null) {
-                    $.ajax({
-                        url: "../api/signin/signin", //确定为登陆
-                        dataType: "json",
-                        async: false,
-                        data: {
-                            name: name,
-                            password: password,
-                            phone: phone,
-                            bizId: bizId,
-                            code: result
-                        },
-                        type: "GET",
-                        success: function (result) {
-                            if (result.code == "000000") {
-                                window.location.href = "../main/main";
-                            } else {
-                                bootboxalert(result.msg);
-                            }
-                        },
-                        error: function () {
-                            bootboxalert("服务器异常，请联系管理员");
-                        }
-                    });
-                }
-            }
-        })
-    }
 </script>
 </body>
 </html>
