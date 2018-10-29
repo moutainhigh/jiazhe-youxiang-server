@@ -70,7 +70,7 @@ public class SysLogBiz {
 
     }
 
-    public static List<SysLogDTO> getList(String moduleName, String operate, Integer level, Paging paging) {
+    public List<SysLogDTO> getList(String moduleName, String operate, Integer level, Paging paging) {
         //这里面给paging的hasMore和total赋值
         return sysLogService.getList(moduleName, operate, level, paging);
     }

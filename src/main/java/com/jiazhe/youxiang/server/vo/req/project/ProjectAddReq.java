@@ -17,13 +17,13 @@ import io.swagger.annotations.ApiModelProperty;
 public class ProjectAddReq extends BaseVO {
 
     private static final long serialVersionUID = 6481364365071703120L;
-    @ApiModelProperty("项目名称")
+    @ApiModelProperty("项目名称,非空")
     private Integer name;
-    @ApiModelProperty("项目描述信息")
+    @ApiModelProperty("项目描述信息，可空")
     private String description;
-    @ApiModelProperty("排序")
-    private Integer priority;
-    @ApiModelProperty("项目状态")
+    @ApiModelProperty("排序，可空，默认1")
+    private Integer priority = 1;
+    @ApiModelProperty("项目状态,可空，默认关闭")
     private Byte status;
 
     public Integer getName() {

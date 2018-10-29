@@ -21,4 +21,6 @@ public interface SysCityService {
     void updateStatusByCityCodes(List<String> cityCodes, Byte status);
 
     void updateStatusByParentCode(String parentCode, Byte status);
+
+    List<SysCityDTO> getOpenList();
 }

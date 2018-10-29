@@ -8,6 +8,7 @@ package com.jiazhe.youxiang.server.biz;
 import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
+import com.jiazhe.youxiang.server.dto.product.ProductPriceBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.stereotype.Service;
@@ -55,7 +56,7 @@ public class ProductBiz {
         return null;
     }
 
-    public List<ProductDTO> getList(Integer productCategoryId, String name, Integer productType, Integer status, Paging paging) {
+    public List<ProductDTO> getList(Integer productCategoryId, String name, Integer productType, List<Integer> cityIds, Integer status, Paging paging) {
         return null;
     }
 
@@ -71,7 +72,7 @@ public class ProductBiz {
 
     /*************商品价格相关******************/
 
-    public void addPrice(ProductPriceDTO productPriceDTO) {
+    public void batchAddPrice(ProductPriceBatchAddDTO productPriceBatchAddDTO) {
     }
 
     public ProductPriceDTO getPriceById(Integer id) {
@@ -86,10 +87,11 @@ public class ProductBiz {
         return Lists.newArrayList();
     }
 
-    public void updatePrice(Integer id, BigDecimal price) {
+    public void batchDeletePrice(List<Integer> id) {
     }
 
-    public void deletePrice(Integer id) {
+
+    public void batchUpdatePrice(List<Integer> cityIds, BigDecimal price) {
     }
 
 
