@@ -55,7 +55,7 @@ public class APIProjectController {
     public Object add(@ModelAttribute ProjectAddReq req) {
         //TODO niexiao 参数验证
         CommonValidator.validateNull(req);
-        CommonValidator.validateNull(req.getName());
+        //CommonValidator.validateNull(req.getName());
         ProjectAddDTO projectAddDTO = ProjectAdapter.projectAddReq2DTO(req);
         //调用BIZ方法
         projectBiz.add(projectAddDTO);
