@@ -371,6 +371,11 @@ class HeaderItemDTO {
      * 字段的具体值
      */
     private Integer level;
+
+    /**
+     * 字段的具体值
+     */
+    private String parentPath;
     /**
      * 子节点
      */
@@ -407,6 +412,14 @@ class HeaderItemDTO {
 
     public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    public String getParentPath() {
+        return parentPath;
+    }
+
+    public void setParentPath(String parentPath) {
+        this.parentPath = parentPath;
     }
 }
 

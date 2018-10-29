@@ -9,10 +9,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.logging.log4j.util.Strings;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * 在这里编写类的功能描述
@@ -26,16 +26,16 @@ public class TreeTest1 {
     public static void main(String[] args) {
 
         List<Map<String, Object>> dataList = getTestData();
-        List<DtsDim> columnDimList = getTestColumnDimList();
+        List<DtsDim> rowDimList = getTestColumnDimList();
 
 
-        List<HeaderItemDTO> getHeaderColumns = getHeaderColumns(dataList, columnDimList);
+        List<HeaderItemDTO> getHeaderColumns = getColumnValues(dataList, rowDimList);
         System.out.println(JSONObject.toJSONString(getHeaderColumns));
     }
 
     private static List<Map<String, Object>> getTestData() {
         List<Map<String, Object>> result = Lists.newArrayList();
-        List<String> years = Lists.newArrayList("2017", "2018");
+        List<String> years = Lists.newArrayList("2017", "2018","2019");
         List<String> quarters = Lists.newArrayList("Q1", "Q2");
         List<String> months = Lists.newArrayList("1", "2");
         for (String year : years) {
@@ -46,6 +46,13 @@ public class TreeTest1 {
                     map.put("quarter", quarter);
                     map.put("month", month);
                     result.add(map);
+                    if(quarter.equals("Q1")){
+                        Map<String, Object> map1 = Maps.newHashMap();
+                        map1.put("year", year);
+                        map1.put("quarter", quarter);
+                        map1.put("month", "3");
+                        result.add(map1);
+                    }
                 }
             }
         }
@@ -61,117 +68,81 @@ public class TreeTest1 {
         DtsDim dtsDim1 = new DtsDim();
         dtsDim1.setDimField("quarter");
         result.add(dtsDim1);
+        DtsDim dtsDim2 = new DtsDim();
+        dtsDim2.setDimField("month");
+        result.add(dtsDim2);
         return result;
     }
 
-    private static List<HeaderItemDTO> getHeaderColumns(List<Map<String, Object>> dataList, List<DtsDim> columnDimList) {
+    /**
+     * 获得列值信息
+     * @param dataList 查询得到的数据（包括行维度）
+     * @param rowDimList 行维度列表
+     * @return
+     */
+    private static List<HeaderItemDTO> getColumnValues(List<Map<String, Object>> dataList, List<DtsDim> rowDimList) {
 
+        //获得行维度字段名集合
         List<String> columnDimFieldList = Lists.newLinkedList();
-        if (CollectionUtils.isNotEmpty(columnDimList)) {
-            for (DtsDim dimItem : columnDimList) {
+        if (CollectionUtils.isNotEmpty(rowDimList)) {
+            for (DtsDim dimItem : rowDimList) {
                 columnDimFieldList.add(dimItem.getDimField());
             }
         }
 
-//        List<String[]> codeList = Lists.newArrayList();
-//        for (Map<String, Object> map : dataList) {
-//            for (String[] item :
-//                    codeList) {
-//                if (item.getFieldValue().equals(getCode(map, columnDimFieldList, 0))) {
-//                 break;
-//                }
-//
-//            }
-//            HeaderItemDTO headerItemDTO = new HeaderItemDTO();
-//            headerItemDTO.setFieldValue(getCode(map, columnDimFieldList, 0));
-//            headerItemDTOS.add(headerItemDTO);
-//        }
-
-
-        List<TreeNode> treeNodes = Lists.newArrayList();
+        //遍历查询得到的数据，获得HeaderItemDTO的map key是HeaderItemDTO所处的路径
+        //map中vaule的数据量和查询得到的数据行数保持一直（不包含合计的情况下）
+        Map<String,HeaderItemDTO> flatHeaderItemMap = Maps.newLinkedHashMap();
         for (Map<String, Object> map : dataList) {
-            int size = columnDimFieldList.size() - 1;
-            List<String> fatherIds = Lists.newArrayList();
-            for (int i = 0; i < size; i++) {
-                TreeNode treeNode = new TreeNode();
-                treeNode.setName(map.get(columnDimFieldList.get(i)).toString());
-                if (i == 0) {
-                    treeNode.setParentId(null);
-                    fatherIds.add(treeNode.getId());
-                } else {
-                    treeNode.setParentId(fatherIds.get(i));
-                }
-                if (!treeNodes.contains(treeNode)) {
-                    treeNodes.add(treeNode);
-                }
+            String path = "";
+            for (DtsDim dim : rowDimList) {
+                HeaderItemDTO item = new HeaderItemDTO();
+                item.setFieldValue(map.get(dim.getDimField()).toString());
+                item.setParentPath(path);
+                path += "," + item.getFieldValue();
+                flatHeaderItemMap.put(path,item);
             }
         }
-//        return getHeaderColumns(treeNodes);
-        return null;
-    }
-
-    private static HeaderItemDTO getgetHeaderColumn() {
-return null;
-    }
-
-    private static String getCode(Map<String, Object> map, List<String> columnDimFieldList, int level) {
-        StringBuilder sb = new StringBuilder();
-        int index = 0;
-        for (int i = 0; i <= level; i++) {
-            if (index > 0) {
-                sb.append(",");
-            }
-            sb.append(map.get(columnDimFieldList.get(level)));
-            index++;
+        //遍历刚刚得到的map，利用path将其拼接树形结构
+        List<HeaderItemDTO> result = Lists.newLinkedList();
+        for (HeaderItemDTO itemDTO : flatHeaderItemMap.values()) {
+           if(Strings.isBlank(itemDTO.getParentPath())){
+               result.add(itemDTO);
+           }else {
+               HeaderItemDTO parent = flatHeaderItemMap.get(itemDTO.getParentPath());
+               if (parent == null) {
+                   System.out.println("有问题：" + JSONObject.toJSONString(itemDTO.getParentPath()));
+               }
+               if (CollectionUtils.isEmpty(parent.getChildren())) {
+                   parent.setChildren(Lists.newLinkedList());
+               }
+               parent.getChildren().add(itemDTO);
+           }
         }
-
-        return sb.toString();
+        return result;
     }
-
-//
-//    private static List<HeaderItemDTO> getHeaderColumns(List<Map<String, Object>> dataList, List<DtsDim> columnDimList) {
-//
-//        List<String> columnDimFieldList = Lists.newLinkedList();
-//        if (CollectionUtils.isNotEmpty(columnDimList)) {
-//            for (DtsDim dimItem : columnDimList) {
-//                columnDimFieldList.add(dimItem.getDimField());
-//            }
-//        }
-//        List<TreeNode> treeNodes = Lists.newArrayList();
-//        for (Map<String, Object> map : dataList) {
-//            int size = columnDimFieldList.size() - 1;
-//            List<String> fatherIds = Lists.newArrayList();
-//            for (int i = 0; i < size; i++) {
-//                TreeNode treeNode = new TreeNode();
-//                treeNode.setName(map.get(columnDimFieldList.get(i)).toString());
-//                if (i == 0) {
-//                    treeNode.setParentId(null);
-//                    fatherIds.add(treeNode.getId());
-//                } else {
-//                    treeNode.setParentId(fatherIds.get(i));
-//                }
-//                if(!treeNodes.contains(treeNode)){
-//                    treeNodes.add(treeNode);
-//                }
-//            }
-//        }
-//        return getHeaderColumns(treeNodes);
-//    }
-
 }
 
 class TreeNode {
-    private String id;
+    private String path;
+    private String parentpath;
     private String name;
-    private String parentId;
     private List<TreeNode> children;
 
-    public TreeNode() {
-        this.id = UUID.randomUUID().toString();
+    public String getPath() {
+        return path;
     }
 
-    public String getId() {
-        return id;
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getParentpath() {
+        return parentpath;
+    }
+
+    public void setParentpath(String parentpath) {
+        this.parentpath = parentpath;
     }
 
     public String getName() {
@@ -180,14 +151,6 @@ class TreeNode {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
     }
 
     public List<TreeNode> getChildren() {
