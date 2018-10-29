@@ -61,7 +61,7 @@ public class APISysUserController extends BaseController{
         Paging paging = new Paging();
         paging.setOffset((req.getPageNum()-1)*req.getPageSize());
         paging.setLimit(req.getPageSize());
-        List<SysUserDTO> sysUserDTOList = sysUserBiz.getList(req.getName(), paging);
+        List<SysUserDTO> sysUserDTOList = sysUserBiz.getList(req.getLoginName(),req.getDisplayName(), paging);
         List<SysUserResp> sysUserRespList = sysUserDTOList.stream().map(SysUserAdapter::DTO2RespVO).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(sysUserRespList, paging);
     }

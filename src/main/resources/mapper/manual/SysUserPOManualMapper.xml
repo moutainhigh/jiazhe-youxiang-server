@@ -4,10 +4,12 @@
     <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.SysUserPO">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
-        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="loginName" property="loginname" jdbcType="VARCHAR"/>
+        <result column="displayName" property="displayname" jdbcType="VARCHAR"/>
         <result column="salt" property="salt" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
         <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP"/>
+        <result column="last_login_ip" property="lastLoginIp" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
         <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
@@ -16,7 +18,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, mobile,name,salt,password,last_login_time,remark, ext_info, is_deleted,add_time, mod_time
+        id, mobile,loginName,displayName,salt,password,last_login_time,remark, ext_info, is_deleted,add_time, mod_time
     </sql>
 
     <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.SysUserPO">
@@ -24,8 +26,11 @@
         <include refid="Base_Column_List"/>
         FROM sys_user
         <where>
-            <if test="name != null and name != ''">
-                AND name = #{name}
+            <if test="loginName != null and loginName != ''">
+                AND loginName = #{loginName}
+            </if>
+            <if test="displayName != null and displayName != ''">
+                AND displayName = #{displayName}
             </if>
             AND is_deleted = 0 ORDER BY last_login_time DESC
         </where>
@@ -35,17 +40,20 @@
     <select id="count" resultType="java.lang.Integer">
         select count(*) from sys_user
         <where>
-            <if test="name != null">
-                AND name = #{name}
+            <if test="loginName != null and loginName != ''">
+                AND loginName = #{loginName}
             </if>
+            <if test="displayName != null and displayName != ''">
+                AND displayName = #{displayName}
+            </if>
+            AND is_deleted = 0
         </where>
-       AND is_deleted = 0
     </select>
 
     <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.SysUserPO" keyProperty="id"
             useGeneratedKeys="true">
-        insert into sys_user ( id, mobile,name,salt,password,last_login_time,remark, ext_info, is_deleted,add_time, mod_time)
-        values (#{id,jdbcType=INTEGER}, #{mobile,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{salt,jdbcType=VARCHAR},
+        insert into sys_user ( id, mobile,loginName,displayName,salt,password,last_login_time,remark, ext_info, is_deleted,add_time, mod_time)
+        values (#{id,jdbcType=INTEGER}, #{mobile,jdbcType=VARCHAR},#{loginname,jdbcType=VARCHAR},#{displayname,jdbcType=VARCHAR},#{salt,jdbcType=VARCHAR},
         #{password,jdbcType=VARCHAR},#{lastLoginTime,jdbcType=TIMESTAMP},#{remark,jdbcType=VARCHAR}, #{extInfo,jdbcType=VARCHAR},
         #{isDeleted,jdbcType=TINYINT},#{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
     </insert>

@@ -12,3 +12,4 @@
 | 客户管理| 109 | com.jiazhe.youxiang.server.common.enums.ProjectCodeEnum |
 | 商品管理| 110 | com.jiazhe.youxiang.server.common.enums.ProjectCodeEnum |
 | 审核管理| 111 | com.jiazhe.youxiang.server.common.enums.ProjectCodeEnum |
+| 登录   |112   |com.jiazhe.youxiang.server.common.enums.LoginEnum|

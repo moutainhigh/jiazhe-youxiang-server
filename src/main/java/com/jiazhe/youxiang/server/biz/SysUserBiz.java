@@ -35,8 +35,8 @@ public class SysUserBiz {
         return  sysUserDTOList;
     }
 
-    public List<SysUserDTO> getList(String name, Paging paging) {
-        return sysUserService.getList(name,paging);
+    public List<SysUserDTO> getList(String loginName, String displayName,Paging paging) {
+        return sysUserService.getList(loginName,displayName,paging);
     }
 
     public int deleteUserWithRole(Integer userId) {
@@ -48,7 +48,7 @@ public class SysUserBiz {
     }
 
     public boolean userHasExisted(UserWithRoleDTO userWithRoleDTO) {
-        List<SysUserDTO> sysUserDTOList = sysUserService.findByName(userWithRoleDTO.getLoginName());
+        List<SysUserDTO> sysUserDTOList = sysUserService.findByLoginName(userWithRoleDTO.getLoginName());
         return (2 == sysUserDTOList.size()) || (sysUserDTOList.size() == 1 && !sysUserDTOList.get(0).getId().equals(userWithRoleDTO.getId()));
     }
 

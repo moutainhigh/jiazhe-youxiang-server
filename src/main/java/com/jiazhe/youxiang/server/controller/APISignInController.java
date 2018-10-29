@@ -89,9 +89,7 @@ public class APISignInController extends BaseController {
                 throw new CommonException(LoginEnum.LOGIN_IDENTIFYING_CODE_EMPTY.getCode(), LoginEnum.LOGIN_IDENTIFYING_CODE_EMPTY.getType(), LoginEnum.LOGIN_IDENTIFYING_CODE_EMPTY.getMessage());
             }
             //判断验证码是否正确
-            if (AliUtils.isVerified(sysUserDTO.getMobile(), identifyingCode, bizId)) {
-                sysUserBiz.updateLastLoginInfo(sysUserDTO.getId(), IpAdrressUtil.getIpAdrress(request));
-            } else {
+            if (!AliUtils.isVerified(sysUserDTO.getMobile(), identifyingCode, bizId)) {
                 throw new CommonException(LoginEnum.LOGIN_IDENTIFYING_CODE_ERROR.getCode(), LoginEnum.LOGIN_IDENTIFYING_CODE_ERROR.getType(), LoginEnum.LOGIN_IDENTIFYING_CODE_ERROR.getMessage());
             }
         }
@@ -115,6 +113,7 @@ public class APISignInController extends BaseController {
         String permission = StringUtils.join(info.getStringPermissions(), ",");
         CookieUtil.addCookie(response, "permission", permission);
         CookieUtil.addCookie(response, "displayName", sysUserDTO.getDisplayName());
+        sysUserBiz.updateLastLoginInfo(sysUserDTO.getId(), IpAdrressUtil.getIpAdrress(request));
         return ResponseFactory.buildSuccess();
     }
 
@@ -122,6 +121,9 @@ public class APISignInController extends BaseController {
     @RequestMapping(value = "/sendcode")
     public Object sendCode(@ModelAttribute SendMsgReq req) throws ClientException {
         List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(req.getLoginname());
+        if (sysUserDTOList.size() != 1) {
+            throw new CommonException(LoginEnum.LOGIN_USER_ILLEGAL.getCode(), LoginEnum.LOGIN_USER_ILLEGAL.getType(), LoginEnum.LOGIN_USER_ILLEGAL.getMessage());
+        }
         if (!ValidateUtils.phoneValidate(sysUserDTOList.get(0).getMobile())) {
             throw new CommonException(LoginEnum.LOGIN_MOBILE_ILLEGAL.getCode(), LoginEnum.LOGIN_MOBILE_ILLEGAL.getType(), LoginEnum.LOGIN_MOBILE_ILLEGAL.getMessage());
         }

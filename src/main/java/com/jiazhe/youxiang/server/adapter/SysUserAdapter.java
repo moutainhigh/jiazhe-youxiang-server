@@ -22,9 +22,10 @@ public class SysUserAdapter {
         sysUserDTO.setId(sysUserPO.getId());
         sysUserDTO.setMobile(sysUserPO.getMobile());
         sysUserDTO.setLoginName(sysUserPO.getLoginname());
-        sysUserDTO.setLastLoginTime(sysUserPO.getLastLoginTime());
+        sysUserDTO.setDisplayName(sysUserPO.getDisplayname());
         sysUserDTO.setSalt(sysUserPO.getSalt());
         sysUserDTO.setPassword(sysUserPO.getPassword());
+        sysUserDTO.setLastLoginTime(sysUserPO.getLastLoginTime());
         sysUserDTO.setLastLoginIp(sysUserPO.getLastLoginIp());
         return sysUserDTO;
     }
@@ -36,10 +37,12 @@ public class SysUserAdapter {
         SysUserPO sysUserPO = new SysUserPO();
         sysUserPO.setId(sysUserDTO.getId());
         sysUserPO.setMobile(sysUserDTO.getMobile());
-        /*sysUserPO.setName(sysUserDTO.getName());*/
+        sysUserPO.setLoginname(sysUserDTO.getLoginName());
+        sysUserPO.setDisplayname(sysUserDTO.getDisplayName());
         sysUserPO.setLastLoginTime(sysUserDTO.getLastLoginTime());
         sysUserPO.setSalt(sysUserDTO.getSalt());
         sysUserPO.setPassword(sysUserDTO.getPassword());
+        sysUserPO.setLastLoginIp(sysUserDTO.getLastLoginIp());
         return sysUserPO;
     }
 

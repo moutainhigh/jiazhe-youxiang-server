@@ -53,9 +53,9 @@ public class SysUserServiceImpl implements SysUserService{
     }
 
     @Override
-    public List<SysUserDTO> getList(String name, Paging paging) {
-        Integer count = sysUserPOManualMapper.count(name);
-        List<SysUserPO> sysUserPOList = sysUserPOManualMapper.query(name,paging.getOffset(),paging.getLimit());
+    public List<SysUserDTO> getList(String loginName,String displayName, Paging paging) {
+        Integer count = sysUserPOManualMapper.count(loginName,displayName);
+        List<SysUserPO> sysUserPOList = sysUserPOManualMapper.query(loginName,displayName,paging.getOffset(),paging.getLimit());
         paging.setTotal(count);
         if (paging.getLimit() + paging.getOffset() >= count) {
             paging.setHasMore(false);
@@ -92,7 +92,8 @@ public class SysUserServiceImpl implements SysUserService{
         UserWithRoleDTO userWithRoleDTO = new UserWithRoleDTO();
         userWithRoleDTO.setId(sysUserPO.getId());
         userWithRoleDTO.setMobile(sysUserPO.getMobile());
-        /*userWithRoleDTO.setName(sysUserPO.getName());*/
+        userWithRoleDTO.setLoginName(sysUserPO.getLoginname());
+        userWithRoleDTO.setDisplayName(sysUserPO.getDisplayname());
         userWithRoleDTO.setRoleIds(roleIds.toString());
         return userWithRoleDTO;
     }
