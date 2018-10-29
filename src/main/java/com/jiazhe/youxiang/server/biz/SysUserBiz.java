@@ -114,7 +114,11 @@ public class SysUserBiz {
         return sysUserService.findByName(name);
     }
 
-    public int updateLastLoginTime(Integer id) {
-        return sysUserService.updateLaseLoginTime(id);
+    public List<SysUserDTO> findByLoginName(String loginName) {
+        return sysUserService.findByLoginName(loginName);
+    }
+
+    public int updateLastLoginInfo(Integer userId , String ipAdrress) {
+        return sysUserService.updateLaseLoginInfo(userId,ipAdrress);
     }
 }

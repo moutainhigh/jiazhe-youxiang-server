@@ -57,6 +57,11 @@ public class CommonConstant {
     public static final Integer ONE_DAY = 24 * 3600 *1000 ;
 
     /**
+     * 短信有效时间
+     */
+    public static final Integer FIVE_MINUTES = 5 * 60 *1000 ;
+
+    /**
      * 订单状态【1代付款，2待派单，3待服务，4已完成，5取消待审核，6取消审核未通过，7已取消】
      */
     public static final Integer ORDER_UNPAID = 1;

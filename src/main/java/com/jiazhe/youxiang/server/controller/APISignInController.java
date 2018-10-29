@@ -1,29 +1,37 @@
 package com.jiazhe.youxiang.server.controller;
 
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.realm.AuthRealm;
 import com.jiazhe.youxiang.base.util.*;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
-/*import com.jiazhe.youxiang.server.domain.po.SysUserPO;*/
+import com.jiazhe.youxiang.server.common.enums.LoginEnum;
+import com.jiazhe.youxiang.server.common.exceptions.CommonException;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
+import com.jiazhe.youxiang.server.vo.ResponseFactory;
+import com.jiazhe.youxiang.server.vo.req.login.SendMsgReq;
+import com.jiazhe.youxiang.server.vo.resp.login.SendMsgResp;
+import com.jiazhe.youxiang.server.vo.req.login.LoginReq;
+import io.swagger.annotations.ApiOperation;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
-import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -32,7 +40,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by TU on 2018/10/11.
+ * @author TU
+ *         Created by TU on 2018/10/11.
  */
 @RestController
 @RequestMapping("api/signin")
@@ -47,111 +56,73 @@ public class APISignInController extends BaseController {
     @Autowired
     private SysUserBiz sysUserBiz;
 
-    /**
-     * 验证用户名密码成功后，给员工发送短信
-     * @param request
-     * @param response
-     * @throws IOException
-     * @throws ClientException
-     */
-    @RequestMapping(value = "/sendsignincode")
-    public void sendIdentifyingCode(HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException {
-        String code = "";
-        String msg = "";
-        JSONObject data = new JSONObject();
-        String name = request.getParameter("name");
-        String password = request.getParameter("password");
-        List<SysUserDTO> sysUserDTOList = sysUserBiz.findByName(name);
-        if (sysUserDTOList.size() == 1) {
-            //根据用户名和密码判断，是否有该用户，有该用户，给该用户手机发验证短信
-            SysUserDTO sysUserDTO = sysUserDTOList.get(0);
-            String saltPassword = EncryptPasswordUtil.encrypt(sysUserDTO.getSalt(), password);
-            if (saltPassword.equals(sysUserDTO.getPassword())) {
-                //密码加密后一致
-                if (!ValidateUtils.phoneValidate(sysUserDTO.getMobile())) {
-                    //判断该用户的绑定的手机号是否合法
-                    code = "000001";
-                    msg = "您还没有绑定合法的手机号码，请联系后台管理员";
-                } else {//合法发送验证码
-                   /*SendSmsResponse res = AliUtils.sendMsg(sysUserPO.getMobile());
-                    if (res.getCode() != null && res.getCode().equals("OK")) {
-                        code = "000000";
-                        msg = "发送验证码成功";
-                        data.put("bizId", res.getBizId());
-                        data.put("phone", sysUserPO.getMobile());
-                    } else {
-                        code = "000001";
-                        msg = "发送短信失败，原因：" + res.getMessage();//发送失败的原因
-                    }*/
-                    code = "000000";
-                    msg = "发送验证码成功";
-                }
-            } else {
-                code = "000001";
-                msg = "密码错误";
-            }
-        } else {
-            code = "000001";
-            msg = "用户不存在";
+    @ApiOperation(value = "登录", httpMethod = "GET", notes = "登录")
+    @RequestMapping(value = "/signin")
+    public Object sigin(@ModelAttribute LoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
+        String loginName = req.getLoginname();
+        String password = req.getPassword();
+        String identifyingCode = req.getIdentifyingCode();
+        String bizId = req.getBizId();
+        List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(loginName);
+        //首先判断用户是否存在且唯一
+        if (sysUserDTOList.size() != 1) {
+            throw new CommonException(LoginEnum.LOGIN_USER_ILLEGAL.getCode(), LoginEnum.LOGIN_USER_ILLEGAL.getType(), LoginEnum.LOGIN_USER_ILLEGAL.getMessage());
         }
-        ResponseUtil.responseUtils(response, ResultPackage.resultPackage(code, data, msg));
+        SysUserDTO sysUserDTO = sysUserDTOList.get(0);
+        String saltPassword = EncryptPasswordUtil.encrypt(sysUserDTO.getSalt(), password);
+        //密码是否正确
+        if (!saltPassword.equals(sysUserDTO.getPassword())) {
+            throw new CommonException(LoginEnum.LOGIN_PASSWRLD_WRONG.getCode(), LoginEnum.LOGIN_PASSWRLD_WRONG.getType(), LoginEnum.LOGIN_PASSWRLD_WRONG.getMessage());
+        }
+        //判断最后一次登陆ip是否一致，一致则直接登陆
+        if (sysUserDTO.getLastLoginIp().equals(IpAdrressUtil.getIpAdrress(request))) {
+
+        } else {
+            //判断有没有短信bizId传过来
+            if (Strings.isEmpty(bizId)) {
+                throw new CommonException(LoginEnum.LOGIN_DIFFERENT_CLIENT.getCode(), LoginEnum.LOGIN_DIFFERENT_CLIENT.getType(), LoginEnum.LOGIN_DIFFERENT_CLIENT.getMessage());
+            }
+            //判断验证码是否正确
+            if (AliUtils.isVerified(sysUserDTO.getMobile(), identifyingCode, bizId)) {
+                sysUserBiz.updateLastLoginInfo(sysUserDTO.getId(), IpAdrressUtil.getIpAdrress(request));
+            } else {
+                throw new CommonException(LoginEnum.LOGIN_IDENTIFYING_CODE_ERROR.getCode(), LoginEnum.LOGIN_IDENTIFYING_CODE_ERROR.getType(), LoginEnum.LOGIN_IDENTIFYING_CODE_ERROR.getMessage());
+            }
+        }
+        Subject subject = SecurityUtils.getSubject();
+        Collection<Session> sessions = sessionDAO.getActiveSessions();
+        for (Session session : sessions) {
+            if (null != session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)) {
+                logger.info("登录用户" + session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY));
+                if (loginName.equals((session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY).toString()))) {
+                    // session.setTimeout(0); //这里就把session清除
+                    logger.info(("删除用户seesion" + session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY).toString()));
+                    // session清除，
+                    sessionDAO.delete(session);
+                }
+            }
+        }
+        subject.login(new UsernamePasswordToken(loginName, password));
+        // 将seesion过期时间设置为8小时
+        subject.getSession().setTimeout(ConstantFetchUtil.hour_8);
+        AuthorizationInfo info = authRealm.doGetAuthorizationInfo(subject.getPrincipals());
+        String permission = StringUtils.join(info.getStringPermissions(), ",");
+        CookieUtil.addCookie(response, "permission", permission);
+        CookieUtil.addCookie(response, "displayName", sysUserDTO.getDisplayName());
+        return ResponseFactory.buildSuccess();
     }
 
-    /**
-     * 后台用户通过验证码和密码登录
-     * @param request
-     * @param response
-     * @throws IOException
-     * @throws ClientException
-     * @throws ParseException
-     */
-    @RequestMapping(value = "/signin")
-    public void sigin(HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
-        String code = "";
-        String msg = "";
-        String name = request.getParameter("name");
-        String password = request.getParameter("password");
-        String phone = request.getParameter("phone");
-        String identifyingCode = request.getParameter("code");
-        String bizId = request.getParameter("bizId");
-        //短信验证码验证通过
-        if (AliUtils.isVerified(phone, identifyingCode, bizId)) {
-            Subject subject = SecurityUtils.getSubject();
-            try {
-                Collection<Session> sessions = sessionDAO.getActiveSessions();
-                for (Session session : sessions) {
-                    if (null != session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)) {
-                        logger.info("登录用户" + session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY));
-                        SimplePrincipalCollection simplePrincipalCollection = (SimplePrincipalCollection) session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
-                        SysUserDTO sysUserDTO = (SysUserDTO) simplePrincipalCollection.getPrimaryPrincipal();
-                        if (name.equals(sysUserDTO.getLoginName())) {
-                            // session.setTimeout(0); //这里就把session清除
-                            logger.info(("删除用户seesion" + session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY).toString()));
-                            // session清除，
-                            sessionDAO.delete(session);
-                        }
-                    }
-                }
-                subject.login(new UsernamePasswordToken(name, password));
-                // 将seesion过期时间设置为8小时
-                subject.getSession().setTimeout(ConstantFetchUtil.hour_8);
-                AuthorizationInfo info = authRealm.doGetAuthorizationInfo(subject.getPrincipals());
-                String permission = StringUtils.join(info.getStringPermissions(), ",");
-                CookieUtil.addCookie(response,"permission",permission);
-                CookieUtil.addCookie(response, "name", name);
-                //更新最后登录时间
-                SysUserDTO sysUserDTO = (SysUserDTO) subject.getPrincipals().getPrimaryPrincipal();
-                sysUserBiz.updateLastLoginTime(sysUserDTO.getId());
-                code = "000000";
-                msg = "登陆成功";
-            } catch (AuthenticationException e) {
-
-            }
-        } else {
-            code = "000001";
-            msg = "验证码错误";
+    @ApiOperation(value = "根据登陆名，发送验证码", httpMethod = "GET", response = SendMsgResp.class, notes = "根据登陆名，发送验证码")
+    @RequestMapping(value = "/sendcode")
+    public Object sendCode(@ModelAttribute SendMsgReq req) throws ClientException {
+        List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(req.getLoginname());
+        if (ValidateUtils.phoneValidate(sysUserDTOList.get(0).getMobile())) {
+            throw new CommonException(LoginEnum.LOGIN_MOBILE_ILLEGAL.getCode(), LoginEnum.LOGIN_MOBILE_ILLEGAL.getType(), LoginEnum.LOGIN_MOBILE_ILLEGAL.getMessage());
         }
-        ResponseUtil.responseUtils(response, ResultPackage.resultPackage(code, new JSONObject(), msg));
+        SendSmsResponse res = AliUtils.sendMsg(sysUserDTOList.get(0).getMobile());
+        SendMsgResp sendMsgResp = new SendMsgResp();
+        sendMsgResp.setBizId(res.getBizId());
+        return ResponseFactory.buildResponse(sendMsgResp);
     }
 
     @RequiresPermissions("test:pagetest")

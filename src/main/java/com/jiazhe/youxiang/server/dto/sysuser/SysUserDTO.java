@@ -23,6 +23,8 @@ public class SysUserDTO {
 
     private String password;
 
+    private String lastLoginIp;
+
     public Integer getId() {
         return id;
     }
@@ -77,5 +79,13 @@ public class SysUserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getLastLoginIp() {
+        return lastLoginIp;
+    }
+
+    public void setLastLoginIp(String lastLoginIp) {
+        this.lastLoginIp = lastLoginIp;
     }
 }

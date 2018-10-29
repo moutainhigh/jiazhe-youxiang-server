@@ -31,5 +31,7 @@ public interface SysUserService {
 
     int saveUserWithRole(boolean isAdd, SysUserDTO sysUserDTO, List<SysUserRoleDTO> newRolesDto, List<SysUserRoleDTO> oldRolesDto);
 
-    int updateLaseLoginTime(Integer id);
+    List<SysUserDTO> findByLoginName(String loginName);
+
+    int updateLaseLoginInfo(Integer userId, String ipAdrress);
 }
