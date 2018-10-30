@@ -39,28 +39,28 @@
                         <a th:href="@{/main/main_center}">主页</a>
                     </li>
                     <li>
-                        <a href="#">系统管理</a>
+                        <a href="#">充值卡</a>
                     </li>
-                    <li class="active">员工管理</li>
+                    <li class="active">充值卡兑换码管理</li>
                 </ul><!-- /.breadcrumb -->
             </div>
 
             <div class="page-content">
                 <div class="row">
                     <div class="col-xs-12" style="padding-top:40px">
-                        <form id="userSearchForm" class="form-horizontal" role="form">
+                        <form id="batchSearchForm" class="form-horizontal" role="form">
                             <div class="form-group">
-                                <label class="col-sm-1 control-label no-padding-right">登录名：</label>
+                                <label class="col-sm-1 control-label no-padding-right">所属项目：</label>
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
-                                        <input id="loginName" name="loginName" class="form-control" type="text"
+                                        <input id="projectId" name="projectId" class="form-control" type="text"
                                                style="height:30px"/>
                                     </div>
                                 </div>
-                                <label class="col-sm-1 control-label no-padding-right">用户姓名：</label>
+                                <label class="col-sm-1 control-label no-padding-right">批次名称：</label>
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
-                                        <input id="displayName" name="displayName" class="form-control" type="text"
+                                        <input id="name" name="name" class="form-control" type="text"
                                                style="height:30px"/>
                                     </div>
                                 </div>
@@ -100,8 +100,8 @@
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-1"></div>
                                         <div class="col-xs-12 col-sm-9">
-                                            <form id="userSaveForm" class="form-horizontal" role="form">
-                                                <input type="hidden" name="id" id="userId" value="0">
+                                            <form id="batchSaveForm" class="form-horizontal" role="form">
+                                                <input type="hidden" name="id" id="batchId" value="0">
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">登录名：</label>
                                                     <div class="col-sm-8">
@@ -198,34 +198,16 @@
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
-        //将角色列表填入到select中
-        $.ajax({
-            url: "../api/sysrole/listall",    //请求的url地址
-            dataType: "json",
-            async: true,
-            type: "GET",
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    var result = data.data;
-                    for(var i=0;i<result.length;i++){
-                        $("#saveRoleIds").append("<option value='"+result[i].id+"'>"+result[i].name+"</option>");
-                    }
-                }
-            },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
-        });
+        //将项目列表填入到projectId中
+
     });
 
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
     jQuery(grid_selector).jqGrid({
         subGrid: false, // 此处设置为true时可以打开子项,子项用不到已删除
-        url: "../api/sysuser/listpage",// 获取数据的地址
-        postData: transformToJson($('#userSearchForm').serializeArray()),
+        url: "../api/rcexchangecodebatch/listpage",// 获取数据的地址
+        postData: transformToJson($('#batchSearchForm').serializeArray()),
         rownumbers: true,
         datatype: "json",
         mtype: "GET",
@@ -237,13 +219,20 @@
         width: "100%",
         autowidth: true,
         height: 350,
-        colNames: ['', '登录名','员工姓名', '电话', '最后登录时间', '操作'],
+        colNames: ['', '批次名称','充值卡名称','是否是虚拟批次','状态','面额', '数量', '过期时间', '操作'],
         colModel: [
             {name: 'id', index: 'id', sortable: false, hidden: true},
-            {name: 'loginName', index: 'loginName', sortable: false},
-            {name: 'displayName', index: 'displayName', sortable: false},
-            {name: 'mobile', index: 'mobile', sortable: false},
-            {name: 'lastLoginTime', index: 'lastLoginTime', sortable: false,formatter:timeFormatter},
+            {name: 'name', index: 'name', sortable: false},
+            {name: 'rechargeCardName', index: 'rechargeCardName', sortable: false},
+            {name: 'isVirtual', index: 'isVirtual', sortable: false,formatter:function (cellvalue, options, rowObject) {
+                return rowObject.isVirtual == 1 ? "是":"否";
+            }},
+            {name: 'status', index: 'status', sortable: false,formatter:function (cellvalue, options, rowObject) {
+                return rowObject.status == 1 ? "启用":"停用";
+            }},
+            {name: 'faceValue', index: 'faceValue', sortable: false},
+            {name: 'amount', index: 'amount', sortable: false},
+            {name: 'expiryTime', index: 'expiryTime', sortable: false,formatter:dateFormatter},
             {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
         ],
         rowNum: 10,
@@ -269,7 +258,7 @@
             records: "totalCount", // 查询出的记录数
             repeatitems: false
         },
-        caption: "员工列表"
+        caption: "批次列表"
     });
     $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
 
@@ -291,57 +280,15 @@
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/sysuser/listpage",// 获取数据的地址
+            url: "../api/rcexchangecodebatch/listpage",// 获取数据的地址
             postData: transformToJson($('#userSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
     }
 
-    function deleteOne(id) {
-        bootbox.confirm({
-            buttons: {
-                confirm: {
-                    label: '确认',
-                    className: 'btn-myStyle'
-                },
-                cancel: {
-                    label: '取消',
-                    className: 'btn-default'
-                }
-            },
-            title: "提示信息",
-            message: '确定要删除该员工吗？',
-            callback: function (result) {
-                if (result) {
-                    $.ajax({
-                        url: "../api/sysuser/delete",    //请求的url地址
-                        dataType: "json",
-                        async: false,
-                        data: {
-                            id: id
-                        },
-                        type: "POST",
-                        success: function (data) {
-                            if ('error' in data) {
-                                bootboxalert(data.error.message);
-                            } else {
-                                jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                            }
-                        },
-                        error: function () {
-                            bootboxalert("服务器异常，请联系管理员");
-                        }
-                    });
-                }
-            },
-        });
-    }
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:deleteOne('" + rowObject.id + "')\">" +
-            "<i class='ace-icon fa fa-trash'></i>" +
-            "</a>&nbsp;&nbsp;";
         str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
             "<i class='ace-icon fa fa-pencil'></i>" +
             "</a>&nbsp;&nbsp;";
@@ -351,12 +298,12 @@
         return str;
     }
 
-    function timeFormatter(cellvalue, options, rowObject) {
-        return timeFormat(rowObject.lastLoginTime);
+    function dateFormatter(cellvalue, options, rowObject) {
+        return dateFormat(rowObject.expiryTime);
     }
 
     function openNew() {
-        $("#modal-title").html("员工信息-添加");
+        $("#modal-title").html("批次信息-添加");
         $("#userId").val(0);
         $("#userSaveForm #saveLoginName").val("");
         $("#userSaveForm #saveDisplayName").val("");
@@ -369,7 +316,7 @@
     }
 
     function openEdit(id) {
-        $("#modal-title").html("员工信息-修改");
+        $("#modal-title").html("批次信息-修改");
         $(".modal-footer-btn").show();
         $('input,select', $('#userSaveForm')).removeAttr('disabled');
         $('#savePassword').attr('disabled', 'disabled');
@@ -378,37 +325,10 @@
     }
 
     function openShow(id) {
-        $("#modal-title").html("员工信息-查看");
+        $("#modal-title").html("批次信息-查看");
         $(".modal-footer-btn").hide();
         $('input,select', $('#userSaveForm')).attr('disabled', 'disabled');
         huixian(id);
-    }
-
-    function submitRoles(){
-        var roleIds = [] ;
-        $("#saveRoleIds option:selected").each(function(){
-           roleIds.push($(this).val());
-        });
-        return roleIds.join(",")
-    }
-
-    function roleShow(ids){
-        var roleIds = ids.split(",");
-        var has ;
-        $("#saveRoleIds option").each(function(){
-            has = false;
-            for(var i=0;i<roleIds.length;i++) {
-                if (roleIds[i] == $(this).val()) {
-                    has = true;
-                    break;
-                }
-            }
-            if(has){
-                $(this).prop('selected', true);
-            }else{
-                $(this).prop('selected', false);
-            }
-        });
     }
 
     function save() {
