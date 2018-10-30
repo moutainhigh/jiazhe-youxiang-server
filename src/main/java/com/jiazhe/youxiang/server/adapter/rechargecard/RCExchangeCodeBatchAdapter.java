@@ -1,11 +1,11 @@
 package com.jiazhe.youxiang.server.adapter.rechargecard;
 
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
-import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchAddReq;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditReq;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveReq;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditResp;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchResp;
 
@@ -48,45 +48,47 @@ public class RCExchangeCodeBatchAdapter {
         return rCExchangeCodeBatchDTO;
     }
 
-    public static RCExchangeCodeBatchAddDTO ReqAdd2DTOAdd(RCExchangeCodeBatchAddReq req) {
+    public static RCExchangeCodeBatchSaveDTO ReqSave2DTOSave(RCExchangeCodeBatchSaveReq req) {
         if (req == null) {
             return null;
         }
-        RCExchangeCodeBatchAddDTO rCExchangeCodeBatchAddDTO = new RCExchangeCodeBatchAddDTO();
-        rCExchangeCodeBatchAddDTO.setName(req.getName());
-        rCExchangeCodeBatchAddDTO.setRechargeCardName(req.getRechargeCardName());
-        rCExchangeCodeBatchAddDTO.setIsVirtual(req.getIsVirtual());
-        rCExchangeCodeBatchAddDTO.setAmount(req.getAmount());
-        rCExchangeCodeBatchAddDTO.setFaceValue(req.getFaceValue());
-        rCExchangeCodeBatchAddDTO.setProjectId(req.getProjectId());
-        rCExchangeCodeBatchAddDTO.setCityCodes(req.getCityCodes());
-        rCExchangeCodeBatchAddDTO.setProductIds(req.getProductIds());
-        rCExchangeCodeBatchAddDTO.setExpiryTime(req.getExpiryTime());
-        rCExchangeCodeBatchAddDTO.setRechargeCardExpiryTime(req.getRechargeCardExpiryTime());
-        rCExchangeCodeBatchAddDTO.setValidityPeriod(req.getValidityPeriod());
-        rCExchangeCodeBatchAddDTO.setExpiryType(req.getExpiryType());
-        rCExchangeCodeBatchAddDTO.setDescription(req.getDescription());
-        return rCExchangeCodeBatchAddDTO;
+        RCExchangeCodeBatchSaveDTO rCExchangeCodeBatchSaveDTO = new RCExchangeCodeBatchSaveDTO();
+        rCExchangeCodeBatchSaveDTO.setId(req.getId());
+        rCExchangeCodeBatchSaveDTO.setName(req.getName());
+        rCExchangeCodeBatchSaveDTO.setRechargeCardName(req.getRechargeCardName());
+        rCExchangeCodeBatchSaveDTO.setIsVirtual(req.getIsVirtual());
+        rCExchangeCodeBatchSaveDTO.setAmount(req.getAmount());
+        rCExchangeCodeBatchSaveDTO.setFaceValue(req.getFaceValue());
+        rCExchangeCodeBatchSaveDTO.setProjectId(req.getProjectId());
+        rCExchangeCodeBatchSaveDTO.setCityCodes(req.getCityCodes());
+        rCExchangeCodeBatchSaveDTO.setProductIds(req.getProductIds());
+        rCExchangeCodeBatchSaveDTO.setExpiryTime(req.getExpiryTime());
+        rCExchangeCodeBatchSaveDTO.setRechargeCardExpiryTime(req.getRechargeCardExpiryTime());
+        rCExchangeCodeBatchSaveDTO.setValidityPeriod(req.getValidityPeriod());
+        rCExchangeCodeBatchSaveDTO.setExpiryType(req.getExpiryType());
+        rCExchangeCodeBatchSaveDTO.setDescription(req.getDescription());
+        return rCExchangeCodeBatchSaveDTO;
     }
 
-    public static RechargeCardExchangeCodeBatchPO DTOSave2PO(RCExchangeCodeBatchAddDTO rcExchangeCodeBatchAddDTO) {
-        if (rcExchangeCodeBatchAddDTO == null) {
+    public static RechargeCardExchangeCodeBatchPO DTOSave2PO(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {
+        if (rcExchangeCodeBatchSaveDTO == null) {
             return null;
         }
         RechargeCardExchangeCodeBatchPO rechargeCardExchangeCodeBatchPO = new RechargeCardExchangeCodeBatchPO();
-        rechargeCardExchangeCodeBatchPO.setName(rcExchangeCodeBatchAddDTO.getName());
-        rechargeCardExchangeCodeBatchPO.setRechargeCardName(rcExchangeCodeBatchAddDTO.getRechargeCardName());
-        rechargeCardExchangeCodeBatchPO.setIsVirtual(rcExchangeCodeBatchAddDTO.getIsVirtual());
-        rechargeCardExchangeCodeBatchPO.setDescription(rcExchangeCodeBatchAddDTO.getDescription());
-        rechargeCardExchangeCodeBatchPO.setAmount(rcExchangeCodeBatchAddDTO.getAmount());
-        rechargeCardExchangeCodeBatchPO.setProjectId(rcExchangeCodeBatchAddDTO.getProjectId());
-        rechargeCardExchangeCodeBatchPO.setCityCodes(rcExchangeCodeBatchAddDTO.getCityCodes());
-        rechargeCardExchangeCodeBatchPO.setProductIds(rcExchangeCodeBatchAddDTO.getProductIds());
-        rechargeCardExchangeCodeBatchPO.setFaceValue(rcExchangeCodeBatchAddDTO.getFaceValue());
-        rechargeCardExchangeCodeBatchPO.setExpiryTime(rcExchangeCodeBatchAddDTO.getExpiryTime());
-        rechargeCardExchangeCodeBatchPO.setRechargeCardExpiryTime(rcExchangeCodeBatchAddDTO.getRechargeCardExpiryTime());
-        rechargeCardExchangeCodeBatchPO.setValidityPeriod(rcExchangeCodeBatchAddDTO.getValidityPeriod());
-        rechargeCardExchangeCodeBatchPO.setExpiryType(rcExchangeCodeBatchAddDTO.getExpiryType());
+        rechargeCardExchangeCodeBatchPO.setId(rcExchangeCodeBatchSaveDTO.getId());
+        rechargeCardExchangeCodeBatchPO.setName(rcExchangeCodeBatchSaveDTO.getName());
+        rechargeCardExchangeCodeBatchPO.setRechargeCardName(rcExchangeCodeBatchSaveDTO.getRechargeCardName());
+        rechargeCardExchangeCodeBatchPO.setIsVirtual(rcExchangeCodeBatchSaveDTO.getIsVirtual());
+        rechargeCardExchangeCodeBatchPO.setDescription(rcExchangeCodeBatchSaveDTO.getDescription());
+        rechargeCardExchangeCodeBatchPO.setAmount(rcExchangeCodeBatchSaveDTO.getAmount());
+        rechargeCardExchangeCodeBatchPO.setProjectId(rcExchangeCodeBatchSaveDTO.getProjectId());
+        rechargeCardExchangeCodeBatchPO.setCityCodes(rcExchangeCodeBatchSaveDTO.getCityCodes());
+        rechargeCardExchangeCodeBatchPO.setProductIds(rcExchangeCodeBatchSaveDTO.getProductIds());
+        rechargeCardExchangeCodeBatchPO.setFaceValue(rcExchangeCodeBatchSaveDTO.getFaceValue());
+        rechargeCardExchangeCodeBatchPO.setExpiryTime(rcExchangeCodeBatchSaveDTO.getExpiryTime());
+        rechargeCardExchangeCodeBatchPO.setRechargeCardExpiryTime(rcExchangeCodeBatchSaveDTO.getRechargeCardExpiryTime());
+        rechargeCardExchangeCodeBatchPO.setValidityPeriod(rcExchangeCodeBatchSaveDTO.getValidityPeriod());
+        rechargeCardExchangeCodeBatchPO.setExpiryType(rcExchangeCodeBatchSaveDTO.getExpiryType());
         return rechargeCardExchangeCodeBatchPO;
     }
 

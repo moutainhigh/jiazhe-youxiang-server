@@ -100,14 +100,15 @@
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-1"></div>
                                         <div class="col-xs-12 col-sm-9">
-                                            <form id="batchAddForm" class="form-horizontal" role="form">
-                                                <input type="hidden" name="productIds" id="addProductIds">
-                                                <input type="hidden" name="cityCodes" id="addCityCodes">
+                                            <form id="batchSaveForm" class="form-horizontal" role="form">
+                                                <input type="hidden" name="id" id="batchId">
+                                                <input type="hidden" name="productIds" id="saveProductIds">
+                                                <input type="hidden" name="cityCodes" id="saveCityCodes">
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">批次名称：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="addName" name="name" class="form-control"
+                                                            <input id="saveName" name="name" class="form-control"
                                                                    type="text" style="height:30px"/>
                                                         </div>
                                                     </div>
@@ -118,7 +119,7 @@
                                                     <label class="col-sm-4 control-label no-padding-right">充值卡名称：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="addRechargeCardName" name="rechargeCardName"
+                                                            <input id="saveRechargeCardName" name="rechargeCardName"
                                                                    class="form-control"
                                                                    type="text" style="height:30px"/>
                                                         </div>
@@ -129,7 +130,7 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">所属项目：</label>
                                                     <div class="col-sm-8">
-                                                        <select id="addProjectId" name="projectId"
+                                                        <select id="saveProjectId" name="projectId"
                                                                 class="selectpicker show-tick form-control">
 
                                                         </select>
@@ -142,35 +143,37 @@
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
                                                             <label class="radio-inline ">
-                                                                <input id="addNotVirtual" type="radio" name="isVirtual"
+                                                                <input id="saveNotVirtualRadio" type="radio"
+                                                                       name="isVirtual"
                                                                        value="0" checked="checked"/>否
                                                             </label>
                                                             <label class="radio-inline">
-                                                                <input id="addIsVirtual" type="radio" name="isVirtual"
+                                                                <input id="saveIsVirtualRadio" type="radio"
+                                                                       name="isVirtual"
                                                                        value="1"/>是
                                                             </label>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2 addIsVirtual"></div>
-                                                <div class="form-group addIsVirtual">
+                                                <div class="space-2 saveIsVirtual"></div>
+                                                <div class="form-group saveIsVirtual">
                                                     <label class="col-sm-4 control-label no-padding-right">面额：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="addFaceValue" name="faceValue"
+                                                            <input id="saveFaceValue" name="faceValue"
                                                                    class="form-control" type="text"
                                                                    style="height:30px"/>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2 addIsVirtual"></div>
-                                                <div class="form-group addIsVirtual">
+                                                <div class="space-2 saveIsVirtual"></div>
+                                                <div class="form-group saveIsVirtual">
                                                     <label class="col-sm-4 control-label no-padding-right">数量：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="addAmount" name="amount"
+                                                            <input id="saveAmount" name="amount"
                                                                    class="form-control" type="text"
                                                                    style="height:30px"/>
                                                         </div>
@@ -180,10 +183,10 @@
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="addExpiryTime">到期时间：</label>
+                                                           for="saveExpiryTime">到期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
-                                                            <input class="form-control date-picker" id="addExpiryTime"
+                                                            <input class="form-control date-picker" id="saveExpiryTime"
                                                                    name="expiryTime" type="text"/>
                                                             <span class="input-group-addon">
                                                                     <i class="fa fa-calendar bigger-110"></i>
@@ -198,11 +201,12 @@
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
                                                             <label class="radio-inline ">
-                                                                <input id="addDeadLine" type="radio" name="expiryType"
+                                                                <input id="saveDeadLineRadio" type="radio"
+                                                                       name="expiryType"
                                                                        value="0" checked="checked"/>指定截止日期
                                                             </label>
                                                             <label class="radio-inline">
-                                                                <input id="addValidityPeriod" type="radio"
+                                                                <input id="saveValidityPeriodRadio" type="radio"
                                                                        name="expiryType"
                                                                        value="1"/>兑换之日起算
                                                             </label>
@@ -210,8 +214,8 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2 addDeadLine"></div>
-                                                <div class="form-group addDeadLine">
+                                                <div class="space-2 saveDeadLine"></div>
+                                                <div class="form-group saveDeadLine">
                                                     <label class="col-sm-4 control-label no-padding-right"
                                                            for="saveRechargeCardExpiryTime">充值卡到期时间：</label>
                                                     <div class="col-sm-8">
@@ -226,8 +230,8 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2 addValidityPeriod" style="display:none;"></div>
-                                                <div class="form-group addValidityPeriod" style="display:none;">
+                                                <div class="space-2 saveValidityPeriod" style="display:none;"></div>
+                                                <div class="form-group saveValidityPeriod" style="display:none;">
                                                     <label class="col-sm-4 control-label no-padding-right">兑换之日有效天数：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
@@ -261,7 +265,7 @@
                                         取消
                                     </button>
 
-                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="addSave()">
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="save()">
                                         <i class="ace-icon fa fa-check"></i>
                                         保存
                                     </button>
@@ -308,19 +312,19 @@
 
         $("input[name=isVirtual]").bind("change", function () {
             if ($("input[name=isVirtual]:checked").val() == 1) {
-                $(".addIsVirtual").css("display", "none");
+                $(".saveIsVirtual").css("display", "none");
             } else {
-                $(".addIsVirtual").css("display", "");
+                $(".saveIsVirtual").css("display", "");
             }
         });
 
         $("input[name=expiryType]").bind("change", function () {
             if ($("input[name=expiryType]:checked").val() == 0) {
-                $(".addDeadLine").css("display", "");
-                $(".addValidityPeriod").css("display", "none");
+                $(".saveDeadLine").css("display", "");
+                $(".saveValidityPeriod").css("display", "none");
             } else {
-                $(".addDeadLine").css("display", "none");
-                $(".addValidityPeriod").css("display", "");
+                $(".saveDeadLine").css("display", "none");
+                $(".saveValidityPeriod").css("display", "");
             }
         });
 
@@ -361,7 +365,12 @@
                 return rowObject.status == 1 ? "启用" : "停用";
             }
             },
-            {name: 'faceValue', index: 'faceValue', sortable: false},
+            {
+                name: 'faceValue', index: 'faceValue', sortable: false,
+                formatter: function (cellvalue, options, rowObject) {
+                    return rowObject.isVirtual == 1 ? "--" : rowObject.faceValue;
+                }
+            },
             {name: 'amount', index: 'amount', sortable: false},
             {name: 'expiryTime', index: 'expiryTime', sortable: false, formatter: dateFormatter},
             {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
@@ -414,7 +423,6 @@
             url: "../api/rcexchangecodebatch/listpage",// 获取数据的地址
             postData: transformToJson($('#batchSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
-        return false;
     }
 
 
@@ -423,13 +431,19 @@
         str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
             "<i class='ace-icon fa fa-pencil'></i>" +
             "</a>&nbsp;&nbsp;";
-        str = str + "<a class='btn btn-minier btn-success' href=\"javascript:openShow('" + rowObject.id + "')\">" +
-            "<i class='ace-icon fa fa-eye'></i>" +
-            "</a>&nbsp;&nbsp;";
+        if (rowObject.status == 0) {
+            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:startUsing('" + rowObject.id + "')\">" +
+                "<i class='ace-icon'>启用</i>" +
+                "</a>&nbsp;&nbsp;";
+        } else {
+            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:stopUsing('" + rowObject.id + "')\">" +
+                "<i class='ace-icon'>停用</i>" +
+                "</a>&nbsp;&nbsp;";
+        }
         if (rowObject.isVirtual == 0) {
             str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:generateCode('" + rowObject.id + "')\">" +
                 "<i class='ace-icon'>生成兑换码</i>" +
-                "</a>";
+                "</a>&nbsp;&nbsp;";
         }
         return str;
     }
@@ -440,35 +454,24 @@
 
     function openNew() {
         $("#modal-title").html("批次信息-添加");
-        $("#batchId").val("")
-        $("#batchAddForm #addName").val("");
-        $("#batchAddForm #addRechargeCardName").val("");
-        $(".modal-footer-btn").show();
-        $('input,select', $('#batchSaveForm')).removeAttr('disabled');
+        $("#batchId").val(0)
+        $("#batchSaveForm #saveName").val("");
+        $("#batchSaveForm #saveRechargeCardName").val("");
     }
 
     function openEdit(id) {
         $("#modal-title").html("批次信息-修改");
-        $(".modal-footer-btn").show();
-        $('input,select', $('#batchSaveForm')).removeAttr('disabled');
         $('#savePassword').attr('disabled', 'disabled');
         $('#saveLoginName').attr('disabled', 'disabled');
         huixian(id);
     }
 
-    function openShow(id) {
-        $("#modal-title").html("批次信息-查看");
-        $(".modal-footer-btn").hide();
-        $('input,select', $('#batchSaveForm')).attr('disabled', 'disabled');
-        huixian(id);
-    }
-
-    function addSave() {
+    function save() {
         $.ajax({
-            url: "../api/rcexchangecodebatch/addsave",
+            url: "../api/rcexchangecodebatch/save",
             dataType: "json",
             async: false,
-            data: transformToJson($('#batchAddForm').serializeArray()),
+            data: transformToJson($('#batchSaveForm').serializeArray()),
             type: "POST",
             success: function (data) {
                 if ('error' in data) {
@@ -486,7 +489,7 @@
 
     function huixian(id) {
         $.ajax({
-            url: "../api/sysuser/getbyid",    //请求的url地址
+            url: "../api/sysuser/getbyid",
             dataType: "json",
             async: false,
             data: {
@@ -515,7 +518,7 @@
     //生成兑换码
     function generateCode(id) {
         $.ajax({
-            url: "../api/rcexchangecodebatch/generatecode",    //请求的url地址
+            url: "../api/rcexchangecodebatch/generatecode",
             dataType: "json",
             async: false,
             data: {
@@ -527,6 +530,54 @@
                     bootboxalert(data.error.message);
                 } else {
                     bootboxalert("生成兑换码成功");
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+    //启用批次
+    function startUsing(id){
+        $.ajax({
+            url: "../api/rcexchangecodebatch/startusing",
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    bootboxalert("启用批次成功");
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+    //停用批次
+    function stopUsing(id) {
+        $.ajax({
+            url: "../api/rcexchangecodebatch/stopusing",    //请求的url地址
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    bootboxalert("停用批次成功");
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                 }
             },
             error: function () {

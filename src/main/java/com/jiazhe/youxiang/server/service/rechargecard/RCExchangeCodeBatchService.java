@@ -1,9 +1,9 @@
 package com.jiazhe.youxiang.server.service.rechargecard;
 
 
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
 import java.util.List;
@@ -26,10 +26,10 @@ public interface RCExchangeCodeBatchService {
 
     /**
      * 保存充值卡兑换码批次信息
-     * @param rcExchangeCodeBatchAddDTO
+     * @param rcExchangeCodeBatchSaveDTO
      * @return
      */
-    int addSave(RCExchangeCodeBatchAddDTO rcExchangeCodeBatchAddDTO);
+    int addSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO);
 
     /**
      * \根据批次id获取批次信息
@@ -40,10 +40,10 @@ public interface RCExchangeCodeBatchService {
 
     /**
      * 保存批次信息
-     * @param rcExchangeCodeBatchEditDTO
+     * @param rcExchangeCodeBatchSaveDTO
      * @return
      */
-    int editSave(RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO);
+    int editSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO);
 
     int changeBatchStatus(Integer id, Byte status);
 

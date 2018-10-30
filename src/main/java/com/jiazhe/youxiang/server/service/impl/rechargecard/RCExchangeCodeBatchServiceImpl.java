@@ -9,9 +9,9 @@ import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCExchangeCodeB
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeSaveDTO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeService;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -50,8 +50,8 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
     }
 
     @Override
-    public int addSave(RCExchangeCodeBatchAddDTO rcExchangeCodeBatchAddDTO) {
-        RechargeCardExchangeCodeBatchPO rcExchangeCodeBatchPO = RCExchangeCodeBatchAdapter.DTOSave2PO(rcExchangeCodeBatchAddDTO);
+    public int addSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {
+        RechargeCardExchangeCodeBatchPO rcExchangeCodeBatchPO = RCExchangeCodeBatchAdapter.DTOSave2PO(rcExchangeCodeBatchSaveDTO);
         rcExchangeCodeBatchPO.setStatus(Byte.valueOf("1"));
         rcExchangeCodeBatchPO.setIsDeleted(Byte.valueOf("0"));
         rcExchangeCodeBatchPO.setExtInfo("");
@@ -68,7 +68,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
     }
 
     @Override
-    public int editSave(RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO) {
+    public int editSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {
         //是否修改该批次下的兑换码相关信息？？？
         return 1;
     }
