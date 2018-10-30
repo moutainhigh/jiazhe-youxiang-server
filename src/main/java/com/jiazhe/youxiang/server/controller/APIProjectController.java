@@ -8,6 +8,8 @@ package com.jiazhe.youxiang.server.controller;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.server.adapter.ProjectAdapter;
 import com.jiazhe.youxiang.server.biz.ProjectBiz;
+import com.jiazhe.youxiang.server.common.enums.ProjectCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.ProjectException;
 import com.jiazhe.youxiang.server.dto.project.ProjectAddDTO;
 import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -18,6 +20,7 @@ import com.jiazhe.youxiang.server.vo.req.project.ProjectListReq;
 import com.jiazhe.youxiang.server.vo.req.project.ProjectUpdateReq;
 import com.jiazhe.youxiang.server.vo.resp.project.ProjectResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,9 +56,10 @@ public class APIProjectController {
     @ApiOperation(value = "添加项目", httpMethod = "POST", notes = "添加项目")
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public Object add(@ModelAttribute ProjectAddReq req) {
-        //TODO niexiao 参数验证
         CommonValidator.validateNull(req);
-        //CommonValidator.validateNull(req.getName());
+        if (Strings.isBlank(req.getName())) {
+            throw new ProjectException(ProjectCodeEnum.PROJECT_NAME_IS_NULL);
+        }
         ProjectAddDTO projectAddDTO = ProjectAdapter.projectAddReq2DTO(req);
         //调用BIZ方法
         projectBiz.add(projectAddDTO);
@@ -86,12 +90,13 @@ public class APIProjectController {
     @ApiOperation(value = "查询项目信息", httpMethod = "GET", response = ProjectResp.class, responseContainer = "List", notes = "查询项目信息")
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
     public Object getList(@ModelAttribute ProjectListReq req) {
+        CommonValidator.validatePaging(req);
         //TODO niexiao 参数验证
         Paging paging = new Paging();
         paging.setOffset(req.getOffset());
         paging.setLimit(req.getLimit());
         //调用BIZ方法
-        List<ProjectDTO> projectDTOList = projectBiz.getList(req.getName(), paging);
+        List<ProjectDTO> projectDTOList = projectBiz.getList(req.getName(), req.getStatus(), paging);
         //将DTO转成VO
         List<ProjectResp> result = projectDTOList.stream().map(ProjectAdapter::projectDTO2VO).collect(Collectors.toList());
         //用ResponseFactory将返回值包装

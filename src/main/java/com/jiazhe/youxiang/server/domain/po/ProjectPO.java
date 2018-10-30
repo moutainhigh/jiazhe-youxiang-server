@@ -6,7 +6,7 @@ import java.util.Date;
 public class ProjectPO implements Serializable {
     private Integer id;
 
-    private Integer name;
+    private String name;
 
     private String description;
 
@@ -32,12 +32,12 @@ public class ProjectPO implements Serializable {
         this.id = id;
     }
 
-    public Integer getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(Integer name) {
-        this.name = name;
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 
     public String getDescription() {

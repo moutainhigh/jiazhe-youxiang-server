@@ -263,8 +263,8 @@ CREATE TABLE `voucher_exchange_record` (
 drop table if exists project;
 CREATE TABLE `project` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
-    `name` INT(10) UNSIGNED NOT NULL COMMENT '项目名称',
-    `description` VARCHAR(1023) NOT NULL COMMENT '项目描述信息',
+    `name` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '项目名称',
+    `description` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '项目描述信息',
     `priority` INT(10) NOT NULL DEFAULT '0' COMMENT '排序序号',
     `status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '状态：',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',

@@ -10,6 +10,7 @@ import com.jiazhe.youxiang.server.common.exceptions.CommonException;
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import com.jiazhe.youxiang.server.vo.req.IdListReq;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
+import com.jiazhe.youxiang.server.vo.req.OffsetLimitReq;
 import org.apache.commons.collections.CollectionUtils;
 
 /**
@@ -41,6 +42,12 @@ public class CommonValidator {
     public static void validateIdList(IdListReq idList) {
         if (idList == null || CollectionUtils.isEmpty(idList.getIds())) {
             throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "ID集合不能为空");
+        }
+    }
+
+    public static void validatePaging(OffsetLimitReq offsetLimitReq) {
+        if (offsetLimitReq == null || offsetLimitReq.getLimit() == null || offsetLimitReq.getLimit() < 0 || offsetLimitReq.getOffset() == null || offsetLimitReq.getOffset() < 0) {
+            throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "分页信息填写不正确");
         }
     }
 }
