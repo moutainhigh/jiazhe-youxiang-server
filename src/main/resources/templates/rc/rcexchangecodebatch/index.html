@@ -118,7 +118,8 @@
                                                     <label class="col-sm-4 control-label no-padding-right">充值卡名称：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="addRechargeCardName" name="rechargeCardName" class="form-control"
+                                                            <input id="addRechargeCardName" name="rechargeCardName"
+                                                                   class="form-control"
                                                                    type="text" style="height:30px"/>
                                                         </div>
                                                     </div>
@@ -128,7 +129,8 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">所属项目：</label>
                                                     <div class="col-sm-8">
-                                                        <select id="addProjectId" name="projectId" class="selectpicker show-tick form-control">
+                                                        <select id="addProjectId" name="projectId"
+                                                                class="selectpicker show-tick form-control">
 
                                                         </select>
                                                     </div>
@@ -177,11 +179,13 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right" for="addExpiryTime">到期时间：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="addExpiryTime">到期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
-                                                            <input class="form-control date-picker" id="addExpiryTime" name="expiryTime" type="text"/>
-                                                                 <span class="input-group-addon">
+                                                            <input class="form-control date-picker" id="addExpiryTime"
+                                                                   name="expiryTime" type="text"/>
+                                                            <span class="input-group-addon">
                                                                     <i class="fa fa-calendar bigger-110"></i>
                                                                 </span>
                                                         </div>
@@ -198,7 +202,8 @@
                                                                        value="0" checked="checked"/>指定截止日期
                                                             </label>
                                                             <label class="radio-inline">
-                                                                <input id="addValidityPeriod" type="radio" name="expiryType"
+                                                                <input id="addValidityPeriod" type="radio"
+                                                                       name="expiryType"
                                                                        value="1"/>兑换之日起算
                                                             </label>
                                                         </div>
@@ -207,10 +212,13 @@
 
                                                 <div class="space-2 addDeadLine"></div>
                                                 <div class="form-group addDeadLine">
-                                                    <label class="col-sm-4 control-label no-padding-right" for="saveRechargeCardExpiryTime">充值卡到期时间：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveRechargeCardExpiryTime">充值卡到期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
-                                                            <input class="form-control date-picker" id="saveRechargeCardExpiryTime" name="rechargeCardExpiryTime" type="text"/>
+                                                            <input class="form-control date-picker"
+                                                                   id="saveRechargeCardExpiryTime"
+                                                                   name="rechargeCardExpiryTime" type="text"/>
                                                             <span class="input-group-addon">
                                                                     <i class="fa fa-calendar bigger-110"></i>
                                                                 </span>
@@ -223,7 +231,8 @@
                                                     <label class="col-sm-4 control-label no-padding-right">兑换之日有效天数：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveValidityPeriod" name="validityPeriod" class="form-control"
+                                                            <input id="saveValidityPeriod" name="validityPeriod"
+                                                                   class="form-control"
                                                                    type="text" style="height:30px"/>
                                                         </div>
                                                     </div>
@@ -231,10 +240,12 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right" for="saveDescription">描述信息：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveDescription">描述信息：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveDescription" name="description" class="form-control"
+                                                            <input id="saveDescription" name="description"
+                                                                   class="form-control"
                                                                    type="text" style="height:30px"/>
                                                         </div>
                                                     </div>
@@ -284,32 +295,32 @@
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
-        
+
         //将项目列表填入到projectId中
 
         $('.date-picker').datepicker({
             language: 'zh-CN',//选择语言
             autoclose: true,
             todayHighlight: true
-        }).next().on(ace.click_event, function(){
+        }).next().on(ace.click_event, function () {
             $(this).prev().focus();
         });
 
         $("input[name=isVirtual]").bind("change", function () {
-            if($("input[name=isVirtual]:checked").val() == 1){
-                $(".addIsVirtual").css("display","none");
-            }else{
-                $(".addIsVirtual").css("display","");
+            if ($("input[name=isVirtual]:checked").val() == 1) {
+                $(".addIsVirtual").css("display", "none");
+            } else {
+                $(".addIsVirtual").css("display", "");
             }
         });
 
         $("input[name=expiryType]").bind("change", function () {
-            if($("input[name=expiryType]:checked").val() == 0){
-                $(".addDeadLine").css("display","");
-                $(".addValidityPeriod").css("display","none");
-            }else{
-                $(".addDeadLine").css("display","none");
-                $(".addValidityPeriod").css("display","");
+            if ($("input[name=expiryType]:checked").val() == 0) {
+                $(".addDeadLine").css("display", "");
+                $(".addValidityPeriod").css("display", "none");
+            } else {
+                $(".addDeadLine").css("display", "none");
+                $(".addValidityPeriod").css("display", "");
             }
         });
 
@@ -332,20 +343,27 @@
         width: "100%",
         autowidth: true,
         height: 350,
-        colNames: ['', '批次名称','充值卡名称','是否是虚拟批次','状态','面额', '数量', '过期时间', '操作'],
+        colNames: ['', '批次名称', '充值卡名称', '是否是虚拟批次', '状态', '面额', '数量', '过期时间', '操作'],
         colModel: [
             {name: 'id', index: 'id', sortable: false, hidden: true},
             {name: 'name', index: 'name', sortable: false},
             {name: 'rechargeCardName', index: 'rechargeCardName', sortable: false},
-            {name: 'isVirtual', index: 'isVirtual', sortable: false,formatter:function (cellvalue, options, rowObject) {
-                return rowObject.isVirtual == 1 ? "是":"否";
-            }},
-            {name: 'status', index: 'status', sortable: false,formatter:function (cellvalue, options, rowObject) {
-                return rowObject.status == 1 ? "启用":"停用";
-            }},
+            {
+                name: 'isVirtual',
+                index: 'isVirtual',
+                sortable: false,
+                formatter: function (cellvalue, options, rowObject) {
+                    return rowObject.isVirtual == 1 ? "是" : "否";
+                }
+            },
+            {
+                name: 'status', index: 'status', sortable: false, formatter: function (cellvalue, options, rowObject) {
+                return rowObject.status == 1 ? "启用" : "停用";
+            }
+            },
             {name: 'faceValue', index: 'faceValue', sortable: false},
             {name: 'amount', index: 'amount', sortable: false},
-            {name: 'expiryTime', index: 'expiryTime', sortable: false,formatter:dateFormatter},
+            {name: 'expiryTime', index: 'expiryTime', sortable: false, formatter: dateFormatter},
             {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
         ],
         rowNum: 10,
@@ -407,7 +425,12 @@
             "</a>&nbsp;&nbsp;";
         str = str + "<a class='btn btn-minier btn-success' href=\"javascript:openShow('" + rowObject.id + "')\">" +
             "<i class='ace-icon fa fa-eye'></i>" +
-            "</a>";
+            "</a>&nbsp;&nbsp;";
+        if (rowObject.isVirtual == 0) {
+            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:generateCode('" + rowObject.id + "')\">" +
+                "<i class='ace-icon'>生成兑换码</i>" +
+                "</a>";
+        }
         return str;
     }
 
@@ -481,6 +504,29 @@
                     $("#saveDisplayName").val(result.displayName);
                     roleShow(result.roleIds);
                     $("#modal-form").modal('show');
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+    //生成兑换码
+    function generateCode(id) {
+        $.ajax({
+            url: "../api/rcexchangecodebatch/generatecode",    //请求的url地址
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    bootboxalert("生成兑换码成功");
                 }
             },
             error: function () {

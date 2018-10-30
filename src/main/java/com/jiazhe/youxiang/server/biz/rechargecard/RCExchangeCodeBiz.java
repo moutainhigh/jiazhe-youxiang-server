@@ -44,4 +44,8 @@ public class RCExchangeCodeBiz {
     public List<RCExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Byte status, Byte used, Paging paging) {
         return null;
     }
+
+    public List<RCExchangeCodeDTO> getByBatchId(Integer id) {
+        return rcExchangeCodeService.getByBatchId(id);
+    }
 }

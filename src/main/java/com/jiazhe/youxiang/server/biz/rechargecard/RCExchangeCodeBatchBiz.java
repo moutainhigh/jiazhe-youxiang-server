@@ -62,6 +62,6 @@ public class RCExchangeCodeBatchBiz {
     }
 
     public int generateCode(Integer id) {
-        return 0;
+        return rcExchangeCodeBatchService.generateCode(id);
     }
 }

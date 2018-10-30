@@ -4,8 +4,10 @@ import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.ValidateUtils;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeBatchAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCExchangeCodeBatchBiz;
+import com.jiazhe.youxiang.server.biz.rechargecard.RCExchangeCodeBiz;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.CommonException;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
@@ -43,6 +45,8 @@ public class APIRCExchangeCodeBatchController extends BaseController {
 
     @Autowired
     private RCExchangeCodeBatchBiz rcExchangeCodeBatchBiz;
+    @Autowired
+    private RCExchangeCodeBiz rcExchangeCodeBiz;
 
     @ApiOperation(value = "【分页】查询充值卡兑换码批次信息（根据项目id和批次名称查询）", httpMethod = "GET", response = RCExchangeCodeBatchResp.class, responseContainer = "List", notes = "【分页】查询充值卡兑换码批次信息（根据项目id和批次名称查询）")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
@@ -82,7 +86,14 @@ public class APIRCExchangeCodeBatchController extends BaseController {
     @RequestMapping(value = "/generatecode", method = RequestMethod.POST)
     public Object generateCode(@ModelAttribute IdReq req) {
         //参数检查,检查是否是虚拟批次，检查该批次是否已经生成过兑换码
-
+        RCExchangeCodeBatchEditDTO dto = rcExchangeCodeBatchBiz.getById(req.getId());
+        if(dto.getIsVirtual().equals(Byte.valueOf("1"))){
+            throw new CommonException(RechargeCardCodeEnum.VIRTUAL_BATCH_CANNOT_GENERATE.getCode(),RechargeCardCodeEnum.VIRTUAL_BATCH_CANNOT_GENERATE.getType(),RechargeCardCodeEnum.VIRTUAL_BATCH_CANNOT_GENERATE.getMessage());
+        }
+        List<RCExchangeCodeDTO> rcExchangeCodeDTOList = rcExchangeCodeBiz.getByBatchId(req.getId());
+        if(rcExchangeCodeDTOList.size()>0){
+            throw new CommonException(RechargeCardCodeEnum.CODE_GENERATED.getCode(),RechargeCardCodeEnum.CODE_GENERATED.getType(),RechargeCardCodeEnum.CODE_GENERATED.getMessage());
+        }
         rcExchangeCodeBatchBiz.generateCode(req.getId());
         return ResponseFactory.buildSuccess();
     }

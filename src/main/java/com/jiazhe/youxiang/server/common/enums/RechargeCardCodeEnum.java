@@ -8,6 +8,8 @@ package com.jiazhe.youxiang.server.common.enums;
 public enum RechargeCardCodeEnum {
 
     INFO_INCOMPLETE(106001, "INFO_INCOMPLETE", "信息填写不完整"),
+    VIRTUAL_BATCH_CANNOT_GENERATE(106002, "VIRTUAL_BATCH_CANNOT_GENERATE", "虚拟批次不能生成兑换码"),
+    CODE_GENERATED(106003, "CODE_GENERATED", "兑换码已经生成，不能再次生成"),
     ;
 
     RechargeCardCodeEnum(Integer code, String type, String message) {

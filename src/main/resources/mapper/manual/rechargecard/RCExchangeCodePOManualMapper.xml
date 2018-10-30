@@ -5,9 +5,10 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="batch_id" property="batchId" jdbcType="INTEGER" />
     <result column="batch_name" property="batchName" jdbcType="VARCHAR" />
+    <result column="recharge_card_name" property="rechargeCardName" jdbcType="VARCHAR" />
     <result column="batch_description" property="batchDescription" jdbcType="VARCHAR" />
     <result column="project_id" property="projectId" jdbcType="INTEGER" />
-    <result column="city_ids" property="cityCodes" jdbcType="VARCHAR" />
+    <result column="city_codes" property="cityCodes" jdbcType="VARCHAR" />
     <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="keyt" property="keyt" jdbcType="VARCHAR" />
@@ -24,4 +25,14 @@
     <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
     <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
   </resultMap>
+
+  <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+    INSERT into recharge_card_exchange_code (batch_id,batch_name,recharge_card_name,batch_description,project_id,city_codes,product_ids,code,keyt,face_value,expiry_time,recharge_card_expiry_time,
+    validity_period,expiry_type,status,used,ext_info,is_deleted,add_time,mod_time) VALUES
+    <foreach collection="list" item="item" separator=",">
+      (#{item.batchId},#{item.batchName},#{item.rechargeCardName},#{item.batchDescription},#{item.projectId},#{item.cityCodes},#{item.productIds},
+      #{item.code},#{item.keyt},#{item.faceValue},#{item.expiryTime},#{item.rechargeCardExpiryTime},#{item.validityPeriod},#{item.expiryType},1,0,
+      "",0,NOW(),NOW())
+    </foreach>
+  </insert>
 </mapper>

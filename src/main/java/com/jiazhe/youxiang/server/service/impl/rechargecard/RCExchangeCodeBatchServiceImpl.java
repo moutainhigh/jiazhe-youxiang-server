@@ -58,30 +58,6 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         rcExchangeCodeBatchPO.setAddTime(new Date());
         rcExchangeCodeBatchPO.setModTime(new Date());
         return rechargeCardExchangeCodeBatchPOMapper.insert(rcExchangeCodeBatchPO);
-       /* List<RCExchangeCodeSaveDTO> rcExchangeCodeSaveDTOS = new ArrayList<RCExchangeCodeSaveDTO>();
-        Integer amount = rcExchangeCodeBatchAddDTO.getAmount();
-        String[][] codeAndKeyts = GenerateCode.generateCode(CommonConstant.RC_EXCHANGE_CODE_PREFIX,amount);*/
-
-        /*for(int i=0;i<amount;i++){
-            RCExchangeCodeSaveDTO rcExchangeCodeSaveDTO = new RCExchangeCodeSaveDTO();
-            rcExchangeCodeSaveDTO.setBatchId(rcExchangeCodeBatchPO.getId());
-            rcExchangeCodeSaveDTO.setBatchName(rcExchangeCodeBatchAddDTO.getName());
-            rcExchangeCodeSaveDTO.setBatchDescription(rcExchangeCodeBatchAddDTO.getDescription());
-            rcExchangeCodeSaveDTO.setProjectId(rcExchangeCodeBatchAddDTO.getProjectId());
-            rcExchangeCodeSaveDTO.setCityCodes(rcExchangeCodeBatchAddDTO.getCityCodes());
-            rcExchangeCodeSaveDTO.setProductIds(rcExchangeCodeBatchAddDTO.getProductIds());
-            rcExchangeCodeSaveDTO.setCode(codeAndKeyts[0][i]);
-            rcExchangeCodeSaveDTO.setKeyt(codeAndKeyts[1][i]);
-            rcExchangeCodeSaveDTO.setFaceValue(rcExchangeCodeBatchAddDTO.getFaceValue());
-            rcExchangeCodeSaveDTO.setExpiryTime(rcExchangeCodeBatchAddDTO.getExpiryTime());
-            rcExchangeCodeSaveDTO.setRechargeCardExpiryTime(rcExchangeCodeBatchAddDTO.getRechargeCardExpiryTime());
-            rcExchangeCodeSaveDTO.setValidityPeriod(rcExchangeCodeBatchAddDTO.getValidityPeriod());
-            rcExchangeCodeSaveDTO.setExpiryType(rcExchangeCodeBatchAddDTO.getExpiryType());
-            rcExchangeCodeSaveDTO.setStatus(Byte.valueOf("1"));
-            rcExchangeCodeSaveDTO.setUsed(Byte.valueOf("0"));
-            rcExchangeCodeSaveDTOS.add(rcExchangeCodeSaveDTO);
-        }
-        List<RechargeCardExchangeCodePO> rechargeCardExchangeCodePOList = rcExchangeCodeSaveDTOS.stream().map(RCExchangeCodeAdapter::DTOSave2PO).collect(Collectors.toList());*/
     }
 
     @Override
@@ -105,5 +81,37 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         rechargeCardExchangeCodeBatchPO.setModTime(new Date());
         rechargeCardExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(rechargeCardExchangeCodeBatchPO);
         return 1;
+    }
+
+    @Override
+    public int generateCode(Integer id) {
+        RechargeCardExchangeCodeBatchPO batchPO = rechargeCardExchangeCodeBatchPOMapper.selectByPrimaryKey(id);
+        List<RCExchangeCodeSaveDTO> rcExchangeCodeSaveDTOS = new ArrayList<RCExchangeCodeSaveDTO>();
+        Integer amount = batchPO.getAmount();
+        String[][] codeAndKeyts = GenerateCode.generateCode(CommonConstant.RC_EXCHANGE_CODE_PREFIX,amount);
+
+        for(int i=0;i<amount;i++){
+            RCExchangeCodeSaveDTO rcExchangeCodeSaveDTO = new RCExchangeCodeSaveDTO();
+            rcExchangeCodeSaveDTO.setBatchId(batchPO.getId());
+            rcExchangeCodeSaveDTO.setBatchName(batchPO.getName());
+            rcExchangeCodeSaveDTO.setRechargeCardName(batchPO.getRechargeCardName());
+            rcExchangeCodeSaveDTO.setBatchDescription(batchPO.getDescription());
+            rcExchangeCodeSaveDTO.setProjectId(batchPO.getProjectId());
+            rcExchangeCodeSaveDTO.setCityCodes(batchPO.getCityCodes());
+            rcExchangeCodeSaveDTO.setProductIds(batchPO.getProductIds());
+            rcExchangeCodeSaveDTO.setCode(codeAndKeyts[0][i]);
+            rcExchangeCodeSaveDTO.setKeyt(codeAndKeyts[1][i]);
+            rcExchangeCodeSaveDTO.setFaceValue(batchPO.getFaceValue());
+            rcExchangeCodeSaveDTO.setExpiryTime(batchPO.getExpiryTime());
+            rcExchangeCodeSaveDTO.setRechargeCardExpiryTime(batchPO.getRechargeCardExpiryTime());
+            rcExchangeCodeSaveDTO.setValidityPeriod(batchPO.getValidityPeriod());
+            rcExchangeCodeSaveDTO.setExpiryType(batchPO.getExpiryType());
+            rcExchangeCodeSaveDTO.setStatus(Byte.valueOf("1"));
+            rcExchangeCodeSaveDTO.setUsed(Byte.valueOf("0"));
+            rcExchangeCodeSaveDTOS.add(rcExchangeCodeSaveDTO);
+        }
+        List<RechargeCardExchangeCodePO> rechargeCardExchangeCodePOList = rcExchangeCodeSaveDTOS.stream().map(RCExchangeCodeAdapter::DTOSave2PO).collect(Collectors.toList());
+        rcExchangeCodeService.batchInsert(rechargeCardExchangeCodePOList);
+        return 0;
     }
 }

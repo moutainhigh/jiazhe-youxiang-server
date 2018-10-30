@@ -46,4 +46,6 @@ public interface RCExchangeCodeBatchService {
     int editSave(RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO);
 
     int changeBatchStatus(Integer id, Byte status);
+
+    int generateCode(Integer id);
 }
