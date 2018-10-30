@@ -17,15 +17,15 @@ import io.swagger.annotations.ApiModelProperty;
 public class ProductCategoryAddReq extends BaseVO {
 
     private static final long serialVersionUID = -6301676705699423049L;
-    @ApiModelProperty("商品分类名称")
+    @ApiModelProperty("商品分类名称,必填")
     private String name;
-    @ApiModelProperty("商品分类描述")
+    @ApiModelProperty("商品分类描述,可空")
     private String description;
-    @ApiModelProperty("缩略图url")
+    @ApiModelProperty("缩略图url，可空")
     private String thumbnailUrl;
-    @ApiModelProperty("详情图url")
+    @ApiModelProperty("详情图url，可空")
     private String detailImgUrl;
-    @ApiModelProperty("排序")
+    @ApiModelProperty("排序，可空")
     private Integer priority;
 
     public String getName() {

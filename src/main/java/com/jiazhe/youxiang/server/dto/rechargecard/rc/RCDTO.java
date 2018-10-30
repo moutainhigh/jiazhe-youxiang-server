@@ -16,7 +16,7 @@ public class RCDTO {
 
     private Integer projectId;
 
-    private String cityIds;
+    private String cityCodes;
 
     private String productIds;
 
@@ -50,12 +50,12 @@ public class RCDTO {
         this.projectId = projectId;
     }
 
-    public String getCityIds() {
-        return cityIds;
+    public String getCityCodes() {
+        return cityCodes;
     }
 
-    public void setCityIds(String cityIds) {
-        this.cityIds = cityIds;
+    public void setCityCodes(String cityCodes) {
+        this.cityCodes = cityCodes;
     }
 
     public String getProductIds() {

@@ -10,7 +10,6 @@
     <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR" />
     <result column="detail_img_url" property="detailImgUrl" jdbcType="VARCHAR" />
     <result column="product_type" property="productType" jdbcType="INTEGER" />
-    <result column="product_price_id" property="productPriceId" jdbcType="INTEGER" />
     <result column="unit_name" property="unitName" jdbcType="VARCHAR" />
     <result column="last_num" property="lastNum" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="TINYINT" />
@@ -81,8 +80,8 @@
   </sql>
   <sql id="Base_Column_List" >
     id, product_category_id, name, description, delay_days, thumbnail_url, detail_img_url, 
-    product_type, product_price_id, unit_name, last_num, status, sms_template, effective_days, 
-    ext_info, is_deleted, add_time, mod_time
+    product_type, unit_name, last_num, status, sms_template, effective_days, ext_info, 
+    is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.ProductPOExample" >
     select
@@ -117,18 +116,16 @@
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.ProductPO" >
     insert into product (id, product_category_id, name, 
       description, delay_days, thumbnail_url, 
-      detail_img_url, product_type, product_price_id, 
-      unit_name, last_num, status, 
-      sms_template, effective_days, ext_info, 
-      is_deleted, add_time, mod_time
-      )
+      detail_img_url, product_type, unit_name, 
+      last_num, status, sms_template, 
+      effective_days, ext_info, is_deleted, 
+      add_time, mod_time)
     values (#{id,jdbcType=INTEGER}, #{productCategoryId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{description,jdbcType=VARCHAR}, #{delayDays,jdbcType=INTEGER}, #{thumbnailUrl,jdbcType=VARCHAR}, 
-      #{detailImgUrl,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER}, #{productPriceId,jdbcType=INTEGER}, 
-      #{unitName,jdbcType=VARCHAR}, #{lastNum,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, 
-      #{smsTemplate,jdbcType=VARCHAR}, #{effectiveDays,jdbcType=INTEGER}, #{extInfo,jdbcType=VARCHAR}, 
-      #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}
-      )
+      #{detailImgUrl,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER}, #{unitName,jdbcType=VARCHAR}, 
+      #{lastNum,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{smsTemplate,jdbcType=VARCHAR}, 
+      #{effectiveDays,jdbcType=INTEGER}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.ProductPO" >
     insert into product
@@ -156,9 +153,6 @@
       </if>
       <if test="productType != null" >
         product_type,
-      </if>
-      <if test="productPriceId != null" >
-        product_price_id,
       </if>
       <if test="unitName != null" >
         unit_name,
@@ -212,9 +206,6 @@
       </if>
       <if test="productType != null" >
         #{productType,jdbcType=INTEGER},
-      </if>
-      <if test="productPriceId != null" >
-        #{productPriceId,jdbcType=INTEGER},
       </if>
       <if test="unitName != null" >
         #{unitName,jdbcType=VARCHAR},
@@ -278,9 +269,6 @@
       <if test="record.productType != null" >
         product_type = #{record.productType,jdbcType=INTEGER},
       </if>
-      <if test="record.productPriceId != null" >
-        product_price_id = #{record.productPriceId,jdbcType=INTEGER},
-      </if>
       <if test="record.unitName != null" >
         unit_name = #{record.unitName,jdbcType=VARCHAR},
       </if>
@@ -323,7 +311,6 @@
       thumbnail_url = #{record.thumbnailUrl,jdbcType=VARCHAR},
       detail_img_url = #{record.detailImgUrl,jdbcType=VARCHAR},
       product_type = #{record.productType,jdbcType=INTEGER},
-      product_price_id = #{record.productPriceId,jdbcType=INTEGER},
       unit_name = #{record.unitName,jdbcType=VARCHAR},
       last_num = #{record.lastNum,jdbcType=INTEGER},
       status = #{record.status,jdbcType=TINYINT},
@@ -360,9 +347,6 @@
       </if>
       <if test="productType != null" >
         product_type = #{productType,jdbcType=INTEGER},
-      </if>
-      <if test="productPriceId != null" >
-        product_price_id = #{productPriceId,jdbcType=INTEGER},
       </if>
       <if test="unitName != null" >
         unit_name = #{unitName,jdbcType=VARCHAR},
@@ -403,7 +387,6 @@
       thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
       detail_img_url = #{detailImgUrl,jdbcType=VARCHAR},
       product_type = #{productType,jdbcType=INTEGER},
-      product_price_id = #{productPriceId,jdbcType=INTEGER},
       unit_name = #{unitName,jdbcType=VARCHAR},
       last_num = #{lastNum,jdbcType=INTEGER},
       status = #{status,jdbcType=TINYINT},

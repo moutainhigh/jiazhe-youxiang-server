@@ -20,8 +20,6 @@ public class ProductPO implements Serializable {
 
     private Integer productType;
 
-    private Integer productPriceId;
-
     private String unitName;
 
     private Integer lastNum;
@@ -104,14 +102,6 @@ public class ProductPO implements Serializable {
 
     public void setProductType(Integer productType) {
         this.productType = productType;
-    }
-
-    public Integer getProductPriceId() {
-        return productPriceId;
-    }
-
-    public void setProductPriceId(Integer productPriceId) {
-        this.productPriceId = productPriceId;
     }
 
     public String getUnitName() {

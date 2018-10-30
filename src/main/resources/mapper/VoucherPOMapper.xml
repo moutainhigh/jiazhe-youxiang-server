@@ -7,7 +7,7 @@
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="customer_id" property="customerId" jdbcType="INTEGER" />
     <result column="project_id" property="projectId" jdbcType="INTEGER" />
-    <result column="city_ids" property="cityIds" jdbcType="VARCHAR" />
+    <result column="city_codes" property="cityCodes" jdbcType="VARCHAR" />
     <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
     <result column="count" property="count" jdbcType="INTEGER" />
     <result column="exchange_record_id" property="exchangeRecordId" jdbcType="INTEGER" />
@@ -78,7 +78,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, name, description, customer_id, project_id, city_ids, product_ids, count, exchange_record_id, 
+    id, name, description, customer_id, project_id, city_codes, product_ids, count, exchange_record_id, 
     expiry_time, used, status, ext_info, is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.VoucherPOExample" >
@@ -113,13 +113,13 @@
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.VoucherPO" >
     insert into voucher (id, name, description, 
-      customer_id, project_id, city_ids, 
+      customer_id, project_id, city_codes, 
       product_ids, count, exchange_record_id, 
       expiry_time, used, status, 
       ext_info, is_deleted, add_time, 
       mod_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
-      #{customerId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{cityIds,jdbcType=VARCHAR}, 
+      #{customerId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR}, 
       #{productIds,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER}, #{exchangeRecordId,jdbcType=INTEGER}, 
       #{expiryTime,jdbcType=TIMESTAMP}, #{used,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
       #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
@@ -143,8 +143,8 @@
       <if test="projectId != null" >
         project_id,
       </if>
-      <if test="cityIds != null" >
-        city_ids,
+      <if test="cityCodes != null" >
+        city_codes,
       </if>
       <if test="productIds != null" >
         product_ids,
@@ -193,8 +193,8 @@
       <if test="projectId != null" >
         #{projectId,jdbcType=INTEGER},
       </if>
-      <if test="cityIds != null" >
-        #{cityIds,jdbcType=VARCHAR},
+      <if test="cityCodes != null" >
+        #{cityCodes,jdbcType=VARCHAR},
       </if>
       <if test="productIds != null" >
         #{productIds,jdbcType=VARCHAR},
@@ -252,8 +252,8 @@
       <if test="record.projectId != null" >
         project_id = #{record.projectId,jdbcType=INTEGER},
       </if>
-      <if test="record.cityIds != null" >
-        city_ids = #{record.cityIds,jdbcType=VARCHAR},
+      <if test="record.cityCodes != null" >
+        city_codes = #{record.cityCodes,jdbcType=VARCHAR},
       </if>
       <if test="record.productIds != null" >
         product_ids = #{record.productIds,jdbcType=VARCHAR},
@@ -297,7 +297,7 @@
       description = #{record.description,jdbcType=VARCHAR},
       customer_id = #{record.customerId,jdbcType=INTEGER},
       project_id = #{record.projectId,jdbcType=INTEGER},
-      city_ids = #{record.cityIds,jdbcType=VARCHAR},
+      city_codes = #{record.cityCodes,jdbcType=VARCHAR},
       product_ids = #{record.productIds,jdbcType=VARCHAR},
       count = #{record.count,jdbcType=INTEGER},
       exchange_record_id = #{record.exchangeRecordId,jdbcType=INTEGER},
@@ -327,8 +327,8 @@
       <if test="projectId != null" >
         project_id = #{projectId,jdbcType=INTEGER},
       </if>
-      <if test="cityIds != null" >
-        city_ids = #{cityIds,jdbcType=VARCHAR},
+      <if test="cityCodes != null" >
+        city_codes = #{cityCodes,jdbcType=VARCHAR},
       </if>
       <if test="productIds != null" >
         product_ids = #{productIds,jdbcType=VARCHAR},
@@ -369,7 +369,7 @@
       description = #{description,jdbcType=VARCHAR},
       customer_id = #{customerId,jdbcType=INTEGER},
       project_id = #{projectId,jdbcType=INTEGER},
-      city_ids = #{cityIds,jdbcType=VARCHAR},
+      city_codes = #{cityCodes,jdbcType=VARCHAR},
       product_ids = #{productIds,jdbcType=VARCHAR},
       count = #{count,jdbcType=INTEGER},
       exchange_record_id = #{exchangeRecordId,jdbcType=INTEGER},

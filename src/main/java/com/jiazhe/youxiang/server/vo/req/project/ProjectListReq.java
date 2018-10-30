@@ -5,7 +5,6 @@
  */
 package com.jiazhe.youxiang.server.vo.req.project;
 
-import com.jiazhe.youxiang.server.vo.BaseVO;
 import com.jiazhe.youxiang.server.vo.req.OffsetLimitReq;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -19,15 +18,24 @@ public class ProjectListReq extends OffsetLimitReq {
 
     private static final long serialVersionUID = 403060575380013152L;
     @ApiModelProperty("项目名称")
-    private Integer name;
+    private String name;
 
-    public Integer getName() {
+    @ApiModelProperty("项目状态")
+    private Integer status;
+
+    public String getName() {
         return name;
     }
 
-    public void setName(Integer name) {
+    public void setName(String name) {
         this.name = name;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
 
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 }

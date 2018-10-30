@@ -625,66 +625,6 @@ public class ProductPOExample {
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceIdIsNull() {
-            addCriterion("product_price_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductPriceIdIsNotNull() {
-            addCriterion("product_price_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductPriceIdEqualTo(Integer value) {
-            addCriterion("product_price_id =", value, "productPriceId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductPriceIdNotEqualTo(Integer value) {
-            addCriterion("product_price_id <>", value, "productPriceId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductPriceIdGreaterThan(Integer value) {
-            addCriterion("product_price_id >", value, "productPriceId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductPriceIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("product_price_id >=", value, "productPriceId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductPriceIdLessThan(Integer value) {
-            addCriterion("product_price_id <", value, "productPriceId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductPriceIdLessThanOrEqualTo(Integer value) {
-            addCriterion("product_price_id <=", value, "productPriceId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductPriceIdIn(List<Integer> values) {
-            addCriterion("product_price_id in", values, "productPriceId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductPriceIdNotIn(List<Integer> values) {
-            addCriterion("product_price_id not in", values, "productPriceId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductPriceIdBetween(Integer value1, Integer value2) {
-            addCriterion("product_price_id between", value1, value2, "productPriceId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductPriceIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("product_price_id not between", value1, value2, "productPriceId");
-            return (Criteria) this;
-        }
-
         public Criteria andUnitNameIsNull() {
             addCriterion("unit_name is null");
             return (Criteria) this;

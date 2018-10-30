@@ -22,7 +22,7 @@ public class RCExchangeCodeAdapter {
         rechargeCardExchangeCodePO.setBatchName(rcExchangeCodeSaveDTO.getBatchName());
         rechargeCardExchangeCodePO.setBatchDescription(rcExchangeCodeSaveDTO.getBatchDescription());
         rechargeCardExchangeCodePO.setProjectId(rcExchangeCodeSaveDTO.getProjectId());
-        rechargeCardExchangeCodePO.setCityIds(rcExchangeCodeSaveDTO.getCityIds());
+        rechargeCardExchangeCodePO.setCityCodes(rcExchangeCodeSaveDTO.getCityCodes());
         rechargeCardExchangeCodePO.setProductIds(rcExchangeCodeSaveDTO.getProductIds());
         rechargeCardExchangeCodePO.setCode(rcExchangeCodeSaveDTO.getCode());
         rechargeCardExchangeCodePO.setKeyt(rcExchangeCodeSaveDTO.getKeyt());
@@ -45,7 +45,7 @@ public class RCExchangeCodeAdapter {
         rCExchangeCodeBatchEditDTO.setName(rechargeCardExchangeCodeBatchPO.getName());
         rCExchangeCodeBatchEditDTO.setDescription(rechargeCardExchangeCodeBatchPO.getDescription());
         rCExchangeCodeBatchEditDTO.setProjectId(rechargeCardExchangeCodeBatchPO.getProjectId());
-        rCExchangeCodeBatchEditDTO.setCityIds(rechargeCardExchangeCodeBatchPO.getCityIds());
+        rCExchangeCodeBatchEditDTO.setCityCodes(rechargeCardExchangeCodeBatchPO.getCityCodes());
         rCExchangeCodeBatchEditDTO.setProductIds(rechargeCardExchangeCodeBatchPO.getProductIds());
         rCExchangeCodeBatchEditDTO.setExpiryTime(rechargeCardExchangeCodeBatchPO.getExpiryTime());
         rCExchangeCodeBatchEditDTO.setRechargeCardExpiryTime(rechargeCardExchangeCodeBatchPO.getRechargeCardExpiryTime());

@@ -15,7 +15,7 @@ public class RechargeCardPO implements Serializable {
 
     private Integer projectId;
 
-    private String cityIds;
+    private String cityCodes;
 
     private String productIds;
 
@@ -79,12 +79,12 @@ public class RechargeCardPO implements Serializable {
         this.projectId = projectId;
     }
 
-    public String getCityIds() {
-        return cityIds;
+    public String getCityCodes() {
+        return cityCodes;
     }
 
-    public void setCityIds(String cityIds) {
-        this.cityIds = cityIds == null ? null : cityIds.trim();
+    public void setCityCodes(String cityCodes) {
+        this.cityCodes = cityCodes == null ? null : cityCodes.trim();
     }
 
     public String getProductIds() {

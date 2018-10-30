@@ -20,7 +20,7 @@ public class ProjectResp extends BaseVO {
     @ApiModelProperty("项目ID")
     private Integer id;
     @ApiModelProperty("项目名称")
-    private Integer name;
+    private String name;
     @ApiModelProperty("项目描述信息")
     private String description;
     @ApiModelProperty("排序")
@@ -36,11 +36,11 @@ public class ProjectResp extends BaseVO {
         this.id = id;
     }
 
-    public Integer getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(Integer name) {
+    public void setName(String name) {
         this.name = name;
     }
 

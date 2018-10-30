@@ -5,7 +5,8 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="customer_id" property="customerId" jdbcType="INTEGER" />
     <result column="gender" property="gender" jdbcType="TINYINT" />
-    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
@@ -74,8 +75,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, customer_id, gender, city_id, address, mobile, name, remark, ext_info, is_deleted, 
-    add_time, mod_time
+    id, customer_id, gender, city_code, city_name, address, mobile, name, remark, ext_info, 
+    is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.CustomerAddressPOExample" >
     select
@@ -109,15 +110,15 @@
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.CustomerAddressPO" >
     insert into customer_address (id, customer_id, gender, 
-      city_id, address, mobile, 
-      name, remark, ext_info, 
-      is_deleted, add_time, mod_time
-      )
+      city_code, city_name, address, 
+      mobile, name, remark, 
+      ext_info, is_deleted, add_time, 
+      mod_time)
     values (#{id,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER}, #{gender,jdbcType=TINYINT}, 
-      #{cityId,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{extInfo,jdbcType=VARCHAR}, 
-      #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}
-      )
+      #{cityCode,jdbcType=VARCHAR}, #{cityName,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{mobile,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.CustomerAddressPO" >
     insert into customer_address
@@ -131,8 +132,11 @@
       <if test="gender != null" >
         gender,
       </if>
-      <if test="cityId != null" >
-        city_id,
+      <if test="cityCode != null" >
+        city_code,
+      </if>
+      <if test="cityName != null" >
+        city_name,
       </if>
       <if test="address != null" >
         address,
@@ -169,8 +173,11 @@
       <if test="gender != null" >
         #{gender,jdbcType=TINYINT},
       </if>
-      <if test="cityId != null" >
-        #{cityId,jdbcType=INTEGER},
+      <if test="cityCode != null" >
+        #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityName != null" >
+        #{cityName,jdbcType=VARCHAR},
       </if>
       <if test="address != null" >
         #{address,jdbcType=VARCHAR},
@@ -216,8 +223,11 @@
       <if test="record.gender != null" >
         gender = #{record.gender,jdbcType=TINYINT},
       </if>
-      <if test="record.cityId != null" >
-        city_id = #{record.cityId,jdbcType=INTEGER},
+      <if test="record.cityCode != null" >
+        city_code = #{record.cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cityName != null" >
+        city_name = #{record.cityName,jdbcType=VARCHAR},
       </if>
       <if test="record.address != null" >
         address = #{record.address,jdbcType=VARCHAR},
@@ -253,7 +263,8 @@
     set id = #{record.id,jdbcType=INTEGER},
       customer_id = #{record.customerId,jdbcType=INTEGER},
       gender = #{record.gender,jdbcType=TINYINT},
-      city_id = #{record.cityId,jdbcType=INTEGER},
+      city_code = #{record.cityCode,jdbcType=VARCHAR},
+      city_name = #{record.cityName,jdbcType=VARCHAR},
       address = #{record.address,jdbcType=VARCHAR},
       mobile = #{record.mobile,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
@@ -275,8 +286,11 @@
       <if test="gender != null" >
         gender = #{gender,jdbcType=TINYINT},
       </if>
-      <if test="cityId != null" >
-        city_id = #{cityId,jdbcType=INTEGER},
+      <if test="cityCode != null" >
+        city_code = #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityName != null" >
+        city_name = #{cityName,jdbcType=VARCHAR},
       </if>
       <if test="address != null" >
         address = #{address,jdbcType=VARCHAR},
@@ -309,7 +323,8 @@
     update customer_address
     set customer_id = #{customerId,jdbcType=INTEGER},
       gender = #{gender,jdbcType=TINYINT},
-      city_id = #{cityId,jdbcType=INTEGER},
+      city_code = #{cityCode,jdbcType=VARCHAR},
+      city_name = #{cityName,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
       mobile = #{mobile,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},

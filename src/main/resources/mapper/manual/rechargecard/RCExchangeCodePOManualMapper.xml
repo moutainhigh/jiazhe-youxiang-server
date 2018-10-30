@@ -7,7 +7,7 @@
     <result column="batch_name" property="batchName" jdbcType="VARCHAR" />
     <result column="batch_description" property="batchDescription" jdbcType="VARCHAR" />
     <result column="project_id" property="projectId" jdbcType="INTEGER" />
-    <result column="city_ids" property="cityIds" jdbcType="VARCHAR" />
+    <result column="city_ids" property="cityCodes" jdbcType="VARCHAR" />
     <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="keyt" property="keyt" jdbcType="VARCHAR" />

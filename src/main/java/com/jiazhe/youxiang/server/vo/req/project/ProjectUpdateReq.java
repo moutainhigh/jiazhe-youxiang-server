@@ -20,13 +20,13 @@ public class ProjectUpdateReq extends BaseVO {
     @ApiModelProperty("项目ID")
     private Integer id;
     @ApiModelProperty("项目名称")
-    private Integer name;
+    private String name;
     @ApiModelProperty("项目描述信息")
     private String description;
     @ApiModelProperty("排序")
     private Integer priority;
     @ApiModelProperty("项目状态")
-    private Byte status;
+    private Integer status;
 
     public Integer getId() {
         return id;
@@ -36,11 +36,11 @@ public class ProjectUpdateReq extends BaseVO {
         this.id = id;
     }
 
-    public Integer getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(Integer name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -60,11 +60,11 @@ public class ProjectUpdateReq extends BaseVO {
         this.priority = priority;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }

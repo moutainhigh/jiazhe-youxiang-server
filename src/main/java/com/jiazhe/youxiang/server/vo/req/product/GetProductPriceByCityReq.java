@@ -14,13 +14,13 @@ import io.swagger.annotations.ApiModelProperty;
  * @author niexiao
  * @created 2018/10/21
  */
-public class GetProductPriceByCity extends BaseVO {
+public class GetProductPriceByCityReq extends BaseVO {
     private static final long serialVersionUID = 3701138133619850597L;
     @ApiModelProperty("商品Id")
     private Integer productId;
 
-    @ApiModelProperty("城市Id")
-    private Integer cityId;
+    @ApiModelProperty("城市code")
+    private String cityCode;
 
     public Integer getProductId() {
         return productId;
@@ -30,11 +30,11 @@ public class GetProductPriceByCity extends BaseVO {
         this.productId = productId;
     }
 
-    public Integer getCityId() {
-        return cityId;
+    public String getCityCode() {
+        return cityCode;
     }
 
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode;
     }
 }
