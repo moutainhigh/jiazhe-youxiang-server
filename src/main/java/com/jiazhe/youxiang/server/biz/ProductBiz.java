@@ -10,7 +10,9 @@ import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
+import com.jiazhe.youxiang.server.service.product.ProductCategoryService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -25,26 +27,33 @@ import java.util.List;
 @Service("productBiz")
 public class ProductBiz {
 
+    @Autowired
+    private ProductCategoryService productCategoryService;
+
     /*************商品分类相关******************/
 
     public void addCategory(ProductCategoryDTO productCategoryDTO) {
+        productCategoryService.addCategory(productCategoryDTO);
     }
 
     public ProductCategoryDTO getCategoryById(Integer id) {
-        return null;
+        return productCategoryService.getCategoryById(id);
     }
 
     public List<ProductCategoryDTO> getCategoryList(String name, Paging paging) {
-        return null;
+        return productCategoryService.getCategoryList(name, paging);
     }
 
     public void deleteCategory(Integer id) {
+        productCategoryService.deleteCategory(id);
     }
 
     public void updateCategory(ProductCategoryDTO productCategoryDTO) {
+        productCategoryService.updateCategory(productCategoryDTO);
     }
 
-    public void updateCategoryStatus(Integer id, Byte status) {
+    public void updateCategoryStatus(Integer id, Integer status) {
+        productCategoryService.updateCategoryStatus(id,status);
     }
 
     /*************商品相关******************/
@@ -67,7 +76,7 @@ public class ProductBiz {
 
     }
 
-    public void updateStatus(Integer id, Byte status) {
+    public void updateStatus(Integer id, Integer status) {
     }
 
     /*************商品价格相关******************/

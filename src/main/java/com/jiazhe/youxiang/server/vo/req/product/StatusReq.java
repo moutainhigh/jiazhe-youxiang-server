@@ -18,13 +18,13 @@ import io.swagger.annotations.ApiModelProperty;
 public class StatusReq extends IdReq {
     private static final long serialVersionUID = 1377664666262107406L;
     @ApiModelProperty("上架状态 0:下架,1:上架")
-    private Byte status;
+    private Integer status;
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }

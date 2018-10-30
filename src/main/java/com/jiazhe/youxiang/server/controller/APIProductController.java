@@ -8,6 +8,8 @@ package com.jiazhe.youxiang.server.controller;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.biz.ProductBiz;
+import com.jiazhe.youxiang.server.common.enums.ProductCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.ProductException;
 import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceBatchAddDTO;
@@ -23,14 +25,15 @@ import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryListReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductListReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductPriceBatchAddReq;
-import com.jiazhe.youxiang.server.vo.req.product.ProductPriceListReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductPriceBatchUpdateReq;
+import com.jiazhe.youxiang.server.vo.req.product.ProductPriceListReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.product.StatusReq;
 import com.jiazhe.youxiang.server.vo.resp.product.ProductCategoryResp;
 import com.jiazhe.youxiang.server.vo.resp.product.ProductPriceResp;
 import com.jiazhe.youxiang.server.vo.resp.product.ProductResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +61,6 @@ public class APIProductController {
     private ProductBiz productBiz;
 
     /*************商品分类相关******************/
-
-
     /**
      * 添加商品分类
      *
@@ -68,7 +69,10 @@ public class APIProductController {
     @ApiOperation(value = "添加商品分类", httpMethod = "POST", notes = "添加商品分类")
     @RequestMapping(value = "addcategory", method = RequestMethod.POST)
     public Object addCategory(@ModelAttribute ProductCategoryAddReq req) {
-        //TODO niexiao 参数验证
+        CommonValidator.validateNull(req);
+        if (Strings.isBlank(req.getName())) {
+            throw new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_NAME_IS_NULL);
+        }
         ProductCategoryDTO productCategoryDTO = ProductAdapter.productCategoryAddReq2DTO(req);
         //调用BIZ方法
         productBiz.addCategory(productCategoryDTO);
@@ -99,7 +103,7 @@ public class APIProductController {
     @ApiOperation(value = "查询商品分类列表", httpMethod = "GET", response = ProductCategoryResp.class, responseContainer = "List", notes = "查询商品分类列表")
     @RequestMapping(value = "getcategorylist", method = RequestMethod.GET)
     public Object getCategoryList(@ModelAttribute ProductCategoryListReq req) {
-        //TODO niexiao 参数验证
+        CommonValidator.validatePaging(req);
         Paging paging = new Paging();
         paging.setOffset(req.getOffset());
         paging.setLimit(req.getLimit());
@@ -119,8 +123,12 @@ public class APIProductController {
     @ApiOperation(value = "编辑商品分类", httpMethod = "POST", notes = "编辑商品分类")
     @RequestMapping(value = "updatecategory", method = RequestMethod.POST)
     public Object updateCategory(@ModelAttribute ProductCategoryUpdateReq req) {
-        //TODO niexiao 参数验证
+
         CommonValidator.validateId(req);
+        if (Strings.isBlank(req.getName())) {
+            throw new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_NAME_IS_NULL);
+        }
+        //TODO niexiao 验证图片地址
         ProductCategoryDTO productCategoryDTO = ProductAdapter.productCategoryUpdateReq2DTO(req);
         //调用BIZ方法
         productBiz.updateCategory(productCategoryDTO);
@@ -136,7 +144,6 @@ public class APIProductController {
     @ApiOperation(value = "编辑商品分类状态", httpMethod = "POST", notes = "编辑商品分类状态")
     @RequestMapping(value = "updatecategorystatus", method = RequestMethod.POST)
     public Object updateCategoryStatus(@ModelAttribute StatusReq req) {
-        //TODO niexiao 参数验证
         validateStatus(req);
         //调用BIZ方法
         productBiz.updateCategoryStatus(req.getId(), req.getStatus());
@@ -360,6 +367,8 @@ public class APIProductController {
      */
     private void validateStatus(StatusReq req) {
         CommonValidator.validateId(req);
-        //TODO niexiao 参数验证
+        if (req == null || req.getStatus() == null || req.getStatus() < 0 || req.getStatus() > 1) {
+            throw new ProductException(ProductCodeEnum.PUTAWAY_STATUS_ERROR);
+        }
     }
 }

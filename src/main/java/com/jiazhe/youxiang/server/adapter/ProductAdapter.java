@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.server.adapter;
 
+import com.jiazhe.youxiang.server.domain.po.ProductCategoryPO;
 import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceBatchAddDTO;
@@ -133,5 +134,35 @@ public class ProductAdapter {
         productPriceResp.setProductId(dto.getProductId());
         productPriceResp.setPrice(dto.getPrice());
         return productPriceResp;
+    }
+
+    public static ProductCategoryPO productCategoryDTO2PO(ProductCategoryDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+        ProductCategoryPO productCategoryPO = new ProductCategoryPO();
+        productCategoryPO.setId(dto.getId());
+        productCategoryPO.setName(dto.getName());
+        productCategoryPO.setDescription(dto.getDescription());
+        productCategoryPO.setThumbnailUrl(dto.getThumbnailUrl());
+        productCategoryPO.setDetailImgUrl(dto.getDetailImgUrl());
+        productCategoryPO.setPriority(dto.getPriority());
+        productCategoryPO.setStatus(dto.getStatus());
+        return productCategoryPO;
+    }
+
+    public static ProductCategoryDTO productCategoryPO2DTO(ProductCategoryPO po) {
+        if (po == null) {
+            return null;
+        }
+        ProductCategoryDTO productCategoryDTO = new ProductCategoryDTO();
+        productCategoryDTO.setId(po.getId());
+        productCategoryDTO.setName(po.getName());
+        productCategoryDTO.setDescription(po.getDescription());
+        productCategoryDTO.setThumbnailUrl(po.getThumbnailUrl());
+        productCategoryDTO.setDetailImgUrl(po.getDetailImgUrl());
+        productCategoryDTO.setPriority(po.getPriority());
+        productCategoryDTO.setStatus(po.getStatus());
+        return productCategoryDTO;
     }
 }

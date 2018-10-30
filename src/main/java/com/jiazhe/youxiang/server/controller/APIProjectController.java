@@ -91,7 +91,6 @@ public class APIProjectController {
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
     public Object getList(@ModelAttribute ProjectListReq req) {
         CommonValidator.validatePaging(req);
-        //TODO niexiao 参数验证
         Paging paging = new Paging();
         paging.setOffset(req.getOffset());
         paging.setLimit(req.getLimit());
@@ -111,7 +110,6 @@ public class APIProjectController {
     @ApiOperation(value = "编辑项目信息", httpMethod = "POST", notes = "编辑项目信息")
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public Object update(@ModelAttribute ProjectUpdateReq req) {
-        //TODO niexiao 参数验证
         CommonValidator.validateNull(req);
         CommonValidator.validateId(req.getId());
         //调用BIZ方法
