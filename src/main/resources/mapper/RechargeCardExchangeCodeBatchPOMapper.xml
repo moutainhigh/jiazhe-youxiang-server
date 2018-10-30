@@ -9,7 +9,7 @@
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="amount" property="amount" jdbcType="INTEGER" />
     <result column="project_id" property="projectId" jdbcType="INTEGER" />
-    <result column="city_ids" property="cityIds" jdbcType="VARCHAR" />
+    <result column="city_codes" property="cityCodes" jdbcType="VARCHAR" />
     <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
     <result column="face_value" property="faceValue" jdbcType="DECIMAL" />
     <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
@@ -81,7 +81,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, name, recharge_card_name, is_virtual, description, amount, project_id, city_ids, 
+    id, name, recharge_card_name, is_virtual, description, amount, project_id, city_codes, 
     product_ids, face_value, expiry_time, recharge_card_expiry_time, validity_period, 
     expiry_type, status, ext_info, is_deleted, add_time, mod_time
   </sql>
@@ -118,14 +118,14 @@
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO" >
     insert into recharge_card_exchange_code_batch (id, name, recharge_card_name, 
       is_virtual, description, amount, 
-      project_id, city_ids, product_ids, 
+      project_id, city_codes, product_ids, 
       face_value, expiry_time, recharge_card_expiry_time, 
       validity_period, expiry_type, status, 
       ext_info, is_deleted, add_time, 
       mod_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{rechargeCardName,jdbcType=VARCHAR}, 
       #{isVirtual,jdbcType=TINYINT}, #{description,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, 
-      #{projectId,jdbcType=INTEGER}, #{cityIds,jdbcType=VARCHAR}, #{productIds,jdbcType=VARCHAR}, 
+      #{projectId,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR}, #{productIds,jdbcType=VARCHAR}, 
       #{faceValue,jdbcType=DECIMAL}, #{expiryTime,jdbcType=TIMESTAMP}, #{rechargeCardExpiryTime,jdbcType=TIMESTAMP}, 
       #{validityPeriod,jdbcType=INTEGER}, #{expiryType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
       #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
@@ -155,8 +155,8 @@
       <if test="projectId != null" >
         project_id,
       </if>
-      <if test="cityIds != null" >
-        city_ids,
+      <if test="cityCodes != null" >
+        city_codes,
       </if>
       <if test="productIds != null" >
         product_ids,
@@ -214,8 +214,8 @@
       <if test="projectId != null" >
         #{projectId,jdbcType=INTEGER},
       </if>
-      <if test="cityIds != null" >
-        #{cityIds,jdbcType=VARCHAR},
+      <if test="cityCodes != null" >
+        #{cityCodes,jdbcType=VARCHAR},
       </if>
       <if test="productIds != null" >
         #{productIds,jdbcType=VARCHAR},
@@ -282,8 +282,8 @@
       <if test="record.projectId != null" >
         project_id = #{record.projectId,jdbcType=INTEGER},
       </if>
-      <if test="record.cityIds != null" >
-        city_ids = #{record.cityIds,jdbcType=VARCHAR},
+      <if test="record.cityCodes != null" >
+        city_codes = #{record.cityCodes,jdbcType=VARCHAR},
       </if>
       <if test="record.productIds != null" >
         product_ids = #{record.productIds,jdbcType=VARCHAR},
@@ -332,7 +332,7 @@
       description = #{record.description,jdbcType=VARCHAR},
       amount = #{record.amount,jdbcType=INTEGER},
       project_id = #{record.projectId,jdbcType=INTEGER},
-      city_ids = #{record.cityIds,jdbcType=VARCHAR},
+      city_codes = #{record.cityCodes,jdbcType=VARCHAR},
       product_ids = #{record.productIds,jdbcType=VARCHAR},
       face_value = #{record.faceValue,jdbcType=DECIMAL},
       expiry_time = #{record.expiryTime,jdbcType=TIMESTAMP},
@@ -369,8 +369,8 @@
       <if test="projectId != null" >
         project_id = #{projectId,jdbcType=INTEGER},
       </if>
-      <if test="cityIds != null" >
-        city_ids = #{cityIds,jdbcType=VARCHAR},
+      <if test="cityCodes != null" >
+        city_codes = #{cityCodes,jdbcType=VARCHAR},
       </if>
       <if test="productIds != null" >
         product_ids = #{productIds,jdbcType=VARCHAR},
@@ -416,7 +416,7 @@
       description = #{description,jdbcType=VARCHAR},
       amount = #{amount,jdbcType=INTEGER},
       project_id = #{projectId,jdbcType=INTEGER},
-      city_ids = #{cityIds,jdbcType=VARCHAR},
+      city_codes = #{cityCodes,jdbcType=VARCHAR},
       product_ids = #{productIds,jdbcType=VARCHAR},
       face_value = #{faceValue,jdbcType=DECIMAL},
       expiry_time = #{expiryTime,jdbcType=TIMESTAMP},

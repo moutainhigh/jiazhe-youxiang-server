@@ -7,7 +7,7 @@
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="amount" property="amount" jdbcType="INTEGER" />
     <result column="project_id" property="projectId" jdbcType="INTEGER" />
-    <result column="city_ids" property="cityIds" jdbcType="VARCHAR" />
+    <result column="city_ids" property="cityCodes" jdbcType="VARCHAR" />
     <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
     <result column="face_value" property="faceValue" jdbcType="DECIMAL" />
     <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />

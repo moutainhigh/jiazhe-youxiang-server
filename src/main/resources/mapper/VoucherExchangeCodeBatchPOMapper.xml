@@ -7,7 +7,7 @@
     <result column="voucher_name" property="voucherName" jdbcType="VARCHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="amount" property="amount" jdbcType="INTEGER" />
-    <result column="city_ids" property="cityIds" jdbcType="VARCHAR" />
+    <result column="city_codes" property="cityCodes" jdbcType="VARCHAR" />
     <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
     <result column="count" property="count" jdbcType="INTEGER" />
     <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
@@ -79,7 +79,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, name, voucher_name, description, amount, city_ids, product_ids, count, expiry_time, 
+    id, name, voucher_name, description, amount, city_codes, product_ids, count, expiry_time, 
     voucher_expiry_time, validity_period, expiry_type, status, ext_info, is_deleted, 
     add_time, mod_time
   </sql>
@@ -115,13 +115,13 @@
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodeBatchPO" >
     insert into voucher_exchange_code_batch (id, name, voucher_name, 
-      description, amount, city_ids, 
+      description, amount, city_codes, 
       product_ids, count, expiry_time, 
       voucher_expiry_time, validity_period, expiry_type, 
       status, ext_info, is_deleted, 
       add_time, mod_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{voucherName,jdbcType=VARCHAR}, 
-      #{description,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, #{cityIds,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR}, 
       #{productIds,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER}, #{expiryTime,jdbcType=TIMESTAMP}, 
       #{voucherExpiryTime,jdbcType=TIMESTAMP}, #{validityPeriod,jdbcType=INTEGER}, #{expiryType,jdbcType=TINYINT}, 
       #{status,jdbcType=TINYINT}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
@@ -145,8 +145,8 @@
       <if test="amount != null" >
         amount,
       </if>
-      <if test="cityIds != null" >
-        city_ids,
+      <if test="cityCodes != null" >
+        city_codes,
       </if>
       <if test="productIds != null" >
         product_ids,
@@ -198,8 +198,8 @@
       <if test="amount != null" >
         #{amount,jdbcType=INTEGER},
       </if>
-      <if test="cityIds != null" >
-        #{cityIds,jdbcType=VARCHAR},
+      <if test="cityCodes != null" >
+        #{cityCodes,jdbcType=VARCHAR},
       </if>
       <if test="productIds != null" >
         #{productIds,jdbcType=VARCHAR},
@@ -260,8 +260,8 @@
       <if test="record.amount != null" >
         amount = #{record.amount,jdbcType=INTEGER},
       </if>
-      <if test="record.cityIds != null" >
-        city_ids = #{record.cityIds,jdbcType=VARCHAR},
+      <if test="record.cityCodes != null" >
+        city_codes = #{record.cityCodes,jdbcType=VARCHAR},
       </if>
       <if test="record.productIds != null" >
         product_ids = #{record.productIds,jdbcType=VARCHAR},
@@ -308,7 +308,7 @@
       voucher_name = #{record.voucherName,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR},
       amount = #{record.amount,jdbcType=INTEGER},
-      city_ids = #{record.cityIds,jdbcType=VARCHAR},
+      city_codes = #{record.cityCodes,jdbcType=VARCHAR},
       product_ids = #{record.productIds,jdbcType=VARCHAR},
       count = #{record.count,jdbcType=INTEGER},
       expiry_time = #{record.expiryTime,jdbcType=TIMESTAMP},
@@ -339,8 +339,8 @@
       <if test="amount != null" >
         amount = #{amount,jdbcType=INTEGER},
       </if>
-      <if test="cityIds != null" >
-        city_ids = #{cityIds,jdbcType=VARCHAR},
+      <if test="cityCodes != null" >
+        city_codes = #{cityCodes,jdbcType=VARCHAR},
       </if>
       <if test="productIds != null" >
         product_ids = #{productIds,jdbcType=VARCHAR},
@@ -384,7 +384,7 @@
       voucher_name = #{voucherName,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       amount = #{amount,jdbcType=INTEGER},
-      city_ids = #{cityIds,jdbcType=VARCHAR},
+      city_codes = #{cityCodes,jdbcType=VARCHAR},
       product_ids = #{productIds,jdbcType=VARCHAR},
       count = #{count,jdbcType=INTEGER},
       expiry_time = #{expiryTime,jdbcType=TIMESTAMP},

@@ -18,7 +18,7 @@ public class RCAdapter {
         rCDTO.setName(rechargeCardPO.getName());
         rCDTO.setDescription(rechargeCardPO.getDescription());
         rCDTO.setProjectId(rechargeCardPO.getProjectId());
-        rCDTO.setCityIds(rechargeCardPO.getCityIds());
+        rCDTO.setCityCodes(rechargeCardPO.getCityCodes());
         rCDTO.setProductIds(rechargeCardPO.getProductIds());
         rCDTO.setFaceValue(rechargeCardPO.getFaceValue());
         rCDTO.setBalance(rechargeCardPO.getBalance());
@@ -34,7 +34,7 @@ public class RCAdapter {
         rCResp.setName(rcdto.getName());
         rCResp.setDescription(rcdto.getDescription());
         rCResp.setProjectId(rcdto.getProjectId());
-        rCResp.setCityIds(rcdto.getCityIds());
+        rCResp.setCityIds(rcdto.getCityCodes());
         rCResp.setProductIds(rcdto.getProductIds());
         rCResp.setFaceValue(rcdto.getFaceValue());
         rCResp.setBalance(rcdto.getBalance());
