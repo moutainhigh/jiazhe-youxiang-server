@@ -6,10 +6,14 @@
 package com.jiazhe.youxiang.server.adapter;
 
 import com.jiazhe.youxiang.server.domain.po.ProductCategoryPO;
+import com.jiazhe.youxiang.server.domain.po.ProductPO;
+import com.jiazhe.youxiang.server.domain.po.ProductPricePO;
+import com.jiazhe.youxiang.server.dto.product.ProductAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
+import com.jiazhe.youxiang.server.dto.product.ProductUpdateDTO;
 import com.jiazhe.youxiang.server.vo.req.product.ProductAddReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryAddReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryUpdateReq;
@@ -18,6 +22,9 @@ import com.jiazhe.youxiang.server.vo.req.product.ProductUpdateReq;
 import com.jiazhe.youxiang.server.vo.resp.product.ProductCategoryResp;
 import com.jiazhe.youxiang.server.vo.resp.product.ProductPriceResp;
 import com.jiazhe.youxiang.server.vo.resp.product.ProductResp;
+import org.apache.commons.collections.CollectionUtils;
+
+import java.util.stream.Collectors;
 
 /**
  * 在这里编写类的功能描述
@@ -48,7 +55,6 @@ public class ProductAdapter {
         }
         ProductResp productResp = new ProductResp();
         productResp.setId(dto.getId());
-        productResp.setProductCategory(productCategoryDTO2VO(dto.getProductCategory()));
         productResp.setName(dto.getName());
         productResp.setDescription(dto.getDescription());
         productResp.setDelayDays(dto.getDelayDays());
@@ -58,15 +64,33 @@ public class ProductAdapter {
         productResp.setUnitName(dto.getUnitName());
         productResp.setLastNum(dto.getLastNum());
         productResp.setStatus(dto.getStatus());
+        productResp.setSmsTemplate(dto.getSmsTemplate());
+        productResp.setEffectiveDays(dto.getEffectiveDays());
+        productResp.setProductCategory(productCategoryDTO2VO(dto.getProductCategory()));
+        if (CollectionUtils.isNotEmpty(dto.getProductPriceList())) {
+            productResp.setProductPriceList(dto.getProductPriceList().stream().map(ProductAdapter::productPriceDTO2VO).collect(Collectors.toList()));
+        }
         return productResp;
     }
 
-    public static ProductDTO productAddReq2DTO(ProductAddReq req) {
+
+    public static ProductAddDTO productAddReq2DTO(ProductAddReq req) {
         if (req == null) {
             return null;
         }
-        ProductDTO productDTO = new ProductDTO();
-        return productDTO;
+        ProductAddDTO productAddDTO = new ProductAddDTO();
+        productAddDTO.setProductCategoryId(req.getProductCategoryId());
+        productAddDTO.setName(req.getName());
+        productAddDTO.setDescription(req.getDescription());
+        productAddDTO.setDelayDays(req.getDelayDays());
+        productAddDTO.setThumbnailUrl(req.getThumbnailUrl());
+        productAddDTO.setDetailImgUrl(req.getDetailImgUrl());
+        productAddDTO.setProductType(req.getProductType());
+        productAddDTO.setUnitName(req.getUnitName());
+        productAddDTO.setLastNum(req.getLastNum());
+        productAddDTO.setSmsTemplate(req.getSmsTemplate());
+        productAddDTO.setEffectiveDays(req.getEffectiveDays());
+        return productAddDTO;
     }
 
     public static ProductCategoryDTO productCategoryAddReq2DTO(ProductCategoryAddReq req) {
@@ -96,21 +120,21 @@ public class ProductAdapter {
         return productCategoryDTO;
     }
 
-    public static ProductDTO productUpdateReq2DTO(ProductUpdateReq req) {
+    public static ProductUpdateDTO productUpdateReq2DTO(ProductUpdateReq req) {
         if (req == null) {
             return null;
         }
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setName(req.getName());
-        productDTO.setDescription(req.getDescription());
-        productDTO.setDelayDays(req.getDelayDays());
-        productDTO.setThumbnailUrl(req.getThumbnailUrl());
-        productDTO.setDetailImgUrl(req.getDetailImgUrl());
-        productDTO.setProductType(req.getProductType());
-        productDTO.setUnitName(req.getUnitName());
-        productDTO.setLastNum(req.getLastNum());
-        productDTO.setId(req.getId());
-        return productDTO;
+        ProductUpdateDTO productUpdateDTO = new ProductUpdateDTO();
+        productUpdateDTO.setName(req.getName());
+        productUpdateDTO.setDescription(req.getDescription());
+        productUpdateDTO.setDelayDays(req.getDelayDays());
+        productUpdateDTO.setThumbnailUrl(req.getThumbnailUrl());
+        productUpdateDTO.setDetailImgUrl(req.getDetailImgUrl());
+        productUpdateDTO.setProductType(req.getProductType());
+        productUpdateDTO.setUnitName(req.getUnitName());
+        productUpdateDTO.setLastNum(req.getLastNum());
+        productUpdateDTO.setId(req.getId());
+        return productUpdateDTO;
     }
 
     public static ProductPriceBatchAddDTO productPriceBatchAddReq2DTO(ProductPriceBatchAddReq req) {
@@ -118,7 +142,7 @@ public class ProductAdapter {
             return null;
         }
         ProductPriceBatchAddDTO productPriceBatchAddDTO = new ProductPriceBatchAddDTO();
-        productPriceBatchAddDTO.setCityIds(req.getCityIds());
+        productPriceBatchAddDTO.setCityCodes(req.getCityCodes());
         productPriceBatchAddDTO.setProductId(req.getProductId());
         productPriceBatchAddDTO.setPrice(req.getPrice());
         return productPriceBatchAddDTO;
@@ -130,8 +154,10 @@ public class ProductAdapter {
         }
         ProductPriceResp productPriceResp = new ProductPriceResp();
         productPriceResp.setId(dto.getId());
-        productPriceResp.setCityId(dto.getCityId());
+        productPriceResp.setCityCode(dto.getCityCode());
+        productPriceResp.setCityName(dto.getCityName());
         productPriceResp.setProductId(dto.getProductId());
+        productPriceResp.setStatus(dto.getStatus());
         productPriceResp.setPrice(dto.getPrice());
         return productPriceResp;
     }
@@ -164,5 +190,74 @@ public class ProductAdapter {
         productCategoryDTO.setPriority(po.getPriority());
         productCategoryDTO.setStatus(po.getStatus());
         return productCategoryDTO;
+    }
+
+    public static ProductPO productAddDTO2PO(ProductAddDTO productAddDTO) {
+        if (productAddDTO == null) {
+            return null;
+        }
+        ProductPO productPO = new ProductPO();
+        productPO.setProductCategoryId(productAddDTO.getProductCategoryId());
+        productPO.setName(productAddDTO.getName());
+        productPO.setDescription(productAddDTO.getDescription());
+        productPO.setDelayDays(productAddDTO.getDelayDays());
+        productPO.setThumbnailUrl(productAddDTO.getThumbnailUrl());
+        productPO.setDetailImgUrl(productAddDTO.getDetailImgUrl());
+        productPO.setProductType(productAddDTO.getProductType());
+        productPO.setUnitName(productAddDTO.getUnitName());
+        productPO.setLastNum(productAddDTO.getLastNum());
+        productPO.setStatus(productAddDTO.getStatus());
+        return productPO;
+    }
+
+    public static ProductDTO productPO2DTO(ProductPO productPO) {
+        if (productPO == null) {
+            return null;
+        }
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(productPO.getId());
+        productDTO.setName(productPO.getName());
+        productDTO.setDescription(productPO.getDescription());
+        productDTO.setDelayDays(productPO.getDelayDays());
+        productDTO.setThumbnailUrl(productPO.getThumbnailUrl());
+        productDTO.setDetailImgUrl(productPO.getDetailImgUrl());
+        productDTO.setProductType(productPO.getProductType());
+        productDTO.setUnitName(productPO.getUnitName());
+        productDTO.setLastNum(productPO.getLastNum());
+        productDTO.setStatus(productPO.getStatus());
+        productDTO.setSmsTemplate(productPO.getSmsTemplate());
+        productDTO.setEffectiveDays(productPO.getEffectiveDays());
+        return productDTO;
+    }
+
+    public static ProductPO productUpdateDTO2PO(ProductUpdateDTO productUpdateDTO) {
+        if (productUpdateDTO == null) {
+            return null;
+        }
+        ProductPO productPO = new ProductPO();
+        productPO.setId(productUpdateDTO.getId());
+        productPO.setName(productUpdateDTO.getName());
+        productPO.setDescription(productUpdateDTO.getDescription());
+        productPO.setDelayDays(productUpdateDTO.getDelayDays());
+        productPO.setThumbnailUrl(productUpdateDTO.getThumbnailUrl());
+        productPO.setDetailImgUrl(productUpdateDTO.getDetailImgUrl());
+        productPO.setProductType(productUpdateDTO.getProductType());
+        productPO.setUnitName(productUpdateDTO.getUnitName());
+        productPO.setLastNum(productUpdateDTO.getLastNum());
+        return productPO;
+    }
+
+    public static ProductPriceDTO productPricePO2DTO(ProductPricePO po) {
+        if (po == null) {
+            return null;
+        }
+        ProductPriceDTO productPriceDTO = new ProductPriceDTO();
+        productPriceDTO.setId(po.getId());
+        productPriceDTO.setCityCode(po.getCityCode());
+        productPriceDTO.setCityName(po.getCityName());
+        productPriceDTO.setProductId(po.getProductId());
+        productPriceDTO.setPrice(po.getPrice());
+        productPriceDTO.setStatus(po.getStatus().intValue());
+        return productPriceDTO;
     }
 }

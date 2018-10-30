@@ -29,9 +29,18 @@
             </if>
             AND is_deleted = 0
         </where>
-        order by priority,add_time desc
+        order by priority desc,add_time desc
         limit #{offset},#{limit}
     </select>
 
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from product_category
+        <where>
+            <if test="name != null">
+                AND name = #{name}
+            </if>
+            AND is_deleted = 0
+        </where>
+    </select>
 
 </mapper>

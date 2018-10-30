@@ -9,4 +9,5 @@ public interface ProductCategoryPOManualMapper {
 
     List<ProductCategoryPO> query(@Param("name") String name, @Param("offset")Integer offset,@Param("limit") Integer limit);
 
+    Integer count(@Param("name")String name);
 }

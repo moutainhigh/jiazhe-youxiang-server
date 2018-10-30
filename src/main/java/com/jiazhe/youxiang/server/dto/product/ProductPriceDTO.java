@@ -8,7 +8,7 @@ package com.jiazhe.youxiang.server.dto.product;
 import java.math.BigDecimal;
 
 /**
- * 在这里编写类的功能描述
+ * 商品价格DTO
  *
  * @author niexiao
  * @created 2018/10/19
@@ -21,14 +21,22 @@ public class ProductPriceDTO {
     private Integer id;
 
     /**
-     * 城市id
+     * 城市code
      */
-    private Integer cityId;
-
+    private String cityCode;
+    /**
+     * 城市名称
+     */
+    private String cityName;
     /**
      * 商品id
      */
     private Integer productId;
+
+    /**
+     * 商品id
+     */
+    private Integer status;
 
     /**
      * 价格
@@ -43,12 +51,20 @@ public class ProductPriceDTO {
         this.id = id;
     }
 
-    public Integer getCityId() {
-        return cityId;
+    public String getCityCode() {
+        return cityCode;
     }
 
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
     public Integer getProductId() {
@@ -57,6 +73,14 @@ public class ProductPriceDTO {
 
     public void setProductId(Integer productId) {
         this.productId = productId;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public BigDecimal getPrice() {

@@ -5,8 +5,11 @@
  */
 package com.jiazhe.youxiang.server.vo.resp.product;
 
+import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.List;
 
 /**
  * 在这里编写类的功能描述
@@ -19,8 +22,6 @@ public class ProductResp extends BaseVO {
     private static final long serialVersionUID = 6160741992157786143L;
     @ApiModelProperty("商品ID")
     private Integer id;
-    @ApiModelProperty("商品类别")
-    private ProductCategoryResp productCategory;
     @ApiModelProperty("商品名称")
     private String name;
     @ApiModelProperty("商品描述")
@@ -39,6 +40,14 @@ public class ProductResp extends BaseVO {
     private Integer lastNum;
     @ApiModelProperty("状态：0:下架,1:上架")
     private Byte status;
+    @ApiModelProperty("短信发送模板")
+    private String smsTemplate;
+    @ApiModelProperty("有效期天数")
+    private Integer effectiveDays;
+    @ApiModelProperty("商品类别")
+    private ProductCategoryResp productCategory;
+    @ApiModelProperty("商品价格列表")
+    private List<ProductPriceResp> productPriceList;
 
     public Integer getId() {
         return id;
@@ -46,14 +55,6 @@ public class ProductResp extends BaseVO {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public ProductCategoryResp getProductCategory() {
-        return productCategory;
-    }
-
-    public void setProductCategory(ProductCategoryResp productCategory) {
-        this.productCategory = productCategory;
     }
 
     public String getName() {
@@ -126,5 +127,37 @@ public class ProductResp extends BaseVO {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getSmsTemplate() {
+        return smsTemplate;
+    }
+
+    public void setSmsTemplate(String smsTemplate) {
+        this.smsTemplate = smsTemplate;
+    }
+
+    public Integer getEffectiveDays() {
+        return effectiveDays;
+    }
+
+    public void setEffectiveDays(Integer effectiveDays) {
+        this.effectiveDays = effectiveDays;
+    }
+
+    public ProductCategoryResp getProductCategory() {
+        return productCategory;
+    }
+
+    public void setProductCategory(ProductCategoryResp productCategory) {
+        this.productCategory = productCategory;
+    }
+
+    public List<ProductPriceResp> getProductPriceList() {
+        return productPriceList;
+    }
+
+    public void setProductPriceList(List<ProductPriceResp> productPriceList) {
+        this.productPriceList = productPriceList;
     }
 }

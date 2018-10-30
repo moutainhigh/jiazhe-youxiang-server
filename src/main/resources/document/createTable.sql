@@ -284,7 +284,6 @@ CREATE TABLE `product` (
     `thumbnail_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '缩略图url',
     `detail_img_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '详情图url',
     `product_type` INT(10) NOT NULL DEFAULT '0' COMMENT '0-服务，1-电子卡',
-    `product_price_id` INT(10) UNSIGNED NOT NULL COMMENT '商品价格id',
     `unit_name` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '计量单位名称',
     `last_num` INT(10) NOT NULL DEFAULT '1' COMMENT '最少购买数量',
     `status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '状态：0:下架,1:上架',
@@ -318,7 +317,8 @@ CREATE TABLE `electronic_product_exchange_code` (
 drop table if exists product_price;
 CREATE TABLE `product_price` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
-    `city_id` INT(10) UNSIGNED NOT NULL COMMENT '城市id',
+    `city_code` VARCHAR(255) NOT NULL DEFAULT ''  COMMENT '城市编码',
+    `city_name` VARCHAR(255) NOT NULL DEFAULT ''  COMMENT '城市名称',
     `product_id` INT(10) UNSIGNED NOT NULL COMMENT '商品id',
     `price` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '商品价格',
     `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '状态：0:未生效,1:已生效',

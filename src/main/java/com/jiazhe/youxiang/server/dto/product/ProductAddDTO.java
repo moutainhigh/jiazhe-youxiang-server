@@ -5,19 +5,18 @@
  */
 package com.jiazhe.youxiang.server.dto.product;
 
-import java.util.List;
-
 /**
  * 在这里编写类的功能描述
  *
  * @author niexiao
  * @created 2018/10/18
  */
-public class ProductDTO {
+public class ProductAddDTO {
+
     /**
-     * 商品ID
+     * 商品类别Id
      */
-    private Integer id;
+    private Integer productCategoryId;
     /**
      * 商品名称
      */
@@ -65,22 +64,12 @@ public class ProductDTO {
      */
     private Integer effectiveDays;
 
-    /**
-     * 商品类别
-     */
-    private ProductCategoryDTO productCategory;
-
-    /**
-     * 商品价格列表
-     */
-    private List<ProductPriceDTO> productPriceList;
-
-    public Integer getId() {
-        return id;
+    public Integer getProductCategoryId() {
+        return productCategoryId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setProductCategoryId(Integer productCategoryId) {
+        this.productCategoryId = productCategoryId;
     }
 
     public String getName() {
@@ -169,21 +158,5 @@ public class ProductDTO {
 
     public void setEffectiveDays(Integer effectiveDays) {
         this.effectiveDays = effectiveDays;
-    }
-
-    public ProductCategoryDTO getProductCategory() {
-        return productCategory;
-    }
-
-    public void setProductCategory(ProductCategoryDTO productCategory) {
-        this.productCategory = productCategory;
-    }
-
-    public List<ProductPriceDTO> getProductPriceList() {
-        return productPriceList;
-    }
-
-    public void setProductPriceList(List<ProductPriceDTO> productPriceList) {
-        this.productPriceList = productPriceList;
     }
 }

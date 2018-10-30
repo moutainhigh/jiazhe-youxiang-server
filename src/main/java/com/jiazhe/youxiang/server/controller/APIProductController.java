@@ -10,15 +10,17 @@ import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.biz.ProductBiz;
 import com.jiazhe.youxiang.server.common.enums.ProductCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.ProductException;
+import com.jiazhe.youxiang.server.dto.product.ProductAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
+import com.jiazhe.youxiang.server.dto.product.ProductUpdateDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdListReq;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
-import com.jiazhe.youxiang.server.vo.req.product.GetProductPriceByCity;
+import com.jiazhe.youxiang.server.vo.req.product.GetProductPriceByCityReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductAddReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryAddReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryListReq;
@@ -33,7 +35,7 @@ import com.jiazhe.youxiang.server.vo.resp.product.ProductCategoryResp;
 import com.jiazhe.youxiang.server.vo.resp.product.ProductPriceResp;
 import com.jiazhe.youxiang.server.vo.resp.product.ProductResp;
 import io.swagger.annotations.ApiOperation;
-import org.apache.logging.log4j.util.Strings;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,9 +73,7 @@ public class APIProductController {
     @RequestMapping(value = "addcategory", method = RequestMethod.POST)
     public Object addCategory(@ModelAttribute ProductCategoryAddReq req) {
         CommonValidator.validateNull(req);
-        if (Strings.isBlank(req.getName())) {
-            throw new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_NAME_IS_NULL);
-        }
+        CommonValidator.validateNull(req.getName(), new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_NAME_IS_NULL));
         ProductCategoryDTO productCategoryDTO = ProductAdapter.productCategoryAddReq2DTO(req);
         //调用BIZ方法
         productBiz.addCategory(productCategoryDTO);
@@ -123,11 +124,8 @@ public class APIProductController {
     @ApiOperation(value = "编辑商品分类", httpMethod = "POST", notes = "编辑商品分类")
     @RequestMapping(value = "updatecategory", method = RequestMethod.POST)
     public Object updateCategory(@ModelAttribute ProductCategoryUpdateReq req) {
-
         CommonValidator.validateId(req);
-        if (Strings.isBlank(req.getName())) {
-            throw new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_NAME_IS_NULL);
-        }
+        CommonValidator.validateNull(req.getName(), new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_NAME_IS_NULL));
         //TODO niexiao 验证图片地址
         ProductCategoryDTO productCategoryDTO = ProductAdapter.productCategoryUpdateReq2DTO(req);
         //调用BIZ方法
@@ -175,10 +173,13 @@ public class APIProductController {
     @ApiOperation(value = "添加商品", httpMethod = "POST", notes = "添加商品")
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public Object add(@ModelAttribute ProductAddReq req) {
-        //TODO niexiao 参数验证
-        ProductDTO productDTO = ProductAdapter.productAddReq2DTO(req);
+        CommonValidator.validateNull(req);
+        CommonValidator.validateId(req.getProductCategoryId(), new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_ID_IS_NULL));
+        CommonValidator.validateNull(req.getName(), new ProductException(ProductCodeEnum.PRODUCT_NAME_IS_NULL));
+        validateProductType(req.getProductType());
+        ProductAddDTO productAddDTO = ProductAdapter.productAddReq2DTO(req);
         //调用BIZ方法
-        productBiz.add(productDTO);
+        productBiz.add(productAddDTO);
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -206,12 +207,12 @@ public class APIProductController {
     @ApiOperation(value = "查询商品列表", httpMethod = "GET", response = ProductResp.class, responseContainer = "List", notes = "查询商品列表")
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
     public Object getList(@ModelAttribute ProductListReq req) {
-        //TODO niexiao 参数验证
+        CommonValidator.validatePaging(req);
         Paging paging = new Paging();
         paging.setOffset(req.getOffset());
         paging.setLimit(req.getLimit());
         //调用BIZ方法
-        List<ProductDTO> productDTOList = productBiz.getList(req.getProductCategoryId(), req.getName(), req.getProductType(), req.getCityIds(), req.getStatus(), paging);
+        List<ProductDTO> productDTOList = productBiz.getList(req.getProductCategoryId(), req.getName(), req.getProductType(), req.getCityCodes(), req.getStatus(), paging);
         //将DTO转成VO
         List<ProductResp> result = productDTOList.stream().map(ProductAdapter::productDTO2VO).collect(Collectors.toList());
         //用ResponseFactory将返回值包装
@@ -226,11 +227,11 @@ public class APIProductController {
     @ApiOperation(value = "编辑商品", httpMethod = "POST", notes = "编辑商品")
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public Object update(@ModelAttribute ProductUpdateReq req) {
-        //TODO niexiao 参数验证
         CommonValidator.validateId(req);
-        ProductDTO productDTO = ProductAdapter.productUpdateReq2DTO(req);
+        CommonValidator.validateNull(req.getName(), new ProductException(ProductCodeEnum.PRODUCT_NAME_IS_NULL));
+        ProductUpdateDTO productUpdateDTO = ProductAdapter.productUpdateReq2DTO(req);
         //调用BIZ方法
-        productBiz.update(productDTO);
+        productBiz.update(productUpdateDTO);
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -243,7 +244,6 @@ public class APIProductController {
     @ApiOperation(value = "编辑商品状态", httpMethod = "POST", notes = "编辑商品状态")
     @RequestMapping(value = "updatestatus", method = RequestMethod.POST)
     public Object updateStatus(@ModelAttribute StatusReq req) {
-        //TODO niexiao 参数验证
         validateStatus(req);
         //调用BIZ方法
         productBiz.updateStatus(req.getId(), req.getStatus());
@@ -275,7 +275,10 @@ public class APIProductController {
     @ApiOperation(value = "批量添加商品价格", httpMethod = "POST", notes = "批量添加商品价格")
     @RequestMapping(value = "batchaddprice", method = RequestMethod.POST)
     public Object batchAddPrice(@ModelAttribute ProductPriceBatchAddReq req) {
-        //TODO niexiao 参数验证
+        CommonValidator.validateNull(req);
+        CommonValidator.validateId(req.getProductId(), new ProductException(ProductCodeEnum.PRODUCT_ID_IS_NULL));
+        validateCityCodes(req.getCityCodes());
+        validatePrice(req.getPrice());
         ProductPriceBatchAddDTO productPriceBatchAddDTO = ProductAdapter.productPriceBatchAddReq2DTO(req);
         //调用BIZ方法
         productBiz.batchAddPrice(productPriceBatchAddDTO);
@@ -284,11 +287,11 @@ public class APIProductController {
     }
 
     /**
-     * 获得某一商品价格
+     * 根据价格ID获得某一商品价格
      *
      * @return
      */
-    @ApiOperation(value = "获得某一商品价格", httpMethod = "GET", response = ProductPriceResp.class, notes = "获得某一商品价格")
+    @ApiOperation(value = "根据价格ID获得某一商品价格", httpMethod = "GET", response = ProductPriceResp.class, notes = "根据价格ID获得某一商品价格")
     @RequestMapping(value = "getpricebyid", method = RequestMethod.GET)
     public Object getPriceById(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
@@ -305,10 +308,12 @@ public class APIProductController {
      */
     @ApiOperation(value = "获得某一商品在某城市的价格", httpMethod = "GET", response = ProductPriceResp.class, notes = "获得某一商品在某城市的价格")
     @RequestMapping(value = "getpricebycity", method = RequestMethod.GET)
-    public Object getPriceByCity(@ModelAttribute GetProductPriceByCity req) {
+    public Object getPriceByCity(@ModelAttribute GetProductPriceByCityReq req) {
         CommonValidator.validateNull(req);
+        CommonValidator.validateId(req.getProductId(), new ProductException(ProductCodeEnum.PRODUCT_ID_IS_NULL));
+        CommonValidator.validateNull(req.getCityCode(), new ProductException(ProductCodeEnum.PRODUCT_CITY_CODE_IS_NULL));
         //调用BIZ方法
-        ProductPriceDTO productPriceDTO = productBiz.getPriceByCity(req.getProductId(), req.getProductId());
+        ProductPriceDTO productPriceDTO = productBiz.getPriceByCity(req.getProductId(), req.getCityCode());
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildResponse(ProductAdapter.productPriceDTO2VO(productPriceDTO));
     }
@@ -321,7 +326,8 @@ public class APIProductController {
     @ApiOperation(value = "获得商品的价格列表", httpMethod = "GET", response = ProductPriceResp.class, responseContainer = "List", notes = "获得商品的价格列表")
     @RequestMapping(value = "getpricelistbyproductid", method = RequestMethod.GET)
     public Object getPriceListByProductId(@ModelAttribute ProductPriceListReq req) {
-        CommonValidator.validateId(req.getProductId());
+        CommonValidator.validateNull(req);
+        CommonValidator.validateId(req.getProductId(), new ProductException(ProductCodeEnum.PRODUCT_ID_IS_NULL));
         //调用BIZ方法
         List<ProductPriceDTO> productPriceDTOList = productBiz.getPriceListByProductId(req.getProductId());
         //用ResponseFactory将返回值包装
@@ -336,9 +342,12 @@ public class APIProductController {
     @ApiOperation(value = "批量编辑商品的价格", httpMethod = "POST", notes = "批量编辑商品的价格")
     @RequestMapping(value = "batchupdateprice", method = RequestMethod.POST)
     public Object batchUpdatePrice(@ModelAttribute ProductPriceBatchUpdateReq req) {
-        //TODO niexiao 参数验证
+        CommonValidator.validateNull(req);
+        CommonValidator.validateId(req.getProductId(), new ProductException(ProductCodeEnum.PRODUCT_ID_IS_NULL));
+        validateCityCodes(req.getCityCodes());
+        validatePrice(req.getPrice());
         //调用BIZ方法
-        productBiz.batchUpdatePrice(req.getCityIds(), req.getPrice());
+        productBiz.batchUpdatePrice(req.getProductId(), req.getCityCodes(), req.getPrice());
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -351,7 +360,7 @@ public class APIProductController {
     @ApiOperation(value = "批量删除商品价格", httpMethod = "GET", notes = "批量删除商品价格")
     @RequestMapping(value = "batchdeleteprice", method = RequestMethod.GET)
     public Object batchDeletePrice(@ModelAttribute IdListReq req) {
-        CommonValidator.validateIdList(req);
+        CommonValidator.validateIdList(req, new ProductException(ProductCodeEnum.PRODUCT_PRICE_ID_IS_NULL));
         //调用BIZ方法
         productBiz.batchDeletePrice(req.getIds());
         return ResponseFactory.buildSuccess();
@@ -369,6 +378,34 @@ public class APIProductController {
         CommonValidator.validateId(req);
         if (req == null || req.getStatus() == null || req.getStatus() < 0 || req.getStatus() > 1) {
             throw new ProductException(ProductCodeEnum.PUTAWAY_STATUS_ERROR);
+        }
+    }
+
+    /**
+     * 验证商品类别
+     *
+     * @param productType
+     */
+    private void validateProductType(Integer productType) {
+        if (productType == null || productType < 0 || productType > 1) {
+            throw new ProductException(ProductCodeEnum.PRODUCT_TYPE_ERROR);
+        }
+    }
+
+    /**
+     * 验证商品价格
+     *
+     * @param price
+     */
+    private void validatePrice(BigDecimal price) {
+        if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new ProductException(ProductCodeEnum.PRODUCT_PRICE_ERROR);
+        }
+    }
+
+    private void validateCityCodes(List<String> codes) {
+        if (CollectionUtils.isEmpty(codes)) {
+            throw new ProductException(ProductCodeEnum.PRODUCT_CITY_CODE_IS_NULL);
         }
     }
 }

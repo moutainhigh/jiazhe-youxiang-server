@@ -26,9 +26,8 @@ import java.util.stream.Collectors;
  * @author niexiao
  * @created 2018/10/30
  */
-@Service("productService")
+@Service("productCategoryService")
 public class ProductCategoryServiceImpl implements ProductCategoryService {
-
 
     @Autowired
     private ProductCategoryPOMapper productCategoryPOMapper;
@@ -50,7 +49,9 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     @Override
     public List<ProductCategoryDTO> getCategoryList(String name, Paging paging) {
+        Integer count = productCategoryPOManualMapper.count(name);
         List<ProductCategoryPO> productCategoryPOList = productCategoryPOManualMapper.query(name, paging.getOffset(), paging.getLimit());
+        paging.setTotal(count);
         return productCategoryPOList.stream().map(ProductAdapter::productCategoryPO2DTO).collect(Collectors.toList());
     }
 

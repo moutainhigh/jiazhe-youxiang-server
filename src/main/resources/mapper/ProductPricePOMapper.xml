@@ -3,7 +3,8 @@
 <mapper namespace="com.jiazhe.youxiang.server.dao.mapper.ProductPricePOMapper" >
   <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.ProductPricePO" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
     <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="price" property="price" jdbcType="DECIMAL" />
     <result column="status" property="status" jdbcType="TINYINT" />
@@ -71,7 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, city_id, product_id, price, status, ext_info, is_deleted, add_time, mod_time
+    id, city_code, city_name, product_id, price, status, ext_info, is_deleted, add_time, 
+    mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.ProductPricePOExample" >
     select
@@ -104,14 +106,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.ProductPricePO" >
-    insert into product_price (id, city_id, product_id, 
-      price, status, ext_info, 
-      is_deleted, add_time, mod_time
-      )
-    values (#{id,jdbcType=INTEGER}, #{cityId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, 
-      #{price,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, #{extInfo,jdbcType=VARCHAR}, 
-      #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}
-      )
+    insert into product_price (id, city_code, city_name, 
+      product_id, price, status, 
+      ext_info, is_deleted, add_time, 
+      mod_time)
+    values (#{id,jdbcType=INTEGER}, #{cityCode,jdbcType=VARCHAR}, #{cityName,jdbcType=VARCHAR}, 
+      #{productId,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, 
+      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.ProductPricePO" >
     insert into product_price
@@ -119,8 +121,11 @@
       <if test="id != null" >
         id,
       </if>
-      <if test="cityId != null" >
-        city_id,
+      <if test="cityCode != null" >
+        city_code,
+      </if>
+      <if test="cityName != null" >
+        city_name,
       </if>
       <if test="productId != null" >
         product_id,
@@ -148,8 +153,11 @@
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="cityId != null" >
-        #{cityId,jdbcType=INTEGER},
+      <if test="cityCode != null" >
+        #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityName != null" >
+        #{cityName,jdbcType=VARCHAR},
       </if>
       <if test="productId != null" >
         #{productId,jdbcType=INTEGER},
@@ -186,8 +194,11 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.cityId != null" >
-        city_id = #{record.cityId,jdbcType=INTEGER},
+      <if test="record.cityCode != null" >
+        city_code = #{record.cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cityName != null" >
+        city_name = #{record.cityName,jdbcType=VARCHAR},
       </if>
       <if test="record.productId != null" >
         product_id = #{record.productId,jdbcType=INTEGER},
@@ -218,7 +229,8 @@
   <update id="updateByExample" parameterType="map" >
     update product_price
     set id = #{record.id,jdbcType=INTEGER},
-      city_id = #{record.cityId,jdbcType=INTEGER},
+      city_code = #{record.cityCode,jdbcType=VARCHAR},
+      city_name = #{record.cityName,jdbcType=VARCHAR},
       product_id = #{record.productId,jdbcType=INTEGER},
       price = #{record.price,jdbcType=DECIMAL},
       status = #{record.status,jdbcType=TINYINT},
@@ -233,8 +245,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jiazhe.youxiang.server.domain.po.ProductPricePO" >
     update product_price
     <set >
-      <if test="cityId != null" >
-        city_id = #{cityId,jdbcType=INTEGER},
+      <if test="cityCode != null" >
+        city_code = #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityName != null" >
+        city_name = #{cityName,jdbcType=VARCHAR},
       </if>
       <if test="productId != null" >
         product_id = #{productId,jdbcType=INTEGER},
@@ -262,7 +277,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jiazhe.youxiang.server.domain.po.ProductPricePO" >
     update product_price
-    set city_id = #{cityId,jdbcType=INTEGER},
+    set city_code = #{cityCode,jdbcType=VARCHAR},
+      city_name = #{cityName,jdbcType=VARCHAR},
       product_id = #{productId,jdbcType=INTEGER},
       price = #{price,jdbcType=DECIMAL},
       status = #{status,jdbcType=TINYINT},

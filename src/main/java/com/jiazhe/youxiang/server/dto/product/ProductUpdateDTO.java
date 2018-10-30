@@ -5,15 +5,14 @@
  */
 package com.jiazhe.youxiang.server.dto.product;
 
-import java.util.List;
-
 /**
  * 在这里编写类的功能描述
  *
  * @author niexiao
- * @created 2018/10/18
+ * @created 2018/10/30
  */
-public class ProductDTO {
+public class ProductUpdateDTO {
+
     /**
      * 商品ID
      */
@@ -50,30 +49,6 @@ public class ProductDTO {
      * 最少购买数量
      */
     private Integer lastNum;
-    /**
-     * 状态：0:下架,1:上架
-     */
-    private Byte status;
-
-    /**
-     * 短信发送模板
-     */
-    private String smsTemplate;
-
-    /**
-     * 有效期天数
-     */
-    private Integer effectiveDays;
-
-    /**
-     * 商品类别
-     */
-    private ProductCategoryDTO productCategory;
-
-    /**
-     * 商品价格列表
-     */
-    private List<ProductPriceDTO> productPriceList;
 
     public Integer getId() {
         return id;
@@ -145,45 +120,5 @@ public class ProductDTO {
 
     public void setLastNum(Integer lastNum) {
         this.lastNum = lastNum;
-    }
-
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
-
-    public String getSmsTemplate() {
-        return smsTemplate;
-    }
-
-    public void setSmsTemplate(String smsTemplate) {
-        this.smsTemplate = smsTemplate;
-    }
-
-    public Integer getEffectiveDays() {
-        return effectiveDays;
-    }
-
-    public void setEffectiveDays(Integer effectiveDays) {
-        this.effectiveDays = effectiveDays;
-    }
-
-    public ProductCategoryDTO getProductCategory() {
-        return productCategory;
-    }
-
-    public void setProductCategory(ProductCategoryDTO productCategory) {
-        this.productCategory = productCategory;
-    }
-
-    public List<ProductPriceDTO> getProductPriceList() {
-        return productPriceList;
-    }
-
-    public void setProductPriceList(List<ProductPriceDTO> productPriceList) {
-        this.productPriceList = productPriceList;
     }
 }
