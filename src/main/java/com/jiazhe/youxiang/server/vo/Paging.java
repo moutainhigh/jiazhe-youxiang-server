@@ -12,9 +12,9 @@ package com.jiazhe.youxiang.server.vo;
  * @created 2018/10/16
  */
 public class Paging {
-    private Integer offset;
+    private Integer offset = 0;
 
-    private Integer limit;
+    private Integer limit = 20;
 
     private Integer total;
 
@@ -58,6 +58,7 @@ public class Paging {
 
     public void setTotal(Integer total) {
         this.total = total;
+        this.hasMore = this.getLimit() + this.getOffset() < total;
     }
 
     public Boolean getHasMore() {

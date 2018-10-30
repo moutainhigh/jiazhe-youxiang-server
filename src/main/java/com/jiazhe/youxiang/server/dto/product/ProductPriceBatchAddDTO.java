@@ -18,7 +18,7 @@ public class ProductPriceBatchAddDTO {
     /**
      * 城市id集合
      */
-    private List<Integer> cityIds;
+    private List<String> cityCodes;
 
     /**
      * 商品id
@@ -30,12 +30,12 @@ public class ProductPriceBatchAddDTO {
      */
     private BigDecimal price;
 
-    public List<Integer> getCityIds() {
-        return cityIds;
+    public List<String> getCityCodes() {
+        return cityCodes;
     }
 
-    public void setCityIds(List<Integer> cityIds) {
-        this.cityIds = cityIds;
+    public void setCityCodes(List<String> cityCodes) {
+        this.cityCodes = cityCodes;
     }
 
     public Integer getProductId() {

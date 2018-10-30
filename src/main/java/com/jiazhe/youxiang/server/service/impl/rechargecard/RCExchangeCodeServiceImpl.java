@@ -75,7 +75,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         rechargeCardPO.setProjectId(rechargeCardExchangeCodePO.getProjectId());
         rechargeCardPO.setName(rechargeCardExchangeCodePO.getBatchName());
         rechargeCardPO.setCustomerId(customerPO.getId());
-        rechargeCardPO.setCityIds(rechargeCardExchangeCodePO.getCityIds());
+        rechargeCardPO.setCityCodes(rechargeCardExchangeCodePO.getCityCodes());
         rechargeCardPO.setProductIds(rechargeCardExchangeCodePO.getProductIds());
         rcService.insert(rechargeCardPO);
         //插入兑换记录信息

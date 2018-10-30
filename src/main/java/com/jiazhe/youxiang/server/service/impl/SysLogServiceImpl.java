@@ -44,9 +44,6 @@ public class SysLogServiceImpl implements SysLogService {
         Integer count = sysLogPOManualMapper.count(moduleName, operate, level);
         List<SysLogPO> sysLogPOList = sysLogPOManualMapper.query(moduleName, operate, level, paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
-        if (!CollectionUtils.isNotEmpty(sysLogPOList)) {
-            paging.setHasMore(false);
-        }
         return sysLogPOList.stream().map(SysLogAdapter::sysLogPO2DTO).collect(Collectors.toList());
     }
 }

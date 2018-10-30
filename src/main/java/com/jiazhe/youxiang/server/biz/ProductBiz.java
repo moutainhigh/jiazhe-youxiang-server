@@ -5,12 +5,17 @@
  */
 package com.jiazhe.youxiang.server.biz;
 
-import com.google.common.collect.Lists;
+import com.jiazhe.youxiang.server.dto.product.ProductAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
+import com.jiazhe.youxiang.server.dto.product.ProductUpdateDTO;
+import com.jiazhe.youxiang.server.service.product.ProductCategoryService;
+import com.jiazhe.youxiang.server.service.product.ProductPriceService;
+import com.jiazhe.youxiang.server.service.product.ProductService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -25,73 +30,92 @@ import java.util.List;
 @Service("productBiz")
 public class ProductBiz {
 
+    @Autowired
+    private ProductCategoryService productCategoryService;
+
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private ProductPriceService productPriceService;
+
     /*************商品分类相关******************/
 
     public void addCategory(ProductCategoryDTO productCategoryDTO) {
+        productCategoryService.addCategory(productCategoryDTO);
     }
 
     public ProductCategoryDTO getCategoryById(Integer id) {
-        return null;
+        return productCategoryService.getCategoryById(id);
     }
 
     public List<ProductCategoryDTO> getCategoryList(String name, Paging paging) {
-        return null;
+        return productCategoryService.getCategoryList(name, paging);
     }
 
     public void deleteCategory(Integer id) {
+        productCategoryService.deleteCategory(id);
     }
 
     public void updateCategory(ProductCategoryDTO productCategoryDTO) {
+        productCategoryService.updateCategory(productCategoryDTO);
     }
 
-    public void updateCategoryStatus(Integer id, Byte status) {
+    public void updateCategoryStatus(Integer id, Integer status) {
+        productCategoryService.updateCategoryStatus(id, status);
     }
 
     /*************商品相关******************/
 
-    public void add(ProductDTO productDTO) {
+    public void add(ProductAddDTO productDTO) {
+        productService.add(productDTO);
     }
 
     public ProductDTO getById(Integer id) {
-        return null;
+        return productService.getById(id);
     }
 
-    public List<ProductDTO> getList(Integer productCategoryId, String name, Integer productType, List<Integer> cityIds, Integer status, Paging paging) {
-        return null;
+    public List<ProductDTO> getList(Integer productCategoryId, String name, Integer productType, List<String> cityCodes, Integer status, Paging paging) {
+        return productService.getList(productCategoryId, name, productType, cityCodes, status, paging);
     }
 
-    public void update(ProductDTO productDTO) {
+    public void update(ProductUpdateDTO productUpdateDTO) {
+        productService.update(productUpdateDTO);
     }
 
     public void delete(Integer id) {
-
+        productService.delete(id);
     }
 
-    public void updateStatus(Integer id, Byte status) {
+    public void updateStatus(Integer id, Integer status) {
+        productService.updateStatus(id, status);
     }
 
     /*************商品价格相关******************/
 
     public void batchAddPrice(ProductPriceBatchAddDTO productPriceBatchAddDTO) {
+        productPriceService.batchAddPrice(productPriceBatchAddDTO);
     }
 
     public ProductPriceDTO getPriceById(Integer id) {
-        return null;
+        return productPriceService.getPriceById(id);
     }
 
-    public ProductPriceDTO getPriceByCity(Integer productId, Integer productId1) {
-        return null;
+    public ProductPriceDTO getPriceByCity(Integer productId, String cityCode) {
+        return productPriceService.getPriceByCity(productId,cityCode);
     }
 
     public List<ProductPriceDTO> getPriceListByProductId(Integer productId) {
-        return Lists.newArrayList();
+        return productPriceService.getListByProductId(productId);
     }
 
-    public void batchDeletePrice(List<Integer> id) {
+    public void batchDeletePrice(List<Integer> ids) {
+        productPriceService.batchDeletePrice(ids);
     }
 
 
-    public void batchUpdatePrice(List<Integer> cityIds, BigDecimal price) {
+    public void batchUpdatePrice(Integer productId, List<String> cityCodes, BigDecimal price) {
+        productPriceService.batchUpdatePrice(productId, cityCodes,price);
     }
 
 

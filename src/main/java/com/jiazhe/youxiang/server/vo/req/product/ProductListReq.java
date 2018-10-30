@@ -25,8 +25,8 @@ public class ProductListReq extends OffsetLimitReq {
     private String name;
     @ApiModelProperty("商品分类，0-服务，1-电子卡")
     private Integer productType;
-    @ApiModelProperty("商品分类，0-服务，1-电子卡")
-    private List<Integer> cityIds;
+    @ApiModelProperty("可用城市code集合")
+    private List<String> cityCodes;
     @ApiModelProperty("状态：0:下架,1:上架")
     private Integer status;
 
@@ -54,12 +54,12 @@ public class ProductListReq extends OffsetLimitReq {
         this.productType = productType;
     }
 
-    public List<Integer> getCityIds() {
-        return cityIds;
+    public List<String> getCityCodes() {
+        return cityCodes;
     }
 
-    public void setCityIds(List<Integer> cityIds) {
-        this.cityIds = cityIds;
+    public void setCityCodes(List<String> cityCodes) {
+        this.cityCodes = cityCodes;
     }
 
     public Integer getStatus() {

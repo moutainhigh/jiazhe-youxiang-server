@@ -7,7 +7,9 @@ package com.jiazhe.youxiang.server.biz;
 
 import com.jiazhe.youxiang.server.dto.project.ProjectAddDTO;
 import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
+import com.jiazhe.youxiang.server.service.ProjectService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,21 +23,27 @@ import java.util.List;
 @Service("projectBiz")
 public class ProjectBiz {
 
+    @Autowired
+    private ProjectService projectService;
+
     public void add(ProjectAddDTO projectAddDTO) {
+        projectService.add(projectAddDTO);
     }
 
-    public List<ProjectDTO> getList(Integer name, Paging paging) {
-        return null;
+    public List<ProjectDTO> getList(String name, Integer status, Paging paging) {
+        return projectService.getList(name, status, paging);
     }
 
     public ProjectDTO getById(Integer id) {
-        return null;
+        return projectService.getById(id);
     }
 
-    public void update(Integer id, Integer name, String description, Integer priority, Byte status) {
+    public void update(Integer id, String name, String description, Integer priority, Integer status) {
+        projectService.update(id, name, description, priority, status);
     }
 
     public void delete(Integer id) {
+        projectService.delete(id);
     }
 
 

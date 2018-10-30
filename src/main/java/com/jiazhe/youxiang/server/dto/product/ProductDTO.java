@@ -5,6 +5,8 @@
  */
 package com.jiazhe.youxiang.server.dto.product;
 
+import java.util.List;
+
 /**
  * 在这里编写类的功能描述
  *
@@ -16,10 +18,6 @@ public class ProductDTO {
      * 商品ID
      */
     private Integer id;
-    /**
-     * 商品类别
-     */
-    private ProductCategoryDTO productCategory;
     /**
      * 商品名称
      */
@@ -57,20 +55,32 @@ public class ProductDTO {
      */
     private Byte status;
 
+    /**
+     * 短信发送模板
+     */
+    private String smsTemplate;
+
+    /**
+     * 有效期天数
+     */
+    private Integer effectiveDays;
+
+    /**
+     * 商品类别
+     */
+    private ProductCategoryDTO productCategory;
+
+    /**
+     * 商品价格列表
+     */
+    private List<ProductPriceDTO> productPriceList;
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public ProductCategoryDTO getProductCategory() {
-        return productCategory;
-    }
-
-    public void setProductCategory(ProductCategoryDTO productCategory) {
-        this.productCategory = productCategory;
     }
 
     public String getName() {
@@ -143,5 +153,37 @@ public class ProductDTO {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getSmsTemplate() {
+        return smsTemplate;
+    }
+
+    public void setSmsTemplate(String smsTemplate) {
+        this.smsTemplate = smsTemplate;
+    }
+
+    public Integer getEffectiveDays() {
+        return effectiveDays;
+    }
+
+    public void setEffectiveDays(Integer effectiveDays) {
+        this.effectiveDays = effectiveDays;
+    }
+
+    public ProductCategoryDTO getProductCategory() {
+        return productCategory;
+    }
+
+    public void setProductCategory(ProductCategoryDTO productCategory) {
+        this.productCategory = productCategory;
+    }
+
+    public List<ProductPriceDTO> getProductPriceList() {
+        return productPriceList;
+    }
+
+    public void setProductPriceList(List<ProductPriceDTO> productPriceList) {
+        this.productPriceList = productPriceList;
     }
 }

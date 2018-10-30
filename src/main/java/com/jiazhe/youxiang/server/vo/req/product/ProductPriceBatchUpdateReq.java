@@ -20,18 +20,28 @@ import java.util.List;
 public class ProductPriceBatchUpdateReq extends BaseVO {
 
     private static final long serialVersionUID = 5650492168853062107L;
+    @ApiModelProperty("商品id,必填，不可空")
+    private Integer productId;
 
-    @ApiModelProperty("城市id集合")
-    private List<Integer> cityIds;
-    @ApiModelProperty("价格")
+    @ApiModelProperty("城市code集合,必填，不可空")
+    private List<String> cityCodes;
+    @ApiModelProperty("价格,必填，不可空")
     private BigDecimal price;
 
-    public List<Integer> getCityIds() {
-        return cityIds;
+    public Integer getProductId() {
+        return productId;
     }
 
-    public void setCityIds(List<Integer> cityIds) {
-        this.cityIds = cityIds;
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+
+    public List<String> getCityCodes() {
+        return cityCodes;
+    }
+
+    public void setCityCodes(List<String> cityCodes) {
+        this.cityCodes = cityCodes;
     }
 
     public BigDecimal getPrice() {

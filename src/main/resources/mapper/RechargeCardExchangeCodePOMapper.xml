@@ -8,7 +8,7 @@
     <result column="recharge_card_name" property="rechargeCardName" jdbcType="VARCHAR" />
     <result column="batch_description" property="batchDescription" jdbcType="VARCHAR" />
     <result column="project_id" property="projectId" jdbcType="INTEGER" />
-    <result column="city_ids" property="cityIds" jdbcType="VARCHAR" />
+    <result column="city_codes" property="cityCodes" jdbcType="VARCHAR" />
     <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="keyt" property="keyt" jdbcType="VARCHAR" />
@@ -84,7 +84,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, batch_id, batch_name, recharge_card_name, batch_description, project_id, city_ids, 
+    id, batch_id, batch_name, recharge_card_name, batch_description, project_id, city_codes, 
     product_ids, code, keyt, face_value, expiry_time, recharge_card_expiry_time, validity_period, 
     expiry_type, status, used, customer_id, ext_info, is_deleted, add_time, mod_time
   </sql>
@@ -121,7 +121,7 @@
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO" >
     insert into recharge_card_exchange_code (id, batch_id, batch_name, 
       recharge_card_name, batch_description, project_id, 
-      city_ids, product_ids, code, 
+      city_codes, product_ids, code, 
       keyt, face_value, expiry_time, 
       recharge_card_expiry_time, validity_period, 
       expiry_type, status, used, 
@@ -129,7 +129,7 @@
       add_time, mod_time)
     values (#{id,jdbcType=INTEGER}, #{batchId,jdbcType=INTEGER}, #{batchName,jdbcType=VARCHAR}, 
       #{rechargeCardName,jdbcType=VARCHAR}, #{batchDescription,jdbcType=VARCHAR}, #{projectId,jdbcType=INTEGER}, 
-      #{cityIds,jdbcType=VARCHAR}, #{productIds,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{cityCodes,jdbcType=VARCHAR}, #{productIds,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
       #{keyt,jdbcType=VARCHAR}, #{faceValue,jdbcType=DECIMAL}, #{expiryTime,jdbcType=TIMESTAMP}, 
       #{rechargeCardExpiryTime,jdbcType=TIMESTAMP}, #{validityPeriod,jdbcType=INTEGER}, 
       #{expiryType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{used,jdbcType=TINYINT}, 
@@ -157,8 +157,8 @@
       <if test="projectId != null" >
         project_id,
       </if>
-      <if test="cityIds != null" >
-        city_ids,
+      <if test="cityCodes != null" >
+        city_codes,
       </if>
       <if test="productIds != null" >
         product_ids,
@@ -225,8 +225,8 @@
       <if test="projectId != null" >
         #{projectId,jdbcType=INTEGER},
       </if>
-      <if test="cityIds != null" >
-        #{cityIds,jdbcType=VARCHAR},
+      <if test="cityCodes != null" >
+        #{cityCodes,jdbcType=VARCHAR},
       </if>
       <if test="productIds != null" >
         #{productIds,jdbcType=VARCHAR},
@@ -302,8 +302,8 @@
       <if test="record.projectId != null" >
         project_id = #{record.projectId,jdbcType=INTEGER},
       </if>
-      <if test="record.cityIds != null" >
-        city_ids = #{record.cityIds,jdbcType=VARCHAR},
+      <if test="record.cityCodes != null" >
+        city_codes = #{record.cityCodes,jdbcType=VARCHAR},
       </if>
       <if test="record.productIds != null" >
         product_ids = #{record.productIds,jdbcType=VARCHAR},
@@ -363,7 +363,7 @@
       recharge_card_name = #{record.rechargeCardName,jdbcType=VARCHAR},
       batch_description = #{record.batchDescription,jdbcType=VARCHAR},
       project_id = #{record.projectId,jdbcType=INTEGER},
-      city_ids = #{record.cityIds,jdbcType=VARCHAR},
+      city_codes = #{record.cityCodes,jdbcType=VARCHAR},
       product_ids = #{record.productIds,jdbcType=VARCHAR},
       code = #{record.code,jdbcType=VARCHAR},
       keyt = #{record.keyt,jdbcType=VARCHAR},
@@ -401,8 +401,8 @@
       <if test="projectId != null" >
         project_id = #{projectId,jdbcType=INTEGER},
       </if>
-      <if test="cityIds != null" >
-        city_ids = #{cityIds,jdbcType=VARCHAR},
+      <if test="cityCodes != null" >
+        city_codes = #{cityCodes,jdbcType=VARCHAR},
       </if>
       <if test="productIds != null" >
         product_ids = #{productIds,jdbcType=VARCHAR},
@@ -459,7 +459,7 @@
       recharge_card_name = #{rechargeCardName,jdbcType=VARCHAR},
       batch_description = #{batchDescription,jdbcType=VARCHAR},
       project_id = #{projectId,jdbcType=INTEGER},
-      city_ids = #{cityIds,jdbcType=VARCHAR},
+      city_codes = #{cityCodes,jdbcType=VARCHAR},
       product_ids = #{productIds,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
       keyt = #{keyt,jdbcType=VARCHAR},

@@ -16,7 +16,7 @@ public class ProjectAddDTO {
     /**
      * 项目名称
      */
-    private Integer name;
+    private String name;
     /**
      * 项目描述信息
      */
@@ -26,11 +26,11 @@ public class ProjectAddDTO {
      */
     private Integer priority;
 
-    public Integer getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(Integer name) {
+    public void setName(String name) {
         this.name = name;
     }
 

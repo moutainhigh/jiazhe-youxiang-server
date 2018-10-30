@@ -10,7 +10,9 @@ public class CustomerAddressPO implements Serializable {
 
     private Byte gender;
 
-    private Integer cityId;
+    private String cityCode;
+
+    private String cityName;
 
     private String address;
 
@@ -54,12 +56,20 @@ public class CustomerAddressPO implements Serializable {
         this.gender = gender;
     }
 
-    public Integer getCityId() {
-        return cityId;
+    public String getCityCode() {
+        return cityCode;
     }
 
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode == null ? null : cityCode.trim();
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName == null ? null : cityName.trim();
     }
 
     public String getAddress() {

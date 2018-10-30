@@ -98,7 +98,7 @@ public class RCServiceImpl implements RCService {
         rechargeCardPO.setProjectId(rcExchangeCodeBatchEditDTO.getProjectId());
         rechargeCardPO.setName(rcExchangeCodeBatchEditDTO.getName());
         rechargeCardPO.setCustomerId(customerPO.getId());
-        rechargeCardPO.setCityIds(rcExchangeCodeBatchEditDTO.getCityIds());
+        rechargeCardPO.setCityCodes(rcExchangeCodeBatchEditDTO.getCityCodes());
         rechargeCardPO.setProductIds(rcExchangeCodeBatchEditDTO.getProductIds());
         rcService.insert(rechargeCardPO);
         //插入兑换记录信息

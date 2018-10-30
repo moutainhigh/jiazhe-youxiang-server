@@ -68,7 +68,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
             rcExchangeCodeSaveDTO.setBatchName(rcExchangeCodeBatchAddDTO.getName());
             rcExchangeCodeSaveDTO.setBatchDescription(rcExchangeCodeBatchAddDTO.getDescription());
             rcExchangeCodeSaveDTO.setProjectId(rcExchangeCodeBatchAddDTO.getProjectId());
-            rcExchangeCodeSaveDTO.setCityIds(rcExchangeCodeBatchAddDTO.getCityIds());
+            rcExchangeCodeSaveDTO.setCityCodes(rcExchangeCodeBatchAddDTO.getCityCodes());
             rcExchangeCodeSaveDTO.setProductIds(rcExchangeCodeBatchAddDTO.getProductIds());
             rcExchangeCodeSaveDTO.setCode(codeAndKeyts[0][i]);
             rcExchangeCodeSaveDTO.setKeyt(codeAndKeyts[1][i]);

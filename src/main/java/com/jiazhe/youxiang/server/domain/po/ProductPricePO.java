@@ -7,7 +7,9 @@ import java.util.Date;
 public class ProductPricePO implements Serializable {
     private Integer id;
 
-    private Integer cityId;
+    private String cityCode;
+
+    private String cityName;
 
     private Integer productId;
 
@@ -33,12 +35,20 @@ public class ProductPricePO implements Serializable {
         this.id = id;
     }
 
-    public Integer getCityId() {
-        return cityId;
+    public String getCityCode() {
+        return cityCode;
     }
 
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode == null ? null : cityCode.trim();
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName == null ? null : cityName.trim();
     }
 
     public Integer getProductId() {

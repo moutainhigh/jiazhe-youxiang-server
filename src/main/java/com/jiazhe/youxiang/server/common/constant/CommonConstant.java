@@ -38,13 +38,18 @@ public class CommonConstant {
 
 
     /**
-     * 没有被删除的代码
+     * 城市开通的代码
      */
     public static final Byte CODE_CITY_OPEN = Byte.valueOf("1");
     /**
      * 没有被删除的代码
      */
     public static final Byte CODE_NOT_DELETED = Byte.valueOf("0");
+
+    /**
+     * 数据被删除的代码
+     */
+    public static final Byte CODE_DELETED = Byte.valueOf("1");
 
     public static final String DEFAULT_TAG_CLIENT_IP = "clientIp";
 

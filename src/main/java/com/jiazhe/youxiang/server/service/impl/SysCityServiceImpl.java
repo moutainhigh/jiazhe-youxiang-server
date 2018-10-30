@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -58,6 +59,17 @@ public class SysCityServiceImpl implements SysCityService {
         criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
         List<SysCityPO> sysCityPOList = sysCityPOMapper.selectByExample(sysCityPOExample);
         return sysCityPOList.stream().map(SysCityAdapter::sysCityPO2DTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<String, String> getCityMapByCodes(List<String> cityCodes) {
+        SysCityPOExample sysCityPOExample = new SysCityPOExample();
+        SysCityPOExample.Criteria criteria = sysCityPOExample.createCriteria();
+        criteria.andCityCodeIn(cityCodes);
+        criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+        List<SysCityPO> sysCityPOList = sysCityPOMapper.selectByExample(sysCityPOExample);
+
+        return sysCityPOList.stream().collect(Collectors.toMap(SysCityPO::getCityCode, SysCityPO::getCityName));
     }
 
     @Override
