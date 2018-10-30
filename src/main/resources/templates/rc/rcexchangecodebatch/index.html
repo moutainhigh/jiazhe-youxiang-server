@@ -41,7 +41,7 @@
                     <li>
                         <a href="#">充值卡</a>
                     </li>
-                    <li class="active">充值卡兑换码管理</li>
+                    <li class="active">充值卡兑换码批次管理</li>
                 </ul><!-- /.breadcrumb -->
             </div>
 
@@ -53,14 +53,14 @@
                                 <label class="col-sm-1 control-label no-padding-right">所属项目：</label>
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
-                                        <input id="projectId" name="projectId" class="form-control" type="text"
+                                        <input id="searchProjectId" name="projectId" class="form-control" type="text"
                                                style="height:30px"/>
                                     </div>
                                 </div>
                                 <label class="col-sm-1 control-label no-padding-right">批次名称：</label>
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
-                                        <input id="name" name="name" class="form-control" type="text"
+                                        <input id="searchName" name="name" class="form-control" type="text"
                                                style="height:30px"/>
                                     </div>
                                 </div>
@@ -100,56 +100,143 @@
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-1"></div>
                                         <div class="col-xs-12 col-sm-9">
-                                            <form id="batchSaveForm" class="form-horizontal" role="form">
-                                                <input type="hidden" name="id" id="batchId" value="0">
+                                            <form id="batchAddForm" class="form-horizontal" role="form">
+                                                <input type="hidden" name="productIds" id="addProductIds">
+                                                <input type="hidden" name="cityIds" id="addCityIds">
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">登录名：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">批次名称：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveLoginName" name="saveLoginName" class="form-control"
+                                                            <input id="addName" name="name" class="form-control"
                                                                    type="text" style="height:30px"/>
                                                         </div>
                                                     </div>
                                                 </div>
+
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">姓名：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">充值卡名称：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveDisplayName" name="saveDisplayName" class="form-control"
+                                                            <input id="addRechargeCardName" name="rechargeCardName" class="form-control"
                                                                    type="text" style="height:30px"/>
                                                         </div>
                                                     </div>
                                                 </div>
+
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">电话：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">所属项目：</label>
                                                     <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="saveMobile" name="mobile"
-                                                                   class="form-control" type="text"
-                                                                   style="height:30px"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">密码：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="savePassword" name="password"
-                                                                   class="form-control" type="text"
-                                                                   style="height:30px"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">角色：</label>
-                                                    <div class="col-sm-8">
-                                                        <select id="saveRoleIds" class="selectpicker show-tick form-control" multiple data-live-search="false">
+                                                        <select id="addProjectId" name="projectId" class="selectpicker show-tick form-control">
 
                                                         </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">虚拟批次：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <label class="radio-inline ">
+                                                                <input id="addNotVirtual" type="radio" name="isVirtual"
+                                                                       value="0" checked="checked"/>否
+                                                            </label>
+                                                            <label class="radio-inline">
+                                                                <input id="addIsVirtual" type="radio" name="isVirtual"
+                                                                       value="1"/>是
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 addIsVirtual"></div>
+                                                <div class="form-group addIsVirtual">
+                                                    <label class="col-sm-4 control-label no-padding-right">面额：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="addFaceValue" name="faceValue"
+                                                                   class="form-control" type="text"
+                                                                   style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 addIsVirtual"></div>
+                                                <div class="form-group addIsVirtual">
+                                                    <label class="col-sm-4 control-label no-padding-right">数量：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="addAmount" name="amount"
+                                                                   class="form-control" type="text"
+                                                                   style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right" for="addExpiryTime">到期时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker" id="addExpiryTime" name="expiryTime" type="text"/>
+                                                                 <span class="input-group-addon">
+                                                                    <i class="fa fa-calendar bigger-110"></i>
+                                                                </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">充值卡过期类型：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <label class="radio-inline ">
+                                                                <input id="addDeadLine" type="radio" name="expiryType"
+                                                                       value="0" checked="checked"/>指定截止日期
+                                                            </label>
+                                                            <label class="radio-inline">
+                                                                <input id="addValidityPeriod" type="radio" name="expiryType"
+                                                                       value="1"/>兑换之日起算
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 addDeadLine"></div>
+                                                <div class="form-group addDeadLine">
+                                                    <label class="col-sm-4 control-label no-padding-right" for="saveRechargeCardExpiryTime">充值卡到期时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker" id="saveRechargeCardExpiryTime" name="rechargeCardExpiryTime" type="text"/>
+                                                            <span class="input-group-addon">
+                                                                    <i class="fa fa-calendar bigger-110"></i>
+                                                                </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 addValidityPeriod" style="display:none;"></div>
+                                                <div class="form-group addValidityPeriod" style="display:none;">
+                                                    <label class="col-sm-4 control-label no-padding-right">兑换之日有效天数：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="saveValidityPeriod" name="validityPeriod" class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right" for="saveDescription">描述信息：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="saveDescription" name="validityPeriod" class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -163,7 +250,7 @@
                                         取消
                                     </button>
 
-                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="save()">
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="addSave()">
                                         <i class="ace-icon fa fa-check"></i>
                                         保存
                                     </button>
@@ -192,13 +279,39 @@
 </body>
 <script type="text/javascript">
     var permission = getCookie("permission");
-
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
+        
         //将项目列表填入到projectId中
+
+        $('.date-picker').datepicker({
+            language: 'zh-CN',//选择语言
+            autoclose: true,
+            todayHighlight: true
+        }).next().on(ace.click_event, function(){
+            $(this).prev().focus();
+        });
+
+        $("input[name=isVirtual]").bind("change", function () {
+            if($("input[name=isVirtual]:checked").val() == 1){
+                $(".addIsVirtual").css("display","none");
+            }else{
+                $(".addIsVirtual").css("display","");
+            }
+        });
+
+        $("input[name=expiryType]").bind("change", function () {
+            if($("input[name=expiryType]:checked").val() == 0){
+                $(".addDeadLine").css("display","");
+                $(".addValidityPeriod").css("display","none");
+            }else{
+                $(".addDeadLine").css("display","none");
+                $(".addValidityPeriod").css("display","");
+            }
+        });
 
     });
 
@@ -304,21 +417,17 @@
 
     function openNew() {
         $("#modal-title").html("批次信息-添加");
-        $("#userId").val(0);
-        $("#userSaveForm #saveLoginName").val("");
-        $("#userSaveForm #saveDisplayName").val("");
-        $("#userSaveForm #savePriority").val("");
-        $("#userSaveForm #saveMobile").val("");
-        $("#userSaveForm #savePassword").val("");
-        roleShow('');
+        $("#batchId").val("")
+        $("#batchAddForm #addName").val("");
+        $("#batchAddForm #addRechargeCardName").val("");
         $(".modal-footer-btn").show();
-        $('input,select', $('#userSaveForm')).removeAttr('disabled');
+        $('input,select', $('#batchSaveForm')).removeAttr('disabled');
     }
 
     function openEdit(id) {
         $("#modal-title").html("批次信息-修改");
         $(".modal-footer-btn").show();
-        $('input,select', $('#userSaveForm')).removeAttr('disabled');
+        $('input,select', $('#batchSaveForm')).removeAttr('disabled');
         $('#savePassword').attr('disabled', 'disabled');
         $('#saveLoginName').attr('disabled', 'disabled');
         huixian(id);
@@ -327,24 +436,16 @@
     function openShow(id) {
         $("#modal-title").html("批次信息-查看");
         $(".modal-footer-btn").hide();
-        $('input,select', $('#userSaveForm')).attr('disabled', 'disabled');
+        $('input,select', $('#batchSaveForm')).attr('disabled', 'disabled');
         huixian(id);
     }
 
-    function save() {
-        var roleIds = submitRoles();
+    function addSave() {
         $.ajax({
-            url: "../api/sysuser/save",
+            url: "../api/rcexchangecodebatch/addsave",
             dataType: "json",
             async: false,
-            data: {
-                id: $("#userId").val(),
-                displayName: $("#saveDisplayName").val(),
-                loginName: $("#saveLoginName").val(),
-                mobile: $("#saveMobile").val(),
-                password:$("#savePassword").val(),
-                roleIds: roleIds
-            },
+            data: transformToJson($('#batchAddForm').serializeArray()),
             type: "POST",
             success: function (data) {
                 if ('error' in data) {

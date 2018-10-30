@@ -25,7 +25,7 @@ public interface RCExchangeCodeBatchService {
     List<RCExchangeCodeBatchDTO> getList(Integer projectId, String name, Paging paging);
 
     /**
-     * 保存充值卡兑换码批次信息，并保存批次下的兑换码
+     * 保存充值卡兑换码批次信息
      * @param rcExchangeCodeBatchAddDTO
      * @return
      */

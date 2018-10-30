@@ -1,8 +1,11 @@
 package com.jiazhe.youxiang.server.controller.rechargecard;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.base.util.ValidateUtils;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeBatchAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCExchangeCodeBatchBiz;
+import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.CommonException;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
@@ -15,6 +18,7 @@ import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch.RCExch
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditResp;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +67,9 @@ public class APIRCExchangeCodeBatchController extends BaseController {
     @RequestMapping(value = "/addsave", method = RequestMethod.POST)
     public Object addSave(@ModelAttribute RCExchangeCodeBatchAddReq req) {
         //参数检查
+        if(Strings.isBlank(req.getName())||Strings.isBlank(req.getRechargeCardName())){
+            throw new CommonException(RechargeCardCodeEnum.INFO_INCOMPLETE.getCode(),RechargeCardCodeEnum.INFO_INCOMPLETE.getType(),RechargeCardCodeEnum.INFO_INCOMPLETE.getMessage());
+        }
         RCExchangeCodeBatchAddDTO rcExchangeCodeBatchAddDTO = RCExchangeCodeBatchAdapter.ReqAdd2DTOAdd(req);
         rcExchangeCodeBatchBiz.addSave(rcExchangeCodeBatchAddDTO);
         return ResponseFactory.buildSuccess();
@@ -78,7 +85,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
     }
 
     @ApiOperation(value = "充值卡兑换码批次信息回显", httpMethod = "GET", response = RCExchangeCodeBatchEditResp.class, notes = "充值卡兑换码批次信息回显")
-    @RequestMapping(value = "/getbyid", method = RequestMethod.POST)
+    @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
     public Object getById(@ModelAttribute IdReq req) {
         //参数检查
         RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchBiz.getById(req.getId());
@@ -90,6 +97,9 @@ public class APIRCExchangeCodeBatchController extends BaseController {
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     public Object editSave(@ModelAttribute RCExchangeCodeBatchEditReq req) {
         //参数检查
+        /**
+         * 未生成码的时候，可以修改所属项目，是否是虚拟批次，面额，数量等信息
+         */
         RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = RCExchangeCodeBatchAdapter.ReqEdit2DTOEdit(req);
         rcExchangeCodeBatchBiz.editSave(rcExchangeCodeBatchEditDTO);
         return ResponseFactory.buildSuccess();

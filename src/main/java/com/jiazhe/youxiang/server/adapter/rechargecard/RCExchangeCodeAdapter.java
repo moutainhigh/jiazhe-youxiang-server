@@ -43,6 +43,8 @@ public class RCExchangeCodeAdapter {
         RCExchangeCodeBatchEditDTO rCExchangeCodeBatchEditDTO = new RCExchangeCodeBatchEditDTO();
         rCExchangeCodeBatchEditDTO.setId(rechargeCardExchangeCodeBatchPO.getId());
         rCExchangeCodeBatchEditDTO.setName(rechargeCardExchangeCodeBatchPO.getName());
+        rCExchangeCodeBatchEditDTO.setRechargeCardName(rechargeCardExchangeCodeBatchPO.getRechargeCardName());
+        rCExchangeCodeBatchEditDTO.setIsVirtual(rechargeCardExchangeCodeBatchPO.getIsVirtual());
         rCExchangeCodeBatchEditDTO.setDescription(rechargeCardExchangeCodeBatchPO.getDescription());
         rCExchangeCodeBatchEditDTO.setProjectId(rechargeCardExchangeCodeBatchPO.getProjectId());
         rCExchangeCodeBatchEditDTO.setCityIds(rechargeCardExchangeCodeBatchPO.getCityIds());

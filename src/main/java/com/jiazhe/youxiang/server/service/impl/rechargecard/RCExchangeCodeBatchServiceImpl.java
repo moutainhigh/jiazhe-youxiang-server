@@ -52,12 +52,17 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
     @Override
     public int addSave(RCExchangeCodeBatchAddDTO rcExchangeCodeBatchAddDTO) {
         RechargeCardExchangeCodeBatchPO rcExchangeCodeBatchPO  = RCExchangeCodeBatchAdapter.DTOSave2PO(rcExchangeCodeBatchAddDTO);
-        rcExchangeCodeBatchPOManualMapper.insert(rcExchangeCodeBatchPO);
-        List<RCExchangeCodeSaveDTO> rcExchangeCodeSaveDTOS = new ArrayList<RCExchangeCodeSaveDTO>();
+        rcExchangeCodeBatchPO.setStatus(Byte.valueOf("1"));
+        rcExchangeCodeBatchPO.setIsDeleted(Byte.valueOf("0"));
+        rcExchangeCodeBatchPO.setExtInfo("");
+        rcExchangeCodeBatchPO.setAddTime(new Date());
+        rcExchangeCodeBatchPO.setModTime(new Date());
+        return rechargeCardExchangeCodeBatchPOMapper.insert(rcExchangeCodeBatchPO);
+       /* List<RCExchangeCodeSaveDTO> rcExchangeCodeSaveDTOS = new ArrayList<RCExchangeCodeSaveDTO>();
         Integer amount = rcExchangeCodeBatchAddDTO.getAmount();
-        String[][] codeAndKeyts = GenerateCode.generateCode(CommonConstant.RC_EXCHANGE_CODE_PREFIX,amount);
-        //保存批次信息，并保存批次下的兑换码
-        for(int i=0;i<amount;i++){
+        String[][] codeAndKeyts = GenerateCode.generateCode(CommonConstant.RC_EXCHANGE_CODE_PREFIX,amount);*/
+
+        /*for(int i=0;i<amount;i++){
             RCExchangeCodeSaveDTO rcExchangeCodeSaveDTO = new RCExchangeCodeSaveDTO();
             rcExchangeCodeSaveDTO.setBatchId(rcExchangeCodeBatchPO.getId());
             rcExchangeCodeSaveDTO.setBatchName(rcExchangeCodeBatchAddDTO.getName());
@@ -76,8 +81,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
             rcExchangeCodeSaveDTO.setUsed(Byte.valueOf("0"));
             rcExchangeCodeSaveDTOS.add(rcExchangeCodeSaveDTO);
         }
-        List<RechargeCardExchangeCodePO> rechargeCardExchangeCodePOList = rcExchangeCodeSaveDTOS.stream().map(RCExchangeCodeAdapter::DTOSave2PO).collect(Collectors.toList());
-        return rcExchangeCodeService.batchSave(rechargeCardExchangeCodePOList);
+        List<RechargeCardExchangeCodePO> rechargeCardExchangeCodePOList = rcExchangeCodeSaveDTOS.stream().map(RCExchangeCodeAdapter::DTOSave2PO).collect(Collectors.toList());*/
     }
 
     @Override

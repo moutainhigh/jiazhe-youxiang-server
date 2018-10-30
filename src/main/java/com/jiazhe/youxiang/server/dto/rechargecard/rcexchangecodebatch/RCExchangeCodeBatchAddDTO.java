@@ -12,6 +12,10 @@ public class RCExchangeCodeBatchAddDTO {
 
     private String name;
 
+    private String rechargeCardName;
+
+    private Byte isVirtual;
+
     private String description;
 
     private Integer amount;
@@ -38,6 +42,22 @@ public class RCExchangeCodeBatchAddDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getRechargeCardName() {
+        return rechargeCardName;
+    }
+
+    public void setRechargeCardName(String rechargeCardName) {
+        this.rechargeCardName = rechargeCardName;
+    }
+
+    public Byte getIsVirtual() {
+        return isVirtual;
+    }
+
+    public void setIsVirtual(Byte isVirtual) {
+        this.isVirtual = isVirtual;
     }
 
     public String getDescription() {
