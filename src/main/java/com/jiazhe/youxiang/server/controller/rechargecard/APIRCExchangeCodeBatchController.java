@@ -70,6 +70,9 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         if(Strings.isBlank(req.getName())||Strings.isBlank(req.getRechargeCardName())){
             throw new CommonException(RechargeCardCodeEnum.INFO_INCOMPLETE.getCode(),RechargeCardCodeEnum.INFO_INCOMPLETE.getType(),RechargeCardCodeEnum.INFO_INCOMPLETE.getMessage());
         }
+        if(req.getExpiryType().equals(Byte.valueOf("0"))&&req.getRechargeCardExpiryTime()==null){
+            throw new CommonException(RechargeCardCodeEnum.INFO_INCOMPLETE.getCode(),RechargeCardCodeEnum.INFO_INCOMPLETE.getType(),RechargeCardCodeEnum.INFO_INCOMPLETE.getMessage());
+        }
         RCExchangeCodeBatchAddDTO rcExchangeCodeBatchAddDTO = RCExchangeCodeBatchAdapter.ReqAdd2DTOAdd(req);
         rcExchangeCodeBatchBiz.addSave(rcExchangeCodeBatchAddDTO);
         return ResponseFactory.buildSuccess();

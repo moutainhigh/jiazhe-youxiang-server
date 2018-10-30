@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * @date 2018/10/21
  */
 @Service("rcExchangeCodeBatchService")
-public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchService{
+public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchService {
 
     @Autowired
     private RCExchangeCodeBatchPOManualMapper rcExchangeCodeBatchPOManualMapper;
@@ -40,8 +40,8 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
 
     @Override
     public List<RCExchangeCodeBatchDTO> getList(Integer projectId, String name, Paging paging) {
-        Integer count = rcExchangeCodeBatchPOManualMapper.count(projectId,name);
-        List<RechargeCardExchangeCodeBatchPO> rechargeCardExchangeCodeBatchPOList = rcExchangeCodeBatchPOManualMapper.query(projectId,name,paging.getOffset(),paging.getLimit());
+        Integer count = rcExchangeCodeBatchPOManualMapper.count(projectId, name);
+        List<RechargeCardExchangeCodeBatchPO> rechargeCardExchangeCodeBatchPOList = rcExchangeCodeBatchPOManualMapper.query(projectId, name, paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
         if (paging.getLimit() + paging.getOffset() >= count) {
             paging.setHasMore(false);
@@ -51,7 +51,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
 
     @Override
     public int addSave(RCExchangeCodeBatchAddDTO rcExchangeCodeBatchAddDTO) {
-        RechargeCardExchangeCodeBatchPO rcExchangeCodeBatchPO  = RCExchangeCodeBatchAdapter.DTOSave2PO(rcExchangeCodeBatchAddDTO);
+        RechargeCardExchangeCodeBatchPO rcExchangeCodeBatchPO = RCExchangeCodeBatchAdapter.DTOSave2PO(rcExchangeCodeBatchAddDTO);
         rcExchangeCodeBatchPO.setStatus(Byte.valueOf("1"));
         rcExchangeCodeBatchPO.setIsDeleted(Byte.valueOf("0"));
         rcExchangeCodeBatchPO.setExtInfo("");

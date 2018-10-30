@@ -34,8 +34,8 @@ public class RCExchangeCodeBatchAddReq extends BaseVO {
     @ApiModelProperty("对应项目id")
     private Integer projectId;
 
-    @ApiModelProperty("对应城市ids")
-    private String cityIds;
+    @ApiModelProperty("对应城市codes")
+    private String cityCodes;
 
     @ApiModelProperty("对应商品ids")
     private String productIds;
@@ -90,12 +90,12 @@ public class RCExchangeCodeBatchAddReq extends BaseVO {
         this.projectId = projectId;
     }
 
-    public String getCityIds() {
-        return cityIds;
+    public String getCityCodes() {
+        return cityCodes;
     }
 
-    public void setCityIds(String cityIds) {
-        this.cityIds = cityIds;
+    public void setCityCodes(String cityCodes) {
+        this.cityCodes = cityCodes;
     }
 
     public String getProductIds() {
