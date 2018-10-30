@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.base.util.EncryptPasswordUtil;
 import com.jiazhe.youxiang.server.adapter.SysRoleAdapter;
 import com.jiazhe.youxiang.server.adapter.SysUserAdapter;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
@@ -16,6 +17,7 @@ import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.sysrole.RolePageReq;
+import com.jiazhe.youxiang.server.vo.req.sysuser.ChangePasswordReq;
 import com.jiazhe.youxiang.server.vo.req.sysuser.UserPageReq;
 import com.jiazhe.youxiang.server.vo.req.sysuser.UserSaveReq;
 import com.jiazhe.youxiang.server.vo.resp.sysrole.SysRoleResp;
@@ -23,6 +25,8 @@ import com.jiazhe.youxiang.server.vo.resp.sysuser.SysUserResp;
 import com.jiazhe.youxiang.server.vo.resp.sysuser.UserWithRoleResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.util.Strings;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +98,7 @@ public class APISysUserController extends BaseController{
             throw new CommonException(CommonCodeEnum.INTERNAL_ERROR.getCode(), CommonCodeEnum.INTERNAL_ERROR.getType(), "信息填写不完整");
         }
         if(Strings.isBlank((req.getRoleIds()))){
-            throw new CommonException(UserCodeEnum.USER_Role_NOTCHOOSE.getCode(), UserCodeEnum.USER_Role_NOTCHOOSE.getType(), UserCodeEnum.USER_Role_NOTCHOOSE.getMessage());
+            throw new CommonException(UserCodeEnum.USER_ROLE_NOTCHOOSE.getCode(), UserCodeEnum.USER_ROLE_NOTCHOOSE.getType(), UserCodeEnum.USER_ROLE_NOTCHOOSE.getMessage());
         }
         /*判断是否重名，要将新建和修改区分开*/
         UserWithRoleDTO userWithRoleDTO = SysUserAdapter.userSaveReq2UserWithDTO(req);
@@ -103,6 +107,32 @@ public class APISysUserController extends BaseController{
             throw new CommonException(UserCodeEnum.USER_HAS_EXISTED.getCode(),UserCodeEnum.USER_HAS_EXISTED.getType(), UserCodeEnum.USER_HAS_EXISTED.getMessage());
         }
         sysUserBiz.saveRoleWithPerm(userWithRoleDTO);
+        return ResponseFactory.buildSuccess();
+    }
+
+    @ApiOperation(value = "获取登录员工信息", httpMethod = "GET", response = SysUserResp.class, notes = "获取登陆员工信息")
+    @RequestMapping(value = "/getuserinfo", method = RequestMethod.GET)
+    public Object getUserInfo() {
+        SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+        //将DTO转为respVO返回
+        SysUserResp sysUserResp = SysUserAdapter.DTO2RespVO(sysUserDTO);
+        return ResponseFactory.buildResponse(sysUserResp);
+    }
+
+
+    @ApiOperation(value = "修改密码", httpMethod = "POST",notes = "修改密码")
+    @RequestMapping(value = "/changepassword", method = RequestMethod.POST)
+    public Object changePassword(@ModelAttribute ChangePasswordReq req) {
+        SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+        if(!req.getPassword1().equals(req.getPassword2())){
+            throw new CommonException(UserCodeEnum.USER_PASSWORD_DIFFERENT.getCode(),UserCodeEnum.USER_PASSWORD_DIFFERENT.getType(),UserCodeEnum.USER_PASSWORD_DIFFERENT.getMessage());
+        }
+        String saltPassword = EncryptPasswordUtil.encrypt(sysUserDTO.getSalt(),req.getOldPassword());
+        if(!saltPassword.equals(sysUserDTO.getPassword())){
+            throw new CommonException(UserCodeEnum.USER_PASSWORD_WRONG.getCode(),UserCodeEnum.USER_PASSWORD_WRONG.getType(),UserCodeEnum.USER_PASSWORD_WRONG.getMessage());
+        }
+        sysUserBiz.changePassword(sysUserDTO.getId(),req.getPassword1());
+        SecurityUtils.getSubject().logout();
         return ResponseFactory.buildSuccess();
     }
 }

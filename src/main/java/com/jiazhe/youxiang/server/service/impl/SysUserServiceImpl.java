@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.server.service.impl;
 
+import com.jiazhe.youxiang.base.util.EncryptPasswordUtil;
+import com.jiazhe.youxiang.base.util.RandomUtil;
 import com.jiazhe.youxiang.server.adapter.SysRoleAdapter;
 import com.jiazhe.youxiang.server.adapter.SysUserAdapter;
 import com.jiazhe.youxiang.server.adapter.SysUserRoleAdapter;
@@ -163,6 +165,15 @@ public class SysUserServiceImpl implements SysUserService{
         SysUserPO sysUserPO = sysUserPOMapper.selectByPrimaryKey(userId);
         sysUserPO.setLastLoginIp(ipAdrress);
         sysUserPO.setLastLoginTime(new Date());
+        return sysUserPOMapper.updateByPrimaryKeySelective(sysUserPO);
+    }
+
+    @Override
+    public int changePassword(Integer id, String newPassword) {
+        SysUserPO sysUserPO = sysUserPOMapper.selectByPrimaryKey(id);
+        String salt = RandomUtil.generateSalt(6);
+        sysUserPO.setSalt(salt);
+        sysUserPO.setPassword(EncryptPasswordUtil.encrypt(salt,newPassword));
         return sysUserPOMapper.updateByPrimaryKeySelective(sysUserPO);
     }
 }

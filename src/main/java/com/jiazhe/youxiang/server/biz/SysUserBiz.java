@@ -121,4 +121,8 @@ public class SysUserBiz {
     public int updateLastLoginInfo(Integer userId , String ipAdrress) {
         return sysUserService.updateLaseLoginInfo(userId,ipAdrress);
     }
+
+    public int changePassword(Integer id, String newPassword) {
+        return sysUserService.changePassword(id,newPassword);
+    }
 }

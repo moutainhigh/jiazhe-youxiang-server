@@ -34,4 +34,6 @@ public interface SysUserService {
     List<SysUserDTO> findByLoginName(String loginName);
 
     int updateLaseLoginInfo(Integer userId, String ipAdrress);
+
+    int changePassword(Integer id, String newPassword);
 }
