@@ -26,6 +26,10 @@ public class RCExchangeCodeBatchEditDTO {
 
     private String productIds;
 
+    private Integer amount;
+
+    private BigDecimal faceValue;
+
     private Date expiryTime;
 
     private Date rechargeCardExpiryTime;
@@ -129,4 +133,21 @@ public class RCExchangeCodeBatchEditDTO {
     public void setIsVirtual(Byte isVirtual) {
         this.isVirtual = isVirtual;
     }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    public BigDecimal getFaceValue() {
+        return faceValue;
+    }
+
+    public void setFaceValue(BigDecimal faceValue) {
+        this.faceValue = faceValue;
+    }
+
 }

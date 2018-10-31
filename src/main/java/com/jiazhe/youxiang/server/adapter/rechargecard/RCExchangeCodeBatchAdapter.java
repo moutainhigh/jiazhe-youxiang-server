@@ -103,8 +103,10 @@ public class RCExchangeCodeBatchAdapter {
         rCExchangeCodeBatchEditResp.setIsVirtual(rcExchangeCodeBatchEditDTO.getIsVirtual());
         rCExchangeCodeBatchEditResp.setDescription(rcExchangeCodeBatchEditDTO.getDescription());
         rCExchangeCodeBatchEditResp.setProjectId(rcExchangeCodeBatchEditDTO.getProjectId());
-        rCExchangeCodeBatchEditResp.setCityIds(rcExchangeCodeBatchEditDTO.getCityCodes());
+        rCExchangeCodeBatchEditResp.setCityCodes(rcExchangeCodeBatchEditDTO.getCityCodes());
         rCExchangeCodeBatchEditResp.setProductIds(rcExchangeCodeBatchEditDTO.getProductIds());
+        rCExchangeCodeBatchEditResp.setAmount(rcExchangeCodeBatchEditDTO.getAmount());
+        rCExchangeCodeBatchEditResp.setFaceValue(rcExchangeCodeBatchEditDTO.getFaceValue());
         rCExchangeCodeBatchEditResp.setExpiryTime(rcExchangeCodeBatchEditDTO.getExpiryTime());
         rCExchangeCodeBatchEditResp.setRechargeCardExpiryTime(rcExchangeCodeBatchEditDTO.getRechargeCardExpiryTime());
         rCExchangeCodeBatchEditResp.setValidityPeriod(rcExchangeCodeBatchEditDTO.getValidityPeriod());

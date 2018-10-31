@@ -112,6 +112,13 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         //参数检查
         RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchBiz.getById(req.getId());
         RCExchangeCodeBatchEditResp rcExchangeCodeBatchEditResp = RCExchangeCodeBatchAdapter.DTOEdit2RespEdit(rcExchangeCodeBatchEditDTO);
+        List<RCExchangeCodeDTO> rcExchangeCodeDTOList = rcExchangeCodeBiz.getByBatchId(req.getId());
+        //有码不允许修改批次的面额和码的数量
+        if(rcExchangeCodeDTOList.size()>0){
+            rcExchangeCodeBatchEditResp.setHasCode(Byte.valueOf("1"));
+        }else{
+            rcExchangeCodeBatchEditResp.setHasCode(Byte.valueOf("0"));
+        }
         return ResponseFactory.buildResponse(rcExchangeCodeBatchEditResp);
     }
 

@@ -45,7 +45,8 @@ public class RCExchangeCodeBatchBiz {
     }
 
     public RCExchangeCodeBatchEditDTO getById(Integer id) {
-        return rcExchangeCodeBatchService.getById(id);
+        RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchService.getById(id);
+        return rcExchangeCodeBatchEditDTO;
     }
 
     public int editSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {

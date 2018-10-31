@@ -344,36 +344,45 @@
             page: "pageNum",
             rows: "pageSize"
         },// 重新定义分页信息
-        width: "100%",
+        /*width: "100%",*/
         autowidth: true,
+        shrinkToFit: true,
         height: 350,
         colNames: ['', '批次名称', '充值卡名称', '是否是虚拟批次', '状态', '面额', '数量', '过期时间', '操作'],
         colModel: [
             {name: 'id', index: 'id', sortable: false, hidden: true},
-            {name: 'name', index: 'name', sortable: false},
-            {name: 'rechargeCardName', index: 'rechargeCardName', sortable: false},
+            {name: 'name', index: 'name', width: 100, sortable: false},
+            {name: 'rechargeCardName', index: 'rechargeCardName', width: 50, sortable: false},
             {
                 name: 'isVirtual',
                 index: 'isVirtual',
+                width: 50,
                 sortable: false,
                 formatter: function (cellvalue, options, rowObject) {
                     return rowObject.isVirtual == 1 ? "是" : "否";
                 }
             },
             {
-                name: 'status', index: 'status', sortable: false, formatter: function (cellvalue, options, rowObject) {
-                return rowObject.status == 1 ? "启用" : "停用";
-            }
+                name: 'status',
+                index: 'status',
+                width: 30,
+                sortable: false,
+                formatter: function (cellvalue, options, rowObject) {
+                    return rowObject.status == 1 ? "启用" : "停用";
+                }
             },
             {
-                name: 'faceValue', index: 'faceValue', sortable: false,
+                name: 'faceValue',
+                index: 'faceValue',
+                width:30,
+                sortable: false,
                 formatter: function (cellvalue, options, rowObject) {
                     return rowObject.isVirtual == 1 ? "--" : rowObject.faceValue;
                 }
             },
-            {name: 'amount', index: 'amount', sortable: false},
-            {name: 'expiryTime', index: 'expiryTime', sortable: false, formatter: dateFormatter},
-            {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
+            {name: 'amount', index: 'amount', width:30,sortable: false},
+            {name: 'expiryTime', index: 'expiryTime', width:50,sortable: false, formatter: dateFormatter},
+            {name: '_action', index: '_action', width:100,sortable: false, formatter: customFormatter}
         ],
         rowNum: 10,
         rowList: [10, 20, 30],
@@ -429,7 +438,7 @@
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
         str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
-            "<i class='ace-icon fa fa-pencil'></i>" +
+            "<i class='ace-icon'>修改</i>" +
             "</a>&nbsp;&nbsp;";
         if (rowObject.status == 0) {
             str = str + "<a class='btn btn-minier btn-success' href=\"javascript:startUsing('" + rowObject.id + "')\">" +
@@ -454,15 +463,27 @@
 
     function openNew() {
         $("#modal-title").html("批次信息-添加");
-        $("#batchId").val(0)
+        $("input[name=isVirtual]").removeAttr('disabled');
+        $("#batchSaveForm #saveFaceValue").removeAttr('disabled');
+        $("#batchSaveForm #saveAmount").removeAttr('disabled');
+        $("#batchId").val(0);
         $("#batchSaveForm #saveName").val("");
         $("#batchSaveForm #saveRechargeCardName").val("");
+        $("#batchSaveForm #saveNotVirtualRadio").click();
+        $("#batchSaveForm #saveFaceValue").val("");
+        $("#batchSaveForm #saveAmount").val("");
+        $("#batchSaveForm #saveExpiryTime").val("");
+        $("#batchSaveForm #saveDeadLineRadio").click();
+        $("#batchSaveForm #saveRechargeCardExpiryTime").val("");
+        $("#batchSaveForm #saveValidityPeriod").val("");
+        $("#batchSaveForm #saveDescription").val("");
     }
 
     function openEdit(id) {
         $("#modal-title").html("批次信息-修改");
-        $('#savePassword').attr('disabled', 'disabled');
-        $('#saveLoginName').attr('disabled', 'disabled');
+        $("input[name=isVirtual]").removeAttr('disabled');
+        $("#batchSaveForm #saveFaceValue").removeAttr('disabled');
+        $("#batchSaveForm #saveAmount").removeAttr('disabled');
         huixian(id);
     }
 
@@ -489,7 +510,7 @@
 
     function huixian(id) {
         $.ajax({
-            url: "../api/sysuser/getbyid",
+            url: "../api/rcexchangecodebatch/getbyid",
             dataType: "json",
             async: false,
             data: {
@@ -501,11 +522,33 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    $("#userId").val(result.id);
-                    $("#saveMobile").val(result.mobile);
-                    $("#saveLoginName").val(result.loginName);
-                    $("#saveDisplayName").val(result.displayName);
-                    roleShow(result.roleIds);
+                    $("#batchId").val(result.id);
+                    $("#batchSaveForm #saveName").val(result.name);
+                    $("#batchSaveForm #saveRechargeCardName").val(result.rechargeCardName);
+                    if (result.isVirtual == 0) {
+                        $("#batchSaveForm #saveNotVirtualRadio").click();
+                        $("#batchSaveForm #saveFaceValue").val(result.faceValue);
+                        $("#batchSaveForm #saveAmount").val(result.amount);
+                        if (result.hasCode == 1) {
+                            $("#batchSaveForm #saveFaceValue").attr("disabled", "disabled");
+                            $("#batchSaveForm #saveAmount").attr("disabled", "disabled");
+                        } else {
+                            $("#batchSaveForm #saveFaceValue").removeAttr('disabled');
+                            $("#batchSaveForm #saveAmount").removeAttr('disabled');
+                        }
+                    } else {
+                        $("#batchSaveForm #saveIsVirtualRadio").click();
+                    }
+                    $("#batchSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
+                    if (result.expiryType == 0) {
+                        $("#batchSaveForm #saveDeadLineRadio").click();
+                        $("#batchSaveForm #saveRechargeCardExpiryTime").val(dateFormat(result.rechargeCardExpiryTime));
+                    } else {
+                        $("#batchSaveForm #saveValidityPeriodRadio").click();
+                        $("#batchSaveForm #saveValidityPeriod").val(result.validityPeriod);
+                    }
+                    $("#batchSaveForm #saveDescription").val(result.description);
+                    $("input[name=isVirtual]").attr('disabled', 'disabled');
                     $("#modal-form").modal('show');
                 }
             },
@@ -539,7 +582,7 @@
     }
 
     //启用批次
-    function startUsing(id){
+    function startUsing(id) {
         $.ajax({
             url: "../api/rcexchangecodebatch/startusing",
             dataType: "json",
