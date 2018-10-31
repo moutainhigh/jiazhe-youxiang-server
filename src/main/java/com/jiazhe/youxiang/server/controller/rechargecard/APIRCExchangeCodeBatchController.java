@@ -67,7 +67,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
 
     @ApiOperation(value = "【新建、修改】保存充值卡兑换码批次信息", httpMethod = "POST", notes = "【新建、修改】保存充值卡兑换码批次信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public Object addSave(@ModelAttribute RCExchangeCodeBatchSaveReq req) {
+    public Object save(@ModelAttribute RCExchangeCodeBatchSaveReq req) {
         //参数检查
         if (Strings.isBlank(req.getName()) || Strings.isBlank(req.getRechargeCardName())) {
             throw new CommonException(RechargeCardCodeEnum.INFO_INCOMPLETE.getCode(), RechargeCardCodeEnum.INFO_INCOMPLETE.getType(), RechargeCardCodeEnum.INFO_INCOMPLETE.getMessage());

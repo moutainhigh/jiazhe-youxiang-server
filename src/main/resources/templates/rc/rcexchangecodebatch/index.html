@@ -104,6 +104,8 @@
                                                 <input type="hidden" name="id" id="batchId">
                                                 <input type="hidden" name="productIds" id="saveProductIds">
                                                 <input type="hidden" name="cityCodes" id="saveCityCodes">
+                                                <input type="hidden" name="expiryType" id="saveExpiryType" value=0>
+                                                <input type="hidden" name="isVirtual" id="saveIsVirtual" value=0>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">批次名称：</label>
                                                     <div class="col-sm-8">
@@ -144,12 +146,12 @@
                                                         <div class="pos-rel">
                                                             <label class="radio-inline ">
                                                                 <input id="saveNotVirtualRadio" type="radio"
-                                                                       name="isVirtual"
+                                                                       name="isVirtualRadio"
                                                                        value="0" checked="checked"/>否
                                                             </label>
                                                             <label class="radio-inline">
                                                                 <input id="saveIsVirtualRadio" type="radio"
-                                                                       name="isVirtual"
+                                                                       name="isVirtualRadio"
                                                                        value="1"/>是
                                                             </label>
                                                         </div>
@@ -202,12 +204,12 @@
                                                         <div class="pos-rel">
                                                             <label class="radio-inline ">
                                                                 <input id="saveDeadLineRadio" type="radio"
-                                                                       name="expiryType"
+                                                                       name="expiryTypeRadio"
                                                                        value="0" checked="checked"/>指定截止日期
                                                             </label>
                                                             <label class="radio-inline">
                                                                 <input id="saveValidityPeriodRadio" type="radio"
-                                                                       name="expiryType"
+                                                                       name="expiryTypeRadio"
                                                                        value="1"/>兑换之日起算
                                                             </label>
                                                         </div>
@@ -310,21 +312,25 @@
             $(this).prev().focus();
         });
 
-        $("input[name=isVirtual]").bind("change", function () {
-            if ($("input[name=isVirtual]:checked").val() == 1) {
+        $("input[name=isVirtualRadio]").bind("change", function () {
+            if ($("input[name=isVirtualRadio]:checked").val() == 1) {
                 $(".saveIsVirtual").css("display", "none");
+                $("#saveIsVirtual").val(1);
             } else {
                 $(".saveIsVirtual").css("display", "");
+                $("#saveIsVirtual").val(0);
             }
         });
 
-        $("input[name=expiryType]").bind("change", function () {
-            if ($("input[name=expiryType]:checked").val() == 0) {
+        $("input[name=expiryTypeRadio]").bind("change", function () {
+            if ($("input[name=expiryTypeRadio]:checked").val() == 0) {
                 $(".saveDeadLine").css("display", "");
                 $(".saveValidityPeriod").css("display", "none");
+                $("#saveExpiryType").val(0);
             } else {
                 $(".saveDeadLine").css("display", "none");
                 $(".saveValidityPeriod").css("display", "");
+                $("#saveExpiryType").val(1);
             }
         });
 
@@ -463,9 +469,9 @@
 
     function openNew() {
         $("#modal-title").html("批次信息-添加");
-        $("input[name=isVirtual]").removeAttr('disabled');
-        $("#batchSaveForm #saveFaceValue").removeAttr('disabled');
-        $("#batchSaveForm #saveAmount").removeAttr('disabled');
+        $("input[name=isVirtualRadio]").removeAttr('disabled');
+        $("#batchSaveForm #saveFaceValue").removeAttr('readonly');
+        $("#batchSaveForm #saveAmount").removeAttr('readonly');
         $("#batchId").val(0);
         $("#batchSaveForm #saveName").val("");
         $("#batchSaveForm #saveRechargeCardName").val("");
@@ -481,9 +487,9 @@
 
     function openEdit(id) {
         $("#modal-title").html("批次信息-修改");
-        $("input[name=isVirtual]").removeAttr('disabled');
-        $("#batchSaveForm #saveFaceValue").removeAttr('disabled');
-        $("#batchSaveForm #saveAmount").removeAttr('disabled');
+        $("input[name=isVirtualRadio]").removeAttr('disabled');
+        $("#batchSaveForm #saveFaceValue").removeAttr('readonly');
+        $("#batchSaveForm #saveAmount").removeAttr('readonly');
         huixian(id);
     }
 
@@ -530,11 +536,11 @@
                         $("#batchSaveForm #saveFaceValue").val(result.faceValue);
                         $("#batchSaveForm #saveAmount").val(result.amount);
                         if (result.hasCode == 1) {
-                            $("#batchSaveForm #saveFaceValue").attr("disabled", "disabled");
-                            $("#batchSaveForm #saveAmount").attr("disabled", "disabled");
+                            $("#batchSaveForm #saveFaceValue").attr("readonly", "readonly");
+                            $("#batchSaveForm #saveAmount").attr("readonly", "readonly");
                         } else {
-                            $("#batchSaveForm #saveFaceValue").removeAttr('disabled');
-                            $("#batchSaveForm #saveAmount").removeAttr('disabled');
+                            $("#batchSaveForm #saveFaceValue").removeAttr('readonly');
+                            $("#batchSaveForm #saveAmount").removeAttr('readonly');
                         }
                     } else {
                         $("#batchSaveForm #saveIsVirtualRadio").click();
@@ -542,13 +548,13 @@
                     $("#batchSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
                     if (result.expiryType == 0) {
                         $("#batchSaveForm #saveDeadLineRadio").click();
-                        $("#batchSaveForm #saveRechargeCardExpiryTime").val(dateFormat(result.rechargeCardExpiryTime));
                     } else {
                         $("#batchSaveForm #saveValidityPeriodRadio").click();
-                        $("#batchSaveForm #saveValidityPeriod").val(result.validityPeriod);
                     }
+                    $("#batchSaveForm #saveValidityPeriod").val(result.validityPeriod);
+                    $("#batchSaveForm #saveRechargeCardExpiryTime").val(dateFormat(result.rechargeCardExpiryTime));
                     $("#batchSaveForm #saveDescription").val(result.description);
-                    $("input[name=isVirtual]").attr('disabled', 'disabled');
+                    $("input[name=isVirtualRadio]").attr('disabled', 'disabled');
                     $("#modal-form").modal('show');
                 }
             },

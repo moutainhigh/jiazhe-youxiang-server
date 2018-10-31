@@ -8,6 +8,7 @@ import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCPOManualMappe
 import com.jiazhe.youxiang.server.domain.po.*;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeRecordService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCService;
@@ -16,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -110,5 +113,38 @@ public class RCServiceImpl implements RCService {
         rechargeCardPO.setExchangeRecordId(rechargeCardRecordPO.getId());
         rcService.update(rechargeCardPO);
         return 1;
+    }
+
+    @Override
+    public int batchUpdate(List<Integer> usedIds, RCExchangeCodeBatchSaveDTO batchSaveDTO) {
+        List<RechargeCardExchangeRecordPO> recordPOList = rcExchangeRecordService.findByCodeIds(usedIds);
+        List<Integer> cardIds = recordPOList.stream().map(RechargeCardExchangeRecordPO::getRechargeCardId).collect(Collectors.toList());
+        List<RechargeCardPO> rcPOList = rcPOManualMapper.findByIds(cardIds);
+        for(RechargeCardPO po : rcPOList){
+            po.setName(batchSaveDTO.getRechargeCardName());
+            po.setDescription(batchSaveDTO.getDescription());
+            po.setProjectId(batchSaveDTO.getProjectId());
+            po.setCityCodes(batchSaveDTO.getCityCodes());
+            po.setProductIds(batchSaveDTO.getProductIds());
+            //直接指定过期时间
+            if(batchSaveDTO.getExpiryType().equals(Byte.valueOf("0"))){
+                po.setExpiryTime(batchSaveDTO.getRechargeCardExpiryTime());
+            }else{
+                po.setExpiryTime(new Date(System.currentTimeMillis()+batchSaveDTO.getValidityPeriod()* CommonConstant.ONE_DAY));
+            }
+        }
+        rcPOManualMapper.batchUpdate(rcPOList);
+        return 0;
+    }
+
+    @Override
+    public int batchChangeStatus(List<Integer> usedIds,Byte status) {
+        List<RechargeCardExchangeRecordPO> recordPOList = rcExchangeRecordService.findByCodeIds(usedIds);
+        List<Integer> cardIds = recordPOList.stream().map(RechargeCardExchangeRecordPO::getRechargeCardId).collect(Collectors.toList());
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("status",status);
+        map.put("ids",cardIds);
+        rcPOManualMapper.batchChangeStatus(map);
+        return 0;
     }
 }

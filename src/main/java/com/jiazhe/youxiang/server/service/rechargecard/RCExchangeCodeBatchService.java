@@ -45,7 +45,18 @@ public interface RCExchangeCodeBatchService {
      */
     int editSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO);
 
+    /**
+     * 修改批次的启用禁用状态
+     * @param id
+     * @param status
+     * @return
+     */
     int changeBatchStatus(Integer id, Byte status);
 
+    /**
+     * 根据批次id生成充值卡兑换码
+     * @param id
+     * @return
+     */
     int generateCode(Integer id);
 }

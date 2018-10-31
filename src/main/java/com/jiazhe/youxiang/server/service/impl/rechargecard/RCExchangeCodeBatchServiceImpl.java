@@ -8,15 +8,18 @@ import com.jiazhe.youxiang.server.dao.mapper.RechargeCardExchangeCodeBatchPOMapp
 import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCExchangeCodeBatchPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeSaveDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeService;
+import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeRecordService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +32,7 @@ import java.util.stream.Collectors;
  * @date 2018/10/21
  */
 @Service("rcExchangeCodeBatchService")
+@Transactional
 public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchService {
 
     @Autowired
@@ -37,6 +41,8 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
     private RechargeCardExchangeCodeBatchPOMapper rechargeCardExchangeCodeBatchPOMapper;
     @Autowired
     private RCExchangeCodeService rcExchangeCodeService;
+    @Autowired
+    private RCExchangeRecordService rcExchangeRecordService;
 
     @Override
     public List<RCExchangeCodeBatchDTO> getList(Integer projectId, String name, Paging paging) {
@@ -68,18 +74,51 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
     }
 
     @Override
-    public int editSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {
-        //是否修改该批次下的兑换码相关信息？？？
+    public int editSave(RCExchangeCodeBatchSaveDTO batchSaveDTO) {
+        RechargeCardExchangeCodeBatchPO batchPO = rechargeCardExchangeCodeBatchPOMapper.selectByPrimaryKey(batchSaveDTO.getId());
+        //批次肯定要修改的信息
+        batchPO.setName(batchSaveDTO.getName());
+        batchPO.setRechargeCardName(batchSaveDTO.getRechargeCardName());
+        batchPO.setProjectId(batchSaveDTO.getProjectId());
+        batchPO.setCityCodes(batchSaveDTO.getCityCodes());
+        batchPO.setProductIds(batchSaveDTO.getProductIds());
+        batchPO.setExpiryTime(batchSaveDTO.getExpiryTime());
+        batchPO.setExpiryType(batchSaveDTO.getExpiryType());
+        batchPO.setRechargeCardExpiryTime(batchSaveDTO.getRechargeCardExpiryTime());
+        batchPO.setValidityPeriod(batchSaveDTO.getValidityPeriod());
+        batchPO.setDescription(batchSaveDTO.getDescription());
+        //不是虚拟批次，只修改批次信息
+        if (batchPO.getIsVirtual().equals(Byte.valueOf("0"))) {
+            //批次下面是否有码，有则为true
+            List<RCExchangeCodeDTO> codeDTOList = rcExchangeCodeService.getByBatchId(batchSaveDTO.getId());
+            boolean batchEmpty = codeDTOList.isEmpty();
+            //没有码则可以修改面额和数量
+            if (batchEmpty) {
+                batchPO.setAmount(batchSaveDTO.getAmount());
+                batchPO.setFaceValue(batchSaveDTO.getFaceValue());
+            }else {
+                rcExchangeCodeService.updateWithBatch(batchSaveDTO);
+            }
+        }
+        rechargeCardExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
         return 1;
     }
 
     @Override
     public int changeBatchStatus(Integer id, Byte status) {
+        RechargeCardExchangeCodeBatchPO batchPO = rechargeCardExchangeCodeBatchPOMapper.selectByPrimaryKey(id);
+        batchPO.setStatus(status);
+        batchPO.setModTime(new Date());
+        rechargeCardExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
         //修改改批次下的兑换码启用停用状态
-        RechargeCardExchangeCodeBatchPO rechargeCardExchangeCodeBatchPO = rechargeCardExchangeCodeBatchPOMapper.selectByPrimaryKey(id);
-        rechargeCardExchangeCodeBatchPO.setStatus(status);
-        rechargeCardExchangeCodeBatchPO.setModTime(new Date());
-        rechargeCardExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(rechargeCardExchangeCodeBatchPO);
+        if (batchPO.getIsVirtual().equals(Byte.valueOf("0"))) {
+            List<RCExchangeCodeDTO> codeDTOList = rcExchangeCodeService.getByBatchId(id);
+            boolean batchEmpty = codeDTOList.isEmpty();
+            //有码则修改对应的码信息
+            if (!batchEmpty) {
+                rcExchangeCodeService.batchChangeStatus(id, status);
+            }
+        }
         return 1;
     }
 
@@ -88,9 +127,9 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         RechargeCardExchangeCodeBatchPO batchPO = rechargeCardExchangeCodeBatchPOMapper.selectByPrimaryKey(id);
         List<RCExchangeCodeSaveDTO> rcExchangeCodeSaveDTOS = new ArrayList<RCExchangeCodeSaveDTO>();
         Integer amount = batchPO.getAmount();
-        String[][] codeAndKeyts = GenerateCode.generateCode(CommonConstant.RC_EXCHANGE_CODE_PREFIX,amount);
+        String[][] codeAndKeyts = GenerateCode.generateCode(CommonConstant.RC_EXCHANGE_CODE_PREFIX, amount);
 
-        for(int i=0;i<amount;i++){
+        for (int i = 0; i < amount; i++) {
             RCExchangeCodeSaveDTO rcExchangeCodeSaveDTO = new RCExchangeCodeSaveDTO();
             rcExchangeCodeSaveDTO.setBatchId(batchPO.getId());
             rcExchangeCodeSaveDTO.setBatchName(batchPO.getName());

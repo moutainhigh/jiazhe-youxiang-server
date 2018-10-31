@@ -404,13 +404,13 @@
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
         str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:deleteOne('" + rowObject.id + "')\">" +
-            "<i class='ace-icon fa fa-trash'></i>" +
+            "<i class='ace-icon'>删除</i>" +
             "</a>&nbsp;&nbsp;";
         str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
-            "<i class='ace-icon fa fa-pencil'></i>" +
+            "<i class='ace-icon'>修改</i>" +
             "</a>&nbsp;&nbsp;";
         str = str + "<a class='btn btn-minier btn-success' href=\"javascript:openShow('" + rowObject.id + "')\">" +
-            "<i class='ace-icon fa fa-eye'></i>" +
+            "<i class='ace-icon'>查看</i>" +
             "</a>";
         return str;
     }

@@ -2,6 +2,8 @@ package com.jiazhe.youxiang.server.service.rechargecard;
 
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeRecordPO;
 
+import java.util.List;
+
 /**
  * @author TU
  * @description
@@ -10,4 +12,11 @@ import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeRecordPO;
 public interface RCExchangeRecordService {
 
     int insert(RechargeCardExchangeRecordPO rechargeCardRecordPO);
+
+    /**
+     * 根据兑换码的ids，查找兑换记录
+     * @param usedIds
+     * @return
+     */
+    List<RechargeCardExchangeRecordPO> findByCodeIds(List<Integer> usedIds);
 }

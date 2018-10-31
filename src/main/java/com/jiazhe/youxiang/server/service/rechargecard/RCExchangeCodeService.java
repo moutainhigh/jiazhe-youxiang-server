@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.service.rechargecard;
 
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 
 import java.util.Date;
 import java.util.List;
@@ -58,4 +59,18 @@ public interface RCExchangeCodeService {
      */
     List<RCExchangeCodeDTO> getByBatchId(Integer id);
 
+    /**
+     * 根据批次信息，修改兑换码信息
+     * @param batchSaveDTO
+     * @return
+     */
+    int updateWithBatch(RCExchangeCodeBatchSaveDTO batchSaveDTO);
+
+    /**
+     * 根据批次id，修改兑换码的启用、停用状态
+     * @param batchId
+     * @param status
+     * @return
+     */
+    int batchChangeStatus(Integer batchId, Byte status);
 }

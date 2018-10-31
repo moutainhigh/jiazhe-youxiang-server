@@ -9,12 +9,14 @@ import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCExchangeCodeP
 import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.*;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeRecordService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -104,6 +106,56 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         criteria.andBatchIdEqualTo(id);
         List<RechargeCardExchangeCodePO> poList = rechargeCardExchangeCodePOMapper.selectByExample(example);
         return poList.stream().map(RCExchangeCodeAdapter::PO2DTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public int updateWithBatch(RCExchangeCodeBatchSaveDTO batchSaveDTO) {
+        RechargeCardExchangeCodePOExample example = new RechargeCardExchangeCodePOExample();
+        RechargeCardExchangeCodePOExample.Criteria criteria = example.createCriteria();
+        criteria.andBatchIdEqualTo(batchSaveDTO.getId());
+        List<RechargeCardExchangeCodePO> poList = rechargeCardExchangeCodePOMapper.selectByExample(example);
+        List<Integer> usedIds = new ArrayList<Integer>();
+        for(RechargeCardExchangeCodePO po :poList){
+            po.setBatchName(batchSaveDTO.getName());
+            po.setRechargeCardName(batchSaveDTO.getRechargeCardName());
+            po.setBatchDescription(batchSaveDTO.getDescription());
+            po.setProjectId(batchSaveDTO.getProjectId());
+            po.setCityCodes(batchSaveDTO.getCityCodes());
+            po.setProductIds(batchSaveDTO.getProductIds());
+            po.setExpiryTime(batchSaveDTO.getExpiryTime());
+            po.setExpiryType(batchSaveDTO.getExpiryType());
+            po.setRechargeCardExpiryTime(batchSaveDTO.getRechargeCardExpiryTime());
+            po.setValidityPeriod(batchSaveDTO.getValidityPeriod());
+            if(po.getUsed().equals(Byte.valueOf("1"))){
+                //记录已经使用过码的id
+                usedIds.add(po.getId());
+            }
+        }
+        rcExchangeCodePOManualMapper.batchUpdate(poList);
+        if(!usedIds.isEmpty()){
+            rcService.batchUpdate(usedIds,batchSaveDTO);
+        }
+        return 0;
+    }
+
+    @Override
+    public int batchChangeStatus(Integer batchId, Byte status) {
+        rcExchangeCodePOManualMapper.batchChangeStatus(batchId,status);
+        RechargeCardExchangeCodePOExample example = new RechargeCardExchangeCodePOExample();
+        RechargeCardExchangeCodePOExample.Criteria criteria = example.createCriteria();
+        criteria.andBatchIdEqualTo(batchId);
+        List<RechargeCardExchangeCodePO> poList = rechargeCardExchangeCodePOMapper.selectByExample(example);
+        List<Integer> usedIds = new ArrayList<Integer>();
+        for(RechargeCardExchangeCodePO po :poList){
+            if(po.getUsed().equals(Byte.valueOf("1"))){
+                //记录已经使用过码的id
+                usedIds.add(po.getId());
+            }
+        }
+        if(!usedIds.isEmpty()){
+            rcService.batchChangeStatus(usedIds,status);
+        }
+        return 0;
     }
 
     @Override

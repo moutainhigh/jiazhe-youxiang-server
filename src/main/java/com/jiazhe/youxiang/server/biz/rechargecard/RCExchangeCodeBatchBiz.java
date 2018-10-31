@@ -44,14 +44,16 @@ public class RCExchangeCodeBatchBiz {
        return rcExchangeCodeBatchService.addSave(rcExchangeCodeBatchSaveDTO);
     }
 
+    public int editSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {
+        return rcExchangeCodeBatchService.editSave(rcExchangeCodeBatchSaveDTO);
+    }
+
     public RCExchangeCodeBatchEditDTO getById(Integer id) {
         RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchService.getById(id);
         return rcExchangeCodeBatchEditDTO;
     }
 
-    public int editSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {
-        return rcExchangeCodeBatchService.editSave(rcExchangeCodeBatchSaveDTO);
-    }
+
 
     public int startUsing(Integer id) {
         return rcExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.START_USING.getId().byteValue());

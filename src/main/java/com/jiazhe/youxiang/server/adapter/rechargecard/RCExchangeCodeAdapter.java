@@ -81,11 +81,20 @@ public class RCExchangeCodeAdapter {
         }
         RCExchangeCodeDTO rCExchangeCodeDTO = new RCExchangeCodeDTO();
         rCExchangeCodeDTO.setId(rechargeCardExchangeCodePO.getId());
+        rCExchangeCodeDTO.setBatchId(rechargeCardExchangeCodePO.getBatchId());
         rCExchangeCodeDTO.setBatchName(rechargeCardExchangeCodePO.getBatchName());
+        rCExchangeCodeDTO.setRechargeCardName(rechargeCardExchangeCodePO.getRechargeCardName());
+        rCExchangeCodeDTO.setBatchDescription(rechargeCardExchangeCodePO.getBatchDescription());
+        rCExchangeCodeDTO.setProjectId(rechargeCardExchangeCodePO.getProjectId());
+        rCExchangeCodeDTO.setCityCodes(rechargeCardExchangeCodePO.getCityCodes());
+        rCExchangeCodeDTO.setProductIds(rechargeCardExchangeCodePO.getProductIds());
         rCExchangeCodeDTO.setCode(rechargeCardExchangeCodePO.getCode());
         rCExchangeCodeDTO.setKeyt(rechargeCardExchangeCodePO.getKeyt());
         rCExchangeCodeDTO.setFaceValue(rechargeCardExchangeCodePO.getFaceValue());
         rCExchangeCodeDTO.setExpiryTime(rechargeCardExchangeCodePO.getExpiryTime());
+        rCExchangeCodeDTO.setRechargeCardExpiryTime(rechargeCardExchangeCodePO.getRechargeCardExpiryTime());
+        rCExchangeCodeDTO.setValidityPeriod(rechargeCardExchangeCodePO.getValidityPeriod());
+        rCExchangeCodeDTO.setExpiryType(rechargeCardExchangeCodePO.getExpiryType());
         rCExchangeCodeDTO.setStatus(rechargeCardExchangeCodePO.getStatus());
         rCExchangeCodeDTO.setUsed(rechargeCardExchangeCodePO.getUsed());
         return rCExchangeCodeDTO;
