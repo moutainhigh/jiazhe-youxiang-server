@@ -17,7 +17,7 @@ import java.util.List;
  * @author niexiao
  * @created 2018/10/19
  */
-public class ProductPriceBatchAddReq extends BaseVO {
+public class ProductPriceBatchAddOrUpdateReq extends BaseVO {
 
     private static final long serialVersionUID = 8358796229274962283L;
     @ApiModelProperty("城市code集合,必填，不可空")

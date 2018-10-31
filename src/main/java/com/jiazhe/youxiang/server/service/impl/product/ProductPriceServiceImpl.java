@@ -7,6 +7,7 @@ package com.jiazhe.youxiang.server.service.impl.product;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.jiazhe.youxiang.base.util.ListUtils;
 import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.common.enums.ProductCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.ProductException;
@@ -14,13 +15,14 @@ import com.jiazhe.youxiang.server.dao.mapper.ProductPricePOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.product.ProductPricePOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.ProductPricePO;
 import com.jiazhe.youxiang.server.domain.po.ProductPricePOExample;
-import com.jiazhe.youxiang.server.dto.product.ProductPriceBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
 import com.jiazhe.youxiang.server.service.SysCityService;
 import com.jiazhe.youxiang.server.service.product.ProductPriceService;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -50,23 +52,49 @@ public class ProductPriceServiceImpl implements ProductPriceService {
         return productPricePOManualMapper.getProductIdsByCityIds(cityCodes);
     }
 
+    @Transactional
     @Override
-    public void batchAddPrice(ProductPriceBatchAddDTO productPriceBatchAddDTO) {
-        //TODO niexiao 这里加入验证逻辑，不得重复加入
-        List<ProductPricePO> productPricePOList = Lists.newArrayList();
-        Map<String, String> cityMap = sysCityService.getCityMapByCodes(productPriceBatchAddDTO.getCityCodes());
-        productPriceBatchAddDTO.getCityCodes().stream().forEach(item -> {
-            ProductPricePO productPricePO = new ProductPricePO();
-            productPricePO.setCityCode(item);
-            productPricePO.setCityName(cityMap.get(item));
-            productPricePO.setProductId(productPriceBatchAddDTO.getProductId());
-            productPricePO.setPrice(productPriceBatchAddDTO.getPrice());
-            productPricePOList.add(productPricePO);
-        });
+    public void batchAddAndUpdatePrice(Integer productId, List<String> cityCodes, BigDecimal price) {
+        ProductPricePOExample productPricePOExample = new ProductPricePOExample();
+        ProductPricePOExample.Criteria criteria = productPricePOExample.createCriteria();
+        criteria.andProductIdEqualTo(productId);
+        criteria.andCityCodeIn(cityCodes);
+        List<ProductPricePO> productPricePOList = productPricePOMapper.selectByExample(productPricePOExample);
+
+        List<String> updateCityCodes = Lists.newArrayList();
         if (CollectionUtils.isNotEmpty(productPricePOList)) {
-            productPricePOManualMapper.batchAddPrice(productPricePOList);
-        } else {
-            throw new ProductException(ProductCodeEnum.PRODUCT_PRICE_BATCH_ADD_ERROR);
+            productPricePOList.stream().forEach(item -> {
+                if (cityCodes.contains(item.getCityCode())) {
+                    cityCodes.remove(item.getCityCode());
+                    updateCityCodes.add(item.getCityCode());
+                }
+            });
+        }
+        if (CollectionUtils.isNotEmpty(updateCityCodes)) {
+            //更新价格
+            productPricePOManualMapper.batchUpdate(productId, updateCityCodes, price);
+        }
+        if (CollectionUtils.isNotEmpty(cityCodes)) {
+            productPricePOList.clear();
+            ListUtils.removeDuplicate(cityCodes);
+            Map<String, String> cityMap = sysCityService.getCityMapByCodes(cityCodes);
+            cityCodes.stream().forEach(item -> {
+                ProductPricePO productPricePO = new ProductPricePO();
+                productPricePO.setCityCode(item);
+                if (Strings.isNotBlank(cityMap.get(item))) {
+                    productPricePO.setCityName(cityMap.get(item));
+                } else {
+                    throw new ProductException(ProductCodeEnum.PRODUCT_PRICE_CITY_NOT_FOUND);
+                }
+                productPricePO.setProductId(productId);
+                productPricePO.setPrice(price);
+                productPricePOList.add(productPricePO);
+            });
+            if (CollectionUtils.isNotEmpty(productPricePOList)) {
+                productPricePOManualMapper.batchAddPrice(productPricePOList);
+            } else {
+                throw new ProductException(ProductCodeEnum.PRODUCT_PRICE_BATCH_ADD_ERROR);
+            }
         }
     }
 
@@ -105,11 +133,6 @@ public class ProductPriceServiceImpl implements ProductPriceService {
     @Override
     public void batchDeletePrice(List<Integer> ids) {
         productPricePOManualMapper.batchDelete(ids);
-    }
-
-    @Override
-    public void batchUpdatePrice(Integer productId, List<String> cityCodes, BigDecimal price) {
-        productPricePOManualMapper.batchUpdate(productId, cityCodes, price);
     }
 
     @Override

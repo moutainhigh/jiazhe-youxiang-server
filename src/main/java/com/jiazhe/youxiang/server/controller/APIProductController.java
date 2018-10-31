@@ -13,7 +13,6 @@ import com.jiazhe.youxiang.server.common.exceptions.ProductException;
 import com.jiazhe.youxiang.server.dto.product.ProductAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
-import com.jiazhe.youxiang.server.dto.product.ProductPriceBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductUpdateDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -27,8 +26,7 @@ import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryListReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductListForCustomerReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductListReq;
-import com.jiazhe.youxiang.server.vo.req.product.ProductPriceBatchAddReq;
-import com.jiazhe.youxiang.server.vo.req.product.ProductPriceBatchUpdateReq;
+import com.jiazhe.youxiang.server.vo.req.product.ProductPriceBatchAddOrUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductPriceListReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.product.StatusReq;
@@ -196,7 +194,7 @@ public class APIProductController {
         CommonValidator.validateId(req);
         //调用BIZ方法
         ProductDTO productDTO = productBiz.getById(req.getId());
-        //用ResponseFactory将返回值包装
+        //用ResponseFactry将返回值包装p
         return ResponseFactory.buildResponse(ProductAdapter.productDTO2VO(productDTO));
     }
 
@@ -292,20 +290,19 @@ public class APIProductController {
     /*************商品价格相关******************/
 
     /**
-     * 批量添加商品价格
+     * 批量添加或修改商品价格
      *
      * @return
      */
-    @ApiOperation(value = "批量添加商品价格", httpMethod = "POST", notes = "批量添加商品价格")
-    @RequestMapping(value = "batchaddprice", method = RequestMethod.POST)
-    public Object batchAddPrice(@ModelAttribute ProductPriceBatchAddReq req) {
+    @ApiOperation(value = "批量添加或修改商品价格", httpMethod = "POST", notes = "批量添加或修改商品价格")
+    @RequestMapping(value = "batchaddorupdateprice", method = RequestMethod.POST)
+    public Object batchAddOrUpdatePrice(@ModelAttribute ProductPriceBatchAddOrUpdateReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateId(req.getProductId(), new ProductException(ProductCodeEnum.PRODUCT_ID_IS_NULL));
         validateCityCodes(req.getCityCodes());
         validatePrice(req.getPrice());
-        ProductPriceBatchAddDTO productPriceBatchAddDTO = ProductAdapter.productPriceBatchAddReq2DTO(req);
         //调用BIZ方法
-        productBiz.batchAddPrice(productPriceBatchAddDTO);
+        productBiz.batchAddOrUpdatePrice(req.getProductId(), req.getCityCodes(), req.getPrice());
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -358,23 +355,6 @@ public class APIProductController {
         return ResponseFactory.buildResponse(productPriceDTOList.stream().map(ProductAdapter::productPriceDTO2VO).collect(Collectors.toList()));
     }
 
-    /**
-     * 批量编辑商品的价格
-     *
-     * @return
-     */
-    @ApiOperation(value = "批量编辑商品的价格", httpMethod = "POST", notes = "批量编辑商品的价格")
-    @RequestMapping(value = "batchupdateprice", method = RequestMethod.POST)
-    public Object batchUpdatePrice(@ModelAttribute ProductPriceBatchUpdateReq req) {
-        CommonValidator.validateNull(req);
-        CommonValidator.validateId(req.getProductId(), new ProductException(ProductCodeEnum.PRODUCT_ID_IS_NULL));
-        validateCityCodes(req.getCityCodes());
-        validatePrice(req.getPrice());
-        //调用BIZ方法
-        productBiz.batchUpdatePrice(req.getProductId(), req.getCityCodes(), req.getPrice());
-        //用ResponseFactory将返回值包装
-        return ResponseFactory.buildSuccess();
-    }
 
     /**
      * 批量删除商品价格

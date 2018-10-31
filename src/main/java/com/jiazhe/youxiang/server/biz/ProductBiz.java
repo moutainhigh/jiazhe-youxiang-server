@@ -8,7 +8,6 @@ package com.jiazhe.youxiang.server.biz;
 import com.jiazhe.youxiang.server.dto.product.ProductAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
-import com.jiazhe.youxiang.server.dto.product.ProductPriceBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductUpdateDTO;
 import com.jiazhe.youxiang.server.service.product.ProductCategoryService;
@@ -107,8 +106,8 @@ public class ProductBiz {
 
     /*************商品价格相关******************/
 
-    public void batchAddPrice(ProductPriceBatchAddDTO productPriceBatchAddDTO) {
-        productPriceService.batchAddPrice(productPriceBatchAddDTO);
+    public void batchAddOrUpdatePrice(Integer productId, List<String> cityCodes, BigDecimal price) {
+        productPriceService.batchAddAndUpdatePrice(productId, cityCodes, price);
     }
 
     public ProductPriceDTO getPriceById(Integer id) {
@@ -125,11 +124,6 @@ public class ProductBiz {
 
     public void batchDeletePrice(List<Integer> ids) {
         productPriceService.batchDeletePrice(ids);
-    }
-
-
-    public void batchUpdatePrice(Integer productId, List<String> cityCodes, BigDecimal price) {
-        productPriceService.batchUpdatePrice(productId, cityCodes, price);
     }
 
 
