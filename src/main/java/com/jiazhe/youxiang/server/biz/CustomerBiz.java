@@ -7,7 +7,10 @@ package com.jiazhe.youxiang.server.biz;
 
 import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.customer.CustomerUpdateDTO;
+import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,20 +24,26 @@ import java.util.List;
 @Service("customerBiz")
 public class CustomerBiz {
 
+    @Autowired
+    private CustomerService customerService;
+
     public void add(CustomerAddDTO customerAddDTO) {
+        customerService.add(customerAddDTO);
     }
 
     public CustomerDTO getById(Integer id) {
-        return null;
+        return customerService.getById(id);
     }
 
     public List<CustomerDTO> getList(String mobile, String name, Paging paging) {
-        return null;
+        return customerService.getList(mobile, name, paging);
     }
 
-    public void update(CustomerDTO customerDTO) {
+    public void update(CustomerUpdateDTO customerUpdateDTO) {
+        customerService.update(customerUpdateDTO);
     }
 
     public void delete(Integer id) {
+        customerService.delete(id);
     }
 }

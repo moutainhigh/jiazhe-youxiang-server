@@ -5,8 +5,10 @@
  */
 package com.jiazhe.youxiang.server.adapter;
 
+import com.jiazhe.youxiang.server.domain.po.CustomerPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.customer.CustomerUpdateDTO;
 import com.jiazhe.youxiang.server.vo.req.customer.CustomerAddReq;
 import com.jiazhe.youxiang.server.vo.req.customer.CustomerUpdateReq;
 import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
@@ -42,14 +44,49 @@ public class CustomerAdapter {
         return customerResp;
     }
 
-    public static CustomerDTO customerUpdateReq2DTO(CustomerUpdateReq req) {
+    public static CustomerUpdateDTO customerUpdateReq2DTO(CustomerUpdateReq req) {
         if (req == null) {
             return null;
         }
+        CustomerUpdateDTO customerUpdateDTO = new CustomerUpdateDTO();
+        customerUpdateDTO.setName(req.getName());
+        customerUpdateDTO.setRemark(req.getRemark());
+        customerUpdateDTO.setId(req.getId());
+        return customerUpdateDTO;
+    }
+
+    public static CustomerPO customerAddDTO2PO(CustomerAddDTO customerAddDTO) {
+        if (customerAddDTO == null) {
+            return null;
+        }
+        CustomerPO customerPO = new CustomerPO();
+        customerPO.setMobile(customerAddDTO.getMobile());
+        customerPO.setName(customerAddDTO.getName());
+        customerPO.setRemark(customerAddDTO.getRemark());
+        return customerPO;
+    }
+
+    public static CustomerDTO customerPO2DTO(CustomerPO customerPO) {
+        if (customerPO == null) {
+            return null;
+        }
         CustomerDTO customerDTO = new CustomerDTO();
-        customerDTO.setName(req.getName());
-        customerDTO.setRemark(req.getRemark());
-        customerDTO.setId(req.getId());
+        customerDTO.setId(customerPO.getId());
+        customerDTO.setMobile(customerPO.getMobile());
+        customerDTO.setName(customerPO.getName());
+        customerDTO.setRemark(customerPO.getRemark());
+        customerDTO.setDefaultAddressId(customerPO.getDefaultAddressId());
         return customerDTO;
+    }
+
+    public static CustomerPO customerUpdateDTO2PO(CustomerUpdateDTO customerUpdateDTO) {
+        if (customerUpdateDTO == null) {
+            return null;
+        }
+        CustomerPO customerPO = new CustomerPO();
+        customerPO.setId(customerUpdateDTO.getId());
+        customerPO.setName(customerUpdateDTO.getName());
+        customerPO.setRemark(customerUpdateDTO.getRemark());
+        return customerPO;
     }
 }

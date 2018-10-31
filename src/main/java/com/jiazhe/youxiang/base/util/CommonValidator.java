@@ -15,6 +15,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.util.Strings;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 通用参数验证器
@@ -110,6 +112,19 @@ public class CommonValidator {
                 throw exception;
             } else {
                 throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "参数不能为空");
+            }
+        }
+    }
+
+    public static void validateMobile(String mobile, CommonException exception) {
+        String PHONE_NUMBER_REG = "^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\d{8}$";
+        Pattern p = Pattern.compile(PHONE_NUMBER_REG);
+        Matcher m = p.matcher(mobile);
+        if (!m.matches()) {
+            if (exception != null) {
+                throw exception;
+            } else {
+                throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "手机号为空或格式错误");
             }
         }
     }

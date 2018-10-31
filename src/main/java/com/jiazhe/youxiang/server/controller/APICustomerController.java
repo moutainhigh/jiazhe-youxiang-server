@@ -8,15 +8,17 @@ package com.jiazhe.youxiang.server.controller;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
+import com.jiazhe.youxiang.server.common.enums.CustomerCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.CustomerException;
 import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.customer.CustomerUpdateDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.customer.CustomerAddReq;
 import com.jiazhe.youxiang.server.vo.req.customer.CustomerListReq;
 import com.jiazhe.youxiang.server.vo.req.customer.CustomerUpdateReq;
-import com.jiazhe.youxiang.server.vo.resp.customer.CustomerDetailResp;
 import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -53,7 +55,9 @@ public class APICustomerController {
     @ApiOperation(value = "添加用户", httpMethod = "POST", notes = "添加用户")
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public Object add(@ModelAttribute CustomerAddReq req) {
-        //TODO niexiao 参数验证
+        CommonValidator.validateNull(req);
+        CommonValidator.validateMobile(req.getMobile(), new CustomerException(CustomerCodeEnum.CUSTOMER_MOBILE_ERROR));
+        CommonValidator.validateNull(req.getName(), new CustomerException(CustomerCodeEnum.CUSTOMER_NAME_IS_NULL));
         CustomerAddDTO customerAddDTO = CustomerAdapter.customerAddReq2DTO(req);
         //调用BIZ方法
         customerBiz.add(customerAddDTO);
@@ -76,22 +80,6 @@ public class APICustomerController {
         return ResponseFactory.buildResponse(CustomerAdapter.customerDTO2VO(customerDTO));
     }
 
-//
-//    /**
-//     * 查询用户充值卡信息
-//     *
-//     * @return
-//     */
-//    @ApiOperation(value = "查询某一用户信息", httpMethod = "GET", response = CustomerDetailResp.class, notes = "查询某一用户信息")
-//    @RequestMapping(value = "getrechargecardbycustomerid", method = RequestMethod.GET)
-//    public Object getRechargeCardByCustomerId(@ModelAttribute IdReq req) {
-//        CommonValidator.validateId(req);
-//        //调用BIZ方法
-//        CustomerDTO customerDTO = customerBiz.getById(req.getId());
-//        //用ResponseFactory将返回值包装
-//        return ResponseFactory.buildResponse(CustomerAdapter.customerDTO2VO(customerDTO));
-//    }
-
     /**
      * 查询客户列表
      *
@@ -100,7 +88,7 @@ public class APICustomerController {
     @ApiOperation(value = "查询客户列表", httpMethod = "GET", response = CustomerResp.class, responseContainer = "List", notes = "查询客户列表")
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
     public Object getList(@ModelAttribute CustomerListReq req) {
-        //TODO niexiao 参数验证
+        CommonValidator.validatePaging(req);
         Paging paging = new Paging();
         paging.setOffset(req.getOffset());
         paging.setLimit(req.getLimit());
@@ -120,11 +108,12 @@ public class APICustomerController {
     @ApiOperation(value = "编辑客户信息", httpMethod = "POST", notes = "编辑客户信息")
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public Object update(@ModelAttribute CustomerUpdateReq req) {
-        //TODO niexiao 参数验证
+        CommonValidator.validateNull(req);
         CommonValidator.validateId(req);
-        CustomerDTO customerDTO = CustomerAdapter.customerUpdateReq2DTO(req);
+        CommonValidator.validateNull(req.getName(), new CustomerException(CustomerCodeEnum.CUSTOMER_NAME_IS_NULL));
+        CustomerUpdateDTO customerUpdateDTO = CustomerAdapter.customerUpdateReq2DTO(req);
         //调用BIZ方法
-        customerBiz.update(customerDTO);
+        customerBiz.update(customerUpdateDTO);
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -143,8 +132,6 @@ public class APICustomerController {
         customerBiz.delete(req.getId());
         return ResponseFactory.buildSuccess();
     }
-
-
 
 
 }

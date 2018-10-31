@@ -25,7 +25,6 @@ public enum ProductCodeEnum {
     PRODUCT_PRICE_CITY_NOT_FOUND(110306, "PRODUCT_PRICE_CITY_NOT_FOUND", "城市信息有误"),
     PRODUCT_PRICE_BATCH_ADD_ERROR(110307, "PRODUCT_PRICE_BATCH_ADD_ERROR", "批量添加商品价格错误");
 
-
     ProductCodeEnum(Integer code, String type, String message) {
         this.code = code;
         this.type = type;
