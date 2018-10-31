@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.server.service.impl.product;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.common.enums.ProductCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.ProductException;
@@ -13,7 +14,6 @@ import com.jiazhe.youxiang.server.dao.mapper.ProductPricePOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.product.ProductPricePOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.ProductPricePO;
 import com.jiazhe.youxiang.server.domain.po.ProductPricePOExample;
-import com.jiazhe.youxiang.server.domain.po.SysCityPO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
 import com.jiazhe.youxiang.server.service.SysCityService;
@@ -110,5 +110,28 @@ public class ProductPriceServiceImpl implements ProductPriceService {
     @Override
     public void batchUpdatePrice(Integer productId, List<String> cityCodes, BigDecimal price) {
         productPricePOManualMapper.batchUpdate(productId, cityCodes, price);
+    }
+
+    @Override
+    public Map<Integer, List<ProductPriceDTO>> getPriceMap(List<Integer> productIds, List<String> cityCodes, Integer status) {
+        Map<Integer, List<ProductPriceDTO>> result = Maps.newHashMap();
+        if (CollectionUtils.isNotEmpty(productIds) && CollectionUtils.isNotEmpty(cityCodes)) {
+            ProductPricePOExample productPricePOExample = new ProductPricePOExample();
+            ProductPricePOExample.Criteria criteria = productPricePOExample.createCriteria();
+            criteria.andProductIdIn(productIds);
+            criteria.andCityCodeIn(cityCodes);
+            if (status != null) {
+                criteria.andStatusEqualTo(status.byteValue());
+            }
+            List<ProductPricePO> productPricePOList = productPricePOMapper.selectByExample(productPricePOExample);
+
+            productPricePOList.stream().forEach(item -> {
+                if (!result.keySet().contains(item.getProductId())) {
+                    result.put(item.getProductId(), Lists.newArrayList());
+                }
+                result.get(item.getProductId()).add(ProductAdapter.productPricePO2DTO(item));
+            });
+        }
+        return result;
     }
 }

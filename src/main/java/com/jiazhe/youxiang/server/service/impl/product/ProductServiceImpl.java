@@ -7,6 +7,7 @@ package com.jiazhe.youxiang.server.service.impl.product;
 
 import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.server.adapter.ProductAdapter;
+import com.jiazhe.youxiang.server.biz.ProductBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.dao.mapper.ProductPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.product.ProductPOManualMapper;
@@ -21,11 +22,13 @@ import com.jiazhe.youxiang.server.service.product.ProductPriceService;
 import com.jiazhe.youxiang.server.service.product.ProductService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -67,8 +70,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> getList(Integer productCategoryId, String name, Integer productType, List<String> cityCodes, Integer status, Paging paging) {
+    public List<ProductDTO> getList(Integer productCategoryId, String name, Integer productType, List<String> cityCodes, Integer status, Paging paging, boolean detail) {
         List<Integer> productIds = Lists.newArrayList();
+        //如果有cityCodes传入则只返回在该城市有价格信息的商品
         if (CollectionUtils.isNotEmpty(cityCodes)) {
             // 获取城市列表中有价格的商品ID集合
             productIds = productPriceService.getProductIdsByCityCodes(cityCodes);
@@ -76,7 +80,42 @@ public class ProductServiceImpl implements ProductService {
         Integer count = productPOManualMapper.count(productCategoryId, name, productType, status, productIds);
         List<ProductPO> productPOList = productPOManualMapper.query(productCategoryId, name, productType, status, productIds, paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
-        return productPOList.stream().map(ProductAdapter::productPO2DTO).collect(Collectors.toList());
+        List<ProductDTO> productDTOList = productPOList.stream().map(ProductAdapter::productPO2DTO).collect(Collectors.toList());
+        //判断是否需要拼装详细信息
+        if (detail) {
+            ProductCategoryDTO productCategory = productCategoryService.getCategoryById(productCategoryId);
+            //获取商品的价格map，不限制价格生效状态
+            Map<Integer, List<ProductPriceDTO>> productPriceMap = productPriceService.getPriceMap(productIds, cityCodes, null);
+            productDTOList.forEach(item -> {
+                item.setProductCategory(productCategory);
+                item.setProductPriceList(productPriceMap.get(item.getId()));
+            });
+        }
+        return productDTOList;
+    }
+
+    @Override
+    public List<ProductDTO> getListForCustomer(Integer productCategoryId, String name, Integer productType, String cityCode, Paging paging) {
+        List<ProductDTO> result = Lists.newArrayList();
+        ProductCategoryDTO productCategory = productCategoryService.getCategoryById(productCategoryId);
+        //首先判断商品分类是否上架
+        if (productCategory != null && productCategory.getStatus().equals(ProductBiz.CODE_PRODUCT_SELL.byteValue())) {
+            Integer count = productPOManualMapper.count(productCategoryId, name, productType, ProductBiz.CODE_PRODUCT_SELL, null);
+            List<ProductPO> productPOList = productPOManualMapper.query(productCategoryId, name, productType, ProductBiz.CODE_PRODUCT_SELL, null, paging.getOffset(), paging.getLimit());
+            paging.setTotal(count);
+            if (CollectionUtils.isNotEmpty(productPOList)) {
+                //获得该城市所有的在售商品的价格列表
+                Map<Integer, List<ProductPriceDTO>> productPriceMap = productPriceService.getPriceMap(productPOList.stream().map(item -> item.getId()).collect(Collectors.toList()), Lists.newArrayList(cityCode), ProductBiz.CODE_PRODUCT_SELL);
+                if (MapUtils.isNotEmpty(productPriceMap)) {
+                    result = productPOList.stream().map(ProductAdapter::productPO2DTO).collect(Collectors.toList());
+                    result.forEach(item -> {
+                        item.setProductCategory(productCategory);
+                        item.setProductPriceList(productPriceMap.get(item.getId()));
+                    });
+                }
+            }
+        }
+        return result;
     }
 
     @Override

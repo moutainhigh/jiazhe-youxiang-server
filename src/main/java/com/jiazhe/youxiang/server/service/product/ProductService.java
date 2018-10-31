@@ -10,6 +10,7 @@ import com.jiazhe.youxiang.server.dto.product.ProductDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductUpdateDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,11 +24,24 @@ public interface ProductService {
 
     ProductDTO getById(Integer id);
 
-    List<ProductDTO> getList(Integer productCategoryId, String name, Integer productType, List<String> cityIds, Integer status, Paging paging);
+    List<ProductDTO> getList(Integer productCategoryId, String name, Integer productType, List<String> cityCodes, Integer status, Paging paging, boolean detail);
+
+    /**
+     * 查询可售卖的商品（客户可见）
+     * @param productCategoryId 商品分类id
+     * @param name 商品名称（可选）
+     * @param productType 商品类型
+     * @param cityCode 客户所在城市code
+     * @param paging
+     * @return
+     */
+    List<ProductDTO> getListForCustomer(Integer productCategoryId, String name, Integer productType, String cityCode, Paging paging);
 
     void update(ProductUpdateDTO productUpdateDTO);
 
     void delete(Integer id);
 
     void updateStatus(Integer id, Integer status);
+
+
 }

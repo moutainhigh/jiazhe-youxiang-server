@@ -25,6 +25,7 @@ import com.jiazhe.youxiang.server.vo.req.product.ProductAddReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryAddReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryListReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryUpdateReq;
+import com.jiazhe.youxiang.server.vo.req.product.ProductListForCustomerReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductListReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductPriceBatchAddReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductPriceBatchUpdateReq;
@@ -213,6 +214,29 @@ public class APIProductController {
         paging.setLimit(req.getLimit());
         //调用BIZ方法
         List<ProductDTO> productDTOList = productBiz.getList(req.getProductCategoryId(), req.getName(), req.getProductType(), req.getCityCodes(), req.getStatus(), paging);
+        //将DTO转成VO
+        List<ProductResp> result = productDTOList.stream().map(ProductAdapter::productDTO2VO).collect(Collectors.toList());
+        //用ResponseFactory将返回值包装
+        return ResponseFactory.buildPaginationResponse(result, paging);
+    }
+
+    /**
+     * 获得商品列表（前端客户专用）
+     *
+     * @return
+     */
+    @ApiOperation(value = "获得商品列表（前端客户专用）", httpMethod = "GET", response = ProductResp.class, responseContainer = "List", notes = "获得商品列表（前端客户专用）")
+    @RequestMapping(value = "getlistforcustomer", method = RequestMethod.GET)
+    public Object getListForCustomer(@ModelAttribute ProductListForCustomerReq req) {
+        CommonValidator.validatePaging(req);
+        CommonValidator.validateId(req.getProductCategoryId(), new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_ID_IS_NULL));
+        CommonValidator.validateNull(req.getCityCode(), new ProductException(ProductCodeEnum.PRODUCT_CITY_CODE_IS_NULL));
+        validateProductType(req.getProductType());
+        Paging paging = new Paging();
+        paging.setOffset(req.getOffset());
+        paging.setLimit(req.getLimit());
+        //调用BIZ方法
+        List<ProductDTO> productDTOList = productBiz.getListForCustomer(req.getProductCategoryId(), req.getName(), req.getProductType(), req.getCityCode(), paging);
         //将DTO转成VO
         List<ProductResp> result = productDTOList.stream().map(ProductAdapter::productDTO2VO).collect(Collectors.toList());
         //用ResponseFactory将返回值包装
