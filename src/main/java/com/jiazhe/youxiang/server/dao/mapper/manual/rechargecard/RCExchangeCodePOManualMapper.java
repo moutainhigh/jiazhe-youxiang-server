@@ -25,4 +25,28 @@ public interface RCExchangeCodePOManualMapper {
      * @return
      */
     int batchChangeStatus(@Param("batchId") Integer batchId, @Param("status")Byte status);
+
+    /**
+     * 根据批次id 和查询条件查询统计兑换码个数
+     * @param batchId
+     * @param code
+     * @param keyt
+     * @param status
+     * @param used
+     * @return
+     */
+    Integer count(@Param("batchId")Integer batchId, @Param("code")String code, @Param("keyt")String keyt, @Param("status")Byte status, @Param("used")Byte used);
+
+    /**
+     * 根据批次id 和查询条件分页查询兑换码
+     * @param batchId
+     * @param code
+     * @param keyt
+     * @param status
+     * @param used
+     * @param offset
+     * @param limit
+     * @return
+     */
+    List<RechargeCardExchangeCodePO> query(@Param("batchId")Integer batchId, @Param("code")String code, @Param("keyt")String keyt, @Param("status")Byte status, @Param("used")Byte used, @Param("offset")Integer offset, @Param("limit")Integer limit);
 }

@@ -39,32 +39,51 @@
                         <a th:href="@{/main/main_center}">主页</a>
                     </li>
                     <li>
-                        <a href="#">充值卡</a>
+                        <a  th:href="@{/rechargecard/exchangecodebatchindex}">充值卡兑换码批次管理</a>
                     </li>
-                    <li class="active">充值卡兑换码管理</li>
+                    <li class="active" th:text="${batchName}"></li>
                 </ul><!-- /.breadcrumb -->
             </div>
 
             <div class="page-content">
                 <div class="row">
                     <div class="col-xs-12" style="padding-top:40px">
-                        <form id="userSearchForm" class="form-horizontal" role="form">
+                        <form id="rcExchangeCodeSearchForm" class="form-horizontal" role="form">
+                            <input type="hidden" th:value="${batchId}" id="searchBatchId" name="batchId"/>
                             <div class="form-group">
-                                <label class="col-sm-1 control-label no-padding-right">登录名：</label>
+                                <div class="col-sm-4">
+                                    <label class="col-sm-3 control-label no-padding-right">状态：</label>
+                                    <div class="col-sm-3">
+                                        <select id="searchStatus" name="status" class="selectpicker show-tick form-control">
+                                            <option value="">所有</option>
+                                            <option value=1>启用</option>
+                                            <option value=0>停用</option>
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-3 control-label no-padding-right">使用状态：</label>
+                                    <div class="col-sm-3">
+                                        <select id="searchUsed" name="used" class="selectpicker show-tick form-control">
+                                            <option value="">所有</option>
+                                            <option value=1>已使用</option>
+                                            <option value=0>未使用</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">兑换码：</label>
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
-                                        <input id="loginName" name="loginName" class="form-control" type="text"
+                                        <input id="searchCode" name="code" class="form-control" type="text"
                                                style="height:30px"/>
                                     </div>
                                 </div>
-                                <label class="col-sm-1 control-label no-padding-right">用户姓名：</label>
+                                <label class="col-sm-1 control-label no-padding-right">密钥：</label>
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
-                                        <input id="displayName" name="displayName" class="form-control" type="text"
+                                        <input id="searchKeyt" name="keyt" class="form-control" type="text"
                                                style="height:30px"/>
                                     </div>
                                 </div>
-                                <div class="col-sm-3">
+                                <div class="col-sm-1">
                                     <button class="btn btn-white btn-default btn-round btn-sm"
                                             onclick="return search()">
                                         <i class="ace-icon fa fa-search red2"></i>
@@ -74,103 +93,18 @@
                             </div>
                         </form>
                     </div><!-- /.col -->
+
                     <div class="col-xs-12" style="text-align: right" id="buttonDiv">
-                        <p style="margin:1px;">
-                            <!--<shiro:hasPermission name="sysrole:add">-->
-                            <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
-                               data-toggle="modal" onclick="openNew()">
-                                <i class="ace-icon fa fa-plus"></i>新建
-                            </a>
-                            <!--</shiro:hasPermission>-->
+                        <p style="margin:1px;height: 31px">
+
                         </p>
                     </div><!-- /.col -->
+
                     <div class="col-xs-12">
                         <table id="grid-table"></table>
 
                         <div id="grid-pager"></div>
                     </div><!-- /.col -->
-                    <div id="modal-form" class="modal fade" tabindex="-1">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="blue bigger" id="modal-title"></h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-1"></div>
-                                        <div class="col-xs-12 col-sm-9">
-                                            <form id="userSaveForm" class="form-horizontal" role="form">
-                                                <input type="hidden" name="id" id="userId" value="0">
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">登录名：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="saveLoginName" name="saveLoginName" class="form-control"
-                                                                   type="text" style="height:30px"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">姓名：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="saveDisplayName" name="saveDisplayName" class="form-control"
-                                                                   type="text" style="height:30px"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">电话：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="saveMobile" name="mobile"
-                                                                   class="form-control" type="text"
-                                                                   style="height:30px"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">密码：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="savePassword" name="password"
-                                                                   class="form-control" type="text"
-                                                                   style="height:30px"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">角色：</label>
-                                                    <div class="col-sm-8">
-                                                        <select id="saveRoleIds" class="selectpicker show-tick form-control" multiple data-live-search="false">
-
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="modal-footer">
-                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
-                                        <i class="ace-icon fa fa-times"></i>
-                                        取消
-                                    </button>
-
-                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="save()">
-                                        <i class="ace-icon fa fa-check"></i>
-                                        保存
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div><!-- /.row -->
             </div><!-- /.page-content -->
         </div>
@@ -198,275 +132,121 @@
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
-        //将角色列表填入到select中
-        $.ajax({
-            url: "../api/sysrole/listall",    //请求的url地址
-            dataType: "json",
-            async: true,
-            type: "GET",
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    var result = data.data;
-                    for(var i=0;i<result.length;i++){
-                        $("#saveRoleIds").append("<option value='"+result[i].id+"'>"+result[i].name+"</option>");
+    });
+
+        var grid_selector = "#grid-table";
+        var pager_selector = "#grid-pager";
+        jQuery(grid_selector).jqGrid({
+            subGrid: false, // 此处设置为true时可以打开子项,子项用不到已删除
+            url: "../api/rcexchangecode/listpage",// 获取数据的地址
+            postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
+            rownumbers: true,
+            datatype: "json",
+            mtype: "GET",
+            hidegrid: false,//收缩列表按钮
+            prmNames: {
+                page: "pageNum",
+                rows: "pageSize"
+            },// 重新定义分页信息
+            width: "100%",
+            autowidth: true,
+            height: 350,
+            colNames: ['','批次名称', '兑换码', '密钥', '停用状态', '使用状态', '面额',  '过期时间', '操作'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'batchName', index: 'batchName', width: 100, sortable: false},
+                {name: 'code', index: 'code', width: 80, sortable: false},
+                {name: 'keyt', index: 'keyt', width: 80, sortable: false},
+                {
+                    name: 'status',
+                    index: 'status',
+                    width: 30,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return rowObject.status == 1 ? "启用" : "停用";
                     }
-                }
-            },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
-        });
-    });
-
-    var grid_selector = "#grid-table";
-    var pager_selector = "#grid-pager";
-    jQuery(grid_selector).jqGrid({
-        subGrid: false, // 此处设置为true时可以打开子项,子项用不到已删除
-        url: "../api/sysuser/listpage",// 获取数据的地址
-        postData: transformToJson($('#userSearchForm').serializeArray()),
-        rownumbers: true,
-        datatype: "json",
-        mtype: "GET",
-        hidegrid: false,//收缩列表按钮
-        prmNames: {
-            page: "pageNum",
-            rows: "pageSize"
-        },// 重新定义分页信息
-        width: "100%",
-        autowidth: true,
-        height: 350,
-        colNames: ['', '登录名','员工姓名', '电话', '最后登录时间', '操作'],
-        colModel: [
-            {name: 'id', index: 'id', sortable: false, hidden: true},
-            {name: 'loginName', index: 'loginName', sortable: false},
-            {name: 'displayName', index: 'displayName', sortable: false},
-            {name: 'mobile', index: 'mobile', sortable: false},
-            {name: 'lastLoginTime', index: 'lastLoginTime', sortable: false,formatter:timeFormatter},
-            {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
-        ],
-        rowNum: 10,
-        rowList: [10, 20, 30],
-        pager: pager_selector,
-        altRows: true,
-        viewrecords: true,
-        emptyrecords: "0条数据",
-        loadComplete: function (data) {
-            data.currPage = data.paging.offset / data.paging.limit;
-            data.totalPage = data.paging.total / data.paging.limit;
-            data.totalCount = data.paging.total;
-            var table = this;
-            setTimeout(function () {
-                $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
-                updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
-            }, 0);
-        },
-        jsonReader: { // jsonReader来跟服务器端返回的数据做对应
-            root: "data", // 包含实际数据的数组
-            page: "currPage", // 当前页
-            total: "totalPage",// 总页数
-            records: "totalCount", // 查询出的记录数
-            repeatitems: false
-        },
-        caption: "员工列表"
-    });
-    $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
-
-    //replace icons with FontAwesome icons like above
-    function updatePagerIcons(table) {
-        var replacement =
-            {
-                'ui-icon-seek-first': 'ace-icon fa fa-angle-double-left bigger-140',
-                'ui-icon-seek-prev': 'ace-icon fa fa-angle-left bigger-140',
-                'ui-icon-seek-next': 'ace-icon fa fa-angle-right bigger-140',
-                'ui-icon-seek-end': 'ace-icon fa fa-angle-double-right bigger-140'
-            };
-        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
-            var icon = $(this);
-            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
-            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
-        })
-    }
-
-    function search() {
-        jQuery(grid_selector).setGridParam({
-            url: "../api/sysuser/listpage",// 获取数据的地址
-            postData: transformToJson($('#userSearchForm').serializeArray()),
-        }).trigger("reloadGrid", [{page: 1}]);
-        return false;
-    }
-
-    function deleteOne(id) {
-        bootbox.confirm({
-            buttons: {
-                confirm: {
-                    label: '确认',
-                    className: 'btn-myStyle'
                 },
-                cancel: {
-                    label: '取消',
-                    className: 'btn-default'
-                }
+                {
+                    name: 'used',
+                    index: 'used',
+                    width: 30,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return rowObject.used == 1 ? "已使用" : "未使用";
+                    }
+                },
+                {name: 'faceValue', index: 'faceValue', width: 30, sortable: false},
+                {name: 'expiryTime', index: 'expiryTime', width: 50, sortable: false,formatter: dateFormatter},
+                {name: '_action', index: '_action', width:100,sortable: false, formatter: customFormatter}
+            ],
+            rowNum: 10,
+            rowList: [10, 20, 30],
+            pager: pager_selector,
+            altRows: true,
+            viewrecords: true,
+            emptyrecords: "0条数据",
+            loadComplete: function (data) {
+                data.currPage = data.paging.offset / data.paging.limit;
+                data.totalPage = data.paging.total / data.paging.limit;
+                data.totalCount = data.paging.total;
+                var table = this;
+                setTimeout(function () {
+                    $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
+                    updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
+                }, 0);
             },
-            title: "提示信息",
-            message: '确定要删除该员工吗？',
-            callback: function (result) {
-                if (result) {
-                    $.ajax({
-                        url: "../api/sysuser/delete",    //请求的url地址
-                        dataType: "json",
-                        async: false,
-                        data: {
-                            id: id
-                        },
-                        type: "POST",
-                        success: function (data) {
-                            if ('error' in data) {
-                                bootboxalert(data.error.message);
-                            } else {
-                                jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                            }
-                        },
-                        error: function () {
-                            bootboxalert("服务器异常，请联系管理员");
-                        }
-                    });
-                }
+            jsonReader: { // jsonReader来跟服务器端返回的数据做对应
+                root: "data", // 包含实际数据的数组
+                page: "currPage", // 当前页
+                total: "totalPage",// 总页数
+                records: "totalCount", // 查询出的记录数
+                repeatitems: false
             },
+            caption: "充值卡兑换码列表"
         });
-    }
+        $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
 
-    function customFormatter(cellvalue, options, rowObject) {
-        var str = "";
-        str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:deleteOne('" + rowObject.id + "')\">" +
-            "<i class='ace-icon fa fa-trash'></i>" +
-            "</a>&nbsp;&nbsp;";
-        str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
-            "<i class='ace-icon fa fa-pencil'></i>" +
-            "</a>&nbsp;&nbsp;";
-        str = str + "<a class='btn btn-minier btn-success' href=\"javascript:openShow('" + rowObject.id + "')\">" +
-            "<i class='ace-icon fa fa-eye'></i>" +
-            "</a>";
-        return str;
-    }
+        //replace icons with FontAwesome icons like above
+        function updatePagerIcons(table) {
+            var replacement =
+                {
+                    'ui-icon-seek-first': 'ace-icon fa fa-angle-double-left bigger-140',
+                    'ui-icon-seek-prev': 'ace-icon fa fa-angle-left bigger-140',
+                    'ui-icon-seek-next': 'ace-icon fa fa-angle-right bigger-140',
+                    'ui-icon-seek-end': 'ace-icon fa fa-angle-double-right bigger-140'
+                };
+            $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+                var icon = $(this);
+                var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+                if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+            })
+        }
 
-    function timeFormatter(cellvalue, options, rowObject) {
-        return timeFormat(rowObject.lastLoginTime);
-    }
+        function search() {
+            jQuery(grid_selector).setGridParam({
+                url: "../api/rcexchangecode/listpage",// 获取数据的地址
+                postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
+            }).trigger("reloadGrid", [{page: 1}]);
+            return false;
+        }
 
-    function openNew() {
-        $("#modal-title").html("员工信息-添加");
-        $("#userId").val(0);
-        $("#userSaveForm #saveLoginName").val("");
-        $("#userSaveForm #saveDisplayName").val("");
-        $("#userSaveForm #savePriority").val("");
-        $("#userSaveForm #saveMobile").val("");
-        $("#userSaveForm #savePassword").val("");
-        roleShow('');
-        $(".modal-footer-btn").show();
-        $('input,select', $('#userSaveForm')).removeAttr('disabled');
-    }
+        function customFormatter(cellvalue, options, rowObject) {
+            var str = "";
+            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:deleteOne('" + rowObject.id + "')\">" +
+                "<i class='ace-icon fa fa-trash'></i>" +
+                "</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
+                "<i class='ace-icon fa fa-pencil'></i>" +
+                "</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:openShow('" + rowObject.id + "')\">" +
+                "<i class='ace-icon fa fa-eye'></i>" +
+                "</a>";
+            return str;
+        }
 
-    function openEdit(id) {
-        $("#modal-title").html("员工信息-修改");
-        $(".modal-footer-btn").show();
-        $('input,select', $('#userSaveForm')).removeAttr('disabled');
-        $('#savePassword').attr('disabled', 'disabled');
-        $('#saveLoginName').attr('disabled', 'disabled');
-        huixian(id);
-    }
-
-    function openShow(id) {
-        $("#modal-title").html("员工信息-查看");
-        $(".modal-footer-btn").hide();
-        $('input,select', $('#userSaveForm')).attr('disabled', 'disabled');
-        huixian(id);
-    }
-
-    function submitRoles(){
-        var roleIds = [] ;
-        $("#saveRoleIds option:selected").each(function(){
-           roleIds.push($(this).val());
-        });
-        return roleIds.join(",")
-    }
-
-    function roleShow(ids){
-        var roleIds = ids.split(",");
-        var has ;
-        $("#saveRoleIds option").each(function(){
-            has = false;
-            for(var i=0;i<roleIds.length;i++) {
-                if (roleIds[i] == $(this).val()) {
-                    has = true;
-                    break;
-                }
-            }
-            if(has){
-                $(this).prop('selected', true);
-            }else{
-                $(this).prop('selected', false);
-            }
-        });
-    }
-
-    function save() {
-        var roleIds = submitRoles();
-        $.ajax({
-            url: "../api/sysuser/save",
-            dataType: "json",
-            async: false,
-            data: {
-                id: $("#userId").val(),
-                displayName: $("#saveDisplayName").val(),
-                loginName: $("#saveLoginName").val(),
-                mobile: $("#saveMobile").val(),
-                password:$("#savePassword").val(),
-                roleIds: roleIds
-            },
-            type: "POST",
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    $("#modal-form").modal('hide');
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                }
-            },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
-        });
-    }
-
-    function huixian(id) {
-        $.ajax({
-            url: "../api/sysuser/getbyid",    //请求的url地址
-            dataType: "json",
-            async: false,
-            data: {
-                id: id
-            },
-            type: "GET",
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    var result = data.data;
-                    $("#userId").val(result.id);
-                    $("#saveMobile").val(result.mobile);
-                    $("#saveLoginName").val(result.loginName);
-                    $("#saveDisplayName").val(result.displayName);
-                    roleShow(result.roleIds);
-                    $("#modal-form").modal('show');
-                }
-            },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
-        });
-    }
+        function dateFormatter(cellvalue, options, rowObject) {
+            return dateFormat(rowObject.expiryTime);
+        }
 
 </script>
 </html>

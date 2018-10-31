@@ -438,6 +438,7 @@
             url: "../api/rcexchangecodebatch/listpage",// 获取数据的地址
             postData: transformToJson($('#batchSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
+        return false;
     }
 
 
@@ -458,6 +459,9 @@
         if (rowObject.isVirtual == 0) {
             str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:generateCode('" + rowObject.id + "')\">" +
                 "<i class='ace-icon'>生成兑换码</i>" +
+                "</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-primary' href=\"../rechargecard/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name +"\">" +
+                "<i class='ace-icon'>兑换码管理</i>" +
                 "</a>&nbsp;&nbsp;";
         }
         return str;

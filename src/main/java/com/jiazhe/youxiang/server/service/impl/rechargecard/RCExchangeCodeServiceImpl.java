@@ -13,6 +13,7 @@ import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchang
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeRecordService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCService;
+import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -156,6 +157,17 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
             rcService.batchChangeStatus(usedIds,status);
         }
         return 0;
+    }
+
+    @Override
+    public List<RCExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Byte status, Byte used,Paging paging) {
+        Integer count = rcExchangeCodePOManualMapper.count(batchId, code,keyt,status,used);
+        List<RechargeCardExchangeCodePO> rechargeCardExchangeCodePOList = rcExchangeCodePOManualMapper.query(batchId, code,keyt,status,used, paging.getOffset(), paging.getLimit());
+        paging.setTotal(count);
+        if (paging.getLimit() + paging.getOffset() >= count) {
+            paging.setHasMore(false);
+        }
+        return rechargeCardExchangeCodePOList.stream().map(RCExchangeCodeAdapter::PO2DTO).collect(Collectors.toList());
     }
 
     @Override
