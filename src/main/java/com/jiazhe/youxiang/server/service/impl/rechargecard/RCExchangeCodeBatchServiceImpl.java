@@ -5,6 +5,8 @@ import com.jiazhe.youxiang.base.util.GenerateCode;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeBatchAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.dao.mapper.RechargeCardExchangeCodeBatchPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCExchangeCodeBatchPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO;
@@ -67,6 +69,9 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
     @Override
     public RCExchangeCodeBatchEditDTO getById(Integer id) {
         RechargeCardExchangeCodeBatchPO rechargeCardExchangeCodeBatchPO = rechargeCardExchangeCodeBatchPOMapper.selectByPrimaryKey(id);
+        if(null == rechargeCardExchangeCodeBatchPO){
+            throw new RechargeCardException(RechargeCardCodeEnum.BATCH_NOT_EXISTED);
+        }
         RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = RCExchangeCodeAdapter.PO2DTOEdit(rechargeCardExchangeCodeBatchPO);
         return rcExchangeCodeBatchEditDTO;
     }
@@ -74,6 +79,9 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
     @Override
     public void editSave(RCExchangeCodeBatchSaveDTO batchSaveDTO) {
         RechargeCardExchangeCodeBatchPO batchPO = rechargeCardExchangeCodeBatchPOMapper.selectByPrimaryKey(batchSaveDTO.getId());
+        if(null == batchPO){
+            throw new RechargeCardException(RechargeCardCodeEnum.BATCH_NOT_EXISTED);
+        }
         //批次肯定要修改的信息
         batchPO.setName(batchSaveDTO.getName());
         batchPO.setRechargeCardName(batchSaveDTO.getRechargeCardName());
@@ -104,7 +112,9 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
     @Override
     public void changeBatchStatus(Integer id, Byte status) {
         RechargeCardExchangeCodeBatchPO batchPO = rechargeCardExchangeCodeBatchPOMapper.selectByPrimaryKey(id);
-
+        if(null == batchPO){
+            throw new RechargeCardException(RechargeCardCodeEnum.BATCH_NOT_EXISTED);
+        }
         batchPO.setStatus(status);
         batchPO.setModTime(new Date());
         rechargeCardExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
@@ -122,10 +132,12 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
     @Override
     public void generateCode(Integer id) {
         RechargeCardExchangeCodeBatchPO batchPO = rechargeCardExchangeCodeBatchPOMapper.selectByPrimaryKey(id);
+        if(null == batchPO){
+            throw new RechargeCardException(RechargeCardCodeEnum.BATCH_NOT_EXISTED);
+        }
         List<RCExchangeCodeSaveDTO> rcExchangeCodeSaveDTOS = Lists.newArrayList();
         Integer amount = batchPO.getAmount();
         String[][] codeAndKeyts = GenerateCode.generateCode(CommonConstant.RC_EXCHANGE_CODE_PREFIX, amount);
-
         for (int i = 0; i < amount; i++) {
             RCExchangeCodeSaveDTO rcExchangeCodeSaveDTO = new RCExchangeCodeSaveDTO();
             rcExchangeCodeSaveDTO.setBatchId(batchPO.getId());

@@ -5,6 +5,8 @@ import com.jiazhe.youxiang.base.util.RandomUtil;
 import com.jiazhe.youxiang.server.adapter.SysRoleAdapter;
 import com.jiazhe.youxiang.server.adapter.SysUserAdapter;
 import com.jiazhe.youxiang.server.adapter.SysUserRoleAdapter;
+import com.jiazhe.youxiang.server.common.enums.UserCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.UserException;
 import com.jiazhe.youxiang.server.dao.mapper.SysUserPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.SysUserPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.*;
@@ -64,21 +66,25 @@ public class SysUserServiceImpl implements SysUserService{
 
     @Override
     public void deleteUserWithRole(Integer userId) {
+        SysUserPO sysUserPO = sysUserPOMapper.selectByPrimaryKey(userId);
+        if(null == sysUserPO){
+            throw new UserException(UserCodeEnum.USER_NOT_EXISTED);
+        }
+        sysUserPO.setIsDeleted(Byte.valueOf("1"));
+        sysUserPOMapper.updateByPrimaryKeySelective(sysUserPO);
         List<SysUserRoleDTO> sysUserRoleDTOList = sysUserRoleService.findByUserId(userId);
         List<Integer> ids = sysUserRoleDTOList.stream().map(SysUserRoleDTO::getId).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(sysUserRoleDTOList)) {
             sysUserRoleService.batchDelete(ids);
         }
-        delete(userId);
-    }
-
-    @Override
-    public void delete(Integer id){sysUserPOManualMapper.delete(id);
     }
 
     @Override
     public UserWithRoleDTO findUserWithRoleById(Integer id) {
         SysUserPO sysUserPO = sysUserPOMapper.selectByPrimaryKey(id);
+        if(null == sysUserPO){
+            throw new UserException(UserCodeEnum.USER_NOT_EXISTED);
+        }
         List<SysUserRoleDTO> sysUserRoleDTOList = sysUserRoleService.findByUserId(id);
         StringBuilder roleIds = new StringBuilder();
         for (SysUserRoleDTO dto : sysUserRoleDTOList) {
@@ -97,20 +103,11 @@ public class SysUserServiceImpl implements SysUserService{
     }
 
     @Override
-    public List<SysUserDTO> findByName(String name) {
-        SysUserPOExample sysUserPOExample = new SysUserPOExample();
-        SysUserPOExample.Criteria criteria = sysUserPOExample.createCriteria();
-        if (!Strings.isEmpty(name)) {
-            /*criteria.andNameEqualTo(name);*/
-        }
-        criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
-        List<SysUserPO> sysUserPOList = sysUserPOMapper.selectByExample(sysUserPOExample);
-        return sysUserPOList.stream().map(SysUserAdapter::PO2DTO).collect(Collectors.toList());
-    }
-
-    @Override
     public SysUserDTO findById(Integer id) {
         SysUserPO sysUserPO = sysUserPOMapper.selectByPrimaryKey(id);
+        if(null == sysUserPO){
+            throw new UserException(UserCodeEnum.USER_NOT_EXISTED);
+        }
         return SysUserAdapter.PO2DTO(sysUserPO);
     }
 
@@ -158,6 +155,9 @@ public class SysUserServiceImpl implements SysUserService{
     @Override
     public void updateLaseLoginInfo(Integer userId, String ipAdrress) {
         SysUserPO sysUserPO = sysUserPOMapper.selectByPrimaryKey(userId);
+        if(null == sysUserPO){
+            throw new UserException(UserCodeEnum.USER_NOT_EXISTED);
+        }
         sysUserPO.setLastLoginIp(ipAdrress);
         sysUserPO.setLastLoginTime(new Date());
         sysUserPOMapper.updateByPrimaryKeySelective(sysUserPO);
@@ -166,6 +166,9 @@ public class SysUserServiceImpl implements SysUserService{
     @Override
     public void changePassword(Integer id, String newPassword) {
         SysUserPO sysUserPO = sysUserPOMapper.selectByPrimaryKey(id);
+        if(null == sysUserPO){
+            throw new UserException(UserCodeEnum.USER_NOT_EXISTED);
+        }
         String salt = RandomUtil.generateSalt(6);
         sysUserPO.setSalt(salt);
         sysUserPO.setPassword(EncryptPasswordUtil.encrypt(salt,newPassword));

@@ -110,10 +110,6 @@ public class SysUserBiz {
         sysUserService.saveUserWithRole(isAdd, sysUserDTO, newRolesDto, oldRolesDto);
     }
 
-    public List<SysUserDTO> findByName(String name) {
-        return sysUserService.findByName(name);
-    }
-
     public List<SysUserDTO> findByLoginName(String loginName) {
         return sysUserService.findByLoginName(loginName);
     }

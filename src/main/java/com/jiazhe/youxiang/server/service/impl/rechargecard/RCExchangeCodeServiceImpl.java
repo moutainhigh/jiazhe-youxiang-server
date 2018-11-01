@@ -113,7 +113,6 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         RechargeCardExchangeCodePOExample.Criteria criteria = example.createCriteria();
         criteria.andBatchIdEqualTo(batchSaveDTO.getId());
         List<RechargeCardExchangeCodePO> poList = rechargeCardExchangeCodePOMapper.selectByExample(example);
-        List<Integer> usedIds = Lists.newArrayList();
         poList.stream().forEach(bean -> {
             bean.setBatchName(batchSaveDTO.getName());
             bean.setBatchName(batchSaveDTO.getName());
@@ -126,11 +125,9 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
             bean.setExpiryType(batchSaveDTO.getExpiryType());
             bean.setRechargeCardExpiryTime(batchSaveDTO.getRechargeCardExpiryTime());
             bean.setValidityPeriod(batchSaveDTO.getValidityPeriod());
-            if(bean.getUsed().equals(Byte.valueOf("1"))){
-                usedIds.add(bean.getId());
-            }
         });
         rcExchangeCodePOManualMapper.batchUpdate(poList);
+        List<Integer> usedIds = poList.stream().filter(bean -> bean.getUsed().equals(Byte.valueOf("1"))).map(RechargeCardExchangeCodePO::getId).collect(Collectors.toList());
         if(!usedIds.isEmpty()){
             rcService.batchUpdate(usedIds,batchSaveDTO);
         }
@@ -143,13 +140,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         RechargeCardExchangeCodePOExample.Criteria criteria = example.createCriteria();
         criteria.andBatchIdEqualTo(batchId);
         List<RechargeCardExchangeCodePO> poList = rechargeCardExchangeCodePOMapper.selectByExample(example);
-        List<Integer> usedIds = new ArrayList<Integer>();
-        for(RechargeCardExchangeCodePO po :poList){
-            if(po.getUsed().equals(Byte.valueOf("1"))){
-                //记录已经使用过码的id
-                usedIds.add(po.getId());
-            }
-        }
+        List<Integer> usedIds = poList.stream().filter(bean -> bean.getUsed().equals(Byte.valueOf("1"))).map(RechargeCardExchangeCodePO::getId).collect(Collectors.toList());
         if(!usedIds.isEmpty()){
             rcService.batchChangeStatus(usedIds,status);
         }

@@ -2,6 +2,8 @@ package com.jiazhe.youxiang.server.service.impl;
 
 import com.jiazhe.youxiang.server.adapter.SysRoleAdapter;
 import com.jiazhe.youxiang.server.adapter.SysRolePermissionAdapter;
+import com.jiazhe.youxiang.server.common.enums.RoleCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.RoleException;
 import com.jiazhe.youxiang.server.dao.mapper.manual.SysRolePOManualMapper;
 import com.jiazhe.youxiang.server.dao.mapper.SysRolePOMapper;
 import com.jiazhe.youxiang.server.domain.po.SysRolePO;
@@ -60,6 +62,9 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Override
     public RoleWithPermDTO findRoleWithPermById(Integer roleId) {
         SysRolePO sysRolePO = sysRolePOMapper.selectByPrimaryKey(roleId);
+        if(null == sysRolePO){
+            throw new RoleException(RoleCodeEnum.ROLE_NOT_EXISTED);
+        }
         List<SysRolePermissionDTO> sysRolePermissionDTOList = sysRolePermissionService.findByRoleId(roleId);
         StringBuilder perms = new StringBuilder();
         for (SysRolePermissionDTO dto : sysRolePermissionDTOList) {

@@ -4,6 +4,7 @@ import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.EncryptPasswordUtil;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
+import com.jiazhe.youxiang.base.util.ValidateUtils;
 import com.jiazhe.youxiang.server.adapter.SysRoleAdapter;
 import com.jiazhe.youxiang.server.adapter.SysUserAdapter;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
@@ -99,10 +100,14 @@ public class APISysUserController extends BaseController {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getLoginName(), new UserException(UserCodeEnum.USER_LOGIN_NAME_IS_NULL));
         CommonValidator.validateNull(req.getDisplayName(), new UserException(UserCodeEnum.USER_DISPLAY_NAME_IS_NULL));
-        CommonValidator.validateNull(req.getPassword(), new UserException(UserCodeEnum.USEER_PASSWORD_IS_NULL));
-        if (Strings.isBlank((req.getRoleIds()))) {
-            throw new UserException(UserCodeEnum.USER_ROLE_NOT_CHOOSE);
+        CommonValidator.validateNull(req.getMobile(), new UserException(UserCodeEnum.USEER_MOBILE_IS_NULL));
+        if(!ValidateUtils.phoneValidate(req.getMobile())){
+            new UserException(UserCodeEnum.USEER_MOBILE_IS_ILLEGAL);
         }
+        if(req.getId() == 0){
+            CommonValidator.validateNull(req.getPassword(), new UserException(UserCodeEnum.USEER_PASSWORD_IS_NULL));
+        }
+        CommonValidator.validateNull(req.getRoleIds(),new UserException(UserCodeEnum.USER_ROLE_NOT_CHOOSE));
         /*判断是否重名，要将新建和修改区分开*/
         UserWithRoleDTO userWithRoleDTO = SysUserAdapter.userSaveReq2UserWithDTO(req);
         boolean roleHasExisted = sysUserBiz.userHasExisted(userWithRoleDTO);
@@ -118,6 +123,9 @@ public class APISysUserController extends BaseController {
     public Object getUserInfo() {
         SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
         //将DTO转为respVO返回
+        if(null == sysUserDTO){
+            throw new UserException(UserCodeEnum.USER_NOT_EXISTED);
+        }
         SysUserResp sysUserResp = SysUserAdapter.DTO2RespVO(sysUserDTO);
         return ResponseFactory.buildResponse(sysUserResp);
     }

@@ -21,11 +21,7 @@ public interface SysUserService {
 
     void deleteUserWithRole(Integer userId);
 
-    void delete(Integer id);
-
     UserWithRoleDTO findUserWithRoleById(Integer id);
-
-    List<SysUserDTO> findByName(String name);
 
     SysUserDTO findById(Integer id);
 
