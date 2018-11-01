@@ -6,11 +6,14 @@
 package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.server.adapter.SysCityAdapter;
 import com.jiazhe.youxiang.server.biz.SysCityBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.enums.CityCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
+import com.jiazhe.youxiang.server.common.exceptions.CityException;
 import com.jiazhe.youxiang.server.dto.syscity.SysCityDTO;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.syscity.CityCodeReq;
@@ -89,7 +92,8 @@ public class APISysCityController extends BaseController {
     @ApiOperation(value = "开通省份（其下级城市全部开通）", httpMethod = "POST", notes = "开通省份（其下级城市全部开通）")
     @RequestMapping(value = "openprovince", method = RequestMethod.POST)
     public Object openProvince(@ModelAttribute CityCodeReq req) {
-        //TODO niexiao 参数验证
+        CommonValidator.validateNull(req);
+        CommonValidator.validateNull(req.getCityCode(),new CityException(CityCodeEnum.CITY_CODE_IS_NULL));
         //调用BIZ方法
         sysCityBiz.openProvince(req.getCityCode());
         //用ResponseFactory将返回值包装,简单的返回成功
@@ -104,7 +108,8 @@ public class APISysCityController extends BaseController {
     @ApiOperation(value = "关闭省份（其下级城市全部关闭）", httpMethod = "POST", notes = "关闭省份（其下级城市全部关闭）")
     @RequestMapping(value = "closeprovince", method = RequestMethod.POST)
     public Object closeProvince(@ModelAttribute CityCodeReq req) {
-        //TODO niexiao 参数验证
+        CommonValidator.validateNull(req);
+        CommonValidator.validateNull(req.getCityCode(),new CityException(CityCodeEnum.CITY_CODE_IS_NULL));
         //调用BIZ方法
         sysCityBiz.closeProvince(req.getCityCode());
         //用ResponseFactory将返回值包装,简单的返回成功
@@ -134,7 +139,8 @@ public class APISysCityController extends BaseController {
     @ApiOperation(value = "批量关闭城市", httpMethod = "POST", notes = "批量关闭城市")
     @RequestMapping(value = "closecities", method = RequestMethod.POST)
     public Object closeCities(@ModelAttribute CityCodesReq req) {
-        //TODO niexiao 参数验证
+        CommonValidator.validateNull(req);
+        CommonValidator.validateNull(req.getCityCodes(),new CityException(CityCodeEnum.CITY_CODE_IS_NULL));
         //调用BIZ方法
         sysCityBiz.closeCities(req.getCityCodes());
         //用ResponseFactory将返回值包装,简单的返回成功

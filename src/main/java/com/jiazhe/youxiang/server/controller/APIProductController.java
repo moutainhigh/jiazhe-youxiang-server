@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.biz.ProductBiz;
 import com.jiazhe.youxiang.server.common.enums.ProductCodeEnum;
@@ -104,9 +105,7 @@ public class APIProductController {
     @RequestMapping(value = "getcategorylist", method = RequestMethod.GET)
     public Object getCategoryList(@ModelAttribute ProductCategoryListReq req) {
         CommonValidator.validatePaging(req);
-        Paging paging = new Paging();
-        paging.setOffset(req.getOffset());
-        paging.setLimit(req.getLimit());
+        Paging paging =  PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
         List<ProductCategoryDTO> productCategoryDTOList = productBiz.getCategoryList(req.getName(), paging);
         //将DTO转成VO
@@ -207,9 +206,7 @@ public class APIProductController {
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
     public Object getList(@ModelAttribute ProductListReq req) {
         CommonValidator.validatePaging(req);
-        Paging paging = new Paging();
-        paging.setOffset(req.getOffset());
-        paging.setLimit(req.getLimit());
+        Paging paging =  PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
         List<ProductDTO> productDTOList = productBiz.getList(req.getProductCategoryId(), req.getName(), req.getProductType(), req.getCityCodes(), req.getStatus(), paging);
         //将DTO转成VO
@@ -230,9 +227,7 @@ public class APIProductController {
         CommonValidator.validateId(req.getProductCategoryId(), new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_ID_IS_NULL));
         CommonValidator.validateNull(req.getCityCode(), new ProductException(ProductCodeEnum.PRODUCT_CITY_CODE_IS_NULL));
         validateProductType(req.getProductType());
-        Paging paging = new Paging();
-        paging.setOffset(req.getOffset());
-        paging.setLimit(req.getLimit());
+        Paging paging =  PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
         List<ProductDTO> productDTOList = productBiz.getListForCustomer(req.getProductCategoryId(), req.getName(), req.getProductType(), req.getCityCode(), paging);
         //将DTO转成VO

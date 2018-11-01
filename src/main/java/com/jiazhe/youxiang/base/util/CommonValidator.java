@@ -7,7 +7,6 @@ package com.jiazhe.youxiang.base.util;
 
 import com.jiazhe.youxiang.server.common.enums.CommonCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.CommonException;
-import com.jiazhe.youxiang.server.vo.BaseVO;
 import com.jiazhe.youxiang.server.vo.req.IdListReq;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.OffsetLimitReq;
@@ -15,8 +14,7 @@ import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.util.Strings;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,16 +27,42 @@ import java.util.regex.Pattern;
  */
 public class CommonValidator {
 
-    public static void validateNull(BaseVO req) {
-        validateNull(req, null);
+    public static void validateNull(Object obj) {
+        validateNull(obj, null);
     }
 
-    public static void validateNull(BaseVO req, CommonException exception) {
-        if (req == null) {
+    public static void validateNull(Object obj, CommonException exception) {
+        if (null == obj) {
             if (exception != null) {
                 throw exception;
             } else {
-                throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "ID不合法");
+                throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "参数不能为空");
+            }
+        } else {
+            if (obj instanceof String) {
+                validateNull((String) obj, exception);
+            } else if (obj instanceof Collection) {
+                validateNull((Collection) obj, exception);
+            }
+        }
+    }
+
+    public static void validateNull(String str, CommonException exception) {
+        if (Strings.isBlank(str)) {
+            if (exception != null) {
+                throw exception;
+            } else {
+                throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "参数字符串不能为空");
+            }
+        }
+    }
+
+    public static void validateNull(Collection coll, CommonException exception) {
+        if (CollectionUtils.isEmpty(coll)) {
+            if (exception != null) {
+                throw exception;
+            } else {
+                throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "集合参数不能为空");
             }
         }
     }
@@ -111,19 +135,6 @@ public class CommonValidator {
         }
     }
 
-    public static void validateNull(String str) {
-        validateNull(str, null);
-    }
-
-    public static void validateNull(String str, CommonException exception) {
-        if (Strings.isBlank(str)) {
-            if (exception != null) {
-                throw exception;
-            } else {
-                throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "参数不能为空");
-            }
-        }
-    }
 
     public static void validateMobile(String mobile, CommonException exception) {
         String PHONE_NUMBER_REG = "^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\d{8}$";
@@ -134,48 +145,6 @@ public class CommonValidator {
                 throw exception;
             } else {
                 throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "手机号为空或格式错误");
-            }
-        }
-    }
-
-    public  static void validateNull(Date date){
-        validateNull(date,null);
-    }
-
-    public static void validateNull(Date date, CommonException exception) {
-        if (null == date) {
-            if (exception != null) {
-                throw exception;
-            } else {
-                throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "参数不能为空");
-            }
-        }
-    }
-
-    public  static void validateNull(Integer integer){
-        validateNull(integer,null);
-    }
-
-    public static void validateNull(Integer integer, CommonException exception) {
-        if (null == integer) {
-            if (exception != null) {
-                throw exception;
-            } else {
-                throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "参数不能为空");
-            }
-        }
-    }
-
-    public  static void validateNull(BigDecimal bigDecimal){
-        validateNull(bigDecimal,null);
-    }
-
-    public static void validateNull(BigDecimal bigDecimal, CommonException exception) {
-        if (null == bigDecimal) {
-            if (exception != null) {
-                throw exception;
-            } else {
-                throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "参数不能为空");
             }
         }
     }

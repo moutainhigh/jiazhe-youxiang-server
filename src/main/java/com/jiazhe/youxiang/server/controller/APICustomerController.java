@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.common.enums.CustomerCodeEnum;
@@ -41,7 +42,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 用户信息Controller
+ * 客户信息Controller
  *
  * @author niexiao
  * @created 2018/10/23
@@ -99,9 +100,7 @@ public class APICustomerController {
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
     public Object getList(@ModelAttribute CustomerListReq req) {
         CommonValidator.validatePaging(req);
-        Paging paging = new Paging();
-        paging.setOffset(req.getOffset());
-        paging.setLimit(req.getLimit());
+        Paging paging =  PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
         List<CustomerDTO> customerDTOList = customerBiz.getList(req.getMobile(), req.getName(), paging);
         //将DTO转成VO
@@ -193,9 +192,7 @@ public class APICustomerController {
     public Object getAddressList(@ModelAttribute AddressListReq req) {
         CommonValidator.validatePaging(req);
         CommonValidator.validateId(req.getCustomerId(), new CustomerException(CustomerCodeEnum.CUSTOMER_ID_IS_NULL));
-        Paging paging = new Paging();
-        paging.setOffset(req.getOffset());
-        paging.setLimit(req.getLimit());
+        Paging paging =  PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
         List<AddressDTO> addressDTOList = customerBiz.getAddressList(req.getCustomerId(), paging);
         //将DTO转成VO
