@@ -19,12 +19,6 @@ public class PaginationResponse<T> extends BaseObject {
 
     private Paging paging;
 
-    private Integer currPage;
-
-    private Integer totalPage;
-
-    private Integer totalCount;
-
     public PaginationResponse() {
     }
 
@@ -37,9 +31,6 @@ public class PaginationResponse<T> extends BaseObject {
     public PaginationResponse(List<T> data, Paging paging) {
         this.data = data;
         this.paging = paging;
-        this.currPage = (int) Math.ceil(paging.getOffset()/paging.getLimit()+ 1) ;
-        this.totalPage = (int) Math.ceil(paging.getTotal()/paging.getLimit()) ;
-        this.totalCount = paging.getTotal();
     }
 
     public List<T> getData() {
@@ -56,29 +47,5 @@ public class PaginationResponse<T> extends BaseObject {
 
     public void setPaging(Paging paging) {
         this.paging = paging;
-    }
-
-    public Integer getCurrPage() {
-        return currPage;
-    }
-
-    public void setCurrPage(Integer currPage) {
-        this.currPage = currPage;
-    }
-
-    public Integer getTotalPage() {
-        return totalPage;
-    }
-
-    public void setTotalPage(Integer totalPage) {
-        this.totalPage = totalPage;
-    }
-
-    public Integer getTotalCount() {
-        return totalCount;
-    }
-
-    public void setTotalCount(Integer totalCount) {
-        this.totalCount = totalCount;
     }
 }
