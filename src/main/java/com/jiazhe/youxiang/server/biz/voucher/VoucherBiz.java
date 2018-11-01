@@ -14,16 +14,16 @@ import java.util.List;
  */
 @Service("voucherBiz")
 public class VoucherBiz {
-    public int startUsing(Integer id) {
-        return 0;
+    public void startUsing(Integer id) {
+
     }
 
-    public int stopUsing(Integer id) {
-        return 0;
+    public void stopUsing(Integer id) {
+
     }
 
-    public int changeExpiryTime(Integer id, Date expiryTime) {
-        return 0;
+    public void changeExpiryTime(Integer id, Date expiryTime) {
+
     }
 
     public List<VoucherDTO> getList(Integer id, Paging paging) {

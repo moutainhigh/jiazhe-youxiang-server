@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface SysUserRolePOManualMapper {
 
-    int batchDelete(@Param("ids")List<Integer> ids);
+    void batchDelete(@Param("ids")List<Integer> ids);
 
-    int batchInsert(List<SysUserRolePO> newRolesPO);
+    void batchInsert(List<SysUserRolePO> newRolesPO);
 }

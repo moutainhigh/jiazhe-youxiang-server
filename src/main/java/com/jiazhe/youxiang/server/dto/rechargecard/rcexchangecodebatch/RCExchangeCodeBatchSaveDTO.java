@@ -8,9 +8,15 @@ import java.util.Date;
  * @description：
  * @date 2018/10/21
  */
-public class RCExchangeCodeBatchAddDTO {
+public class RCExchangeCodeBatchSaveDTO {
+
+    private Integer id;
 
     private String name;
+
+    private String rechargeCardName;
+
+    private Byte isVirtual;
 
     private String description;
 
@@ -32,12 +38,36 @@ public class RCExchangeCodeBatchAddDTO {
 
     private Byte expiryType;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getRechargeCardName() {
+        return rechargeCardName;
+    }
+
+    public void setRechargeCardName(String rechargeCardName) {
+        this.rechargeCardName = rechargeCardName;
+    }
+
+    public Byte getIsVirtual() {
+        return isVirtual;
+    }
+
+    public void setIsVirtual(Byte isVirtual) {
+        this.isVirtual = isVirtual;
     }
 
     public String getDescription() {

@@ -21,27 +21,31 @@ public class RCExchangeCodeBiz {
     @Autowired
     private RCExchangeCodeService rcExchangeCodeService;
 
-    public int startUsing(Integer id) {
-        return rcExchangeCodeService.changeCodeStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
+    public void startUsing(Integer id) {
+        rcExchangeCodeService.changeCodeStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
     }
 
-    public int stopUsing(Integer id) {
-        return rcExchangeCodeService.changeCodeStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
+    public void stopUsing(Integer id) {
+        rcExchangeCodeService.changeCodeStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
     }
 
-    public int changeExpiryTime(Integer id, Date expiryTime) {
-        return rcExchangeCodeService.changeExpiryTime(id,expiryTime);
+    public void changeExpiryTime(Integer id, Date expiryTime) {
+        rcExchangeCodeService.changeExpiryTime(id,expiryTime);
     }
 
-    public int customerSelfCharge(String mobile, String keyt) {
-        return rcExchangeCodeService.codeCharge(1,mobile,keyt);
+    public void customerSelfCharge(String mobile, String keyt) {
+        rcExchangeCodeService.codeCharge(1,mobile,keyt);
     }
 
-    public int backstageCodeCharge(String mobile, String keyt) {
-        return rcExchangeCodeService.codeCharge(0,mobile,keyt);
+    public void backstageCodeCharge(String mobile, String keyt) {
+        rcExchangeCodeService.codeCharge(0,mobile,keyt);
     }
 
-    public List<RCExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Paging paging) {
-        return null;
+    public List<RCExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Byte status, Byte used, Paging paging) {
+        return rcExchangeCodeService.getList(batchId,code,keyt,status,used,paging);
+    }
+
+    public List<RCExchangeCodeDTO> getByBatchId(Integer id) {
+        return rcExchangeCodeService.getByBatchId(id);
     }
 }

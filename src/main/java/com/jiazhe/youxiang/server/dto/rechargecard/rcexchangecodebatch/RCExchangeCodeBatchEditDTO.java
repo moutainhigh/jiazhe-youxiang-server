@@ -14,7 +14,9 @@ public class RCExchangeCodeBatchEditDTO {
 
     private String name;
 
-    private BigDecimal faceValue;
+    private String rechargeCardName;
+
+    private Byte isVirtual;
 
     private String description;
 
@@ -23,6 +25,10 @@ public class RCExchangeCodeBatchEditDTO {
     private String cityCodes;
 
     private String productIds;
+
+    private Integer amount;
+
+    private BigDecimal faceValue;
 
     private Date expiryTime;
 
@@ -112,6 +118,30 @@ public class RCExchangeCodeBatchEditDTO {
         this.expiryType = expiryType;
     }
 
+    public String getRechargeCardName() {
+        return rechargeCardName;
+    }
+
+    public void setRechargeCardName(String rechargeCardName) {
+        this.rechargeCardName = rechargeCardName;
+    }
+
+    public Byte getIsVirtual() {
+        return isVirtual;
+    }
+
+    public void setIsVirtual(Byte isVirtual) {
+        this.isVirtual = isVirtual;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
     public BigDecimal getFaceValue() {
         return faceValue;
     }
@@ -119,4 +149,5 @@ public class RCExchangeCodeBatchEditDTO {
     public void setFaceValue(BigDecimal faceValue) {
         this.faceValue = faceValue;
     }
+
 }

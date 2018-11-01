@@ -18,8 +18,11 @@ public class UserSaveReq extends BaseVO {
     @ApiModelProperty("员工电话")
     private String mobile;
 
-    @ApiModelProperty("员工姓名")
-    private String name;
+    @ApiModelProperty("员工登录名【唯一，且不能修改】")
+    private String loginName;
+
+    @ApiModelProperty("员工显示名")
+    private String displayName;
 
     @ApiModelProperty("员工登录密码")
     private String password;
@@ -43,12 +46,20 @@ public class UserSaveReq extends BaseVO {
         this.mobile = mobile;
     }
 
-    public String getName() {
-        return name;
+    public String getLoginName() {
+        return loginName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public String getPassword() {

@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -15,13 +16,21 @@ public class RCExchangeCodeBatchEditResp extends BaseVO {
 
     private String name;
 
+    private String rechargeCardName;
+
+    private Byte isVirtual;
+
     private String description;
 
     private Integer projectId;
 
-    private String cityIds;
+    private String cityCodes;
 
     private String productIds;
+
+    private Integer amount;
+
+    private BigDecimal faceValue;
 
     private Date expiryTime;
 
@@ -30,6 +39,8 @@ public class RCExchangeCodeBatchEditResp extends BaseVO {
     private Integer validityPeriod;
 
     private Byte expiryType;
+
+    private Byte hasCode;
 
     public Integer getId() {
         return id;
@@ -63,12 +74,12 @@ public class RCExchangeCodeBatchEditResp extends BaseVO {
         this.projectId = projectId;
     }
 
-    public String getCityIds() {
-        return cityIds;
+    public String getCityCodes() {
+        return cityCodes;
     }
 
-    public void setCityIds(String cityIds) {
-        this.cityIds = cityIds;
+    public void setCityCodes(String cityCodes) {
+        this.cityCodes = cityCodes;
     }
 
     public String getProductIds() {
@@ -109,5 +120,45 @@ public class RCExchangeCodeBatchEditResp extends BaseVO {
 
     public void setExpiryType(Byte expiryType) {
         this.expiryType = expiryType;
+    }
+
+    public String getRechargeCardName() {
+        return rechargeCardName;
+    }
+
+    public void setRechargeCardName(String rechargeCardName) {
+        this.rechargeCardName = rechargeCardName;
+    }
+
+    public Byte getIsVirtual() {
+        return isVirtual;
+    }
+
+    public void setIsVirtual(Byte isVirtual) {
+        this.isVirtual = isVirtual;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    public BigDecimal getFaceValue() {
+        return faceValue;
+    }
+
+    public void setFaceValue(BigDecimal faceValue) {
+        this.faceValue = faceValue;
+    }
+
+    public Byte getHasCode() {
+        return hasCode;
+    }
+
+    public void setHasCode(Byte hasCode) {
+        this.hasCode = hasCode;
     }
 }

@@ -78,4 +78,8 @@ public class OrderInfoBiz {
     public Integer getUnauditOrderCount() {
         return 0;
     }
+
+    public List<OrderInfoDTO> getOrderByRCId(Integer id) {
+        return null;
+    }
 }

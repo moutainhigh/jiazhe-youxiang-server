@@ -13,18 +13,29 @@ public class UserPageReq extends PageSizeNumReq {
 
     private static final long serialVersionUID = 1227970050086613351L;
 
+    @ApiModelProperty("登录名")
+    private String loginName;
+
     @ApiModelProperty("员工名称")
-    private String name;
+    private String displayName;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
 
-    public String getName() {
-        return name;
+    public String getLoginName() {
+        return loginName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 }

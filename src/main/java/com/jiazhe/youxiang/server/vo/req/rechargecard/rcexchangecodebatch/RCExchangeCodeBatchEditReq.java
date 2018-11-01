@@ -18,6 +18,12 @@ public class RCExchangeCodeBatchEditReq extends BaseVO{
     @ApiModelProperty("批次名称")
     private String name;
 
+    @ApiModelProperty("兑换成充值卡后的充值卡")
+    private String rechargeCardName;
+
+    @ApiModelProperty("是否是虚拟批次")
+    private Byte isVirtual;
+
     @ApiModelProperty("批次描述")
     private String description;
 
@@ -120,5 +126,21 @@ public class RCExchangeCodeBatchEditReq extends BaseVO{
 
     public void setExpiryType(Byte expiryType) {
         this.expiryType = expiryType;
+    }
+
+    public String getRechargeCardName() {
+        return rechargeCardName;
+    }
+
+    public void setRechargeCardName(String rechargeCardName) {
+        this.rechargeCardName = rechargeCardName;
+    }
+
+    public Byte getIsVirtual() {
+        return isVirtual;
+    }
+
+    public void setIsVirtual(Byte isVirtual) {
+        this.isVirtual = isVirtual;
     }
 }

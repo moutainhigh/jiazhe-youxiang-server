@@ -7,12 +7,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * 用于优惠券兑换码管理相关页面转发
- * Created by tujia on 2018/10/13.
+ * @author TU
+ * @description 用于优惠券相关管理页面转发
+ * @date 2018/10/13.
  */
 @Controller
-@RequestMapping("/vouchercode")
-public class VoucherCodeController extends BaseController {
+@RequestMapping("/voucher")
+public class VoucherController extends BaseController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(VoucherCodeController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(VoucherController.class);
 }

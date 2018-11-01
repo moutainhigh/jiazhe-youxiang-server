@@ -35,12 +35,12 @@ public class SysUserBiz {
         return  sysUserDTOList;
     }
 
-    public List<SysUserDTO> getList(String name, Paging paging) {
-        return sysUserService.getList(name,paging);
+    public List<SysUserDTO> getList(String loginName, String displayName,Paging paging) {
+        return sysUserService.getList(loginName,displayName,paging);
     }
 
-    public int deleteUserWithRole(Integer userId) {
-        return sysUserService.deleteUserWithRole(userId);
+    public void deleteUserWithRole(Integer userId) {
+        sysUserService.deleteUserWithRole(userId);
     }
 
     public UserWithRoleDTO findUserWithRoleById(Integer id) {
@@ -48,11 +48,11 @@ public class SysUserBiz {
     }
 
     public boolean userHasExisted(UserWithRoleDTO userWithRoleDTO) {
-        List<SysUserDTO> sysUserDTOList = sysUserService.findByName(userWithRoleDTO.getName());
+        List<SysUserDTO> sysUserDTOList = sysUserService.findByLoginName(userWithRoleDTO.getLoginName());
         return (2 == sysUserDTOList.size()) || (sysUserDTOList.size() == 1 && !sysUserDTOList.get(0).getId().equals(userWithRoleDTO.getId()));
     }
 
-    public int saveRoleWithPerm(UserWithRoleDTO userWithRoleDTO) {
+    public void saveRoleWithPerm(UserWithRoleDTO userWithRoleDTO) {
         /*判断是新建还是修改，id=0为新建，其他为修改*/
         boolean isAdd = userWithRoleDTO.getId() == 0;
         /*用户信息DTO*/
@@ -105,15 +105,20 @@ public class SysUserBiz {
             }
         }
         sysUserDTO.setMobile(userWithRoleDTO.getMobile());
-        sysUserDTO.setName(userWithRoleDTO.getName());
-        return sysUserService.saveUserWithRole(isAdd, sysUserDTO, newRolesDto, oldRolesDto);
+        sysUserDTO.setDisplayName(userWithRoleDTO.getDisplayName());
+        sysUserDTO.setLoginName(userWithRoleDTO.getLoginName());
+        sysUserService.saveUserWithRole(isAdd, sysUserDTO, newRolesDto, oldRolesDto);
     }
 
-    public List<SysUserDTO> findByName(String name) {
-        return sysUserService.findByName(name);
+    public List<SysUserDTO> findByLoginName(String loginName) {
+        return sysUserService.findByLoginName(loginName);
     }
 
-    public int updateLastLoginTime(Integer id) {
-        return sysUserService.updateLaseLoginTime(id);
+    public void updateLastLoginInfo(Integer userId , String ipAdrress) {
+        sysUserService.updateLaseLoginInfo(userId,ipAdrress);
+    }
+
+    public void changePassword(Integer id, String newPassword) {
+        sysUserService.changePassword(id,newPassword);
     }
 }

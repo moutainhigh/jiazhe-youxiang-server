@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class SysRoleResp extends BaseObject {
 
     private static final long serialVersionUID = -8161107313653321193L;
-    
+
     @ApiModelProperty("角色id")
     private int id;
 

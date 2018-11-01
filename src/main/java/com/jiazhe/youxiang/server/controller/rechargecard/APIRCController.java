@@ -1,8 +1,12 @@
 package com.jiazhe.youxiang.server.controller.rechargecard;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCBiz;
+import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
@@ -10,6 +14,7 @@ import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.DirectChargeReq;
 import com.jiazhe.youxiang.server.vo.req.ExpiryTimeEditReq;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.RCPageReq;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rc.RCResp;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +42,7 @@ public class APIRCController extends BaseController{
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     public Object startUsing(@ModelAttribute IdReq req) {
         //参数检查
+        CommonValidator.validateId(req);
         rcBiz.startUsing(req.getId());
         return ResponseFactory.buildSuccess();
     }
@@ -45,6 +51,7 @@ public class APIRCController extends BaseController{
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     public Object stopUsing(@ModelAttribute IdReq req) {
         //参数检查
+        CommonValidator.validateId(req);
         rcBiz.stopUsing(req.getId());
         return ResponseFactory.buildSuccess();
     }
@@ -53,27 +60,19 @@ public class APIRCController extends BaseController{
     @RequestMapping(value = "/changeexpirytime", method = RequestMethod.POST)
     public Object changeExpiryTime(@ModelAttribute ExpiryTimeEditReq req) {
         //参数检查
+        CommonValidator.validateId(req);
+        CommonValidator.validateNull(req.getExpiryTime(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRT_TIME_IS_NULL));
         rcBiz.changeExpiryTime(req.getId(),req.getExpiryTime());
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "【后台展示】根据客户id查询所有充值卡，【分页】", httpMethod = "GET",response = RCResp.class, responseContainer = "List",notes = "【后台展示】根据客户id查询所有充值卡，【分页】")
+    @ApiOperation(value = "根据客户id,充值卡状态，查询所有充值卡，【分页】", httpMethod = "GET",response = RCResp.class, responseContainer = "List",notes = "根据客户id，充值卡状态查询所有充值卡，【分页】")
     @RequestMapping(value = "/listpage", method = RequestMethod.POST)
-    public Object listPage(@ModelAttribute IdReq idReq, @ModelAttribute PageSizeNumReq pageReq) {
+    public Object listPage(@ModelAttribute RCPageReq req) {
         //参数检查
-        Paging paging = new Paging();
-        paging.setOffset((pageReq.getPageNum()-1)*pageReq.getPageSize());
-        paging.setLimit(pageReq.getPageSize());
-        List<RCDTO> rcDTOList = rcBiz.getList(idReq.getId(),paging);
-        List<RCResp> rcRespList = rcDTOList.stream().map(RCAdapter::DTO2Resp).collect(Collectors.toList());
-        return ResponseFactory.buildResponse(rcRespList);
-    }
-
-    @ApiOperation(value = "【app端使用】根据客户id查询所有【未过期】充值卡", httpMethod = "GET",response = RCResp.class, responseContainer = "List",notes = "根据客户id查询所有【未过期】充值卡")
-    @RequestMapping(value = "/findunexpiredbycustomerid", method = RequestMethod.POST)
-    public Object changeExpiryTime(@ModelAttribute IdReq req) {
-        //参数检查
-        List<RCDTO> rcDTOList = rcBiz.findUnexpiredByCustomerId(req.getId());
+        CommonValidator.validatePaging(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
+        List<RCDTO> rcDTOList = rcBiz.getList(req.getCustomerId(),req.getStatus(),paging);
         List<RCResp> rcRespList = rcDTOList.stream().map(RCAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildResponse(rcRespList);
     }

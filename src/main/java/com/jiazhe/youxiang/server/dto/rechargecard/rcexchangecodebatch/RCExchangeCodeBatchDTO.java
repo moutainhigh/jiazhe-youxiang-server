@@ -14,6 +14,8 @@ public class RCExchangeCodeBatchDTO {
 
     private String name;
 
+    private String rechargeCardName;
+
     private Integer amount;
 
     private BigDecimal faceValue;
@@ -21,6 +23,8 @@ public class RCExchangeCodeBatchDTO {
     private Date expiryTime;
 
     private Byte status;
+
+    private Byte isVirtual;
 
     public Integer getId() {
         return id;
@@ -68,5 +72,21 @@ public class RCExchangeCodeBatchDTO {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public Byte getIsVirtual() {
+        return isVirtual;
+    }
+
+    public void setIsVirtual(Byte isVirtual) {
+        this.isVirtual = isVirtual;
+    }
+
+    public String getRechargeCardName() {
+        return rechargeCardName;
+    }
+
+    public void setRechargeCardName(String rechargeCardName) {
+        this.rechargeCardName = rechargeCardName;
     }
 }
