@@ -1,20 +1,19 @@
-package com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecode;
+package com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecode;
 
-import com.jiazhe.youxiang.server.vo.BaseObject;
+import com.jiazhe.youxiang.server.vo.BaseVO;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @author TU
- * @description
- * @date 2018/10/24.
+ * @author tu
+ * @description：
+ * @date 2018/11/1
  */
-public class RCExchangeCodeResp extends BaseObject {
+public class RCExchangeCodeEditReq extends BaseVO {
 
     private Integer id;
-
-    private String batchName;
 
     private String rechargeCardName;
 
@@ -24,23 +23,15 @@ public class RCExchangeCodeResp extends BaseObject {
 
     private String productIds;
 
-    private String code;
-
-    private String keyt;
-
-    private BigDecimal faceValue;
-
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date expiryTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date rechargeCardExpiryTime;
 
     private Integer validityPeriod;
 
     private Byte expiryType;
-
-    private Byte status;
-
-    private Byte used;
 
     public Integer getId() {
         return id;
@@ -48,62 +39,6 @@ public class RCExchangeCodeResp extends BaseObject {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getBatchName() {
-        return batchName;
-    }
-
-    public void setBatchName(String batchName) {
-        this.batchName = batchName;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getKeyt() {
-        return keyt;
-    }
-
-    public void setKeyt(String keyt) {
-        this.keyt = keyt;
-    }
-
-    public BigDecimal getFaceValue() {
-        return faceValue;
-    }
-
-    public void setFaceValue(BigDecimal faceValue) {
-        this.faceValue = faceValue;
-    }
-
-    public Date getExpiryTime() {
-        return expiryTime;
-    }
-
-    public void setExpiryTime(Date expiryTime) {
-        this.expiryTime = expiryTime;
-    }
-
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
-
-    public Byte getUsed() {
-        return used;
-    }
-
-    public void setUsed(Byte used) {
-        this.used = used;
     }
 
     public String getRechargeCardName() {
@@ -136,6 +71,14 @@ public class RCExchangeCodeResp extends BaseObject {
 
     public void setProductIds(String productIds) {
         this.productIds = productIds;
+    }
+
+    public Date getExpiryTime() {
+        return expiryTime;
+    }
+
+    public void setExpiryTime(Date expiryTime) {
+        this.expiryTime = expiryTime;
     }
 
     public Date getRechargeCardExpiryTime() {

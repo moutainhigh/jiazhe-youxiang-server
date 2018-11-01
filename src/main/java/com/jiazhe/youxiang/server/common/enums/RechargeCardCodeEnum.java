@@ -16,6 +16,8 @@ public enum RechargeCardCodeEnum {
     VIRTUAL_BATCH_CANNOT_GENERATE(106007, "VIRTUAL_BATCH_CANNOT_GENERATE", "虚拟批次不能生成兑换码"),
     CODE_GENERATED(106008, "CODE_GENERATED", "兑换码已经生成，不能再次生成"),
     BATCH_NOT_EXISTED(106009, "BATCH_NOT_EXISTED", "批次不存在"),
+    EXCHANGE_CODE_NOT_EXISTED(106010, "EXCHANGE_CODE_NOT_EXISTED", "兑换码不存在"),
+    EXCHANGE_CODE_EXPIRT_TIME_IS_NULL(106011, "EXCHANGE_CODE_EXPIRT_TIME_IS_NULL", "兑换码过期时间为空"),
     ;
 
     RechargeCardCodeEnum(Integer code, String type, String message) {

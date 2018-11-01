@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.service.rechargecard;
 
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
@@ -86,4 +87,13 @@ public interface RCExchangeCodeService {
      * @return
      */
     List<RCExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Byte status, Byte used, Paging paging);
+
+    /**
+     * 根据id获取兑换码信息
+     * @param id
+     * @return
+     */
+    RCExchangeCodeDTO getById(Integer id);
+
+    void editSave(RCExchangeCodeEditDTO dto);
 }
