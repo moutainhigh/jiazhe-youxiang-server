@@ -15,7 +15,7 @@ public interface RCExchangeRecordPOManualMapper {
      * @param rechargeCardRecordPO
      * @return
      */
-    int insert(RechargeCardExchangeRecordPO rechargeCardRecordPO);
+    void insert(RechargeCardExchangeRecordPO rechargeCardRecordPO);
 
     /**
      * 根据码ids，查找兑换记录列表

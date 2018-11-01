@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface RCExchangeRecordService {
 
-    int insert(RechargeCardExchangeRecordPO rechargeCardRecordPO);
+    void insert(RechargeCardExchangeRecordPO rechargeCardRecordPO);
 
     /**
      * 根据兑换码的ids，查找兑换记录

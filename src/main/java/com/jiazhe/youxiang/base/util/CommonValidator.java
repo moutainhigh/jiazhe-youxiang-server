@@ -11,9 +11,12 @@ import com.jiazhe.youxiang.server.vo.BaseVO;
 import com.jiazhe.youxiang.server.vo.req.IdListReq;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.OffsetLimitReq;
+import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.util.Strings;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -100,12 +103,60 @@ public class CommonValidator {
         }
     }
 
+    public static void validatePaging(PageSizeNumReq pageSizeNumReq) {
+        if (pageSizeNumReq == null || pageSizeNumReq.getPageNum() == null || pageSizeNumReq.getPageNum() < 1 || pageSizeNumReq.getPageSize() == null || pageSizeNumReq.getPageSize() < 1) {
+            throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "分页信息填写不正确");
+        }
+    }
+
     public static void validateNull(String str) {
         validateNull(str, null);
     }
 
     public static void validateNull(String str, CommonException exception) {
         if (Strings.isBlank(str)) {
+            if (exception != null) {
+                throw exception;
+            } else {
+                throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "参数不能为空");
+            }
+        }
+    }
+
+    public  static void validateNull(Date date){
+        validateNull(date,null);
+    }
+
+    public static void validateNull(Date date, CommonException exception) {
+        if (null == date) {
+            if (exception != null) {
+                throw exception;
+            } else {
+                throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "参数不能为空");
+            }
+        }
+    }
+
+    public  static void validateNull(Integer integer){
+        validateNull(integer,null);
+    }
+
+    public static void validateNull(Integer integer, CommonException exception) {
+        if (null == integer) {
+            if (exception != null) {
+                throw exception;
+            } else {
+                throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "参数不能为空");
+            }
+        }
+    }
+
+    public  static void validateNull(BigDecimal bigDecimal){
+        validateNull(bigDecimal,null);
+    }
+
+    public static void validateNull(BigDecimal bigDecimal, CommonException exception) {
+        if (null == bigDecimal) {
             if (exception != null) {
                 throw exception;
             } else {

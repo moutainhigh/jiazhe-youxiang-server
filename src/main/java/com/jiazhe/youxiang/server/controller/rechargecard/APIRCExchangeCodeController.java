@@ -1,6 +1,8 @@
 package com.jiazhe.youxiang.server.controller.rechargecard;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCExchangeCodeBiz;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
@@ -40,9 +42,8 @@ public class APIRCExchangeCodeController extends BaseController{
     @ApiOperation(value = "分页查询充值卡兑换码（根据批次id和兑换码的码和密钥查询）", httpMethod = "GET", response = RCExchangeCodeResp.class, responseContainer = "List",notes = "分页查询充值卡兑换码（根据批次id和兑换码的码和密钥查询）")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute RCExchangeCodePageReq req) {
-        Paging paging = new Paging();
-        paging.setOffset((req.getPageNum()-1)*req.getPageSize());
-        paging.setLimit(req.getPageSize());
+        CommonValidator.validatePaging(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
         List<RCExchangeCodeDTO> rcExchangeCodeDTOList = rcExchangeCodeBiz.getList(req.getBatchId(),req.getCode(),req.getKeyt(),req.getStatus(),req.getUsed(),paging);
         List<RCExchangeCodeResp> rcExchangeCodeBatchRespList = rcExchangeCodeDTOList.stream().map(RCExchangeCodeAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(rcExchangeCodeBatchRespList, paging);
@@ -52,6 +53,7 @@ public class APIRCExchangeCodeController extends BaseController{
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     public Object startUsing(@ModelAttribute IdReq req) {
         //参数检查
+        CommonValidator.validateId(req);
         rcExchangeCodeBiz.startUsing(req.getId());
         return ResponseFactory.buildSuccess();
     }
@@ -60,6 +62,7 @@ public class APIRCExchangeCodeController extends BaseController{
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     public Object stopUsing(@ModelAttribute IdReq req) {
         //参数检查
+        CommonValidator.validateId(req);
         rcExchangeCodeBiz.stopUsing(req.getId());
         return ResponseFactory.buildSuccess();
     }

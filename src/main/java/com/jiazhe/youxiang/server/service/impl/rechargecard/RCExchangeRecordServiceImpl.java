@@ -20,9 +20,9 @@ public class RCExchangeRecordServiceImpl implements RCExchangeRecordService {
     private RCExchangeRecordPOManualMapper rcExchangeRecordPOManualMapper;
 
     @Override
-    public int insert(RechargeCardExchangeRecordPO rechargeCardRecordPO) {
+    public void insert(RechargeCardExchangeRecordPO rechargeCardRecordPO) {
         rcExchangeRecordPOManualMapper.insert(rechargeCardRecordPO);
-        return rechargeCardRecordPO.getId();
+        rechargeCardRecordPO.getId();
     }
 
     @Override

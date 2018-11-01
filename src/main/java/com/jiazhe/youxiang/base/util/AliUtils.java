@@ -17,6 +17,8 @@ import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 
 /**
  * @author TU
@@ -54,9 +56,10 @@ public class AliUtils {
         request.setOutId("yourOutId");
         //请求失败这里会抛ClientException异常
         SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
-        /*if(sendSmsResponse.getCode() != null && sendSmsResponse.getCode().equals("OK")) {
-	    //请求成功
-	    }*/
+        if (sendSmsResponse.getCode() == null && !sendSmsResponse.getCode().equals("OK")) {
+            //请求失败
+            throw new LoginException(LoginCodeEnum.LOGIN_SENDCODE_ERROR);
+        }
         return sendSmsResponse;
     }
 
@@ -87,21 +90,23 @@ public class AliUtils {
     }
 
     /**
-     *验证码验证
+     * 验证码验证
      */
     public static boolean isVerified(String phone, String code, String bizId) throws ClientException, ParseException {
         QuerySendDetailsResponse querySendDetailsResponse = querySendDetails(phone, bizId);
         List<QuerySendDetailsResponse.SmsSendDetailDTO> smsSendDetailDTOList = querySendDetailsResponse.getSmsSendDetailDTOs();
-        if (smsSendDetailDTOList.size() != 0) {
-            String content = smsSendDetailDTOList.get(smsSendDetailDTOList.size() - 1).getContent();
-            if (content.contains(code)) {
-                long receiveTime = MyDateUtils.strToMinutes(smsSendDetailDTOList.get(smsSendDetailDTOList.size() - 1).getReceiveDate()).getTime();
-                //短信验证码在有5分钟有效期内
-                if (System.currentTimeMillis() - receiveTime < CommonConstant.FIVE_MINUTES) {
-                    return true;
-                }
-            }
+        if (smsSendDetailDTOList.size() == 0) {
+            throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
         }
-        return false;
+        String content = smsSendDetailDTOList.get(smsSendDetailDTOList.size() - 1).getContent();
+        if (!content.contains(code)){
+            throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
+        }
+        long receiveTime = MyDateUtils.strToMinutes(smsSendDetailDTOList.get(smsSendDetailDTOList.size() - 1).getReceiveDate()).getTime();
+        //短信验证码在有5分钟有效期内
+        if (System.currentTimeMillis() - receiveTime > CommonConstant.FIVE_MINUTES) {
+            throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_EXPIRY);
+        }
+        return true;
     }
 }

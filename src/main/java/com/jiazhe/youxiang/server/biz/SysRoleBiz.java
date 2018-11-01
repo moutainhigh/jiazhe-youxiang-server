@@ -3,7 +3,6 @@ package com.jiazhe.youxiang.server.biz;
 import com.jiazhe.youxiang.server.dto.sysrole.RoleWithPermDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRolePermissionDTO;
-import com.jiazhe.youxiang.server.dto.sysuser.SysUserRoleDTO;
 import com.jiazhe.youxiang.server.service.SysRoleService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.logging.log4j.util.Strings;
@@ -36,8 +35,8 @@ public class SysRoleBiz {
      * @param roleId
      * @return
      */
-    public int deleteRoleWithPerms(Integer roleId) {
-        return sysRoleService.deleteRoleWithPerms(roleId);
+    public void deleteRoleWithPerms(Integer roleId) {
+        sysRoleService.deleteRoleWithPerms(roleId);
     }
 
     public RoleWithPermDTO findRoleWithPermById(Integer roleId) {
@@ -49,7 +48,7 @@ public class SysRoleBiz {
         return (2 == sysRoleDTOList.size()) || (sysRoleDTOList.size() == 1 && !sysRoleDTOList.get(0).getId().equals(roleWithPermDTO.getId()));
     }
 
-    public int saveRoleWithPerm(RoleWithPermDTO roleWithPermDTO) {
+    public void saveRoleWithPerm(RoleWithPermDTO roleWithPermDTO) {
         /*判断是新建还是修改，id=0为新建，其他为修改*/
         boolean isAdd = roleWithPermDTO.getId() == 0;
         /*角色信息DTO*/
@@ -105,7 +104,7 @@ public class SysRoleBiz {
         sysRoleDTO.setName(roleWithPermDTO.getName());
         sysRoleDTO.setIsSuper(Byte.valueOf(roleWithPermDTO.getIsSuper()));
         sysRoleDTO.setPriority(Integer.valueOf(roleWithPermDTO.getPriority()));
-        return sysRoleService.saveRoleWithPerm(isAdd, sysRoleDTO, newPermsDto, oldPermsDto);
+        sysRoleService.saveRoleWithPerm(isAdd, sysRoleDTO, newPermsDto, oldPermsDto);
     }
 
     public List<SysRoleDTO> findAll() {

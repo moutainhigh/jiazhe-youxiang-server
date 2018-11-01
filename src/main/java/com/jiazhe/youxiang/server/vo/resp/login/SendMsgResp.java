@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.resp.login;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author TU
@@ -9,6 +10,7 @@ import com.jiazhe.youxiang.server.vo.BaseVO;
  */
 public class SendMsgResp extends BaseVO {
 
+    @ApiModelProperty("短信返回bizId")
     private String bizId;
 
     public String getBizId() {

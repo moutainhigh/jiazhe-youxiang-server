@@ -14,7 +14,7 @@ public interface SysUserRoleService {
 
     List<SysUserRoleDTO> findByUserId(Integer userId);
 
-    int batchDelete(List<Integer> ids);
+    void batchDelete(List<Integer> ids);
 
-    int batchInsert(List<SysUserRolePO> newPermsPO);
+    void batchInsert(List<SysUserRolePO> newPermsPO);
 }

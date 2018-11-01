@@ -31,7 +31,7 @@ public class RCExchangeCodeBatchBiz {
         return rcExchangeCodeBatchService.getList(projectId,name,paging);
     }
 
-    public int addSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {
+    public void addSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {
         if(rcExchangeCodeBatchSaveDTO.getIsVirtual().equals(Byte.valueOf("1"))){
             rcExchangeCodeBatchSaveDTO.setAmount(0);
             rcExchangeCodeBatchSaveDTO.setFaceValue(new BigDecimal(0));
@@ -41,11 +41,11 @@ public class RCExchangeCodeBatchBiz {
         }else{
             rcExchangeCodeBatchSaveDTO.setRechargeCardExpiryTime(new Date());
         }
-       return rcExchangeCodeBatchService.addSave(rcExchangeCodeBatchSaveDTO);
+       rcExchangeCodeBatchService.addSave(rcExchangeCodeBatchSaveDTO);
     }
 
-    public int editSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {
-        return rcExchangeCodeBatchService.editSave(rcExchangeCodeBatchSaveDTO);
+    public void editSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {
+        rcExchangeCodeBatchService.editSave(rcExchangeCodeBatchSaveDTO);
     }
 
     public RCExchangeCodeBatchEditDTO getById(Integer id) {
@@ -55,27 +55,27 @@ public class RCExchangeCodeBatchBiz {
 
 
 
-    public int startUsing(Integer id) {
-        return rcExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
+    public void startUsing(Integer id) {
+        rcExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
     }
 
-    public int stopUsing(Integer id) {
-        return rcExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
+    public void stopUsing(Integer id) {
+         rcExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
     }
 
     public List<RCExchangeCodeBatchDTO> getList(Integer projectId, String name) {
         return null;
     }
 
-    public int delete(Integer id) {
-        return 0;
+    public void delete(Integer id) {
+
     }
 
     public List<RCExchangeCodeBatchDTO> getByProjectId(Integer projectId) {
         return null;
     }
 
-    public int generateCode(Integer id) {
-        return rcExchangeCodeBatchService.generateCode(id);
+    public void generateCode(Integer id) {
+        rcExchangeCodeBatchService.generateCode(id);
     }
 }

@@ -19,14 +19,14 @@ public interface SysRoleService {
      * @param roleId
      * @return
      */
-    int deleteRoleWithPerms(Integer roleId);
+    void deleteRoleWithPerms(Integer roleId);
 
     /**
      * 根据id删除角色（不包括权限）
      * @param id
      * @return
      */
-    int delete(Integer id);
+    void delete(Integer id);
 
     /**
      * 根据角色id查找角色信息，包括权限
@@ -58,7 +58,7 @@ public interface SysRoleService {
      * @param oldPermsDto
      * @return
      */
-    int saveRoleWithPerm(boolean isAdd, SysRoleDTO sysRoleDTO, List<SysRolePermissionDTO> newPermsDto, List<SysRolePermissionDTO> oldPermsDto);
+    void saveRoleWithPerm(boolean isAdd, SysRoleDTO sysRoleDTO, List<SysRolePermissionDTO> newPermsDto, List<SysRolePermissionDTO> oldPermsDto);
 
     /**
      * 查询所有角色信息

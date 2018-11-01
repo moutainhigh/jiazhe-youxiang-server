@@ -6,8 +6,8 @@ import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.realm.AuthRealm;
 import com.jiazhe.youxiang.base.util.*;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
-import com.jiazhe.youxiang.server.common.enums.LoginEnum;
-import com.jiazhe.youxiang.server.common.exceptions.CommonException;
+import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.login.SendMsgReq;
@@ -16,7 +16,6 @@ import com.jiazhe.youxiang.server.vo.req.login.LoginReq;
 import io.swagger.annotations.ApiOperation;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
-import org.apache.logging.log4j.util.Strings;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -58,39 +57,34 @@ public class APISignInController extends BaseController {
 
     @ApiOperation(value = "登录", httpMethod = "GET", notes = "登录")
     @RequestMapping(value = "/signin")
-    public Object sigin(@ModelAttribute LoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
+    public Object signin(@ModelAttribute LoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
         String loginName = req.getLoginname();
         String password = req.getPassword();
         String identifyingCode = req.getIdentifyingCode();
         String bizId = req.getBizId();
         List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(loginName);
         //首先判断用户是否存在且唯一
-        if(Strings.isBlank(loginName)||Strings.isBlank(password)){
-            throw new CommonException(LoginEnum.LOGIN_USER_ILLEGAL.getCode(), LoginEnum.LOGIN_USER_ILLEGAL.getType(), LoginEnum.LOGIN_USER_ILLEGAL.getMessage());
-        }
+        CommonValidator.validateNull(req.getLoginname(),new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
+        CommonValidator.validateNull(req.getPassword(),new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         if (sysUserDTOList.size() != 1) {
-            throw new CommonException(LoginEnum.LOGIN_USER_ILLEGAL.getCode(), LoginEnum.LOGIN_USER_ILLEGAL.getType(), LoginEnum.LOGIN_USER_ILLEGAL.getMessage());
+            throw new LoginException(LoginCodeEnum.LOGIN_USER_ILLEGAL);
         }
         SysUserDTO sysUserDTO = sysUserDTOList.get(0);
         String saltPassword = EncryptPasswordUtil.encrypt(sysUserDTO.getSalt(), password);
         //密码是否正确
         if (!saltPassword.equals(sysUserDTO.getPassword())) {
-            throw new CommonException(LoginEnum.LOGIN_PASSWRLD_WRONG.getCode(), LoginEnum.LOGIN_PASSWRLD_WRONG.getType(), LoginEnum.LOGIN_PASSWRLD_WRONG.getMessage());
+            throw new LoginException(LoginCodeEnum.LOGIN_PASSWRLD_WRONG);
         }
         //判断最后一次登陆ip是否一致，一致则直接登陆
         if (sysUserDTO.getLastLoginIp().equals(IpAdrressUtil.getIpAdrress(request))) {
 
         } else {
             //判断有没有短信bizId传过来
-            if (Strings.isEmpty(bizId)) {
-                throw new CommonException(LoginEnum.LOGIN_DIFFERENT_CLIENT.getCode(), LoginEnum.LOGIN_DIFFERENT_CLIENT.getType(), LoginEnum.LOGIN_DIFFERENT_CLIENT.getMessage());
-            }
-            if (Strings.isEmpty(identifyingCode)) {
-                throw new CommonException(LoginEnum.LOGIN_IDENTIFYING_CODE_EMPTY.getCode(), LoginEnum.LOGIN_IDENTIFYING_CODE_EMPTY.getType(), LoginEnum.LOGIN_IDENTIFYING_CODE_EMPTY.getMessage());
-            }
+            CommonValidator.validateNull(bizId,new LoginException(LoginCodeEnum.LOGIN_DIFFERENT_CLIENT));
+            CommonValidator.validateNull(identifyingCode,new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_EMPTY));
             //判断验证码是否正确
             if (!AliUtils.isVerified(sysUserDTO.getMobile(), identifyingCode, bizId)) {
-                throw new CommonException(LoginEnum.LOGIN_IDENTIFYING_CODE_ERROR.getCode(), LoginEnum.LOGIN_IDENTIFYING_CODE_ERROR.getType(), LoginEnum.LOGIN_IDENTIFYING_CODE_ERROR.getMessage());
+                throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
             }
         }
         Subject subject = SecurityUtils.getSubject();
@@ -122,16 +116,12 @@ public class APISignInController extends BaseController {
     public Object sendCode(@ModelAttribute SendMsgReq req) throws ClientException {
         List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(req.getLoginname());
         if (sysUserDTOList.size() != 1) {
-            throw new CommonException(LoginEnum.LOGIN_USER_ILLEGAL.getCode(), LoginEnum.LOGIN_USER_ILLEGAL.getType(), LoginEnum.LOGIN_USER_ILLEGAL.getMessage());
+            throw new LoginException(LoginCodeEnum.LOGIN_USER_ILLEGAL);
         }
         if (!ValidateUtils.phoneValidate(sysUserDTOList.get(0).getMobile())) {
-            throw new CommonException(LoginEnum.LOGIN_MOBILE_ILLEGAL.getCode(), LoginEnum.LOGIN_MOBILE_ILLEGAL.getType(), LoginEnum.LOGIN_MOBILE_ILLEGAL.getMessage());
+            throw new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL);
         }
         SendSmsResponse res = AliUtils.sendMsg(sysUserDTOList.get(0).getMobile());
-        if(res.getCode() == null || !res.getCode().equals("OK")){
-            logger.error("发送验证码失败，原因："+res.getMessage());
-            throw new CommonException(LoginEnum.LOGIN_MOBILE_ILLEGAL.getCode(), LoginEnum.LOGIN_MOBILE_ILLEGAL.getType(), LoginEnum.LOGIN_MOBILE_ILLEGAL.getMessage());
-        }
         SendMsgResp sendMsgResp = new SendMsgResp();
         sendMsgResp.setBizId(res.getBizId());
         return ResponseFactory.buildResponse(sendMsgResp);

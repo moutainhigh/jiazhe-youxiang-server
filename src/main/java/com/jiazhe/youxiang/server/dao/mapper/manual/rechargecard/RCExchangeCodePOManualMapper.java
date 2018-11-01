@@ -12,11 +12,11 @@ import java.util.List;
  */
 public interface RCExchangeCodePOManualMapper {
 
-    int batchInsert(List<RechargeCardExchangeCodePO> rechargeCardExchangeCodePOList);
+    void batchInsert(List<RechargeCardExchangeCodePO> rechargeCardExchangeCodePOList);
 
     RechargeCardExchangeCodePO findByKeyt(String keyt);
 
-    int batchUpdate(List<RechargeCardExchangeCodePO> poList);
+    void batchUpdate(List<RechargeCardExchangeCodePO> poList);
 
     /**
      * 根据批次id，批量修改兑换码的启用停用状态
@@ -24,7 +24,7 @@ public interface RCExchangeCodePOManualMapper {
      * @param status
      * @return
      */
-    int batchChangeStatus(@Param("batchId") Integer batchId, @Param("status")Byte status);
+    void batchChangeStatus(@Param("batchId") Integer batchId, @Param("status")Byte status);
 
     /**
      * 根据批次id 和查询条件查询统计兑换码个数

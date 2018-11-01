@@ -23,13 +23,13 @@ public interface SysRolePermissionService {
      * @param ids
      * @return
      */
-    int batchDelete(List<Integer> ids);
+    void batchDelete(List<Integer> ids);
 
     /**
      * 根据实体批量插入
      * @param newPermsPO
      * @return
      */
-    int batchInsert(List<SysRolePermissionPO> newPermsPO);
+    void batchInsert(List<SysRolePermissionPO> newPermsPO);
 
 }

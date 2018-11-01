@@ -19,9 +19,9 @@ public interface SysUserService {
 
     List<SysUserDTO> getList(String loginName,String displayName, Paging paging);
 
-    int deleteUserWithRole(Integer userId);
+    void deleteUserWithRole(Integer userId);
 
-    int delete(Integer id);
+    void delete(Integer id);
 
     UserWithRoleDTO findUserWithRoleById(Integer id);
 
@@ -29,11 +29,11 @@ public interface SysUserService {
 
     SysUserDTO findById(Integer id);
 
-    int saveUserWithRole(boolean isAdd, SysUserDTO sysUserDTO, List<SysUserRoleDTO> newRolesDto, List<SysUserRoleDTO> oldRolesDto);
+    void saveUserWithRole(boolean isAdd, SysUserDTO sysUserDTO, List<SysUserRoleDTO> newRolesDto, List<SysUserRoleDTO> oldRolesDto);
 
     List<SysUserDTO> findByLoginName(String loginName);
 
-    int updateLaseLoginInfo(Integer userId, String ipAdrress);
+    void updateLaseLoginInfo(Integer userId, String ipAdrress);
 
-    int changePassword(Integer id, String newPassword);
+    void changePassword(Integer id, String newPassword);
 }

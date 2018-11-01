@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl.rechargecard;
 
+import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.base.util.GenerateCode;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeBatchAdapter;
@@ -49,21 +50,18 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         Integer count = rcExchangeCodeBatchPOManualMapper.count(projectId, name);
         List<RechargeCardExchangeCodeBatchPO> rechargeCardExchangeCodeBatchPOList = rcExchangeCodeBatchPOManualMapper.query(projectId, name, paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
-        if (paging.getLimit() + paging.getOffset() >= count) {
-            paging.setHasMore(false);
-        }
         return rechargeCardExchangeCodeBatchPOList.stream().map(RCExchangeCodeBatchAdapter::PO2DTO).collect(Collectors.toList());
     }
 
     @Override
-    public int addSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {
+    public void addSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {
         RechargeCardExchangeCodeBatchPO rcExchangeCodeBatchPO = RCExchangeCodeBatchAdapter.DTOSave2PO(rcExchangeCodeBatchSaveDTO);
         rcExchangeCodeBatchPO.setStatus(Byte.valueOf("1"));
         rcExchangeCodeBatchPO.setIsDeleted(Byte.valueOf("0"));
         rcExchangeCodeBatchPO.setExtInfo("");
         rcExchangeCodeBatchPO.setAddTime(new Date());
         rcExchangeCodeBatchPO.setModTime(new Date());
-        return rechargeCardExchangeCodeBatchPOMapper.insert(rcExchangeCodeBatchPO);
+        rechargeCardExchangeCodeBatchPOMapper.insert(rcExchangeCodeBatchPO);
     }
 
     @Override
@@ -74,7 +72,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
     }
 
     @Override
-    public int editSave(RCExchangeCodeBatchSaveDTO batchSaveDTO) {
+    public void editSave(RCExchangeCodeBatchSaveDTO batchSaveDTO) {
         RechargeCardExchangeCodeBatchPO batchPO = rechargeCardExchangeCodeBatchPOMapper.selectByPrimaryKey(batchSaveDTO.getId());
         //批次肯定要修改的信息
         batchPO.setName(batchSaveDTO.getName());
@@ -101,12 +99,12 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
             }
         }
         rechargeCardExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
-        return 1;
     }
 
     @Override
-    public int changeBatchStatus(Integer id, Byte status) {
+    public void changeBatchStatus(Integer id, Byte status) {
         RechargeCardExchangeCodeBatchPO batchPO = rechargeCardExchangeCodeBatchPOMapper.selectByPrimaryKey(id);
+
         batchPO.setStatus(status);
         batchPO.setModTime(new Date());
         rechargeCardExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
@@ -119,13 +117,12 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
                 rcExchangeCodeService.batchChangeStatus(id, status);
             }
         }
-        return 1;
     }
 
     @Override
-    public int generateCode(Integer id) {
+    public void generateCode(Integer id) {
         RechargeCardExchangeCodeBatchPO batchPO = rechargeCardExchangeCodeBatchPOMapper.selectByPrimaryKey(id);
-        List<RCExchangeCodeSaveDTO> rcExchangeCodeSaveDTOS = new ArrayList<RCExchangeCodeSaveDTO>();
+        List<RCExchangeCodeSaveDTO> rcExchangeCodeSaveDTOS = Lists.newArrayList();
         Integer amount = batchPO.getAmount();
         String[][] codeAndKeyts = GenerateCode.generateCode(CommonConstant.RC_EXCHANGE_CODE_PREFIX, amount);
 
@@ -151,6 +148,5 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         }
         List<RechargeCardExchangeCodePO> rechargeCardExchangeCodePOList = rcExchangeCodeSaveDTOS.stream().map(RCExchangeCodeAdapter::DTOSave2PO).collect(Collectors.toList());
         rcExchangeCodeService.batchInsert(rechargeCardExchangeCodePOList);
-        return 0;
     }
 }

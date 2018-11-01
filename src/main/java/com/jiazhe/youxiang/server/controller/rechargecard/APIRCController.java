@@ -1,8 +1,12 @@
 package com.jiazhe.youxiang.server.controller.rechargecard;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCBiz;
+import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
@@ -38,6 +42,7 @@ public class APIRCController extends BaseController{
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     public Object startUsing(@ModelAttribute IdReq req) {
         //参数检查
+        CommonValidator.validateId(req);
         rcBiz.startUsing(req.getId());
         return ResponseFactory.buildSuccess();
     }
@@ -46,6 +51,7 @@ public class APIRCController extends BaseController{
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     public Object stopUsing(@ModelAttribute IdReq req) {
         //参数检查
+        CommonValidator.validateId(req);
         rcBiz.stopUsing(req.getId());
         return ResponseFactory.buildSuccess();
     }
@@ -54,6 +60,8 @@ public class APIRCController extends BaseController{
     @RequestMapping(value = "/changeexpirytime", method = RequestMethod.POST)
     public Object changeExpiryTime(@ModelAttribute ExpiryTimeEditReq req) {
         //参数检查
+        CommonValidator.validateId(req);
+        CommonValidator.validateNull(req.getExpiryTime(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRT_TIME_IS_NULL));
         rcBiz.changeExpiryTime(req.getId(),req.getExpiryTime());
         return ResponseFactory.buildSuccess();
     }
@@ -62,9 +70,8 @@ public class APIRCController extends BaseController{
     @RequestMapping(value = "/listpage", method = RequestMethod.POST)
     public Object listPage(@ModelAttribute RCPageReq req) {
         //参数检查
-        Paging paging = new Paging();
-        paging.setOffset((req.getPageNum()-1)*req.getPageSize());
-        paging.setLimit(req.getPageSize());
+        CommonValidator.validatePaging(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
         List<RCDTO> rcDTOList = rcBiz.getList(req.getCustomerId(),req.getStatus(),paging);
         List<RCResp> rcRespList = rcDTOList.stream().map(RCAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildResponse(rcRespList);

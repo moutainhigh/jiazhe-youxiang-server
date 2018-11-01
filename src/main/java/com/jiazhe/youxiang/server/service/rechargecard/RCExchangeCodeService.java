@@ -19,7 +19,7 @@ public interface RCExchangeCodeService {
      * @param rechargeCardExchangeCodePOList
      * @return
      */
-    int batchInsert(List<RechargeCardExchangeCodePO> rechargeCardExchangeCodePOList);
+    void batchInsert(List<RechargeCardExchangeCodePO> rechargeCardExchangeCodePOList);
 
     /**
      * 修改兑换码启用停用状态
@@ -27,7 +27,7 @@ public interface RCExchangeCodeService {
      * @param status
      * @return
      */
-    int changeCodeStatus(Integer id, Byte status);
+    void changeCodeStatus(Integer id, Byte status);
 
     /**
      * 修改充值卡兑换码过期时间
@@ -35,7 +35,7 @@ public interface RCExchangeCodeService {
      * @param expiryTime
      * @return
      */
-    int changeExpiryTime(Integer id, Date expiryTime);
+    void changeExpiryTime(Integer id, Date expiryTime);
 
 
     /**
@@ -51,7 +51,7 @@ public interface RCExchangeCodeService {
      * @param keyt
      * @return
      */
-    int codeCharge(Integer type, String mobile, String keyt);
+    void codeCharge(Integer type, String mobile, String keyt);
 
     /**
      * 根据批次id，获取批次下码的数量
@@ -65,7 +65,7 @@ public interface RCExchangeCodeService {
      * @param batchSaveDTO
      * @return
      */
-    int updateWithBatch(RCExchangeCodeBatchSaveDTO batchSaveDTO);
+    void updateWithBatch(RCExchangeCodeBatchSaveDTO batchSaveDTO);
 
     /**
      * 根据批次id，修改兑换码的启用、停用状态
@@ -73,7 +73,7 @@ public interface RCExchangeCodeService {
      * @param status
      * @return
      */
-    int batchChangeStatus(Integer batchId, Byte status);
+    void batchChangeStatus(Integer batchId, Byte status);
 
     /**
      * 根据批次id，和相关条件查询兑换码

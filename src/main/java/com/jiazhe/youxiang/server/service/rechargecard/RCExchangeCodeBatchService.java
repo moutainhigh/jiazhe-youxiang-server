@@ -29,7 +29,7 @@ public interface RCExchangeCodeBatchService {
      * @param rcExchangeCodeBatchSaveDTO
      * @return
      */
-    int addSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO);
+    void addSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO);
 
     /**
      * \根据批次id获取批次信息
@@ -43,7 +43,7 @@ public interface RCExchangeCodeBatchService {
      * @param rcExchangeCodeBatchSaveDTO
      * @return
      */
-    int editSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO);
+    void editSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO);
 
     /**
      * 修改批次的启用禁用状态
@@ -51,12 +51,12 @@ public interface RCExchangeCodeBatchService {
      * @param status
      * @return
      */
-    int changeBatchStatus(Integer id, Byte status);
+    void changeBatchStatus(Integer id, Byte status);
 
     /**
      * 根据批次id生成充值卡兑换码
      * @param id
      * @return
      */
-    int generateCode(Integer id);
+    void generateCode(Integer id);
 }

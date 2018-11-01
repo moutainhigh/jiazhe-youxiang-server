@@ -5,7 +5,7 @@ package com.jiazhe.youxiang.server.common.enums;
  * @description
  * @date 2018/10/29.
  */
-public enum LoginEnum {
+public enum LoginCodeEnum {
     LOGIN_LOGININFO_INCOMPLETE(112001, "LOGININFO_INCOMPLETE", "用户名和密码不能为空"),
     LOGIN_USER_ILLEGAL(112002, "USER_ILLEGAL", "非法用户"),
     LOGIN_PASSWRLD_WRONG(112003, "PASSWRLD_WRONG", "密码错误"),
@@ -13,9 +13,10 @@ public enum LoginEnum {
     LOGIN_MOBILE_ILLEGAL(112005, "MOBILE_ILLEGAL", "绑定的电话号码非法，请联系管理员"),
     LOGIN_SENDCODE_ERROR(112006, "SENDCODE_ERROR", "发送验证码失败，请稍后重试"),
     LOGIN_IDENTIFYING_CODE_EMPTY(112007, "IDENTIFYING_CODE_EMPTY", "验证码不能为空"),
-    LOGIN_IDENTIFYING_CODE_ERROR(112008, "IDENTIFYING_CODE_ERROR", "验证码错误");
+    LOGIN_IDENTIFYING_CODE_ERROR(112008, "IDENTIFYING_CODE_ERROR", "验证码错误"),
+    LOGIN_IDENTIFYING_CODE_EXPIRY(112009, "LOGIN_IDENTIFYING_CODE_EXPIRY", "验证码失效");
 
-    LoginEnum(Integer code, String type, String message) {
+    LoginCodeEnum(Integer code, String type, String message) {
         this.code = code;
         this.type = type;
         this.message = message;

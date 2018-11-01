@@ -19,7 +19,7 @@ public interface SysRolePOManualMapper {
      * @param sysRolePO
      * @return
      */
-    Integer insert(SysRolePO sysRolePO);
+    void insert(SysRolePO sysRolePO);
 
     /**
      * 计数
@@ -45,5 +45,5 @@ public interface SysRolePOManualMapper {
      * @param id
      * @return
      */
-    int delete(Integer id);
+    void delete(Integer id);
 }

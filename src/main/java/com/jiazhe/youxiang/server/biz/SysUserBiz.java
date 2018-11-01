@@ -39,8 +39,8 @@ public class SysUserBiz {
         return sysUserService.getList(loginName,displayName,paging);
     }
 
-    public int deleteUserWithRole(Integer userId) {
-        return sysUserService.deleteUserWithRole(userId);
+    public void deleteUserWithRole(Integer userId) {
+        sysUserService.deleteUserWithRole(userId);
     }
 
     public UserWithRoleDTO findUserWithRoleById(Integer id) {
@@ -52,7 +52,7 @@ public class SysUserBiz {
         return (2 == sysUserDTOList.size()) || (sysUserDTOList.size() == 1 && !sysUserDTOList.get(0).getId().equals(userWithRoleDTO.getId()));
     }
 
-    public int saveRoleWithPerm(UserWithRoleDTO userWithRoleDTO) {
+    public void saveRoleWithPerm(UserWithRoleDTO userWithRoleDTO) {
         /*判断是新建还是修改，id=0为新建，其他为修改*/
         boolean isAdd = userWithRoleDTO.getId() == 0;
         /*用户信息DTO*/
@@ -107,7 +107,7 @@ public class SysUserBiz {
         sysUserDTO.setMobile(userWithRoleDTO.getMobile());
         sysUserDTO.setDisplayName(userWithRoleDTO.getDisplayName());
         sysUserDTO.setLoginName(userWithRoleDTO.getLoginName());
-        return sysUserService.saveUserWithRole(isAdd, sysUserDTO, newRolesDto, oldRolesDto);
+        sysUserService.saveUserWithRole(isAdd, sysUserDTO, newRolesDto, oldRolesDto);
     }
 
     public List<SysUserDTO> findByName(String name) {
@@ -118,11 +118,11 @@ public class SysUserBiz {
         return sysUserService.findByLoginName(loginName);
     }
 
-    public int updateLastLoginInfo(Integer userId , String ipAdrress) {
-        return sysUserService.updateLaseLoginInfo(userId,ipAdrress);
+    public void updateLastLoginInfo(Integer userId , String ipAdrress) {
+        sysUserService.updateLaseLoginInfo(userId,ipAdrress);
     }
 
-    public int changePassword(Integer id, String newPassword) {
-        return sysUserService.changePassword(id,newPassword);
+    public void changePassword(Integer id, String newPassword) {
+        sysUserService.changePassword(id,newPassword);
     }
 }

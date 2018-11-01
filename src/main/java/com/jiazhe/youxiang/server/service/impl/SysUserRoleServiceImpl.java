@@ -42,12 +42,12 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
     }
 
     @Override
-    public int batchDelete(List<Integer> ids) {
-        return sysUserRolePOManualMapper.batchDelete(ids);
+    public void batchDelete(List<Integer> ids) {
+         sysUserRolePOManualMapper.batchDelete(ids);
     }
 
     @Override
-    public int batchInsert(List<SysUserRolePO> newRolesPO) {
-        return sysUserRolePOManualMapper.batchInsert(newRolesPO);
+    public void batchInsert(List<SysUserRolePO> newRolesPO) {
+         sysUserRolePOManualMapper.batchInsert(newRolesPO);
     }
 }

@@ -25,22 +25,22 @@ public class RCBiz {
 
     @Autowired
     private RCService rcService ;
-    public int startUsing(Integer id) {
-        return rcService.changeStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
+    public void startUsing(Integer id) {
+        rcService.changeStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
     }
 
-    public int stopUsing(Integer id) {
-        return rcService.changeStatus(id,CodeStatusEnum.STOP_USING.getId().byteValue());
-    }
-
-
-    public int changeExpiryTime(Integer id, Date expiryTime) {
-        return rcService.changeExpiryTime(id,expiryTime);
+    public void stopUsing(Integer id) {
+        rcService.changeStatus(id,CodeStatusEnum.STOP_USING.getId().byteValue());
     }
 
 
-    public int directCharge(String mobile , Integer batchId, BigDecimal faceValue) {
-        return rcService.directCharge(mobile,batchId,faceValue);
+    public void changeExpiryTime(Integer id, Date expiryTime) {
+        rcService.changeExpiryTime(id,expiryTime);
+    }
+
+
+    public void directCharge(String mobile , Integer batchId, BigDecimal faceValue) {
+        rcService.directCharge(mobile,batchId,faceValue);
     }
 
     public List<RCDTO> getList(Integer customerId, Byte status, Paging paging) {

@@ -43,18 +43,18 @@ public class SysRoleServiceImpl implements SysRoleService {
     private static final Logger LOGGER = LoggerFactory.getLogger(SysRoleServiceImpl.class);
 
     @Override
-    public int deleteRoleWithPerms(Integer roleId) {
+    public void deleteRoleWithPerms(Integer roleId) {
         List<SysRolePermissionDTO> sysRolePermissionDTOList = sysRolePermissionService.findByRoleId(roleId);
         List<Integer> ids = sysRolePermissionDTOList.stream().map(SysRolePermissionDTO::getId).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(sysRolePermissionDTOList)) {
             sysRolePermissionService.batchDelete(ids);
         }
-        return delete(roleId);
+        delete(roleId);
     }
 
     @Override
-    public int delete(Integer id) {
-        return sysRolePOManualMapper.delete(id);
+    public void delete(Integer id) {
+        sysRolePOManualMapper.delete(id);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
-    public int saveRoleWithPerm(boolean isAdd, SysRoleDTO sysRoleDTO, List<SysRolePermissionDTO> newPermsDto, List<SysRolePermissionDTO> oldPermsDto) {
+    public void saveRoleWithPerm(boolean isAdd, SysRoleDTO sysRoleDTO, List<SysRolePermissionDTO> newPermsDto, List<SysRolePermissionDTO> oldPermsDto) {
         SysRolePO sysRolePO = SysRoleAdapter.DTO2PO(sysRoleDTO);
         sysRolePO.setModTime(new Date());
         List<SysRolePermissionPO> newPermsPO = newPermsDto.stream().map(SysRolePermissionAdapter::DTO2PO).collect(Collectors.toList());
@@ -122,7 +122,6 @@ public class SysRoleServiceImpl implements SysRoleService {
             List<Integer> oldIds = oldPermsDto.stream().map(SysRolePermissionDTO::getId).collect(Collectors.toList());
             sysRolePermissionService.batchDelete(oldIds);
         }
-        return 1;
     }
 
     @Override
@@ -141,9 +140,6 @@ public class SysRoleServiceImpl implements SysRoleService {
         Integer count = sysRolePOManualMapper.count(name);
         List<SysRolePO> sysRolePOList = sysRolePOManualMapper.query(name, paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
-        if (paging.getLimit() + paging.getOffset() >= count) {
-            paging.setHasMore(false);
-        }
         return sysRolePOList.stream().map(SysRoleAdapter::PO2DTO).collect(Collectors.toList());
     }
 }

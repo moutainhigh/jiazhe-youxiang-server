@@ -7,11 +7,13 @@ package com.jiazhe.youxiang.server.common.enums;
  */
 public enum UserCodeEnum {
 
-    USER_INCOMPLETE_INFO(101001, "INCOMPLETE_INFO", "信息填写不完整"),
-    USER_HAS_EXISTED(101002, "HAS_EXISTED", "用户已经存在"),
-    USER_ROLE_NOTCHOOSE(101003, "NOTCHOOSE", "没有选择角色"),
-    USER_PASSWORD_DIFFERENT(101004, "PASSWORD_DIFFERENT", "两次密码不一样"),
-    USER_PASSWORD_WRONG(101005, "PASSWORD_WRONG", "密码错误");
+    USER_LOGIN_NAME_IS_NULL(101001, "USER_LOGIN_NAME_IS_NULL", "用户登录名不能为空"),
+    USER_DISPLAY_NAME_IS_NULL(101002, "USER_DISPLAY_NAME_IS_NULL", "用户姓名不能为空"),
+    USEER_PASSWORD_IS_NULL(101003,"","密码不能为空"),
+    USER_HAS_EXISTED(101004, "HAS_EXISTED", "登录名不能重复"),
+    USER_ROLE_NOT_CHOOSE(101005, "NOT_CHOOSE", "没有选择角色"),
+    USER_PASSWORD_DIFFERENT(101006, "PASSWORD_DIFFERENT", "两次密码不一样"),
+    USER_OLD_PASSWORD_WRONG(101007, "OLD_PASSWORD_WRONG", "密码错误");
 
     UserCodeEnum(Integer code, String type, String message) {
         this.code = code;

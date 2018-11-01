@@ -59,25 +59,21 @@ public class SysUserServiceImpl implements SysUserService{
         Integer count = sysUserPOManualMapper.count(loginName,displayName);
         List<SysUserPO> sysUserPOList = sysUserPOManualMapper.query(loginName,displayName,paging.getOffset(),paging.getLimit());
         paging.setTotal(count);
-        if (paging.getLimit() + paging.getOffset() >= count) {
-            paging.setHasMore(false);
-        }
         return sysUserPOList.stream().map(SysUserAdapter::PO2DTO).collect(Collectors.toList());
     }
 
     @Override
-    public int deleteUserWithRole(Integer userId) {
+    public void deleteUserWithRole(Integer userId) {
         List<SysUserRoleDTO> sysUserRoleDTOList = sysUserRoleService.findByUserId(userId);
         List<Integer> ids = sysUserRoleDTOList.stream().map(SysUserRoleDTO::getId).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(sysUserRoleDTOList)) {
             sysUserRoleService.batchDelete(ids);
         }
-        return delete(userId);
+        delete(userId);
     }
 
     @Override
-    public int delete(Integer id) {
-        return sysUserPOManualMapper.delete(id);
+    public void delete(Integer id){sysUserPOManualMapper.delete(id);
     }
 
     @Override
@@ -119,7 +115,7 @@ public class SysUserServiceImpl implements SysUserService{
     }
 
     @Override
-    public int saveUserWithRole(boolean isAdd, SysUserDTO sysUserDTO, List<SysUserRoleDTO> newRolesDto, List<SysUserRoleDTO> oldRolesDto) {
+    public void saveUserWithRole(boolean isAdd, SysUserDTO sysUserDTO, List<SysUserRoleDTO> newRolesDto, List<SysUserRoleDTO> oldRolesDto) {
         SysUserPO sysUserPO = SysUserAdapter.DTO2PO(sysUserDTO);
         sysUserPO.setModTime(new Date());
         List<SysUserRolePO> newPermsPO = newRolesDto.stream().map(SysUserRoleAdapter::DTO2PO).collect(Collectors.toList());
@@ -147,7 +143,6 @@ public class SysUserServiceImpl implements SysUserService{
             List<Integer> oldIds = oldRolesDto.stream().map(SysUserRoleDTO::getId).collect(Collectors.toList());
             sysUserRoleService.batchDelete(oldIds);
         }
-        return 1;
     }
 
     @Override
@@ -161,19 +156,19 @@ public class SysUserServiceImpl implements SysUserService{
     }
 
     @Override
-    public int updateLaseLoginInfo(Integer userId, String ipAdrress) {
+    public void updateLaseLoginInfo(Integer userId, String ipAdrress) {
         SysUserPO sysUserPO = sysUserPOMapper.selectByPrimaryKey(userId);
         sysUserPO.setLastLoginIp(ipAdrress);
         sysUserPO.setLastLoginTime(new Date());
-        return sysUserPOMapper.updateByPrimaryKeySelective(sysUserPO);
+        sysUserPOMapper.updateByPrimaryKeySelective(sysUserPO);
     }
 
     @Override
-    public int changePassword(Integer id, String newPassword) {
+    public void changePassword(Integer id, String newPassword) {
         SysUserPO sysUserPO = sysUserPOMapper.selectByPrimaryKey(id);
         String salt = RandomUtil.generateSalt(6);
         sysUserPO.setSalt(salt);
         sysUserPO.setPassword(EncryptPasswordUtil.encrypt(salt,newPassword));
-        return sysUserPOMapper.updateByPrimaryKeySelective(sysUserPO);
+        sysUserPOMapper.updateByPrimaryKeySelective(sysUserPO);
     }
 }

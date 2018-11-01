@@ -42,33 +42,29 @@ public class RCServiceImpl implements RCService {
     private RCExchangeRecordService rcExchangeRecordService;
 
     @Override
-    public int changeStatus(Integer id, Byte status) {
+    public void changeStatus(Integer id, Byte status) {
         RechargeCardPO rechargeCardPO = rechargeCardPOMapper.selectByPrimaryKey(id);
         rechargeCardPO.setStatus(status);
         rechargeCardPO.setModTime(new Date());
         rechargeCardPOMapper.updateByPrimaryKeySelective(rechargeCardPO);
-        return 1;
     }
 
     @Override
-    public int changeExpiryTime(Integer id, Date expiryTime) {
+    public void changeExpiryTime(Integer id, Date expiryTime) {
         RechargeCardPO rechargeCardPO = rechargeCardPOMapper.selectByPrimaryKey(id);
         rechargeCardPO.setExpiryTime(expiryTime);
         rechargeCardPO.setModTime(new Date());
         rechargeCardPOMapper.updateByPrimaryKeySelective(rechargeCardPO);
-        return 1;
     }
 
     @Override
-    public int insert(RechargeCardPO rechargeCardPO) {
+    public void insert(RechargeCardPO rechargeCardPO) {
         rcPOManualMapper.insert(rechargeCardPO);
-        return 1;
     }
 
     @Override
-    public int update(RechargeCardPO rechargeCardPO) {
+    public void update(RechargeCardPO rechargeCardPO) {
         rechargeCardPOMapper.updateByPrimaryKeySelective(rechargeCardPO);
-        return 1;
     }
 
     @Override
@@ -83,7 +79,7 @@ public class RCServiceImpl implements RCService {
     }
 
     @Override
-    public int directCharge(String mobile, Integer batchId, BigDecimal faceValue) {
+    public void directCharge(String mobile, Integer batchId, BigDecimal faceValue) {
         CustomerPO customerPO = null;
         RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchService.getById(batchId);
         RechargeCardPO rechargeCardPO = new RechargeCardPO();
@@ -112,11 +108,10 @@ public class RCServiceImpl implements RCService {
         //修改充值卡对应的兑换记录id
         rechargeCardPO.setExchangeRecordId(rechargeCardRecordPO.getId());
         rcService.update(rechargeCardPO);
-        return 1;
     }
 
     @Override
-    public int batchUpdate(List<Integer> usedIds, RCExchangeCodeBatchSaveDTO batchSaveDTO) {
+    public void batchUpdate(List<Integer> usedIds, RCExchangeCodeBatchSaveDTO batchSaveDTO) {
         List<RechargeCardExchangeRecordPO> recordPOList = rcExchangeRecordService.findByCodeIds(usedIds);
         List<Integer> cardIds = recordPOList.stream().map(RechargeCardExchangeRecordPO::getRechargeCardId).collect(Collectors.toList());
         List<RechargeCardPO> rcPOList = rcPOManualMapper.findByIds(cardIds);
@@ -134,17 +129,15 @@ public class RCServiceImpl implements RCService {
             }
         }
         rcPOManualMapper.batchUpdate(rcPOList);
-        return 0;
     }
 
     @Override
-    public int batchChangeStatus(List<Integer> usedIds,Byte status) {
+    public void batchChangeStatus(List<Integer> usedIds,Byte status) {
         List<RechargeCardExchangeRecordPO> recordPOList = rcExchangeRecordService.findByCodeIds(usedIds);
         List<Integer> cardIds = recordPOList.stream().map(RechargeCardExchangeRecordPO::getRechargeCardId).collect(Collectors.toList());
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("status",status);
         map.put("ids",cardIds);
         rcPOManualMapper.batchChangeStatus(map);
-        return 0;
     }
 }
