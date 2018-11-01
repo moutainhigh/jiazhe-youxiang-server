@@ -5,11 +5,11 @@
  */
 package com.jiazhe.youxiang.server.service.product;
 
-import com.jiazhe.youxiang.server.dto.product.ProductPriceBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 在这里编写类的功能描述
@@ -23,7 +23,7 @@ public interface ProductPriceService {
 
     List<Integer> getProductIdsByCityCodes(List<String> cityCodes);
 
-    void batchAddPrice(ProductPriceBatchAddDTO productPriceBatchAddDTO);
+    void batchAddAndUpdatePrice(Integer productId, List<String> cityCodes, BigDecimal price);
 
     ProductPriceDTO getPriceById(Integer id);
 
@@ -31,5 +31,5 @@ public interface ProductPriceService {
 
     void batchDeletePrice(List<Integer> ids);
 
-    void batchUpdatePrice(Integer productId, List<String> cityCodes, BigDecimal price);
+    Map<Integer, List<ProductPriceDTO>> getPriceMap(List<Integer> productIds, List<String> cityCodes, Integer status);
 }

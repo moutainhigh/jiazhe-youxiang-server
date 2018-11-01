@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @created 2018/10/23
  */
 public class CustomerResp extends BaseVO {
+    private static final long serialVersionUID = -4737374455334097327L;
     @ApiModelProperty("ID")
     private Integer id;
     @ApiModelProperty("手机号码")
@@ -23,8 +24,8 @@ public class CustomerResp extends BaseVO {
     private String name;
     @ApiModelProperty("客户备注")
     private String remark;
-    @ApiModelProperty("默认地址ID")
-    private Integer defaultAddressId;
+    @ApiModelProperty("默认地址")
+    private AddressResp defaultAddress;
 
     public Integer getId() {
         return id;
@@ -58,11 +59,11 @@ public class CustomerResp extends BaseVO {
         this.remark = remark;
     }
 
-    public Integer getDefaultAddressId() {
-        return defaultAddressId;
+    public AddressResp getDefaultAddress() {
+        return defaultAddress;
     }
 
-    public void setDefaultAddressId(Integer defaultAddressId) {
-        this.defaultAddressId = defaultAddressId;
+    public void setDefaultAddress(AddressResp defaultAddress) {
+        this.defaultAddress = defaultAddress;
     }
 }

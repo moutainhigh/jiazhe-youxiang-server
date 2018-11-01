@@ -16,11 +16,12 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class CustomerAddReq extends BaseVO {
 
-    @ApiModelProperty("手机号码")
+    private static final long serialVersionUID = -7970985863088405963L;
+    @ApiModelProperty("手机号码,必填")
     private String mobile;
-    @ApiModelProperty("客户名称")
+    @ApiModelProperty("客户名称,必填")
     private String name;
-    @ApiModelProperty("客户备注")
+    @ApiModelProperty("客户备注,选填，可空")
     private String remark;
 
     public String getMobile() {

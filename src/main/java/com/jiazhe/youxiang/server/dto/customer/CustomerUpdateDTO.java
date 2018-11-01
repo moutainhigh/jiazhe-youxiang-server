@@ -6,21 +6,17 @@
 package com.jiazhe.youxiang.server.dto.customer;
 
 /**
- * 在这里编写类的功能描述
+ * 客户信息修改DTO
  *
  * @author niexiao
  * @created 2018/10/23
  */
-public class CustomerDTO {
+public class CustomerUpdateDTO {
 
     /**
-     * id
+     * 客户id
      */
     private Integer id;
-    /**
-     * 手机号码
-     */
-    private String mobile;
     /**
      * 客户名称
      */
@@ -29,11 +25,6 @@ public class CustomerDTO {
      * 客户备注
      */
     private String remark;
-    /**
-     * 默认地址ID
-     */
-    //TODO niexiao 修改成默认地址
-    private AddressDTO defaultAddress;
 
     public Integer getId() {
         return id;
@@ -41,14 +32,6 @@ public class CustomerDTO {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
     }
 
     public String getName() {
@@ -65,13 +48,5 @@ public class CustomerDTO {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public AddressDTO getDefaultAddress() {
-        return defaultAddress;
-    }
-
-    public void setDefaultAddress(AddressDTO defaultAddress) {
-        this.defaultAddress = defaultAddress;
     }
 }

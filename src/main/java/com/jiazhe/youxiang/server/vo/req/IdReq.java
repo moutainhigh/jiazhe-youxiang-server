@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class IdReq extends BaseVO {
 
-    @ApiModelProperty("ID")
+    @ApiModelProperty("Id")
     private Integer id;
 
     public Integer getId() {

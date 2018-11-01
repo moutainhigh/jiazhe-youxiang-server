@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.biz.ProductBiz;
 import com.jiazhe.youxiang.server.common.enums.ProductCodeEnum;
@@ -13,7 +14,6 @@ import com.jiazhe.youxiang.server.common.exceptions.ProductException;
 import com.jiazhe.youxiang.server.dto.product.ProductAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
-import com.jiazhe.youxiang.server.dto.product.ProductPriceBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductUpdateDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -25,9 +25,9 @@ import com.jiazhe.youxiang.server.vo.req.product.ProductAddReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryAddReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryListReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductCategoryUpdateReq;
+import com.jiazhe.youxiang.server.vo.req.product.ProductListForCustomerReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductListReq;
-import com.jiazhe.youxiang.server.vo.req.product.ProductPriceBatchAddReq;
-import com.jiazhe.youxiang.server.vo.req.product.ProductPriceBatchUpdateReq;
+import com.jiazhe.youxiang.server.vo.req.product.ProductPriceBatchAddOrUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductPriceListReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.product.StatusReq;
@@ -105,9 +105,7 @@ public class APIProductController {
     @RequestMapping(value = "getcategorylist", method = RequestMethod.GET)
     public Object getCategoryList(@ModelAttribute ProductCategoryListReq req) {
         CommonValidator.validatePaging(req);
-        Paging paging = new Paging();
-        paging.setOffset(req.getOffset());
-        paging.setLimit(req.getLimit());
+        Paging paging =  PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
         List<ProductCategoryDTO> productCategoryDTOList = productBiz.getCategoryList(req.getName(), paging);
         //将DTO转成VO
@@ -195,7 +193,7 @@ public class APIProductController {
         CommonValidator.validateId(req);
         //调用BIZ方法
         ProductDTO productDTO = productBiz.getById(req.getId());
-        //用ResponseFactory将返回值包装
+        //用ResponseFactry将返回值包装p
         return ResponseFactory.buildResponse(ProductAdapter.productDTO2VO(productDTO));
     }
 
@@ -208,11 +206,30 @@ public class APIProductController {
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
     public Object getList(@ModelAttribute ProductListReq req) {
         CommonValidator.validatePaging(req);
-        Paging paging = new Paging();
-        paging.setOffset(req.getOffset());
-        paging.setLimit(req.getLimit());
+        Paging paging =  PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
         List<ProductDTO> productDTOList = productBiz.getList(req.getProductCategoryId(), req.getName(), req.getProductType(), req.getCityCodes(), req.getStatus(), paging);
+        //将DTO转成VO
+        List<ProductResp> result = productDTOList.stream().map(ProductAdapter::productDTO2VO).collect(Collectors.toList());
+        //用ResponseFactory将返回值包装
+        return ResponseFactory.buildPaginationResponse(result, paging);
+    }
+
+    /**
+     * 获得商品列表（前端客户专用）
+     *
+     * @return
+     */
+    @ApiOperation(value = "获得商品列表（前端客户专用）", httpMethod = "GET", response = ProductResp.class, responseContainer = "List", notes = "获得商品列表（前端客户专用）")
+    @RequestMapping(value = "getlistforcustomer", method = RequestMethod.GET)
+    public Object getListForCustomer(@ModelAttribute ProductListForCustomerReq req) {
+        CommonValidator.validatePaging(req);
+        CommonValidator.validateId(req.getProductCategoryId(), new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_ID_IS_NULL));
+        CommonValidator.validateNull(req.getCityCode(), new ProductException(ProductCodeEnum.PRODUCT_CITY_CODE_IS_NULL));
+        validateProductType(req.getProductType());
+        Paging paging =  PagingParamUtil.pagingParamSwitch(req);
+        //调用BIZ方法
+        List<ProductDTO> productDTOList = productBiz.getListForCustomer(req.getProductCategoryId(), req.getName(), req.getProductType(), req.getCityCode(), paging);
         //将DTO转成VO
         List<ProductResp> result = productDTOList.stream().map(ProductAdapter::productDTO2VO).collect(Collectors.toList());
         //用ResponseFactory将返回值包装
@@ -268,20 +285,19 @@ public class APIProductController {
     /*************商品价格相关******************/
 
     /**
-     * 批量添加商品价格
+     * 批量添加或修改商品价格
      *
      * @return
      */
-    @ApiOperation(value = "批量添加商品价格", httpMethod = "POST", notes = "批量添加商品价格")
-    @RequestMapping(value = "batchaddprice", method = RequestMethod.POST)
-    public Object batchAddPrice(@ModelAttribute ProductPriceBatchAddReq req) {
+    @ApiOperation(value = "批量添加或修改商品价格", httpMethod = "POST", notes = "批量添加或修改商品价格")
+    @RequestMapping(value = "batchaddorupdateprice", method = RequestMethod.POST)
+    public Object batchAddOrUpdatePrice(@ModelAttribute ProductPriceBatchAddOrUpdateReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateId(req.getProductId(), new ProductException(ProductCodeEnum.PRODUCT_ID_IS_NULL));
         validateCityCodes(req.getCityCodes());
         validatePrice(req.getPrice());
-        ProductPriceBatchAddDTO productPriceBatchAddDTO = ProductAdapter.productPriceBatchAddReq2DTO(req);
         //调用BIZ方法
-        productBiz.batchAddPrice(productPriceBatchAddDTO);
+        productBiz.batchAddOrUpdatePrice(req.getProductId(), req.getCityCodes(), req.getPrice());
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -334,23 +350,6 @@ public class APIProductController {
         return ResponseFactory.buildResponse(productPriceDTOList.stream().map(ProductAdapter::productPriceDTO2VO).collect(Collectors.toList()));
     }
 
-    /**
-     * 批量编辑商品的价格
-     *
-     * @return
-     */
-    @ApiOperation(value = "批量编辑商品的价格", httpMethod = "POST", notes = "批量编辑商品的价格")
-    @RequestMapping(value = "batchupdateprice", method = RequestMethod.POST)
-    public Object batchUpdatePrice(@ModelAttribute ProductPriceBatchUpdateReq req) {
-        CommonValidator.validateNull(req);
-        CommonValidator.validateId(req.getProductId(), new ProductException(ProductCodeEnum.PRODUCT_ID_IS_NULL));
-        validateCityCodes(req.getCityCodes());
-        validatePrice(req.getPrice());
-        //调用BIZ方法
-        productBiz.batchUpdatePrice(req.getProductId(), req.getCityCodes(), req.getPrice());
-        //用ResponseFactory将返回值包装
-        return ResponseFactory.buildSuccess();
-    }
 
     /**
      * 批量删除商品价格
