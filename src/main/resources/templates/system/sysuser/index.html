@@ -253,9 +253,6 @@
         viewrecords: true,
         emptyrecords: "0条数据",
         loadComplete: function (data) {
-            data.currPage = data.paging.offset / data.paging.limit;
-            data.totalPage = data.paging.total / data.paging.limit;
-            data.totalCount = data.paging.total;
             var table = this;
             setTimeout(function () {
                 $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
@@ -264,9 +261,9 @@
         },
         jsonReader: { // jsonReader来跟服务器端返回的数据做对应
             root: "data", // 包含实际数据的数组
-            page: "currPage", // 当前页
-            total: "totalPage",// 总页数
-            records: "totalCount", // 查询出的记录数
+            page: "paging.currPage", // 当前页
+            total: "paging.totalPage",// 总页数
+            records: "paging.total", // 查询出的记录数
             repeatitems: false
         },
         caption: "员工列表"

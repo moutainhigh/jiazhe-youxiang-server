@@ -20,6 +20,10 @@ public class Paging {
 
     private Boolean hasMore = false;
 
+    private Integer currPage;
+
+    private Integer totalPage;
+
     public Paging() {
         // 默认构造函数也给出来
     }
@@ -59,13 +63,20 @@ public class Paging {
     public void setTotal(Integer total) {
         this.total = total;
         this.hasMore = this.getLimit() + this.getOffset() < total;
+        this.currPage = (int) Math.ceil(1.0 * this.getOffset() / this.getLimit() + 1);
+        this.totalPage = (int) Math.ceil(1.0 * this.getTotal() / this.getLimit());
     }
 
     public Boolean getHasMore() {
         return hasMore;
     }
 
-    public void setHasMore(Boolean hasMore) {
-        this.hasMore = hasMore;
+    public Integer getCurrPage() {
+        return currPage;
     }
+
+    public Integer getTotalPage() {
+        return totalPage;
+    }
+
 }
