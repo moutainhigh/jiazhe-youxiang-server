@@ -186,9 +186,6 @@
         viewrecords: true,
         emptyrecords: "0条数据",
         loadComplete: function (data) {
-            data.currPage = data.paging.offset / data.paging.limit;
-            data.totalPage = data.paging.total / data.paging.limit;
-            data.totalCount = data.paging.total;
             var table = this;
             setTimeout(function () {
                 $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
