@@ -5,6 +5,9 @@
  */
 package com.jiazhe.youxiang.server.service;
 
+import com.jiazhe.youxiang.server.dto.customer.AddressAddDTO;
+import com.jiazhe.youxiang.server.dto.customer.AddressDTO;
+import com.jiazhe.youxiang.server.dto.customer.AddressUpdateDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerUpdateDTO;
@@ -29,4 +32,16 @@ public interface CustomerService {
     void update(CustomerUpdateDTO customerUpdateDTO);
 
     void delete(Integer id);
+
+    List<AddressDTO> getAddressList(Integer customerId, Paging paging);
+
+    void setAddressDefault(Integer id, Integer isDefault);
+
+    void deleteAddress(Integer id);
+
+    void updateAddress(AddressUpdateDTO addressUpdateDTO);
+
+    AddressDTO getAddressById(Integer id);
+
+    void addAddress(AddressAddDTO addressAddDTO);
 }

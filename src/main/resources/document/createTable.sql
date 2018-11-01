@@ -353,7 +353,7 @@ CREATE TABLE `customer` (
     `name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '客户姓名',
     `password` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '密码',
     `remark` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '备注信息',
-    `default_address_id` INT(10) UNSIGNED COMMENT '默认地址id',
+    `default_address_id` INT(10) UNSIGNED DEFAULT '0' COMMENT '默认地址id,0表示没有地址',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

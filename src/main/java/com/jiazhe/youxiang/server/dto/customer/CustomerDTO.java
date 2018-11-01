@@ -33,7 +33,7 @@ public class CustomerDTO {
      * 默认地址ID
      */
     //TODO niexiao 修改成默认地址
-    private Integer defaultAddressId;
+    private AddressDTO defaultAddress;
 
     public Integer getId() {
         return id;
@@ -67,11 +67,11 @@ public class CustomerDTO {
         this.remark = remark;
     }
 
-    public Integer getDefaultAddressId() {
-        return defaultAddressId;
+    public AddressDTO getDefaultAddress() {
+        return defaultAddress;
     }
 
-    public void setDefaultAddressId(Integer defaultAddressId) {
-        this.defaultAddressId = defaultAddressId;
+    public void setDefaultAddress(AddressDTO defaultAddress) {
+        this.defaultAddress = defaultAddress;
     }
 }

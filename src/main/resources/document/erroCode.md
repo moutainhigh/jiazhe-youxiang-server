@@ -9,6 +9,7 @@
 | 充值卡管理| 106 | com.jiazhe.youxiang.server.common.enums.ProjectCodeEnum |
 | 代金券管理| 107 | com.jiazhe.youxiang.server.common.enums.ProjectCodeEnum |
 | 订单管理| 108 | com.jiazhe.youxiang.server.common.enums.ProjectCodeEnum |
-| 客户管理| 109 | com.jiazhe.youxiang.server.common.enums.ProjectCodeEnum |
-| 商品管理| 110 | com.jiazhe.youxiang.server.common.enums.ProjectCodeEnum |
-| 审核管理| 111 | com.jiazhe.youxiang.server.common.enums.ProjectCodeEnum |
+| 客户管理| 109 | com.jiazhe.youxiang.server.common.enums.CustomerCodeEnum |
+| 商品管理| 110 | com.jiazhe.youxiang.server.common.enums.ProductCodeEnum |
+| 审核管理| 111 |  |
+| 地址管理| 112 | com.jiazhe.youxiang.server.common.enums.AddressCodeEnum |

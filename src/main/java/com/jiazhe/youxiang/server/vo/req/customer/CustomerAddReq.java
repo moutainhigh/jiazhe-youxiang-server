@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class CustomerAddReq extends BaseVO {
 
+    private static final long serialVersionUID = -7970985863088405963L;
     @ApiModelProperty("手机号码,必填")
     private String mobile;
     @ApiModelProperty("客户名称,必填")

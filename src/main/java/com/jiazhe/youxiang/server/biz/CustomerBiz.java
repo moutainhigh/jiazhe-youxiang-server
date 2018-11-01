@@ -5,6 +5,9 @@
  */
 package com.jiazhe.youxiang.server.biz;
 
+import com.jiazhe.youxiang.server.dto.customer.AddressAddDTO;
+import com.jiazhe.youxiang.server.dto.customer.AddressDTO;
+import com.jiazhe.youxiang.server.dto.customer.AddressUpdateDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerUpdateDTO;
@@ -27,6 +30,22 @@ public class CustomerBiz {
     @Autowired
     private CustomerService customerService;
 
+    /**
+     * 默认地址代码
+     */
+    public static final Integer CODE_ADDRESS_IS_DEFAULT = Integer.valueOf(1);
+    /**
+     * 非地址代码
+     */
+    public static final Integer CODE_ADDRESS_IS_NOT_DEFAULT = Integer.valueOf(0);
+
+    /**
+     * 没有默认地址的代码
+     */
+    public static final Integer CODE_CUSTOMER_NO_DEFAULT_ADDRESS = Integer.valueOf(0);
+
+    /********************客户相关***********************/
+
     public void add(CustomerAddDTO customerAddDTO) {
         customerService.add(customerAddDTO);
     }
@@ -45,5 +64,36 @@ public class CustomerBiz {
 
     public void delete(Integer id) {
         customerService.delete(id);
+    }
+
+
+    /********************客户地址相关***********************/
+
+    public void addAddress(AddressAddDTO addressAddDTO) {
+        customerService.addAddress(addressAddDTO);
+
+    }
+
+    public AddressDTO getAddressById(Integer id) {
+        return customerService.getAddressById(id);
+
+    }
+
+    public List<AddressDTO> getAddressList(Integer customerId,Paging paging) {
+        return customerService.getAddressList(customerId, paging);
+    }
+
+    public void updateAddress(AddressUpdateDTO addressUpdateDTO) {
+        customerService.updateAddress(addressUpdateDTO);
+
+    }
+
+    public void deleteAddress(Integer id) {
+        customerService.deleteAddress(id);
+    }
+
+    public void setAddressDefault(Integer id, Integer isDefault) {
+        customerService.setAddressDefault(id, isDefault);
+
     }
 }
