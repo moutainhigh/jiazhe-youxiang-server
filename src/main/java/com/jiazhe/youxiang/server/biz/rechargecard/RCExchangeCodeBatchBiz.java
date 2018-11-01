@@ -82,10 +82,4 @@ public class RCExchangeCodeBatchBiz {
         rcExchangeCodeBatchService.generateCode(id);
     }
 
-    public void export(Integer batchId) {
-       List<RCExchangeCodeDTO> rcExchangeCodeDTOList= rcExchangeCodeBiz.getByBatchId(batchId);
-       if(rcExchangeCodeDTOList.isEmpty()){
-           throw new RechargeCardException(RechargeCardCodeEnum.NO_CODE_TO_EXPORT);
-       }
-    }
 }

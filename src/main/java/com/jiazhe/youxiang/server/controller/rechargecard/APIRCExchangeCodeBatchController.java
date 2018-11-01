@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.controller.rechargecard;
 import com.alibaba.druid.sql.PagerUtils;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.ExportExcelUtils;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeBatchAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCExchangeCodeBatchBiz;
@@ -32,6 +33,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -146,10 +149,20 @@ public class APIRCExchangeCodeBatchController extends BaseController {
 
     @ApiOperation(value = "导出批次下兑换码", httpMethod = "GET", notes = "导出批次下兑换码")
     @RequestMapping(value = "/export", method = RequestMethod.GET)
-    public Object export(@ModelAttribute IdReq req) {
-        //参数检查
+    public void export(@ModelAttribute IdReq req, HttpServletResponse response) throws IOException {
+        List<RCExchangeCodeDTO> rcExchangeCodeDTOList= rcExchangeCodeBiz.getByBatchId(req.getId());
+        ExportExcelUtils.exportExcel(response,rcExchangeCodeDTOList);
+    }
+
+    @ApiOperation(value = "导出前检查", httpMethod = "GET", notes = "导出前检查")
+    @RequestMapping(value = "/exportcheck", method = RequestMethod.GET)
+    public Object exportCheck(@ModelAttribute IdReq req){
         CommonValidator.validateId(req);
-        rcExchangeCodeBatchBiz.export(req.getId());
+        List<RCExchangeCodeDTO> rcExchangeCodeDTOList= rcExchangeCodeBiz.getByBatchId(req.getId());
+        if(rcExchangeCodeDTOList.isEmpty()){
+            throw new RechargeCardException(RechargeCardCodeEnum.NO_CODE_TO_EXPORT);
+        }
         return ResponseFactory.buildSuccess();
     }
+
 }

@@ -455,7 +455,7 @@
                 str = str + "<a class='btn btn-minier btn-primary' href=\"../rechargecard/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name + "\">" +
                     "<i class='ace-icon'>兑换码管理</i>" +
                     "</a>&nbsp;&nbsp;";
-                str = str + "<a class='btn btn-minier btn-yellow' href=\"../api/rcexchangecodebatch/export?id=" + rowObject.id+ "\">" +
+                str = str + "<a class='btn btn-minier btn-yellow' href=\"javascript:exportExcel('" + rowObject.id + "')\">" +
                     "<i class='ace-icon'>导出</i>" +
                     "</a>&nbsp;&nbsp;";
             } else {
@@ -585,6 +585,29 @@
                 } else {
                     jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                     bootboxalert("生成兑换码成功");
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+    //导出为excel
+    function exportExcel(id) {
+        $.ajax({
+            url: "../api/rcexchangecodebatch/exportcheck",
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                }else {
+                    window.location.href = "../api/rcexchangecodebatch/export?id="+id;
                 }
             },
             error: function () {
