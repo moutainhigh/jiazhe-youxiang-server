@@ -71,23 +71,12 @@ public class Paging {
         return hasMore;
     }
 
-    public void setHasMore(Boolean hasMore) {
-        this.hasMore = hasMore;
-    }
-
     public Integer getCurrPage() {
         return currPage;
-    }
-
-    public void setCurrPage(Integer currPage) {
-        this.currPage = currPage;
     }
 
     public Integer getTotalPage() {
         return totalPage;
     }
 
-    public void setTotalPage(Integer totalPage) {
-        this.totalPage = totalPage;
-    }
 }
