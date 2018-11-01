@@ -40,7 +40,7 @@ public class RCExchangeCodeBatchEditResp extends BaseVO {
 
     private Byte expiryType;
 
-    private Byte hasCode;
+    private Byte isMade;
 
     public Integer getId() {
         return id;
@@ -154,11 +154,11 @@ public class RCExchangeCodeBatchEditResp extends BaseVO {
         this.faceValue = faceValue;
     }
 
-    public Byte getHasCode() {
-        return hasCode;
+    public Byte getIsMade() {
+        return isMade;
     }
 
-    public void setHasCode(Byte hasCode) {
-        this.hasCode = hasCode;
+    public void setIsMade(Byte isMade) {
+        this.isMade = isMade;
     }
 }

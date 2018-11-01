@@ -18,6 +18,8 @@ public class RCExchangeCodeBatchEditDTO {
 
     private Byte isVirtual;
 
+    private Byte isMade;
+
     private String description;
 
     private Integer projectId;
@@ -150,4 +152,11 @@ public class RCExchangeCodeBatchEditDTO {
         this.faceValue = faceValue;
     }
 
+    public Byte getIsMade() {
+        return isMade;
+    }
+
+    public void setIsMade(Byte isMade) {
+        this.isMade = isMade;
+    }
 }

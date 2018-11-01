@@ -82,7 +82,7 @@
             <if test="keyt != null  and keyt != ''">
                 AND keyt = #{keyt}
             </if>
-            AND batch_id = #{batchId} AND is_deleted = 0 ORDER BY status desc,used asc
+            AND batch_id = #{batchId} AND is_deleted = 0 ORDER BY id ASC
         </where>
         limit #{offset},#{limit}
 

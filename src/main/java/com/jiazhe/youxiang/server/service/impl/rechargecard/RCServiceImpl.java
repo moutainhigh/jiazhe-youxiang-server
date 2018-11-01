@@ -14,6 +14,7 @@ import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeRecordService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
  * @date 2018/10/23.
  */
 @Service("rcService")
+@Transactional
 public class RCServiceImpl implements RCService {
 
     @Autowired

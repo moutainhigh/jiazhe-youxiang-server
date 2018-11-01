@@ -77,7 +77,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(),new RechargeCardException(RechargeCardCodeEnum.BATCH_NAME_IS_NULL));
         CommonValidator.validateNull(req.getRechargeCardName(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));
-        if (req.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
+        if (!req.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
            CommonValidator.validateNull(req.getAmount(),new RechargeCardException(RechargeCardCodeEnum.NOT_VIRTUAL_NEED_AMOUNT));
            CommonValidator.validateNull(req.getFaceValue(),new RechargeCardException(RechargeCardCodeEnum.NOT_VIRTUAL_NEED_FACE_VALUE));
         }
@@ -109,8 +109,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         if (dto.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
             throw new RechargeCardException(RechargeCardCodeEnum.VIRTUAL_BATCH_CANNOT_GENERATE);
         }
-        List<RCExchangeCodeDTO> rcExchangeCodeDTOList = rcExchangeCodeBiz.getByBatchId(req.getId());
-        if (!rcExchangeCodeDTOList.isEmpty()) {
+        if(dto.getIsMade().equals(Byte.valueOf("1"))){
             throw new RechargeCardException(RechargeCardCodeEnum.CODE_GENERATED);
         }
         rcExchangeCodeBatchBiz.generateCode(req.getId());
@@ -124,13 +123,6 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         CommonValidator.validateId(req);
         RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchBiz.getById(req.getId());
         RCExchangeCodeBatchEditResp rcExchangeCodeBatchEditResp = RCExchangeCodeBatchAdapter.DTOEdit2RespEdit(rcExchangeCodeBatchEditDTO);
-        List<RCExchangeCodeDTO> rcExchangeCodeDTOList = rcExchangeCodeBiz.getByBatchId(req.getId());
-        //有码不允许修改批次的面额和码的数量
-        if(rcExchangeCodeDTOList.size()>0){
-            rcExchangeCodeBatchEditResp.setHasCode(Byte.valueOf("1"));
-        }else{
-            rcExchangeCodeBatchEditResp.setHasCode(Byte.valueOf("0"));
-        }
         return ResponseFactory.buildResponse(rcExchangeCodeBatchEditResp);
     }
 

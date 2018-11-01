@@ -29,6 +29,7 @@ public class RCExchangeCodeBatchAdapter {
         rCExchangeCodeBatchResp.setExpiryTime(dto.getExpiryTime());
         rCExchangeCodeBatchResp.setStatus(dto.getStatus());
         rCExchangeCodeBatchResp.setIsVirtual(dto.getIsVirtual());
+        rCExchangeCodeBatchResp.setIsMade(dto.getIsMade());
         return rCExchangeCodeBatchResp;
     }
 
@@ -41,6 +42,7 @@ public class RCExchangeCodeBatchAdapter {
         rCExchangeCodeBatchDTO.setName(rechargeCardExchangeCodeBatchPO.getName());
         rCExchangeCodeBatchDTO.setRechargeCardName(rechargeCardExchangeCodeBatchPO.getRechargeCardName());
         rCExchangeCodeBatchDTO.setIsVirtual(rechargeCardExchangeCodeBatchPO.getIsVirtual());
+        rCExchangeCodeBatchDTO.setIsMade(rechargeCardExchangeCodeBatchPO.getIsMade());
         rCExchangeCodeBatchDTO.setAmount(rechargeCardExchangeCodeBatchPO.getAmount());
         rCExchangeCodeBatchDTO.setFaceValue(rechargeCardExchangeCodeBatchPO.getFaceValue());
         rCExchangeCodeBatchDTO.setExpiryTime(rechargeCardExchangeCodeBatchPO.getExpiryTime());
@@ -100,6 +102,7 @@ public class RCExchangeCodeBatchAdapter {
         rCExchangeCodeBatchEditResp.setId(rcExchangeCodeBatchEditDTO.getId());
         rCExchangeCodeBatchEditResp.setName(rcExchangeCodeBatchEditDTO.getName());
         rCExchangeCodeBatchEditResp.setRechargeCardName(rcExchangeCodeBatchEditDTO.getRechargeCardName());
+        rCExchangeCodeBatchEditResp.setIsMade(rcExchangeCodeBatchEditDTO.getIsMade());
         rCExchangeCodeBatchEditResp.setIsVirtual(rcExchangeCodeBatchEditDTO.getIsVirtual());
         rCExchangeCodeBatchEditResp.setDescription(rcExchangeCodeBatchEditDTO.getDescription());
         rCExchangeCodeBatchEditResp.setProjectId(rcExchangeCodeBatchEditDTO.getProjectId());

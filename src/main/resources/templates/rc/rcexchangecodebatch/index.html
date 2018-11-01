@@ -377,15 +377,15 @@
             {
                 name: 'faceValue',
                 index: 'faceValue',
-                width:30,
+                width: 30,
                 sortable: false,
                 formatter: function (cellvalue, options, rowObject) {
                     return rowObject.isVirtual == 1 ? "--" : rowObject.faceValue;
                 }
             },
-            {name: 'amount', index: 'amount', width:30,sortable: false},
-            {name: 'expiryTime', index: 'expiryTime', width:50,sortable: false, formatter: dateFormatter},
-            {name: '_action', index: '_action', width:100,sortable: false, formatter: customFormatter}
+            {name: 'amount', index: 'amount', width: 30, sortable: false},
+            {name: 'expiryTime', index: 'expiryTime', width: 50, sortable: false, formatter: dateFormatter},
+            {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
         ],
         rowNum: 10,
         rowList: [10, 20, 30],
@@ -451,13 +451,22 @@
                 "</a>&nbsp;&nbsp;";
         }
         if (rowObject.isVirtual == 0) {
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:generateCode('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>生成兑换码</i>" +
-                "</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-primary' href=\"../rechargecard/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name +"\">" +
-                "<i class='ace-icon'>兑换码管理</i>" +
-                "</a>&nbsp;&nbsp;";
+            if (rowObject.isMade == 1) {
+                str = str + "<a class='btn btn-minier btn-primary' href=\"../rechargecard/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name + "\">" +
+                    "<i class='ace-icon'>兑换码管理</i>" +
+                    "</a>&nbsp;&nbsp;";
+                str = str + "<a class='btn btn-minier btn-primary' href=\"../rechargecard/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name + "\">" +
+                    "<i class='ace-icon'>导出</i>" +
+                    "</a>&nbsp;&nbsp;";
+            } else {
+                str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:generateCode('" + rowObject.id + "')\">" +
+                    "<i class='ace-icon'>生成兑换码</i>" +
+                    "</a>&nbsp;&nbsp;";
+            }
+
+
         }
+
         return str;
     }
 
@@ -533,7 +542,7 @@
                         $("#batchSaveForm #saveNotVirtualRadio").click();
                         $("#batchSaveForm #saveFaceValue").val(result.faceValue);
                         $("#batchSaveForm #saveAmount").val(result.amount);
-                        if (result.hasCode == 1) {
+                        if (result.isMade == 1) {
                             $("#batchSaveForm #saveFaceValue").attr("readonly", "readonly");
                             $("#batchSaveForm #saveAmount").attr("readonly", "readonly");
                         } else {
@@ -576,6 +585,7 @@
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                     bootboxalert("生成兑换码成功");
                 }
             },

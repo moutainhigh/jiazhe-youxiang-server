@@ -16,6 +16,8 @@ public class RCExchangeCodeResp extends BaseObject {
 
     private String batchName;
 
+    private String rechargeCardName;
+
     private String code;
 
     private String keyt;
@@ -90,5 +92,13 @@ public class RCExchangeCodeResp extends BaseObject {
 
     public void setUsed(Byte used) {
         this.used = used;
+    }
+
+    public String getRechargeCardName() {
+        return rechargeCardName;
+    }
+
+    public void setRechargeCardName(String rechargeCardName) {
+        this.rechargeCardName = rechargeCardName;
     }
 }

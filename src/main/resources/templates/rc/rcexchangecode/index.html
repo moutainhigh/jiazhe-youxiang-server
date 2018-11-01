@@ -151,10 +151,11 @@
         width: "100%",
         autowidth: true,
         height: 350,
-        colNames: ['','批次名称', '兑换码', '密钥', '停用状态', '使用状态', '面额',  '过期时间', '操作'],
+        colNames: ['','批次名称','充值卡名称', '兑换码', '密钥', '停用状态', '使用状态', '面额',  '过期时间', '操作'],
         colModel: [
             {name: 'id', index: 'id', sortable: false, hidden: true},
             {name: 'batchName', index: 'batchName', width: 100, sortable: false},
+            {name: 'rechargeCardName', index: 'rechargeCardName', width: 50, sortable: false},
             {name: 'code', index: 'code', width: 80, sortable: false},
             {name: 'keyt', index: 'keyt', width: 80, sortable: false},
             {

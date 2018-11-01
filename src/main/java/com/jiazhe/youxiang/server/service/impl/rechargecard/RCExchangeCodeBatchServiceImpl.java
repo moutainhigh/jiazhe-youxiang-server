@@ -58,6 +58,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
     @Override
     public void addSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {
         RechargeCardExchangeCodeBatchPO rcExchangeCodeBatchPO = RCExchangeCodeBatchAdapter.DTOSave2PO(rcExchangeCodeBatchSaveDTO);
+        rcExchangeCodeBatchPO.setIsMade(Byte.valueOf("0"));
         rcExchangeCodeBatchPO.setStatus(Byte.valueOf("1"));
         rcExchangeCodeBatchPO.setIsDeleted(Byte.valueOf("0"));
         rcExchangeCodeBatchPO.setExtInfo("");
@@ -93,7 +94,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         batchPO.setRechargeCardExpiryTime(batchSaveDTO.getRechargeCardExpiryTime());
         batchPO.setValidityPeriod(batchSaveDTO.getValidityPeriod());
         batchPO.setDescription(batchSaveDTO.getDescription());
-        //不是虚拟批次，只修改批次信息
+        //不是虚拟批次，只修改批次和码的信息
         if (batchPO.getIsVirtual().equals(Byte.valueOf("0"))) {
             //批次下面是否有码，有则为true
             List<RCExchangeCodeDTO> codeDTOList = rcExchangeCodeService.getByBatchId(batchSaveDTO.getId());
@@ -135,6 +136,13 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         if(null == batchPO){
             throw new RechargeCardException(RechargeCardCodeEnum.BATCH_NOT_EXISTED);
         }
+        List<RCExchangeCodeDTO> rcExchangeCodeDTOList = rcExchangeCodeService.getByBatchId(id);
+        //实际去查一下，批次下是否有兑换码
+        if (!rcExchangeCodeDTOList.isEmpty()) {
+            throw new RechargeCardException(RechargeCardCodeEnum.CODE_GENERATED);
+        }
+        batchPO.setIsMade(Byte.valueOf("1"));
+        rechargeCardExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
         List<RCExchangeCodeSaveDTO> rcExchangeCodeSaveDTOS = Lists.newArrayList();
         Integer amount = batchPO.getAmount();
         String[][] codeAndKeyts = GenerateCode.generateCode(CommonConstant.RC_EXCHANGE_CODE_PREFIX, amount);
@@ -154,7 +162,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
             rcExchangeCodeSaveDTO.setRechargeCardExpiryTime(batchPO.getRechargeCardExpiryTime());
             rcExchangeCodeSaveDTO.setValidityPeriod(batchPO.getValidityPeriod());
             rcExchangeCodeSaveDTO.setExpiryType(batchPO.getExpiryType());
-            rcExchangeCodeSaveDTO.setStatus(Byte.valueOf("1"));
+            rcExchangeCodeSaveDTO.setStatus(batchPO.getStatus());
             rcExchangeCodeSaveDTO.setUsed(Byte.valueOf("0"));
             rcExchangeCodeSaveDTOS.add(rcExchangeCodeSaveDTO);
         }
