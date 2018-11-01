@@ -144,4 +144,12 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @ApiOperation(value = "导出批次下兑换码", httpMethod = "GET", notes = "导出批次下兑换码")
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    public Object export(@ModelAttribute IdReq req) {
+        //参数检查
+        CommonValidator.validateId(req);
+        rcExchangeCodeBatchBiz.export(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
 }

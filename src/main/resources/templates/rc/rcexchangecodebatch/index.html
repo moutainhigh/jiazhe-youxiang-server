@@ -455,7 +455,7 @@
                 str = str + "<a class='btn btn-minier btn-primary' href=\"../rechargecard/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name + "\">" +
                     "<i class='ace-icon'>兑换码管理</i>" +
                     "</a>&nbsp;&nbsp;";
-                str = str + "<a class='btn btn-minier btn-primary' href=\"../rechargecard/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name + "\">" +
+                str = str + "<a class='btn btn-minier btn-yellow' href=\"../api/rcexchangecodebatch/export?id=" + rowObject.id+ "\">" +
                     "<i class='ace-icon'>导出</i>" +
                     "</a>&nbsp;&nbsp;";
             } else {
@@ -463,8 +463,6 @@
                     "<i class='ace-icon'>生成兑换码</i>" +
                     "</a>&nbsp;&nbsp;";
             }
-
-
         }
 
         return str;

@@ -1,6 +1,9 @@
 package com.jiazhe.youxiang.server.biz.rechargecard;
 
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
+import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
@@ -77,5 +80,12 @@ public class RCExchangeCodeBatchBiz {
 
     public void generateCode(Integer id) {
         rcExchangeCodeBatchService.generateCode(id);
+    }
+
+    public void export(Integer batchId) {
+       List<RCExchangeCodeDTO> rcExchangeCodeDTOList= rcExchangeCodeBiz.getByBatchId(batchId);
+       if(rcExchangeCodeDTOList.isEmpty()){
+           throw new RechargeCardException(RechargeCardCodeEnum.NO_CODE_TO_EXPORT);
+       }
     }
 }
