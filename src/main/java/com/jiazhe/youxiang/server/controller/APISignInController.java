@@ -76,9 +76,7 @@ public class APISignInController extends BaseController {
             throw new LoginException(LoginCodeEnum.LOGIN_PASSWRLD_WRONG);
         }
         //判断最后一次登陆ip是否一致，一致则直接登陆
-        if (sysUserDTO.getLastLoginIp().equals(IpAdrressUtil.getIpAdrress(request))) {
-
-        } else {
+        if (!sysUserDTO.getLastLoginIp().equals(IpAdrressUtil.getIpAdrress(request))){
             //判断有没有短信bizId传过来
             CommonValidator.validateNull(bizId,new LoginException(LoginCodeEnum.LOGIN_DIFFERENT_CLIENT));
             CommonValidator.validateNull(identifyingCode,new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_EMPTY));

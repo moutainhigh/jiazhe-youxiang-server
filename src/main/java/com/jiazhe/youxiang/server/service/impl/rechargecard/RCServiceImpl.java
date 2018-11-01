@@ -115,19 +115,19 @@ public class RCServiceImpl implements RCService {
         List<RechargeCardExchangeRecordPO> recordPOList = rcExchangeRecordService.findByCodeIds(usedIds);
         List<Integer> cardIds = recordPOList.stream().map(RechargeCardExchangeRecordPO::getRechargeCardId).collect(Collectors.toList());
         List<RechargeCardPO> rcPOList = rcPOManualMapper.findByIds(cardIds);
-        for(RechargeCardPO po : rcPOList){
-            po.setName(batchSaveDTO.getRechargeCardName());
-            po.setDescription(batchSaveDTO.getDescription());
-            po.setProjectId(batchSaveDTO.getProjectId());
-            po.setCityCodes(batchSaveDTO.getCityCodes());
-            po.setProductIds(batchSaveDTO.getProductIds());
+        rcPOList.stream().forEach(bean -> {
+            bean.setName(batchSaveDTO.getRechargeCardName());
+            bean.setDescription(batchSaveDTO.getDescription());
+            bean.setProjectId(batchSaveDTO.getProjectId());
+            bean.setCityCodes(batchSaveDTO.getCityCodes());
+            bean.setProductIds(batchSaveDTO.getProductIds());
             //直接指定过期时间
-            if(batchSaveDTO.getExpiryType().equals(Byte.valueOf("0"))){
-                po.setExpiryTime(batchSaveDTO.getRechargeCardExpiryTime());
+            if(batchSaveDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)){
+                bean.setExpiryTime(batchSaveDTO.getRechargeCardExpiryTime());
             }else{
-                po.setExpiryTime(new Date(System.currentTimeMillis()+batchSaveDTO.getValidityPeriod()* CommonConstant.ONE_DAY));
+                bean.setExpiryTime(new Date(bean.getAddTime().getTime()+batchSaveDTO.getValidityPeriod()* CommonConstant.ONE_DAY));
             }
-        }
+        });
         rcPOManualMapper.batchUpdate(rcPOList);
     }
 
