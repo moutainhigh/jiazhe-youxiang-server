@@ -42,13 +42,13 @@ public class SysRolePermissionServiceImpl implements SysRolePermissionService {
     }
 
     @Override
-    public int batchDelete(List<Integer> ids) {
-        return sysRolePermissionPOManualMapper.batchDelete(ids);
+    public void batchDelete(List<Integer> ids) {
+        sysRolePermissionPOManualMapper.batchDelete(ids);
     }
 
     @Override
-    public int batchInsert(List<SysRolePermissionPO> newPermsPO) {
-        return sysRolePermissionPOManualMapper.batchInsert(newPermsPO);
+    public void batchInsert(List<SysRolePermissionPO> newPermsPO) {
+        sysRolePermissionPOManualMapper.batchInsert(newPermsPO);
     }
 
 }

@@ -17,19 +17,19 @@ public interface SysUserService {
 
     List<SysUserDTO> findAll();
 
-    List<SysUserDTO> getList(String name, Paging paging);
+    List<SysUserDTO> getList(String loginName,String displayName, Paging paging);
 
-    int deleteUserWithRole(Integer userId);
-
-    int delete(Integer id);
+    void deleteUserWithRole(Integer userId);
 
     UserWithRoleDTO findUserWithRoleById(Integer id);
 
-    List<SysUserDTO> findByName(String name);
-
     SysUserDTO findById(Integer id);
 
-    int saveUserWithRole(boolean isAdd, SysUserDTO sysUserDTO, List<SysUserRoleDTO> newRolesDto, List<SysUserRoleDTO> oldRolesDto);
+    void saveUserWithRole(boolean isAdd, SysUserDTO sysUserDTO, List<SysUserRoleDTO> newRolesDto, List<SysUserRoleDTO> oldRolesDto);
 
-    int updateLaseLoginTime(Integer id);
+    List<SysUserDTO> findByLoginName(String loginName);
+
+    void updateLaseLoginInfo(Integer userId, String ipAdrress);
+
+    void changePassword(Integer id, String newPassword);
 }

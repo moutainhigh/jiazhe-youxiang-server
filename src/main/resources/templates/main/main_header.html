@@ -75,11 +75,11 @@
 </div>
 <script>
     /*设置右上角的welcome，用户（displayName)*/
-    $("#displayName").html(decodeURI(getCookie("name")));
+    $("#displayName").html(decodeURI(getCookie("displayName")));
 
     function showUserInfo() {
         $.ajax({
-            url: "../system/getUserInfo",
+            url: "../api/sysuser/getuserinfo",
             dataType: "json",
             async: true,
             type: "GET",

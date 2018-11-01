@@ -18,7 +18,7 @@ public interface SysRolePermissionPOManualMapper {
      * @param sysRolePermissionPOList
      * @return
      */
-    int batchInsert(List<SysRolePermissionPO> sysRolePermissionPOList);
+    void batchInsert(List<SysRolePermissionPO> sysRolePermissionPOList);
 
     /**
      * 批量删除
@@ -26,5 +26,5 @@ public interface SysRolePermissionPOManualMapper {
      * @param ids
      * @return
      */
-    int batchDelete(@Param("ids") List<Integer> ids);
+    void batchDelete(@Param("ids") List<Integer> ids);
 }

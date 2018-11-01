@@ -14,6 +14,8 @@ public class RCExchangeCodeSaveDTO {
 
     private String batchName;
 
+    private String rechargeCardName;
+
     private String batchDescription;
 
     private Integer projectId;
@@ -56,6 +58,14 @@ public class RCExchangeCodeSaveDTO {
 
     public void setBatchName(String batchName) {
         this.batchName = batchName;
+    }
+
+    public String getRechargeCardName() {
+        return rechargeCardName;
+    }
+
+    public void setRechargeCardName(String rechargeCardName) {
+        this.rechargeCardName = rechargeCardName;
     }
 
     public String getBatchDescription() {

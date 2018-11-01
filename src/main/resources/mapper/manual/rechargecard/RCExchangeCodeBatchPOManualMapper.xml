@@ -4,10 +4,12 @@
   <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="recharge_card_name" property="rechargeCardName" jdbcType="VARCHAR" />
+    <result column="is_virtual" property="isVirtual" jdbcType="TINYINT" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="amount" property="amount" jdbcType="INTEGER" />
     <result column="project_id" property="projectId" jdbcType="INTEGER" />
-    <result column="city_ids" property="cityCodes" jdbcType="VARCHAR" />
+    <result column="city_codes" property="cityCodes" jdbcType="VARCHAR" />
     <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
     <result column="face_value" property="faceValue" jdbcType="DECIMAL" />
     <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
@@ -22,7 +24,7 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    id, name, description, amount,project_id,city_ids,product_ids,face_value,expiry_time,recharge_card_expiry_time,validity_period,expiry_type,status,
+    id, name,recharge_card_name,is_virtual, description, amount,project_id,city_codes,product_ids,face_value,expiry_time,recharge_card_expiry_time,validity_period,expiry_type,status,
     ext_info, is_deleted,add_time, mod_time
   </sql>
 

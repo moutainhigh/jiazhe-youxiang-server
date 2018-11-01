@@ -19,23 +19,27 @@ public class VoucherExchangeCodeBatchBiz {
         return null ;
     }
 
-    public int startUsing(Integer id) {
-        return 0;
+    public void startUsing(Integer id) {
+
     }
 
-    public int stopUsing(Integer id) {
-        return 0;
+    public void stopUsing(Integer id) {
+
     }
 
-    public int addSave(VoucherExchangeCodeBatchAddDTO voucherExchangeCodeBatchAddDTO) {
-        return 0;
+    public void addSave(VoucherExchangeCodeBatchAddDTO voucherExchangeCodeBatchAddDTO) {
+
     }
 
-    public int editSave(VoucherExchangeCodeBatchEditDTO voucherExchangeCodeBatchEditDTO) {
-        return 0;
+    public void editSave(VoucherExchangeCodeBatchEditDTO voucherExchangeCodeBatchEditDTO) {
+
     }
 
     public VoucherExchangeCodeBatchEditDTO getById(Integer id) {
         return null;
+    }
+
+    public int generaterCode(Integer id) {
+        return 0;
     }
 }

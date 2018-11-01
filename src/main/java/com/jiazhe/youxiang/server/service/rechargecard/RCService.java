@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.service.rechargecard;
 
 import com.jiazhe.youxiang.server.domain.po.RechargeCardPO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -20,7 +21,7 @@ public interface RCService {
      * @param status
      * @return
      */
-    int changeStatus(Integer id, Byte status);
+    void changeStatus(Integer id, Byte status);
 
     /**
      * 修改充值卡过期时间
@@ -28,21 +29,21 @@ public interface RCService {
      * @param expiryTime
      * @return
      */
-    int changeExpiryTime(Integer id, Date expiryTime);
+    void changeExpiryTime(Integer id, Date expiryTime);
 
     /**
      * 插入充值卡记录
      * @param rechargeCardPO
      * @return
      */
-    int insert(RechargeCardPO rechargeCardPO);
+    void insert(RechargeCardPO rechargeCardPO);
 
     /**
      * 修改充值卡信息
      * @param rechargeCardPO
      * @return
      */
-    int update(RechargeCardPO rechargeCardPO);
+    void update(RechargeCardPO rechargeCardPO);
 
     /**
      * 通过客户id查找所有未过期的充值卡
@@ -58,5 +59,21 @@ public interface RCService {
      * @param faceValue  面额
      * @return
      */
-    int directCharge(String mobile ,Integer batchId, BigDecimal faceValue);
+    void directCharge(String mobile ,Integer batchId, BigDecimal faceValue);
+
+    /**
+     * 根据已经使用的兑换码的ids 查找对应的充值卡，根据相关信息进行修改
+     * @param usedIds
+     * @param batchSaveDTO
+     * @return
+     */
+    void batchUpdate(List<Integer> usedIds, RCExchangeCodeBatchSaveDTO batchSaveDTO);
+
+    /**
+     * 已经使用的兑换码的ids 查找对应的充值卡，并启用停用
+     * @param usedIds
+     * @param status
+     * @return
+     */
+    void batchChangeStatus(List<Integer> usedIds,Byte status);
 }

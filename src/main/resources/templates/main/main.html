@@ -110,7 +110,7 @@
                     取消
                 </button>
 
-                <button class="btn btn-sm btn-primary modal-footer-btn" onclick="saveUserInfo()">
+                <button class="btn btn-sm btn-primary modal-footer-btn" onclick="changePassword()">
                     <i class="ace-icon fa fa-check"></i>
                     保存
                 </button>
@@ -173,12 +173,12 @@
         changeCenter();
     }
 
-    function saveUserInfo() {
+    function changePassword() {
         var oldPassword = $("#oldPassword").val();
         var password1 = $("#password1").val();
         var password2 = $("#password2").val();
         $.ajax({
-            url: "../system/saveUserInfo",
+            url: "../api/sysuser/changepassword",
             dataType: "json",
             data: {
                 "oldPassword": oldPassword,
@@ -188,32 +188,23 @@
             async: true,
             type: "POST",
             success: function (result) {
-                switch (result.code) {
-                    case '000000':
-                        $('#changePwdModal').modal("hide");
-                        bootbox.alert({
-                            buttons: {
-                                ok: {
-                                    label: '确定',
-                                    className: 'btn-myStyle'
-                                }
-                            },
-                            message: "密码修改成功，重新登陆",
-                            title: "提示信息",
-                            callback: function (e) {
-                                window.location.href = "../system/index";
+                if("error" in result){
+                    bootboxalert(result.error.message);
+                }else{
+                    $('#changePwdModal').modal("hide");
+                    bootbox.alert({
+                        buttons: {
+                            ok: {
+                                label: '确定',
+                                className: 'btn-myStyle'
                             }
-                        });
-                        break;
-                    case "000001":
-                        parent.location.href = "../system/index";
-                        break;
-                    case "000002":
-                        window.location.href = "../system/403";
-                        break;
-                    default :
-                        bootboxalert(result.msg);
-                        break;
+                        },
+                        message: "密码修改成功，重新登陆",
+                        title: "提示信息",
+                        callback: function (e) {
+                            window.location.href = "../system/index";
+                        }
+                    });
                 }
             },
             error: function () {

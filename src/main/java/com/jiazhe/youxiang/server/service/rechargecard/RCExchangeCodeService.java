@@ -1,6 +1,9 @@
 package com.jiazhe.youxiang.server.service.rechargecard;
 
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
+import com.jiazhe.youxiang.server.vo.Paging;
 
 import java.util.Date;
 import java.util.List;
@@ -16,7 +19,7 @@ public interface RCExchangeCodeService {
      * @param rechargeCardExchangeCodePOList
      * @return
      */
-    int batchSave(List<RechargeCardExchangeCodePO> rechargeCardExchangeCodePOList);
+    void batchInsert(List<RechargeCardExchangeCodePO> rechargeCardExchangeCodePOList);
 
     /**
      * 修改兑换码启用停用状态
@@ -24,7 +27,7 @@ public interface RCExchangeCodeService {
      * @param status
      * @return
      */
-    int changeCodeStatus(Integer id, Byte status);
+    void changeCodeStatus(Integer id, Byte status);
 
     /**
      * 修改充值卡兑换码过期时间
@@ -32,7 +35,7 @@ public interface RCExchangeCodeService {
      * @param expiryTime
      * @return
      */
-    int changeExpiryTime(Integer id, Date expiryTime);
+    void changeExpiryTime(Integer id, Date expiryTime);
 
 
     /**
@@ -48,5 +51,39 @@ public interface RCExchangeCodeService {
      * @param keyt
      * @return
      */
-    int codeCharge(Integer type, String mobile, String keyt);
+    void codeCharge(Integer type, String mobile, String keyt);
+
+    /**
+     * 根据批次id，获取批次下码的数量
+     * @param id
+     * @return
+     */
+    List<RCExchangeCodeDTO> getByBatchId(Integer id);
+
+    /**
+     * 根据批次信息，修改兑换码信息
+     * @param batchSaveDTO
+     * @return
+     */
+    void updateWithBatch(RCExchangeCodeBatchSaveDTO batchSaveDTO);
+
+    /**
+     * 根据批次id，修改兑换码的启用、停用状态
+     * @param batchId
+     * @param status
+     * @return
+     */
+    void batchChangeStatus(Integer batchId, Byte status);
+
+    /**
+     * 根据批次id，和相关条件查询兑换码
+     * @param batchId
+     * @param code
+     * @param keyt
+     * @param status
+     * @param used
+     * @param paging
+     * @return
+     */
+    List<RCExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Byte status, Byte used, Paging paging);
 }

@@ -13,13 +13,17 @@ public class SysUserDTO {
 
     private String mobile;
 
-    private String name;
+    private String loginName;
+
+    private String displayName;
 
     private Date lastLoginTime;
 
     private String salt;
 
     private String password;
+
+    private String lastLoginIp;
 
     public Integer getId() {
         return id;
@@ -37,12 +41,20 @@ public class SysUserDTO {
         this.mobile = mobile;
     }
 
-    public String getName() {
-        return name;
+    public String getLoginName() {
+        return loginName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public Date getLastLoginTime() {
@@ -67,5 +79,13 @@ public class SysUserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getLastLoginIp() {
+        return lastLoginIp;
+    }
+
+    public void setLastLoginIp(String lastLoginIp) {
+        this.lastLoginIp = lastLoginIp;
     }
 }

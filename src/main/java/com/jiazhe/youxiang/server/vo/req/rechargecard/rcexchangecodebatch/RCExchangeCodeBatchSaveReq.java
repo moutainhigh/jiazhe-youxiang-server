@@ -2,21 +2,31 @@ package com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * @author tu
- * @description：充值卡兑换码批次信息新建请求参数
+ * @description：充值卡兑换码批次信息保存请求参数
  * @date 2018/10/21
  */
-public class RCExchangeCodeBatchAddReq extends BaseVO {
+public class RCExchangeCodeBatchSaveReq extends BaseVO {
 
     private static final long serialVersionUID = 4463662904507337273L;
 
+    @ApiModelProperty("批次id，0为添加")
+    private Integer id;
+
     @ApiModelProperty("批次名称")
     private String name;
+
+    @ApiModelProperty("兑换成充值卡的名称")
+    private String rechargeCardName;
+
+    @ApiModelProperty("是否是虚拟批次")
+    private Byte isVirtual;
 
     @ApiModelProperty("兑换码数量")
     private Integer amount;
@@ -27,19 +37,21 @@ public class RCExchangeCodeBatchAddReq extends BaseVO {
     @ApiModelProperty("对应项目id")
     private Integer projectId;
 
-    @ApiModelProperty("对应城市id")
-    private String cityIds;
+    @ApiModelProperty("对应城市codes")
+    private String cityCodes;
 
-    @ApiModelProperty("对应商品id")
+    @ApiModelProperty("对应商品ids")
     private String productIds;
 
     @ApiModelProperty("批次过期时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date expiryTime;
 
     @ApiModelProperty("充值卡过期时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date rechargeCardExpiryTime;
 
-    @ApiModelProperty("自兑换之日起，***天有效")
+    @ApiModelProperty("自兑换之日起，充值卡**天内有效")
     private Integer validityPeriod;
 
     @ApiModelProperty("充值卡过期类型")
@@ -48,6 +60,13 @@ public class RCExchangeCodeBatchAddReq extends BaseVO {
     @ApiModelProperty("描述信息")
     private String description;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -81,12 +100,12 @@ public class RCExchangeCodeBatchAddReq extends BaseVO {
         this.projectId = projectId;
     }
 
-    public String getCityIds() {
-        return cityIds;
+    public String getCityCodes() {
+        return cityCodes;
     }
 
-    public void setCityIds(String cityIds) {
-        this.cityIds = cityIds;
+    public void setCityCodes(String cityCodes) {
+        this.cityCodes = cityCodes;
     }
 
     public String getProductIds() {
@@ -135,5 +154,21 @@ public class RCExchangeCodeBatchAddReq extends BaseVO {
 
     public void setExpiryType(Byte expiryType) {
         this.expiryType = expiryType;
+    }
+
+    public String getRechargeCardName() {
+        return rechargeCardName;
+    }
+
+    public void setRechargeCardName(String rechargeCardName) {
+        this.rechargeCardName = rechargeCardName;
+    }
+
+    public Byte getIsVirtual() {
+        return isVirtual;
+    }
+
+    public void setIsVirtual(Byte isVirtual) {
+        this.isVirtual = isVirtual;
     }
 }

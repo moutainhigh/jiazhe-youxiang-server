@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCExchangeRecordPOManualMapper" >
-  <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeRecordPO" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="recharge_card_id" property="rechargeCardId" jdbcType="INTEGER" />
-    <result column="exchange_code_id" property="exchangeCodeId" jdbcType="INTEGER" />
-    <result column="exchange_type" property="exchangeType" jdbcType="INTEGER" />
-    <result column="operator_id" property="operatorId" jdbcType="INTEGER" />
-    <result column="operator_name" property="operatorName" jdbcType="VARCHAR" />
-    <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
-    <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
-    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
-    <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
-  </resultMap>
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCExchangeRecordPOManualMapper">
+    <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeRecordPO">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="recharge_card_id" property="rechargeCardId" jdbcType="INTEGER"/>
+        <result column="exchange_code_id" property="exchangeCodeId" jdbcType="INTEGER"/>
+        <result column="exchange_type" property="exchangeType" jdbcType="INTEGER"/>
+        <result column="operator_id" property="operatorId" jdbcType="INTEGER"/>
+        <result column="operator_name" property="operatorName" jdbcType="VARCHAR"/>
+        <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, recharge_card_id,exchange_code_id,exchange_type,operator_id,operator_name,
+    ext_info, is_deleted,add_time, mod_time
+  </sql>
+
+    <select id="findByCodeIds" parameterType="java.util.List" resultType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeRecordPO">
+        select
+        <include refid="Base_Column_List"/>
+        FROM recharge_card_exchange_record
+        where exchange_code_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

@@ -18,23 +18,23 @@ public class VoucherExchangeCodeBiz {
         return null;
     }
 
-    public int startUsing(Integer id) {
-        return 0 ;
+    public void startUsing(Integer id) {
+
     }
 
-    public int stopUsing(Integer id) {
-        return 0;
+    public void stopUsing(Integer id) {
+
     }
 
-    public int changeExpiryTime(Integer customerId, Date expiryTime) {
-        return 0;
+    public void changeExpiryTime(Integer customerId, Date expiryTime) {
+
     }
 
-    public int customerSelfCharge(Integer customerId, String keyt) {
-        return 0;
+    public void customerSelfCharge(Integer customerId, String keyt) {
+
     }
 
-    public int backstageCodeCharge(Integer customerId, String keyt) {
-        return 0;
+    public void backstageCodeCharge(Integer customerId, String keyt) {
+
     }
 }

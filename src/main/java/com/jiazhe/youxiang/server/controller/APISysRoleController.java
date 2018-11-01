@@ -1,11 +1,14 @@
 package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.SysRoleAdapter;
 import com.jiazhe.youxiang.server.biz.SysRoleBiz;
 import com.jiazhe.youxiang.server.common.enums.CommonCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.RoleCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.CommonException;
+import com.jiazhe.youxiang.server.common.exceptions.RoleException;
 import com.jiazhe.youxiang.server.dto.sysrole.RoleWithPermDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -53,9 +56,8 @@ public class APISysRoleController extends BaseController {
     @ApiOperation(value = "分页查询角色信息", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List",notes = "分页查询角色信息")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute RolePageReq req) {
-        Paging paging = new Paging();
-        paging.setOffset((req.getPageNum()-1)*req.getPageSize());
-        paging.setLimit(req.getPageSize());
+        CommonValidator.validatePaging(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
         List<SysRoleDTO> sysRoleDTOList = sysRoleBiz.getList(req.getName(), paging);
         List<SysRoleResp> sysRoleRespList = sysRoleDTOList.stream().map(SysRoleAdapter::DTO2RespVO).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(sysRoleRespList, paging);
@@ -64,16 +66,15 @@ public class APISysRoleController extends BaseController {
     @ApiOperation(value = "根据id删除角色信息（包含权限）", httpMethod = "POST",notes = "根据id删除角色信息（包含权限）")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public Object delete(@ModelAttribute IdReq req) {
-        int count = sysRoleBiz.deleteRoleWithPerms(req.getId());
-        if (count != 1) {
-            throw new CommonException(CommonCodeEnum.INTERNAL_ERROR.getCode(), CommonCodeEnum.INTERNAL_ERROR.getType(), "删除失败");
-        }
+        CommonValidator.validateId(req);
+        sysRoleBiz.deleteRoleWithPerms(req.getId());
         return ResponseFactory.buildSuccess();
     }
 
     @ApiOperation(value = "根据id获取角色信息（包含权限）", httpMethod = "GET", response = RoleWithPermResp.class, notes = "根据id获取角色信息（包含权限）")
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
     public Object getById(@ModelAttribute IdReq req) {
+        CommonValidator.validateId(req);
         //当前角色信息(包括权限字符串）DTO
         RoleWithPermDTO dto = sysRoleBiz.findRoleWithPermById(req.getId());
         //将DTO转为respVO返回
@@ -85,18 +86,18 @@ public class APISysRoleController extends BaseController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Object save(@ModelAttribute RoleSaveReq req) {
         /*参数检查*/
-        if (null == req || Strings.isBlank(req.getName())) {
-            throw new CommonException(RoleCodeEnum.ROLE_INCOMPLETE_INFO.getCode(),RoleCodeEnum.ROLE_INCOMPLETE_INFO.getType(), RoleCodeEnum.ROLE_INCOMPLETE_INFO.getMessage());
-        }
+        CommonValidator.validateNull(req);
+        CommonValidator.validateId(req.getId());
+        CommonValidator.validateNull(req.getName(),new RoleException(RoleCodeEnum.ROLE_NAME_IS_NULL));
         /*非管理员，还不带权限字符串*/
         if (req.getIsSuper() == 0 && Strings.isBlank(req.getPermsStr())) {
-            throw new CommonException(RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getCode(), RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getType(), RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE.getMessage());
+            throw new RoleException(RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE);
         }
         /*判断是否重名，要将新建和修改区分开*/
         RoleWithPermDTO roleWithPermDTO = SysRoleAdapter.roleSaveReq2RoleWithPremDTO(req);
         boolean roleHasExisted = sysRoleBiz.roleHasExisted(roleWithPermDTO);
         if (roleHasExisted) {
-            throw new CommonException(RoleCodeEnum.ROLE_HAS_EXISTED.getCode(), RoleCodeEnum.ROLE_HAS_EXISTED.getType(), RoleCodeEnum.ROLE_HAS_EXISTED.getMessage());
+            throw new RoleException(RoleCodeEnum.ROLE_NAME_HAS_EXISTED);
         }
         sysRoleBiz.saveRoleWithPerm(roleWithPermDTO);
         return ResponseFactory.buildSuccess();

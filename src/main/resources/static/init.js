@@ -69,6 +69,14 @@ function timeFormat(time){
     return year + '-' + month+ '-' + date + ' ' + hours + ':' + minutes + ':' + seconds;
 }
 
+function dateFormat(time){
+    var d = new Date(time);
+    var year = d.getFullYear();
+    var month = (d.getMonth()+1)>9?(d.getMonth()+1):'0'+(d.getMonth());
+    var date = d.getDate()>9?d.getDate():'0'+d.getDate();
+    return year + '-' + month+ '-' + date;
+}
+
 
 
 
