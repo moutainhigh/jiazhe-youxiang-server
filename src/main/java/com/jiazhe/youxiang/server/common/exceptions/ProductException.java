@@ -17,30 +17,6 @@ import com.jiazhe.youxiang.server.vo.ResponseMsg;
  */
 public class ProductException extends CommonException {
 
-    public ProductException(Integer code, String type, String message) {
-        super(code, type, message);
-    }
-
-    public ProductException(CommonCodeEnum codeEnum) {
-        super(codeEnum);
-    }
-
-    public ProductException(ResponseMsg responseMsg) {
-        super(responseMsg);
-    }
-
-    public ProductException(CommonCodeEnum codeEnum, Throwable cause) {
-        super(codeEnum, cause);
-    }
-
-    public ProductException(Integer code, String type, String message, Throwable cause) {
-        super(code, type, message, cause);
-    }
-
-    public ProductException(ResponseMsg responseMsg, Throwable cause) {
-        super(responseMsg, cause);
-    }
-
     public ProductException(ProductCodeEnum productCodeEnum) {
         super(productCodeEnum.getCode(), productCodeEnum.getType(), productCodeEnum.getMessage());
     }

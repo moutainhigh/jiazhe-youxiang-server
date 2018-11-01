@@ -8,7 +8,6 @@ package com.jiazhe.youxiang.server.biz;
 import com.jiazhe.youxiang.server.dto.product.ProductAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
-import com.jiazhe.youxiang.server.dto.product.ProductPriceBatchAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductUpdateDTO;
 import com.jiazhe.youxiang.server.service.product.ProductCategoryService;
@@ -38,6 +37,16 @@ public class ProductBiz {
 
     @Autowired
     private ProductPriceService productPriceService;
+
+    /**
+     * 商品上架状态代码
+     */
+    public static final Integer CODE_PRODUCT_SELL = Integer.valueOf(1);
+    /**
+     * 商品下架状态代码
+     */
+    public static final Integer CODE_PRODUCT_NOT_SELL = Integer.valueOf(0);
+
 
     /*************商品分类相关******************/
 
@@ -76,7 +85,11 @@ public class ProductBiz {
     }
 
     public List<ProductDTO> getList(Integer productCategoryId, String name, Integer productType, List<String> cityCodes, Integer status, Paging paging) {
-        return productService.getList(productCategoryId, name, productType, cityCodes, status, paging);
+        return productService.getList(productCategoryId, name, productType, cityCodes, status, paging, false);
+    }
+
+    public List<ProductDTO> getListForCustomer(Integer productCategoryId, String name, Integer productType, String cityCode, Paging paging) {
+        return productService.getListForCustomer(productCategoryId, name, productType, cityCode, paging);
     }
 
     public void update(ProductUpdateDTO productUpdateDTO) {
@@ -93,8 +106,8 @@ public class ProductBiz {
 
     /*************商品价格相关******************/
 
-    public void batchAddPrice(ProductPriceBatchAddDTO productPriceBatchAddDTO) {
-        productPriceService.batchAddPrice(productPriceBatchAddDTO);
+    public void batchAddOrUpdatePrice(Integer productId, List<String> cityCodes, BigDecimal price) {
+        productPriceService.batchAddAndUpdatePrice(productId, cityCodes, price);
     }
 
     public ProductPriceDTO getPriceById(Integer id) {
@@ -102,7 +115,7 @@ public class ProductBiz {
     }
 
     public ProductPriceDTO getPriceByCity(Integer productId, String cityCode) {
-        return productPriceService.getPriceByCity(productId,cityCode);
+        return productPriceService.getPriceByCity(productId, cityCode);
     }
 
     public List<ProductPriceDTO> getPriceListByProductId(Integer productId) {
@@ -111,11 +124,6 @@ public class ProductBiz {
 
     public void batchDeletePrice(List<Integer> ids) {
         productPriceService.batchDeletePrice(ids);
-    }
-
-
-    public void batchUpdatePrice(Integer productId, List<String> cityCodes, BigDecimal price) {
-        productPriceService.batchUpdatePrice(productId, cityCodes,price);
     }
 
 

@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.ProjectAdapter;
 import com.jiazhe.youxiang.server.biz.ProjectBiz;
 import com.jiazhe.youxiang.server.common.enums.ProjectCodeEnum;
@@ -91,9 +92,7 @@ public class APIProjectController {
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
     public Object getList(@ModelAttribute ProjectListReq req) {
         CommonValidator.validatePaging(req);
-        Paging paging = new Paging();
-        paging.setOffset(req.getOffset());
-        paging.setLimit(req.getLimit());
+        Paging paging =  PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
         List<ProjectDTO> projectDTOList = projectBiz.getList(req.getName(), req.getStatus(), paging);
         //将DTO转成VO

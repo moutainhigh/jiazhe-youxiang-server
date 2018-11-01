@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.CustomerAddressPOManualMapper">
+    <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.CustomerAddressPO">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
+        <result column="gender" property="gender" jdbcType="TINYINT"/>
+        <result column="city_code" property="cityCode" jdbcType="VARCHAR"/>
+        <result column="city_name" property="cityName" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, customer_id, gender, city_code, city_name, address, mobile, name, remark, ext_info, 
+    is_deleted, add_time, mod_time
+    </sql>
+
+    <insert id="insertSelectiveGetID" parameterType="com.jiazhe.youxiang.server.domain.po.CustomerAddressPO" keyProperty="id" useGeneratedKeys="true">
+        insert into customer_address
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="customerId != null" >
+                customer_id,
+            </if>
+            <if test="gender != null" >
+                gender,
+            </if>
+            <if test="cityCode != null" >
+                city_code,
+            </if>
+            <if test="cityName != null" >
+                city_name,
+            </if>
+            <if test="address != null" >
+                address,
+            </if>
+            <if test="mobile != null" >
+                mobile,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="remark != null" >
+                remark,
+            </if>
+            <if test="extInfo != null" >
+                ext_info,
+            </if>
+            <if test="isDeleted != null" >
+                is_deleted,
+            </if>
+            <if test="addTime != null" >
+                add_time,
+            </if>
+            <if test="modTime != null" >
+                mod_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="customerId != null" >
+                #{customerId,jdbcType=INTEGER},
+            </if>
+            <if test="gender != null" >
+                #{gender,jdbcType=TINYINT},
+            </if>
+            <if test="cityCode != null" >
+                #{cityCode,jdbcType=VARCHAR},
+            </if>
+            <if test="cityName != null" >
+                #{cityName,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null" >
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null" >
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null" >
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="extInfo != null" >
+                #{extInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null" >
+                #{isDeleted,jdbcType=TINYINT},
+            </if>
+            <if test="addTime != null" >
+                #{addTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modTime != null" >
+                #{modTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="query" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from customer_address
+        <where>
+            <if test="customerId != null">
+                AND customer_id = #{customerId}
+            </if>
+            AND is_deleted = 0
+        </where>
+        order by mod_time desc
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from customer_address
+        <where>
+            <if test="customerId != null">
+                AND customer_id = #{customerId}
+            </if>
+            AND is_deleted = 0
+        </where>
+    </select>
+
+</mapper>

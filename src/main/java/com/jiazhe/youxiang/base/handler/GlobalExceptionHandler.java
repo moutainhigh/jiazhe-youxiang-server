@@ -17,6 +17,7 @@ import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -52,8 +53,14 @@ public class GlobalExceptionHandler {
         } else if (e instanceof ServletException) {
             httpServletResponse.setStatus(HttpServletResponse.SC_OK);
             rm.setCode(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode());
-            rm.setMessage(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getMessage());
             rm.setType(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType());
+            rm.setMessage(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getMessage());
+            LOGGER.info("param error exception:{}", e.getMessage());
+        } else if (e instanceof BindException) {
+            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+            rm.setCode(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode());
+            rm.setType(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType());
+            rm.setMessage(((BindException) e).getBindingResult().toString());
             LOGGER.info("param error exception:{}", e.getMessage());
         } else if (e instanceof UnauthorizedException || e instanceof AuthorizationException) {
             //权限异常
