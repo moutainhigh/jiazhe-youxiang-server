@@ -7,7 +7,10 @@ import com.jiazhe.youxiang.server.adapter.rechargecard.RCAdapter;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.enums.CustomerCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.CommonException;
+import com.jiazhe.youxiang.server.common.exceptions.CustomerException;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCEditDTO;
@@ -76,20 +79,13 @@ public class APIRCController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "修改充值卡过期时间", httpMethod = "POST",notes = "修改充值卡过期时间")
-    @RequestMapping(value = "/changeexpirytime", method = RequestMethod.POST)
-    public Object changeExpiryTime(@ModelAttribute ExpiryTimeEditReq req) {
-        //参数检查
-        CommonValidator.validateId(req);
-        CommonValidator.validateNull(req.getExpiryTime(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRT_TIME_IS_NULL));
-        rcBiz.changeExpiryTime(req.getId(),req.getExpiryTime());
-        return ResponseFactory.buildSuccess();
-    }
-
     @ApiOperation(value = "后台直接给客户充值任意分数", httpMethod = "POST",notes = "后台直接给客户充值任意分数")
     @RequestMapping(value = "/directcharge", method = RequestMethod.POST)
     public Object directCharge(@ModelAttribute DirectChargeReq req) {
         //参数检查
+        CommonValidator.validateId(req.getBatchId());
+        CommonValidator.validateMobile(req.getMobile(),new CustomerException(CustomerCodeEnum.CUSTOMER_MOBILE_ERROR));
+        CommonValidator.validateNull(req.getFaceValue());
         rcBiz.directCharge(req.getMobile(),req.getBatchId(),req.getFaceValue());
         return ResponseFactory.buildSuccess();
     }

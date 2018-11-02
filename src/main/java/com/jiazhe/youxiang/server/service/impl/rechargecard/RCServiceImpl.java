@@ -12,11 +12,13 @@ import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord.RCExchangeRecordDTO;
+import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeRecordService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -98,8 +100,9 @@ public class RCServiceImpl implements RCService {
         }else{
             rechargeCardPO.setExpiryTime(new Date(System.currentTimeMillis()+rcExchangeCodeBatchEditDTO.getValidityPeriod()* CommonConstant.ONE_DAY));
         }
-        /*rechargeCardPO.setFaceValue(rcExchangeCodeBatchEditDTO.getFaceValue());
-        rechargeCardPO.setBalance(rcExchangeCodeBatchEditDTO.getFaceValue());*/
+        rechargeCardPO.setDescription(rcExchangeCodeBatchEditDTO.getDescription());
+        rechargeCardPO.setFaceValue(faceValue);
+        rechargeCardPO.setBalance(faceValue);
         //暂时置为0，等生成了兑换记录再修改
         rechargeCardPO.setExchangeRecordId(0);
         rechargeCardPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
@@ -110,9 +113,16 @@ public class RCServiceImpl implements RCService {
         rechargeCardPO.setProductIds(rcExchangeCodeBatchEditDTO.getProductIds());
         rcService.insert(rechargeCardPO);
         //插入兑换记录信息
+        SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
         RechargeCardExchangeRecordPO rechargeCardRecordPO = new RechargeCardExchangeRecordPO();
+        rechargeCardRecordPO.setOperatorId(sysUserDTO.getId());
+        rechargeCardRecordPO.setOperatorName(sysUserDTO.getLoginName());
         rechargeCardRecordPO.setExchangeType(2);
         rechargeCardRecordPO.setRechargeCardId(rechargeCardPO.getId());
+        rechargeCardRecordPO.setExtInfo("");
+        rechargeCardRecordPO.setIsDeleted(Byte.valueOf("0"));
+        rechargeCardRecordPO.setAddTime(new Date());
+        rechargeCardRecordPO.setModTime(new Date());
         rcExchangeRecordService.insert(rechargeCardRecordPO);
         //修改充值卡对应的兑换记录id
         rechargeCardPO.setExchangeRecordId(rechargeCardRecordPO.getId());

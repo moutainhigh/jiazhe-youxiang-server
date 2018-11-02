@@ -15,11 +15,13 @@ import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
+import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeRecordService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -106,6 +108,12 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         RechargeCardExchangeRecordPO rechargeCardRecordPO = new RechargeCardExchangeRecordPO();
         rechargeCardRecordPO.setExchangeCodeId(rechargeCardExchangeCodePO.getId());
         rechargeCardRecordPO.setExchangeType(type);
+        //如果后台用兑换码帮客户充值，同样记录操作人员的信息
+        if(type == 0){
+            SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+            rechargeCardRecordPO.setOperatorId(sysUserDTO.getId());
+            rechargeCardRecordPO.setOperatorName(sysUserDTO.getLoginName());
+        }
         rechargeCardRecordPO.setRechargeCardId(rechargeCardPO.getId());
         rechargeCardRecordPO.setOperatorId(0);
         rechargeCardRecordPO.setOperatorName("");

@@ -247,10 +247,11 @@
             {name: 'exchangeType', index: 'rcExchangeRecordResp.exchangeType', width: 50, sortable: false,formatter: function(cellvalue, options, rowObject){
                 if(rowObject.rcExchangeRecordResp.exchangeType == 0) return "后台兑换";
                 if(rowObject.rcExchangeRecordResp.exchangeType == 1) return "前台兑换";
-                if(rowObject.rcExchangeRecordResp.exchangeType == 2) return "自行充值";
+                if(rowObject.rcExchangeRecordResp.exchangeType == 2) return "直接充值";
             }},
-            {name: 'operatorName', index: 'rcExchangeRecordResp.operatorName', width: 50, sortable: false},
-
+            {name: 'operatorName', index: 'rcExchangeRecordResp.operatorName', width: 50, sortable: false,formatter: function(cellvalue, options, rowObject){
+                return rowObject.rcExchangeRecordResp.operatorName;
+            }},
             {name: '_action', index: '_action', width:100,sortable: false, formatter: customFormatter}
         ],
         rowNum: 10,
