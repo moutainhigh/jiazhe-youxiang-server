@@ -19,6 +19,7 @@ import com.jiazhe.youxiang.server.dao.mapper.manual.CustomerPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.CustomerAddressPO;
 import com.jiazhe.youxiang.server.domain.po.CustomerAddressPOExample;
 import com.jiazhe.youxiang.server.domain.po.CustomerPO;
+import com.jiazhe.youxiang.server.domain.po.CustomerPOExample;
 import com.jiazhe.youxiang.server.dto.customer.AddressAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.AddressDTO;
 import com.jiazhe.youxiang.server.dto.customer.AddressUpdateDTO;
@@ -27,6 +28,9 @@ import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerUpdateDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +51,8 @@ import static java.util.stream.Collectors.toMap;
  */
 @Service("customerService")
 public class CustomerServiceImpl implements CustomerService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
     @Autowired
     private CustomerPOMapper customerPOMapper;
@@ -80,6 +86,30 @@ public class CustomerServiceImpl implements CustomerService {
             customerDTO.setDefaultAddress(CustomerAdapter.addressPO2DTO(customerAddressPO));
         }
         return customerDTO;
+    }
+
+    @Override
+    public CustomerDTO getByMobile(String mobile) {
+        CustomerPOExample customerPOExample = new CustomerPOExample();
+        CustomerPOExample.Criteria criteria = customerPOExample.createCriteria();
+        criteria.andMobileEqualTo(mobile);
+        criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+        List<CustomerPO> customerPOList = customerPOMapper.selectByExample(customerPOExample);
+        if (CollectionUtils.isEmpty(customerPOList)) {
+            return null;
+        }
+        if (customerPOList.size() != 1) {
+            LOGGER.error("发现客户手机号重复:{}", mobile);
+            throw new CustomerException(CustomerCodeEnum.CUSTOMER_MOBILE_REPEAT);
+        } else {
+            CustomerPO customerPO = customerPOList.get(0);
+            CustomerDTO customerDTO = CustomerAdapter.customerPO2DTO(customerPO);
+            if (!CustomerBiz.CODE_CUSTOMER_NO_DEFAULT_ADDRESS.equals(customerPO.getDefaultAddressId())) {
+                CustomerAddressPO customerAddressPO = customerAddressPOMapper.selectByPrimaryKey(customerPO.getDefaultAddressId());
+                customerDTO.setDefaultAddress(CustomerAdapter.addressPO2DTO(customerAddressPO));
+            }
+            return customerDTO;
+        }
     }
 
     @Override
@@ -132,9 +162,7 @@ public class CustomerServiceImpl implements CustomerService {
         customerPOMapper.updateByPrimaryKeySelective(customerPO);
     }
 
-
     /********************客户地址相关***********************/
-
 
     @Transactional
     @Override

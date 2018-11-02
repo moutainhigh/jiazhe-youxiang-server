@@ -27,6 +27,13 @@ public interface CustomerService {
 
     CustomerDTO getById(Integer id);
 
+    /**
+     * 根据客户手机号获得客户信息
+     * @param mobile
+     * @return
+     */
+    CustomerDTO getByMobile(String mobile);
+
     List<CustomerDTO> getList(String mobile, String name, Paging paging);
 
     void update(CustomerUpdateDTO customerUpdateDTO);

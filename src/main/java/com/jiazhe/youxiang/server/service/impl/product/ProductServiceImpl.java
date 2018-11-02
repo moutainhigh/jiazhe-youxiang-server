@@ -54,6 +54,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void add(ProductAddDTO productAddDTO) {
+        //TODO niexiao 验证商品分类是否存在
         ProductPO productPO = ProductAdapter.productAddDTO2PO(productAddDTO);
         productPOMapper.insertSelective(productPO);
     }
