@@ -40,7 +40,7 @@
 
                                     <div class="space-6"></div>
 
-                                    <form id="loginForm">
+                                    <form id="loginForm" onsubmit="return login()">
                                         <input type="hidden" id="bizId" name="bizId">
                                         <fieldset>
                                             <label class="block clearfix">
@@ -75,7 +75,7 @@
                                             <div class="space"></div>
 
                                             <div class="clearfix">
-                                                <button type="button" class="width-35 pull-right btn btn-sm btn-primary"
+                                                <button type="submit" class="width-35 pull-right btn btn-sm btn-primary"
                                                         id="login-btn">
                                                     <i class="ace-icon fa fa-key"></i>
                                                     <span class="bigger-110">登录</span>
@@ -103,23 +103,23 @@
 
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
-    var countdown=60;
+    var countdown = 60;
 
     function settime(val) {
         if (countdown == 0) {
-            $("#identifyingCodeBadge").css("display","none");
-            $("#identifyingCodeButton").css("display","");
+            $("#identifyingCodeBadge").css("display", "none");
+            $("#identifyingCodeButton").css("display", "");
             countdown = 60;
         } else {
             countdown--;
             $("#identifyingCodeBadge").find("span").text(countdown);
-            setTimeout(function() {
+            setTimeout(function () {
                 settime(val)
-            },1000);
+            }, 1000);
         }
     }
 
-    function getCode(){
+    function getCode() {
         var loginname = $("#loginname").val();
         $.ajax({
             url: "../api/signin/sendcode", //登陆请求
@@ -130,12 +130,12 @@
             },
             type: "GET",
             success: function (data) {
-                if ('error' in data){//错误
+                if ('error' in data) {//错误
                     bootboxalert(data.error.message);
-                }else{//发送验证码成功
+                } else {//发送验证码成功
                     $("#bizId").val(data.data.bizId);
-                    $("#identifyingCodeBadge").css("display","");
-                    $("#identifyingCodeButton").css("display","none");
+                    $("#identifyingCodeBadge").css("display", "");
+                    $("#identifyingCodeButton").css("display", "none");
                     settime(60);
                 }
             },
@@ -144,45 +144,44 @@
             }
         });
     }
-    $(function () {
-
-        $("#login-btn").click(function () {
-            var loginname = $("#loginname").val();
-            var password = $("#password").val();
-            var identifyingCode = $("#identifyingCode").val();
-            var bizId = $("#bizId").val()
-            if (loginname == "" || password == "") {
-                bootboxalert("请将信息填写完整后再登录");
-                return false;
-            }
-            $.ajax({
-                url: "../api/signin/signin", //登陆请求
-                dataType: "json",
-                async: false,
-                data: {
-                    loginname: loginname,
-                    password: password,
-                    identifyingCode : identifyingCode,
-                    bizId:bizId
-                },
-                type: "GET",
-                success: function (data) {
-                    if ('error' in data){//异客户端登陆了
-                        if(data.error.code == 112004 ){//发送了验证码
-                            $('#identifyingCodeLabel').css("display","block");
-                        }else{
-                            bootboxalert(data.error.message);
-                        }
-                    }else{//登陆成功
-                       window.location.href = "../main/main";
+    function login() {
+        var loginname = $("#loginname").val();
+        var password = $("#password").val();
+        var identifyingCode = $("#identifyingCode").val();
+        var bizId = $("#bizId").val()
+        if (loginname == "" || password == "") {
+            bootboxalert("请将信息填写完整后再登录");
+            return false;
+        }
+        $.ajax({
+            url: "../api/signin/signin", //登陆请求
+            dataType: "json",
+            async: false,
+            data: {
+                loginname: loginname,
+                password: password,
+                identifyingCode: identifyingCode,
+                bizId: bizId
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {//异客户端登陆了
+                    if (data.error.code == 112004) {//发送了验证码
+                        $('#identifyingCodeLabel').css("display", "block");
+                    } else {
+                        bootboxalert(data.error.message);
                     }
-                },
-                error: function () {
-                    bootboxalert("服务器异常，请联系管理员");
+                } else {//登陆成功
+                    window.location.href = "../main/main";
                 }
-            });
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
         });
-    })
+        return false;
+    }
+
 </script>
 </body>
 </html>

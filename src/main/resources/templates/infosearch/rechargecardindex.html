@@ -12,7 +12,6 @@
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
 
-
     <style>
         .form-group {
             margin-bottom: 0px;
@@ -47,21 +46,30 @@
                     <div class="col-xs-12" style="padding-top:40px">
                         <form id="rcSearchForm" class="form-horizontal" role="form">
                             <div class="form-group">
-                                <div class="col-sm-4">
-                                    <label class="col-sm-3 control-label no-padding-right">状态：</label>
-                                    <div class="col-sm-3">
+                                <div class="col-sm-8">
+                                    <label class="col-sm-2 control-label no-padding-right">状态：</label>
+                                    <div class="col-sm-2">
                                         <select id="searchStatus" name="status" class="selectpicker show-tick form-control">
                                             <option value="">所有</option>
                                             <option value=1>启用</option>
                                             <option value=0>停用</option>
                                         </select>
                                     </div>
-                                    <label class="col-sm-3 control-label no-padding-right">过期状态：</label>
-                                    <div class="col-sm-3">
+                                    <label class="col-sm-2 control-label no-padding-right">过期状态：</label>
+                                    <div class="col-sm-2">
                                         <select id="searchExpiry" name="expiry" class="selectpicker show-tick form-control">
                                             <option value="">所有</option>
                                             <option value=1>已过期</option>
                                             <option value=0>未过期</option>
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 control-label no-padding-right">兑换方式：</label>
+                                    <div class="col-sm-2">
+                                        <select id="searchExchangeType" name="exchangeType" class="selectpicker show-tick form-control">
+                                            <option value="">所有</option>
+                                            <option value=0>后台兑换</option>
+                                            <option value=1>前台兑换</option>
+                                            <option value=2>直接充值</option>
                                         </select>
                                     </div>
                                 </div>
@@ -223,10 +231,10 @@
         width: "100%",
         autowidth: true,
         height: 350,
-        colNames: ['','充值卡名称', '停用状态',  '面额','余额',  '兑换时间','过期时间','兑换类型','后台操作人',  '操作'],
+        colNames: ['','充值卡名称', '状态', '面额','余额', '兑换时间','客户手机号','客户姓名','过期时间','兑换类型','后台操作人', '操作'],
         colModel: [
             {name: 'id', index: 'id', sortable: false, hidden: true},
-            {name: 'name', index: 'name', width: 100, sortable: false},
+            {name: 'name', index: 'name', width: 50, sortable: false},
             {
                 name: 'status',
                 index: 'status',
@@ -241,6 +249,12 @@
             {name: 'addTime', index: 'addTime', width: 60, sortable: false,formatter: function(cellvalue, options, rowObject){
                 return timeFormat(rowObject.addTime);
             }},
+            {name: 'customerMobile', index: 'customerResp.mobile', width: 50, sortable: false,formatter: function(cellvalue, options, rowObject){
+                return rowObject.customerResp.mobile;
+            }},
+            {name: 'customerName', index: 'customerResp.name', width: 50, sortable: false,formatter: function(cellvalue, options, rowObject){
+                return rowObject.customerResp.name;
+            }},
             {name: 'expiryTime', index: 'expiryTime', width: 40, sortable: false,formatter: function (cellvalue, options, rowObject) {
                 return dateFormat(rowObject.expiryTime)
             }},
@@ -252,7 +266,7 @@
             {name: 'operatorName', index: 'rcExchangeRecordResp.operatorName', width: 50, sortable: false,formatter: function(cellvalue, options, rowObject){
                 return rowObject.rcExchangeRecordResp.operatorName;
             }},
-            {name: '_action', index: '_action', width:100,sortable: false, formatter: customFormatter}
+            {name: '_action', index: '_action', width:50,sortable: false, formatter: customFormatter}
         ],
         rowNum: 10,
         rowList: [10, 20, 30],

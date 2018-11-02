@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCPOManualMapper">
-    <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.RechargeCardPO" >
-        <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="name" property="name" jdbcType="VARCHAR" />
-        <result column="description" property="description" jdbcType="VARCHAR" />
-        <result column="customer_id" property="customerId" jdbcType="INTEGER" />
-        <result column="project_id" property="projectId" jdbcType="INTEGER" />
-        <result column="city_codes" property="cityCodes" jdbcType="VARCHAR" />
-        <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
-        <result column="face_value" property="faceValue" jdbcType="DECIMAL" />
-        <result column="balance" property="balance" jdbcType="DECIMAL" />
-        <result column="exchange_record_id" property="exchangeRecordId" jdbcType="INTEGER" />
-        <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
-        <result column="status" property="status" jdbcType="TINYINT" />
-        <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
-        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
-        <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
-        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
+    <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.RechargeCardPO">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
+        <result column="project_id" property="projectId" jdbcType="INTEGER"/>
+        <result column="city_codes" property="cityCodes" jdbcType="VARCHAR"/>
+        <result column="product_ids" property="productIds" jdbcType="VARCHAR"/>
+        <result column="face_value" property="faceValue" jdbcType="DECIMAL"/>
+        <result column="balance" property="balance" jdbcType="DECIMAL"/>
+        <result column="exchange_record_id" property="exchangeRecordId" jdbcType="INTEGER"/>
+        <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -41,44 +41,54 @@
   </insert>
 
     <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.RechargeCardPO">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM recharge_card
+        SELECT rc.id, rc.name,rc.description,rc.customer_id, rc.project_id,
+        rc.city_codes,rc.product_ids,rc.face_value,rc.balance,
+        rc.exchange_record_id,rc.expiry_time,rc.status,rc.ext_info, rc.is_deleted,rc.add_time, rc.mod_time
+        FROM recharge_card rc LEFT JOIN
+        recharge_card_exchange_record rcec ON rc.id = rcec.recharge_card_id
+        LEFT JOIN customer c ON c.id = rc.customer_id
         <where>
-            <if test="customerId != null">
-                AND customer_id = #{customerId}
+            <if test="mobile != null and mobile != ''">
+                AND c.mobile = #{mobile}
+            </if>
+            <if test="exchangeType != null">
+                AND rcec.exchange_type = #{exchangeType}
             </if>
             <if test="status != null">
-                AND status = #{status}
+                AND rc.status = #{status}
             </if>
             <if test="expiry == 0">
-                AND expiry_time &gt; NOW()
+                AND rc.expiry_time &gt; NOW()
             </if>
             <if test="expiry == 1">
-                AND expiry_time &lt;= NOW()
+                AND rc.expiry_time &lt;= NOW()
             </if>
-            AND is_deleted = 0 ORDER BY add_time desc
+            AND rc.is_deleted = 0 ORDER BY rc.add_time desc
         </where>
         limit #{offset},#{limit}
-
     </select>
 
     <select id="count" resultType="java.lang.Integer">
-        select count(*) from recharge_card
+        select count(*) FROM recharge_card rc
+        LEFT JOIN recharge_card_exchange_record rcec ON rc.id = rcec.recharge_card_id
+        LEFT JOIN customer c ON c.id = rc.customer_id
         <where>
-            <if test="customerId != null">
-                AND customer_id = #{customerId}
+            <if test="mobile != null and mobile != ''">
+                AND c.mobile = #{mobile}
             </if>
-            <if test="status != null ">
-                AND status = #{status}
+            <if test="exchangeType != null">
+                AND rcec.exchange_type = #{exchangeType}
+            </if>
+            <if test="status != null">
+                AND rc.status = #{status}
             </if>
             <if test="expiry == 0">
-                AND expiry_time &gt; NOW()
+                AND rc.expiry_time &gt; NOW()
             </if>
             <if test="expiry == 1">
-                AND expiry_time &lt;= NOW()
+                AND rc.expiry_time &lt;= NOW()
             </if>
-            AND is_deleted = 0
+            AND rc.is_deleted = 0 ORDER BY rc.add_time desc
         </where>
     </select>
 

@@ -44,8 +44,8 @@ public class RCBiz {
         rcService.directCharge(mobile,batchId,faceValue);
     }
 
-    public List<RCDTO> getList(String mobile, Byte status,Byte expiry, Paging paging) {
-        return rcService.getList(mobile,status,expiry,paging);
+    public List<RCDTO> getList(String mobile, Integer exchangeType,Byte status,Byte expiry, Paging paging) {
+        return rcService.getList(mobile,exchangeType,status,expiry,paging);
     }
 
 

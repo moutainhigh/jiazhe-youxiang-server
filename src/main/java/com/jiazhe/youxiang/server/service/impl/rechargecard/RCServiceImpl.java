@@ -18,6 +18,7 @@ import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeBatchServic
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeRecordService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import org.apache.logging.log4j.util.Strings;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -107,7 +108,7 @@ public class RCServiceImpl implements RCService {
         rechargeCardPO.setExchangeRecordId(0);
         rechargeCardPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
         rechargeCardPO.setProjectId(rcExchangeCodeBatchEditDTO.getProjectId());
-        rechargeCardPO.setName(rcExchangeCodeBatchEditDTO.getName());
+        rechargeCardPO.setName(rcExchangeCodeBatchEditDTO.getRechargeCardName());
         rechargeCardPO.setCustomerId(customerDTO.getId());
         rechargeCardPO.setCityCodes(rcExchangeCodeBatchEditDTO.getCityCodes());
         rechargeCardPO.setProductIds(rcExchangeCodeBatchEditDTO.getProductIds());
@@ -161,18 +162,19 @@ public class RCServiceImpl implements RCService {
     }
 
     @Override
-    public List<RCDTO> getList(String mobile, Byte status, Byte expiry, Paging paging) {
-        CustomerDTO customerDTO = customerService.getByMobile(mobile);
-        Integer customerId = 0;
-        if(null != customerDTO){
-            customerId = customerDTO.getId();
-        }
-        List<RechargeCardPO> rechargeCardPOList = rcPOManualMapper.query(customerId,status,expiry,paging.getOffset(),paging.getLimit());
+    public List<RCDTO> getList(String mobile, Integer exchangeType,Byte status, Byte expiry, Paging paging) {
+        final CustomerDTO customerDTO = customerService.getByMobile(mobile);
+        List<RechargeCardPO> rechargeCardPOList = rcPOManualMapper.query(mobile,exchangeType,status,expiry,paging.getOffset(),paging.getLimit());
         List<RCDTO> rcDTOList = rechargeCardPOList.stream().map(RCAdapter::PO2DTO).collect(Collectors.toList());
-        Integer count = rcPOManualMapper.count(customerId,status,expiry);
+        Integer count = rcPOManualMapper.count(mobile,exchangeType,status,expiry);
         paging.setTotal(count);
         rcDTOList.stream().forEach(bean -> {
-            bean.setCustomerDTO(customerDTO);
+            if(Strings.isBlank(mobile)){
+                CustomerDTO customerDTO1 = customerService.getById(bean.getCustomerId());
+                bean.setCustomerDTO(customerDTO1);
+            }else{
+                bean.setCustomerDTO(customerDTO);
+            }
             RCExchangeRecordDTO rcExchangeRecordDTO = rcExchangeRecordService.findByCardId(bean.getId());
             bean.setRcExchangeRecordDTO(rcExchangeRecordDTO);
         });

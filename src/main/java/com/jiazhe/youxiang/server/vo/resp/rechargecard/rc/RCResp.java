@@ -20,6 +20,8 @@ public class RCResp extends BaseVO{
 
     private String description;
 
+    private Integer customerId;
+
     private Integer projectId;
 
     private String cityCodes;
@@ -46,6 +48,14 @@ public class RCResp extends BaseVO{
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 
     public String getName() {

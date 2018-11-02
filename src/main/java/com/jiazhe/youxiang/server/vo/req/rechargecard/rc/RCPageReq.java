@@ -15,6 +15,9 @@ public class RCPageReq extends PageSizeNumReq {
     @ApiModelProperty("客户电话")
     private String mobile;
 
+    @ApiModelProperty("兑换种类")
+    private Integer exchangeType;
+
     @ApiModelProperty("充值卡停用/启用状态")
     private Byte status;
 
@@ -27,6 +30,14 @@ public class RCPageReq extends PageSizeNumReq {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public Integer getExchangeType() {
+        return exchangeType;
+    }
+
+    public void setExchangeType(Integer exchangeType) {
+        this.exchangeType = exchangeType;
     }
 
     public Byte getStatus() {

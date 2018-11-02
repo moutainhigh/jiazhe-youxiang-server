@@ -78,6 +78,9 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         if(null == rechargeCardExchangeCodePO){
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
         }
+        if(rechargeCardExchangeCodePO.getStatus().equals(Byte.valueOf("0"))){
+            throw  new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_HAS_STOPED_USING);
+        }
         if(rechargeCardExchangeCodePO.getUsed().equals(Byte.valueOf("1"))){
             throw  new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_HAS_USED);
         }

@@ -18,6 +18,8 @@ public class RCDTO {
 
     private String description;
 
+    private Integer customerId;
+
     private Integer projectId;
 
     private String cityCodes;
@@ -44,6 +46,14 @@ public class RCDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 
     public String getDescription() {

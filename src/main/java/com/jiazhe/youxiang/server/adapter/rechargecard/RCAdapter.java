@@ -19,6 +19,7 @@ public class RCAdapter {
         }
         RCDTO rCDTO = new RCDTO();
         rCDTO.setId(rechargeCardPO.getId());
+        rCDTO.setCustomerId(rechargeCardPO.getCustomerId());
         rCDTO.setName(rechargeCardPO.getName());
         rCDTO.setDescription(rechargeCardPO.getDescription());
         rCDTO.setProjectId(rechargeCardPO.getProjectId());
@@ -38,6 +39,7 @@ public class RCAdapter {
         }
         RCResp rCResp = new RCResp();
         rCResp.setId(rcdto.getId());
+        rCResp.setCustomerId(rcdto.getCustomerId());
         rCResp.setName(rcdto.getName());
         rCResp.setDescription(rcdto.getDescription());
         rCResp.setProjectId(rcdto.getProjectId());

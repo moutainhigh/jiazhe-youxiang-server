@@ -53,10 +53,7 @@ public class APIRCController extends BaseController{
     public Object searchListPage(@ModelAttribute RCPageReq req) {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        if(Strings.isBlank(req.getMobile())){
-            req.setMobile("xxxxxxxxxxx");
-        }
-        List<RCDTO> rcDTOList = rcBiz.getList(req.getMobile(),req.getStatus(),req.getExpiry(),paging);
+        List<RCDTO> rcDTOList = rcBiz.getList(req.getMobile(),req.getExchangeType(),req.getStatus(),req.getExpiry(),paging);
         List<RCResp> rcRespList = rcDTOList.stream().map(RCAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(rcRespList, paging);
     }

@@ -82,12 +82,13 @@ public interface RCService {
     /**
      * 根据客户电话，充值卡状态，是否过期和分页参数查询充值卡信息
      * @param mobile
+     * @param exchangeType
      * @param status
      * @param expiry
      * @param paging
      * @return
      */
-    List<RCDTO> getList(String mobile, Byte status, Byte expiry, Paging paging);
+    List<RCDTO> getList(String mobile, Integer exchangeType, Byte status, Byte expiry, Paging paging);
 
     RCDTO getById(Integer id);
 
