@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.service.rechargecard;
 
 import com.jiazhe.youxiang.server.domain.po.RechargeCardPO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
@@ -87,4 +88,8 @@ public interface RCService {
      * @return
      */
     List<RCDTO> getList(String mobile, Byte status, Byte expiry, Paging paging);
+
+    RCDTO getById(Integer id);
+
+    void editSave(RCEditDTO dto);
 }

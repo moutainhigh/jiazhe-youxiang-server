@@ -30,6 +30,10 @@ public class RCDTO {
 
     private Date expiryTime;
 
+    private Byte status;
+
+    private Date addTime;
+
     private CustomerDTO customerDTO;
 
     private RCExchangeRecordDTO rcExchangeRecordDTO;
@@ -120,5 +124,21 @@ public class RCDTO {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public Date getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
     }
 }

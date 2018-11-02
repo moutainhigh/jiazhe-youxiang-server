@@ -8,6 +8,7 @@ import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCPOManualMappe
 import com.jiazhe.youxiang.server.domain.po.*;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord.RCExchangeRecordDTO;
@@ -88,7 +89,7 @@ public class RCServiceImpl implements RCService {
 
     @Override
     public void directCharge(String mobile, Integer batchId, BigDecimal faceValue) {
-        CustomerDTO customerDTO = customerService.getById(1);
+        CustomerDTO customerDTO = customerService.getByMobile(mobile);
         RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchService.getById(batchId);
         RechargeCardPO rechargeCardPO = new RechargeCardPO();
         //直接指定过期时间
@@ -151,10 +152,14 @@ public class RCServiceImpl implements RCService {
 
     @Override
     public List<RCDTO> getList(String mobile, Byte status, Byte expiry, Paging paging) {
-        CustomerDTO customerDTO = null;
-        List<RechargeCardPO> rechargeCardPOList = rcPOManualMapper.query(customerDTO.getId(),status,expiry,paging.getOffset(),paging.getLimit());
+        CustomerDTO customerDTO = customerService.getByMobile(mobile);
+        Integer customerId = 0;
+        if(null != customerDTO){
+            customerId = customerDTO.getId();
+        }
+        List<RechargeCardPO> rechargeCardPOList = rcPOManualMapper.query(customerId,status,expiry,paging.getOffset(),paging.getLimit());
         List<RCDTO> rcDTOList = rechargeCardPOList.stream().map(RCAdapter::PO2DTO).collect(Collectors.toList());
-        Integer count = rcPOManualMapper.count(customerDTO.getId(),status,expiry);
+        Integer count = rcPOManualMapper.count(customerId,status,expiry);
         paging.setTotal(count);
         rcDTOList.stream().forEach(bean -> {
             bean.setCustomerDTO(customerDTO);
@@ -162,5 +167,22 @@ public class RCServiceImpl implements RCService {
             bean.setRcExchangeRecordDTO(rcExchangeRecordDTO);
         });
         return rcDTOList;
+    }
+
+    @Override
+    public RCDTO getById(Integer id) {
+        RechargeCardPO po = rechargeCardPOMapper.selectByPrimaryKey(id);
+        return RCAdapter.PO2DTO(po);
+    }
+
+    @Override
+    public void editSave(RCEditDTO dto) {
+        RechargeCardPO po = rechargeCardPOMapper.selectByPrimaryKey(dto.getId());
+        po.setProductIds(dto.getProductIds());
+        po.setCityCodes(dto.getCityCodes());
+        po.setName(dto.getName());
+        po.setExpiryTime(dto.getExpiryTime());
+        po.setDescription(dto.getDescription());
+        rechargeCardPOMapper.updateByPrimaryKeySelective(po);
     }
 }

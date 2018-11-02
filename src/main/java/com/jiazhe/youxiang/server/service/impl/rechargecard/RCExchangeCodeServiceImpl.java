@@ -73,7 +73,16 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
     @Override
     public void codeCharge(Integer type,String mobile, String keyt) {
         RechargeCardExchangeCodePO rechargeCardExchangeCodePO = findByKeyt(keyt);
-        CustomerDTO customerDTO = customerService.getById(1);;
+        if(null == rechargeCardExchangeCodePO){
+            throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
+        }
+        if(rechargeCardExchangeCodePO.getUsed().equals(Byte.valueOf("1"))){
+            throw  new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_HAS_USED);
+        }
+        if(rechargeCardExchangeCodePO.getExpiryTime().getTime()< System.currentTimeMillis()){
+            throw  new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_HAS_EXPIRIED);
+        }
+        CustomerDTO customerDTO = customerService.getByMobile(mobile);
         RechargeCardPO rechargeCardPO = new RechargeCardPO();
         //直接指定过期时间
         if(rechargeCardExchangeCodePO.getExpiryType().equals(Byte.valueOf("0"))){
@@ -81,6 +90,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         }else{
             rechargeCardPO.setExpiryTime(new Date(System.currentTimeMillis()+rechargeCardExchangeCodePO.getValidityPeriod()* CommonConstant.ONE_DAY));
         }
+        rechargeCardPO.setDescription(rechargeCardExchangeCodePO.getBatchDescription());
         rechargeCardPO.setFaceValue(rechargeCardExchangeCodePO.getFaceValue());
         rechargeCardPO.setBalance(rechargeCardExchangeCodePO.getFaceValue());
         //暂时置为0，等生成了兑换记录再修改
@@ -97,6 +107,12 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         rechargeCardRecordPO.setExchangeCodeId(rechargeCardExchangeCodePO.getId());
         rechargeCardRecordPO.setExchangeType(type);
         rechargeCardRecordPO.setRechargeCardId(rechargeCardPO.getId());
+        rechargeCardRecordPO.setOperatorId(0);
+        rechargeCardRecordPO.setOperatorName("");
+        rechargeCardRecordPO.setExtInfo("");
+        rechargeCardRecordPO.setIsDeleted(Byte.valueOf("0"));
+        rechargeCardRecordPO.setAddTime(new Date());
+        rechargeCardRecordPO.setModTime(new Date());
         rcExchangeRecordService.insert(rechargeCardRecordPO);
         //修改充值卡对应的兑换记录id
         rechargeCardPO.setExchangeRecordId(rechargeCardRecordPO.getId());

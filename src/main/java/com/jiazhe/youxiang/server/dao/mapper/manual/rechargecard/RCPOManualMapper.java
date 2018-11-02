@@ -49,7 +49,7 @@ public interface RCPOManualMapper {
      * @param limit
      * @return
      */
-    List<RechargeCardPO> query(@Param("customerID")Integer customerId, @Param("status")Byte status, @Param("expiry")Byte expiry, @Param("offset")Integer offset, @Param("limit")Integer limit);
+    List<RechargeCardPO> query(@Param("customerId")Integer customerId, @Param("status")Byte status, @Param("expiry")Byte expiry, @Param("offset")Integer offset, @Param("limit")Integer limit);
 
     /**
      * 根据客户id,充值卡停用、启用状态，是否过期查询记录条数
@@ -58,5 +58,5 @@ public interface RCPOManualMapper {
      * @param expiry
      * @return
      */
-    Integer count(@Param("customerID")Integer customerId, @Param("status")Byte status, @Param("expiry")Byte expiry);
+    Integer count(@Param("customerId")Integer customerId, @Param("status")Byte status, @Param("expiry")Byte expiry);
 }

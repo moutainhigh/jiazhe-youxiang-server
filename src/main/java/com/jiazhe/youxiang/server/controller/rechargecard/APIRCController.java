@@ -4,17 +4,23 @@ import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCAdapter;
+import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCBiz;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCEditDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeEditDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.DirectChargeReq;
 import com.jiazhe.youxiang.server.vo.req.ExpiryTimeEditReq;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.RCEditReq;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.RCPageReq;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecode.RCExchangeCodeEditReq;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rc.RCResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.util.Strings;
@@ -80,17 +86,6 @@ public class APIRCController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-   /* @ApiOperation(value = "根据客户id,充值卡状态，查询所有充值卡，【分页】", httpMethod = "GET",response = RCResp.class, responseContainer = "List",notes = "根据客户id，充值卡状态查询所有充值卡，【分页】")
-    @RequestMapping(value = "/listpage", method = RequestMethod.POST)
-    public Object listPage(@ModelAttribute RCPageReq req) {
-        //参数检查
-        CommonValidator.validatePaging(req);
-        Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        List<RCDTO> rcDTOList = rcBiz.getList(req.getCustomerId(),req.getStatus(),paging);
-        List<RCResp> rcRespList = rcDTOList.stream().map(RCAdapter::DTO2Resp).collect(Collectors.toList());
-        return ResponseFactory.buildResponse(rcRespList);
-    }*/
-
     @ApiOperation(value = "后台直接给客户充值任意分数", httpMethod = "POST",notes = "后台直接给客户充值任意分数")
     @RequestMapping(value = "/directcharge", method = RequestMethod.POST)
     public Object directCharge(@ModelAttribute DirectChargeReq req) {
@@ -98,4 +93,28 @@ public class APIRCController extends BaseController{
         rcBiz.directCharge(req.getMobile(),req.getBatchId(),req.getFaceValue());
         return ResponseFactory.buildSuccess();
     }
+
+    @ApiOperation(value = "回显充值卡信息", httpMethod = "GET",response = RCResp.class,notes = "回显充值卡信息")
+    @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
+    public Object getById(@ModelAttribute IdReq req) {
+        //参数检查
+        CommonValidator.validateId(req);
+        RCDTO rcDTO = rcBiz.getById(req.getId());
+        RCResp rcResp = RCAdapter.DTO2Resp(rcDTO);
+        return ResponseFactory.buildResponse(rcResp);
+    }
+
+    @ApiOperation(value = "修改充值卡信息", httpMethod = "POST",notes = "修改充值卡信息")
+    @RequestMapping(value = "/editsave", method = RequestMethod.POST)
+    public Object editSave(@ModelAttribute RCEditReq req) {
+        //参数检查
+        CommonValidator.validateNull(req);
+        CommonValidator.validateNull(req.getId());
+        CommonValidator.validateNull(req.getName(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));
+        CommonValidator.validateNull(req.getExpiryTime(),new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_EXPIRT_TIME_IS_NULL));
+        RCEditDTO dto = RCAdapter.EditReq2EditDTO(req);
+        rcBiz.editSave(dto);
+        return ResponseFactory.buildSuccess();
+    }
+
 }

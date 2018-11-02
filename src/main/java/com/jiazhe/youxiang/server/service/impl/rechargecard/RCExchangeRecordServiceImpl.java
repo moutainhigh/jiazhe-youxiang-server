@@ -33,7 +33,7 @@ public class RCExchangeRecordServiceImpl implements RCExchangeRecordService {
 
     @Override
     public void insert(RechargeCardExchangeRecordPO rechargeCardRecordPO) {
-        rcExchangeRecordPOManualMapper.insert(rechargeCardRecordPO);
+        rechargeCardExchangeRecordPOMapper.insert(rechargeCardRecordPO);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class RCExchangeRecordServiceImpl implements RCExchangeRecordService {
         criteria.andRechargeCardIdEqualTo(cardId);
         List<RechargeCardExchangeRecordPO> poList = rechargeCardExchangeRecordPOMapper.selectByExample(example);
         if(poList.isEmpty()||poList.size()>1){
-            throw new RechargeCardException(RechargeCardCodeEnum.CARD_2_RECORD_EXCEPTIOM);
+            throw new RechargeCardException(RechargeCardCodeEnum.CARD_2_RECORD_EXCEPTION);
         }
         RCExchangeRecordDTO dto = RCExchangeRecordAdapter.PO2DTO(poList.get(0));
         return dto;

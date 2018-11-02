@@ -119,7 +119,7 @@ public class APIRCExchangeCodeController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "客户用用兑换码自行充值", httpMethod = "POST",notes = "客户用用兑换码自行充值")
+    @ApiOperation(value = "客户用兑换码自行充值", httpMethod = "POST",notes = "客户用兑换码自行充值")
     @RequestMapping(value = "/customerselfcodecharge", method = RequestMethod.POST)
     public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) {
         //参数检查

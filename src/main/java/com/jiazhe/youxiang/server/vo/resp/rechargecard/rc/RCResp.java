@@ -14,6 +14,8 @@ import java.util.Date;
  */
 public class RCResp extends BaseVO{
 
+    private Integer id;
+
     private String name;
 
     private String description;
@@ -30,9 +32,22 @@ public class RCResp extends BaseVO{
 
     private Date expiryTime;
 
+    private Byte status;
+
+    private Date addTime;
+
     private CustomerResp customerResp;
 
     private RCExchangeRecordResp rcExchangeRecordResp;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -111,5 +126,21 @@ public class RCResp extends BaseVO{
 
     public void setRcExchangeRecordResp(RCExchangeRecordResp rcExchangeRecordResp) {
         this.rcExchangeRecordResp = rcExchangeRecordResp;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public Date getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
     }
 }
