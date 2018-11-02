@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title>CRM首页</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/static/init.css}"/>
+
+    <!-- Javascript -->
+    <script th:src="@{/static/init.js}"></script>
+
+
+    <style>
+        .form-group {
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+
+<body class="no-skin">
+
+<div class="main-container ace-save-state" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.loadState('main-container')
+        } catch (e) {
+        }
+    </script>
+
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a th:href="@{/main/main_center}">主页</a>
+                    </li>
+                    <li class="active">充值卡查询</li>
+                </ul><!-- /.breadcrumb -->
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xs-12" style="padding-top:40px">
+                        <form id="rcExchangeCodeSearchForm" class="form-horizontal" role="form">
+                            <input type="hidden" th:value="${batchId}" id="searchBatchId" name="batchId"/>
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <label class="col-sm-3 control-label no-padding-right">状态：</label>
+                                    <div class="col-sm-3">
+                                        <select id="searchStatus" name="status" class="selectpicker show-tick form-control">
+                                            <option value="">所有</option>
+                                            <option value=1>启用</option>
+                                            <option value=0>停用</option>
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-3 control-label no-padding-right">使用状态：</label>
+                                    <div class="col-sm-3">
+                                        <select id="searchUsed" name="used" class="selectpicker show-tick form-control">
+                                            <option value="">所有</option>
+                                            <option value=1>已使用</option>
+                                            <option value=0>未使用</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">兑换码：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="searchCode" name="code" class="form-control" type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">密钥：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="searchKeyt" name="keyt" class="form-control" type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <button class="btn btn-white btn-default btn-round btn-sm"
+                                            onclick="return search()">
+                                        <i class="ace-icon fa fa-search red2"></i>
+                                        查询
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!-- /.col -->
+
+                    <div class="col-xs-12" style="text-align: right" id="buttonDiv">
+                        <p style="margin:1px;height: 31px">
+
+                        </p>
+                    </div><!-- /.col -->
+
+                    <div class="col-xs-12">
+                        <table id="grid-table"></table>
+
+                        <div id="grid-pager"></div>
+                    </div><!-- /.col -->
+
+                    <div id="modal-form" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger" id="modal-title">修改兑换码信息</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-1"></div>
+                                        <div class="col-xs-12 col-sm-9">
+                                            <form id="codeSaveForm" class="form-horizontal" role="form">
+                                                <input type="hidden" name="id" id="saveCodeId">
+                                                <input type="hidden" name="productIds" id="saveProductIds">
+                                                <input type="hidden" name="cityCodes" id="saveCityCodes">
+                                                <input type="hidden" name="expiryType" id="saveExpiryType" value=0>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">充值卡名称：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="saveRechargeCardName" name="rechargeCardName"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveExpiryTime">到期时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker" id="saveExpiryTime"
+                                                                   name="expiryTime" type="text"/>
+                                                            <span class="input-group-addon">
+                                                                    <i class="fa fa-calendar bigger-110"></i>
+                                                                </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">充值卡过期类型：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <label class="radio-inline ">
+                                                                <input id="saveDeadLineRadio" type="radio"
+                                                                       name="expiryTypeRadio"
+                                                                       value="0" checked="checked"/>指定截止日期
+                                                            </label>
+                                                            <label class="radio-inline">
+                                                                <input id="saveValidityPeriodRadio" type="radio"
+                                                                       name="expiryTypeRadio"
+                                                                       value="1"/>兑换之日起算
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 saveDeadLine"></div>
+                                                <div class="form-group saveDeadLine">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveRechargeCardExpiryTime">充值卡到期时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker"
+                                                                   id="saveRechargeCardExpiryTime"
+                                                                   name="rechargeCardExpiryTime" type="text"/>
+                                                            <span class="input-group-addon">
+                                                                    <i class="fa fa-calendar bigger-110"></i>
+                                                                </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 saveValidityPeriod" style="display:none;"></div>
+                                                <div class="form-group saveValidityPeriod" style="display:none;">
+                                                    <label class="col-sm-4 control-label no-padding-right">兑换之日有效天数：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="saveValidityPeriod" name="validityPeriod"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveDescription">描述信息：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="saveDescription" name="batchDescription"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="save()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        保存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+
+    <!--<div class="footer">
+        <div class="footer-inner">
+            <div class="footer-content" style="padding: 0px;">
+						<span class="bigger-120">
+							<span class="blue bolder"></span>
+							悠享后台管理系统 &copy; 2018
+						</span>
+                &nbsp; &nbsp;
+            </div>
+        </div>
+    </div>-->
+</div><!-- /.main-container -->
+</div>
+</body>
+<script type="text/javascript">
+    var permission = getCookie("permission");
+
+    $(function () {
+        //重新修改表格宽度
+        $(window).resize(function () {
+            $("#grid-table").setGridWidth($(window).width() * 0.96);
+        });
+
+        $('.date-picker').datepicker({
+            language: 'zh-CN',//选择语言
+            autoclose: true,
+            todayHighlight: true
+        }).next().on(ace.click_event, function () {
+            $(this).prev().focus();
+        });
+
+        $("input[name=expiryTypeRadio]").bind("change", function () {
+            if ($("input[name=expiryTypeRadio]:checked").val() == 0) {
+                $(".saveDeadLine").css("display", "");
+                $(".saveValidityPeriod").css("display", "none");
+                $("#saveExpiryType").val(0);
+            } else {
+                $(".saveDeadLine").css("display", "none");
+                $(".saveValidityPeriod").css("display", "");
+                $("#saveExpiryType").val(1);
+            }
+        });
+
+    });
+
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+    jQuery(grid_selector).jqGrid({
+        subGrid: false, // 此处设置为true时可以打开子项,子项用不到已删除
+        url: "../api/rcexchangecode/listpage",// 获取数据的地址
+        postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
+        rownumbers: true,
+        datatype: "json",
+        mtype: "GET",
+        hidegrid: false,//收缩列表按钮
+        prmNames: {
+            page: "pageNum",
+            rows: "pageSize"
+        },// 重新定义分页信息
+        width: "100%",
+        autowidth: true,
+        height: 350,
+        colNames: ['','批次名称','充值卡名称', '兑换码', '密钥', '停用状态', '使用状态', '面额',  '过期时间', '操作'],
+        colModel: [
+            {name: 'id', index: 'id', sortable: false, hidden: true},
+            {name: 'batchName', index: 'batchName', width: 100, sortable: false},
+            {name: 'rechargeCardName', index: 'rechargeCardName', width: 50, sortable: false},
+            {name: 'code', index: 'code', width: 80, sortable: false},
+            {name: 'keyt', index: 'keyt', width: 80, sortable: false},
+            {
+                name: 'status',
+                index: 'status',
+                width: 30,
+                sortable: false,
+                formatter: function (cellvalue, options, rowObject) {
+                    return rowObject.status == 1 ? "启用" : "停用";
+                }
+            },
+            {
+                name: 'used',
+                index: 'used',
+                width: 30,
+                sortable: false,
+                formatter: function (cellvalue, options, rowObject) {
+                    return rowObject.used == 1 ? "已使用" : "未使用";
+                }
+            },
+            {name: 'faceValue', index: 'faceValue', width: 30, sortable: false},
+            {name: 'expiryTime', index: 'expiryTime', width: 50, sortable: false,formatter: dateFormatter},
+            {name: '_action', index: '_action', width:100,sortable: false, formatter: customFormatter}
+        ],
+        rowNum: 10,
+        rowList: [10, 20, 30],
+        pager: pager_selector,
+        altRows: true,
+        viewrecords: true,
+        emptyrecords: "0条数据",
+        loadComplete: function (data) {
+            var table = this;
+            setTimeout(function () {
+                $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
+                updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
+            }, 0);
+        },
+        jsonReader: { // jsonReader来跟服务器端返回的数据做对应
+            root: "data", // 包含实际数据的数组
+            page: "paging.currPage", // 当前页
+            total: "paging.totalPage",// 总页数
+            records: "paging.total", // 查询出的记录数
+            repeatitems: false
+        },
+        caption: "充值卡查询结果列表"
+    });
+    $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
+
+    //replace icons with FontAwesome icons like above
+    function updatePagerIcons(table) {
+        var replacement =
+            {
+                'ui-icon-seek-first': 'ace-icon fa fa-angle-double-left bigger-140',
+                'ui-icon-seek-prev': 'ace-icon fa fa-angle-left bigger-140',
+                'ui-icon-seek-next': 'ace-icon fa fa-angle-right bigger-140',
+                'ui-icon-seek-end': 'ace-icon fa fa-angle-double-right bigger-140'
+            };
+        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+            var icon = $(this);
+            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+        })
+    }
+
+    function search() {
+        jQuery(grid_selector).setGridParam({
+            url: "../api/rcexchangecode/listpage",// 获取数据的地址
+            postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
+        }).trigger("reloadGrid", [{page: 1}]);
+        return false;
+    }
+
+    function customFormatter(cellvalue, options, rowObject) {
+        var str = "";
+        if(rowObject.used == 0){
+            str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
+                "<i class='ace-icon'>修改</i>" +
+                "</a>&nbsp;&nbsp;";
+            if(rowObject.status == 0){
+                str = str + "<a class='btn btn-minier btn-success' href=\"javascript:startUsing('" + rowObject.id + "')\">" +
+                    "<i class='ace-icon'>启用</i>" +
+                    "</a>";
+            }else{
+                str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:stopUsing('" + rowObject.id + "')\">" +
+                    "<i class='ace-icon'>停用</i>" +
+                    "</a>&nbsp;&nbsp;";
+            }
+
+        }
+
+        return str;
+    }
+
+    function dateFormatter(cellvalue, options, rowObject) {
+        return dateFormat(rowObject.expiryTime);
+    }
+
+    //启用兑换码
+    function startUsing(id) {
+        $.ajax({
+            url: "../api/rcexchangecode/startusing",
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    bootboxalert("启用兑换码成功");
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+    //停用兑换码
+    function stopUsing(id) {
+        $.ajax({
+            url: "../api/rcexchangecode/stopusing",    //请求的url地址
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    bootboxalert("停用兑换码成功");
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+    function save() {
+        $.ajax({
+            url: "../api/rcexchangecode/editsave",
+            dataType: "json",
+            async: false,
+            data: transformToJson($('#codeSaveForm').serializeArray()),
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $("#modal-form").modal('hide');
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+    function openEdit(id) {
+        $.ajax({
+            url: "../api/rcexchangecode/getbyid",
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#saveCodeId").val(result.id);
+                    $("#codeSaveForm #saveRechargeCardName").val(result.rechargeCardName);
+                    $("#codeSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
+                    if (result.expiryType == 0) {
+                        $("#codeSaveForm #saveDeadLineRadio").click();
+                    } else {
+                        $("#codeSaveForm #saveValidityPeriodRadio").click();
+                    }
+                    $("#codeSaveForm #saveValidityPeriod").val(result.validityPeriod);
+                    $("#codeSaveForm #saveRechargeCardExpiryTime").val(dateFormat(result.rechargeCardExpiryTime));
+                    $("#codeSaveForm #saveDescription").val(result.batchDescription);
+                    $("#modal-form").modal('show');
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+</script>
+</html>
+

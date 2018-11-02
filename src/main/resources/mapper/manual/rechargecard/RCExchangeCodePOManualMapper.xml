@@ -82,7 +82,10 @@
             <if test="keyt != null  and keyt != ''">
                 AND keyt = #{keyt}
             </if>
-            AND batch_id = #{batchId} AND is_deleted = 0 ORDER BY id ASC
+            <if test="batchId != null  and batchId != 0">
+                AND batch_id = #{batchId}
+            </if>
+            AND is_deleted = 0 ORDER BY id ASC
         </where>
         limit #{offset},#{limit}
 
@@ -103,7 +106,10 @@
             <if test="keyt != null  and keyt != ''">
                 AND keyt = #{keyt}
             </if>
-            AND batch_id = #{batchId} AND is_deleted = 0
+            <if test="batchId != null  and batchId != 0">
+                AND batch_id = #{batchId}
+            </if>
+            AND is_deleted = 0
         </where>
     </select>
 </mapper>

@@ -64,6 +64,11 @@ public class CommonConstant {
     public static final String VOUCHER_EXCHANGE_CODE_PREFIX = "1";
 
     /**
+     * 订单号前缀
+     */
+    public static final String ORDER_CODE_PREFIX = "2";
+
+    /**
      * 一天的毫秒数
      */
     public static final Integer ONE_DAY = 24 * 3600 *1000 ;

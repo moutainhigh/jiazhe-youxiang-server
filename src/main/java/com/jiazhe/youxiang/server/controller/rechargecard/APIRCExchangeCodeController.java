@@ -22,6 +22,7 @@ import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecode.RCExchangeC
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecode.RCExchangeCodePageReq;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecode.RCExchangeCodeResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,20 @@ public class APIRCExchangeCodeController extends BaseController{
     public Object listPage(@ModelAttribute RCExchangeCodePageReq req) {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
+        List<RCExchangeCodeDTO> rcExchangeCodeDTOList = rcExchangeCodeBiz.getList(req.getBatchId(),req.getCode(),req.getKeyt(),req.getStatus(),req.getUsed(),paging);
+        List<RCExchangeCodeResp> rcExchangeCodeBatchRespList = rcExchangeCodeDTOList.stream().map(RCExchangeCodeAdapter::DTO2Resp).collect(Collectors.toList());
+        return ResponseFactory.buildPaginationResponse(rcExchangeCodeBatchRespList, paging);
+    }
+
+    @ApiOperation(value = "信息查询页查询兑换码", httpMethod = "GET", response = RCExchangeCodeResp.class, responseContainer = "List",notes = "信息查询页查询兑换码")
+    @RequestMapping(value = "/searchlistpage", method = RequestMethod.GET)
+    public Object searchListPage(@ModelAttribute RCExchangeCodePageReq req) {
+        CommonValidator.validatePaging(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
+        if(Strings.isBlank(req.getCode())&&Strings.isBlank(req.getKeyt())){
+            req.setCode("xxxxxxxxxxxxxxxx");
+            req.setKeyt("xxxxxxxxxxxxxxxx");
+        }
         List<RCExchangeCodeDTO> rcExchangeCodeDTOList = rcExchangeCodeBiz.getList(req.getBatchId(),req.getCode(),req.getKeyt(),req.getStatus(),req.getUsed(),paging);
         List<RCExchangeCodeResp> rcExchangeCodeBatchRespList = rcExchangeCodeDTOList.stream().map(RCExchangeCodeAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(rcExchangeCodeBatchRespList, paging);
