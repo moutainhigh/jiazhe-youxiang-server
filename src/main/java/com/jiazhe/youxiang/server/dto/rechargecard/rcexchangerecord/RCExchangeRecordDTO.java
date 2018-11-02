@@ -11,9 +11,13 @@ public class RCExchangeRecordDTO {
 
     private Integer id;
 
+    private Integer rechargeCardId;
+
     private Integer exchangeCodeId;
 
     private Integer exchangeType;
+
+    private Integer operatorId;
 
     private String operatorName;
 
@@ -59,4 +63,19 @@ public class RCExchangeRecordDTO {
         this.addTime = addTime;
     }
 
+    public Integer getRechargeCardId() {
+        return rechargeCardId;
+    }
+
+    public void setRechargeCardId(Integer rechargeCardId) {
+        this.rechargeCardId = rechargeCardId;
+    }
+
+    public Integer getOperatorId() {
+        return operatorId;
+    }
+
+    public void setOperatorId(Integer operatorId) {
+        this.operatorId = operatorId;
+    }
 }

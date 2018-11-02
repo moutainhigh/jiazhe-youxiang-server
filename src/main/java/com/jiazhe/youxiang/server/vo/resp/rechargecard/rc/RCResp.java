@@ -1,6 +1,8 @@
 package com.jiazhe.youxiang.server.vo.resp.rechargecard.rc;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
+import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangerecord.RCExchangeRecordResp;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -28,6 +30,9 @@ public class RCResp extends BaseVO{
 
     private Date expiryTime;
 
+    private CustomerResp customerResp;
+
+    private RCExchangeRecordResp rcExchangeRecordResp;
     public String getName() {
         return name;
     }
@@ -90,5 +95,21 @@ public class RCResp extends BaseVO{
 
     public void setExpiryTime(Date expiryTime) {
         this.expiryTime = expiryTime;
+    }
+
+    public CustomerResp getCustomerResp() {
+        return customerResp;
+    }
+
+    public void setCustomerResp(CustomerResp customerResp) {
+        this.customerResp = customerResp;
+    }
+
+    public RCExchangeRecordResp getRcExchangeRecordResp() {
+        return rcExchangeRecordResp;
+    }
+
+    public void setRcExchangeRecordResp(RCExchangeRecordResp rcExchangeRecordResp) {
+        this.rcExchangeRecordResp = rcExchangeRecordResp;
     }
 }

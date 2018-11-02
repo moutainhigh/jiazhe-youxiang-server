@@ -11,9 +11,11 @@ import com.jiazhe.youxiang.server.dao.mapper.RechargeCardExchangeCodePOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCExchangeCodePOManualMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.*;
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
+import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeRecordService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCService;
@@ -44,6 +46,8 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
     private RCService rcService;
     @Autowired
     private RCExchangeRecordService rcExchangeRecordService;
+    @Autowired
+    private CustomerService customerService;
 
     @Override
     public void batchInsert(List<RechargeCardExchangeCodePO> rechargeCardExchangeCodePOList) {
@@ -69,7 +73,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
     @Override
     public void codeCharge(Integer type,String mobile, String keyt) {
         RechargeCardExchangeCodePO rechargeCardExchangeCodePO = findByKeyt(keyt);
-        CustomerPO customerPO = null;
+        CustomerDTO customerDTO = customerService.getById(1);;
         RechargeCardPO rechargeCardPO = new RechargeCardPO();
         //直接指定过期时间
         if(rechargeCardExchangeCodePO.getExpiryType().equals(Byte.valueOf("0"))){
@@ -84,7 +88,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         rechargeCardPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
         rechargeCardPO.setProjectId(rechargeCardExchangeCodePO.getProjectId());
         rechargeCardPO.setName(rechargeCardExchangeCodePO.getBatchName());
-        rechargeCardPO.setCustomerId(customerPO.getId());
+        rechargeCardPO.setCustomerId(customerDTO.getId());
         rechargeCardPO.setCityCodes(rechargeCardExchangeCodePO.getCityCodes());
         rechargeCardPO.setProductIds(rechargeCardExchangeCodePO.getProductIds());
         rcService.insert(rechargeCardPO);

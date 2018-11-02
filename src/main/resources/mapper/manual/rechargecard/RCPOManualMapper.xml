@@ -25,6 +25,48 @@
         ext_info, is_deleted,add_time, mod_time
     </sql>
 
+    <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.RechargeCardPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM recharge_card
+        <where>
+            <if test="customerId != null">
+                AND customer_id = #{customerId}
+            </if>
+            <if test="status != null  and status != ''">
+                AND status = #{status}
+            </if>
+            <if test="expiry == 0">
+                AND expiry_time &gt; NOW()
+            </if>
+            <if test="expiry == 1">
+                AND expiry_time &lt;= NOW()
+            </if>
+            AND is_deleted = 0 ORDER BY add_time desc
+        </where>
+        limit #{offset},#{limit}
+
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from recharge_card
+        <where>
+            <if test="customerId != null">
+                AND customer_id = #{customerId}
+            </if>
+            <if test="status != null  and status != ''">
+                AND status = #{status}
+            </if>
+            <if test="expiry == 0">
+                AND expiry_time &gt; NOW()
+            </if>
+            <if test="expiry == 1">
+                AND expiry_time &lt;= NOW()
+            </if>
+            AND is_deleted = 0
+        </where>
+    </select>
+
     <select id="findByIds" parameterType="java.util.List"
             resultType="com.jiazhe.youxiang.server.domain.po.RechargeCardPO">
         select

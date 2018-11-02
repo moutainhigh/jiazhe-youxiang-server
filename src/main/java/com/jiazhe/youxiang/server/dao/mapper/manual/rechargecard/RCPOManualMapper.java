@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard;
 
 import com.jiazhe.youxiang.server.domain.po.RechargeCardPO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -38,4 +39,24 @@ public interface RCPOManualMapper {
      * @return
      */
     void batchChangeStatus(Map<String,Object> map);
+
+    /**
+     * 根据客户id,充值卡停用、启用状态，是否过期，分页参数查询充值卡列表
+     * @param customerId
+     * @param status
+     * @param expiry
+     * @param offset
+     * @param limit
+     * @return
+     */
+    List<RechargeCardPO> query(@Param("customerID")Integer customerId, @Param("status")Byte status, @Param("expiry")Byte expiry, @Param("offset")Integer offset, @Param("limit")Integer limit);
+
+    /**
+     * 根据客户id,充值卡停用、启用状态，是否过期查询记录条数
+     * @param customerId
+     * @param status
+     * @param expiry
+     * @return
+     */
+    Integer count(@Param("customerID")Integer customerId, @Param("status")Byte status, @Param("expiry")Byte expiry);
 }

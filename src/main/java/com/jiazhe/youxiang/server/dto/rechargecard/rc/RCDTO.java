@@ -1,9 +1,7 @@
 package com.jiazhe.youxiang.server.dto.rechargecard.rc;
 
-import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
-import com.jiazhe.youxiang.server.vo.resp.rechargecard.rc.RCResp;
-import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecode.RCExchangeCodeResp;
-
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord.RCExchangeRecordDTO;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -13,6 +11,8 @@ import java.util.Date;
  * @date 2018/10/23.
  */
 public class RCDTO {
+
+    private Integer id;
 
     private String name;
 
@@ -30,9 +30,9 @@ public class RCDTO {
 
     private Date expiryTime;
 
-    private CustomerResp customerResp;
+    private CustomerDTO customerDTO;
 
-    private RCExchangeCodeResp rcExchangeCodeResp;
+    private RCExchangeRecordDTO rcExchangeRecordDTO;
 
     public String getName() {
         return name;
@@ -98,19 +98,27 @@ public class RCDTO {
         this.expiryTime = expiryTime;
     }
 
-    public CustomerResp getCustomerResp() {
-        return customerResp;
+    public CustomerDTO getCustomerDTO() {
+        return customerDTO;
     }
 
-    public void setCustomerResp(CustomerResp customerResp) {
-        this.customerResp = customerResp;
+    public void setCustomerDTO(CustomerDTO customerDTO) {
+        this.customerDTO = customerDTO;
     }
 
-    public RCExchangeCodeResp getRcExchangeCodeResp() {
-        return rcExchangeCodeResp;
+    public RCExchangeRecordDTO getRcExchangeRecordDTO() {
+        return rcExchangeRecordDTO;
     }
 
-    public void setRcExchangeCodeResp(RCExchangeCodeResp rcExchangeCodeResp) {
-        this.rcExchangeCodeResp = rcExchangeCodeResp;
+    public void setRcExchangeRecordDTO(RCExchangeRecordDTO rcExchangeRecordDTO) {
+        this.rcExchangeRecordDTO = rcExchangeRecordDTO;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

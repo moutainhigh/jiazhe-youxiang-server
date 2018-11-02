@@ -19,6 +19,7 @@ public enum RechargeCardCodeEnum {
     EXCHANGE_CODE_NOT_EXISTED(106010, "EXCHANGE_CODE_NOT_EXISTED", "兑换码不存在"),
     EXCHANGE_CODE_EXPIRT_TIME_IS_NULL(106011, "EXCHANGE_CODE_EXPIRT_TIME_IS_NULL", "兑换码过期时间为空"),
     NO_CODE_TO_EXPORT(106012, "NO_CODE_TO_EXPORT", "没有兑换码可以导出"),
+    CARD_2_RECORD_EXCEPTIOM(106013, "CARD_2_RECORD_EXCEPTIOM", "该充值卡对应的兑换记录异常"),
     ;
 
     RechargeCardCodeEnum(Integer code, String type, String message) {

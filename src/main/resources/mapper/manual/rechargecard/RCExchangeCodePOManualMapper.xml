@@ -88,7 +88,6 @@
             AND is_deleted = 0 ORDER BY id ASC
         </where>
         limit #{offset},#{limit}
-
     </select>
 
     <select id="count" resultType="java.lang.Integer">
@@ -111,5 +110,11 @@
             </if>
             AND is_deleted = 0
         </where>
+    </select>
+
+    <select id="findByKeyt" resultType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM recharge_card_exchange_code WHERE keyt = #{keyt} AND is_deleted = 0
     </select>
 </mapper>

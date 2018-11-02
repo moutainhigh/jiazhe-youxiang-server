@@ -279,7 +279,7 @@
     var pager_selector = "#grid-pager";
     jQuery(grid_selector).jqGrid({
         subGrid: false, // 此处设置为true时可以打开子项,子项用不到已删除
-        url: "../api/rcexchangecode/listpage",// 获取数据的地址
+        url: "../api/rc/searchlistpage",// 获取数据的地址
         postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
         rownumbers: true,
         datatype: "json",
@@ -292,13 +292,10 @@
         width: "100%",
         autowidth: true,
         height: 350,
-        colNames: ['','批次名称','充值卡名称', '兑换码', '密钥', '停用状态', '使用状态', '面额',  '过期时间', '操作'],
+        colNames: ['','充值卡名称', '停用状态',  '面额','余额',  '兑换时间', '过期时间', '操作'],
         colModel: [
             {name: 'id', index: 'id', sortable: false, hidden: true},
-            {name: 'batchName', index: 'batchName', width: 100, sortable: false},
-            {name: 'rechargeCardName', index: 'rechargeCardName', width: 50, sortable: false},
-            {name: 'code', index: 'code', width: 80, sortable: false},
-            {name: 'keyt', index: 'keyt', width: 80, sortable: false},
+            {name: 'name', index: 'name', width: 100, sortable: false},
             {
                 name: 'status',
                 index: 'status',
@@ -308,17 +305,14 @@
                     return rowObject.status == 1 ? "启用" : "停用";
                 }
             },
-            {
-                name: 'used',
-                index: 'used',
-                width: 30,
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    return rowObject.used == 1 ? "已使用" : "未使用";
-                }
-            },
             {name: 'faceValue', index: 'faceValue', width: 30, sortable: false},
-            {name: 'expiryTime', index: 'expiryTime', width: 50, sortable: false,formatter: dateFormatter},
+            {name: 'balance', index: 'balance', width: 30, sortable: false},
+            {name: 'addTime', index: 'addTime', width: 50, sortable: false,formatter: function(cellvalue, options, rowObject){
+                return dateFormat(rowObject.addTime);
+            }},
+            {name: 'expiryTime', index: 'expiryTime', width: 50, sortable: false,formatter: function (cellvalue, options, rowObject) {
+                return dateFormat(rowObject.expiryTime)
+            }},
             {name: '_action', index: '_action', width:100,sortable: false, formatter: customFormatter}
         ],
         rowNum: 10,
@@ -363,7 +357,7 @@
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/rcexchangecode/listpage",// 获取数据的地址
+            url: "../api/rc/searchlistpage",// 获取数据的地址
             postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
@@ -371,7 +365,7 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        if(rowObject.used == 0){
+        /*if(rowObject.used == 0){
             str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
                 "<i class='ace-icon'>修改</i>" +
                 "</a>&nbsp;&nbsp;";
@@ -384,20 +378,15 @@
                     "<i class='ace-icon'>停用</i>" +
                     "</a>&nbsp;&nbsp;";
             }
-
-        }
+        }*/
 
         return str;
     }
 
-    function dateFormatter(cellvalue, options, rowObject) {
-        return dateFormat(rowObject.expiryTime);
-    }
-
-    //启用兑换码
+    //启用充值卡
     function startUsing(id) {
         $.ajax({
-            url: "../api/rcexchangecode/startusing",
+            url: "../api/rc/startusing",
             dataType: "json",
             async: false,
             data: {
@@ -408,7 +397,7 @@
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
-                    bootboxalert("启用兑换码成功");
+                    bootboxalert("启用充值卡成功");
                     jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                 }
             },
@@ -418,10 +407,10 @@
         });
     }
 
-    //停用兑换码
+    //停用充值卡
     function stopUsing(id) {
         $.ajax({
-            url: "../api/rcexchangecode/stopusing",    //请求的url地址
+            url: "../api/rc/stopusing",
             dataType: "json",
             async: false,
             data: {
@@ -432,7 +421,7 @@
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
-                    bootboxalert("停用兑换码成功");
+                    bootboxalert("停用充值卡成功");
                     jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                 }
             },
@@ -444,7 +433,7 @@
 
     function save() {
         $.ajax({
-            url: "../api/rcexchangecode/editsave",
+            url: "../api/rc/editsave",
             dataType: "json",
             async: false,
             data: transformToJson($('#codeSaveForm').serializeArray()),
@@ -465,7 +454,7 @@
 
     function openEdit(id) {
         $.ajax({
-            url: "../api/rcexchangecode/getbyid",
+            url: "../api/rc/getbyid",
             dataType: "json",
             async: false,
             data: {
