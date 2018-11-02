@@ -34,7 +34,7 @@ public class RCAdapter {
         rCResp.setName(rcdto.getName());
         rCResp.setDescription(rcdto.getDescription());
         rCResp.setProjectId(rcdto.getProjectId());
-        rCResp.setCityIds(rcdto.getCityCodes());
+        rCResp.setCityCodes(rcdto.getCityCodes());
         rCResp.setProductIds(rcdto.getProductIds());
         rCResp.setFaceValue(rcdto.getFaceValue());
         rCResp.setBalance(rcdto.getBalance());

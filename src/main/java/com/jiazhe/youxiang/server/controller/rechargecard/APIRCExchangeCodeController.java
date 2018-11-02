@@ -58,7 +58,7 @@ public class APIRCExchangeCodeController extends BaseController{
         return ResponseFactory.buildPaginationResponse(rcExchangeCodeBatchRespList, paging);
     }
 
-    @ApiOperation(value = "信息查询页查询兑换码", httpMethod = "GET", response = RCExchangeCodeResp.class, responseContainer = "List",notes = "信息查询页查询兑换码")
+    @ApiOperation(value = "信息查询页查询充值卡兑换码", httpMethod = "GET", response = RCExchangeCodeResp.class, responseContainer = "List",notes = "信息查询页查询充值卡兑换码")
     @RequestMapping(value = "/searchlistpage", method = RequestMethod.GET)
     public Object searchListPage(@ModelAttribute RCExchangeCodePageReq req) {
         CommonValidator.validatePaging(req);

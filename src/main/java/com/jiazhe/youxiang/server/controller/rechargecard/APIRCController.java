@@ -17,6 +17,7 @@ import com.jiazhe.youxiang.server.vo.req.ExpiryTimeEditReq;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.RCPageReq;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rc.RCResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,19 @@ public class APIRCController extends BaseController{
 
     @Autowired
     private RCBiz rcBiz;
+
+    @ApiOperation(value = "【后台】信息查询页查询充值卡", httpMethod = "GET", response = RCResp.class, responseContainer = "List",notes = "【后台】信息查询页查询充值卡")
+    @RequestMapping(value = "/searchlistpage", method = RequestMethod.GET)
+    public Object searchListPage(@ModelAttribute RCPageReq req) {
+        CommonValidator.validatePaging(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
+        if(Strings.isBlank(req.getMobile())){
+            req.setMobile("xxxxxxxxxxx");
+        }
+        List<RCDTO> rcDTOList = rcBiz.getList(req.getMobile(),req.getStatus(),req.getExpiry(),paging);
+        List<RCResp> rcRespList = rcDTOList.stream().map(RCAdapter::DTO2Resp).collect(Collectors.toList());
+        return ResponseFactory.buildPaginationResponse(rcRespList, paging);
+    }
 
     @ApiOperation(value = "启用充值卡", httpMethod = "POST",notes = "启用充值卡")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
@@ -66,7 +80,7 @@ public class APIRCController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "根据客户id,充值卡状态，查询所有充值卡，【分页】", httpMethod = "GET",response = RCResp.class, responseContainer = "List",notes = "根据客户id，充值卡状态查询所有充值卡，【分页】")
+   /* @ApiOperation(value = "根据客户id,充值卡状态，查询所有充值卡，【分页】", httpMethod = "GET",response = RCResp.class, responseContainer = "List",notes = "根据客户id，充值卡状态查询所有充值卡，【分页】")
     @RequestMapping(value = "/listpage", method = RequestMethod.POST)
     public Object listPage(@ModelAttribute RCPageReq req) {
         //参数检查
@@ -75,7 +89,7 @@ public class APIRCController extends BaseController{
         List<RCDTO> rcDTOList = rcBiz.getList(req.getCustomerId(),req.getStatus(),paging);
         List<RCResp> rcRespList = rcDTOList.stream().map(RCAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildResponse(rcRespList);
-    }
+    }*/
 
     @ApiOperation(value = "后台直接给客户充值任意分数", httpMethod = "POST",notes = "后台直接给客户充值任意分数")
     @RequestMapping(value = "/directcharge", method = RequestMethod.POST)

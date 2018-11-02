@@ -9,9 +9,11 @@ import com.jiazhe.youxiang.server.domain.po.*;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
+import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeRecordService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCService;
+import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +44,8 @@ public class RCServiceImpl implements RCService {
     private RCService rcService;
     @Autowired
     private RCExchangeRecordService rcExchangeRecordService;
+    @Autowired
+    private CustomerService customerService;
 
     @Override
     public void changeStatus(Integer id, Byte status) {
@@ -141,5 +145,11 @@ public class RCServiceImpl implements RCService {
         map.put("status",status);
         map.put("ids",cardIds);
         rcPOManualMapper.batchChangeStatus(map);
+    }
+
+    @Override
+    public List<RCDTO> getList(String mobile, Byte status, Byte expiry, Paging paging) {
+
+        return null;
     }
 }

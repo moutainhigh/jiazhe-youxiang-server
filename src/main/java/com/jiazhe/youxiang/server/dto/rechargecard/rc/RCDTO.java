@@ -1,5 +1,9 @@
 package com.jiazhe.youxiang.server.dto.rechargecard.rc;
 
+import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
+import com.jiazhe.youxiang.server.vo.resp.rechargecard.rc.RCResp;
+import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecode.RCExchangeCodeResp;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -25,6 +29,10 @@ public class RCDTO {
     private BigDecimal balance;
 
     private Date expiryTime;
+
+    private CustomerResp customerResp;
+
+    private RCExchangeCodeResp rcExchangeCodeResp;
 
     public String getName() {
         return name;
@@ -88,5 +96,21 @@ public class RCDTO {
 
     public void setExpiryTime(Date expiryTime) {
         this.expiryTime = expiryTime;
+    }
+
+    public CustomerResp getCustomerResp() {
+        return customerResp;
+    }
+
+    public void setCustomerResp(CustomerResp customerResp) {
+        this.customerResp = customerResp;
+    }
+
+    public RCExchangeCodeResp getRcExchangeCodeResp() {
+        return rcExchangeCodeResp;
+    }
+
+    public void setRcExchangeCodeResp(RCExchangeCodeResp rcExchangeCodeResp) {
+        this.rcExchangeCodeResp = rcExchangeCodeResp;
     }
 }
