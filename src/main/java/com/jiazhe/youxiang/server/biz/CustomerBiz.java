@@ -53,6 +53,14 @@ public class CustomerBiz {
     public CustomerDTO getById(Integer id) {
         return customerService.getById(id);
     }
+    /**
+     * 根据客户手机号获得客户信息
+     * @param mobile
+     * @return
+     */
+    public CustomerDTO getByMobile(String mobile) {
+        return customerService.getByMobile(mobile);
+    }
 
     public List<CustomerDTO> getList(String mobile, String name, Paging paging) {
         return customerService.getList(mobile, name, paging);
