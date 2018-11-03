@@ -205,6 +205,7 @@ CREATE TABLE `voucher_exchange_code_batch` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
     `name` VARCHAR(255) NOT NULL COMMENT '批次名称',
     `voucher_name` VARCHAR(255) NOT NULL COMMENT '兑换成代金券后的名称',
+    `project_id` INT(10) UNSIGNED COMMENT '对应项目id，为空表示无对应项目',
     `is_made` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已经制作,0:否,1:是',
     `description` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '代金券详细信息',
     `amount` INT(10) NOT NULL DEFAULT '0' COMMENT '代金券数量',
