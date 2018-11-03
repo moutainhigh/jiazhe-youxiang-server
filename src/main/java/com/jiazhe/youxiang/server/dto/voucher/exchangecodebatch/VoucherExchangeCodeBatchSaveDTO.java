@@ -1,16 +1,16 @@
-package com.jiazhe.youxiang.server.vo.resp.voucher.exchangecodebatch;
+package com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch;
 
-import com.jiazhe.youxiang.server.vo.BaseObject;
+import io.swagger.annotations.ApiModelProperty;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @author TU
- * @description
- * @date 2018/10/24.
+ * @author tu
+ * @description：
+ * @date 2018/11/3
  */
-public class VoucherExchangeCodeBatchEditResp extends BaseObject {
+public class VoucherExchangeCodeBatchSaveDTO {
 
     private Integer id;
 
@@ -18,19 +18,15 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
 
     private String voucherName;
 
-    private Byte isMade;
+    private Integer amount;
 
-    private String description;
+    private Integer count;
 
     private Integer projectId;
 
     private String cityCodes;
 
     private String productIds;
-
-    private Integer amount;
-
-    private BigDecimal count;
 
     private Date expiryTime;
 
@@ -39,6 +35,8 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
     private Integer validityPeriod;
 
     private Byte expiryType;
+
+    private String description;
 
     public Integer getId() {
         return id;
@@ -64,20 +62,20 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
         this.voucherName = voucherName;
     }
 
-    public Byte getIsMade() {
-        return isMade;
+    public Integer getAmount() {
+        return amount;
     }
 
-    public void setIsMade(Byte isMade) {
-        this.isMade = isMade;
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 
-    public String getDescription() {
-        return description;
+    public Integer getCount() {
+        return count;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
     public Integer getProjectId() {
@@ -102,22 +100,6 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
 
     public void setProductIds(String productIds) {
         this.productIds = productIds;
-    }
-
-    public Integer getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
-    }
-
-    public BigDecimal getCount() {
-        return count;
-    }
-
-    public void setCount(BigDecimal count) {
-        this.count = count;
     }
 
     public Date getExpiryTime() {
@@ -150,5 +132,13 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
 
     public void setExpiryType(Byte expiryType) {
         this.expiryType = expiryType;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

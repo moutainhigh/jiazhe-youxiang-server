@@ -102,7 +102,6 @@
                                                 <input type="hidden" name="productIds" id="saveProductIds">
                                                 <input type="hidden" name="cityCodes" id="saveCityCodes">
                                                 <input type="hidden" name="expiryType" id="saveExpiryType" value=0>
-                                                <input type="hidden" name="isVirtual" id="saveIsVirtual" value=0>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">批次名称：</label>
                                                     <div class="col-sm-8">
@@ -115,10 +114,10 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">充值卡名称：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">代金券名称：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveRechargeCardName" name="rechargeCardName"
+                                                            <input id="saveVoucherName" name="voucherName"
                                                                    class="form-control"
                                                                    type="text" style="height:30px"/>
                                                         </div>
@@ -136,31 +135,13 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">虚拟批次：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <label class="radio-inline ">
-                                                                <input id="saveNotVirtualRadio" type="radio"
-                                                                       name="isVirtualRadio"
-                                                                       value="0" checked="checked"/>否
-                                                            </label>
-                                                            <label class="radio-inline">
-                                                                <input id="saveIsVirtualRadio" type="radio"
-                                                                       name="isVirtualRadio"
-                                                                       value="1"/>是
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
-                                                <div class="space-2 saveIsVirtual"></div>
+                                                <div class="space-2"></div>
                                                 <div class="form-group saveIsVirtual">
-                                                    <label class="col-sm-4 control-label no-padding-right">面额：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">可兑换数量：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveFaceValue" name="faceValue"
+                                                            <input id="saveCount" name="count"
                                                                    class="form-control" type="text"
                                                                    style="height:30px"/>
                                                         </div>
@@ -196,7 +177,7 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">充值卡过期类型：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">代金券过期类型：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
                                                             <label class="radio-inline ">
@@ -216,7 +197,7 @@
                                                 <div class="space-2 saveDeadLine"></div>
                                                 <div class="form-group saveDeadLine">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveRechargeCardExpiryTime">充值卡到期时间：</label>
+                                                           for="saveRechargeCardExpiryTime">代金券到期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker"
@@ -309,16 +290,6 @@
             $(this).prev().focus();
         });
 
-        $("input[name=isVirtualRadio]").bind("change", function () {
-            if ($("input[name=isVirtualRadio]:checked").val() == 1) {
-                $(".saveIsVirtual").css("display", "none");
-                $("#saveIsVirtual").val(1);
-            } else {
-                $(".saveIsVirtual").css("display", "");
-                $("#saveIsVirtual").val(0);
-            }
-        });
-
         $("input[name=expiryTypeRadio]").bind("change", function () {
             if ($("input[name=expiryTypeRadio]:checked").val() == 0) {
                 $(".saveDeadLine").css("display", "");
@@ -337,7 +308,7 @@
     var pager_selector = "#grid-pager";
     jQuery(grid_selector).jqGrid({
         subGrid: false, // 此处设置为true时可以打开子项,子项用不到已删除
-        url: "../api/rcexchangecodebatch/listpage",// 获取数据的地址
+        url: "../api/voucherexchangecodebatch/listpage",// 获取数据的地址
         postData: transformToJson($('#batchSearchForm').serializeArray()),
         rownumbers: true,
         datatype: "json",
@@ -351,20 +322,11 @@
         autowidth: true,
         shrinkToFit: true,
         height: 350,
-        colNames: ['', '批次名称', '充值卡名称', '是否是虚拟批次', '状态', '面额', '数量', '过期时间', '操作'],
+        colNames: ['', '批次名称', '代金券名称', '状态', '可兑换数量', '数量', '过期时间', '操作'],
         colModel: [
             {name: 'id', index: 'id', sortable: false, hidden: true},
             {name: 'name', index: 'name', width: 100, sortable: false},
-            {name: 'rechargeCardName', index: 'rechargeCardName', width: 50, sortable: false},
-            {
-                name: 'isVirtual',
-                index: 'isVirtual',
-                width: 50,
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    return rowObject.isVirtual == 1 ? "是" : "否";
-                }
-            },
+            {name: 'voucherName', index: 'voucherName', width: 50, sortable: false},
             {
                 name: 'status',
                 index: 'status',
@@ -474,14 +436,13 @@
 
     function openNew() {
         $("#modal-title").html("批次信息-添加");
-        $("input[name=isVirtualRadio]").removeAttr('disabled');
-        $("#batchSaveForm #saveFaceValue").removeAttr('readonly');
+
+        $("#batchSaveForm #saveCount").removeAttr('readonly');
         $("#batchSaveForm #saveAmount").removeAttr('readonly');
         $("#batchId").val(0);
         $("#batchSaveForm #saveName").val("");
-        $("#batchSaveForm #saveRechargeCardName").val("");
-        $("#batchSaveForm #saveNotVirtualRadio").click();
-        $("#batchSaveForm #saveFaceValue").val("");
+        $("#batchSaveForm #saveVoucherName").val("");
+        $("#batchSaveForm #saveCount").val("");
         $("#batchSaveForm #saveAmount").val("");
         $("#batchSaveForm #saveExpiryTime").val("");
         $("#batchSaveForm #saveDeadLineRadio").click();
@@ -492,15 +453,14 @@
 
     function openEdit(id) {
         $("#modal-title").html("批次信息-修改");
-        $("input[name=isVirtualRadio]").removeAttr('disabled');
-        $("#batchSaveForm #saveFaceValue").removeAttr('readonly');
+        $("#batchSaveForm #saveCount").removeAttr('readonly');
         $("#batchSaveForm #saveAmount").removeAttr('readonly');
         huixian(id);
     }
 
     function save() {
         $.ajax({
-            url: "../api/rcexchangecodebatch/save",
+            url: "../api/voucherexchangecodebatch/save",
             dataType: "json",
             async: false,
             data: transformToJson($('#batchSaveForm').serializeArray()),
@@ -521,7 +481,7 @@
 
     function huixian(id) {
         $.ajax({
-            url: "../api/rcexchangecodebatch/getbyid",
+            url: "../api/voucherexchangecodebatch/getbyid",
             dataType: "json",
             async: false,
             data: {
@@ -535,21 +495,17 @@
                     var result = data.data;
                     $("#batchId").val(result.id);
                     $("#batchSaveForm #saveName").val(result.name);
-                    $("#batchSaveForm #saveRechargeCardName").val(result.rechargeCardName);
-                    if (result.isVirtual == 0) {
-                        $("#batchSaveForm #saveNotVirtualRadio").click();
-                        $("#batchSaveForm #saveFaceValue").val(result.faceValue);
-                        $("#batchSaveForm #saveAmount").val(result.amount);
-                        if (result.isMade == 1) {
-                            $("#batchSaveForm #saveFaceValue").attr("readonly", "readonly");
-                            $("#batchSaveForm #saveAmount").attr("readonly", "readonly");
-                        } else {
-                            $("#batchSaveForm #saveFaceValue").removeAttr('readonly');
-                            $("#batchSaveForm #saveAmount").removeAttr('readonly');
-                        }
+                    $("#batchSaveForm #saveVoucherName").val(result.voucherName);
+                    $("#batchSaveForm #saveCount").val(result.count);
+                    $("#batchSaveForm #saveAmount").val(result.amount);
+                    if (result.isMade == 1) {
+                        $("#batchSaveForm #saveCount").attr("readonly", "readonly");
+                        $("#batchSaveForm #saveAmount").attr("readonly", "readonly");
                     } else {
-                        $("#batchSaveForm #saveIsVirtualRadio").click();
+                        $("#batchSaveForm #saveCount").removeAttr('readonly');
+                        $("#batchSaveForm #saveAmount").removeAttr('readonly');
                     }
+
                     $("#batchSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
                     if (result.expiryType == 0) {
                         $("#batchSaveForm #saveDeadLineRadio").click();
@@ -557,9 +513,8 @@
                         $("#batchSaveForm #saveValidityPeriodRadio").click();
                     }
                     $("#batchSaveForm #saveValidityPeriod").val(result.validityPeriod);
-                    $("#batchSaveForm #saveRechargeCardExpiryTime").val(dateFormat(result.rechargeCardExpiryTime));
+                    $("#batchSaveForm #voucherExpiryTime").val(dateFormat(result.voucherExpiryTime));
                     $("#batchSaveForm #saveDescription").val(result.description);
-                    $("input[name=isVirtualRadio]").attr('disabled', 'disabled');
                     $("#modal-form").modal('show');
                 }
             },
@@ -572,7 +527,7 @@
     //生成兑换码
     function generateCode(id) {
         $.ajax({
-            url: "../api/rcexchangecodebatch/generatecode",
+            url: "../api/voucherexchangecodebatch/generatecode",
             dataType: "json",
             async: false,
             data: {
@@ -596,7 +551,7 @@
     //导出为excel
     function exportExcel(id) {
         $.ajax({
-            url: "../api/rcexchangecodebatch/exportcheck",
+            url: "../api/voucherexchangecodebatch/exportcheck",
             dataType: "json",
             async: false,
             data: {
@@ -607,7 +562,7 @@
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 }else {
-                    window.location.href = "../api/rcexchangecodebatch/export?id="+id;
+                    window.location.href = "../api/voucherexchangecodebatch/export?id="+id;
                 }
             },
             error: function () {
@@ -619,7 +574,7 @@
     //启用批次
     function startUsing(id) {
         $.ajax({
-            url: "../api/rcexchangecodebatch/startusing",
+            url: "../api/voucherexchangecodebatch/startusing",
             dataType: "json",
             async: false,
             data: {
@@ -643,7 +598,7 @@
     //停用批次
     function stopUsing(id) {
         $.ajax({
-            url: "../api/rcexchangecodebatch/stopusing",    //请求的url地址
+            url: "../api/voucherexchangecodebatch/stopusing",    //请求的url地址
             dataType: "json",
             async: false,
             data: {
