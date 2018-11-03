@@ -4,8 +4,12 @@ import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
+import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.UserCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
+import com.jiazhe.youxiang.server.common.exceptions.UserException;
 import com.jiazhe.youxiang.server.dao.mapper.CustomerPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.RechargeCardExchangeCodePOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCExchangeCodePOManualMapper;
@@ -114,6 +118,9 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         //如果后台用兑换码帮客户充值，同样记录操作人员的信息
         if(type.equals(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE)){
             SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+            if(null == sysUserDTO){
+                throw new UserException(UserCodeEnum.USER_NOT_EXISTED);
+            }
             rechargeCardRecordPO.setOperatorId(sysUserDTO.getId());
             rechargeCardRecordPO.setOperatorName(sysUserDTO.getLoginName());
         }

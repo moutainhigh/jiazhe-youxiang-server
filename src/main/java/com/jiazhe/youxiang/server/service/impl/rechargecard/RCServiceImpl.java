@@ -3,6 +3,8 @@ package com.jiazhe.youxiang.server.service.impl.rechargecard;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
+import com.jiazhe.youxiang.server.common.enums.UserCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.UserException;
 import com.jiazhe.youxiang.server.dao.mapper.RechargeCardPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.*;
@@ -115,10 +117,13 @@ public class RCServiceImpl implements RCService {
         rcService.insert(rechargeCardPO);
         //插入兑换记录信息
         SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+        if(null == sysUserDTO){
+            throw new UserException(UserCodeEnum.USER_NOT_EXISTED);
+        }
         RechargeCardExchangeRecordPO rechargeCardRecordPO = new RechargeCardExchangeRecordPO();
         rechargeCardRecordPO.setOperatorId(sysUserDTO.getId());
         rechargeCardRecordPO.setOperatorName(sysUserDTO.getLoginName());
-        rechargeCardRecordPO.setExchangeType(2);
+        rechargeCardRecordPO.setExchangeType(CommonConstant.EXCHANGETYPE_USER_DIRECTCHARGE);
         rechargeCardRecordPO.setRechargeCardId(rechargeCardPO.getId());
         rechargeCardRecordPO.setExtInfo("");
         rechargeCardRecordPO.setIsDeleted(Byte.valueOf("0"));
@@ -146,6 +151,8 @@ public class RCServiceImpl implements RCService {
                 bean.setExpiryTime(batchSaveDTO.getRechargeCardExpiryTime());
             }else{
                 bean.setExpiryTime(new Date(bean.getAddTime().getTime()+batchSaveDTO.getValidityPeriod()* CommonConstant.ONE_DAY));
+                System.out.println(bean.getAddTime().toString());
+                System.out.println(bean.getExpiryTime().toString());
             }
         });
         rcPOManualMapper.batchUpdate(rcPOList);

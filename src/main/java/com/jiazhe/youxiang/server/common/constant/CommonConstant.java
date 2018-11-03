@@ -71,7 +71,7 @@ public class CommonConstant {
     /**
      * 一天的毫秒数
      */
-    public static final Integer ONE_DAY = 24 * 3600 *1000 ;
+    public static final long ONE_DAY = 24 * 3600 *1000 ;
 
     /**
      * 短信有效时间
