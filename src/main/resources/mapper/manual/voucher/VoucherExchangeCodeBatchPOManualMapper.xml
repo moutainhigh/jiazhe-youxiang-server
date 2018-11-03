@@ -24,8 +24,38 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-
+      id,name,voucher_name,project_id,is_made,description,amount,city_codes,product_ids,count,expiry_time,voucher_expiry_time,
+      validity_period,expiry_type,status,ext_info,is_deleted,add_time,mod_time
     </sql>
 
+    <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodeBatchPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM voucher_exchange_code_batch
+        <where>
+            <if test="projectId != null">
+                AND project_id = #{projectId}
+            </if>
+            <if test="name != null  and name != ''">
+                AND name = #{name}
+            </if>
+            AND is_deleted = 0 ORDER BY add_time desc
+        </where>
+        limit #{offset},#{limit}
+
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from voucher_exchange_code_batch
+        <where>
+            <if test="name != null  and name != ''">
+                AND name = #{name}
+            </if>
+            <if test="projectId != null  and projectId != ''">
+                AND project_id = #{projectId}
+            </if>
+            AND is_deleted = 0
+        </where>
+    </select>
 
 </mapper>

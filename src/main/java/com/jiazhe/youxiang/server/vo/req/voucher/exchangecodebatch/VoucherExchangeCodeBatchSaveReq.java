@@ -44,7 +44,7 @@ public class VoucherExchangeCodeBatchSaveReq  extends BaseVO{
 
     @ApiModelProperty("代金券过期时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date rechargeCardExpiryTime;
+    private Date voucherExpiryTime;
 
     @ApiModelProperty("自兑换之日起，代金券**天内有效")
     private Integer validityPeriod;
@@ -127,12 +127,12 @@ public class VoucherExchangeCodeBatchSaveReq  extends BaseVO{
         this.expiryTime = expiryTime;
     }
 
-    public Date getRechargeCardExpiryTime() {
-        return rechargeCardExpiryTime;
+    public Date getVoucherExpiryTime() {
+        return voucherExpiryTime;
     }
 
-    public void setRechargeCardExpiryTime(Date rechargeCardExpiryTime) {
-        this.rechargeCardExpiryTime = rechargeCardExpiryTime;
+    public void setVoucherExpiryTime(Date voucherExpiryTime) {
+        this.voucherExpiryTime = voucherExpiryTime;
     }
 
     public Integer getValidityPeriod() {

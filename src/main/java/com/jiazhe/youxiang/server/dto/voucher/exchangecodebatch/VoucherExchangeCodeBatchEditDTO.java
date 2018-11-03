@@ -28,11 +28,11 @@ public class VoucherExchangeCodeBatchEditDTO {
 
     private Integer amount;
 
-    private BigDecimal count;
+    private Integer count;
 
     private Date expiryTime;
 
-    private Date rechargeCardExpiryTime;
+    private Date voucherExpiryTime;
 
     private Integer validityPeriod;
 
@@ -110,11 +110,11 @@ public class VoucherExchangeCodeBatchEditDTO {
         this.amount = amount;
     }
 
-    public BigDecimal getCount() {
+    public Integer getCount() {
         return count;
     }
 
-    public void setCount(BigDecimal count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 
@@ -126,12 +126,12 @@ public class VoucherExchangeCodeBatchEditDTO {
         this.expiryTime = expiryTime;
     }
 
-    public Date getRechargeCardExpiryTime() {
-        return rechargeCardExpiryTime;
+    public Date getVoucherExpiryTime() {
+        return voucherExpiryTime;
     }
 
-    public void setRechargeCardExpiryTime(Date rechargeCardExpiryTime) {
-        this.rechargeCardExpiryTime = rechargeCardExpiryTime;
+    public void setVoucherExpiryTime(Date voucherExpiryTime) {
+        this.voucherExpiryTime = voucherExpiryTime;
     }
 
     public Integer getValidityPeriod() {

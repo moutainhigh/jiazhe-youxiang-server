@@ -30,7 +30,7 @@ public class VoucherExchangeCodeBatchSaveDTO {
 
     private Date expiryTime;
 
-    private Date rechargeCardExpiryTime;
+    private Date voucherExpiryTime;
 
     private Integer validityPeriod;
 
@@ -110,12 +110,12 @@ public class VoucherExchangeCodeBatchSaveDTO {
         this.expiryTime = expiryTime;
     }
 
-    public Date getRechargeCardExpiryTime() {
-        return rechargeCardExpiryTime;
+    public Date getVoucherExpiryTime() {
+        return voucherExpiryTime;
     }
 
-    public void setRechargeCardExpiryTime(Date rechargeCardExpiryTime) {
-        this.rechargeCardExpiryTime = rechargeCardExpiryTime;
+    public void setVoucherExpiryTime(Date voucherExpiryTime) {
+        this.voucherExpiryTime = voucherExpiryTime;
     }
 
     public Integer getValidityPeriod() {

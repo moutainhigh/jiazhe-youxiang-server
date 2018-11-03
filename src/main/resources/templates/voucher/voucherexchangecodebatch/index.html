@@ -138,7 +138,7 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group saveIsVirtual">
-                                                    <label class="col-sm-4 control-label no-padding-right">可兑换数量：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">兑换商品数量：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
                                                             <input id="saveCount" name="count"
@@ -197,12 +197,12 @@
                                                 <div class="space-2 saveDeadLine"></div>
                                                 <div class="form-group saveDeadLine">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveRechargeCardExpiryTime">代金券到期时间：</label>
+                                                           for="saveVoucherExpiryTime">代金券到期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker"
-                                                                   id="saveRechargeCardExpiryTime"
-                                                                   name="rechargeCardExpiryTime" type="text"/>
+                                                                   id="saveVoucherExpiryTime"
+                                                                   name="voucherExpiryTime" type="text"/>
                                                             <span class="input-group-addon">
                                                                     <i class="fa fa-calendar bigger-110"></i>
                                                                 </span>
@@ -322,7 +322,7 @@
         autowidth: true,
         shrinkToFit: true,
         height: 350,
-        colNames: ['', '批次名称', '代金券名称', '状态', '可兑换数量', '数量', '过期时间', '操作'],
+        colNames: ['', '批次名称', '代金券名称', '状态', '可兑换商品数量', '数量', '过期时间', '操作'],
         colModel: [
             {name: 'id', index: 'id', sortable: false, hidden: true},
             {name: 'name', index: 'name', width: 100, sortable: false},
@@ -336,15 +336,7 @@
                     return rowObject.status == 1 ? "启用" : "停用";
                 }
             },
-            {
-                name: 'faceValue',
-                index: 'faceValue',
-                width: 30,
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    return rowObject.isVirtual == 1 ? "--" : rowObject.faceValue;
-                }
-            },
+            {name: 'count', index: 'count', width: 50, sortable: false},
             {name: 'amount', index: 'amount', width: 30, sortable: false},
             {name: 'expiryTime', index: 'expiryTime', width: 50, sortable: false, formatter: dateFormatter},
             {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
@@ -391,7 +383,7 @@
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/rcexchangecodebatch/listpage",// 获取数据的地址
+            url: "../api/voucherexchangecodebatch/listpage",// 获取数据的地址
             postData: transformToJson($('#batchSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
@@ -412,21 +404,18 @@
                 "<i class='ace-icon'>停用</i>" +
                 "</a>&nbsp;&nbsp;";
         }
-        if (rowObject.isVirtual == 0) {
-            if (rowObject.isMade == 1) {
-                str = str + "<a class='btn btn-minier btn-primary' href=\"../rechargecard/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name + "\">" +
-                    "<i class='ace-icon'>兑换码管理</i>" +
-                    "</a>&nbsp;&nbsp;";
-                str = str + "<a class='btn btn-minier btn-yellow' href=\"javascript:exportExcel('" + rowObject.id + "')\">" +
-                    "<i class='ace-icon'>导出</i>" +
-                    "</a>&nbsp;&nbsp;";
-            } else {
-                str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:generateCode('" + rowObject.id + "')\">" +
-                    "<i class='ace-icon'>生成兑换码</i>" +
-                    "</a>&nbsp;&nbsp;";
-            }
+        if (rowObject.isMade == 1) {
+            str = str + "<a class='btn btn-minier btn-primary' href=\"../rechargecard/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name + "\">" +
+                "<i class='ace-icon'>兑换码管理</i>" +
+                "</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-yellow' href=\"javascript:exportExcel('" + rowObject.id + "')\">" +
+                "<i class='ace-icon'>导出</i>" +
+                "</a>&nbsp;&nbsp;";
+        } else {
+            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:generateCode('" + rowObject.id + "')\">" +
+                "<i class='ace-icon'>生成兑换码</i>" +
+                "</a>&nbsp;&nbsp;";
         }
-
         return str;
     }
 
@@ -446,7 +435,7 @@
         $("#batchSaveForm #saveAmount").val("");
         $("#batchSaveForm #saveExpiryTime").val("");
         $("#batchSaveForm #saveDeadLineRadio").click();
-        $("#batchSaveForm #saveRechargeCardExpiryTime").val("");
+        $("#batchSaveForm #saveVoucherExpiryTime").val("");
         $("#batchSaveForm #saveValidityPeriod").val("");
         $("#batchSaveForm #saveDescription").val("");
     }
@@ -513,7 +502,7 @@
                         $("#batchSaveForm #saveValidityPeriodRadio").click();
                     }
                     $("#batchSaveForm #saveValidityPeriod").val(result.validityPeriod);
-                    $("#batchSaveForm #voucherExpiryTime").val(dateFormat(result.voucherExpiryTime));
+                    $("#batchSaveForm #saveVoucherExpiryTime").val(dateFormat(result.voucherExpiryTime));
                     $("#batchSaveForm #saveDescription").val(result.description);
                     $("#modal-form").modal('show');
                 }

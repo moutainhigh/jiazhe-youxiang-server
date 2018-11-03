@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.adapter.voucher;
 
+import com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchSaveDTO;
@@ -20,10 +21,12 @@ public class VoucherExchangeCodeBatchAdapter {
         VoucherExchangeCodeBatchResp voucherExchangeCodeBatchResp = new VoucherExchangeCodeBatchResp();
         voucherExchangeCodeBatchResp.setId(dto.getId());
         voucherExchangeCodeBatchResp.setName(dto.getName());
+        voucherExchangeCodeBatchResp.setVoucherName(dto.getVoucherName());
         voucherExchangeCodeBatchResp.setAmount(dto.getAmount());
         voucherExchangeCodeBatchResp.setCount(dto.getCount());
         voucherExchangeCodeBatchResp.setExpiryTime(dto.getExpiryTime());
         voucherExchangeCodeBatchResp.setStatus(dto.getStatus());
+        voucherExchangeCodeBatchResp.setIsMade(dto.getIsMade());
         return voucherExchangeCodeBatchResp;
     }
 
@@ -41,7 +44,7 @@ public class VoucherExchangeCodeBatchAdapter {
         voucherExchangeCodeBatchSaveDTO.setCityCodes(req.getCityCodes());
         voucherExchangeCodeBatchSaveDTO.setProductIds(req.getProductIds());
         voucherExchangeCodeBatchSaveDTO.setExpiryTime(req.getExpiryTime());
-        voucherExchangeCodeBatchSaveDTO.setRechargeCardExpiryTime(req.getRechargeCardExpiryTime());
+        voucherExchangeCodeBatchSaveDTO.setVoucherExpiryTime(req.getVoucherExpiryTime());
         voucherExchangeCodeBatchSaveDTO.setValidityPeriod(req.getValidityPeriod());
         voucherExchangeCodeBatchSaveDTO.setExpiryType(req.getExpiryType());
         voucherExchangeCodeBatchSaveDTO.setDescription(req.getDescription());
@@ -64,9 +67,46 @@ public class VoucherExchangeCodeBatchAdapter {
         voucherExchangeCodeBatchEditResp.setAmount(voucherExchangeCodeBatchEditDTO.getAmount());
         voucherExchangeCodeBatchEditResp.setCount(voucherExchangeCodeBatchEditDTO.getCount());
         voucherExchangeCodeBatchEditResp.setExpiryTime(voucherExchangeCodeBatchEditDTO.getExpiryTime());
-        voucherExchangeCodeBatchEditResp.setRechargeCardExpiryTime(voucherExchangeCodeBatchEditDTO.getRechargeCardExpiryTime());
+        voucherExchangeCodeBatchEditResp.setVoucherExpiryTime(voucherExchangeCodeBatchEditDTO.getVoucherExpiryTime());
         voucherExchangeCodeBatchEditResp.setValidityPeriod(voucherExchangeCodeBatchEditDTO.getValidityPeriod());
         voucherExchangeCodeBatchEditResp.setExpiryType(voucherExchangeCodeBatchEditDTO.getExpiryType());
         return voucherExchangeCodeBatchEditResp;
+    }
+
+    public static VoucherExchangeCodeBatchDTO PO2DTO(VoucherExchangeCodeBatchPO voucherExchangeCodeBatchPO) {
+        if (voucherExchangeCodeBatchPO == null) {
+            return null;
+        }
+        VoucherExchangeCodeBatchDTO voucherExchangeCodeBatchDTO = new VoucherExchangeCodeBatchDTO();
+        voucherExchangeCodeBatchDTO.setId(voucherExchangeCodeBatchPO.getId());
+        voucherExchangeCodeBatchDTO.setName(voucherExchangeCodeBatchPO.getName());
+        voucherExchangeCodeBatchDTO.setVoucherName(voucherExchangeCodeBatchPO.getVoucherName());
+        voucherExchangeCodeBatchDTO.setIsMade(voucherExchangeCodeBatchPO.getIsMade());
+        voucherExchangeCodeBatchDTO.setAmount(voucherExchangeCodeBatchPO.getAmount());
+        voucherExchangeCodeBatchDTO.setCount(voucherExchangeCodeBatchPO.getCount());
+        voucherExchangeCodeBatchDTO.setExpiryTime(voucherExchangeCodeBatchPO.getExpiryTime());
+        voucherExchangeCodeBatchDTO.setStatus(voucherExchangeCodeBatchPO.getStatus());
+        return voucherExchangeCodeBatchDTO;
+    }
+
+    public static VoucherExchangeCodeBatchPO DTOSave2PO(VoucherExchangeCodeBatchSaveDTO voucherExchangeCodeBatchSaveDTO) {
+        if (voucherExchangeCodeBatchSaveDTO == null) {
+            return null;
+        }
+        VoucherExchangeCodeBatchPO voucherExchangeCodeBatchPO = new VoucherExchangeCodeBatchPO();
+        voucherExchangeCodeBatchPO.setId(voucherExchangeCodeBatchSaveDTO.getId());
+        voucherExchangeCodeBatchPO.setName(voucherExchangeCodeBatchSaveDTO.getName());
+        voucherExchangeCodeBatchPO.setVoucherName(voucherExchangeCodeBatchSaveDTO.getVoucherName());
+        voucherExchangeCodeBatchPO.setAmount(voucherExchangeCodeBatchSaveDTO.getAmount());
+        voucherExchangeCodeBatchPO.setCount(voucherExchangeCodeBatchSaveDTO.getCount());
+        voucherExchangeCodeBatchPO.setProjectId(voucherExchangeCodeBatchSaveDTO.getProjectId());
+        voucherExchangeCodeBatchPO.setCityCodes(voucherExchangeCodeBatchSaveDTO.getCityCodes());
+        voucherExchangeCodeBatchPO.setProductIds(voucherExchangeCodeBatchSaveDTO.getProductIds());
+        voucherExchangeCodeBatchPO.setExpiryTime(voucherExchangeCodeBatchSaveDTO.getExpiryTime());
+        voucherExchangeCodeBatchPO.setVoucherExpiryTime(voucherExchangeCodeBatchSaveDTO.getVoucherExpiryTime());
+        voucherExchangeCodeBatchPO.setValidityPeriod(voucherExchangeCodeBatchSaveDTO.getValidityPeriod());
+        voucherExchangeCodeBatchPO.setExpiryType(voucherExchangeCodeBatchSaveDTO.getExpiryType());
+        voucherExchangeCodeBatchPO.setDescription(voucherExchangeCodeBatchSaveDTO.getDescription());
+        return voucherExchangeCodeBatchPO;
     }
 }

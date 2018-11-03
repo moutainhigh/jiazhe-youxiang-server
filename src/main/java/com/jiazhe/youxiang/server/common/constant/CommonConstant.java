@@ -98,6 +98,12 @@ public class CommonConstant {
     public static final Byte RECHARGE_CARD_EXPIRY_PERIOD = Byte.valueOf("1");
 
     /**
+     *优惠券过期时间来源,0为直接指定过期时间，1为指定兑换之日起有效期天数
+     */
+    public static final Byte VOUCHER_EXPIRY_TIME = Byte.valueOf("0");
+    public static final Byte VOUCHER_CARD_EXPIRY_PERIOD = Byte.valueOf("1");
+
+    /**
      * 启用停用状态
      */
     public static final Byte STARTUSING = Byte.valueOf("1");

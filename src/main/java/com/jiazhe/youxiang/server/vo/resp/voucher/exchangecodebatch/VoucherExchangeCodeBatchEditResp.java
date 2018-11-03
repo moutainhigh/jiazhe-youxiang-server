@@ -30,11 +30,11 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
 
     private Integer amount;
 
-    private BigDecimal count;
+    private Integer count;
 
     private Date expiryTime;
 
-    private Date rechargeCardExpiryTime;
+    private Date voucherExpiryTime;
 
     private Integer validityPeriod;
 
@@ -112,14 +112,6 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
         this.amount = amount;
     }
 
-    public BigDecimal getCount() {
-        return count;
-    }
-
-    public void setCount(BigDecimal count) {
-        this.count = count;
-    }
-
     public Date getExpiryTime() {
         return expiryTime;
     }
@@ -128,12 +120,20 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
         this.expiryTime = expiryTime;
     }
 
-    public Date getRechargeCardExpiryTime() {
-        return rechargeCardExpiryTime;
+    public Integer getCount() {
+        return count;
     }
 
-    public void setRechargeCardExpiryTime(Date rechargeCardExpiryTime) {
-        this.rechargeCardExpiryTime = rechargeCardExpiryTime;
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public Date getVoucherExpiryTime() {
+        return voucherExpiryTime;
+    }
+
+    public void setVoucherExpiryTime(Date voucherExpiryTime) {
+        this.voucherExpiryTime = voucherExpiryTime;
     }
 
     public Integer getValidityPeriod() {
