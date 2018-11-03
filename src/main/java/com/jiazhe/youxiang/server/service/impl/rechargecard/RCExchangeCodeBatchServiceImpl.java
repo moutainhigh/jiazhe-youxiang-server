@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  * @date 2018/10/21
  */
 @Service("rcExchangeCodeBatchService")
-@Transactional
+@Transactional(rollbackFor=Exception.class)
 public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchService {
 
     @Autowired
@@ -95,7 +95,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         batchPO.setValidityPeriod(batchSaveDTO.getValidityPeriod());
         batchPO.setDescription(batchSaveDTO.getDescription());
         //不是虚拟批次，只修改批次和码的信息
-        if (batchPO.getIsVirtual().equals(Byte.valueOf("0"))) {
+        if (!batchPO.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
             //批次下面是否有码，有则为true
             List<RCExchangeCodeDTO> codeDTOList = rcExchangeCodeService.getByBatchId(batchSaveDTO.getId());
             boolean batchEmpty = codeDTOList.isEmpty();
@@ -120,7 +120,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         batchPO.setModTime(new Date());
         rechargeCardExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
         //修改改批次下的兑换码启用停用状态
-        if (batchPO.getIsVirtual().equals(Byte.valueOf("0"))) {
+        if (!batchPO.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
             List<RCExchangeCodeDTO> codeDTOList = rcExchangeCodeService.getByBatchId(id);
             boolean batchEmpty = codeDTOList.isEmpty();
             //有码则修改对应的码信息

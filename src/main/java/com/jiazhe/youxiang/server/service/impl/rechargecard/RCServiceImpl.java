@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  * @date 2018/10/23.
  */
 @Service("rcService")
-@Transactional
+@Transactional(rollbackFor=Exception.class)
 public class RCServiceImpl implements RCService {
 
     @Autowired
@@ -96,7 +96,7 @@ public class RCServiceImpl implements RCService {
         RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchService.getById(batchId);
         RechargeCardPO rechargeCardPO = new RechargeCardPO();
         //直接指定过期时间
-        if(rcExchangeCodeBatchEditDTO.getExpiryType().equals(Byte.valueOf("0"))){
+        if(rcExchangeCodeBatchEditDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)){
             rechargeCardPO.setExpiryTime(rcExchangeCodeBatchEditDTO.getRechargeCardExpiryTime());
         }else{
             rechargeCardPO.setExpiryTime(new Date(System.currentTimeMillis()+rcExchangeCodeBatchEditDTO.getValidityPeriod()* CommonConstant.ONE_DAY));
@@ -155,7 +155,7 @@ public class RCServiceImpl implements RCService {
     public void batchChangeStatus(List<Integer> usedIds,Byte status) {
         List<RechargeCardExchangeRecordPO> recordPOList = rcExchangeRecordService.findByCodeIds(usedIds);
         List<Integer> cardIds = recordPOList.stream().map(RechargeCardExchangeRecordPO::getRechargeCardId).collect(Collectors.toList());
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<String, Object>(2);
         map.put("status",status);
         map.put("ids",cardIds);
         rcPOManualMapper.batchChangeStatus(map);

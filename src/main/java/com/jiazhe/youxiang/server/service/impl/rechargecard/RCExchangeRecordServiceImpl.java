@@ -23,7 +23,7 @@ import java.util.List;
  * @date 2018/10/23.
  */
 @Service("rcExchangeRecordService")
-@Transactional
+@Transactional(rollbackFor=Exception.class)
 public class RCExchangeRecordServiceImpl implements RCExchangeRecordService {
 
     @Autowired

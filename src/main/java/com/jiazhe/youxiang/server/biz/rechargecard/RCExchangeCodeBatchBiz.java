@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.biz.rechargecard;
 
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
@@ -35,11 +36,11 @@ public class RCExchangeCodeBatchBiz {
     }
 
     public void addSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {
-        if(rcExchangeCodeBatchSaveDTO.getIsVirtual().equals(Byte.valueOf("1"))){
+        if(rcExchangeCodeBatchSaveDTO.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)){
             rcExchangeCodeBatchSaveDTO.setAmount(0);
             rcExchangeCodeBatchSaveDTO.setFaceValue(new BigDecimal(0));
         }
-        if(rcExchangeCodeBatchSaveDTO.getExpiryType().equals(Byte.valueOf("0"))){
+        if(rcExchangeCodeBatchSaveDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)){
             rcExchangeCodeBatchSaveDTO.setValidityPeriod(0);
         }else{
             rcExchangeCodeBatchSaveDTO.setRechargeCardExpiryTime(new Date());

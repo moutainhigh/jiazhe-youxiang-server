@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  * @date 2018/10/22.
  */
 @Service("rcExchangeCodeService")
-@Transactional
+@Transactional(rollbackFor=Exception.class)
 public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
 
     @Autowired
@@ -78,10 +78,10 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         if(null == rechargeCardExchangeCodePO){
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
         }
-        if(rechargeCardExchangeCodePO.getStatus().equals(Byte.valueOf("0"))){
+        if(rechargeCardExchangeCodePO.getStatus().equals(CommonConstant.STOPTUSING)){
             throw  new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_HAS_STOPED_USING);
         }
-        if(rechargeCardExchangeCodePO.getUsed().equals(Byte.valueOf("1"))){
+        if(rechargeCardExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_USED)){
             throw  new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_HAS_USED);
         }
         if(rechargeCardExchangeCodePO.getExpiryTime().getTime()< System.currentTimeMillis()){
@@ -90,7 +90,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         CustomerDTO customerDTO = customerService.getByMobile(mobile);
         RechargeCardPO rechargeCardPO = new RechargeCardPO();
         //直接指定过期时间
-        if(rechargeCardExchangeCodePO.getExpiryType().equals(Byte.valueOf("0"))){
+        if(rechargeCardExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)){
             rechargeCardPO.setExpiryTime(rechargeCardExchangeCodePO.getRechargeCardExpiryTime());
         }else{
             rechargeCardPO.setExpiryTime(new Date(System.currentTimeMillis()+rechargeCardExchangeCodePO.getValidityPeriod()* CommonConstant.ONE_DAY));
@@ -112,7 +112,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         rechargeCardRecordPO.setExchangeCodeId(rechargeCardExchangeCodePO.getId());
         rechargeCardRecordPO.setExchangeType(type);
         //如果后台用兑换码帮客户充值，同样记录操作人员的信息
-        if(type == 0){
+        if(type.equals(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE)){
             SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
             rechargeCardRecordPO.setOperatorId(sysUserDTO.getId());
             rechargeCardRecordPO.setOperatorName(sysUserDTO.getLoginName());
@@ -209,7 +209,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         po.setRechargeCardName(dto.getRechargeCardName());
         po.setExpiryTime(dto.getExpiryTime());
         po.setExpiryType(dto.getExpiryType());
-        if(dto.getExpiryType().equals(Byte.valueOf("0"))){
+        if(dto.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)){
             po.setRechargeCardExpiryTime(dto.getRechargeCardExpiryTime());
         }else{
             po.setValidityPeriod(dto.getValidityPeriod());

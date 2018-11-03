@@ -91,9 +91,36 @@ public class CommonConstant {
 
     public static final Byte BATCH_IS_VIRTUAL = Byte.valueOf("1");
 
-    //充值卡过期时间来源,0为直接指定过期时间，1为指定兑换之日起有效期天数
+    /**
+    *充值卡过期时间来源,0为直接指定过期时间，1为指定兑换之日起有效期天数
+     */
     public static final Byte RECHARGE_CARD_EXPIRY_TIME = Byte.valueOf("0");
     public static final Byte RECHARGE_CARD_EXPIRY_PERIOD = Byte.valueOf("1");
+
+    /**
+     * 启用停用状态
+     */
+    public static final Byte STARTUSING = Byte.valueOf("1");
+    public static final Byte STOPTUSING = Byte.valueOf("0");
+
+    /**
+     * 兑换方式【0-后台兑换码兑换，1-客户自行兑换码兑换，2-直接充值】
+     */
+    public static final Integer EXCHANGETYPE_USER_CODE_EXCHANGE = 0;
+    public static final Integer EXCHANGETYPE_CUSTOMER_CODE_EXCHANGE = 1;
+    public static final Integer EXCHANGETYPE_USER_DIRECTCHARGE = 2;
+
+    /**
+     * 是否已经使用
+     */
+    public static final Byte CODE_NOT_USED = Byte.valueOf("0");
+    public static final Byte CODE_HAS_USED = Byte.valueOf("1");
+
+    /**
+     * 批次下的码是否已经制作
+     */
+    public static final Byte EXCHANGE_CODE_HAS_MADE = Byte.valueOf("1");
+    public static final Byte EXCHANGE_CODE_NOT_MADE = Byte.valueOf("0");
 
 
 

@@ -112,7 +112,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         if (dto.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
             throw new RechargeCardException(RechargeCardCodeEnum.VIRTUAL_BATCH_CANNOT_GENERATE);
         }
-        if(dto.getIsMade().equals(Byte.valueOf("1"))){
+        if(dto.getIsMade().equals(CommonConstant.EXCHANGE_CODE_HAS_MADE)){
             throw new RechargeCardException(RechargeCardCodeEnum.CODE_GENERATED);
         }
         rcExchangeCodeBatchBiz.generateCode(req.getId());
