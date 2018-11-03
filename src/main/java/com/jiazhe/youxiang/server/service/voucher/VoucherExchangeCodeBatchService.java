@@ -41,4 +41,10 @@ public interface VoucherExchangeCodeBatchService {
      * @return
      */
     VoucherExchangeCodeBatchEditDTO getById(Integer id);
+
+    /**
+     * 生成代金券兑换码
+     * @param id
+     */
+    void generateCode(Integer id);
 }

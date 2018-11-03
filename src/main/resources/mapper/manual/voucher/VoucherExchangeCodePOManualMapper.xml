@@ -9,6 +9,8 @@
         <result column="batch_description" property="batchDescription" jdbcType="VARCHAR" />
         <result column="project_id" property="projectId" jdbcType="INTEGER" />
         <result column="city_codes" property="cityCodes" jdbcType="VARCHAR" />
+        <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
+        <result column="count" property="count" jdbcType="INTEGER" />
         <result column="code" property="code" jdbcType="VARCHAR" />
         <result column="keyt" property="keyt" jdbcType="VARCHAR" />
         <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
@@ -25,7 +27,20 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-
+      id,batch_id,batch_name,voucher_name,batch_description,project_id,city_codes,product_ids,count,code,keyt,expiry_time,voucher_expiry_time,
+        validity_period,expiry_type,status,used,customer_id,ext_info,is_deleted,add_time,mod_time
     </sql>
+
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT into voucher_exchange_code
+        (batch_id,batch_name,voucher_name,batch_description,project_id,city_codes,product_ids,code,keyt,count,expiry_time,voucher_expiry_time,
+        validity_period,expiry_type,status,used,ext_info,is_deleted,add_time,mod_time) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.batchId},#{item.batchName},#{item.voucherName},#{item.batchDescription},#{item.projectId},#{item.cityCodes},#{item.productIds},
+            #{item.code},#{item.keyt},#{item.count},#{item.expiryTime},#{item.voucherExpiryTime},#{item.validityPeriod},#{item.expiryType},#{item.status},0,
+            "",0,NOW(),NOW())
+        </foreach>
+    </insert>
+
 
 </mapper>

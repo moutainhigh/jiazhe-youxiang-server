@@ -85,6 +85,15 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
     @RequestMapping(value = "/generatecode", method = RequestMethod.POST)
     public Object generateCode(@ModelAttribute IdReq req) {
         //参数检查
+        CommonValidator.validateId(req);
+        //参数检查,检查是否是虚拟批次，检查该批次是否已经生成过兑换码
+        VoucherExchangeCodeBatchEditDTO dto = voucherExchangeCodeBatchBiz.getById(req.getId());
+        if(null == dto){
+            throw new VoucherException(VoucherCodeEnum.BATCH_NOT_EXISTED);
+        }
+        if(dto.getIsMade().equals(CommonConstant.EXCHANGE_CODE_HAS_MADE)){
+            throw new VoucherException(VoucherCodeEnum.CODE_GENERATED);
+        }
         voucherExchangeCodeBatchBiz.generateCode(req.getId());
         return ResponseFactory.buildSuccess();
     }

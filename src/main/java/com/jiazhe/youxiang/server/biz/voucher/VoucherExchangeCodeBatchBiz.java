@@ -40,7 +40,7 @@ public class VoucherExchangeCodeBatchBiz {
     }
 
     public void generateCode(Integer id) {
-
+        voucherExchangeCodeBatchService.generateCode(id);
     }
 
     public void addSave(VoucherExchangeCodeBatchSaveDTO voucherExchangeCodeBatchSaveDTO) {

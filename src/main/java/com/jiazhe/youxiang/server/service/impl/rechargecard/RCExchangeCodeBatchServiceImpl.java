@@ -141,7 +141,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         if (!rcExchangeCodeDTOList.isEmpty()) {
             throw new RechargeCardException(RechargeCardCodeEnum.CODE_GENERATED);
         }
-        batchPO.setIsMade(Byte.valueOf("1"));
+        batchPO.setIsMade(CommonConstant.EXCHANGE_CODE_HAS_MADE);
         rechargeCardExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
         List<RCExchangeCodeSaveDTO> rcExchangeCodeSaveDTOS = Lists.newArrayList();
         Integer amount = batchPO.getAmount();

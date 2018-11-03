@@ -1,10 +1,13 @@
-package com.jiazhe.youxiang.server.domain.po;
+package com.jiazhe.youxiang.server.dto.voucher.exchangecode;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class VoucherExchangeCodePO implements Serializable {
-    private Integer id;
+/**
+ * @author tu
+ * @description：
+ * @date 2018/11/3
+ */
+public class VoucherExchangeCodeSaveDTO {
 
     private Integer batchId;
 
@@ -40,24 +43,6 @@ public class VoucherExchangeCodePO implements Serializable {
 
     private Integer customerId;
 
-    private String extInfo;
-
-    private Byte isDeleted;
-
-    private Date addTime;
-
-    private Date modTime;
-
-    private static final long serialVersionUID = 1L;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Integer getBatchId() {
         return batchId;
     }
@@ -71,7 +56,7 @@ public class VoucherExchangeCodePO implements Serializable {
     }
 
     public void setBatchName(String batchName) {
-        this.batchName = batchName == null ? null : batchName.trim();
+        this.batchName = batchName;
     }
 
     public String getVoucherName() {
@@ -79,7 +64,7 @@ public class VoucherExchangeCodePO implements Serializable {
     }
 
     public void setVoucherName(String voucherName) {
-        this.voucherName = voucherName == null ? null : voucherName.trim();
+        this.voucherName = voucherName;
     }
 
     public String getBatchDescription() {
@@ -87,7 +72,7 @@ public class VoucherExchangeCodePO implements Serializable {
     }
 
     public void setBatchDescription(String batchDescription) {
-        this.batchDescription = batchDescription == null ? null : batchDescription.trim();
+        this.batchDescription = batchDescription;
     }
 
     public Integer getProjectId() {
@@ -103,7 +88,7 @@ public class VoucherExchangeCodePO implements Serializable {
     }
 
     public void setCityCodes(String cityCodes) {
-        this.cityCodes = cityCodes == null ? null : cityCodes.trim();
+        this.cityCodes = cityCodes;
     }
 
     public String getProductIds() {
@@ -111,7 +96,7 @@ public class VoucherExchangeCodePO implements Serializable {
     }
 
     public void setProductIds(String productIds) {
-        this.productIds = productIds == null ? null : productIds.trim();
+        this.productIds = productIds;
     }
 
     public Integer getCount() {
@@ -127,7 +112,7 @@ public class VoucherExchangeCodePO implements Serializable {
     }
 
     public void setCode(String code) {
-        this.code = code == null ? null : code.trim();
+        this.code = code;
     }
 
     public String getKeyt() {
@@ -135,7 +120,7 @@ public class VoucherExchangeCodePO implements Serializable {
     }
 
     public void setKeyt(String keyt) {
-        this.keyt = keyt == null ? null : keyt.trim();
+        this.keyt = keyt;
     }
 
     public Date getExpiryTime() {
@@ -192,37 +177,5 @@ public class VoucherExchangeCodePO implements Serializable {
 
     public void setCustomerId(Integer customerId) {
         this.customerId = customerId;
-    }
-
-    public String getExtInfo() {
-        return extInfo;
-    }
-
-    public void setExtInfo(String extInfo) {
-        this.extInfo = extInfo == null ? null : extInfo.trim();
-    }
-
-    public Byte getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(Byte isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
-    public Date getAddTime() {
-        return addTime;
-    }
-
-    public void setAddTime(Date addTime) {
-        this.addTime = addTime;
-    }
-
-    public Date getModTime() {
-        return modTime;
-    }
-
-    public void setModTime(Date modTime) {
-        this.modTime = modTime;
     }
 }
