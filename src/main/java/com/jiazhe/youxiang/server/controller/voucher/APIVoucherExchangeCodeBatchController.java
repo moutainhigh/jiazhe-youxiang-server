@@ -2,13 +2,16 @@ package com.jiazhe.youxiang.server.controller.voucher;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.ExportExcelUtils;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherExchangeCodeBatchAdapter;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherExchangeCodeBatchBiz;
+import com.jiazhe.youxiang.server.biz.voucher.VoucherExchangeCodeBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.VoucherCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.VoucherException;
+import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchSaveDTO;
@@ -28,6 +31,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +49,8 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
 
     @Autowired
     private VoucherExchangeCodeBatchBiz voucherExchangeCodeBatchBiz;
+    @Autowired
+    private VoucherExchangeCodeBiz voucherExchangeCodeBiz;
 
     @ApiOperation(value = "分页查询代金券兑换码批次信息（根据项目和批次名称查询）", httpMethod = "GET", response = VoucherExchangeCodeBatchResp.class, responseContainer = "List", notes = "分页查询代金券兑换码批次信息（根据项目和批次名称查询）")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
@@ -121,6 +128,24 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
     public Object stopUsing(@ModelAttribute IdReq req) {
         //参数检查
         voucherExchangeCodeBatchBiz.stopUsing(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
+    @ApiOperation(value = "导出批次下兑换码", httpMethod = "GET", notes = "导出批次下兑换码")
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    public void export(@ModelAttribute IdReq req, HttpServletResponse response) throws IOException {
+        List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOList= voucherExchangeCodeBiz.getByBatchId(req.getId());
+        ExportExcelUtils.exportVoucherCode(response,voucherExchangeCodeDTOList);
+    }
+
+    @ApiOperation(value = "导出前检查", httpMethod = "GET", notes = "导出前检查")
+    @RequestMapping(value = "/exportcheck", method = RequestMethod.GET)
+    public Object exportCheck(@ModelAttribute IdReq req){
+        CommonValidator.validateId(req);
+        List<VoucherExchangeCodeDTO> rcExchangeCodeDTOList= voucherExchangeCodeBiz.getByBatchId(req.getId());
+        if(rcExchangeCodeDTOList.isEmpty()){
+            throw new VoucherException(VoucherCodeEnum.NO_CODE_TO_EXPORT);
+        }
         return ResponseFactory.buildSuccess();
     }
 }

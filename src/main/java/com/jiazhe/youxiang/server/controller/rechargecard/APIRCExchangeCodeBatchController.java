@@ -151,7 +151,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     public void export(@ModelAttribute IdReq req, HttpServletResponse response) throws IOException {
         List<RCExchangeCodeDTO> rcExchangeCodeDTOList= rcExchangeCodeBiz.getByBatchId(req.getId());
-        ExportExcelUtils.exportExcel(response,rcExchangeCodeDTOList);
+        ExportExcelUtils.exportRechargeCardCode(response,rcExchangeCodeDTOList);
     }
 
     @ApiOperation(value = "导出前检查", httpMethod = "GET", notes = "导出前检查")

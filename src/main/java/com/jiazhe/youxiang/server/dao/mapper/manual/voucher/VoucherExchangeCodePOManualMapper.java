@@ -18,4 +18,28 @@ public interface VoucherExchangeCodePOManualMapper {
      * @param voucherExchangeCodePOList
      */
     void batchInsert(List<VoucherExchangeCodePO> voucherExchangeCodePOList);
+
+    /**
+     * 计数
+     * @param batchId
+     * @param code
+     * @param keyt
+     * @param status
+     * @param used
+     * @return
+     */
+    Integer count(@Param("batchId")Integer batchId, @Param("code")String code, @Param("keyt")String keyt, @Param("status")Byte status, @Param("used")Byte used);
+
+    /**
+     * 分页查询代金券兑换码信息
+     * @param batchId
+     * @param code
+     * @param keyt
+     * @param status
+     * @param used
+     * @param offset
+     * @param limit
+     * @return
+     */
+    List<VoucherExchangeCodePO> query(@Param("batchId")Integer batchId, @Param("code")String code, @Param("keyt")String keyt, @Param("status")Byte status, @Param("used")Byte used, @Param("offset")Integer offset, @Param("limit")Integer limit);
 }

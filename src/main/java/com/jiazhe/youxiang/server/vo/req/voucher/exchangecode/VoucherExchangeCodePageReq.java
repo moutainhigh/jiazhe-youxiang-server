@@ -11,13 +11,19 @@ import io.swagger.annotations.ApiModelProperty;
 public class VoucherExchangeCodePageReq extends PageSizeNumReq {
 
     @ApiModelProperty("批次id")
-    private Integer batchId ;
+    private Integer batchId;
 
-    @ApiModelProperty("代金券吗")
+    @ApiModelProperty("启用停用状态")
+    private Byte status;
+
+    @ApiModelProperty("使用状态")
+    private Byte used;
+
+    @ApiModelProperty("充值卡兑换码")
     private String code ;
 
-    @ApiModelProperty("代金券密钥")
-    private String keyt ;
+    @ApiModelProperty("充值卡兑换密钥")
+    private String keyt;
 
     public Integer getBatchId() {
         return batchId;
@@ -25,6 +31,22 @@ public class VoucherExchangeCodePageReq extends PageSizeNumReq {
 
     public void setBatchId(Integer batchId) {
         this.batchId = batchId;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public Byte getUsed() {
+        return used;
+    }
+
+    public void setUsed(Byte used) {
+        this.used = used;
     }
 
     public String getCode() {

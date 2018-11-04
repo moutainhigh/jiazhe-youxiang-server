@@ -1,7 +1,9 @@
 package com.jiazhe.youxiang.server.biz.voucher;
 
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
+import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeCodeService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -14,9 +16,9 @@ import java.util.List;
  */
 @Service("voucherExchangeCodeBiz")
 public class VoucherExchangeCodeBiz {
-    public List<VoucherExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Paging paging) {
-        return null;
-    }
+
+    @Autowired
+    private VoucherExchangeCodeService voucherExchangeCodeService;
 
     public void startUsing(Integer id) {
 
@@ -36,5 +38,13 @@ public class VoucherExchangeCodeBiz {
 
     public void backstageCodeCharge(Integer customerId, String keyt) {
 
+    }
+
+    public List<VoucherExchangeCodeDTO> getByBatchId(Integer id) {
+        return voucherExchangeCodeService.getByBatchId(id);
+    }
+
+    public List<VoucherExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Byte status, Byte used, Paging paging) {
+        return voucherExchangeCodeService.getList(batchId,code,keyt,status,used,paging);
     }
 }

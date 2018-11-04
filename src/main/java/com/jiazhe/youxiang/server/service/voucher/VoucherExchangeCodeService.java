@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.service.voucher;
 
 import com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
+import com.jiazhe.youxiang.server.vo.Paging;
 
 import java.util.List;
 
@@ -24,4 +25,16 @@ public interface VoucherExchangeCodeService {
      * @param voucherExchangeCodePOList
      */
     void batchInsert(List<VoucherExchangeCodePO> voucherExchangeCodePOList);
+
+    /**
+     * 分页查询代金券兑换码信息
+     * @param batchId
+     * @param code
+     * @param keyt
+     * @param status
+     * @param used
+     * @param paging
+     * @return
+     */
+    List<VoucherExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Byte status, Byte used, Paging paging);
 }

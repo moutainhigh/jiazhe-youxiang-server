@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.biz.voucher;
 
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchSaveDTO;
@@ -55,4 +56,5 @@ public class VoucherExchangeCodeBatchBiz {
     public void editSave(VoucherExchangeCodeBatchSaveDTO voucherExchangeCodeBatchSaveDTO) {
         voucherExchangeCodeBatchService.editSave(voucherExchangeCodeBatchSaveDTO);
     }
+
 }

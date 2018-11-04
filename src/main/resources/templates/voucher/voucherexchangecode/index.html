@@ -282,7 +282,7 @@
     var pager_selector = "#grid-pager";
     jQuery(grid_selector).jqGrid({
         subGrid: false, // 此处设置为true时可以打开子项,子项用不到已删除
-        url: "../api/rcexchangecode/listpage",// 获取数据的地址
+        url: "../api/voucherexchangecode/listpage",// 获取数据的地址
         postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
         rownumbers: true,
         datatype: "json",
@@ -295,11 +295,11 @@
         width: "100%",
         autowidth: true,
         height: 350,
-        colNames: ['','批次名称','充值卡名称', '兑换码', '密钥', '停用状态', '使用状态', '面额',  '过期时间', '操作'],
+        colNames: ['','批次名称','代金券名称', '兑换码', '密钥', '停用状态', '使用状态', '兑换商品数量',  '过期时间', '操作'],
         colModel: [
             {name: 'id', index: 'id', sortable: false, hidden: true},
             {name: 'batchName', index: 'batchName', width: 100, sortable: false},
-            {name: 'rechargeCardName', index: 'rechargeCardName', width: 50, sortable: false},
+            {name: 'voucherName', index: 'voucherName', width: 50, sortable: false},
             {name: 'code', index: 'code', width: 80, sortable: false},
             {name: 'keyt', index: 'keyt', width: 80, sortable: false},
             {
@@ -320,7 +320,7 @@
                     return rowObject.used == 1 ? "已使用" : "未使用";
                 }
             },
-            {name: 'faceValue', index: 'faceValue', width: 30, sortable: false},
+            {name: 'count', index: 'count', width: 50, sortable: false},
             {name: 'expiryTime', index: 'expiryTime', width: 50, sortable: false,formatter: dateFormatter},
             {name: '_action', index: '_action', width:100,sortable: false, formatter: customFormatter}
         ],
@@ -344,7 +344,7 @@
             records: "paging.total", // 查询出的记录数
             repeatitems: false
         },
-        caption: "充值卡兑换码列表"
+        caption: "代金券兑换码列表"
     });
     $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
 
@@ -366,7 +366,7 @@
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/rcexchangecode/listpage",// 获取数据的地址
+            url: "../api/voucherexchangecode/listpage",// 获取数据的地址
             postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
@@ -400,7 +400,7 @@
     //启用兑换码
     function startUsing(id) {
         $.ajax({
-            url: "../api/rcexchangecode/startusing",
+            url: "../api/voucherexchangecode/startusing",
             dataType: "json",
             async: false,
             data: {
@@ -424,7 +424,7 @@
     //停用兑换码
     function stopUsing(id) {
         $.ajax({
-            url: "../api/rcexchangecode/stopusing",    //请求的url地址
+            url: "../api/voucherexchangecode/stopusing",    //请求的url地址
             dataType: "json",
             async: false,
             data: {
@@ -447,7 +447,7 @@
 
     function save() {
         $.ajax({
-            url: "../api/rcexchangecode/editsave",
+            url: "../api/voucherexchangecode/editsave",
             dataType: "json",
             async: false,
             data: transformToJson($('#codeSaveForm').serializeArray()),
@@ -468,7 +468,7 @@
 
     function openEdit(id) {
         $.ajax({
-            url: "../api/rcexchangecode/getbyid",
+            url: "../api/voucherexchangecode/getbyid",
             dataType: "json",
             async: false,
             data: {

@@ -1,6 +1,8 @@
 package com.jiazhe.youxiang.server.controller.voucher;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherExchangeCodeBiz;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
@@ -40,12 +42,11 @@ public class APIVoucherExchangeCodeController extends BaseController {
     @ApiOperation(value = "分页查询代金券兑换码（根据批次id和兑换码的码和密钥查询）", httpMethod = "GET", response = VoucherExchangeCodeResp.class, responseContainer = "List",notes = "分页查询代金券兑换码（根据批次id和兑换码的码和密钥查询）")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute VoucherExchangeCodePageReq req) {
-        Paging paging = new Paging();
-        paging.setOffset((req.getPageNum()-1)*req.getPageSize());
-        paging.setLimit(req.getPageSize());
-        List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOList = voucherExchangeCodeBiz.getList(req.getBatchId(),req.getCode(),req.getKeyt(),paging);
-        List<VoucherExchangeCodeResp> voucherExchangeCodeBatchRespList = voucherExchangeCodeDTOList.stream().map(VoucherExchangeCodeAdapter::DTO2Resp).collect(Collectors.toList());
-        return ResponseFactory.buildPaginationResponse(voucherExchangeCodeBatchRespList, paging);
+        CommonValidator.validatePaging(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
+        List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOList = voucherExchangeCodeBiz.getList(req.getBatchId(),req.getCode(),req.getKeyt(),req.getStatus(),req.getUsed(),paging);
+        List<VoucherExchangeCodeResp> voucherExchangeCodeRespList = voucherExchangeCodeDTOList.stream().map(VoucherExchangeCodeAdapter::DTO2Resp).collect(Collectors.toList());
+        return ResponseFactory.buildPaginationResponse(voucherExchangeCodeRespList, paging);
     }
 
     @ApiOperation(value = "启用代金券兑换码", httpMethod = "POST",notes = "启用代金券兑换码")
