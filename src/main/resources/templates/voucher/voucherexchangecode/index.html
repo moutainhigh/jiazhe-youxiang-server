@@ -125,10 +125,10 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">充值卡名称：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">代金券名称：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveRechargeCardName" name="rechargeCardName"
+                                                            <input id="saveVoucherName" name="voucherName"
                                                                    class="form-control"
                                                                    type="text" style="height:30px"/>
                                                         </div>
@@ -152,7 +152,7 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">充值卡过期类型：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">代金券过期类型：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
                                                             <label class="radio-inline ">
@@ -172,12 +172,12 @@
                                                 <div class="space-2 saveDeadLine"></div>
                                                 <div class="form-group saveDeadLine">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveRechargeCardExpiryTime">充值卡到期时间：</label>
+                                                           for="saveVoucherExpiryTime">代金券到期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker"
-                                                                   id="saveRechargeCardExpiryTime"
-                                                                   name="rechargeCardExpiryTime" type="text"/>
+                                                                   id="saveVoucherExpiryTime"
+                                                                   name="voucherExpiryTime" type="text"/>
                                                             <span class="input-group-addon">
                                                                     <i class="fa fa-calendar bigger-110"></i>
                                                                 </span>
@@ -481,7 +481,7 @@
                 } else {
                     var result = data.data;
                     $("#saveCodeId").val(result.id);
-                    $("#codeSaveForm #saveRechargeCardName").val(result.rechargeCardName);
+                    $("#codeSaveForm #saveVoucherName").val(result.voucherName);
                     $("#codeSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
                     if (result.expiryType == 0) {
                         $("#codeSaveForm #saveDeadLineRadio").click();
@@ -489,7 +489,7 @@
                         $("#codeSaveForm #saveValidityPeriodRadio").click();
                     }
                     $("#codeSaveForm #saveValidityPeriod").val(result.validityPeriod);
-                    $("#codeSaveForm #saveRechargeCardExpiryTime").val(dateFormat(result.rechargeCardExpiryTime));
+                    $("#codeSaveForm #saveVoucherExpiryTime").val(dateFormat(result.voucherExpiryTime));
                     $("#codeSaveForm #saveDescription").val(result.batchDescription);
                     $("#modal-form").modal('show');
                 }

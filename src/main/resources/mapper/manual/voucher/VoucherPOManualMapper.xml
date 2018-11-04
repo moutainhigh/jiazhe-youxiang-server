@@ -24,6 +24,72 @@
       id,name,description,customer_id,project_id,city_codes,product_ids,count,exchange_record_id,expiry_time,used,status,ext_info,is_deleted,add_time,mod_time
     </sql>
 
+    <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.VoucherPO" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into voucher (id, name, description,
+        customer_id, project_id, city_codes,
+        product_ids, count,
+        exchange_record_id, expiry_time, used,status,
+        ext_info, is_deleted, add_time,
+        mod_time)
+        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+        #{customerId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR},
+        #{productIds,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER},
+        #{exchangeRecordId,jdbcType=INTEGER}, #{expiryTime,jdbcType=TIMESTAMP}, 0,1,
+        "", 0, NOW(),NOW())
+    </insert>
+
+    <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.VoucherPO">
+        SELECT rc.id, rc.name,rc.description,rc.customer_id, rc.project_id,
+        rc.city_codes,rc.product_ids,rc.count,rc.exchange_record_id,rc.expiry_time,rc.used,rc.status,rc.ext_info, rc.is_deleted,rc.add_time, rc.mod_time
+        FROM voucher rc LEFT JOIN
+        voucher_exchange_record rcec ON rc.id = rcec.voucher_id
+        LEFT JOIN customer c ON c.id = rc.customer_id
+        <where>
+            <if test="mobile != null and mobile != ''">
+                AND c.mobile = #{mobile}
+            </if>
+            <if test="exchangeType != null">
+                AND rcec.exchange_type = #{exchangeType}
+            </if>
+            <if test="status != null">
+                AND rc.status = #{status}
+            </if>
+            <if test="expiry == 0">
+                AND rc.expiry_time &gt; NOW()
+            </if>
+            <if test="expiry == 1">
+                AND rc.expiry_time &lt;= NOW()
+            </if>
+            AND rc.is_deleted = 0 ORDER BY rc.add_time desc
+        </where>
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) FROM voucher rc LEFT JOIN
+        voucher_exchange_record rcec ON rc.id = rcec.voucher_id
+        LEFT JOIN customer c ON c.id = rc.customer_id
+        <where>
+            <if test="mobile != null and mobile != ''">
+                AND c.mobile = #{mobile}
+            </if>
+            <if test="exchangeType != null">
+                AND rcec.exchange_type = #{exchangeType}
+            </if>
+            <if test="status != null">
+                AND rc.status = #{status}
+            </if>
+            <if test="expiry == 0">
+                AND rc.expiry_time &gt; NOW()
+            </if>
+            <if test="expiry == 1">
+                AND rc.expiry_time &lt;= NOW()
+            </if>
+            AND rc.is_deleted = 0 ORDER BY rc.add_time desc
+        </where>
+    </select>
+
     <select id="findByIds" parameterType="java.util.List"
             resultType="com.jiazhe.youxiang.server.domain.po.VoucherPO">
         select

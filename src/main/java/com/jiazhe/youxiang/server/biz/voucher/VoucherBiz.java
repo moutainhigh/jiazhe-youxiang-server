@@ -1,7 +1,11 @@
 package com.jiazhe.youxiang.server.biz.voucher;
 
+import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
 import com.jiazhe.youxiang.server.dto.voucher.voucher.VoucherDTO;
+import com.jiazhe.youxiang.server.dto.voucher.voucher.VoucherEditDTO;
+import com.jiazhe.youxiang.server.service.voucher.VoucherService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -14,23 +18,27 @@ import java.util.List;
  */
 @Service("voucherBiz")
 public class VoucherBiz {
-    public void startUsing(Integer id) {
 
+    @Autowired
+    private VoucherService voucherService;
+
+    public void startUsing(Integer id) {
+        voucherService.changeStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
     }
 
     public void stopUsing(Integer id) {
-
+        voucherService.changeStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
     }
 
-    public void changeExpiryTime(Integer id, Date expiryTime) {
-
+    public List<VoucherDTO> getList(String mobile, Integer exchangeType, Byte status, Byte expiry, Paging paging) {
+        return voucherService.getList(mobile,exchangeType,status,expiry,paging);
     }
 
-    public List<VoucherDTO> getList(Integer id, Paging paging) {
-        return null;
+    public VoucherDTO getById(Integer id) {
+        return voucherService.getById(id);
     }
 
-    public List<VoucherDTO> findUnexpiredByCustomerId(Integer id) {
-        return null;
+    public void editSave(VoucherEditDTO dto) {
+        voucherService.editSave(dto);
     }
 }

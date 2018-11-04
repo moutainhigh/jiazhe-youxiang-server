@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.service.voucher;
 
 import com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
+import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeEditDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
@@ -51,4 +52,39 @@ public interface VoucherExchangeCodeService {
      * @param status
      */
     void batchChangeStatus(Integer batchId, Byte status);
+
+    /**
+     * 根据id查找
+     * @param id
+     * @return
+     */
+    VoucherExchangeCodeDTO getById(Integer id);
+
+    /**
+     * 修改兑换码信息
+     * @param dto
+     */
+    void editSave(VoucherExchangeCodeEditDTO dto);
+
+    /**
+     * 改变代金券兑换码的启用、停用状态
+     * @param id
+     * @param status
+     */
+    void changeCodeStatus(Integer id, Byte status);
+
+    /**
+     * 兑换码换代金券
+     * @param exchangeType
+     * @param mobile
+     * @param keyt
+     */
+    void codeCharge(Integer exchangeType, String mobile, String keyt);
+
+    /**
+     * 根据keyt查询代金券兑换码
+     * @param keyt
+     * @return
+     */
+    VoucherExchangeCodePO  findByKeyt(String keyt);
 }

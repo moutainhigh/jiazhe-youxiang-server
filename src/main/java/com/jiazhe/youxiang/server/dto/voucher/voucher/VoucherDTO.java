@@ -1,5 +1,9 @@
 package com.jiazhe.youxiang.server.dto.voucher.voucher;
 
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.voucher.exchangerecord.VoucherExchangeRecordDTO;
+import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
+
 import java.util.Date;
 
 /**
@@ -19,7 +23,7 @@ public class VoucherDTO {
 
     private Integer projectId;
 
-    private String cityIds;
+    private String cityCodes;
 
     private String productIds;
 
@@ -27,9 +31,15 @@ public class VoucherDTO {
 
     private Date expiryTime;
 
+    private Byte status;
+
     private Byte used;
 
-    private Byte status;
+    private Date addTime;
+
+    private CustomerDTO customerDTO;
+
+    private VoucherExchangeRecordDTO voucherExchangeRecordDTO;
 
     public Integer getId() {
         return id;
@@ -71,14 +81,6 @@ public class VoucherDTO {
         this.projectId = projectId;
     }
 
-    public String getCityIds() {
-        return cityIds;
-    }
-
-    public void setCityIds(String cityIds) {
-        this.cityIds = cityIds;
-    }
-
     public String getProductIds() {
         return productIds;
     }
@@ -117,5 +119,37 @@ public class VoucherDTO {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getCityCodes() {
+        return cityCodes;
+    }
+
+    public void setCityCodes(String cityCodes) {
+        this.cityCodes = cityCodes;
+    }
+
+    public Date getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
+    }
+
+    public CustomerDTO getCustomerDTO() {
+        return customerDTO;
+    }
+
+    public void setCustomerDTO(CustomerDTO customerDTO) {
+        this.customerDTO = customerDTO;
+    }
+
+    public VoucherExchangeRecordDTO getVoucherExchangeRecordDTO() {
+        return voucherExchangeRecordDTO;
+    }
+
+    public void setVoucherExchangeRecordDTO(VoucherExchangeRecordDTO voucherExchangeRecordDTO) {
+        this.voucherExchangeRecordDTO = voucherExchangeRecordDTO;
     }
 }

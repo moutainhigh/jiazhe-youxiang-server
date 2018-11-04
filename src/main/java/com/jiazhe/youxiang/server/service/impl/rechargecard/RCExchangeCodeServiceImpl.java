@@ -119,7 +119,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         if(type.equals(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE)){
             SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
             if(null == sysUserDTO){
-                throw new UserException(UserCodeEnum.USER_NOT_EXISTED);
+                throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
             }
             rechargeCardRecordPO.setOperatorId(sysUserDTO.getId());
             rechargeCardRecordPO.setOperatorName(sysUserDTO.getLoginName());

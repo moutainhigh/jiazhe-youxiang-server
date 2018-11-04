@@ -3,8 +3,10 @@ package com.jiazhe.youxiang.server.adapter.voucher;
 import com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
+import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeEditDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeSaveDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchEditDTO;
+import com.jiazhe.youxiang.server.vo.req.voucher.exchangecode.VoucherExchangeCodeEditReq;
 import com.jiazhe.youxiang.server.vo.resp.voucher.exchangecode.VoucherExchangeCodeResp;
 
 /**
@@ -107,5 +109,22 @@ public class VoucherExchangeCodeAdapter {
         voucherExchangeCodeDTO.setUsed(voucherExchangeCodePO.getUsed());
         voucherExchangeCodeDTO.setCustomerId(voucherExchangeCodePO.getCustomerId());
         return voucherExchangeCodeDTO;
+    }
+
+    public static VoucherExchangeCodeEditDTO EditReq2EditDTO(VoucherExchangeCodeEditReq req) {
+        if (req == null) {
+            return null;
+        }
+        VoucherExchangeCodeEditDTO voucherExchangeCodeEditDTO = new VoucherExchangeCodeEditDTO();
+        voucherExchangeCodeEditDTO.setId(req.getId());
+        voucherExchangeCodeEditDTO.setVoucherName(req.getVoucherName());
+        voucherExchangeCodeEditDTO.setBatchDescription(req.getBatchDescription());
+        voucherExchangeCodeEditDTO.setCityCodes(req.getCityCodes());
+        voucherExchangeCodeEditDTO.setProductIds(req.getProductIds());
+        voucherExchangeCodeEditDTO.setExpiryTime(req.getExpiryTime());
+        voucherExchangeCodeEditDTO.setVoucherExpiryTime(req.getVoucherExpiryTime());
+        voucherExchangeCodeEditDTO.setValidityPeriod(req.getValidityPeriod());
+        voucherExchangeCodeEditDTO.setExpiryType(req.getExpiryType());
+        return voucherExchangeCodeEditDTO;
     }
 }

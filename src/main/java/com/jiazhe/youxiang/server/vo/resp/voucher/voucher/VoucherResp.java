@@ -1,7 +1,10 @@
 package com.jiazhe.youxiang.server.vo.resp.voucher.voucher;
 
 import com.jiazhe.youxiang.server.vo.BaseObject;
+import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
+import com.jiazhe.youxiang.server.vo.resp.voucher.exchangerecord.VoucherExchangeRecordResp;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -21,7 +24,7 @@ public class VoucherResp extends BaseObject {
 
     private Integer projectId;
 
-    private String cityIds;
+    private String cityCodes;
 
     private String productIds;
 
@@ -29,9 +32,15 @@ public class VoucherResp extends BaseObject {
 
     private Date expiryTime;
 
+    private Byte status;
+
     private Byte used;
 
-    private Byte status;
+    private Date addTime;
+
+    private CustomerResp customerResp;
+
+    private VoucherExchangeRecordResp voucherExchangeRecordResp;
 
     public Integer getId() {
         return id;
@@ -73,12 +82,12 @@ public class VoucherResp extends BaseObject {
         this.projectId = projectId;
     }
 
-    public String getCityIds() {
-        return cityIds;
+    public String getCityCodes() {
+        return cityCodes;
     }
 
-    public void setCityIds(String cityIds) {
-        this.cityIds = cityIds;
+    public void setCityCodes(String cityCodes) {
+        this.cityCodes = cityCodes;
     }
 
     public String getProductIds() {
@@ -105,6 +114,14 @@ public class VoucherResp extends BaseObject {
         this.expiryTime = expiryTime;
     }
 
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
     public Byte getUsed() {
         return used;
     }
@@ -113,11 +130,27 @@ public class VoucherResp extends BaseObject {
         this.used = used;
     }
 
-    public Byte getStatus() {
-        return status;
+    public Date getAddTime() {
+        return addTime;
     }
 
-    public void setStatus(Byte status) {
-        this.status = status;
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
+    }
+
+    public CustomerResp getCustomerResp() {
+        return customerResp;
+    }
+
+    public void setCustomerResp(CustomerResp customerResp) {
+        this.customerResp = customerResp;
+    }
+
+    public VoucherExchangeRecordResp getVoucherExchangeRecordResp() {
+        return voucherExchangeRecordResp;
+    }
+
+    public void setVoucherExchangeRecordResp(VoucherExchangeRecordResp voucherExchangeRecordResp) {
+        this.voucherExchangeRecordResp = voucherExchangeRecordResp;
     }
 }

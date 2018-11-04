@@ -55,4 +55,7 @@ public interface VoucherExchangeCodePOManualMapper {
      * @param status
      */
     void batchChangeStatus(@Param("batchId") Integer batchId, @Param("status")Byte status);
+
+
+    VoucherExchangeCodePO findByKeyt(@Param("keyt") String keyt);
 }

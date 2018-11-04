@@ -3,7 +3,9 @@ package com.jiazhe.youxiang.server.service.impl.rechargecard;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
+import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.UserCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.common.exceptions.UserException;
 import com.jiazhe.youxiang.server.dao.mapper.RechargeCardPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCPOManualMapper;
@@ -118,7 +120,7 @@ public class RCServiceImpl implements RCService {
         //插入兑换记录信息
         SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
         if(null == sysUserDTO){
-            throw new UserException(UserCodeEnum.USER_NOT_EXISTED);
+            throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
         RechargeCardExchangeRecordPO rechargeCardRecordPO = new RechargeCardExchangeRecordPO();
         rechargeCardRecordPO.setOperatorId(sysUserDTO.getId());

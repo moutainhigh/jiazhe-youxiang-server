@@ -7,7 +7,9 @@ import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.base.util.ValidateUtils;
 import com.jiazhe.youxiang.server.adapter.SysUserAdapter;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
+import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.UserCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.common.exceptions.UserException;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.UserWithRoleDTO;
@@ -113,7 +115,7 @@ public class APISysUserController extends BaseController {
         SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
         //将DTO转为respVO返回
         if(null == sysUserDTO){
-            throw new UserException(UserCodeEnum.USER_NOT_EXISTED);
+            throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
         SysUserResp sysUserResp = SysUserAdapter.DTO2RespVO(sysUserDTO);
         return ResponseFactory.buildResponse(sysUserResp);
@@ -126,6 +128,9 @@ public class APISysUserController extends BaseController {
         CommonValidator.validateNull(req.getPassword1(),new UserException(UserCodeEnum.USEER_PASSWORD_IS_NULL));
         CommonValidator.validateNull(req.getPassword2(),new UserException(UserCodeEnum.USEER_PASSWORD_IS_NULL));
         SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+        if(null == sysUserDTO){
+            throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
+        }
         if (!req.getPassword1().equals(req.getPassword2())) {
             throw new UserException(UserCodeEnum.USER_PASSWORD_DIFFERENT);
         }

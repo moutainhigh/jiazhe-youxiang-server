@@ -112,4 +112,10 @@
         </where>
     </select>
 
+    <select id="findByKeyt" resultType="com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodePO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM voucher_exchange_code WHERE keyt = #{keyt} AND is_deleted = 0
+    </select>
+
 </mapper>

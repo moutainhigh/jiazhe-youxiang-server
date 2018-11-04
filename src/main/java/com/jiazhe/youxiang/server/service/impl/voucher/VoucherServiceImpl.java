@@ -1,12 +1,21 @@
 package com.jiazhe.youxiang.server.service.impl.voucher;
 
+import com.jiazhe.youxiang.server.adapter.voucher.VoucherAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.dao.mapper.VoucherPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.voucher.VoucherPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.VoucherExchangeRecordPO;
 import com.jiazhe.youxiang.server.domain.po.VoucherPO;
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchSaveDTO;
+import com.jiazhe.youxiang.server.dto.voucher.exchangerecord.VoucherExchangeRecordDTO;
+import com.jiazhe.youxiang.server.dto.voucher.voucher.VoucherDTO;
+import com.jiazhe.youxiang.server.dto.voucher.voucher.VoucherEditDTO;
+import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeRecordService;
 import com.jiazhe.youxiang.server.service.voucher.VoucherService;
+import com.jiazhe.youxiang.server.vo.Paging;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +38,11 @@ public class VoucherServiceImpl implements VoucherService {
     @Autowired
     private VoucherPOManualMapper voucherPOManualMapper;
     @Autowired
+    private VoucherPOMapper voucherPOMapper;
+    @Autowired
     private VoucherExchangeRecordService voucherExchangeRecordService;
+    @Autowired
+    private CustomerService customerService;
     @Override
     public void batchUpdate(List<Integer> usedIds, VoucherExchangeCodeBatchSaveDTO batchSaveDTO) {
         List<VoucherExchangeRecordPO> recordPOList = voucherExchangeRecordService.findByCodeIds(usedIds);
@@ -59,5 +72,60 @@ public class VoucherServiceImpl implements VoucherService {
         map.put("status",status);
         map.put("ids",cardIds);
         voucherPOManualMapper.batchChangeStatus(map);
+    }
+
+    @Override
+    public List<VoucherDTO> getList(String mobile, Integer exchangeType, Byte status, Byte expiry, Paging paging) {
+        final CustomerDTO customerDTO = customerService.getByMobile(mobile);
+        List<VoucherPO> rechargeCardPOList = voucherPOManualMapper.query(mobile,exchangeType,status,expiry,paging.getOffset(),paging.getLimit());
+        List<VoucherDTO> rcDTOList = rechargeCardPOList.stream().map(VoucherAdapter::PO2DTO).collect(Collectors.toList());
+        Integer count = voucherPOManualMapper.count(mobile,exchangeType,status,expiry);
+        paging.setTotal(count);
+        rcDTOList.stream().forEach(bean -> {
+            if(Strings.isBlank(mobile)){
+                CustomerDTO customerDTO1 = customerService.getById(bean.getCustomerId());
+                bean.setCustomerDTO(customerDTO1);
+            }else{
+                bean.setCustomerDTO(customerDTO);
+            }
+            VoucherExchangeRecordDTO voucherExchangeRecordDTO = voucherExchangeRecordService.findByVoucherId(bean.getId());
+            bean.setVoucherExchangeRecordDTO(voucherExchangeRecordDTO);
+        });
+        return rcDTOList;
+    }
+
+    @Override
+    public void changeStatus(Integer id, Byte status) {
+        VoucherPO voucherPO = voucherPOMapper.selectByPrimaryKey(id);
+        voucherPO.setStatus(status);
+        voucherPO.setModTime(new Date());
+        voucherPOMapper.updateByPrimaryKeySelective(voucherPO);
+    }
+
+    @Override
+    public VoucherDTO getById(Integer id) {
+        VoucherPO po = voucherPOMapper.selectByPrimaryKey(id);
+        return VoucherAdapter.PO2DTO(po);
+    }
+
+    @Override
+    public void editSave(VoucherEditDTO dto) {
+        VoucherPO po = voucherPOMapper.selectByPrimaryKey(dto.getId());
+        po.setProductIds(dto.getProductIds());
+        po.setCityCodes(dto.getCityCodes());
+        po.setName(dto.getName());
+        po.setExpiryTime(dto.getExpiryTime());
+        po.setDescription(dto.getDescription());
+        voucherPOMapper.updateByPrimaryKeySelective(po);
+    }
+
+    @Override
+    public void insert(VoucherPO voucherPO) {
+        voucherPOManualMapper.insert(voucherPO);
+    }
+
+    @Override
+    public void update(VoucherPO voucherPO) {
+        voucherPOMapper.updateByPrimaryKeySelective(voucherPO);
     }
 }
