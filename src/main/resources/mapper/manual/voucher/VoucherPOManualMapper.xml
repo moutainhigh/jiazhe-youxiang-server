@@ -21,7 +21,40 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-
+      id,name,description,customer_id,project_id,city_codes,product_ids,count,exchange_record_id,expiry_time,used,status,ext_info,is_deleted,add_time,mod_time
     </sql>
+
+    <select id="findByIds" parameterType="java.util.List"
+            resultType="com.jiazhe.youxiang.server.domain.po.VoucherPO">
+        select
+        <include refid="Base_Column_List"/>
+        FROM voucher
+        where id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <update id="batchUpdate" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update voucher
+            <set>
+                name = #{item.name},description = #{item.description},project_id = #{item.projectId},city_codes =
+                #{item.cityCodes},product_ids = #{item.productIds},expiry_time = #{item.expiryTime},mod_time = NOW()
+            </set>
+            where id = #{item.id}
+        </foreach>
+    </update>
+
+    <select id="batchChangeStatus" parameterType="java.util.Map">
+        update voucher
+        <set>
+            status = #{status},mod_time = NOW()
+        </set>
+        where id in
+        <foreach collection="ids" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
 
 </mapper>

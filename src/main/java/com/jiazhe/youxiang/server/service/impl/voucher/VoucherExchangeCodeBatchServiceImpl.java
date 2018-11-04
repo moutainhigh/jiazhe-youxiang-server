@@ -65,8 +65,33 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
     }
 
     @Override
-    public void editSave(VoucherExchangeCodeBatchSaveDTO voucherExchangeCodeBatchSaveDTO) {
-
+    public void editSave(VoucherExchangeCodeBatchSaveDTO batchSaveDTO) {
+        VoucherExchangeCodeBatchPO batchPO = voucherExchangeCodeBatchPOMapper.selectByPrimaryKey(batchSaveDTO.getId());
+        if(null == batchPO){
+            throw new VoucherException(VoucherCodeEnum.BATCH_NOT_EXISTED);
+        }
+        //批次肯定要修改的信息
+        batchPO.setName(batchSaveDTO.getName());
+        batchPO.setVoucherName(batchSaveDTO.getVoucherName());
+        batchPO.setProjectId(batchSaveDTO.getProjectId());
+        batchPO.setCityCodes(batchSaveDTO.getCityCodes());
+        batchPO.setProductIds(batchSaveDTO.getProductIds());
+        batchPO.setExpiryTime(batchSaveDTO.getExpiryTime());
+        batchPO.setExpiryType(batchSaveDTO.getExpiryType());
+        batchPO.setVoucherExpiryTime(batchSaveDTO.getVoucherExpiryTime());
+        batchPO.setValidityPeriod(batchSaveDTO.getValidityPeriod());
+        batchPO.setDescription(batchSaveDTO.getDescription());
+        //批次下面是否有码，有则为true
+        List<VoucherExchangeCodeDTO> codeDTOList = voucherExchangeCodeService.getByBatchId(batchSaveDTO.getId());
+        boolean batchEmpty = codeDTOList.isEmpty();
+        //没有码则可以修改面额和数量
+        if (batchEmpty) {
+            batchPO.setAmount(batchSaveDTO.getAmount());
+            batchPO.setCount(batchSaveDTO.getCount());
+        }else {
+            voucherExchangeCodeService.updateWithBatch(batchSaveDTO);
+        }
+        voucherExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
     }
 
     @Override
@@ -117,5 +142,22 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
         }
         List<VoucherExchangeCodePO> voucherExchangeCodePOList = voucherExchangeCodeSaveDTOList.stream().map(VoucherExchangeCodeAdapter::DTOSave2PO).collect(Collectors.toList());
         voucherExchangeCodeService.batchInsert(voucherExchangeCodePOList);
+    }
+
+    @Override
+    public void changeBatchStatus(Integer id, Byte status) {
+        VoucherExchangeCodeBatchPO batchPO = voucherExchangeCodeBatchPOMapper.selectByPrimaryKey(id);
+        if(null == batchPO){
+            throw new VoucherException(VoucherCodeEnum.BATCH_NOT_EXISTED);
+        }
+        batchPO.setStatus(status);
+        batchPO.setModTime(new Date());
+        voucherExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
+        List<VoucherExchangeCodeDTO> codeDTOList = voucherExchangeCodeService.getByBatchId(id);
+        boolean batchEmpty = codeDTOList.isEmpty();
+        //有码则修改对应的码信息
+        if (!batchEmpty) {
+            voucherExchangeCodeService.batchChangeStatus(id, status);
+        }
     }
 }

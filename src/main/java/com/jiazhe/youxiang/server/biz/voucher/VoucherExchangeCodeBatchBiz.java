@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.biz.voucher;
 
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchEditDTO;
@@ -29,11 +30,11 @@ public class VoucherExchangeCodeBatchBiz {
     }
 
     public void startUsing(Integer id) {
-
+        voucherExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
     }
 
     public void stopUsing(Integer id) {
-
+        voucherExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
     }
 
     public VoucherExchangeCodeBatchEditDTO getById(Integer id) {

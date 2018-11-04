@@ -42,4 +42,17 @@ public interface VoucherExchangeCodePOManualMapper {
      * @return
      */
     List<VoucherExchangeCodePO> query(@Param("batchId")Integer batchId, @Param("code")String code, @Param("keyt")String keyt, @Param("status")Byte status, @Param("used")Byte used, @Param("offset")Integer offset, @Param("limit")Integer limit);
+
+    /**
+     * 批量修改兑换码信息
+     * @param poList
+     */
+    void batchUpdate(List<VoucherExchangeCodePO> poList);
+
+    /**
+     * 根据批次id，修改批次下兑换码的状态
+     * @param batchId
+     * @param status
+     */
+    void batchChangeStatus(@Param("batchId") Integer batchId, @Param("status")Byte status);
 }

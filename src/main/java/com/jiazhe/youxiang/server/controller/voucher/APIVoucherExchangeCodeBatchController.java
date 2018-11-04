@@ -119,6 +119,7 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     public Object startUsing(@ModelAttribute IdReq req) {
         //参数检查
+        CommonValidator.validateId(req);
         voucherExchangeCodeBatchBiz.startUsing(req.getId());
         return ResponseFactory.buildSuccess();
     }
@@ -127,6 +128,7 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     public Object stopUsing(@ModelAttribute IdReq req) {
         //参数检查
+        CommonValidator.validateId(req);
         voucherExchangeCodeBatchBiz.stopUsing(req.getId());
         return ResponseFactory.buildSuccess();
     }

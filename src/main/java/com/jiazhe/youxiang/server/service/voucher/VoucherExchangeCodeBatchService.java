@@ -47,4 +47,11 @@ public interface VoucherExchangeCodeBatchService {
      * @param id
      */
     void generateCode(Integer id);
+
+    /**
+     * 修改批次的启用停用状态
+     * @param id
+     * @param status
+     */
+    void changeBatchStatus(Integer id, Byte status);
 }

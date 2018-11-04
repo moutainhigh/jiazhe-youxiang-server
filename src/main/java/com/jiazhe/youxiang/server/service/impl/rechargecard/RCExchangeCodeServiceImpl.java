@@ -158,7 +158,6 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         List<RechargeCardExchangeCodePO> poList = rechargeCardExchangeCodePOMapper.selectByExample(example);
         poList.stream().forEach(bean -> {
             bean.setBatchName(batchSaveDTO.getName());
-            bean.setBatchName(batchSaveDTO.getName());
             bean.setRechargeCardName(batchSaveDTO.getRechargeCardName());
             bean.setBatchDescription(batchSaveDTO.getDescription());
             bean.setProjectId(batchSaveDTO.getProjectId());

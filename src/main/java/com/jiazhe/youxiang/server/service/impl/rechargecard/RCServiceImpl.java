@@ -151,8 +151,6 @@ public class RCServiceImpl implements RCService {
                 bean.setExpiryTime(batchSaveDTO.getRechargeCardExpiryTime());
             }else{
                 bean.setExpiryTime(new Date(bean.getAddTime().getTime()+batchSaveDTO.getValidityPeriod()* CommonConstant.ONE_DAY));
-                System.out.println(bean.getAddTime().toString());
-                System.out.println(bean.getExpiryTime().toString());
             }
         });
         rcPOManualMapper.batchUpdate(rcPOList);

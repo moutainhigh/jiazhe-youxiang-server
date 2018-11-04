@@ -94,7 +94,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         batchPO.setRechargeCardExpiryTime(batchSaveDTO.getRechargeCardExpiryTime());
         batchPO.setValidityPeriod(batchSaveDTO.getValidityPeriod());
         batchPO.setDescription(batchSaveDTO.getDescription());
-        //不是虚拟批次，只修改批次和码的信息
+        //不是虚拟批次，要修改批次、码、充值卡的信息
         if (!batchPO.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
             //批次下面是否有码，有则为true
             List<RCExchangeCodeDTO> codeDTOList = rcExchangeCodeService.getByBatchId(batchSaveDTO.getId());
