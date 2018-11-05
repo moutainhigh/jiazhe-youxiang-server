@@ -64,7 +64,6 @@ public class APISignInController extends BaseController {
         String password = req.getPassword();
         String identifyingCode = req.getIdentifyingCode();
         String bizId = req.getBizId();
-
         //首先判断用户是否存在且唯一
         CommonValidator.validateNull(req.getLoginname(),new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         CommonValidator.validateNull(req.getPassword(),new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
@@ -101,6 +100,8 @@ public class APISignInController extends BaseController {
                 }
             }
         }
+       /* AuthToken authToken = new AuthToken(loginName, password, LoginType.USER.toString());*/
+       /* authToken.setRememberMe(req.getRememberMe().equals("1"));*/
         subject.login(new AuthToken(loginName, password, LoginType.USER.toString()));
         // 将seesion过期时间设置为8小时
         subject.getSession().setTimeout(ConstantFetchUtil.hour_8);
