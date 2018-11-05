@@ -47,16 +47,19 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/api/signin/signin", "anon");//后台登陆请求
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/templates/**", "anon");
+        filterChainDefinitionMap.put("/", "user");
 /*        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
         filterChainDefinitionMap.put("/swagger-resources*//**", "anon");
          filterChainDefinitionMap.put("/webjars*//**", "anon");
          filterChainDefinitionMap.put("/v2*//**", "anon");*/
-        filterChainDefinitionMap.put("/**", "anon");//表示所有url必须通过认证才能访问
+        filterChainDefinitionMap.put("/**", "authc");//表示所有url必须通过认证才能访问
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }
 
-    //配置自定义的权限登录器
+    /**
+     * 配置员工自定义的权限登录器
+     */
     @Bean(name = "userRealm")
     public UserRealm userRealm() {
         UserRealm userRealm = new UserRealm();
@@ -67,6 +70,9 @@ public class ShiroConfig {
         return userRealm;
     }
 
+    /**
+     * 配置客户自定义的权限登录器
+     */
     @Bean(name = "customerRealm")
     public CustomerRealm customerRealm() {
         CustomerRealm customerRealm = new CustomerRealm();
@@ -127,7 +133,9 @@ public class ShiroConfig {
     }
 
     @Bean(name = "securityManager")
-    public SecurityManager securityManager() {
+    public SecurityManager securityManager(@Qualifier("sessionManager") DefaultWebSessionManager defaultWebSessionManager,
+                                           @Qualifier("cacheManager") EhCacheManager ehCacheManager
+                                         ) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         //设置realm.
         securityManager.setAuthenticator(modularRealmAuthenticator());
@@ -136,23 +144,22 @@ public class ShiroConfig {
         realms.add(userRealm());
         realms.add(customerRealm());
         securityManager.setRealms(realms);
-        securityManager.setRememberMeManager(rememberMeManager());
-        securityManager.setCacheManager(ehCacheManager());
-        securityManager.setSessionManager(sessionManager());
+        /*securityManager.setRememberMeManager(cookieRememberMeManager);*/
+        securityManager.setCacheManager(ehCacheManager);
+        securityManager.setSessionManager(defaultWebSessionManager);
         return securityManager;
     }
 
-    @Bean
+/*    @Bean(name="rememberMe")
     public SimpleCookie rememberMeCookie() {
         //System.out.println("ShiroConfiguration.rememberMeCookie()");
         //这个参数是cookie的名称，对应前端的checkbox的name = rememberMe
-        SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
-        //<!-- 记住我cookie生效时间30天 ,单位秒;-->
-        simpleCookie.setMaxAge(259200);
+        SimpleCookie simpleCookie = new SimpleCookie();
+        simpleCookie.setName("rememberMe");
         return simpleCookie;
-    }
+    }*/
 
-    @Bean
+    /*@Bean(name = "rememberMeManager")
     public CookieRememberMeManager rememberMeManager() {
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
         cookieRememberMeManager.setCookie(rememberMeCookie());
@@ -160,16 +167,17 @@ public class ShiroConfig {
         byte[] cipherKey = Base64.getDecoder().decode("wGiHplamyXlVB11UXWol8g==");
         cookieRememberMeManager.setCipherKey(cipherKey);
         return cookieRememberMeManager;
-    }
+    }*/
 
     @Bean(name = "sessionManager")
-    public DefaultWebSessionManager sessionManager() {
+    public DefaultWebSessionManager sessionManager(@Qualifier("sessionDAO") MemorySessionDAO sessionDAO) {
         DefaultWebSessionManager defaultWebSessionManager = new DefaultWebSessionManager();
         defaultWebSessionManager.setGlobalSessionTimeout(1800000);
         defaultWebSessionManager.setDeleteInvalidSessions(true);
         defaultWebSessionManager.setSessionValidationSchedulerEnabled(true);
         defaultWebSessionManager.setSessionValidationInterval(1800000);
-        defaultWebSessionManager.setSessionDAO(memorySessionDAO());
+        defaultWebSessionManager.setSessionDAO(sessionDAO);
+        /*defaultWebSessionManager.setSessionIdCookie(simpleCookie);*/
         return defaultWebSessionManager;
     }
 

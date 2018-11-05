@@ -65,8 +65,8 @@ public class APISignInController extends BaseController {
         String identifyingCode = req.getIdentifyingCode();
         String bizId = req.getBizId();
         //首先判断用户是否存在且唯一
-        CommonValidator.validateNull(req.getLoginname(),new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
-        CommonValidator.validateNull(req.getPassword(),new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
+        CommonValidator.validateNull(req.getLoginname(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
+        CommonValidator.validateNull(req.getPassword(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(loginName);
         if (sysUserDTOList.size() != 1) {
             throw new LoginException(LoginCodeEnum.LOGIN_USER_ILLEGAL);
@@ -78,10 +78,10 @@ public class APISignInController extends BaseController {
             throw new LoginException(LoginCodeEnum.LOGIN_PASSWRLD_WRONG);
         }
         //判断最后一次登陆ip是否一致，一致则直接登陆
-        if (!sysUserDTO.getLastLoginIp().equals(IpAdrressUtil.getIpAdrress(request))){
+        if (!sysUserDTO.getLastLoginIp().equals(IpAdrressUtil.getIpAdrress(request))) {
             //判断有没有短信bizId传过来
-            CommonValidator.validateNull(bizId,new LoginException(LoginCodeEnum.LOGIN_DIFFERENT_CLIENT));
-            CommonValidator.validateNull(identifyingCode,new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_EMPTY));
+            CommonValidator.validateNull(bizId, new LoginException(LoginCodeEnum.LOGIN_DIFFERENT_CLIENT));
+            CommonValidator.validateNull(identifyingCode, new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_EMPTY));
             //判断验证码是否正确
             if (!AliUtils.isVerified(sysUserDTO.getMobile(), identifyingCode, bizId)) {
                 throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
@@ -92,7 +92,9 @@ public class APISignInController extends BaseController {
         for (Session session : sessions) {
             if (null != session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)) {
                 logger.info("登录用户" + session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY));
-                if (loginName.equals((session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY).toString()))) {
+                logger.info(String.valueOf(session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)));
+                SysUserDTO sysUserDTO1 = (SysUserDTO)session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
+                if (loginName.equals(sysUserDTO1.getLoginName())) {
                     // session.setTimeout(0); //这里就把session清除
                     logger.info(("删除用户seesion" + session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY).toString()));
                     // session清除，
@@ -100,7 +102,7 @@ public class APISignInController extends BaseController {
                 }
             }
         }
-       AuthToken authToken = new AuthToken(loginName, password, LoginType.USER.toString());
+        AuthToken authToken = new AuthToken(loginName, password, LoginType.USER.toString());
         authToken.setRememberMe(req.getRememberMe().equals("1"));
         subject.login(authToken);
         // 将seesion过期时间设置为8小时

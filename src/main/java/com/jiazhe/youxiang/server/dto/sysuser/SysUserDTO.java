@@ -10,7 +10,7 @@ import java.util.Date;
  */
 public class SysUserDTO implements Serializable{
 
-    private static final long serialVersionUID = 3868043216372041696L;
+  private static final long serialVersionUID = 3868043216372041696L;
 
     private Integer id;
 
