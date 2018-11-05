@@ -100,9 +100,9 @@ public class APISignInController extends BaseController {
                 }
             }
         }
-       /* AuthToken authToken = new AuthToken(loginName, password, LoginType.USER.toString());*/
-       /* authToken.setRememberMe(req.getRememberMe().equals("1"));*/
-        subject.login(new AuthToken(loginName, password, LoginType.USER.toString()));
+       AuthToken authToken = new AuthToken(loginName, password, LoginType.USER.toString());
+        authToken.setRememberMe(req.getRememberMe().equals("1"));
+        subject.login(authToken);
         // 将seesion过期时间设置为8小时
         subject.getSession().setTimeout(ConstantFetchUtil.hour_8);
         AuthorizationInfo info = userRealm.doGetAuthorizationInfo(subject.getPrincipals());

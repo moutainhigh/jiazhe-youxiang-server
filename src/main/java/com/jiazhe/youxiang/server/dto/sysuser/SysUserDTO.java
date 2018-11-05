@@ -8,7 +8,9 @@ import java.util.Date;
  * @description：
  * @date 2018/10/19
  */
-public class SysUserDTO{
+public class SysUserDTO implements Serializable{
+
+    private static final long serialVersionUID = 3868043216372041696L;
 
     private Integer id;
 

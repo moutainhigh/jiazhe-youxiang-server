@@ -136,13 +136,13 @@ public class ShiroConfig {
         realms.add(userRealm());
         realms.add(customerRealm());
         securityManager.setRealms(realms);
-        /*securityManager.setRememberMeManager(rememberMeManager());*/
+        securityManager.setRememberMeManager(rememberMeManager());
         securityManager.setCacheManager(ehCacheManager());
         securityManager.setSessionManager(sessionManager());
         return securityManager;
     }
 
-   /* @Bean
+    @Bean
     public SimpleCookie rememberMeCookie() {
         //System.out.println("ShiroConfiguration.rememberMeCookie()");
         //这个参数是cookie的名称，对应前端的checkbox的name = rememberMe
@@ -154,13 +154,13 @@ public class ShiroConfig {
 
     @Bean
     public CookieRememberMeManager rememberMeManager() {
-        //System.out.println("ShiroConfiguration.rememberMeManager()");
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
         cookieRememberMeManager.setCookie(rememberMeCookie());
         //rememberMe cookie加密的密钥 建议每个项目都不一样 默认AES算法 密钥长度(128 256 512 位)
-        cookieRememberMeManager.setCipherKey("12345".getBytes());
+        byte[] cipherKey = Base64.getDecoder().decode("wGiHplamyXlVB11UXWol8g==");
+        cookieRememberMeManager.setCipherKey(cipherKey);
         return cookieRememberMeManager;
-    }*/
+    }
 
     @Bean(name = "sessionManager")
     public DefaultWebSessionManager sessionManager() {
