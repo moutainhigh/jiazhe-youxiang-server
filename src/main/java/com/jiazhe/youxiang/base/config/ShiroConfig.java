@@ -1,49 +1,25 @@
 package com.jiazhe.youxiang.base.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
-import com.jiazhe.youxiang.base.realm.AuthRealm;
-import com.jiazhe.youxiang.base.realm.CredentialsMatcher;
-import com.jiazhe.youxiang.base.realm.ShiroLoginFilter;
-import com.jiazhe.youxiang.base.util.ProjectUtil;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.authz.AuthorizationException;
-import org.apache.shiro.authz.Permission;
-import org.apache.shiro.cache.Cache;
-import org.apache.shiro.cache.CacheException;
-import org.apache.shiro.cache.CacheManager;
+import com.jiazhe.youxiang.base.realm.*;
+import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
+import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.session.SessionException;
-import org.apache.shiro.session.mgt.SessionContext;
-import org.apache.shiro.session.mgt.SessionKey;
-import org.apache.shiro.session.mgt.SessionManager;
-import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
+import org.apache.shiro.realm.Realm;
 import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
-import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.subject.Subject;
-import org.apache.shiro.subject.SubjectContext;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cache.ehcache.EhCacheCache;
-import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.Filter;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -79,15 +55,24 @@ public class ShiroConfig {
     }
 
     //配置自定义的权限登录器
-    @Bean(name = "authRealm")
-    public AuthRealm authRealm(@Qualifier("credentialsMatcher") CredentialsMatcher matcher,@Qualifier("cacheManager") CacheManager cacheManager) {
-        AuthRealm authRealm = new AuthRealm();
-        authRealm.setCredentialsMatcher(matcher);
-        /*authRealm.setCachingEnabled(true);
-        authRealm.setAuthenticationCachingEnabled(false);*/
-        authRealm.setAuthorizationCacheName("shiro-authorizationCache");
-        authRealm.setCacheManager(cacheManager);
-        return authRealm;
+    @Bean(name = "userRealm")
+    public UserRealm userRealm() {
+        UserRealm userRealm = new UserRealm();
+        userRealm.setName("userRealm");
+        userRealm.setCredentialsMatcher(credentialsMatcher());
+        userRealm.setAuthorizationCacheName("shiro-authorizationCache");
+        userRealm.setCacheManager(ehCacheManager());
+        return userRealm;
+    }
+
+    @Bean(name = "customerRealm")
+    public CustomerRealm customerRealm() {
+        CustomerRealm customerRealm = new CustomerRealm();
+        customerRealm.setName("customerRealm");
+        customerRealm.setCredentialsMatcher(credentialsMatcher());
+        customerRealm.setAuthorizationCacheName("shiro-authorizationCache");
+        customerRealm.setCacheManager(ehCacheManager());
+        return customerRealm;
     }
 
     //配置自定义的密码比较器
@@ -131,22 +116,37 @@ public class ShiroConfig {
         return new MemorySessionDAO();
     }
 
+    @Bean
+    public ModularRealmAuthenticator modularRealmAuthenticator(){
+        //自己重写的ModularRealmAuthenticator
+        UserModularRealmAuthenticator modularRealmAuthenticator = new UserModularRealmAuthenticator();
+        modularRealmAuthenticator.setAuthenticationStrategy(new AtLeastOneSuccessfulStrategy());
+        return modularRealmAuthenticator;
+    }
+
     @Bean(name = "securityManager")
-    public DefaultWebSecurityManager defaultWebSecurityManager(@Qualifier("authRealm") AuthRealm authRealm ,@Qualifier("sessionManager") SessionManager sessionManager){
-        DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager();
-        defaultWebSecurityManager.setRealm(authRealm);
-        defaultWebSecurityManager.setSessionManager(sessionManager);
-        return defaultWebSecurityManager;
+    public SecurityManager securityManager(){
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        //设置realm.
+        securityManager.setAuthenticator(modularRealmAuthenticator());
+        List<Realm> realms = new ArrayList<>();
+        //添加多个Realm
+        realms.add(userRealm());
+        realms.add(customerRealm());
+        securityManager.setRealms(realms);
+        securityManager.setCacheManager(ehCacheManager());
+        securityManager.setSessionManager(sessionManager());
+        return securityManager;
     }
 
     @Bean(name = "sessionManager")
-    public DefaultWebSessionManager defaultWebSessionManager(@Qualifier("sessionDAO") SessionDAO sessionDao){
+    public DefaultWebSessionManager sessionManager(){
         DefaultWebSessionManager defaultWebSessionManager = new DefaultWebSessionManager();
         defaultWebSessionManager.setGlobalSessionTimeout(1800000);
         defaultWebSessionManager.setDeleteInvalidSessions(true);
         defaultWebSessionManager.setSessionValidationSchedulerEnabled(true);
         defaultWebSessionManager.setSessionValidationInterval(1800000);
-        defaultWebSessionManager.setSessionDAO(sessionDao);
+        defaultWebSessionManager.setSessionDAO(memorySessionDAO());
         return defaultWebSessionManager;
     }
 

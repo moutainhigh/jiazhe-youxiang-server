@@ -3,10 +3,12 @@ package com.jiazhe.youxiang.server.controller;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.jiazhe.youxiang.base.controller.BaseController;
-import com.jiazhe.youxiang.base.realm.AuthRealm;
+import com.jiazhe.youxiang.base.realm.AuthToken;
+import com.jiazhe.youxiang.base.realm.UserRealm;
 import com.jiazhe.youxiang.base.util.*;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.LoginType;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
@@ -51,7 +53,7 @@ public class APISignInController extends BaseController {
     @Autowired
     private SessionDAO sessionDAO;
     @Autowired
-    private AuthRealm authRealm;
+    private UserRealm userRealm;
     @Autowired
     private SysUserBiz sysUserBiz;
 
@@ -62,10 +64,11 @@ public class APISignInController extends BaseController {
         String password = req.getPassword();
         String identifyingCode = req.getIdentifyingCode();
         String bizId = req.getBizId();
-        List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(loginName);
+
         //首先判断用户是否存在且唯一
         CommonValidator.validateNull(req.getLoginname(),new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         CommonValidator.validateNull(req.getPassword(),new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
+        List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(loginName);
         if (sysUserDTOList.size() != 1) {
             throw new LoginException(LoginCodeEnum.LOGIN_USER_ILLEGAL);
         }
@@ -98,10 +101,10 @@ public class APISignInController extends BaseController {
                 }
             }
         }
-        subject.login(new UsernamePasswordToken(loginName, password));
+        subject.login(new AuthToken(loginName, password, LoginType.USER.toString()));
         // 将seesion过期时间设置为8小时
         subject.getSession().setTimeout(ConstantFetchUtil.hour_8);
-        AuthorizationInfo info = authRealm.doGetAuthorizationInfo(subject.getPrincipals());
+        AuthorizationInfo info = userRealm.doGetAuthorizationInfo(subject.getPrincipals());
         String permission = StringUtils.join(info.getStringPermissions(), ",");
         CookieUtil.addCookie(response, "permission", permission);
         CookieUtil.addCookie(response, "displayName", sysUserDTO.getDisplayName());

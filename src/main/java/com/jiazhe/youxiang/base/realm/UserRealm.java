@@ -25,9 +25,9 @@ import java.util.List;
  * @author tu
  * @date 2018/10/20
  */
-public class AuthRealm extends AuthorizingRealm {
+public class UserRealm extends AuthorizingRealm {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthRealm.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserRealm.class);
 
     @Autowired
     private SysUserBiz sysUserBiz;
