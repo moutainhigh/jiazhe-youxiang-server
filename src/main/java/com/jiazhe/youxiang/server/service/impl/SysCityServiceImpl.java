@@ -13,7 +13,7 @@ import com.jiazhe.youxiang.server.domain.po.SysCityPO;
 import com.jiazhe.youxiang.server.domain.po.SysCityPOExample;
 import com.jiazhe.youxiang.server.dto.syscity.SysCityDTO;
 import com.jiazhe.youxiang.server.service.SysCityService;
-import org.apache.logging.log4j.util.Strings;
+import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,18 +37,12 @@ public class SysCityServiceImpl implements SysCityService {
     private SysCityPOManualMapper sysCityPOManualMapper;
 
     @Override
-    public List<SysCityDTO> getList(String parentCode) {
-        SysCityPOExample sysCityPOExample = new SysCityPOExample();
-        SysCityPOExample.Criteria criteria = sysCityPOExample.createCriteria();
-        if (Strings.isBlank(parentCode)) {
-            criteria.andCityLevelEqualTo(CommonConstant.CITY_LEVEL_1);
-        } else {
-            criteria.andParentCodeEqualTo(parentCode);
-        }
-        criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
-        List<SysCityPO> sysCityPOList = sysCityPOMapper.selectByExample(sysCityPOExample);
-
+    public List<SysCityDTO> getList(String parentCode, Integer level, Paging paging) {
+        Integer count = sysCityPOManualMapper.count(parentCode, level);
+        List<SysCityPO> sysCityPOList = sysCityPOManualMapper.query(parentCode, level, paging.getOffset(), paging.getLimit());
+        paging.setTotal(count);
         return sysCityPOList.stream().map(SysCityAdapter::sysCityPO2DTO).collect(Collectors.toList());
+
     }
 
     @Override
@@ -73,8 +67,8 @@ public class SysCityServiceImpl implements SysCityService {
     }
 
     @Override
-    public void updateStatusByParentCode(String parentCode, Byte status) {
-        sysCityPOManualMapper.updateStatusByParentCode(parentCode, status);
+    public void updateStatusByCityCode(String parentCode, Byte status) {
+        sysCityPOManualMapper.updateStatusByCityCode(parentCode, status);
     }
 
 

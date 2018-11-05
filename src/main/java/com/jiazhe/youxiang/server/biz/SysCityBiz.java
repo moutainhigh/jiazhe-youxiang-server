@@ -5,10 +5,11 @@
  */
 package com.jiazhe.youxiang.server.biz;
 
-import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.server.common.enums.CityStatusEnum;
 import com.jiazhe.youxiang.server.dto.syscity.SysCityDTO;
 import com.jiazhe.youxiang.server.service.impl.SysCityServiceImpl;
+import com.jiazhe.youxiang.server.vo.Paging;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,30 +24,50 @@ import java.util.List;
 @Service("sysCityBiz")
 public class SysCityBiz {
 
+    /**
+     * 一级城市级别
+     */
+    public static final Integer CITY_LEVEL_1 = 1;
+    /**
+     * 二级城市级别
+     */
+    public static final Integer CITY_LEVEL_2 = 2;
+    /**
+     * 三级城市级别
+     */
+    public static final Integer CITY_LEVEL_3 = 3;
+
+
     @Autowired
     private SysCityServiceImpl sysCityService;
 
-    public List<SysCityDTO> getList(String parentCode) {
-        return sysCityService.getList(parentCode);
+    public List<SysCityDTO> getList(String parentCode, Paging paging) {
+        //如果上级code为空则默认查询一级城市，否则查询二级城市
+        if (Strings.isBlank(parentCode)) {
+            return sysCityService.getList(parentCode, CITY_LEVEL_1, paging);
+        } else {
+            return sysCityService.getList(parentCode, CITY_LEVEL_2, paging);
+        }
     }
 
-    public void openProvince(String cityCode) {
-        sysCityService.updateStatusByParentCode(cityCode, CityStatusEnum.OPEN.getId().byteValue());
+    public void open(String cityCode) {
+        sysCityService.updateStatusByCityCode(cityCode, CityStatusEnum.OPEN.getId().byteValue());
     }
 
-    public void closeProvince(String cityCode) {
-        sysCityService.updateStatusByParentCode(cityCode, CityStatusEnum.CLOSE.getId().byteValue());
+    public void close(String cityCode) {
+        sysCityService.updateStatusByCityCode(cityCode, CityStatusEnum.CLOSE.getId().byteValue());
     }
 
-    public void openCities(List<String> cityCodes) {
+    public void open(List<String> cityCodes) {
         sysCityService.updateStatusByCityCodes(cityCodes, CityStatusEnum.OPEN.getId().byteValue());
     }
 
-    public void closeCities(List<String> cityCodes) {
+    public void close(List<String> cityCodes) {
         sysCityService.updateStatusByCityCodes(cityCodes, CityStatusEnum.CLOSE.getId().byteValue());
     }
 
     public List<SysCityDTO> getOpenList() {
-       return sysCityService.getOpenList();
+        return sysCityService.getOpenList();
     }
+
 }

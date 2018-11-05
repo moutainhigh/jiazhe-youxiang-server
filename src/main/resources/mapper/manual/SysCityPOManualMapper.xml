@@ -15,20 +15,62 @@
     <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
     <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
   </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, city_code, city_name, city_pinyin, city_level, priority, parent_code, status,
+    ext_info, is_deleted, add_time, mod_time
+  </sql>
+
   <update id="updateStatusByCityCodes" parameterType="com.jiazhe.youxiang.server.domain.po.SysCityPO" >
     update sys_city
     set
       status = #{status,jdbcType=TINYINT}
-    where city_code in
+    where
+    city_code in
+    <foreach collection="cityCodes" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+    or
+    parent_code in
     <foreach collection="cityCodes" item="item" open="(" separator="," close=")">
       #{item}
     </foreach>
   </update>
 
-  <update id="updateStatusByParentCode" parameterType="com.jiazhe.youxiang.server.domain.po.SysCityPO" >
+  <update id="updateStatusByCityCode" parameterType="com.jiazhe.youxiang.server.domain.po.SysCityPO" >
     update sys_city
     set
     status = #{status,jdbcType=TINYINT}
     where parent_code = #{parentCode,jdbcType=VARCHAR} or city_code = #{parentCode,jdbcType=VARCHAR}
   </update>
+
+  <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.SysCityPO">
+    select
+    <include refid="Base_Column_List"/>
+    from sys_city
+    <where>
+      <if test="parentCode != null and parentCode!=''">
+        AND parent_code = #{parentCode}
+      </if>
+      <if test="level != null and level!=''">
+        AND city_level = #{level}
+      </if>
+      AND is_deleted = 0
+    </where>
+    order by city_code asc
+    limit #{offset},#{limit}
+  </select>
+
+  <select id="count" resultType="java.lang.Integer">
+    select count(*) from sys_city
+    <where>
+      <if test="parentCode != null and parentCode!=''">
+        AND parent_code = #{parentCode}
+      </if>
+      <if test="level != null and level!=''">
+        AND city_level = #{level}
+      </if>
+      AND is_deleted = 0
+    </where>
+  </select>
 </mapper>

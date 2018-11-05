@@ -7,6 +7,7 @@ package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.SysCityAdapter;
 import com.jiazhe.youxiang.server.biz.SysCityBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
@@ -15,6 +16,7 @@ import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.exceptions.CityException;
 import com.jiazhe.youxiang.server.dto.syscity.SysCityDTO;
+import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.syscity.CityCodeReq;
 import com.jiazhe.youxiang.server.vo.req.syscity.CityCodesReq;
@@ -56,16 +58,14 @@ public class APISysCityController extends BaseController {
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.CITY,operate = "城市查询",level = LogLevelEnum.LEVEL_1)
     public Object getList(@ModelAttribute SysCityListReq req) {
-        //TODO niexiao 参数验证
-        if (null == req) {
-            req = new SysCityListReq();
-        }
+        CommonValidator.validatePaging(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
-        List<SysCityDTO> sysCityDTOS = sysCityBiz.getList(req.getParentCode());
+        List<SysCityDTO> sysCityDTOS = sysCityBiz.getList(req.getParentCode(),paging);
         //将DTO转成VO
         List<SysCityResp> result = sysCityDTOS.stream().map(SysCityAdapter::sysCityDTO2VO).collect(Collectors.toList());
         //用ResponseFactory将返回值包装
-        return ResponseFactory.buildResponse(result);
+        return ResponseFactory.buildPaginationResponse(result, paging);
     }
 
     /**
@@ -89,13 +89,13 @@ public class APISysCityController extends BaseController {
      *
      * @return
      */
-    @ApiOperation(value = "开通省份（其下级城市全部开通）", httpMethod = "POST", notes = "开通省份（其下级城市全部开通）")
-    @RequestMapping(value = "openprovince", method = RequestMethod.POST)
-    public Object openProvince(@ModelAttribute CityCodeReq req) {
+    @ApiOperation(value = "开通城市（其下级城市全部开通）", httpMethod = "POST", notes = "开通省份（其下级城市全部开通）")
+    @RequestMapping(value = "open", method = RequestMethod.POST)
+    public Object open(@ModelAttribute CityCodeReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getCityCode(),new CityException(CityCodeEnum.CITY_CODE_IS_NULL));
         //调用BIZ方法
-        sysCityBiz.openProvince(req.getCityCode());
+        sysCityBiz.open(req.getCityCode());
         //用ResponseFactory将返回值包装,简单的返回成功
         return ResponseFactory.buildSuccess();
     }
@@ -105,13 +105,13 @@ public class APISysCityController extends BaseController {
      *
      * @return
      */
-    @ApiOperation(value = "关闭省份（其下级城市全部关闭）", httpMethod = "POST", notes = "关闭省份（其下级城市全部关闭）")
-    @RequestMapping(value = "closeprovince", method = RequestMethod.POST)
-    public Object closeProvince(@ModelAttribute CityCodeReq req) {
+    @ApiOperation(value = "关闭城市（其下级城市全部关闭）", httpMethod = "POST", notes = "关闭省份（其下级城市全部关闭）")
+    @RequestMapping(value = "close", method = RequestMethod.POST)
+    public Object close(@ModelAttribute CityCodeReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getCityCode(),new CityException(CityCodeEnum.CITY_CODE_IS_NULL));
         //调用BIZ方法
-        sysCityBiz.closeProvince(req.getCityCode());
+        sysCityBiz.close(req.getCityCode());
         //用ResponseFactory将返回值包装,简单的返回成功
         return ResponseFactory.buildSuccess();
     }
@@ -122,11 +122,12 @@ public class APISysCityController extends BaseController {
      * @return
      */
     @ApiOperation(value = "批量开通城市", httpMethod = "POST", notes = "批量开通城市")
-    @RequestMapping(value = "opencities", method = RequestMethod.POST)
-    public Object openCities(@ModelAttribute CityCodesReq req) {
-        //TODO niexiao 参数验证
+    @RequestMapping(value = "batchopen", method = RequestMethod.POST)
+    public Object batchOpen(@ModelAttribute CityCodesReq req) {
+        CommonValidator.validateNull(req);
+        CommonValidator.validateNull(req.getCityCodes(),new CityException(CityCodeEnum.CITY_CODE_IS_NULL));
         //调用BIZ方法
-        sysCityBiz.openCities(req.getCityCodes());
+        sysCityBiz.open(req.getCityCodes());
         //用ResponseFactory将返回值包装,简单的返回成功
         return ResponseFactory.buildSuccess();
     }
@@ -137,12 +138,12 @@ public class APISysCityController extends BaseController {
      * @return
      */
     @ApiOperation(value = "批量关闭城市", httpMethod = "POST", notes = "批量关闭城市")
-    @RequestMapping(value = "closecities", method = RequestMethod.POST)
-    public Object closeCities(@ModelAttribute CityCodesReq req) {
+    @RequestMapping(value = "batchclose", method = RequestMethod.POST)
+    public Object batchClose(@ModelAttribute CityCodesReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getCityCodes(),new CityException(CityCodeEnum.CITY_CODE_IS_NULL));
         //调用BIZ方法
-        sysCityBiz.closeCities(req.getCityCodes());
+        sysCityBiz.close(req.getCityCodes());
         //用ResponseFactory将返回值包装,简单的返回成功
         return ResponseFactory.buildSuccess();
     }

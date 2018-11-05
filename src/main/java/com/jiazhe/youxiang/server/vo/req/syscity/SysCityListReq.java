@@ -5,7 +5,7 @@
  */
 package com.jiazhe.youxiang.server.vo.req.syscity;
 
-import com.jiazhe.youxiang.server.vo.BaseVO;
+import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -14,11 +14,11 @@ import io.swagger.annotations.ApiModelProperty;
  * @author niexiao
  * @created 2018/10/16
  */
-public class SysCityListReq extends BaseVO {
+public class SysCityListReq extends PageSizeNumReq {
 
     private static final long serialVersionUID = 8343280757693372496L;
-    @ApiModelProperty("上级城市Code，可空，为空时查询所有一级城市")
-    private String parentCode ;
+    @ApiModelProperty("上级城市Code")
+    private String parentCode;
 
     public String getParentCode() {
         return parentCode;

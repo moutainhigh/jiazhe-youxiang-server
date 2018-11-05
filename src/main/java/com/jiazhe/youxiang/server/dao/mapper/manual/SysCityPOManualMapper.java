@@ -5,6 +5,8 @@
  */
 package com.jiazhe.youxiang.server.dao.mapper.manual;
 
+import com.jiazhe.youxiang.server.domain.po.SysCityPO;
+import com.jiazhe.youxiang.server.domain.po.SysLogPO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -28,10 +30,16 @@ public interface SysCityPOManualMapper {
 
     /**
      * 开通或关闭整个省份
+     *
      * @param parentCode
      * @param status
      * @return
      */
-    int updateStatusByParentCode(@Param("parentCode") String parentCode, @Param("status") Byte status);
+    int updateStatusByCityCode(@Param("parentCode") String parentCode, @Param("status") Byte status);
+
+    List<SysCityPO> query(@Param("parentCode") String parentCode, @Param("level") Integer level,@Param("offset") Integer offset, @Param("limit") Integer limit);
+
+    Integer count(@Param("parentCode") String parentCode,@Param("level") Integer level);
+
 
 }

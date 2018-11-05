@@ -108,7 +108,9 @@
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
+            alert("ad");
             $("#grid-table").setGridWidth($(window).width() * 0.96);
+            alert($(window).height());
         });
     });
 

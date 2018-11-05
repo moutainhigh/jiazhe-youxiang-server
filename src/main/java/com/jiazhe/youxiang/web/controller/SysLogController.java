@@ -5,7 +5,6 @@
  */
 package com.jiazhe.youxiang.web.controller;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -23,9 +22,8 @@ public class SysLogController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SysUserController.class);
 
-    //跳转到用户管理页面
     @RequestMapping(value = "/index")
-    public String main() {
+    public String index() {
         return "system/syslog/index";
     }
 }
