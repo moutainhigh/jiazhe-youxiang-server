@@ -24,13 +24,13 @@
         <include refid="Base_Column_List"/>
         from sys_log
         <where>
-            <if test="moduleName != null">
+            <if test="moduleName != null and moduleName!=''">
                 AND module_name = #{moduleName}
             </if>
-            <if test="operate != null">
+            <if test="operate != null and operate!=''">
                 AND operate = #{operate}
             </if>
-            <if test="level != null">
+            <if test="level != null and level!=''">
                 AND level = #{level}
             </if>
             AND is_deleted = 0
@@ -42,13 +42,13 @@
     <select id="count" resultType="java.lang.Integer">
         select count(*) from sys_log
         <where>
-            <if test="moduleName != null">
+            <if test="moduleName != null and moduleName!=''">
                 AND module_name = #{moduleName}
             </if>
-            <if test="operate != null">
+            <if test="operate != null and operate!=''">
                 AND operate = #{operate}
             </if>
-            <if test="level != null">
+            <if test="level != null and level!=''">
                 AND level = #{level}
             </if>
             AND is_deleted = 0

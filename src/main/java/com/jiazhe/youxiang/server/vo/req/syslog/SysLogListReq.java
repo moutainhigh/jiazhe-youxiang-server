@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.server.vo.req.syslog;
 
 import com.jiazhe.youxiang.server.vo.req.OffsetLimitReq;
+import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -14,7 +15,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author niexiao
  * @created 2018/10/17
  */
-public class SysLogListReq extends OffsetLimitReq {
+public class SysLogListReq extends PageSizeNumReq {
 
     private static final long serialVersionUID = 8827889561488904043L;
     @ApiModelProperty("模块名称")
