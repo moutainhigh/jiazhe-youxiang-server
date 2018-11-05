@@ -84,10 +84,17 @@
             async: true,
             type: "GET",
             success: function (result) {
-                var data = result.data;
-                window.parent.$("#loginName").val(data.loginName);
-                window.parent.$("#displayName").val(data.displayName);
-                window.parent.$("#changePwdModal").modal('show');
+                if("error" in result){
+                    if(result.error.code == 101010){
+                        parent.window.location.href = "../system/index";
+                    }
+                    bootboxalert(result.error.message);
+                }else{
+                    var data = result.data;
+                    window.parent.$("#loginName").val(data.loginName);
+                    window.parent.$("#displayName").val(data.displayName);
+                    window.parent.$("#changePwdModal").modal('show');
+                }
             },
             error: function () {
                 alert("出错了");

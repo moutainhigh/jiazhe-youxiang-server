@@ -13,6 +13,8 @@ public class RechargeCardExchangeCodeBatchPO implements Serializable {
 
     private Byte isVirtual;
 
+    private Byte isMade;
+
     private String description;
 
     private Integer amount;
@@ -75,6 +77,14 @@ public class RechargeCardExchangeCodeBatchPO implements Serializable {
 
     public void setIsVirtual(Byte isVirtual) {
         this.isVirtual = isVirtual;
+    }
+
+    public Byte getIsMade() {
+        return isMade;
+    }
+
+    public void setIsMade(Byte isMade) {
+        this.isMade = isMade;
     }
 
     public String getDescription() {

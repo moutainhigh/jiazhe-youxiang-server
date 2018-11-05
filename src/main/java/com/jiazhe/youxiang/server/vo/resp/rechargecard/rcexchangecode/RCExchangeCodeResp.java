@@ -16,6 +16,14 @@ public class RCExchangeCodeResp extends BaseObject {
 
     private String batchName;
 
+    private String rechargeCardName;
+
+    private String batchDescription;
+
+    private String cityCodes;
+
+    private String productIds;
+
     private String code;
 
     private String keyt;
@@ -23,6 +31,12 @@ public class RCExchangeCodeResp extends BaseObject {
     private BigDecimal faceValue;
 
     private Date expiryTime;
+
+    private Date rechargeCardExpiryTime;
+
+    private Integer validityPeriod;
+
+    private Byte expiryType;
 
     private Byte status;
 
@@ -90,5 +104,61 @@ public class RCExchangeCodeResp extends BaseObject {
 
     public void setUsed(Byte used) {
         this.used = used;
+    }
+
+    public String getRechargeCardName() {
+        return rechargeCardName;
+    }
+
+    public void setRechargeCardName(String rechargeCardName) {
+        this.rechargeCardName = rechargeCardName;
+    }
+
+    public String getBatchDescription() {
+        return batchDescription;
+    }
+
+    public void setBatchDescription(String batchDescription) {
+        this.batchDescription = batchDescription;
+    }
+
+    public String getCityCodes() {
+        return cityCodes;
+    }
+
+    public void setCityCodes(String cityCodes) {
+        this.cityCodes = cityCodes;
+    }
+
+    public String getProductIds() {
+        return productIds;
+    }
+
+    public void setProductIds(String productIds) {
+        this.productIds = productIds;
+    }
+
+    public Date getRechargeCardExpiryTime() {
+        return rechargeCardExpiryTime;
+    }
+
+    public void setRechargeCardExpiryTime(Date rechargeCardExpiryTime) {
+        this.rechargeCardExpiryTime = rechargeCardExpiryTime;
+    }
+
+    public Integer getValidityPeriod() {
+        return validityPeriod;
+    }
+
+    public void setValidityPeriod(Integer validityPeriod) {
+        this.validityPeriod = validityPeriod;
+    }
+
+    public Byte getExpiryType() {
+        return expiryType;
+    }
+
+    public void setExpiryType(Byte expiryType) {
+        this.expiryType = expiryType;
     }
 }

@@ -1,7 +1,9 @@
 package com.jiazhe.youxiang.server.biz.rechargecard;
 
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeEditDTO;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +36,11 @@ public class RCExchangeCodeBiz {
     }
 
     public void customerSelfCharge(String mobile, String keyt) {
-        rcExchangeCodeService.codeCharge(1,mobile,keyt);
+        rcExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_CUSTOMER_CODE_EXCHANGE,mobile,keyt);
     }
 
     public void backstageCodeCharge(String mobile, String keyt) {
-        rcExchangeCodeService.codeCharge(0,mobile,keyt);
+        rcExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE,mobile,keyt);
     }
 
     public List<RCExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Byte status, Byte used, Paging paging) {
@@ -47,5 +49,13 @@ public class RCExchangeCodeBiz {
 
     public List<RCExchangeCodeDTO> getByBatchId(Integer id) {
         return rcExchangeCodeService.getByBatchId(id);
+    }
+
+    public RCExchangeCodeDTO getById(Integer id) {
+        return rcExchangeCodeService.getById(id);
+    }
+
+    public void editSave(RCExchangeCodeEditDTO dto) {
+        rcExchangeCodeService.editSave(dto);
     }
 }

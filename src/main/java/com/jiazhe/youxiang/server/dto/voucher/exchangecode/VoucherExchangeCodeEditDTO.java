@@ -1,25 +1,23 @@
-package com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch;
+package com.jiazhe.youxiang.server.dto.voucher.exchangecode;
 
 import java.util.Date;
 
 /**
- * @author TU
- * @description
- * @date 2018/10/24.
+ * @author tu
+ * @description：
+ * @date 2018/11/4
  */
-public class VoucherExchangeCodeBatchAddDTO {
+public class VoucherExchangeCodeEditDTO {
 
-    private String name;
+    private Integer id;
 
-    private String description;
+    private String voucherName;
 
-    private Integer amount;
+    private String batchDescription;
 
-    private String cityIds;
+    private String cityCodes;
 
     private String productIds;
-
-    private Integer count;
 
     private Date expiryTime;
 
@@ -29,36 +27,36 @@ public class VoucherExchangeCodeBatchAddDTO {
 
     private Byte expiryType;
 
-    public String getName() {
-        return name;
+    public Integer getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getDescription() {
-        return description;
+    public String getVoucherName() {
+        return voucherName;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setVoucherName(String voucherName) {
+        this.voucherName = voucherName;
     }
 
-    public Integer getAmount() {
-        return amount;
+    public String getBatchDescription() {
+        return batchDescription;
     }
 
-    public void setAmount(Integer amount) {
-        this.amount = amount;
+    public void setBatchDescription(String batchDescription) {
+        this.batchDescription = batchDescription;
     }
 
-    public String getCityIds() {
-        return cityIds;
+    public String getCityCodes() {
+        return cityCodes;
     }
 
-    public void setCityIds(String cityIds) {
-        this.cityIds = cityIds;
+    public void setCityCodes(String cityCodes) {
+        this.cityCodes = cityCodes;
     }
 
     public String getProductIds() {
@@ -67,14 +65,6 @@ public class VoucherExchangeCodeBatchAddDTO {
 
     public void setProductIds(String productIds) {
         this.productIds = productIds;
-    }
-
-    public Integer getCount() {
-        return count;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
     }
 
     public Date getExpiryTime() {

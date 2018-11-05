@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.server.dto.rechargecard.rc;
 
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord.RCExchangeRecordDTO;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -10,9 +12,13 @@ import java.util.Date;
  */
 public class RCDTO {
 
+    private Integer id;
+
     private String name;
 
     private String description;
+
+    private Integer customerId;
 
     private Integer projectId;
 
@@ -26,12 +32,28 @@ public class RCDTO {
 
     private Date expiryTime;
 
+    private Byte status;
+
+    private Date addTime;
+
+    private CustomerDTO customerDTO;
+
+    private RCExchangeRecordDTO rcExchangeRecordDTO;
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 
     public String getDescription() {
@@ -88,5 +110,45 @@ public class RCDTO {
 
     public void setExpiryTime(Date expiryTime) {
         this.expiryTime = expiryTime;
+    }
+
+    public CustomerDTO getCustomerDTO() {
+        return customerDTO;
+    }
+
+    public void setCustomerDTO(CustomerDTO customerDTO) {
+        this.customerDTO = customerDTO;
+    }
+
+    public RCExchangeRecordDTO getRcExchangeRecordDTO() {
+        return rcExchangeRecordDTO;
+    }
+
+    public void setRcExchangeRecordDTO(RCExchangeRecordDTO rcExchangeRecordDTO) {
+        this.rcExchangeRecordDTO = rcExchangeRecordDTO;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public Date getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
     }
 }

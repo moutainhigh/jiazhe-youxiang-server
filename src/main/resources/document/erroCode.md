@@ -7,7 +7,7 @@
 | 日志管理| 104 |  |
 | 项目管理| 105 | com.jiazhe.youxiang.server.common.enums.ProjectCodeEnum |
 | 充值卡管理| 106 | com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum |
-| 代金券管理| 107 |  |
+| 代金券管理| 107 |  com.jiazhe.youxiang.server.common.enums.VoucherCodeEnum |
 | 订单管理| 108 | com.jiazhe.youxiang.server.common.enums.ProjectCodeEnum |
 | 客户管理| 109 | com.jiazhe.youxiang.server.common.enums.CustomerCodeEnum |
 | 商品管理| 110 | com.jiazhe.youxiang.server.common.enums.ProductCodeEnum |

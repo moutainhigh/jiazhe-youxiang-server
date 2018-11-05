@@ -14,7 +14,7 @@ public interface RCExchangeCodePOManualMapper {
 
     void batchInsert(List<RechargeCardExchangeCodePO> rechargeCardExchangeCodePOList);
 
-    RechargeCardExchangeCodePO findByKeyt(String keyt);
+    RechargeCardExchangeCodePO findByKeyt(@Param("keyt") String keyt);
 
     void batchUpdate(List<RechargeCardExchangeCodePO> poList);
 

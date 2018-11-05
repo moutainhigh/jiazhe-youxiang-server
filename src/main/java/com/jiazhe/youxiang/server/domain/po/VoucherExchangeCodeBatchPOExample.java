@@ -305,6 +305,126 @@ public class VoucherExchangeCodeBatchPOExample {
             return (Criteria) this;
         }
 
+        public Criteria andProjectIdIsNull() {
+            addCriterion("project_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdIsNotNull() {
+            addCriterion("project_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdEqualTo(Integer value) {
+            addCriterion("project_id =", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdNotEqualTo(Integer value) {
+            addCriterion("project_id <>", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdGreaterThan(Integer value) {
+            addCriterion("project_id >", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("project_id >=", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdLessThan(Integer value) {
+            addCriterion("project_id <", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdLessThanOrEqualTo(Integer value) {
+            addCriterion("project_id <=", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdIn(List<Integer> values) {
+            addCriterion("project_id in", values, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdNotIn(List<Integer> values) {
+            addCriterion("project_id not in", values, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdBetween(Integer value1, Integer value2) {
+            addCriterion("project_id between", value1, value2, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("project_id not between", value1, value2, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsMadeIsNull() {
+            addCriterion("is_made is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsMadeIsNotNull() {
+            addCriterion("is_made is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsMadeEqualTo(Byte value) {
+            addCriterion("is_made =", value, "isMade");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsMadeNotEqualTo(Byte value) {
+            addCriterion("is_made <>", value, "isMade");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsMadeGreaterThan(Byte value) {
+            addCriterion("is_made >", value, "isMade");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsMadeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("is_made >=", value, "isMade");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsMadeLessThan(Byte value) {
+            addCriterion("is_made <", value, "isMade");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsMadeLessThanOrEqualTo(Byte value) {
+            addCriterion("is_made <=", value, "isMade");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsMadeIn(List<Byte> values) {
+            addCriterion("is_made in", values, "isMade");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsMadeNotIn(List<Byte> values) {
+            addCriterion("is_made not in", values, "isMade");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsMadeBetween(Byte value1, Byte value2) {
+            addCriterion("is_made between", value1, value2, "isMade");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsMadeNotBetween(Byte value1, Byte value2) {
+            addCriterion("is_made not between", value1, value2, "isMade");
+            return (Criteria) this;
+        }
+
         public Criteria andDescriptionIsNull() {
             addCriterion("description is null");
             return (Criteria) this;

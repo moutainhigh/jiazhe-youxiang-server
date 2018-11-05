@@ -30,6 +30,8 @@ public class RCExchangeCodeBatchResp extends BaseVO{
 
     private Byte isVirtual;
 
+    private Byte isMade;
+
     public Integer getId() {
         return id;
     }
@@ -84,6 +86,14 @@ public class RCExchangeCodeBatchResp extends BaseVO{
 
     public void setIsVirtual(Byte isVirtual) {
         this.isVirtual = isVirtual;
+    }
+
+    public Byte getIsMade() {
+        return isMade;
+    }
+
+    public void setIsMade(Byte isMade) {
+        this.isMade = isMade;
     }
 
     public String getRechargeCardName() {

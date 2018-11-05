@@ -18,6 +18,10 @@ public class VoucherExchangeCodePO implements Serializable {
 
     private String cityCodes;
 
+    private String productIds;
+
+    private Integer count;
+
     private String code;
 
     private String keyt;
@@ -100,6 +104,22 @@ public class VoucherExchangeCodePO implements Serializable {
 
     public void setCityCodes(String cityCodes) {
         this.cityCodes = cityCodes == null ? null : cityCodes.trim();
+    }
+
+    public String getProductIds() {
+        return productIds;
+    }
+
+    public void setProductIds(String productIds) {
+        this.productIds = productIds == null ? null : productIds.trim();
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
     public String getCode() {

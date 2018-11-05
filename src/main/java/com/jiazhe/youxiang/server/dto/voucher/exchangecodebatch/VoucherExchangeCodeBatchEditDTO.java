@@ -1,11 +1,12 @@
 package com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @author TU
- * @description
- * @date 2018/10/24.
+ * @author tu
+ * @description：
+ * @date 2018/11/3
  */
 public class VoucherExchangeCodeBatchEditDTO {
 
@@ -13,11 +14,21 @@ public class VoucherExchangeCodeBatchEditDTO {
 
     private String name;
 
+    private String voucherName;
+
+    private Byte isMade;
+
     private String description;
 
-    private String cityIds;
+    private Integer projectId;
+
+    private String cityCodes;
 
     private String productIds;
+
+    private Integer amount;
+
+    private Integer count;
 
     private Date expiryTime;
 
@@ -43,6 +54,22 @@ public class VoucherExchangeCodeBatchEditDTO {
         this.name = name;
     }
 
+    public String getVoucherName() {
+        return voucherName;
+    }
+
+    public void setVoucherName(String voucherName) {
+        this.voucherName = voucherName;
+    }
+
+    public Byte getIsMade() {
+        return isMade;
+    }
+
+    public void setIsMade(Byte isMade) {
+        this.isMade = isMade;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -51,12 +78,20 @@ public class VoucherExchangeCodeBatchEditDTO {
         this.description = description;
     }
 
-    public String getCityIds() {
-        return cityIds;
+    public Integer getProjectId() {
+        return projectId;
     }
 
-    public void setCityIds(String cityIds) {
-        this.cityIds = cityIds;
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
+    public String getCityCodes() {
+        return cityCodes;
+    }
+
+    public void setCityCodes(String cityCodes) {
+        this.cityCodes = cityCodes;
     }
 
     public String getProductIds() {
@@ -65,6 +100,22 @@ public class VoucherExchangeCodeBatchEditDTO {
 
     public void setProductIds(String productIds) {
         this.productIds = productIds;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
     public Date getExpiryTime() {

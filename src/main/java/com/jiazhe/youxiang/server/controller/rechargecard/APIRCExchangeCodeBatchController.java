@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.controller.rechargecard;
 import com.alibaba.druid.sql.PagerUtils;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.ExportExcelUtils;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeBatchAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCExchangeCodeBatchBiz;
@@ -32,6 +33,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,16 +80,16 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(),new RechargeCardException(RechargeCardCodeEnum.BATCH_NAME_IS_NULL));
         CommonValidator.validateNull(req.getRechargeCardName(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));
-        if (req.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
+        if (!req.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
            CommonValidator.validateNull(req.getAmount(),new RechargeCardException(RechargeCardCodeEnum.NOT_VIRTUAL_NEED_AMOUNT));
            CommonValidator.validateNull(req.getFaceValue(),new RechargeCardException(RechargeCardCodeEnum.NOT_VIRTUAL_NEED_FACE_VALUE));
         }
-        CommonValidator.validateNull(req.getExpiryTime(),new RechargeCardException(RechargeCardCodeEnum.BATCH_EXPIRT_TIME_IS_NULL));
+        CommonValidator.validateNull(req.getExpiryTime(),new RechargeCardException(RechargeCardCodeEnum.BATCH_EXPIRY_TIME_IS_NULL));
         if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
-            CommonValidator.validateNull(req.getRechargeCardExpiryTime(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRT_TIME_IS_NULL));
+            CommonValidator.validateNull(req.getRechargeCardExpiryTime(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRY_TIME_IS_NULL));
         }
         if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_PERIOD)) {
-            CommonValidator.validateNull(req.getValidityPeriod(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRT_TIME_IS_NULL));
+            CommonValidator.validateNull(req.getValidityPeriod(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRY_TIME_IS_NULL));
         }
         RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO = RCExchangeCodeBatchAdapter.ReqSave2DTOSave(req);
         if (req.getId() == 0) {
@@ -109,8 +112,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         if (dto.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
             throw new RechargeCardException(RechargeCardCodeEnum.VIRTUAL_BATCH_CANNOT_GENERATE);
         }
-        List<RCExchangeCodeDTO> rcExchangeCodeDTOList = rcExchangeCodeBiz.getByBatchId(req.getId());
-        if (!rcExchangeCodeDTOList.isEmpty()) {
+        if(dto.getIsMade().equals(CommonConstant.EXCHANGE_CODE_HAS_MADE)){
             throw new RechargeCardException(RechargeCardCodeEnum.CODE_GENERATED);
         }
         rcExchangeCodeBatchBiz.generateCode(req.getId());
@@ -124,13 +126,6 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         CommonValidator.validateId(req);
         RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchBiz.getById(req.getId());
         RCExchangeCodeBatchEditResp rcExchangeCodeBatchEditResp = RCExchangeCodeBatchAdapter.DTOEdit2RespEdit(rcExchangeCodeBatchEditDTO);
-        List<RCExchangeCodeDTO> rcExchangeCodeDTOList = rcExchangeCodeBiz.getByBatchId(req.getId());
-        //有码不允许修改批次的面额和码的数量
-        if(rcExchangeCodeDTOList.size()>0){
-            rcExchangeCodeBatchEditResp.setHasCode(Byte.valueOf("1"));
-        }else{
-            rcExchangeCodeBatchEditResp.setHasCode(Byte.valueOf("0"));
-        }
         return ResponseFactory.buildResponse(rcExchangeCodeBatchEditResp);
     }
 
@@ -149,6 +144,24 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         //参数检查
         CommonValidator.validateId(req);
         rcExchangeCodeBatchBiz.stopUsing(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
+    @ApiOperation(value = "导出批次下兑换码", httpMethod = "GET", notes = "导出批次下兑换码")
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    public void export(@ModelAttribute IdReq req, HttpServletResponse response) throws IOException {
+        List<RCExchangeCodeDTO> rcExchangeCodeDTOList= rcExchangeCodeBiz.getByBatchId(req.getId());
+        ExportExcelUtils.exportRechargeCardCode(response,rcExchangeCodeDTOList);
+    }
+
+    @ApiOperation(value = "导出前检查", httpMethod = "GET", notes = "导出前检查")
+    @RequestMapping(value = "/exportcheck", method = RequestMethod.GET)
+    public Object exportCheck(@ModelAttribute IdReq req){
+        CommonValidator.validateId(req);
+        List<RCExchangeCodeDTO> rcExchangeCodeDTOList= rcExchangeCodeBiz.getByBatchId(req.getId());
+        if(rcExchangeCodeDTOList.isEmpty()){
+            throw new RechargeCardException(RechargeCardCodeEnum.NO_CODE_TO_EXPORT);
+        }
         return ResponseFactory.buildSuccess();
     }
 

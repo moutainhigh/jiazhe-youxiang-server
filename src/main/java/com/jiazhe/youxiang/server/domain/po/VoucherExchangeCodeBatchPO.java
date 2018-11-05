@@ -10,6 +10,10 @@ public class VoucherExchangeCodeBatchPO implements Serializable {
 
     private String voucherName;
 
+    private Integer projectId;
+
+    private Byte isMade;
+
     private String description;
 
     private Integer amount;
@@ -62,6 +66,22 @@ public class VoucherExchangeCodeBatchPO implements Serializable {
 
     public void setVoucherName(String voucherName) {
         this.voucherName = voucherName == null ? null : voucherName.trim();
+    }
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
+    public Byte getIsMade() {
+        return isMade;
+    }
+
+    public void setIsMade(Byte isMade) {
+        this.isMade = isMade;
     }
 
     public String getDescription() {

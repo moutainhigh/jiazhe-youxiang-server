@@ -4,6 +4,7 @@ import com.jiazhe.youxiang.base.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -16,4 +17,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class VoucherController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VoucherController.class);
+
+    /**
+     * 跳转到代金券兑换码批次管理页面
+     */
+    @RequestMapping(value = "/exchangecodebatchindex")
+    public String exchangeCodeBatchIndex() {
+        return "voucher/voucherexchangecodebatch/index";
+    }
+
+    /**
+     *  跳转到充值卡兑换码页面
+     */
+    @RequestMapping(value = "/exchangecodeindex")
+    public String exchangeCodeIndex(String batchId , String batchName , Model model) {
+        model.addAttribute("batchId",batchId);
+        model.addAttribute("batchName",batchName);
+        return "voucher/voucherexchangecode/index";
+    }
 }

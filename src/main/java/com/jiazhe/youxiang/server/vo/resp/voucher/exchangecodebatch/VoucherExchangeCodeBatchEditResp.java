@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.vo.resp.voucher.exchangecodebatch;
 
 import com.jiazhe.youxiang.server.vo.BaseObject;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -15,11 +16,21 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
 
     private String name;
 
+    private String voucherName;
+
+    private Byte isMade;
+
     private String description;
 
-    private String cityIds;
+    private Integer projectId;
+
+    private String cityCodes;
 
     private String productIds;
+
+    private Integer amount;
+
+    private Integer count;
 
     private Date expiryTime;
 
@@ -45,6 +56,22 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
         this.name = name;
     }
 
+    public String getVoucherName() {
+        return voucherName;
+    }
+
+    public void setVoucherName(String voucherName) {
+        this.voucherName = voucherName;
+    }
+
+    public Byte getIsMade() {
+        return isMade;
+    }
+
+    public void setIsMade(Byte isMade) {
+        this.isMade = isMade;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -53,12 +80,20 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
         this.description = description;
     }
 
-    public String getCityIds() {
-        return cityIds;
+    public Integer getProjectId() {
+        return projectId;
     }
 
-    public void setCityIds(String cityIds) {
-        this.cityIds = cityIds;
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
+    public String getCityCodes() {
+        return cityCodes;
+    }
+
+    public void setCityCodes(String cityCodes) {
+        this.cityCodes = cityCodes;
     }
 
     public String getProductIds() {
@@ -69,12 +104,28 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
         this.productIds = productIds;
     }
 
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
     public Date getExpiryTime() {
         return expiryTime;
     }
 
     public void setExpiryTime(Date expiryTime) {
         this.expiryTime = expiryTime;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
     public Date getVoucherExpiryTime() {
@@ -100,6 +151,4 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
     public void setExpiryType(Byte expiryType) {
         this.expiryType = expiryType;
     }
-
-
 }

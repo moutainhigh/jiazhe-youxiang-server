@@ -6,6 +6,7 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="recharge_card_name" property="rechargeCardName" jdbcType="VARCHAR" />
     <result column="is_virtual" property="isVirtual" jdbcType="TINYINT" />
+    <result column="is_made" property="isMade" jdbcType="TINYINT" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="amount" property="amount" jdbcType="INTEGER" />
     <result column="project_id" property="projectId" jdbcType="INTEGER" />
@@ -24,7 +25,7 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    id, name,recharge_card_name,is_virtual, description, amount,project_id,city_codes,product_ids,face_value,expiry_time,recharge_card_expiry_time,validity_period,expiry_type,status,
+    id, name,recharge_card_name,is_virtual,is_made, description, amount,project_id,city_codes,product_ids,face_value,expiry_time,recharge_card_expiry_time,validity_period,expiry_type,status,
     ext_info, is_deleted,add_time, mod_time
   </sql>
 

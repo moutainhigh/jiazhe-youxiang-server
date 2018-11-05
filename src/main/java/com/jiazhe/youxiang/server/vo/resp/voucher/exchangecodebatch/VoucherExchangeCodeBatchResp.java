@@ -16,6 +16,8 @@ public class VoucherExchangeCodeBatchResp extends BaseVO {
 
     private String name;
 
+    private String voucherName;
+
     private Integer amount;
 
     private Integer count;
@@ -23,6 +25,8 @@ public class VoucherExchangeCodeBatchResp extends BaseVO {
     private Date expiryTime;
 
     private Byte status;
+
+    private Byte isMade;
 
     public Integer getId() {
         return id;
@@ -70,5 +74,21 @@ public class VoucherExchangeCodeBatchResp extends BaseVO {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getVoucherName() {
+        return voucherName;
+    }
+
+    public void setVoucherName(String voucherName) {
+        this.voucherName = voucherName;
+    }
+
+    public Byte getIsMade() {
+        return isMade;
+    }
+
+    public void setIsMade(Byte isMade) {
+        this.isMade = isMade;
     }
 }

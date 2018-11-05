@@ -19,11 +19,27 @@ public class VoucherExchangeCodeResp extends BaseVO{
 
     private String batchName;
 
+    private String voucherName;
+
+    private String batchDescription;
+
+    private String cityCodes;
+
+    private String productIds;
+
     private String code;
 
     private String keyt;
 
+    private Integer count;
+
     private Date expiryTime;
+
+    private Date voucherExpiryTime;
+
+    private Integer validityPeriod;
+
+    private Byte expiryType;
 
     private Byte status;
 
@@ -83,5 +99,69 @@ public class VoucherExchangeCodeResp extends BaseVO{
 
     public void setUsed(Byte used) {
         this.used = used;
+    }
+
+    public String getVoucherName() {
+        return voucherName;
+    }
+
+    public void setVoucherName(String voucherName) {
+        this.voucherName = voucherName;
+    }
+
+    public String getBatchDescription() {
+        return batchDescription;
+    }
+
+    public void setBatchDescription(String batchDescription) {
+        this.batchDescription = batchDescription;
+    }
+
+    public String getCityCodes() {
+        return cityCodes;
+    }
+
+    public void setCityCodes(String cityCodes) {
+        this.cityCodes = cityCodes;
+    }
+
+    public String getProductIds() {
+        return productIds;
+    }
+
+    public void setProductIds(String productIds) {
+        this.productIds = productIds;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public Date getVoucherExpiryTime() {
+        return voucherExpiryTime;
+    }
+
+    public void setVoucherExpiryTime(Date voucherExpiryTime) {
+        this.voucherExpiryTime = voucherExpiryTime;
+    }
+
+    public Integer getValidityPeriod() {
+        return validityPeriod;
+    }
+
+    public void setValidityPeriod(Integer validityPeriod) {
+        this.validityPeriod = validityPeriod;
+    }
+
+    public Byte getExpiryType() {
+        return expiryType;
+    }
+
+    public void setExpiryType(Byte expiryType) {
+        this.expiryType = expiryType;
     }
 }

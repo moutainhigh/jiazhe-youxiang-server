@@ -11,10 +11,10 @@ import io.swagger.annotations.ApiModelProperty;
 public class CodeChargeReq extends BaseVO{
 
     @ApiModelProperty("密钥")
-    String keyt ;
+    private String keyt ;
 
     @ApiModelProperty("用户手机号")
-    Integer customerId;
+    private String mobile;
 
     public String getKeyt() {
         return keyt;
@@ -24,11 +24,11 @@ public class CodeChargeReq extends BaseVO{
         this.keyt = keyt;
     }
 
-    public Integer getCustomerId() {
-        return customerId;
+    public String getMobile() {
+        return mobile;
     }
 
-    public void setCustomerId(Integer customerId) {
-        this.customerId = customerId;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 }

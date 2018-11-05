@@ -5,6 +5,8 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="voucher_name" property="voucherName" jdbcType="VARCHAR" />
+    <result column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="is_made" property="isMade" jdbcType="TINYINT" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="amount" property="amount" jdbcType="INTEGER" />
     <result column="city_codes" property="cityCodes" jdbcType="VARCHAR" />
@@ -79,9 +81,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, name, voucher_name, description, amount, city_codes, product_ids, count, expiry_time, 
-    voucher_expiry_time, validity_period, expiry_type, status, ext_info, is_deleted, 
-    add_time, mod_time
+    id, name, voucher_name, project_id, is_made, description, amount, city_codes, product_ids, 
+    count, expiry_time, voucher_expiry_time, validity_period, expiry_type, status, ext_info, 
+    is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodeBatchPOExample" >
     select
@@ -115,17 +117,19 @@
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodeBatchPO" >
     insert into voucher_exchange_code_batch (id, name, voucher_name, 
-      description, amount, city_codes, 
-      product_ids, count, expiry_time, 
-      voucher_expiry_time, validity_period, expiry_type, 
-      status, ext_info, is_deleted, 
-      add_time, mod_time)
+      project_id, is_made, description, 
+      amount, city_codes, product_ids, 
+      count, expiry_time, voucher_expiry_time, 
+      validity_period, expiry_type, status, 
+      ext_info, is_deleted, add_time, 
+      mod_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{voucherName,jdbcType=VARCHAR}, 
-      #{description,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR}, 
-      #{productIds,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER}, #{expiryTime,jdbcType=TIMESTAMP}, 
-      #{voucherExpiryTime,jdbcType=TIMESTAMP}, #{validityPeriod,jdbcType=INTEGER}, #{expiryType,jdbcType=TINYINT}, 
-      #{status,jdbcType=TINYINT}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
-      #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
+      #{projectId,jdbcType=INTEGER}, #{isMade,jdbcType=TINYINT}, #{description,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR}, #{productIds,jdbcType=VARCHAR}, 
+      #{count,jdbcType=INTEGER}, #{expiryTime,jdbcType=TIMESTAMP}, #{voucherExpiryTime,jdbcType=TIMESTAMP}, 
+      #{validityPeriod,jdbcType=INTEGER}, #{expiryType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
+      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodeBatchPO" >
     insert into voucher_exchange_code_batch
@@ -138,6 +142,12 @@
       </if>
       <if test="voucherName != null" >
         voucher_name,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="isMade != null" >
+        is_made,
       </if>
       <if test="description != null" >
         description,
@@ -191,6 +201,12 @@
       </if>
       <if test="voucherName != null" >
         #{voucherName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="isMade != null" >
+        #{isMade,jdbcType=TINYINT},
       </if>
       <if test="description != null" >
         #{description,jdbcType=VARCHAR},
@@ -254,6 +270,12 @@
       <if test="record.voucherName != null" >
         voucher_name = #{record.voucherName,jdbcType=VARCHAR},
       </if>
+      <if test="record.projectId != null" >
+        project_id = #{record.projectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.isMade != null" >
+        is_made = #{record.isMade,jdbcType=TINYINT},
+      </if>
       <if test="record.description != null" >
         description = #{record.description,jdbcType=VARCHAR},
       </if>
@@ -306,6 +328,8 @@
     set id = #{record.id,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
       voucher_name = #{record.voucherName,jdbcType=VARCHAR},
+      project_id = #{record.projectId,jdbcType=INTEGER},
+      is_made = #{record.isMade,jdbcType=TINYINT},
       description = #{record.description,jdbcType=VARCHAR},
       amount = #{record.amount,jdbcType=INTEGER},
       city_codes = #{record.cityCodes,jdbcType=VARCHAR},
@@ -332,6 +356,12 @@
       </if>
       <if test="voucherName != null" >
         voucher_name = #{voucherName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="isMade != null" >
+        is_made = #{isMade,jdbcType=TINYINT},
       </if>
       <if test="description != null" >
         description = #{description,jdbcType=VARCHAR},
@@ -382,6 +412,8 @@
     update voucher_exchange_code_batch
     set name = #{name,jdbcType=VARCHAR},
       voucher_name = #{voucherName,jdbcType=VARCHAR},
+      project_id = #{projectId,jdbcType=INTEGER},
+      is_made = #{isMade,jdbcType=TINYINT},
       description = #{description,jdbcType=VARCHAR},
       amount = #{amount,jdbcType=INTEGER},
       city_codes = #{cityCodes,jdbcType=VARCHAR},

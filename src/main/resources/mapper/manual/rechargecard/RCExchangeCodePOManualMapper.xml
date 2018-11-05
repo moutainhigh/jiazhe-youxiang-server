@@ -37,7 +37,7 @@
         validity_period,expiry_type,status,used,ext_info,is_deleted,add_time,mod_time) VALUES
         <foreach collection="list" item="item" separator=",">
             (#{item.batchId},#{item.batchName},#{item.rechargeCardName},#{item.batchDescription},#{item.projectId},#{item.cityCodes},#{item.productIds},
-            #{item.code},#{item.keyt},#{item.faceValue},#{item.expiryTime},#{item.rechargeCardExpiryTime},#{item.validityPeriod},#{item.expiryType},1,0,
+            #{item.code},#{item.keyt},#{item.faceValue},#{item.expiryTime},#{item.rechargeCardExpiryTime},#{item.validityPeriod},#{item.expiryType},#{item.status},0,
             "",0,NOW(),NOW())
         </foreach>
     </insert>
@@ -82,10 +82,12 @@
             <if test="keyt != null  and keyt != ''">
                 AND keyt = #{keyt}
             </if>
-            AND batch_id = #{batchId} AND is_deleted = 0 ORDER BY status desc,used asc
+            <if test="batchId != null  and batchId != 0">
+                AND batch_id = #{batchId}
+            </if>
+            AND is_deleted = 0 ORDER BY id ASC
         </where>
         limit #{offset},#{limit}
-
     </select>
 
     <select id="count" resultType="java.lang.Integer">
@@ -103,7 +105,16 @@
             <if test="keyt != null  and keyt != ''">
                 AND keyt = #{keyt}
             </if>
-            AND batch_id = #{batchId} AND is_deleted = 0
+            <if test="batchId != null  and batchId != 0">
+                AND batch_id = #{batchId}
+            </if>
+            AND is_deleted = 0
         </where>
+    </select>
+
+    <select id="findByKeyt" resultType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM recharge_card_exchange_code WHERE keyt = #{keyt} AND is_deleted = 0
     </select>
 </mapper>

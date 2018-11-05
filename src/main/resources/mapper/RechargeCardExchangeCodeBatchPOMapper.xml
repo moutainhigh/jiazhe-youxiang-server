@@ -6,6 +6,7 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="recharge_card_name" property="rechargeCardName" jdbcType="VARCHAR" />
     <result column="is_virtual" property="isVirtual" jdbcType="TINYINT" />
+    <result column="is_made" property="isMade" jdbcType="TINYINT" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="amount" property="amount" jdbcType="INTEGER" />
     <result column="project_id" property="projectId" jdbcType="INTEGER" />
@@ -81,8 +82,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, name, recharge_card_name, is_virtual, description, amount, project_id, city_codes, 
-    product_ids, face_value, expiry_time, recharge_card_expiry_time, validity_period, 
+    id, name, recharge_card_name, is_virtual, is_made, description, amount, project_id, 
+    city_codes, product_ids, face_value, expiry_time, recharge_card_expiry_time, validity_period, 
     expiry_type, status, ext_info, is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPOExample" >
@@ -117,19 +118,21 @@
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO" >
     insert into recharge_card_exchange_code_batch (id, name, recharge_card_name, 
-      is_virtual, description, amount, 
-      project_id, city_codes, product_ids, 
-      face_value, expiry_time, recharge_card_expiry_time, 
-      validity_period, expiry_type, status, 
-      ext_info, is_deleted, add_time, 
-      mod_time)
+      is_virtual, is_made, description, 
+      amount, project_id, city_codes, 
+      product_ids, face_value, expiry_time, 
+      recharge_card_expiry_time, validity_period, 
+      expiry_type, status, ext_info, 
+      is_deleted, add_time, mod_time
+      )
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{rechargeCardName,jdbcType=VARCHAR}, 
-      #{isVirtual,jdbcType=TINYINT}, #{description,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, 
-      #{projectId,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR}, #{productIds,jdbcType=VARCHAR}, 
-      #{faceValue,jdbcType=DECIMAL}, #{expiryTime,jdbcType=TIMESTAMP}, #{rechargeCardExpiryTime,jdbcType=TIMESTAMP}, 
-      #{validityPeriod,jdbcType=INTEGER}, #{expiryType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
-      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
-      #{modTime,jdbcType=TIMESTAMP})
+      #{isVirtual,jdbcType=TINYINT}, #{isMade,jdbcType=TINYINT}, #{description,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR}, 
+      #{productIds,jdbcType=VARCHAR}, #{faceValue,jdbcType=DECIMAL}, #{expiryTime,jdbcType=TIMESTAMP}, 
+      #{rechargeCardExpiryTime,jdbcType=TIMESTAMP}, #{validityPeriod,jdbcType=INTEGER}, 
+      #{expiryType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{extInfo,jdbcType=VARCHAR}, 
+      #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO" >
     insert into recharge_card_exchange_code_batch
@@ -145,6 +148,9 @@
       </if>
       <if test="isVirtual != null" >
         is_virtual,
+      </if>
+      <if test="isMade != null" >
+        is_made,
       </if>
       <if test="description != null" >
         description,
@@ -204,6 +210,9 @@
       </if>
       <if test="isVirtual != null" >
         #{isVirtual,jdbcType=TINYINT},
+      </if>
+      <if test="isMade != null" >
+        #{isMade,jdbcType=TINYINT},
       </if>
       <if test="description != null" >
         #{description,jdbcType=VARCHAR},
@@ -273,6 +282,9 @@
       <if test="record.isVirtual != null" >
         is_virtual = #{record.isVirtual,jdbcType=TINYINT},
       </if>
+      <if test="record.isMade != null" >
+        is_made = #{record.isMade,jdbcType=TINYINT},
+      </if>
       <if test="record.description != null" >
         description = #{record.description,jdbcType=VARCHAR},
       </if>
@@ -329,6 +341,7 @@
       name = #{record.name,jdbcType=VARCHAR},
       recharge_card_name = #{record.rechargeCardName,jdbcType=VARCHAR},
       is_virtual = #{record.isVirtual,jdbcType=TINYINT},
+      is_made = #{record.isMade,jdbcType=TINYINT},
       description = #{record.description,jdbcType=VARCHAR},
       amount = #{record.amount,jdbcType=INTEGER},
       project_id = #{record.projectId,jdbcType=INTEGER},
@@ -359,6 +372,9 @@
       </if>
       <if test="isVirtual != null" >
         is_virtual = #{isVirtual,jdbcType=TINYINT},
+      </if>
+      <if test="isMade != null" >
+        is_made = #{isMade,jdbcType=TINYINT},
       </if>
       <if test="description != null" >
         description = #{description,jdbcType=VARCHAR},
@@ -413,6 +429,7 @@
     set name = #{name,jdbcType=VARCHAR},
       recharge_card_name = #{rechargeCardName,jdbcType=VARCHAR},
       is_virtual = #{isVirtual,jdbcType=TINYINT},
+      is_made = #{isMade,jdbcType=TINYINT},
       description = #{description,jdbcType=VARCHAR},
       amount = #{amount,jdbcType=INTEGER},
       project_id = #{projectId,jdbcType=INTEGER},

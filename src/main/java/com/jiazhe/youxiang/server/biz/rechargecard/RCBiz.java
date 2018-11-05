@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardPO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCEditDTO;
 import com.jiazhe.youxiang.server.service.rechargecard.RCService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,13 +44,21 @@ public class RCBiz {
         rcService.directCharge(mobile,batchId,faceValue);
     }
 
-    public List<RCDTO> getList(Integer customerId, Byte status, Paging paging) {
-        return null ;
+    public List<RCDTO> getList(String mobile, Integer exchangeType,Byte status,Byte expiry, Paging paging) {
+        return rcService.getList(mobile,exchangeType,status,expiry,paging);
     }
 
 
     public List<RCDTO> findUnexpiredByCustomerId(Integer customerId) {
         List<RCDTO> rcdtoList =rcService.findUnexpiredByCustomerId(customerId);
         return rcdtoList;
+    }
+
+    public RCDTO getById(Integer id) {
+        return rcService.getById(id);
+    }
+
+    public void editSave(RCEditDTO dto) {
+        rcService.editSave(dto);
     }
 }

@@ -1,7 +1,10 @@
 package com.jiazhe.youxiang.server.adapter.rechargecard;
 
+import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardPO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCEditDTO;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.RCEditReq;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rc.RCResp;
 
 /**
@@ -15,6 +18,8 @@ public class RCAdapter {
             return null;
         }
         RCDTO rCDTO = new RCDTO();
+        rCDTO.setId(rechargeCardPO.getId());
+        rCDTO.setCustomerId(rechargeCardPO.getCustomerId());
         rCDTO.setName(rechargeCardPO.getName());
         rCDTO.setDescription(rechargeCardPO.getDescription());
         rCDTO.setProjectId(rechargeCardPO.getProjectId());
@@ -23,6 +28,8 @@ public class RCAdapter {
         rCDTO.setFaceValue(rechargeCardPO.getFaceValue());
         rCDTO.setBalance(rechargeCardPO.getBalance());
         rCDTO.setExpiryTime(rechargeCardPO.getExpiryTime());
+        rCDTO.setStatus(rechargeCardPO.getStatus());
+        rCDTO.setAddTime(rechargeCardPO.getAddTime());
         return rCDTO;
     }
 
@@ -31,14 +38,34 @@ public class RCAdapter {
             return null;
         }
         RCResp rCResp = new RCResp();
+        rCResp.setId(rcdto.getId());
+        rCResp.setCustomerId(rcdto.getCustomerId());
         rCResp.setName(rcdto.getName());
         rCResp.setDescription(rcdto.getDescription());
         rCResp.setProjectId(rcdto.getProjectId());
-        rCResp.setCityIds(rcdto.getCityCodes());
+        rCResp.setCityCodes(rcdto.getCityCodes());
         rCResp.setProductIds(rcdto.getProductIds());
         rCResp.setFaceValue(rcdto.getFaceValue());
         rCResp.setBalance(rcdto.getBalance());
         rCResp.setExpiryTime(rcdto.getExpiryTime());
+        rCResp.setStatus(rcdto.getStatus());
+        rCResp.setAddTime(rcdto.getAddTime());
+        rCResp.setCustomerResp(CustomerAdapter.customerDTO2VO(rcdto.getCustomerDTO()));
+        rCResp.setRcExchangeRecordResp(RCExchangeRecordAdapter.DTO2Resp(rcdto.getRcExchangeRecordDTO()));
         return rCResp;
+    }
+
+    public static RCEditDTO EditReq2EditDTO(RCEditReq req) {
+        if (req == null) {
+            return null;
+        }
+        RCEditDTO rCEditDTO = new RCEditDTO();
+        rCEditDTO.setId(req.getId());
+        rCEditDTO.setCityCodes(req.getCityCodes());
+        rCEditDTO.setProductIds(req.getProductIds());
+        rCEditDTO.setName(req.getName());
+        rCEditDTO.setDescription(req.getDescription());
+        rCEditDTO.setExpiryTime(req.getExpiryTime());
+        return rCEditDTO;
     }
 }

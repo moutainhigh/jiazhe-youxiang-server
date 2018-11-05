@@ -2,7 +2,9 @@ package com.jiazhe.youxiang.server.service.rechargecard;
 
 import com.jiazhe.youxiang.server.domain.po.RechargeCardPO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
+import com.jiazhe.youxiang.server.vo.Paging;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -76,4 +78,19 @@ public interface RCService {
      * @return
      */
     void batchChangeStatus(List<Integer> usedIds,Byte status);
+
+    /**
+     * 根据客户电话，充值卡状态，是否过期和分页参数查询充值卡信息
+     * @param mobile
+     * @param exchangeType
+     * @param status
+     * @param expiry
+     * @param paging
+     * @return
+     */
+    List<RCDTO> getList(String mobile, Integer exchangeType, Byte status, Byte expiry, Paging paging);
+
+    RCDTO getById(Integer id);
+
+    void editSave(RCEditDTO dto);
 }

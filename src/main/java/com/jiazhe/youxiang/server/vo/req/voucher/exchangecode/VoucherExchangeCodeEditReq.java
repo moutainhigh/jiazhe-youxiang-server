@@ -1,41 +1,35 @@
-package com.jiazhe.youxiang.server.vo.req.voucher.exchangecodebatch;
+package com.jiazhe.youxiang.server.vo.req.voucher.exchangecode;
 
-import io.swagger.annotations.ApiModelProperty;
+import com.jiazhe.youxiang.server.vo.BaseVO;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
 /**
- * @author TU
- * @description
- * @date 2018/10/24.
+ * @author tu
+ * @description：
+ * @date 2018/11/4
  */
-public class VoucherExchangeCodeBatchEditReq {
+public class VoucherExchangeCodeEditReq extends BaseVO {
 
-    @ApiModelProperty("代金券兑换码批次id")
     private Integer id;
 
-    @ApiModelProperty("代金券兑换码批次名称")
-    private String name;
+    private String voucherName;
 
-    @ApiModelProperty("描述信息")
-    private String description;
+    private String batchDescription;
 
-    @ApiModelProperty("城市ids，用逗号连接")
-    private String cityIds;
+    private String cityCodes;
 
-    @ApiModelProperty("商品ids，用逗号连接")
     private String productIds;
 
-    @ApiModelProperty("代金券兑换码批次过期时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date expiryTime;
 
-    @ApiModelProperty("兑换后，代金券过期时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date voucherExpiryTime;
 
-    @ApiModelProperty("自兑换之日起，代金券***天内有效")
     private Integer validityPeriod;
 
-    @ApiModelProperty("代金券过期类型")
     private Byte expiryType;
 
     public Integer getId() {
@@ -46,28 +40,21 @@ public class VoucherExchangeCodeBatchEditReq {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+
+    public String getBatchDescription() {
+        return batchDescription;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setBatchDescription(String batchDescription) {
+        this.batchDescription = batchDescription;
     }
 
-    public String getDescription() {
-        return description;
+    public String getCityCodes() {
+        return cityCodes;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getCityIds() {
-        return cityIds;
-    }
-
-    public void setCityIds(String cityIds) {
-        this.cityIds = cityIds;
+    public void setCityCodes(String cityCodes) {
+        this.cityCodes = cityCodes;
     }
 
     public String getProductIds() {
@@ -84,6 +71,14 @@ public class VoucherExchangeCodeBatchEditReq {
 
     public void setExpiryTime(Date expiryTime) {
         this.expiryTime = expiryTime;
+    }
+
+    public String getVoucherName() {
+        return voucherName;
+    }
+
+    public void setVoucherName(String voucherName) {
+        this.voucherName = voucherName;
     }
 
     public Date getVoucherExpiryTime() {

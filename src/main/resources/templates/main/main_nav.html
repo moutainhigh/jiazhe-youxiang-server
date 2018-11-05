@@ -95,7 +95,7 @@
             </li>
 
             <li class="">
-                <a th:href="@{/record/index}" target="iframeCenter">
+                <a th:href="@{/order/orderindex}" target="iframeCenter">
                     <i class="menu-icon fa fa-list-ul"></i>
                     <span class="menu-text"> 订单管理 </span>
                 </a>
@@ -120,6 +120,47 @@
 
             <li class="">
                 <a href="#" class="dropdown-toggle">
+                    <i class="menu-icon fa fa-info-circle"></i>
+                    <span class="menu-text">信息查询</span>
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+
+                <b class="arrow"></b>
+
+                <ul class="submenu">
+
+                    <li class="">
+                        <a th:href="@{/infosearch/rechargecardcodeindex}" target="iframeCenter">
+                            充值卡兑换码查询
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
+                        <a th:href="@{/infosearch/rechargecardindex}" target="iframeCenter">
+                            充值卡查询
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
+                        <a th:href="@{/infosearch/vouchercodeindex}" target="iframeCenter">
+                            代金券兑换码查询
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
+                        <a th:href="@{/infosearch/voucherindex}" target="iframeCenter">
+                            代金券查询
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="">
+                <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-cog"></i>
                     <span class="menu-text">系统管理</span>
                     <b class="arrow fa fa-angle-down"></b>
@@ -129,7 +170,7 @@
 
                 <ul class="submenu">
                     <li class="">
-                        <a th:href="@{/vouchercode/index}" target="iframeCenter">
+                        <a th:href="@{/voucher/exchangecodebatchindex}" target="iframeCenter">
                             代金券兑换码管理
                         </a>
                         <b class="arrow"></b>

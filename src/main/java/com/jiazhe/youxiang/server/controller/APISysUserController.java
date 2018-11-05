@@ -5,33 +5,24 @@ import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.EncryptPasswordUtil;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.base.util.ValidateUtils;
-import com.jiazhe.youxiang.server.adapter.SysRoleAdapter;
 import com.jiazhe.youxiang.server.adapter.SysUserAdapter;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
-import com.jiazhe.youxiang.server.biz.SysUserRoleBiz;
-import com.jiazhe.youxiang.server.common.enums.CommonCodeEnum;
-import com.jiazhe.youxiang.server.common.enums.RoleCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.UserCodeEnum;
-import com.jiazhe.youxiang.server.common.exceptions.CommonException;
+import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.common.exceptions.UserException;
-import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.UserWithRoleDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
-import com.jiazhe.youxiang.server.vo.req.sysrole.RolePageReq;
 import com.jiazhe.youxiang.server.vo.req.sysuser.ChangePasswordReq;
 import com.jiazhe.youxiang.server.vo.req.sysuser.UserPageReq;
 import com.jiazhe.youxiang.server.vo.req.sysuser.UserSaveReq;
-import com.jiazhe.youxiang.server.vo.resp.sysrole.SysRoleResp;
 import com.jiazhe.youxiang.server.vo.resp.sysuser.SysUserResp;
 import com.jiazhe.youxiang.server.vo.resp.sysuser.UserWithRoleResp;
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import io.swagger.annotations.ApiOperation;
-import org.apache.logging.log4j.util.Strings;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,7 +115,7 @@ public class APISysUserController extends BaseController {
         SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
         //将DTO转为respVO返回
         if(null == sysUserDTO){
-            throw new UserException(UserCodeEnum.USER_NOT_EXISTED);
+            throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
         SysUserResp sysUserResp = SysUserAdapter.DTO2RespVO(sysUserDTO);
         return ResponseFactory.buildResponse(sysUserResp);
@@ -137,6 +128,9 @@ public class APISysUserController extends BaseController {
         CommonValidator.validateNull(req.getPassword1(),new UserException(UserCodeEnum.USEER_PASSWORD_IS_NULL));
         CommonValidator.validateNull(req.getPassword2(),new UserException(UserCodeEnum.USEER_PASSWORD_IS_NULL));
         SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+        if(null == sysUserDTO){
+            throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
+        }
         if (!req.getPassword1().equals(req.getPassword2())) {
             throw new UserException(UserCodeEnum.USER_PASSWORD_DIFFERENT);
         }
