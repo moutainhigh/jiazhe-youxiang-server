@@ -90,7 +90,7 @@ public class ShiroConfig {
 
     //配置自定义的密码比较器
     @Bean(name = "credentialsMatcher")
-    public CredentialsMatcher credentialsMatcher(){
+    public CredentialsMatcher credentialsMatcher() {
         CredentialsMatcher credentialsMatcher = new CredentialsMatcher();
         return credentialsMatcher;
     }
@@ -130,10 +130,10 @@ public class ShiroConfig {
         return new MemorySessionDAO();
     }
 
-   /* @Bean(name = "customerSessionDAO")
-    public CustomerSessionDao customerSessionDao(){
+    @Bean(name = "customerSessionDAO")
+    public CustomerSessionDao customerSessionDao() {
         return new CustomerSessionDao();
-    }*/
+    }
 
     @Bean
     public ModularRealmAuthenticator modularRealmAuthenticator() {
@@ -180,7 +180,7 @@ public class ShiroConfig {
     }*/
 
     @Bean
-    public HashedCredentialsMatcher hashedCredentialsMatcher(){
+    public HashedCredentialsMatcher hashedCredentialsMatcher() {
         HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
         hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
         hashedCredentialsMatcher.setHashAlgorithmName("MD5");
@@ -195,8 +195,8 @@ public class ShiroConfig {
         defaultWebSessionManager.setDeleteInvalidSessions(true);
         defaultWebSessionManager.setSessionValidationSchedulerEnabled(true);
         defaultWebSessionManager.setSessionValidationInterval(1800000);
-        /*defaultWebSessionManager.setSessionDAO(customerSessionDao());*/
-        defaultWebSessionManager.setSessionDAO(memorySessionDAO());
+        defaultWebSessionManager.setSessionDAO(customerSessionDao());
+        /*defaultWebSessionManager.setSessionDAO(memorySessionDAO());*/
        /* defaultWebSessionManager.setSessionIdCookie(rememberMeCookie());*/
         return defaultWebSessionManager;
     }
