@@ -125,12 +125,12 @@ public class ShiroConfig {
         return shiroLoginFilter;
     }
 
-    @Bean(name = "sessionDAO")
+    /*@Bean(name = "sessionDAO")
     public MemorySessionDAO memorySessionDAO() {
         return new MemorySessionDAO();
-    }
+    }*/
 
-    @Bean(name = "customerSessionDAO")
+    @Bean(name = "sessionDAO")
     public CustomerSessionDao customerSessionDao() {
         return new CustomerSessionDao();
     }

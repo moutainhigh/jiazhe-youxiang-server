@@ -1,22 +1,28 @@
 package com.jiazhe.youxiang.base.realm;
 
+import com.jiazhe.youxiang.base.util.SerializableUtils;
+import com.jiazhe.youxiang.server.common.enums.LoginType;
 import com.jiazhe.youxiang.server.dao.mapper.SimpleSessionPOMapper;
 import com.jiazhe.youxiang.server.domain.po.SimpleSessionPO;
 import com.jiazhe.youxiang.server.domain.po.SimpleSessionPOExample;
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.SimpleSession;
+import org.apache.shiro.session.mgt.ValidatingSession;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
+import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -44,7 +50,7 @@ public class CustomerSessionDao extends AbstractSessionDAO {
         this.storeSession(sessionId, session);
         SimpleSessionPO simpleSessionPO = new SimpleSessionPO();
         simpleSessionPO.setCookie(sessionId.toString());
-        simpleSessionPO.setSession(session.toString());
+        simpleSessionPO.setSession(SerializableUtils.serialize(session));
         simpleSessionPO.setExtInfo("");
         simpleSessionPO.setIsDeleted(Byte.valueOf("0"));
         simpleSessionPO.setAddTime(new Date());
@@ -66,8 +72,7 @@ public class CustomerSessionDao extends AbstractSessionDAO {
     @Override
     protected Session doReadSession(Serializable sessionId) {
         log.info("----------doReadSession-------------");
-        return (Session)this.sessions.get(sessionId);
-       /* Session session = null;
+        Session session = null;
         try {
             session = super.readSession(sessionId);
         } catch (Exception e) {
@@ -76,10 +81,23 @@ public class CustomerSessionDao extends AbstractSessionDAO {
         if (null == session) {
             SimpleSessionPO simpleSessionPO = getSimpleSessionPOBySession(sessionId);
             if (simpleSessionPO != null) {
-               *//* session = (Session) simpleSessionPO.getSession();*//*
+                session = (Session) SerializableUtils.deserialize(simpleSessionPO.getSession());
+                Subject s = new Subject.Builder().session(session).buildSubject();
+                if(s.getPrincipal() instanceof SysUserDTO){
+                    SysUserDTO sysUserDTO = (SysUserDTO) s.getPrincipal();
+                    if(null == sysUserDTO){
+                        SecurityUtils.getSubject().login(new AuthToken("tujian","123", LoginType.USER.toString()));
+                    }
+                }
+                if(s.getPrincipal() instanceof CustomerDTO){
+                    CustomerDTO customerDTO = (CustomerDTO) s.getPrincipal();
+                    if(null == customerDTO){
+                        SecurityUtils.getSubject().login(new AuthToken("13051827155","", LoginType.CUSTOMER.toString()));
+                    }
+                }
             }
         }
-        return session;*/
+        return session;
     }
 
     private SimpleSessionPO getSimpleSessionPOBySession(Serializable sessionId) {
@@ -95,7 +113,6 @@ public class CustomerSessionDao extends AbstractSessionDAO {
     @Override
     public void update(Session session) throws UnknownSessionException {
         log.info("----------storeSession-------------");
-
         this.storeSession(session.getId(), session);
     }
 
