@@ -85,10 +85,11 @@
             type: "GET",
             success: function (result) {
                 if("error" in result){
-                    if(result.error.code == 101010){
+                    if(result.error.code == 112010){
                         parent.window.location.href = "../system/index";
+                    }else{
+                        window.parent.bootboxalert(result.error.message);
                     }
-                    bootboxalert(result.error.message);
                 }else{
                     var data = result.data;
                     window.parent.$("#loginName").val(data.loginName);

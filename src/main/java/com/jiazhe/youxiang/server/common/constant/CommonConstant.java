@@ -24,20 +24,6 @@ public class CommonConstant {
     public static final String PERCENT = "%";
 
     /**
-     * 一级城市级别
-     */
-    public static final Integer CITY_LEVEL_1 = 1;
-    /**
-     * 二级城市级别
-     */
-    public static final Integer CITY_LEVEL_2 = 2;
-    /**
-     * 三级城市级别
-     */
-    public static final Integer CITY_LEVEL_3 = 3;
-
-
-    /**
      * 城市开通的代码
      */
     public static final Byte CODE_CITY_OPEN = Byte.valueOf("1");
