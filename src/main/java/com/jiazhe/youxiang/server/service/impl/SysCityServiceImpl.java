@@ -86,6 +86,7 @@ public class SysCityServiceImpl implements SysCityService {
         } else {
             List<SysCityPO> brothers = getPOListByParentCode(cityPO.getParentCode());
             if (CollectionUtils.isNotEmpty(brothers)) {
+                //由于此时数据库操作未提交，所以要排除掉被操作的城市
                 boolean hasOpen = brothers.stream().anyMatch(item -> CityStatusEnum.OPEN.getId().byteValue() == item.getStatus() && !item.getCityCode().equals(cityCode));
                 if (!hasOpen && CityStatusEnum.OPEN.getId().byteValue() == parentCityPO.getStatus()) {
                     //如果所有兄弟都是关闭的，那么上级城市就关闭
@@ -102,6 +103,11 @@ public class SysCityServiceImpl implements SysCityService {
     }
 
 
+    /**
+     * 根据城市编码获得城市信息
+     * @param cityCode
+     * @return
+     */
     private SysCityPO getPOListByCityCode(String cityCode) {
         SysCityPOExample sysCityPOExample = new SysCityPOExample();
         SysCityPOExample.Criteria criteria = sysCityPOExample.createCriteria();
@@ -114,6 +120,11 @@ public class SysCityServiceImpl implements SysCityService {
         return null;
     }
 
+    /**
+     * 根据城市编码集合获得城市信息集合
+     * @param cityCodes
+     * @return
+     */
     private List<SysCityPO> getPOListByCityCodes(List<String> cityCodes) {
         SysCityPOExample sysCityPOExample = new SysCityPOExample();
         SysCityPOExample.Criteria criteria = sysCityPOExample.createCriteria();
@@ -122,6 +133,11 @@ public class SysCityServiceImpl implements SysCityService {
         return sysCityPOMapper.selectByExample(sysCityPOExample);
     }
 
+    /**
+     * 根据上级城市编码获得城市信息集合
+     * @param parentCode
+     * @return
+     */
     private List<SysCityPO> getPOListByParentCode(String parentCode) {
         SysCityPOExample sysCityPOExample = new SysCityPOExample();
         SysCityPOExample.Criteria criteria = sysCityPOExample.createCriteria();

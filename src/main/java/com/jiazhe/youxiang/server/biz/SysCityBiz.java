@@ -50,11 +50,11 @@ public class SysCityBiz {
         }
     }
 
-    public void batchOpen(String cityCode) {
+    public void open(String cityCode) {
         sysCityService.updateStatusByCityCode(cityCode, CityStatusEnum.OPEN.getId().byteValue());
     }
 
-    public void batchClose(String cityCode) {
+    public void close(String cityCode) {
         sysCityService.updateStatusByCityCode(cityCode, CityStatusEnum.CLOSE.getId().byteValue());
     }
 
