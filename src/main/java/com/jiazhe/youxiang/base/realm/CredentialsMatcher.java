@@ -8,10 +8,14 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.crypto.hash.SimpleHash;
 
-//自定义密码比较器类
+/**
+ *自定义密码比较器类
+ */
 public class CredentialsMatcher extends SimpleCredentialsMatcher {
 
-    //校验
+    /**
+     *校验
+     */
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
         AuthToken utoken=(AuthToken) token;
