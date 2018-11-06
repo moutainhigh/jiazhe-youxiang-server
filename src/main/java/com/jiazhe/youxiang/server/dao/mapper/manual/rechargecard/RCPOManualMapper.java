@@ -38,7 +38,7 @@ public interface RCPOManualMapper {
      * @param map
      * @return
      */
-    void batchChangeStatus(Map<String,Object> map);
+    void batchChangeStatus(Map<String, Object> map);
 
     /**
      * 根据客户id,充值卡停用、启用状态，是否过期，分页参数查询充值卡列表
@@ -50,7 +50,7 @@ public interface RCPOManualMapper {
      * @param limit
      * @return
      */
-    List<RechargeCardPO> query(@Param("mobile")String mobile,@Param("exchangeType")Integer exchangeType, @Param("status")Byte status, @Param("expiry")Byte expiry, @Param("offset")Integer offset, @Param("limit")Integer limit);
+    List<RechargeCardPO> query(@Param("mobile") String mobile, @Param("exchangeType") Integer exchangeType, @Param("status") Byte status, @Param("expiry") Byte expiry, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
     /**
      * 根据客户id,充值卡停用、启用状态，是否过期，兑换方式查询记录条数
@@ -60,5 +60,5 @@ public interface RCPOManualMapper {
      * @param expiry
      * @return
      */
-    Integer count(@Param("mobile")String mobile, @Param("exchangeType")Integer exchangeType,@Param("status")Byte status, @Param("expiry")Byte expiry);
+    Integer count(@Param("mobile") String mobile, @Param("exchangeType") Integer exchangeType, @Param("status") Byte status, @Param("expiry") Byte expiry);
 }

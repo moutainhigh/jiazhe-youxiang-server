@@ -23,7 +23,7 @@ public interface ProductPricePOManualMapper {
 
     void batchUpdate(@Param("productId") Integer productId, @Param("cityCodes") List<String> cityCodes, @Param("price") BigDecimal price);
 
-    List<Integer> getProductIdsByCityIds(@Param("cityCodes")List<String> cityCodes);
+    List<Integer> getProductIdsByCityIds(@Param("cityCodes") List<String> cityCodes);
 
-    void batchAddPrice(@Param("list")List<ProductPricePO> productPricePOList);
+    void batchAddPrice(@Param("list") List<ProductPricePO> productPricePOList);
 }

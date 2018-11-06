@@ -130,6 +130,11 @@ public class ShiroConfig {
         return new MemorySessionDAO();
     }
 
+   /* @Bean(name = "customerSessionDAO")
+    public CustomerSessionDao customerSessionDao(){
+        return new CustomerSessionDao();
+    }*/
+
     @Bean
     public ModularRealmAuthenticator modularRealmAuthenticator() {
         //自己重写的ModularRealmAuthenticator
@@ -190,6 +195,7 @@ public class ShiroConfig {
         defaultWebSessionManager.setDeleteInvalidSessions(true);
         defaultWebSessionManager.setSessionValidationSchedulerEnabled(true);
         defaultWebSessionManager.setSessionValidationInterval(1800000);
+        /*defaultWebSessionManager.setSessionDAO(customerSessionDao());*/
         defaultWebSessionManager.setSessionDAO(memorySessionDAO());
        /* defaultWebSessionManager.setSessionIdCookie(rememberMeCookie());*/
         return defaultWebSessionManager;

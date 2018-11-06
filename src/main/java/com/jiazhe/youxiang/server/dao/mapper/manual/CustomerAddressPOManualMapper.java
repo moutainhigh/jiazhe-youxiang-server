@@ -11,5 +11,5 @@ public interface CustomerAddressPOManualMapper {
 
     Integer count(@Param("customerId") Integer customerId);
 
-    List<CustomerAddressPO> query(@Param("customerId") Integer customerId,@Param("offset") Integer offset, @Param("limit")Integer limit);
+    List<CustomerAddressPO> query(@Param("customerId") Integer customerId, @Param("offset") Integer offset, @Param("limit") Integer limit);
 }
