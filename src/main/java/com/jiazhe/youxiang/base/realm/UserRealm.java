@@ -50,7 +50,7 @@ public class UserRealm extends AuthorizingRealm {
         logger.info("=========进入用户登录验证============");
         try {
             /*获取用户输入的token*/
-            UsernamePasswordToken utoken = (UsernamePasswordToken) token;
+            AuthToken utoken = (AuthToken) token;
             String loginname = utoken.getUsername();
             List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(loginname);
             if (sysUserDTOList.size() == 1) {

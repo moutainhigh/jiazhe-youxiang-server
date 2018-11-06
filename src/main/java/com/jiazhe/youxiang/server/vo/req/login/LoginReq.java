@@ -22,6 +22,9 @@ public class LoginReq extends BaseVO {
     @ApiModelProperty("短信bizId")
     private String bizId ;
 
+    /*@ApiModelProperty("是否记住我")
+    private String rememberMe;*/
+
     public String getLoginname() {
         return loginname;
     }
@@ -53,4 +56,12 @@ public class LoginReq extends BaseVO {
     public void setBizId(String bizId) {
         this.bizId = bizId;
     }
+
+    /*public String getRememberMe() {
+        return rememberMe;
+    }
+
+    public void setRememberMe(String rememberMe) {
+        this.rememberMe = rememberMe;
+    }*/
 }
