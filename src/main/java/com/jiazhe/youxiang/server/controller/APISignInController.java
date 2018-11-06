@@ -92,9 +92,7 @@ public class APISignInController extends BaseController {
         for (Session session : sessions) {
             if (null != session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)) {
                 logger.info("登录用户" + session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY));
-                logger.info(String.valueOf(session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)));
-                SysUserDTO sysUserDTO1 = (SysUserDTO)session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
-                if (loginName.equals(sysUserDTO1.getLoginName())) {
+                if (loginName.equals(session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY).toString())) {
                     // session.setTimeout(0); //这里就把session清除
                     logger.info(("删除用户seesion" + session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY).toString()));
                     // session清除，
@@ -103,7 +101,7 @@ public class APISignInController extends BaseController {
             }
         }
         AuthToken authToken = new AuthToken(loginName, password, LoginType.USER.toString());
-        authToken.setRememberMe(req.getRememberMe().equals("1"));
+        /*authToken.setRememberMe(req.getRememberMe().equals("1"));*/
         subject.login(authToken);
         // 将seesion过期时间设置为8小时
         subject.getSession().setTimeout(ConstantFetchUtil.hour_8);

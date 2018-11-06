@@ -76,10 +76,10 @@
 
                                             <div class="clearfix">
 
-                                                <label class="inline">
+                                               <!-- <label class="inline">
                                                     <input id="rememberMe" type="checkbox" class="ace"/>
                                                     <span class="lbl"> 记住我</span>
-                                                </label>
+                                                </label>-->
 
                                                 <button type="submit" class="width-35 pull-right btn btn-sm btn-primary"
                                                         id="login-btn">
@@ -153,7 +153,7 @@
     function login() {
         var loginname = $("#loginname").val();
         var password = $("#password").val();
-        var rememberMe = $('#rememberMe').is(':checked')?1:0;
+        /*var rememberMe = $('#rememberMe').is(':checked')?1:0;*/
         var identifyingCode = $("#identifyingCode").val();
         var bizId = $("#bizId").val()
         if (loginname == "" || password == "") {
@@ -167,7 +167,7 @@
             data: {
                 loginname: loginname,
                 password: password,
-                rememberMe:rememberMe,
+               /* rememberMe:rememberMe,*/
                 identifyingCode: identifyingCode,
                 bizId: bizId
             },

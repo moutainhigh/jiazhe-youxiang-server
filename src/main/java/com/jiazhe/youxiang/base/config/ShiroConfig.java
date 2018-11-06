@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.base.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.jiazhe.youxiang.base.realm.*;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
@@ -19,6 +20,7 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.apache.shiro.codec.Base64;
 
 import javax.servlet.Filter;
 import java.util.*;
@@ -47,7 +49,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/api/signin/signin", "anon");//后台登陆请求
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/templates/**", "anon");
-        filterChainDefinitionMap.put("/", "user");
+       /* filterChainDefinitionMap.put("/", "user");*/
 /*        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
         filterChainDefinitionMap.put("/swagger-resources*//**", "anon");
          filterChainDefinitionMap.put("/webjars*//**", "anon");
@@ -67,6 +69,7 @@ public class ShiroConfig {
         userRealm.setCredentialsMatcher(credentialsMatcher());
         userRealm.setAuthorizationCacheName("shiro-authorizationCache");
         userRealm.setCacheManager(ehCacheManager());
+       /* userRealm.setCredentialsMatcher(hashedCredentialsMatcher());*/
         return userRealm;
     }
 
@@ -85,8 +88,9 @@ public class ShiroConfig {
 
     //配置自定义的密码比较器
     @Bean(name = "credentialsMatcher")
-    public CredentialsMatcher credentialsMatcher() {
-        return new CredentialsMatcher();
+    public CredentialsMatcher credentialsMatcher(){
+        CredentialsMatcher credentialsMatcher = new CredentialsMatcher();
+        return credentialsMatcher;
     }
 
     @Bean
@@ -102,9 +106,9 @@ public class ShiroConfig {
     }
 
     @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(@Qualifier("securityManager") SecurityManager manager) {
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor() {
         AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
-        advisor.setSecurityManager(manager);
+        advisor.setSecurityManager(securityManager());
         return advisor;
     }
 
@@ -133,9 +137,7 @@ public class ShiroConfig {
     }
 
     @Bean(name = "securityManager")
-    public SecurityManager securityManager(@Qualifier("sessionManager") DefaultWebSessionManager defaultWebSessionManager,
-                                           @Qualifier("cacheManager") EhCacheManager ehCacheManager
-                                         ) {
+    public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         //设置realm.
         securityManager.setAuthenticator(modularRealmAuthenticator());
@@ -144,18 +146,19 @@ public class ShiroConfig {
         realms.add(userRealm());
         realms.add(customerRealm());
         securityManager.setRealms(realms);
-        /*securityManager.setRememberMeManager(cookieRememberMeManager);*/
-        securityManager.setCacheManager(ehCacheManager);
-        securityManager.setSessionManager(defaultWebSessionManager);
+       /* securityManager.setRememberMeManager(rememberMeManager());*/
+        securityManager.setCacheManager(ehCacheManager());
+        securityManager.setSessionManager(sessionManager());
         return securityManager;
     }
 
-/*    @Bean(name="rememberMe")
+   /* @Bean(name = "rememberMe")
     public SimpleCookie rememberMeCookie() {
         //System.out.println("ShiroConfiguration.rememberMeCookie()");
         //这个参数是cookie的名称，对应前端的checkbox的name = rememberMe
-        SimpleCookie simpleCookie = new SimpleCookie();
-        simpleCookie.setName("rememberMe");
+        SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
+        //<!-- 记住我cookie生效时间30天 ,单位秒;-->
+        simpleCookie.setMaxAge(259200);
         return simpleCookie;
     }*/
 
@@ -164,20 +167,29 @@ public class ShiroConfig {
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
         cookieRememberMeManager.setCookie(rememberMeCookie());
         //rememberMe cookie加密的密钥 建议每个项目都不一样 默认AES算法 密钥长度(128 256 512 位)
-        byte[] cipherKey = Base64.getDecoder().decode("wGiHplamyXlVB11UXWol8g==");
+        byte[] cipherKey = Base64.decode("2AvVhdsgUs0FSA3SDFAdag==");
         cookieRememberMeManager.setCipherKey(cipherKey);
         return cookieRememberMeManager;
     }*/
 
+    @Bean
+    public HashedCredentialsMatcher hashedCredentialsMatcher(){
+        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
+        hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
+        hashedCredentialsMatcher.setHashAlgorithmName("MD5");
+        hashedCredentialsMatcher.setHashIterations(1024);
+        return hashedCredentialsMatcher;
+    }
+
     @Bean(name = "sessionManager")
-    public DefaultWebSessionManager sessionManager(@Qualifier("sessionDAO") MemorySessionDAO sessionDAO) {
+    public DefaultWebSessionManager sessionManager() {
         DefaultWebSessionManager defaultWebSessionManager = new DefaultWebSessionManager();
         defaultWebSessionManager.setGlobalSessionTimeout(1800000);
         defaultWebSessionManager.setDeleteInvalidSessions(true);
         defaultWebSessionManager.setSessionValidationSchedulerEnabled(true);
         defaultWebSessionManager.setSessionValidationInterval(1800000);
-        defaultWebSessionManager.setSessionDAO(sessionDAO);
-        /*defaultWebSessionManager.setSessionIdCookie(simpleCookie);*/
+        defaultWebSessionManager.setSessionDAO(memorySessionDAO());
+       /* defaultWebSessionManager.setSessionIdCookie(rememberMeCookie());*/
         return defaultWebSessionManager;
     }
 
