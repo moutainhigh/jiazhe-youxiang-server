@@ -15,7 +15,8 @@ import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.login.CustomerLoginReq;
-import com.jiazhe.youxiang.server.vo.req.login.SendMsgReq;
+import com.jiazhe.youxiang.server.vo.req.login.SendMsgToCustomerReq;
+import com.jiazhe.youxiang.server.vo.req.login.SendMsgToUserReq;
 import com.jiazhe.youxiang.server.vo.req.login.UserLoginReq;
 import com.jiazhe.youxiang.server.vo.resp.login.SendMsgResp;
 import io.swagger.annotations.ApiOperation;
@@ -96,7 +97,7 @@ public class APISignInController extends BaseController {
                 Subject s = new Subject.Builder().session(session).buildSubject();
                 SysUserDTO temp = (SysUserDTO) s.getPrincipal();
                 if (loginName.equals(temp.getLoginName())) {
-                    logger.info(("删除" + temp.getLoginName() + "session"));
+                    logger.info(("删除员工" + temp.getLoginName() + "的登陆session"));
                     sessionDAO.delete(session);
                 }
             }
@@ -122,7 +123,7 @@ public class APISignInController extends BaseController {
 
     @ApiOperation(value = "根据登陆名，发送验证码", httpMethod = "GET", response = SendMsgResp.class, notes = "根据登陆名，发送验证码")
     @RequestMapping(value = "/usersendcode")
-    public Object userSendCode(@ModelAttribute SendMsgReq req) throws ClientException {
+    public Object userSendCode(@ModelAttribute SendMsgToUserReq req) throws ClientException {
         List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(req.getLoginname());
         if (sysUserDTOList.size() != 1) {
             throw new LoginException(LoginCodeEnum.LOGIN_USER_ILLEGAL);
@@ -139,70 +140,49 @@ public class APISignInController extends BaseController {
     @ApiOperation(value = "客户登录", httpMethod = "GET", notes = "客户登录")
     @RequestMapping(value = "/customerSignin")
     public Object customerSignin(@ModelAttribute CustomerLoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
-       /* String mobile = req.getMobile();
+        String mobile = req.getMobile();
         String identifyingCode = req.getIdentifyingCode();
         String bizId = req.getBizId();
         //首先判断用户是否存在且唯一
         CommonValidator.validateNull(req.getMobile(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         CommonValidator.validateNull(req.getIdentifyingCode(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
-        List<CustomerDTO> customerDTOS = customerBiz.findByLoginName(loginName);
-     *//*  *//**//* if (sysUserDTOList.size() != 1) {
-            throw new LoginException(LoginCodeEnum.LOGIN_USER_ILLEGAL);
+        if (!ValidateUtils.phoneValidate(req.getMobile())) {
+            throw new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL);
         }
-        SysUserDTO sysUserDTO = sysUserDTOList.get(0);*//**//*
-        //判断最后一次登陆ip是否一致，一致则直接登陆
-        if (!sysUserDTO.getLastLoginIp().equals(IpAdrressUtil.getIpAdrress(request))) {
-            //判断有没有短信bizId传过来
-            CommonValidator.validateNull(bizId, new LoginException(LoginCodeEnum.LOGIN_DIFFERENT_CLIENT));
-            CommonValidator.validateNull(identifyingCode, new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_EMPTY));
-            //判断验证码是否正确
-            if (!AliUtils.isVerified(sysUserDTO.getMobile(), identifyingCode, bizId)) {
-                throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
-            }*//*
+        CustomerDTO customerDTO = customerBiz.getByMobile(mobile);
+        if(null == customerDTO){
+            throw new LoginException(LoginCodeEnum.LOGIN_CUSTOMER_NOT_EXISTED);
         }
         Subject subject = SecurityUtils.getSubject();
         Collection<Session> sessions = sessionDAO.getActiveSessions();
         for (Session session : sessions) {
             if (null != session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)) {
                 Subject s = new Subject.Builder().session(session).buildSubject();
-                SysUserDTO temp = (SysUserDTO) s.getPrincipal();
-                if (loginName.equals(temp.getLoginName())) {
-                    logger.info(("删除" + temp.getLoginName() + "session"));
+                CustomerDTO temp = (CustomerDTO) s.getPrincipal();
+                if (mobile.equals(temp.getMobile())) {
+                    logger.info(("删除客户" + temp.getMobile() + "的登陆session"));
                     sessionDAO.delete(session);
                 }
             }
         }
-        try {
-            AuthToken authToken = new AuthToken(loginName, password, LoginType.USER.toString());
-            *//*authToken.setRememberMe(req.getRememberMe().equals("1"));*//*
-            subject.login(authToken);
-        } catch (Exception e) {
-            if (e instanceof IncorrectCredentialsException) {
-                throw new LoginException(LoginCodeEnum.LOGIN_PASSWRLD_WRONG);
-            }
-        }
+        AuthToken authToken = new AuthToken(mobile, "", LoginType.CUSTOMER.toString());
+        subject.login(authToken);
         // 将seesion过期时间设置为8小时
         subject.getSession().setTimeout(ConstantFetchUtil.hour_8);
-        AuthorizationInfo info = userRealm.doGetAuthorizationInfo(subject.getPrincipals());
-        String permission = StringUtils.join(info.getStringPermissions(), ",");
-        CookieUtil.addCookie(response, "permission", permission);
-        CookieUtil.addCookie(response, "displayName", URLEncoder.encode(sysUserDTO.getDisplayName(), "UTF-8"));
-        sysUserBiz.updateLastLoginInfo(sysUserDTO.getId(), IpAdrressUtil.getIpAdrress(request));
-        return ResponseFactory.buildSuccess();*/
-        return null;
+        return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "根据登陆名，发送验证码", httpMethod = "GET", response = SendMsgResp.class, notes = "根据登陆名，发送验证码")
+    @ApiOperation(value = "根据电话号码，发送验证码", httpMethod = "GET", response = SendMsgResp.class, notes = "根据电话号码，发送验证码")
     @RequestMapping(value = "/customersendcode")
-    public Object customerSendCode(@ModelAttribute SendMsgReq req) throws ClientException {
-        List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(req.getLoginname());
-        if (sysUserDTOList.size() != 1) {
-            throw new LoginException(LoginCodeEnum.LOGIN_USER_ILLEGAL);
-        }
-        if (!ValidateUtils.phoneValidate(sysUserDTOList.get(0).getMobile())) {
+    public Object customerSendCode(@ModelAttribute SendMsgToCustomerReq req) throws ClientException {
+        if (!ValidateUtils.phoneValidate(req.getMobile())) {
             throw new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL);
         }
-        SendSmsResponse res = AliUtils.sendMsg(sysUserDTOList.get(0).getMobile());
+        CustomerDTO customerDTO = customerBiz.getByMobile(req.getMobile());
+        if(null == customerDTO){
+            throw new LoginException(LoginCodeEnum.LOGIN_CUSTOMER_NOT_EXISTED);
+        }
+        SendSmsResponse res = AliUtils.sendMsg(req.getMobile());
         SendMsgResp sendMsgResp = new SendMsgResp();
         sendMsgResp.setBizId(res.getBizId());
         return ResponseFactory.buildResponse(sendMsgResp);
