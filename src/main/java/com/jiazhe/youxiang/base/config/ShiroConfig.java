@@ -125,15 +125,15 @@ public class ShiroConfig {
         return shiroLoginFilter;
     }
 
-    /*@Bean(name = "sessionDAO")
+    @Bean(name = "sessionDAO")
     public MemorySessionDAO memorySessionDAO() {
         return new MemorySessionDAO();
-    }*/
+    }
 
-    @Bean(name = "sessionDAO")
+    /*@Bean(name = "customerSessionDAO")
     public CustomerSessionDao customerSessionDao() {
         return new CustomerSessionDao();
-    }
+    }*/
 
     @Bean
     public ModularRealmAuthenticator modularRealmAuthenticator() {
@@ -195,8 +195,8 @@ public class ShiroConfig {
         defaultWebSessionManager.setDeleteInvalidSessions(true);
         defaultWebSessionManager.setSessionValidationSchedulerEnabled(true);
         defaultWebSessionManager.setSessionValidationInterval(1800000);
-        defaultWebSessionManager.setSessionDAO(customerSessionDao());
-        /*defaultWebSessionManager.setSessionDAO(memorySessionDAO());*/
+        /*defaultWebSessionManager.setSessionDAO(customerSessionDao());*/
+        defaultWebSessionManager.setSessionDAO(memorySessionDAO());
        /* defaultWebSessionManager.setSessionIdCookie(rememberMeCookie());*/
         return defaultWebSessionManager;
     }
