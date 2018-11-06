@@ -7,7 +7,7 @@ import com.jiazhe.youxiang.server.vo.BaseVO;
  * @description
  * @date 2018/10/29.
  */
-public class SendMsgReq extends BaseVO {
+public class SendMsgToUserReq extends BaseVO {
 
     private String loginname;
 

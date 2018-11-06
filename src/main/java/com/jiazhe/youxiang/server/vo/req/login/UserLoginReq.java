@@ -5,10 +5,10 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author TU
- * @description 登陆用的请求封装
+ * @description 员工登陆用的请求封装
  * @date 2018/10/29.
  */
-public class LoginReq extends BaseVO {
+public class UserLoginReq extends BaseVO {
 
     @ApiModelProperty("登录名")
     private String loginname;

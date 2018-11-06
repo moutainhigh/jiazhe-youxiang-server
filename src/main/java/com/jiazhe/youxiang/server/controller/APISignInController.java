@@ -6,15 +6,19 @@ import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.realm.AuthToken;
 import com.jiazhe.youxiang.base.realm.UserRealm;
 import com.jiazhe.youxiang.base.util.*;
+import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginType;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
-import com.jiazhe.youxiang.server.vo.req.login.SendMsgReq;
+import com.jiazhe.youxiang.server.vo.req.login.CustomerLoginReq;
+import com.jiazhe.youxiang.server.vo.req.login.SendMsgToCustomerReq;
+import com.jiazhe.youxiang.server.vo.req.login.SendMsgToUserReq;
+import com.jiazhe.youxiang.server.vo.req.login.UserLoginReq;
 import com.jiazhe.youxiang.server.vo.resp.login.SendMsgResp;
-import com.jiazhe.youxiang.server.vo.req.login.LoginReq;
 import io.swagger.annotations.ApiOperation;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -58,10 +62,12 @@ public class APISignInController extends BaseController {
     private UserRealm userRealm;
     @Autowired
     private SysUserBiz sysUserBiz;
+    @Autowired
+    private CustomerBiz customerBiz;
 
-    @ApiOperation(value = "登录", httpMethod = "GET", notes = "登录")
+    @ApiOperation(value = "员工登录", httpMethod = "GET", notes = "员工登录")
     @RequestMapping(value = "/usersignin")
-    public Object signin(@ModelAttribute LoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
+    public Object userSignin(@ModelAttribute UserLoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
         String loginName = req.getLoginname();
         String password = req.getPassword();
         String identifyingCode = req.getIdentifyingCode();
@@ -91,7 +97,7 @@ public class APISignInController extends BaseController {
                 Subject s = new Subject.Builder().session(session).buildSubject();
                 SysUserDTO temp = (SysUserDTO) s.getPrincipal();
                 if (loginName.equals(temp.getLoginName())) {
-                    logger.info(("删除" + temp.getLoginName() + "session"));
+                    logger.info(("删除员工" + temp.getLoginName() + "的登陆session"));
                     sessionDAO.delete(session);
                 }
             }
@@ -117,7 +123,7 @@ public class APISignInController extends BaseController {
 
     @ApiOperation(value = "根据登陆名，发送验证码", httpMethod = "GET", response = SendMsgResp.class, notes = "根据登陆名，发送验证码")
     @RequestMapping(value = "/usersendcode")
-    public Object sendCode(@ModelAttribute SendMsgReq req) throws ClientException {
+    public Object userSendCode(@ModelAttribute SendMsgToUserReq req) throws ClientException {
         List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(req.getLoginname());
         if (sysUserDTOList.size() != 1) {
             throw new LoginException(LoginCodeEnum.LOGIN_USER_ILLEGAL);
@@ -126,6 +132,57 @@ public class APISignInController extends BaseController {
             throw new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL);
         }
         SendSmsResponse res = AliUtils.sendMsg(sysUserDTOList.get(0).getMobile());
+        SendMsgResp sendMsgResp = new SendMsgResp();
+        sendMsgResp.setBizId(res.getBizId());
+        return ResponseFactory.buildResponse(sendMsgResp);
+    }
+
+    @ApiOperation(value = "客户登录", httpMethod = "GET", notes = "客户登录")
+    @RequestMapping(value = "/customerSignin")
+    public Object customerSignin(@ModelAttribute CustomerLoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
+        String mobile = req.getMobile();
+        String identifyingCode = req.getIdentifyingCode();
+        String bizId = req.getBizId();
+        //首先判断用户是否存在且唯一
+        CommonValidator.validateNull(req.getMobile(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
+        CommonValidator.validateNull(req.getIdentifyingCode(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
+        if (!ValidateUtils.phoneValidate(req.getMobile())) {
+            throw new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL);
+        }
+        CustomerDTO customerDTO = customerBiz.getByMobile(mobile);
+        if(null == customerDTO){
+            throw new LoginException(LoginCodeEnum.LOGIN_CUSTOMER_NOT_EXISTED);
+        }
+        Subject subject = SecurityUtils.getSubject();
+        Collection<Session> sessions = sessionDAO.getActiveSessions();
+        for (Session session : sessions) {
+            if (null != session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)) {
+                Subject s = new Subject.Builder().session(session).buildSubject();
+                CustomerDTO temp = (CustomerDTO) s.getPrincipal();
+                if (mobile.equals(temp.getMobile())) {
+                    logger.info(("删除客户" + temp.getMobile() + "的登陆session"));
+                    sessionDAO.delete(session);
+                }
+            }
+        }
+        AuthToken authToken = new AuthToken(mobile, "", LoginType.CUSTOMER.toString());
+        subject.login(authToken);
+        // 将seesion过期时间设置为8小时
+        subject.getSession().setTimeout(ConstantFetchUtil.hour_8);
+        return ResponseFactory.buildSuccess();
+    }
+
+    @ApiOperation(value = "根据电话号码，发送验证码", httpMethod = "GET", response = SendMsgResp.class, notes = "根据电话号码，发送验证码")
+    @RequestMapping(value = "/customersendcode")
+    public Object customerSendCode(@ModelAttribute SendMsgToCustomerReq req) throws ClientException {
+        if (!ValidateUtils.phoneValidate(req.getMobile())) {
+            throw new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL);
+        }
+        CustomerDTO customerDTO = customerBiz.getByMobile(req.getMobile());
+        if(null == customerDTO){
+            throw new LoginException(LoginCodeEnum.LOGIN_CUSTOMER_NOT_EXISTED);
+        }
+        SendSmsResponse res = AliUtils.sendMsg(req.getMobile());
         SendMsgResp sendMsgResp = new SendMsgResp();
         sendMsgResp.setBizId(res.getBizId());
         return ResponseFactory.buildResponse(sendMsgResp);
