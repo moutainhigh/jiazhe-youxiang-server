@@ -142,11 +142,14 @@
                     url: "../api/syscity/getlist?parentCode=" + cityCode,// 获取数据的地址
                     datatype: "json",
                     mtype: "GET",
-                    colNames: ['', '城市名称', '城市编码', '操作'],
+                    width: "100%",
+                    autowidth: true,
+                    colNames: ['', '城市名称', '城市编码', '状态', '操作'],
                     colModel: [
                         {name: 'id', index: 'id', editable: false, hidden: true},
                         {name: 'cityName', index: 'cityName', editable: false},
                         {name: 'cityCode', index: 'cityCode', editable: false},
+                        {name: 'status', index: 'status', editable: false, width: 30, formatter: statusFormatter},
                         {name: '_action', index: '_action', width: 50, formatter: customFormatter}
                     ],
                     rowNum: 30,
@@ -166,11 +169,12 @@
             width: "100%",
             autowidth: true,
             height: 350,
-            colNames: ['', '城市名称', '城市编码', '操作'],
+            colNames: ['', '城市名称', '城市编码', '状态', '操作'],
             colModel: [
                 {name: 'id', index: 'id', editable: false, hidden: true},
                 {name: 'cityName', index: 'cityName', editable: false},
                 {name: 'cityCode', index: 'cityCode', editable: false},
+                {name: 'status', index: 'status', editable: false, width: 30, formatter: statusFormatter},
                 {name: '_action', index: '_action', width: 50, formatter: customFormatter}
             ],
             viewrecords: true,
@@ -210,6 +214,10 @@
                 "</a>&nbsp;&nbsp;";
         }
         return str;
+    }
+
+    function statusFormatter(cellvalue, options, cell) {
+        return cell.status == 1 ? "开通" : "未开通";
     }
 
     function open(cityCode) {

@@ -95,7 +95,7 @@ public class APISysCityController extends BaseController {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getCityCode(),new CityException(CityCodeEnum.CITY_CODE_IS_NULL));
         //调用BIZ方法
-        sysCityBiz.open(req.getCityCode());
+        sysCityBiz.batchOpen(req.getCityCode());
         //用ResponseFactory将返回值包装,简单的返回成功
         return ResponseFactory.buildSuccess();
     }
@@ -111,7 +111,7 @@ public class APISysCityController extends BaseController {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getCityCode(),new CityException(CityCodeEnum.CITY_CODE_IS_NULL));
         //调用BIZ方法
-        sysCityBiz.close(req.getCityCode());
+        sysCityBiz.batchClose(req.getCityCode());
         //用ResponseFactory将返回值包装,简单的返回成功
         return ResponseFactory.buildSuccess();
     }
@@ -127,7 +127,7 @@ public class APISysCityController extends BaseController {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getCityCodes(),new CityException(CityCodeEnum.CITY_CODE_IS_NULL));
         //调用BIZ方法
-        sysCityBiz.open(req.getCityCodes());
+        sysCityBiz.batchOpen(req.getCityCodes());
         //用ResponseFactory将返回值包装,简单的返回成功
         return ResponseFactory.buildSuccess();
     }
@@ -143,7 +143,7 @@ public class APISysCityController extends BaseController {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getCityCodes(),new CityException(CityCodeEnum.CITY_CODE_IS_NULL));
         //调用BIZ方法
-        sysCityBiz.close(req.getCityCodes());
+        sysCityBiz.batchClose(req.getCityCodes());
         //用ResponseFactory将返回值包装,简单的返回成功
         return ResponseFactory.buildSuccess();
     }
