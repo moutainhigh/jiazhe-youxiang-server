@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.server.service;
 
 import com.jiazhe.youxiang.server.dto.syscity.SysCityDTO;
+import com.jiazhe.youxiang.server.vo.Paging;
 
 import java.util.List;
 import java.util.Map;
@@ -17,11 +18,12 @@ import java.util.Map;
  * @created 2018/10/16
  */
 public interface SysCityService {
-    List<SysCityDTO> getList(String parentCode);
 
     void updateStatusByCityCodes(List<String> cityCodes, Byte status);
 
-    void updateStatusByParentCode(String parentCode, Byte status);
+    void updateStatusByCityCode(String parentCode, Byte status);
+
+    List<SysCityDTO> getList(String parentCode, Integer level, Paging paging);
 
     List<SysCityDTO> getOpenList();
 

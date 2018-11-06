@@ -15,4 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SysCityController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SysCityController.class);
+
+    @RequestMapping(value = "/index")
+    public String index() {
+        return "system/syscity/index";
+    }
 }

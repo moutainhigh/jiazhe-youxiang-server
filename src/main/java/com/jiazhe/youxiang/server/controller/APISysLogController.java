@@ -6,6 +6,8 @@
 package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.SysLogAdapter;
 import com.jiazhe.youxiang.server.biz.SysLogBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
@@ -48,14 +50,12 @@ public class APISysLogController extends BaseController {
      *
      * @return
      */
-    @CustomLog(moduleName = ModuleEnum.LOG, operate = "日志查询", level = LogLevelEnum.LEVEL_1)
+//    @CustomLog(moduleName = ModuleEnum.LOG, operate = "日志查询", level = LogLevelEnum.LEVEL_1)
     @ApiOperation(value = "查询日志信息", httpMethod = "GET", response = SysLogResp.class, responseContainer = "List", notes = "查询日志信息")
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
     public Object getList(@ModelAttribute SysLogListReq req) {
-        //TODO niexiao 参数验证
-        Paging paging = new Paging();
-        paging.setOffset(req.getOffset());
-        paging.setLimit(req.getLimit());
+        CommonValidator.validatePaging(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
         List<SysLogDTO> sysLogDTOList = sysLogBiz.getList(req.getModuleName(), req.getOperate(), req.getLevel(), paging);
         //将DTO转成VO
