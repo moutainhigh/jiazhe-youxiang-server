@@ -133,8 +133,8 @@ public class APICustomerController {
      *
      * @return
      */
-    @ApiOperation(value = "删除客户", httpMethod = "GET", notes = "删除客户")
-    @RequestMapping(value = "delete", method = RequestMethod.GET)
+    @ApiOperation(value = "删除客户", httpMethod = "POST", notes = "删除客户")
+    @RequestMapping(value = "delete", method = RequestMethod.POST)
     public Object delete(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
