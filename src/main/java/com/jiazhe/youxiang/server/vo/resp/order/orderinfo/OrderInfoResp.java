@@ -1,7 +1,10 @@
 package com.jiazhe.youxiang.server.vo.resp.order.orderinfo;
 
+import com.jiazhe.youxiang.server.dto.product.ProductDTO;
 import com.jiazhe.youxiang.server.vo.BaseObject;
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
+import com.jiazhe.youxiang.server.vo.resp.product.ProductResp;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -56,6 +59,12 @@ public class OrderInfoResp extends BaseVO {
     private Byte type;
 
     private Byte status;
+
+    private String auditReason;
+
+    private CustomerResp customerResp;
+
+    private ProductResp productResp;
 
     public Integer getId() {
         return id;
@@ -231,5 +240,29 @@ public class OrderInfoResp extends BaseVO {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getAuditReason() {
+        return auditReason;
+    }
+
+    public void setAuditReason(String auditReason) {
+        this.auditReason = auditReason;
+    }
+
+    public CustomerResp getCustomerResp() {
+        return customerResp;
+    }
+
+    public void setCustomerResp(CustomerResp customerResp) {
+        this.customerResp = customerResp;
+    }
+
+    public ProductResp getProductResp() {
+        return productResp;
+    }
+
+    public void setProductResp(ProductResp productResp) {
+        this.productResp = productResp;
     }
 }

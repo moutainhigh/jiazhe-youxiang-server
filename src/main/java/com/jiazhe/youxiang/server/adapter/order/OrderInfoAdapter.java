@@ -1,5 +1,8 @@
 package com.jiazhe.youxiang.server.adapter.order;
 
+import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
+import com.jiazhe.youxiang.server.adapter.ProductAdapter;
+import com.jiazhe.youxiang.server.domain.po.OrderInfoPO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
 
@@ -36,6 +39,40 @@ public class OrderInfoAdapter {
         orderInfoResp.setComments(dto.getComments());
         orderInfoResp.setType(dto.getType());
         orderInfoResp.setStatus(dto.getStatus());
+        orderInfoResp.setAuditReason(dto.getAuditReason());
+        orderInfoResp.setProductResp(ProductAdapter.productDTO2VO(dto.getProductDTO()));
+        orderInfoResp.setCustomerResp(CustomerAdapter.customerDTO2VO(dto.getCustomerDTO()));
         return orderInfoResp;
+    }
+
+    public static OrderInfoDTO PO2DTO(OrderInfoPO orderInfoPO) {
+        if (orderInfoPO == null) {
+            return null;
+        }
+        OrderInfoDTO orderInfoDTO = new OrderInfoDTO();
+        orderInfoDTO.setId(orderInfoPO.getId());
+        orderInfoDTO.setOrderCode(orderInfoPO.getOrderCode());
+        orderInfoDTO.setCustomerId(orderInfoPO.getCustomerId());
+        orderInfoDTO.setProductId(orderInfoPO.getProductId());
+        orderInfoDTO.setProductPrice(orderInfoPO.getProductPrice());
+        orderInfoDTO.setCount(orderInfoPO.getCount());
+        orderInfoDTO.setCustomerAddress(orderInfoPO.getCustomerAddress());
+        orderInfoDTO.setCustomerMobile(orderInfoPO.getCustomerMobile());
+        orderInfoDTO.setCustomerName(orderInfoPO.getCustomerName());
+        orderInfoDTO.setCustomerRemark(orderInfoPO.getCustomerRemark());
+        orderInfoDTO.setWorkerName(orderInfoPO.getWorkerName());
+        orderInfoDTO.setWorkerMobile(orderInfoPO.getWorkerMobile());
+        orderInfoDTO.setOrderTime(orderInfoPO.getOrderTime());
+        orderInfoDTO.setServiceTime(orderInfoPO.getServiceTime());
+        orderInfoDTO.setRealServiceTime(orderInfoPO.getRealServiceTime());
+        orderInfoDTO.setPayRechargeCard(orderInfoPO.getPayRechargeCard());
+        orderInfoDTO.setPayVoucher(orderInfoPO.getPayVoucher());
+        orderInfoDTO.setPayCash(orderInfoPO.getPayCash());
+        orderInfoDTO.setTotalCost(orderInfoPO.getTotalCost());
+        orderInfoDTO.setComments(orderInfoPO.getComments());
+        orderInfoDTO.setType(orderInfoPO.getType());
+        orderInfoDTO.setStatus(orderInfoPO.getStatus());
+        orderInfoDTO.setAuditReason(orderInfoPO.getAuditReason());
+        return orderInfoDTO;
     }
 }

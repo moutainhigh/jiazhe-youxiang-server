@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.order.OrderInfoPOManualMapper">
+    <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.OrderInfoPO">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="order_code" property="orderCode" jdbcType="VARCHAR"/>
+        <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
+        <result column="product_id" property="productId" jdbcType="INTEGER"/>
+        <result column="product_price" property="productPrice" jdbcType="INTEGER"/>
+        <result column="count" property="count" jdbcType="INTEGER"/>
+        <result column="customer_address" property="customerAddress" jdbcType="VARCHAR"/>
+        <result column="customer_mobile" property="customerMobile" jdbcType="VARCHAR"/>
+        <result column="customer_name" property="customerName" jdbcType="VARCHAR"/>
+        <result column="customer_remark" property="customerRemark" jdbcType="VARCHAR"/>
+        <result column="worker_name" property="workerName" jdbcType="VARCHAR"/>
+        <result column="worker_mobile" property="workerMobile" jdbcType="VARCHAR"/>
+        <result column="order_time" property="orderTime" jdbcType="TIMESTAMP"/>
+        <result column="service_time" property="serviceTime" jdbcType="TIMESTAMP"/>
+        <result column="real_service_time" property="realServiceTime" jdbcType="TIMESTAMP"/>
+        <result column="pay_recharge_card" property="payRechargeCard" jdbcType="DECIMAL"/>
+        <result column="pay_voucher" property="payVoucher" jdbcType="INTEGER"/>
+        <result column="pay_cash" property="payCash" jdbcType="DECIMAL"/>
+        <result column="total_cost" property="totalCost" jdbcType="DECIMAL"/>
+        <result column="comments" property="comments" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="TINYINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="audit_reason" property="auditReason" jdbcType="VARCHAR"/>
+        <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,order_code,customer_id,product_id,product_price,count,customer_address,customer_mobile,customer_name,customer_remark,worker_name,worker_mobile,order_time
+        service_time,real_service_time,pay_recharge_card,pay_voucher,pay_cash,total_cost,comments,type,status,audit_reason,ext_info, is_deleted,add_time,mod_time
+    </sql>
+
+    <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.OrderInfoPO">
+        SELECT
+        o.id,o.order_code,o.customer_id,o.product_id,o.product_price,o.count,o.customer_address,o.customer_mobile,o.customer_name,o.customer_remark,o.worker_name,o.worker_mobile,o.order_time
+        service_time,o.real_service_time,o.pay_recharge_card,o.pay_voucher,o.pay_cash,o.total_cost,o.comments,o.type,o.status,o.audit_reason,o.ext_info,o.
+        is_deleted,o.add_time,o.mod_time
+        FROM order_info o
+        LEFT JOIN customer c ON c.id = o.customer_id
+        <where>
+            <if test="status != null and status != 0">
+                AND o.status = #{status}
+            </if>
+            <if test="orderCode != null and orderCode !=''">
+                AND o.order_code = #{orderCode}
+            </if>
+            <if test="mobile != null and mobile !=''">
+                AND (o.customer_mobile = #{mobile} OR c.mobile = #{mobile})
+            </if>
+            <if test="orderStartTime != null">
+                AND o.order_time &gt;= #{orderStartTime}
+            </if>
+            <if test="orderEndTime != null">
+                AND o.order_time &lt;= #{orderEndTime}
+            </if>
+            <if test="workerMobile != null and workerMobile !=''">
+                AND o.worker_mobile = #{workerMobile}
+            </if>
+            AND o.is_deleted = 0 ORDER BY o.add_time desc
+        </where>
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM order_info o
+        LEFT JOIN customer c ON c.id = o.customer_id
+        <where>
+            <if test="status != null and status != 0">
+                AND o.status = #{status}
+            </if>
+            <if test="orderCode != null and orderCode !=''">
+                AND o.order_code = #{orderCode}
+            </if>
+            <if test="mobile != null and mobile !=''">
+                AND (o.customer_mobile = #{mobile} OR c.mobile = #{mobile})
+            </if>
+            <if test="orderStartTime != null">
+                AND o.order_time &gt;= #{orderStartTime}
+            </if>
+            <if test="orderEndTime != null">
+                AND o.order_time &lt;= #{orderEndTime}
+            </if>
+            <if test="workerMobile != null and workerMobile !=''">
+                AND o.worker_mobile = #{workerMobile}
+            </if>
+            AND o.is_deleted = 0
+        </where>
+    </select>
+
+</mapper>

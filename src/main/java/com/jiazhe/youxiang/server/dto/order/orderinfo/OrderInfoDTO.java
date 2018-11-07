@@ -1,5 +1,8 @@
 package com.jiazhe.youxiang.server.dto.order.orderinfo;
 
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.product.ProductDTO;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -53,6 +56,12 @@ public class OrderInfoDTO {
     private Byte type;
 
     private Byte status;
+
+    private String auditReason;
+
+    private ProductDTO productDTO;
+
+    private CustomerDTO customerDTO;
 
     public Integer getId() {
         return id;
@@ -228,5 +237,29 @@ public class OrderInfoDTO {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getAuditReason() {
+        return auditReason;
+    }
+
+    public void setAuditReason(String auditReason) {
+        this.auditReason = auditReason;
+    }
+
+    public ProductDTO getProductDTO() {
+        return productDTO;
+    }
+
+    public void setProductDTO(ProductDTO productDTO) {
+        this.productDTO = productDTO;
+    }
+
+    public CustomerDTO getCustomerDTO() {
+        return customerDTO;
+    }
+
+    public void setCustomerDTO(CustomerDTO customerDTO) {
+        this.customerDTO = customerDTO;
     }
 }
