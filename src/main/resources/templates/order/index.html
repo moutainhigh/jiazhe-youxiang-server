@@ -17,12 +17,14 @@
         .form-group {
             margin-bottom: 0px;
         }
-        .ui-jqgrid .ui-jqgrid-bdiv{
-            overflow-x:auto;
+
+        .ui-jqgrid .ui-jqgrid-bdiv {
+            overflow-x: auto;
         }
-        ::-webkit-scrollbar{
-            width:4px;
-            height:10px;
+
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 10px;
         }
     </style>
 </head>
@@ -112,7 +114,8 @@
                                 <label class="col-sm-1 control-label no-padding-right">服务人员电话：</label>
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
-                                        <input id="searchWorkerMobile" name="workerMobile" class="form-control" type="text"
+                                        <input id="searchWorkerMobile" name="workerMobile" class="form-control"
+                                               type="text"
                                                style="height:30px"/>
                                     </div>
                                 </div>
@@ -285,9 +288,9 @@
 
     $(function () {
         //重新修改表格宽度
-        /*$(window).resize(function () {
+        $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
-        });*/
+        });
 
         $('.date-picker').datepicker({
             language: 'zh-CN',//选择语言
@@ -313,20 +316,20 @@
             rows: "pageSize"
         },// 重新定义分页信息
         autowidth: true,
-        shrinkToFit:false,
+        shrinkToFit: false,
         autoScroll: true,
         height: 350,
-        colNames: ['','操作', '订单号', '商品名称', '单价', '数量', '下单电话', '客户电话', '客户姓名', '状态', '代金券抵扣数量', '充值卡支付金额', '在线支付金额'],
+        colNames: ['', '操作', '订单号', '商品名称', '单价', '数量', '下单电话', '客户电话', '客户姓名', '状态', '代金券抵扣数量', '充值卡支付金额', '在线支付金额'],
         colModel: [
             {name: 'id', index: 'id', sortable: false, hidden: true},
             {name: '_action', index: '_action', width: 260, sortable: false, formatter: customFormatter},
             {name: 'orderCode', index: 'orderCode', sortable: false},
             {name: 'productResp.name', index: 'productResp.name', sortable: false},
-            {name: 'productPrice', index: 'productPrice',  width: 50, sortable: false},
-            {name: 'count', index: 'count', width: 50,sortable: false},
-            {name: 'customerResp.mobile', index: 'customerResp.mobile',  width: 100,sortable: false},
-            {name: 'customerMobile', index: 'customerMobile', width: 100,sortable: false},
-            {name: 'customerName', index: 'customerName', width: 70,sortable: false},
+            {name: 'productPrice', index: 'productPrice', width: 50, sortable: false},
+            {name: 'count', index: 'count', width: 50, sortable: false},
+            {name: 'customerResp.mobile', index: 'customerResp.mobile', width: 100, sortable: false},
+            {name: 'customerMobile', index: 'customerMobile', width: 100, sortable: false},
+            {name: 'customerName', index: 'customerName', width: 70, sortable: false},
             {
                 name: 'status',
                 index: 'status',
@@ -358,9 +361,9 @@
                     }
                 }
             },
-            {name: 'payVoucher', index: 'payVoucher', width: 120,sortable: false},
-            {name: 'payRechargeCard', index: 'payRechargeCard',width: 120, sortable: false},
-            {name: 'payCash', index: 'payCash', width: 120,sortable: false}
+            {name: 'payVoucher', index: 'payVoucher', width: 120, sortable: false},
+            {name: 'payRechargeCard', index: 'payRechargeCard', width: 120, sortable: false},
+            {name: 'payCash', index: 'payCash', width: 120, sortable: false}
         ],
         rowNum: 10,
         rowList: [10, 20, 30],
@@ -385,7 +388,7 @@
         },
         caption: "订单列表"
     });
-   /* $(window).triggerHandler('resize.jqGrid');*///trigger window resize to make the grid get the correct size
+    $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
 
     //replace icons with FontAwesome icons like above
     function updatePagerIcons(table) {
@@ -424,7 +427,7 @@
                 "<i class='ace-icon'>预约</i>" +
                 "</a>&nbsp;&nbsp;";
         }
-        if(rowObject.status==3){
+        if (rowObject.status == 3) {
             str = str + "<a class='btn btn-minier btn-success' href=\"javascript:stopUsing('" + rowObject.id + "')\">" +
                 "<i class='ace-icon'>完成订单</i>" +
                 "</a>&nbsp;&nbsp;";
@@ -435,7 +438,7 @@
                 "<i class='ace-icon'>追加收款</i>" +
                 "</a>&nbsp;&nbsp;";
         }
-        if(rowObject.status==5){
+        if (rowObject.status == 5) {
             str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:stopUsing('" + rowObject.id + "')\">" +
                 "<i class='ace-icon'>审核通过</i>" +
                 "</a>&nbsp;&nbsp;";
@@ -443,7 +446,7 @@
                 "<i class='ace-icon'>审核不通过</i>" +
                 "</a>&nbsp;&nbsp;";
         }
-        if(rowObject.status==5){
+        if (rowObject.status == 5) {
             str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:startUsing('" + rowObject.id + "')\">" +
                 "<i class='ace-icon'>取消订单</i>" +
                 "</a>&nbsp;&nbsp;";

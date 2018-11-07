@@ -18,7 +18,7 @@
       id,voucher_id,exchange_code_id,exchange_type,operator_id,operator_name,ext_info,is_deleted,add_time,mod_time
     </sql>
 
-    <select id="findByCodeIds" parameterType="java.util.List" resultType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeRecordPO">
+    <select id="findByCodeIds" parameterType="java.util.List" resultType="com.jiazhe.youxiang.server.domain.po.VoucherExchangeRecordPO">
         select
         <include refid="Base_Column_List"/>
         FROM voucher_exchange_record

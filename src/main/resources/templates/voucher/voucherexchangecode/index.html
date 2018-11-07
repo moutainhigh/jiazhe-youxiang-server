@@ -39,7 +39,7 @@
                         <a th:href="@{/main/main_center}">主页</a>
                     </li>
                     <li>
-                        <a  th:href="@{/voucher/exchangecodebatchindex}">代金券兑换码批次管理</a>
+                        <a th:href="@{/voucher/exchangecodebatchindex}">代金券兑换码批次管理</a>
                     </li>
                     <li class="active" th:text="${batchName}"></li>
                 </ul><!-- /.breadcrumb -->
@@ -54,7 +54,8 @@
                                 <div class="col-sm-4">
                                     <label class="col-sm-3 control-label no-padding-right">状态：</label>
                                     <div class="col-sm-3">
-                                        <select id="searchStatus" name="status" class="selectpicker show-tick form-control">
+                                        <select id="searchStatus" name="status"
+                                                class="selectpicker show-tick form-control">
                                             <option value="">所有</option>
                                             <option value=1>启用</option>
                                             <option value=0>停用</option>
@@ -131,6 +132,18 @@
                                                             <input id="saveVoucherName" name="voucherName"
                                                                    class="form-control"
                                                                    type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">适用范围：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input class="form-control" onclick="showChooseModal();"
+                                                                   type="text" value="点击选择适用范围" style="height:30px"
+                                                                   readonly/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -245,6 +258,8 @@
         </div>
     </div>-->
 </div><!-- /.main-container -->
+<div id="selectCityAndProduct">
+
 </div>
 </body>
 <script type="text/javascript">
@@ -255,6 +270,7 @@
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
+        $('#selectCityAndProduct').load('../pageimport/selectcityandproduct');
 
         $('.date-picker').datepicker({
             language: 'zh-CN',//选择语言
@@ -295,7 +311,7 @@
         width: "100%",
         autowidth: true,
         height: 350,
-        colNames: ['','批次名称','代金券名称', '兑换码', '密钥', '停用状态', '使用状态', '兑换商品数量',  '过期时间', '操作'],
+        colNames: ['', '批次名称', '代金券名称', '兑换码', '密钥', '停用状态', '使用状态', '兑换商品数量', '过期时间', '操作'],
         colModel: [
             {name: 'id', index: 'id', sortable: false, hidden: true},
             {name: 'batchName', index: 'batchName', width: 100, sortable: false},
@@ -321,8 +337,16 @@
                 }
             },
             {name: 'count', index: 'count', width: 50, sortable: false},
-            {name: 'expiryTime', index: 'expiryTime', width: 50, sortable: false,formatter: dateFormatter},
-            {name: '_action', index: '_action', width:100,sortable: false, formatter: customFormatter}
+            {
+                name: 'expiryTime',
+                index: 'expiryTime',
+                width: 50,
+                sortable: false,
+                formatter: function (cellvalue, options, rowObject) {
+                    return dateFormat(rowObject.expiryTime);
+                }
+            },
+            {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
         ],
         rowNum: 10,
         rowList: [10, 20, 30],
@@ -374,27 +398,22 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        if(rowObject.used == 0){
+        if (rowObject.used == 0) {
             str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
                 "<i class='ace-icon'>修改</i>" +
                 "</a>&nbsp;&nbsp;";
-            if(rowObject.status == 0){
+            if (rowObject.status == 0) {
                 str = str + "<a class='btn btn-minier btn-success' href=\"javascript:startUsing('" + rowObject.id + "')\">" +
                     "<i class='ace-icon'>启用</i>" +
                     "</a>";
-            }else{
+            } else {
                 str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:stopUsing('" + rowObject.id + "')\">" +
                     "<i class='ace-icon'>停用</i>" +
                     "</a>&nbsp;&nbsp;";
             }
 
         }
-
         return str;
-    }
-
-    function dateFormatter(cellvalue, options, rowObject) {
-        return dateFormat(rowObject.expiryTime);
     }
 
     //启用兑换码
@@ -424,7 +443,7 @@
     //停用兑换码
     function stopUsing(id) {
         $.ajax({
-            url: "../api/voucherexchangecode/stopusing",    //请求的url地址
+            url: "../api/voucherexchangecode/stopusing", 
             dataType: "json",
             async: false,
             data: {
@@ -482,6 +501,8 @@
                     var result = data.data;
                     $("#saveCodeId").val(result.id);
                     $("#codeSaveForm #saveVoucherName").val(result.voucherName);
+                    $("#codeSaveForm #saveCityCodes").val(result.cityCodes);
+                    $("#codeSaveForm #saveProductIds").val(result.productIds);
                     $("#codeSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
                     if (result.expiryType == 0) {
                         $("#codeSaveForm #saveDeadLineRadio").click();

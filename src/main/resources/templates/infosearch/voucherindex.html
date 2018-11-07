@@ -131,6 +131,18 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">适用范围：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input class="form-control" onclick="showChooseModal();"
+                                                                   type="text" value="点击选择适用范围" style="height:30px"
+                                                                   readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right"
                                                            for="saveExpiryTime">到期时间：</label>
                                                     <div class="col-sm-8">
@@ -192,6 +204,8 @@
         </div>
     </div>-->
 </div><!-- /.main-container -->
+<div id="selectCityAndProduct">
+
 </div>
 </body>
 <script type="text/javascript">
@@ -202,6 +216,7 @@
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
+        $('#selectCityAndProduct').load('../pageimport/selectcityandproduct');
 
         $('.date-picker').datepicker({
             language: 'zh-CN',//选择语言
@@ -425,6 +440,8 @@
                     var result = data.data;
                     $("#saveCardId").val(result.id);
                     $("#cardSaveForm #saveVoucherName").val(result.name);
+                    $("#cardSaveForm #saveCityCodes").val(result.cityCodes);
+                    $("#cardSaveForm #saveProductIds").val(result.productIds);
                     $("#cardSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
                     $("#codeSaveForm #saveDescription").val(result.description);
                     $("#modal-form").modal('show');

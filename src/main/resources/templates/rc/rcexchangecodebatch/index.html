@@ -138,6 +138,18 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">适用范围：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input class="form-control" onclick="showChooseModal();"
+                                                                   type="text" value="点击选择适用范围" style="height:30px"
+                                                                   readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">虚拟批次：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
@@ -289,6 +301,8 @@
         </div>
     </div>-->
 </div><!-- /.main-container -->
+<div id="selectCityAndProduct">
+
 </div>
 </body>
 <script type="text/javascript">
@@ -298,7 +312,7 @@
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
-
+        $('#selectCityAndProduct').load('../pageimport/selectcityandproduct');
         //将项目列表填入到projectId中
 
         $('.date-picker').datepicker({
@@ -384,7 +398,15 @@
                 }
             },
             {name: 'amount', index: 'amount', width: 30, sortable: false},
-            {name: 'expiryTime', index: 'expiryTime', width: 50, sortable: false, formatter: dateFormatter},
+            {
+                name: 'expiryTime',
+                index: 'expiryTime',
+                width: 50,
+                sortable: false,
+                formatter: function (cellvalue, options, rowObject) {
+                    return dateFormat(rowObject.expiryTime);
+                }
+            },
             {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
         ],
         rowNum: 10,
@@ -468,10 +490,6 @@
         return str;
     }
 
-    function dateFormatter(cellvalue, options, rowObject) {
-        return dateFormat(rowObject.expiryTime);
-    }
-
     function openNew() {
         $("#modal-title").html("批次信息-添加");
         $("input[name=isVirtualRadio]").removeAttr('disabled');
@@ -480,6 +498,8 @@
         $("#batchId").val(0);
         $("#batchSaveForm #saveName").val("");
         $("#batchSaveForm #saveRechargeCardName").val("");
+        $("#batchSaveForm #saveCityCodes").val("");
+        $("#batchSaveForm #saveProductIds").val("");
         $("#batchSaveForm #saveNotVirtualRadio").click();
         $("#batchSaveForm #saveFaceValue").val("");
         $("#batchSaveForm #saveAmount").val("");
@@ -536,6 +556,8 @@
                     $("#batchId").val(result.id);
                     $("#batchSaveForm #saveName").val(result.name);
                     $("#batchSaveForm #saveRechargeCardName").val(result.rechargeCardName);
+                    $("#batchSaveForm #saveCityCodes").val(result.cityCodes);
+                    $("#batchSaveForm #saveProductIds").val(result.productIds);
                     if (result.isVirtual == 0) {
                         $("#batchSaveForm #saveNotVirtualRadio").click();
                         $("#batchSaveForm #saveFaceValue").val(result.faceValue);
@@ -606,8 +628,8 @@
             success: function (data) {
                 if ('error' in data) {
                     bootboxalert(data.error.message);
-                }else {
-                    window.location.href = "../api/rcexchangecodebatch/export?id="+id;
+                } else {
+                    window.location.href = "../api/rcexchangecodebatch/export?id=" + id;
                 }
             },
             error: function () {
