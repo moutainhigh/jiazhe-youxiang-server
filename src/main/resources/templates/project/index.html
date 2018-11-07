@@ -261,7 +261,6 @@
 
     function addOrUpdate() {
         var projectId = $("#projectId").val();
-        alert(projectId);
         if (projectId <= 0) {
             add();
         } else {
@@ -280,17 +279,8 @@
                 priority: $("#inputPriority").val()
             },
             type: "POST",
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    $("#modal-form").modal('hide');
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                }
-            },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            success: success,
+            error: error
         });
     }
 
@@ -306,57 +296,26 @@
                 priority: $("#inputPriority").val()
             },
             type: "POST",
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    $("#modal-form").modal('hide');
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                }
-            },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            success: success,
+            error: error
         });
     }
 
     function deleteOne(id) {
-        bootbox.confirm({
-            buttons: {
-                confirm: {
-                    label: '确认',
-                    className: 'btn-myStyle'
-                },
-                cancel: {
-                    label: '取消',
-                    className: 'btn-default'
-                }
-            },
-            title: "提示信息",
-            message: '确定要删除该项目吗？',
-            callback: function (result) {
-                if (result) {
-                    $.ajax({
-                        url: "../api/project/delete",    //请求的url地址
-                        dataType: "json",
-                        async: false,
-                        data: {
-                            id: id
-                        },
-                        type: "POST",
-                        success: function (data) {
-                            if ('error' in data) {
-                                bootboxalert(data.error.message);
-                            } else {
-                                jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                            }
-                        },
-                        error: function () {
-                            bootboxalert("服务器异常，请联系管理员");
-                        }
-                    });
-                }
-            },
+        confirm("确定要删除该项目吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "../api/project/delete",    //请求的url地址
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    success: success,
+                    error: error
+                });
+            }
         });
     }
 
@@ -387,9 +346,7 @@
                     $("#modal-form").modal('show');
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
     }
 
@@ -402,49 +359,52 @@
     }
 
     function begin(id) {
-        $.ajax({
-            url: "../api/project/begin",    //请求的url地址
-            dataType: "json",
-            async: false,
-            data: {
-                id: id
-            },
-            type: "GET",
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                }else {
-                    $("#modal-form").modal('hide');
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                }
-            },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
+        confirm("确定要删除该项目吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "../api/project/begin",    //请求的url地址
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "GET",
+                    success: success,
+                    error: function () {
+                        bootboxalert("服务器异常，请联系管理员");
+                    }
+                });
             }
         });
     }
 
     function end(id) {
-        $.ajax({
-            url: "../api/project/end",    //请求的url地址
-            dataType: "json",
-            async: false,
-            data: {
-                id: id
-            },
-            type: "GET",
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                }else {
-                    $("#modal-form").modal('hide');
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                }
-            },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
+        confirm("确定要删除该项目吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "../api/project/end",    //请求的url地址
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "GET",
+                    success: success,
+                    error: function () {
+                        bootboxalert("服务器异常，请联系管理员");
+                    }
+                });
             }
         });
+    }
+
+    function success(data) {
+        if ('error' in data) {
+            bootboxalert(data.error.message);
+        } else {
+            $("#modal-form").modal('hide');
+            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+        }
     }
 
 </script>
