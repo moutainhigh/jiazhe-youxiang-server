@@ -6,9 +6,11 @@ import com.jiazhe.youxiang.server.dao.mapper.manual.order.OrderInfoPOManualMappe
 import com.jiazhe.youxiang.server.domain.po.OrderInfoPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
+import com.jiazhe.youxiang.server.dto.order.orderpayment.OrderPaymentDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.order.OrderInfoService;
+import com.jiazhe.youxiang.server.service.order.OrderPaymentService;
 import com.jiazhe.youxiang.server.service.product.ProductService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     private CustomerService customerService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private OrderPaymentService orderPaymentService;
 
     @Override
     public List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile, Date orderStartTime, Date orderEndTime,String workerMobile, Paging paging) {

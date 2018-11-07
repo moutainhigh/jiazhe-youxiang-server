@@ -391,21 +391,13 @@
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
         if(rowObject.used == 0){
-            str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>修改</i>" +
-                "</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">修改</a>&nbsp;&nbsp;";
             if(rowObject.status == 0){
-                str = str + "<a class='btn btn-minier btn-success' href=\"javascript:startUsing('" + rowObject.id + "')\">" +
-                    "<i class='ace-icon'>启用</i>" +
-                    "</a>";
+                str = str + "<a class='btn btn-minier btn-success' href=\"javascript:startUsing('" + rowObject.id + "')\">启用</a>";
             }else{
-                str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:stopUsing('" + rowObject.id + "')\">" +
-                    "<i class='ace-icon'>停用</i>" +
-                    "</a>&nbsp;&nbsp;";
+                str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:stopUsing('" + rowObject.id + "')\">停用</a>&nbsp;&nbsp;";
             }
-
         }
-
         return str;
     }
 

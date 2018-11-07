@@ -22,4 +22,11 @@ public interface VoucherExchangeRecordService {
     VoucherExchangeRecordDTO findByVoucherId(Integer id);
 
     void insert(VoucherExchangeRecordPO voucherExchangeRecordPO);
+
+    /**
+     * 根据code的id查询兑换记录
+     * @param id
+     * @return
+     */
+    VoucherExchangeRecordDTO findByCodeId(Integer id);
 }

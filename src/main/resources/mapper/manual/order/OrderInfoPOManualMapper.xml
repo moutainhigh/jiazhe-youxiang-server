@@ -92,5 +92,4 @@
             AND o.is_deleted = 0
         </where>
     </select>
-
 </mapper>

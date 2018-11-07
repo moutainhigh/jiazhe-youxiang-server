@@ -84,7 +84,7 @@
             async: true,
             type: "GET",
             success: function (result) {
-                if(result.code == "112010"){
+                if("error" in result && result.error.code == 112010){
                     window.parent.location.href = "../system/index";
                 }else{
                     var data = result.data;

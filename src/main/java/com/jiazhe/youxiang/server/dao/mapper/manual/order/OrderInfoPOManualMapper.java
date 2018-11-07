@@ -32,10 +32,11 @@ public interface OrderInfoPOManualMapper {
      * @param mobile
      * @param orderStartTime
      * @param orderEndTime
-     * @param workMobile
+     * @param workerMobile
      * @param offset
      * @param limit
      * @return
      */
     List<OrderInfoPO> query(@Param("status") Byte status, @Param("orderCode")String orderCode, @Param("mobile")String mobile, @Param("orderStartTime")Date orderStartTime, @Param("orderEndTime")Date orderEndTime,@Param("workerMobile")String workerMobile, @Param("offset")Integer offset,  @Param("limit")Integer limit);
+
 }

@@ -416,40 +416,22 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str = str + "<a class='btn btn-minier btn-success' href=\"javascript:startUsing('" + rowObject.id + "')\">" +
-            "<i class='ace-icon'>查看</i>" +
-            "</a>&nbsp;&nbsp;";
+        str = str + "<a class='btn btn-minier btn-success' href=\"javascript:startUsing('" + rowObject.id + "')\">查看</a>&nbsp;&nbsp;";
         if (rowObject.status == 2) {
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:startUsing('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>取消订单</i>" +
-                "</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:stopUsing('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>预约</i>" +
-                "</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:startUsing('" + rowObject.id + "')\">取消订单</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:stopUsing('" + rowObject.id + "')\">预约</a>&nbsp;&nbsp;";
         }
         if (rowObject.status == 3) {
-            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:stopUsing('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>完成订单</i>" +
-                "</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:startUsing('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>取消订单</i>" +
-                "</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:stopUsing('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>追加收款</i>" +
-                "</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:stopUsing('" + rowObject.id + "')\">完成订单</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:startUsing('" + rowObject.id + "')\">取消订单</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:stopUsing('" + rowObject.id + "')\">追加收款</a>&nbsp;&nbsp;";
         }
         if (rowObject.status == 5) {
-            str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:stopUsing('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>审核通过</i>" +
-                "</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:startUsing('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>审核不通过</i>" +
-                "</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:stopUsing('" + rowObject.id + "')\">审核通过</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:startUsing('" + rowObject.id + "')\">审核不通过</a>&nbsp;&nbsp;";
         }
-        if (rowObject.status == 5) {
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:startUsing('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>取消订单</i>" +
-                "</a>&nbsp;&nbsp;";
+        if (rowObject.status == 6) {
+            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:startUsing('" + rowObject.id + "')\">取消订单</a>&nbsp;&nbsp;";
         }
         return str;
     }

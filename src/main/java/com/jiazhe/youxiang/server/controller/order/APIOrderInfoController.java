@@ -121,7 +121,7 @@ public class APIOrderInfoController extends BaseController {
     }
 
     @ApiOperation(value = "获取订单信息", httpMethod = "GET", response = OrderInfoResp.class,notes = "客户支付")
-    @RequestMapping(value = "/getbyid", method = RequestMethod.POST)
+    @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
     public Object getById(@ModelAttribute IdReq req) {
         OrderInfoDTO orderInfoDTO = orderInfoBiz.getById(req.getId());
         OrderInfoResp orderInfoResp = OrderInfoAdapter.DTO2Resp(orderInfoDTO);
