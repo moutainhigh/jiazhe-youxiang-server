@@ -161,8 +161,6 @@
 </div>
 </body>
 <script type="text/javascript">
-    var permission = getCookie("permission");
-
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -239,6 +237,28 @@
         }
     }
 
+    function customFormatter(cellvalue, options, rowObject) {
+        var str = "";
+        str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:deleteOne('" + rowObject.id + "')\">" +
+            "<i class='ace-icon'>删除</i>" +
+            "</a>&nbsp;&nbsp;";
+        str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
+            "<i class='ace-icon'>修改</i>" +
+            "</a>&nbsp;&nbsp;";
+
+        if (rowObject.status == 0) {
+            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:begin('" + rowObject.id + "')\">" +
+                "<i class='ace-icon'>启动</i>" +
+                "</a>&nbsp;&nbsp;";
+        }
+        if (rowObject.status == 1) {
+            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:end('" + rowObject.id + "')\">" +
+                "<i class='ace-icon'>停止</i>" +
+                "</a>&nbsp;&nbsp;";
+        }
+        return str;
+    }
+
     function addOrUpdate() {
         var projectId = $("#projectId").val();
         alert(projectId);
@@ -300,30 +320,6 @@
         });
     }
 
-
-    function customFormatter(cellvalue, options, rowObject) {
-        var str = "";
-        str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:deleteOne('" + rowObject.id + "')\">" +
-            "<i class='ace-icon'>删除</i>" +
-            "</a>&nbsp;&nbsp;";
-        str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
-            "<i class='ace-icon'>修改</i>" +
-            "</a>&nbsp;&nbsp;";
-
-        if (rowObject.status == 0) {
-            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:begin('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>启动</i>" +
-                "</a>&nbsp;&nbsp;";
-        }
-        if (rowObject.status == 1) {
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:end('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>停止</i>" +
-                "</a>&nbsp;&nbsp;";
-        }
-        return str;
-    }
-
-
     function deleteOne(id) {
         bootbox.confirm({
             buttons: {
@@ -363,7 +359,6 @@
             },
         });
     }
-
 
     function openEdit(id) {
         $("#modal-title").html("项目信息-修改");
