@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/static/init.css}"/>
+
+    <!-- Javascript -->
+    <script th:src="@{/static/init.js}"></script>
+
+
+    <style>
+        .form-group {
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+
+<body class="no-skin">
+
+<div class="main-container ace-save-state" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.loadState('main-container')
+        } catch (e) {
+        }
+    </script>
+
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a th:href="@{/main/main_center}">主页</a>
+                    </li>
+                    <li class="active">项目管理</li>
+                </ul><!-- /.breadcrumb -->
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xs-12" style="padding-top:40px">
+                        <form id="searchForm" class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">项目名称：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="name" name="name" class="form-control" type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">项目状态：</label>
+                                <div class="col-sm-2">
+                                    <select id="status" name="status" class="selectpicker show-tick form-control">
+                                        <option value="">所有</option>
+                                        <option value=0>未启动</option>
+                                        <option value=1>进行中</option>
+                                        <option value=2>已结束</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <button class="btn btn-white btn-default btn-round btn-sm"
+                                            onclick="return search()">
+                                        <i class="ace-icon fa fa-search red2"></i>
+                                        查询
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!-- /.col -->
+                    <div class="col-xs-12" style="text-align: right" id="buttonDiv">
+                        <p style="margin:1px;">
+                            <!--<shiro:hasPermission name="sysrole:add">-->
+                            <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
+                               data-toggle="modal" onclick="openNew()">
+                                <i class="ace-icon fa fa-plus"></i>新建
+                            </a>
+                            <!--</shiro:hasPermission>-->
+                        </p>
+                    </div><!-- /.col -->
+                    <div class="col-xs-12">
+                        <table id="grid-table"></table>
+
+                        <div id="grid-pager"></div>
+                    </div><!-- /.col -->
+                    <div id="modal-form" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger" id="modal-title"></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-1"></div>
+                                        <div class="col-xs-12 col-sm-9">
+                                            <form id="projectSaveForm" class="form-horizontal" role="form">
+                                                <input type="hidden" name="id" id="projectId" value="0">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">项目名称：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputName" name="inputName"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">项目描述：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputDescription" name="inputDescription"
+                                                                   class="form-control"
+                                                                   type="text" style="height: 30px;"/>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">排序：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputPriority" name="inputPriority"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="addOrUpdate()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        保存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+
+</div><!-- /.main-container -->
+</div>
+</body>
+<script type="text/javascript">
+    var permission = getCookie("permission");
+
+    $(function () {
+        //重新修改表格宽度
+        $(window).resize(function () {
+            $("#grid-table").setGridWidth($(window).width() * 0.96);
+        });
+    });
+
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+    jQuery(grid_selector).jqGrid({
+        url: "../api/project/getlist",// 获取数据的地址
+        postData: transformToJson($('#searchForm').serializeArray()),
+        rownumbers: true,
+        datatype: "json",
+        mtype: "GET",
+        hidegrid: false,//收缩列表按钮
+        prmNames: {
+            page: "pageNum",
+            rows: "pageSize"
+        },// 重新定义分页信息
+        width: "100%",
+        autowidth: true,
+        height: 350,
+        colNames: ['', '项目名称', '项目描述', '项目状态', '排序', '操作'],
+        colModel: [
+            {name: 'id', index: 'id', sortable: false, hidden: true},
+            {name: 'name', index: 'name', width: 50, sortable: false},
+            {name: 'description', index: 'description', sortable: false},
+            {name: 'status', index: 'status', width: 50, sortable: false, formatter: statusFormatter},
+            {name: 'priority', index: 'priority', width: 20, sortable: false},
+            {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
+        ],
+        rowNum: 10,
+        rowList: [10, 20, 30],
+        pager: pager_selector,
+        altRows: true,
+        viewrecords: true,
+        emptyrecords: "0条数据",
+        loadComplete: function (data) {
+            var table = this;
+            setTimeout(function () {
+                $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
+                updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
+            }, 0);
+        },
+        jsonReader: { // jsonReader来跟服务器端返回的数据做对应
+            root: "data", // 包含实际数据的数组
+            page: "paging.currPage", // 当前页
+            total: "paging.totalPage",// 总页数
+            records: "paging.total", // 查询出的记录数
+            repeatitems: false
+        },
+        caption: "项目列表"
+    });
+    $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
+
+    function search() {
+        jQuery(grid_selector).setGridParam({
+            url: "../api/project/getlist",// 获取数据的地址
+            postData: transformToJson($('#searchForm').serializeArray()),
+        }).trigger("reloadGrid", [{page: 1}]);
+        return false;
+    }
+
+    function statusFormatter(cellvalue, options, cell) {
+        switch (cell.status) {
+            case 0:
+            default:
+                return "未启动";
+            case 1:
+                return "进行中";
+            case 2:
+                return "已结束";
+        }
+    }
+
+    function addOrUpdate() {
+        var projectId = $("#projectId").val();
+        alert(projectId);
+        if (projectId <= 0) {
+            add();
+        } else {
+            update();
+        }
+    }
+
+    function add() {
+        $.ajax({
+            url: "../api/project/add",
+            dataType: "json",
+            async: false,
+            data: {
+                name: $("#inputName").val(),
+                description: $("#inputDescription").val(),
+                priority: $("#inputPriority").val()
+            },
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $("#modal-form").modal('hide');
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+    function update() {
+        $.ajax({
+            url: "../api/project/update",
+            dataType: "json",
+            async: false,
+            data: {
+                id: $("#projectId").val(),
+                name: $("#inputName").val(),
+                description: $("#inputDescription").val(),
+                priority: $("#inputPriority").val()
+            },
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $("#modal-form").modal('hide');
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+
+    function customFormatter(cellvalue, options, rowObject) {
+        var str = "";
+        str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:deleteOne('" + rowObject.id + "')\">" +
+            "<i class='ace-icon'>删除</i>" +
+            "</a>&nbsp;&nbsp;";
+        str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
+            "<i class='ace-icon'>修改</i>" +
+            "</a>&nbsp;&nbsp;";
+
+        if (rowObject.status == 0) {
+            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:begin('" + rowObject.id + "')\">" +
+                "<i class='ace-icon'>启动</i>" +
+                "</a>&nbsp;&nbsp;";
+        }
+        if (rowObject.status == 1) {
+            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:end('" + rowObject.id + "')\">" +
+                "<i class='ace-icon'>停止</i>" +
+                "</a>&nbsp;&nbsp;";
+        }
+        return str;
+    }
+
+
+    function deleteOne(id) {
+        bootbox.confirm({
+            buttons: {
+                confirm: {
+                    label: '确认',
+                    className: 'btn-myStyle'
+                },
+                cancel: {
+                    label: '取消',
+                    className: 'btn-default'
+                }
+            },
+            title: "提示信息",
+            message: '确定要删除该项目吗？',
+            callback: function (result) {
+                if (result) {
+                    $.ajax({
+                        url: "../api/project/delete",    //请求的url地址
+                        dataType: "json",
+                        async: false,
+                        data: {
+                            id: id
+                        },
+                        type: "POST",
+                        success: function (data) {
+                            if ('error' in data) {
+                                bootboxalert(data.error.message);
+                            } else {
+                                jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                            }
+                        },
+                        error: function () {
+                            bootboxalert("服务器异常，请联系管理员");
+                        }
+                    });
+                }
+            },
+        });
+    }
+
+
+    function openEdit(id) {
+        $("#modal-title").html("项目信息-修改");
+        $(".modal-footer-btn").show();
+        getById(id);
+    }
+
+    function getById(id) {
+        $.ajax({
+            url: "../api/project/getbyid",    //请求的url地址
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#projectId").val(result.id);
+                    $("#inputName").val(result.name);
+                    $("#inputDescription").val(result.description);
+                    $("#inputPriority").val(result.priority);
+                    $("#modal-form").modal('show');
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+    function openNew() {
+        $("#modal-title").html("项目信息-添加");
+        $("#projectId").val(0);
+        $("#inputName").val("");
+        $("#inputDescription").val("");
+        $("#inputPriority").val("");
+    }
+
+    function begin(id) {
+        $.ajax({
+            url: "../api/project/begin",    //请求的url地址
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                }else {
+                    $("#modal-form").modal('hide');
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+    function end(id) {
+        $.ajax({
+            url: "../api/project/end",    //请求的url地址
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                }else {
+                    $("#modal-form").modal('hide');
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+</script>
+</html>
+
