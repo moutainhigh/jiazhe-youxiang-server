@@ -39,6 +39,8 @@ public class ProductAddReq extends BaseVO {
     private String smsTemplate;
     @ApiModelProperty("有效期天数 可空")
     private Integer effectiveDays;
+    @ApiModelProperty("商品排序")
+    private Integer priority;
 
     public Integer getProductCategoryId() {
         return productCategoryId;
@@ -126,5 +128,13 @@ public class ProductAddReq extends BaseVO {
 
     public void setEffectiveDays(Integer effectiveDays) {
         this.effectiveDays = effectiveDays;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 }

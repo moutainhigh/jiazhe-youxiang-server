@@ -60,7 +60,7 @@
         <!--<table tableName="order_info" domainObjectName="OrderInfoPO"/>-->
         <!--<table tableName="order_payment" domainObjectName="OrderPaymentPO"/>-->
         <!--<table tableName="order_refund" domainObjectName="OrderRefundPO"/>-->
-        <!--<table tableName="product" domainObjectName="ProductPO"/>-->
+        <table tableName="product" domainObjectName="ProductPO"/>
         <!--<table tableName="product_price" domainObjectName="ProductPricePO"/>-->
         <!--<table tableName="product_category" domainObjectName="ProductCategoryPO"/>-->
         <!--<table tableName="project" domainObjectName="ProjectPO"/>-->

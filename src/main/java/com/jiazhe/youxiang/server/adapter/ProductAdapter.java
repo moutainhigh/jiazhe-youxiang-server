@@ -64,6 +64,7 @@ public class ProductAdapter {
         productResp.setStatus(dto.getStatus());
         productResp.setSmsTemplate(dto.getSmsTemplate());
         productResp.setEffectiveDays(dto.getEffectiveDays());
+        productResp.setPriority(dto.getPriority());
         productResp.setProductCategory(productCategoryDTO2VO(dto.getProductCategory()));
         if (CollectionUtils.isNotEmpty(dto.getProductPriceList())) {
             productResp.setProductPriceList(dto.getProductPriceList().stream().map(ProductAdapter::productPriceDTO2VO).collect(Collectors.toList()));
@@ -88,6 +89,7 @@ public class ProductAdapter {
         productAddDTO.setLastNum(req.getLastNum());
         productAddDTO.setSmsTemplate(req.getSmsTemplate());
         productAddDTO.setEffectiveDays(req.getEffectiveDays());
+        productAddDTO.setPriority(req.getPriority());
         return productAddDTO;
     }
 
@@ -194,6 +196,9 @@ public class ProductAdapter {
         productPO.setUnitName(productAddDTO.getUnitName());
         productPO.setLastNum(productAddDTO.getLastNum());
         productPO.setStatus(productAddDTO.getStatus());
+        productPO.setSmsTemplate(productAddDTO.getSmsTemplate());
+        productPO.setEffectiveDays(productAddDTO.getEffectiveDays());
+        productPO.setPriority(productAddDTO.getPriority());
         return productPO;
     }
 
@@ -212,6 +217,7 @@ public class ProductAdapter {
         productDTO.setUnitName(productPO.getUnitName());
         productDTO.setLastNum(productPO.getLastNum());
         productDTO.setStatus(productPO.getStatus());
+        productDTO.setPriority(productPO.getPriority());
         productDTO.setSmsTemplate(productPO.getSmsTemplate());
         productDTO.setEffectiveDays(productPO.getEffectiveDays());
         return productDTO;
@@ -231,6 +237,7 @@ public class ProductAdapter {
         productPO.setProductType(productUpdateDTO.getProductType());
         productPO.setUnitName(productUpdateDTO.getUnitName());
         productPO.setLastNum(productUpdateDTO.getLastNum());
+        productPO.setPriority(productUpdateDTO.getPriority());
         return productPO;
     }
 

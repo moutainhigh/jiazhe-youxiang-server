@@ -50,6 +50,11 @@ public class ProductUpdateDTO {
      */
     private Integer lastNum;
 
+    /**
+     * 商品排序
+     */
+    private Integer priority;
+
     public Integer getId() {
         return id;
     }
@@ -120,5 +125,13 @@ public class ProductUpdateDTO {
 
     public void setLastNum(Integer lastNum) {
         this.lastNum = lastNum;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 }

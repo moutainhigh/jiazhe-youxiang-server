@@ -293,6 +293,7 @@ CREATE TABLE `product` (
     `unit_name` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '计量单位名称',
     `last_num` INT(10) NOT NULL DEFAULT '1' COMMENT '最少购买数量',
     `status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '状态：0:下架,1:上架',
+    `priority` INT(10) NOT NULL DEFAULT '0' COMMENT '排序序号',
     `sms_template` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '短信发送模板',
     `effective_days` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '有效期天数',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',

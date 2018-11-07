@@ -21,11 +21,11 @@
         <result column="mod_time" property="modTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-    id, product_category_id, name, description, delay_days, thumbnail_url, detail_img_url, 
-    product_type, unit_name, last_num, status, sms_template, effective_days, ext_info, 
-    is_deleted, add_time, mod_time
-  </sql>
+    <sql id="Base_Column_List" >
+    id, product_category_id, name, description, delay_days, thumbnail_url, detail_img_url,
+    product_type, unit_name, last_num, status, priority, sms_template, effective_days,
+    ext_info, is_deleted, add_time, mod_time
+    </sql>
 
     <select id="query" resultMap="BaseResultMap">
         select
