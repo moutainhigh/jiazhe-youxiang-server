@@ -99,9 +99,9 @@
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-1"></div>
                                         <div class="col-xs-12 col-sm-9">
-                                            <form id="projectSaveForm" class="form-horizontal" role="form">
+                                            <form id="productCategorySaveForm" class="form-horizontal" role="form">
                                                 <input type="hidden" name="id" id="inputProductCategoryId" value="0">
-                                                <input type="hidden" name="thumbnailUrl" id="inputThumbnailUrl"
+                                                <input name="thumbnailUrl" id="inputThumbnailUrl"
                                                        value="">
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">商品大类名称：</label>
@@ -273,9 +273,24 @@
         return str;
     }
 
+    function openNew() {
+        $("#modal-title").html("商品大类信息-添加");
+        $("#inputProductCategoryId").val(0);
+        $("#inputName").val("");
+        $("#inputDescription").val("");
+        $("#inputPriority").val("");
+        $('#fileThumbnail').ace_file_input('reset_input');
+    }
+
+    function openEdit(id) {
+        $("#modal-title").html("商品大类信息-修改");
+        $(".modal-footer-btn").show();
+        getById(id);
+    }
+
     function addOrUpdate() {
         var productCategoryId = $("#inputProductCategoryId").val();
-        if (productCategoryId || productCategoryId <= 0) {
+        if (!productCategoryId || productCategoryId <= 0) {
             add();
         } else {
             update();
@@ -335,19 +350,7 @@
         });
     }
 
-    function openNew() {
-        $("#modal-title").html("商品大类信息-添加");
-        $("#projectId").val(0);
-        $("#inputName").val("");
-        $("#inputDescription").val("");
-        $("#inputPriority").val("");
-    }
 
-    function openEdit(id) {
-        $("#modal-title").html("商品大类信息-修改");
-        $(".modal-footer-btn").show();
-        getById(id);
-    }
 
 
     function getById(id) {
@@ -368,9 +371,11 @@
                     $("#inputName").val(result.name);
                     $("#inputDescription").val(result.description);
                     $("#inputPriority").val(result.priority);
+                    $("#inputThumbnailUrl").val(result.thumbnailUrl);
                     $('#fileThumbnail').ace_file_input('show_file_list', [
-                        {type: 'image', name: 'name of image', path: 'https://blog.csdn.net/yjclsx'},
+                        '/coupon/static/' + result.thumbnailUrl,
                     ]);
+                    $('#my-fileThumbnail').ace_file_input('loading' , true);
 
                     $("#modal-form").modal('show');
                 }
@@ -422,8 +427,8 @@
         no_icon: 'ace-icon fa fa-cloud-upload',
         droppable: true,
         thumbnail: 'large',
-        allowExt: ["jpeg", "jpg", "png", "gif", "bmp"],
-        allowMime: ["image/jpg", "image/jpeg", "image/png", "image/gif", "image/bmp"],
+        allowExt: ['jpg', 'jpeg', 'png', 'gif', 'tif', 'tiff', 'bmp'],
+        allowMime: ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/tif', 'image/tiff', 'image/bmp'],
     }).on('change', function () {
         var image = $('#fileThumbnail')[0].files[0]
         if (!image) {
