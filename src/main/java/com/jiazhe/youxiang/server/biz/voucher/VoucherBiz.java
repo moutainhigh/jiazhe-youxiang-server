@@ -64,18 +64,22 @@ public class VoucherBiz {
         }
         if (status.equals(Byte.valueOf("1"))) {
             List<VoucherDTO> voucherDTOListAll = voucherService.getList(customerDTO.getMobile(), null, null, null, paging);
-            return voucherDTOListAll.stream()
+            List<VoucherDTO> voucherDTOListUsable = voucherDTOListAll.stream()
                     .filter(bean ->
                             bean.getStatus().equals(Byte.valueOf("0"))
                                     || bean.getExpiryTime().compareTo(new Date()) == -1
                                     || bean.getUsed().equals(Byte.valueOf("1"))
                     ).collect(Collectors.toList());
+            paging.setTotal(voucherDTOListUsable.size());
+            return voucherDTOListUsable;
         }
         if (status.equals(Byte.valueOf("2"))) {
-            List<VoucherDTO> voucherDTOListUsable = voucherService.getList(customerDTO.getMobile(), null, Byte.valueOf("1"), Byte.valueOf("0"), paging);
-            return voucherDTOListUsable.stream()
+            List<VoucherDTO> temp = voucherService.getList(customerDTO.getMobile(), null, Byte.valueOf("1"), Byte.valueOf("0"), paging);
+            List<VoucherDTO> voucherDTOListUsable =  temp.stream()
                     .filter(bean -> bean.getUsed().equals(Byte.valueOf("0")))
                     .collect(Collectors.toList());
+            paging.setTotal(voucherDTOListUsable.size());
+            return voucherDTOListUsable;
         }
         return null;
     }

@@ -83,18 +83,22 @@ public class RCBiz {
         }
         if (status.equals(Byte.valueOf("1"))) {
             List<RCDTO> rcdtoListAll = rcService.getList(customerDTO.getMobile(), null, null, null, paging);
-            return rcdtoListAll.stream()
+            List<RCDTO> rcdtoListUnusable = rcdtoListAll.stream()
                     .filter(bean ->
                             bean.getStatus().equals(Byte.valueOf("0"))
                                     || bean.getExpiryTime().compareTo(new Date()) == -1
                                     ||bean.getBalance().compareTo(new BigDecimal(0)) == 0
                     ).collect(Collectors.toList());
+            paging.setTotal(rcdtoListUnusable.size());
+            return rcdtoListUnusable;
         }
         if (status.equals(Byte.valueOf("2"))) {
-            List<RCDTO> rcdtoListUsable = rcService.getList(customerDTO.getMobile(), null, Byte.valueOf("1"), Byte.valueOf("0"), paging);
-            return rcdtoListUsable.stream()
+            List<RCDTO> temp = rcService.getList(customerDTO.getMobile(), null, Byte.valueOf("1"), Byte.valueOf("0"), paging);
+            List<RCDTO> rcdtoListUsable = temp.stream()
                     .filter(bean -> bean.getBalance().compareTo(new BigDecimal(0)) == 1)
                     .collect(Collectors.toList());
+            paging.setTotal(rcdtoListUsable.size());
+            return rcdtoListUsable;
         }
         return null;
     }
