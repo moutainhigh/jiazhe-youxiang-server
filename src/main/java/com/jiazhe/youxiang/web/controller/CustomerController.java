@@ -15,4 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CustomerController extends BaseController{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomerController.class);
+
+    @RequestMapping(value = "/index")
+    public String index() {
+        return "customer/index";
+    }
 }

@@ -130,19 +130,21 @@ public class CustomerServiceImpl implements CustomerService {
         Map<Integer, AddressDTO> result = Maps.newHashMap();
         List<Integer> addressIdList = Lists.newArrayList();
         customerPOList.stream().forEach(item -> {
-            if (item.getDefaultAddressId() != null && item.getDefaultAddressId() != CustomerBiz.CODE_CUSTOMER_NO_DEFAULT_ADDRESS) {
+            if (item.getDefaultAddressId() != null && item.getDefaultAddressId().byteValue() != CustomerBiz.CODE_CUSTOMER_NO_DEFAULT_ADDRESS) {
                 addressIdList.add(item.getDefaultAddressId());
             }
         });
-        CustomerAddressPOExample customerAddressPOExample = new CustomerAddressPOExample();
-        CustomerAddressPOExample.Criteria criteria = customerAddressPOExample.createCriteria();
-        criteria.andIdIn(addressIdList);
-        criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
-        List<CustomerAddressPO> customerAddressPOList = customerAddressPOMapper.selectByExample(customerAddressPOExample);
-        Map<Integer, CustomerAddressPO> customerAddressPOMap = customerAddressPOList.stream().collect(toMap(CustomerAddressPO::getCustomerId, Function.identity()));
-        customerAddressPOMap.keySet().stream().forEach(key -> {
-            result.put(key, CustomerAdapter.addressPO2DTO(customerAddressPOMap.get(key)));
-        });
+        if (CollectionUtils.isNotEmpty(addressIdList)) {
+            CustomerAddressPOExample customerAddressPOExample = new CustomerAddressPOExample();
+            CustomerAddressPOExample.Criteria criteria = customerAddressPOExample.createCriteria();
+            criteria.andIdIn(addressIdList);
+            criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+            List<CustomerAddressPO> customerAddressPOList = customerAddressPOMapper.selectByExample(customerAddressPOExample);
+            Map<Integer, CustomerAddressPO> customerAddressPOMap = customerAddressPOList.stream().collect(toMap(CustomerAddressPO::getCustomerId, Function.identity()));
+            customerAddressPOMap.keySet().stream().forEach(key -> {
+                result.put(key, CustomerAdapter.addressPO2DTO(customerAddressPOMap.get(key)));
+            });
+        }
         return result;
     }
 

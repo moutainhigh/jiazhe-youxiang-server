@@ -102,7 +102,7 @@ public class AliUtils {
         if (!content.contains(code)){
             throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
         }
-        long receiveTime = MyDateUtils.strToMinutes(smsSendDetailDTOList.get(smsSendDetailDTOList.size() - 1).getReceiveDate()).getTime();
+        long receiveTime = DateUtil.strToMinutes(smsSendDetailDTOList.get(smsSendDetailDTOList.size() - 1).getReceiveDate()).getTime();
         //短信验证码在有5分钟有效期内
         if (System.currentTimeMillis() - receiveTime > CommonConstant.FIVE_MINUTES) {
             throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_EXPIRY);

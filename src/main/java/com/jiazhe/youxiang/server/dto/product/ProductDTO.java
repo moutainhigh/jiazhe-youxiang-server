@@ -75,6 +75,11 @@ public class ProductDTO {
      */
     private List<ProductPriceDTO> productPriceList;
 
+    /**
+     * 商品排序
+     */
+    private Integer priority;
+
     public Integer getId() {
         return id;
     }
@@ -185,5 +190,13 @@ public class ProductDTO {
 
     public void setProductPriceList(List<ProductPriceDTO> productPriceList) {
         this.productPriceList = productPriceList;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 }

@@ -15,4 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProductController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
+
+    @RequestMapping(value = "/index")
+    public String index() {
+        return "product/productcategory/index";
+    }
 }

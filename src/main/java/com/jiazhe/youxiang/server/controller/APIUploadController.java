@@ -16,10 +16,14 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 文件上传Controller
@@ -33,38 +37,35 @@ public class APIUploadController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(APIUploadController.class);
 
+    @Value("${web.upload.image-path}")
+    private String imagePath;
+
     /**
      * 上传图片
      *
      * @return
      */
-    @ApiOperation(value = "上传图片", httpMethod = "POST", response = UploadImageResp.class, notes = "上传图片")
-    @RequestMapping(value = "uploadimage", method = RequestMethod.POST)
-    public Object uploadImage(@ModelAttribute UploadImageReq req) {
-        //TODO niexiao 参数验证
-        CommonValidator.validateNull(req);
-        validateEmpty(req);
-        validateFileType(req);
-        String root_fileName = req.getImage().getOriginalFilename();
-        LOGGER.info("上传图片:name={},type={}", root_fileName, req.getImage().getContentType());
-        //TODO niexiao 处理图片 获取路径 存入指定路径
-        String imagePath = "";
-        String url = UploadUtil.uploadImage(req.getImage(), imagePath);
-
+    @RequestMapping(value = "uploadimage", method = RequestMethod.POST, headers = ("content-type=multipart/*"), consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Object uploadImage(@RequestParam("file") MultipartFile file) {
+        CommonValidator.validateNull(file);
+        validateEmpty(file);
+        validateFileType(file);
+        //处理图片 获取路径 存入指定路径
+        String url = UploadUtil.uploadImage(file, imagePath);
         UploadImageResp result = new UploadImageResp();
         result.setUrl(url);
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildResponse(result);
     }
 
-    private void validateFileType(@ModelAttribute UploadImageReq req) {
-        String contentType = req.getImage().getContentType();
+    private void validateFileType(MultipartFile file) {
+        String contentType = file.getContentType();
         //TODO niexiao 判断文件类型
 
     }
 
-    private void validateEmpty(@ModelAttribute UploadImageReq req) {
-        if (req.getImage().isEmpty() || StringUtils.isBlank(req.getImage().getOriginalFilename())) {
+    private void validateEmpty(MultipartFile file) {
+        if (file.isEmpty() || StringUtils.isBlank(file.getOriginalFilename())) {
             throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "上传文件不能为空");
         }
     }

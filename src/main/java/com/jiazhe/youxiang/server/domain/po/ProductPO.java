@@ -26,6 +26,8 @@ public class ProductPO implements Serializable {
 
     private Byte status;
 
+    private Integer priority;
+
     private String smsTemplate;
 
     private Integer effectiveDays;
@@ -126,6 +128,14 @@ public class ProductPO implements Serializable {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 
     public String getSmsTemplate() {

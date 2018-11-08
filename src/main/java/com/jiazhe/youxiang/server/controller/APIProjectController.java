@@ -122,12 +122,40 @@ public class APIProjectController {
      *
      * @return
      */
-    @ApiOperation(value = "删除项目", httpMethod = "GET", notes = "删除项目")
-    @RequestMapping(value = "delete", method = RequestMethod.GET)
+    @ApiOperation(value = "删除项目", httpMethod = "POST", notes = "删除项目")
+    @RequestMapping(value = "delete", method = RequestMethod.POST)
     public Object delete(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
         projectBiz.delete(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
+    /**
+     * 启动项目
+     *
+     * @return
+     */
+    @ApiOperation(value = "启动项目", httpMethod = "GET", response = ProjectResp.class, notes = "启动项目")
+    @RequestMapping(value = "begin", method = RequestMethod.GET)
+    public Object begin(@ModelAttribute IdReq req) {
+        CommonValidator.validateId(req);
+        //调用BIZ方法
+        projectBiz.begin(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
+    /**
+     * 停止项目
+     *
+     * @return
+     */
+    @ApiOperation(value = "停止项目", httpMethod = "GET", response = ProjectResp.class, notes = "停止项目")
+    @RequestMapping(value = "end", method = RequestMethod.GET)
+    public Object end(@ModelAttribute IdReq req) {
+        CommonValidator.validateId(req);
+        //调用BIZ方法
+        projectBiz.end(req.getId());
         return ResponseFactory.buildSuccess();
     }
 }

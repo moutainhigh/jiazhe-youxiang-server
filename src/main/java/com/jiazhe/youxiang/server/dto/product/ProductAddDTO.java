@@ -64,6 +64,11 @@ public class ProductAddDTO {
      */
     private Integer effectiveDays;
 
+    /**
+     * 商品排序
+     */
+    private Integer priority;
+
     public Integer getProductCategoryId() {
         return productCategoryId;
     }
@@ -158,5 +163,13 @@ public class ProductAddDTO {
 
     public void setEffectiveDays(Integer effectiveDays) {
         this.effectiveDays = effectiveDays;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 }
