@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -87,7 +88,7 @@ public class RCBiz {
                     .filter(bean ->
                             bean.getStatus().equals(Byte.valueOf("0"))
                                     || bean.getExpiryTime().compareTo(new Date()) == -1
-                                    ||bean.getBalance().compareTo(new BigDecimal(0)) == 0
+                                    || bean.getBalance().compareTo(new BigDecimal(0)) == 0
                     ).collect(Collectors.toList());
             paging.setTotal(rcdtoListUnusable.size());
             return rcdtoListUnusable;
@@ -101,5 +102,23 @@ public class RCBiz {
             return rcdtoListUsable;
         }
         return null;
+    }
+
+    public List<RCDTO> getListByGoodsAttr(Integer customerId, Integer productId, String cityCode, Paging paging) {
+        CustomerDTO customerDTO = customerBiz.getById(customerId);
+        List<RCDTO> temp = rcService.getList(customerDTO.getMobile(), null, Byte.valueOf("1"), Byte.valueOf("0"), paging);
+        List<RCDTO> rcdtoListUsable = temp.stream()
+                .filter(bean ->
+                        bean.getBalance().compareTo(new BigDecimal(0)) == 1
+                                && bean.getCityCodes().contains(cityCode))
+                .filter(bean -> productsHasProduct(bean.getProductIds(), productId))
+                .collect(Collectors.toList());
+        paging.setTotal(rcdtoListUsable.size());
+        return rcdtoListUsable;
+    }
+
+    public boolean productsHasProduct(String productIds, Integer productId) {
+        List<String> result = Arrays.asList(productIds.split(","));
+        return result.contains(productId.toString());
     }
 }

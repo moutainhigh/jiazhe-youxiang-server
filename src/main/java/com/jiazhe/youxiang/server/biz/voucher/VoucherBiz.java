@@ -10,6 +10,7 @@ import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,7 +57,6 @@ public class VoucherBiz {
      * @return
      */
     public List<VoucherDTO> getListByCustomerId(Integer customerId, Byte status, Paging paging) {
-
         CustomerDTO customerDTO = customerBiz.getById(customerId);
         if (status.equals(Byte.valueOf("0"))) {
             List<VoucherDTO> voucherDTOListAll = voucherService.getList(customerDTO.getMobile(), null, null, null, paging);
@@ -75,12 +75,30 @@ public class VoucherBiz {
         }
         if (status.equals(Byte.valueOf("2"))) {
             List<VoucherDTO> temp = voucherService.getList(customerDTO.getMobile(), null, Byte.valueOf("1"), Byte.valueOf("0"), paging);
-            List<VoucherDTO> voucherDTOListUsable =  temp.stream()
+            List<VoucherDTO> voucherDTOListUsable = temp.stream()
                     .filter(bean -> bean.getUsed().equals(Byte.valueOf("0")))
                     .collect(Collectors.toList());
             paging.setTotal(voucherDTOListUsable.size());
             return voucherDTOListUsable;
         }
         return null;
+    }
+
+    public List<VoucherDTO> getListByGoodsAttr(Integer customerId, Integer productId, String cityCode, Paging paging) {
+        CustomerDTO customerDTO = customerBiz.getById(customerId);
+        List<VoucherDTO> temp = voucherService.getList(customerDTO.getMobile(), null, Byte.valueOf("1"), Byte.valueOf("0"), paging);
+        List<VoucherDTO> voucherDTOListUsable = temp.stream()
+                .filter(bean ->
+                        bean.getUsed().equals(Byte.valueOf("0"))
+                                && bean.getCityCodes().contains(cityCode))
+                .filter(bean -> productsHasProduct(bean.getProductIds(), productId))
+                .collect(Collectors.toList());
+        paging.setTotal(voucherDTOListUsable.size());
+        return voucherDTOListUsable;
+    }
+
+    public boolean productsHasProduct(String productIds, Integer productId) {
+        List<String> result = Arrays.asList(productIds.split(","));
+        return result.contains(productId.toString());
     }
 }
