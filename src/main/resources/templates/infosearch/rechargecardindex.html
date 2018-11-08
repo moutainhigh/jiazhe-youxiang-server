@@ -472,6 +472,7 @@
     }
 
     function getOrderPaymentList(id) {//显示消费记录
+        var orderStatus = ['待付款','待派单','待服务','服务完成','取消待审核','取消未通过','已取消'];
         $("#modelTbody").empty();
         $.ajax({
             url: "../api/orderpayment/getbyrechargecardid",
@@ -488,12 +489,12 @@
                     var result = data.data;
                     for(var i=0;i<result.length;i++){
                         var str = "<tr>"+
-                            "<td>"+result.orderInfoResp.productResp.name+"</td>"+
-                            "<td>"+result.orderInfoResp.productPrice+"</td>"+
-                            "<td>"+result.orderInfoResp.count+"</td>"+
-                            "<td>"+timeFormat(result.orderInfoResp.orderTime)+"</td>"+
-                            "<td>"+result.payMoney +"</td>"+
-                            "<td>"+result.orderInfoResp.status+"</td>"+
+                            "<td>"+result[i].orderInfoResp.productResp.name+"</td>"+
+                            "<td>"+result[i].orderInfoResp.productPrice+"</td>"+
+                            "<td>"+result[i].orderInfoResp.count+"</td>"+
+                            "<td>"+timeFormat(result[i].orderInfoResp.orderTime)+"</td>"+
+                            "<td>"+result[i].payMoney +"</td>"+
+                            "<td>"+orderStatus[result[i].orderInfoResp.status-1]+"</td>"+
                             "</td></tr>"
                         $("#modelTbody").append(str);
                     }
