@@ -58,8 +58,8 @@ public class ProductBiz {
         return productCategoryService.getCategoryById(id);
     }
 
-    public List<ProductCategoryDTO> getCategoryList(String name, Paging paging) {
-        return productCategoryService.getCategoryList(name, paging);
+    public List<ProductCategoryDTO> getCategoryList(String name, Integer status, Paging paging) {
+        return productCategoryService.getCategoryList(name,status, paging);
     }
 
     public void deleteCategory(Integer id) {
@@ -125,6 +125,7 @@ public class ProductBiz {
     public void batchDeletePrice(List<Integer> ids) {
         productPriceService.batchDeletePrice(ids);
     }
+
 
 
 }

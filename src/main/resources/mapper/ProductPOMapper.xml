@@ -13,6 +13,7 @@
     <result column="unit_name" property="unitName" jdbcType="VARCHAR" />
     <result column="last_num" property="lastNum" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="priority" property="priority" jdbcType="INTEGER" />
     <result column="sms_template" property="smsTemplate" jdbcType="VARCHAR" />
     <result column="effective_days" property="effectiveDays" jdbcType="INTEGER" />
     <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
@@ -80,8 +81,8 @@
   </sql>
   <sql id="Base_Column_List" >
     id, product_category_id, name, description, delay_days, thumbnail_url, detail_img_url, 
-    product_type, unit_name, last_num, status, sms_template, effective_days, ext_info, 
-    is_deleted, add_time, mod_time
+    product_type, unit_name, last_num, status, priority, sms_template, effective_days, 
+    ext_info, is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.ProductPOExample" >
     select
@@ -117,15 +118,17 @@
     insert into product (id, product_category_id, name, 
       description, delay_days, thumbnail_url, 
       detail_img_url, product_type, unit_name, 
-      last_num, status, sms_template, 
-      effective_days, ext_info, is_deleted, 
-      add_time, mod_time)
+      last_num, status, priority, 
+      sms_template, effective_days, ext_info, 
+      is_deleted, add_time, mod_time
+      )
     values (#{id,jdbcType=INTEGER}, #{productCategoryId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{description,jdbcType=VARCHAR}, #{delayDays,jdbcType=INTEGER}, #{thumbnailUrl,jdbcType=VARCHAR}, 
       #{detailImgUrl,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER}, #{unitName,jdbcType=VARCHAR}, 
-      #{lastNum,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{smsTemplate,jdbcType=VARCHAR}, 
-      #{effectiveDays,jdbcType=INTEGER}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
-      #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
+      #{lastNum,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{priority,jdbcType=INTEGER}, 
+      #{smsTemplate,jdbcType=VARCHAR}, #{effectiveDays,jdbcType=INTEGER}, #{extInfo,jdbcType=VARCHAR}, 
+      #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.ProductPO" >
     insert into product
@@ -162,6 +165,9 @@
       </if>
       <if test="status != null" >
         status,
+      </if>
+      <if test="priority != null" >
+        priority,
       </if>
       <if test="smsTemplate != null" >
         sms_template,
@@ -215,6 +221,9 @@
       </if>
       <if test="status != null" >
         #{status,jdbcType=TINYINT},
+      </if>
+      <if test="priority != null" >
+        #{priority,jdbcType=INTEGER},
       </if>
       <if test="smsTemplate != null" >
         #{smsTemplate,jdbcType=VARCHAR},
@@ -278,6 +287,9 @@
       <if test="record.status != null" >
         status = #{record.status,jdbcType=TINYINT},
       </if>
+      <if test="record.priority != null" >
+        priority = #{record.priority,jdbcType=INTEGER},
+      </if>
       <if test="record.smsTemplate != null" >
         sms_template = #{record.smsTemplate,jdbcType=VARCHAR},
       </if>
@@ -314,6 +326,7 @@
       unit_name = #{record.unitName,jdbcType=VARCHAR},
       last_num = #{record.lastNum,jdbcType=INTEGER},
       status = #{record.status,jdbcType=TINYINT},
+      priority = #{record.priority,jdbcType=INTEGER},
       sms_template = #{record.smsTemplate,jdbcType=VARCHAR},
       effective_days = #{record.effectiveDays,jdbcType=INTEGER},
       ext_info = #{record.extInfo,jdbcType=VARCHAR},
@@ -357,6 +370,9 @@
       <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
       </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
       <if test="smsTemplate != null" >
         sms_template = #{smsTemplate,jdbcType=VARCHAR},
       </if>
@@ -390,6 +406,7 @@
       unit_name = #{unitName,jdbcType=VARCHAR},
       last_num = #{lastNum,jdbcType=INTEGER},
       status = #{status,jdbcType=TINYINT},
+      priority = #{priority,jdbcType=INTEGER},
       sms_template = #{smsTemplate,jdbcType=VARCHAR},
       effective_days = #{effectiveDays,jdbcType=INTEGER},
       ext_info = #{extInfo,jdbcType=VARCHAR},

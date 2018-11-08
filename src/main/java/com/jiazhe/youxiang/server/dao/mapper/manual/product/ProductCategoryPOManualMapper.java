@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ProductCategoryPOManualMapper {
 
-    List<ProductCategoryPO> query(@Param("name") String name, @Param("offset") Integer offset, @Param("limit") Integer limit);
+    List<ProductCategoryPO> query(@Param("name") String name, @Param("status") Integer status, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
-    Integer count(@Param("name") String name);
+    Integer count(@Param("name") String name, @Param("status") Integer status);
 }

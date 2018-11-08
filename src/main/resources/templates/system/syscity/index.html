@@ -248,9 +248,7 @@
                     jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
     }
 </script>

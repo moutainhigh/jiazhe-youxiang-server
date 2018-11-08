@@ -15,4 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProjectController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProjectController.class);
+
+    @RequestMapping(value = "/index")
+    public String index() {
+        return "project/index";
+    }
 }

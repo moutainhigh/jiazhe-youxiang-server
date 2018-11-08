@@ -5,6 +5,8 @@
  */
 package com.jiazhe.youxiang.base.util;
 
+import com.jiazhe.youxiang.server.common.enums.CommonCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.CommonException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedOutputStream;
@@ -34,11 +36,9 @@ public class UploadUtil {
         if (!file.exists()) {
             file.mkdirs();
         }
-        String fileName = "";
-
+        String fileName = createFileName(multipartFile);
         try {
             FileInputStream fileInputStream = (FileInputStream) multipartFile.getInputStream();
-            fileName = createFileName();
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(path + File.separator + fileName));
             byte[] bs = new byte[1024];
             int len;
@@ -47,16 +47,19 @@ public class UploadUtil {
             }
             bos.flush();
             bos.close();
-
         } catch (IOException e) {
-//TODO niexiao 抛出自定义异常
+            //TODO niexiao 抛出自定义异常
+            throw new CommonException(CommonCodeEnum.INTERNAL_ERROR.getCode(), CommonCodeEnum.INTERNAL_ERROR.getType(), e.getMessage());
         }
-
         return fileName;
     }
 
-    private static String createFileName() {
-        //TODO niexiao 完善
-        return "";
+    private static String createFileName(MultipartFile multipartFile) {
+        String suffix = getSuffix(multipartFile.getOriginalFilename());
+        return DateUtil.yyyyMMDDhhmmssSSS() + suffix;
+    }
+
+    private static String getSuffix(String fileName) {
+        return fileName.substring(fileName.lastIndexOf("."));
     }
 }

@@ -11,7 +11,8 @@ public enum CommonCodeEnum {
     SUCCESS(100000, "COMMON_SUC", "请求成功"),
     INTERNAL_ERROR(100001, "COMMON_INTERNAL_ERROR", "内部异常"),
     PARAMS_ILLEGAL_ERROR(100002, "COMMON_PARAMS_ILLEGAL", "参数错误"),
-    HTTP_ERROR(100003, "COMMON_HTTP_ERROR", "HTTP调用异常"),;
+    HTTP_ERROR(100003, "COMMON_HTTP_ERROR", "HTTP调用异常"),
+    ;
 
     CommonCodeEnum(Integer code, String type, String message) {
         this.code = code;

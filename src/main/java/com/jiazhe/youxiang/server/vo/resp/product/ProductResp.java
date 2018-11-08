@@ -48,6 +48,8 @@ public class ProductResp extends BaseVO {
     private ProductCategoryResp productCategory;
     @ApiModelProperty("商品价格列表")
     private List<ProductPriceResp> productPriceList;
+    @ApiModelProperty("商品排序")
+    private Integer priority;
 
     public Integer getId() {
         return id;
@@ -159,5 +161,13 @@ public class ProductResp extends BaseVO {
 
     public void setProductPriceList(List<ProductPriceResp> productPriceList) {
         this.productPriceList = productPriceList;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 }

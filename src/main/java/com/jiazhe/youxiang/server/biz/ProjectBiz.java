@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.server.biz;
 
+import com.jiazhe.youxiang.server.common.enums.ProjectStatusEnum;
 import com.jiazhe.youxiang.server.dto.project.ProjectAddDTO;
 import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
 import com.jiazhe.youxiang.server.service.ProjectService;
@@ -47,4 +48,11 @@ public class ProjectBiz {
     }
 
 
+    public void begin(Integer id) {
+        projectService.update(id, null, null, null, ProjectStatusEnum.DOING.getId());
+    }
+
+    public void end(Integer id) {
+        projectService.update(id, null, null, null, ProjectStatusEnum.FINISH.getId());
+    }
 }

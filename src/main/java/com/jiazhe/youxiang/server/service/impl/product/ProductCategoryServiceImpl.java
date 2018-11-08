@@ -48,9 +48,9 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Override
-    public List<ProductCategoryDTO> getCategoryList(String name, Paging paging) {
-        Integer count = productCategoryPOManualMapper.count(name);
-        List<ProductCategoryPO> productCategoryPOList = productCategoryPOManualMapper.query(name, paging.getOffset(), paging.getLimit());
+    public List<ProductCategoryDTO> getCategoryList(String name, Integer status, Paging paging) {
+        Integer count = productCategoryPOManualMapper.count(name, status);
+        List<ProductCategoryPO> productCategoryPOList = productCategoryPOManualMapper.query(name, status, paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
         return productCategoryPOList.stream().map(ProductAdapter::productCategoryPO2DTO).collect(Collectors.toList());
     }

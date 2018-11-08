@@ -21,7 +21,7 @@
         <include refid="Base_Column_List"/>
         from project
         <where>
-            <if test="name != null">
+            <if test="name != null and name != ''">
                 AND name = #{name}
             </if>
             <if test="status != null">
@@ -29,14 +29,14 @@
             </if>
             AND is_deleted = 0
         </where>
-        order by priority desc,add_time desc
+        order by status, priority desc,add_time desc
         limit #{offset},#{limit}
     </select>
 
     <select id="count" resultType="java.lang.Integer">
         select count(*) from project
         <where>
-            <if test="name != null">
+            <if test="name != null and name != ''">
                 AND name = #{name}
             </if>
             <if test="status != null">

@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.server.vo.req.project;
 
 import com.jiazhe.youxiang.server.vo.req.OffsetLimitReq;
+import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -14,7 +15,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author niexiao
  * @created 2018/10/18
  */
-public class ProjectListReq extends OffsetLimitReq {
+public class ProjectListReq extends PageSizeNumReq {
 
     private static final long serialVersionUID = 403060575380013152L;
     @ApiModelProperty("项目名称")

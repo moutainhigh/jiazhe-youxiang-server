@@ -23,10 +23,10 @@
         <include refid="Base_Column_List"/>
         from customer
         <where>
-            <if test="name != null">
-                AND name = #{name}
+            <if test="name != null and name!=''">
+                AND name like concat('%',#{name},'%')
             </if>
-            <if test="mobile != null">
+            <if test="mobile != null and mobile!=''">
                 AND mobile = #{mobile}
             </if>
             AND is_deleted = 0
@@ -38,10 +38,10 @@
     <select id="count" resultType="java.lang.Integer">
         select count(*) from customer
         <where>
-            <if test="name != null">
-                AND name = #{name}
+            <if test="name != null and name!=''">
+                AND name like concat('%',#{name},'%')
             </if>
-            <if test="mobile != null">
+            <if test="mobile != null and mobile!=''">
                 AND mobile = #{mobile}
             </if>
             AND is_deleted = 0

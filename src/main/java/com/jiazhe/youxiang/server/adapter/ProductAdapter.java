@@ -36,15 +36,15 @@ public class ProductAdapter {
         if (dto == null) {
             return null;
         }
-        ProductCategoryResp productTypeResp = new ProductCategoryResp();
-        productTypeResp.setId(dto.getId());
-        productTypeResp.setName(dto.getName());
-        productTypeResp.setDescription(dto.getDescription());
-        productTypeResp.setThumbnailUrl(dto.getThumbnailUrl());
-        productTypeResp.setDetailImgUrl(dto.getDetailImgUrl());
-        productTypeResp.setPriority(dto.getPriority());
-        productTypeResp.setStatus(dto.getStatus());
-        return productTypeResp;
+        ProductCategoryResp productCategoryResp = new ProductCategoryResp();
+        productCategoryResp.setId(dto.getId());
+        productCategoryResp.setName(dto.getName());
+        productCategoryResp.setDescription(dto.getDescription());
+        productCategoryResp.setThumbnailUrl(dto.getThumbnailUrl());
+        productCategoryResp.setDetailImgUrl(dto.getDetailImgUrl());
+        productCategoryResp.setPriority(dto.getPriority());
+        productCategoryResp.setStatus(dto.getStatus());
+        return productCategoryResp;
     }
 
     public static ProductResp productDTO2VO(ProductDTO dto) {
@@ -64,6 +64,7 @@ public class ProductAdapter {
         productResp.setStatus(dto.getStatus());
         productResp.setSmsTemplate(dto.getSmsTemplate());
         productResp.setEffectiveDays(dto.getEffectiveDays());
+        productResp.setPriority(dto.getPriority());
         productResp.setProductCategory(productCategoryDTO2VO(dto.getProductCategory()));
         if (CollectionUtils.isNotEmpty(dto.getProductPriceList())) {
             productResp.setProductPriceList(dto.getProductPriceList().stream().map(ProductAdapter::productPriceDTO2VO).collect(Collectors.toList()));
@@ -88,6 +89,7 @@ public class ProductAdapter {
         productAddDTO.setLastNum(req.getLastNum());
         productAddDTO.setSmsTemplate(req.getSmsTemplate());
         productAddDTO.setEffectiveDays(req.getEffectiveDays());
+        productAddDTO.setPriority(req.getPriority());
         return productAddDTO;
     }
 
@@ -160,7 +162,9 @@ public class ProductAdapter {
         productCategoryPO.setThumbnailUrl(dto.getThumbnailUrl());
         productCategoryPO.setDetailImgUrl(dto.getDetailImgUrl());
         productCategoryPO.setPriority(dto.getPriority());
-        productCategoryPO.setStatus(dto.getStatus());
+        if(dto.getStatus()!=null){
+            productCategoryPO.setStatus(dto.getStatus().byteValue());
+        }
         return productCategoryPO;
     }
 
@@ -175,7 +179,9 @@ public class ProductAdapter {
         productCategoryDTO.setThumbnailUrl(po.getThumbnailUrl());
         productCategoryDTO.setDetailImgUrl(po.getDetailImgUrl());
         productCategoryDTO.setPriority(po.getPriority());
-        productCategoryDTO.setStatus(po.getStatus());
+        if(po.getStatus()!=null){
+            productCategoryDTO.setStatus(po.getStatus().intValue());
+        }
         return productCategoryDTO;
     }
 
@@ -194,6 +200,9 @@ public class ProductAdapter {
         productPO.setUnitName(productAddDTO.getUnitName());
         productPO.setLastNum(productAddDTO.getLastNum());
         productPO.setStatus(productAddDTO.getStatus());
+        productPO.setSmsTemplate(productAddDTO.getSmsTemplate());
+        productPO.setEffectiveDays(productAddDTO.getEffectiveDays());
+        productPO.setPriority(productAddDTO.getPriority());
         return productPO;
     }
 
@@ -212,6 +221,7 @@ public class ProductAdapter {
         productDTO.setUnitName(productPO.getUnitName());
         productDTO.setLastNum(productPO.getLastNum());
         productDTO.setStatus(productPO.getStatus());
+        productDTO.setPriority(productPO.getPriority());
         productDTO.setSmsTemplate(productPO.getSmsTemplate());
         productDTO.setEffectiveDays(productPO.getEffectiveDays());
         return productDTO;
@@ -231,6 +241,7 @@ public class ProductAdapter {
         productPO.setProductType(productUpdateDTO.getProductType());
         productPO.setUnitName(productUpdateDTO.getUnitName());
         productPO.setLastNum(productUpdateDTO.getLastNum());
+        productPO.setPriority(productUpdateDTO.getPriority());
         return productPO;
     }
 
