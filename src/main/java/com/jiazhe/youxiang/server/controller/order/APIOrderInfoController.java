@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.controller.order;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.order.OrderInfoBiz;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
@@ -32,13 +33,20 @@ public class APIOrderInfoController extends BaseController {
     @Autowired
     private OrderInfoBiz orderInfoBiz ;
 
-    @ApiOperation(value = "【前后台共用】分页查询订单信息", httpMethod = "GET", response = OrderInfoResp.class, responseContainer = "List", notes = "【前后台共用】分页查询订单信息")
+    @ApiOperation(value = "【后台】分页查询订单信息", httpMethod = "GET", response = OrderInfoResp.class, responseContainer = "List", notes = "【后台】分页查询订单信息")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute OrderInfoPageReq req) {
-        Paging paging = new Paging();
-        paging.setOffset((req.getPageNum() - 1) * req.getPageSize());
-        paging.setLimit(req.getPageSize());
-        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getMobile(),req.getStatus(),paging);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
+        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getStatus(),req.getOrderCode(),req.getMobile(),req.getCustomerMobile(),req.getOrderStartTime(),req.getOrderEndTime(),req.getWorkerMobile(),paging);
+        List<OrderInfoResp> orderInfoRespList = orderInfoDTOList.stream().map(OrderInfoAdapter::DTO2Resp).collect(Collectors.toList());
+        return ResponseFactory.buildPaginationResponse(orderInfoRespList, paging);
+    }
+
+    @ApiOperation(value = "【APP端】分页查询订单信息", httpMethod = "GET", response = OrderInfoResp.class, responseContainer = "List", notes = "【后台】分页查询订单信息")
+    @RequestMapping(value = "/customerlistpage", method = RequestMethod.GET)
+    public Object customerListPage(@ModelAttribute CustomerOrderInfoPageReq req) {
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
+        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.custoemrGetList(req.getCustomerId(),req.getStatus(),paging);
         List<OrderInfoResp> orderInfoRespList = orderInfoDTOList.stream().map(OrderInfoAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(orderInfoRespList, paging);
     }
@@ -122,7 +130,7 @@ public class APIOrderInfoController extends BaseController {
     }
 
     @ApiOperation(value = "获取订单信息", httpMethod = "GET", response = OrderInfoResp.class,notes = "客户支付")
-    @RequestMapping(value = "/getbyid", method = RequestMethod.POST)
+    @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
     public Object getById(@ModelAttribute IdReq req) {
         OrderInfoDTO orderInfoDTO = orderInfoBiz.getById(req.getId());
         OrderInfoResp orderInfoResp = OrderInfoAdapter.DTO2Resp(orderInfoDTO);

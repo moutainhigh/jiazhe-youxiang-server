@@ -28,7 +28,7 @@ public interface VoucherExchangeCodePOManualMapper {
      * @param used
      * @return
      */
-    Integer count(@Param("batchId")Integer batchId, @Param("code")String code, @Param("keyt")String keyt, @Param("status")Byte status, @Param("used")Byte used);
+    Integer count(@Param("batchId") Integer batchId, @Param("code") String code, @Param("keyt") String keyt, @Param("status") Byte status, @Param("used") Byte used);
 
     /**
      * 分页查询代金券兑换码信息
@@ -41,7 +41,7 @@ public interface VoucherExchangeCodePOManualMapper {
      * @param limit
      * @return
      */
-    List<VoucherExchangeCodePO> query(@Param("batchId")Integer batchId, @Param("code")String code, @Param("keyt")String keyt, @Param("status")Byte status, @Param("used")Byte used, @Param("offset")Integer offset, @Param("limit")Integer limit);
+    List<VoucherExchangeCodePO> query(@Param("batchId") Integer batchId, @Param("code") String code, @Param("keyt") String keyt, @Param("status") Byte status, @Param("used") Byte used, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
     /**
      * 批量修改兑换码信息
@@ -54,7 +54,7 @@ public interface VoucherExchangeCodePOManualMapper {
      * @param batchId
      * @param status
      */
-    void batchChangeStatus(@Param("batchId") Integer batchId, @Param("status")Byte status);
+    void batchChangeStatus(@Param("batchId") Integer batchId, @Param("status") Byte status);
 
 
     VoucherExchangeCodePO findByKeyt(@Param("keyt") String keyt);

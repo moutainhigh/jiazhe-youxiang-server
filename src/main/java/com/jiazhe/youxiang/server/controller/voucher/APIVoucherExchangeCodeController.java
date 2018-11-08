@@ -118,7 +118,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "客户用兑换码自行充值", httpMethod = "POST",notes = "客户用兑换码自行充值")
+    @ApiOperation(value = "【APP端】客户用代金券兑换码兑换", httpMethod = "POST",notes = "【APP端】客户用代金券兑换码兑换，为了与后台共用接口，所以传客户电话")
     @RequestMapping(value = "/customerselfcodecharge", method = RequestMethod.POST)
     public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) {
         //参数检查

@@ -51,6 +51,22 @@ public class VoucherExchangeRecordServiceImpl implements VoucherExchangeRecordSe
 
     @Override
     public void insert(VoucherExchangeRecordPO voucherExchangeRecordPO) {
-        voucherExchangeRecordPOMapper.insert(voucherExchangeRecordPO);
+        voucherExchangeRecordPOManualMapper.insert(voucherExchangeRecordPO);
+    }
+
+    @Override
+    public VoucherExchangeRecordDTO findByCodeId(Integer id) {
+        VoucherExchangeRecordPOExample example = new VoucherExchangeRecordPOExample();
+        VoucherExchangeRecordPOExample.Criteria criteria = example.createCriteria();
+        criteria.andExchangeCodeIdEqualTo(id);
+        List<VoucherExchangeRecordPO> poList = voucherExchangeRecordPOMapper.selectByExample(example);
+        if(poList.isEmpty()){
+            throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_HAS_NOT_USED);
+        }
+        if(poList.size()>1){
+            throw new VoucherException(VoucherCodeEnum.CODE_2_RECORD_EXCEPTION);
+        }
+        VoucherExchangeRecordDTO dto = VoucherExchangeRecordAdapter.PO2DTO(poList.get(0));
+        return dto;
     }
 }

@@ -46,10 +46,11 @@
                     <div class="col-xs-12" style="padding-top:40px">
                         <form id="rcSearchForm" class="form-horizontal" role="form">
                             <div class="form-group">
-                                <div class="col-sm-8">
+                                <div class="col-sm-6">
                                     <label class="col-sm-2 control-label no-padding-right">状态：</label>
                                     <div class="col-sm-2">
-                                        <select id="searchStatus" name="status" class="selectpicker show-tick form-control">
+                                        <select id="searchStatus" name="status"
+                                                class="selectpicker show-tick form-control">
                                             <option value="">所有</option>
                                             <option value=1>启用</option>
                                             <option value=0>停用</option>
@@ -57,7 +58,8 @@
                                     </div>
                                     <label class="col-sm-2 control-label no-padding-right">过期状态：</label>
                                     <div class="col-sm-2">
-                                        <select id="searchExpiry" name="expiry" class="selectpicker show-tick form-control">
+                                        <select id="searchExpiry" name="expiry"
+                                                class="selectpicker show-tick form-control">
                                             <option value="">所有</option>
                                             <option value=1>已过期</option>
                                             <option value=0>未过期</option>
@@ -65,7 +67,8 @@
                                     </div>
                                     <label class="col-sm-2 control-label no-padding-right">兑换方式：</label>
                                     <div class="col-sm-2">
-                                        <select id="searchExchangeType" name="exchangeType" class="selectpicker show-tick form-control">
+                                        <select id="searchExchangeType" name="exchangeType"
+                                                class="selectpicker show-tick form-control">
                                             <option value="">所有</option>
                                             <option value=0>后台兑换</option>
                                             <option value=1>前台兑换</option>
@@ -79,7 +82,7 @@
                                                style="height:30px"/>
                                     </div>
                                 </div>
-                                <div class="col-sm-1">
+                                <div class="col-sm-3">
                                     <button class="btn btn-white btn-default btn-round btn-sm"
                                             onclick="return search()">
                                         <i class="ace-icon fa fa-search red2"></i>
@@ -125,6 +128,18 @@
                                                             <input id="saveVoucherName" name="name"
                                                                    class="form-control"
                                                                    type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">适用范围：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input class="form-control" onclick="showChooseModal();"
+                                                                   type="text" value="点击选择适用范围" style="height:30px"
+                                                                   readonly/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -192,6 +207,38 @@
         </div>
     </div>-->
 </div><!-- /.main-container -->
+<div id="modal-table" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header no-padding">
+                <div class="table-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <span class="white">&times;</span>
+                    </button>
+                    消费记录
+                </div>
+            </div>
+            <div class="modal-body no-padding" style="height:250px">
+                <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                    <thead>
+                    <tr>
+                        <th>商品名称</th>
+                        <th>商品单价</th>
+                        <th>商品数量</th>
+                        <th>下单时间</th>
+                        <th>订单状态</th>
+                    </tr>
+                    </thead>
+                    <tbody id="modelTbody">
+                    <!--此处放消费记录-->
+                    </tbody>
+                </table>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<div id="selectCityAndProduct">
+
 </div>
 </body>
 <script type="text/javascript">
@@ -202,6 +249,7 @@
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
+        $('#selectCityAndProduct').load('../pageimport/selectcityandproduct');
 
         $('.date-picker').datepicker({
             language: 'zh-CN',//选择语言
@@ -230,7 +278,7 @@
         width: "100%",
         autowidth: true,
         height: 350,
-        colNames: ['','代金券名称', '状态', '是否已经使用', '兑换时间','客户手机号','客户姓名','过期时间','兑换类型','后台操作人', '操作'],
+        colNames: ['', '代金券名称', '状态', '是否已经使用', '兑换时间', '客户手机号', '客户姓名', '过期时间', '兑换类型', '后台操作人', '操作'],
         colModel: [
             {name: 'id', index: 'id', sortable: false, hidden: true},
             {name: 'name', index: 'name', width: 50, sortable: false},
@@ -252,26 +300,62 @@
                     return rowObject.used == 1 ? "已使用" : "未使用";
                 }
             },
-            {name: 'addTime', index: 'addTime', width: 60, sortable: false,formatter: function(cellvalue, options, rowObject){
-                return timeFormat(rowObject.addTime);
-            }},
-            {name: 'customerMobile', index: 'customerResp.mobile', width: 50, sortable: false,formatter: function(cellvalue, options, rowObject){
-                return rowObject.customerResp.mobile;
-            }},
-            {name: 'customerName', index: 'customerResp.name', width: 50, sortable: false,formatter: function(cellvalue, options, rowObject){
-                return rowObject.customerResp.name;
-            }},
-            {name: 'expiryTime', index: 'expiryTime', width: 40, sortable: false,formatter: function (cellvalue, options, rowObject) {
-                return dateFormat(rowObject.expiryTime)
-            }},
-            {name: 'voucherExchangeRecordResp.exchangeType', index: 'voucherExchangeRecordResp.exchangeType', width: 50, sortable: false,formatter: function(cellvalue, options, rowObject){
-                if(rowObject.voucherExchangeRecordResp.exchangeType == 0) return "后台兑换";
-                if(rowObject.voucherExchangeRecordResp.exchangeType == 1) return "前台兑换";
-            }},
-            {name: 'operatorName', index: 'rcExchangeRecordResp.operatorName', width: 50, sortable: false,formatter: function(cellvalue, options, rowObject){
-                return rowObject.voucherExchangeRecordResp.operatorName;
-            }},
-            {name: '_action', index: '_action', width:50,sortable: false, formatter: customFormatter}
+            {
+                name: 'addTime',
+                index: 'addTime',
+                width: 60,
+                sortable: false,
+                formatter: function (cellvalue, options, rowObject) {
+                    return timeFormat(rowObject.addTime);
+                }
+            },
+            {
+                name: 'customerMobile',
+                index: 'customerResp.mobile',
+                width: 50,
+                sortable: false,
+                formatter: function (cellvalue, options, rowObject) {
+                    return rowObject.customerResp.mobile;
+                }
+            },
+            {
+                name: 'customerName',
+                index: 'customerResp.name',
+                width: 50,
+                sortable: false,
+                formatter: function (cellvalue, options, rowObject) {
+                    return rowObject.customerResp.name;
+                }
+            },
+            {
+                name: 'expiryTime',
+                index: 'expiryTime',
+                width: 40,
+                sortable: false,
+                formatter: function (cellvalue, options, rowObject) {
+                    return dateFormat(rowObject.expiryTime)
+                }
+            },
+            {
+                name: 'voucherExchangeRecordResp.exchangeType',
+                index: 'voucherExchangeRecordResp.exchangeType',
+                width: 50,
+                sortable: false,
+                formatter: function (cellvalue, options, rowObject) {
+                    if (rowObject.voucherExchangeRecordResp.exchangeType == 0) return "后台兑换";
+                    if (rowObject.voucherExchangeRecordResp.exchangeType == 1) return "前台兑换";
+                }
+            },
+            {
+                name: 'operatorName',
+                index: 'rcExchangeRecordResp.operatorName',
+                width: 50,
+                sortable: false,
+                formatter: function (cellvalue, options, rowObject) {
+                    return rowObject.voucherExchangeRecordResp.operatorName;
+                }
+            },
+            {name: '_action', index: '_action', width: 80, sortable: false, formatter: customFormatter}
         ],
         rowNum: 10,
         rowList: [10, 20, 30],
@@ -297,22 +381,6 @@
     });
     $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
 
-    //replace icons with FontAwesome icons like above
-    function updatePagerIcons(table) {
-        var replacement =
-            {
-                'ui-icon-seek-first': 'ace-icon fa fa-angle-double-left bigger-140',
-                'ui-icon-seek-prev': 'ace-icon fa fa-angle-left bigger-140',
-                'ui-icon-seek-next': 'ace-icon fa fa-angle-right bigger-140',
-                'ui-icon-seek-end': 'ace-icon fa fa-angle-double-right bigger-140'
-            };
-        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
-            var icon = $(this);
-            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
-            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
-        })
-    }
-
     function search() {
         jQuery(grid_selector).setGridParam({
             url: "../api/voucher/searchlistpage",// 获取数据的地址
@@ -323,19 +391,15 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        if(rowObject.used == 0){
-            str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>修改</i>" +
-                "</a>&nbsp;&nbsp;";
-            if(rowObject.status == 0){
-                str = str + "<a class='btn btn-minier btn-success' href=\"javascript:startUsing('" + rowObject.id + "')\">" +
-                    "<i class='ace-icon'>启用</i>" +
-                    "</a>";
-            }else{
-                str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:stopUsing('" + rowObject.id + "')\">" +
-                    "<i class='ace-icon'>停用</i>" +
-                    "</a>&nbsp;&nbsp;";
+        if (rowObject.used == 0) {
+            str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">修改</a>&nbsp;&nbsp;";
+            if (rowObject.status == 0) {
+                str = str + "<a class='btn btn-minier btn-success' href=\"javascript:startUsing('" + rowObject.id + "')\">启用</a>&nbsp;&nbsp;";
+            } else {
+                str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:stopUsing('" + rowObject.id + "')\">停用</a>&nbsp;&nbsp;";
             }
+        }else{
+            str = str + "<a href=\"javascript:getOrderPaymentList('" + rowObject.id + "')\" class='btn btn-minier btn-green'>消费记录</a>&nbsp;&nbsp;";
         }
         return str;
     }
@@ -425,9 +489,46 @@
                     var result = data.data;
                     $("#saveCardId").val(result.id);
                     $("#cardSaveForm #saveVoucherName").val(result.name);
+                    $("#cardSaveForm #saveCityCodes").val(result.cityCodes);
+                    $("#cardSaveForm #saveProductIds").val(result.productIds);
                     $("#cardSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
                     $("#codeSaveForm #saveDescription").val(result.description);
                     $("#modal-form").modal('show');
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+    function getOrderPaymentList(id) {//显示消费记录
+        var orderStatus = ['待付款','待派单','待服务','服务完成','取消待审核','取消未通过','已取消'];
+        $("#modelTbody").empty();
+        $.ajax({
+            url: "../api/orderpayment/getbyvoucherid",
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for(var i=0;i<result.length;i++){
+                        var str = "<tr>"+
+                            "<td>"+result[i].orderInfoResp.productResp.name+"</td>"+
+                            "<td>"+result[i].orderInfoResp.productPrice+"</td>"+
+                            "<td>"+result[i].orderInfoResp.count+"</td>"+
+                            "<td>"+timeFormat(result[i].orderInfoResp.orderTime)+"</td>"+
+                            "<td>"+orderStatus[result[i].orderInfoResp.status-1]+"</td>"+
+                            "</td></tr>"
+                        $("#modelTbody").append(str);
+                    }
+                    $("#modal-table").modal('show');
                 }
             },
             error: function () {

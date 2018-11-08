@@ -12,9 +12,9 @@ import java.util.List;
  */
 public interface SysUserPOManualMapper {
 
-    Integer count(@Param("loginName")String loginName,@Param("displayName")String displayName);
+    Integer count(@Param("loginName") String loginName, @Param("displayName") String displayName);
 
-    List<SysUserPO> query(@Param("loginName")String loginName,@Param("displayName")String displayName, @Param("offset")Integer offset, @Param("limit")Integer limit);
+    List<SysUserPO> query(@Param("loginName") String loginName, @Param("displayName") String displayName, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
     void delete(Integer id);
 

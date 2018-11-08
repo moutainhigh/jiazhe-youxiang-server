@@ -90,7 +90,17 @@ public interface RCService {
      */
     List<RCDTO> getList(String mobile, Integer exchangeType, Byte status, Byte expiry, Paging paging);
 
+    /**
+     * 通过id查询充值卡信息
+     * @param id
+     * @return
+     */
     RCDTO getById(Integer id);
 
+    /**
+     *编辑保存充值卡信息
+     * @param dto
+     */
     void editSave(RCEditDTO dto);
+
 }

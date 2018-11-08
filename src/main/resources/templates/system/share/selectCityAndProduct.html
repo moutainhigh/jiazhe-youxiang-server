@@ -1,0 +1,172 @@
+<!--权限树 -->
+<link rel="stylesheet" th:href="@{/static/ztree/css/metroStyle.css}" type="text/css">
+<script th:src="@{/static/ztree/js/jquery.ztree.all.min.js}"></script>
+<!--选择城市和商品模态框-->
+<div id="selectCityAndProductModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="blue bigger">选择可用城市和可用商品</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12">
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <div id="cityContent" style="border:1px solid rgb(170,170,170);z-index:10;">
+                                    <ul id="cityTree" class="ztree" style="margin-top:0; width:100%; height:auto;">
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div id="productContent" style="border:1px solid rgb(170,170,170);z-index:10;">
+                                    <ul id="productTree" class="ztree" style="margin-top:0; width:100%; height:auto;">
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    取消
+                </button>
+                <button class="btn btn-sm btn-primary modal-footer-btn" onclick="cityAndProductChoosed()">
+                    <i class="ace-icon fa fa-check"></i>
+                    确定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var setting = {
+        view: {
+            selectedMulti: true
+        },
+        check: {
+            enable: true
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        edit: {
+            enable: false
+        }
+    };
+    var zCityNodes = [];
+    var zProductNodes = [];
+    $.ajax({
+        url: "../api/syscity/getopenlist",
+        dataType: "json",
+        async: false,
+        type: "GET",
+        success: function (data) {
+            if ('error' in data) {
+                bootboxalert(data.error.message);
+            } else {
+                var result = data.data;
+                for (var i = 0; i < result.length; i++) {
+                    var zNode = {};
+                    zNode.id = parseInt(result[i].cityCode);
+                    zNode.pId = result[i].parentCode == "" ? 0 : parseInt(result[i].parentCode);
+                    zNode.name = result[i].cityName;
+                    zCityNodes.push(zNode);
+                }
+
+            }
+            console.log(zNode);
+        },
+        error: function () {
+            bootboxalert("服务器异常，请联系管理员");
+        }
+    });
+    $.ajax({
+        url: "../api/product/getlist",
+        dataType: "json",
+        async: false,
+        data: {
+            offset: 0,
+            limit: 10000
+        },
+        type: "GET",
+        success: function (data) {
+            if ('error' in data) {
+                bootboxalert(data.error.message);
+            } else {
+                var result = data.data;
+                for (var i = 0; i < result.length; i++) {
+                    var zNode = {};
+                    zNode.id = parseInt(result[i].id);
+                    zNode.pId = 0;
+                    zNode.name = result[i].name;
+                    zProductNodes.push(zNode);
+                }
+
+            }
+        },
+        error: function () {
+            bootboxalert("服务器异常，请联系管理员");
+        }
+    });
+    //初始化权限树
+    cityTree = $.fn.zTree.init($("#cityTree"), setting, zCityNodes);
+    productTree = $.fn.zTree.init($("#productTree"), setting, zProductNodes);
+
+    function showChooseModal() {
+        cityTree.checkAllNodes(false);
+        productTree.checkAllNodes(false);
+        checkNodes();
+        $("#selectCityAndProductModal").modal('show');
+    }
+
+    function submitNodes() {
+        var citynodes = cityTree.getCheckedNodes(true);
+        var productnodes = productTree.getCheckedNodes(true);
+        var str1 = "";
+        var str2 = "";
+        for (var i = 0; i < citynodes.length; i++) {
+            str1 += citynodes[i].id + ",";
+        }
+        if (str1.length > 0) {
+            str1 = str1.substring(0, str1.length - 1);
+        }
+        for (var i = 0; i < productnodes.length; i++) {
+            str2 += productnodes[i].id + ",";
+        }
+        if (str2.length > 0) {
+            str2 = str2.substring(0, str2.length - 1);
+        }
+        $("#saveCityCodes").val(str1);
+        $("#saveProductIds").val(str2);
+    }
+
+    //标识选中状态
+    function checkNodes() {
+        var citycodes = $("#saveCityCodes").val();
+        var productids = $("#saveProductIds").val();
+        var nodes1 = cityTree.getCheckedNodes(false);
+        var nodes2 = productTree.getCheckedNodes(false);
+        for (var i = 0; i < nodes1.length; i++) {
+            if (citycodes.indexOf(nodes1[i].id) != -1) {
+                cityTree.checkNode(nodes1[i], true, false);
+            }
+        }
+        for (var i = 0; i < nodes2.length; i++) {
+            if (productids.indexOf(nodes2[i].id) != -1) {
+                productTree.checkNode(nodes2[i], true, false);
+            }
+        }
+    }
+
+    function cityAndProductChoosed() {
+        submitNodes();
+        $("#selectCityAndProductModal").modal('hide');
+    }
+
+
+</script>

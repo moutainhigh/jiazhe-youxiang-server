@@ -20,14 +20,14 @@ public interface RCExchangeCodeBatchPOManualMapper {
      * @param limit
      * @return
      */
-    List<RechargeCardExchangeCodeBatchPO> query(@Param("projectId")Integer projectId, @Param("name")String name, @Param("offset")Integer offset, @Param("limit")Integer limit);
+    List<RechargeCardExchangeCodeBatchPO> query(@Param("projectId") Integer projectId, @Param("name") String name, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
     /**
      * 根据项目id，批次名称查询充值卡兑换码批次个数
      * @param name
      * @return
      */
-    Integer count(@Param("projectId")Integer projectId,@Param("name") String name);
+    Integer count(@Param("projectId") Integer projectId, @Param("name") String name);
 
     /**
      * 插入充值卡兑换码批次信息，并将id返回到实体中

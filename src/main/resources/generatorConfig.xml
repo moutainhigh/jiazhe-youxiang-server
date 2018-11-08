@@ -78,5 +78,7 @@
         <!--<table tableName="voucher_exchange_code" domainObjectName="VoucherExchangeCodePO"/>-->
         <!--<table tableName="voucher_exchange_code_batch" domainObjectName="VoucherExchangeCodeBatchPO"/>-->
         <!--<table tableName="voucher_exchange_record" domainObjectName="VoucherExchangeRecordPO"/>-->
+        <!--<table tableName="simple_session" domainObjectName="SimpleSessionPO"/>-->
+
     </context>
 </generatorConfiguration>

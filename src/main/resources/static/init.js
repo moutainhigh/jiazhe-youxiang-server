@@ -21,8 +21,5 @@ document.write("<script language='javascript' src='../static/ace-master/js/boots
 document.write("<script language='javascript' src='../static/ace-master/js/jquery.jqGrid.min.js'></script>");
 document.write("<script language='javascript' src='../static/ace-master/js/grid.locale-cn.js'></script>");
 document.write("<script language='javascript' src='../static/ace-master/js/tree.min.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/select2.min.js'></script>");
 document.write("<script language='javascript' src='../static/common.js'></script>");
-
-
-
-

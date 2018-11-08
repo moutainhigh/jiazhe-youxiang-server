@@ -1,14 +1,19 @@
 package com.jiazhe.youxiang.server.biz.order;
 
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
+import com.jiazhe.youxiang.server.service.CustomerService;
+import com.jiazhe.youxiang.server.service.order.OrderInfoService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerPlaceOrderReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserPlaceOrderReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserReservationOrderReq;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,8 +24,13 @@ import java.util.List;
 @Service("orderInfoBiz")
 public class OrderInfoBiz {
 
-    public List<OrderInfoDTO> getList(String mobile, Byte status, Paging paging) {
-        return null ;
+    @Autowired
+    private OrderInfoService orderInfoService;
+    @Autowired
+    private CustomerService customerService;
+
+    public List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile,String customerMobile, Date orderStartTime, Date orderEndTime,String worekerMobile, Paging paging) {
+        return orderInfoService.getList(status,orderCode,mobile,customerMobile,orderStartTime,orderEndTime,worekerMobile,paging);
     }
 
     public int customerCancelOrder(Integer id) {
@@ -68,7 +78,7 @@ public class OrderInfoBiz {
     }
 
     public OrderInfoDTO getById(Integer id) {
-        return null;
+        return orderInfoService.getById(id);
     }
 
     public Integer getUnsentOrderCount() {
@@ -81,5 +91,10 @@ public class OrderInfoBiz {
 
     public List<OrderInfoDTO> getOrderByRCId(Integer id) {
         return null;
+    }
+
+    public List<OrderInfoDTO> custoemrGetList(Integer customerId, Byte status, Paging paging) {
+        CustomerDTO customerDTO = customerService.getById(customerId);
+        return getList(status,null,customerDTO.getMobile(),null,null,null,null,paging);
     }
 }

@@ -51,6 +51,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/api/signin/customersignin", "anon");//前台登陆请求
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/templates/**", "anon");
+       /* filterChainDefinitionMap.put("/", "user");*/
         filterChainDefinitionMap.put("/**", "anon");//表示所有url必须通过认证才能访问
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
@@ -85,7 +86,7 @@ public class ShiroConfig {
 
     //配置自定义的密码比较器
     @Bean(name = "credentialsMatcher")
-    public CredentialsMatcher credentialsMatcher(){
+    public CredentialsMatcher credentialsMatcher() {
         CredentialsMatcher credentialsMatcher = new CredentialsMatcher();
         return credentialsMatcher;
     }
@@ -124,6 +125,11 @@ public class ShiroConfig {
     public MemorySessionDAO memorySessionDAO() {
         return new MemorySessionDAO();
     }
+
+    /*@Bean(name = "customerSessionDAO")
+    public CustomerSessionDao customerSessionDao() {
+        return new CustomerSessionDao();
+    }*/
 
     @Bean
     public ModularRealmAuthenticator modularRealmAuthenticator() {
@@ -170,7 +176,7 @@ public class ShiroConfig {
     }*/
 
     @Bean
-    public HashedCredentialsMatcher hashedCredentialsMatcher(){
+    public HashedCredentialsMatcher hashedCredentialsMatcher() {
         HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
         hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
         hashedCredentialsMatcher.setHashAlgorithmName("MD5");
@@ -185,6 +191,7 @@ public class ShiroConfig {
         defaultWebSessionManager.setDeleteInvalidSessions(true);
         defaultWebSessionManager.setSessionValidationSchedulerEnabled(true);
         defaultWebSessionManager.setSessionValidationInterval(1800000);
+        /*defaultWebSessionManager.setSessionDAO(customerSessionDao());*/
         defaultWebSessionManager.setSessionDAO(memorySessionDAO());
        /* defaultWebSessionManager.setSessionIdCookie(rememberMeCookie());*/
         return defaultWebSessionManager;

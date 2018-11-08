@@ -50,8 +50,12 @@
                                 <label class="col-sm-1 control-label no-padding-right">所属项目：</label>
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
-                                        <input id="searchProjectId" name="projectId" class="form-control" type="text"
-                                               style="height:30px"/>
+                                        <select id="searchProjectId" name="projectId" class="form-control" type="text"
+                                              style="height:30px">
+                                        </select>
+                                        <!--<select id="searchProjectId" name="projectId" class="select2 tag-input-style"
+                                                data-placeholder="" style="height: 30px">
+                                        </select>-->
                                     </div>
                                 </div>
                                 <label class="col-sm-1 control-label no-padding-right">批次名称：</label>
@@ -130,9 +134,24 @@
                                                     <label class="col-sm-4 control-label no-padding-right">所属项目：</label>
                                                     <div class="col-sm-8">
                                                         <select id="saveProjectId" name="projectId"
-                                                                class="selectpicker show-tick form-control">
+                                                                 class="selectpicker show-tick form-control">
+                                                         </select>
+                                                        <!--<select id="saveProjectId" name="projectId"
+                                                                class="select2 tag-input-style" data-placeholder=""
+                                                                style="height: 30px">
+                                                        </select>-->
+                                                    </div>
+                                                </div>
 
-                                                        </select>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">适用范围：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input class="form-control" onclick="showChooseModal();"
+                                                                   type="text" value="点击选择适用范围" style="height:30px"
+                                                                   readonly/>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -289,6 +308,8 @@
         </div>
     </div>-->
 </div><!-- /.main-container -->
+<div id="selectCityAndProduct">
+
 </div>
 </body>
 <script type="text/javascript">
@@ -298,8 +319,36 @@
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
-
+        $('#selectCityAndProduct').load('../pageimport/selectcityandproduct');
         //将项目列表填入到projectId中
+        $.ajax({
+            url: "../api/project/getlist",
+            dataType: "json",
+            async: false,
+            data: {
+                pageSize: 10000,
+                pageNum: 1
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#searchProjectId").append("<option value=>&nbsp;</option>");
+                    $("#saveProjectId").append("<option value=>&nbsp;</option>");
+                    for (var i = 0; i < result.length; i++) {
+                        $("#searchProjectId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                        if (result[i].status == 1) {
+                            $("#saveProjectId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                        }
+                    }
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
 
         $('.date-picker').datepicker({
             language: 'zh-CN',//选择语言
@@ -384,7 +433,15 @@
                 }
             },
             {name: 'amount', index: 'amount', width: 30, sortable: false},
-            {name: 'expiryTime', index: 'expiryTime', width: 50, sortable: false, formatter: dateFormatter},
+            {
+                name: 'expiryTime',
+                index: 'expiryTime',
+                width: 50,
+                sortable: false,
+                formatter: function (cellvalue, options, rowObject) {
+                    return dateFormat(rowObject.expiryTime);
+                }
+            },
             {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
         ],
         rowNum: 10,
@@ -411,22 +468,6 @@
     });
     $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
 
-    //replace icons with FontAwesome icons like above
-    function updatePagerIcons(table) {
-        var replacement =
-            {
-                'ui-icon-seek-first': 'ace-icon fa fa-angle-double-left bigger-140',
-                'ui-icon-seek-prev': 'ace-icon fa fa-angle-left bigger-140',
-                'ui-icon-seek-next': 'ace-icon fa fa-angle-right bigger-140',
-                'ui-icon-seek-end': 'ace-icon fa fa-angle-double-right bigger-140'
-            };
-        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
-            var icon = $(this);
-            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
-            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
-        })
-    }
-
     function search() {
         jQuery(grid_selector).setGridParam({
             url: "../api/rcexchangecodebatch/listpage",// 获取数据的地址
@@ -438,38 +479,21 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
-            "<i class='ace-icon'>修改</i>" +
-            "</a>&nbsp;&nbsp;";
+        str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">修改</a>&nbsp;&nbsp;";
         if (rowObject.status == 0) {
-            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:startUsing('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>启用</i>" +
-                "</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:startUsing('" + rowObject.id + "')\">启用</a>&nbsp;&nbsp;";
         } else {
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:stopUsing('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>停用</i>" +
-                "</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:stopUsing('" + rowObject.id + "')\">停用</a>&nbsp;&nbsp;";
         }
         if (rowObject.isVirtual == 0) {
             if (rowObject.isMade == 1) {
-                str = str + "<a class='btn btn-minier btn-primary' href=\"../rechargecard/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name + "\">" +
-                    "<i class='ace-icon'>兑换码管理</i>" +
-                    "</a>&nbsp;&nbsp;";
-                str = str + "<a class='btn btn-minier btn-yellow' href=\"javascript:exportExcel('" + rowObject.id + "')\">" +
-                    "<i class='ace-icon'>导出</i>" +
-                    "</a>&nbsp;&nbsp;";
+                str = str + "<a class='btn btn-minier btn-primary' href=\"../rechargecard/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name + "\">兑换码管理</a>&nbsp;&nbsp;";
+                str = str + "<a class='btn btn-minier btn-yellow' href=\"javascript:exportExcel('" + rowObject.id + "')\">导出</a>&nbsp;&nbsp;";
             } else {
-                str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:generateCode('" + rowObject.id + "')\">" +
-                    "<i class='ace-icon'>生成兑换码</i>" +
-                    "</a>&nbsp;&nbsp;";
+                str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:generateCode('" + rowObject.id + "')\">生成兑换码</a>&nbsp;&nbsp;";
             }
         }
-
         return str;
-    }
-
-    function dateFormatter(cellvalue, options, rowObject) {
-        return dateFormat(rowObject.expiryTime);
     }
 
     function openNew() {
@@ -480,6 +504,9 @@
         $("#batchId").val(0);
         $("#batchSaveForm #saveName").val("");
         $("#batchSaveForm #saveRechargeCardName").val("");
+        $("#batchSaveForm #saveProjectId").prop('selectedIndex', 0);
+        $("#batchSaveForm #saveCityCodes").val("");
+        $("#batchSaveForm #saveProductIds").val("");
         $("#batchSaveForm #saveNotVirtualRadio").click();
         $("#batchSaveForm #saveFaceValue").val("");
         $("#batchSaveForm #saveAmount").val("");
@@ -536,6 +563,9 @@
                     $("#batchId").val(result.id);
                     $("#batchSaveForm #saveName").val(result.name);
                     $("#batchSaveForm #saveRechargeCardName").val(result.rechargeCardName);
+                    $("#batchSaveForm #saveProjectId").val(result.projectId);
+                    $("#batchSaveForm #saveCityCodes").val(result.cityCodes);
+                    $("#batchSaveForm #saveProductIds").val(result.productIds);
                     if (result.isVirtual == 0) {
                         $("#batchSaveForm #saveNotVirtualRadio").click();
                         $("#batchSaveForm #saveFaceValue").val(result.faceValue);
@@ -606,8 +636,8 @@
             success: function (data) {
                 if ('error' in data) {
                     bootboxalert(data.error.message);
-                }else {
-                    window.location.href = "../api/rcexchangecodebatch/export?id="+id;
+                } else {
+                    window.location.href = "../api/rcexchangecodebatch/export?id=" + id;
                 }
             },
             error: function () {

@@ -12,7 +12,9 @@ import com.jiazhe.youxiang.server.dto.voucher.voucher.VoucherEditDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
+import com.jiazhe.youxiang.server.vo.req.voucher.voucher.VoucherCustomerPageReq;
 import com.jiazhe.youxiang.server.vo.req.voucher.voucher.VoucherEditReq;
+import com.jiazhe.youxiang.server.vo.req.voucher.voucher.VoucherGoodsAttrPageReq;
 import com.jiazhe.youxiang.server.vo.req.voucher.voucher.VoucherPageReq;
 import com.jiazhe.youxiang.server.vo.resp.voucher.voucher.VoucherResp;
 import io.swagger.annotations.ApiOperation;
@@ -43,6 +45,26 @@ public class APIVoucherController extends BaseController{
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         List<VoucherDTO> voucherDTOList = voucherBiz.getList(req.getMobile(),req.getExchangeType(),req.getStatus(),req.getExpiry(),paging);
+        List<VoucherResp> rcRespList = voucherDTOList.stream().map(VoucherAdapter::DTO2Resp).collect(Collectors.toList());
+        return ResponseFactory.buildPaginationResponse(rcRespList, paging);
+    }
+
+    @ApiOperation(value = "【APP端】查询客户的代金券", httpMethod = "GET", response = VoucherResp.class, responseContainer = "List",notes = "【后台】信息查询页查询代金券")
+    @RequestMapping(value = "/findbycustomeridpage", method = RequestMethod.GET)
+    public Object findByCustomerIdPage(@ModelAttribute VoucherCustomerPageReq req) {
+        CommonValidator.validatePaging(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
+        List<VoucherDTO> voucherDTOList = voucherBiz.getListByCustomerId(req.getCustomerId(),req.getStatus(),paging);
+        List<VoucherResp> rcRespList = voucherDTOList.stream().map(VoucherAdapter::DTO2Resp).collect(Collectors.toList());
+        return ResponseFactory.buildPaginationResponse(rcRespList, paging);
+    }
+
+    @ApiOperation(value = "【APP端】根据购买物属性（商品和城市），查询客户可使用的代金券，分页", httpMethod = "GET", response = VoucherResp.class, responseContainer = "List",notes = "【APP端】根据购买物属性（商品和城市），查询客户可使用的代金券，分页")
+    @RequestMapping(value = "/findbygoodsattrpage", method = RequestMethod.GET)
+    public Object findByGoodsAttrPage(@ModelAttribute VoucherGoodsAttrPageReq req) {
+        CommonValidator.validatePaging(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
+        List<VoucherDTO> voucherDTOList = voucherBiz.getListByGoodsAttr(req.getCustomerId(),req.getProductId(),req.getCityCode(),paging);
         List<VoucherResp> rcRespList = voucherDTOList.stream().map(VoucherAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(rcRespList, paging);
     }

@@ -43,7 +43,7 @@ public interface VoucherPOManualMapper {
      * @param limit
      * @return
      */
-    List<VoucherPO> query(@Param("mobile")String mobile,@Param("exchangeType")Integer exchangeType, @Param("status")Byte status, @Param("expiry")Byte expiry, @Param("offset")Integer offset, @Param("limit")Integer limit);
+    List<VoucherPO> query(@Param("mobile") String mobile, @Param("exchangeType") Integer exchangeType, @Param("status") Byte status, @Param("expiry") Byte expiry, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
     /**
      * 根据客户id,代金券停用、启用状态，是否过期，兑换方式查询记录条数
@@ -53,7 +53,7 @@ public interface VoucherPOManualMapper {
      * @param expiry
      * @return
      */
-    Integer count(@Param("mobile")String mobile, @Param("exchangeType")Integer exchangeType,@Param("status")Byte status, @Param("expiry")Byte expiry);
+    Integer count(@Param("mobile") String mobile, @Param("exchangeType") Integer exchangeType, @Param("status") Byte status, @Param("expiry") Byte expiry);
 
     /**
      * 插入代金券记录，返回记录id

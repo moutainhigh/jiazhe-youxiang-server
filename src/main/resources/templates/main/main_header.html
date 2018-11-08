@@ -84,12 +84,8 @@
             async: true,
             type: "GET",
             success: function (result) {
-                if("error" in result){
-                    if(result.error.code == 112010){
-                        parent.window.location.href = "../system/index";
-                    }else{
-                        window.parent.bootboxalert(result.error.message);
-                    }
+                if("error" in result && result.error.code == 112010){
+                    window.parent.location.href = "../system/index";
                 }else{
                     var data = result.data;
                     window.parent.$("#loginName").val(data.loginName);

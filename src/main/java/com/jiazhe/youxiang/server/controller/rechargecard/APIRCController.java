@@ -19,10 +19,8 @@ import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
-import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.DirectChargeReq;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.*;
 import com.jiazhe.youxiang.server.vo.req.ExpiryTimeEditReq;
-import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.RCEditReq;
-import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.RCPageReq;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecode.RCExchangeCodeEditReq;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rc.RCResp;
 import io.swagger.annotations.ApiOperation;
@@ -54,6 +52,26 @@ public class APIRCController extends BaseController{
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         List<RCDTO> rcDTOList = rcBiz.getList(req.getMobile(),req.getExchangeType(),req.getStatus(),req.getExpiry(),paging);
+        List<RCResp> rcRespList = rcDTOList.stream().map(RCAdapter::DTO2Resp).collect(Collectors.toList());
+        return ResponseFactory.buildPaginationResponse(rcRespList, paging);
+    }
+
+    @ApiOperation(value = "【APP端】客户查询所有充值卡，分页", httpMethod = "GET", response = RCResp.class, responseContainer = "List",notes = "【APP端】客户查询所有充值卡，分页")
+    @RequestMapping(value = "/findbycustomeridpage", method = RequestMethod.GET)
+    public Object findByCustomerIdPage(@ModelAttribute RCCustomerPageReq req) {
+        CommonValidator.validatePaging(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
+        List<RCDTO> rcDTOList = rcBiz.getListByCustomerId(req.getCustomerId(),req.getStatus(),paging);
+        List<RCResp> rcRespList = rcDTOList.stream().map(RCAdapter::DTO2Resp).collect(Collectors.toList());
+        return ResponseFactory.buildPaginationResponse(rcRespList, paging);
+    }
+
+    @ApiOperation(value = "【APP端】根据购买物属性（商品和城市），查询客户可使用的充值卡，分页", httpMethod = "GET", response = RCResp.class, responseContainer = "List",notes = "【APP端】根据购买物属性（商品和城市），查询客户可使用的充值卡，分页")
+    @RequestMapping(value = "/findbygoodsattrpage", method = RequestMethod.GET)
+    public Object findByGoodsAttrPage(@ModelAttribute RCGoodsAttrPageReq req) {
+        CommonValidator.validatePaging(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
+        List<RCDTO> rcDTOList = rcBiz.getListByGoodsAttr(req.getCustomerId(),req.getProductId(),req.getCityCode(),paging);
         List<RCResp> rcRespList = rcDTOList.stream().map(RCAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(rcRespList, paging);
     }

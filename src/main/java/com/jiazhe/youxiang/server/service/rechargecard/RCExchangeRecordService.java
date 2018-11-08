@@ -27,4 +27,11 @@ public interface RCExchangeRecordService {
      * @return
      */
     RCExchangeRecordDTO findByCardId(Integer cardId);
+
+    /**
+     * 根据兑换码id查找兑换记录
+     * @param id
+     * @return
+     */
+    RCExchangeRecordDTO findByCodeId(Integer id);
 }

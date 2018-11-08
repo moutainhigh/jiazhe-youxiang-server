@@ -13,6 +13,10 @@ public class OrderInfoPO implements Serializable {
 
     private Integer productId;
 
+    private String customerCityCode;
+
+    private String customerCityName;
+
     private Integer productPrice;
 
     private Integer count;
@@ -91,6 +95,22 @@ public class OrderInfoPO implements Serializable {
 
     public void setProductId(Integer productId) {
         this.productId = productId;
+    }
+
+    public String getCustomerCityCode() {
+        return customerCityCode;
+    }
+
+    public void setCustomerCityCode(String customerCityCode) {
+        this.customerCityCode = customerCityCode == null ? null : customerCityCode.trim();
+    }
+
+    public String getCustomerCityName() {
+        return customerCityName;
+    }
+
+    public void setCustomerCityName(String customerCityName) {
+        this.customerCityName = customerCityName == null ? null : customerCityName.trim();
     }
 
     public Integer getProductPrice() {

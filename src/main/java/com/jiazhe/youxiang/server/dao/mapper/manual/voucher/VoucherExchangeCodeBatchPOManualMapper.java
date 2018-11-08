@@ -19,7 +19,7 @@ public interface VoucherExchangeCodeBatchPOManualMapper {
      * @param name
      * @return
      */
-    Integer count(@Param("projectId") Integer projectId, @Param("name")String name);
+    Integer count(@Param("projectId") Integer projectId, @Param("name") String name);
 
     /**
      * 分页查询
@@ -29,5 +29,5 @@ public interface VoucherExchangeCodeBatchPOManualMapper {
      * @param limit
      * @return
      */
-    List<VoucherExchangeCodeBatchPO> query(@Param("projectId")Integer projectId, @Param("name")String name, @Param("offset")Integer offset, @Param("limit")Integer limit);
+    List<VoucherExchangeCodeBatchPO> query(@Param("projectId") Integer projectId, @Param("name") String name, @Param("offset") Integer offset, @Param("limit") Integer limit);
 }
