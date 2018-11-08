@@ -16,14 +16,15 @@ public interface OrderInfoService {
      * 后台通过参数分页查询订单信息
      * @param status
      * @param orderCode
-     * @param mobile  下单人的电话或收货人的电话
+     * @param mobile  下单人手机号
+     * @param customerMobile 收货人手机号
      * @param orderStartTime
      * @param orderEndTime
      * @param workerMobile
      * @param paging
      * @return
      */
-    List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile, Date orderStartTime, Date orderEndTime,String workerMobile, Paging paging);
+    List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile,String customerMobile, Date orderStartTime, Date orderEndTime,String workerMobile, Paging paging);
 
     /**
      * 获取订单信息

@@ -18,18 +18,20 @@ public interface OrderInfoPOManualMapper {
      * @param status
      * @param orderCode
      * @param mobile
+     * @param customerMobile 收货人手机号
      * @param orderStartTime
      * @param orderEndTime
      * @param workerMobile
      * @return
      */
-    Integer count(@Param("status") Byte status, @Param("orderCode")String orderCode, @Param("mobile")String mobile, @Param("orderStartTime")Date orderStartTime, @Param("orderEndTime")Date orderEndTime,@Param("workerMobile")String workerMobile);
+    Integer count(@Param("status") Byte status, @Param("orderCode")String orderCode, @Param("mobile")String mobile,@Param("customerMobile")String customerMobile, @Param("orderStartTime")Date orderStartTime, @Param("orderEndTime")Date orderEndTime,@Param("workerMobile")String workerMobile);
 
     /**
      * 后台分页查询订单
      * @param status
      * @param orderCode
      * @param mobile
+     * @param customerMobile 收货人手机号
      * @param orderStartTime
      * @param orderEndTime
      * @param workerMobile
@@ -37,6 +39,6 @@ public interface OrderInfoPOManualMapper {
      * @param limit
      * @return
      */
-    List<OrderInfoPO> query(@Param("status") Byte status, @Param("orderCode")String orderCode, @Param("mobile")String mobile, @Param("orderStartTime")Date orderStartTime, @Param("orderEndTime")Date orderEndTime,@Param("workerMobile")String workerMobile, @Param("offset")Integer offset,  @Param("limit")Integer limit);
+    List<OrderInfoPO> query(@Param("status") Byte status, @Param("orderCode")String orderCode, @Param("mobile")String mobile,@Param("customerMobile")String customerMobile, @Param("orderStartTime")Date orderStartTime, @Param("orderEndTime")Date orderEndTime,@Param("workerMobile")String workerMobile, @Param("offset")Integer offset,  @Param("limit")Integer limit);
 
 }

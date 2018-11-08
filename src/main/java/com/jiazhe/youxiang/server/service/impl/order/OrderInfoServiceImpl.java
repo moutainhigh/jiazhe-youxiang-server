@@ -43,9 +43,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     private OrderPaymentService orderPaymentService;
 
     @Override
-    public List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile, Date orderStartTime, Date orderEndTime,String workerMobile, Paging paging) {
-        Integer count = orderInfoPOManualMapper.count(status, orderCode,mobile,orderStartTime,orderEndTime,workerMobile);
-        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode,mobile,orderStartTime,orderEndTime,workerMobile, paging.getOffset(), paging.getLimit());
+    public List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile, String customerMobile,Date orderStartTime, Date orderEndTime,String workerMobile, Paging paging) {
+        Integer count = orderInfoPOManualMapper.count(status, orderCode,mobile,customerMobile,orderStartTime,orderEndTime,workerMobile);
+        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode,mobile,customerMobile,orderStartTime,orderEndTime,workerMobile, paging.getOffset(), paging.getLimit());
         List<OrderInfoDTO> orderInfoDTOList = orderInfoPOList.stream().map(OrderInfoAdapter::PO2DTO).collect(Collectors.toList());
         orderInfoDTOList.forEach(bean->{
             ProductDTO productDTO = productService.getById(bean.getProductId());

@@ -65,7 +65,7 @@
                                         <option value=3>待服务</option>
                                         <option value=4>已完成</option>
                                         <option value=5>取消待审核</option>
-                                        <option value=6>审核未通过</option>
+                                        <option value=6>取消未通过</option>
                                         <option value=7>已取消</option>
                                     </select>
                                 </div>
@@ -76,10 +76,17 @@
                                                style="height:30px"/>
                                     </div>
                                 </div>
-                                <label class="col-sm-1 control-label no-padding-right">手机号：</label>
+                                <label class="col-sm-1 control-label no-padding-right">客户手机号：</label>
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
                                         <input id="searchMobile" name="mobile" class="form-control" type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">收货手机号：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="searchCustomerMobile" name="customerMobile" class="form-control" type="text"
                                                style="height:30px"/>
                                     </div>
                                 </div>
@@ -285,7 +292,7 @@
 </body>
 <script type="text/javascript">
     var permission = getCookie("permission");
-
+    var orderStatus = ['待付款','待派单','待服务','服务完成','取消待审核','取消未通过','已取消'];
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -335,29 +342,7 @@
                 index: 'status',
                 sortable: false,
                 formatter: function (cellvalue, options, rowObject) {
-                    switch (rowObject.status) {
-                        case 1 :
-                            return "待付款";
-                            break;
-                        case 2 :
-                            return "待派单";
-                            break;
-                        case 3 :
-                            return "待服务";
-                            break;
-                        case 4 :
-                            return "已完成";
-                            break;
-                        case 5 :
-                            return "取消待审核";
-                            break;
-                        case 6 :
-                            return "审核未通过";
-                            break;
-                        case 7 :
-                            return "已取消";
-                            break;
-                    }
+                    return orderStatus[rowObject.status];
                 }
             },
             {name: 'payVoucher', index: 'payVoucher',sortable: false},

@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  * @author tu
- * @description：
+ * @description：后台查询订单输入参数
  * @date 2018/10/24
  */
 public class OrderInfoPageReq extends PageSizeNumReq {
@@ -19,8 +19,11 @@ public class OrderInfoPageReq extends PageSizeNumReq {
     @ApiModelProperty("订单状态")
     private Byte status ;
 
-    @ApiModelProperty("下单客户手机")
+    @ApiModelProperty("下单客户手机号")
     private String mobile;
+
+    @ApiModelProperty("收货手机号")
+    private String customerMobile;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty("下单期间起")
@@ -48,6 +51,14 @@ public class OrderInfoPageReq extends PageSizeNumReq {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getCustomerMobile() {
+        return customerMobile;
+    }
+
+    public void setCustomerMobile(String customerMobile) {
+        this.customerMobile = customerMobile;
     }
 
     public String getOrderCode() {

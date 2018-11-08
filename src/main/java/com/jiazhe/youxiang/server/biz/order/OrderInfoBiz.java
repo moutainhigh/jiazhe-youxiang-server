@@ -1,6 +1,8 @@
 package com.jiazhe.youxiang.server.biz.order;
 
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
+import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.order.OrderInfoService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerPlaceOrderReq;
@@ -24,9 +26,11 @@ public class OrderInfoBiz {
 
     @Autowired
     private OrderInfoService orderInfoService;
+    @Autowired
+    private CustomerService customerService;
 
-    public List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile, Date orderStartTime, Date orderEndTime,String worekerMobile, Paging paging) {
-        return orderInfoService.getList(status,orderCode,mobile,orderStartTime,orderEndTime,worekerMobile,paging);
+    public List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile,String customerMobile, Date orderStartTime, Date orderEndTime,String worekerMobile, Paging paging) {
+        return orderInfoService.getList(status,orderCode,mobile,customerMobile,orderStartTime,orderEndTime,worekerMobile,paging);
     }
 
     public int customerCancelOrder(Integer id) {
@@ -87,5 +91,10 @@ public class OrderInfoBiz {
 
     public List<OrderInfoDTO> getOrderByRCId(Integer id) {
         return null;
+    }
+
+    public List<OrderInfoDTO> custoemrGetList(Integer customerId, Byte status, Paging paging) {
+        CustomerDTO customerDTO = customerService.getById(customerId);
+        return getList(status,null,customerDTO.getMobile(),null,null,null,null,paging);
     }
 }
