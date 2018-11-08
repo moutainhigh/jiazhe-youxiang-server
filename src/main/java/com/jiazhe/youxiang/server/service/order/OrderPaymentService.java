@@ -23,4 +23,11 @@ public interface OrderPaymentService {
      * @return
      */
     List<OrderPaymentDTO> getByVoucherId(Integer id);
+
+    /**
+     * 通过订单id，查找消费记录
+     * @param id
+     * @return
+     */
+    List<OrderPaymentDTO> getByOrderId(Integer id);
 }

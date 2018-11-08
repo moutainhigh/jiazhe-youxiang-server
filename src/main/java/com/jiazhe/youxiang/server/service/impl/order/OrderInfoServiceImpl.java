@@ -1,6 +1,9 @@
 package com.jiazhe.youxiang.server.service.impl.order;
 
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.OrderException;
 import com.jiazhe.youxiang.server.dao.mapper.OrderInfoPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.order.OrderInfoPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.OrderInfoPO;
@@ -66,5 +69,29 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         dto.setCustomerDTO(customerDTO);
         dto.setProductDTO(productDTO);
         return dto;
+    }
+
+    @Override
+    public void customerCancelOrder(Integer id) {
+        OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
+        //订单为待付款或待派单状态，直接走退款流程
+        if(orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNPAID)||orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSENT)){
+            orderInfoPO.setStatus(CommonConstant.ORDER_CANCEL);
+            List<OrderPaymentDTO> orderPaymentDTOList = orderPaymentService.getByOrderId(id);
+    
+            if(!orderPaymentDTOList.isEmpty()){
+                orderPaymentDTOList.stream().forEach(bean->{
+
+                });
+            }
+        }
+        //订单为待服务状态，直接将订单置为取消待审核状态，此时不退款
+        else if(orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSERVICE)){
+            orderInfoPO.setStatus(CommonConstant.ORDER_CANCELWATINGCHECK);
+        }
+        else {
+            throw new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CANCEL);
+        }
+        orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
     }
 }

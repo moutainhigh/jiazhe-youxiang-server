@@ -33,24 +33,24 @@ public class OrderInfoBiz {
         return orderInfoService.getList(status,orderCode,mobile,customerMobile,orderStartTime,orderEndTime,worekerMobile,paging);
     }
 
-    public int customerCancelOrder(Integer id) {
-        return 0;
+    public void customerCancelOrder(Integer id) {
+        orderInfoService.customerCancelOrder(id);
     }
 
-    public int orderCancelPass(Integer id) {
-        return 0;
+    public void orderCancelPass(Integer id) {
+
     }
 
-    public int orderCancelUnpass(Integer id) {
-        return 0;
+    public void orderCancelUnpass(Integer id) {
+
     }
 
-    public int userCancelOrder(Integer id) {
-        return 0;
+    public void userCancelOrder(Integer id) {
+
     }
 
-    public int userChargeAdditional(Integer orderId, BigDecimal additionalPay) {
-        return 0;
+    public void userChargeAdditional(Integer orderId, BigDecimal additionalPay) {
+
     }
 
     public NeedPayResp customerLaunchPay(Integer id) {

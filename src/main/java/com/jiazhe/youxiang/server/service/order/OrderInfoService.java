@@ -33,4 +33,9 @@ public interface OrderInfoService {
      */
     OrderInfoDTO getById(Integer id);
 
+    /**
+     * 客户取消订单
+     * @param id
+     */
+    void customerCancelOrder(Integer id);
 }

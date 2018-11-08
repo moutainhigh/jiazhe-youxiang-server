@@ -67,13 +67,13 @@ public class CommonConstant {
     /**
      * 订单状态【1代付款，2待派单，3待服务，4已完成，5取消待审核，6取消审核未通过，7已取消】
      */
-    public static final Integer ORDER_UNPAID = 1;
-    public static final Integer ORDER_UNSENT = 2;
-    public static final Integer ORDER_UNSERVICE = 3;
-    public static final Integer ORDER_COMPLETE = 4;
-    public static final Integer ORDER_CANCELWATINGCHECK = 5;
-    public static final Integer ORDER_CANCELUNPASS = 6;
-    public static final Integer ORDER_CANCEL = 7;
+    public static final Byte ORDER_UNPAID = 1;
+    public static final Byte ORDER_UNSENT = 2;
+    public static final Byte ORDER_UNSERVICE = 3;
+    public static final Byte ORDER_COMPLETE = 4;
+    public static final Byte ORDER_CANCELWATINGCHECK = 5;
+    public static final Byte ORDER_CANCELUNPASS = 6;
+    public static final Byte ORDER_CANCEL = 7;
 
     public static final Byte BATCH_IS_VIRTUAL = Byte.valueOf("1");
 
@@ -113,6 +113,13 @@ public class CommonConstant {
      */
     public static final Byte EXCHANGE_CODE_HAS_MADE = Byte.valueOf("1");
     public static final Byte EXCHANGE_CODE_NOT_MADE = Byte.valueOf("0");
+
+    /**
+     * 支付类型【1为充值卡支付，2为代金券支付，3为在线支付】
+     */
+    public static final Byte PAY_RECHARGE_CARD = Byte.valueOf("1");
+    public static final Byte PAY_VOUCHER = Byte.valueOf("2");
+    public static final Byte PAY_CASH = Byte.valueOf("3");
 
 
 

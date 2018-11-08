@@ -54,4 +54,15 @@ public class OrderPaymentServiceImpl implements OrderPaymentService {
         });
         return orderPaymentDTOList;
     }
+
+    @Override
+    public List<OrderPaymentDTO> getByOrderId(Integer id) {
+        OrderPaymentPOExample example = new OrderPaymentPOExample();
+        OrderPaymentPOExample.Criteria criteria = example.createCriteria();
+        criteria.andOrderIdEqualTo(id);
+        criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
+        List<OrderPaymentPO> poList = orderPaymentPOMapper.selectByExample(example);
+        List<OrderPaymentDTO> orderPaymentDTOList = poList.stream().map(OrderPaymentAdapter::PO2DTO).collect(Collectors.toList());
+        return orderPaymentDTOList;
+    }
 }
