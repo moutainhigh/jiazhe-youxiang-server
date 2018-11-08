@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8"/>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/static/init.css}"/>
+
+    <!-- Javascript -->
+    <script th:src="@{/static/init.js}"></script>
+
+
+    <style>
+        .form-group {
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+
+<body class="no-skin">
+
+<div class="main-container ace-save-state" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.loadState('main-container')
+        } catch (e) {
+        }
+    </script>
+
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a th:href="@{/main/main_center}">主页</a>
+                    </li>
+                    <li class="active">商品大类管理</li>
+                </ul><!-- /.breadcrumb -->
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xs-12" style="padding-top:40px">
+                        <form id="searchForm" class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">商品大类名称：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="name" name="name" class="form-control" type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+
+                                <label class="col-sm-1 control-label no-padding-right">状态：</label>
+                                <div class="col-sm-2">
+                                    <select id="status" name="status" class="selectpicker show-tick form-control">
+                                        <option value="">所有</option>
+                                        <option value=0>下架</option>
+                                        <option value=1>上架</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <button class="btn btn-white btn-default btn-round btn-sm"
+                                            onclick="return search()">
+                                        <i class="ace-icon fa fa-search red2"></i>
+                                        查询
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!-- /.col -->
+                    <div class="col-xs-12" style="text-align: right" id="buttonDiv">
+                        <p style="margin:1px;">
+                            <!--<shiro:hasPermission name="sysrole:add">-->
+                            <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
+                               data-toggle="modal" onclick="openNew()">
+                                <i class="ace-icon fa fa-plus"></i>新建
+                            </a>
+                            <!--</shiro:hasPermission>-->
+                        </p>
+                    </div><!-- /.col -->
+                    <div class="col-xs-12">
+                        <table id="grid-table"></table>
+
+                        <div id="grid-pager"></div>
+                    </div><!-- /.col -->
+                    <div id="modal-form" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger" id="modal-title"></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-1"></div>
+                                        <div class="col-xs-12 col-sm-9">
+                                            <form id="projectSaveForm" class="form-horizontal" role="form">
+                                                <input type="hidden" name="id" id="inputProductCategoryId" value="0">
+                                                <input type="hidden" name="thumbnailUrl" id="inputThumbnailUrl"
+                                                       value="">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">商品大类名称：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputName" name="inputName"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">商品大类描述：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputDescription" name="inputDescription"
+                                                                   class="form-control"
+                                                                   type="text" style="height: 30px;"/>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">缩略图：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="widget-main">
+                                                            <div class="form-group">
+                                                                <div class="col-xs-12">
+                                                                    <input type="file" id="fileThumbnail"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">排序：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputPriority" name="inputPriority"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="addOrUpdate()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        保存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+
+</div><!-- /.main-container -->
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+        //重新修改表格宽度
+        $(window).resize(function () {
+            $("#grid-table").setGridWidth($(window).width() * 0.96);
+        });
+    });
+
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+    jQuery(grid_selector).jqGrid({
+        url: "../api/product/getcategorylist",// 获取数据的地址
+        postData: transformToJson($('#searchForm').serializeArray()),
+        rownumbers: true,
+        datatype: "json",
+        mtype: "GET",
+        hidegrid: false,//收缩列表按钮
+        prmNames: {
+            page: "pageNum",
+            rows: "pageSize"
+        },// 重新定义分页信息
+        width: "100%",
+        autowidth: true,
+        height: 350,
+        colNames: ['', '大类名称', '大类描述', '缩略图', '状态', '排序', '操作'],
+        colModel: [
+            {name: 'id', index: 'id', sortable: false, hidden: true},
+            {name: 'name', index: 'name', width: 50, sortable: false},
+            {name: 'description', index: 'description', sortable: false},
+            {name: 'thumbnailUrl', index: 'thumbnailUrl', width: 50, sortable: false},
+            {name: 'status', index: 'status', width: 50, sortable: false, formatter: statusFormatter},
+            {name: 'priority', index: 'priority', width: 20, sortable: false},
+            {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
+        ],
+        rowNum: 10,
+        rowList: [10, 20, 30],
+        pager: pager_selector,
+        altRows: true,
+        viewrecords: true,
+        emptyrecords: "0条数据",
+        loadComplete: function (data) {
+            var table = this;
+            setTimeout(function () {
+                $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
+                updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
+            }, 0);
+        },
+        jsonReader: { // jsonReader来跟服务器端返回的数据做对应
+            root: "data", // 包含实际数据的数组
+            page: "paging.currPage", // 当前页
+            total: "paging.totalPage",// 总页数
+            records: "paging.total", // 查询出的记录数
+            repeatitems: false
+        },
+        caption: "商品大类列表"
+    });
+    $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
+
+    function search() {
+        jQuery(grid_selector).setGridParam({
+            url: "../api/product/getcategorylist",// 获取数据的地址
+            postData: transformToJson($('#searchForm').serializeArray()),
+        }).trigger("reloadGrid", [{page: 1}]);
+        return false;
+    }
+
+    function statusFormatter(cellvalue, options, cell) {
+        switch (cell.status) {
+            case 0:
+            default:
+                return "下架";
+            case 1:
+                return "上架";
+        }
+    }
+
+    function customFormatter(cellvalue, options, rowObject) {
+        var str = "";
+        str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:deleteOne('" + rowObject.id + "')\">" +
+            "<i class='ace-icon'>删除</i>" +
+            "</a>&nbsp;&nbsp;";
+        str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
+            "<i class='ace-icon'>修改</i>" +
+            "</a>&nbsp;&nbsp;";
+
+        if (rowObject.status == 0) {
+            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:sold('" + rowObject.id + "')\">" +
+                "<i class='ace-icon'>上架</i>" +
+                "</a>&nbsp;&nbsp;";
+        } else {
+            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:soldOut('" + rowObject.id + "')\">" +
+                "<i class='ace-icon'>下架</i>" +
+                "</a>&nbsp;&nbsp;";
+        }
+        return str;
+    }
+
+    function addOrUpdate() {
+        var productCategoryId = $("#inputProductCategoryId").val();
+        if (productCategoryId || productCategoryId <= 0) {
+            add();
+        } else {
+            update();
+        }
+    }
+
+    function add() {
+        $.ajax({
+            url: "../api/product/addcategory",
+            dataType: "json",
+            async: false,
+            data: {
+                name: $("#inputName").val(),
+                description: $("#inputDescription").val(),
+                priority: $("#inputPriority").val(),
+                thumbnailUrl: $("#inputThumbnailUrl").val()
+            },
+            type: "POST",
+            success: success,
+            error: error
+        });
+    }
+
+    function update() {
+        $.ajax({
+            url: "../api/product/updatecategory",
+            dataType: "json",
+            async: false,
+            data: {
+                id: $("#inputProductCategoryId").val(),
+                name: $("#inputName").val(),
+                description: $("#inputDescription").val(),
+                priority: $("#inputPriority").val(),
+                thumbnailUrl: $("#inputThumbnailUrl").val()
+            },
+            type: "POST",
+            success: success,
+            error: error
+        });
+    }
+
+    function deleteOne(id) {
+        confirm("确定要删除该商品大类吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "../api/product/deletecategory",    //请求的url地址
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    success: success,
+                    error: error
+                });
+            }
+        });
+    }
+
+    function openNew() {
+        $("#modal-title").html("商品大类信息-添加");
+        $("#projectId").val(0);
+        $("#inputName").val("");
+        $("#inputDescription").val("");
+        $("#inputPriority").val("");
+    }
+
+    function openEdit(id) {
+        $("#modal-title").html("商品大类信息-修改");
+        $(".modal-footer-btn").show();
+        getById(id);
+    }
+
+
+    function getById(id) {
+        $.ajax({
+            url: "../api/product/getcategorybyid",    //请求的url地址
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#inputProductCategoryId").val(result.id);
+                    $("#inputName").val(result.name);
+                    $("#inputDescription").val(result.description);
+                    $("#inputPriority").val(result.priority);
+                    $('#fileThumbnail').ace_file_input('show_file_list', [
+                        {type: 'image', name: 'name of image', path: 'https://blog.csdn.net/yjclsx'},
+                    ]);
+
+                    $("#modal-form").modal('show');
+                }
+            },
+            error: error
+        });
+    }
+
+    /**
+     * 上架
+     * @param id
+     */
+    function sold(id) {
+        updateCategoryStatus(id, 1);
+    }
+
+    /**
+     * 下架
+     * @param id
+     */
+    function soldOut(id) {
+        updateCategoryStatus(id, 0);
+    }
+
+    function updateCategoryStatus(id, status) {
+        confirm("确定要上架该商品大类吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "../api/product/updatecategorystatus",    //请求的url地址
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id,
+                        status: status
+                    },
+                    type: "POST",
+                    success: success,
+                    error: error
+                });
+            }
+        });
+    }
+
+
+    $('#fileThumbnail').ace_file_input({
+        style: 'well',
+        btn_choose: '把图片拖到这里或点击选择图片',
+        btn_change: null,
+        no_icon: 'ace-icon fa fa-cloud-upload',
+        droppable: true,
+        thumbnail: 'large',
+        allowExt: ["jpeg", "jpg", "png", "gif", "bmp"],
+        allowMime: ["image/jpg", "image/jpeg", "image/png", "image/gif", "image/bmp"],
+    }).on('change', function () {
+        var image = $('#fileThumbnail')[0].files[0]
+        if (!image) {
+            return;
+        }
+        var formData = new FormData();
+        formData.append('file', image);
+
+        $.ajax({
+            url: "../api/upload/uploadimage",    //请求的url地址
+            dataType: "json",
+            type: 'POST',
+            async: true,
+            processData: false, // 告诉jQuery不要去处理发送的数据
+            contentType: false,// 告诉jQuery不要去设置Content-Type请求头
+            data: formData,
+            cache: false,
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $('#inputThumbnailUrl').val(data.data.url)
+//                    alert('文件上传成功!' + data.data.url);
+                }
+            },
+            error: error
+        });
+    });
+
+    function success(data) {
+        if ('error' in data) {
+            bootboxalert(data.error.message);
+        } else {
+            $("#modal-form").modal('hide');
+            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+        }
+    }
+
+</script>
+</html>
+

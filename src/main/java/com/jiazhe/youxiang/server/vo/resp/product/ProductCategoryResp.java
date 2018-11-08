@@ -30,7 +30,7 @@ public class ProductCategoryResp extends BaseVO {
     @ApiModelProperty("排序")
     private Integer priority;
     @ApiModelProperty("商品分类上架状态 0:下架,1:上架")
-    private Byte status;
+    private Integer status;
 
     public Integer getId() {
         return id;
@@ -80,11 +80,11 @@ public class ProductCategoryResp extends BaseVO {
         this.priority = priority;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }

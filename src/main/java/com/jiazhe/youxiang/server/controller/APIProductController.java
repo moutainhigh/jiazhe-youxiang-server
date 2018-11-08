@@ -107,7 +107,7 @@ public class APIProductController {
         CommonValidator.validatePaging(req);
         Paging paging =  PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
-        List<ProductCategoryDTO> productCategoryDTOList = productBiz.getCategoryList(req.getName(), paging);
+        List<ProductCategoryDTO> productCategoryDTOList = productBiz.getCategoryList(req.getName(),req.getStatus(), paging);
         //将DTO转成VO
         List<ProductCategoryResp> result = productCategoryDTOList.stream().map(ProductAdapter::productCategoryDTO2VO).collect(Collectors.toList());
         //用ResponseFactory将返回值包装
@@ -152,8 +152,8 @@ public class APIProductController {
      *
      * @return
      */
-    @ApiOperation(value = "删除商品分类", httpMethod = "GET", notes = "删除商品分类")
-    @RequestMapping(value = "deletecategory", method = RequestMethod.GET)
+    @ApiOperation(value = "删除商品分类", httpMethod = "POST", notes = "删除商品分类")
+    @RequestMapping(value = "deletecategory", method = RequestMethod.POST)
     public Object deleteCategory(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法

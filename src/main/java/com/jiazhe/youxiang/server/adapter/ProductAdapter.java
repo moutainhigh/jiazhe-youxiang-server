@@ -36,15 +36,15 @@ public class ProductAdapter {
         if (dto == null) {
             return null;
         }
-        ProductCategoryResp productTypeResp = new ProductCategoryResp();
-        productTypeResp.setId(dto.getId());
-        productTypeResp.setName(dto.getName());
-        productTypeResp.setDescription(dto.getDescription());
-        productTypeResp.setThumbnailUrl(dto.getThumbnailUrl());
-        productTypeResp.setDetailImgUrl(dto.getDetailImgUrl());
-        productTypeResp.setPriority(dto.getPriority());
-        productTypeResp.setStatus(dto.getStatus());
-        return productTypeResp;
+        ProductCategoryResp productCategoryResp = new ProductCategoryResp();
+        productCategoryResp.setId(dto.getId());
+        productCategoryResp.setName(dto.getName());
+        productCategoryResp.setDescription(dto.getDescription());
+        productCategoryResp.setThumbnailUrl(dto.getThumbnailUrl());
+        productCategoryResp.setDetailImgUrl(dto.getDetailImgUrl());
+        productCategoryResp.setPriority(dto.getPriority());
+        productCategoryResp.setStatus(dto.getStatus());
+        return productCategoryResp;
     }
 
     public static ProductResp productDTO2VO(ProductDTO dto) {
@@ -162,7 +162,9 @@ public class ProductAdapter {
         productCategoryPO.setThumbnailUrl(dto.getThumbnailUrl());
         productCategoryPO.setDetailImgUrl(dto.getDetailImgUrl());
         productCategoryPO.setPriority(dto.getPriority());
-        productCategoryPO.setStatus(dto.getStatus());
+        if(dto.getStatus()!=null){
+            productCategoryPO.setStatus(dto.getStatus().byteValue());
+        }
         return productCategoryPO;
     }
 
@@ -177,7 +179,9 @@ public class ProductAdapter {
         productCategoryDTO.setThumbnailUrl(po.getThumbnailUrl());
         productCategoryDTO.setDetailImgUrl(po.getDetailImgUrl());
         productCategoryDTO.setPriority(po.getPriority());
-        productCategoryDTO.setStatus(po.getStatus());
+        if(po.getStatus()!=null){
+            productCategoryDTO.setStatus(po.getStatus().intValue());
+        }
         return productCategoryDTO;
     }
 

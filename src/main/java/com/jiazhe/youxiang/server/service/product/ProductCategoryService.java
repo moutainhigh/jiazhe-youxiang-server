@@ -22,7 +22,7 @@ public interface ProductCategoryService {
 
     ProductCategoryDTO getCategoryById(Integer id);
 
-    List<ProductCategoryDTO> getCategoryList(String name, Paging paging);
+    List<ProductCategoryDTO> getCategoryList(String name, Integer status, Paging paging);
 
     void deleteCategory(Integer id);
 
