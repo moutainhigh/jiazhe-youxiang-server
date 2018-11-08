@@ -356,6 +356,146 @@ public class OrderInfoPOExample {
             return (Criteria) this;
         }
 
+        public Criteria andCustomerCityCodeIsNull() {
+            addCriterion("customer_city_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityCodeIsNotNull() {
+            addCriterion("customer_city_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityCodeEqualTo(String value) {
+            addCriterion("customer_city_code =", value, "customerCityCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityCodeNotEqualTo(String value) {
+            addCriterion("customer_city_code <>", value, "customerCityCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityCodeGreaterThan(String value) {
+            addCriterion("customer_city_code >", value, "customerCityCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("customer_city_code >=", value, "customerCityCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityCodeLessThan(String value) {
+            addCriterion("customer_city_code <", value, "customerCityCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityCodeLessThanOrEqualTo(String value) {
+            addCriterion("customer_city_code <=", value, "customerCityCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityCodeLike(String value) {
+            addCriterion("customer_city_code like", value, "customerCityCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityCodeNotLike(String value) {
+            addCriterion("customer_city_code not like", value, "customerCityCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityCodeIn(List<String> values) {
+            addCriterion("customer_city_code in", values, "customerCityCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityCodeNotIn(List<String> values) {
+            addCriterion("customer_city_code not in", values, "customerCityCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityCodeBetween(String value1, String value2) {
+            addCriterion("customer_city_code between", value1, value2, "customerCityCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityCodeNotBetween(String value1, String value2) {
+            addCriterion("customer_city_code not between", value1, value2, "customerCityCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityNameIsNull() {
+            addCriterion("customer_city_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityNameIsNotNull() {
+            addCriterion("customer_city_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityNameEqualTo(String value) {
+            addCriterion("customer_city_name =", value, "customerCityName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityNameNotEqualTo(String value) {
+            addCriterion("customer_city_name <>", value, "customerCityName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityNameGreaterThan(String value) {
+            addCriterion("customer_city_name >", value, "customerCityName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityNameGreaterThanOrEqualTo(String value) {
+            addCriterion("customer_city_name >=", value, "customerCityName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityNameLessThan(String value) {
+            addCriterion("customer_city_name <", value, "customerCityName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityNameLessThanOrEqualTo(String value) {
+            addCriterion("customer_city_name <=", value, "customerCityName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityNameLike(String value) {
+            addCriterion("customer_city_name like", value, "customerCityName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityNameNotLike(String value) {
+            addCriterion("customer_city_name not like", value, "customerCityName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityNameIn(List<String> values) {
+            addCriterion("customer_city_name in", values, "customerCityName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityNameNotIn(List<String> values) {
+            addCriterion("customer_city_name not in", values, "customerCityName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityNameBetween(String value1, String value2) {
+            addCriterion("customer_city_name between", value1, value2, "customerCityName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCustomerCityNameNotBetween(String value1, String value2) {
+            addCriterion("customer_city_name not between", value1, value2, "customerCityName");
+            return (Criteria) this;
+        }
+
         public Criteria andProductPriceIsNull() {
             addCriterion("product_price is null");
             return (Criteria) this;

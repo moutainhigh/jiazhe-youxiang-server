@@ -392,6 +392,8 @@ CREATE TABLE `order_info` (
     `order_code` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '订单编号',
     `customer_id` INT(10) UNSIGNED NOT NULL COMMENT '客户id',
     `product_id` INT(10) UNSIGNED NOT NULL COMMENT '商品id',
+    `customer_city_code` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '客户下单的城市code',
+    `customer_city_name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '客户下单的城市名称',
     `product_price` INT(10) UNSIGNED NOT NULL COMMENT '商品单价',
     `count` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '购买数量',
     `customer_address` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '联系地址',
@@ -478,5 +480,16 @@ CREATE TABLE `audit_record` (
     PRIMARY KEY (`id`)
 )  ENGINE=INNODB COMMENT='兑换审核信息表';
 
-
+drop table if exists `simple_session`;
+CREATE TABLE `simple_session` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
+    `cookie` VARCHAR(50) NOT NULL DEFAULT '' COMMENT 'cookie',
+    `session` VARCHAR(5000) NOT NULL DEFAULT '' COMMENT 'session',
+    `status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '状态 0-不可用，1-可用',
+    `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
+    `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
+    `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+    PRIMARY KEY (`id`)
+)  ENGINE=INNODB COMMENT='登录记录信息表';
 

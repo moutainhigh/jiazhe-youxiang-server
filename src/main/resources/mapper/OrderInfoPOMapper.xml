@@ -6,6 +6,8 @@
     <result column="order_code" property="orderCode" jdbcType="VARCHAR" />
     <result column="customer_id" property="customerId" jdbcType="INTEGER" />
     <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="customer_city_code" property="customerCityCode" jdbcType="VARCHAR" />
+    <result column="customer_city_name" property="customerCityName" jdbcType="VARCHAR" />
     <result column="product_price" property="productPrice" jdbcType="INTEGER" />
     <result column="count" property="count" jdbcType="INTEGER" />
     <result column="customer_address" property="customerAddress" jdbcType="VARCHAR" />
@@ -89,10 +91,11 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, order_code, customer_id, product_id, product_price, count, customer_address, 
-    customer_mobile, customer_name, customer_remark, worker_name, worker_mobile, order_time, 
-    service_time, real_service_time, pay_recharge_card, pay_voucher, pay_cash, total_cost, 
-    comments, type, status, audit_reason, ext_info, is_deleted, add_time, mod_time
+    id, order_code, customer_id, product_id, customer_city_code, customer_city_name, 
+    product_price, count, customer_address, customer_mobile, customer_name, customer_remark, 
+    worker_name, worker_mobile, order_time, service_time, real_service_time, pay_recharge_card, 
+    pay_voucher, pay_cash, total_cost, comments, type, status, audit_reason, ext_info, 
+    is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.OrderInfoPOExample" >
     select
@@ -126,25 +129,25 @@
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.OrderInfoPO" >
     insert into order_info (id, order_code, customer_id, 
-      product_id, product_price, count, 
-      customer_address, customer_mobile, customer_name, 
-      customer_remark, worker_name, worker_mobile, 
-      order_time, service_time, real_service_time, 
-      pay_recharge_card, pay_voucher, pay_cash, 
-      total_cost, comments, type, 
-      status, audit_reason, ext_info, 
-      is_deleted, add_time, mod_time
-      )
+      product_id, customer_city_code, customer_city_name, 
+      product_price, count, customer_address, 
+      customer_mobile, customer_name, customer_remark, 
+      worker_name, worker_mobile, order_time, 
+      service_time, real_service_time, pay_recharge_card, 
+      pay_voucher, pay_cash, total_cost, 
+      comments, type, status, 
+      audit_reason, ext_info, is_deleted, 
+      add_time, mod_time)
     values (#{id,jdbcType=INTEGER}, #{orderCode,jdbcType=VARCHAR}, #{customerId,jdbcType=INTEGER}, 
-      #{productId,jdbcType=INTEGER}, #{productPrice,jdbcType=INTEGER}, #{count,jdbcType=INTEGER}, 
-      #{customerAddress,jdbcType=VARCHAR}, #{customerMobile,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, 
-      #{customerRemark,jdbcType=VARCHAR}, #{workerName,jdbcType=VARCHAR}, #{workerMobile,jdbcType=VARCHAR}, 
-      #{orderTime,jdbcType=TIMESTAMP}, #{serviceTime,jdbcType=TIMESTAMP}, #{realServiceTime,jdbcType=TIMESTAMP}, 
-      #{payRechargeCard,jdbcType=DECIMAL}, #{payVoucher,jdbcType=INTEGER}, #{payCash,jdbcType=DECIMAL}, 
-      #{totalCost,jdbcType=DECIMAL}, #{comments,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
-      #{status,jdbcType=TINYINT}, #{auditReason,jdbcType=VARCHAR}, #{extInfo,jdbcType=VARCHAR}, 
-      #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}
-      )
+      #{productId,jdbcType=INTEGER}, #{customerCityCode,jdbcType=VARCHAR}, #{customerCityName,jdbcType=VARCHAR}, 
+      #{productPrice,jdbcType=INTEGER}, #{count,jdbcType=INTEGER}, #{customerAddress,jdbcType=VARCHAR}, 
+      #{customerMobile,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, #{customerRemark,jdbcType=VARCHAR}, 
+      #{workerName,jdbcType=VARCHAR}, #{workerMobile,jdbcType=VARCHAR}, #{orderTime,jdbcType=TIMESTAMP}, 
+      #{serviceTime,jdbcType=TIMESTAMP}, #{realServiceTime,jdbcType=TIMESTAMP}, #{payRechargeCard,jdbcType=DECIMAL}, 
+      #{payVoucher,jdbcType=INTEGER}, #{payCash,jdbcType=DECIMAL}, #{totalCost,jdbcType=DECIMAL}, 
+      #{comments,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
+      #{auditReason,jdbcType=VARCHAR}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.OrderInfoPO" >
     insert into order_info
@@ -160,6 +163,12 @@
       </if>
       <if test="productId != null" >
         product_id,
+      </if>
+      <if test="customerCityCode != null" >
+        customer_city_code,
+      </if>
+      <if test="customerCityName != null" >
+        customer_city_name,
       </if>
       <if test="productPrice != null" >
         product_price,
@@ -243,6 +252,12 @@
       </if>
       <if test="productId != null" >
         #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="customerCityCode != null" >
+        #{customerCityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCityName != null" >
+        #{customerCityName,jdbcType=VARCHAR},
       </if>
       <if test="productPrice != null" >
         #{productPrice,jdbcType=INTEGER},
@@ -336,6 +351,12 @@
       <if test="record.productId != null" >
         product_id = #{record.productId,jdbcType=INTEGER},
       </if>
+      <if test="record.customerCityCode != null" >
+        customer_city_code = #{record.customerCityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerCityName != null" >
+        customer_city_name = #{record.customerCityName,jdbcType=VARCHAR},
+      </if>
       <if test="record.productPrice != null" >
         product_price = #{record.productPrice,jdbcType=INTEGER},
       </if>
@@ -416,6 +437,8 @@
       order_code = #{record.orderCode,jdbcType=VARCHAR},
       customer_id = #{record.customerId,jdbcType=INTEGER},
       product_id = #{record.productId,jdbcType=INTEGER},
+      customer_city_code = #{record.customerCityCode,jdbcType=VARCHAR},
+      customer_city_name = #{record.customerCityName,jdbcType=VARCHAR},
       product_price = #{record.productPrice,jdbcType=INTEGER},
       count = #{record.count,jdbcType=INTEGER},
       customer_address = #{record.customerAddress,jdbcType=VARCHAR},
@@ -454,6 +477,12 @@
       </if>
       <if test="productId != null" >
         product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="customerCityCode != null" >
+        customer_city_code = #{customerCityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCityName != null" >
+        customer_city_name = #{customerCityName,jdbcType=VARCHAR},
       </if>
       <if test="productPrice != null" >
         product_price = #{productPrice,jdbcType=INTEGER},
@@ -532,6 +561,8 @@
     set order_code = #{orderCode,jdbcType=VARCHAR},
       customer_id = #{customerId,jdbcType=INTEGER},
       product_id = #{productId,jdbcType=INTEGER},
+      customer_city_code = #{customerCityCode,jdbcType=VARCHAR},
+      customer_city_name = #{customerCityName,jdbcType=VARCHAR},
       product_price = #{productPrice,jdbcType=INTEGER},
       count = #{count,jdbcType=INTEGER},
       customer_address = #{customerAddress,jdbcType=VARCHAR},
