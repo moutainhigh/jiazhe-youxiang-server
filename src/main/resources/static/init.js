@@ -21,6 +21,7 @@ document.write("<script language='javascript' src='../static/ace-master/js/boots
 document.write("<script language='javascript' src='../static/ace-master/js/jquery.jqGrid.min.js'></script>");
 document.write("<script language='javascript' src='../static/ace-master/js/grid.locale-cn.js'></script>");
 document.write("<script language='javascript' src='../static/ace-master/js/tree.min.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/select2.min.js'></script>");
 
 /*将form通过$('#operatorSearchForm').serializeArray()方式获得的formData【形如：
 [{"name":"user","value":"hpc"},{"name":"pwd","value":"123"},{"name":"sex","value":"M"},{"name":"age","value":"100"}]】格式

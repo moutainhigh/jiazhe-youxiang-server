@@ -18,6 +18,7 @@
 @import "../static/ace-master/css/ace-skins.min.css";
 @import "../static/ace-master/css/ace-rtl.min.css";
 @import "../static/ace-master/css/ace-ie.min.css";
+@import "../static/ace-master/css/select2.min.css";
 
 /*滚动条宽度和长度,外层轨道*/
 ::-webkit-scrollbar{
