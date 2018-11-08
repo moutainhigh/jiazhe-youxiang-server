@@ -28,4 +28,12 @@
             #{item}
         </foreach>
     </select>
+
+    <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeRecordPO" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into recharge_card_exchange_record (id, recharge_card_id,exchange_code_id,exchange_type,operator_id,operator_name,
+    ext_info, is_deleted,add_time, mod_time)
+        values (#{id,jdbcType=INTEGER}, #{rechargeCardId,jdbcType=INTEGER},#{exchangeCodeId,jdbcType=INTEGER},#{exchangeType,jdbcType=TINYINT},#{operatorId,jdbcType=INTEGER},
+        #{operatorName,jdbcType=VARCHAR}, #{extInfo,jdbcType=VARCHAR},#{isDeleted,jdbcType=TINYINT},#{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
+    </insert>
 </mapper>

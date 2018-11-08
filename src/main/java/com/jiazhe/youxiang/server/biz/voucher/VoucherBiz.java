@@ -1,6 +1,8 @@
 package com.jiazhe.youxiang.server.biz.voucher;
 
+import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.voucher.voucher.VoucherDTO;
 import com.jiazhe.youxiang.server.dto.voucher.voucher.VoucherEditDTO;
 import com.jiazhe.youxiang.server.service.voucher.VoucherService;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author TU
@@ -21,6 +24,8 @@ public class VoucherBiz {
 
     @Autowired
     private VoucherService voucherService;
+    @Autowired
+    private CustomerBiz customerBiz;
 
     public void startUsing(Integer id) {
         voucherService.changeStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
@@ -31,7 +36,7 @@ public class VoucherBiz {
     }
 
     public List<VoucherDTO> getList(String mobile, Integer exchangeType, Byte status, Byte expiry, Paging paging) {
-        return voucherService.getList(mobile,exchangeType,status,expiry,paging);
+        return voucherService.getList(mobile, exchangeType, status, expiry, paging);
     }
 
     public VoucherDTO getById(Integer id) {
@@ -40,5 +45,38 @@ public class VoucherBiz {
 
     public void editSave(VoucherEditDTO dto) {
         voucherService.editSave(dto);
+    }
+
+    /**
+     * app端根据客户id，和是否可用查询充值卡列表
+     *
+     * @param customerId
+     * @param status     0为所有，1为不可用【包括过期、停用和余额为0】，2为可用
+     * @param paging
+     * @return
+     */
+    public List<VoucherDTO> getListByCustomerId(Integer customerId, Byte status, Paging paging) {
+
+        CustomerDTO customerDTO = customerBiz.getById(customerId);
+        if (status.equals(Byte.valueOf("0"))) {
+            List<VoucherDTO> voucherDTOListAll = voucherService.getList(customerDTO.getMobile(), null, null, null, paging);
+            return voucherDTOListAll;
+        }
+        if (status.equals(Byte.valueOf("1"))) {
+            List<VoucherDTO> voucherDTOListAll = voucherService.getList(customerDTO.getMobile(), null, null, null, paging);
+            return voucherDTOListAll.stream()
+                    .filter(bean ->
+                            bean.getStatus().equals(Byte.valueOf("0"))
+                                    || bean.getExpiryTime().compareTo(new Date()) == -1
+                                    || bean.getUsed().equals(Byte.valueOf("1"))
+                    ).collect(Collectors.toList());
+        }
+        if (status.equals(Byte.valueOf("2"))) {
+            List<VoucherDTO> voucherDTOListUsable = voucherService.getList(customerDTO.getMobile(), null, Byte.valueOf("1"), Byte.valueOf("0"), paging);
+            return voucherDTOListUsable.stream()
+                    .filter(bean -> bean.getUsed().equals(Byte.valueOf("0")))
+                    .collect(Collectors.toList());
+        }
+        return null;
     }
 }

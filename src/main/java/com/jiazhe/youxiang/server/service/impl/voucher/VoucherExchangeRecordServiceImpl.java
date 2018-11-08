@@ -51,7 +51,7 @@ public class VoucherExchangeRecordServiceImpl implements VoucherExchangeRecordSe
 
     @Override
     public void insert(VoucherExchangeRecordPO voucherExchangeRecordPO) {
-        voucherExchangeRecordPOMapper.insert(voucherExchangeRecordPO);
+        voucherExchangeRecordPOManualMapper.insert(voucherExchangeRecordPO);
     }
 
     @Override

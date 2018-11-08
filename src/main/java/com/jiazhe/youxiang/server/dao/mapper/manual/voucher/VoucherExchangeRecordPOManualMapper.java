@@ -18,4 +18,10 @@ public interface VoucherExchangeRecordPOManualMapper {
      * @return
      */
     List<VoucherExchangeRecordPO> findByCodeIds(List<Integer> codeIds);
+
+    /**
+     * 插入，有id返回
+     * @param voucherExchangeRecordPO
+     */
+    void insert(VoucherExchangeRecordPO voucherExchangeRecordPO);
 }
