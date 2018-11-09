@@ -17,7 +17,7 @@ public class OrderInfoPO implements Serializable {
 
     private String customerCityName;
 
-    private Integer productPrice;
+    private BigDecimal productPrice;
 
     private Integer count;
 
@@ -113,11 +113,11 @@ public class OrderInfoPO implements Serializable {
         this.customerCityName = customerCityName == null ? null : customerCityName.trim();
     }
 
-    public Integer getProductPrice() {
+    public BigDecimal getProductPrice() {
         return productPrice;
     }
 
-    public void setProductPrice(Integer productPrice) {
+    public void setProductPrice(BigDecimal productPrice) {
         this.productPrice = productPrice;
     }
 

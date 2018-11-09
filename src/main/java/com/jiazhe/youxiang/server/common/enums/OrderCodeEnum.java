@@ -7,7 +7,8 @@ package com.jiazhe.youxiang.server.common.enums;
  */
 public enum OrderCodeEnum {
 
-    ORDER_CAN_NOT_CANCEL(108001, "订单不能被取消", "ORDER_CAN_NOT_CANCEL"),
+    ORDER_CAN_NOT_CANCEL(108001, "ORDER_CAN_NOT_CANCEL", "订单不能被取消"),
+    ORDER_CAN_CALCULATE_NEED_PAY(108002, "ORDER_CAN_CALCULATE_NEED_PAY","该订单不支持计算待付金额"),
     ;
 
     OrderCodeEnum(Integer code, String type, String message) {

@@ -394,7 +394,7 @@ CREATE TABLE `order_info` (
     `product_id` INT(10) UNSIGNED NOT NULL COMMENT '商品id',
     `customer_city_code` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '客户下单的城市code',
     `customer_city_name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '客户下单的城市名称',
-    `product_price` INT(10) UNSIGNED NOT NULL COMMENT '商品单价',
+    `product_price` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '商品单价',
     `count` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '购买数量',
     `customer_address` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '联系地址',
     `customer_mobile` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '联系手机号',

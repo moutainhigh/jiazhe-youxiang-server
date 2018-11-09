@@ -8,7 +8,7 @@
     <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="customer_city_code" property="customerCityCode" jdbcType="VARCHAR" />
     <result column="customer_city_name" property="customerCityName" jdbcType="VARCHAR" />
-    <result column="product_price" property="productPrice" jdbcType="INTEGER" />
+    <result column="product_price" property="productPrice" jdbcType="DECIMAL" />
     <result column="count" property="count" jdbcType="INTEGER" />
     <result column="customer_address" property="customerAddress" jdbcType="VARCHAR" />
     <result column="customer_mobile" property="customerMobile" jdbcType="VARCHAR" />
@@ -140,7 +140,7 @@
       add_time, mod_time)
     values (#{id,jdbcType=INTEGER}, #{orderCode,jdbcType=VARCHAR}, #{customerId,jdbcType=INTEGER}, 
       #{productId,jdbcType=INTEGER}, #{customerCityCode,jdbcType=VARCHAR}, #{customerCityName,jdbcType=VARCHAR}, 
-      #{productPrice,jdbcType=INTEGER}, #{count,jdbcType=INTEGER}, #{customerAddress,jdbcType=VARCHAR}, 
+      #{productPrice,jdbcType=DECIMAL}, #{count,jdbcType=INTEGER}, #{customerAddress,jdbcType=VARCHAR}, 
       #{customerMobile,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, #{customerRemark,jdbcType=VARCHAR}, 
       #{workerName,jdbcType=VARCHAR}, #{workerMobile,jdbcType=VARCHAR}, #{orderTime,jdbcType=TIMESTAMP}, 
       #{serviceTime,jdbcType=TIMESTAMP}, #{realServiceTime,jdbcType=TIMESTAMP}, #{payRechargeCard,jdbcType=DECIMAL}, 
@@ -260,7 +260,7 @@
         #{customerCityName,jdbcType=VARCHAR},
       </if>
       <if test="productPrice != null" >
-        #{productPrice,jdbcType=INTEGER},
+        #{productPrice,jdbcType=DECIMAL},
       </if>
       <if test="count != null" >
         #{count,jdbcType=INTEGER},
@@ -358,7 +358,7 @@
         customer_city_name = #{record.customerCityName,jdbcType=VARCHAR},
       </if>
       <if test="record.productPrice != null" >
-        product_price = #{record.productPrice,jdbcType=INTEGER},
+        product_price = #{record.productPrice,jdbcType=DECIMAL},
       </if>
       <if test="record.count != null" >
         count = #{record.count,jdbcType=INTEGER},
@@ -439,7 +439,7 @@
       product_id = #{record.productId,jdbcType=INTEGER},
       customer_city_code = #{record.customerCityCode,jdbcType=VARCHAR},
       customer_city_name = #{record.customerCityName,jdbcType=VARCHAR},
-      product_price = #{record.productPrice,jdbcType=INTEGER},
+      product_price = #{record.productPrice,jdbcType=DECIMAL},
       count = #{record.count,jdbcType=INTEGER},
       customer_address = #{record.customerAddress,jdbcType=VARCHAR},
       customer_mobile = #{record.customerMobile,jdbcType=VARCHAR},
@@ -485,7 +485,7 @@
         customer_city_name = #{customerCityName,jdbcType=VARCHAR},
       </if>
       <if test="productPrice != null" >
-        product_price = #{productPrice,jdbcType=INTEGER},
+        product_price = #{productPrice,jdbcType=DECIMAL},
       </if>
       <if test="count != null" >
         count = #{count,jdbcType=INTEGER},
@@ -563,7 +563,7 @@
       product_id = #{productId,jdbcType=INTEGER},
       customer_city_code = #{customerCityCode,jdbcType=VARCHAR},
       customer_city_name = #{customerCityName,jdbcType=VARCHAR},
-      product_price = #{productPrice,jdbcType=INTEGER},
+      product_price = #{productPrice,jdbcType=DECIMAL},
       count = #{count,jdbcType=INTEGER},
       customer_address = #{customerAddress,jdbcType=VARCHAR},
       customer_mobile = #{customerMobile,jdbcType=VARCHAR},

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -115,10 +116,12 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "客户发起支付", httpMethod = "GET",response = NeedPayResp.class, notes = "客户发起支付")
-    @RequestMapping(value = "/customerlaunchpay" , method = RequestMethod.GET)
-    public Object customerLaunchPay(@ModelAttribute IdReq req) {
-        NeedPayResp needPayResp = orderInfoBiz.customerLaunchPay(req.getId());
+    @ApiOperation(value = "计算客户需要在线支付的金额", httpMethod = "GET",response = NeedPayResp.class, notes = "计算客户需要在线支付的金额")
+    @RequestMapping(value = "/customerneedpaycash" , method = RequestMethod.GET)
+    public Object customerNeedPayCash(@ModelAttribute IdReq req) {
+        BigDecimal needPayCash = orderInfoBiz.customerNeedPayCash(req.getId());
+        NeedPayResp needPayResp = new NeedPayResp();
+        needPayResp.setPayCash(needPayCash);
         return ResponseFactory.buildResponse(needPayResp);
     }
 
@@ -144,7 +147,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildResponse(count);
     }
 
-    @ApiOperation(value = "【客户取消】待审核订单数量", httpMethod = "GET",notes = "【客户取消】待审核订单数量")
+    @ApiOperation(value = "待审核订单数量", httpMethod = "GET",notes = "待审核订单数量")
     @RequestMapping(value = "/getunauditordercount", method = RequestMethod.GET)
     public Object getUnauditOrderCount() {
         Integer count = orderInfoBiz.getUnauditOrderCount();

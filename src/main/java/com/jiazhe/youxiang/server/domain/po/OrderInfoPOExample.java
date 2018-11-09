@@ -506,52 +506,52 @@ public class OrderInfoPOExample {
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceEqualTo(Integer value) {
+        public Criteria andProductPriceEqualTo(BigDecimal value) {
             addCriterion("product_price =", value, "productPrice");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceNotEqualTo(Integer value) {
+        public Criteria andProductPriceNotEqualTo(BigDecimal value) {
             addCriterion("product_price <>", value, "productPrice");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceGreaterThan(Integer value) {
+        public Criteria andProductPriceGreaterThan(BigDecimal value) {
             addCriterion("product_price >", value, "productPrice");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceGreaterThanOrEqualTo(Integer value) {
+        public Criteria andProductPriceGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("product_price >=", value, "productPrice");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceLessThan(Integer value) {
+        public Criteria andProductPriceLessThan(BigDecimal value) {
             addCriterion("product_price <", value, "productPrice");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceLessThanOrEqualTo(Integer value) {
+        public Criteria andProductPriceLessThanOrEqualTo(BigDecimal value) {
             addCriterion("product_price <=", value, "productPrice");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceIn(List<Integer> values) {
+        public Criteria andProductPriceIn(List<BigDecimal> values) {
             addCriterion("product_price in", values, "productPrice");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceNotIn(List<Integer> values) {
+        public Criteria andProductPriceNotIn(List<BigDecimal> values) {
             addCriterion("product_price not in", values, "productPrice");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceBetween(Integer value1, Integer value2) {
+        public Criteria andProductPriceBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("product_price between", value1, value2, "productPrice");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceNotBetween(Integer value1, Integer value2) {
+        public Criteria andProductPriceNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("product_price not between", value1, value2, "productPrice");
             return (Criteria) this;
         }
