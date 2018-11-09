@@ -51,7 +51,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildPaginationResponse(orderInfoRespList, paging);
     }
 
-    @ApiOperation(value = "【APP】客户取消订单", httpMethod = "POST", notes = "【APP】客户取消订单")
+    @ApiOperation(value = "【APP端】客户取消订单", httpMethod = "POST", notes = "【APP端】客户取消订单")
     @RequestMapping(value = "/customercancelorder", method = RequestMethod.POST)
     public Object customerCancelOrder(@ModelAttribute IdReq req) {
         orderInfoBiz.customerCancelOrder(req.getId());

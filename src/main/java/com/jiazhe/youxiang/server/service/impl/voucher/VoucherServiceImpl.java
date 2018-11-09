@@ -128,4 +128,12 @@ public class VoucherServiceImpl implements VoucherService {
     public void update(VoucherPO voucherPO) {
         voucherPOMapper.updateByPrimaryKeySelective(voucherPO);
     }
+
+    @Override
+    public void batchChangeUsed(List<Integer> ids, Byte used) {
+        Map<String, Object> map = new HashMap<String, Object>(2);
+        map.put("used",used);
+        map.put("ids",ids);
+        voucherPOManualMapper.batchChangeUsed(map);
+    }
 }

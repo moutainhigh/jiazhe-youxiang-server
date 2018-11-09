@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl.order;
 
+import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
@@ -10,17 +11,24 @@ import com.jiazhe.youxiang.server.domain.po.OrderInfoPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.order.orderpayment.OrderPaymentDTO;
+import com.jiazhe.youxiang.server.dto.order.orderrefund.OrderRefundDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
+import com.jiazhe.youxiang.server.dto.voucher.voucher.VoucherDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.order.OrderInfoService;
 import com.jiazhe.youxiang.server.service.order.OrderPaymentService;
+import com.jiazhe.youxiang.server.service.order.OrderRefundService;
 import com.jiazhe.youxiang.server.service.product.ProductService;
+import com.jiazhe.youxiang.server.service.rechargecard.RCService;
+import com.jiazhe.youxiang.server.service.voucher.VoucherService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +39,7 @@ import java.util.stream.Collectors;
  * @date 2018/11/7.
  */
 @Service("orderInfoService")
-@Transactional(rollbackFor=Exception.class)
+@Transactional(rollbackFor = Exception.class)
 public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Autowired
@@ -44,13 +52,19 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     private ProductService productService;
     @Autowired
     private OrderPaymentService orderPaymentService;
+    @Autowired
+    private RCService rcService;
+    @Autowired
+    private VoucherService voucherService;
+    @Autowired
+    private OrderRefundService orderRefundService;
 
     @Override
-    public List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile, String customerMobile,Date orderStartTime, Date orderEndTime,String workerMobile, Paging paging) {
-        Integer count = orderInfoPOManualMapper.count(status, orderCode,mobile,customerMobile,orderStartTime,orderEndTime,workerMobile);
-        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode,mobile,customerMobile,orderStartTime,orderEndTime,workerMobile, paging.getOffset(), paging.getLimit());
+    public List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Paging paging) {
+        Integer count = orderInfoPOManualMapper.count(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile);
+        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, paging.getOffset(), paging.getLimit());
         List<OrderInfoDTO> orderInfoDTOList = orderInfoPOList.stream().map(OrderInfoAdapter::PO2DTO).collect(Collectors.toList());
-        orderInfoDTOList.forEach(bean->{
+        orderInfoDTOList.forEach(bean -> {
             ProductDTO productDTO = productService.getById(bean.getProductId());
             CustomerDTO customerDTO = customerService.getById(bean.getCustomerId());
             bean.setProductDTO(productDTO);
@@ -75,23 +89,51 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     public void customerCancelOrder(Integer id) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
         //订单为待付款或待派单状态，直接走退款流程
-        if(orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNPAID)||orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSENT)){
+        if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNPAID) || orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSENT)) {
             orderInfoPO.setStatus(CommonConstant.ORDER_CANCEL);
             List<OrderPaymentDTO> orderPaymentDTOList = orderPaymentService.getByOrderId(id);
-    
-            if(!orderPaymentDTOList.isEmpty()){
-                orderPaymentDTOList.stream().forEach(bean->{
+            List<OrderRefundDTO> orderRefundDTOList = Lists.newArrayList();
+            List<RCDTO> rcDTOList = Lists.newArrayList();
+            List<Integer> voucherIds = Lists.newArrayList();
+            if (!orderPaymentDTOList.isEmpty()) {
+                orderPaymentDTOList.stream().forEach(bean -> {
+                    orderRefundDTOList.add(paymentDto2RefundDto(bean));
+                    if (bean.getPayType().equals(CommonConstant.PAY_RECHARGE_CARD)) {
+                        RCDTO rcdto = rcService.getById(bean.getRechargeCardId());
+                        rcdto.setBalance(rcdto.getBalance().add(bean.getPayMoney()));
+                        rcDTOList.add(rcdto);
+                    }
+                    if (bean.getPayType().equals(CommonConstant.PAY_VOUCHER)) {
+                        voucherIds.add(bean.getVoucherId());
+                    }
+                    if (bean.getPayType().equals(CommonConstant.PAY_CASH)) {
 
+                    }
                 });
             }
+            rcService.batchUpdate(rcDTOList);
+            voucherService.batchChangeUsed(voucherIds, Byte.valueOf("0"));
+            orderRefundService.batchInsert(orderRefundDTOList);
         }
         //订单为待服务状态，直接将订单置为取消待审核状态，此时不退款
-        else if(orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSERVICE)){
+        else if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSERVICE)) {
             orderInfoPO.setStatus(CommonConstant.ORDER_CANCELWATINGCHECK);
-        }
-        else {
+        } else {
             throw new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CANCEL);
         }
         orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
+    }
+
+    private OrderRefundDTO paymentDto2RefundDto(OrderPaymentDTO paymentDTO) {
+        OrderRefundDTO refundDTO = new OrderRefundDTO();
+        refundDTO.setOrderCode(paymentDTO.getOrderCode());
+        refundDTO.setOrderId(paymentDTO.getOrderId());
+        refundDTO.setRefundType(paymentDTO.getPayType());
+        refundDTO.setRechargeCardId(paymentDTO.getRechargeCardId());
+        refundDTO.setVoucherId(paymentDTO.getVoucherId());
+        refundDTO.setRefundMoney(paymentDTO.getPayMoney());
+        refundDTO.setSerialNumber(paymentDTO.getSerialNumber());
+        return refundDTO;
+
     }
 }

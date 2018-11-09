@@ -103,4 +103,9 @@ public interface RCService {
      */
     void editSave(RCEditDTO dto);
 
+    /**
+     * 根据充值卡相关信息，进行修改
+     * @param rcDTOList
+     */
+    void batchUpdate(List<RCDTO> rcDTOList);
 }

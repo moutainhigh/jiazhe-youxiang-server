@@ -204,4 +204,10 @@ public class RCServiceImpl implements RCService {
         po.setDescription(dto.getDescription());
         rechargeCardPOMapper.updateByPrimaryKeySelective(po);
     }
+
+    @Override
+    public void batchUpdate(List<RCDTO> rcDTOList) {
+        List<RechargeCardPO> rcPOList = rcDTOList.stream().map(RCAdapter::DTO2PO).collect(Collectors.toList());
+        rcPOManualMapper.batchUpdate(rcPOList);
+    }
 }

@@ -23,10 +23,10 @@ public interface VoucherService {
 
     /**
      * 已经使用的兑换码的ids 查找对应的代金券，并启用停用
-     * @param usedIds
+     * @param ids
      * @param status
      */
-    void batchChangeStatus(List<Integer> usedIds, Byte status);
+    void batchChangeStatus(List<Integer> ids, Byte status);
 
     /**
      * 根据客户电话，代金券状态，是否过期和分页参数查询充值卡信息
@@ -58,4 +58,6 @@ public interface VoucherService {
     void insert(VoucherPO voucherPO);
 
     void update(VoucherPO voucherPO);
+
+    void batchChangeUsed(List<Integer> ids, Byte aByte);
 }
