@@ -27,6 +27,9 @@ public class SysUserResp extends BaseObject {
     @ApiModelProperty("最后登录时间")
     private Date lastLoginTime;
 
+    @ApiModelProperty("最后登录IP")
+    private String lastLoginIp;
+
     public Integer getId() {
         return id;
     }
@@ -65,5 +68,13 @@ public class SysUserResp extends BaseObject {
 
     public void setLastLoginTime(Date lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
+    }
+
+    public String getLastLoginIp() {
+        return lastLoginIp;
+    }
+
+    public void setLastLoginIp(String lastLoginIp) {
+        this.lastLoginIp = lastLoginIp;
     }
 }

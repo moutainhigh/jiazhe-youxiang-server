@@ -18,7 +18,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, mobile,loginName,displayName,salt,password,last_login_time,remark, ext_info, is_deleted,add_time, mod_time
+        id, mobile,loginName,displayName,salt,password,last_login_time,last_login_ip,remark, ext_info, is_deleted,add_time, mod_time
     </sql>
 
     <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.SysUserPO">
