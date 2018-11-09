@@ -19,6 +19,7 @@ import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord.RCExchangeRecordDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeService;
@@ -106,7 +107,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         rechargeCardPO.setExchangeRecordId(0);
         rechargeCardPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
         rechargeCardPO.setProjectId(rechargeCardExchangeCodePO.getProjectId());
-        rechargeCardPO.setName(rechargeCardExchangeCodePO.getBatchName());
+        rechargeCardPO.setName(rechargeCardExchangeCodePO.getRechargeCardName());
         rechargeCardPO.setCustomerId(customerDTO.getId());
         rechargeCardPO.setCityCodes(rechargeCardExchangeCodePO.getCityCodes());
         rechargeCardPO.setProductIds(rechargeCardExchangeCodePO.getProductIds());
@@ -171,7 +172,9 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         rcExchangeCodePOManualMapper.batchUpdate(poList);
         List<Integer> usedIds = poList.stream().filter(bean -> bean.getUsed().equals(Byte.valueOf("1"))).map(RechargeCardExchangeCodePO::getId).collect(Collectors.toList());
         if(!usedIds.isEmpty()){
-            rcService.batchUpdate(usedIds,batchSaveDTO);
+            List<RCExchangeRecordDTO> recordDTOList = rcExchangeRecordService.findByCodeIds(usedIds);
+            List<Integer> cardIds = recordDTOList.stream().map(RCExchangeRecordDTO::getRechargeCardId).collect(Collectors.toList());
+            rcService.batchUpdate(cardIds,batchSaveDTO);
         }
     }
 
@@ -184,7 +187,9 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         List<RechargeCardExchangeCodePO> poList = rechargeCardExchangeCodePOMapper.selectByExample(example);
         List<Integer> usedIds = poList.stream().filter(bean -> bean.getUsed().equals(Byte.valueOf("1"))).map(RechargeCardExchangeCodePO::getId).collect(Collectors.toList());
         if(!usedIds.isEmpty()){
-            rcService.batchChangeStatus(usedIds,status);
+            List<RCExchangeRecordDTO> recordDTOList = rcExchangeRecordService.findByCodeIds(usedIds);
+            List<Integer> cardIds = recordDTOList.stream().map(RCExchangeRecordDTO::getRechargeCardId).collect(Collectors.toList());
+            rcService.batchChangeStatus(cardIds,status);
         }
     }
 

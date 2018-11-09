@@ -64,20 +64,20 @@ public interface RCService {
     void directCharge(String mobile ,Integer batchId, BigDecimal faceValue);
 
     /**
-     * 根据已经使用的兑换码的ids 查找对应的充值卡，根据相关信息进行修改
-     * @param usedIds
+     * 根据充值卡ids，将充值卡信息修改为批次相关的信息
+     * @param ids
      * @param batchSaveDTO
      * @return
      */
-    void batchUpdate(List<Integer> usedIds, RCExchangeCodeBatchSaveDTO batchSaveDTO);
+    void batchUpdate(List<Integer> ids, RCExchangeCodeBatchSaveDTO batchSaveDTO);
 
     /**
-     * 已经使用的兑换码的ids 查找对应的充值卡，并启用停用
-     * @param usedIds
+     * 已经充值卡ids，批量停用启用
+     * @param ids
      * @param status
      * @return
      */
-    void batchChangeStatus(List<Integer> usedIds,Byte status);
+    void batchChangeStatus(List<Integer> ids ,Byte status);
 
     /**
      * 根据客户电话，充值卡状态，是否过期和分页参数查询充值卡信息

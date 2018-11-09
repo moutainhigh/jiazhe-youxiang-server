@@ -138,10 +138,8 @@ public class RCServiceImpl implements RCService {
     }
 
     @Override
-    public void batchUpdate(List<Integer> usedIds, RCExchangeCodeBatchSaveDTO batchSaveDTO) {
-        List<RechargeCardExchangeRecordPO> recordPOList = rcExchangeRecordService.findByCodeIds(usedIds);
-        List<Integer> cardIds = recordPOList.stream().map(RechargeCardExchangeRecordPO::getRechargeCardId).collect(Collectors.toList());
-        List<RechargeCardPO> rcPOList = rcPOManualMapper.findByIds(cardIds);
+    public void batchUpdate(List<Integer> ids, RCExchangeCodeBatchSaveDTO batchSaveDTO) {
+        List<RechargeCardPO> rcPOList = rcPOManualMapper.findByIds(ids);
         rcPOList.stream().forEach(bean -> {
             bean.setName(batchSaveDTO.getRechargeCardName());
             bean.setDescription(batchSaveDTO.getDescription());
@@ -159,12 +157,10 @@ public class RCServiceImpl implements RCService {
     }
 
     @Override
-    public void batchChangeStatus(List<Integer> usedIds,Byte status) {
-        List<RechargeCardExchangeRecordPO> recordPOList = rcExchangeRecordService.findByCodeIds(usedIds);
-        List<Integer> cardIds = recordPOList.stream().map(RechargeCardExchangeRecordPO::getRechargeCardId).collect(Collectors.toList());
+    public void batchChangeStatus(List<Integer> ids,Byte status) {
         Map<String, Object> map = new HashMap<String, Object>(2);
         map.put("status",status);
-        map.put("ids",cardIds);
+        map.put("ids",ids);
         rcPOManualMapper.batchChangeStatus(map);
     }
 

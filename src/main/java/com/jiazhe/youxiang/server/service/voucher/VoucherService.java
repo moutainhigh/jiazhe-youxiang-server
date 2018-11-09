@@ -15,14 +15,14 @@ import java.util.List;
  */
 public interface VoucherService {
     /**
-     * 根据那些已经使用的兑换码，修改对应的代金券信息
-     * @param usedIds
+     * 根据代金券ids，修改对应的代金券信息
+     * @param ids
      * @param batchSaveDTO
      */
-    void batchUpdate(List<Integer> usedIds, VoucherExchangeCodeBatchSaveDTO batchSaveDTO);
+    void batchUpdate(List<Integer> ids, VoucherExchangeCodeBatchSaveDTO batchSaveDTO);
 
     /**
-     * 已经使用的兑换码的ids 查找对应的代金券，并启用停用
+     * 根据代金券ids，批量启用停用
      * @param ids
      * @param status
      */
