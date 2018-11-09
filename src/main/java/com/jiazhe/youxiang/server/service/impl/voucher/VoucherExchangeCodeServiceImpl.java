@@ -172,6 +172,9 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
             throw  new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_HAS_EXPIRIED);
         }
         CustomerDTO customerDTO = customerService.getByMobile(mobile);
+        if(null == customerDTO){
+            throw new VoucherException(VoucherCodeEnum.CUSTOMER_NOT_EXIST);
+        }
         VoucherPO voucherPO = new VoucherPO();
         //直接指定过期时间
         if(voucherExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)){

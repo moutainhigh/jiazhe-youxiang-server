@@ -4,8 +4,10 @@ import com.jiazhe.youxiang.server.adapter.rechargecard.RCAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.UserCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
+import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.common.exceptions.UserException;
 import com.jiazhe.youxiang.server.dao.mapper.RechargeCardPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCPOManualMapper;
@@ -97,6 +99,9 @@ public class RCServiceImpl implements RCService {
     @Override
     public void directCharge(String mobile, Integer batchId, BigDecimal faceValue) {
         CustomerDTO customerDTO = customerService.getByMobile(mobile);
+        if(null == customerDTO){
+            throw new RechargeCardException(RechargeCardCodeEnum.CUSTOMER_NOT_EXIST);
+        }
         RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchService.getById(batchId);
         RechargeCardPO rechargeCardPO = new RechargeCardPO();
         //直接指定过期时间

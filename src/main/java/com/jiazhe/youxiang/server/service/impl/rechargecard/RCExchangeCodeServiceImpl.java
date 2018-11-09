@@ -93,6 +93,9 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
             throw  new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_HAS_EXPIRIED);
         }
         CustomerDTO customerDTO = customerService.getByMobile(mobile);
+        if(null == customerDTO){
+            throw new RechargeCardException(RechargeCardCodeEnum.CUSTOMER_NOT_EXIST);
+        }
         RechargeCardPO rechargeCardPO = new RechargeCardPO();
         //直接指定过期时间
         if(rechargeCardExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)){
