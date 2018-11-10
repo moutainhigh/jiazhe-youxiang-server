@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -92,29 +93,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         //订单为待付款或待派单状态，直接走退款流程
         if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNPAID) || orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSENT)) {
             orderInfoPO.setStatus(CommonConstant.ORDER_CANCEL);
-            List<OrderPaymentDTO> orderPaymentDTOList = orderPaymentService.getByOrderId(id);
-            List<OrderRefundDTO> orderRefundDTOList = Lists.newArrayList();
-            List<RCDTO> rcDTOList = Lists.newArrayList();
-            List<Integer> voucherIds = Lists.newArrayList();
-            if (!orderPaymentDTOList.isEmpty()) {
-                orderPaymentDTOList.stream().forEach(bean -> {
-                    orderRefundDTOList.add(paymentDto2RefundDto(bean));
-                    if (bean.getPayType().equals(CommonConstant.PAY_RECHARGE_CARD)) {
-                        RCDTO rcdto = rcService.getById(bean.getRechargeCardId());
-                        rcdto.setBalance(rcdto.getBalance().add(bean.getPayMoney()));
-                        rcDTOList.add(rcdto);
-                    }
-                    if (bean.getPayType().equals(CommonConstant.PAY_VOUCHER)) {
-                        voucherIds.add(bean.getVoucherId());
-                    }
-                    if (bean.getPayType().equals(CommonConstant.PAY_CASH)) {
-
-                    }
-                });
-            }
-            rcService.batchUpdate(rcDTOList);
-            voucherService.batchChangeUsed(voucherIds, Byte.valueOf("0"));
-            orderRefundService.batchInsert(orderRefundDTOList);
+            //退款功能共用，提出公共方法
+            orderRefund(id);
         }
         //订单为待服务状态，直接将订单置为取消待审核状态，此时不退款
         else if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSERVICE)) {
@@ -160,6 +140,54 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         return left;
     }
 
+    @Override
+    public void orderCancelPass(Integer id) {
+        OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
+        //订单为取消待审核状态，才能审核
+        if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_CANCELWATINGCHECK)) {
+            orderInfoPO.setStatus(CommonConstant.ORDER_CANCEL);
+            //退款功能共用，提出公共方法
+            orderRefund(id);
+        }else {
+            throw new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CHECK);
+        }
+        orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
+    }
+
+    @Override
+    public void orderCancelUnpass(Integer id, String auditReason) {
+        OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
+        //订单为取消待审核状态，才能审核
+        if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_CANCELWATINGCHECK)) {
+            orderInfoPO.setStatus(CommonConstant.ORDER_CANCELUNPASS);
+            orderInfoPO.setAuditReason(auditReason);
+        }else {
+            throw new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CHECK);
+        }
+        orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
+    }
+
+    @Override
+    public void userCancelOrder(Integer id) {
+        OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
+        //订单不是已完成状态，才能取消
+        if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_COMPLETE)) {
+            throw new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CANCEL);
+        }else {
+            orderInfoPO.setStatus(CommonConstant.ORDER_CANCEL);
+            //退款功能共用，提出公共方法
+            orderRefund(id);
+        }
+        orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
+    }
+
+    @Override
+    public void userCompleteOrder(Integer id) {
+        OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
+        orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
+        orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
+    }
+
     private OrderRefundDTO paymentDto2RefundDto(OrderPaymentDTO paymentDTO) {
         OrderRefundDTO refundDTO = new OrderRefundDTO();
         refundDTO.setOrderCode(paymentDTO.getOrderCode());
@@ -171,5 +199,31 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         refundDTO.setSerialNumber(paymentDTO.getSerialNumber());
         return refundDTO;
 
+    }
+
+    public void orderRefund(Integer orderId){
+        List<OrderPaymentDTO> orderPaymentDTOList = orderPaymentService.getByOrderId(orderId);
+        List<OrderRefundDTO> orderRefundDTOList = Lists.newArrayList();
+        List<RCDTO> rcDTOList = Lists.newArrayList();
+        List<Integer> voucherIds = Lists.newArrayList();
+        if (!orderPaymentDTOList.isEmpty()) {
+            orderPaymentDTOList.stream().forEach(bean -> {
+                orderRefundDTOList.add(paymentDto2RefundDto(bean));
+                if (bean.getPayType().equals(CommonConstant.PAY_RECHARGE_CARD)) {
+                    RCDTO rcdto = rcService.getById(bean.getRechargeCardId());
+                    rcdto.setBalance(rcdto.getBalance().add(bean.getPayMoney()));
+                    rcDTOList.add(rcdto);
+                }
+                if (bean.getPayType().equals(CommonConstant.PAY_VOUCHER)) {
+                    voucherIds.add(bean.getVoucherId());
+                }
+                if (bean.getPayType().equals(CommonConstant.PAY_CASH)) {
+
+                }
+            });
+        }
+        rcService.batchUpdate(rcDTOList);
+        voucherService.batchChangeUsed(voucherIds, Byte.valueOf("0"));
+        orderRefundService.batchInsert(orderRefundDTOList);
     }
 }

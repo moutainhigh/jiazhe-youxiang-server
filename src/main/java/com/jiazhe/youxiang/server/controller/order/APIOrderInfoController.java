@@ -77,17 +77,17 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildResponse(needPayResp);
     }
 
-    @ApiOperation(value = "取消订单审核【通过】", httpMethod = "POST", notes = "取消订单审核【通过】")
+    @ApiOperation(value = "审核通过", httpMethod = "POST", notes = "审核通过")
     @RequestMapping(value = "/ordercancelpass", method = RequestMethod.POST)
     public Object orderCancelPass(@ModelAttribute IdReq req) {
         orderInfoBiz.orderCancelPass(req.getId());
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "取消订单审核【不通过】", httpMethod = "POST", notes = "取消订单审核【不通过】")
+    @ApiOperation(value = "审核不通过", httpMethod = "POST", notes = "审核不通过")
     @RequestMapping(value = "/ordercancelunpass", method = RequestMethod.POST)
-    public Object orderCancelUnpass(@ModelAttribute IdReq req) {
-        orderInfoBiz.orderCancelUnpass(req.getId());
+    public Object orderCancelUnpass(@ModelAttribute OrderCancelUnpassReq req) {
+        orderInfoBiz.orderCancelUnpass(req.getOrderId(),req.getAuditReason());
         return ResponseFactory.buildSuccess();
     }
 
@@ -104,7 +104,6 @@ public class APIOrderInfoController extends BaseController {
         orderInfoBiz.userCompleteOrder(req.getId());
         return ResponseFactory.buildSuccess();
     }
-
 
     @ApiOperation(value = "客户下单", httpMethod = "POST", notes = "客户下单")
     @RequestMapping(value = "/customerplaceorder", method = RequestMethod.POST)

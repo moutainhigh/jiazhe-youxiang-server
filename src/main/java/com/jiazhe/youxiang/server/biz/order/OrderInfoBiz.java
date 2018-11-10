@@ -41,14 +41,15 @@ public class OrderInfoBiz {
     }
 
     public void orderCancelPass(Integer id) {
-
+        orderInfoService.orderCancelPass(id);
     }
 
-    public void orderCancelUnpass(Integer id) {
-
+    public void orderCancelUnpass(Integer id,String auditReason) {
+        orderInfoService.orderCancelUnpass(id,auditReason);
     }
 
     public void userCancelOrder(Integer id) {
+        orderInfoService.userCancelOrder(id);
 
     }
 
@@ -76,8 +77,8 @@ public class OrderInfoBiz {
         return orderInfoService.customerPay(orderId, payCash, serialNumber);
     }
 
-    public int userCompleteOrder(Integer orderId) {
-        return 0;
+    public void userCompleteOrder(Integer id) {
+        orderInfoService.userCompleteOrder(id);
     }
 
     public int customerPlaceOrder(CustomerPlaceOrderReq req) {

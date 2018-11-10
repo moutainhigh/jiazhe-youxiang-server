@@ -51,4 +51,29 @@ public interface OrderInfoService {
      * @return
      */
     BigDecimal customerPay(Integer orderId, BigDecimal payCash, String serialNumber);
+
+    /**
+     * 订单取消审核通过
+     * @param id
+     */
+    void orderCancelPass(Integer id);
+
+    /**
+     * 订单取消审核不通过
+     * @param id
+     * @param auditReason 不通过理由
+     */
+    void orderCancelUnpass(Integer id,String auditReason);
+
+    /**
+     * 员工直接后台取消订单【除了已完成状态订单，其余都能取消】
+     * @param id
+     */
+    void userCancelOrder(Integer id);
+
+    /**
+     * 员工完成订单，所有状态下的订单都能置为已完成状态
+     * @param id
+     */
+    void userCompleteOrder(Integer id);
 }

@@ -9,6 +9,7 @@ public enum OrderCodeEnum {
 
     ORDER_CAN_NOT_CANCEL(108001, "ORDER_CAN_NOT_CANCEL", "订单不能被取消"),
     ORDER_CAN_CALCULATE_NEED_PAY(108002, "ORDER_CAN_CALCULATE_NEED_PAY","该订单不支持计算待付金额"),
+    ORDER_CAN_NOT_CHECK(108003, "ORDER_CAN_NOT_CHECK", "订单不是待审核状态，不能被审核"),
     ;
 
     OrderCodeEnum(Integer code, String type, String message) {
