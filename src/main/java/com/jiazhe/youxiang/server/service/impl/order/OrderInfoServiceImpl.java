@@ -78,7 +78,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if(orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNPAID)||orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSENT)){
             orderInfoPO.setStatus(CommonConstant.ORDER_CANCEL);
             List<OrderPaymentDTO> orderPaymentDTOList = orderPaymentService.getByOrderId(id);
-    
+
             if(!orderPaymentDTOList.isEmpty()){
                 orderPaymentDTOList.stream().forEach(bean->{
 
