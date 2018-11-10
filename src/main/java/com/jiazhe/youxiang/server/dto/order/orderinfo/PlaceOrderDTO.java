@@ -1,6 +1,5 @@
-package com.jiazhe.youxiang.server.vo.req.order.orderinfo;
+package com.jiazhe.youxiang.server.dto.order.orderinfo;
 
-import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
@@ -8,46 +7,53 @@ import java.util.Date;
 
 /**
  * @author tu
- * @description：客户下单请求参数
- * @date 2018/10/24
+ * @description：
+ * @date 2018/11/10
  */
-public class UserPlaceOrderReq extends BaseVO {
+public class PlaceOrderDTO {
 
-    @ApiModelProperty("客户id")
+    private Byte type;
+
     private Integer customerId;
 
-    @ApiModelProperty("商品id")
     private Integer productId;
 
-    @ApiModelProperty("商品价格")
-    private Integer productPrice;
+    private String customerCityCode;
 
-    @ApiModelProperty("下单数量")
     private Integer count;
 
-    @ApiModelProperty("订单地址")
     private String customerAddress;
 
-    @ApiModelProperty("订单联系电话")
     private String customerMobile;
 
-    @ApiModelProperty("订单接收人")
     private String customerName;
 
-    @ApiModelProperty("客户留言")
     private String customerRemark;
 
-    @ApiModelProperty("提供服务人员")
     private String workerName;
 
-    @ApiModelProperty("服务人员电话")
     private String workerMobile;
 
-    @ApiModelProperty("服务时间")
-    private Date realServiceTime;
+    private Date serviceTime;
 
-    @ApiModelProperty("代金券id")
-    private Integer voucherId;
+    /**
+     * 使用的代金券ids
+     */
+    private String voucherIds;
+
+    /**
+     * 使用的充值卡ids
+     */
+    private String rechargeCardIds;
+
+    /**
+     * 每张充值卡使用的金额
+     */
+    private String cardMoneys;
+
+    private BigDecimal totalCost;
+
+    private String comments;
 
     public Integer getCustomerId() {
         return customerId;
@@ -63,14 +69,6 @@ public class UserPlaceOrderReq extends BaseVO {
 
     public void setProductId(Integer productId) {
         this.productId = productId;
-    }
-
-    public Integer getProductPrice() {
-        return productPrice;
-    }
-
-    public void setProductPrice(Integer productPrice) {
-        this.productPrice = productPrice;
     }
 
     public Integer getCount() {
@@ -129,19 +127,67 @@ public class UserPlaceOrderReq extends BaseVO {
         this.workerMobile = workerMobile;
     }
 
-    public Date getRealServiceTime() {
-        return realServiceTime;
+    public String getCustomerCityCode() {
+        return customerCityCode;
     }
 
-    public void setRealServiceTime(Date realServiceTime) {
-        this.realServiceTime = realServiceTime;
+    public void setCustomerCityCode(String customerCityCode) {
+        this.customerCityCode = customerCityCode;
     }
 
-    public Integer getVoucherId() {
-        return voucherId;
+    public String getVoucherIds() {
+        return voucherIds;
     }
 
-    public void setVoucherId(Integer voucherId) {
-        this.voucherId = voucherId;
+    public void setVoucherIds(String voucherIds) {
+        this.voucherIds = voucherIds;
+    }
+
+    public String getRechargeCardIds() {
+        return rechargeCardIds;
+    }
+
+    public void setRechargeCardIds(String rechargeCardIds) {
+        this.rechargeCardIds = rechargeCardIds;
+    }
+
+    public String getCardMoneys() {
+        return cardMoneys;
+    }
+
+    public void setCardMoneys(String cardMoneys) {
+        this.cardMoneys = cardMoneys;
+    }
+
+    public BigDecimal getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(BigDecimal totalCost) {
+        this.totalCost = totalCost;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public Date getServiceTime() {
+        return serviceTime;
+    }
+
+    public void setServiceTime(Date serviceTime) {
+        this.serviceTime = serviceTime;
+    }
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
     }
 }

@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.service.impl.order;
 
 import com.jiazhe.youxiang.server.adapter.order.OrderPaymentAdapter;
 import com.jiazhe.youxiang.server.dao.mapper.OrderPaymentPOMapper;
+import com.jiazhe.youxiang.server.dao.mapper.manual.order.OrderPaymentPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.OrderPaymentPO;
 import com.jiazhe.youxiang.server.domain.po.OrderPaymentPOExample;
 import com.jiazhe.youxiang.server.dto.order.orderpayment.OrderPaymentDTO;
@@ -25,6 +26,8 @@ public class OrderPaymentServiceImpl implements OrderPaymentService {
 
     @Autowired
     private OrderPaymentPOMapper orderPaymentPOMapper;
+    @Autowired
+    private OrderPaymentPOManualMapper orderPaymentPOManualMapper;
     @Autowired
     private OrderInfoService orderInfoService;
 
@@ -70,5 +73,10 @@ public class OrderPaymentServiceImpl implements OrderPaymentService {
     @Override
     public void insert(OrderPaymentPO orderPaymentPO) {
         orderPaymentPOMapper.insert(orderPaymentPO);
+    }
+
+    @Override
+    public void batchInsert(List<OrderPaymentPO> orderPaymentPOList) {
+        orderPaymentPOManualMapper.batchInsert(orderPaymentPOList);
     }
 }

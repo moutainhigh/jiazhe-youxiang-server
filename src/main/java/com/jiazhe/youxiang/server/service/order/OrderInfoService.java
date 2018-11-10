@@ -1,9 +1,11 @@
 package com.jiazhe.youxiang.server.service.order;
 
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
+import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -76,4 +78,10 @@ public interface OrderInfoService {
      * @param id
      */
     void userCompleteOrder(Integer id);
+
+    /**
+     * 下单
+     * @param dto
+     */
+    void placeOrder(PlaceOrderDTO dto) throws ParseException;
 }

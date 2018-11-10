@@ -132,4 +132,10 @@ public class VoucherServiceImpl implements VoucherService {
         map.put("ids",ids);
         voucherPOManualMapper.batchChangeUsed(map);
     }
+
+    @Override
+    public List<VoucherDTO> findByIds(List<Integer> voucherIds) {
+        List<VoucherPO> poList = voucherPOManualMapper.findByIds(voucherIds);
+        return poList.stream().map(VoucherAdapter::PO2DTO).collect(Collectors.toList());
+    }
 }

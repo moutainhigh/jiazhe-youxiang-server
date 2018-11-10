@@ -108,4 +108,11 @@ public interface RCService {
      * @param rcDTOList
      */
     void batchUpdate(List<RCDTO> rcDTOList);
+
+    /**
+     * 根据充值卡ids，查找充值卡list
+     * @param ids
+     * @return
+     */
+    List<RCDTO> findByIds(List<Integer> ids);
 }

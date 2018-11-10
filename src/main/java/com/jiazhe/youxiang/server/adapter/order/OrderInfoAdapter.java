@@ -4,6 +4,8 @@ import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
 import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.domain.po.OrderInfoPO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
+import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.PlaceOrderReq;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
 
 /**
@@ -74,5 +76,30 @@ public class OrderInfoAdapter {
         orderInfoDTO.setStatus(orderInfoPO.getStatus());
         orderInfoDTO.setAuditReason(orderInfoPO.getAuditReason());
         return orderInfoDTO;
+    }
+
+    public static PlaceOrderDTO ReqPlaceOrder2DTOPlaceOrder(PlaceOrderReq req) {
+        if (req == null) {
+            return null;
+        }
+        PlaceOrderDTO placeOrderDTO = new PlaceOrderDTO();
+        placeOrderDTO.setType(req.getType());
+        placeOrderDTO.setCustomerId(req.getCustomerId());
+        placeOrderDTO.setProductId(req.getProductId());
+        placeOrderDTO.setCustomerCityCode(req.getCustomerCityCode());
+        placeOrderDTO.setCount(req.getCount());
+        placeOrderDTO.setCustomerAddress(req.getCustomerAddress());
+        placeOrderDTO.setCustomerMobile(req.getCustomerMobile());
+        placeOrderDTO.setCustomerName(req.getCustomerName());
+        placeOrderDTO.setCustomerRemark(req.getCustomerRemark());
+        placeOrderDTO.setWorkerName(req.getWorkerName());
+        placeOrderDTO.setWorkerMobile(req.getWorkerMobile());
+        placeOrderDTO.setServiceTime(req.getServiceTime());
+        placeOrderDTO.setVoucherIds(req.getVoucherIds());
+        placeOrderDTO.setRechargeCardIds(req.getRechargeCardIds());
+        placeOrderDTO.setCardMoneys(req.getCardMoneys());
+        placeOrderDTO.setTotalCost(req.getTotalCost());
+        placeOrderDTO.setComments(req.getComments());
+        return placeOrderDTO;
     }
 }

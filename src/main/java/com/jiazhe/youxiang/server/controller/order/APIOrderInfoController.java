@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -105,17 +106,10 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "客户下单", httpMethod = "POST", notes = "客户下单")
-    @RequestMapping(value = "/customerplaceorder", method = RequestMethod.POST)
-    public Object customerPlaceOrder(@ModelAttribute CustomerPlaceOrderReq req) {
-        orderInfoBiz.customerPlaceOrder(req);
-        return ResponseFactory.buildSuccess();
-    }
-
-    @ApiOperation(value = "员工下单", httpMethod = "POST", notes = "员工下单")
-    @RequestMapping(value = "/userplaceorder", method = RequestMethod.POST)
-    public Object userPlaceOrder(@ModelAttribute UserPlaceOrderReq req) {
-        orderInfoBiz.userPlaceOrder(req);
+    @ApiOperation(value = "【后端、APP端】下单", httpMethod = "POST", notes = "【后端、APP端】下单")
+    @RequestMapping(value = "/placeorder", method = RequestMethod.POST)
+    public Object userPlaceOrder(@ModelAttribute PlaceOrderReq req) throws ParseException {
+        orderInfoBiz.placeOrder(OrderInfoAdapter.ReqPlaceOrder2DTOPlaceOrder(req));
         return ResponseFactory.buildSuccess();
     }
 

@@ -211,4 +211,10 @@ public class RCServiceImpl implements RCService {
         List<RechargeCardPO> rcPOList = rcDTOList.stream().map(RCAdapter::DTO2PO).collect(Collectors.toList());
         rcPOManualMapper.batchUpdate(rcPOList);
     }
+
+    @Override
+    public List<RCDTO> findByIds(List<Integer> ids) {
+        List<RechargeCardPO> poList = rcPOManualMapper.findByIds(ids);
+        return poList.stream().map(RCAdapter::PO2DTO).collect(Collectors.toList());
+    }
 }

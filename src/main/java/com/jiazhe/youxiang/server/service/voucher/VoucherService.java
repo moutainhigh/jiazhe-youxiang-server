@@ -60,4 +60,6 @@ public interface VoucherService {
     void update(VoucherPO voucherPO);
 
     void batchChangeUsed(List<Integer> ids, Byte aByte);
+
+    List<VoucherDTO> findByIds(List<Integer> voucherIds);
 }

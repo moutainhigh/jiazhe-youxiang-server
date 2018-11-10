@@ -41,4 +41,10 @@ public interface OrderPaymentService {
      * @param orderPaymentPO
      */
     void insert(OrderPaymentPO orderPaymentPO);
+
+    /**
+     * 批量插入付款信息
+     * @param orderPaymentPOList
+     */
+    void batchInsert(List<OrderPaymentPO> orderPaymentPOList);
 }

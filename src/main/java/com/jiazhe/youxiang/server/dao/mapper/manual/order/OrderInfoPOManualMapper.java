@@ -41,4 +41,9 @@ public interface OrderInfoPOManualMapper {
      */
     List<OrderInfoPO> query(@Param("status") Byte status, @Param("orderCode")String orderCode, @Param("mobile")String mobile,@Param("customerMobile")String customerMobile, @Param("orderStartTime")Date orderStartTime, @Param("orderEndTime")Date orderEndTime,@Param("workerMobile")String workerMobile, @Param("offset")Integer offset,  @Param("limit")Integer limit);
 
+    /**
+     * 插入订单信息，并将id返回至实体中
+     * @param orderInfoPO
+     */
+    void insert(OrderInfoPO orderInfoPO);
 }
