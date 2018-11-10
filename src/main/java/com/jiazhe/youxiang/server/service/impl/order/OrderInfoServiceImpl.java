@@ -8,6 +8,7 @@ import com.jiazhe.youxiang.server.common.exceptions.OrderException;
 import com.jiazhe.youxiang.server.dao.mapper.OrderInfoPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.order.OrderInfoPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.OrderInfoPO;
+import com.jiazhe.youxiang.server.domain.po.OrderPaymentPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.order.orderpayment.OrderPaymentDTO;
@@ -49,8 +50,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Autowired
     private CustomerService customerService;
     @Autowired
-    private ProductService productService;
-    @Autowired
     private OrderPaymentService orderPaymentService;
     @Autowired
     private RCService rcService;
@@ -58,6 +57,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     private VoucherService voucherService;
     @Autowired
     private OrderRefundService orderRefundService;
+    @Autowired
+    private ProductService productService;
 
     @Override
     public List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Paging paging) {
@@ -122,6 +123,41 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             throw new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CANCEL);
         }
         orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
+    }
+
+    @Override
+    public BigDecimal customerPay(Integer orderId, BigDecimal payCash, String serialNumber) {
+        OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(orderId);
+        Integer needPayCount = orderInfoPO.getCount() - orderInfoPO.getPayVoucher();
+        BigDecimal needPayMoney = orderInfoPO.getProductPrice().multiply(new BigDecimal(needPayCount));
+        BigDecimal left = needPayMoney.subtract(orderInfoPO.getPayRechargeCard().add(orderInfoPO.getPayCash().add(payCash)));
+        orderInfoPO.setPayCash(orderInfoPO.getPayCash().add(payCash));
+        if (payCash.compareTo(new BigDecimal(0)) == 1) {
+            OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
+            orderPaymentPO.setOrderId(orderInfoPO.getId());
+            orderPaymentPO.setOrderCode(orderInfoPO.getOrderCode());
+            orderPaymentPO.setPayType(CommonConstant.PAY_CASH);
+            orderPaymentPO.setPayMoney(payCash);
+            orderPaymentPO.setSerialNumber(serialNumber);
+            orderPaymentPO.setExtInfo("");
+            orderPaymentPO.setIsDeleted(Byte.valueOf("0"));
+            orderPaymentPO.setAddTime(new Date());
+            orderPaymentPO.setModTime(new Date());
+            orderPaymentService.insert(orderPaymentPO);
+        }
+        //说明订单支付完成，判断商品，如果是服务类商品就置为待派单状态，如果是虚拟商品，就置为已完成状态，并发相关电子商品吗
+        if (left.compareTo(new BigDecimal(0)) == 0 || left.compareTo(new BigDecimal(0)) == -1) {
+            ProductDTO productDTO = productService.getById(orderInfoPO.getProductId());
+            if (productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
+                orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
+            }
+            if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
+                orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
+                //此处应该有发放电子码逻辑！！！！！！！
+            }
+        }
+        orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
+        return left;
     }
 
     private OrderRefundDTO paymentDto2RefundDto(OrderPaymentDTO paymentDTO) {

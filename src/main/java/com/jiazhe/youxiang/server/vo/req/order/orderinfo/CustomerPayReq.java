@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.vo.req.order.orderinfo;
 
+import com.jiazhe.youxiang.server.vo.BaseVO;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -10,13 +11,17 @@ import java.math.BigDecimal;
  * @description：
  * @date 2018/10/24
  */
-public class CustomerPayReq extends IdReq {
+public class CustomerPayReq extends BaseVO {
 
-    @ApiModelProperty("现金、微信、支付宝支付金额")
+    @ApiModelProperty("订单id")
+    private Integer orderId;
+
+    @ApiModelProperty("在线支付金额")
     private BigDecimal payCash;
 
-    @ApiModelProperty("充值卡支付金额")
-    private BigDecimal payRechargeCard;
+    @ApiModelProperty("第三方流水号")
+    private String serialNumber;
+
 
     public BigDecimal getPayCash() {
         return payCash;
@@ -26,11 +31,19 @@ public class CustomerPayReq extends IdReq {
         this.payCash = payCash;
     }
 
-    public BigDecimal getPayRechargeCard() {
-        return payRechargeCard;
+    public Integer getOrderId() {
+        return orderId;
     }
 
-    public void setPayRechargeCard(BigDecimal payRechargeCard) {
-        this.payRechargeCard = payRechargeCard;
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 }

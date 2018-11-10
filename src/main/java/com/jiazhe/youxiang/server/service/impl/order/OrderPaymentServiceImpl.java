@@ -20,13 +20,14 @@ import java.util.stream.Collectors;
  * @date 2018/11/7
  */
 @Service("orderPaymentService")
-@Transactional(rollbackFor=Exception.class)
+@Transactional(rollbackFor = Exception.class)
 public class OrderPaymentServiceImpl implements OrderPaymentService {
 
     @Autowired
     private OrderPaymentPOMapper orderPaymentPOMapper;
     @Autowired
     private OrderInfoService orderInfoService;
+
     @Override
     public List<OrderPaymentDTO> getByRechargeCardId(Integer id) {
         OrderPaymentPOExample example = new OrderPaymentPOExample();
@@ -35,7 +36,7 @@ public class OrderPaymentServiceImpl implements OrderPaymentService {
         criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
         List<OrderPaymentPO> poList = orderPaymentPOMapper.selectByExample(example);
         List<OrderPaymentDTO> orderPaymentDTOList = poList.stream().map(OrderPaymentAdapter::PO2DTO).collect(Collectors.toList());
-        orderPaymentDTOList.forEach(bean->{
+        orderPaymentDTOList.forEach(bean -> {
             bean.setOrderInfoDTO(orderInfoService.getById(bean.getOrderId()));
         });
         return orderPaymentDTOList;
@@ -49,7 +50,7 @@ public class OrderPaymentServiceImpl implements OrderPaymentService {
         criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
         List<OrderPaymentPO> poList = orderPaymentPOMapper.selectByExample(example);
         List<OrderPaymentDTO> orderPaymentDTOList = poList.stream().map(OrderPaymentAdapter::PO2DTO).collect(Collectors.toList());
-        orderPaymentDTOList.forEach(bean->{
+        orderPaymentDTOList.forEach(bean -> {
             bean.setOrderInfoDTO(orderInfoService.getById(bean.getOrderId()));
         });
         return orderPaymentDTOList;
@@ -64,5 +65,10 @@ public class OrderPaymentServiceImpl implements OrderPaymentService {
         List<OrderPaymentPO> poList = orderPaymentPOMapper.selectByExample(example);
         List<OrderPaymentDTO> orderPaymentDTOList = poList.stream().map(OrderPaymentAdapter::PO2DTO).collect(Collectors.toList());
         return orderPaymentDTOList;
+    }
+
+    @Override
+    public void insert(OrderPaymentPO orderPaymentPO) {
+        orderPaymentPOMapper.insert(orderPaymentPO);
     }
 }

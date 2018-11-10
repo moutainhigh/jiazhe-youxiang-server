@@ -32,8 +32,8 @@ public class OrderInfoBiz {
     @Autowired
     private CustomerService customerService;
 
-    public List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile,String customerMobile, Date orderStartTime, Date orderEndTime,String worekerMobile, Paging paging) {
-        return orderInfoService.getList(status,orderCode,mobile,customerMobile,orderStartTime,orderEndTime,worekerMobile,paging);
+    public List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String worekerMobile, Paging paging) {
+        return orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, worekerMobile, paging);
     }
 
     public void customerCancelOrder(Integer id) {
@@ -58,14 +58,22 @@ public class OrderInfoBiz {
 
     public BigDecimal customerNeedPayCash(Integer id) {
         OrderInfoDTO dto = orderInfoService.getById(id);
-        if(!dto.getStatus().equals(CommonConstant.ORDER_UNPAID)){
+        if (!dto.getStatus().equals(CommonConstant.ORDER_UNPAID)) {
             throw new OrderException(OrderCodeEnum.ORDER_CAN_CALCULATE_NEED_PAY);
         }
         return calculateOrderNeedPay(dto);
     }
 
-    public int customerPay(Integer orderId,BigDecimal payCash,BigDecimal payRechargeCard) {
-        return 1;
+    /**
+     * 支付订单，并返回订单待支付金额
+     *
+     * @param orderId
+     * @param payCash
+     * @param serialNumber
+     * @return
+     */
+    public BigDecimal customerPay(Integer orderId, BigDecimal payCash, String serialNumber) {
+        return orderInfoService.customerPay(orderId, payCash, serialNumber);
     }
 
     public int userCompleteOrder(Integer orderId) {
@@ -102,12 +110,19 @@ public class OrderInfoBiz {
 
     public List<OrderInfoDTO> custoemrGetList(Integer customerId, Byte status, Paging paging) {
         CustomerDTO customerDTO = customerService.getById(customerId);
-        return getList(status,null,customerDTO.getMobile(),null,null,null,null,paging);
+        return getList(status, null, customerDTO.getMobile(), null, null, null, null, paging);
     }
 
-    private BigDecimal calculateOrderNeedPay(OrderInfoDTO dto){
+    /**
+     * 计算订单待支付金额，如果待支付金额大于0，返回待支付金额，如果小于等于0，返回0
+     *
+     * @param dto
+     * @return
+     */
+    private BigDecimal calculateOrderNeedPay(OrderInfoDTO dto) {
         Integer needPayCount = dto.getCount() - dto.getPayVoucher();
-        BigDecimal needPayMoney = dto.getProductPrice().multiply(new BigDecimal(needPayCount));
-        return needPayMoney.subtract(dto.getPayRechargeCard().add(dto.getPayCash()));
+        BigDecimal needPay = dto.getProductPrice().multiply(new BigDecimal(needPayCount));
+        BigDecimal needPayMoney = needPay.subtract(dto.getPayRechargeCard().add(dto.getPayCash()));
+        return needPayMoney.compareTo(new BigDecimal(0)) == 1 ? needPay : new BigDecimal(0);
     }
 }
