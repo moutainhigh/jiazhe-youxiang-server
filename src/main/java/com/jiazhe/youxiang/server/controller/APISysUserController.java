@@ -52,7 +52,8 @@ public class APISysUserController extends BaseController {
     @RequestMapping(value = "/listall", method = RequestMethod.GET)
     public Object listAll() {
         List<SysUserDTO> sysUserDTOList = sysUserBiz.findAll();
-        return ResponseFactory.buildResponse(sysUserDTOList);
+        List<SysUserResp> sysUserRespList = sysUserDTOList.stream().map(SysUserAdapter::DTO2RespVO).collect(Collectors.toList());
+        return ResponseFactory.buildResponse(sysUserRespList);
     }
 
     @ApiOperation(value = "分页查询员工信息", httpMethod = "GET", response = SysUserResp.class, responseContainer = "List", notes = "分页查询员工信息")

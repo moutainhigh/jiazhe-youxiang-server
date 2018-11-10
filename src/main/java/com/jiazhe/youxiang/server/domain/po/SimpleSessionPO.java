@@ -10,11 +10,11 @@ public class SimpleSessionPO implements Serializable {
 
     private String session;
 
+    private Byte status;
+
     private String extInfo;
 
     private Byte isDeleted;
-
-    private Byte status;
 
     private Date addTime;
 
@@ -46,6 +46,14 @@ public class SimpleSessionPO implements Serializable {
         this.session = session == null ? null : session.trim();
     }
 
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
     public String getExtInfo() {
         return extInfo;
     }
@@ -60,14 +68,6 @@ public class SimpleSessionPO implements Serializable {
 
     public void setIsDeleted(Byte isDeleted) {
         this.isDeleted = isDeleted;
-    }
-
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
     }
 
     public Date getAddTime() {

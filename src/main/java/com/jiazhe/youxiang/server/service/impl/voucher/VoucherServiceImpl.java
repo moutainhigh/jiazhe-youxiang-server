@@ -44,10 +44,8 @@ public class VoucherServiceImpl implements VoucherService {
     @Autowired
     private CustomerService customerService;
     @Override
-    public void batchUpdate(List<Integer> usedIds, VoucherExchangeCodeBatchSaveDTO batchSaveDTO) {
-        List<VoucherExchangeRecordPO> recordPOList = voucherExchangeRecordService.findByCodeIds(usedIds);
-        List<Integer> cardIds = recordPOList.stream().map(VoucherExchangeRecordPO::getVoucherId).collect(Collectors.toList());
-        List<VoucherPO> rcPOList = voucherPOManualMapper.findByIds(cardIds);
+    public void batchUpdate(List<Integer> ids, VoucherExchangeCodeBatchSaveDTO batchSaveDTO) {
+        List<VoucherPO> rcPOList = voucherPOManualMapper.findByIds(ids);
         rcPOList.stream().forEach(bean -> {
             bean.setName(batchSaveDTO.getVoucherName());
             bean.setDescription(batchSaveDTO.getDescription());
@@ -65,12 +63,10 @@ public class VoucherServiceImpl implements VoucherService {
     }
 
     @Override
-    public void batchChangeStatus(List<Integer> usedIds, Byte status) {
-        List<VoucherExchangeRecordPO> recordPOList = voucherExchangeRecordService.findByCodeIds(usedIds);
-        List<Integer> cardIds = recordPOList.stream().map(VoucherExchangeRecordPO::getVoucherId).collect(Collectors.toList());
+    public void batchChangeStatus(List<Integer> ids, Byte status) {
         Map<String, Object> map = new HashMap<String, Object>(2);
         map.put("status",status);
-        map.put("ids",cardIds);
+        map.put("ids",ids);
         voucherPOManualMapper.batchChangeStatus(map);
     }
 
@@ -127,5 +123,13 @@ public class VoucherServiceImpl implements VoucherService {
     @Override
     public void update(VoucherPO voucherPO) {
         voucherPOMapper.updateByPrimaryKeySelective(voucherPO);
+    }
+
+    @Override
+    public void batchChangeUsed(List<Integer> ids, Byte used) {
+        Map<String, Object> map = new HashMap<String, Object>(2);
+        map.put("used",used);
+        map.put("ids",ids);
+        voucherPOManualMapper.batchChangeUsed(map);
     }
 }

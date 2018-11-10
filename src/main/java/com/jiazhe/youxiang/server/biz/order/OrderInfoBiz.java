@@ -1,5 +1,8 @@
 package com.jiazhe.youxiang.server.biz.order;
 
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.OrderException;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
@@ -53,8 +56,12 @@ public class OrderInfoBiz {
 
     }
 
-    public NeedPayResp customerLaunchPay(Integer id) {
-        return null;
+    public BigDecimal customerNeedPayCash(Integer id) {
+        OrderInfoDTO dto = orderInfoService.getById(id);
+        if(!dto.getStatus().equals(CommonConstant.ORDER_UNPAID)){
+            throw new OrderException(OrderCodeEnum.ORDER_CAN_CALCULATE_NEED_PAY);
+        }
+        return calculateOrderNeedPay(dto);
     }
 
     public int customerPay(Integer orderId,BigDecimal payCash,BigDecimal payRechargeCard) {
@@ -96,5 +103,11 @@ public class OrderInfoBiz {
     public List<OrderInfoDTO> custoemrGetList(Integer customerId, Byte status, Paging paging) {
         CustomerDTO customerDTO = customerService.getById(customerId);
         return getList(status,null,customerDTO.getMobile(),null,null,null,null,paging);
+    }
+
+    private BigDecimal calculateOrderNeedPay(OrderInfoDTO dto){
+        Integer needPayCount = dto.getCount() - dto.getPayVoucher();
+        BigDecimal needPayMoney = dto.getProductPrice().multiply(new BigDecimal(needPayCount));
+        return needPayMoney.subtract(dto.getPayRechargeCard().add(dto.getPayCash()));
     }
 }

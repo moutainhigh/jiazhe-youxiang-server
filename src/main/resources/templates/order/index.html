@@ -342,7 +342,7 @@
                 index: 'status',
                 sortable: false,
                 formatter: function (cellvalue, options, rowObject) {
-                    return orderStatus[rowObject.status];
+                    return orderStatus[rowObject.status-1];
                 }
             },
             {name: 'payVoucher', index: 'payVoucher',sortable: false},

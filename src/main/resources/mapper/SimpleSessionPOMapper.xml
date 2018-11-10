@@ -5,9 +5,9 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="cookie" property="cookie" jdbcType="VARCHAR" />
     <result column="session" property="session" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
     <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
-    <result column="status" property="status" jdbcType="TINYINT" />
     <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
     <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -70,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, cookie, session, ext_info, is_deleted, status, add_time, mod_time
+    id, cookie, session, status, ext_info, is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.SimpleSessionPOExample" >
     select
@@ -104,10 +104,10 @@
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.SimpleSessionPO" >
     insert into simple_session (id, cookie, session, 
-      ext_info, is_deleted, status, 
+      status, ext_info, is_deleted, 
       add_time, mod_time)
     values (#{id,jdbcType=INTEGER}, #{cookie,jdbcType=VARCHAR}, #{session,jdbcType=VARCHAR}, 
-      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
+      #{status,jdbcType=TINYINT}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
       #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.SimpleSessionPO" >
@@ -122,14 +122,14 @@
       <if test="session != null" >
         session,
       </if>
+      <if test="status != null" >
+        status,
+      </if>
       <if test="extInfo != null" >
         ext_info,
       </if>
       <if test="isDeleted != null" >
         is_deleted,
-      </if>
-      <if test="status != null" >
-        status,
       </if>
       <if test="addTime != null" >
         add_time,
@@ -148,14 +148,14 @@
       <if test="session != null" >
         #{session,jdbcType=VARCHAR},
       </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
       <if test="extInfo != null" >
         #{extInfo,jdbcType=VARCHAR},
       </if>
       <if test="isDeleted != null" >
         #{isDeleted,jdbcType=TINYINT},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=TINYINT},
       </if>
       <if test="addTime != null" >
         #{addTime,jdbcType=TIMESTAMP},
@@ -183,14 +183,14 @@
       <if test="record.session != null" >
         session = #{record.session,jdbcType=VARCHAR},
       </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
       <if test="record.extInfo != null" >
         ext_info = #{record.extInfo,jdbcType=VARCHAR},
       </if>
       <if test="record.isDeleted != null" >
         is_deleted = #{record.isDeleted,jdbcType=TINYINT},
-      </if>
-      <if test="record.status != null" >
-        status = #{record.status,jdbcType=TINYINT},
       </if>
       <if test="record.addTime != null" >
         add_time = #{record.addTime,jdbcType=TIMESTAMP},
@@ -208,9 +208,9 @@
     set id = #{record.id,jdbcType=INTEGER},
       cookie = #{record.cookie,jdbcType=VARCHAR},
       session = #{record.session,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT},
       ext_info = #{record.extInfo,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=TINYINT},
-      status = #{record.status,jdbcType=TINYINT},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
       mod_time = #{record.modTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
@@ -226,14 +226,14 @@
       <if test="session != null" >
         session = #{session,jdbcType=VARCHAR},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
       <if test="extInfo != null" >
         ext_info = #{extInfo,jdbcType=VARCHAR},
       </if>
       <if test="isDeleted != null" >
         is_deleted = #{isDeleted,jdbcType=TINYINT},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=TINYINT},
       </if>
       <if test="addTime != null" >
         add_time = #{addTime,jdbcType=TIMESTAMP},
@@ -248,9 +248,9 @@
     update simple_session
     set cookie = #{cookie,jdbcType=VARCHAR},
       session = #{session,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
       ext_info = #{extInfo,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=TINYINT},
-      status = #{status,jdbcType=TINYINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       mod_time = #{modTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}

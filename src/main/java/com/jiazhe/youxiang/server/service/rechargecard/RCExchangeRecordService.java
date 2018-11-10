@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.service.rechargecard;
 
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeRecordPO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord.RCExchangeRecordDTO;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface RCExchangeRecordService {
      * @param usedIds
      * @return
      */
-    List<RechargeCardExchangeRecordPO> findByCodeIds(List<Integer> usedIds);
+    List<RCExchangeRecordDTO> findByCodeIds(List<Integer> usedIds);
 
     /**
      * 根据充值卡id，查询兑换记录

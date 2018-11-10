@@ -17,7 +17,7 @@ public interface VoucherExchangeRecordService {
      * @param usedIds
      * @return
      */
-    List<VoucherExchangeRecordPO> findByCodeIds(List<Integer> usedIds);
+    List<VoucherExchangeRecordDTO> findByCodeIds(List<Integer> usedIds);
 
     VoucherExchangeRecordDTO findByVoucherId(Integer id);
 
