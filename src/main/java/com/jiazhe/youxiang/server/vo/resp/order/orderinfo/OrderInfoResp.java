@@ -24,7 +24,7 @@ public class OrderInfoResp extends BaseVO {
 
     private Integer productId;
 
-    private Integer productPrice;
+    private BigDecimal productPrice;
 
     private Integer count;
 
@@ -98,11 +98,11 @@ public class OrderInfoResp extends BaseVO {
         this.productId = productId;
     }
 
-    public Integer getProductPrice() {
+    public BigDecimal getProductPrice() {
         return productPrice;
     }
 
-    public void setProductPrice(Integer productPrice) {
+    public void setProductPrice(BigDecimal productPrice) {
         this.productPrice = productPrice;
     }
 

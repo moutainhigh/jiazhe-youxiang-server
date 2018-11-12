@@ -56,6 +56,7 @@ public class SysUserAdapter {
         sysUserResp.setLoginName(sysUserDTO.getLoginName());
         sysUserResp.setDisplayName(sysUserDTO.getDisplayName());
         sysUserResp.setLastLoginTime(sysUserDTO.getLastLoginTime());
+        sysUserResp.setLastLoginIp(sysUserDTO.getLastLoginIp());
         return sysUserResp;
     }
 

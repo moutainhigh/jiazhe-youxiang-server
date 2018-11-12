@@ -8,10 +8,13 @@ import java.util.Date;
 
 /**
  * @author tu
- * @description：
+ * @description：客户下单请求参数
  * @date 2018/10/24
  */
-public class CustomerPlaceOrderReq  extends BaseVO {
+public class PlaceOrderReq extends BaseVO {
+
+    @ApiModelProperty("下单方式，前台下单0，后台下单1")
+    private Byte type;
 
     @ApiModelProperty("客户id")
     private Integer customerId;
@@ -37,7 +40,13 @@ public class CustomerPlaceOrderReq  extends BaseVO {
     @ApiModelProperty("客户留言")
     private String customerRemark;
 
-    @ApiModelProperty("预约时间")
+    @ApiModelProperty("提供服务人员")
+    private String workerName;
+
+    @ApiModelProperty("服务人员电话")
+    private String workerMobile;
+
+    @ApiModelProperty("服务时间")
     private Date serviceTime;
 
     /**
@@ -58,6 +67,20 @@ public class CustomerPlaceOrderReq  extends BaseVO {
     @ApiModelProperty("充值卡金额")
     private String cardMoneys;
 
+    @ApiModelProperty("订单成本")
+    private BigDecimal totalCost;
+
+    @ApiModelProperty("订单备注")
+    private String comments;
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
+    }
+
     public Integer getCustomerId() {
         return customerId;
     }
@@ -72,14 +95,6 @@ public class CustomerPlaceOrderReq  extends BaseVO {
 
     public void setProductId(Integer productId) {
         this.productId = productId;
-    }
-
-    public String getCustomerCityCode() {
-        return customerCityCode;
-    }
-
-    public void setCustomerCityCode(String customerCityCode) {
-        this.customerCityCode = customerCityCode;
     }
 
     public Integer getCount() {
@@ -122,12 +137,36 @@ public class CustomerPlaceOrderReq  extends BaseVO {
         this.customerRemark = customerRemark;
     }
 
+    public String getWorkerName() {
+        return workerName;
+    }
+
+    public void setWorkerName(String workerName) {
+        this.workerName = workerName;
+    }
+
+    public String getWorkerMobile() {
+        return workerMobile;
+    }
+
+    public void setWorkerMobile(String workerMobile) {
+        this.workerMobile = workerMobile;
+    }
+
     public Date getServiceTime() {
         return serviceTime;
     }
 
     public void setServiceTime(Date serviceTime) {
         this.serviceTime = serviceTime;
+    }
+
+    public String getCustomerCityCode() {
+        return customerCityCode;
+    }
+
+    public void setCustomerCityCode(String customerCityCode) {
+        this.customerCityCode = customerCityCode;
     }
 
     public String getVoucherIds() {
@@ -152,5 +191,21 @@ public class CustomerPlaceOrderReq  extends BaseVO {
 
     public void setCardMoneys(String cardMoneys) {
         this.cardMoneys = cardMoneys;
+    }
+
+    public BigDecimal getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(BigDecimal totalCost) {
+        this.totalCost = totalCost;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 }

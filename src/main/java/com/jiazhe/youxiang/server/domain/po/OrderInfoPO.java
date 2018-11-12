@@ -17,7 +17,7 @@ public class OrderInfoPO implements Serializable {
 
     private String customerCityName;
 
-    private Integer productPrice;
+    private BigDecimal productPrice;
 
     private Integer count;
 
@@ -45,7 +45,9 @@ public class OrderInfoPO implements Serializable {
 
     private BigDecimal payCash;
 
-    private BigDecimal totalCost;
+    private BigDecimal totalAmount;
+
+    private BigDecimal cost;
 
     private String comments;
 
@@ -113,11 +115,11 @@ public class OrderInfoPO implements Serializable {
         this.customerCityName = customerCityName == null ? null : customerCityName.trim();
     }
 
-    public Integer getProductPrice() {
+    public BigDecimal getProductPrice() {
         return productPrice;
     }
 
-    public void setProductPrice(Integer productPrice) {
+    public void setProductPrice(BigDecimal productPrice) {
         this.productPrice = productPrice;
     }
 
@@ -225,12 +227,20 @@ public class OrderInfoPO implements Serializable {
         this.payCash = payCash;
     }
 
-    public BigDecimal getTotalCost() {
-        return totalCost;
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setTotalCost(BigDecimal totalCost) {
-        this.totalCost = totalCost;
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public BigDecimal getCost() {
+        return cost;
+    }
+
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
     }
 
     public String getComments() {

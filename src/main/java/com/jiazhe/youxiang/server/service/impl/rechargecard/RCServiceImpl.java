@@ -4,8 +4,10 @@ import com.jiazhe.youxiang.server.adapter.rechargecard.RCAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.UserCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
+import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.common.exceptions.UserException;
 import com.jiazhe.youxiang.server.dao.mapper.RechargeCardPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCPOManualMapper;
@@ -97,6 +99,9 @@ public class RCServiceImpl implements RCService {
     @Override
     public void directCharge(String mobile, Integer batchId, BigDecimal faceValue) {
         CustomerDTO customerDTO = customerService.getByMobile(mobile);
+        if(null == customerDTO){
+            throw new RechargeCardException(RechargeCardCodeEnum.CUSTOMER_NOT_EXIST);
+        }
         RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchService.getById(batchId);
         RechargeCardPO rechargeCardPO = new RechargeCardPO();
         //直接指定过期时间
@@ -138,10 +143,8 @@ public class RCServiceImpl implements RCService {
     }
 
     @Override
-    public void batchUpdate(List<Integer> usedIds, RCExchangeCodeBatchSaveDTO batchSaveDTO) {
-        List<RechargeCardExchangeRecordPO> recordPOList = rcExchangeRecordService.findByCodeIds(usedIds);
-        List<Integer> cardIds = recordPOList.stream().map(RechargeCardExchangeRecordPO::getRechargeCardId).collect(Collectors.toList());
-        List<RechargeCardPO> rcPOList = rcPOManualMapper.findByIds(cardIds);
+    public void batchUpdate(List<Integer> ids, RCExchangeCodeBatchSaveDTO batchSaveDTO) {
+        List<RechargeCardPO> rcPOList = rcPOManualMapper.findByIds(ids);
         rcPOList.stream().forEach(bean -> {
             bean.setName(batchSaveDTO.getRechargeCardName());
             bean.setDescription(batchSaveDTO.getDescription());
@@ -159,12 +162,10 @@ public class RCServiceImpl implements RCService {
     }
 
     @Override
-    public void batchChangeStatus(List<Integer> usedIds,Byte status) {
-        List<RechargeCardExchangeRecordPO> recordPOList = rcExchangeRecordService.findByCodeIds(usedIds);
-        List<Integer> cardIds = recordPOList.stream().map(RechargeCardExchangeRecordPO::getRechargeCardId).collect(Collectors.toList());
+    public void batchChangeStatus(List<Integer> ids,Byte status) {
         Map<String, Object> map = new HashMap<String, Object>(2);
         map.put("status",status);
-        map.put("ids",cardIds);
+        map.put("ids",ids);
         rcPOManualMapper.batchChangeStatus(map);
     }
 
@@ -203,5 +204,17 @@ public class RCServiceImpl implements RCService {
         po.setExpiryTime(dto.getExpiryTime());
         po.setDescription(dto.getDescription());
         rechargeCardPOMapper.updateByPrimaryKeySelective(po);
+    }
+
+    @Override
+    public void batchUpdate(List<RCDTO> rcDTOList) {
+        List<RechargeCardPO> rcPOList = rcDTOList.stream().map(RCAdapter::DTO2PO).collect(Collectors.toList());
+        rcPOManualMapper.batchUpdate(rcPOList);
+    }
+
+    @Override
+    public List<RCDTO> findByIds(List<Integer> ids) {
+        List<RechargeCardPO> poList = rcPOManualMapper.findByIds(ids);
+        return poList.stream().map(RCAdapter::PO2DTO).collect(Collectors.toList());
     }
 }

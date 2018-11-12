@@ -3,7 +3,11 @@ package com.jiazhe.youxiang.server.adapter.order;
 import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
 import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.domain.po.OrderInfoPO;
+import com.jiazhe.youxiang.server.dto.order.orderinfo.AppendOrderDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
+import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
+import com.jiazhe.youxiang.server.dto.order.orderinfo.UserReservationOrderDTO;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.*;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
 
 /**
@@ -68,11 +72,78 @@ public class OrderInfoAdapter {
         orderInfoDTO.setPayRechargeCard(orderInfoPO.getPayRechargeCard());
         orderInfoDTO.setPayVoucher(orderInfoPO.getPayVoucher());
         orderInfoDTO.setPayCash(orderInfoPO.getPayCash());
-        orderInfoDTO.setTotalCost(orderInfoPO.getTotalCost());
         orderInfoDTO.setComments(orderInfoPO.getComments());
         orderInfoDTO.setType(orderInfoPO.getType());
         orderInfoDTO.setStatus(orderInfoPO.getStatus());
         orderInfoDTO.setAuditReason(orderInfoPO.getAuditReason());
         return orderInfoDTO;
+    }
+
+    public static PlaceOrderDTO ReqUserPlaceOrder2DTOPlaceOrder(UserPlaceOrderReq req) {
+        if (req == null) {
+            return null;
+        }
+        PlaceOrderDTO placeOrderDTO = new PlaceOrderDTO();
+        placeOrderDTO.setCustomerId(req.getCustomerId());
+        placeOrderDTO.setProductId(req.getProductId());
+        placeOrderDTO.setCustomerCityCode(req.getCustomerCityCode());
+        placeOrderDTO.setCount(req.getCount());
+        placeOrderDTO.setCustomerAddress(req.getCustomerAddress());
+        placeOrderDTO.setCustomerMobile(req.getCustomerMobile());
+        placeOrderDTO.setCustomerName(req.getCustomerName());
+        placeOrderDTO.setCustomerRemark(req.getCustomerRemark());
+        placeOrderDTO.setWorkerName(req.getWorkerName());
+        placeOrderDTO.setWorkerMobile(req.getWorkerMobile());
+        placeOrderDTO.setRealServiceTime(req.getRealServiceTime());
+        placeOrderDTO.setVoucherIds(req.getVoucherIds());
+        placeOrderDTO.setRechargeCardIds(req.getRechargeCardIds());
+        placeOrderDTO.setCardMoneys(req.getCardMoneys());
+        return placeOrderDTO;
+    }
+
+    public static PlaceOrderDTO ReqCustomerPlaceOrder2DTOPlaceOrder(CustomerPlaceOrderReq req) {
+        if (req == null) {
+            return null;
+        }
+        PlaceOrderDTO placeOrderDTO = new PlaceOrderDTO();
+        placeOrderDTO.setCustomerId(req.getCustomerId());
+        placeOrderDTO.setProductId(req.getProductId());
+        placeOrderDTO.setCustomerCityCode(req.getCustomerCityCode());
+        placeOrderDTO.setCount(req.getCount());
+        placeOrderDTO.setCustomerAddress(req.getCustomerAddress());
+        placeOrderDTO.setCustomerMobile(req.getCustomerMobile());
+        placeOrderDTO.setCustomerName(req.getCustomerName());
+        placeOrderDTO.setCustomerRemark(req.getCustomerRemark());
+        placeOrderDTO.setServiceTime(req.getServiceTime());
+        placeOrderDTO.setVoucherIds(req.getVoucherIds());
+        placeOrderDTO.setRechargeCardIds(req.getRechargeCardIds());
+        placeOrderDTO.setCardMoneys(req.getCardMoneys());
+        return placeOrderDTO;
+    }
+
+    public static UserReservationOrderDTO ReqUserReservationOrder2DTOUserReservationOrder(UserReservationOrderReq req) {
+        if (req == null) {
+            return null;
+        }
+        UserReservationOrderDTO userReservationOrderDTO = new UserReservationOrderDTO();
+        userReservationOrderDTO.setOrderId(req.getOrderId());
+        userReservationOrderDTO.setWorkerName(req.getWorkerName());
+        userReservationOrderDTO.setWorkerMobile(req.getWorkerMobile());
+        userReservationOrderDTO.setRealServiceTime(req.getRealServiceTime());
+        userReservationOrderDTO.setCost(req.getCost());
+        return userReservationOrderDTO;
+    }
+
+    public static AppendOrderDTO ReqAppendOrder2DTOAppendOrder(AppendOrderReq req) {
+        if (req == null) {
+            return null;
+        }
+        AppendOrderDTO appendOrderDTO = new AppendOrderDTO();
+        appendOrderDTO.setOrderId(req.getOrderId());
+        appendOrderDTO.setCount(req.getCount());
+        appendOrderDTO.setVoucherIds(req.getVoucherIds());
+        appendOrderDTO.setRechargeCardIds(req.getRechargeCardIds());
+        appendOrderDTO.setCardMoneys(req.getCardMoneys());
+        return appendOrderDTO;
     }
 }

@@ -79,7 +79,7 @@
                                 <label class="col-sm-1 control-label no-padding-right">客户手机号：</label>
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
-                                        <input id="searchMobile" name="mobile" class="form-control" type="text"
+                                        <input id="searchMobile" name="mobile" class="form-control" type="text" th:value="${mobile}"
                                                style="height:30px"/>
                                     </div>
                                 </div>
@@ -326,25 +326,25 @@
         shrinkToFit: false,
         autoScroll: true,
         height: 350,
-        colNames: ['', '操作', '订单号', '商品名称', '单价', '数量', '下单电话', '客户电话', '客户姓名', '状态', '代金券抵扣数量', '充值卡支付金额', '在线支付金额'],
+        colNames: ['', '操作', '订单号','状态','商品名称', '单价', '数量', '下单电话', '客户电话', '客户姓名','代金券抵扣数量', '充值卡支付金额', '在线支付金额'],
         colModel: [
             {name: 'id', index: 'id', sortable: false, hidden: true},
             {name: '_action', index: '_action', width: 260, sortable: false, formatter: customFormatter},
-            {name: 'orderCode', index: 'orderCode', sortable: false},
+            {name: 'orderCode', index: 'orderCode', width: 175,sortable: false},
+            {
+                name: 'status',
+                index: 'status',
+                sortable: false,
+                formatter: function (cellvalue, options, rowObject) {
+                    return orderStatus[rowObject.status-1];
+                }
+            },
             {name: 'productResp.name', index: 'productResp.name', sortable: false},
             {name: 'productPrice', index: 'productPrice', sortable: false},
             {name: 'count', index: 'count', sortable: false},
             {name: 'customerResp.mobile', index: 'customerResp.mobile',sortable: false},
             {name: 'customerMobile', index: 'customerMobile', sortable: false},
             {name: 'customerName', index: 'customerName', sortable: false},
-            {
-                name: 'status',
-                index: 'status',
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    return orderStatus[rowObject.status];
-                }
-            },
             {name: 'payVoucher', index: 'payVoucher',sortable: false},
             {name: 'payRechargeCard', index: 'payRechargeCard', sortable: false},
             {name: 'payCash', index: 'payCash', sortable: false}

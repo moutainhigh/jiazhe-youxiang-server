@@ -123,4 +123,15 @@
         </foreach>
     </select>
 
+    <select id="batchChangeUsed" parameterType="java.util.Map">
+        update voucher
+        <set>
+            used = #{used},mod_time = NOW()
+        </set>
+        where id in
+        <foreach collection="ids" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
 </mapper>

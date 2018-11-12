@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl.voucher;
 
+import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeRecordAdapter;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherExchangeRecordAdapter;
 import com.jiazhe.youxiang.server.common.enums.VoucherCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.VoucherException;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author tu
@@ -32,8 +34,9 @@ public class VoucherExchangeRecordServiceImpl implements VoucherExchangeRecordSe
 
 
     @Override
-    public List<VoucherExchangeRecordPO> findByCodeIds(List<Integer> codeIds) {
-        return voucherExchangeRecordPOManualMapper.findByCodeIds(codeIds);
+    public List<VoucherExchangeRecordDTO> findByCodeIds(List<Integer> codeIds) {
+        List<VoucherExchangeRecordPO> poList = voucherExchangeRecordPOManualMapper.findByCodeIds(codeIds);
+        return poList.stream().map(VoucherExchangeRecordAdapter::PO2DTO).collect(Collectors.toList());
     }
 
     @Override
