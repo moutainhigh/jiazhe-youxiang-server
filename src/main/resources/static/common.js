@@ -91,7 +91,7 @@ function error(data) {
     bootboxalert("服务器异常，请联系管理员");
 }
 
-bootbox.setDefaults("locale","zh_CN");  
+bootbox.setDefaults("locale","zh_CN");
 
 
 
