@@ -396,7 +396,7 @@
         }
         if (rowObject.status == 5) {
             str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:orderCancelPass('" + rowObject.id + "')\">审核通过</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:startUsing('" + rowObject.id + "')\">审核不通过</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:orderCancelUnpass('" + rowObject.id + "')\">审核不通过</a>&nbsp;&nbsp;";
         }
         if (rowObject.status == 6) {
             str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:userCancelOrder('" + rowObject.id + "')\">取消订单</a>&nbsp;&nbsp;";
@@ -471,6 +471,34 @@
                 bootboxalert("服务器异常，请联系管理员");
             }
         });
+    }
+
+    function orderCancelUnpass(id) {
+        bootbox.prompt("请输入审核不通过理由", function(result){
+            if(!result == ""){
+                $.ajax({
+                    url: "../api/orderinfo/ordercancelunpass",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        orderId: id,
+                        auditReason:result
+                    },
+                    type: "POST",
+                    success: function (data) {
+                        if ('error' in data) {
+                            bootboxalert(data.error.message);
+                        } else {
+                            bootboxalert("操作成功");
+                            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                        }
+                    },
+                    error: function () {
+                        bootboxalert("服务器异常，请联系管理员");
+                    }
+                });
+            }
+        })
     }
 
 </script>
