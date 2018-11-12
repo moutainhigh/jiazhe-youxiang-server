@@ -47,7 +47,7 @@
                     <div class="col-xs-12" style="padding-top:40px">
                         <form id="eleProductCodeSearchForm" class="form-horizontal" role="form">
                             <div class="form-group">
-                                <div class="col-sm-5">
+                                <div class="col-sm-6">
                                     <label class="col-sm-2 control-label no-padding-right">商品：</label>
                                     <div class="col-sm-2">
                                         <select id="searchProductId" name="productId" class="selectpicker show-tick form-control">
@@ -69,18 +69,20 @@
                                         </select>
                                     </div>
                                 </div>
-                                <label class="col-sm-1 control-label no-padding-right">兑换码：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <input id="searchCode" name="code" class="form-control" type="text"
-                                               style="height:30px"/>
+                                <div class="col-sm-4">
+                                    <label class="col-sm-2 control-label no-padding-right">兑换码：</label>
+                                    <div class="col-sm-4">
+                                        <div class="pos-rel">
+                                            <input id="searchCode" name="code" class="form-control" type="text"
+                                                   style="height:30px"/>
+                                        </div>
                                     </div>
-                                </div>
-                                <label class="col-sm-1 control-label no-padding-right">密钥：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <input id="searchKeyt" name="keyt" class="form-control" type="text"
-                                               style="height:30px"/>
+                                    <label class="col-sm-2 control-label no-padding-right">密钥：</label>
+                                    <div class="col-sm-4">
+                                        <div class="pos-rel">
+                                            <input id="searchKeyt" name="keyt" class="form-control" type="text"
+                                                   style="height:30px"/>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-1">
@@ -116,14 +118,14 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="blue bigger" id="modal-title"></h4>
+                                    <h4 class="blue bigger" id="modal-title">导入电子商品兑换码</h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-1"></div>
                                         <div class="col-xs-12 col-sm-9">
                                             <form id="eleProductCodeSaveForm" class="form-horizontal" role="form">
-                                                <input name="excelUrl" id="excelUrl">
+                                                <input type="hidden" name="excelUrl" id="excelUrl">
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">所属商品：</label>
                                                     <div class="col-sm-8">
@@ -165,7 +167,7 @@
                                                         <div class="widget-main">
                                                             <div class="form-group">
                                                                 <div class="col-xs-12">
-                                                                    <input type="file" id="eleProductCodeFle"/>
+                                                                    <input type="file" id="eleProductCodeFile"/>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -350,7 +352,7 @@
         return "";
     }
 
-    $('#eleProductCodeFle').ace_file_input({
+    $('#eleProductCodeFile').ace_file_input({
         style: 'well',
         btn_choose: '请选择电子商品兑换码',
         btn_change: null,
@@ -360,7 +362,7 @@
         allowExt: ['xls','xlsx'],
 //        allowMime: ['application/vnd.ms-excel'],
     }).on('change', function () {
-        var image = $('#eleProductCodeFle')[0].files[0]
+        var image = $('#eleProductCodeFile')[0].files[0]
         if (!image) {
             return;
         }
@@ -387,6 +389,14 @@
             error: error
         });
     });
+
+    function openNew() {
+        $("#saveProductId option:first").prop("selected", 'selected');
+        $("#saveBatchName").val('');
+        $("#saveExpiryTime").val('');
+        $("#excelUrl").val('');
+        $('#eleProductCodeFile').ace_file_input('reset_input');
+    }
 
     function save() {
         $.ajax({

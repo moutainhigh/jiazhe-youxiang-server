@@ -11,6 +11,7 @@ import com.jiazhe.youxiang.server.service.EleProductCodeService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.resp.eleproductcode.ExcelLegalityResp;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -50,8 +51,10 @@ public class EleProductCodeBiz {
             dto.setProductId(productId);
             dto.setBatchName(batchName);
             dto.setExpiryTime(expiryTime);
-            dto.setCode(row.getCell(0).toString());
-            dto.setKeyt(row.getCell(1).toString());
+            row.getCell(0).setCellType(Cell.CELL_TYPE_STRING);
+            dto.setCode(row.getCell(0).getStringCellValue().toString());
+            row.getCell(1).setCellType(Cell.CELL_TYPE_STRING);
+            dto.setKeyt(row.getCell(1).getStringCellValue().toString());
             eleProductCodeDTOList.add(dto);
         }
         List<ElectronicProductExchangeCodePO> poList = eleProductCodeDTOList.stream().map(EleProductCodeAdapter::DTO2PO).collect(Collectors.toList());
