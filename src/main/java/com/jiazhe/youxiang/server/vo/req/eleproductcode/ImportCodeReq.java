@@ -1,8 +1,8 @@
-package com.jiazhe.youxiang.server.vo.req.eleproductexcode;
+package com.jiazhe.youxiang.server.vo.req.eleproductcode;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -16,12 +16,13 @@ public class ImportCodeReq extends BaseVO {
     @ApiModelProperty("excel路径")
     private String excelUrl;
 
-    @ApiModelProperty("新批次还是沿用老批次")
-    private Byte isNew;
+    @ApiModelProperty("商品id")
+    private Integer productId;
 
     @ApiModelProperty("批次名称")
     private String batchName;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty("过期时间")
     private Date expiryTime;
 
@@ -49,11 +50,11 @@ public class ImportCodeReq extends BaseVO {
         this.expiryTime = expiryTime;
     }
 
-    public Byte getIsNew() {
-        return isNew;
+    public Integer getProductId() {
+        return productId;
     }
 
-    public void setIsNew(Byte isNew) {
-        this.isNew = isNew;
+    public void setProductId(Integer productId) {
+        this.productId = productId;
     }
 }

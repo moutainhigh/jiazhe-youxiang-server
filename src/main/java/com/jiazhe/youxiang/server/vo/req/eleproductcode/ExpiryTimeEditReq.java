@@ -1,7 +1,6 @@
-package com.jiazhe.youxiang.server.vo.req.eleproductexcode;
+package com.jiazhe.youxiang.server.vo.req.eleproductcode;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
-import com.jiazhe.youxiang.server.vo.req.IdReq;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
