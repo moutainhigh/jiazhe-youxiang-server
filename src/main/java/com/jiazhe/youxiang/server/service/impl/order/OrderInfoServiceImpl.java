@@ -475,8 +475,14 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 }
             });
         }
-        rcService.batchUpdate(rcDTOList);
-        voucherService.batchChangeUsed(voucherIds, Byte.valueOf("0"));
-        orderRefundService.batchInsert(orderRefundDTOList);
+        if(!rcDTOList.isEmpty()){
+            rcService.batchUpdate(rcDTOList);
+        }
+        if(!voucherIds.isEmpty()){
+            voucherService.batchChangeUsed(voucherIds, Byte.valueOf("0"));
+        }
+        if(!orderRefundDTOList.isEmpty()){
+            orderRefundService.batchInsert(orderRefundDTOList);
+        }
     }
 }

@@ -386,22 +386,91 @@
         var str = "";
         str = str + "<a class='btn btn-minier btn-success' href=\"javascript:startUsing('" + rowObject.id + "')\">查看</a>&nbsp;&nbsp;";
         if (rowObject.status == 2) {
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:startUsing('" + rowObject.id + "')\">取消订单</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:userCancelOrder('" + rowObject.id + "')\">取消订单</a>&nbsp;&nbsp;";
             str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:stopUsing('" + rowObject.id + "')\">预约</a>&nbsp;&nbsp;";
         }
         if (rowObject.status == 3) {
-            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:stopUsing('" + rowObject.id + "')\">完成订单</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:startUsing('" + rowObject.id + "')\">取消订单</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:userCompleteOrder('" + rowObject.id + "')\">完成订单</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:userCancelOrder('" + rowObject.id + "')\">取消订单</a>&nbsp;&nbsp;";
             str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:stopUsing('" + rowObject.id + "')\">追加收款</a>&nbsp;&nbsp;";
         }
         if (rowObject.status == 5) {
-            str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:stopUsing('" + rowObject.id + "')\">审核通过</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:orderCancelPass('" + rowObject.id + "')\">审核通过</a>&nbsp;&nbsp;";
             str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:startUsing('" + rowObject.id + "')\">审核不通过</a>&nbsp;&nbsp;";
         }
         if (rowObject.status == 6) {
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:startUsing('" + rowObject.id + "')\">取消订单</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:userCancelOrder('" + rowObject.id + "')\">取消订单</a>&nbsp;&nbsp;";
         }
         return str;
+    }
+
+    function userCancelOrder(id){
+        $.ajax({
+            url: "../api/orderinfo/usercancelorder",
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    bootboxalert("取消成功");
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+    function userCompleteOrder(id) {
+        $.ajax({
+            url: "../api/orderinfo/usercompleteorder",
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    bootboxalert("成功完成该订单");
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+    function orderCancelPass(id){
+        $.ajax({
+            url: "../api/orderinfo/ordercancelpass",
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    bootboxalert("成功取消该订单");
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
     }
 
 </script>
