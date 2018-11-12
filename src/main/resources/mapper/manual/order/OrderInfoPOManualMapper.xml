@@ -22,7 +22,8 @@
         <result column="pay_recharge_card" property="payRechargeCard" jdbcType="DECIMAL"/>
         <result column="pay_voucher" property="payVoucher" jdbcType="INTEGER"/>
         <result column="pay_cash" property="payCash" jdbcType="DECIMAL"/>
-        <result column="total_cost" property="totalCost" jdbcType="DECIMAL"/>
+        <result column="total_amount" property="totalAmount" jdbcType="DECIMAL"/>
+        <result column="cost" property="cost" jdbcType="DECIMAL"/>
         <result column="comments" property="comments" jdbcType="VARCHAR"/>
         <result column="type" property="type" jdbcType="TINYINT"/>
         <result column="status" property="status" jdbcType="TINYINT"/>
@@ -35,23 +36,23 @@
 
     <sql id="Base_Column_List">
         id,order_code,customer_id,product_id,customer_city_code,customer_city_name,product_price,count,customer_address,customer_mobile,customer_name,customer_remark,worker_name,worker_mobile,order_time
-        service_time,real_service_time,pay_recharge_card,pay_voucher,pay_cash,total_cost,comments,type,status,audit_reason,ext_info, is_deleted,add_time,mod_time
+        service_time,real_service_time,pay_recharge_card,pay_voucher,pay_cash,total_amount,cost,comments,type,status,audit_reason,ext_info, is_deleted,add_time,mod_time
     </sql>
 
     <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.OrderInfoPO" keyProperty="id"
             useGeneratedKeys="true">
         insert into order_info (id,order_code,customer_id,product_id,customer_city_code,customer_city_name,product_price,count,customer_address,customer_mobile,customer_name,customer_remark,worker_name,worker_mobile,order_time
-        service_time,real_service_time,pay_recharge_card,pay_voucher,pay_cash,total_cost,comments,type,status,audit_reason,ext_info, is_deleted,add_time,mod_time)
+        service_time,real_service_time,pay_recharge_card,pay_voucher,pay_cash,total_amount,cost,comments,type,status,audit_reason,ext_info, is_deleted,add_time,mod_time)
         values (#{id,jdbcType=INTEGER},  #{orderCode,jdbcType=VARCHAR},#{customerId,jdbcType=INTEGER},#{productId,jdbcType=INTEGER}, #{customerCityCode,jdbcType=VARCHAR}, #{customerCityName,jdbcType=VARCHAR},
          #{productPrice,jdbcType=DECIMAL},#{count,jdbcType=INTEGER}, #{customerAddress,jdbcType=VARCHAR},#{customerMobile,jdbcType=VARCHAR},#{customerName,jdbcType=VARCHAR},#{customerRemark,jdbcType=VARCHAR},
          #{workerName,jdbcType=VARCHAR},#{workerMobile,jdbcType=VARCHAR},NOW(),#{serviceTime,jdbcType=TIMESTAMP},#{realServiceTime,jdbcType=TIMESTAMP},#{payRechargeCard,jdbcType=DECIMAL},#{payVoucher,jdbcType=INTEGER},
-         #{payCash,jdbcType=DECIMAL},#{totalCost,jdbcType=DECIMAL},#{comments,jdbcType=VARCHAR},#{type,jdbcType=TINYINT},#{status,jdbcType=TINYINT},"","",0,NOW(),NOW())
+         #{payCash,jdbcType=DECIMAL},#{totalAmount,jdbcType=DECIMAL},#{cost,jdbcType=DECIMAL},#{comments,jdbcType=VARCHAR},#{type,jdbcType=TINYINT},#{status,jdbcType=TINYINT},"","",0,NOW(),NOW())
     </insert>
 
     <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.OrderInfoPO">
         SELECT
         o.id,o.order_code,o.customer_id,o.product_id,o.customer_city_code,o.customer_city_name,o.product_price,o.count,o.customer_address,o.customer_mobile,o.customer_name,o.customer_remark,o.worker_name,o.worker_mobile,o.order_time
-        service_time,o.real_service_time,o.pay_recharge_card,o.pay_voucher,o.pay_cash,o.total_cost,o.comments,o.type,o.status,o.audit_reason,o.ext_info,o.
+        service_time,o.real_service_time,o.pay_recharge_card,o.pay_voucher,o.pay_cash,o.total_amount,o.cost,o.comments,o.type,o.status,o.audit_reason,o.ext_info,o.
         is_deleted,o.add_time,o.mod_time
         FROM order_info o
         LEFT JOIN customer c ON c.id = o.customer_id

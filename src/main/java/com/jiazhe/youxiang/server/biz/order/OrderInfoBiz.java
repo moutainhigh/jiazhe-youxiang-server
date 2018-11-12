@@ -4,8 +4,10 @@ import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.OrderException;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.order.orderinfo.AppendOrderDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
+import com.jiazhe.youxiang.server.dto.order.orderinfo.UserReservationOrderDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.order.OrderInfoService;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -52,10 +54,6 @@ public class OrderInfoBiz {
 
     }
 
-    public void userChargeAdditional(Integer orderId, BigDecimal additionalPay) {
-
-    }
-
     public BigDecimal customerNeedPayCash(Integer id) {
         OrderInfoDTO dto = orderInfoService.getById(id);
         if (!dto.getStatus().equals(CommonConstant.ORDER_UNPAID)) {
@@ -80,8 +78,8 @@ public class OrderInfoBiz {
         orderInfoService.userCompleteOrder(id);
     }
 
-    public int userReservationOrder(UserReservationOrderReq req) {
-        return 0;
+    public void userReservationOrder(UserReservationOrderDTO dto) {
+        orderInfoService.userReservationOrder(dto);
     }
 
     public OrderInfoDTO getById(Integer id) {
@@ -120,5 +118,9 @@ public class OrderInfoBiz {
 
     public void placeOrder(PlaceOrderDTO placeOrderDTO) throws ParseException {
         orderInfoService.placeOrder(placeOrderDTO);
+    }
+
+    public void appendOrder(AppendOrderDTO appendOrderDTO) {
+
     }
 }

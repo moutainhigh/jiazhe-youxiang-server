@@ -7,11 +7,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @author tu
- * @description：
- * @date 2018/10/24
+ * @author TU
+ * @description
+ * @date 2018/11/12.
  */
-public class CustomerPlaceOrderReq  extends BaseVO {
+public class UserPlaceOrderReq extends BaseVO {
 
     @ApiModelProperty("客户id")
     private Integer customerId;
@@ -37,8 +37,14 @@ public class CustomerPlaceOrderReq  extends BaseVO {
     @ApiModelProperty("客户留言")
     private String customerRemark;
 
-    @ApiModelProperty("预约时间")
-    private Date serviceTime;
+    @ApiModelProperty("提供服务人员")
+    private String workerName;
+
+    @ApiModelProperty("服务人员电话")
+    private String workerMobile;
+
+    @ApiModelProperty("服务时间")
+    private Date realServiceTime;
 
     /**
      * 使用的代金券ids
@@ -57,6 +63,12 @@ public class CustomerPlaceOrderReq  extends BaseVO {
      */
     @ApiModelProperty("充值卡金额")
     private String cardMoneys;
+
+    @ApiModelProperty("订单成本")
+    private BigDecimal cost;
+
+    @ApiModelProperty("订单备注")
+    private String comments;
 
     public Integer getCustomerId() {
         return customerId;
@@ -122,12 +134,28 @@ public class CustomerPlaceOrderReq  extends BaseVO {
         this.customerRemark = customerRemark;
     }
 
-    public Date getServiceTime() {
-        return serviceTime;
+    public String getWorkerName() {
+        return workerName;
     }
 
-    public void setServiceTime(Date serviceTime) {
-        this.serviceTime = serviceTime;
+    public void setWorkerName(String workerName) {
+        this.workerName = workerName;
+    }
+
+    public String getWorkerMobile() {
+        return workerMobile;
+    }
+
+    public void setWorkerMobile(String workerMobile) {
+        this.workerMobile = workerMobile;
+    }
+
+    public Date getRealServiceTime() {
+        return realServiceTime;
+    }
+
+    public void setRealServiceTime(Date realServiceTime) {
+        this.realServiceTime = realServiceTime;
     }
 
     public String getVoucherIds() {
@@ -152,5 +180,21 @@ public class CustomerPlaceOrderReq  extends BaseVO {
 
     public void setCardMoneys(String cardMoneys) {
         this.cardMoneys = cardMoneys;
+    }
+
+    public BigDecimal getCost() {
+        return cost;
+    }
+
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 }

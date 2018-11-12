@@ -36,6 +36,8 @@ public class PlaceOrderDTO {
 
     private Date serviceTime;
 
+    private Date realServiceTime;
+
     /**
      * 使用的代金券ids
      */
@@ -51,7 +53,7 @@ public class PlaceOrderDTO {
      */
     private String cardMoneys;
 
-    private BigDecimal totalCost;
+    private BigDecimal cost;
 
     private String comments;
 
@@ -159,12 +161,12 @@ public class PlaceOrderDTO {
         this.cardMoneys = cardMoneys;
     }
 
-    public BigDecimal getTotalCost() {
-        return totalCost;
+    public BigDecimal getCost() {
+        return cost;
     }
 
-    public void setTotalCost(BigDecimal totalCost) {
-        this.totalCost = totalCost;
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
     }
 
     public String getComments() {
@@ -189,5 +191,13 @@ public class PlaceOrderDTO {
 
     public void setType(Byte type) {
         this.type = type;
+    }
+
+    public Date getRealServiceTime() {
+        return realServiceTime;
+    }
+
+    public void setRealServiceTime(Date realServiceTime) {
+        this.realServiceTime = realServiceTime;
     }
 }

@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.service.order;
 
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
+import com.jiazhe.youxiang.server.dto.order.orderinfo.UserReservationOrderDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
 import java.math.BigDecimal;
@@ -84,4 +85,10 @@ public interface OrderInfoService {
      * @param dto
      */
     void placeOrder(PlaceOrderDTO dto) throws ParseException;
+
+    /**
+     * 预约订单
+     * @param dto
+     */
+    void userReservationOrder(UserReservationOrderDTO dto);
 }

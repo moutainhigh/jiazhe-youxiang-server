@@ -13,6 +13,7 @@ import com.jiazhe.youxiang.server.domain.po.OrderPaymentPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
+import com.jiazhe.youxiang.server.dto.order.orderinfo.UserReservationOrderDTO;
 import com.jiazhe.youxiang.server.dto.order.orderpayment.OrderPaymentDTO;
 import com.jiazhe.youxiang.server.dto.order.orderrefund.OrderRefundDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
@@ -199,7 +200,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Override
     public void placeOrder(PlaceOrderDTO dto) throws ParseException {
         List<OrderPaymentPO> orderPaymentPOList = Lists.newArrayList();
-
         CustomerDTO customerDTO = customerService.getById(dto.getCustomerId());
         if (null == customerDTO) {
             throw new OrderException(OrderCodeEnum.CUSTOMER_NOT_EXIST);
@@ -225,6 +225,15 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if (bean.getStatus().equals(Byte.valueOf("0")) || bean.getUsed().equals(Byte.valueOf("1"))) {
                     throw new OrderException(OrderCodeEnum.ORDER_VOUCHER_PAY_ERROR);
                 }
+                if(!bean.getCityCodes().contains(dto.getCustomerCityCode())){
+                    throw new OrderException(OrderCodeEnum.VOUCHER_NOT_SUPPORT_CITY);
+                }
+                List<Integer> prductIds = Arrays.asList(bean.getProductIds().split(","))
+                        .stream().map(s -> Integer.parseInt(s.trim()))
+                        .collect(Collectors.toList());
+                if(!prductIds.contains(dto.getProductId())){
+                    throw new OrderException(OrderCodeEnum.VOUCHER_NOT_SUPPORT_PRODUCT);
+                }
                 bean.setUsed(Byte.valueOf("1"));
                 voucherPayCount[0] = voucherPayCount[0] + bean.getCount();
                 OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
@@ -246,6 +255,15 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                     .collect(Collectors.toList());
             List<RCDTO> rcdtoList = rcService.findByIds(rechargeCardIds);
             rcdtoList.stream().forEach(bean -> {
+                if(!bean.getCityCodes().contains(dto.getCustomerCityCode())){
+                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_NOT_SUPPORT_CITY);
+                }
+                List<Integer> prductIds = Arrays.asList(bean.getProductIds().split(","))
+                        .stream().map(s -> Integer.parseInt(s.trim()))
+                        .collect(Collectors.toList());
+                if(!prductIds.contains(dto.getProductId())){
+                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_NOT_SUPPORT_PRODUCT);
+                }
                 int i = 0;
                 if (bean.getBalance().compareTo(cardMoneys.get(i)) == -1) {
                     throw new OrderException(OrderCodeEnum.ORDER_RECHARGE_CARD_PAY_ERROR);
@@ -287,7 +305,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPO.setPayRechargeCard(rechargeCardPayMoney[0]);
         orderInfoPO.setPayVoucher(voucherPayCount[0]);
         orderInfoPO.setPayCash(new BigDecimal(0));
-        orderInfoPO.setTotalCost(dto.getTotalCost());
+        orderInfoPO.setTotalAmount(productPriceDTO.getPrice().multiply(new BigDecimal(dto.getCount())));
+        orderInfoPO.setCost(dto.getCost());
         orderInfoPO.setComments(dto.getComments());
         orderInfoPO.setType(dto.getType());
         if (payOff) {
@@ -305,6 +324,22 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             bean.setOrderId(orderInfoPO.getId());
         });
         orderPaymentService.batchInsert(orderPaymentPOList);
+    }
+
+    @Override
+    public void userReservationOrder(UserReservationOrderDTO dto) {
+        OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(dto.getOrderId());
+        if(null == orderInfoPO||orderInfoPO.getIsDeleted().equals(Byte.valueOf("1"))){
+            throw new OrderException(OrderCodeEnum.ORDER_NOT_EXIST);
+        }
+        if(!orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSENT)){
+            throw new OrderException(OrderCodeEnum.ORDER_STATUS_NOT_UNSENT);
+        }
+        orderInfoPO.setWorkerMobile(dto.getWorkerMobile());
+        orderInfoPO.setWorkerName(dto.getWorkerName());
+        orderInfoPO.setRealServiceTime(dto.getRealServiceTime());
+        orderInfoPO.setCost(dto.getCost());
+        orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
     }
 
     private OrderRefundDTO paymentDto2RefundDto(OrderPaymentDTO paymentDTO) {

@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.order.OrderInfoBiz;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
+import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
@@ -106,24 +107,37 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "【后端、APP端】下单", httpMethod = "POST", notes = "【后端、APP端】下单")
-    @RequestMapping(value = "/placeorder", method = RequestMethod.POST)
-    public Object userPlaceOrder(@ModelAttribute PlaceOrderReq req) throws ParseException {
-        orderInfoBiz.placeOrder(OrderInfoAdapter.ReqPlaceOrder2DTOPlaceOrder(req));
+    @ApiOperation(value = "【后端】下单", httpMethod = "POST", notes = "【后端】下单")
+    @RequestMapping(value = "/userplaceorder", method = RequestMethod.POST)
+    public Object userPlaceOrder(@ModelAttribute UserPlaceOrderReq req) throws ParseException {
+        PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqUserPlaceOrder2DTOPlaceOrder(req);
+        placeOrderDTO.setType(Byte.valueOf("0"));
+        placeOrderDTO.setServiceTime(req.getRealServiceTime());
+        orderInfoBiz.placeOrder(placeOrderDTO);
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "员工预约订单", httpMethod = "POST", notes = "员工预约订单")
+    @ApiOperation(value = "【APP端】下单", httpMethod = "POST", notes = "【APP端】下单")
+    @RequestMapping(value = "/customerplaceorder", method = RequestMethod.POST)
+    public Object customerPlaceOrder(@ModelAttribute CustomerPlaceOrderReq req) throws ParseException {
+        PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqCustomerPlaceOrder2DTOPlaceOrder(req);
+        placeOrderDTO.setType(Byte.valueOf("1"));
+        placeOrderDTO.setRealServiceTime(req.getServiceTime());
+        orderInfoBiz.placeOrder(placeOrderDTO);
+        return ResponseFactory.buildSuccess();
+    }
+
+    @ApiOperation(value = "员工预约服务、派单", httpMethod = "POST", notes = "员工预约服务、派单")
     @RequestMapping(value = "/userreservationorder", method = RequestMethod.POST)
     public Object userReservationOrder(@ModelAttribute UserReservationOrderReq req) {
-        orderInfoBiz.userReservationOrder(req);
+        orderInfoBiz.userReservationOrder(OrderInfoAdapter.ReqUserReservationOrder2DTOUserReservationOrder(req));
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "员工收取订单超额费用", httpMethod = "POST", notes = "员工收取订单超额费用")
-    @RequestMapping(value = "/userchargeadditional", method = RequestMethod.POST)
-    public Object userChargeAdditional(@ModelAttribute ChargeAdditionalReq req) {
-        orderInfoBiz.userChargeAdditional(req.getId(), req.getAdditionalPay());
+    @ApiOperation(value = "员工追加订单", httpMethod = "POST", notes = "员工追加订单")
+    @RequestMapping(value = "/appendorder", method = RequestMethod.POST)
+    public Object appendOrder(@ModelAttribute AppendOrderReq req) {
+        orderInfoBiz.appendOrder(OrderInfoAdapter.ReqAppendOrder2DTOAppendOrder(req));
         return ResponseFactory.buildSuccess();
     }
 

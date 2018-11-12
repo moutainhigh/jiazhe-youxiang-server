@@ -1,32 +1,25 @@
-package com.jiazhe.youxiang.server.vo.req.order.orderinfo;
+package com.jiazhe.youxiang.server.dto.order.orderinfo;
 
-import com.jiazhe.youxiang.server.vo.BaseVO;
-import com.jiazhe.youxiang.server.vo.req.IdReq;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @author tu
- * @description：
- * @date 2018/10/24
+ * @author TU
+ * @description
+ * @date 2018/11/12.
  */
-public class UserReservationOrderReq {
+public class UserReservationOrderDTO {
 
-    @ApiModelProperty("订单id")
     private Integer orderId;
 
-    @ApiModelProperty("服务人员姓名")
     private String workerName;
 
-    @ApiModelProperty("服务人联系方式")
     private String workerMobile;
 
-    @ApiModelProperty("真实服务时间")
     private Date realServiceTime;
 
-    @ApiModelProperty("订单成本")
     private BigDecimal cost;
 
     public String getWorkerName() {
