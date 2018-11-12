@@ -237,13 +237,14 @@
         width: "100%",
         autowidth: true,
         height: 350,
-        colNames: ['', '登录名','员工姓名', '电话', '最后登录时间', '操作'],
+        colNames: ['', '登录名','员工姓名', '电话', '最后登录时间','最后登录ip', '操作'],
         colModel: [
             {name: 'id', index: 'id', sortable: false, hidden: true},
             {name: 'loginName', index: 'loginName', sortable: false},
             {name: 'displayName', index: 'displayName', sortable: false},
             {name: 'mobile', index: 'mobile', sortable: false},
             {name: 'lastLoginTime', index: 'lastLoginTime', sortable: false,formatter:timeFormatter},
+            {name: 'lastLoginIp', index: 'lastLoginIp', sortable: false},
             {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
         ],
         rowNum: 10,

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author TU
@@ -37,8 +38,9 @@ public class RCExchangeRecordServiceImpl implements RCExchangeRecordService {
     }
 
     @Override
-    public List<RechargeCardExchangeRecordPO> findByCodeIds(List<Integer> codeIds) {
-        return rcExchangeRecordPOManualMapper.findByCodeIds(codeIds);
+    public List<RCExchangeRecordDTO> findByCodeIds(List<Integer> codeIds) {
+        List<RechargeCardExchangeRecordPO> poList = rcExchangeRecordPOManualMapper.findByCodeIds(codeIds);
+        return poList.stream().map(RCExchangeRecordAdapter::PO2DTO).collect(Collectors.toList());
     }
 
     @Override

@@ -2,7 +2,10 @@ package com.jiazhe.youxiang.web.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author TU
@@ -21,7 +24,8 @@ public class InfoSerach extends BaseController {
 
     //跳转到充值卡查询页面
     @RequestMapping(value = "/rechargecardindex")
-    public String rechargeCardIndex() {
+    public String rechargeCardIndex(String mobile,Model model) {
+        model.addAttribute("mobile",mobile);
         return "infosearch/rechargecardindex";
     }
 
@@ -33,7 +37,8 @@ public class InfoSerach extends BaseController {
 
     //跳转到代金券查询页面
     @RequestMapping(value = "/voucherindex")
-    public String voucherIndex() {
+    public String voucherIndex(String mobile,Model model) {
+        model.addAttribute("mobile",mobile);
         return "infosearch/voucherindex";
     }
 }

@@ -7,9 +7,9 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @author tu
- * @description：客户下单请求参数
- * @date 2018/10/24
+ * @author TU
+ * @description
+ * @date 2018/11/12.
  */
 public class UserPlaceOrderReq extends BaseVO {
 
@@ -19,8 +19,8 @@ public class UserPlaceOrderReq extends BaseVO {
     @ApiModelProperty("商品id")
     private Integer productId;
 
-    @ApiModelProperty("商品价格")
-    private Integer productPrice;
+    @ApiModelProperty("下单城市code")
+    private String customerCityCode;
 
     @ApiModelProperty("下单数量")
     private Integer count;
@@ -46,8 +46,29 @@ public class UserPlaceOrderReq extends BaseVO {
     @ApiModelProperty("服务时间")
     private Date realServiceTime;
 
-    @ApiModelProperty("代金券id")
-    private Integer voucherId;
+    /**
+     * 使用的代金券ids
+     */
+    @ApiModelProperty("代金券ids")
+    private String voucherIds;
+
+    /**
+     * 使用的充值卡ids
+     */
+    @ApiModelProperty("充值卡ids")
+    private String rechargeCardIds;
+
+    /**
+     * 每张充值卡使用的金额
+     */
+    @ApiModelProperty("充值卡金额")
+    private String cardMoneys;
+
+    @ApiModelProperty("订单成本")
+    private BigDecimal cost;
+
+    @ApiModelProperty("订单备注")
+    private String comments;
 
     public Integer getCustomerId() {
         return customerId;
@@ -65,12 +86,12 @@ public class UserPlaceOrderReq extends BaseVO {
         this.productId = productId;
     }
 
-    public Integer getProductPrice() {
-        return productPrice;
+    public String getCustomerCityCode() {
+        return customerCityCode;
     }
 
-    public void setProductPrice(Integer productPrice) {
-        this.productPrice = productPrice;
+    public void setCustomerCityCode(String customerCityCode) {
+        this.customerCityCode = customerCityCode;
     }
 
     public Integer getCount() {
@@ -137,11 +158,43 @@ public class UserPlaceOrderReq extends BaseVO {
         this.realServiceTime = realServiceTime;
     }
 
-    public Integer getVoucherId() {
-        return voucherId;
+    public String getVoucherIds() {
+        return voucherIds;
     }
 
-    public void setVoucherId(Integer voucherId) {
-        this.voucherId = voucherId;
+    public void setVoucherIds(String voucherIds) {
+        this.voucherIds = voucherIds;
+    }
+
+    public String getRechargeCardIds() {
+        return rechargeCardIds;
+    }
+
+    public void setRechargeCardIds(String rechargeCardIds) {
+        this.rechargeCardIds = rechargeCardIds;
+    }
+
+    public String getCardMoneys() {
+        return cardMoneys;
+    }
+
+    public void setCardMoneys(String cardMoneys) {
+        this.cardMoneys = cardMoneys;
+    }
+
+    public BigDecimal getCost() {
+        return cost;
+    }
+
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 }

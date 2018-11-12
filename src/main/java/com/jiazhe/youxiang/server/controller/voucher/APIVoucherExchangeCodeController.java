@@ -7,7 +7,9 @@ import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherExchangeCodeBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.enums.CustomerCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.VoucherCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.CustomerException;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.common.exceptions.VoucherException;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
@@ -122,6 +124,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
     @RequestMapping(value = "/customerselfcodecharge", method = RequestMethod.POST)
     public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) {
         //参数检查
+        CommonValidator.validateMobile(req.getMobile(),new CustomerException(CustomerCodeEnum.CUSTOMER_MOBILE_ERROR));
         voucherExchangeCodeBiz.customerSelfCharge(req.getMobile(),req.getKeyt());
         return ResponseFactory.buildSuccess();
     }
@@ -130,6 +133,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
     @RequestMapping(value = "/backstagecodecharge", method = RequestMethod.POST)
     public Object customerSelfCharge(@ModelAttribute CodeChargeReq req) {
         //参数检查
+        CommonValidator.validateMobile(req.getMobile(),new CustomerException(CustomerCodeEnum.CUSTOMER_MOBILE_ERROR));
         voucherExchangeCodeBiz.backstageCodeCharge(req.getMobile(),req.getKeyt());
         return ResponseFactory.buildSuccess();
     }

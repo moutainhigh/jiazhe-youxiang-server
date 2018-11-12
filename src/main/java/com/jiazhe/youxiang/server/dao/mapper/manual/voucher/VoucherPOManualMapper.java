@@ -60,4 +60,10 @@ public interface VoucherPOManualMapper {
      * @param voucherPO
      */
     void insert(VoucherPO voucherPO);
+
+    /**
+     * 根据代金券ids 批量将代金券置为不同已使用，未使用状态
+     * @param map
+     */
+    void batchChangeUsed(Map<String, Object> map);
 }

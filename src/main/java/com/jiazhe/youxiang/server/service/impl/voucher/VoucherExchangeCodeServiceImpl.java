@@ -17,6 +17,7 @@ import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeEditDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchSaveDTO;
+import com.jiazhe.youxiang.server.dto.voucher.exchangerecord.VoucherExchangeRecordDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeCodeService;
 import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeRecordService;
@@ -95,7 +96,9 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
         voucherExchangeCodePOManualMapper.batchUpdate(poList);
         List<Integer> usedIds = poList.stream().filter(bean -> bean.getUsed().equals(Byte.valueOf("1"))).map(VoucherExchangeCodePO::getId).collect(Collectors.toList());
         if(!usedIds.isEmpty()){
-            voucherService.batchUpdate(usedIds,batchSaveDTO);
+            List<VoucherExchangeRecordDTO> recordDTOList = voucherExchangeRecordService.findByCodeIds(usedIds);
+            List<Integer> voucherIds = recordDTOList.stream().map(VoucherExchangeRecordDTO::getVoucherId).collect(Collectors.toList());
+            voucherService.batchUpdate(voucherIds,batchSaveDTO);
         }
     }
 
@@ -108,7 +111,9 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
         List<VoucherExchangeCodePO> poList = voucherExchangeCodePOMapper.selectByExample(example);
         List<Integer> usedIds = poList.stream().filter(bean -> bean.getUsed().equals(Byte.valueOf("1"))).map(VoucherExchangeCodePO::getId).collect(Collectors.toList());
         if(!usedIds.isEmpty()){
-            voucherService.batchChangeStatus(usedIds,status);
+            List<VoucherExchangeRecordDTO> recordDTOList = voucherExchangeRecordService.findByCodeIds(usedIds);
+            List<Integer> voucherIds = recordDTOList.stream().map(VoucherExchangeRecordDTO::getVoucherId).collect(Collectors.toList());
+            voucherService.batchChangeStatus(voucherIds,status);
         }
     }
 
@@ -167,6 +172,9 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
             throw  new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_HAS_EXPIRIED);
         }
         CustomerDTO customerDTO = customerService.getByMobile(mobile);
+        if(null == customerDTO){
+            throw new VoucherException(VoucherCodeEnum.CUSTOMER_NOT_EXIST);
+        }
         VoucherPO voucherPO = new VoucherPO();
         //直接指定过期时间
         if(voucherExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)){
@@ -180,7 +188,7 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
         voucherPO.setExchangeRecordId(0);
         voucherPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
         voucherPO.setProjectId(voucherExchangeCodePO.getProjectId());
-        voucherPO.setName(voucherExchangeCodePO.getBatchName());
+        voucherPO.setName(voucherExchangeCodePO.getVoucherName());
         voucherPO.setCustomerId(customerDTO.getId());
         voucherPO.setCityCodes(voucherExchangeCodePO.getCityCodes());
         voucherPO.setProductIds(voucherExchangeCodePO.getProductIds());

@@ -68,4 +68,24 @@ public class RCAdapter {
         rCEditDTO.setExpiryTime(req.getExpiryTime());
         return rCEditDTO;
     }
+
+    public static RechargeCardPO DTO2PO(RCDTO rcdto) {
+        if (rcdto == null) {
+            return null;
+        }
+        RechargeCardPO rechargeCardPO = new RechargeCardPO();
+        rechargeCardPO.setId(rcdto.getId());
+        rechargeCardPO.setName(rcdto.getName());
+        rechargeCardPO.setDescription(rcdto.getDescription());
+        rechargeCardPO.setCustomerId(rcdto.getCustomerId());
+        rechargeCardPO.setProjectId(rcdto.getProjectId());
+        rechargeCardPO.setCityCodes(rcdto.getCityCodes());
+        rechargeCardPO.setProductIds(rcdto.getProductIds());
+        rechargeCardPO.setFaceValue(rcdto.getFaceValue());
+        rechargeCardPO.setBalance(rcdto.getBalance());
+        rechargeCardPO.setExpiryTime(rcdto.getExpiryTime());
+        rechargeCardPO.setStatus(rcdto.getStatus());
+        rechargeCardPO.setAddTime(rcdto.getAddTime());
+        return rechargeCardPO;
+    }
 }

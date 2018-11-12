@@ -108,7 +108,7 @@
             update recharge_card
             <set>
                 name = #{item.name},description = #{item.description},project_id = #{item.projectId},city_codes =
-                #{item.cityCodes},product_ids = #{item.productIds},expiry_time = #{item.expiryTime},mod_time = NOW()
+                #{item.cityCodes},product_ids = #{item.productIds},face_value = #{item.faceValue}, balance = #{item.balance},expiry_time = #{item.expiryTime},mod_time = NOW()
             </set>
             where id = #{item.id}
         </foreach>

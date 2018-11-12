@@ -37,7 +37,7 @@ function getCookie(key) {
 function timeFormat(time){
     var d = new Date(time);
     var year = d.getFullYear();
-    var month = (d.getMonth()+1)>9?(d.getMonth()+1):'0'+(d.getMonth());
+    var month = (d.getMonth()+1)>9?(d.getMonth()+1):'0'+(d.getMonth()+1);
     var date = d.getDate()>9?d.getDate():'0'+d.getDate();
     var hours = d.getHours()>9?d.getHours():'0'+d.getHours();
     var minutes = d.getMinutes()>9?d.getMinutes():'0'+d.getMinutes();
@@ -48,7 +48,7 @@ function timeFormat(time){
 function dateFormat(time){
     var d = new Date(time);
     var year = d.getFullYear();
-    var month = (d.getMonth()+1)>9?(d.getMonth()+1):'0'+(d.getMonth());
+    var month = (d.getMonth()+1)>9?(d.getMonth()+1):'0'+(d.getMonth()+1);
     var date = d.getDate()>9?d.getDate():'0'+d.getDate();
     return year + '-' + month+ '-' + date;
 }
