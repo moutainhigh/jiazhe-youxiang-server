@@ -121,6 +121,6 @@ public class OrderInfoBiz {
     }
 
     public void appendOrder(AppendOrderDTO appendOrderDTO) {
-
+        orderInfoService.appendOrder(appendOrderDTO);
     }
 }

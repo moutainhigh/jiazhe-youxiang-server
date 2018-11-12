@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.order;
 
+import com.jiazhe.youxiang.server.dto.order.orderinfo.AppendOrderDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.UserReservationOrderDTO;
@@ -91,4 +92,10 @@ public interface OrderInfoService {
      * @param dto
      */
     void userReservationOrder(UserReservationOrderDTO dto);
+
+    /**
+     * 追加订单
+     * @param appendOrderDTO
+     */
+    void appendOrder(AppendOrderDTO appendOrderDTO);
 }

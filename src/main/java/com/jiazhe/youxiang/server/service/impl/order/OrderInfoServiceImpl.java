@@ -11,6 +11,7 @@ import com.jiazhe.youxiang.server.dao.mapper.manual.order.OrderInfoPOManualMappe
 import com.jiazhe.youxiang.server.domain.po.OrderInfoPO;
 import com.jiazhe.youxiang.server.domain.po.OrderPaymentPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.order.orderinfo.AppendOrderDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.UserReservationOrderDTO;
@@ -222,16 +223,19 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                     .collect(Collectors.toList());
             List<VoucherDTO> voucherDTOList = voucherService.findByIds(voucherIds);
             voucherDTOList.stream().forEach(bean -> {
+                if(!bean.getCustomerId().equals(customerDTO.getId())){
+                    throw new OrderException(OrderCodeEnum.VOUCHER_IS_NOT_YOURS);
+                }
                 if (bean.getStatus().equals(Byte.valueOf("0")) || bean.getUsed().equals(Byte.valueOf("1"))) {
                     throw new OrderException(OrderCodeEnum.ORDER_VOUCHER_PAY_ERROR);
                 }
                 if(!bean.getCityCodes().contains(dto.getCustomerCityCode())){
                     throw new OrderException(OrderCodeEnum.VOUCHER_NOT_SUPPORT_CITY);
                 }
-                List<Integer> prductIds = Arrays.asList(bean.getProductIds().split(","))
+                List<Integer> productIds = Arrays.asList(bean.getProductIds().split(","))
                         .stream().map(s -> Integer.parseInt(s.trim()))
                         .collect(Collectors.toList());
-                if(!prductIds.contains(dto.getProductId())){
+                if(!productIds.contains(dto.getProductId())){
                     throw new OrderException(OrderCodeEnum.VOUCHER_NOT_SUPPORT_PRODUCT);
                 }
                 bean.setUsed(Byte.valueOf("1"));
@@ -255,13 +259,16 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                     .collect(Collectors.toList());
             List<RCDTO> rcdtoList = rcService.findByIds(rechargeCardIds);
             rcdtoList.stream().forEach(bean -> {
+                if(!bean.getCustomerId().equals(customerDTO.getId())){
+                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_NOT_YOURS);
+                }
                 if(!bean.getCityCodes().contains(dto.getCustomerCityCode())){
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_NOT_SUPPORT_CITY);
                 }
-                List<Integer> prductIds = Arrays.asList(bean.getProductIds().split(","))
+                List<Integer> productIds = Arrays.asList(bean.getProductIds().split(","))
                         .stream().map(s -> Integer.parseInt(s.trim()))
                         .collect(Collectors.toList());
-                if(!prductIds.contains(dto.getProductId())){
+                if(!productIds.contains(dto.getProductId())){
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_NOT_SUPPORT_PRODUCT);
                 }
                 int i = 0;
@@ -339,6 +346,99 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPO.setWorkerName(dto.getWorkerName());
         orderInfoPO.setRealServiceTime(dto.getRealServiceTime());
         orderInfoPO.setCost(dto.getCost());
+        orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
+    }
+
+    @Override
+    public void appendOrder(AppendOrderDTO appendOrderDTO) {
+        OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(appendOrderDTO.getOrderId());
+        if(null == orderInfoPO||orderInfoPO.getIsDeleted().equals(Byte.valueOf("1"))){
+            throw new OrderException(OrderCodeEnum.ORDER_NOT_EXIST);
+        }
+        if(!orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSERVICE)){
+            throw new OrderException(OrderCodeEnum.ORDER_CAN_NOT_APPEND_ANOTHER);
+        }
+        List<OrderPaymentPO> orderPaymentPOList = Lists.newArrayList();
+        //代金券支付数量
+        Integer[] voucherPayCount = {0};
+        BigDecimal[] rechargeCardPayMoney = {new BigDecimal(0)};
+        if (!Strings.isBlank(appendOrderDTO.getVoucherIds())) {
+            List<Integer> voucherIds = Arrays.asList(appendOrderDTO.getVoucherIds().split(","))
+                    .stream().map(s -> Integer.parseInt(s.trim()))
+                    .collect(Collectors.toList());
+            List<VoucherDTO> voucherDTOList = voucherService.findByIds(voucherIds);
+            voucherDTOList.stream().forEach(bean -> {
+                if(!bean.getCustomerId().equals(orderInfoPO.getCustomerId())){
+                    throw new OrderException(OrderCodeEnum.VOUCHER_IS_NOT_YOURS);
+                }
+                if (bean.getStatus().equals(Byte.valueOf("0")) || bean.getUsed().equals(Byte.valueOf("1"))) {
+                    throw new OrderException(OrderCodeEnum.ORDER_VOUCHER_PAY_ERROR);
+                }
+                if(!bean.getCityCodes().contains(orderInfoPO.getCustomerCityCode())){
+                    throw new OrderException(OrderCodeEnum.VOUCHER_NOT_SUPPORT_CITY);
+                }
+                List<Integer> productIds = Arrays.asList(bean.getProductIds().split(","))
+                        .stream().map(s -> Integer.parseInt(s.trim()))
+                        .collect(Collectors.toList());
+                if(!productIds.contains(orderInfoPO.getProductId())){
+                    throw new OrderException(OrderCodeEnum.VOUCHER_NOT_SUPPORT_PRODUCT);
+                }
+                bean.setUsed(Byte.valueOf("1"));
+                voucherPayCount[0] = voucherPayCount[0] + bean.getCount();
+                OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
+                orderPaymentPO.setOrderCode(orderInfoPO.getOrderCode());
+                orderPaymentPO.setPayType(CommonConstant.PAY_VOUCHER);
+                orderPaymentPO.setVoucherId(bean.getId());
+                orderPaymentPO.setPayMoney(new BigDecimal(0));
+                orderPaymentPO.setSerialNumber("");
+                orderPaymentPOList.add(orderPaymentPO);
+            });
+            voucherService.batchChangeUsed(voucherIds, Byte.valueOf("1"));
+        }
+        if (!Strings.isBlank(appendOrderDTO.getRechargeCardIds())) {
+            List<Integer> rechargeCardIds = Arrays.asList(appendOrderDTO.getRechargeCardIds().split(","))
+                    .stream().map(s -> Integer.parseInt(s.trim()))
+                    .collect(Collectors.toList());
+            List<BigDecimal> cardMoneys = Arrays.asList(appendOrderDTO.getCardMoneys().split(","))
+                    .stream().map(s -> new BigDecimal(s.trim()))
+                    .collect(Collectors.toList());
+            List<RCDTO> rcdtoList = rcService.findByIds(rechargeCardIds);
+            rcdtoList.stream().forEach(bean -> {
+                if(!bean.getCustomerId().equals(orderInfoPO.getCustomerId())){
+                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_NOT_YOURS);
+                }
+                if(!bean.getCityCodes().contains(orderInfoPO.getCustomerCityCode())){
+                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_NOT_SUPPORT_CITY);
+                }
+                List<Integer> productIds = Arrays.asList(bean.getProductIds().split(","))
+                        .stream().map(s -> Integer.parseInt(s.trim()))
+                        .collect(Collectors.toList());
+                if(!productIds.contains(orderInfoPO.getProductId())){
+                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_NOT_SUPPORT_PRODUCT);
+                }
+                int i = 0;
+                if (bean.getBalance().compareTo(cardMoneys.get(i)) == -1) {
+                    throw new OrderException(OrderCodeEnum.ORDER_RECHARGE_CARD_PAY_ERROR);
+                }
+                bean.setBalance(bean.getBalance().subtract(cardMoneys.get(i)));
+                rechargeCardPayMoney[0] = rechargeCardPayMoney[0].add(cardMoneys.get(i));
+                i++;
+                OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
+                orderPaymentPO.setOrderCode(orderInfoPO.getOrderCode());
+                orderPaymentPO.setPayType(CommonConstant.PAY_RECHARGE_CARD);
+                orderPaymentPO.setRechargeCardId(bean.getId());
+                orderPaymentPO.setPayMoney(cardMoneys.get(0));
+                orderPaymentPO.setSerialNumber("");
+                orderPaymentPOList.add(orderPaymentPO);
+            });
+            rcService.batchUpdate(rcdtoList);
+        }
+        orderPaymentService.batchInsert(orderPaymentPOList);
+        orderInfoPO.setCount(orderInfoPO.getCount()+appendOrderDTO.getCount());
+        orderInfoPO.setPayRechargeCard(orderInfoPO.getPayRechargeCard().add(rechargeCardPayMoney[0]));
+        orderInfoPO.setPayVoucher(orderInfoPO.getPayVoucher()+voucherPayCount[0]);
+        orderInfoPO.setTotalAmount(orderInfoPO.getProductPrice().multiply(new BigDecimal(orderInfoPO.getCount())));
+        orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
         orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
     }
 

@@ -20,6 +20,9 @@ public enum OrderCodeEnum {
     RECHARGE_CARD_NOT_SUPPORT_CITY(108011, "RECHARGE_CARD_NOT_SUPPORT_CITY", "充值卡不支持该城市"),
     ORDER_STATUS_NOT_UNSENT(108012, "ORDER_STATUS_NOT_UNSENT", "订单不是待派单状态，不能预约预约"),
     ORDER_NOT_EXIST(108013, "ORDER_NOT_EXIST", "订单不存在"),
+    ORDER_CAN_NOT_APPEND_ANOTHER(108014, "ORDER_CAN_NOT_APPEND_ANOTHER", "该订单不能追加新订单"),
+    VOUCHER_IS_NOT_YOURS(108015, "VOUCHER_IS_NOT_YOURS", "不能使用他人名下的代金券"),
+    RECHARGE_CARD_IS_NOT_YOURS(108016, "RECHARGE_CARD_IS_NOT_YOURS", "不能使用他人名下的充值卡"),
     ;
 
     OrderCodeEnum(Integer code, String type, String message) {
