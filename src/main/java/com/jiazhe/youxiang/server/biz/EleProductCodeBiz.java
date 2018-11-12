@@ -10,11 +10,9 @@ import com.jiazhe.youxiang.server.dto.eleproductexcode.EleProductCodeDTO;
 import com.jiazhe.youxiang.server.service.EleProductCodeService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.resp.eleproductcode.ExcelLegalityResp;
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,9 +49,9 @@ public class EleProductCodeBiz {
             dto.setProductId(productId);
             dto.setBatchName(batchName);
             dto.setExpiryTime(expiryTime);
-            row.getCell(0).setCellType(Cell.CELL_TYPE_STRING);
+            row.getCell(0).setCellType(CellType.STRING);
             dto.setCode(row.getCell(0).getStringCellValue().toString());
-            row.getCell(1).setCellType(Cell.CELL_TYPE_STRING);
+            row.getCell(1).setCellType(CellType.STRING);
             dto.setKeyt(row.getCell(1).getStringCellValue().toString());
             eleProductCodeDTOList.add(dto);
         }
@@ -71,9 +69,9 @@ public class EleProductCodeBiz {
         if(excelFile.getName().endsWith("xlsx")){
             workbook = new XSSFWorkbook(in);
         }
-        if(excelFile.getName().endsWith("xls")){
+        /*if(excelFile.getName().endsWith("xls")){
             workbook = new HSSFWorkbook(in);
-        }
+        }*/
         Sheet sheet = workbook.getSheetAt(0);
         return sheet;
     }

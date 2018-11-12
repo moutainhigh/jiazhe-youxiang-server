@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.base.util.UploadUtil;
 import com.jiazhe.youxiang.server.adapter.EleProductCodeAdapter;
@@ -60,7 +61,7 @@ public class APIEleProductCodeController extends BaseController {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         List<EleProductCodeDTO> eleProductExCodeDTOList = eleProductCodeBiz.getList(req.getProductId(),req.getBatchName(),req.getStatus(),req.getCode(),req.getKeyt(),paging);
         List<EleProductCodeResp> eleProductExCodeRespList = eleProductExCodeDTOList.stream().map(EleProductCodeAdapter::DTO2Resp).collect(Collectors.toList());
-        return ResponseFactory.buildResponse(eleProductExCodeRespList);
+        return ResponseFactory.buildPaginationResponse(eleProductExCodeRespList,paging);
     }
 
     @ApiOperation(value = "获取所有批次", httpMethod = "GET",response = EleProductCodeResp.class ,responseContainer = "List" ,notes = "获取所有批次")
@@ -98,6 +99,10 @@ public class APIEleProductCodeController extends BaseController {
     @RequestMapping(value = "/importcode", method = RequestMethod.POST)
     public Object importCode(@ModelAttribute ImportCodeReq req) throws IOException {
         //参数检查
+        CommonValidator.validateNull(req.getProductId(),new EleProductCodeException(EleProductCodeEnum.PRODUCT_IS_NULL));
+        CommonValidator.validateNull(req.getBatchName(),new EleProductCodeException(EleProductCodeEnum.BATCH_NAME_IS_NULL));
+        CommonValidator.validateNull(req.getExpiryTime(),new EleProductCodeException(EleProductCodeEnum.EXPIRY_TIME_IS_NULL));
+        CommonValidator.validateNull(req.getExcelUrl(),new EleProductCodeException(EleProductCodeEnum.FILE_NOT_EXIST));
         eleProductCodeBiz.importCode(excelpath+"/"+req.getExcelUrl(),req.getProductId(),req.getBatchName(),req.getExpiryTime());
         return ResponseFactory.buildSuccess();
     }

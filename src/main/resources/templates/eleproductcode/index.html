@@ -359,7 +359,7 @@
         no_icon: 'ace-icon fa fa-cloud-upload',
         droppable: true,
         thumbnail: 'large',
-        allowExt: ['xls','xlsx'],
+        allowExt: ['xlsx'],
 //        allowMime: ['application/vnd.ms-excel'],
     }).on('change', function () {
         var image = $('#eleProductCodeFile')[0].files[0]
@@ -409,6 +409,7 @@
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
+                    $("#modal-form").modal('hide');
                     jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                 }
             },
