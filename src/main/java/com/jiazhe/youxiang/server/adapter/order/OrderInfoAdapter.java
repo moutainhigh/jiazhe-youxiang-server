@@ -148,6 +148,7 @@ public class OrderInfoAdapter {
         AppendOrderDTO appendOrderDTO = new AppendOrderDTO();
         appendOrderDTO.setOrderId(req.getOrderId());
         appendOrderDTO.setCount(req.getCount());
+        appendOrderDTO.setCost(req.getCost());
         appendOrderDTO.setVoucherIds(req.getVoucherIds());
         appendOrderDTO.setRechargeCardIds(req.getRechargeCardIds());
         appendOrderDTO.setCardMoneys(req.getCardMoneys());

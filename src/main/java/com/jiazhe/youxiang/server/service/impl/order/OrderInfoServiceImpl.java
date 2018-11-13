@@ -438,6 +438,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPO.setCount(orderInfoPO.getCount()+appendOrderDTO.getCount());
         orderInfoPO.setPayRechargeCard(orderInfoPO.getPayRechargeCard().add(rechargeCardPayMoney[0]));
         orderInfoPO.setPayVoucher(orderInfoPO.getPayVoucher()+voucherPayCount[0]);
+        orderInfoPO.setCost(appendOrderDTO.getCost());
         orderInfoPO.setTotalAmount(orderInfoPO.getProductPrice().multiply(new BigDecimal(orderInfoPO.getCount())));
         orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
         orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
@@ -476,7 +477,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if (bean.getPayType().equals(CommonConstant.PAY_VOUCHER)) {
                     voucherIds.add(bean.getVoucherId());
                 }
-                if (bean.getPayType().equals(CommonConstant.PAY_CASH)) {
+                if (bean.getPayType().equals(CommonConstant.PAY_CASH)){
 
                 }
             });
