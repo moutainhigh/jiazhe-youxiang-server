@@ -212,6 +212,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
         //代金券支付数量
         Integer[] voucherPayCount = {0};
+        Integer[] i = {0};
         BigDecimal[] rechargeCardPayMoney = {new BigDecimal(0)};
         ProductPriceDTO productPriceDTO = productPriceService.getPriceByCity(dto.getProductId(), dto.getCustomerCityCode());
         if (null == productPriceDTO || productPriceDTO.getStatus().equals(Byte.valueOf("0"))) {
@@ -271,20 +272,19 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if(!productIds.contains(dto.getProductId())){
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_NOT_SUPPORT_PRODUCT);
                 }
-                int i = 0;
-                if (bean.getBalance().compareTo(cardMoneys.get(i)) == -1) {
+                if (bean.getBalance().compareTo(cardMoneys.get(i[0])) == -1) {
                     throw new OrderException(OrderCodeEnum.ORDER_RECHARGE_CARD_PAY_ERROR);
                 }
-                bean.setBalance(bean.getBalance().subtract(cardMoneys.get(i)));
-                rechargeCardPayMoney[0] = rechargeCardPayMoney[0].add(cardMoneys.get(i));
-                i++;
+                bean.setBalance(bean.getBalance().subtract(cardMoneys.get(i[0])));
+                rechargeCardPayMoney[0] = rechargeCardPayMoney[0].add(cardMoneys.get(i[0]));
                 OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
                 orderPaymentPO.setOrderCode(orderCode);
                 orderPaymentPO.setPayType(CommonConstant.PAY_RECHARGE_CARD);
                 orderPaymentPO.setRechargeCardId(bean.getId());
-                orderPaymentPO.setPayMoney(cardMoneys.get(0));
+                orderPaymentPO.setPayMoney(cardMoneys.get(i[0]));
                 orderPaymentPO.setSerialNumber("");
                 orderPaymentPOList.add(orderPaymentPO);
+                i[0] = i[0] + 1;
             });
             rcService.batchUpdate(rcdtoList);
         }
@@ -362,6 +362,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         List<OrderPaymentPO> orderPaymentPOList = Lists.newArrayList();
         //代金券支付数量
         Integer[] voucherPayCount = {0};
+        Integer[] i = {0};
         BigDecimal[] rechargeCardPayMoney = {new BigDecimal(0)};
         if (!Strings.isBlank(appendOrderDTO.getVoucherIds())) {
             List<Integer> voucherIds = Arrays.asList(appendOrderDTO.getVoucherIds().split(","))
@@ -387,6 +388,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 bean.setUsed(Byte.valueOf("1"));
                 voucherPayCount[0] = voucherPayCount[0] + bean.getCount();
                 OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
+                orderPaymentPO.setOrderId(appendOrderDTO.getOrderId());
                 orderPaymentPO.setOrderCode(orderInfoPO.getOrderCode());
                 orderPaymentPO.setPayType(CommonConstant.PAY_VOUCHER);
                 orderPaymentPO.setVoucherId(bean.getId());
@@ -417,20 +419,20 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if(!productIds.contains(orderInfoPO.getProductId())){
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_NOT_SUPPORT_PRODUCT);
                 }
-                int i = 0;
-                if (bean.getBalance().compareTo(cardMoneys.get(i)) == -1) {
+                if (bean.getBalance().compareTo(cardMoneys.get(i[0])) == -1) {
                     throw new OrderException(OrderCodeEnum.ORDER_RECHARGE_CARD_PAY_ERROR);
                 }
-                bean.setBalance(bean.getBalance().subtract(cardMoneys.get(i)));
-                rechargeCardPayMoney[0] = rechargeCardPayMoney[0].add(cardMoneys.get(i));
-                i++;
+                bean.setBalance(bean.getBalance().subtract(cardMoneys.get(i[0])));
+                rechargeCardPayMoney[0] = rechargeCardPayMoney[0].add(cardMoneys.get(i[0]));
                 OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
+                orderPaymentPO.setOrderId(appendOrderDTO.getOrderId());
                 orderPaymentPO.setOrderCode(orderInfoPO.getOrderCode());
                 orderPaymentPO.setPayType(CommonConstant.PAY_RECHARGE_CARD);
                 orderPaymentPO.setRechargeCardId(bean.getId());
-                orderPaymentPO.setPayMoney(cardMoneys.get(0));
+                orderPaymentPO.setPayMoney(cardMoneys.get(i[0]));
                 orderPaymentPO.setSerialNumber("");
                 orderPaymentPOList.add(orderPaymentPO);
+                i[0] = i[0] + 1;
             });
             rcService.batchUpdate(rcdtoList);
         }
