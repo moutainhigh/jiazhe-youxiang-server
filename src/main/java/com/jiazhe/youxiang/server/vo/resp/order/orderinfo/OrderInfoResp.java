@@ -22,6 +22,10 @@ public class OrderInfoResp extends BaseVO {
 
     private Integer customerId;
 
+    private String customerCityCode;
+
+    private String customerCityName;
+
     private Integer productId;
 
     private BigDecimal productPrice;
@@ -52,7 +56,9 @@ public class OrderInfoResp extends BaseVO {
 
     private BigDecimal payCash;
 
-    private BigDecimal totalCost;
+    private BigDecimal totalAmount;
+
+    private BigDecimal cost;
 
     private String comments;
 
@@ -210,12 +216,20 @@ public class OrderInfoResp extends BaseVO {
         this.payCash = payCash;
     }
 
-    public BigDecimal getTotalCost() {
-        return totalCost;
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setTotalCost(BigDecimal totalCost) {
-        this.totalCost = totalCost;
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public BigDecimal getCost() {
+        return cost;
+    }
+
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
     }
 
     public String getComments() {
@@ -264,5 +278,21 @@ public class OrderInfoResp extends BaseVO {
 
     public void setProductResp(ProductResp productResp) {
         this.productResp = productResp;
+    }
+
+    public String getCustomerCityCode() {
+        return customerCityCode;
+    }
+
+    public void setCustomerCityCode(String customerCityCode) {
+        this.customerCityCode = customerCityCode;
+    }
+
+    public String getCustomerCityName() {
+        return customerCityName;
+    }
+
+    public void setCustomerCityName(String customerCityName) {
+        this.customerCityName = customerCityName;
     }
 }

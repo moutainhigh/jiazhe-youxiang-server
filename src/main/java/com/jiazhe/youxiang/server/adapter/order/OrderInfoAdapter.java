@@ -24,6 +24,8 @@ public class OrderInfoAdapter {
         orderInfoResp.setId(dto.getId());
         orderInfoResp.setOrderCode(dto.getOrderCode());
         orderInfoResp.setCustomerId(dto.getCustomerId());
+        orderInfoResp.setCustomerCityCode(dto.getCustomerCityCode());
+        orderInfoResp.setCustomerCityName(dto.getCustomerCityName());
         orderInfoResp.setProductId(dto.getProductId());
         orderInfoResp.setProductPrice(dto.getProductPrice());
         orderInfoResp.setCount(dto.getCount());
@@ -39,7 +41,8 @@ public class OrderInfoAdapter {
         orderInfoResp.setPayRechargeCard(dto.getPayRechargeCard());
         orderInfoResp.setPayVoucher(dto.getPayVoucher());
         orderInfoResp.setPayCash(dto.getPayCash());
-        orderInfoResp.setTotalCost(dto.getTotalCost());
+        orderInfoResp.setTotalAmount(dto.getTotalAmount());
+        orderInfoResp.setCost(dto.getCost());
         orderInfoResp.setComments(dto.getComments());
         orderInfoResp.setType(dto.getType());
         orderInfoResp.setStatus(dto.getStatus());
@@ -58,6 +61,8 @@ public class OrderInfoAdapter {
         orderInfoDTO.setOrderCode(orderInfoPO.getOrderCode());
         orderInfoDTO.setCustomerId(orderInfoPO.getCustomerId());
         orderInfoDTO.setProductId(orderInfoPO.getProductId());
+        orderInfoDTO.setCustomerCityCode(orderInfoPO.getCustomerCityCode());
+        orderInfoDTO.setCustomerCityName(orderInfoPO.getCustomerCityName());
         orderInfoDTO.setProductPrice(orderInfoPO.getProductPrice());
         orderInfoDTO.setCount(orderInfoPO.getCount());
         orderInfoDTO.setCustomerAddress(orderInfoPO.getCustomerAddress());
@@ -72,6 +77,8 @@ public class OrderInfoAdapter {
         orderInfoDTO.setPayRechargeCard(orderInfoPO.getPayRechargeCard());
         orderInfoDTO.setPayVoucher(orderInfoPO.getPayVoucher());
         orderInfoDTO.setPayCash(orderInfoPO.getPayCash());
+        orderInfoDTO.setTotalAmount(orderInfoPO.getTotalAmount());
+        orderInfoDTO.setCost(orderInfoPO.getCost());
         orderInfoDTO.setComments(orderInfoPO.getComments());
         orderInfoDTO.setType(orderInfoPO.getType());
         orderInfoDTO.setStatus(orderInfoPO.getStatus());
