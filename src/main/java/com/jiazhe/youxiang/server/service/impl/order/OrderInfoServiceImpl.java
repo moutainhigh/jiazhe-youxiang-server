@@ -443,6 +443,11 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
     }
 
+    @Override
+    public Integer getCountByStatus(Byte status) {
+        return orderInfoPOManualMapper.getCountByStatus(status);
+    }
+
     private OrderRefundDTO paymentDto2RefundDto(OrderPaymentDTO paymentDTO) {
         OrderRefundDTO refundDTO = new OrderRefundDTO();
         refundDTO.setOrderCode(paymentDTO.getOrderCode());

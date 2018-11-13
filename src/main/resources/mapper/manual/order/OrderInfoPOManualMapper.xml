@@ -108,4 +108,14 @@
             AND o.is_deleted = 0
         </where>
     </select>
+
+    <select id="getCountByStatus" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM order_info o
+        <where>
+            <if test="status != null and status != 0">
+                AND o.status = #{status}
+            </if>
+            AND o.is_deleted = 0
+        </where>
+    </select>
 </mapper>

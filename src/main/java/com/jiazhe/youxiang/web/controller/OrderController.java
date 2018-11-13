@@ -16,7 +16,8 @@ public class OrderController extends BaseController{
 
     //跳转到充订单管理页面
     @RequestMapping(value = "/orderindex")
-    public String orderIndex(String mobile,Model model) {
+    public String orderIndex(String mobile,Integer status,Model model) {
+        model.addAttribute("status",status);
         model.addAttribute("mobile",mobile);
         return "order/index";
     }

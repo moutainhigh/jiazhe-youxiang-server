@@ -98,4 +98,11 @@ public interface OrderInfoService {
      * @param appendOrderDTO
      */
     void appendOrder(AppendOrderDTO appendOrderDTO);
+
+    /**
+     *根据订单状态，获取订单个数
+     * @param status
+     * @return
+     */
+    Integer getCountByStatus(Byte status);
 }

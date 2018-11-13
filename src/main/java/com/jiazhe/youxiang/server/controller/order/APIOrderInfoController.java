@@ -15,6 +15,7 @@ import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.*;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
+import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.WaitingDealCountResp;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -156,18 +157,22 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildResponse(orderInfoResp);
     }
 
-    @ApiOperation(value = "待预约订单数量", httpMethod = "GET", notes = "待预约订单数量")
+    @ApiOperation(value = "待预约订单数量", httpMethod = "GET",  response = WaitingDealCountResp.class,  notes = "待预约订单数量")
     @RequestMapping(value = "/getunsentordercount", method = RequestMethod.GET)
     public Object getUnsentOrderCount() {
         Integer count = orderInfoBiz.getUnsentOrderCount();
-        return ResponseFactory.buildResponse(count);
+        WaitingDealCountResp waitingDealCountResp = new WaitingDealCountResp();
+        waitingDealCountResp.setCount(count);
+        return ResponseFactory.buildResponse(waitingDealCountResp);
     }
 
-    @ApiOperation(value = "待审核订单数量", httpMethod = "GET", notes = "待审核订单数量")
+    @ApiOperation(value = "取消待审核订单数量", httpMethod = "GET", response = WaitingDealCountResp.class,  notes = "取消待审核订单数量")
     @RequestMapping(value = "/getunauditordercount", method = RequestMethod.GET)
     public Object getUnauditOrderCount() {
         Integer count = orderInfoBiz.getUnauditOrderCount();
-        return ResponseFactory.buildResponse(count);
+        WaitingDealCountResp waitingDealCountResp = new WaitingDealCountResp();
+        waitingDealCountResp.setCount(count);
+        return ResponseFactory.buildResponse(waitingDealCountResp);
     }
 
 }
