@@ -17,6 +17,7 @@ document.write("<script language='javascript' src='../static/ace-master/js/ace-e
 document.write("<script language='javascript' src='../static/ace-master/js/ace.min.js'></script>");
 document.write("<script language='javascript' src='../static/ace-master/js/bootbox.js'></script>");
 document.write("<script language='javascript' src='../static/ace-master/js/moment.min.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/moment-locale-zh-cn.js'></script>");
 document.write("<script language='javascript' src='../static/ace-master/js/bootstrap-datetimepicker.min.js'></script>");
 document.write("<script language='javascript' src='../static/ace-master/js/bootstrap-datepicker.min.js'></script>");
 document.write("<script language='javascript' src='../static/ace-master/js/bootstrap-datepicker.zh-CN.js'></script>");
