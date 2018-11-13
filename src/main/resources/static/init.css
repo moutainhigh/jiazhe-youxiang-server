@@ -9,6 +9,7 @@
 /*ace admin 样式*/
 @import "../static/ace-master/css/jquery-ui.min.css";
 @import "../static/ace-master/css/bootstrap-datepicker3.min.css";
+@import "../static/ace-master/css/bootstrap-datetimepicker.min.css";
 @import "../static/ace-master/css/ui.jqgrid.min.css";
 @import "../static/ace-master/css/bootstrap.min.css";
 @import "../static/ace-master/font-awesome/4.5.0/css/font-awesome.min.css";

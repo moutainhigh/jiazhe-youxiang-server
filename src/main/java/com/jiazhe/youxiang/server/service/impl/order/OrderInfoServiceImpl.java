@@ -342,6 +342,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if(!orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSENT)){
             throw new OrderException(OrderCodeEnum.ORDER_STATUS_NOT_UNSENT);
         }
+        orderInfoPO.setStatus(CommonConstant.ORDER_UNSERVICE);
         orderInfoPO.setWorkerMobile(dto.getWorkerMobile());
         orderInfoPO.setWorkerName(dto.getWorkerName());
         orderInfoPO.setRealServiceTime(dto.getRealServiceTime());

@@ -154,26 +154,108 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="blue bigger" id="modal-title">修改兑换码信息</h4>
+                                    <h4 class="blue bigger" id="modal-title">预约</h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-1"></div>
                                         <div class="col-xs-12 col-sm-9">
-                                            <form id="codeSaveForm" class="form-horizontal" role="form">
-                                                <input type="hidden" name="id" id="saveCodeId">
-                                                <input type="hidden" name="productIds" id="saveProductIds">
-                                                <input type="hidden" name="cityCodes" id="saveCityCodes">
-                                                <input type="hidden" name="expiryType" id="saveExpiryType" value=0>
+                                            <form id="orderReservationForm" class="form-horizontal" role="form">
+                                                <input type="hidden" name="orderId" id="re_orderId">
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">订单号：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="re_orderCode"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">充值卡名称：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">下单时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveRechargeCardName" name="rechargeCardName"
+                                                            <input id="re_orderTime"
                                                                    class="form-control"
-                                                                   type="text" style="height:30px"/>
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">商品名：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="re_productName"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">数量：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="re_count" class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">预约时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="re_serviceTime" class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">联系人：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="re_customerName" class="form-control" type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">联系电话：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="re_customerMobile"  class="form-control"  type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">服务地址：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="re_customerAddress" class="form-control" type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">客户留言：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="re_customerRemark" class="form-control" type="text" style="height:30px" readonly/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -181,11 +263,12 @@
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveExpiryTime">到期时间：</label>
+                                                           for="re_realServiceTime">服务时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
-                                                            <input class="form-control date-picker" id="saveExpiryTime"
-                                                                   name="expiryTime" type="text"/>
+                                                            <input class="form-control datetime-picker"
+                                                                   id="re_realServiceTime"
+                                                                   name="realServiceTime" type="text"/>
                                                             <span class="input-group-addon">
                                                                     <i class="fa fa-calendar bigger-110"></i>
                                                                 </span>
@@ -195,60 +278,36 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">充值卡过期类型：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">服务人员：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <label class="radio-inline ">
-                                                                <input id="saveDeadLineRadio" type="radio"
-                                                                       name="expiryTypeRadio"
-                                                                       value="0" checked="checked"/>指定截止日期
-                                                            </label>
-                                                            <label class="radio-inline">
-                                                                <input id="saveValidityPeriodRadio" type="radio"
-                                                                       name="expiryTypeRadio"
-                                                                       value="1"/>兑换之日起算
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="space-2 saveDeadLine"></div>
-                                                <div class="form-group saveDeadLine">
-                                                    <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveRechargeCardExpiryTime">充值卡到期时间：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-group">
-                                                            <input class="form-control date-picker"
-                                                                   id="saveRechargeCardExpiryTime"
-                                                                   name="rechargeCardExpiryTime" type="text"/>
-                                                            <span class="input-group-addon">
-                                                                    <i class="fa fa-calendar bigger-110"></i>
-                                                                </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="space-2 saveValidityPeriod" style="display:none;"></div>
-                                                <div class="form-group saveValidityPeriod" style="display:none;">
-                                                    <label class="col-sm-4 control-label no-padding-right">兑换之日有效天数：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="saveValidityPeriod" name="validityPeriod"
+                                                            <input id="re_workerName" name="workerName"
                                                                    class="form-control"
-                                                                   type="text" style="height:30px"/>
+                                                                   type="text" style="height:30px" />
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveDescription">描述信息：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">联系方式：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveDescription" name="batchDescription"
+                                                            <input id="re_workerMobile" name="workerMobile"
                                                                    class="form-control"
-                                                                   type="text" style="height:30px"/>
+                                                                   type="text" style="height:30px" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">订单成本：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="re_cost" name="cost"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -263,7 +322,7 @@
                                         取消
                                     </button>
 
-                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="save()">
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="saveReservationInfo()">
                                         <i class="ace-icon fa fa-check"></i>
                                         保存
                                     </button>
@@ -299,10 +358,8 @@
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
 
-        $('.date-picker').datepicker({
-            language: 'zh-CN',//选择语言
-            autoclose: true,
-            todayHighlight: true
+        $('#re_realServiceTime').datetimepicker({
+            format: "YYYY-MM-DD HH:mm"
         }).next().on(ace.click_event, function () {
             $(this).prev().focus();
         });
@@ -387,7 +444,7 @@
         str = str + "<a class='btn btn-minier btn-success' href=\"javascript:startUsing('" + rowObject.id + "')\">查看</a>&nbsp;&nbsp;";
         if (rowObject.status == 2) {
             str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:userCancelOrder('" + rowObject.id + "')\">取消订单</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:stopUsing('" + rowObject.id + "')\">预约</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:userReservationOrder('" + rowObject.id + "')\">预约</a>&nbsp;&nbsp;";
         }
         if (rowObject.status == 3) {
             str = str + "<a class='btn btn-minier btn-success' href=\"javascript:userCompleteOrder('" + rowObject.id + "')\">完成订单</a>&nbsp;&nbsp;";
@@ -404,71 +461,143 @@
         return str;
     }
 
-    function userCancelOrder(id){
+    function userReservationOrder(id){
+        $("#re_orderId").val(id);
+        $("#re_realServiceTime").val('');
+        $("#re_workerMobile").val('');
+        $("#re_workerName").val('');
+        $("#re_cost").val('');
         $.ajax({
-            url: "../api/orderinfo/usercancelorder",
+            url: "../api/orderinfo/getbyid",
             dataType: "json",
             async: false,
             data: {
                 id: id
             },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#re_orderCode").val(result.orderCode);
+                    $("#re_orderTime").val(timeFormat(result.orderTime));
+                    $("#re_productName").val(result.productResp.name);
+                    $("#re_count").val(result.count);
+                    $("#re_customerName").val(result.customerName);
+                    $("#re_customerMobile").val(result.customerMobile);
+                    $("#re_customerRemark").val(result.customerRemark);
+                    $("#re_customerAddress").val(result.customerAddress);
+                    $("#re_serviceTime").val(timeFormat(result.serviceTime));
+                    $("#re_realServiceTime").val(timeFormat(result.realServiceTime).substring(0,16));
+                    $("#modal-form").modal("show");
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+    
+    function saveReservationInfo() {
+        $.ajax({
+            url: "../api/orderinfo/userreservationorder",
+            dataType: "json",
+            async: false,
+            data: transformToJson($('#orderReservationForm').serializeArray()),
             type: "POST",
             success: function (data) {
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
-                    bootboxalert("取消成功");
+                    $("#modal-form").modal("hide");
+                    bootboxalert("预约成功");
                     jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                 }
             },
             error: function () {
                 bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+    function userCancelOrder(id){
+        confirm("确定要取消该订单吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "../api/orderinfo/usercancelorder",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    success: function (data) {
+                        if ('error' in data) {
+                            bootboxalert(data.error.message);
+                        } else {
+                            bootboxalert("取消成功");
+                            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                        }
+                    },
+                    error: function () {
+                        bootboxalert("服务器异常，请联系管理员");
+                    }
+                });
             }
         });
     }
 
     function userCompleteOrder(id) {
-        $.ajax({
-            url: "../api/orderinfo/usercompleteorder",
-            dataType: "json",
-            async: false,
-            data: {
-                id: id
-            },
-            type: "POST",
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    bootboxalert("成功完成该订单");
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                }
-            },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
+        confirm("确定要完成该订单吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "../api/orderinfo/usercompleteorder",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    success: function (data) {
+                        if ('error' in data) {
+                            bootboxalert(data.error.message);
+                        } else {
+                            bootboxalert("成功完成该订单");
+                            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                        }
+                    },
+                    error: function () {
+                        bootboxalert("服务器异常，请联系管理员");
+                    }
+                });
             }
         });
     }
 
     function orderCancelPass(id){
-        $.ajax({
-            url: "../api/orderinfo/ordercancelpass",
-            dataType: "json",
-            async: false,
-            data: {
-                id: id
-            },
-            type: "POST",
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    bootboxalert("成功取消该订单");
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                }
-            },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
+        confirm("确定通过审核该订单的取消？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "../api/orderinfo/ordercancelpass",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    success: function (data) {
+                        if ('error' in data) {
+                            bootboxalert(data.error.message);
+                        } else {
+                            bootboxalert("成功取消该订单");
+                            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                        }
+                    },
+                    error: function () {
+                        bootboxalert("服务器异常，请联系管理员");
+                    }
+                });
             }
         });
     }

@@ -1,9 +1,12 @@
 package com.jiazhe.youxiang.server.controller.order;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.order.OrderInfoBiz;
+import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.OrderException;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -130,6 +133,10 @@ public class APIOrderInfoController extends BaseController {
     @ApiOperation(value = "员工预约服务、派单", httpMethod = "POST", notes = "员工预约服务、派单")
     @RequestMapping(value = "/userreservationorder", method = RequestMethod.POST)
     public Object userReservationOrder(@ModelAttribute UserReservationOrderReq req) {
+        CommonValidator.validateNull(req.getRealServiceTime(),new OrderException(OrderCodeEnum.REAL_SERVICE_TIME_IS_NULL));
+        CommonValidator.validateNull(req.getWorkerName(),new OrderException(OrderCodeEnum.WORKER_NAME_IS_NAME));
+        CommonValidator.validateNull(req.getWorkerMobile(),new OrderException(OrderCodeEnum.WORKER_MOBILE_IS_NAME));
+        CommonValidator.validateNull(req.getCost(),new OrderException(OrderCodeEnum.ORDER_COST_IS_NULL));
         orderInfoBiz.userReservationOrder(OrderInfoAdapter.ReqUserReservationOrder2DTOUserReservationOrder(req));
         return ResponseFactory.buildSuccess();
     }

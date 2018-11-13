@@ -16,7 +16,10 @@ document.write("<script language='javascript' src='../static/ace-master/js/boots
 document.write("<script language='javascript' src='../static/ace-master/js/ace-elements.min.js'></script>");
 document.write("<script language='javascript' src='../static/ace-master/js/ace.min.js'></script>");
 document.write("<script language='javascript' src='../static/ace-master/js/bootbox.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/moment.min.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/bootstrap-datetimepicker.min.js'></script>");
 document.write("<script language='javascript' src='../static/ace-master/js/bootstrap-datepicker.min.js'></script>");
+document.write("<script language='javascript' src='../static/ace-master/js/bootstrap-datetimepicker.zh-CN.js'></script>");
 document.write("<script language='javascript' src='../static/ace-master/js/bootstrap-datepicker.zh-CN.js'></script>");
 document.write("<script language='javascript' src='../static/ace-master/js/jquery.jqGrid.min.js'></script>");
 document.write("<script language='javascript' src='../static/ace-master/js/grid.locale-cn.js'></script>");
