@@ -10,6 +10,7 @@
 
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
+    <script th:src="@{/static/img.js}"></script>
 
 
     <style>
@@ -37,7 +38,10 @@
                         <i class="ace-icon fa fa-home home-icon"></i>
                         <a th:href="@{/main/main_center}">主页</a>
                     </li>
-                    <li class="active">项目管理</li>
+                    <li>
+                        <a th:href="@{/product/productcategory/index}">商品大类管理</a>
+                    </li>
+                    <li class="active" th:text="${productCategoryName}"/>
                 </ul><!-- /.breadcrumb -->
             </div>
 
@@ -45,21 +49,30 @@
                 <div class="row">
                     <div class="col-xs-12" style="padding-top:40px">
                         <form id="searchForm" class="form-horizontal" role="form">
+                            <input id="searchProductCategoryId" name="productCategoryId" type="hidden"
+                                   th:value="${productCategoryId}"/>
                             <div class="form-group">
-                                <label class="col-sm-1 control-label no-padding-right">项目名称：</label>
+                                <label class="col-sm-1 control-label no-padding-right">商品名称：</label>
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
                                         <input id="name" name="name" class="form-control" type="text"
                                                style="height:30px"/>
                                     </div>
                                 </div>
-                                <label class="col-sm-1 control-label no-padding-right">项目状态：</label>
+                                <label class="col-sm-1 control-label no-padding-right">商品状态：</label>
                                 <div class="col-sm-2">
                                     <select id="status" name="status" class="selectpicker show-tick form-control">
                                         <option value="">所有</option>
-                                        <option value=0>未启动</option>
-                                        <option value=1>进行中</option>
-                                        <option value=2>已结束</option>
+                                        <option value=0>下架</option>
+                                        <option value=1>上架</option>
+                                    </select>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">商品分类：</label>
+                                <div class="col-sm-2">
+                                    <select id="productType" name="productType" class="selectpicker show-tick form-control">
+                                        <option value="">所有</option>
+                                        <option value=0>服务</option>
+                                        <option value=1>电子卡</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-3">
@@ -98,13 +111,16 @@
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-1"></div>
                                         <div class="col-xs-12 col-sm-9">
-                                            <form id="projectSaveForm" class="form-horizontal" role="form">
-                                                <input type="hidden" name="id" id="projectId" value="0">
+                                            <form id="productSaveForm" class="form-horizontal" role="form">
+                                                <input type="hidden" id="inputProductId" name="id" value="0">
+                                                <input type="hidden" id="inputproductCategoryId" name="productCategoryId" th:value="${productCategoryId}">
+                                                <input type="hidden" name="thumbnailUrl" id="inputThumbnailUrl" value="">
+                                                <input type="hidden" name="detailImgUrl" id="inputDetailImgUrl" value="">
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">项目名称：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">商品名称：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="inputName" name="inputName"
+                                                            <input id="inputName" name="name"
                                                                    class="form-control"
                                                                    type="text" style="height:30px"/>
                                                         </div>
@@ -112,10 +128,99 @@
                                                 </div>
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">项目描述：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">商品描述：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="inputDescription" name="inputDescription"
+                                                            <input id="inputDescription" name="description"
+                                                                   class="form-control"
+                                                                   type="text" style="height: 30px;"/>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">最少购买数量：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputLastNum" name="lastNum"
+                                                                   class="form-control"
+                                                                   type="text" style="height: 30px;"/>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">单位名称：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputUnitName" name="unitName"
+                                                                   class="form-control"
+                                                                   type="text" style="height: 30px;"/>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">有效期天数
+                                                        ：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputEffectiveDays"  name="effectiveDays"
+                                                                   class="form-control"
+                                                                   type="text" style="height: 30px;"/>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">商品分类：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <label class="radio-inline ">
+                                                                <input id="inputService" type="radio"
+                                                                       name="productType"
+                                                                       value="0" checked="checked"/>服务
+                                                            </label>
+                                                            <label class="radio-inline">
+                                                                <input type="radio"
+                                                                       name="productType"
+                                                                       value="1"/>电子卡
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">缩略图：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="widget-main">
+                                                            <div class="form-group">
+                                                                <div class="col-xs-12">
+                                                                    <input type="file" id="fileThumbnail"/>
+                                                                    <img id="imgThumbnail" width="200" height="200"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">详情图：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="widget-main">
+                                                            <div class="form-group">
+                                                                <div class="col-xs-12">
+                                                                    <input type="file" id="fileDetail"/>
+                                                                    <img id="imgDetail" width="200" height="200"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">短信发送模板
+                                                        ：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputSmsTemplate"  name="smsTemplate"
                                                                    class="form-control"
                                                                    type="text" style="height: 30px;"/>
 
@@ -127,7 +232,7 @@
                                                     <label class="col-sm-4 control-label no-padding-right">排序：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="inputPriority" name="inputPriority"
+                                                            <input id="inputPriority" name="priority"
                                                                    class="form-control"
                                                                    type="text" style="height:30px"/>
                                                         </div>
@@ -166,12 +271,15 @@
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
+
+        initImgControl("fileThumbnail","imgThumbnail","inputThumbnailUrl");
+        initImgControl("fileDetail","imgDetail","inputDetailImgUrl");
     });
 
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
     jQuery(grid_selector).jqGrid({
-        url: "../api/project/getlist",// 获取数据的地址
+        url: "/api/product/getlist",// 获取数据的地址
         postData: transformToJson($('#searchForm').serializeArray()),
         rownumbers: true,
         datatype: "json",
@@ -184,11 +292,15 @@
         width: "100%",
         autowidth: true,
         height: 350,
-        colNames: ['', '项目名称', '项目描述', '项目状态', '排序', '操作'],
+        colNames: ['', '商品名称', '商品描述', '最少购买数量', '单位名称 ', '有效期天数 ', '商品分类 ', '商品状态', '排序', '操作'],
         colModel: [
             {name: 'id', index: 'id', sortable: false, hidden: true},
             {name: 'name', index: 'name', width: 50, sortable: false},
             {name: 'description', index: 'description', sortable: false},
+            {name: 'lastNum', index: 'lastNum', width: 50, sortable: false},
+            {name: 'unitName', index: 'unitName', width: 50, sortable: false},
+            {name: 'effectiveDays', index: 'effectiveDays', width: 50, sortable: false},
+            {name: 'productType', index: 'productType', width: 50, sortable: false, formatter: productTypeFormatter},
             {name: 'status', index: 'status', width: 50, sortable: false, formatter: statusFormatter},
             {name: 'priority', index: 'priority', width: 20, sortable: false},
             {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
@@ -213,13 +325,13 @@
             records: "paging.total", // 查询出的记录数
             repeatitems: false
         },
-        caption: "项目列表"
+        caption: "商品列表"
     });
     $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/project/getlist",// 获取数据的地址
+            url: "/api/product/getlist",// 获取数据的地址
             postData: transformToJson($('#searchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
@@ -229,39 +341,38 @@
         switch (cell.status) {
             case 0:
             default:
-                return "未启动";
+                return "下架";
             case 1:
-                return "进行中";
-            case 2:
-                return "已结束";
+                return "上架";
         }
     }
 
+    function productTypeFormatter(cellvalue, options, cell) {
+        switch (cell.productType) {
+            case 0:
+            default:
+                return "服务";
+            case 1:
+                return "电子卡";
+        }
+    }
+
+
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:deleteOne('" + rowObject.id + "')\">" +
-            "<i class='ace-icon'>删除</i>" +
-            "</a>&nbsp;&nbsp;";
-        str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
-            "<i class='ace-icon'>修改</i>" +
-            "</a>&nbsp;&nbsp;";
-
+        str += getFunctionButton("btn-danger","deleteOne(" + rowObject.id + ")","删除");
+        str += getFunctionButton("btn-info","openEdit(" + rowObject.id + ")","修改");
         if (rowObject.status == 0) {
-            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:begin('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>启动</i>" +
-                "</a>&nbsp;&nbsp;";
-        }
-        if (rowObject.status == 1) {
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:end('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>停止</i>" +
-                "</a>&nbsp;&nbsp;";
+            str += getFunctionButton("btn-success","sold(" + rowObject.id + ")","上架");
+        } else {
+            str += getFunctionButton("btn-danger","soldOut(" + rowObject.id + ")","下架");
         }
         return str;
     }
 
     function addOrUpdate() {
-        var projectId = $("#projectId").val();
-        if (projectId <= 0) {
+        var productId = $("#inputProductId").val();
+        if (productId <= 0) {
             add();
         } else {
             update();
@@ -270,14 +381,10 @@
 
     function add() {
         $.ajax({
-            url: "../api/project/add",
+            url: "/api/product/add",
             dataType: "json",
             async: false,
-            data: {
-                name: $("#inputName").val(),
-                description: $("#inputDescription").val(),
-                priority: $("#inputPriority").val()
-            },
+            data: transformToJson($('#productSaveForm').serializeArray()),
             type: "POST",
             success: success,
             error: error
@@ -286,15 +393,10 @@
 
     function update() {
         $.ajax({
-            url: "../api/project/update",
+            url: "/api/product/update",
             dataType: "json",
             async: false,
-            data: {
-                id: $("#projectId").val(),
-                name: $("#inputName").val(),
-                description: $("#inputDescription").val(),
-                priority: $("#inputPriority").val()
-            },
+            data: transformToJson($('#productSaveForm').serializeArray()),
             type: "POST",
             success: success,
             error: error
@@ -302,10 +404,10 @@
     }
 
     function deleteOne(id) {
-        confirm("确定要删除该项目吗？", function (result) {
+        confirm("确定要删除该商品吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/project/delete",    //请求的url地址
+                    url: "/api/product/delete",    //请求的url地址
                     dataType: "json",
                     async: false,
                     data: {
@@ -319,15 +421,34 @@
         });
     }
 
+
+    function openNew() {
+        $("#modal-title").html("商品信息-添加");
+        $("#inputProductId").val(0);
+        $("#inputName").val("");
+        $("#inputDescription").val("");
+        $("#inputLastNum").val("");
+        $("#inputUnitName").val("");
+        $("#inputEffectiveDays").val("");
+        $("#inputSmsTemplate").val("");
+        $('#inputThumbnailUrl').val("");
+        $('#inputDetailImgUrl').val("");
+        $("#inputPriority").val("");
+        $('#imgThumbnail').attr('hidden', 'hidden');
+        $('#imgDetail').attr('hidden', 'hidden');
+    }
+
     function openEdit(id) {
-        $("#modal-title").html("项目信息-修改");
+        $("#modal-title").html("商品信息-修改");
         $(".modal-footer-btn").show();
+        $('#imgThumbnail').removeAttr('hidden');
+        $('#imgDetail').removeAttr('hidden');
         getById(id);
     }
 
     function getById(id) {
         $.ajax({
-            url: "../api/project/getbyid",    //请求的url地址
+            url: "/api/product/getbyid",    //请求的url地址
             dataType: "json",
             async: false,
             data: {
@@ -339,10 +460,21 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    $("#projectId").val(result.id);
+                    $("#inputProductId").val(result.id);
                     $("#inputName").val(result.name);
                     $("#inputDescription").val(result.description);
+                    $("#inputLastNum").val(result.lastNum);
+                    $("#inputUnitName").val(result.unitName);
+                    $("#inputEffectiveDays").val(result.effectiveDays);
+                    $("#inputSmsTemplate").val(result.smsTemplate);
                     $("#inputPriority").val(result.priority);
+                    if(result.productType==0){
+                        $("#inputService").click();
+                    }
+                    $('#fileThumbnail').ace_file_input('show_file_list', [getImageUrl(result.thumbnailUrl)]);
+                    $('#imgThumbnail').attr('src', getImageUrl(result.thumbnailUrl));
+                    $('#fileDetail').ace_file_input('show_file_list', [getImageUrl(result.thumbnailUrl)]);
+                    $('#imgDetail').attr('src', getImageUrl(result.detailImgUrl));
                     $("#modal-form").modal('show');
                 }
             },
@@ -350,57 +482,39 @@
         });
     }
 
-    function openNew() {
-        $("#modal-title").html("项目信息-添加");
-        $("#projectId").val(0);
-        $("#inputName").val("");
-        $("#inputDescription").val("");
-        $("#inputPriority").val("");
+    /**
+     * 上架
+     * @param id
+     */
+    function sold(id) {
+        updateCategoryStatus(id, 1);
     }
 
-    function begin(id) {
-        confirm("确定要启动该项目吗？", function (result) {
+    /**
+     * 下架
+     * @param id
+     */
+    function soldOut(id) {
+        updateCategoryStatus(id, 0);
+    }
+
+    function updateCategoryStatus(id, status) {
+        confirm("确定要上架该商品吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/project/begin",    //请求的url地址
+                    url: "/api/product/updatestatus",    //请求的url地址
                     dataType: "json",
                     async: false,
                     data: {
-                        id: id
+                        id: id,
+                        status: status
                     },
-                    type: "GET",
+                    type: "POST",
                     success: success,
                     error: error
                 });
             }
         });
-    }
-
-    function end(id) {
-        confirm("确定要停止该项目吗？", function (result) {
-            if (result) {
-                $.ajax({
-                    url: "../api/project/end",    //请求的url地址
-                    dataType: "json",
-                    async: false,
-                    data: {
-                        id: id
-                    },
-                    type: "GET",
-                    success: success,
-                    error: error
-                });
-            }
-        });
-    }
-
-    function success(data) {
-        if ('error' in data) {
-            bootboxalert(data.error.message);
-        } else {
-            $("#modal-form").modal('hide');
-            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-        }
     }
 
 </script>

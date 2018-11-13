@@ -273,8 +273,8 @@ public class APIProductController {
      *
      * @return
      */
-    @ApiOperation(value = "删除商品", httpMethod = "GET", notes = "删除商品")
-    @RequestMapping(value = "delete", method = RequestMethod.GET)
+    @ApiOperation(value = "删除商品", httpMethod = "POST", notes = "删除商品")
+    @RequestMapping(value = "delete", method = RequestMethod.POST)
     public Object delete(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法

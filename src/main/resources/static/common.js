@@ -37,7 +37,7 @@ function getCookie(key) {
 function timeFormat(time){
     var d = new Date(time);
     var year = d.getFullYear();
-    var month = (d.getMonth()+1)>9?(d.getMonth()+1):'0'+(d.getMonth()+1);
+    var month = (d.getMonth()+1)>9?(d.getMonth()+1):'0'+(d.getMonth());
     var date = d.getDate()>9?d.getDate():'0'+d.getDate();
     var hours = d.getHours()>9?d.getHours():'0'+d.getHours();
     var minutes = d.getMinutes()>9?d.getMinutes():'0'+d.getMinutes();
@@ -48,7 +48,7 @@ function timeFormat(time){
 function dateFormat(time){
     var d = new Date(time);
     var year = d.getFullYear();
-    var month = (d.getMonth()+1)>9?(d.getMonth()+1):'0'+(d.getMonth()+1);
+    var month = (d.getMonth()+1)>9?(d.getMonth()+1):'0'+(d.getMonth());
     var date = d.getDate()>9?d.getDate():'0'+d.getDate();
     return year + '-' + month+ '-' + date;
 }
@@ -89,6 +89,46 @@ function confirm(message,callback){
 
 function error(data) {
     bootboxalert("服务器异常，请联系管理员");
+}
+
+/**
+ * 获得图片路径
+ * @param url
+ * @returns {string}
+ */
+function getImageUrl(url) {
+    return '/static/' + url
+}
+
+/**
+ * 获得功能按钮
+ * @param style 按钮样式
+ * @param func 功能
+ * @param name 按钮名称
+ * @returns {string}
+ */
+function getFunctionButton(style, func, name) {
+    return "<a class='btn btn-minier " + style + "' href='javascript:" + func + "'>" + name + "</a>&nbsp;";
+}
+
+/**
+ * 获得跳转按钮
+ * @param style 按钮样式
+ * @param url 跳转地址
+ * @param name 按钮名称
+ * @returns {string}
+ */
+function getRedirectButton(style, url, name) {
+    return "<a class='btn btn-minier " + style + "' href='" + url + "'>" + name + "</a>&nbsp;";
+}
+
+function success(data) {
+    if ('error' in data) {
+        bootboxalert(data.error.message);
+    } else {
+        $("#modal-form").modal('hide');
+        jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+    }
 }
 
 

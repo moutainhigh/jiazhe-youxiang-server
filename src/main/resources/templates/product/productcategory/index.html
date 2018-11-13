@@ -11,6 +11,7 @@
 
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
+    <script th:src="@{/static/img.js}"></script>
 
     <style>
         .form-group {
@@ -100,8 +101,7 @@
                                         <div class="col-xs-12 col-sm-9">
                                             <form id="productCategorySaveForm" class="form-horizontal" role="form">
                                                 <input type="hidden" name="id" id="inputProductCategoryId" value="0">
-                                                <input type="hidden" name="thumbnailUrl" id="inputThumbnailUrl"
-                                                       value="">
+                                                <input type="hidden" name="thumbnailUrl" id="inputThumbnailUrl" value="">
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">商品大类名称：</label>
                                                     <div class="col-sm-8">
@@ -182,12 +182,13 @@
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
+        initImgControl("fileThumbnail","imgThumbnail","inputThumbnailUrl");
     });
 
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
     jQuery(grid_selector).jqGrid({
-        url: "../api/product/getcategorylist",// 获取数据的地址
+        url: "/api/product/getcategorylist",// 获取数据的地址
         postData: transformToJson($('#searchForm').serializeArray()),
         rownumbers: true,
         datatype: "json",
@@ -236,7 +237,7 @@
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/product/getcategorylist",// 获取数据的地址
+            url: "/api/product/getcategorylist",// 获取数据的地址
             postData: transformToJson($('#searchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
@@ -254,22 +255,15 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:deleteOne('" + rowObject.id + "')\">" +
-            "<i class='ace-icon'>删除</i>" +
-            "</a>&nbsp;&nbsp;";
-        str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
-            "<i class='ace-icon'>修改</i>" +
-            "</a>&nbsp;&nbsp;";
-
+        str += getFunctionButton("btn-danger","deleteOne(" + rowObject.id + ")","删除");
+        str += getFunctionButton("btn-info","openEdit(" + rowObject.id + ")","修改");
         if (rowObject.status == 0) {
-            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:sold('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>上架</i>" +
-                "</a>&nbsp;&nbsp;";
+            str += getFunctionButton("btn-success","sold(" + rowObject.id + ")","上架");
         } else {
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:soldOut('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>下架</i>" +
-                "</a>&nbsp;&nbsp;";
+            str += getFunctionButton("btn-danger","soldOut(" + rowObject.id + ")","下架");
         }
+        var url ="/product//product/index?productCategoryId=" + rowObject.id + "&&productCategoryName=" + rowObject.name ;
+        str += getRedirectButton("btn-primary",url,"商品管理");
         return str;
     }
 
@@ -308,7 +302,7 @@
 
     function add() {
         $.ajax({
-            url: "../api/product/addcategory",
+            url: "/api/product/addcategory",
             dataType: "json",
             async: false,
             data: {
@@ -325,7 +319,7 @@
 
     function update() {
         $.ajax({
-            url: "../api/product/updatecategory",
+            url: "/api/product/updatecategory",
             dataType: "json",
             async: false,
             data: {
@@ -345,7 +339,7 @@
         confirm("确定要删除该商品大类吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/product/deletecategory",    //请求的url地址
+                    url: "/api/product/deletecategory",    //请求的url地址
                     dataType: "json",
                     async: false,
                     data: {
@@ -362,7 +356,7 @@
 
     function getById(id) {
         $.ajax({
-            url: "../api/product/getcategorybyid",    //请求的url地址
+            url: "/api/product/getcategorybyid",    //请求的url地址
             dataType: "json",
             async: false,
             data: {
@@ -408,7 +402,7 @@
         confirm("确定要上架该商品大类吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/product/updatecategorystatus",    //请求的url地址
+                    url: "/api/product/updatecategorystatus",    //请求的url地址
                     dataType: "json",
                     async: false,
                     data: {
@@ -423,61 +417,6 @@
         });
     }
 
-
-    $('#fileThumbnail').ace_file_input({
-        style: 'well',
-        btn_choose: '把图片拖到这里或点击选择图片',
-        btn_change: null,
-        no_icon: 'ace-icon fa fa-cloud-upload',
-        droppable: true,
-        thumbnail: 'large',
-        allowExt: ['jpg', 'jpeg', 'png', 'gif', 'tif', 'tiff', 'bmp'],
-        allowMime: ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/tif', 'image/tiff', 'image/bmp'],
-        before_remove: function () {
-            $('#imgThumbnail').attr('hidden', 'hidden');
-            return true;
-        }
-    }).on('change', function () {
-        var image = $('#fileThumbnail')[0].files[0]
-        if (!image) {
-            return;
-        }
-        var formData = new FormData();
-        formData.append('file', image);
-
-        $.ajax({
-            url: "../api/upload/uploadimage",    //请求的url地址
-            dataType: "json",
-            type: 'POST',
-            async: true,
-            processData: false, // 告诉jQuery不要去处理发送的数据
-            contentType: false,// 告诉jQuery不要去设置Content-Type请求头
-            data: formData,
-            cache: false,
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    $('#inputThumbnailUrl').val(data.data.url)
-//                    alert('文件上传成功!' + data.data.url);
-                }
-            },
-            error: error
-        });
-    });
-
-    function success(data) {
-        if ('error' in data) {
-            bootboxalert(data.error.message);
-        } else {
-            $("#modal-form").modal('hide');
-            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-        }
-    }
-
-    function getImageUrl(url) {
-        return '/coupon/static/' + url
-    }
 
 </script>
 </html>

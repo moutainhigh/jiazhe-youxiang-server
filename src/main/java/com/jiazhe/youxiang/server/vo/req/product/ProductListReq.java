@@ -5,7 +5,7 @@
  */
 package com.jiazhe.youxiang.server.vo.req.product;
 
-import com.jiazhe.youxiang.server.vo.req.OffsetLimitReq;
+import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
  * @author niexiao
  * @created 2018/10/18
  */
-public class ProductListReq extends OffsetLimitReq {
+public class ProductListReq extends PageSizeNumReq {
 
     private static final long serialVersionUID = 6324763709129013284L;
     @ApiModelProperty("商品类别Id")
