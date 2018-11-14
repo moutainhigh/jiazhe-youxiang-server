@@ -1,6 +1,5 @@
-function initImgControl(fileControl, imgControl, inputControl) {
-
-    fileControl.ace_file_input({
+function initImgControl(file_selector, img_selector, input_selector) {
+    $(file_selector).ace_file_input({
         style: 'well',
         btn_choose: '把图片拖到这里或点击选择图片',
         btn_change: null,
@@ -14,7 +13,7 @@ function initImgControl(fileControl, imgControl, inputControl) {
             return true;
         }
     }).on('change', function () {
-        var image = fileControl[0].files[0]
+        var image = $(file_selector)[0].files[0]
         if (!image) {
             return;
         }
@@ -34,8 +33,8 @@ function initImgControl(fileControl, imgControl, inputControl) {
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
-                    inputControl.val(data.data.url)
-                    imgControl.attr('hidden', 'hidden');
+                    $(input_selector).val(data.data.url)
+                    $(img_selector).attr('hidden', 'hidden');
 //                    alert('文件上传成功!' + data.data.url);
                 }
             },

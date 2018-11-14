@@ -177,16 +177,38 @@
 </div>
 </body>
 <script type="text/javascript">
+
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
-        initImgControl($("#fileThumbnail"), $("#imgThumbnail"), $("#inputThumbnailUrl"));
+
+
+        var tableOption = {
+            url: "/api/product/getcategorylist",// 获取数据的地址
+            postData: transformToJson($('#searchForm').serializeArray()),
+            colNames: ['', '大类名称', '大类描述', '缩略图', '状态', '排序', '操作'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'name', index: 'name', width: 50, sortable: false},
+                {name: 'description', index: 'description', sortable: false},
+                {name: 'thumbnailUrl', index: 'thumbnailUrl', width: 50, sortable: false, formatter: imageFormatter},
+                {name: 'status', index: 'status', width: 50, sortable: false, formatter: statusFormatter},
+                {name: 'priority', index: 'priority', width: 20, sortable: false},
+                {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
+            ],
+            caption: "商品大类列表"
+        }
+
+        initTable(grid_selector,pager_selector,tableOption)
+        initImgControl("#fileThumbnail", "#imgThumbnail", "#inputThumbnailUrl");
     });
 
-    var grid_selector = "#grid-table";
-    var pager_selector = "#grid-pager";
+
     jQuery(grid_selector).jqGrid({
         url: "/api/product/getcategorylist",// 获取数据的地址
         postData: transformToJson($('#searchForm').serializeArray()),

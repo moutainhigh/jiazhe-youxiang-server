@@ -307,8 +307,8 @@
         }
 
         initTable(grid_selector, pager_selector, tableOption);
-        initImgControl($("#fileThumbnail"), $("#imgThumbnail"), $("#inputThumbnailUrl"));
-        initImgControl($("#fileDetail"), $("#imgDetail"), $("#inputDetailImgUrl"));
+        initImgControl("#fileThumbnail", "#imgThumbnail", "#inputThumbnailUrl");
+        initImgControl("#fileDetail", "#imgDetail", "#inputDetailImgUrl");
     });
 
     $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
