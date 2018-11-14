@@ -59,7 +59,7 @@ public class ProductBiz {
     }
 
     public List<ProductCategoryDTO> getCategoryList(String name, Integer status, Paging paging) {
-        return productCategoryService.getCategoryList(name,status, paging);
+        return productCategoryService.getCategoryList(name, status, paging);
     }
 
     public void deleteCategory(Integer id) {
@@ -118,8 +118,8 @@ public class ProductBiz {
         return productPriceService.getPriceByCity(productId, cityCode);
     }
 
-    public List<ProductPriceDTO> getPriceListByProductId(Integer productId) {
-        return productPriceService.getListByProductId(productId);
+    public List<ProductPriceDTO> getPriceList(Integer productId, String cityName, String cityCode, Integer status, Paging paging) {
+        return productPriceService.getPriceList(productId, cityName, cityCode, status, paging);
     }
 
     public void batchDeletePrice(List<Integer> ids) {
@@ -127,5 +127,11 @@ public class ProductBiz {
     }
 
 
+    public void updatePriceStatus(Integer id, Integer status) {
+        productPriceService.updatePrice(id, null, status);
+    }
 
+    public void updatePrice(Integer id, BigDecimal price) {
+        productPriceService.updatePrice(id, price, null);
+    }
 }

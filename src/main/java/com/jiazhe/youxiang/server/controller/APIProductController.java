@@ -29,6 +29,7 @@ import com.jiazhe.youxiang.server.vo.req.product.ProductListForCustomerReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductListReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductPriceBatchAddOrUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductPriceListReq;
+import com.jiazhe.youxiang.server.vo.req.product.ProductPriceUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.product.ProductUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.product.StatusReq;
 import com.jiazhe.youxiang.server.vo.resp.product.ProductCategoryResp;
@@ -105,9 +106,9 @@ public class APIProductController {
     @RequestMapping(value = "getcategorylist", method = RequestMethod.GET)
     public Object getCategoryList(@ModelAttribute ProductCategoryListReq req) {
         CommonValidator.validatePaging(req);
-        Paging paging =  PagingParamUtil.pagingParamSwitch(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
-        List<ProductCategoryDTO> productCategoryDTOList = productBiz.getCategoryList(req.getName(),req.getStatus(), paging);
+        List<ProductCategoryDTO> productCategoryDTOList = productBiz.getCategoryList(req.getName(), req.getStatus(), paging);
         //将DTO转成VO
         List<ProductCategoryResp> result = productCategoryDTOList.stream().map(ProductAdapter::productCategoryDTO2VO).collect(Collectors.toList());
         //用ResponseFactory将返回值包装
@@ -206,7 +207,7 @@ public class APIProductController {
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
     public Object getList(@ModelAttribute ProductListReq req) {
         CommonValidator.validatePaging(req);
-        Paging paging =  PagingParamUtil.pagingParamSwitch(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
         List<ProductDTO> productDTOList = productBiz.getList(req.getProductCategoryId(), req.getName(), req.getProductType(), req.getCityCodes(), req.getStatus(), paging);
         //将DTO转成VO
@@ -227,7 +228,7 @@ public class APIProductController {
         CommonValidator.validateId(req.getProductCategoryId(), new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_ID_IS_NULL));
         CommonValidator.validateNull(req.getCityCode(), new ProductException(ProductCodeEnum.PRODUCT_CITY_CODE_IS_NULL));
         validateProductType(req.getProductType());
-        Paging paging =  PagingParamUtil.pagingParamSwitch(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
         List<ProductDTO> productDTOList = productBiz.getListForCustomer(req.getProductCategoryId(), req.getName(), req.getProductType(), req.getCityCode(), paging);
         //将DTO转成VO
@@ -273,8 +274,8 @@ public class APIProductController {
      *
      * @return
      */
-    @ApiOperation(value = "删除商品", httpMethod = "GET", notes = "删除商品")
-    @RequestMapping(value = "delete", method = RequestMethod.GET)
+    @ApiOperation(value = "删除商品", httpMethod = "POST", notes = "删除商品")
+    @RequestMapping(value = "delete", method = RequestMethod.POST)
     public Object delete(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
@@ -283,6 +284,7 @@ public class APIProductController {
     }
 
     /*************商品价格相关******************/
+
 
     /**
      * 批量添加或修改商品价格
@@ -317,6 +319,7 @@ public class APIProductController {
         return ResponseFactory.buildResponse(ProductAdapter.productPriceDTO2VO(productPriceDTO));
     }
 
+
     /**
      * 获得某一商品在某城市的价格
      *
@@ -340,14 +343,16 @@ public class APIProductController {
      * @return
      */
     @ApiOperation(value = "获得商品的价格列表", httpMethod = "GET", response = ProductPriceResp.class, responseContainer = "List", notes = "获得商品的价格列表")
-    @RequestMapping(value = "getpricelistbyproductid", method = RequestMethod.GET)
-    public Object getPriceListByProductId(@ModelAttribute ProductPriceListReq req) {
+    @RequestMapping(value = "getpricelist", method = RequestMethod.GET)
+    public Object getPriceList(@ModelAttribute ProductPriceListReq req) {
         CommonValidator.validateNull(req);
+        CommonValidator.validatePaging(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
         CommonValidator.validateId(req.getProductId(), new ProductException(ProductCodeEnum.PRODUCT_ID_IS_NULL));
         //调用BIZ方法
-        List<ProductPriceDTO> productPriceDTOList = productBiz.getPriceListByProductId(req.getProductId());
-        //用ResponseFactory将返回值包装
-        return ResponseFactory.buildResponse(productPriceDTOList.stream().map(ProductAdapter::productPriceDTO2VO).collect(Collectors.toList()));
+        List<ProductPriceDTO> productPriceDTOList = productBiz.getPriceList(req.getProductId(), req.getCityName(), req.getCityCode(), req.getStatus(), paging);
+        List<ProductPriceResp> result = productPriceDTOList.stream().map(ProductAdapter::productPriceDTO2VO).collect(Collectors.toList());
+        return ResponseFactory.buildPaginationResponse(result, paging);
     }
 
 
@@ -362,6 +367,37 @@ public class APIProductController {
         CommonValidator.validateIdList(req, new ProductException(ProductCodeEnum.PRODUCT_PRICE_ID_IS_NULL));
         //调用BIZ方法
         productBiz.batchDeletePrice(req.getIds());
+        return ResponseFactory.buildSuccess();
+    }
+
+    /**
+     * 更新价格
+     *
+     * @return
+     */
+    @ApiOperation(value = "更新价格", httpMethod = "POST", notes = "更新价格")
+    @RequestMapping(value = "updateprice", method = RequestMethod.POST)
+    public Object updatePrice(@ModelAttribute ProductPriceUpdateReq req) {
+        CommonValidator.validateId(req);
+        validatePrice(req.getPrice());
+        //调用BIZ方法
+        productBiz.updatePrice(req.getId(), req.getPrice());
+        //用ResponseFactory将返回值包装
+        return ResponseFactory.buildSuccess();
+    }
+
+    /**
+     * 更新价格状态
+     *
+     * @return
+     */
+    @ApiOperation(value = "更新价格状态", httpMethod = "POST", notes = "更新价格状态")
+    @RequestMapping(value = "updatepricestatus", method = RequestMethod.POST)
+    public Object updatePriceStatus(@ModelAttribute StatusReq req) {
+        validateStatus(req);
+        //调用BIZ方法
+        productBiz.updatePriceStatus(req.getId(), req.getStatus());
+        //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
 

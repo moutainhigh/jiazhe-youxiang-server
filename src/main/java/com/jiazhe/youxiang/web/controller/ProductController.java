@@ -4,6 +4,7 @@ import com.jiazhe.youxiang.base.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -16,8 +17,24 @@ public class ProductController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
 
-    @RequestMapping(value = "/index")
-    public String index() {
-        return "product/productcategory/index";
+    @RequestMapping(value = "/productcategory/index")
+    public String productCategoryIndex() {
+        return "product/category/index";
+    }
+
+    @RequestMapping(value = "/product/index")
+    public String productIndex(String productCategoryId, String productCategoryName, Model model) {
+        model.addAttribute("productCategoryId", productCategoryId);
+        model.addAttribute("productCategoryName", productCategoryName);
+        return "product/product/index";
+    }
+
+    @RequestMapping(value = "/productprice/index")
+    public String productPriceIndex(String productId, String productName, String productCategoryId, String productCategoryName, Model model) {
+        model.addAttribute("productId", productId);
+        model.addAttribute("productName", productName);
+        model.addAttribute("productCategoryId", productCategoryId);
+        model.addAttribute("productCategoryName", productCategoryName);
+        return "product/price/index";
     }
 }
