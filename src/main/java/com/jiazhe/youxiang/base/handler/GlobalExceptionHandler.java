@@ -62,18 +62,6 @@ public class GlobalExceptionHandler {
             rm.setType(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType());
             rm.setMessage(((BindException) e).getBindingResult().toString());
             LOGGER.info("param error exception:{}", e.getMessage());
-        } else if (e instanceof UnauthorizedException || e instanceof AuthorizationException) {
-            //权限异常
-            if (ProjectUtil.isAjax(httpServletRequest)) {
-                String code = "000002";
-                String msg = "无权限";
-                System.out.println("BaseController：ajax请求，无权限");
-                ResponseUtil.responseUtils(httpServletResponse, ResultPackage.resultPackage(code, new JSONObject(), msg));
-                return null;
-            } else {
-                System.out.println("BaseController：页面跳转，无权限");
-                return "redirect:/system/403";
-            }
         } else {
             httpServletResponse.setStatus(HttpServletResponse.SC_OK);
             rm.setCode(CommonCodeEnum.INTERNAL_ERROR.getCode());

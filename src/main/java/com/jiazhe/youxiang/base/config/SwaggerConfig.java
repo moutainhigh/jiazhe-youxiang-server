@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.base.config;
 
+import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +33,9 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation
+//                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation
+//                        .class))
+                .apis(RequestHandlerSelectors.withMethodAnnotation(AppApi
                         .class))
                 .paths(PathSelectors.any())
                 .build();
