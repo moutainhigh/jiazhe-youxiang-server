@@ -12,7 +12,7 @@ public class UploadExcelResp extends BaseVO {
 
     private static final long serialVersionUID = -3982593416256463460L;
 
-    @ApiModelProperty("Excel URL")
+    @ApiModelProperty("excel路径")
     private String url;
 
     @ApiModelProperty("电子码数量")

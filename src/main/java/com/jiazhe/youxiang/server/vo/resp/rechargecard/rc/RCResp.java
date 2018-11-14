@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.vo.resp.rechargecard.rc;
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangerecord.RCExchangeRecordResp;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -14,28 +15,40 @@ import java.util.Date;
  */
 public class RCResp extends BaseVO{
 
+    @ApiModelProperty("充值卡id")
     private Integer id;
 
+    @ApiModelProperty("充值卡名称")
     private String name;
 
+    @ApiModelProperty("充值卡描述信息")
     private String description;
 
+    @ApiModelProperty("所属客户id")
     private Integer customerId;
 
+    @ApiModelProperty("所属项目id")
     private Integer projectId;
 
+    @ApiModelProperty("适用城市code，多个用,连接")
     private String cityCodes;
 
+    @ApiModelProperty("适用商品id，多个用,连接")
     private String productIds;
 
+    @ApiModelProperty("充值卡面额")
     private BigDecimal faceValue;
 
+    @ApiModelProperty("充值卡余额")
     private BigDecimal balance;
 
+    @ApiModelProperty("充值卡过期时间")
     private Date expiryTime;
 
+    @ApiModelProperty("充值卡状态 0停用 1启用")
     private Byte status;
 
+    @ApiModelProperty("充值时间")
     private Date addTime;
 
     private CustomerResp customerResp;

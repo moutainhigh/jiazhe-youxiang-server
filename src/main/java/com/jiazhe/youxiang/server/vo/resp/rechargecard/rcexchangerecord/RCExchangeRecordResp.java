@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangerecord;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
@@ -13,14 +14,19 @@ public class RCExchangeRecordResp extends BaseVO{
 
     private static final long serialVersionUID = 1698163218039110811L;
 
+    @ApiModelProperty("兑换记录id")
     private Integer id;
 
+    @ApiModelProperty("兑换码id")
     private Integer exchangeCodeId;
 
+    @ApiModelProperty("兑换类型，0-后台兑换，1-客户兑换，2-直接充值")
     private Integer exchangeType;
 
+    @ApiModelProperty("操作人姓名")
     private String operatorName;
 
+    @ApiModelProperty("兑换记录生成时间")
     private Date addTime;
 
     public Integer getId() {

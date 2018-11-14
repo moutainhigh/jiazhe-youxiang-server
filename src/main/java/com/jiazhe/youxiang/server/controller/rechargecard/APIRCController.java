@@ -42,7 +42,7 @@ public class APIRCController extends BaseController{
     @Autowired
     private RCBiz rcBiz;
 
-    @ApiOperation(value = "【后台】信息查询页查询充值卡", httpMethod = "GET", response = RCResp.class, responseContainer = "List",notes = "【后台】信息查询页查询充值卡")
+    @ApiOperation(value = "【后台】充值卡列表（用于信息查询页面）", httpMethod = "GET", response = RCResp.class, responseContainer = "List",notes = "信息查询页查询充值卡")
     @RequestMapping(value = "/searchlistpage", method = RequestMethod.GET)
     public Object searchListPage(@ModelAttribute RCPageReq req) {
         CommonValidator.validatePaging(req);
@@ -52,7 +52,7 @@ public class APIRCController extends BaseController{
         return ResponseFactory.buildPaginationResponse(rcRespList, paging);
     }
 
-    @ApiOperation(value = "【APP端】客户查询所有充值卡，分页", httpMethod = "GET", response = RCResp.class, responseContainer = "List",notes = "【APP端】客户查询所有充值卡，分页")
+    @ApiOperation(value = "【APP端】客户查询所有充值卡（分页）", httpMethod = "GET", response = RCResp.class, responseContainer = "List",notes = "客户查询所有充值卡，分页")
     @RequestMapping(value = "/findbycustomeridpage", method = RequestMethod.GET)
     public Object findByCustomerIdPage(@ModelAttribute RCCustomerPageReq req) {
         CommonValidator.validatePaging(req);
@@ -62,7 +62,7 @@ public class APIRCController extends BaseController{
         return ResponseFactory.buildPaginationResponse(rcRespList, paging);
     }
 
-    @ApiOperation(value = "【APP端】根据购买物属性（商品和城市），查询客户可使用的充值卡，分页", httpMethod = "GET", response = RCResp.class, responseContainer = "List",notes = "【APP端】根据购买物属性（商品和城市），查询客户可使用的充值卡，分页")
+    @ApiOperation(value = "【后台、APP端】根据购买物属性（商品和城市），查询客户可使用的充值卡，分页", httpMethod = "GET", response = RCResp.class, responseContainer = "List",notes = "根据购买物属性（商品和城市），查询客户可使用的充值卡，分页")
     @RequestMapping(value = "/findbygoodsattrpage", method = RequestMethod.GET)
     public Object findByGoodsAttrPage(@ModelAttribute RCGoodsAttrPageReq req) {
         CommonValidator.validatePaging(req);
@@ -72,7 +72,7 @@ public class APIRCController extends BaseController{
         return ResponseFactory.buildPaginationResponse(rcRespList, paging);
     }
 
-    @ApiOperation(value = "启用充值卡", httpMethod = "POST",notes = "启用充值卡")
+    @ApiOperation(value = "【后台】启用充值卡", httpMethod = "POST",notes = "启用充值卡")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     public Object startUsing(@ModelAttribute IdReq req) {
         //参数检查
@@ -81,7 +81,7 @@ public class APIRCController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "停用充值卡", httpMethod = "POST",notes = "停用充值卡")
+    @ApiOperation(value = "【后台】停用充值卡", httpMethod = "POST",notes = "停用充值卡")
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     public Object stopUsing(@ModelAttribute IdReq req) {
         //参数检查
@@ -90,7 +90,7 @@ public class APIRCController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "后台直接给客户充值任意分数", httpMethod = "POST",notes = "后台直接给客户充值任意分数")
+    @ApiOperation(value = "【后台】直接给客户充值任意分数", httpMethod = "POST",notes = "直接给客户充值任意分数")
     @RequestMapping(value = "/directcharge", method = RequestMethod.POST)
     public Object directCharge(@ModelAttribute DirectChargeReq req) {
         //参数检查
@@ -101,7 +101,7 @@ public class APIRCController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "回显充值卡信息", httpMethod = "GET",response = RCResp.class,notes = "回显充值卡信息")
+    @ApiOperation(value = "【后台】回显充值卡信息", httpMethod = "GET",response = RCResp.class,notes = "回显充值卡信息")
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
     public Object getById(@ModelAttribute IdReq req) {
         //参数检查
@@ -111,7 +111,7 @@ public class APIRCController extends BaseController{
         return ResponseFactory.buildResponse(rcResp);
     }
 
-    @ApiOperation(value = "修改充值卡信息", httpMethod = "POST",notes = "修改充值卡信息")
+    @ApiOperation(value = "【后台】修改充值卡信息", httpMethod = "POST",notes = "修改充值卡信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     public Object editSave(@ModelAttribute RCEditReq req) {
         //参数检查

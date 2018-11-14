@@ -43,7 +43,7 @@ public class APISysRoleController extends BaseController {
     @Autowired
     private SysRoleBiz sysRoleBiz;
 
-    @ApiOperation(value = "查询所有角色信息", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List",notes = "查询所有角色信息")
+    @ApiOperation(value = "【后台】角色列表", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List",notes = "查询所有角色信息，无条件查询")
     @RequestMapping(value = "/listall", method = RequestMethod.GET)
     public Object listAll() {
         List<SysRoleDTO> sysRoleDTOList = sysRoleBiz.findAll();
@@ -51,7 +51,7 @@ public class APISysRoleController extends BaseController {
         return ResponseFactory.buildResponse(sysRoleRespList);
     }
 
-    @ApiOperation(value = "分页查询角色信息", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List",notes = "分页查询角色信息")
+    @ApiOperation(value = "【后台】角色列表（分页）", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List",notes = "分页查询角色信息，有条件查询")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute RolePageReq req) {
         CommonValidator.validatePaging(req);
@@ -61,7 +61,7 @@ public class APISysRoleController extends BaseController {
         return ResponseFactory.buildPaginationResponse(sysRoleRespList, paging);
     }
 
-    @ApiOperation(value = "根据id删除角色信息（包含权限）", httpMethod = "POST",notes = "根据id删除角色信息（包含权限）")
+    @ApiOperation(value = "【后台】删除角色", httpMethod = "POST",notes = "根据id删除角色信息和角色对应的权限信息，此处未删除员工和角色的绑定关系")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public Object delete(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
@@ -69,7 +69,7 @@ public class APISysRoleController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "根据id获取角色信息（包含权限）", httpMethod = "GET", response = RoleWithPermResp.class, notes = "根据id获取角色信息（包含权限）")
+    @ApiOperation(value = "【后台】获取角色信息", httpMethod = "GET", response = RoleWithPermResp.class, notes = "根据id获取角色信息（包含权限）")
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
     public Object getById(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
@@ -80,7 +80,7 @@ public class APISysRoleController extends BaseController {
         return ResponseFactory.buildResponse(result);
     }
 
-    @ApiOperation(value = "【新建、修改】保存角色信息", httpMethod = "POST", notes = "【新建、修改】保存角色信息")
+    @ApiOperation(value = "【后台】保存角色信息", httpMethod = "POST", notes = "新建、修改保存角色信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Object save(@ModelAttribute RoleSaveReq req) {
         /*参数检查*/
