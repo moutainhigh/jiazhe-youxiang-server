@@ -159,60 +159,34 @@
 </div>
 </body>
 <script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
+
+
+        var tableOption = {
+            url: "/api/customer/getlist",// 获取数据的地址
+            postData: transformToJson($('#searchForm').serializeArray()),
+            colNames: ['', '客户名称', '手机号码', '客户备注', '默认地址', '操作'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'name', index: 'name', width: 50, sortable: false},
+                {name: 'mobile', index: 'mobile', width: 50, sortable: false},
+                {name: 'remark', index: 'remark', width: 100, sortable: false},
+                {name: 'defaultAddress', index: 'defaultAddress', sortable: false, formatter: addressFormatter},
+                {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
+            ],
+            caption: "客户列表"
+        }
+
+        initTable(grid_selector, pager_selector, tableOption);
     });
 
-    var grid_selector = "#grid-table";
-    var pager_selector = "#grid-pager";
-    jQuery(grid_selector).jqGrid({
-        url: "../api/customer/getlist",// 获取数据的地址
-        postData: transformToJson($('#searchForm').serializeArray()),
-        rownumbers: true,
-        datatype: "json",
-        mtype: "GET",
-        hidegrid: false,//收缩列表按钮
-        prmNames: {
-            page: "pageNum",
-            rows: "pageSize"
-        },// 重新定义分页信息
-        width: "100%",
-        autowidth: true,
-        height: 350,
-        colNames: ['', '客户名称', '手机号码', '客户备注', '默认地址', '操作'],
-        colModel: [
-            {name: 'id', index: 'id', sortable: false, hidden: true},
-            {name: 'name', index: 'name', width: 50, sortable: false},
-            {name: 'mobile', index: 'mobile', width: 50, sortable: false},
-            {name: 'remark', index: 'remark', width: 100, sortable: false},
-            {name: 'defaultAddress', index: 'defaultAddress', sortable: false, formatter: addressFormatter},
-            {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
-        ],
-        rowNum: 10,
-        rowList: [10, 20, 30],
-        pager: pager_selector,
-        altRows: true,
-        viewrecords: true,
-        emptyrecords: "0条数据",
-        loadComplete: function (data) {
-            var table = this;
-            setTimeout(function () {
-                $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
-                updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
-            }, 0);
-        },
-        jsonReader: { // jsonReader来跟服务器端返回的数据做对应
-            root: "data", // 包含实际数据的数组
-            page: "paging.currPage", // 当前页
-            total: "paging.totalPage",// 总页数
-            records: "paging.total", // 查询出的记录数
-            repeatitems: false
-        },
-        caption: "客户列表"
-    });
     $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
 
     function search() {
@@ -232,25 +206,17 @@
     }
 
     function customFormatter(cellvalue, options, rowObject) {
+
         var str = "";
-        str += "<a class='btn btn-minier btn-danger' href=\"javascript:deleteOne('" + rowObject.id + "')\">" +
-            "<i class='ace-icon'>删除</i>" +
-            "</a>&nbsp;&nbsp;";
-        str += "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
-            "<i class='ace-icon'>修改</i>" +
-            "</a>&nbsp;&nbsp;";
-        str += "<a class='btn btn-minier btn-success'" +
-            "<i class='ace-icon'>充值卡</i>" +
-            "</a>&nbsp;&nbsp;";
-        str += "<a class='btn btn-minier btn-success'" +
-            "<i class='ace-icon'>订单</i>" +
-            "</a>&nbsp;&nbsp;";
-        str += "<a class='btn btn-minier btn-yellow'" +
-            "<i class='ace-icon'>下单</i>" +
-            "</a>&nbsp;&nbsp;";
-        str += "<a class='btn btn-minier btn-yellow '" +
-            "<i class='ace-icon'>充值</i>" +
-            "</a>&nbsp;&nbsp;";
+        str += getFunctionButton("btn-danger", "deleteOne(" + rowObject.id + ")", "删除");
+        str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
+
+        var url ="/product//product/index?productCategoryId=" + rowObject.id + "&&productCategoryName=" + rowObject.name ;
+        str += getRedirectButton("btn-success",url,"充值卡");
+        str += getRedirectButton("btn-success",url,"代金券");
+        str += getRedirectButton("btn-success",url,"订单");
+        str += getFunctionButton("btn-yellow",url,"下单");
+        str += getFunctionButton("btn-yellow",url,"充值");
         return str;
     }
 

@@ -9,6 +9,7 @@ import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.biz.ProductBiz;
+import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.enums.ProductCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.ProductException;
 import com.jiazhe.youxiang.server.dto.product.ProductAddDTO;
@@ -221,6 +222,7 @@ public class APIProductController {
      *
      * @return
      */
+    @AppApi
     @ApiOperation(value = "获得商品列表（前端客户专用）", httpMethod = "GET", response = ProductResp.class, responseContainer = "List", notes = "获得商品列表（前端客户专用）")
     @RequestMapping(value = "getlistforcustomer", method = RequestMethod.GET)
     public Object getListForCustomer(@ModelAttribute ProductListForCustomerReq req) {
