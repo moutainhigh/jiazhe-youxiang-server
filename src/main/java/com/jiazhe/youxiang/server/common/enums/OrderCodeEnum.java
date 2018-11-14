@@ -27,6 +27,7 @@ public enum OrderCodeEnum {
     WORKER_MOBILE_IS_NAME(108018, "WORKER_MOBILE_IS_NAME", "服务人员电话不能为空"),
     REAL_SERVICE_TIME_IS_NULL(108019, "REAL_SERVICE_TIME_IS_NULL", "服务时间不能为空"),
     ORDER_COST_IS_NULL(108020, "ORDER_COST_IS_NULL", "订单成本不能为空"),
+    ELE_PRODUCT_CODE_NOT_ENOUGH(108021, "ELE_PRODUCT_CODE_NOT_ENOUGH", "下单数量大于库存，请联系管理员"),
     ;
 
     OrderCodeEnum(Integer code, String type, String message) {

@@ -23,12 +23,32 @@
 
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
         INSERT into electronic_product_exchange_code
-        (product_id,batch_name,order_id,order_code,code,keyt,status,expiry_time,ext_info,is_deleted,add_time,mod_time) VALUES
+        (product_id,batch_name,order_id,order_code,code,keyt,status,expiry_time,ext_info,is_deleted,add_time,mod_time)
+        VALUES
         <foreach collection="list" item="item" separator=",">
             (#{item.productId},#{item.batchName},0,"",#{item.code},#{item.keyt},0,#{item.expiryTime},
             "",0,NOW(),NOW())
         </foreach>
     </insert>
+
+    <update id="batchSendOut" parameterType="java.util.Map">
+        update electronic_product_exchange_code
+        <set>
+            order_id = #{orderId},order_code = #{orderCode},status = 1,mod_time = NOW()
+        </set>
+        where id in
+        <foreach collection="ids" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="selectTopN" resultType="com.jiazhe.youxiang.server.domain.po.ElectronicProductExchangeCodePO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM electronic_product_exchange_code
+        WHERE product_id = #{productId} and is_deleted = 0 and status = 0 and expiry_time &gt;NOW()
+        order by expiry_time asc limit #{count}
+    </select>
 
     <select id="getAllBatch" resultType="com.jiazhe.youxiang.server.domain.po.ElectronicProductExchangeCodePO">
         SELECT  DISTINCT(batch_name)

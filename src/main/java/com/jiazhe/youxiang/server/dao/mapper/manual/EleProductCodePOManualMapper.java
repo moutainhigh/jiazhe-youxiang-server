@@ -4,6 +4,7 @@ import com.jiazhe.youxiang.server.domain.po.ElectronicProductExchangeCodePO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author TU
@@ -24,4 +25,18 @@ public interface EleProductCodePOManualMapper {
      * @param poList
      */
     void batchInsert(List<ElectronicProductExchangeCodePO> poList);
+
+    /**
+     * 获取n个可用电子码
+     * @param productId
+     * @param count
+     * @return
+     */
+    List<ElectronicProductExchangeCodePO> selectTopN(@Param("productId") Integer productId, @Param("count")Integer count);
+
+    /**
+     *  批量发放商品电子码
+     * @param map
+     */
+    void batchSendOut(Map<String, Object> map);
 }

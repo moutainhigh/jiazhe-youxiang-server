@@ -36,4 +36,19 @@ public interface EleProductCodeService {
      * @param poList
      */
     void batchInsert(List<ElectronicProductExchangeCodePO> poList);
+
+    /**
+     * 获取可以发放的n个电子兑换码
+     * @param productId
+     * @return
+     */
+    List<EleProductCodeDTO> selectTopN(Integer productId,Integer count);
+
+    /**
+     * 批量发放电子码
+     * @param ids
+     * @param orderId
+     * @param orderCode
+     */
+    void batchSendOut(List<Integer> ids, Integer orderId, String orderCode);
 }

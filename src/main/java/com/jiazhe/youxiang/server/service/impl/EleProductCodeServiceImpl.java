@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -49,5 +51,20 @@ public class EleProductCodeServiceImpl implements EleProductCodeService {
     @Override
     public void batchInsert(List<ElectronicProductExchangeCodePO> poList) {
         eleProductCodePOManualMapper.batchInsert(poList);
+    }
+
+    @Override
+    public List<EleProductCodeDTO> selectTopN(Integer productId, Integer count) {
+        List<ElectronicProductExchangeCodePO> pOList = eleProductCodePOManualMapper.selectTopN(productId,count);
+        return pOList.stream().map(EleProductCodeAdapter::PO2DTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public void batchSendOut(List<Integer> ids, Integer orderId, String orderCode) {
+        Map<String, Object> map = new HashMap<String, Object>(3);
+        map.put("ids",ids);
+        map.put("orderId",orderId);
+        map.put("orderCode",orderCode);
+        eleProductCodePOManualMapper.batchSendOut(map);
     }
 }
