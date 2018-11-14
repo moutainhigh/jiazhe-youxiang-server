@@ -128,6 +128,10 @@ public class ProductBiz {
 
 
     public void updatePriceStatus(Integer id, Integer status) {
-        productPriceService.updatePriceStatus(id, status);
+        productPriceService.updatePrice(id, null, status);
+    }
+
+    public void updatePrice(Integer id, BigDecimal price) {
+        productPriceService.updatePrice(id, price, null);
     }
 }

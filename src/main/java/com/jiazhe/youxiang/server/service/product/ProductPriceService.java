@@ -37,4 +37,6 @@ public interface ProductPriceService {
     Map<Integer, List<ProductPriceDTO>> getPriceMap(List<Integer> productIds, List<String> cityCodes, Integer status);
 
     void updatePriceStatus(Integer id, Integer status);
+
+    void updatePrice(Integer id, BigDecimal price, Integer status);
 }

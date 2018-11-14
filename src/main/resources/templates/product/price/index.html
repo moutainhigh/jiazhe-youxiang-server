@@ -10,13 +10,6 @@
 
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
-    <script src='/static/ace-master/js/jquery.bootstrap-duallistbox.min.js'></script>
-    <script src="/static/ace-master/js/bootstrap-multiselect.min.js"></script>
-    <script src="/static/ace-master/js/bootstrap-multiselect.min.js"></script>
-    <script src="/static/ace-master/js/select2.min.js"></script>
-    <script src="/static/ace-master/js/jquery-typeahead.js"></script>
-
-
     <style>
         .form-group {
             margin-bottom: 0px;
@@ -110,7 +103,7 @@
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-1"></div>
                                         <div class="col-xs-12 col-sm-9">
-                                            <form id="productPriceSaveForm" class="form-horizontal" role="form">
+                                            <form class="form-horizontal" role="form">
                                                 <input type="hidden" id="inputProductId" name="productId"
                                                        th:value="${productId}">
                                                 <div class="form-group">
@@ -120,8 +113,8 @@
 
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <select class="form-control" id="selecltCityList"
-                                                                    multiple="multiple" name="cityCodes[]"></select>
+                                                            <select class="form-control" id="selecltCityList" size="10"
+                                                                    multiple="multiple"></select>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -146,7 +139,50 @@
                                         取消
                                     </button>
 
-                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="addOrUpdate()">
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="batchUpdate()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        保存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="edit-modal-form" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger" id="modal-title"></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-1"></div>
+                                        <div class="col-xs-12 col-sm-9">
+                                            <form id="productPriceSaveForm" class="form-horizontal" role="form">
+                                                <input type="hidden" id="inputPriceId" name="id">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">价格：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputPrice2" name="price"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="update()">
                                         <i class="ace-icon fa fa-check"></i>
                                         保存
                                     </button>
@@ -171,7 +207,7 @@
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
-        initCitySelect();
+
         var tableOption = {
             url: "/api/product/getpricelist",// 获取数据的地址
             colNames: ['', '城市名称', '城市代码', '价格', '状态', '操作'],
@@ -188,6 +224,7 @@
         }
 
         initTable(grid_selector, pager_selector, tableOption);
+        initCitySelect();
     });
 
     $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
@@ -210,9 +247,9 @@
         }
     }
 
-
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
+        str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "编辑");
         if (rowObject.status == 0) {
             str += getFunctionButton("btn-success", "makeEfficacy(" + rowObject.id + ")", "生效");
         } else {
@@ -221,12 +258,31 @@
         return str;
     }
 
-    function addOrUpdate() {
+    function update() {
+        $.ajax({
+            url: "/api/product/updateprice",
+            dataType: "json",
+            async: false,
+            data: transformToJson($('#productPriceSaveForm').serializeArray()),
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $("#edit-modal-form").modal('hide');
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: error
+        });
+    }
+
+    function batchUpdate() {
         $.ajax({
             url: "/api/product/batchaddorupdateprice",
             dataType: "json",
             async: false,
-            traditional:true,//ajax传递数组时会进行序列化，必须加上traditional：true的标识才可以。
+            traditional: true,//ajax传递数组时会进行序列化，必须加上traditional：true的标识才可以。
             data: {
                 productId: $("#inputProductId").val(),
                 cityCodes: $("#selecltCityList").val(),
@@ -239,8 +295,17 @@
     }
 
 
+
+
     function openNew() {
         $("#modal-title").html("商品价格-批量修改");
+    }
+
+    function openEdit(id) {
+        $("#edit-modal-title").html("商品价格-修改");
+        $("#inputPriceId").val(id);
+        $("#inputPrice2").val("");
+        $("#edit-modal-form").modal('show');
     }
 
     /**
@@ -292,7 +357,7 @@
 
                     var result = data.data;
                     for (var i = 0; i < result.length; i++) {
-                        $("#selecltCityList").append("<option name='cityCodes[]' value='" + result[i].cityCode + "'>" + result[i].cityName + "</option>");
+                        $("#selecltCityList").append("<option value='" + result[i].cityCode + "'>" + result[i].cityName + "</option>");
                     }
                 }
             },

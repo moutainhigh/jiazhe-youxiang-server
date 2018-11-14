@@ -183,4 +183,18 @@ public class ProductPriceServiceImpl implements ProductPriceService {
         productPricePO.setStatus(status.byteValue());
         productPricePOMapper.updateByPrimaryKeySelective(productPricePO);
     }
+
+    @Override
+    public void updatePrice(Integer id, BigDecimal price, Integer status) {
+        ProductPricePO productPricePO = new ProductPricePO();
+        productPricePO.setId(id);
+        productPricePO.setModTime(new Date());
+        if(price!=null){
+            productPricePO.setPrice(price);
+        }
+        if(status!=null){
+            productPricePO.setStatus(status.byteValue());
+        }
+        productPricePOMapper.updateByPrimaryKeySelective(productPricePO);
+    }
 }
