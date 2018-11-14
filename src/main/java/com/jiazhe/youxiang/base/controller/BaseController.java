@@ -20,13 +20,13 @@ public abstract class BaseController {
     /**
      * 权限异常
      */
-    @ExceptionHandler({ UnauthorizedException.class, AuthorizationException.class })
+    @ExceptionHandler({UnauthorizedException.class, AuthorizationException.class})
     public String authorizationException(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (ProjectUtil.isAjax(request)) {
             String code = "000002";
             String msg = "无权限";
             System.out.println("BaseController：ajax请求，无权限");
-            ResponseUtil.responseUtils(response, ResultPackage.resultPackage(code,new JSONObject(),msg));
+            ResponseUtil.responseUtils(response, ResultPackage.resultPackage(code, new JSONObject(), msg));
             return null;
         } else {
             System.out.println("BaseController：页面跳转，无权限");
