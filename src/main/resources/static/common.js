@@ -91,6 +91,8 @@ function error(data) {
     bootboxalert("服务器异常，请联系管理员");
 }
 
+bootbox.setDefaults("locale","zh_CN");
+
 /**
  * 获得图片路径
  * @param url
@@ -203,6 +205,7 @@ function initTable(grid_selector, pager_selector, options) {
         caption: caption
     });
 }
+
 
 
 

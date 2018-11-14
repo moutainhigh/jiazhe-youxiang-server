@@ -21,6 +21,9 @@ public class AppendOrderReq extends BaseVO{
     @ApiModelProperty("追加数量")
     private Integer count;
 
+    @ApiModelProperty("订单成本")
+    private BigDecimal cost;
+
     /**
      * 使用的代金券ids
      */
@@ -77,5 +80,13 @@ public class AppendOrderReq extends BaseVO{
 
     public void setCardMoneys(String cardMoneys) {
         this.cardMoneys = cardMoneys;
+    }
+
+    public BigDecimal getCost() {
+        return cost;
+    }
+
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
     }
 }

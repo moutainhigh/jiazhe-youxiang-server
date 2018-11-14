@@ -1,4 +1,4 @@
-package com.jiazhe.youxiang.server.vo.resp.eleproductexcode;
+package com.jiazhe.youxiang.server.vo.resp.eleproductcode;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
 

@@ -1,6 +1,6 @@
-package com.jiazhe.youxiang.server.vo.resp.eleproductexcode;
+package com.jiazhe.youxiang.server.dto.eleproductexcode;
 
-import com.jiazhe.youxiang.server.vo.BaseVO;
+import com.jiazhe.youxiang.server.dto.product.ProductDTO;
 
 import java.util.Date;
 
@@ -9,13 +9,13 @@ import java.util.Date;
  * @description
  * @date 2018/10/25.
  */
-public class EleProductExCodeResp extends BaseVO {
-
-    private static final long serialVersionUID = 945447596984890166L;
+public class EleProductCodeDTO {
 
     private Integer id;
 
     private Integer productId;
+
+    private ProductDTO productDTO;
 
     private String batchName;
 
@@ -81,5 +81,13 @@ public class EleProductExCodeResp extends BaseVO {
 
     public void setExpiryTime(Date expiryTime) {
         this.expiryTime = expiryTime;
+    }
+
+    public ProductDTO getProductDTO() {
+        return productDTO;
+    }
+
+    public void setProductDTO(ProductDTO productDTO) {
+        this.productDTO = productDTO;
     }
 }

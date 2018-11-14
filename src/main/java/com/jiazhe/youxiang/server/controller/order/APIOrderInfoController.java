@@ -1,9 +1,12 @@
 package com.jiazhe.youxiang.server.controller.order;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.order.OrderInfoBiz;
+import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.OrderException;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -12,6 +15,7 @@ import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.*;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
+import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.WaitingDealCountResp;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -121,6 +125,9 @@ public class APIOrderInfoController extends BaseController {
     @RequestMapping(value = "/customerplaceorder", method = RequestMethod.POST)
     public Object customerPlaceOrder(@ModelAttribute CustomerPlaceOrderReq req) throws ParseException {
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqCustomerPlaceOrder2DTOPlaceOrder(req);
+        placeOrderDTO.setWorkerMobile("");
+        placeOrderDTO.setWorkerName("");
+        placeOrderDTO.setCost(new BigDecimal(0));
         placeOrderDTO.setType(Byte.valueOf("1"));
         placeOrderDTO.setRealServiceTime(req.getServiceTime());
         orderInfoBiz.placeOrder(placeOrderDTO);
@@ -130,6 +137,10 @@ public class APIOrderInfoController extends BaseController {
     @ApiOperation(value = "员工预约服务、派单", httpMethod = "POST", notes = "员工预约服务、派单")
     @RequestMapping(value = "/userreservationorder", method = RequestMethod.POST)
     public Object userReservationOrder(@ModelAttribute UserReservationOrderReq req) {
+        CommonValidator.validateNull(req.getRealServiceTime(),new OrderException(OrderCodeEnum.REAL_SERVICE_TIME_IS_NULL));
+        CommonValidator.validateNull(req.getWorkerName(),new OrderException(OrderCodeEnum.WORKER_NAME_IS_NAME));
+        CommonValidator.validateNull(req.getWorkerMobile(),new OrderException(OrderCodeEnum.WORKER_MOBILE_IS_NAME));
+        CommonValidator.validateNull(req.getCost(),new OrderException(OrderCodeEnum.ORDER_COST_IS_NULL));
         orderInfoBiz.userReservationOrder(OrderInfoAdapter.ReqUserReservationOrder2DTOUserReservationOrder(req));
         return ResponseFactory.buildSuccess();
     }
@@ -149,18 +160,22 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildResponse(orderInfoResp);
     }
 
-    @ApiOperation(value = "待预约订单数量", httpMethod = "GET", notes = "待预约订单数量")
+    @ApiOperation(value = "待预约订单数量", httpMethod = "GET",  response = WaitingDealCountResp.class,  notes = "待预约订单数量")
     @RequestMapping(value = "/getunsentordercount", method = RequestMethod.GET)
     public Object getUnsentOrderCount() {
         Integer count = orderInfoBiz.getUnsentOrderCount();
-        return ResponseFactory.buildResponse(count);
+        WaitingDealCountResp waitingDealCountResp = new WaitingDealCountResp();
+        waitingDealCountResp.setCount(count);
+        return ResponseFactory.buildResponse(waitingDealCountResp);
     }
 
-    @ApiOperation(value = "待审核订单数量", httpMethod = "GET", notes = "待审核订单数量")
+    @ApiOperation(value = "取消待审核订单数量", httpMethod = "GET", response = WaitingDealCountResp.class,  notes = "取消待审核订单数量")
     @RequestMapping(value = "/getunauditordercount", method = RequestMethod.GET)
     public Object getUnauditOrderCount() {
         Integer count = orderInfoBiz.getUnauditOrderCount();
-        return ResponseFactory.buildResponse(count);
+        WaitingDealCountResp waitingDealCountResp = new WaitingDealCountResp();
+        waitingDealCountResp.setCount(count);
+        return ResponseFactory.buildResponse(waitingDealCountResp);
     }
 
 }

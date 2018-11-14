@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.vo.req.order.orderinfo;
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -23,6 +24,7 @@ public class UserReservationOrderReq {
     @ApiModelProperty("服务人联系方式")
     private String workerMobile;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @ApiModelProperty("真实服务时间")
     private Date realServiceTime;
 

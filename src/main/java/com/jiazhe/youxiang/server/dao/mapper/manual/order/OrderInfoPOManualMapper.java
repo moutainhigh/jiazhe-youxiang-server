@@ -46,4 +46,11 @@ public interface OrderInfoPOManualMapper {
      * @param orderInfoPO
      */
     void insert(OrderInfoPO orderInfoPO);
+
+    /**
+     * 根据订单状态，获取订单的个数
+     * @param status
+     * @return
+     */
+    Integer getCountByStatus(@Param("status")Byte status);
 }

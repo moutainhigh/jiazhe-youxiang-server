@@ -87,11 +87,11 @@ public class OrderInfoBiz {
     }
 
     public Integer getUnsentOrderCount() {
-        return 0;
+        return orderInfoService.getCountByStatus(CommonConstant.ORDER_UNSENT);
     }
 
     public Integer getUnauditOrderCount() {
-        return 0;
+        return orderInfoService.getCountByStatus(CommonConstant.ORDER_CANCELWATINGCHECK);
     }
 
     public List<OrderInfoDTO> getOrderByRCId(Integer id) {

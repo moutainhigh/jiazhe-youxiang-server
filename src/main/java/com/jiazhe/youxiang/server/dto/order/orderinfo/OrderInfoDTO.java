@@ -19,6 +19,10 @@ public class OrderInfoDTO {
 
     private Integer customerId;
 
+    private String customerCityCode;
+
+    private String customerCityName;
+
     private Integer productId;
 
     private BigDecimal productPrice;
@@ -49,7 +53,9 @@ public class OrderInfoDTO {
 
     private BigDecimal payCash;
 
-    private BigDecimal totalCost;
+    private BigDecimal cost;
+
+    private BigDecimal totalAmount;
 
     private String comments;
 
@@ -207,12 +213,20 @@ public class OrderInfoDTO {
         this.payCash = payCash;
     }
 
-    public BigDecimal getTotalCost() {
-        return totalCost;
+    public BigDecimal getCost() {
+        return cost;
     }
 
-    public void setTotalCost(BigDecimal totalCost) {
-        this.totalCost = totalCost;
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
+    }
+
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     public String getComments() {
@@ -261,5 +275,21 @@ public class OrderInfoDTO {
 
     public void setCustomerDTO(CustomerDTO customerDTO) {
         this.customerDTO = customerDTO;
+    }
+
+    public String getCustomerCityCode() {
+        return customerCityCode;
+    }
+
+    public void setCustomerCityCode(String customerCityCode) {
+        this.customerCityCode = customerCityCode;
+    }
+
+    public String getCustomerCityName() {
+        return customerCityName;
+    }
+
+    public void setCustomerCityName(String customerCityName) {
+        this.customerCityName = customerCityName;
     }
 }
