@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.server.service.product;
 
 import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
+import com.jiazhe.youxiang.server.vo.Paging;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,7 +20,9 @@ import java.util.Map;
  */
 public interface ProductPriceService {
 
-    List<ProductPriceDTO> getListByProductId(Integer id);
+    List<ProductPriceDTO> getAllPriceList(Integer productId);
+
+    List<ProductPriceDTO> getPriceList(Integer productId, String cityName, String cityCode, Integer status, Paging paging);
 
     List<Integer> getProductIdsByCityCodes(List<String> cityCodes);
 
@@ -32,4 +35,6 @@ public interface ProductPriceService {
     void batchDeletePrice(List<Integer> ids);
 
     Map<Integer, List<ProductPriceDTO>> getPriceMap(List<Integer> productIds, List<String> cityCodes, Integer status);
+
+    void updatePriceStatus(Integer id, Integer status);
 }

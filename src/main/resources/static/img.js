@@ -1,6 +1,6 @@
-function initImgControl(fileLabel, imgLabel, inputLabel) {
+function initImgControl(fileControl, imgControl, inputControl) {
 
-    $('#'+fileLabel).ace_file_input({
+    fileControl.ace_file_input({
         style: 'well',
         btn_choose: '把图片拖到这里或点击选择图片',
         btn_change: null,
@@ -10,11 +10,11 @@ function initImgControl(fileLabel, imgLabel, inputLabel) {
         allowExt: ['jpg', 'jpeg', 'png', 'gif', 'tif', 'tiff', 'bmp'],
         allowMime: ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/tif', 'image/tiff', 'image/bmp'],
         before_remove: function () {
-            $('#'+imgLabel).attr('hidden', 'hidden');
+            imgControl.attr('hidden', 'hidden');
             return true;
         }
     }).on('change', function () {
-        var image = $('#'+fileLabel)[0].files[0]
+        var image = fileControl[0].files[0]
         if (!image) {
             return;
         }
@@ -34,8 +34,8 @@ function initImgControl(fileLabel, imgLabel, inputLabel) {
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
-                    $('#'+inputLabel).val(data.data.url)
-                    $('#'+imgLabel).attr('hidden', 'hidden');
+                    inputControl.val(data.data.url)
+                    imgControl.attr('hidden', 'hidden');
 //                    alert('文件上传成功!' + data.data.url);
                 }
             },

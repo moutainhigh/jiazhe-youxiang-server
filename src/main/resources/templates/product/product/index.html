@@ -12,7 +12,6 @@
     <script th:src="@{/static/init.js}"></script>
     <script th:src="@{/static/img.js}"></script>
 
-
     <style>
         .form-group {
             margin-bottom: 0px;
@@ -29,6 +28,9 @@
         } catch (e) {
         }
     </script>
+
+    <input id="hiddenProductCategoryId" type="hidden" th:value="${productCategoryId}"/>
+    <input id="hiddenProductCategoryName" type="hidden" th:value="${productCategoryName}"/>
 
     <div class="main-content">
         <div class="main-content-inner">
@@ -69,7 +71,8 @@
                                 </div>
                                 <label class="col-sm-1 control-label no-padding-right">商品分类：</label>
                                 <div class="col-sm-2">
-                                    <select id="productType" name="productType" class="selectpicker show-tick form-control">
+                                    <select id="productType" name="productType"
+                                            class="selectpicker show-tick form-control">
                                         <option value="">所有</option>
                                         <option value=0>服务</option>
                                         <option value=1>电子卡</option>
@@ -113,9 +116,12 @@
                                         <div class="col-xs-12 col-sm-9">
                                             <form id="productSaveForm" class="form-horizontal" role="form">
                                                 <input type="hidden" id="inputProductId" name="id" value="0">
-                                                <input type="hidden" id="inputproductCategoryId" name="productCategoryId" th:value="${productCategoryId}">
-                                                <input type="hidden" name="thumbnailUrl" id="inputThumbnailUrl" value="">
-                                                <input type="hidden" name="detailImgUrl" id="inputDetailImgUrl" value="">
+                                                <input type="hidden" id="inputproductCategoryId"
+                                                       name="productCategoryId" th:value="${productCategoryId}">
+                                                <input type="hidden" name="thumbnailUrl" id="inputThumbnailUrl"
+                                                       value="">
+                                                <input type="hidden" name="detailImgUrl" id="inputDetailImgUrl"
+                                                       value="">
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">商品名称：</label>
                                                     <div class="col-sm-8">
@@ -165,7 +171,7 @@
                                                         ：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="inputEffectiveDays"  name="effectiveDays"
+                                                            <input id="inputEffectiveDays" name="effectiveDays"
                                                                    class="form-control"
                                                                    type="text" style="height: 30px;"/>
 
@@ -220,7 +226,7 @@
                                                         ：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="inputSmsTemplate"  name="smsTemplate"
+                                                            <input id="inputSmsTemplate" name="smsTemplate"
                                                                    class="form-control"
                                                                    type="text" style="height: 30px;"/>
 
@@ -266,67 +272,45 @@
 </div>
 </body>
 <script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
 
-        initImgControl("fileThumbnail","imgThumbnail","inputThumbnailUrl");
-        initImgControl("fileDetail","imgDetail","inputDetailImgUrl");
+
+        var tableOption = {
+            url: "/api/product/getlist",// 获取数据的地址
+            postData: transformToJson($('#searchForm').serializeArray()),
+            colNames: ['', '商品名称', '商品描述', '最少购买数量', '单位名称 ', '有效期天数 ', '商品分类 ', '商品状态', '排序', '操作'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'name', index: 'name', width: 50, sortable: false},
+                {name: 'description', index: 'description', sortable: false},
+                {name: 'lastNum', index: 'lastNum', width: 50, sortable: false},
+                {name: 'unitName', index: 'unitName', width: 50, sortable: false},
+                {name: 'effectiveDays', index: 'effectiveDays', width: 50, sortable: false},
+                {
+                    name: 'productType',
+                    index: 'productType',
+                    width: 50,
+                    sortable: false,
+                    formatter: productTypeFormatter
+                },
+                {name: 'status', index: 'status', width: 50, sortable: false, formatter: statusFormatter},
+                {name: 'priority', index: 'priority', width: 20, sortable: false},
+                {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
+            ],
+            caption: "商品列表"
+        }
+
+        initTable(grid_selector, pager_selector, tableOption);
+        initImgControl($("#fileThumbnail"), $("#imgThumbnail"), $("#inputThumbnailUrl"));
+        initImgControl($("#fileDetail"), $("#imgDetail"), $("#inputDetailImgUrl"));
     });
 
-    var grid_selector = "#grid-table";
-    var pager_selector = "#grid-pager";
-    jQuery(grid_selector).jqGrid({
-        url: "/api/product/getlist",// 获取数据的地址
-        postData: transformToJson($('#searchForm').serializeArray()),
-        rownumbers: true,
-        datatype: "json",
-        mtype: "GET",
-        hidegrid: false,//收缩列表按钮
-        prmNames: {
-            page: "pageNum",
-            rows: "pageSize"
-        },// 重新定义分页信息
-        width: "100%",
-        autowidth: true,
-        height: 350,
-        colNames: ['', '商品名称', '商品描述', '最少购买数量', '单位名称 ', '有效期天数 ', '商品分类 ', '商品状态', '排序', '操作'],
-        colModel: [
-            {name: 'id', index: 'id', sortable: false, hidden: true},
-            {name: 'name', index: 'name', width: 50, sortable: false},
-            {name: 'description', index: 'description', sortable: false},
-            {name: 'lastNum', index: 'lastNum', width: 50, sortable: false},
-            {name: 'unitName', index: 'unitName', width: 50, sortable: false},
-            {name: 'effectiveDays', index: 'effectiveDays', width: 50, sortable: false},
-            {name: 'productType', index: 'productType', width: 50, sortable: false, formatter: productTypeFormatter},
-            {name: 'status', index: 'status', width: 50, sortable: false, formatter: statusFormatter},
-            {name: 'priority', index: 'priority', width: 20, sortable: false},
-            {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
-        ],
-        rowNum: 10,
-        rowList: [10, 20, 30],
-        pager: pager_selector,
-        altRows: true,
-        viewrecords: true,
-        emptyrecords: "0条数据",
-        loadComplete: function (data) {
-            var table = this;
-            setTimeout(function () {
-                $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
-                updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
-            }, 0);
-        },
-        jsonReader: { // jsonReader来跟服务器端返回的数据做对应
-            root: "data", // 包含实际数据的数组
-            page: "paging.currPage", // 当前页
-            total: "paging.totalPage",// 总页数
-            records: "paging.total", // 查询出的记录数
-            repeatitems: false
-        },
-        caption: "商品列表"
-    });
     $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
 
     function search() {
@@ -359,14 +343,20 @@
 
 
     function customFormatter(cellvalue, options, rowObject) {
+        var productCategoryId = $("#hiddenProductCategoryId").val();
+        var productCategoryName = $("#hiddenProductCategoryName").val();
+
         var str = "";
-        str += getFunctionButton("btn-danger","deleteOne(" + rowObject.id + ")","删除");
-        str += getFunctionButton("btn-info","openEdit(" + rowObject.id + ")","修改");
+        str += getFunctionButton("btn-danger", "deleteOne(" + rowObject.id + ")", "删除");
+        str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
         if (rowObject.status == 0) {
-            str += getFunctionButton("btn-success","sold(" + rowObject.id + ")","上架");
+            str += getFunctionButton("btn-success", "sold(" + rowObject.id + ")", "上架");
         } else {
-            str += getFunctionButton("btn-danger","soldOut(" + rowObject.id + ")","下架");
+            str += getFunctionButton("btn-danger", "soldOut(" + rowObject.id + ")", "下架");
         }
+        var url = "/product//productprice/index?productId=" + rowObject.id + "&&productName=" + rowObject.name +
+            "&&productCategoryId=" + productCategoryId + "&&productCategoryName=" + productCategoryName;
+        str += getRedirectButton("btn-primary", url, "价格管理");
         return str;
     }
 
@@ -421,7 +411,6 @@
         });
     }
 
-
     function openNew() {
         $("#modal-title").html("商品信息-添加");
         $("#inputProductId").val(0);
@@ -468,7 +457,7 @@
                     $("#inputEffectiveDays").val(result.effectiveDays);
                     $("#inputSmsTemplate").val(result.smsTemplate);
                     $("#inputPriority").val(result.priority);
-                    if(result.productType==0){
+                    if (result.productType == 0) {
                         $("#inputService").click();
                     }
                     $('#fileThumbnail').ace_file_input('show_file_list', [getImageUrl(result.thumbnailUrl)]);
@@ -515,6 +504,10 @@
                 });
             }
         });
+    }
+
+    function openPriceEdit(id) {
+        $("#price-modal-form").modal('show');
     }
 
 </script>

@@ -284,6 +284,9 @@ public class APIProductController {
 
     /*************商品价格相关******************/
 
+
+
+
     /**
      * 批量添加或修改商品价格
      *
@@ -317,6 +320,7 @@ public class APIProductController {
         return ResponseFactory.buildResponse(ProductAdapter.productPriceDTO2VO(productPriceDTO));
     }
 
+
     /**
      * 获得某一商品在某城市的价格
      *
@@ -340,12 +344,14 @@ public class APIProductController {
      * @return
      */
     @ApiOperation(value = "获得商品的价格列表", httpMethod = "GET", response = ProductPriceResp.class, responseContainer = "List", notes = "获得商品的价格列表")
-    @RequestMapping(value = "getpricelistbyproductid", method = RequestMethod.GET)
-    public Object getPriceListByProductId(@ModelAttribute ProductPriceListReq req) {
+    @RequestMapping(value = "getpricelist", method = RequestMethod.GET)
+    public Object getPriceList(@ModelAttribute ProductPriceListReq req) {
         CommonValidator.validateNull(req);
+        CommonValidator.validatePaging(req);
+        Paging paging =  PagingParamUtil.pagingParamSwitch(req);
         CommonValidator.validateId(req.getProductId(), new ProductException(ProductCodeEnum.PRODUCT_ID_IS_NULL));
         //调用BIZ方法
-        List<ProductPriceDTO> productPriceDTOList = productBiz.getPriceListByProductId(req.getProductId());
+        List<ProductPriceDTO> productPriceDTOList = productBiz.getPriceList(req.getProductId(),req.getCityName(),req.getCityCode(),req.getStatus(),paging);
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildResponse(productPriceDTOList.stream().map(ProductAdapter::productPriceDTO2VO).collect(Collectors.toList()));
     }
@@ -362,6 +368,21 @@ public class APIProductController {
         CommonValidator.validateIdList(req, new ProductException(ProductCodeEnum.PRODUCT_PRICE_ID_IS_NULL));
         //调用BIZ方法
         productBiz.batchDeletePrice(req.getIds());
+        return ResponseFactory.buildSuccess();
+    }
+
+    /**
+     * 更新价格状态
+     *
+     * @return
+     */
+    @ApiOperation(value = "更新价格状态", httpMethod = "POST", notes = "更新价格状态")
+    @RequestMapping(value = "updatepricestatus", method = RequestMethod.POST)
+    public Object updatePriceStatus(@ModelAttribute StatusReq req) {
+        validateStatus(req);
+        //调用BIZ方法
+        productBiz.updatePriceStatus(req.getId(), req.getStatus());
+        //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
 

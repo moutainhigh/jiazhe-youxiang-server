@@ -328,7 +328,7 @@ CREATE TABLE `product_price` (
     `city_name` VARCHAR(255) NOT NULL DEFAULT ''  COMMENT '城市名称',
     `product_id` INT(10) UNSIGNED NOT NULL COMMENT '商品id',
     `price` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '商品价格',
-    `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '状态：0:未生效,1:已生效',
+    `status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '状态：0:未生效,1:已生效',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

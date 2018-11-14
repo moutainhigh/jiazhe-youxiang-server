@@ -19,7 +19,7 @@ public class ProductController extends BaseController {
 
     @RequestMapping(value = "/productcategory/index")
     public String productCategoryIndex() {
-        return "product/productcategory/index";
+        return "product/category/index";
     }
 
     @RequestMapping(value = "/product/index")
@@ -27,5 +27,14 @@ public class ProductController extends BaseController {
         model.addAttribute("productCategoryId", productCategoryId);
         model.addAttribute("productCategoryName", productCategoryName);
         return "product/product/index";
+    }
+
+    @RequestMapping(value = "/productprice/index")
+    public String productPriceIndex(String productId, String productName, String productCategoryId, String productCategoryName, Model model) {
+        model.addAttribute("productId", productId);
+        model.addAttribute("productName", productName);
+        model.addAttribute("productCategoryId", productCategoryId);
+        model.addAttribute("productCategoryName", productCategoryName);
+        return "product/price/index";
     }
 }

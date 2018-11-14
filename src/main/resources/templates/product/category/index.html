@@ -182,7 +182,7 @@
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
-        initImgControl("fileThumbnail","imgThumbnail","inputThumbnailUrl");
+        initImgControl($("#fileThumbnail"), $("#imgThumbnail"), $("#inputThumbnailUrl"));
     });
 
     var grid_selector = "#grid-table";

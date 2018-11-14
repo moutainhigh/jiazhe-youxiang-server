@@ -18,6 +18,7 @@ import com.jiazhe.youxiang.server.domain.po.ProductPricePOExample;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
 import com.jiazhe.youxiang.server.service.SysCityService;
 import com.jiazhe.youxiang.server.service.product.ProductPriceService;
+import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -122,13 +124,28 @@ public class ProductPriceServiceImpl implements ProductPriceService {
     }
 
     @Override
-    public List<ProductPriceDTO> getListByProductId(Integer productId) {
-        ProductPricePOExample productPricePOExample = new ProductPricePOExample();
-        ProductPricePOExample.Criteria criteria = productPricePOExample.createCriteria();
-        criteria.andProductIdEqualTo(productId);
-        List<ProductPricePO> productPricePOList = productPricePOMapper.selectByExample(productPricePOExample);
-        return productPricePOList.stream().map(ProductAdapter::productPricePO2DTO).collect(Collectors.toList());
+    public List<ProductPriceDTO> getAllPriceList(Integer productId) {
+        return getPriceList(productId, null, null, null, null);
     }
+
+    @Override
+    public List<ProductPriceDTO> getPriceList(Integer productId, String cityName, String cityCode, Integer status, Paging paging) {
+        List<ProductPriceDTO> result = Lists.newArrayList();
+        Integer offset = null;
+        Integer limit = null;
+        if (paging != null) {
+            offset = paging.getOffset();
+            limit = paging.getLimit();
+            Integer count = productPricePOManualMapper.count(productId, cityName, cityCode, status);
+            paging.setTotal(count);
+        }
+        List<ProductPricePO> productPricePOList = productPricePOManualMapper.query(productId, cityName, cityCode, status, offset, limit);
+        if (CollectionUtils.isNotEmpty(productPricePOList)) {
+            result = productPricePOList.stream().map(ProductAdapter::productPricePO2DTO).collect(Collectors.toList());
+        }
+        return result;
+    }
+
 
     @Override
     public void batchDeletePrice(List<Integer> ids) {
@@ -156,5 +173,14 @@ public class ProductPriceServiceImpl implements ProductPriceService {
             });
         }
         return result;
+    }
+
+    @Override
+    public void updatePriceStatus(Integer id, Integer status) {
+        ProductPricePO productPricePO = new ProductPricePO();
+        productPricePO.setId(id);
+        productPricePO.setModTime(new Date());
+        productPricePO.setStatus(status.byteValue());
+        productPricePOMapper.updateByPrimaryKeySelective(productPricePO);
     }
 }
