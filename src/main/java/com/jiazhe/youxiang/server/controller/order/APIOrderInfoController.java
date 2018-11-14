@@ -125,6 +125,9 @@ public class APIOrderInfoController extends BaseController {
     @RequestMapping(value = "/customerplaceorder", method = RequestMethod.POST)
     public Object customerPlaceOrder(@ModelAttribute CustomerPlaceOrderReq req) throws ParseException {
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqCustomerPlaceOrder2DTOPlaceOrder(req);
+        placeOrderDTO.setWorkerMobile("");
+        placeOrderDTO.setWorkerName("");
+        placeOrderDTO.setCost(new BigDecimal(0));
         placeOrderDTO.setType(Byte.valueOf("1"));
         placeOrderDTO.setRealServiceTime(req.getServiceTime());
         orderInfoBiz.placeOrder(placeOrderDTO);

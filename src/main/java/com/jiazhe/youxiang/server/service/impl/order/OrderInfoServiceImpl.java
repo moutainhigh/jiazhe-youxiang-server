@@ -507,6 +507,11 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
     }
 
+    /**
+     * 根据订单信息，设置定单comment字段内容，并且返回要兑换的电子码list
+     * @param orderInfoPO
+     * @return
+     */
     private  List<EleProductCodeDTO>  sendEleProductCode(OrderInfoPO orderInfoPO) {
         List<EleProductCodeDTO> eleProductCodeDTOList  = eleProductCodeService.selectTopN(orderInfoPO.getProductId(), orderInfoPO.getCount());
         if (eleProductCodeDTOList.size() != orderInfoPO.getCount()) {
@@ -515,7 +520,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         StringBuilder comments = new StringBuilder();
         eleProductCodeDTOList.stream().forEach(bean -> {
             if (!Strings.isBlank(bean.getCode())) {
-                comments.append("兑换码为：" + bean.getCode() + ",兑换密钥为：" + bean.getKeyt() + "；");
+                comments.append("兑换码为：" + bean.getCode() + "，兑换密钥为：" + bean.getKeyt() + "；");
             }
         });
         orderInfoPO.setComments(comments.toString());
