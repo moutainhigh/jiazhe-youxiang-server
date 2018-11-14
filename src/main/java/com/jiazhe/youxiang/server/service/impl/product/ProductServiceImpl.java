@@ -63,7 +63,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO getById(Integer id) {
         ProductPO productPO = productPOMapper.selectByPrimaryKey(id);
         ProductCategoryDTO productCategory = productCategoryService.getCategoryById(productPO.getProductCategoryId());
-        List<ProductPriceDTO> productPriceList = productPriceService.getListByProductId(productPO.getId());
+        List<ProductPriceDTO> productPriceList = productPriceService.getAllPriceList(productPO.getId());
         ProductDTO productDTO = ProductAdapter.productPO2DTO(productPO);
         productDTO.setProductCategory(productCategory);
         productDTO.setProductPriceList(productPriceList);

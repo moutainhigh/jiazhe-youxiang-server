@@ -26,4 +26,17 @@ public interface ProductPricePOManualMapper {
     List<Integer> getProductIdsByCityIds(@Param("cityCodes") List<String> cityCodes);
 
     void batchAddPrice(@Param("list") List<ProductPricePO> productPricePOList);
+
+    Integer count(@Param("productId") Integer productId,
+                  @Param("cityName") String cityName,
+                  @Param("cityCode") String cityCode,
+                  @Param("status") Integer status);
+
+    List<ProductPricePO> query(@Param("productId") Integer productId,
+                               @Param("cityName") String cityName,
+                               @Param("cityCode") String cityCode,
+                               @Param("status") Integer status,
+                               @Param("offset") Integer offset,
+                               @Param("limit") Integer limit);
+
 }

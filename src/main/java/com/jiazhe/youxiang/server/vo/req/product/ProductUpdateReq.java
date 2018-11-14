@@ -32,6 +32,8 @@ public class ProductUpdateReq extends IdReq {
     private String unitName;
     @ApiModelProperty("最少购买数量")
     private Integer lastNum;
+    @ApiModelProperty("商品排序")
+    private Integer priority;
 
     public String getName() {
         return name;
@@ -95,5 +97,13 @@ public class ProductUpdateReq extends IdReq {
 
     public void setLastNum(Integer lastNum) {
         this.lastNum = lastNum;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 }

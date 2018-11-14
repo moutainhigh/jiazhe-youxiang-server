@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.server.vo.req.product;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -14,11 +15,20 @@ import io.swagger.annotations.ApiModelProperty;
  * @author niexiao
  * @created 2018/10/19
  */
-public class ProductPriceListReq extends BaseVO {
+public class ProductPriceListReq extends PageSizeNumReq {
 
     private static final long serialVersionUID = -3365347102140933251L;
     @ApiModelProperty("商品id")
     private Integer productId;
+
+    @ApiModelProperty("城市名称")
+    private String cityName;
+
+    @ApiModelProperty("城市代码")
+    private String cityCode;
+
+    @ApiModelProperty("价格生效状态")
+    private Integer status;
 
     public Integer getProductId() {
         return productId;
@@ -26,5 +36,29 @@ public class ProductPriceListReq extends BaseVO {
 
     public void setProductId(Integer productId) {
         this.productId = productId;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getCityCode() {
+        return cityCode;
+    }
+
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

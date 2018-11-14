@@ -133,6 +133,7 @@ public class ProductAdapter {
         productUpdateDTO.setProductType(req.getProductType());
         productUpdateDTO.setUnitName(req.getUnitName());
         productUpdateDTO.setLastNum(req.getLastNum());
+        productUpdateDTO.setPriority(req.getPriority());
         productUpdateDTO.setId(req.getId());
         return productUpdateDTO;
     }

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/static/init.css}"/>
+
+    <!-- Javascript -->
+    <script th:src="@{/static/init.js}"></script>
+    <style>
+        .form-group {
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+
+<body class="no-skin">
+
+<div class="main-container ace-save-state" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.loadState('main-container')
+        } catch (e) {
+        }
+    </script>
+
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a th:href="@{/main/main_center}">主页</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/product/productcategory/index}">商品大类管理</a>
+                    </li>
+                    <li>
+                        <a th:href="@{'/product/product/index?productCategoryId='+${productCategoryId}+'&&productCategoryName='+${productCategoryName}}">商品管理</a>
+
+                    </li>
+                    <li class="active" th:text="${productName}"/>
+                </ul><!-- /.breadcrumb -->
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xs-12" style="padding-top:40px">
+                        <form id="searchForm" class="form-horizontal" role="form">
+                            <input id="searchProductId" name="productId" type="hidden" th:value="${productId}"/>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">城市名称：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input name="cityName" class="form-control" type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">价格状态：</label>
+                                <div class="col-sm-2">
+                                    <select name="status" class="selectpicker show-tick form-control">
+                                        <option value="">所有</option>
+                                        <option value=0>未生效</option>
+                                        <option value=1>已生效</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <button class="btn btn-white btn-default btn-round btn-sm"
+                                            onclick="return search()">
+                                        <i class="ace-icon fa fa-search red2"></i>
+                                        查询
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!-- /.col -->
+                    <div class="col-xs-12" style="text-align: right" id="buttonDiv">
+                        <p style="margin:1px;">
+                            <!--<shiro:hasPermission name="sysrole:add">-->
+                            <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
+                               data-toggle="modal" onclick="openNew()">
+                                <i class="ace-icon fa fa-plus"></i>批量修改
+                            </a>
+                            <!--</shiro:hasPermission>-->
+                        </p>
+                    </div><!-- /.col -->
+                    <div class="col-xs-12">
+                        <table id="grid-table"></table>
+
+                        <div id="grid-pager"></div>
+                    </div><!-- /.col -->
+                    <div id="modal-form" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger" id="modal-title"></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-1"></div>
+                                        <div class="col-xs-12 col-sm-9">
+                                            <form class="form-horizontal" role="form">
+                                                <input type="hidden" id="inputProductId" name="productId"
+                                                       th:value="${productId}">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="selecltCityList">
+                                                        选择城市</label>
+
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <select class="form-control" id="selecltCityList" size="10"
+                                                                    multiple="multiple"></select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">价格：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputPrice" name="price"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="batchUpdate()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        保存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="edit-modal-form" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger" id="modal-title"></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-1"></div>
+                                        <div class="col-xs-12 col-sm-9">
+                                            <form id="productPriceSaveForm" class="form-horizontal" role="form">
+                                                <input type="hidden" id="inputPriceId" name="id">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">价格：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputPrice2" name="price"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="update()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        保存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+
+</div><!-- /.main-container -->
+</div>
+</body>
+<script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+
+    $(function () {
+        //重新修改表格宽度
+        $(window).resize(function () {
+            $("#grid-table").setGridWidth($(window).width() * 0.96);
+        });
+
+        var tableOption = {
+            url: "/api/product/getpricelist",// 获取数据的地址
+            colNames: ['', '城市名称', '城市代码', '价格', '状态', '操作'],
+            postData: transformToJson($('#searchForm').serializeArray()),
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'cityName', index: 'cityName', width: 50, sortable: false},
+                {name: 'cityCode', index: 'cityName', sortable: false},
+                {name: 'price', index: 'price', sortable: false},
+                {name: 'status', index: 'status', sortable: false, formatter: statusFormatter},
+                {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
+            ],
+            caption: "价格列表"
+        }
+
+        initTable(grid_selector, pager_selector, tableOption);
+        initCitySelect();
+    });
+
+    $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
+
+    function search() {
+        jQuery(grid_selector).setGridParam({
+            url: "/api/product/getpricelist",// 获取数据的地址
+            postData: transformToJson($('#searchForm').serializeArray()),
+        }).trigger("reloadGrid", [{page: 1}]);
+        return false;
+    }
+
+    function statusFormatter(cellvalue, options, cell) {
+        switch (cell.status) {
+            case 0:
+            default:
+                return "未生效";
+            case 1:
+                return "已生效";
+        }
+    }
+
+    function customFormatter(cellvalue, options, rowObject) {
+        var str = "";
+        str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "编辑");
+        if (rowObject.status == 0) {
+            str += getFunctionButton("btn-success", "makeEfficacy(" + rowObject.id + ")", "生效");
+        } else {
+            str += getFunctionButton("btn-danger", "loseEfficacy(" + rowObject.id + ")", "失效");
+        }
+        return str;
+    }
+
+    function update() {
+        $.ajax({
+            url: "/api/product/updateprice",
+            dataType: "json",
+            async: false,
+            data: transformToJson($('#productPriceSaveForm').serializeArray()),
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $("#edit-modal-form").modal('hide');
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: error
+        });
+    }
+
+    function batchUpdate() {
+        $.ajax({
+            url: "/api/product/batchaddorupdateprice",
+            dataType: "json",
+            async: false,
+            traditional: true,//ajax传递数组时会进行序列化，必须加上traditional：true的标识才可以。
+            data: {
+                productId: $("#inputProductId").val(),
+                cityCodes: $("#selecltCityList").val(),
+                price: $("#inputPrice").val(),
+            },
+            type: "POST",
+            success: success,
+            error: error
+        });
+    }
+
+
+
+
+    function openNew() {
+        $("#modal-title").html("商品价格-批量修改");
+    }
+
+    function openEdit(id) {
+        $("#edit-modal-title").html("商品价格-修改");
+        $("#inputPriceId").val(id);
+        $("#inputPrice2").val("");
+        $("#edit-modal-form").modal('show');
+    }
+
+    /**
+     * 生效
+     * @param id
+     */
+    function makeEfficacy(id) {
+        updatePriceStatus(id, 1);
+    }
+
+    /**
+     * 失效
+     * @param id
+     */
+    function loseEfficacy(id) {
+        updatePriceStatus(id, 0);
+    }
+
+    function updatePriceStatus(id, status) {
+        confirm("确定要修改价格状态吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "/api/product/updatepricestatus",    //请求的url地址
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id,
+                        status: status
+                    },
+                    type: "POST",
+                    success: success,
+                    error: error
+                });
+            }
+        });
+    }
+
+    function initCitySelect() {
+        //将已开通城市列表填充到多选框中
+        $.ajax({
+            url: "/api/syscity/getopenlist",    //请求的url地址
+            dataType: "json",
+            async: true,
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#selecltCityList").append("<option value='" + result[i].cityCode + "'>" + result[i].cityName + "</option>");
+                    }
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+</script>
+</html>
+
