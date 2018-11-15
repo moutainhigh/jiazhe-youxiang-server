@@ -134,4 +134,12 @@
         </foreach>
     </select>
 
+    <select id="totalValidVoucher" resultType="java.lang.Integer">
+        select count(*) FROM voucher WHERE customer_id = #{customerId}
+        AND status = 1
+        AND used = 0
+        AND expiry_time &gt; NOW()
+        AND is_deleted = 0
+    </select>
+
 </mapper>

@@ -66,4 +66,11 @@ public interface VoucherPOManualMapper {
      * @param map
      */
     void batchChangeUsed(Map<String, Object> map);
+
+    /**
+     * 计算客户有效代金券的数量
+     * @param customerId
+     * @return
+     */
+    Integer totalValidVoucher(@Param("customerId")Integer customerId);
 }

@@ -1,10 +1,7 @@
 package com.jiazhe.youxiang.server.biz.rechargecard;
 
-import com.jiazhe.youxiang.server.adapter.rechargecard.RCAdapter;
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
-import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
-import com.jiazhe.youxiang.server.domain.po.RechargeCardPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCEditDTO;
@@ -40,6 +37,9 @@ public class RCBiz {
         rcService.changeStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
     }
 
+    public BigDecimal totalValidBalance(Integer customerId){
+        return rcService.totalValidBalance(customerId);
+    }
 
     public void changeExpiryTime(Integer id, Date expiryTime) {
         rcService.changeExpiryTime(id, expiryTime);

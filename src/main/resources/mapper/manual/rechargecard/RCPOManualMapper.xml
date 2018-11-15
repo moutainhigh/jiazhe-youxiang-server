@@ -124,4 +124,12 @@
             #{item}
         </foreach>
     </select>
+
+    <select id="totalValidBalance" resultType="java.math.BigDecimal">
+        SELECT sum(balance) FROM recharge_card where
+        customer_id = #{customerId}
+        AND status = 1
+        AND expiry_time &gt; NOW()
+        AND is_deleted = 0
+    </select>
 </mapper>

@@ -28,6 +28,10 @@ public class VoucherBiz {
     @Autowired
     private CustomerBiz customerBiz;
 
+    public Integer totalValidVoucher(Integer customerId){
+        return voucherService.totalValidVoucher(customerId);
+    }
+
     public void startUsing(Integer id) {
         voucherService.changeStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
     }

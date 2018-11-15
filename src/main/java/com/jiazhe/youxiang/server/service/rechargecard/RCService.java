@@ -115,4 +115,10 @@ public interface RCService {
      * @return
      */
     List<RCDTO> findByIds(List<Integer> ids);
+
+    /**
+     * 计算客户有效充值卡的余额
+     * @param customerId
+     */
+    BigDecimal totalValidBalance(Integer customerId);
 }

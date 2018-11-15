@@ -138,4 +138,9 @@ public class VoucherServiceImpl implements VoucherService {
         List<VoucherPO> poList = voucherPOManualMapper.findByIds(voucherIds);
         return poList.stream().map(VoucherAdapter::PO2DTO).collect(Collectors.toList());
     }
+
+    @Override
+    public Integer totalValidVoucher(Integer customerId) {
+        return voucherPOManualMapper.totalValidVoucher(customerId);
+    }
 }
