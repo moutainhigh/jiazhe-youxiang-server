@@ -152,6 +152,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
                 //此处应该有发放电子码逻辑！！！！！！！
                 eleProductCodeDTOList = sendEleProductCode(orderInfoPO);
+                eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderInfoPO.getOrderCode());
             }
         }
         orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
@@ -334,8 +335,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             }
             if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
-                //此处应该有发放电子码
-                eleProductCodeDTOList = sendEleProductCode(orderInfoPO);
             }
         } else {
             orderInfoPO.setStatus(CommonConstant.ORDER_UNPAID);
@@ -344,7 +343,11 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderPaymentPOList.stream().forEach(bean -> {
             bean.setOrderId(orderInfoPO.getId());
         });
-        eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderCode);
+        if(payOff&&productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)){
+            //此处发放电子码
+            eleProductCodeDTOList = sendEleProductCode(orderInfoPO);
+            eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderCode);
+        }
         orderPaymentService.batchInsert(orderPaymentPOList);
     }
 

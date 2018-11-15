@@ -144,6 +144,7 @@ public class APIOrderInfoController extends BaseController {
         placeOrderDTO.setCost(new BigDecimal(0));
         placeOrderDTO.setType(Byte.valueOf("1"));
         placeOrderDTO.setRealServiceTime(req.getServiceTime());
+        placeOrderDTO.setComments("");
         orderInfoBiz.placeOrder(placeOrderDTO);
         return ResponseFactory.buildSuccess();
     }

@@ -77,6 +77,8 @@ public class OrderPaymentServiceImpl implements OrderPaymentService {
 
     @Override
     public void batchInsert(List<OrderPaymentPO> orderPaymentPOList) {
-        orderPaymentPOManualMapper.batchInsert(orderPaymentPOList);
+        if(!orderPaymentPOList.isEmpty()){
+            orderPaymentPOManualMapper.batchInsert(orderPaymentPOList);
+        }
     }
 }

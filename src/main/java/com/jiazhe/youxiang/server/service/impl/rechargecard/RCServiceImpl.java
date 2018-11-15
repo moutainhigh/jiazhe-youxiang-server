@@ -208,8 +208,10 @@ public class RCServiceImpl implements RCService {
 
     @Override
     public void batchUpdate(List<RCDTO> rcDTOList) {
-        List<RechargeCardPO> rcPOList = rcDTOList.stream().map(RCAdapter::DTO2PO).collect(Collectors.toList());
-        rcPOManualMapper.batchUpdate(rcPOList);
+        if(!rcDTOList.isEmpty()){
+            List<RechargeCardPO> rcPOList = rcDTOList.stream().map(RCAdapter::DTO2PO).collect(Collectors.toList());
+            rcPOManualMapper.batchUpdate(rcPOList);
+        }
     }
 
     @Override

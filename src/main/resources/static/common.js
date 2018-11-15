@@ -140,40 +140,42 @@ function success(data) {
  * @param options 参数
  */
 function initTable(grid_selector, pager_selector, options) {
-    var url = options.url ? options.url : "";
-    var caption = options.caption ? options.caption : "列表";
-    var colNames = options.colNames ? options.colNames : ['', '操作'];
-    var colModel = options.colModel ? options.colModel : [
+    var url = options.hasOwnProperty("url") ? options.url : "";
+    var caption = options.hasOwnProperty("caption") ? options.caption : "列表";
+    var colNames = options.hasOwnProperty("colNames") ? options.colNames : ['', '操作'];
+    var colModel = options.hasOwnProperty("colModel") ? options.colModel : [
         {name: 'id', index: 'id', sortable: false, hidden: true},
         {name: '_action', index: '_action', width: 100, sortable: false}
     ]
 
 
-    var postData = options.postData ? options.postData : "";
-    var rownumbers = options.rownumbers ? options.rownumbers : true;
-    var datatype = options.datatype ? options.datatype : "json";
-    var mtype = options.mtype ? options.mtype : "GET";
-    var hidegrid = options.hidegrid ? options.hidegrid : false;//收缩列表按钮
-    var prmNames = options.prmNames ? options.prmNames : {
+    var postData = options.hasOwnProperty("postData") ? options.postData : "";
+    var rownumbers = options.hasOwnProperty("rownumbers") ? options.rownumbers : true;
+    var datatype = options.hasOwnProperty("datatype") ? options.datatype : "json";
+    var mtype = options.hasOwnProperty("mtype") ? options.mtype : "GET";
+    var hidegrid = options.hasOwnProperty("hidegrid") ? options.hidegrid : false;//收缩列表按钮
+    var prmNames = options.hasOwnProperty("prmNames") ? options.prmNames : {
         page: "pageNum",
         rows: "pageSize"
     };
-    var width = options.width ? options.width : "100%";
-    var autowidth = options.autowidth ? options.autowidth : true;
-    var height = options.height ? options.height : 350;
-    var rowNum = options.rowNum ? options.rowNum : 10;
-    var rowList = options.rowList ? options.rowList : [10, 20, 30];
-    var altRows = options.altRows ? options.altRows : true;
-    var viewrecords = options.viewrecords ? options.viewrecords : true;
-    var emptyrecords = options.emptyrecords ? options.emptyrecords : "0条数据";
-    var loadComplete = options.loadComplete ? options.loadComplete : function (data) {
+    var width = options.hasOwnProperty("width") ? options.width : "100%";
+    var autowidth = options.hasOwnProperty("autowidth") ? options.autowidth : true;
+    var shrinkToFit = options.hasOwnProperty("shrinkToFit") ? options.shrinkToFit : true;
+    var autoScroll = options.hasOwnProperty("autoScroll") ? options.autoScroll : false;
+    var height = options.hasOwnProperty("height") ? options.height : 350;
+    var rowNum = options.hasOwnProperty("rowNum") ? options.rowNum : 10;
+    var rowList = options.hasOwnProperty("rowList") ? options.rowList : [10, 20, 30];
+    var altRows = options.hasOwnProperty("altRows") ? options.altRows : true;
+    var viewrecords = options.hasOwnProperty("viewrecords") ? options.viewrecords : true;
+    var emptyrecords = options.hasOwnProperty("emptyrecords") ? options.emptyrecords : "0条数据";
+    var loadComplete = options.hasOwnProperty("loadComplete") ? options.loadComplete : function (data) {
         var table = this;
         setTimeout(function () {
             $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
             updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
         }, 0);
     };
-    var jsonReader = options.jsonReader ? options.jsonReader : { // jsonReader来跟服务器端返回的数据做对应
+    var jsonReader = options.hasOwnProperty("jsonReader") ? options.jsonReader : { // jsonReader来跟服务器端返回的数据做对应
         root: "data", // 包含实际数据的数组
         page: "paging.currPage", // 当前页
         total: "paging.totalPage",// 总页数
@@ -191,6 +193,8 @@ function initTable(grid_selector, pager_selector, options) {
         prmNames: prmNames,// 重新定义分页信息
         width: width,
         autowidth: autowidth,
+        shrinkToFit : shrinkToFit,
+        autoScroll : autoScroll,
         height: height,
         colNames: colNames,
         colModel: colModel,
