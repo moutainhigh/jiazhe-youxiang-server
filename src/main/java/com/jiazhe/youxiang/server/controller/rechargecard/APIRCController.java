@@ -6,6 +6,7 @@ import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCAdapter;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCBiz;
+import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CustomerCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
@@ -52,6 +53,7 @@ public class APIRCController extends BaseController{
         return ResponseFactory.buildPaginationResponse(rcRespList, paging);
     }
 
+    @AppApi
     @ApiOperation(value = "【APP端】客户查询所有充值卡（分页）", httpMethod = "GET", response = RCResp.class, responseContainer = "List",notes = "客户查询所有充值卡，分页")
     @RequestMapping(value = "/findbycustomeridpage", method = RequestMethod.GET)
     public Object findByCustomerIdPage(@ModelAttribute RCCustomerPageReq req) {
@@ -62,6 +64,7 @@ public class APIRCController extends BaseController{
         return ResponseFactory.buildPaginationResponse(rcRespList, paging);
     }
 
+    @AppApi
     @ApiOperation(value = "【后台、APP端】根据购买物属性（商品和城市），查询客户可使用的充值卡，分页", httpMethod = "GET", response = RCResp.class, responseContainer = "List",notes = "根据购买物属性（商品和城市），查询客户可使用的充值卡，分页")
     @RequestMapping(value = "/findbygoodsattrpage", method = RequestMethod.GET)
     public Object findByGoodsAttrPage(@ModelAttribute RCGoodsAttrPageReq req) {

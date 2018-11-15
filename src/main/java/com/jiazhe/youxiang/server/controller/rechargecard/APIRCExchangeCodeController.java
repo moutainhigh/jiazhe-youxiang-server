@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCExchangeCodeBiz;
+import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CustomerCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
@@ -117,6 +118,7 @@ public class APIRCExchangeCodeController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
+    @AppApi
     @ApiOperation(value = "【APP端】客户用兑换码进行兑换", httpMethod = "POST",notes = "客户用充值卡兑换码兑换，这里为了与后台共用接口，所以传参为客户电话")
     @RequestMapping(value = "/customerselfcodecharge", method = RequestMethod.POST)
     public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) {

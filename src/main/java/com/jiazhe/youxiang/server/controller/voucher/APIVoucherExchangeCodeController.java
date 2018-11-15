@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherExchangeCodeBiz;
+import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CustomerCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.VoucherCodeEnum;
@@ -117,6 +118,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @AppApi
     @ApiOperation(value = "【APP端】客户用代金券兑换码兑换", httpMethod = "POST",notes = "【APP端】客户用代金券兑换码兑换，为了与后台共用接口，所以传客户电话")
     @RequestMapping(value = "/customerselfcodecharge", method = RequestMethod.POST)
     public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) {

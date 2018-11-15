@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherAdapter;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherBiz;
+import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.enums.VoucherCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.VoucherException;
 import com.jiazhe.youxiang.server.dto.voucher.voucher.VoucherDTO;
@@ -49,6 +50,7 @@ public class APIVoucherController extends BaseController{
         return ResponseFactory.buildPaginationResponse(rcRespList, paging);
     }
 
+    @AppApi
     @ApiOperation(value = "【APP端】查询客户的代金券", httpMethod = "GET", response = VoucherResp.class, responseContainer = "List",notes = "【后台】信息查询页查询代金券")
     @RequestMapping(value = "/findbycustomeridpage", method = RequestMethod.GET)
     public Object findByCustomerIdPage(@ModelAttribute VoucherCustomerPageReq req) {
@@ -59,7 +61,8 @@ public class APIVoucherController extends BaseController{
         return ResponseFactory.buildPaginationResponse(rcRespList, paging);
     }
 
-    @ApiOperation(value = "【APP端】根据购买物属性（商品和城市），查询客户可使用的代金券，分页", httpMethod = "GET", response = VoucherResp.class, responseContainer = "List",notes = "【APP端】根据购买物属性（商品和城市），查询客户可使用的代金券，分页")
+    @AppApi
+    @ApiOperation(value = "【APP端、后台】根据购买物属性（商品和城市），查询客户可使用的代金券，分页", httpMethod = "GET", response = VoucherResp.class, responseContainer = "List",notes = "【APP端】根据购买物属性（商品和城市），查询客户可使用的代金券，分页")
     @RequestMapping(value = "/findbygoodsattrpage", method = RequestMethod.GET)
     public Object findByGoodsAttrPage(@ModelAttribute VoucherGoodsAttrPageReq req) {
         CommonValidator.validatePaging(req);

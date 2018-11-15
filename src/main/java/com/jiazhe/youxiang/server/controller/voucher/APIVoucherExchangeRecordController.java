@@ -29,7 +29,7 @@ public class APIVoucherExchangeRecordController {
     @Autowired
     private VoucherExchangeRecordBiz voucherExchangeRecordBiz;
 
-    @ApiOperation(value = "【组合条件】分页查询代金券兑换记录", httpMethod = "GET", response = VoucherExchangeRecordResp.class, responseContainer = "List",notes = "【组合条件】分页查询代金券兑换记录")
+    @ApiOperation(value = "【后台、暂时无用】分页查询代金券兑换记录", httpMethod = "GET", response = VoucherExchangeRecordResp.class, responseContainer = "List",notes = "【组合条件】分页查询代金券兑换记录")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute VoucherExchangeRecordPageReq req) {
         Paging paging = new Paging();
