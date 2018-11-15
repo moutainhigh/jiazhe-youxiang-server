@@ -98,7 +98,7 @@ public class OrderInfoBiz {
         return null;
     }
 
-    public List<OrderInfoDTO> custoemrGetList(Integer customerId, Byte status, Paging paging) {
+    public List<OrderInfoDTO> customerGetList(Integer customerId, Byte status, Paging paging) {
         CustomerDTO customerDTO = customerService.getById(customerId);
         return getList(status, null, customerDTO.getMobile(), null, null, null, null, paging);
     }
@@ -126,5 +126,9 @@ public class OrderInfoBiz {
 
     public void prePaymentCheck(Integer id) {
         orderInfoService.prePaymentCheck(id);
+    }
+
+    public void userChangeReservationInfo(UserReservationOrderDTO userReservationOrderDTO) {
+        orderInfoService.userChangeReservationInfo(userReservationOrderDTO);
     }
 }

@@ -94,6 +94,12 @@ public interface OrderInfoService {
     void userReservationOrder(UserReservationOrderDTO dto);
 
     /**
+     * 用户修改预约信息
+     * @param dto
+     */
+    void userChangeReservationInfo(UserReservationOrderDTO dto);
+
+    /**
      * 追加订单
      * @param appendOrderDTO
      */
@@ -111,4 +117,5 @@ public interface OrderInfoService {
      * @param id
      */
     void prePaymentCheck(Integer id);
+
 }

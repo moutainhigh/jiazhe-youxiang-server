@@ -55,7 +55,7 @@ public class APIOrderInfoController extends BaseController {
     @RequestMapping(value = "/customerlistpage", method = RequestMethod.GET)
     public Object customerListPage(@ModelAttribute CustomerOrderInfoPageReq req) {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.custoemrGetList(req.getCustomerId(), req.getStatus(), paging);
+        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.customerGetList(req.getCustomerId(), req.getStatus(), paging);
         List<OrderInfoResp> orderInfoRespList = orderInfoDTOList.stream().map(OrderInfoAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(orderInfoRespList, paging);
     }
@@ -156,6 +156,16 @@ public class APIOrderInfoController extends BaseController {
         CommonValidator.validateNull(req.getWorkerMobile(),new OrderException(OrderCodeEnum.WORKER_MOBILE_IS_NAME));
         CommonValidator.validateNull(req.getCost(),new OrderException(OrderCodeEnum.ORDER_COST_IS_NULL));
         orderInfoBiz.userReservationOrder(OrderInfoAdapter.ReqUserReservationOrder2DTOUserReservationOrder(req));
+        return ResponseFactory.buildSuccess();
+    }
+
+    @ApiOperation(value = "员工修改预约信息", httpMethod = "POST", notes = "员工修改预约信息")
+    @RequestMapping(value = "/userchangereservationinfo", method = RequestMethod.POST)
+    public Object userChangeReservationInfo(@ModelAttribute UserReservationOrderReq req) {
+        CommonValidator.validateNull(req.getRealServiceTime(),new OrderException(OrderCodeEnum.REAL_SERVICE_TIME_IS_NULL));
+        CommonValidator.validateNull(req.getWorkerName(),new OrderException(OrderCodeEnum.WORKER_NAME_IS_NAME));
+        CommonValidator.validateNull(req.getWorkerMobile(),new OrderException(OrderCodeEnum.WORKER_MOBILE_IS_NAME));
+        orderInfoBiz.userChangeReservationInfo(OrderInfoAdapter.ReqUserReservationOrder2DTOUserReservationOrder(req));
         return ResponseFactory.buildSuccess();
     }
 
