@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.vo.resp.voucher.voucher;
 import com.jiazhe.youxiang.server.vo.BaseObject;
 import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
 import com.jiazhe.youxiang.server.vo.resp.voucher.exchangerecord.VoucherExchangeRecordResp;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -14,28 +15,40 @@ import java.util.Date;
  */
 public class VoucherResp extends BaseObject {
 
+    @ApiModelProperty("代金券id")
     private Integer id;
 
+    @ApiModelProperty("代金券名称")
     private String name;
 
+    @ApiModelProperty("代金券描述")
     private String description;
 
+    @ApiModelProperty("客户id")
     private Integer customerId;
 
+    @ApiModelProperty("所属项目id")
     private Integer projectId;
 
+    @ApiModelProperty("适用城市code，多个用,连接")
     private String cityCodes;
 
+    @ApiModelProperty("适用商品id，多个用,连接")
     private String productIds;
 
+    @ApiModelProperty("替代商品数量")
     private Integer count;
 
+    @ApiModelProperty("过期时间")
     private Date expiryTime;
 
+    @ApiModelProperty("状态 0停用 1启用")
     private Byte status;
 
+    @ApiModelProperty("使用状态 0未使用 1已使用")
     private Byte used;
 
+    @ApiModelProperty("兑换时间")
     private Date addTime;
 
     private CustomerResp customerResp;

@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.resp.order.orderinfo;
 
 import com.jiazhe.youxiang.server.vo.BaseObject;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
  */
 public class NeedPayResp extends BaseObject {
 
+    @ApiModelProperty("待在线支付金额")
     private BigDecimal payCash;
 
     public BigDecimal getPayCash() {

@@ -79,7 +79,7 @@ public class APIOrderInfoController extends BaseController {
     }
 
     @AppApi
-    @ApiOperation(value = "【APP端】支付前检查", httpMethod = "GET", response = NeedPayResp.class, notes = "客户支付")
+    @ApiOperation(value = "【APP端】支付前检查", httpMethod = "GET", notes = "支付前检查")
     @RequestMapping(value = "/prepaymentcheck", method = RequestMethod.POST)
     public Object prePaymentCheck(@ModelAttribute IdReq req) {
         orderInfoBiz.prePaymentCheck(req.getId());
