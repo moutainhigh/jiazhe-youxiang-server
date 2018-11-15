@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.dao.mapper.manual;
 import com.jiazhe.youxiang.server.domain.po.ElectronicProductExchangeCodePO;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -39,4 +40,11 @@ public interface EleProductCodePOManualMapper {
      * @param map
      */
     void batchSendOut(Map<String, Object> map);
+
+    /**
+     * 根据批次名，批量修改电子码过期时间
+     * @param batchName
+     * @param expiryTime
+     */
+    void batchChangeExpiryTime(@Param("batchName") String batchName, @Param("expiryTime") Date expiryTime);
 }

@@ -840,15 +840,18 @@
             return false;
         }
         var left = (parseInt($("#appendCount").val()) - count) * parseInt($("#app_productPrice").val()) - money;
-        var tips = left > 0 ? "所选的付款内容不足以支付追加的订单，继续追加该订单吗" : "所选的付款内容超额支付追加的订单，继续追加该订单吗";
-        if (left != 0) {
-            confirm(tips, function (result) {
+        if (left > 0) {
+            confirm("所选的付款内容不足以支付追加的订单，继续追加该订单吗？", function (result) {
                 if (result) {
                     appendOrder();
                 }
             });
-        } else {
+        }
+        if(left == 0){
             appendOrder()
+        }
+        if(left < 0){
+            bootboxalert("所选的付款内容超额支付追加的订单，不能追加！");
         }
     }
 

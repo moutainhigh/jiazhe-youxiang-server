@@ -37,8 +37,8 @@ public class EleProductCodeBiz {
     @Autowired
     private EleProductCodeService eleProductCodeService;
 
-    public int changeExpiryTime(String batchName, Date expiryTime) {
-        return 0;
+    public void batchChangeExpiryTime(String batchName, Date expiryTime) {
+        eleProductCodeService.batchChangeExpiryTime(batchName,expiryTime);
     }
 
     public void importCode(String excelUrl, Integer productId , String batchName, Date expiryTime) throws IOException {

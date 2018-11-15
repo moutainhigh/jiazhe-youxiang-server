@@ -108,11 +108,12 @@ public class APIEleProductCodeController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "【后台】批量修改电子码有效期（未想好咋做）", httpMethod = "POST",notes = "批量修改电子码有效期")
-    @RequestMapping(value = "/changeexpirytime", method = RequestMethod.POST)
-    public Object changeExpiryTime(@ModelAttribute ExpiryTimeEditReq req) {
+    @ApiOperation(value = "【后台】批量修改电子码有效期", httpMethod = "POST",notes = "批量修改电子码有效期")
+    @RequestMapping(value = "/batchchangeexpirytime", method = RequestMethod.POST)
+    public Object batchChangeExpiryTime(@ModelAttribute ExpiryTimeEditReq req) {
         //参数检查
-        eleProductCodeBiz.changeExpiryTime(req.getBatchName(),req.getExpiryTime());
+        CommonValidator.validateNull(req.getExpiryTime(),new EleProductCodeException(EleProductCodeEnum.EXPIRY_TIME_IS_NULL));
+        eleProductCodeBiz.batchChangeExpiryTime(req.getBatchName(),req.getExpiryTime());
         return ResponseFactory.buildSuccess();
     }
 

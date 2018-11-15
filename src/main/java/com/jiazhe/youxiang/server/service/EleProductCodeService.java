@@ -4,6 +4,7 @@ import com.jiazhe.youxiang.server.domain.po.ElectronicProductExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.eleproductexcode.EleProductCodeDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,4 +52,11 @@ public interface EleProductCodeService {
      * @param orderCode
      */
     void batchSendOut(List<Integer> ids, Integer orderId, String orderCode);
+
+    /**
+     * 根据批次名，修改电子码的过期时间
+     * @param batchName
+     * @param expiryTime
+     */
+    void batchChangeExpiryTime(String batchName, Date expiryTime);
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,5 +67,10 @@ public class EleProductCodeServiceImpl implements EleProductCodeService {
         map.put("orderId",orderId);
         map.put("orderCode",orderCode);
         eleProductCodePOManualMapper.batchSendOut(map);
+    }
+
+    @Override
+    public void batchChangeExpiryTime(String batchName, Date expiryTime) {
+        eleProductCodePOManualMapper.batchChangeExpiryTime(batchName,expiryTime);
     }
 }
