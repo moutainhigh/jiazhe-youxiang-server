@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardPO;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -61,4 +62,11 @@ public interface RCPOManualMapper {
      * @return
      */
     Integer count(@Param("mobile") String mobile, @Param("exchangeType") Integer exchangeType, @Param("status") Byte status, @Param("expiry") Byte expiry);
+
+    /**
+     * 计算客户有效充值卡的总金额
+     * @param customerId
+     * @return
+     */
+    BigDecimal totalValidBalance(@Param("customerId")Integer customerId);
 }

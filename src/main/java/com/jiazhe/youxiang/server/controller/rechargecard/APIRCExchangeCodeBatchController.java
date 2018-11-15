@@ -54,7 +54,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
     @Autowired
     private RCExchangeCodeBiz rcExchangeCodeBiz;
 
-    @ApiOperation(value = "【分页】查询充值卡兑换码批次信息（根据项目id和批次名称查询）", httpMethod = "GET", response = RCExchangeCodeBatchResp.class, responseContainer = "List", notes = "【分页】查询充值卡兑换码批次信息（根据项目id和批次名称查询）")
+    @ApiOperation(value = "【后台】充值卡兑换码批次信息列表（分页）", httpMethod = "GET", response = RCExchangeCodeBatchResp.class, responseContainer = "List", notes = "查询充值卡兑换码批次信息（根据项目id和批次名称查询）")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute RCExchangeCodeBatchPageReq req) {
         CommonValidator.validatePaging(req);
@@ -64,7 +64,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         return ResponseFactory.buildPaginationResponse(rcExchangeCodeBatchRespList, paging);
     }
 
-    @ApiOperation(value = "查询充值卡兑换码批次信息（根据项目id和批次名称查询）", httpMethod = "GET", response = RCExchangeCodeBatchResp.class, responseContainer = "List", notes = "查询充值卡兑换码批次信息（根据项目id和批次名称查询）")
+    @ApiOperation(value = "【后台，暂时无用】充值卡兑换码批次信息列表（不分页）", httpMethod = "GET", response = RCExchangeCodeBatchResp.class, responseContainer = "List", notes = "查询充值卡兑换码批次信息（根据项目id和批次名称查询）")
     @RequestMapping(value = "/listall", method = RequestMethod.GET)
     public Object listAll(@ModelAttribute RCExchangeCodeBatchPageReq req) {
         List<RCExchangeCodeBatchDTO> rcExchangeCodeBatchDTOList = rcExchangeCodeBatchBiz.getList(req.getProjectId(), req.getName());
@@ -72,7 +72,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         return ResponseFactory.buildResponse(rcExchangeCodeBatchRespList);
     }
 
-    @ApiOperation(value = "【新建、修改】保存充值卡兑换码批次信息", httpMethod = "POST", notes = "【新建、修改】保存充值卡兑换码批次信息")
+    @ApiOperation(value = "【后台】保存充值卡兑换码批次信息", httpMethod = "POST", notes = "【新建、修改】保存充值卡兑换码批次信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Object save(@ModelAttribute RCExchangeCodeBatchSaveReq req) {
         //参数检查
@@ -100,7 +100,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "生成批次下的充值卡兑换码", httpMethod = "POST", notes = "生成批次下的充值卡兑换码")
+    @ApiOperation(value = "【后台】生成充值卡兑换码", httpMethod = "POST", notes = "生成批次下的充值卡兑换码")
     @RequestMapping(value = "/generatecode", method = RequestMethod.POST)
     public Object generateCode(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
@@ -119,7 +119,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "充值卡兑换码批次信息回显", httpMethod = "GET", response = RCExchangeCodeBatchEditResp.class, notes = "充值卡兑换码批次信息回显")
+    @ApiOperation(value = "【后台】充值卡兑换码批次信息回显", httpMethod = "GET", response = RCExchangeCodeBatchEditResp.class, notes = "充值卡兑换码批次信息回显")
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
     public Object getById(@ModelAttribute IdReq req) {
         //参数检查
@@ -129,7 +129,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         return ResponseFactory.buildResponse(rcExchangeCodeBatchEditResp);
     }
 
-    @ApiOperation(value = "启用批次【同时改变批次下兑换码，充值卡状态】", httpMethod = "POST", notes = "启用批次【同时改变批次下兑换码，充值卡状态】")
+    @ApiOperation(value = "【后台】启用批次", httpMethod = "POST", notes = "启用批次，同时改变批次下兑换码和已经兑换成充值卡的状态")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     public Object startUsing(@ModelAttribute IdReq req) {
         //参数检查
@@ -138,7 +138,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "停用批次【同时改变批次下兑换码，充值卡状态】", httpMethod = "POST", notes = "停用批次【同时改变批次下兑换码，充值卡状态】")
+    @ApiOperation(value = "【后台】停用批次", httpMethod = "POST", notes = "停用批次，同时改变批次下兑换码和已经兑换成充值卡的状态")
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     public Object stopUsing(@ModelAttribute IdReq req) {
         //参数检查
@@ -147,14 +147,14 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "导出批次下兑换码", httpMethod = "GET", notes = "导出批次下兑换码")
+    @ApiOperation(value = "【后台】导出批次下兑换码", httpMethod = "GET", notes = "导出批次下兑换码")
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     public void export(@ModelAttribute IdReq req, HttpServletResponse response) throws IOException {
         List<RCExchangeCodeDTO> rcExchangeCodeDTOList= rcExchangeCodeBiz.getByBatchId(req.getId());
         ExportExcelUtils.exportRechargeCardCode(response,rcExchangeCodeDTOList);
     }
 
-    @ApiOperation(value = "导出前检查", httpMethod = "GET", notes = "导出前检查")
+    @ApiOperation(value = "【后台】导出前检查", httpMethod = "GET", notes = "导出前检查，看批次下是否有兑换码")
     @RequestMapping(value = "/exportcheck", method = RequestMethod.GET)
     public Object exportCheck(@ModelAttribute IdReq req){
         CommonValidator.validateId(req);

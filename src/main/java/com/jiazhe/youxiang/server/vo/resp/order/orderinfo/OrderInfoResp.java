@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.server.vo.BaseObject;
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
 import com.jiazhe.youxiang.server.vo.resp.product.ProductResp;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -16,56 +17,82 @@ import java.util.Date;
  */
 public class OrderInfoResp extends BaseVO {
 
+    @ApiModelProperty("订单id")
     private Integer id;
 
+    @ApiModelProperty("订单号")
     private String orderCode;
 
+    @ApiModelProperty("客户id")
     private Integer customerId;
 
+    @ApiModelProperty("下单城市code")
     private String customerCityCode;
 
+    @ApiModelProperty("下单城市名")
     private String customerCityName;
 
+    @ApiModelProperty("商品id")
     private Integer productId;
 
+    @ApiModelProperty("下单时单价")
     private BigDecimal productPrice;
 
+    @ApiModelProperty("下单数量")
     private Integer count;
 
+    @ApiModelProperty("客户地址")
     private String customerAddress;
 
+    @ApiModelProperty("收货人电话")
     private String customerMobile;
 
+    @ApiModelProperty("收货人姓名")
     private String customerName;
 
+    @ApiModelProperty("客户留言")
     private String customerRemark;
 
+    @ApiModelProperty("服务人员姓名")
     private String workerName;
 
+    @ApiModelProperty("服务人员电话")
     private String workerMobile;
 
+    @ApiModelProperty("下单时间")
     private Date orderTime;
 
+    @ApiModelProperty("预约时间")
     private Date serviceTime;
 
+    @ApiModelProperty("服务时间")
     private Date realServiceTime;
 
+    @ApiModelProperty("充值卡支付金额")
     private BigDecimal payRechargeCard;
 
+    @ApiModelProperty("代金券代替数量")
     private Integer payVoucher;
 
+    @ApiModelProperty("在线支付金额")
     private BigDecimal payCash;
 
+    @ApiModelProperty("订单总金额")
     private BigDecimal totalAmount;
 
+    @ApiModelProperty("订单成本")
     private BigDecimal cost;
 
+    @ApiModelProperty("订单备注")
     private String comments;
 
+    @ApiModelProperty("订单类型，0为后台下单 1为app下单")
     private Byte type;
 
+    @ApiModelProperty("订单状态【1代付款，2待派单，3待服务，4已完成，5取消待审核，6取消审核未通过，7已取消】")
     private Byte status;
 
+    @ApiModelProperty("审核不通过理由")
     private String auditReason;
 
     private CustomerResp customerResp;

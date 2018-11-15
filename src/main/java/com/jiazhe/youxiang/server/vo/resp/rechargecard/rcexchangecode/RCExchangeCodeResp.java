@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecode;
 
 import com.jiazhe.youxiang.server.vo.BaseObject;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -12,34 +13,49 @@ import java.util.Date;
  */
 public class RCExchangeCodeResp extends BaseObject {
 
+    @ApiModelProperty("兑换码id")
     private Integer id;
 
+    @ApiModelProperty("所属批次名称")
     private String batchName;
 
+    @ApiModelProperty("充值卡名称")
     private String rechargeCardName;
 
+    @ApiModelProperty("批次描述信息")
     private String batchDescription;
 
+    @ApiModelProperty("可用的城市code，多个用,连接")
     private String cityCodes;
 
+    @ApiModelProperty("可用的商品i，多个用,连接")
     private String productIds;
 
+    @ApiModelProperty("兑换码")
     private String code;
 
+    @ApiModelProperty("兑换密钥")
     private String keyt;
 
+    @ApiModelProperty("充值卡面额")
     private BigDecimal faceValue;
 
+    @ApiModelProperty("兑换码过期时间")
     private Date expiryTime;
 
+    @ApiModelProperty("充值卡过期时间")
     private Date rechargeCardExpiryTime;
 
+    @ApiModelProperty("自兑换之日起，有效期的天数")
     private Integer validityPeriod;
 
+    @ApiModelProperty("充值卡过期时间指定类型")
     private Byte expiryType;
 
+    @ApiModelProperty("兑换码状态，1为启用 0为停用")
     private Byte status;
 
+    @ApiModelProperty("是否已经使用，1为已经使用，0为未使用")
     private Byte used;
 
     public Integer getId() {

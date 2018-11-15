@@ -54,7 +54,7 @@ public class APIEleProductCodeController extends BaseController {
     @Value("${web.upload.ele-product-code-excel-path}")
     private String excelpath;
 
-    @ApiOperation(value = "查询批次下所有电子码", httpMethod = "GET",response = EleProductCodeResp.class ,responseContainer = "List" ,notes = "查询批次下所有电子码")
+    @ApiOperation(value = "【后台】查询所有电子码", httpMethod = "GET",response = EleProductCodeResp.class ,responseContainer = "List" ,notes = "查询批次下所有电子码，有条件查询")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute EleProductCodePageReq req) {
         //参数检查
@@ -64,7 +64,7 @@ public class APIEleProductCodeController extends BaseController {
         return ResponseFactory.buildPaginationResponse(eleProductExCodeRespList,paging);
     }
 
-    @ApiOperation(value = "获取所有批次", httpMethod = "GET",response = EleProductCodeResp.class ,responseContainer = "List" ,notes = "获取所有批次")
+    @ApiOperation(value = "【后台】获取所有批次", httpMethod = "GET",response = EleProductCodeResp.class ,responseContainer = "List" ,notes = "获取所有批次，无条件")
     @RequestMapping(value = "/getallbatch", method = RequestMethod.GET)
     public Object getAllBatch() {
         //参数检查
@@ -73,6 +73,7 @@ public class APIEleProductCodeController extends BaseController {
         return ResponseFactory.buildResponse(eleProductExCodeRespList);
     }
 
+    @ApiOperation(value = "【后台】上传电子码excel并校验", httpMethod = "POST",response = UploadExcelResp.class ,notes = "上传电子码excel并校验")
     @RequestMapping(value = "uploadexcel", method = RequestMethod.POST, headers = ("content-type=multipart/*"), consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Object uploadExcel(@RequestParam("file") MultipartFile file) throws IOException {
         //参数检查
@@ -95,7 +96,7 @@ public class APIEleProductCodeController extends BaseController {
         return ResponseFactory.buildResponse(result);
     }
 
-    @ApiOperation(value = "导入电子码", httpMethod = "POST",notes = "导入电子码")
+    @ApiOperation(value = "【后台】导入电子码", httpMethod = "POST",notes = "导入电子码")
     @RequestMapping(value = "/importcode", method = RequestMethod.POST)
     public Object importCode(@ModelAttribute ImportCodeReq req) throws IOException {
         //参数检查
@@ -107,11 +108,12 @@ public class APIEleProductCodeController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "批量修改电子码有效期", httpMethod = "POST",notes = "批量修改电子码有效期")
-    @RequestMapping(value = "/changeexpirytime", method = RequestMethod.POST)
-    public Object changeExpiryTime(@ModelAttribute ExpiryTimeEditReq req) {
+    @ApiOperation(value = "【后台】批量修改电子码有效期", httpMethod = "POST",notes = "批量修改电子码有效期")
+    @RequestMapping(value = "/batchchangeexpirytime", method = RequestMethod.POST)
+    public Object batchChangeExpiryTime(@ModelAttribute ExpiryTimeEditReq req) {
         //参数检查
-        eleProductCodeBiz.changeExpiryTime(req.getBatchName(),req.getExpiryTime());
+        CommonValidator.validateNull(req.getExpiryTime(),new EleProductCodeException(EleProductCodeEnum.EXPIRY_TIME_IS_NULL));
+        eleProductCodeBiz.batchChangeExpiryTime(req.getBatchName(),req.getExpiryTime());
         return ResponseFactory.buildSuccess();
     }
 

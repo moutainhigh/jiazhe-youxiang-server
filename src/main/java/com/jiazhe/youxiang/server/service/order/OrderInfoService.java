@@ -94,6 +94,12 @@ public interface OrderInfoService {
     void userReservationOrder(UserReservationOrderDTO dto);
 
     /**
+     * 用户修改预约信息
+     * @param dto
+     */
+    void userChangeReservationInfo(UserReservationOrderDTO dto);
+
+    /**
      * 追加订单
      * @param appendOrderDTO
      */
@@ -105,4 +111,11 @@ public interface OrderInfoService {
      * @return
      */
     Integer getCountByStatus(Byte status);
+
+    /**
+     * 付款前检查，如果是电子商品，检查该兑换码数量是否足够
+     * @param id
+     */
+    void prePaymentCheck(Integer id);
+
 }

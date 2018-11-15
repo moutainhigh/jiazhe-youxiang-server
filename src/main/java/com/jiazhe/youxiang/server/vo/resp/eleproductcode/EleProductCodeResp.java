@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.vo.resp.eleproductcode;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import com.jiazhe.youxiang.server.vo.resp.product.ProductResp;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
@@ -14,20 +15,27 @@ public class EleProductCodeResp extends BaseVO {
 
     private static final long serialVersionUID = 945447596984890166L;
 
+    @ApiModelProperty("电子码id")
     private Integer id;
 
+    @ApiModelProperty("对应商品id")
     private Integer productId;
 
     private ProductResp productResp;
 
+    @ApiModelProperty("批次名")
     private String batchName;
 
+    @ApiModelProperty("电子码")
     private String code;
 
+    @ApiModelProperty("电子密钥")
     private String keyt;
 
+    @ApiModelProperty("是否已经兑换出去，0为未兑换，1为已兑换")
     private Byte status;
 
+    @ApiModelProperty("过期时间，指在本系统过期时间，过期后不发放给客户")
     private Date expiryTime;
 
     public Integer getId() {

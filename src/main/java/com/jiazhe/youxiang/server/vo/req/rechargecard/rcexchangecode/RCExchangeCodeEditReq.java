@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecode;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
@@ -13,24 +14,33 @@ import java.util.Date;
  */
 public class RCExchangeCodeEditReq extends BaseVO {
 
+    @ApiModelProperty("兑换码id")
     private Integer id;
 
+    @ApiModelProperty("充值卡名称")
     private String rechargeCardName;
 
+    @ApiModelProperty("批次描述信息")
     private String batchDescription;
 
+    @ApiModelProperty("适用的城市code，多个用,连接")
     private String cityCodes;
 
+    @ApiModelProperty("适用的商品id，多个用,连接")
     private String productIds;
 
+    @ApiModelProperty("兑换码本身过期时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date expiryTime;
 
+    @ApiModelProperty("充值卡过期时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date rechargeCardExpiryTime;
 
+    @ApiModelProperty("自兑换之日起，充值卡有效期天数")
     private Integer validityPeriod;
 
+    @ApiModelProperty("充值卡过期时间指定类型")
     private Byte expiryType;
 
     public Integer getId() {

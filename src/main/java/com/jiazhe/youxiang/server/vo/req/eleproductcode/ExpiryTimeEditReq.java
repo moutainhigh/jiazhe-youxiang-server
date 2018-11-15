@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.vo.req.eleproductcode;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -17,6 +18,7 @@ public class ExpiryTimeEditReq extends BaseVO{
     @ApiModelProperty("批次名称")
     private String batchName;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty("新的过期时间")
     private Date expiryTime;
 

@@ -31,6 +31,14 @@
         </foreach>
     </insert>
 
+    <update id="batchChangeExpiryTime">
+        update electronic_product_exchange_code
+        <set>
+            expiry_time = #{expiryTime},mod_time = NOW()
+        </set>
+        where batch_name = #{batchName}
+    </update>
+
     <update id="batchSendOut" parameterType="java.util.Map">
         update electronic_product_exchange_code
         <set>

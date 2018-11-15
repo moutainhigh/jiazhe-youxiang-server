@@ -48,7 +48,7 @@ public class APISysUserController extends BaseController {
     @Autowired
     private SysUserBiz sysUserBiz;
 
-    @ApiOperation(value = "查询所有员工信息", httpMethod = "GET", response = SysUserResp.class, responseContainer = "List", notes = "查询所有员工信息")
+    @ApiOperation(value = "【后台】员工列表", httpMethod = "GET", response = SysUserResp.class, responseContainer = "List", notes = "查询所有员工信息，无查询条件")
     @RequestMapping(value = "/listall", method = RequestMethod.GET)
     public Object listAll() {
         List<SysUserDTO> sysUserDTOList = sysUserBiz.findAll();
@@ -56,7 +56,7 @@ public class APISysUserController extends BaseController {
         return ResponseFactory.buildResponse(sysUserRespList);
     }
 
-    @ApiOperation(value = "分页查询员工信息", httpMethod = "GET", response = SysUserResp.class, responseContainer = "List", notes = "分页查询员工信息")
+    @ApiOperation(value = "【后台】员工列表（分页）", httpMethod = "GET", response = SysUserResp.class, responseContainer = "List", notes = "分页查询员工信息，带查询条件")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute UserPageReq req) {
         CommonValidator.validatePaging(req);
@@ -66,7 +66,7 @@ public class APISysUserController extends BaseController {
         return ResponseFactory.buildPaginationResponse(sysUserRespList, paging);
     }
 
-    @ApiOperation(value = "根据id删除员工信息（包含对应角色）", httpMethod = "POST", notes = "根据id删除员工信息（包含对应角色）")
+    @ApiOperation(value = "【后台】删除员工", httpMethod = "POST", notes = "根据id删除员工信息（并软删除对应角色）")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public Object delete(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
@@ -74,7 +74,7 @@ public class APISysUserController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "根据id获取员工信息（包含角色）", httpMethod = "GET", response = UserWithRoleResp.class, notes = "根据id获取员工信息（包含角色）")
+    @ApiOperation(value = "【后台】获取员工信息", httpMethod = "GET", response = UserWithRoleResp.class, notes = "根据id获取员工信息（包含角色id，多个角色id用逗号连接）")
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
     public Object getById(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
@@ -85,7 +85,7 @@ public class APISysUserController extends BaseController {
         return ResponseFactory.buildResponse(result);
     }
 
-    @ApiOperation(value = "【新建、修改】保存员工信息", httpMethod = "POST", notes = "【新建、修改】保存员工信息")
+    @ApiOperation(value = "【后台】保存员工信息", httpMethod = "POST", notes = "保存员工信息、员工对应角色信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Object save(@ModelAttribute UserSaveReq req) {
         /*参数检查*/
@@ -110,7 +110,7 @@ public class APISysUserController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "获取登录员工信息", httpMethod = "GET", response = SysUserResp.class, notes = "获取登陆员工信息")
+    @ApiOperation(value = "【后台】获取登录员工信息", httpMethod = "GET", response = SysUserResp.class, notes = "获取登陆员工信息，无入参")
     @RequestMapping(value = "/getuserinfo", method = RequestMethod.GET)
     public Object getUserInfo() {
         SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
@@ -122,7 +122,7 @@ public class APISysUserController extends BaseController {
         return ResponseFactory.buildResponse(sysUserResp);
     }
 
-    @ApiOperation(value = "修改密码", httpMethod = "POST", notes = "修改密码")
+    @ApiOperation(value = "【后台】修改密码", httpMethod = "POST", notes = "员工自行修改登陆密码")
     @RequestMapping(value = "/changepassword", method = RequestMethod.POST)
     public Object changePassword(@ModelAttribute ChangePasswordReq req) {
         CommonValidator.validateNull(req.getOldPassword(),new UserException(UserCodeEnum.USEER_PASSWORD_IS_NULL));

@@ -217,4 +217,9 @@ public class RCServiceImpl implements RCService {
         List<RechargeCardPO> poList = rcPOManualMapper.findByIds(ids);
         return poList.stream().map(RCAdapter::PO2DTO).collect(Collectors.toList());
     }
+
+    @Override
+    public BigDecimal totalValidBalance(Integer customerId) {
+        return rcPOManualMapper.totalValidBalance(customerId);
+    }
 }

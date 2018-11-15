@@ -15,7 +15,7 @@ public class DirectChargeReq extends BaseVO {
     @ApiModelProperty("充值客户手机号")
     String mobile;
 
-    @ApiModelProperty("批次id")
+    @ApiModelProperty("虚拟批次的id")
     Integer batchId;
 
     @ApiModelProperty("充值分数")

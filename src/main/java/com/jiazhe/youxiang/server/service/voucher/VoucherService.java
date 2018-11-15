@@ -62,4 +62,11 @@ public interface VoucherService {
     void batchChangeUsed(List<Integer> ids, Byte aByte);
 
     List<VoucherDTO> findByIds(List<Integer> voucherIds);
+
+    /**
+     * 计算客户有效代金券的张数
+     * @param customerId
+     * @return
+     */
+    Integer totalValidVoucher(Integer customerId);
 }

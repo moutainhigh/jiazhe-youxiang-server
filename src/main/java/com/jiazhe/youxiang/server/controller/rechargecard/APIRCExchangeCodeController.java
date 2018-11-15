@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCExchangeCodeBiz;
+import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CustomerCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
@@ -46,7 +47,7 @@ public class APIRCExchangeCodeController extends BaseController{
     @Autowired
     private RCExchangeCodeBiz rcExchangeCodeBiz;
 
-    @ApiOperation(value = "分页查询充值卡兑换码（根据批次id和兑换码的码和密钥查询）", httpMethod = "GET", response = RCExchangeCodeResp.class, responseContainer = "List",notes = "分页查询充值卡兑换码（根据批次id和兑换码的码和密钥查询）")
+    @ApiOperation(value = "【后台】充值卡兑换码列表", httpMethod = "GET", response = RCExchangeCodeResp.class, responseContainer = "List",notes = "分页查询充值卡兑换码（根据批次id和兑换码的码和密钥查询）")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute RCExchangeCodePageReq req) {
         CommonValidator.validatePaging(req);
@@ -56,7 +57,7 @@ public class APIRCExchangeCodeController extends BaseController{
         return ResponseFactory.buildPaginationResponse(rcExchangeCodeBatchRespList, paging);
     }
 
-    @ApiOperation(value = "信息查询页查询充值卡兑换码", httpMethod = "GET", response = RCExchangeCodeResp.class, responseContainer = "List",notes = "信息查询页查询充值卡兑换码")
+    @ApiOperation(value = "【后台】充值卡兑换码列表（信息查询功能模块使用）", httpMethod = "GET", response = RCExchangeCodeResp.class, responseContainer = "List",notes = "分页查询充值卡兑换码，不指定批次等信息")
     @RequestMapping(value = "/searchlistpage", method = RequestMethod.GET)
     public Object searchListPage(@ModelAttribute RCExchangeCodePageReq req) {
         CommonValidator.validatePaging(req);
@@ -70,7 +71,7 @@ public class APIRCExchangeCodeController extends BaseController{
         return ResponseFactory.buildPaginationResponse(rcExchangeCodeBatchRespList, paging);
     }
 
-    @ApiOperation(value = "启用充值卡兑换码", httpMethod = "POST",notes = "启用充值卡兑换码")
+    @ApiOperation(value = "【后台】启用充值卡兑换码", httpMethod = "POST",notes = "启用充值卡兑换码，已经兑换的充值卡不能修改")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     public Object startUsing(@ModelAttribute IdReq req) {
         //参数检查
@@ -79,7 +80,7 @@ public class APIRCExchangeCodeController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "停用充值卡兑换码", httpMethod = "POST",notes = "停用充值卡兑换码")
+    @ApiOperation(value = "【后台】停用充值卡兑换码", httpMethod = "POST",notes = "停用充值卡兑换码，已经兑换的充值卡不能修改")
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     public Object stopUsing(@ModelAttribute IdReq req) {
         //参数检查
@@ -88,7 +89,7 @@ public class APIRCExchangeCodeController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "获取兑换码信息", httpMethod = "GET",response = RCExchangeCodeResp.class,notes = "获取兑换码信息")
+    @ApiOperation(value = "【后台】获取兑换码信息", httpMethod = "GET",response = RCExchangeCodeResp.class,notes = "获取兑换码信息")
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
     public Object getById(@ModelAttribute IdReq req) {
         //参数检查
@@ -117,7 +118,8 @@ public class APIRCExchangeCodeController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "【APP端】客户用充值卡兑换码兑换", httpMethod = "POST",notes = "【APP端】客户用充值卡兑换码兑换，这里为了与后台共用接口，所以传参为客户电话")
+    @AppApi
+    @ApiOperation(value = "【APP端】客户用兑换码进行兑换", httpMethod = "POST",notes = "客户用充值卡兑换码兑换，这里为了与后台共用接口，所以传参为客户电话")
     @RequestMapping(value = "/customerselfcodecharge", method = RequestMethod.POST)
     public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) {
         //参数检查
@@ -126,7 +128,7 @@ public class APIRCExchangeCodeController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "后台用兑换码进行充值", httpMethod = "POST",notes = "后台用兑换码进行充值")
+    @ApiOperation(value = "【后台】后台用兑换码进行兑换", httpMethod = "POST",notes = "后台用兑换码进行兑换")
     @RequestMapping(value = "/backstagecodecharge", method = RequestMethod.POST)
     public Object customerSelfCharge(@ModelAttribute CodeChargeReq req) {
         //参数检查

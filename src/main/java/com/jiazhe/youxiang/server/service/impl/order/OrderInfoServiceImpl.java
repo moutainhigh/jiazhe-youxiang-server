@@ -214,11 +214,14 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (null == customerDTO) {
             throw new OrderException(OrderCodeEnum.CUSTOMER_NOT_EXIST);
         }
-        String orderCode = GenerateCode.generateOrderCode(customerDTO.getMobile());
         ProductDTO productDTO = productService.getById(dto.getProductId());
         if (null == productDTO || productDTO.getStatus().equals(Byte.valueOf("0"))) {
             throw new OrderException(OrderCodeEnum.PRODUCT_NOT_AVAILABLE);
         }
+        if(productDTO.getLastNum()>dto.getCount()){
+            throw new OrderException(OrderCodeEnum.ORDER_COUNT_LESS_THAN_LAST_NUM);
+        }
+        String orderCode = GenerateCode.generateOrderCode(customerDTO.getMobile());
         //代金券支付数量
         Integer[] voucherPayCount = {0};
         Integer[] i = {0};
@@ -363,6 +366,21 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
+    public void userChangeReservationInfo(UserReservationOrderDTO dto) {
+        OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(dto.getOrderId());
+        if (null == orderInfoPO || orderInfoPO.getIsDeleted().equals(Byte.valueOf("1"))) {
+            throw new OrderException(OrderCodeEnum.ORDER_NOT_EXIST);
+        }
+        if (!orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSERVICE)) {
+            throw new OrderException(OrderCodeEnum.ORDER_STATUS_NOT_UNSERVICE);
+        }
+        orderInfoPO.setWorkerMobile(dto.getWorkerMobile());
+        orderInfoPO.setWorkerName(dto.getWorkerName());
+        orderInfoPO.setRealServiceTime(dto.getRealServiceTime());
+        orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
+    }
+
+    @Override
     public void appendOrder(AppendOrderDTO appendOrderDTO) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(appendOrderDTO.getOrderId());
         if (null == orderInfoPO || orderInfoPO.getIsDeleted().equals(Byte.valueOf("1"))) {
@@ -461,6 +479,19 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Override
     public Integer getCountByStatus(Byte status) {
         return orderInfoPOManualMapper.getCountByStatus(status);
+    }
+
+    @Override
+    public void prePaymentCheck(Integer id) {
+        OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
+        ProductDTO productDTO = productService.getById(orderInfoPO.getProductId());
+        //电子商品需要检查一下电子吗是否足够，服务类商品不需要检查
+        if(productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)){
+            List<EleProductCodeDTO> eleProductCodeDTOList = eleProductCodeService.selectTopN(orderInfoPO.getProductId(),orderInfoPO.getCount());
+            if(eleProductCodeDTOList.size()<orderInfoPO.getCount()){
+                throw new OrderException(OrderCodeEnum.ELE_PRODUCT_CODE_NOT_ENOUGH);
+            }
+        }
     }
 
     private OrderRefundDTO paymentDto2RefundDto(OrderPaymentDTO paymentDTO) {

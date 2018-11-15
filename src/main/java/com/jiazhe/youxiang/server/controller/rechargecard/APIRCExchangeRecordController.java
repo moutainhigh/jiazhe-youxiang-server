@@ -32,34 +32,34 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("api/rcexchangerecord")
-public class APIRCExchangeRecordController extends BaseController{
+public class APIRCExchangeRecordController extends BaseController {
 
     @Autowired
     private RCExchangeRecordBiz rcExchangeRecordBiz;
     @Autowired
     private OrderInfoBiz orderInfoBiz;
 
-    @ApiOperation(value = "【组合条件】分页查询充值卡兑换记录", httpMethod = "GET", response = RCExchangeRecordResp.class, responseContainer = "List",notes = "【组合条件】分页查询充值卡兑换记录")
+    @ApiOperation(value = "【后台，暂时无用】分页查询充值卡兑换记录", httpMethod = "GET", response = RCExchangeRecordResp.class, responseContainer = "List", notes = "【组合条件】分页查询充值卡兑换记录")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute RCExchangeRecordPageReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        List<RCExchangeRecordDTO> rcExchangeCodeBatchDTOList = rcExchangeRecordBiz.getList(req.getBeginDate(),req.getEndDate(),req.getCode(),req.getKeyt(),paging);
+        List<RCExchangeRecordDTO> rcExchangeCodeBatchDTOList = rcExchangeRecordBiz.getList(req.getBeginDate(), req.getEndDate(), req.getCode(), req.getKeyt(), paging);
         List<RCExchangeRecordResp> rcExchangeCodeBatchRespList = rcExchangeCodeBatchDTOList.stream().map(RCExchangeRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(rcExchangeCodeBatchRespList, paging);
     }
 
-    @ApiOperation(value = "通过充值卡id，查找兑换记录", httpMethod = "GET", response = RCExchangeRecordResp.class,notes = "通过充值卡id，查找兑换记录")
+    @ApiOperation(value = "【后台，暂时无用】通过充值卡id，查找兑换记录", httpMethod = "GET", response = RCExchangeRecordResp.class, notes = "通过充值卡id，查找兑换记录")
     @RequestMapping(value = "/getbyrcid", method = RequestMethod.GET)
     public Object getByRCId(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
-        RCExchangeRecordDTO rcExchangeCodeBatchDTO  = rcExchangeRecordBiz.getByRCId(req.getId());
-        RCExchangeRecordResp rcExchangeCodeBatchResp =RCExchangeRecordAdapter.DTO2Resp(rcExchangeCodeBatchDTO);
+        RCExchangeRecordDTO rcExchangeCodeBatchDTO = rcExchangeRecordBiz.getByRCId(req.getId());
+        RCExchangeRecordResp rcExchangeCodeBatchResp = RCExchangeRecordAdapter.DTO2Resp(rcExchangeCodeBatchDTO);
         return ResponseFactory.buildResponse(rcExchangeCodeBatchResp);
     }
 
-    @ApiOperation(value = "通过充值卡id，查找该充值卡消费记录", httpMethod = "GET", response = OrderInfoResp.class,notes = "通过充值卡id，查找该充值卡消费记录")
+    @ApiOperation(value = "【后台，暂时无用】通过充值卡id，查找该充值卡消费记录", httpMethod = "GET", response = OrderInfoResp.class, notes = "通过充值卡id，查找该充值卡消费记录")
     @RequestMapping(value = "/getorderbyrcid", method = RequestMethod.GET)
     public Object getOrderByRCId(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);

@@ -75,17 +75,7 @@
             data: {},
             type: "GET",
             success: function (result) {
-                switch (result.code) {
-                    case "000001":
-                        parent.location.href = "../system/index";
-                        break;
-                    case "000002":
-                        window.location.href = "../system/403";
-                        break;
-                    default :
-                        bootboxalert(result.msg);
-                        break;
-                }
+
             },
             error: function () {
                 bootboxalert("服务器异常，请联系管理员");

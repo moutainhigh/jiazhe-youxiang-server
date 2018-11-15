@@ -333,6 +333,12 @@
                                         <i class="ace-icon fa fa-check"></i>
                                         保存
                                     </button>
+
+                                    <button id="reservationChangeBtn" class="btn btn-sm btn-primary modal-footer-btn"
+                                            onclick="changeReservationInfo()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        修改
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -686,16 +692,18 @@
             str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:userReservationOrder('" + rowObject.id + "')\">预约</a>&nbsp;&nbsp;";
         }
         if (rowObject.status == 3) {
+            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:changeOrderReservation('" + rowObject.id + "')\">修改订单</a>&nbsp;&nbsp;";
             str = str + "<a class='btn btn-minier btn-success' href=\"javascript:userCompleteOrder('" + rowObject.id + "')\">完成订单</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:userCancelOrder('" + rowObject.id + "')\">取消订单</a>&nbsp;&nbsp;";
             str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:showAppendOrder('" + rowObject.id + "')\">追加订单</a>&nbsp;&nbsp;";
         }
         if (rowObject.status == 5) {
             str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:orderCancelPass('" + rowObject.id + "')\">审核通过</a>&nbsp;&nbsp;";
             str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:orderCancelUnpass('" + rowObject.id + "')\">审核不通过</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:userCompleteOrder('" + rowObject.id + "')\">完成订单</a>&nbsp;&nbsp;";
         }
         if (rowObject.status == 6) {
             str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:userCancelOrder('" + rowObject.id + "')\">取消订单</a>&nbsp;&nbsp;";
+            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:userCompleteOrder('" + rowObject.id + "')\">完成订单</a>&nbsp;&nbsp;";
         }
         return str;
     }
@@ -840,15 +848,18 @@
             return false;
         }
         var left = (parseInt($("#appendCount").val()) - count) * parseInt($("#app_productPrice").val()) - money;
-        var tips = left > 0 ? "所选的付款内容不足以支付追加的订单，继续追加该订单吗" : "所选的付款内容超额支付追加的订单，继续追加该订单吗";
-        if (left != 0) {
-            confirm(tips, function (result) {
+        if (left > 0) {
+            confirm("所选的付款内容不足以支付追加的订单，继续追加该订单吗？", function (result) {
                 if (result) {
                     appendOrder();
                 }
             });
-        } else {
+        }
+        if(left == 0){
             appendOrder()
+        }
+        if(left < 0){
+            bootboxalert("所选的付款内容超额支付追加的订单，不能追加！");
         }
     }
 
@@ -933,6 +944,7 @@
     function showOrder(id) {
         $("#modal-title").html("查看");
         $("#reservationSaveBtn").css("display", "none");
+        $("#reservationChangeBtn").css("display","none");
         fillOrderInfo(id);
         $("#re_realServiceTime").attr("readonly", "readonly");
         $("#re_workerMobile").attr("readonly", "readonly");
@@ -943,12 +955,23 @@
     function userReservationOrder(id) {
         $("#modal-title").html("预约");
         $("#reservationSaveBtn").css("display", "");
+        $("#reservationChangeBtn").css("display","none");
         fillOrderInfo(id);
         $("#re_realServiceTime").removeAttr("readonly");
         $("#re_workerMobile").removeAttr("readonly");
         $("#re_workerName").removeAttr("readonly");
         $("#re_cost").removeAttr("readonly");
+    }
 
+    function changeOrderReservation(id){
+        $("#modal-title").html("修改预约信息");
+        $("#reservationSaveBtn").css("display", "none");
+        $("#reservationChangeBtn").css("display","");
+        fillOrderInfo(id);
+        $("#re_realServiceTime").removeAttr("readonly");
+        $("#re_workerMobile").removeAttr("readonly");
+        $("#re_workerName").removeAttr("readonly");
+        $("#re_cost").attr("readonly","readonly");
     }
 
     function saveReservationInfo() {
@@ -964,6 +987,28 @@
                 } else {
                     $("#orderReservationModal").modal("hide");
                     bootboxalert("预约成功");
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+    function changeReservationInfo() {
+        $.ajax({
+            url: "../api/orderinfo/userchangereservationinfo",
+            dataType: "json",
+            async: false,
+            data: transformToJson($('#orderReservationForm').serializeArray()),
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $("#orderReservationModal").modal("hide");
+                    bootboxalert("修改预约信息成功");
                     jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                 }
             },
