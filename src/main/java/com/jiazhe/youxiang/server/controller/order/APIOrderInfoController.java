@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.order.OrderInfoBiz;
+import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.OrderException;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
@@ -49,6 +50,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildPaginationResponse(orderInfoRespList, paging);
     }
 
+    @AppApi
     @ApiOperation(value = "【APP端】分页查询订单信息", httpMethod = "GET", response = OrderInfoResp.class, responseContainer = "List", notes = "【后台】分页查询订单信息")
     @RequestMapping(value = "/customerlistpage", method = RequestMethod.GET)
     public Object customerListPage(@ModelAttribute CustomerOrderInfoPageReq req) {
@@ -58,6 +60,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildPaginationResponse(orderInfoRespList, paging);
     }
 
+    @AppApi
     @ApiOperation(value = "【APP端】客户取消订单", httpMethod = "POST", notes = "【APP端】客户取消订单")
     @RequestMapping(value = "/customercancelorder", method = RequestMethod.POST)
     public Object customerCancelOrder(@ModelAttribute IdReq req) {
@@ -65,7 +68,8 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "计算客户需要在线支付的金额", httpMethod = "GET", response = NeedPayResp.class, notes = "计算客户需要在线支付的金额")
+    @AppApi
+    @ApiOperation(value = "【APP端】计算客户需要在线支付的金额", httpMethod = "GET", response = NeedPayResp.class, notes = "计算客户需要在线支付的金额")
     @RequestMapping(value = "/customerneedpaycash", method = RequestMethod.GET)
     public Object customerNeedPayCash(@ModelAttribute IdReq req) {
         BigDecimal needPayCash = orderInfoBiz.customerNeedPayCash(req.getId());
@@ -74,6 +78,15 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildResponse(needPayResp);
     }
 
+    @AppApi
+    @ApiOperation(value = "【APP端】支付前检查", httpMethod = "GET", response = NeedPayResp.class, notes = "客户支付")
+    @RequestMapping(value = "/prepaymentcheck", method = RequestMethod.POST)
+    public Object prePaymentCheck(@ModelAttribute IdReq req) {
+        orderInfoBiz.prePaymentCheck(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
+    @AppApi
     @ApiOperation(value = "【APP端】客户支付", httpMethod = "POST", response = NeedPayResp.class, notes = "客户支付")
     @RequestMapping(value = "/customerpay", method = RequestMethod.POST)
     public Object customerPay(@ModelAttribute CustomerPayReq req) {
@@ -121,6 +134,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @AppApi
     @ApiOperation(value = "【APP端】下单", httpMethod = "POST", notes = "【APP端】下单")
     @RequestMapping(value = "/customerplaceorder", method = RequestMethod.POST)
     public Object customerPlaceOrder(@ModelAttribute CustomerPlaceOrderReq req) throws ParseException {

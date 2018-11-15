@@ -105,4 +105,10 @@ public interface OrderInfoService {
      * @return
      */
     Integer getCountByStatus(Byte status);
+
+    /**
+     * 付款前检查，如果是电子商品，检查该兑换码数量是否足够
+     * @param id
+     */
+    void prePaymentCheck(Integer id);
 }

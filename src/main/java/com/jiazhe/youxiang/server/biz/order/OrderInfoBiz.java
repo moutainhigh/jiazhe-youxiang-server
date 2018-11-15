@@ -123,4 +123,8 @@ public class OrderInfoBiz {
     public void appendOrder(AppendOrderDTO appendOrderDTO) {
         orderInfoService.appendOrder(appendOrderDTO);
     }
+
+    public void prePaymentCheck(Integer id) {
+        orderInfoService.prePaymentCheck(id);
+    }
 }

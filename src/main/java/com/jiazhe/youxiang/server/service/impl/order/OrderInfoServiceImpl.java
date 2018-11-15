@@ -463,6 +463,19 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         return orderInfoPOManualMapper.getCountByStatus(status);
     }
 
+    @Override
+    public void prePaymentCheck(Integer id) {
+        OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
+        ProductDTO productDTO = productService.getById(orderInfoPO.getProductId());
+        //电子商品需要检查一下电子吗是否足够，服务类商品不需要检查
+        if(productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)){
+            List<EleProductCodeDTO> eleProductCodeDTOList = eleProductCodeService.selectTopN(orderInfoPO.getProductId(),orderInfoPO.getCount());
+            if(eleProductCodeDTOList.size()<orderInfoPO.getCount()){
+                throw new OrderException(OrderCodeEnum.ELE_PRODUCT_CODE_NOT_ENOUGH);
+            }
+        }
+    }
+
     private OrderRefundDTO paymentDto2RefundDto(OrderPaymentDTO paymentDTO) {
         OrderRefundDTO refundDTO = new OrderRefundDTO();
         refundDTO.setOrderCode(paymentDTO.getOrderCode());
