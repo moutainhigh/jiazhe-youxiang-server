@@ -3,7 +3,6 @@ package com.jiazhe.youxiang.server.controller;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.server.adapter.AuditRecordAdapter;
 import com.jiazhe.youxiang.server.biz.AuditRecordBiz;
-import com.jiazhe.youxiang.server.biz.EleProductExCodeBiz;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
