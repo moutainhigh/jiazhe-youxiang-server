@@ -17,8 +17,11 @@ public class SysRoleController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SysRoleController.class);
 
-    //跳转到角色管理页面
-    @RequiresPermissions("sysrole-index")
+    /**
+     * 跳转到角色管理页面
+     * @return 页面
+     */
+    /*@RequiresPermissions("sysrole-index")*/
     @RequestMapping(value = "/index")
     public String main() {
         return "system/sysrole/index";

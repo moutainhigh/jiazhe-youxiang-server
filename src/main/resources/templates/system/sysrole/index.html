@@ -3,36 +3,20 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta charset="utf-8"/>
-    <title>CRM首页</title>
+    <title></title>
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <!-- CSS -->
     <link rel="stylesheet" th:href="@{/static/init.css}"/>
-
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
-
     <!--权限树 -->
-    <link rel="stylesheet" th:href="@{/static/ztree/css/metroStyle.css}" type="text/css">
-    <script th:src="@{/static/ztree/js/jquery.ztree.all.min.js}"></script>
-
-    <style>
-        .form-group {
-            margin-bottom: 0px;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/static/zTree/css/metroStyle.css}" type="text/css">
+    <script th:src="@{/static/zTree/js/jquery.ztree.all.min.js}"></script>
 </head>
 
 <body class="no-skin">
-
 <div class="main-container ace-save-state" id="main-container">
-    <script type="text/javascript">
-        try {
-            ace.settings.loadState('main-container')
-        } catch (e) {
-        }
-    </script>
-
     <div class="main-content">
         <div class="main-content-inner">
             <div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -47,7 +31,6 @@
                     <li class="active">角色管理</li>
                 </ul><!-- /.breadcrumb -->
             </div>
-
             <div class="page-content">
                 <div class="row">
                     <div class="col-xs-12" style="padding-top:40px">
@@ -72,7 +55,7 @@
                     </div><!-- /.col -->
                     <div class="col-xs-12" style="text-align: right" id="buttonDiv">
                         <p style="margin:1px;">
-                            <!--                            <shiro:hasPermission name="sysrole:add">-->
+                            <!--<shiro:hasPermission name="sysrole:add">-->
                             <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
                                data-toggle="modal" onclick="openNew()">
                                 <i class="ace-icon fa fa-plus"></i>新建
@@ -160,7 +143,8 @@
                                         取消
                                     </button>
 
-                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="save()">
+                                    <button class="btn btn-sm btn-primary modal-footer-btn modal-footer-btn-save"
+                                            onclick="save()">
                                         <i class="ace-icon fa fa-check"></i>
                                         保存
                                     </button>
@@ -172,22 +156,12 @@
             </div><!-- /.page-content -->
         </div>
     </div><!-- /.main-content -->
-
-    <!--<div class="footer">
-        <div class="footer-inner">
-            <div class="footer-content" style="padding: 0px;">
-						<span class="bigger-120">
-							<span class="blue bolder"></span>
-							悠享后台管理系统 &copy; 2018
-						</span>
-                &nbsp; &nbsp;
-            </div>
-        </div>
-    </div>-->
 </div><!-- /.main-container -->
 </div>
 </body>
 <script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
     var permission = getCookie("permission");
     var setting = {
         view: {
@@ -223,6 +197,8 @@
 
     //初始化权限树
     permsTree = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+
+    //将勾选的权限id放到隐藏的input中，用英文逗号连接
     function submitNodes() {
         var nodes = permsTree.getCheckedNodes(true);
         var str = "";
@@ -239,6 +215,7 @@
         $("#perms").val(perms);
     }
 
+    //将所有的节点置为不可勾选状态
     function disablePerms() {
         var nodes = permsTree.getNodes();
         if ($("input[name=isSuper]:checked").val() == "1") {
@@ -254,7 +231,7 @@
         }
     }
 
-    //标识选中状态
+    //根据权限字符串，勾选checkbox
     function checkNodes(perms) {
         var nodes = permsTree.getCheckedNodes(false);
         for (var i = 0; i < nodes.length; i++) {
@@ -281,135 +258,62 @@
         $("input[name=isSuper]").bind("change", function () {
             disablePerms();
         });
-    });
 
-    var grid_selector = "#grid-table";
-    var pager_selector = "#grid-pager";
-    jQuery(grid_selector).jqGrid({
-        subGrid: false, // 此处设置为true时可以打开子项,子项用不到已删除
-        url: "../api/sysrole/listpage",// 获取数据的地址
-        postData: transformToJson($('#roleSearchForm').serializeArray()),
-        rownumbers: true,
-        datatype: "json",
-        mtype: "GET",
-        hidegrid: false,//收缩列表按钮
-        prmNames: {
-            page: "pageNum",
-            rows: "pageSize"
-        },// 重新定义分页信息
-        width: "100%",
-        autowidth: true,
-        height: 350,
-        colNames: ['', '角色名称', '拥有所有权限', '排序序号', '操作'],
-        colModel: [
-            {name: 'id', index: 'id', sortable: false, hidden: true},
-            {name: 'name', index: 'name', sortable: false},
-            {name: 'isSuper', index: 'isSuper', sortable: false,formatter:function (cellvalue, options, rowObject) {
-                return rowObject.isSuper==1?'是':'否';
-            }},
-            {name: 'priority', index: 'priority', sortable: false},
-            {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
-        ],
-        rowNum: 10,
-        rowList: [10, 20, 30],
-        pager: pager_selector,
-        altRows: true,
-        viewrecords: true,
-        emptyrecords: "0条数据",
-        loadComplete: function (data) {
-            var table = this;
-            setTimeout(function () {
-                $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
-                updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
-            }, 0);
-        },
-        jsonReader: { // jsonReader来跟服务器端返回的数据做对应
-            root: "data", // 包含实际数据的数组
-            page: "paging.currPage", // 当前页
-            total: "paging.totalPage",// 总页数
-            records: "paging.total", // 查询出的记录数
-            repeatitems: false
-        },
-        caption: "角色列表"
+        var tableOption = {
+            url: "../api/sysrole/listpage",// 获取数据的地址
+            postData: transformToJson($('#roleSearchForm').serializeArray()),
+            colNames: ['', '角色名称', '拥有所有权限', '排序序号', '操作'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'name', index: 'name', sortable: false},
+                {
+                    name: 'isSuper',
+                    index: 'isSuper',
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return rowObject.isSuper == 1 ? '是' : '否';
+                    }
+                },
+                {name: 'priority', index: 'priority', sortable: false},
+                {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
+            ],
+            caption: "角色列表"
+        };
+        initTable(grid_selector, pager_selector, tableOption);
     });
-    $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
-
-    //replace icons with FontAwesome icons like above
-    function updatePagerIcons(table) {
-        var replacement =
-            {
-                'ui-icon-seek-first': 'ace-icon fa fa-angle-double-left bigger-140',
-                'ui-icon-seek-prev': 'ace-icon fa fa-angle-left bigger-140',
-                'ui-icon-seek-next': 'ace-icon fa fa-angle-right bigger-140',
-                'ui-icon-seek-end': 'ace-icon fa fa-angle-double-right bigger-140'
-            };
-        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
-            var icon = $(this);
-            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
-            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
-        })
-    }
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/sysrole/listpage",// 获取数据的地址
+            url: "../api/sysrole/listpage",
             postData: transformToJson($('#roleSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
     }
 
-    function deleteOne(id) {
-        bootbox.confirm({
-            buttons: {
-                confirm: {
-                    label: '确认',
-                    className: 'btn-myStyle'
-                },
-                cancel: {
-                    label: '取消',
-                    className: 'btn-default'
-                }
-            },
-            title: "提示信息",
-            message: '确定要删除该角色吗？',
-            callback: function (result) {
-                if (result) {
-                    $.ajax({
-                        url: "../api/sysrole/delete",    //请求的url地址
-                        dataType: "json",
-                        async: false,
-                        data: {
-                            id: id
-                        },
-                        type: "POST",
-                        success: function (data) {
-                            if ('error' in data) {
-                                bootboxalert(data.error.message);
-                            } else {
-                                jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                            }
-                        },
-                        error: function () {
-                            bootboxalert("服务器异常，请联系管理员");
-                        }
-                    });
-                }
-            },
-        });
-    }
-
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:deleteOne('" + rowObject.id + "')\">" +
-            "<i class='ace-icon'>删除</i>" +
-            "</a>&nbsp;&nbsp;";
-        str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
-            "<i class='ace-icon'>修改</i>" +
-            "</a>&nbsp;&nbsp;";
-        str = str + "<a class='btn btn-minier btn-success' href=\"javascript:openShow('" + rowObject.id + "')\">" +
-            "<i class='ace-icon'>查看</i>" +
-            "</a>";
+        str += getFunctionButton("btn-danger", "deleteOne(" + rowObject.id + ")", "删除");
+        str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
+        str += getFunctionButton("btn-success", "openShow(" + rowObject.id + ")", "查看");
         return str;
+    }
+
+    function deleteOne(id) {
+        confirm("确定要删除该角色吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "../api/sysrole/delete",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    success: success,
+                    error: error
+                });
+            }
+        });
     }
 
     function openNew() {
@@ -419,14 +323,14 @@
         $("#roleSaveForm #savePriority").val("");
         $("#notSuper").prop('checked', true);
         disablePerms();
-        $(".modal-footer-btn").show();
+        $(".modal-footer-btn-save").show();
         $('input,select', $('#roleSaveForm')).removeAttr('disabled');
         $('#treeDemo').removeAttr('disabled');
     }
 
     function openEdit(id) {
         $("#modal-title").html("角色信息-修改");
-        $(".modal-footer-btn").show();
+        $(".modal-footer-btn-save").show();
         $('input,select', $('#roleSaveForm')).removeAttr('disabled');
         $('#treeDemo').removeAttr('disabled');
         permsTree.checkAllNodes(false);
@@ -435,7 +339,7 @@
 
     function openShow(id) {
         $("#modal-title").html("角色信息-查看");
-        $(".modal-footer-btn").hide();
+        $(".modal-footer-btn-save").hide();
         $('input,select', $('#roleSaveForm')).attr('disabled', 'disabled');
         $('#treeDemo').attr('disabled');
         permsTree.checkAllNodes(false);
@@ -443,9 +347,13 @@
     }
 
     function save() {
+        if (!isInteger($("#savePriority").val())) {
+            bootboxalert("排序必须为非负整数");
+            return false;
+        }
         submitNodes();
         $.ajax({
-            url: "../api/sysrole/save",    //请求的url地址
+            url: "../api/sysrole/save",
             dataType: "json",
             async: false,
             data: {
@@ -456,23 +364,14 @@
                 permsStr: $("#perms").val()
             },
             type: "POST",
-            success: function (data) {
-                if('error' in data){
-                    bootboxalert(data.error.message);
-                }else{
-                    $("#modal-form").modal('hide');
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                }
-            },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            success: success,
+            error: error
         });
     }
 
     function huixian(id) {
         $.ajax({
-            url: "../api/sysrole/getbyid",    //请求的url地址
+            url: "../api/sysrole/getbyid",
             dataType: "json",
             async: false,
             data: {
@@ -480,9 +379,9 @@
             },
             type: "GET",
             success: function (data) {
-                if('error' in data){
+                if ('error' in data) {
                     bootboxalert(data.error.message);
-                }else{
+                } else {
                     var result = data.data;
                     $("#roleId").val(result.id);
                     $("#savePriority").val(result.priority);
@@ -498,12 +397,9 @@
                     $("#modal-form").modal('show');
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
     }
-
 </script>
 </html>
 

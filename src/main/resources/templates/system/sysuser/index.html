@@ -3,33 +3,18 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta charset="utf-8"/>
-    <title>CRM首页</title>
+    <title></title>
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <!-- CSS -->
     <link rel="stylesheet" th:href="@{/static/init.css}"/>
-
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
-
-
-    <style>
-        .form-group {
-            margin-bottom: 0px;
-        }
-    </style>
 </head>
 
 <body class="no-skin">
 
 <div class="main-container ace-save-state" id="main-container">
-    <script type="text/javascript">
-        try {
-            ace.settings.loadState('main-container')
-        } catch (e) {
-        }
-    </script>
-
     <div class="main-content">
         <div class="main-content-inner">
             <div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -106,7 +91,8 @@
                                                     <label class="col-sm-4 control-label no-padding-right">登录名：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveLoginName" name="saveLoginName" class="form-control"
+                                                            <input id="saveLoginName" name="saveLoginName"
+                                                                   class="form-control"
                                                                    type="text" style="height:30px"/>
                                                         </div>
                                                     </div>
@@ -116,7 +102,8 @@
                                                     <label class="col-sm-4 control-label no-padding-right">姓名：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveDisplayName" name="saveDisplayName" class="form-control"
+                                                            <input id="saveDisplayName" name="saveDisplayName"
+                                                                   class="form-control"
                                                                    type="text" style="height:30px"/>
                                                         </div>
                                                     </div>
@@ -138,7 +125,7 @@
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
                                                             <input id="savePassword" name="password"
-                                                                   class="form-control" type="text"
+                                                                   class="form-control" type="password"
                                                                    style="height:30px"/>
                                                         </div>
                                                     </div>
@@ -147,7 +134,9 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">角色：</label>
                                                     <div class="col-sm-8">
-                                                        <select id="saveRoleIds" class="selectpicker show-tick form-control" multiple data-live-search="false">
+                                                        <select id="saveRoleIds"
+                                                                class="selectpicker show-tick form-control" multiple
+                                                                data-live-search="false">
 
                                                         </select>
                                                     </div>
@@ -163,7 +152,8 @@
                                         取消
                                     </button>
 
-                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="save()">
+                                    <button class="btn btn-sm btn-primary modal-footer-btn modal-footer-btn-save"
+                                            onclick="save()">
                                         <i class="ace-icon fa fa-check"></i>
                                         保存
                                     </button>
@@ -175,24 +165,12 @@
             </div><!-- /.page-content -->
         </div>
     </div><!-- /.main-content -->
-
-    <!--<div class="footer">
-        <div class="footer-inner">
-            <div class="footer-content" style="padding: 0px;">
-						<span class="bigger-120">
-							<span class="blue bolder"></span>
-							悠享后台管理系统 &copy; 2018
-						</span>
-                &nbsp; &nbsp;
-            </div>
-        </div>
-    </div>-->
 </div><!-- /.main-container -->
-</div>
 </body>
 <script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
     var permission = getCookie("permission");
-
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -200,7 +178,7 @@
         });
         //将角色列表填入到select中
         $.ajax({
-            url: "../api/sysrole/listall",    //请求的url地址
+            url: "../api/sysrole/listall",
             dataType: "json",
             async: true,
             type: "GET",
@@ -209,148 +187,72 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    for(var i=0;i<result.length;i++){
-                        $("#saveRoleIds").append("<option value='"+result[i].id+"'>"+result[i].name+"</option>");
+                    for (var i = 0; i < result.length; i++) {
+                        $("#saveRoleIds").append("<option value='" + result[i].id + "'>" + result[i].name + "</option>");
                     }
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
+
+        var tableOption = {
+            url: "../api/sysuser/listpage",
+            postData: transformToJson($('#userSearchForm').serializeArray()),
+            colNames: ['', '登录名', '员工姓名', '电话', '最后登录时间', '最后登录ip', '操作'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'loginName', index: 'loginName', sortable: false},
+                {name: 'displayName', index: 'displayName', sortable: false},
+                {name: 'mobile', index: 'mobile', sortable: false},
+                {
+                    name: 'lastLoginTime',
+                    index: 'lastLoginTime',
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return timeFormat(rowObject.lastLoginTime);
+                    }
+                },
+                {name: 'lastLoginIp', index: 'lastLoginIp', sortable: false},
+                {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
+            ],
+            caption: "员工列表"
+        };
+        initTable(grid_selector, pager_selector, tableOption);
     });
 
-    var grid_selector = "#grid-table";
-    var pager_selector = "#grid-pager";
-    jQuery(grid_selector).jqGrid({
-        subGrid: false, // 此处设置为true时可以打开子项,子项用不到已删除
-        url: "../api/sysuser/listpage",// 获取数据的地址
-        postData: transformToJson($('#userSearchForm').serializeArray()),
-        rownumbers: true,
-        datatype: "json",
-        mtype: "GET",
-        hidegrid: false,//收缩列表按钮
-        prmNames: {
-            page: "pageNum",
-            rows: "pageSize"
-        },// 重新定义分页信息
-        width: "100%",
-        autowidth: true,
-        height: 350,
-        colNames: ['', '登录名','员工姓名', '电话', '最后登录时间','最后登录ip', '操作'],
-        colModel: [
-            {name: 'id', index: 'id', sortable: false, hidden: true},
-            {name: 'loginName', index: 'loginName', sortable: false},
-            {name: 'displayName', index: 'displayName', sortable: false},
-            {name: 'mobile', index: 'mobile', sortable: false},
-            {name: 'lastLoginTime', index: 'lastLoginTime', sortable: false,formatter:timeFormatter},
-            {name: 'lastLoginIp', index: 'lastLoginIp', sortable: false},
-            {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
-        ],
-        rowNum: 10,
-        rowList: [10, 20, 30],
-        pager: pager_selector,
-        altRows: true,
-        viewrecords: true,
-        emptyrecords: "0条数据",
-        loadComplete: function (data) {
-            var table = this;
-            setTimeout(function () {
-                $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
-                updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
-            }, 0);
-        },
-        jsonReader: { // jsonReader来跟服务器端返回的数据做对应
-            root: "data", // 包含实际数据的数组
-            page: "paging.currPage", // 当前页
-            total: "paging.totalPage",// 总页数
-            records: "paging.total", // 查询出的记录数
-            repeatitems: false
-        },
-        caption: "员工列表"
-    });
-    $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
-
-    //replace icons with FontAwesome icons like above
-    function updatePagerIcons(table) {
-        var replacement =
-            {
-                'ui-icon-seek-first': 'ace-icon fa fa-angle-double-left bigger-140',
-                'ui-icon-seek-prev': 'ace-icon fa fa-angle-left bigger-140',
-                'ui-icon-seek-next': 'ace-icon fa fa-angle-right bigger-140',
-                'ui-icon-seek-end': 'ace-icon fa fa-angle-double-right bigger-140'
-            };
-        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
-            var icon = $(this);
-            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
-            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
-        })
+    function customFormatter(cellvalue, options, rowObject) {
+        var str = "";
+        var str = "";
+        str += getFunctionButton("btn-danger", "deleteOne(" + rowObject.id + ")", "删除");
+        str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
+        str += getFunctionButton("btn-success", "openShow(" + rowObject.id + ")", "查看");
+        return str;
     }
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/sysuser/listpage",// 获取数据的地址
+            url: "../api/sysuser/listpage",
             postData: transformToJson($('#userSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
     }
 
     function deleteOne(id) {
-        bootbox.confirm({
-            buttons: {
-                confirm: {
-                    label: '确认',
-                    className: 'btn-myStyle'
-                },
-                cancel: {
-                    label: '取消',
-                    className: 'btn-default'
-                }
-            },
-            title: "提示信息",
-            message: '确定要删除该员工吗？',
-            callback: function (result) {
-                if (result) {
-                    $.ajax({
-                        url: "../api/sysuser/delete",    //请求的url地址
-                        dataType: "json",
-                        async: false,
-                        data: {
-                            id: id
-                        },
-                        type: "POST",
-                        success: function (data) {
-                            if ('error' in data) {
-                                bootboxalert(data.error.message);
-                            } else {
-                                jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                            }
-                        },
-                        error: function () {
-                            bootboxalert("服务器异常，请联系管理员");
-                        }
-                    });
-                }
-            },
+        confirm("确定要删除该员工码？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "../api/sysuser/delete",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    success: success,
+                    error: error
+                });
+            }
         });
-    }
-
-    function customFormatter(cellvalue, options, rowObject) {
-        var str = "";
-        str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:deleteOne('" + rowObject.id + "')\">" +
-            "<i class='ace-icon'>删除</i>" +
-            "</a>&nbsp;&nbsp;";
-        str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
-            "<i class='ace-icon'>修改</i>" +
-            "</a>&nbsp;&nbsp;";
-        str = str + "<a class='btn btn-minier btn-success' href=\"javascript:openShow('" + rowObject.id + "')\">" +
-            "<i class='ace-icon'>查看</i>" +
-            "</a>";
-        return str;
-    }
-
-    function timeFormatter(cellvalue, options, rowObject) {
-        return timeFormat(rowObject.lastLoginTime);
     }
 
     function openNew() {
@@ -362,13 +264,13 @@
         $("#userSaveForm #saveMobile").val("");
         $("#userSaveForm #savePassword").val("");
         roleShow('');
-        $(".modal-footer-btn").show();
+        $(".modal-footer-btn-save").show();
         $('input,select', $('#userSaveForm')).removeAttr('disabled');
     }
 
     function openEdit(id) {
         $("#modal-title").html("员工信息-修改");
-        $(".modal-footer-btn").show();
+        $(".modal-footer-btn-save").show();
         $('input,select', $('#userSaveForm')).removeAttr('disabled');
         $('#savePassword').attr('disabled', 'disabled');
         $('#saveLoginName').attr('disabled', 'disabled');
@@ -377,33 +279,33 @@
 
     function openShow(id) {
         $("#modal-title").html("员工信息-查看");
-        $(".modal-footer-btn").hide();
+        $(".modal-footer-btn-save").hide();
         $('input,select', $('#userSaveForm')).attr('disabled', 'disabled');
         huixian(id);
     }
 
-    function submitRoles(){
-        var roleIds = [] ;
-        $("#saveRoleIds option:selected").each(function(){
-           roleIds.push($(this).val());
+    function submitRoles() {
+        var roleIds = [];
+        $("#saveRoleIds option:selected").each(function () {
+            roleIds.push($(this).val());
         });
         return roleIds.join(",")
     }
 
-    function roleShow(ids){
+    function roleShow(ids) {
         var roleIds = ids.split(",");
-        var has ;
-        $("#saveRoleIds option").each(function(){
+        var has;
+        $("#saveRoleIds option").each(function () {
             has = false;
-            for(var i=0;i<roleIds.length;i++) {
+            for (var i = 0; i < roleIds.length; i++) {
                 if (roleIds[i] == $(this).val()) {
                     has = true;
                     break;
                 }
             }
-            if(has){
+            if (has) {
                 $(this).prop('selected', true);
-            }else{
+            } else {
                 $(this).prop('selected', false);
             }
         });
@@ -420,27 +322,18 @@
                 displayName: $("#saveDisplayName").val(),
                 loginName: $("#saveLoginName").val(),
                 mobile: $("#saveMobile").val(),
-                password:$("#savePassword").val(),
+                password: $("#savePassword").val(),
                 roleIds: roleIds
             },
             type: "POST",
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    $("#modal-form").modal('hide');
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                }
-            },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            success: success,
+            error: error
         });
     }
 
     function huixian(id) {
         $.ajax({
-            url: "../api/sysuser/getbyid",    //请求的url地址
+            url: "../api/sysuser/getbyid",
             dataType: "json",
             async: false,
             data: {
@@ -460,9 +353,7 @@
                     $("#modal-form").modal('show');
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
     }
 

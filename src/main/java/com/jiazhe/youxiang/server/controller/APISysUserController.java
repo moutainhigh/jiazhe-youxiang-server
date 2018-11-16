@@ -94,7 +94,7 @@ public class APISysUserController extends BaseController {
         CommonValidator.validateNull(req.getDisplayName(), new UserException(UserCodeEnum.USER_DISPLAY_NAME_IS_NULL));
         CommonValidator.validateNull(req.getMobile(), new UserException(UserCodeEnum.USEER_MOBILE_IS_NULL));
         if(!ValidateUtils.phoneValidate(req.getMobile())){
-            new UserException(UserCodeEnum.USEER_MOBILE_IS_ILLEGAL);
+            throw new UserException(UserCodeEnum.USEER_MOBILE_IS_ILLEGAL);
         }
         if(req.getId() == 0){
             CommonValidator.validateNull(req.getPassword(), new UserException(UserCodeEnum.USEER_PASSWORD_IS_NULL));
