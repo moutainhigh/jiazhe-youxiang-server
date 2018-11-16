@@ -78,7 +78,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
     }
 
     @Override
-    public void codeCharge(Integer type,String mobile, String keyt) {
+    public void codeCharge(Integer type,Integer id, String keyt) {
         RechargeCardExchangeCodePO rechargeCardExchangeCodePO = findByKeyt(keyt);
         if(null == rechargeCardExchangeCodePO){
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
@@ -92,7 +92,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         if(rechargeCardExchangeCodePO.getExpiryTime().getTime()< System.currentTimeMillis()){
             throw  new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_HAS_EXPIRIED);
         }
-        CustomerDTO customerDTO = customerService.getByMobile(mobile);
+        CustomerDTO customerDTO = customerService.getById(id);
         if(null == customerDTO){
             throw new RechargeCardException(RechargeCardCodeEnum.CUSTOMER_NOT_EXIST);
         }

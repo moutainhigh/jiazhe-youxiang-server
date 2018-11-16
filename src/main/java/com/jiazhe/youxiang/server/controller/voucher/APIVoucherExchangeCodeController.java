@@ -119,12 +119,12 @@ public class APIVoucherExchangeCodeController extends BaseController {
     }
 
     @AppApi
-    @ApiOperation(value = "【APP端】客户用代金券兑换码兑换", httpMethod = "POST",notes = "【APP端】客户用代金券兑换码兑换，为了与后台共用接口，所以传客户电话")
+    @ApiOperation(value = "【APP端】客户用代金券兑换码兑换", httpMethod = "POST",notes = "【APP端】客户用代金券兑换码兑换")
     @RequestMapping(value = "/customerselfcodecharge", method = RequestMethod.POST)
     public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) {
         //参数检查
-        CommonValidator.validateMobile(req.getMobile(),new CustomerException(CustomerCodeEnum.CUSTOMER_MOBILE_ERROR));
-        voucherExchangeCodeBiz.customerSelfCharge(req.getMobile(),req.getKeyt());
+        CommonValidator.validateId(req.getId());
+        voucherExchangeCodeBiz.customerSelfCharge(req.getId(),req.getKeyt());
         return ResponseFactory.buildSuccess();
     }
 
@@ -132,8 +132,8 @@ public class APIVoucherExchangeCodeController extends BaseController {
     @RequestMapping(value = "/backstagecodecharge", method = RequestMethod.POST)
     public Object customerSelfCharge(@ModelAttribute CodeChargeReq req) {
         //参数检查
-        CommonValidator.validateMobile(req.getMobile(),new CustomerException(CustomerCodeEnum.CUSTOMER_MOBILE_ERROR));
-        voucherExchangeCodeBiz.backstageCodeCharge(req.getMobile(),req.getKeyt());
+        CommonValidator.validateId(req.getId());
+        voucherExchangeCodeBiz.backstageCodeCharge(req.getId(),req.getKeyt());
         return ResponseFactory.buildSuccess();
     }
 }

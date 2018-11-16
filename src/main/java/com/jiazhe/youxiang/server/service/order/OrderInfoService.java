@@ -85,7 +85,7 @@ public interface OrderInfoService {
      * 下单
      * @param dto
      */
-    void placeOrder(PlaceOrderDTO dto) throws ParseException;
+    BigDecimal placeOrder(PlaceOrderDTO dto) throws ParseException;
 
     /**
      * 预约订单

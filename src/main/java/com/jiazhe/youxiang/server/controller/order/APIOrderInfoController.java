@@ -106,7 +106,7 @@ public class APIOrderInfoController extends BaseController {
     @ApiOperation(value = "审核不通过", httpMethod = "POST", notes = "审核不通过")
     @RequestMapping(value = "/ordercancelunpass", method = RequestMethod.POST)
     public Object orderCancelUnpass(@ModelAttribute OrderCancelUnpassReq req) {
-        orderInfoBiz.orderCancelUnpass(req.getOrderId(),req.getAuditReason());
+        orderInfoBiz.orderCancelUnpass(req.getOrderId(), req.getAuditReason());
         return ResponseFactory.buildSuccess();
     }
 
@@ -124,18 +124,20 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "【后端】下单", httpMethod = "POST", notes = "【后端】下单")
+    @ApiOperation(value = "【后端】下单", httpMethod = "POST", response = NeedPayResp.class, notes = "【后端】下单")
     @RequestMapping(value = "/userplaceorder", method = RequestMethod.POST)
     public Object userPlaceOrder(@ModelAttribute UserPlaceOrderReq req) throws ParseException {
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqUserPlaceOrder2DTOPlaceOrder(req);
         placeOrderDTO.setType(Byte.valueOf("0"));
         placeOrderDTO.setServiceTime(req.getRealServiceTime());
-        orderInfoBiz.placeOrder(placeOrderDTO);
-        return ResponseFactory.buildSuccess();
+        BigDecimal needPayCash = orderInfoBiz.placeOrder(placeOrderDTO);
+        NeedPayResp needPayResp = new NeedPayResp();
+        needPayResp.setPayCash(needPayCash);
+        return ResponseFactory.buildResponse(needPayResp);
     }
 
     @AppApi
-    @ApiOperation(value = "【APP端】下单", httpMethod = "POST", notes = "【APP端】下单")
+    @ApiOperation(value = "【APP端】下单", httpMethod = "POST", response = NeedPayResp.class, notes = "【APP端】下单")
     @RequestMapping(value = "/customerplaceorder", method = RequestMethod.POST)
     public Object customerPlaceOrder(@ModelAttribute CustomerPlaceOrderReq req) throws ParseException {
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqCustomerPlaceOrder2DTOPlaceOrder(req);
@@ -145,17 +147,19 @@ public class APIOrderInfoController extends BaseController {
         placeOrderDTO.setType(Byte.valueOf("1"));
         placeOrderDTO.setRealServiceTime(req.getServiceTime());
         placeOrderDTO.setComments("");
-        orderInfoBiz.placeOrder(placeOrderDTO);
-        return ResponseFactory.buildSuccess();
+        BigDecimal needPayCash = orderInfoBiz.placeOrder(placeOrderDTO);
+        NeedPayResp needPayResp = new NeedPayResp();
+        needPayResp.setPayCash(needPayCash);
+        return ResponseFactory.buildResponse(needPayResp);
     }
 
     @ApiOperation(value = "员工预约服务、派单", httpMethod = "POST", notes = "员工预约服务、派单")
     @RequestMapping(value = "/userreservationorder", method = RequestMethod.POST)
     public Object userReservationOrder(@ModelAttribute UserReservationOrderReq req) {
-        CommonValidator.validateNull(req.getRealServiceTime(),new OrderException(OrderCodeEnum.REAL_SERVICE_TIME_IS_NULL));
-        CommonValidator.validateNull(req.getWorkerName(),new OrderException(OrderCodeEnum.WORKER_NAME_IS_NAME));
-        CommonValidator.validateNull(req.getWorkerMobile(),new OrderException(OrderCodeEnum.WORKER_MOBILE_IS_NAME));
-        CommonValidator.validateNull(req.getCost(),new OrderException(OrderCodeEnum.ORDER_COST_IS_NULL));
+        CommonValidator.validateNull(req.getRealServiceTime(), new OrderException(OrderCodeEnum.REAL_SERVICE_TIME_IS_NULL));
+        CommonValidator.validateNull(req.getWorkerName(), new OrderException(OrderCodeEnum.WORKER_NAME_IS_NAME));
+        CommonValidator.validateNull(req.getWorkerMobile(), new OrderException(OrderCodeEnum.WORKER_MOBILE_IS_NAME));
+        CommonValidator.validateNull(req.getCost(), new OrderException(OrderCodeEnum.ORDER_COST_IS_NULL));
         orderInfoBiz.userReservationOrder(OrderInfoAdapter.ReqUserReservationOrder2DTOUserReservationOrder(req));
         return ResponseFactory.buildSuccess();
     }
@@ -163,9 +167,9 @@ public class APIOrderInfoController extends BaseController {
     @ApiOperation(value = "员工修改预约信息", httpMethod = "POST", notes = "员工修改预约信息")
     @RequestMapping(value = "/userchangereservationinfo", method = RequestMethod.POST)
     public Object userChangeReservationInfo(@ModelAttribute UserReservationOrderReq req) {
-        CommonValidator.validateNull(req.getRealServiceTime(),new OrderException(OrderCodeEnum.REAL_SERVICE_TIME_IS_NULL));
-        CommonValidator.validateNull(req.getWorkerName(),new OrderException(OrderCodeEnum.WORKER_NAME_IS_NAME));
-        CommonValidator.validateNull(req.getWorkerMobile(),new OrderException(OrderCodeEnum.WORKER_MOBILE_IS_NAME));
+        CommonValidator.validateNull(req.getRealServiceTime(), new OrderException(OrderCodeEnum.REAL_SERVICE_TIME_IS_NULL));
+        CommonValidator.validateNull(req.getWorkerName(), new OrderException(OrderCodeEnum.WORKER_NAME_IS_NAME));
+        CommonValidator.validateNull(req.getWorkerMobile(), new OrderException(OrderCodeEnum.WORKER_MOBILE_IS_NAME));
         orderInfoBiz.userChangeReservationInfo(OrderInfoAdapter.ReqUserReservationOrder2DTOUserReservationOrder(req));
         return ResponseFactory.buildSuccess();
     }
@@ -185,7 +189,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildResponse(orderInfoResp);
     }
 
-    @ApiOperation(value = "待预约订单数量", httpMethod = "GET",  response = WaitingDealCountResp.class,  notes = "待预约订单数量")
+    @ApiOperation(value = "待预约订单数量", httpMethod = "GET", response = WaitingDealCountResp.class, notes = "待预约订单数量")
     @RequestMapping(value = "/getunsentordercount", method = RequestMethod.GET)
     public Object getUnsentOrderCount() {
         Integer count = orderInfoBiz.getUnsentOrderCount();
@@ -194,7 +198,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildResponse(waitingDealCountResp);
     }
 
-    @ApiOperation(value = "取消待审核订单数量", httpMethod = "GET", response = WaitingDealCountResp.class,  notes = "取消待审核订单数量")
+    @ApiOperation(value = "取消待审核订单数量", httpMethod = "GET", response = WaitingDealCountResp.class, notes = "取消待审核订单数量")
     @RequestMapping(value = "/getunauditordercount", method = RequestMethod.GET)
     public Object getUnauditOrderCount() {
         Integer count = orderInfoBiz.getUnauditOrderCount();

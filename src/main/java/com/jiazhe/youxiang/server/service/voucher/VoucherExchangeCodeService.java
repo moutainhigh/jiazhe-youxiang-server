@@ -76,10 +76,10 @@ public interface VoucherExchangeCodeService {
     /**
      * 兑换码换代金券
      * @param exchangeType
-     * @param mobile
+     * @param id
      * @param keyt
      */
-    void codeCharge(Integer exchangeType, String mobile, String keyt);
+    void codeCharge(Integer exchangeType, Integer id, String keyt);
 
     /**
      * 根据keyt查询代金券兑换码

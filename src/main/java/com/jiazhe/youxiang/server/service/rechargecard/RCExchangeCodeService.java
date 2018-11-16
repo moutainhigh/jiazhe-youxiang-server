@@ -48,11 +48,11 @@ public interface RCExchangeCodeService {
 
     /**
      * 用兑换码进行充值【type=0表示后台兑换码充值的，1表示客户自行兑换码充值的】
-     * @param mobile
+     * @param id
      * @param keyt
      * @return
      */
-    void codeCharge(Integer type, String mobile, String keyt);
+    void codeCharge(Integer type, Integer id, String keyt);
 
     /**
      * 根据批次id，获取批次下码的数量

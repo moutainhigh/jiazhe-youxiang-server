@@ -12,8 +12,8 @@ import java.math.BigDecimal;
  */
 public class DirectChargeReq extends BaseVO {
 
-    @ApiModelProperty("充值客户手机号")
-    String mobile;
+    @ApiModelProperty("充值客户id")
+    Integer id;
 
     @ApiModelProperty("虚拟批次的id")
     Integer batchId;
@@ -21,12 +21,12 @@ public class DirectChargeReq extends BaseVO {
     @ApiModelProperty("充值分数")
     BigDecimal faceValue;
 
-    public String getMobile() {
-        return mobile;
+    public Integer getId() {
+        return id;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getBatchId() {

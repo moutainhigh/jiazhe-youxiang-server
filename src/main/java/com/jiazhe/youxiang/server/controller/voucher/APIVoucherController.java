@@ -51,7 +51,7 @@ public class APIVoucherController extends BaseController{
     }
 
     @AppApi
-    @ApiOperation(value = "【APP端】查询客户的代金券", httpMethod = "GET", response = VoucherResp.class, responseContainer = "List",notes = "【后台】信息查询页查询代金券")
+    @ApiOperation(value = "【APP端】查询客户的代金券", httpMethod = "GET", response = VoucherResp.class, responseContainer = "List",notes = "查询客户可用的代金券")
     @RequestMapping(value = "/findbycustomeridpage", method = RequestMethod.GET)
     public Object findByCustomerIdPage(@ModelAttribute VoucherCustomerPageReq req) {
         CommonValidator.validatePaging(req);
@@ -62,7 +62,7 @@ public class APIVoucherController extends BaseController{
     }
 
     @AppApi
-    @ApiOperation(value = "【APP端、后台】根据购买物属性（商品和城市），查询客户可使用的代金券，分页", httpMethod = "GET", response = VoucherResp.class, responseContainer = "List",notes = "【APP端】根据购买物属性（商品和城市），查询客户可使用的代金券，分页")
+    @ApiOperation(value = "【APP端、后台】根据购买物属性（商品和城市），查询客户可使用的代金券，分页", httpMethod = "GET", response = VoucherResp.class, responseContainer = "List",notes = "【APP端、后台】根据购买物属性（商品和城市），查询客户可使用的代金券，分页")
     @RequestMapping(value = "/findbygoodsattrpage", method = RequestMethod.GET)
     public Object findByGoodsAttrPage(@ModelAttribute VoucherGoodsAttrPageReq req) {
         CommonValidator.validatePaging(req);

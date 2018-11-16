@@ -56,12 +56,12 @@ public interface RCService {
 
     /**
      * 后台直接充值任意面额
-     * @param mobile  客户手机
+     * @param id  客户id
      * @param batchId  批次信息
      * @param faceValue  面额
      * @return
      */
-    void directCharge(String mobile ,Integer batchId, BigDecimal faceValue);
+    void directCharge(Integer id ,Integer batchId, BigDecimal faceValue);
 
     /**
      * 根据充值卡ids，将充值卡信息修改为批次相关的信息
