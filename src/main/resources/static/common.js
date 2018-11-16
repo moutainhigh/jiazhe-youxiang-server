@@ -63,6 +63,20 @@ function isInteger(input) {
     return tt.test(input);
 }
 
+/**
+ * 非负浮点数
+ * @param input
+ * @returns {boolean}
+ */
+function isNumber(input){
+    var regPos = /^\d+(\.\d+)?$/;
+    if(regPos.test(input)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 //replace icons with FontAwesome icons like above
 function updatePagerIcons(table) {
     var replacement =
@@ -102,6 +116,29 @@ function error(data) {
 }
 
 bootbox.setDefaults("locale", "zh_CN");
+
+/**
+ * 日期选择器初始化
+ */
+function initDatePicker(){
+    $('.date-picker').datepicker({
+        language: 'zh-CN',
+        autoclose: true,
+        todayHighlight: true
+    }).next().on(ace.click_event, function () {
+        $(this).prev().focus();
+    });
+}
+
+/**
+ * 生成表格中带颜色的文字
+ * @param text
+ * @param color
+ * @returns {string}
+ */
+function generateSpan(text,color){
+    return "<span style='color:#"+color+"'>"+text+"</span>";
+}
 
 /**
  * 获得图片路径
