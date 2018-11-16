@@ -599,6 +599,14 @@
 
         });
 
+        $('.date-picker').datepicker({
+            language: 'zh-CN',//选择语言
+            autoclose: true,
+            todayHighlight: true
+        }).next().on(ace.click_event, function () {
+            $(this).prev().focus();
+        });
+
         $('#re_realServiceTime').datetimepicker({
             format: "YYYY-MM-DD HH:mm"
         }).next().on(ace.click_event, function () {
