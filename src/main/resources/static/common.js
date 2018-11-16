@@ -1,6 +1,4 @@
-/*将form通过$('#operatorSearchForm').serializeArray()方式获得的formData【形如：
- [{"name":"user","value":"hpc"},{"name":"pwd","value":"123"},{"name":"sex","value":"M"},{"name":"age","value":"100"}]】格式
- 转为{"user":"hpc","pwd":"123","sex":"M","age":"100"}格式*/
+
 function transformToJson(formData) {
     var obj = {}
     for (var i in formData) {
@@ -98,7 +96,7 @@ function confirm(message, callback) {
         buttons: {
             confirm: {
                 label: '确认',
-                className: 'btn-myStyle'
+                className: 'btn-primary'
             },
             cancel: {
                 label: '取消',

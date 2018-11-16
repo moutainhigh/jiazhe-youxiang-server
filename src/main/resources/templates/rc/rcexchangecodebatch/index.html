@@ -579,7 +579,7 @@
 
     //启用批次
     function startUsing(id) {
-        confirm("确定要启用该批次码？", function (result) {
+        confirm("确定要启用该批次吗？", function (result) {
             if (result) {
                 $.ajax({
                     url: "../api/rcexchangecodebatch/startusing",
@@ -598,7 +598,7 @@
 
     //停用批次
     function stopUsing(id) {
-        confirm("确定要停用该批次码？", function (result) {
+        confirm("确定要停用该批次吗？", function (result) {
             if (result) {
                 $.ajax({
                     url: "../api/rcexchangecodebatch/stopusing",

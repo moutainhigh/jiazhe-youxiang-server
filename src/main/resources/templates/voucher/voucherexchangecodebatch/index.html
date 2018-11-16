@@ -164,8 +164,8 @@
                                                             <input class="form-control date-picker" id="saveExpiryTime"
                                                                    name="expiryTime" type="text"/>
                                                             <span class="input-group-addon">
-                                                                        <i class="fa fa-calendar bigger-110"></i>
-                                                                    </span>
+                                                                            <i class="fa fa-calendar bigger-110"></i>
+                                                                        </span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -199,8 +199,8 @@
                                                                    id="saveVoucherExpiryTime"
                                                                    name="voucherExpiryTime" type="text"/>
                                                             <span class="input-group-addon">
-                                                                        <i class="fa fa-calendar bigger-110"></i>
-                                                                    </span>
+                                                                            <i class="fa fa-calendar bigger-110"></i>
+                                                                        </span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -302,9 +302,7 @@
                     }
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
 
         initDatePicker();
@@ -410,13 +408,19 @@
     }
 
     function save() {
-        if(!isNumber($("#saveCount").val())){
+        if (!isNumber($("#saveCount").val())) {
             bootboxalert("兑换商品数量非法");
             return false;
         }
         if (!isInteger($("#saveAmount").val())) {
             bootboxalert("数量非法");
             return false;
+        }
+        if($("input[name=expiryTypeRadio]:checked").val() == 1){
+            if(!isNumber($("#saveValidityPeriod").val())){
+                bootboxalert("兑换之日有效天数非法");
+                return false;
+            }
         }
         $.ajax({
             url: "../api/voucherexchangecodebatch/save",
@@ -520,7 +524,7 @@
 
     //启用批次
     function startUsing(id) {
-        confirm("是否要启用该批次？", function (result) {
+        confirm("是否要启用该批次吗？", function (result) {
             if (result) {
                 $.ajax({
                     url: "../api/voucherexchangecodebatch/startusing",
@@ -539,7 +543,7 @@
 
     //停用批次
     function stopUsing(id) {
-        confirm("是否要停用该批次？", function (result) {
+        confirm("是否要停用该批次吗？", function (result) {
             if (result) {
                 $.ajax({
                     url: "../api/voucherexchangecodebatch/stopusing",

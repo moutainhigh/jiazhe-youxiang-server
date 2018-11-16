@@ -3,32 +3,17 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta charset="utf-8"/>
-    <title>CRM首页</title>
+    <title></title>
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <!-- CSS -->
     <link rel="stylesheet" th:href="@{/static/init.css}"/>
-
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
-
-    <style>
-        .form-group {
-            margin-bottom: 0px;
-        }
-    </style>
 </head>
 
 <body class="no-skin">
-
 <div class="main-container ace-save-state" id="main-container">
-    <script type="text/javascript">
-        try {
-            ace.settings.loadState('main-container')
-        } catch (e) {
-        }
-    </script>
-
     <div class="main-content">
         <div class="main-content-inner">
             <div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -78,7 +63,8 @@
                                 <label class="col-sm-1 control-label no-padding-right">客户电话：</label>
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
-                                        <input id="searchMobile" name="mobile" class="form-control" type="text" th:value="${mobile}"
+                                        <input id="searchMobile" name="mobile" class="form-control" type="text"
+                                               th:value="${mobile}"
                                                style="height:30px"/>
                                     </div>
                                 </div>
@@ -153,8 +139,8 @@
                                                             <input class="form-control date-picker" id="saveExpiryTime"
                                                                    name="expiryTime" type="text"/>
                                                             <span class="input-group-addon">
-                                                                    <i class="fa fa-calendar bigger-110"></i>
-                                                                </span>
+                                                                        <i class="fa fa-calendar bigger-110"></i>
+                                                                    </span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -194,18 +180,6 @@
             </div><!-- /.page-content -->
         </div>
     </div><!-- /.main-content -->
-
-    <!--<div class="footer">
-        <div class="footer-inner">
-            <div class="footer-content" style="padding: 0px;">
-						<span class="bigger-120">
-							<span class="blue bolder"></span>
-							悠享后台管理系统 &copy; 2018
-						</span>
-                &nbsp; &nbsp;
-            </div>
-        </div>
-    </div>-->
 </div><!-- /.main-container -->
 <div id="modal-table" class="modal fade" tabindex="-1">
     <div class="modal-dialog">
@@ -237,12 +211,13 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
-<div id="selectCityAndProduct">
-
-</div>
+<div id="selectCityAndProduct"></div>
 </body>
 <script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
     var permission = getCookie("permission");
+    var orderStatus = ['待付款', '待派单', '待服务', '服务完成', '取消待审核', '取消未通过', '已取消'];
 
     $(function () {
         //重新修改表格宽度
@@ -250,140 +225,101 @@
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
         $('#selectCityAndProduct').load('../pageimport/selectcityandproduct');
+        initDatePicker();
 
-        $('.date-picker').datepicker({
-            language: 'zh-CN',//选择语言
-            autoclose: true,
-            todayHighlight: true
-        }).next().on(ace.click_event, function () {
-            $(this).prev().focus();
-        });
+        var tableOption = {
+            url: "../api/voucher/searchlistpage",
+            postData: transformToJson($('#rcSearchForm').serializeArray()),
+            colNames: ['', '代金券名称', '状态', '是否已经使用', '兑换时间', '客户手机号', '客户姓名', '过期时间', '兑换类型', '后台操作人', '操作'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'name', index: 'name', width: 50, sortable: false},
+                {
+                    name: 'status',
+                    index: 'status',
+                    width: 30,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        var text = rowObject.status == 1 ? "启用" : "停用";
+                        var color = rowObject.status == 1 ? "00FF00" : "0000FF";
+                        return generateSpan(text, color);
+                    }
+                },
+                {
+                    name: 'used',
+                    index: 'used',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return rowObject.used == 1 ? "已使用" : "未使用";
+                    }
+                },
+                {
+                    name: 'addTime',
+                    index: 'addTime',
+                    width: 60,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return timeFormat(rowObject.addTime);
+                    }
+                },
+                {
+                    name: 'customerMobile',
+                    index: 'customerResp.mobile',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return rowObject.customerResp.mobile;
+                    }
+                },
+                {
+                    name: 'customerName',
+                    index: 'customerResp.name',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return rowObject.customerResp.name;
+                    }
+                },
+                {
+                    name: 'expiryTime',
+                    index: 'expiryTime',
+                    width: 40,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return dateFormat(rowObject.expiryTime)
+                    }
+                },
+                {
+                    name: 'voucherExchangeRecordResp.exchangeType',
+                    index: 'voucherExchangeRecordResp.exchangeType',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (rowObject.voucherExchangeRecordResp.exchangeType == 0) return "后台兑换";
+                        if (rowObject.voucherExchangeRecordResp.exchangeType == 1) return "前台兑换";
+                    }
+                },
+                {
+                    name: 'operatorName',
+                    index: 'rcExchangeRecordResp.operatorName',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return rowObject.voucherExchangeRecordResp.operatorName;
+                    }
+                },
+                {name: '_action', index: '_action', width: 80, sortable: false, formatter: customFormatter}
+            ],
+            caption: "代金券查询结果列表"
+        };
+        initTable(grid_selector, pager_selector, tableOption);
 
     });
-
-    var grid_selector = "#grid-table";
-    var pager_selector = "#grid-pager";
-    jQuery(grid_selector).jqGrid({
-        subGrid: false, // 此处设置为true时可以打开子项,子项用不到已删除
-        url: "../api/voucher/searchlistpage",// 获取数据的地址
-        postData: transformToJson($('#rcSearchForm').serializeArray()),
-        rownumbers: true,
-        datatype: "json",
-        mtype: "GET",
-        hidegrid: false,//收缩列表按钮
-        prmNames: {
-            page: "pageNum",
-            rows: "pageSize"
-        },// 重新定义分页信息
-        width: "100%",
-        autowidth: true,
-        height: 350,
-        colNames: ['', '代金券名称', '状态', '是否已经使用', '兑换时间', '客户手机号', '客户姓名', '过期时间', '兑换类型', '后台操作人', '操作'],
-        colModel: [
-            {name: 'id', index: 'id', sortable: false, hidden: true},
-            {name: 'name', index: 'name', width: 50, sortable: false},
-            {
-                name: 'status',
-                index: 'status',
-                width: 30,
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    return rowObject.status == 1 ? "启用" : "停用";
-                }
-            },
-            {
-                name: 'used',
-                index: 'used',
-                width: 50,
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    return rowObject.used == 1 ? "已使用" : "未使用";
-                }
-            },
-            {
-                name: 'addTime',
-                index: 'addTime',
-                width: 60,
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    return timeFormat(rowObject.addTime);
-                }
-            },
-            {
-                name: 'customerMobile',
-                index: 'customerResp.mobile',
-                width: 50,
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    return rowObject.customerResp.mobile;
-                }
-            },
-            {
-                name: 'customerName',
-                index: 'customerResp.name',
-                width: 50,
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    return rowObject.customerResp.name;
-                }
-            },
-            {
-                name: 'expiryTime',
-                index: 'expiryTime',
-                width: 40,
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    return dateFormat(rowObject.expiryTime)
-                }
-            },
-            {
-                name: 'voucherExchangeRecordResp.exchangeType',
-                index: 'voucherExchangeRecordResp.exchangeType',
-                width: 50,
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    if (rowObject.voucherExchangeRecordResp.exchangeType == 0) return "后台兑换";
-                    if (rowObject.voucherExchangeRecordResp.exchangeType == 1) return "前台兑换";
-                }
-            },
-            {
-                name: 'operatorName',
-                index: 'rcExchangeRecordResp.operatorName',
-                width: 50,
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    return rowObject.voucherExchangeRecordResp.operatorName;
-                }
-            },
-            {name: '_action', index: '_action', width: 80, sortable: false, formatter: customFormatter}
-        ],
-        rowNum: 10,
-        rowList: [10, 20, 30],
-        pager: pager_selector,
-        altRows: true,
-        viewrecords: true,
-        emptyrecords: "0条数据",
-        loadComplete: function (data) {
-            var table = this;
-            setTimeout(function () {
-                $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
-                updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
-            }, 0);
-        },
-        jsonReader: { // jsonReader来跟服务器端返回的数据做对应
-            root: "data", // 包含实际数据的数组
-            page: "paging.currPage", // 当前页
-            total: "paging.totalPage",// 总页数
-            records: "paging.total", // 查询出的记录数
-            repeatitems: false
-        },
-        caption: "代金券查询结果列表"
-    });
-    $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/voucher/searchlistpage",// 获取数据的地址
+            url: "../api/voucher/searchlistpage",
             postData: transformToJson($('#rcSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
@@ -392,64 +328,54 @@
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
         if (rowObject.used == 0) {
-            str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">修改</a>&nbsp;&nbsp;";
+            str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
             if (rowObject.status == 0) {
-                str = str + "<a class='btn btn-minier btn-success' href=\"javascript:startUsing('" + rowObject.id + "')\">启用</a>&nbsp;&nbsp;";
+                str += getFunctionButton("btn-success", "startUsing(" + rowObject.id + ")", "启用");
             } else {
-                str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:stopUsing('" + rowObject.id + "')\">停用</a>&nbsp;&nbsp;";
+                str += getFunctionButton("btn-danger", "stopUsing(" + rowObject.id + ")", "停用");
             }
-        }else{
-            str = str + "<a href=\"javascript:getOrderPaymentList('" + rowObject.id + "')\" class='btn btn-minier btn-green'>消费记录</a>&nbsp;&nbsp;";
+        } else {
+            str += getFunctionButton("btn-green", "getOrderPaymentList(" + rowObject.id + ")", "消费记录");
         }
         return str;
     }
 
     //启用代金券
     function startUsing(id) {
-        $.ajax({
-            url: "../api/voucher/startusing",
-            dataType: "json",
-            async: false,
-            data: {
-                id: id
-            },
-            type: "POST",
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    bootboxalert("启用代金券成功");
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                }
-            },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
+        confirm("确定启用该充值卡吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "../api/voucher/startusing",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    success: success,
+                    error: error
+                });
             }
-        });
+        })
     }
 
     //停用代金券
     function stopUsing(id) {
-        $.ajax({
-            url: "../api/voucher/stopusing",
-            dataType: "json",
-            async: false,
-            data: {
-                id: id
-            },
-            type: "POST",
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    bootboxalert("停用代金券成功");
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                }
-            },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
+        confirm("确定停用该充值卡吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "../api/voucher/stopusing",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    success: success,
+                    error: error
+                });
             }
-        });
+        })
     }
 
     function save() {
@@ -459,17 +385,8 @@
             async: false,
             data: transformToJson($('#cardSaveForm').serializeArray()),
             type: "POST",
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    $("#modal-form").modal('hide');
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                }
-            },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            success: success,
+            error: error
         });
     }
 
@@ -496,14 +413,11 @@
                     $("#modal-form").modal('show');
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
     }
 
     function getOrderPaymentList(id) {//显示消费记录
-        var orderStatus = ['待付款','待派单','待服务','服务完成','取消待审核','取消未通过','已取消'];
         $("#modelTbody").empty();
         $.ajax({
             url: "../api/orderpayment/getbyvoucherid",
@@ -518,25 +432,22 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    for(var i=0;i<result.length;i++){
-                        var str = "<tr>"+
-                            "<td>"+result[i].orderInfoResp.productResp.name+"</td>"+
-                            "<td>"+result[i].orderInfoResp.productPrice+"</td>"+
-                            "<td>"+result[i].orderInfoResp.count+"</td>"+
-                            "<td>"+timeFormat(result[i].orderInfoResp.orderTime)+"</td>"+
-                            "<td>"+orderStatus[result[i].orderInfoResp.status-1]+"</td>"+
+                    for (var i = 0; i < result.length; i++) {
+                        var str = "<tr>" +
+                            "<td>" + result[i].orderInfoResp.productResp.name + "</td>" +
+                            "<td>" + result[i].orderInfoResp.productPrice + "</td>" +
+                            "<td>" + result[i].orderInfoResp.count + "</td>" +
+                            "<td>" + timeFormat(result[i].orderInfoResp.orderTime) + "</td>" +
+                            "<td>" + orderStatus[result[i].orderInfoResp.status - 1] + "</td>" +
                             "</td></tr>"
                         $("#modelTbody").append(str);
                     }
                     $("#modal-table").modal('show');
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
     }
-
 </script>
 </html>
 
