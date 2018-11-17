@@ -225,6 +225,7 @@
         str += getFunctionButton("btn-danger", "deleteOne(" + rowObject.id + ")", "删除");
         str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
         str += getFunctionButton("btn-success", "openShow(" + rowObject.id + ")", "查看");
+        str += getFunctionButton("btn-danger", "resetPassword(\"" + rowObject.displayName + "\"," + rowObject.id + ")", "重置密码");
         return str;
     }
 
@@ -354,6 +355,26 @@
             },
             error: error
         });
+    }
+
+    function resetPassword(displayName, id) {
+        confirm("确定重置【" + displayName + "】的密码为【123456】吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "../api/sysuser/resetpassword",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    success: function (data) {
+                        bootboxalert("密码重置成功!")
+                    },
+                    error: error
+                });
+            }
+        })
     }
 </script>
 </html>

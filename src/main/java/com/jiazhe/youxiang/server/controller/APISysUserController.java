@@ -143,4 +143,12 @@ public class APISysUserController extends BaseController {
         SecurityUtils.getSubject().logout();
         return ResponseFactory.buildSuccess();
     }
+
+    @ApiOperation(value = "【后台】重置员工密码", httpMethod = "POST", notes = "重置员工密码，重置为123456")
+    @RequestMapping(value = "/resetpassword", method = RequestMethod.POST)
+    public Object resetPassword(@ModelAttribute IdReq req) {
+        CommonValidator.validateId(req.getId());
+        sysUserBiz.changePassword(req.getId(),"123456");
+        return ResponseFactory.buildSuccess();
+    }
 }

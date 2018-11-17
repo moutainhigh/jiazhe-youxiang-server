@@ -29,7 +29,13 @@ public interface SysUserService {
 
     List<SysUserDTO> findByLoginName(String loginName);
 
-    void updateLaseLoginInfo(Integer userId, String ipAdrress);
+    void updateLastLoginInfo(Integer userId, String ipAdrress);
 
+    /**
+     * 修改密码
+     * @param id
+     * @param newPassword
+     */
     void changePassword(Integer id, String newPassword);
+
 }
