@@ -5,6 +5,10 @@
  */
 package com.jiazhe.youxiang.server.dto.customer;
 
+import io.swagger.annotations.ApiModelProperty;
+
+import java.math.BigDecimal;
+
 /**
  * 在这里编写类的功能描述
  *
@@ -26,13 +30,20 @@ public class CustomerDTO {
      */
     private String name;
     /**
+     * 充值卡余额
+     */
+    private BigDecimal rechargeCardBalance;
+    /**
+     * 代金劵张数
+     */
+    private Integer voucherCount;
+    /**
      * 客户备注
      */
     private String remark;
     /**
      * 默认地址ID
      */
-    //TODO niexiao 修改成默认地址
     private AddressDTO defaultAddress;
 
     public Integer getId() {
@@ -57,6 +68,22 @@ public class CustomerDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public BigDecimal getRechargeCardBalance() {
+        return rechargeCardBalance;
+    }
+
+    public void setRechargeCardBalance(BigDecimal rechargeCardBalance) {
+        this.rechargeCardBalance = rechargeCardBalance;
+    }
+
+    public Integer getVoucherCount() {
+        return voucherCount;
+    }
+
+    public void setVoucherCount(Integer voucherCount) {
+        this.voucherCount = voucherCount;
     }
 
     public String getRemark() {

@@ -46,6 +46,8 @@ public class CustomerAdapter {
         customerResp.setId(dto.getId());
         customerResp.setMobile(dto.getMobile());
         customerResp.setName(dto.getName());
+        customerResp.setRechargeCardBalance(dto.getRechargeCardBalance());
+        customerResp.setVoucherCount(dto.getVoucherCount());
         customerResp.setRemark(dto.getRemark());
         customerResp.setDefaultAddress(addressDTO2VO(dto.getDefaultAddress()));
         return customerResp;

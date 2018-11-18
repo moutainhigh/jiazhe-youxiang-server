@@ -57,7 +57,7 @@ public class SysCityServiceImpl implements SysCityService {
         SysCityPOExample.Criteria criteria = sysCityPOExample.createCriteria();
         criteria.andStatusEqualTo(CommonConstant.CODE_CITY_OPEN);
         //TODO niexiao 业务上线后可能会有调整
-        criteria.andCityLevelEqualTo(SysCityBiz.CITY_LEVEL_2);
+//        criteria.andCityLevelEqualTo(SysCityBiz.CITY_LEVEL_2);
         criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
         List<SysCityPO> sysCityPOList = sysCityPOMapper.selectByExample(sysCityPOExample);
         return sysCityPOList.stream().map(SysCityAdapter::sysCityPO2DTO).collect(Collectors.toList());
@@ -108,6 +108,7 @@ public class SysCityServiceImpl implements SysCityService {
 
     /**
      * 根据城市编码获得城市信息
+     *
      * @param cityCode
      * @return
      */
@@ -125,6 +126,7 @@ public class SysCityServiceImpl implements SysCityService {
 
     /**
      * 根据城市编码集合获得城市信息集合
+     *
      * @param cityCodes
      * @return
      */
@@ -138,6 +140,7 @@ public class SysCityServiceImpl implements SysCityService {
 
     /**
      * 根据上级城市编码获得城市信息集合
+     *
      * @param parentCode
      * @return
      */

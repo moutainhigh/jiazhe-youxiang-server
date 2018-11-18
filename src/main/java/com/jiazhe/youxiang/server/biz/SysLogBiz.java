@@ -6,8 +6,10 @@
 package com.jiazhe.youxiang.server.biz;
 
 import com.jiazhe.youxiang.server.dto.syslog.SysLogDTO;
+import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.SysLogService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,9 +56,14 @@ public class SysLogBiz {
                     sysLogDTO.setModuleName(moduleName);
                     sysLogDTO.setOperate(operate);
                     sysLogDTO.setLevel(level);
-                    //todo niexiao 获取当前登录人信息
-                    sysLogDTO.setOperatorId(0);
-                    sysLogDTO.setOperatorName("test");
+                    SysUserDTO userDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+                    if(userDTO!=null){
+                        sysLogDTO.setOperatorId(userDTO.getId());
+                        sysLogDTO.setOperatorName(userDTO.getLoginName());
+                    }else {
+                        sysLogDTO.setOperatorId(0);
+                        sysLogDTO.setOperatorName("未知");
+                    }
                     sysLogDTO.setIp(ip);
                     sysLogDTO.setDetail(detail);
                     int success = sysLogService.insert(sysLogDTO);
