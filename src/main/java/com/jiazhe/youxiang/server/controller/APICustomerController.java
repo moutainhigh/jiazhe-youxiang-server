@@ -9,6 +9,7 @@ import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
+import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.enums.CustomerCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.CustomerException;
 import com.jiazhe.youxiang.server.dto.customer.AddressAddDTO;
@@ -149,6 +150,7 @@ public class APICustomerController {
      *
      * @return
      */
+    @AppApi
     @ApiOperation(value = "添加地址", httpMethod = "POST", notes = "添加地址")
     @RequestMapping(value = "addaddress", method = RequestMethod.POST)
     public Object addAddress(@ModelAttribute AddressAddReq req) {
@@ -171,6 +173,7 @@ public class APICustomerController {
      *
      * @return
      */
+    @AppApi
     @ApiOperation(value = "查询某一地址信息", httpMethod = "GET", response = AddressResp.class, notes = "查询某一地址信息")
     @RequestMapping(value = "getaddressbyid", method = RequestMethod.GET)
     public Object getAddressById(@ModelAttribute IdReq req) {
@@ -187,6 +190,7 @@ public class APICustomerController {
      *
      * @return
      */
+    @AppApi
     @ApiOperation(value = "查询客户的地址列表", httpMethod = "GET", response = AddressResp.class, responseContainer = "List", notes = "查询客户的地址列表")
     @RequestMapping(value = "getaddresslist", method = RequestMethod.GET)
     public Object getAddressList(@ModelAttribute AddressListReq req) {
@@ -207,6 +211,7 @@ public class APICustomerController {
      *
      * @return
      */
+    @AppApi
     @ApiOperation(value = "编辑地址信息", httpMethod = "POST", notes = "编辑地址信息")
     @RequestMapping(value = "updateaddress", method = RequestMethod.POST)
     public Object updateAddress(@ModelAttribute AddressUpdateReq req) {
@@ -229,8 +234,9 @@ public class APICustomerController {
      *
      * @return
      */
-    @ApiOperation(value = "删除地址信息", httpMethod = "GET", notes = "删除地址信息")
-    @RequestMapping(value = "deleteaddress", method = RequestMethod.GET)
+    @AppApi
+    @ApiOperation(value = "删除地址信息", httpMethod = "POST", notes = "删除地址信息")
+    @RequestMapping(value = "deleteaddress", method = RequestMethod.POST)
     public Object deleteAddress(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
@@ -243,8 +249,9 @@ public class APICustomerController {
      *
      * @return
      */
-    @ApiOperation(value = "设置某一地址为默认", httpMethod = "GET", response = AddressResp.class, notes = "设置某一地址为默认")
-    @RequestMapping(value = "setaddressdefault", method = RequestMethod.GET)
+    @AppApi
+    @ApiOperation(value = "设置某一地址为默认", httpMethod = "POST", response = AddressResp.class, notes = "设置某一地址为默认")
+    @RequestMapping(value = "setaddressdefault", method = RequestMethod.POST)
     public Object setAddressDefault(@ModelAttribute AddressSetDefaultReq req) {
         CommonValidator.validateId(req);
         validateIsDefault(req.getIsDefault());
