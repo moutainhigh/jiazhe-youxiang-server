@@ -648,6 +648,8 @@
                 }, 0);
                 if (data.data.length == 0){//解决没有数据时，不出现横向滚动条的问题
                     $('head').append('<style> .ui-jqgrid .ui-jqgrid-hdiv{overflow:auto}</style>');
+                }else{
+                    $('head').append('<style> .ui-jqgrid .ui-jqgrid-hdiv{overflow:hidden}</style>');
                 }
             },
             caption: "订单列表"
@@ -658,7 +660,7 @@
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/orderinfo/listpage",// 获取数据的地址
+            url: "../api/orderinfo/listpage",
             postData: transformToJson($('#orderInfoSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
