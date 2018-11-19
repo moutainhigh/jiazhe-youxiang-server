@@ -604,13 +604,7 @@
 
         });
 
-        $('.date-picker').datepicker({
-            language: 'zh-CN',//选择语言
-            autoclose: true,
-            todayHighlight: true
-        }).next().on(ace.click_event, function () {
-            $(this).prev().focus();
-        });
+        initDatePicker();
 
         $('#re_realServiceTime').datetimepicker({
             format: "YYYY-MM-DD HH:mm"
@@ -672,24 +666,24 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str = str + "<a class='btn btn-minier btn-success' href=\"javascript:showOrder('" + rowObject.id + "')\">查看</a>&nbsp;&nbsp;";
+        str += getFunctionButton("btn-success", "showOrder(" + rowObject.id + ")", "查看");
         if (rowObject.status == 2) {
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:userCancelOrder('" + rowObject.id + "')\">取消订单</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:userReservationOrder('" + rowObject.id + "')\">预约</a>&nbsp;&nbsp;";
+            str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
+            str += getFunctionButton("btn-primary", "userReservationOrder(" + rowObject.id + ")", "预约");
         }
         if (rowObject.status == 3) {
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:changeOrderReservation('" + rowObject.id + "')\">修改订单</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:userCompleteOrder('" + rowObject.id + "')\">完成订单</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:showAppendOrder('" + rowObject.id + "')\">追加订单</a>&nbsp;&nbsp;";
+            str += getFunctionButton("btn-danger", "changeOrderReservation(" + rowObject.id + ")", "修改订单");
+            str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + ")", "完成订单");
+            str += getFunctionButton("btn-primary", "showAppendOrder(" + rowObject.id + ")", "追加订单");
         }
         if (rowObject.status == 5) {
-            str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:orderCancelPass('" + rowObject.id + "')\">审核通过</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:orderCancelUnpass('" + rowObject.id + "')\">审核不通过</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:userCompleteOrder('" + rowObject.id + "')\">完成订单</a>&nbsp;&nbsp;";
+            str += getFunctionButton("btn-primary", "orderCancelPass(" + rowObject.id + ")", "审核通过");
+            str += getFunctionButton("btn-danger", "orderCancelUnpass(" + rowObject.id + ")", "审核不通过");
+            str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + ")", "完成订单");
         }
         if (rowObject.status == 6) {
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:userCancelOrder('" + rowObject.id + "')\">取消订单</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:userCompleteOrder('" + rowObject.id + "')\">完成订单</a>&nbsp;&nbsp;";
+            str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
+            str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + ")", "完成订单");
         }
         return str;
     }
@@ -733,9 +727,7 @@
                     $("#appendOrderModal").modal("show");
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
         $.ajax({
             url: "../api/voucher/findbygoodsattrpage",
@@ -769,9 +761,7 @@
                     }
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error:error
         });
         $.ajax({
             url: "../api/rc/findbygoodsattrpage",
@@ -806,9 +796,7 @@
                     }
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
     }
 
@@ -884,9 +872,7 @@
                     jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
     }
 
@@ -921,9 +907,7 @@
                     $("#orderReservationModal").modal("show");
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
     }
 
@@ -976,9 +960,7 @@
                     jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
     }
 
@@ -998,9 +980,7 @@
                     jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
     }
 
@@ -1023,9 +1003,7 @@
                             jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                         }
                     },
-                    error: function () {
-                        bootboxalert("服务器异常，请联系管理员");
-                    }
+                    error: error
                 });
             }
         });
@@ -1050,9 +1028,7 @@
                             jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                         }
                     },
-                    error: function () {
-                        bootboxalert("服务器异常，请联系管理员");
-                    }
+                    error: error
                 });
             }
         });
@@ -1077,9 +1053,7 @@
                             jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                         }
                     },
-                    error: function () {
-                        bootboxalert("服务器异常，请联系管理员");
-                    }
+                    error: error
                 });
             }
         });
@@ -1105,9 +1079,7 @@
                             jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                         }
                     },
-                    error: function () {
-                        bootboxalert("服务器异常，请联系管理员");
-                    }
+                    error: error
                 });
             }
         })

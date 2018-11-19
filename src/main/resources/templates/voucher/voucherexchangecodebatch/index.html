@@ -490,12 +490,8 @@
             },
             type: "POST",
             success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                    bootboxalert("生成兑换码成功");
-                }
+                success(data)
+                bootboxalert("生成兑换码成功");
             },
             error: error
         });
