@@ -17,4 +17,8 @@ public interface AuditRecordService {
     AuditRecordDTO getById(Integer id);
 
     Integer getCountByStatus(Byte status);
+
+    void auditRecordUnpass(Integer auditRecordId, Integer version, String reason);
+
+    void auditRecordPass(Integer auditRecordId, Integer version, Integer rechargeCardCodeBatchId);
 }

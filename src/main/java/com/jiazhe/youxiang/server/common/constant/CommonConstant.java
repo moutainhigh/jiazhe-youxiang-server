@@ -101,6 +101,7 @@ public class CommonConstant {
     public static final Integer EXCHANGETYPE_USER_CODE_EXCHANGE = 0;
     public static final Integer EXCHANGETYPE_CUSTOMER_CODE_EXCHANGE = 1;
     public static final Integer EXCHANGETYPE_USER_DIRECTCHARGE = 2;
+    public static final Integer EXCHANGETYPE_AUDITRECORD_PASS = 3;
 
     /**
      * 是否已经使用

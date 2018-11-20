@@ -22,12 +22,12 @@ public class AuditRecordBiz {
     @Autowired
     private AuditRecordService auditRecordService;
 
-    public int auditRecordPass(Integer auditRecordId, Integer rechargeCardCodeBatchId, String reason) {
-        return 0;
+    public void auditRecordPass(Integer auditRecordId,Integer version, Integer rechargeCardCodeBatchId){
+        auditRecordService.auditRecordPass(auditRecordId,version,rechargeCardCodeBatchId);
     }
 
-    public int auditRecordUnpass(Integer auditRecordId, String reason) {
-        return 0;
+    public void auditRecordUnpass(Integer auditRecordId, Integer version ,String reason) {
+        auditRecordService.auditRecordUnpass(auditRecordId,version,reason);
     }
 
     public Integer getWaitCheckCount() {

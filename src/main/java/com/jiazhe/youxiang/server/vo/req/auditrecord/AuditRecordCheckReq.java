@@ -1,6 +1,6 @@
 package com.jiazhe.youxiang.server.vo.req.auditrecord;
 
-import com.jiazhe.youxiang.server.vo.req.IdReq;
+import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -8,7 +8,14 @@ import io.swagger.annotations.ApiModelProperty;
  * @description
  * @date 2018/10/25.
  */
-public class AuditRecordCheckReq extends IdReq {
+public class AuditRecordCheckReq extends BaseVO {
+
+    @ApiModelProperty("记录id")
+    private Integer id ;
+
+    @ApiModelProperty("版本号")
+    private Integer version ;
+
 
     @ApiModelProperty("审核理由")
     private String reason ;
@@ -30,5 +37,21 @@ public class AuditRecordCheckReq extends IdReq {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }
