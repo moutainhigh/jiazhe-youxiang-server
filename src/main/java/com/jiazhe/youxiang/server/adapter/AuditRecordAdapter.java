@@ -30,6 +30,8 @@ public class AuditRecordAdapter {
         auditRecordResp.setAuditorId(auditRecordDTO.getAuditorId());
         auditRecordResp.setAuditorName(auditRecordDTO.getAuditorName());
         auditRecordResp.setVersion(auditRecordDTO.getVersion());
+        auditRecordResp.setAddTime(auditRecordDTO.getAddTime());
+        auditRecordResp.setModTime(auditRecordDTO.getModTime());
         return auditRecordResp;
     }
 
@@ -53,6 +55,8 @@ public class AuditRecordAdapter {
         auditRecordDTO.setAuditorId(auditRecordPO.getAuditorId());
         auditRecordDTO.setAuditorName(auditRecordPO.getAuditorName());
         auditRecordDTO.setVersion(auditRecordPO.getVersion());
+        auditRecordDTO.setAddTime(auditRecordPO.getAddTime());
+        auditRecordDTO.setModTime(auditRecordPO.getModTime());
         return auditRecordDTO;
     }
 }

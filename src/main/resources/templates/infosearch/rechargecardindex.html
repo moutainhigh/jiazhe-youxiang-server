@@ -58,6 +58,7 @@
                                             <option value=0>后台兑换</option>
                                             <option value=1>前台兑换</option>
                                             <option value=2>直接充值</option>
+                                            <option value=3>消费审核</option>
                                         </select>
                                     </div>
                                 </div>
@@ -220,7 +221,7 @@
     var pager_selector = "#grid-pager";
     var permission = getCookie("permission");
     var orderStatus = ['待付款', '待派单', '待服务', '服务完成', '取消待审核', '取消未通过', '已取消'];
-    var exchangeType = ["后台兑换", "前台兑换", "直接充值"];
+    var exchangeType = ["后台兑换", "前台兑换", "直接充值","消费审核"];
 
     $(function () {
         //重新修改表格宽度

@@ -32,7 +32,7 @@
         <include refid="Base_Column_List"/>
         FROM audit_record
         <where>
-            <if test="status != null and status != 0">
+            <if test="status != null">
                 AND status = #{status}
             </if>
             AND is_deleted = 0 ORDER BY mod_time DESC
@@ -43,7 +43,7 @@
     <select id="count" resultType="java.lang.Integer">
         select count(*) from audit_record
         <where>
-            <if test="status != null and status != 0">
+            <if test="status != null">
                 AND status = #{status}
             </if>
             AND is_deleted = 0

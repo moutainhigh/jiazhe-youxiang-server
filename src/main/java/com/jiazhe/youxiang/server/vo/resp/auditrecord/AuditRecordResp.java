@@ -58,6 +58,12 @@ public class AuditRecordResp extends BaseVO {
     @ApiModelProperty("版本")
     private Integer version;
 
+    @ApiModelProperty("提交时间")
+    private Date addTime;
+
+    @ApiModelProperty("审核时间")
+    private Date modTime;
+
     public Integer getId() {
         return id;
     }
@@ -176,5 +182,21 @@ public class AuditRecordResp extends BaseVO {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public Date getModTime() {
+        return modTime;
+    }
+
+    public void setModTime(Date modTime) {
+        this.modTime = modTime;
+    }
+
+    public Date getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
     }
 }

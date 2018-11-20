@@ -49,7 +49,7 @@
                     </i>
                 </a>
 
-                <a th:title="待审核消费" class="btn btn-warning">
+                <a th:title="待审核消费" class="btn btn-warning" th:href="@{/auditrecord/index(status=0)}" target="iframeCenter">
                     <i class="ace-icon fa fa-check">
                         0
                     </i>
@@ -101,9 +101,9 @@
             </li>
 
             <li class="">
-                <a th:href="@{/audit/index}" target="iframeCenter">
+                <a th:href="@{/auditrecord/index}" target="iframeCenter">
                     <i class="menu-icon fa fa-check"></i>
-                    <span class="menu-text"> 审核管理 </span>
+                    <span class="menu-text"> 消费审核 </span>
                 </a>
                 <b class="arrow"></b>
             </li>
