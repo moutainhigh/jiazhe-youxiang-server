@@ -117,6 +117,7 @@ public class APISignInController extends BaseController {
         String permission = StringUtils.join(info.getStringPermissions(), ",");
         CookieUtil.addCookie(response, "permission", permission);
         CookieUtil.addCookie(response, "displayName", URLEncoder.encode(sysUserDTO.getDisplayName(), "UTF-8"));
+        logger.info("登陆ip为：" + IpAdrressUtil.getIpAdrress(request));
         sysUserBiz.updateLastLoginInfo(sysUserDTO.getId(), IpAdrressUtil.getIpAdrress(request));
         return ResponseFactory.buildSuccess();
     }
@@ -150,7 +151,7 @@ public class APISignInController extends BaseController {
             throw new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL);
         }
         CustomerDTO customerDTO = customerBiz.getByMobile(mobile);
-        if(null == customerDTO){
+        if (null == customerDTO) {
             throw new LoginException(LoginCodeEnum.LOGIN_CUSTOMER_NOT_EXISTED);
         }
         Subject subject = SecurityUtils.getSubject();
@@ -179,7 +180,7 @@ public class APISignInController extends BaseController {
             throw new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL);
         }
         CustomerDTO customerDTO = customerBiz.getByMobile(req.getMobile());
-        if(null == customerDTO){
+        if (null == customerDTO) {
             throw new LoginException(LoginCodeEnum.LOGIN_CUSTOMER_NOT_EXISTED);
         }
         SendSmsResponse res = AliUtils.sendMsg(req.getMobile());
