@@ -1,10 +1,12 @@
 package com.jiazhe.youxiang.server.biz;
 
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
+import com.jiazhe.youxiang.server.service.AuditRecordService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordAddReq;
 import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordEditReq;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,10 @@ import java.util.List;
  */
 @Service("auditRecordBiz")
 public class AuditRecordBiz {
+
+    @Autowired
+    private AuditRecordService auditRecordService;
+
     public int auditRecordPass(Integer auditRecordId, Integer rechargeCardCodeBatchId, String reason) {
         return 0;
     }
@@ -33,7 +39,7 @@ public class AuditRecordBiz {
     }
 
     public List<AuditRecordDTO> getList(Byte status,Paging paging) {
-        return null;
+        return auditRecordService.getList(status,paging);
     }
 
     public List<AuditRecordDTO> getSubmitterList(Integer submitterId, Paging paging) {

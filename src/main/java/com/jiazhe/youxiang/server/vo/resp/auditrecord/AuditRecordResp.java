@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.resp.auditrecord;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -12,34 +13,49 @@ import java.util.Date;
  */
 public class AuditRecordResp extends BaseVO {
 
+    @ApiModelProperty("消费记录id")
     private Integer id;
 
+    @ApiModelProperty("充值卡id")
     private Integer rechargeCardId;
 
+    @ApiModelProperty("客户姓名")
     private String customerName;
 
+    @ApiModelProperty("客户电话")
     private String customerMobile;
 
+    @ApiModelProperty("兑换金额")
     private BigDecimal exchangeMoney;
 
+    @ApiModelProperty("备注")
     private String remark;
 
+    @ApiModelProperty("消费记录图片，多张用,连接")
     private String imgUrls;
 
+    @ApiModelProperty("提交人id")
     private Integer submitterId;
 
+    @ApiModelProperty("提交人姓名")
     private String submitterName;
 
+    @ApiModelProperty("提交人备注")
     private String submitterRemark;
 
+    @ApiModelProperty("状态 0待审核 1未通过 2通过")
     private Byte status;
 
+    @ApiModelProperty("审核时间")
     private Date auditTime;
 
+    @ApiModelProperty("审核人id")
     private Integer auditorId;
 
+    @ApiModelProperty("审核人姓名")
     private String auditorName;
 
+    @ApiModelProperty("版本")
     private Integer version;
 
     public Integer getId() {

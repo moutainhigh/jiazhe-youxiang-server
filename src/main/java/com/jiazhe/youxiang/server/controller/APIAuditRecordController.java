@@ -1,8 +1,11 @@
 package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.AuditRecordAdapter;
 import com.jiazhe.youxiang.server.biz.AuditRecordBiz;
+import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
@@ -13,7 +16,6 @@ import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordCheckReq;
 import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordEditReq;
 import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordPageReq;
 import com.jiazhe.youxiang.server.vo.resp.auditrecord.AuditRecordResp;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,18 +75,16 @@ public class APIAuditRecordController extends BaseController{
         return ResponseFactory.buildResponse(auditRecordResp);
     }
 
-    @ApiOperation(value = "【后台】根据审核状态查询", httpMethod = "GET",response = AuditRecordResp.class,responseContainer = "List" ,notes = "【后台】根据审核状态查询")
+    @ApiOperation(value = "【后台】消费记录列表", httpMethod = "GET",response = AuditRecordResp.class,responseContainer = "List" ,notes = "【后台】消费记录列表")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     public Object listPage(@ModelAttribute AuditRecordPageReq req) {
-        //参数检查
-        Paging paging = new Paging();
-        paging.setOffset((req.getPageNum()-1)*req.getPageSize());
-        paging.setLimit(req.getPageSize());
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
         List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getStatus(),paging);
         List<AuditRecordResp> auditRecordRespList = auditRecordDTOList.stream().map(AuditRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(auditRecordRespList,paging);
     }
 
+    @AppApi
     @ApiOperation(value = "【前台】根据提交人id查询", httpMethod = "GET",response = AuditRecordResp.class,responseContainer = "List",notes = "【前台】根据提交人id查询")
     @RequestMapping(value = "/submitterlistpage", method = RequestMethod.GET)
     public Object submitterListPage(@ModelAttribute IdReq idReq, @ModelAttribute PageSizeNumReq pageSizeNumReq) {
