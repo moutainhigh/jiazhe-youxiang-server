@@ -31,19 +31,19 @@ public class AuditRecordBiz {
     }
 
     public Integer getWaitCheckCount() {
-        return 0;
+        return auditRecordService.getCountByStatus(Byte.valueOf("0"));
     }
 
     public AuditRecordDTO getById(Integer id) {
-        return null;
+        return auditRecordService.getById(id);
     }
 
     public List<AuditRecordDTO> getList(Byte status,Paging paging) {
-        return auditRecordService.getList(status,paging);
+        return auditRecordService.getList(null,status,paging);
     }
 
     public List<AuditRecordDTO> getSubmitterList(Integer submitterId, Paging paging) {
-        return null;
+        return auditRecordService.getList(submitterId,null,paging);
     }
 
     public int addSave(AuditRecordAddReq req) {

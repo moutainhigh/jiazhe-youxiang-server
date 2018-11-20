@@ -12,5 +12,9 @@ import java.util.List;
  */
 public interface AuditRecordService {
 
-    List<AuditRecordDTO> getList(Byte status, Paging paging);
+    List<AuditRecordDTO> getList(Integer submitterId,Byte status, Paging paging);
+
+    AuditRecordDTO getById(Integer id);
+
+    Integer getCountByStatus(Byte status);
 }

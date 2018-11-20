@@ -212,6 +212,7 @@ function initTable(grid_selector, pager_selector, options) {
     var rowList = options.hasOwnProperty("rowList") ? options.rowList : [10, 20, 30];
     var altRows = options.hasOwnProperty("altRows") ? options.altRows : true;
     var viewrecords = options.hasOwnProperty("viewrecords") ? options.viewrecords : true;
+    var multiselect = options.hasOwnProperty("multiselect") ? options.multiselect : false;
     var emptyrecords = options.hasOwnProperty("emptyrecords") ? options.emptyrecords : "0条数据";
     var loadComplete = options.hasOwnProperty("loadComplete") ? options.loadComplete : function (data) {
         var table = this;
@@ -248,6 +249,7 @@ function initTable(grid_selector, pager_selector, options) {
         pager: pager_selector,
         altRows: altRows,
         viewrecords: viewrecords,
+        multiselect:multiselect,
         emptyrecords: emptyrecords,
         loadComplete: loadComplete,
         jsonReader: jsonReader,

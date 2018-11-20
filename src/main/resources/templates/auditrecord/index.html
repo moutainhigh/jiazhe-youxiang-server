@@ -33,7 +33,7 @@
                         <i class="ace-icon fa fa-home home-icon"></i>
                         <a th:href="@{/main/main_center}">主页</a>
                     </li>
-                    <li class="active">订单管理</li>
+                    <li class="active">消费审核</li>
                 </ul><!-- /.breadcrumb -->
             </div>
 
@@ -46,9 +46,9 @@
                                 <div class="col-sm-2">
                                     <select id="searchStatus" name="status" class="selectpicker show-tick form-control">
                                         <option value=>所有</option>
-                                        <option value=1 th:selected="${status} == 0">待审核</option>
-                                        <option value=2 th:selected="${status} == 1">未通过</option>
-                                        <option value=3 th:selected="${status} == 2">已通过</option>
+                                        <option value=0 th:selected="${status} == 0">待审核</option>
+                                        <option value=1 th:selected="${status} == 1">未通过</option>
+                                        <option value=2 th:selected="${status} == 2">已通过</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-3">
@@ -289,6 +289,7 @@
             postData: transformToJson($('#auditRecordSearchForm').serializeArray()),
             shrinkToFit: false,
             autoScroll: true,
+            multiselect: true,
             colNames: ['', '操作', '客户姓名','客户电话', '分数', '状态', '提交人姓名','提交时间', '审核人姓名','审核时间'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},

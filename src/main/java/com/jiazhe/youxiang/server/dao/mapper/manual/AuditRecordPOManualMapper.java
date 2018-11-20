@@ -16,7 +16,7 @@ public interface AuditRecordPOManualMapper {
      * @param status
      * @return
      */
-    Integer count(Byte status);
+    Integer count(@Param("submitterId") Integer submitterId,@Param("status") Byte status);
 
     /**
      * 分页查询
@@ -25,5 +25,5 @@ public interface AuditRecordPOManualMapper {
      * @param limit
      * @return
      */
-    List<AuditRecordPO> query(@Param("status")Byte status, @Param("offset")Integer offset, @Param("limit")Integer limit);
+    List<AuditRecordPO> query(@Param("submitterId") Integer submitterId,@Param("status")Byte status, @Param("offset")Integer offset, @Param("limit")Integer limit);
 }

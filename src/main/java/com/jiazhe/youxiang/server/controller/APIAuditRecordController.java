@@ -10,12 +10,9 @@ import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
-import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
-import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordAddReq;
-import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordCheckReq;
-import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordEditReq;
-import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordPageReq;
+import com.jiazhe.youxiang.server.vo.req.auditrecord.*;
 import com.jiazhe.youxiang.server.vo.resp.auditrecord.AuditRecordResp;
+import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.WaitingDealCountResp;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,18 +55,19 @@ public class APIAuditRecordController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "待审核消费记录条数", httpMethod = "GET",notes = "待审核消费记录条数")
+    @ApiOperation(value = "待审核消费记录条数", httpMethod = "GET",response = WaitingDealCountResp.class ,notes = "待审核消费记录条数")
     @RequestMapping(value = "/getwaitcheckcount", method = RequestMethod.GET)
     public Object getWaitCheckCount() {
-        //参数检查
         Integer count = auditRecordBiz.getWaitCheckCount();
-        return ResponseFactory.buildResponse(count);
+        WaitingDealCountResp waitingDealCountResp = new WaitingDealCountResp();
+        waitingDealCountResp.setCount(count);
+        return ResponseFactory.buildResponse(waitingDealCountResp);
     }
 
     @ApiOperation(value = "获取消费记录详情", httpMethod = "GET",response = AuditRecordResp.class,notes = "获取消费记录详情")
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
     public Object getById(@ModelAttribute IdReq req) {
-        //参数检查
+        CommonValidator.validateId(req.getId());
         AuditRecordDTO auditRecordDTO = auditRecordBiz.getById(req.getId());
         AuditRecordResp auditRecordResp = AuditRecordAdapter.DTO2Resp(auditRecordDTO);
         return ResponseFactory.buildResponse(auditRecordResp);
@@ -87,12 +85,9 @@ public class APIAuditRecordController extends BaseController{
     @AppApi
     @ApiOperation(value = "【前台】根据提交人id查询", httpMethod = "GET",response = AuditRecordResp.class,responseContainer = "List",notes = "【前台】根据提交人id查询")
     @RequestMapping(value = "/submitterlistpage", method = RequestMethod.GET)
-    public Object submitterListPage(@ModelAttribute IdReq idReq, @ModelAttribute PageSizeNumReq pageSizeNumReq) {
-        //参数检查
-        Paging paging = new Paging();
-        paging.setOffset((pageSizeNumReq.getPageNum()-1)*pageSizeNumReq.getPageSize());
-        paging.setLimit(pageSizeNumReq.getPageSize());
-        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getSubmitterList(idReq.getId(),paging);
+    public Object submitterListPage(@ModelAttribute AuditRecordWeChatPageReq req) {
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);;
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getSubmitterList(req.getId(),paging);
         List<AuditRecordResp> auditRecordRespList = auditRecordDTOList.stream().map(AuditRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(auditRecordRespList,paging);
     }
