@@ -46,8 +46,8 @@ public class AuditRecordBiz {
         return auditRecordService.getList(submitterId,null,paging);
     }
 
-    public int addSave(AuditRecordAddReq req) {
-        return 0;
+    public void addSave(AuditRecordAddReq req) {
+
     }
 
     public int editSave(AuditRecordEditReq req) {

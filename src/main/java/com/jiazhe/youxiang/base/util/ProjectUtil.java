@@ -8,12 +8,15 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class ProjectUtil {
 
-    //判断是否是ajax请求
+    /**
+     * 判断是是否是ajax类型
+     */
     public static boolean isAjax(ServletRequest request){
-        String header = ((HttpServletRequest) request).getHeader("X-Requested-With");
-        if("XMLHttpRequest".equalsIgnoreCase(header)){
-            return Boolean.TRUE;
+        String accept = ((HttpServletRequest) request).getHeader("Accept");
+        System.out.println(accept);
+        if(accept.contains("text/html")){
+            return Boolean.FALSE;
         }
-        return Boolean.FALSE;
+        return Boolean.TRUE;
     }
 }

@@ -9,6 +9,7 @@ import com.jiazhe.youxiang.base.util.ProjectUtil;
 import com.jiazhe.youxiang.base.util.ResponseUtil;
 import com.jiazhe.youxiang.base.util.ResultPackage;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.ResponseMsg;
 import net.sf.json.JSONObject;
@@ -36,7 +37,15 @@ public class ShiroLoginFilter extends FormAuthenticationFilter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         if (ProjectUtil.isAjax(request)) {
             System.out.println("ShiroLoginFilter：ajax请求，未登录");
-            ResponseUtil.responseUtils(httpServletResponse, ResultPackage.resultPackage("112010", new JSONObject(), "未登录"));
+            JSONObject obj = new JSONObject();
+            obj.put("code", LoginCodeEnum.LOGIN_NOT_SIGNIN_IN.getCode());
+            obj.put("type", LoginCodeEnum.LOGIN_NOT_SIGNIN_IN.getType());
+            obj.put("message", LoginCodeEnum.LOGIN_NOT_SIGNIN_IN.getMessage());
+            JSONObject result = new JSONObject();
+            result.put("error",obj);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("utf-8");
+            response.getWriter().write(result.toString());
         } else {
             /**
              * @Mark 非ajax请求重定向为登录页面
