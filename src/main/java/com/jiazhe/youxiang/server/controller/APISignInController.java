@@ -19,6 +19,7 @@ import com.jiazhe.youxiang.server.vo.req.login.SendMsgToCustomerReq;
 import com.jiazhe.youxiang.server.vo.req.login.SendMsgToUserReq;
 import com.jiazhe.youxiang.server.vo.req.login.UserLoginReq;
 import com.jiazhe.youxiang.server.vo.resp.login.SendMsgResp;
+import com.jiazhe.youxiang.server.vo.resp.login.SessionResp;
 import io.swagger.annotations.ApiOperation;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -65,7 +66,7 @@ public class APISignInController extends BaseController {
     @Autowired
     private CustomerBiz customerBiz;
 
-    @ApiOperation(value = "员工登录", httpMethod = "GET", notes = "员工登录")
+    @ApiOperation(value = "员工登录", httpMethod = "GET", response = SessionResp.class ,notes = "员工登录")
     @RequestMapping(value = "/usersignin")
     public Object userSignin(@ModelAttribute UserLoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
         String loginName = req.getLoginname();
@@ -112,14 +113,16 @@ public class APISignInController extends BaseController {
             }
         }
         // 将seesion过期时间设置为8小时
+        SessionResp sessionResp = new SessionResp();
         subject.getSession().setTimeout(ConstantFetchUtil.hour_8);
+        sessionResp.setSessionId(subject.getSession().getId().toString());
         AuthorizationInfo info = userRealm.doGetAuthorizationInfo(subject.getPrincipals());
         String permission = StringUtils.join(info.getStringPermissions(), ",");
         CookieUtil.addCookie(response, "permission", permission);
         CookieUtil.addCookie(response, "displayName", URLEncoder.encode(sysUserDTO.getDisplayName(), "UTF-8"));
         logger.info("登陆ip为：" + IpAdrressUtil.getIpAdrress(request));
         sysUserBiz.updateLastLoginInfo(sysUserDTO.getId(), IpAdrressUtil.getIpAdrress(request));
-        return ResponseFactory.buildSuccess();
+        return ResponseFactory.buildResponse(sessionResp);
     }
 
     @ApiOperation(value = "根据登陆名，发送验证码", httpMethod = "GET", response = SendMsgResp.class, notes = "根据登陆名，发送验证码")
