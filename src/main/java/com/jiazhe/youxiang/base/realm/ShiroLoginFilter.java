@@ -46,7 +46,7 @@ public class ShiroLoginFilter extends FormAuthenticationFilter {
             PrintWriter out = response.getWriter();
             out.println("<html>");
             out.println("<script>");
-            out.println("window.open('/" + ProjectUtil.projectName + "/system/index','_parent')");
+            out.println("window.open('" + "/system/index','_parent')");
             out.println("</script>");
             out.println("</html>");
         }

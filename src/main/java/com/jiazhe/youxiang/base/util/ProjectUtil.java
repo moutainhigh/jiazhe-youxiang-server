@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class ProjectUtil {
 
-    public static String projectName = "coupon";//项目名称
-
     //判断是否是ajax请求
     public static boolean isAjax(ServletRequest request){
         String header = ((HttpServletRequest) request).getHeader("X-Requested-With");
