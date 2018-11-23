@@ -47,11 +47,11 @@ public class AuditRecordBiz {
         return auditRecordService.getList(submitterId,null,paging);
     }
 
-    public void editSave(AuditRecordEditReq req) {
-
-    }
-
     public void addSave(String customerName, String customerMobile, BigDecimal exchangeMoney, String imgUrls) {
         auditRecordService.addSave(customerName,customerMobile,exchangeMoney,imgUrls);
+    }
+
+    public void editSave(Integer id, Integer version, String customerName, String customerMobile, BigDecimal exchangeMoney, String imgUrls) {
+        auditRecordService.editSave(id,version,customerName,customerMobile,exchangeMoney,imgUrls);
     }
 }

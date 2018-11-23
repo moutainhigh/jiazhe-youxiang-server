@@ -25,4 +25,6 @@ public interface AuditRecordService {
     void auditRecordPass(Integer auditRecordId, Integer version, Integer rechargeCardCodeBatchId);
 
     void addSave(String customerName, String customerMobile, BigDecimal exchangeMoney, String imgUrls);
+
+    void editSave(Integer id, Integer version, String customerName, String customerMobile, BigDecimal exchangeMoney, String imgUrls);
 }

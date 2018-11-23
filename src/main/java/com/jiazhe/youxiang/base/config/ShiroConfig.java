@@ -42,6 +42,7 @@ public class ShiroConfig {
         bean.setFilters(filters);
         /*bean.setLoginUrl("../system/index");*/
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+        filterChainDefinitionMap.put("/api/preview/img/**", "anon"); //预览图片匿名访问
         filterChainDefinitionMap.put("/system/index", "anon"); //登录页url匿名访问
         filterChainDefinitionMap.put("/system/login", "anon");//登陆系统匿名访问
         filterChainDefinitionMap.put("/system/logout", "anon");//退出系统匿名访问

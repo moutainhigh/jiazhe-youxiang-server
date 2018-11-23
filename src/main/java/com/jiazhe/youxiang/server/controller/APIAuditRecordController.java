@@ -117,7 +117,11 @@ public class APIAuditRecordController extends BaseController{
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     public Object editSave(@ModelAttribute AuditRecordEditReq req) {
         //参数检查
-        auditRecordBiz.editSave(req);
+        CommonValidator.validateNull(req.getCustomerName(),new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_NAME_IS_NULL));
+        CommonValidator.validateNull(req.getCustomerMobile(),new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_MOBILE_IS_NULL));
+        CommonValidator.validateNull(req.getExchangeMoney(),new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_MONEY_IS_NULL));
+        CommonValidator.validateMobile(req.getCustomerMobile(),new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_MOBILE_IS_ILLEGAL));
+        auditRecordBiz.editSave(req.getId(),req.getVersion(),req.getCustomerName(),req.getCustomerMobile(),req.getExchangeMoney(),req.getImgUrls());
         return ResponseFactory.buildSuccess();
     }
 
