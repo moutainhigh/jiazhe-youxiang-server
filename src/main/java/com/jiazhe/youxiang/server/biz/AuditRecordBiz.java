@@ -9,6 +9,7 @@ import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordEditReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -46,11 +47,11 @@ public class AuditRecordBiz {
         return auditRecordService.getList(submitterId,null,paging);
     }
 
-    public void addSave(AuditRecordAddReq req) {
+    public void editSave(AuditRecordEditReq req) {
 
     }
 
-    public int editSave(AuditRecordEditReq req) {
-        return 0;
+    public void addSave(String customerName, String customerMobile, BigDecimal exchangeMoney, String imgUrls) {
+        auditRecordService.addSave(customerName,customerMobile,exchangeMoney,imgUrls);
     }
 }

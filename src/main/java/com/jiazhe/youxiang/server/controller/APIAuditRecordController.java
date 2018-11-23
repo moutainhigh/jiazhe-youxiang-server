@@ -7,21 +7,27 @@ import com.jiazhe.youxiang.server.adapter.AuditRecordAdapter;
 import com.jiazhe.youxiang.server.biz.AuditRecordBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.enums.AuditRecordCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.AuditRecordException;
+import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
+import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
+import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import com.jiazhe.youxiang.server.vo.req.auditrecord.*;
 import com.jiazhe.youxiang.server.vo.resp.auditrecord.AuditRecordResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.WaitingDealCountResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Security;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,9 +90,13 @@ public class APIAuditRecordController extends BaseController{
 
     @ApiOperation(value = "【审核小程序】根据提交人id查询", httpMethod = "GET",response = AuditRecordResp.class,responseContainer = "List",notes = "【前台】根据提交人id查询")
     @RequestMapping(value = "/submitterlistpage", method = RequestMethod.GET)
-    public Object submitterListPage(@ModelAttribute AuditRecordWeChatPageReq req) {
-        Paging paging = PagingParamUtil.pagingParamSwitch(req);;
-        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getSubmitterList(req.getId(),paging);
+    public Object submitterListPage(@ModelAttribute PageSizeNumReq req) {
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
+        SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+        if(null == sysUserDTO){
+            throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
+        }
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getSubmitterList(sysUserDTO.getId(),paging);
         List<AuditRecordResp> auditRecordRespList = auditRecordDTOList.stream().map(AuditRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(auditRecordRespList,paging);
     }
@@ -95,7 +105,11 @@ public class APIAuditRecordController extends BaseController{
     @RequestMapping(value = "/addsave", method = RequestMethod.POST)
     public Object addSave(@ModelAttribute AuditRecordAddReq req) {
         //参数检查
-        auditRecordBiz.addSave(req);
+        CommonValidator.validateNull(req.getCustomerName(),new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_NAME_IS_NULL));
+        CommonValidator.validateNull(req.getCustomerMobile(),new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_MOBILE_IS_NULL));
+        CommonValidator.validateNull(req.getExchangeMoney(),new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_MONEY_IS_NULL));
+        CommonValidator.validateMobile(req.getCustomerMobile(),new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_MOBILE_IS_ILLEGAL));
+        auditRecordBiz.addSave(req.getCustomerName(),req.getCustomerMobile(),req.getExchangeMoney(),req.getImgUrls());
         return ResponseFactory.buildSuccess();
     }
 

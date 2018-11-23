@@ -31,6 +31,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.security.auth.Subject;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,9 +60,9 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     private RCService rcService;
 
     @Override
-    public List<AuditRecordDTO> getList(Integer submitterId,Byte status, Paging paging) {
-        Integer count = auditRecordPOManualMapper.count(submitterId,status);
-        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(submitterId,status,paging.getOffset(),paging.getLimit());
+    public List<AuditRecordDTO> getList(Integer submitterId, Byte status, Paging paging) {
+        Integer count = auditRecordPOManualMapper.count(submitterId, status);
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(submitterId, status, paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
         return auditRecordPOList.stream().map(AuditRecordAdapter::PO2DTO).collect(Collectors.toList());
     }
@@ -73,13 +75,13 @@ public class AuditRecordServiceImpl implements AuditRecordService {
 
     @Override
     public Integer getCountByStatus(Byte status) {
-        return auditRecordPOManualMapper.count(null,status);
+        return auditRecordPOManualMapper.count(null, status);
     }
 
     @Override
     public void auditRecordUnpass(Integer auditRecordId, Integer version, String reason) {
         AuditRecordPO auditRecordPO = auditRecordPOMapper.selectByPrimaryKey(auditRecordId);
-        if(!auditRecordPO.getVersion().equals(version)){
+        if (!auditRecordPO.getVersion().equals(version)) {
             throw new AuditRecordException(AuditRecordCodeEnum.VERSION_IS_CHANGED);
         }
         auditRecordPO.setModTime(new Date());
@@ -91,20 +93,20 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     @Override
     public void auditRecordPass(Integer auditRecordId, Integer version, Integer rechargeCardCodeBatchId) {
         AuditRecordPO auditRecordPO = auditRecordPOMapper.selectByPrimaryKey(auditRecordId);
-        if(!auditRecordPO.getVersion().equals(version)){
+        if (!auditRecordPO.getVersion().equals(version)) {
             throw new AuditRecordException(AuditRecordCodeEnum.VERSION_IS_CHANGED);
         }
         CustomerDTO customerDTO = customerService.getByMobile(auditRecordPO.getCustomerMobile());
-        if(null == customerDTO){
+        if (null == customerDTO) {
             throw new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_NOT_EXIST);
         }
         RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchService.getById(rechargeCardCodeBatchId);
         RechargeCardPO rechargeCardPO = new RechargeCardPO();
         //直接指定过期时间
-        if(rcExchangeCodeBatchEditDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)){
+        if (rcExchangeCodeBatchEditDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
             rechargeCardPO.setExpiryTime(rcExchangeCodeBatchEditDTO.getRechargeCardExpiryTime());
-        }else{
-            rechargeCardPO.setExpiryTime(new Date(System.currentTimeMillis()+rcExchangeCodeBatchEditDTO.getValidityPeriod()* CommonConstant.ONE_DAY));
+        } else {
+            rechargeCardPO.setExpiryTime(new Date(System.currentTimeMillis() + rcExchangeCodeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY));
         }
         rechargeCardPO.setDescription(rcExchangeCodeBatchEditDTO.getDescription());
         rechargeCardPO.setFaceValue(auditRecordPO.getExchangeMoney());
@@ -120,7 +122,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         rcService.insert(rechargeCardPO);
         //插入兑换记录信息
         SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
-        if(null == sysUserDTO){
+        if (null == sysUserDTO) {
             throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
         RechargeCardExchangeRecordPO rechargeCardRecordPO = new RechargeCardExchangeRecordPO();
@@ -140,5 +142,33 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         auditRecordPO.setStatus(Byte.valueOf("2"));
         auditRecordPO.setModTime(new Date());
         auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
+    }
+
+    @Override
+    public void addSave(String customerName, String customerMobile, BigDecimal exchangeMoney, String imgUrls) {
+        AuditRecordPO auditRecordPO = new AuditRecordPO();
+        auditRecordPO.setRechargeCardId(0);
+        auditRecordPO.setCustomerName(customerName);
+        auditRecordPO.setCustomerMobile(customerMobile);
+        auditRecordPO.setExchangeMoney(exchangeMoney);
+        auditRecordPO.setImgUrls(imgUrls);
+        auditRecordPO.setAddTime(new Date());
+        auditRecordPO.setModTime(new Date());
+        auditRecordPO.setExtInfo("");
+        auditRecordPO.setIsDeleted(Byte.valueOf("0"));
+        auditRecordPO.setStatus(Byte.valueOf("0"));
+        auditRecordPO.setVersion(0);
+        auditRecordPO.setAuditorId(0);
+        auditRecordPO.setAuditorName("");
+        auditRecordPO.setAuditTime(new Date());
+        SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+        if (null == sysUserDTO) {
+            throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
+        }
+        auditRecordPO.setSubmitterId(sysUserDTO.getId());
+        auditRecordPO.setSubmitterName(sysUserDTO.getDisplayName());
+        auditRecordPO.setSubmitterRemark("");
+        auditRecordPO.setRemark("");
+        auditRecordPOMapper.insert(auditRecordPO);
     }
 }
