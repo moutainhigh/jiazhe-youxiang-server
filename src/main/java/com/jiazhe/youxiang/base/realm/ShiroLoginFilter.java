@@ -33,8 +33,8 @@ public class ShiroLoginFilter extends FormAuthenticationFilter {
      */
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws IOException {
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+//        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+//        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         if (ProjectUtil.isAjax(request)) {
             System.out.println("ShiroLoginFilter：ajax请求，未登录");
             JSONObject obj = new JSONObject();
