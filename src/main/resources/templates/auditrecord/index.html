@@ -309,9 +309,11 @@
                 {name: 'addTime', index: 'addTime', sortable: false,formatter:function(cellvalue, options, rowObject){
                     return timeFormat(rowObject.addTime)
                 }},
-                {name: 'auditorName', index: 'auditorName', sortable: false},
+                {name: 'auditorName', index: 'auditorName', sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return rowObject.status == 0 ?"":rowObject.auditorName;
+                }},
                 {name: 'modTime', index: 'modTime', sortable: false,formatter:function(cellvalue, options, rowObject){
-                    return timeFormat(rowObject.modTime);
+                    return rowObject.status == 0 ?"":timeFormat(rowObject.modTime);
                 }},
             ],
             loadComplete: function (data) {
