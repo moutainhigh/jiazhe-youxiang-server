@@ -175,12 +175,13 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     @Override
     public void editSave(Integer id, Integer version, String customerName, String customerMobile, BigDecimal exchangeMoney, String imgUrls) {
         AuditRecordPO auditRecordPO = auditRecordPOMapper.selectByPrimaryKey(id);
-        if(!auditRecordPO.getVersion().equals(version)){//版本不一致
+        if (!auditRecordPO.getVersion().equals(version)) {//版本不一致
             throw new AuditRecordException(AuditRecordCodeEnum.VERSION_IS_CHANGED);
         }
-        if(auditRecordPO.getStatus().equals(Byte.valueOf("2"))){//通过不允许修改
+        if (auditRecordPO.getStatus().equals(Byte.valueOf("2"))) {//通过不允许修改
             throw new AuditRecordException(AuditRecordCodeEnum.RECORD_HASS_PASSED);
         }
+        auditRecordPO.setVersion(version + 1);
         auditRecordPO.setStatus(Byte.valueOf(("0")));
         auditRecordPO.setCustomerName(customerName);
         auditRecordPO.setCustomerMobile(customerMobile);
