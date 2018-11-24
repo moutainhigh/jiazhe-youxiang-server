@@ -406,7 +406,19 @@
             async: false,
             data:transformToJson($('#auditForm').serializeArray()),
             type: "POST",
-            success: success,
+            success: function(data){
+                if ('error' in data) {i
+                    if(data.error.code == 111002){
+                        bootboxalert("记录已被修改，已重新载入，请重新审核");
+                        huxian($("#auditRecordId").val());
+                    }else{
+                        bootboxalert(data.error.message);
+                    }
+                } else {
+                    $("#modal-form").modal('hide');
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
             error: error
         });
     }
