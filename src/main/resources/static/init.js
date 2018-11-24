@@ -8,6 +8,7 @@ document.write("<script language='javascript' src='/static/ace-master/js/respond
 document.write("<script language='javascript' src='/static/ace-master/js/jquery-2.1.4.min.js'></script>");
 document.write("<script language='javascript' src='/static/ace-master/js/jquery-1.11.3.min.js'></script>");
 document.write("<script language='javascript' src='/static/ace-master/js/bootstrap.min.js'></script>");
+document.write("<script language='javascript' src='/static/ace-master/js/jquery.colorbox.min.js'></script>");
 document.write("<script language='javascript' src='/static/ace-master/js/spinbox.min.js'></script>");
 document.write("<script language='javascript' src='/static/ace-master/js/ace-elements.min.js'></script>");
 document.write("<script language='javascript' src='/static/ace-master/js/ace.min.js'></script>");

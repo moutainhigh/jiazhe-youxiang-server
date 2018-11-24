@@ -10,7 +10,6 @@
     <link rel="stylesheet" th:href="@{/static/init.css}"/>
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
-
     <style>
         .ui-jqgrid .ui-jqgrid-bdiv {
             overflow-x: auto;
@@ -24,7 +23,7 @@
 </head>
 
 <body class="no-skin">
-    <div class="main-container ace-save-state" id="main-container">
+<div class="main-container ace-save-state" id="main-container">
     <div class="main-content">
         <div class="main-content-inner">
             <div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -74,7 +73,7 @@
                         <div id="grid-pager"></div>
                     </div><!-- /.col -->
 
-                    <div id="orderReservationModal" class="modal fade" tabindex="-1">
+                    <div id="auditModal" class="modal fade" tabindex="-1">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -85,14 +84,14 @@
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-1"></div>
                                         <div class="col-xs-12 col-sm-9">
-                                            <form id="orderReservationForm" class="form-horizontal" role="form">
+                                            <form id="auditForm" class="form-horizontal" role="form">
                                                 <input type="hidden" name="orderId" id="re_orderId">
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">订单号：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">客户姓名：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="re_orderCode"
+                                                            <input id="customerName" name="customerName"
                                                                    class="form-control"
                                                                    type="text" style="height:30px" readonly/>
                                                         </div>
@@ -101,10 +100,10 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">下单时间：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">客户电话：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="re_orderTime"
+                                                            <input id="customerMobile" name="customerMobile"
                                                                    class="form-control"
                                                                    type="text" style="height:30px" readonly/>
                                                         </div>
@@ -113,10 +112,10 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">商品名：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">兑换数量：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="re_productName"
+                                                            <input id="exchangeMoney" name="exchangeMoney"
                                                                    class="form-control"
                                                                    type="text" style="height:30px" readonly/>
                                                         </div>
@@ -125,119 +124,64 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">数量：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">消费凭证：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="re_count" class="form-control"
-                                                                   type="text" style="height:30px" readonly/>
+                                                            <ul id="imgUrls" class="ace-thumbnails clearfix" style="padding-left:60px">
+
+                                                            </ul>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">预约时间：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">审核结果：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="re_serviceTime" class="form-control"
-                                                                   type="text" style="height:30px" readonly/>
+                                                            <label class="radio-inline">
+                                                                <input id="pass" type="radio"
+                                                                       name="status"
+                                                                       value=2 />通过
+                                                            </label>
+                                                            <label class="radio-inline ">
+                                                                <input id="unpass" type="radio"
+                                                                       name="status"
+                                                                       value=1 />不通过
+                                                            </label>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务对象姓名：</label>
+                                                <div class="space-2 unpass"></div>
+                                                <div class="form-group unpass">
+                                                    <label class="col-sm-4 control-label no-padding-right">审核理由：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="re_customerName" class="form-control" type="text"
-                                                                   style="height:30px" readonly/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务对象电话：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="re_customerMobile" class="form-control"
-                                                                   type="text" style="height:30px" readonly/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务地址：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="re_customerAddress" class="form-control"
-                                                                   type="text" style="height:30px" readonly/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">客户留言：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="re_customerRemark" class="form-control"
-                                                                   type="text" style="height:30px" readonly/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right"
-                                                           for="re_realServiceTime">服务时间：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-group">
-                                                            <input class="form-control datetime-picker"
-                                                                   id="re_realServiceTime"
-                                                                   name="realServiceTime" type="text"/>
-                                                            <span class="input-group-addon">
-                                                                    <i class="fa fa-calendar bigger-110"></i>
-                                                                </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务人员姓名：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="re_workerName" name="workerName"
-                                                                   class="form-control"
+                                                            <input id="remark" name="remark" class="form-control"
                                                                    type="text" style="height:30px"/>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务人员电话：</label>
+                                                <div class="space-2 pass"></div>
+                                                <div class="form-group pass">
+                                                    <label class="col-sm-4 control-label no-padding-right">所属项目：</label>
                                                     <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="re_workerMobile" name="workerMobile"
-                                                                   class="form-control"
-                                                                   type="text" style="height:30px"/>
-                                                        </div>
+                                                        <select id="projectId" name="projectId"
+                                                                onchange="projectChanged()"
+                                                                class="selectpicker show-tick form-control">
+                                                        </select>
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">订单成本：</label>
+                                                <div class="space-2 pass"></div>
+                                                <div class="form-group pass">
+                                                    <label class="col-sm-4 control-label no-padding-right">所属批次：</label>
                                                     <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="re_cost" name="cost"
-                                                                   class="form-control"
-                                                                   type="text" style="height:30px"/>
-                                                        </div>
+                                                        <select id="batchId" name="batchId"
+                                                                class="selectpicker show-tick form-control">
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </form>
@@ -251,16 +195,10 @@
                                         取消
                                     </button>
 
-                                    <button id="reservationSaveBtn" class="btn btn-sm btn-primary modal-footer-btn"
-                                            onclick="saveReservationInfo()">
+                                    <button id="saveBtn" class="btn btn-sm btn-primary modal-footer-btn"
+                                            onclick="save()">
                                         <i class="ace-icon fa fa-check"></i>
-                                        保存
-                                    </button>
-
-                                    <button id="reservationChangeBtn" class="btn btn-sm btn-primary modal-footer-btn"
-                                            onclick="changeReservationInfo()">
-                                        <i class="ace-icon fa fa-check"></i>
-                                        修改
+                                        提交
                                     </button>
                                 </div>
                             </div>
@@ -284,13 +222,74 @@
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
 
+        var $overflow = '';
+        var colorbox_params = {
+            rel: 'colorbox',
+            reposition:true,
+            scalePhotos:true,
+            scrolling:false,
+            previous:'<i class="ace-icon fa fa-arrow-left"></i>',
+            next:'<i class="ace-icon fa fa-arrow-right"></i>',
+            close:'&times;',
+            current:'{current} of {total}',
+            maxWidth:'100%',
+            maxHeight:'100%',
+            onOpen:function(){
+                $overflow = document.body.style.overflow;
+                document.body.style.overflow = 'hidden';
+            },
+            onClosed:function(){
+                document.body.style.overflow = $overflow;
+            },
+            onComplete:function(){
+                $.colorbox.resize();
+            }
+        };
+        $('.ace-thumbnails [data-rel="colorbox"]').colorbox(colorbox_params);
+
+        //将项目列表填入到projectId中
+        $.ajax({
+            url: "../api/project/getlist",
+            dataType: "json",
+            async: false,
+            data: {
+                pageSize: 10000,
+                pageNum: 1
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#projectId").append("<option value=>&nbsp;</option>");
+                    for (var i = 0; i < result.length; i++) {
+                        if (result[i].status == 1) {//进行中的项目
+                            $("#projectId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                        }
+                    }
+                }
+            },
+            error: error
+        });
+
+        $("#auditForm input[name=status]").bind("change", function () {
+            if ($("input[name=status]:checked").val() == 1) {
+                $(".pass").css("display", "none");
+                $(".unpass").css("display", "");
+            } else {
+                $(".pass").css("display", "");
+                $(".unpass").css("display", "none");
+            }
+        });
+
         var tableOption = {
             url: "../api/auditrecord/listpage",
             postData: transformToJson($('#auditRecordSearchForm').serializeArray()),
             shrinkToFit: false,
             autoScroll: true,
             multiselect: true,
-            colNames: ['', '操作', '客户姓名','客户电话', '分数', '状态', '提交人姓名','提交时间', '审核人姓名','审核时间'],
+            colNames: ['', '操作', '客户姓名', '客户电话', '分数', '状态', '提交人姓名', '提交时间', '审核人姓名', '审核时间'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: '_action', index: '_action', sortable: false, formatter: customFormatter},
@@ -306,15 +305,30 @@
                     }
                 },
                 {name: 'submitterName', index: 'submitterName', sortable: false},
-                {name: 'addTime', index: 'addTime', sortable: false,formatter:function(cellvalue, options, rowObject){
-                    return timeFormat(rowObject.addTime)
-                }},
-                {name: 'auditorName', index: 'auditorName', sortable: false,formatter:function(cellvalue, options, rowObject){
-                    return rowObject.status == 0 ?"":rowObject.auditorName;
-                }},
-                {name: 'modTime', index: 'modTime', sortable: false,formatter:function(cellvalue, options, rowObject){
-                    return rowObject.status == 0 ?"":timeFormat(rowObject.modTime);
-                }},
+                {
+                    name: 'addTime',
+                    index: 'addTime',
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return timeFormat(rowObject.addTime)
+                    }
+                },
+                {
+                    name: 'auditorName',
+                    index: 'auditorName',
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return rowObject.status == 0 ? "" : rowObject.auditorName;
+                    }
+                },
+                {
+                    name: 'modTime',
+                    index: 'modTime',
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return rowObject.status == 0 ? "" : timeFormat(rowObject.modTime);
+                    }
+                },
             ],
             loadComplete: function (data) {
                 var table = this;
@@ -322,9 +336,9 @@
                     $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
                     updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
                 }, 0);
-                if (data.data.length == 0){//解决没有数据时，不出现横向滚动条的问题
+                if (data.data.length == 0) {//解决没有数据时，不出现横向滚动条的问题
                     $('head').append('<style> .ui-jqgrid .ui-jqgrid-hdiv{overflow:auto}</style>');
-                }else{
+                } else {
                     $('head').append('<style> .ui-jqgrid .ui-jqgrid-hdiv{overflow:hidden}</style>');
                 }
             },
@@ -344,17 +358,74 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str += getFunctionButton("btn-success", "showOrder(" + rowObject.id + ")", "查看");
-        if (rowObject.status == 0 ) {//待审核
-            str += getFunctionButton("btn-primary", "userReservationOrder(" + rowObject.id + ")", "审核");
-        }
-        if (rowObject.status == 1) {//审核未通过
-            str += getFunctionButton("btn-primary", "userReservationOrder(" + rowObject.id + ")", "审核");
-        }
-        if (rowObject.status == 2) {//审核通过
-
+        if (rowObject.status == 0) {
+            str += getFunctionButton("btn-primary", "check(" + rowObject.id + ")", "审核");
+        } else {
+            str += getFunctionButton("btn-success", "show(" + rowObject.id + ")", "查看");
         }
         return str;
+    }
+
+    function show(id) {
+        huixian(id);
+        $("#remark").attr('readonly','readonly');
+        $("#auditForm input[name=status]").attr('disabled', 'disabled');
+        $("#saveBtn").hide();
+        $("#modal-title").html("查看");
+    }
+
+    function check(id) {
+        huixian(id);
+        $("#remark").removeAttr('readonly');
+        $("#saveBtn").show();
+        $("#modal-title").html("审核");
+    }
+
+    function huixian(id) {
+        $("#imgUrls").empty();
+        $("#auditModal").modal("show");
+        $.ajax({
+            url: "../api/auditrecord/getbyid",
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#customerName").val(result.customerName);
+                    $("#customerMobile").val(result.customerMobile);
+                    $("#exchangeMoney").val(result.exchangeMoney);
+                    $("#remark").val(result.remark);
+                    $("#auditForm input[name=status]").removeAttr('disabled');
+                    result.status == 1?$("#unpass").click():$("#pass").click();
+                    if(result.status == 2){
+                        $(".pass").css("display","none");
+                    }
+                    var imgUrls = result.imgUrls.split(",");
+                    for (var i = 0; i < imgUrls.length; i++) {
+                        $("#imgUrls").append("<li style='display:none'>" +
+                            "<a href='../api/preview/img/" + imgUrls[i] + "' data-rel='colorbox'>" +
+                            "<img width='150' height='150' alt='150x150' src='../api/preview/img/" + imgUrls[i] + "'/></a></li>")
+                    }
+                    $("#imgUrls li:first").css("display", "");
+                }
+            },
+            error: error
+        });
+
+    }
+
+    function save() {
+
+    }
+
+    function projectChanged() {
+
     }
 
 </script>
