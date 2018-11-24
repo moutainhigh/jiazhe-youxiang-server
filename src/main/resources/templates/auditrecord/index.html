@@ -19,6 +19,18 @@
             width: 4px;
             height: 10px;
         }
+
+         .float {
+             overflow: hidden;
+         }
+
+        .item {
+            float: left;
+            height:100px;
+            width: 31%;
+            border-right: 3px solid #fff;
+            border-top: 3px solid #fff;
+        }
     </style>
 </head>
 
@@ -73,7 +85,7 @@
                         <div id="grid-pager"></div>
                     </div><!-- /.col -->
 
-                    <div id="modal-form" class="modal fade" tabindex="-1">
+                    <div id="modal-form" class="modal fade" tabindex="-1" >
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -126,12 +138,8 @@
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">消费凭证：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <ul id="imgUrls" class="ace-thumbnails clearfix" style="padding-left:60px">
+                                                    <div class="col-sm-8 float" id="pics">
 
-                                                            </ul>
-                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -170,7 +178,7 @@
                                                     <label class="col-sm-4 control-label no-padding-right">所属项目：</label>
                                                     <div class="col-sm-8">
                                                         <select id="projectId" name="projectId"
-                                                                onchange="projectChanged()"
+                                                                onchange="refreshBatch()"
                                                                 class="selectpicker show-tick form-control">
                                                         </select>
                                                     </div>
@@ -205,6 +213,17 @@
                             </div>
                         </div>
                     </div>
+
+                    <!--放大图片模态框-->
+                    <div id="ShowImage_Form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-header" style="border-bottom: 0px">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        </div>
+                        <div class="modal-body" style="text-align: center">
+                            <div id="img_show" style="height:500px">
+                            </div>
+                        </div>
+                    </div>
                 </div><!-- /.row -->
             </div><!-- /.page-content -->
         </div>
@@ -216,6 +235,15 @@
     var pager_selector = "#grid-pager";
     var permission = getCookie("permission");
     var auditRecordStatus = ['待审核', '未通过', '已通过'];
+    $(document).ready(function () {
+        // 通过该方法来为每次弹出的模态框设置最新的zIndex值，从而使最新的modal显示在最前面
+        $(document).on('show.bs.modal', '.modal', function (event) {
+            var zIndex = 1060 + (10 * $('.modal:visible').length);
+            $(this).css('z-index', zIndex);
+            console.log(zIndex);
+        });
+    });
+
     $(function () {
 
         //重新修改表格宽度
@@ -249,7 +277,7 @@
             error: error
         });
 
-        projectChanged();
+        refreshBatch();
 
         $("#auditForm input[name=status]").bind("change", function () {
             if ($("input[name=status]:checked").val() == 1) {
@@ -360,7 +388,7 @@
     }
 
     function huixian(id) {
-        $("#imgUrls").empty();
+        $("#pics").empty();
         $("#modal-form").modal("show");
         $.ajax({
             url: "../api/auditrecord/getbyid",
@@ -388,11 +416,8 @@
                     }
                     var imgUrls = result.imgUrls.split(",");
                     for (var i = 0; i < imgUrls.length; i++) {
-                        $("#imgUrls").append("<li style='display:none'>" +
-                            "<a href='../api/preview/img/" + imgUrls[i] + "' data-rel='colorbox' class='cboxElement'>" +
-                            "<img width='150' height='150' alt='150x150' src='../api/preview/img/" + imgUrls[i] + "'/></a></li>")
+                        $("#pics").append("<img class='item' onmouseover=\"this.style.cursor='pointer';this.style.cursor='hand'\"  onmouseout=\"this.style.cursor='default'\" onclick=\"javascript:showimage('../api/preview/img/"+imgUrls[i]+"');\" src='../api/preview/img/"+imgUrls[i]+"'>")
                     }
-                    $("#imgUrls li:first").css("display", "");
                 }
             },
             error: error
@@ -423,7 +448,7 @@
         });
     }
 
-    function projectChanged() {
+    function refreshBatch() {
         var projectId = $("#projectId").val();
         $("#batchId").empty();
         $.ajax({
@@ -449,6 +474,19 @@
             },
             error: error
         });
+    }
+
+    function showimage(source){//图片单击放大显示
+        $("#ShowImage_Form").find("#img_show").html("<image src='"+source+"' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' />");
+        $("#ShowImage_Form").modal({backdrop: 'static', keyboard: true});
+    }
+
+    function bigimg(obj){
+        var zoom = parseInt(obj.style.zoom,10)||100;
+        zoom += event.wheelDelta / 12;
+        if(zoom > 0 )
+            obj.style.zoom=zoom+'%';
+        return false;
     }
 
 </script>
