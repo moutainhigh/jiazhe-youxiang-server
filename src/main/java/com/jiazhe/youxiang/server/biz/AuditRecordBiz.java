@@ -23,8 +23,8 @@ public class AuditRecordBiz {
     @Autowired
     private AuditRecordService auditRecordService;
 
-    public void auditRecordPass(Integer auditRecordId,Integer version, Integer rechargeCardCodeBatchId){
-        auditRecordService.auditRecordPass(auditRecordId,version,rechargeCardCodeBatchId);
+    public void auditRecordPass(Integer auditRecordId,Integer version, Integer batchId){
+        auditRecordService.auditRecordPass(auditRecordId,version,batchId);
     }
 
     public void auditRecordUnpass(Integer auditRecordId, Integer version ,String reason) {

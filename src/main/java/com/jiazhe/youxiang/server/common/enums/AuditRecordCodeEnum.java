@@ -16,6 +16,7 @@ public enum AuditRecordCodeEnum {
     CUSTOMER_MOBILE_IS_ILLEGAL(111007, "CUSTOMER_MOBILE_IS_ILLEGAL", "客户电话非法"),
     EXCHANGE_MONEY_IS_ILLEGAL(111008, "EXCHANGE_MONEY_IS_ILLEGAL", "消费积分不合法"),
     RECORD_HASS_PASSED(111009, "RECORD_HASS_PASSED", "该条记录已经通过审核，不允许修改"),
+    NO_BATCH_INFO(111010, "NO_BATCH_INFO", "没有指定批次"),
     ;
 
     AuditRecordCodeEnum(Integer code, String type, String message) {

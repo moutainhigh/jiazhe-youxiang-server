@@ -10,6 +10,7 @@ import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.dao.mapper.RechargeCardExchangeCodeBatchPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCExchangeCodeBatchPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO;
+import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPOExample;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeSaveDTO;
@@ -168,5 +169,17 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         }
         List<RechargeCardExchangeCodePO> rechargeCardExchangeCodePOList = rcExchangeCodeSaveDTOS.stream().map(RCExchangeCodeAdapter::DTOSave2PO).collect(Collectors.toList());
         rcExchangeCodeService.batchInsert(rechargeCardExchangeCodePOList);
+    }
+
+    @Override
+    public List<RCExchangeCodeBatchDTO> getByProjectId(Integer projectId) {
+        RechargeCardExchangeCodeBatchPOExample example = new RechargeCardExchangeCodeBatchPOExample();
+        RechargeCardExchangeCodeBatchPOExample.Criteria criteria = example.createCriteria();
+        if(!projectId.equals(0)){
+            criteria.andProjectIdEqualTo(projectId);
+        }
+        criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
+        List<RechargeCardExchangeCodeBatchPO> poList = rechargeCardExchangeCodeBatchPOMapper.selectByExample(example);
+        return poList.stream().map(RCExchangeCodeBatchAdapter::PO2DTO).collect(Collectors.toList());
     }
 }

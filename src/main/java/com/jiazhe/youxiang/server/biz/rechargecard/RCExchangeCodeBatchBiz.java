@@ -76,7 +76,7 @@ public class RCExchangeCodeBatchBiz {
     }
 
     public List<RCExchangeCodeBatchDTO> getByProjectId(Integer projectId) {
-        return null;
+        return rcExchangeCodeBatchService.getByProjectId(projectId);
     }
 
     public void generateCode(Integer id) {

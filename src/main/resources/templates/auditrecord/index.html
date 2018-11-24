@@ -73,7 +73,7 @@
                         <div id="grid-pager"></div>
                     </div><!-- /.col -->
 
-                    <div id="auditModal" class="modal fade" tabindex="-1">
+                    <div id="modal-form" class="modal fade" tabindex="-1">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -85,7 +85,8 @@
                                         <div class="col-xs-12 col-sm-1"></div>
                                         <div class="col-xs-12 col-sm-9">
                                             <form id="auditForm" class="form-horizontal" role="form">
-                                                <input type="hidden" name="orderId" id="re_orderId">
+                                                <input type="hidden" name="id" id="auditRecordId"/>
+                                                <input type="hidden" name="version" id="version">
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">客户姓名：</label>
@@ -222,31 +223,6 @@
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
 
-        var $overflow = '';
-        var colorbox_params = {
-            rel: 'colorbox',
-            reposition:true,
-            scalePhotos:true,
-            scrolling:false,
-            previous:'<i class="ace-icon fa fa-arrow-left"></i>',
-            next:'<i class="ace-icon fa fa-arrow-right"></i>',
-            close:'&times;',
-            current:'{current} of {total}',
-            maxWidth:'100%',
-            maxHeight:'100%',
-            onOpen:function(){
-                $overflow = document.body.style.overflow;
-                document.body.style.overflow = 'hidden';
-            },
-            onClosed:function(){
-                document.body.style.overflow = $overflow;
-            },
-            onComplete:function(){
-                $.colorbox.resize();
-            }
-        };
-        $('.ace-thumbnails [data-rel="colorbox"]').colorbox(colorbox_params);
-
         //将项目列表填入到projectId中
         $.ajax({
             url: "../api/project/getlist",
@@ -262,7 +238,7 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    $("#projectId").append("<option value=>&nbsp;</option>");
+                    $("#projectId").append("<option value=0>&nbsp;</option>");
                     for (var i = 0; i < result.length; i++) {
                         if (result[i].status == 1) {//进行中的项目
                             $("#projectId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
@@ -272,6 +248,8 @@
             },
             error: error
         });
+
+        projectChanged();
 
         $("#auditForm input[name=status]").bind("change", function () {
             if ($("input[name=status]:checked").val() == 1) {
@@ -306,11 +284,11 @@
                 },
                 {name: 'submitterName', index: 'submitterName', sortable: false},
                 {
-                    name: 'addTime',
-                    index: 'addTime',
+                    name: 'modTime',
+                    index: 'modTime',
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return timeFormat(rowObject.addTime)
+                        return timeFormat(rowObject.modTime)
                     }
                 },
                 {
@@ -322,11 +300,11 @@
                     }
                 },
                 {
-                    name: 'modTime',
-                    index: 'modTime',
+                    name: 'auditTime',
+                    index: 'auditTime',
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.status == 0 ? "" : timeFormat(rowObject.modTime);
+                        return rowObject.status == 0 ? "" : timeFormat(rowObject.auditTime);
                     }
                 },
             ],
@@ -383,7 +361,7 @@
 
     function huixian(id) {
         $("#imgUrls").empty();
-        $("#auditModal").modal("show");
+        $("#modal-form").modal("show");
         $.ajax({
             url: "../api/auditrecord/getbyid",
             dataType: "json",
@@ -397,6 +375,8 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
+                    $("#auditRecordId").val(result.id);
+                    $("#version").val(result.version);
                     $("#customerName").val(result.customerName);
                     $("#customerMobile").val(result.customerMobile);
                     $("#exchangeMoney").val(result.exchangeMoney);
@@ -409,7 +389,7 @@
                     var imgUrls = result.imgUrls.split(",");
                     for (var i = 0; i < imgUrls.length; i++) {
                         $("#imgUrls").append("<li style='display:none'>" +
-                            "<a href='../api/preview/img/" + imgUrls[i] + "' data-rel='colorbox'>" +
+                            "<a href='../api/preview/img/" + imgUrls[i] + "' data-rel='colorbox' class='cboxElement'>" +
                             "<img width='150' height='150' alt='150x150' src='../api/preview/img/" + imgUrls[i] + "'/></a></li>")
                     }
                     $("#imgUrls li:first").css("display", "");
@@ -417,15 +397,46 @@
             },
             error: error
         });
-
     }
 
     function save() {
-
+        $.ajax({
+            url: "../api/auditrecord/auditrecordcheck",
+            dataType: "json",
+            async: false,
+            data:transformToJson($('#auditForm').serializeArray()),
+            type: "POST",
+            success: success,
+            error: error
+        });
     }
 
     function projectChanged() {
-
+        var projectId = $("#projectId").val();
+        $("#batchId").empty();
+        $.ajax({
+            url: "../api/rcexchangecodebatch/findvirtualbyprojectid",
+            dataType: "json",
+            async: false,
+            data:{
+                id:projectId
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#batchId").append("<option value=>&nbsp;</option>");
+                    for (var i = 0; i < result.length; i++) {
+                        if (result[i].status == 1) {//进行中的项目
+                            $("#batchId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                        }
+                    }
+                }
+            },
+            error: error
+        });
     }
 
 </script>

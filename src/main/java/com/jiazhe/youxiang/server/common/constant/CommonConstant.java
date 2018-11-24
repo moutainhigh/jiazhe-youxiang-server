@@ -5,6 +5,8 @@
  */
 package com.jiazhe.youxiang.server.common.constant;
 
+import java.math.BigDecimal;
+
 /**
  * 在这里编写类的功能描述
  *
@@ -96,7 +98,7 @@ public class CommonConstant {
     public static final Byte STOPTUSING = Byte.valueOf("0");
 
     /**
-     * 兑换方式【0-后台兑换码兑换，1-客户自行兑换码兑换，2-直接充值】
+     * 兑换方式【0-后台兑换码兑换，1-客户自行兑换码兑换，2-直接充值，3审核系统来的】
      */
     public static final Integer EXCHANGETYPE_USER_CODE_EXCHANGE = 0;
     public static final Integer EXCHANGETYPE_CUSTOMER_CODE_EXCHANGE = 1;
@@ -127,5 +129,10 @@ public class CommonConstant {
      */
     public static final Integer SERVICE_PRODUCT = 0;
     public static final Integer ELE_PRODUCT = 1;
+
+    /**
+     * 1积分 = 5 元 汇率
+     */
+    public static final BigDecimal exchangeRate = new BigDecimal(5) ;
 
 }

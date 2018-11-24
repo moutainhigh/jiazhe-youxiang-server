@@ -45,19 +45,18 @@ public class APIAuditRecordController extends BaseController{
     @Autowired
     private AuditRecordBiz auditRecordBiz;
 
-    @ApiOperation(value = "【后台】审核通过", httpMethod = "POST",notes = "审核通过")
-    @RequestMapping(value = "/auditrecordpass", method = RequestMethod.POST)
+    @ApiOperation(value = "【后台】审核", httpMethod = "POST",notes = "审核")
+    @RequestMapping(value = "/auditrecordcheck", method = RequestMethod.POST)
     public Object auditRecordPass(@ModelAttribute AuditRecordCheckReq req) {
         //参数检查
-        auditRecordBiz.auditRecordPass(req.getId(),req.getVersion(),req.getRechargeCardCodeBatchId());
-        return ResponseFactory.buildSuccess();
-    }
-
-    @ApiOperation(value = "【后台】审核不通过", httpMethod = "POST",notes = "审核不通过")
-    @RequestMapping(value = "/auditrecordunpass", method = RequestMethod.POST)
-    public Object auditRecordUnpass(@ModelAttribute AuditRecordCheckReq req) {
-        CommonValidator.validateNull(req.getReason(),new AuditRecordException(AuditRecordCodeEnum.AUDIT_REASON_IS_NULL));
-        auditRecordBiz.auditRecordUnpass(req.getId(),req.getVersion(),req.getReason());
+        if(req.getStatus().equals(Byte.valueOf("1"))){
+            CommonValidator.validateNull(req.getRemark(),new AuditRecordException(AuditRecordCodeEnum.AUDIT_REASON_IS_NULL));
+            auditRecordBiz.auditRecordUnpass(req.getId(),req.getVersion(),req.getRemark());
+        }
+        if(req.getStatus().equals(Byte.valueOf("2"))){
+            CommonValidator.validateNull(req.getBatchId(),new AuditRecordException(AuditRecordCodeEnum.NO_BATCH_INFO));
+            auditRecordBiz.auditRecordPass(req.getId(),req.getVersion(),req.getBatchId());
+        }
         return ResponseFactory.buildSuccess();
     }
 

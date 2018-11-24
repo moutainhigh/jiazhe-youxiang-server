@@ -59,4 +59,11 @@ public interface RCExchangeCodeBatchService {
      * @return
      */
     void generateCode(Integer id);
+
+    /**
+     * 根据项目id查找批次
+     * @param projectId
+     * @return
+     */
+    List<RCExchangeCodeBatchDTO> getByProjectId(Integer projectId);
 }

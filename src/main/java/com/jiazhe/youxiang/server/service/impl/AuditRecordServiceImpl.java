@@ -10,12 +10,11 @@ import com.jiazhe.youxiang.server.common.exceptions.AuditRecordException;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.dao.mapper.AuditRecordPOMapper;
+import com.jiazhe.youxiang.server.dao.mapper.CustomerPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.AuditRecordPOManualMapper;
-import com.jiazhe.youxiang.server.domain.po.AuditRecordPO;
-import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO;
-import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeRecordPO;
-import com.jiazhe.youxiang.server.domain.po.RechargeCardPO;
+import com.jiazhe.youxiang.server.domain.po.*;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
+import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
@@ -55,6 +54,8 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     @Autowired
     private CustomerService customerService;
     @Autowired
+    private CustomerPOMapper customerPOMapper;
+    @Autowired
     private RCExchangeRecordService rcExchangeRecordService;
     @Autowired
     private RCService rcService;
@@ -84,23 +85,38 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         if (!auditRecordPO.getVersion().equals(version)) {
             throw new AuditRecordException(AuditRecordCodeEnum.VERSION_IS_CHANGED);
         }
-        auditRecordPO.setModTime(new Date());
+        SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+        if (null == sysUserDTO) {
+            throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
+        }
+        auditRecordPO.setVersion(version + 1);
+        auditRecordPO.setAuditorId(sysUserDTO.getId());
+        auditRecordPO.setAuditorName(sysUserDTO.getDisplayName());
+        auditRecordPO.setAuditTime(new Date());
         auditRecordPO.setStatus(Byte.valueOf("1"));
         auditRecordPO.setRemark(reason);
         auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
     }
 
     @Override
-    public void auditRecordPass(Integer auditRecordId, Integer version, Integer rechargeCardCodeBatchId) {
+    public void auditRecordPass(Integer auditRecordId, Integer version, Integer batchId) {
         AuditRecordPO auditRecordPO = auditRecordPOMapper.selectByPrimaryKey(auditRecordId);
         if (!auditRecordPO.getVersion().equals(version)) {
             throw new AuditRecordException(AuditRecordCodeEnum.VERSION_IS_CHANGED);
         }
+        Integer customerId = 0;
         CustomerDTO customerDTO = customerService.getByMobile(auditRecordPO.getCustomerMobile());
         if (null == customerDTO) {
-            throw new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_NOT_EXIST);
+            //throw new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_NOT_EXIST);
+            CustomerPO customerPO = new CustomerPO();
+            customerPO.setMobile(auditRecordPO.getCustomerMobile());
+            customerPO.setName(auditRecordPO.getCustomerName());
+            customerPO.setRemark("");
+            customerId = customerPOMapper.insertSelective(customerPO);
+        } else {
+            customerId = customerDTO.getId();
         }
-        RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchService.getById(rechargeCardCodeBatchId);
+        RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchService.getById(batchId);
         RechargeCardPO rechargeCardPO = new RechargeCardPO();
         //直接指定过期时间
         if (rcExchangeCodeBatchEditDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
@@ -109,14 +125,14 @@ public class AuditRecordServiceImpl implements AuditRecordService {
             rechargeCardPO.setExpiryTime(new Date(System.currentTimeMillis() + rcExchangeCodeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY));
         }
         rechargeCardPO.setDescription(rcExchangeCodeBatchEditDTO.getDescription());
-        rechargeCardPO.setFaceValue(auditRecordPO.getExchangeMoney());
-        rechargeCardPO.setBalance(auditRecordPO.getExchangeMoney());
+        rechargeCardPO.setFaceValue(auditRecordPO.getExchangeMoney().multiply(CommonConstant.exchangeRate));
+        rechargeCardPO.setBalance(auditRecordPO.getExchangeMoney().multiply(CommonConstant.exchangeRate));
         //暂时置为0，等生成了兑换记录再修改
         rechargeCardPO.setExchangeRecordId(0);
         rechargeCardPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
         rechargeCardPO.setProjectId(rcExchangeCodeBatchEditDTO.getProjectId());
         rechargeCardPO.setName(rcExchangeCodeBatchEditDTO.getRechargeCardName());
-        rechargeCardPO.setCustomerId(customerDTO.getId());
+        rechargeCardPO.setCustomerId(customerId);
         rechargeCardPO.setCityCodes(rcExchangeCodeBatchEditDTO.getCityCodes());
         rechargeCardPO.setProductIds(rcExchangeCodeBatchEditDTO.getProductIds());
         rcService.insert(rechargeCardPO);
@@ -138,9 +154,12 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         //修改充值卡对应的兑换记录id
         rechargeCardPO.setExchangeRecordId(rechargeCardRecordPO.getId());
         rcService.update(rechargeCardPO);
+        auditRecordPO.setVersion(version + 1);
+        auditRecordPO.setAuditorId(sysUserDTO.getId());
+        auditRecordPO.setAuditorName(sysUserDTO.getDisplayName());
+        auditRecordPO.setAuditTime(new Date());
         auditRecordPO.setRechargeCardId(rechargeCardPO.getId());
         auditRecordPO.setStatus(Byte.valueOf("2"));
-        auditRecordPO.setModTime(new Date());
         auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
     }
 
@@ -187,7 +206,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         auditRecordPO.setCustomerMobile(customerMobile);
         auditRecordPO.setExchangeMoney(exchangeMoney);
         auditRecordPO.setImgUrls(imgUrls);
-        auditRecordPO.setAddTime(new Date());
+        auditRecordPO.setModTime(new Date());
         auditRecordPOMapper.updateByPrimaryKey(auditRecordPO);
     }
 }
