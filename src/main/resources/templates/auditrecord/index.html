@@ -407,10 +407,10 @@
             data:transformToJson($('#auditForm').serializeArray()),
             type: "POST",
             success: function(data){
-                if ('error' in data) {i
+                if ('error' in data) {
                     if(data.error.code == 111002){
                         bootboxalert("记录已被修改，已重新载入，请重新审核");
-                        huxian($("#auditRecordId").val());
+                        huixian($("#auditRecordId").val());
                     }else{
                         bootboxalert(data.error.message);
                     }
