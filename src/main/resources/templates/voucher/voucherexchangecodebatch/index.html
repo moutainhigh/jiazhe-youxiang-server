@@ -3,33 +3,17 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta charset="utf-8"/>
-    <title>CRM首页</title>
+    <title></title>
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <!-- CSS -->
     <link rel="stylesheet" th:href="@{/static/init.css}"/>
-
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
-
-
-    <style>
-        .form-group {
-            margin-bottom: 0px;
-        }
-    </style>
 </head>
 
 <body class="no-skin">
-
 <div class="main-container ace-save-state" id="main-container">
-    <script type="text/javascript">
-        try {
-            ace.settings.loadState('main-container')
-        } catch (e) {
-        }
-    </script>
-
     <div class="main-content">
         <div class="main-content-inner">
             <div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -174,14 +158,14 @@
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveExpiryTime">到期时间：</label>
+                                                           for="saveExpiryTime">过期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker" id="saveExpiryTime"
                                                                    name="expiryTime" type="text"/>
                                                             <span class="input-group-addon">
-                                                                    <i class="fa fa-calendar bigger-110"></i>
-                                                                </span>
+                                                                            <i class="fa fa-calendar bigger-110"></i>
+                                                                        </span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -208,15 +192,15 @@
                                                 <div class="space-2 saveDeadLine"></div>
                                                 <div class="form-group saveDeadLine">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveVoucherExpiryTime">代金券到期时间：</label>
+                                                           for="saveVoucherExpiryTime">代金券过期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker"
                                                                    id="saveVoucherExpiryTime"
                                                                    name="voucherExpiryTime" type="text"/>
                                                             <span class="input-group-addon">
-                                                                    <i class="fa fa-calendar bigger-110"></i>
-                                                                </span>
+                                                                            <i class="fa fa-calendar bigger-110"></i>
+                                                                        </span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -272,20 +256,20 @@
     <!--<div class="footer">
         <div class="footer-inner">
             <div class="footer-content" style="padding: 0px;">
-						<span class="bigger-120">
-							<span class="blue bolder"></span>
-							悠享后台管理系统 &copy; 2018
-						</span>
+                        <span class="bigger-120">
+                            <span class="blue bolder"></span>
+                            悠享后台管理系统 &copy; 2018
+                        </span>
                 &nbsp; &nbsp;
             </div>
         </div>
     </div>-->
 </div><!-- /.main-container -->
-<div id="selectCityAndProduct">
-
-</div>
+<div id="selectCityAndProduct"></div>
 </body>
 <script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
     var permission = getCookie("permission");
     $(function () {
         //重新修改表格宽度
@@ -318,18 +302,10 @@
                     }
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
 
-        $('.date-picker').datepicker({
-            language: 'zh-CN',//选择语言
-            autoclose: true,
-            todayHighlight: true
-        }).next().on(ace.click_event, function () {
-            $(this).prev().focus();
-        });
+        initDatePicker();
 
         $("input[name=expiryTypeRadio]").bind("change", function () {
             if ($("input[name=expiryTypeRadio]:checked").val() == 0) {
@@ -343,99 +319,64 @@
             }
         });
 
+        var tableOption = {
+            url: "../api/voucherexchangecodebatch/listpage",
+            postData: transformToJson($('#batchSearchForm').serializeArray()),
+            colNames: ['', '批次名称', '代金券名称', '状态', '可兑换商品数量', '数量', '过期时间', '操作'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'name', index: 'name', width: 100, sortable: false},
+                {name: 'voucherName', index: 'voucherName', width: 50, sortable: false},
+                {
+                    name: 'status',
+                    index: 'status',
+                    width: 30,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        var text = rowObject.status == 1 ? "启用" : "停用";
+                        var color = rowObject.status == 1 ? "00FF00" : "0000FF";
+                        return generateSpan(text, color);
+                    }
+                },
+                {name: 'count', index: 'count', width: 50, sortable: false},
+                {name: 'amount', index: 'amount', width: 30, sortable: false},
+                {
+                    name: 'expiryTime',
+                    index: 'expiryTime',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return dateFormat(rowObject.expiryTime);
+                    }
+                },
+                {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
+            ],
+            caption: "批次列表"
+        };
+        initTable(grid_selector, pager_selector, tableOption);
     });
-
-    var grid_selector = "#grid-table";
-    var pager_selector = "#grid-pager";
-    jQuery(grid_selector).jqGrid({
-        subGrid: false, // 此处设置为true时可以打开子项,子项用不到已删除
-        url: "../api/voucherexchangecodebatch/listpage",// 获取数据的地址
-        postData: transformToJson($('#batchSearchForm').serializeArray()),
-        rownumbers: true,
-        datatype: "json",
-        mtype: "GET",
-        hidegrid: false,//收缩列表按钮
-        prmNames: {
-            page: "pageNum",
-            rows: "pageSize"
-        },// 重新定义分页信息
-        /*width: "100%",*/
-        autowidth: true,
-        shrinkToFit: true,
-        height: 350,
-        colNames: ['', '批次名称', '代金券名称', '状态', '可兑换商品数量', '数量', '过期时间', '操作'],
-        colModel: [
-            {name: 'id', index: 'id', sortable: false, hidden: true},
-            {name: 'name', index: 'name', width: 100, sortable: false},
-            {name: 'voucherName', index: 'voucherName', width: 50, sortable: false},
-            {
-                name: 'status',
-                index: 'status',
-                width: 30,
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    return rowObject.status == 1 ? "启用" : "停用";
-                }
-            },
-            {name: 'count', index: 'count', width: 50, sortable: false},
-            {name: 'amount', index: 'amount', width: 30, sortable: false},
-            {
-                name: 'expiryTime',
-                index: 'expiryTime',
-                width: 50,
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    return dateFormat(rowObject.expiryTime);
-                }
-            },
-            {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
-        ],
-        rowNum: 10,
-        rowList: [10, 20, 30],
-        pager: pager_selector,
-        altRows: true,
-        viewrecords: true,
-        emptyrecords: "0条数据",
-        loadComplete: function (data) {
-            var table = this;
-            setTimeout(function () {
-                $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
-                updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
-            }, 0);
-        },
-        jsonReader: { // jsonReader来跟服务器端返回的数据做对应
-            root: "data", // 包含实际数据的数组
-            page: "paging.currPage", // 当前页
-            total: "paging.totalPage",// 总页数
-            records: "paging.total", // 查询出的记录数
-            repeatitems: false
-        },
-        caption: "批次列表"
-    });
-    $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/voucherexchangecodebatch/listpage",// 获取数据的地址
+            url: "../api/voucherexchangecodebatch/listpage",
             postData: transformToJson($('#batchSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
     }
 
-
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">修改</a>&nbsp;&nbsp;";
+        str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
         if (rowObject.status == 0) {
-            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:startUsing('" + rowObject.id + "')\">启用</a>&nbsp;&nbsp;";
+            str += getFunctionButton("btn-success", "startUsing(" + rowObject.id + ")", "启用");
         } else {
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:stopUsing('" + rowObject.id + "')\">停用</a>&nbsp;&nbsp;";
+            str += getFunctionButton("btn-danger", "stopUsing(" + rowObject.id + ")", "停用");
         }
         if (rowObject.isMade == 1) {
-            str = str + "<a class='btn btn-minier btn-primary' href=\"../voucher/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name + "\">兑换码管理</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-yellow' href=\"javascript:exportExcel('" + rowObject.id + "')\">导出</a>&nbsp;&nbsp;";
+            str += getRedirectButton("btn-primary", "../voucher/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name, "兑换码管理");
+            str += getFunctionButton("btn-yellow", "exportExcel(" + rowObject.id + ")", "导出");
         } else {
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:generateCode('" + rowObject.id + "')\">生成兑换码</a>&nbsp;&nbsp;";
+            str += getFunctionButton("btn-danger", "generateCode(" + rowObject.id + ")", "生成兑换码");
         }
         return str;
     }
@@ -467,23 +408,28 @@
     }
 
     function save() {
+        if (!isNumber($("#saveCount").val())) {
+            bootboxalert("兑换商品数量非法");
+            return false;
+        }
+        if (!isInteger($("#saveAmount").val())) {
+            bootboxalert("数量非法");
+            return false;
+        }
+        if($("input[name=expiryTypeRadio]:checked").val() == 1){
+            if(!isNumber($("#saveValidityPeriod").val())){
+                bootboxalert("兑换之日有效天数非法");
+                return false;
+            }
+        }
         $.ajax({
             url: "../api/voucherexchangecodebatch/save",
             dataType: "json",
             async: false,
             data: transformToJson($('#batchSaveForm').serializeArray()),
             type: "POST",
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    $("#modal-form").modal('hide');
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                }
-            },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            success: success,
+            error: error
         });
     }
 
@@ -529,9 +475,7 @@
                     $("#modal-form").modal('show');
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
     }
 
@@ -546,16 +490,10 @@
             },
             type: "POST",
             success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                    bootboxalert("生成兑换码成功");
-                }
+                success(data)
+                bootboxalert("生成兑换码成功");
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
     }
 
@@ -576,60 +514,47 @@
                     window.location.href = "../api/voucherexchangecodebatch/export?id=" + id;
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
     }
 
     //启用批次
     function startUsing(id) {
-        $.ajax({
-            url: "../api/voucherexchangecodebatch/startusing",
-            dataType: "json",
-            async: false,
-            data: {
-                id: id
-            },
-            type: "POST",
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    bootboxalert("启用批次成功");
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                }
-            },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
+        confirm("是否要启用该批次吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "../api/voucherexchangecodebatch/startusing",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    success: success,
+                    error: error
+                });
             }
-        });
+        })
     }
 
     //停用批次
     function stopUsing(id) {
-        $.ajax({
-            url: "../api/voucherexchangecodebatch/stopusing",    //请求的url地址
-            dataType: "json",
-            async: false,
-            data: {
-                id: id
-            },
-            type: "POST",
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    bootboxalert("停用批次成功");
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                }
-            },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
+        confirm("是否要停用该批次吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "../api/voucherexchangecodebatch/stopusing",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    success: success,
+                    error: error
+                });
             }
-        });
+        })
     }
-
 </script>
 </html>
 

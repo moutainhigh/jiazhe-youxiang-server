@@ -1,11 +1,12 @@
-<!--权限树 -->
-<link rel="stylesheet" th:href="@{/static/ztree/css/metroStyle.css}" type="text/css">
-<script th:src="@{/static/ztree/js/jquery.ztree.all.min.js}"></script>
+<!--树 -->
+<link rel="stylesheet" th:href="@{/static/zTree/css/metroStyle.css}" type="text/css">
+<script th:src="@{/static/zTree/js/jquery.ztree.all.min.js}"></script>
 <!--选择城市和商品模态框-->
 <div id="selectCityAndProductModal" class="modal fade" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="blue bigger">选择可用城市和可用商品</h4>
             </div>
             <div class="modal-body">
@@ -79,7 +80,6 @@
                 }
 
             }
-            console.log(zNode);
         },
         error: function () {
             bootboxalert("服务器异常，请联系管理员");

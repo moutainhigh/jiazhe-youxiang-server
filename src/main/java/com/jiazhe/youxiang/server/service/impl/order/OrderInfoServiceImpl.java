@@ -152,6 +152,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
                 //此处应该有发放电子码逻辑！！！！！！！
                 eleProductCodeDTOList = sendEleProductCode(orderInfoPO);
+                eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderInfoPO.getOrderCode());
             }
         }
         orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
@@ -207,7 +208,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public void placeOrder(PlaceOrderDTO dto) throws ParseException {
+    public BigDecimal placeOrder(PlaceOrderDTO dto) throws ParseException {
         List<OrderPaymentPO> orderPaymentPOList = Lists.newArrayList();
         List<EleProductCodeDTO> eleProductCodeDTOList = Lists.newArrayList();
         CustomerDTO customerDTO = customerService.getById(dto.getCustomerId());
@@ -218,7 +219,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (null == productDTO || productDTO.getStatus().equals(Byte.valueOf("0"))) {
             throw new OrderException(OrderCodeEnum.PRODUCT_NOT_AVAILABLE);
         }
-        if(productDTO.getLastNum()>dto.getCount()){
+        if (productDTO.getLastNum() > dto.getCount()) {
             throw new OrderException(OrderCodeEnum.ORDER_COUNT_LESS_THAN_LAST_NUM);
         }
         String orderCode = GenerateCode.generateOrderCode(customerDTO.getMobile());
@@ -334,8 +335,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             }
             if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
-                //此处应该有发放电子码
-                eleProductCodeDTOList = sendEleProductCode(orderInfoPO);
             }
         } else {
             orderInfoPO.setStatus(CommonConstant.ORDER_UNPAID);
@@ -344,8 +343,13 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderPaymentPOList.stream().forEach(bean -> {
             bean.setOrderId(orderInfoPO.getId());
         });
-        eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderCode);
+        if (payOff && productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
+            //此处发放电子码
+            eleProductCodeDTOList = sendEleProductCode(orderInfoPO);
+            eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderCode);
+        }
         orderPaymentService.batchInsert(orderPaymentPOList);
+        return rechargeCardPayMoney[0].subtract(needPay);
     }
 
     @Override
@@ -486,9 +490,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
         ProductDTO productDTO = productService.getById(orderInfoPO.getProductId());
         //电子商品需要检查一下电子吗是否足够，服务类商品不需要检查
-        if(productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)){
-            List<EleProductCodeDTO> eleProductCodeDTOList = eleProductCodeService.selectTopN(orderInfoPO.getProductId(),orderInfoPO.getCount());
-            if(eleProductCodeDTOList.size()<orderInfoPO.getCount()){
+        if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
+            List<EleProductCodeDTO> eleProductCodeDTOList = eleProductCodeService.selectTopN(orderInfoPO.getProductId(), orderInfoPO.getCount());
+            if (eleProductCodeDTOList.size() < orderInfoPO.getCount()) {
                 throw new OrderException(OrderCodeEnum.ELE_PRODUCT_CODE_NOT_ENOUGH);
             }
         }
@@ -540,11 +544,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     /**
      * 根据订单信息，设置定单comment字段内容，并且返回要兑换的电子码list
+     *
      * @param orderInfoPO
      * @return
      */
-    private  List<EleProductCodeDTO>  sendEleProductCode(OrderInfoPO orderInfoPO) {
-        List<EleProductCodeDTO> eleProductCodeDTOList  = eleProductCodeService.selectTopN(orderInfoPO.getProductId(), orderInfoPO.getCount());
+    private List<EleProductCodeDTO> sendEleProductCode(OrderInfoPO orderInfoPO) {
+        List<EleProductCodeDTO> eleProductCodeDTOList = eleProductCodeService.selectTopN(orderInfoPO.getProductId(), orderInfoPO.getCount());
         if (eleProductCodeDTOList.size() != orderInfoPO.getCount()) {
             throw new OrderException(OrderCodeEnum.ELE_PRODUCT_CODE_NOT_ENOUGH);
         }

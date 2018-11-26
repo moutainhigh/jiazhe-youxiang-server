@@ -115,10 +115,11 @@ public class SysUserBiz {
     }
 
     public void updateLastLoginInfo(Integer userId , String ipAdrress) {
-        sysUserService.updateLaseLoginInfo(userId,ipAdrress);
+        sysUserService.updateLastLoginInfo(userId,ipAdrress);
     }
 
     public void changePassword(Integer id, String newPassword) {
         sysUserService.changePassword(id,newPassword);
     }
+
 }

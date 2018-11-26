@@ -97,10 +97,10 @@ public class APIRCController extends BaseController{
     @RequestMapping(value = "/directcharge", method = RequestMethod.POST)
     public Object directCharge(@ModelAttribute DirectChargeReq req) {
         //参数检查
+        CommonValidator.validateId(req.getId());
         CommonValidator.validateId(req.getBatchId());
-        CommonValidator.validateMobile(req.getMobile(),new CustomerException(CustomerCodeEnum.CUSTOMER_MOBILE_ERROR));
         CommonValidator.validateNull(req.getFaceValue());
-        rcBiz.directCharge(req.getMobile(),req.getBatchId(),req.getFaceValue());
+        rcBiz.directCharge(req.getId(),req.getBatchId(),req.getFaceValue());
         return ResponseFactory.buildSuccess();
     }
 

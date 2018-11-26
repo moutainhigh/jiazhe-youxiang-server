@@ -42,6 +42,7 @@ public class ShiroConfig {
         bean.setFilters(filters);
         /*bean.setLoginUrl("../system/index");*/
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+        filterChainDefinitionMap.put("/api/preview/img/**", "anon"); //预览图片匿名访问
         filterChainDefinitionMap.put("/system/index", "anon"); //登录页url匿名访问
         filterChainDefinitionMap.put("/system/login", "anon");//登陆系统匿名访问
         filterChainDefinitionMap.put("/system/logout", "anon");//退出系统匿名访问
@@ -52,7 +53,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/templates/**", "anon");
        /* filterChainDefinitionMap.put("/", "user");*/
-        filterChainDefinitionMap.put("/**", "anon");//表示所有url必须通过认证才能访问
+        filterChainDefinitionMap.put("/**", "authc");//表示所有url必须通过认证才能访问
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }
@@ -121,15 +122,15 @@ public class ShiroConfig {
         return shiroLoginFilter;
     }
 
-    @Bean(name = "sessionDAO")
-    public MemorySessionDAO memorySessionDAO() {
-        return new MemorySessionDAO();
-    }
+//    @Bean(name = "sessionDAO")
+//    public MemorySessionDAO memorySessionDAO() {
+//        return new MemorySessionDAO();
+//    }
 
-    /*@Bean(name = "customerSessionDAO")
-    public CustomerSessionDao customerSessionDao() {
-        return new CustomerSessionDao();
-    }*/
+    @Bean(name = "customSessionDAO")
+    public CustomSessionDAO customSessionDao() {
+        return new CustomSessionDAO();
+    }
 
     @Bean
     public ModularRealmAuthenticator modularRealmAuthenticator() {
@@ -191,9 +192,8 @@ public class ShiroConfig {
         defaultWebSessionManager.setDeleteInvalidSessions(true);
         defaultWebSessionManager.setSessionValidationSchedulerEnabled(true);
         defaultWebSessionManager.setSessionValidationInterval(1800000);
-        /*defaultWebSessionManager.setSessionDAO(customerSessionDao());*/
-        defaultWebSessionManager.setSessionDAO(memorySessionDAO());
-       /* defaultWebSessionManager.setSessionIdCookie(rememberMeCookie());*/
+        defaultWebSessionManager.setSessionDAO(customSessionDao());
+//        defaultWebSessionManager.setSessionDAO(memorySessionDAO());
         return defaultWebSessionManager;
     }
 

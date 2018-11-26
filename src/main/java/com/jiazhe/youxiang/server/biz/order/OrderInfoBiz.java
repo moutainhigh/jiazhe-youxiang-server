@@ -113,11 +113,11 @@ public class OrderInfoBiz {
         Integer needPayCount = dto.getCount() - dto.getPayVoucher();
         BigDecimal needPay = dto.getProductPrice().multiply(new BigDecimal(needPayCount));
         BigDecimal needPayMoney = needPay.subtract(dto.getPayRechargeCard().add(dto.getPayCash()));
-        return needPayMoney.compareTo(new BigDecimal(0)) == 1 ? needPay : new BigDecimal(0);
+        return needPayMoney;
     }
 
-    public void placeOrder(PlaceOrderDTO placeOrderDTO) throws ParseException {
-        orderInfoService.placeOrder(placeOrderDTO);
+    public BigDecimal placeOrder(PlaceOrderDTO placeOrderDTO) throws ParseException {
+        return orderInfoService.placeOrder(placeOrderDTO);
     }
 
     public void appendOrder(AppendOrderDTO appendOrderDTO) {

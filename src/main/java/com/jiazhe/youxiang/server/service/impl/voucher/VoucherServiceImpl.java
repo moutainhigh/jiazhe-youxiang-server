@@ -130,7 +130,9 @@ public class VoucherServiceImpl implements VoucherService {
         Map<String, Object> map = new HashMap<String, Object>(2);
         map.put("used",used);
         map.put("ids",ids);
-        voucherPOManualMapper.batchChangeUsed(map);
+        if(!ids.isEmpty()){
+            voucherPOManualMapper.batchChangeUsed(map);
+        }
     }
 
     @Override

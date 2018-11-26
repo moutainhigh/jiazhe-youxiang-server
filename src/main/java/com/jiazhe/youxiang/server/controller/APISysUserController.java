@@ -94,7 +94,7 @@ public class APISysUserController extends BaseController {
         CommonValidator.validateNull(req.getDisplayName(), new UserException(UserCodeEnum.USER_DISPLAY_NAME_IS_NULL));
         CommonValidator.validateNull(req.getMobile(), new UserException(UserCodeEnum.USEER_MOBILE_IS_NULL));
         if(!ValidateUtils.phoneValidate(req.getMobile())){
-            new UserException(UserCodeEnum.USEER_MOBILE_IS_ILLEGAL);
+            throw new UserException(UserCodeEnum.USEER_MOBILE_IS_ILLEGAL);
         }
         if(req.getId() == 0){
             CommonValidator.validateNull(req.getPassword(), new UserException(UserCodeEnum.USEER_PASSWORD_IS_NULL));
@@ -141,6 +141,14 @@ public class APISysUserController extends BaseController {
         }
         sysUserBiz.changePassword(sysUserDTO.getId(), req.getPassword1());
         SecurityUtils.getSubject().logout();
+        return ResponseFactory.buildSuccess();
+    }
+
+    @ApiOperation(value = "【后台】重置员工密码", httpMethod = "POST", notes = "重置员工密码，重置为123456")
+    @RequestMapping(value = "/resetpassword", method = RequestMethod.POST)
+    public Object resetPassword(@ModelAttribute IdReq req) {
+        CommonValidator.validateId(req.getId());
+        sysUserBiz.changePassword(req.getId(),"123456");
         return ResponseFactory.buildSuccess();
     }
 }

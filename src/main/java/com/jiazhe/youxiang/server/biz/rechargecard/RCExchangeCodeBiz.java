@@ -35,12 +35,12 @@ public class RCExchangeCodeBiz {
         rcExchangeCodeService.changeExpiryTime(id,expiryTime);
     }
 
-    public void customerSelfCharge(String mobile, String keyt) {
-        rcExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_CUSTOMER_CODE_EXCHANGE,mobile,keyt);
+    public void customerSelfCharge(Integer id, String keyt) {
+        rcExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_CUSTOMER_CODE_EXCHANGE,id,keyt);
     }
 
-    public void backstageCodeCharge(String mobile, String keyt) {
-        rcExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE,mobile,keyt);
+    public void backstageCodeCharge(Integer id, String keyt) {
+        rcExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE,id,keyt);
     }
 
     public List<RCExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Byte status, Byte used, Paging paging) {

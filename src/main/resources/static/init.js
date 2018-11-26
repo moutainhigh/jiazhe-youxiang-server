@@ -1,12 +1,6 @@
 /**
  * Created by TU on 2018/7/31.
  */
-/*document.write("<script language='javascript' src='/static/assets/js/jquery-1.11.1.min.js'></script>");
-document.write("<script language='javascript' src='/static/assets/bootstrap/js/bootstrap.min.js'></script>");
-document.write("<script language='javascript' src='/static/jquery-confirm-master/jquery-confirm.min.js'></script>");
-document.write("<script language='javascript' src='/static/easyui-1.5/jquery.easyui.min.js'></script>");*/
-
-/*ace admin js*/
 
 document.write("<script language='javascript' src='/static/ace-master/js/ace-extra.min.js'></script>");
 document.write("<script language='javascript' src='/static/ace-master/js/html5shiv.min.js'></script>");
