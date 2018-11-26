@@ -97,8 +97,8 @@ public class RCServiceImpl implements RCService {
     }
 
     @Override
-    public void directCharge(String mobile, Integer batchId, BigDecimal faceValue) {
-        CustomerDTO customerDTO = customerService.getByMobile(mobile);
+    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue) {
+        CustomerDTO customerDTO = customerService.getById(id);
         if(null == customerDTO){
             throw new RechargeCardException(RechargeCardCodeEnum.CUSTOMER_NOT_EXIST);
         }
@@ -208,8 +208,10 @@ public class RCServiceImpl implements RCService {
 
     @Override
     public void batchUpdate(List<RCDTO> rcDTOList) {
-        List<RechargeCardPO> rcPOList = rcDTOList.stream().map(RCAdapter::DTO2PO).collect(Collectors.toList());
-        rcPOManualMapper.batchUpdate(rcPOList);
+        if(!rcDTOList.isEmpty()){
+            List<RechargeCardPO> rcPOList = rcDTOList.stream().map(RCAdapter::DTO2PO).collect(Collectors.toList());
+            rcPOManualMapper.batchUpdate(rcPOList);
+        }
     }
 
     @Override

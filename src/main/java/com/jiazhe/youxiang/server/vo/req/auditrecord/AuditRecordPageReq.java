@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class AuditRecordPageReq extends PageSizeNumReq {
 
-    @ApiModelProperty("审核状态")
+    @ApiModelProperty("消费记录状态")
     private Byte status;
 
     public Byte getStatus() {

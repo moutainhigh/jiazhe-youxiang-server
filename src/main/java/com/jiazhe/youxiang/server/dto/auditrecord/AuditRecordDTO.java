@@ -40,6 +40,10 @@ public class AuditRecordDTO {
 
     private Integer version;
 
+    private Date addTime;
+
+    private Date modTime;
+
     public Integer getId() {
         return id;
     }
@@ -158,5 +162,21 @@ public class AuditRecordDTO {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public Date getModTime() {
+        return modTime;
+    }
+
+    public void setModTime(Date modTime) {
+        this.modTime = modTime;
+    }
+
+    public Date getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
     }
 }

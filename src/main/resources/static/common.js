@@ -1,6 +1,4 @@
-/*将form通过$('#operatorSearchForm').serializeArray()方式获得的formData【形如：
-[{"name":"user","value":"hpc"},{"name":"pwd","value":"123"},{"name":"sex","value":"M"},{"name":"age","value":"100"}]】格式
-转为{"user":"hpc","pwd":"123","sex":"M","age":"100"}格式*/
+
 function transformToJson(formData) {
     var obj = {}
     for (var i in formData) {
@@ -53,6 +51,30 @@ function dateFormat(time) {
     return year + '-' + month + '-' + date;
 }
 
+/**
+ * 前台输入判断是否为非负整数
+ * @param input
+ * @returns {boolean}
+ */
+function isInteger(input) {
+    var tt = /^\d+$/g;
+    return tt.test(input);
+}
+
+/**
+ * 非负浮点数
+ * @param input
+ * @returns {boolean}
+ */
+function isNumber(input){
+    var regPos = /^\d+(\.\d+)?$/;
+    if(regPos.test(input)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 //replace icons with FontAwesome icons like above
 function updatePagerIcons(table) {
     var replacement =
@@ -74,7 +96,7 @@ function confirm(message, callback) {
         buttons: {
             confirm: {
                 label: '确认',
-                className: 'btn-myStyle'
+                className: 'btn-primary'
             },
             cancel: {
                 label: '取消',
@@ -91,7 +113,30 @@ function error(data) {
     bootboxalert("服务器异常，请联系管理员");
 }
 
-bootbox.setDefaults("locale","zh_CN");
+bootbox.setDefaults("locale", "zh_CN");
+
+/**
+ * 日期选择器初始化
+ */
+function initDatePicker(){
+    $('.date-picker').datepicker({
+        language: 'zh-CN',
+        autoclose: true,
+        todayHighlight: true
+    }).next().on(ace.click_event, function () {
+        $(this).prev().focus();
+    });
+}
+
+/**
+ * 生成表格中带颜色的文字
+ * @param text
+ * @param color
+ * @returns {string}
+ */
+function generateSpan(text,color){
+    return "<span style='color:#"+color+"'>"+text+"</span>";
+}
 
 /**
  * 获得图片路径
@@ -140,40 +185,43 @@ function success(data) {
  * @param options 参数
  */
 function initTable(grid_selector, pager_selector, options) {
-    var url = options.url ? options.url : "";
-    var caption = options.caption ? options.caption : "列表";
-    var colNames = options.colNames ? options.colNames : ['', '操作'];
-    var colModel = options.colModel ? options.colModel : [
+    var url = options.hasOwnProperty("url") ? options.url : "";
+    var caption = options.hasOwnProperty("caption") ? options.caption : "列表";
+    var colNames = options.hasOwnProperty("colNames") ? options.colNames : ['', '操作'];
+    var colModel = options.hasOwnProperty("colModel") ? options.colModel : [
         {name: 'id', index: 'id', sortable: false, hidden: true},
         {name: '_action', index: '_action', width: 100, sortable: false}
     ]
 
 
-    var postData = options.postData ? options.postData : "";
-    var rownumbers = options.rownumbers ? options.rownumbers : true;
-    var datatype = options.datatype ? options.datatype : "json";
-    var mtype = options.mtype ? options.mtype : "GET";
-    var hidegrid = options.hidegrid ? options.hidegrid : false;//收缩列表按钮
-    var prmNames = options.prmNames ? options.prmNames : {
+    var postData = options.hasOwnProperty("postData") ? options.postData : "";
+    var rownumbers = options.hasOwnProperty("rownumbers") ? options.rownumbers : true;
+    var datatype = options.hasOwnProperty("datatype") ? options.datatype : "json";
+    var mtype = options.hasOwnProperty("mtype") ? options.mtype : "GET";
+    var hidegrid = options.hasOwnProperty("hidegrid") ? options.hidegrid : false;//收缩列表按钮
+    var prmNames = options.hasOwnProperty("prmNames") ? options.prmNames : {
         page: "pageNum",
         rows: "pageSize"
     };
-    var width = options.width ? options.width : "100%";
-    var autowidth = options.autowidth ? options.autowidth : true;
-    var height = options.height ? options.height : 350;
-    var rowNum = options.rowNum ? options.rowNum : 10;
-    var rowList = options.rowList ? options.rowList : [10, 20, 30];
-    var altRows = options.altRows ? options.altRows : true;
-    var viewrecords = options.viewrecords ? options.viewrecords : true;
-    var emptyrecords = options.emptyrecords ? options.emptyrecords : "0条数据";
-    var loadComplete = options.loadComplete ? options.loadComplete : function (data) {
+    var width = options.hasOwnProperty("width") ? options.width : "100%";
+    var autowidth = options.hasOwnProperty("autowidth") ? options.autowidth : true;
+    var shrinkToFit = options.hasOwnProperty("shrinkToFit") ? options.shrinkToFit : true;
+    var autoScroll = options.hasOwnProperty("autoScroll") ? options.autoScroll : false;
+    var height = options.hasOwnProperty("height") ? options.height : 350;
+    var rowNum = options.hasOwnProperty("rowNum") ? options.rowNum : 10;
+    var rowList = options.hasOwnProperty("rowList") ? options.rowList : [10, 20, 30];
+    var altRows = options.hasOwnProperty("altRows") ? options.altRows : true;
+    var viewrecords = options.hasOwnProperty("viewrecords") ? options.viewrecords : true;
+    var multiselect = options.hasOwnProperty("multiselect") ? options.multiselect : false;
+    var emptyrecords = options.hasOwnProperty("emptyrecords") ? options.emptyrecords : "0条数据";
+    var loadComplete = options.hasOwnProperty("loadComplete") ? options.loadComplete : function (data) {
         var table = this;
         setTimeout(function () {
             $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
             updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
         }, 0);
     };
-    var jsonReader = options.jsonReader ? options.jsonReader : { // jsonReader来跟服务器端返回的数据做对应
+    var jsonReader = options.hasOwnProperty("jsonReader") ? options.jsonReader : { // jsonReader来跟服务器端返回的数据做对应
         root: "data", // 包含实际数据的数组
         page: "paging.currPage", // 当前页
         total: "paging.totalPage",// 总页数
@@ -191,6 +239,8 @@ function initTable(grid_selector, pager_selector, options) {
         prmNames: prmNames,// 重新定义分页信息
         width: width,
         autowidth: autowidth,
+        shrinkToFit: shrinkToFit,
+        autoScroll: autoScroll,
         height: height,
         colNames: colNames,
         colModel: colModel,
@@ -199,6 +249,7 @@ function initTable(grid_selector, pager_selector, options) {
         pager: pager_selector,
         altRows: altRows,
         viewrecords: viewrecords,
+        multiselect:multiselect,
         emptyrecords: emptyrecords,
         loadComplete: loadComplete,
         jsonReader: jsonReader,

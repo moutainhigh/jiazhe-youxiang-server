@@ -153,7 +153,7 @@ public class SysUserServiceImpl implements SysUserService{
     }
 
     @Override
-    public void updateLaseLoginInfo(Integer userId, String ipAdrress) {
+    public void updateLastLoginInfo(Integer userId, String ipAdrress) {
         SysUserPO sysUserPO = sysUserPOMapper.selectByPrimaryKey(userId);
         if(null == sysUserPO){
             throw new UserException(UserCodeEnum.USER_NOT_EXISTED);

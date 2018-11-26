@@ -157,7 +157,7 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
     }
 
     @Override
-    public void codeCharge(Integer exchangeType, String mobile, String keyt) {
+    public void codeCharge(Integer exchangeType, Integer id, String keyt) {
         VoucherExchangeCodePO voucherExchangeCodePO = findByKeyt(keyt);
         if(null == voucherExchangeCodePO){
             throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
@@ -171,7 +171,7 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
         if(voucherExchangeCodePO.getExpiryTime().getTime()< System.currentTimeMillis()){
             throw  new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_HAS_EXPIRIED);
         }
-        CustomerDTO customerDTO = customerService.getByMobile(mobile);
+        CustomerDTO customerDTO = customerService.getById(id);
         if(null == customerDTO){
             throw new VoucherException(VoucherCodeEnum.CUSTOMER_NOT_EXIST);
         }

@@ -17,8 +17,11 @@ public class SysUserController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SysUserController.class);
 
-    //跳转到用户管理页面
-    @RequiresPermissions("sysuser-index")
+    /**
+     * 跳转到用户管理页面
+     * @return 页面
+     */
+    /*@RequiresPermissions("sysuser-index")*/
     @RequestMapping(value = "/index")
     public String main() {
         return "system/sysuser/index";

@@ -13,8 +13,8 @@ public class CodeChargeReq extends BaseVO {
     @ApiModelProperty("密钥")
     String keyt ;
 
-    @ApiModelProperty("客户手机号")
-    String mobile;
+    @ApiModelProperty("客户id")
+    Integer id;
 
     public String getKeyt() {
         return keyt;
@@ -24,11 +24,11 @@ public class CodeChargeReq extends BaseVO {
         this.keyt = keyt;
     }
 
-    public String getMobile() {
-        return mobile;
+    public Integer getId() {
+        return id;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

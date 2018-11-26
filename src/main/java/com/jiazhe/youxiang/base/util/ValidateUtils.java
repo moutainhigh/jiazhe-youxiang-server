@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
 
 public class ValidateUtils {
 
+    private static Pattern phonePattern = Pattern.compile("^[1][3,4,5,7,8,9][0-9]{9}$");
+
     public static boolean telValidate(String tel) {//电话号码验证
         Pattern p1 = null, p2 = null;
         Matcher m = null;
@@ -26,14 +28,14 @@ public class ValidateUtils {
         return b;
     }
 
-    public static boolean phoneValidate(String phone) {//11位手机号验证
-        Pattern p = null;
-        Matcher m = null;
-        boolean b = false;
-        p = Pattern.compile("^[1][3,4,5,7,8,9][0-9]{9}$"); // 验证手机号
-        m = p.matcher(phone);
-        b = m.matches();
-        return b;
+    /**
+     * 手机号验证，11位  ^[1][3,4,5,7,8,9][0-9]{9}$
+     * @param phone
+     * @return
+     */
+    public static boolean phoneValidate(String phone) {
+        Matcher m = phonePattern.matcher(phone);
+        return m.matches();
     }
 
     public static boolean isNumeric(String str) {

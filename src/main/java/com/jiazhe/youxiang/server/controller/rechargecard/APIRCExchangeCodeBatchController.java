@@ -64,11 +64,12 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         return ResponseFactory.buildPaginationResponse(rcExchangeCodeBatchRespList, paging);
     }
 
-    @ApiOperation(value = "【后台，暂时无用】充值卡兑换码批次信息列表（不分页）", httpMethod = "GET", response = RCExchangeCodeBatchResp.class, responseContainer = "List", notes = "查询充值卡兑换码批次信息（根据项目id和批次名称查询）")
-    @RequestMapping(value = "/listall", method = RequestMethod.GET)
-    public Object listAll(@ModelAttribute RCExchangeCodeBatchPageReq req) {
-        List<RCExchangeCodeBatchDTO> rcExchangeCodeBatchDTOList = rcExchangeCodeBatchBiz.getList(req.getProjectId(), req.getName());
-        List<RCExchangeCodeBatchResp> rcExchangeCodeBatchRespList = rcExchangeCodeBatchDTOList.stream().map(RCExchangeCodeBatchAdapter::DTO2Resp).collect(Collectors.toList());
+    @ApiOperation(value = "【后台】根据项目id查询充值卡兑换码虚拟批次", httpMethod = "GET", response = RCExchangeCodeBatchResp.class, responseContainer = "List", notes = "根据项目id查询充值卡兑换码虚拟批次")
+    @RequestMapping(value = "/findvirtualbyprojectid", method = RequestMethod.GET)
+    public Object findVirtualByProjectId(@ModelAttribute IdReq req) {
+        List<RCExchangeCodeBatchDTO> rcExchangeCodeBatchDTOList = rcExchangeCodeBatchBiz.getByProjectId(req.getId());
+        List<RCExchangeCodeBatchDTO> virtualList = rcExchangeCodeBatchDTOList.stream().filter(bean-> bean.getStatus().equals(CommonConstant.BATCH_IS_VIRTUAL)).collect(Collectors.toList());
+        List<RCExchangeCodeBatchResp> rcExchangeCodeBatchRespList = virtualList.stream().map(RCExchangeCodeBatchAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildResponse(rcExchangeCodeBatchRespList);
     }
 

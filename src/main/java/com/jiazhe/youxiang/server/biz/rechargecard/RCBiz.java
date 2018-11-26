@@ -46,8 +46,8 @@ public class RCBiz {
     }
 
 
-    public void directCharge(String mobile, Integer batchId, BigDecimal faceValue) {
-        rcService.directCharge(mobile, batchId, faceValue);
+    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue) {
+        rcService.directCharge(id, batchId, faceValue);
     }
 
     public List<RCDTO> getList(String mobile, Integer exchangeType, Byte status, Byte expiry, Paging paging) {

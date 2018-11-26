@@ -1,12 +1,15 @@
 package com.jiazhe.youxiang.server.biz;
 
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
+import com.jiazhe.youxiang.server.service.AuditRecordService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordAddReq;
 import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordEditReq;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -16,35 +19,39 @@ import java.util.List;
  */
 @Service("auditRecordBiz")
 public class AuditRecordBiz {
-    public int auditRecordPass(Integer auditRecordId, Integer rechargeCardCodeBatchId, String reason) {
-        return 0;
+
+    @Autowired
+    private AuditRecordService auditRecordService;
+
+    public void auditRecordPass(Integer auditRecordId,Integer version, Integer batchId){
+        auditRecordService.auditRecordPass(auditRecordId,version,batchId);
     }
 
-    public int auditRecordUnpass(Integer auditRecordId, String reason) {
-        return 0;
+    public void auditRecordUnpass(Integer auditRecordId, Integer version ,String reason) {
+        auditRecordService.auditRecordUnpass(auditRecordId,version,reason);
     }
 
     public Integer getWaitCheckCount() {
-        return 0;
+        return auditRecordService.getCountByStatus(Byte.valueOf("0"));
     }
 
     public AuditRecordDTO getById(Integer id) {
-        return null;
+        return auditRecordService.getById(id);
     }
 
     public List<AuditRecordDTO> getList(Byte status,Paging paging) {
-        return null;
+        return auditRecordService.getList(null,status,paging);
     }
 
     public List<AuditRecordDTO> getSubmitterList(Integer submitterId, Paging paging) {
-        return null;
+        return auditRecordService.getList(submitterId,null,paging);
     }
 
-    public int addSave(AuditRecordAddReq req) {
-        return 0;
+    public void addSave(String customerName, String customerMobile, BigDecimal exchangeMoney, String imgUrls) {
+        auditRecordService.addSave(customerName,customerMobile,exchangeMoney,imgUrls);
     }
 
-    public int editSave(AuditRecordEditReq req) {
-        return 0;
+    public void editSave(Integer id, Integer version, String customerName, String customerMobile, BigDecimal exchangeMoney, String imgUrls) {
+        auditRecordService.editSave(id,version,customerName,customerMobile,exchangeMoney,imgUrls);
     }
 }

@@ -3,21 +3,15 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta charset="utf-8"/>
-    <title>CRM首页</title>
+    <title></title>
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <!-- CSS -->
     <link rel="stylesheet" th:href="@{/static/init.css}"/>
-
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
 
-
     <style>
-        .form-group {
-            margin-bottom: 0px;
-        }
-
         .ui-jqgrid .ui-jqgrid-bdiv {
             overflow-x: auto;
         }
@@ -30,15 +24,7 @@
 </head>
 
 <body class="no-skin">
-
-<div class="main-container ace-save-state" id="main-container">
-    <script type="text/javascript">
-        try {
-            ace.settings.loadState('main-container')
-        } catch (e) {
-        }
-    </script>
-
+    <div class="main-container ace-save-state" id="main-container">
     <div class="main-content">
         <div class="main-content-inner">
             <div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -564,25 +550,19 @@
             </div><!-- /.page-content -->
         </div>
     </div><!-- /.main-content -->
-
-    <!--<div class="footer">
-        <div class="footer-inner">
-            <div class="footer-content" style="padding: 0px;">
-						<span class="bigger-120">
-							<span class="blue bolder"></span>
-							悠享后台管理系统 &copy; 2018
-						</span>
-                &nbsp; &nbsp;
-            </div>
-        </div>
-    </div>-->
 </div><!-- /.main-container -->
-</div>
 </body>
 <script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
     var permission = getCookie("permission");
     var orderStatus = ['待付款', '待派单', '待服务', '服务完成', '取消待审核', '取消未通过', '已取消'];
     $(function () {
+        $(document).on("hidden.bs.modal", ".bootbox", function () {
+            if($(".modal-backdrop").length > 0){
+                $("body").addClass("modal-open");
+            }
+        })
         //重新修改表格宽度
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
@@ -592,93 +572,68 @@
             value: 1, min: 1, max: 100, step: 1, on_sides: true, icon_up: 'ace-icon fa fa-plus',
             icon_down: 'ace-icon fa fa-minus', btn_up_class: 'btn-success', btn_down_class: 'btn-danger'
         })
-            .closest('.ace-spinner')
-            .on('changed.fu.spinbox', function () {
-//                $("#voucherArea input[type=checkbox]").each(function(){
-//                    $(this).prop("checked",false);
-//                });
-//                $("#rechargeCardArea input[type=checkbox]").each(function(){
-//                    $(this).prop("checked",false);
-//                    $("#spendMoney_"+$(this).val()).val(0);
-//                });
-            });
+        .closest('.ace-spinner')
+        .on('changed.fu.spinbox', function () {
 
+        });
+
+        initDatePicker();
 
         $('#re_realServiceTime').datetimepicker({
             format: "YYYY-MM-DD HH:mm"
         }).next().on(ace.click_event, function () {
             $(this).prev().focus();
         });
-    });
 
-    var grid_selector = "#grid-table";
-    var pager_selector = "#grid-pager";
-    jQuery(grid_selector).jqGrid({
-        subGrid: false, // 此处设置为true时可以打开子项,子项用不到已删除
-        url: "../api/orderinfo/listpage",// 获取数据的地址
-        postData: transformToJson($('#orderInfoSearchForm').serializeArray()),
-        rownumbers: true,
-        datatype: "json",
-        mtype: "GET",
-        hidegrid: false,//收缩列表按钮
-        prmNames: {
-            page: "pageNum",
-            rows: "pageSize"
-        },// 重新定义分页信息
-        autowidth: true,
-        shrinkToFit: false,
-        autoScroll: true,
-        height: 350,
-        colNames: ['', '操作', '订单号', '状态', '商品名称', '单价', '数量', '下单账号', '服务对象电话', '服务对象姓名', '代金券抵扣数量', '充值卡支付金额', '在线支付金额'],
-        colModel: [
-            {name: 'id', index: 'id', sortable: false, hidden: true},
-            {name: '_action', index: '_action', width: 260, sortable: false, formatter: customFormatter},
-            {name: 'orderCode', index: 'orderCode', width: 175, sortable: false},
-            {
-                name: 'status',
-                index: 'status',
-                sortable: false,
-                formatter: function (cellvalue, options, rowObject) {
-                    return orderStatus[rowObject.status - 1];
+        var tableOption = {
+            url: "../api/orderinfo/listpage",
+            postData: transformToJson($('#orderInfoSearchForm').serializeArray()),
+            shrinkToFit: false,
+            autoScroll: true,
+            colNames: ['', '操作', '订单号', '状态', '商品名称', '单价', '数量', '下单账号', '服务对象电话', '服务对象姓名', '代金券抵扣数量', '充值卡支付金额', '在线支付金额'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: '_action', index: '_action', width: 260, sortable: false, formatter: customFormatter},
+                {name: 'orderCode', index: 'orderCode', width: 175, sortable: false},
+                {
+                    name: 'status',
+                    index: 'status',
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return orderStatus[rowObject.status - 1];
+                    }
+                },
+                {name: 'productResp.name', index: 'productResp.name', sortable: false},
+                {name: 'productPrice', index: 'productPrice', sortable: false},
+                {name: 'count', index: 'count', sortable: false},
+                {name: 'customerResp.mobile', index: 'customerResp.mobile', sortable: false},
+                {name: 'customerMobile', index: 'customerMobile', sortable: false},
+                {name: 'customerName', index: 'customerName', sortable: false},
+                {name: 'payVoucher', index: 'payVoucher', sortable: false},
+                {name: 'payRechargeCard', index: 'payRechargeCard', sortable: false},
+                {name: 'payCash', index: 'payCash', sortable: false}
+            ],
+            loadComplete: function (data) {
+                var table = this;
+                setTimeout(function () {
+                    $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
+                    updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
+                }, 0);
+                if (data.data.length == 0){//解决没有数据时，不出现横向滚动条的问题
+                    $('head').append('<style> .ui-jqgrid .ui-jqgrid-hdiv{overflow:auto}</style>');
+                }else{
+                    $('head').append('<style> .ui-jqgrid .ui-jqgrid-hdiv{overflow:hidden}</style>');
                 }
             },
-            {name: 'productResp.name', index: 'productResp.name', sortable: false},
-            {name: 'productPrice', index: 'productPrice', sortable: false},
-            {name: 'count', index: 'count', sortable: false},
-            {name: 'customerResp.mobile', index: 'customerResp.mobile', sortable: false},
-            {name: 'customerMobile', index: 'customerMobile', sortable: false},
-            {name: 'customerName', index: 'customerName', sortable: false},
-            {name: 'payVoucher', index: 'payVoucher', sortable: false},
-            {name: 'payRechargeCard', index: 'payRechargeCard', sortable: false},
-            {name: 'payCash', index: 'payCash', sortable: false}
-        ],
-        rowNum: 10,
-        rowList: [10, 20, 30],
-        pager: pager_selector,
-        altRows: true,
-        viewrecords: true,
-        emptyrecords: "0条数据",
-        loadComplete: function (data) {
-            var table = this;
-            setTimeout(function () {
-                $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
-                updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
-            }, 0);
-        },
-        jsonReader: { // jsonReader来跟服务器端返回的数据做对应
-            root: "data", // 包含实际数据的数组
-            page: "paging.currPage", // 当前页
-            total: "paging.totalPage",// 总页数
-            records: "paging.total", // 查询出的记录数
-            repeatitems: false
-        },
-        caption: "订单列表"
+            caption: "订单列表"
+        };
+
+        initTable(grid_selector, pager_selector, tableOption);
     });
-    $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/orderinfo/listpage",// 获取数据的地址
+            url: "../api/orderinfo/listpage",
             postData: transformToJson($('#orderInfoSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
@@ -686,24 +641,24 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str = str + "<a class='btn btn-minier btn-success' href=\"javascript:showOrder('" + rowObject.id + "')\">查看</a>&nbsp;&nbsp;";
+        str += getFunctionButton("btn-success", "showOrder(" + rowObject.id + ")", "查看");
         if (rowObject.status == 2) {
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:userCancelOrder('" + rowObject.id + "')\">取消订单</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:userReservationOrder('" + rowObject.id + "')\">预约</a>&nbsp;&nbsp;";
+            str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
+            str += getFunctionButton("btn-primary", "userReservationOrder(" + rowObject.id + ")", "预约");
         }
         if (rowObject.status == 3) {
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:changeOrderReservation('" + rowObject.id + "')\">修改订单</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:userCompleteOrder('" + rowObject.id + "')\">完成订单</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:showAppendOrder('" + rowObject.id + "')\">追加订单</a>&nbsp;&nbsp;";
+            str += getFunctionButton("btn-danger", "changeOrderReservation(" + rowObject.id + ")", "修改订单");
+            str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + ")", "完成订单");
+            str += getFunctionButton("btn-primary", "showAppendOrder(" + rowObject.id + ")", "追加订单");
         }
         if (rowObject.status == 5) {
-            str = str + "<a class='btn btn-minier btn-primary' href=\"javascript:orderCancelPass('" + rowObject.id + "')\">审核通过</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:orderCancelUnpass('" + rowObject.id + "')\">审核不通过</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:userCompleteOrder('" + rowObject.id + "')\">完成订单</a>&nbsp;&nbsp;";
+            str += getFunctionButton("btn-primary", "orderCancelPass(" + rowObject.id + ")", "审核通过");
+            str += getFunctionButton("btn-danger", "orderCancelUnpass(" + rowObject.id + ")", "审核不通过");
+            str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + ")", "完成订单");
         }
         if (rowObject.status == 6) {
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:userCancelOrder('" + rowObject.id + "')\">取消订单</a>&nbsp;&nbsp;";
-            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:userCompleteOrder('" + rowObject.id + "')\">完成订单</a>&nbsp;&nbsp;";
+            str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
+            str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + ")", "完成订单");
         }
         return str;
     }
@@ -747,9 +702,7 @@
                     $("#appendOrderModal").modal("show");
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
         $.ajax({
             url: "../api/voucher/findbygoodsattrpage",
@@ -783,9 +736,7 @@
                     }
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error:error
         });
         $.ajax({
             url: "../api/rc/findbygoodsattrpage",
@@ -820,9 +771,7 @@
                     }
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
     }
 
@@ -898,9 +847,7 @@
                     jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
     }
 
@@ -935,9 +882,7 @@
                     $("#orderReservationModal").modal("show");
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
     }
 
@@ -990,9 +935,7 @@
                     jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
     }
 
@@ -1012,9 +955,7 @@
                     jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                 }
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
     }
 
@@ -1037,9 +978,7 @@
                             jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                         }
                     },
-                    error: function () {
-                        bootboxalert("服务器异常，请联系管理员");
-                    }
+                    error: error
                 });
             }
         });
@@ -1064,9 +1003,7 @@
                             jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                         }
                     },
-                    error: function () {
-                        bootboxalert("服务器异常，请联系管理员");
-                    }
+                    error: error
                 });
             }
         });
@@ -1091,9 +1028,7 @@
                             jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                         }
                     },
-                    error: function () {
-                        bootboxalert("服务器异常，请联系管理员");
-                    }
+                    error: error
                 });
             }
         });
@@ -1119,9 +1054,7 @@
                             jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                         }
                     },
-                    error: function () {
-                        bootboxalert("服务器异常，请联系管理员");
-                    }
+                    error: error
                 });
             }
         })
