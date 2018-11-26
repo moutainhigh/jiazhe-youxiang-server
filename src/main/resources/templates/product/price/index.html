@@ -10,6 +10,8 @@
 
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
+    <link rel="stylesheet" th:href="@{/static/ztree/css/metroStyle.css}" type="text/css">
+    <script th:src="@{/static/ztree/js/jquery.ztree.all.min.js}"></script>
     <style>
         .form-group {
             margin-bottom: 0px;
@@ -106,18 +108,21 @@
                                             <form class="form-horizontal" role="form">
                                                 <input type="hidden" id="inputProductId" name="productId"
                                                        th:value="${productId}">
+                                                <input type="hidden" name="cityCodes" id="inputCityCodes">
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="selecltCityList">
+                                                           for="treeCity">
                                                         选择城市</label>
 
                                                     <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <select class="form-control" id="selecltCityList" size="10"
-                                                                    multiple="multiple"></select>
+                                                        <div style="border:1px solid rgb(170,170,170);z-index:10;">
+                                                            <ul id="treeCity" class="ztree"
+                                                                style="margin-top:0; width:100%; height:auto;">
+                                                            </ul>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">价格：</label>
                                                     <div class="col-sm-8">
@@ -224,7 +229,7 @@
         }
 
         initTable(grid_selector, pager_selector, tableOption);
-        initCitySelect();
+        initCityTree();
     });
 
     $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
@@ -278,6 +283,7 @@
     }
 
     function batchUpdate() {
+        submitNodes();
         $.ajax({
             url: "/api/product/batchaddorupdateprice",
             dataType: "json",
@@ -285,7 +291,7 @@
             traditional: true,//ajax传递数组时会进行序列化，必须加上traditional：true的标识才可以。
             data: {
                 productId: $("#inputProductId").val(),
-                cityCodes: $("#selecltCityList").val(),
+                cityCodes: $("#inputCityCodes").val(),
                 price: $("#inputPrice").val(),
             },
             type: "POST",
@@ -295,6 +301,17 @@
     }
 
 
+    function submitNodes() {
+        var citynodes = treeCity.getCheckedNodes(true);
+        var strCityCodes = "";
+        for (var i = 0; i < citynodes.length; i++) {
+            strCityCodes += citynodes[i].id + ",";
+        }
+        if (strCityCodes.length > 0) {
+            strCityCodes = strCityCodes.substring(0, strCityCodes.length - 1);
+        }
+        $("#inputCityCodes").val(strCityCodes);
+    }
 
 
     function openNew() {
@@ -343,28 +360,48 @@
         });
     }
 
-    function initCitySelect() {
-        //将已开通城市列表填充到多选框中
+    function initCityTree() {
+        var zCityNodes = [];
+        var setting = {
+            view: {
+                selectedMulti: true
+            },
+            check: {
+                enable: true
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            edit: {
+                enable: false
+            }
+        };
         $.ajax({
-            url: "/api/syscity/getopenlist",    //请求的url地址
+            url: "/api/syscity/getopenlist",
             dataType: "json",
-            async: true,
+            async: false,
             type: "GET",
             success: function (data) {
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
-
                     var result = data.data;
                     for (var i = 0; i < result.length; i++) {
-                        $("#selecltCityList").append("<option value='" + result[i].cityCode + "'>" + result[i].cityName + "</option>");
+                        var zNode = {};
+                        zNode.id = parseInt(result[i].cityCode);
+                        zNode.pId = result[i].parentCode == "" ? 0 : parseInt(result[i].parentCode);
+                        zNode.name = result[i].cityName;
+                        zCityNodes.push(zNode);
                     }
+
                 }
+                console.log(zNode);
             },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
+            error: error
         });
+        treeCity = $.fn.zTree.init($("#treeCity"), setting, zCityNodes);
     }
 
 </script>

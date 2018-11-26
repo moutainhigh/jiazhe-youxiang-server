@@ -8,6 +8,8 @@ package com.jiazhe.youxiang.server.vo.resp.customer;
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.math.BigDecimal;
+
 /**
  * 在这里编写类的功能描述
  *
@@ -20,6 +22,10 @@ public class CustomerResp extends BaseVO {
     private Integer id;
     @ApiModelProperty("手机号码")
     private String mobile;
+    @ApiModelProperty("充值卡余额")
+    private BigDecimal rechargeCardBalance;
+    @ApiModelProperty("代金劵张数")
+    private Integer voucherCount;
     @ApiModelProperty("客户名称")
     private String name;
     @ApiModelProperty("客户备注")
@@ -41,6 +47,22 @@ public class CustomerResp extends BaseVO {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public BigDecimal getRechargeCardBalance() {
+        return rechargeCardBalance;
+    }
+
+    public void setRechargeCardBalance(BigDecimal rechargeCardBalance) {
+        this.rechargeCardBalance = rechargeCardBalance;
+    }
+
+    public Integer getVoucherCount() {
+        return voucherCount;
+    }
+
+    public void setVoucherCount(Integer voucherCount) {
+        this.voucherCount = voucherCount;
     }
 
     public String getName() {

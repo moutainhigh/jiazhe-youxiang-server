@@ -67,11 +67,11 @@ public class APIProductController {
 
     /*************商品分类相关******************/
     /**
-     * 添加商品分类
+     * 【后台】添加商品分类
      *
      * @return
      */
-    @ApiOperation(value = "添加商品分类", httpMethod = "POST", notes = "添加商品分类")
+    @ApiOperation(value = "【后台】添加商品分类", httpMethod = "POST", notes = "【后台】添加商品分类")
     @RequestMapping(value = "addcategory", method = RequestMethod.POST)
     public Object addCategory(@ModelAttribute ProductCategoryAddReq req) {
         CommonValidator.validateNull(req);
@@ -88,7 +88,7 @@ public class APIProductController {
      *
      * @return
      */
-    @ApiOperation(value = "获得商品分类", httpMethod = "GET", response = ProductCategoryResp.class, notes = "获得商品分类")
+    @ApiOperation(value = "【后台】获得商品分类", httpMethod = "GET", response = ProductCategoryResp.class, notes = "【后台】获得商品分类")
     @RequestMapping(value = "getcategorybyid", method = RequestMethod.GET)
     public Object getCategoryById(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);

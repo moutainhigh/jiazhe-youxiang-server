@@ -5,6 +5,8 @@
  */
 package com.jiazhe.youxiang.server.biz;
 
+import com.jiazhe.youxiang.server.biz.rechargecard.RCBiz;
+import com.jiazhe.youxiang.server.biz.voucher.VoucherBiz;
 import com.jiazhe.youxiang.server.dto.customer.AddressAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.AddressDTO;
 import com.jiazhe.youxiang.server.dto.customer.AddressUpdateDTO;
@@ -13,9 +15,11 @@ import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerUpdateDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -29,6 +33,10 @@ public class CustomerBiz {
 
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private RCBiz rcBiz;
+    @Autowired
+    private VoucherBiz voucherBiz;
 
     /**
      * 默认地址代码
@@ -53,8 +61,10 @@ public class CustomerBiz {
     public CustomerDTO getById(Integer id) {
         return customerService.getById(id);
     }
+
     /**
      * 根据客户手机号获得客户信息
+     *
      * @param mobile
      * @return
      */
@@ -63,7 +73,16 @@ public class CustomerBiz {
     }
 
     public List<CustomerDTO> getList(String mobile, String name, Paging paging) {
-        return customerService.getList(mobile, name, paging);
+        List<CustomerDTO> result = customerService.getList(mobile, name, paging);
+
+        if (CollectionUtils.isNotEmpty(result)) {
+            result.stream().forEach(item -> {
+                //TODO niexiao 添加有效余额和张数
+                item.setRechargeCardBalance(BigDecimal.ZERO);
+                item.setVoucherCount(1);
+            });
+        }
+        return result;
     }
 
     public void update(CustomerUpdateDTO customerUpdateDTO) {
@@ -87,7 +106,7 @@ public class CustomerBiz {
 
     }
 
-    public List<AddressDTO> getAddressList(Integer customerId,Paging paging) {
+    public List<AddressDTO> getAddressList(Integer customerId, Paging paging) {
         return customerService.getAddressList(customerId, paging);
     }
 
