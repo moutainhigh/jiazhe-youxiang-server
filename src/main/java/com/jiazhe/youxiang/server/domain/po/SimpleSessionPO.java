@@ -14,8 +14,6 @@ public class SimpleSessionPO implements Serializable {
 
     private String extInfo;
 
-    private Byte isDeleted;
-
     private Date addTime;
 
     private Date modTime;
@@ -60,14 +58,6 @@ public class SimpleSessionPO implements Serializable {
 
     public void setExtInfo(String extInfo) {
         this.extInfo = extInfo == null ? null : extInfo.trim();
-    }
-
-    public Byte getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(Byte isDeleted) {
-        this.isDeleted = isDeleted;
     }
 
     public Date getAddTime() {

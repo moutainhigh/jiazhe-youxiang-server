@@ -52,7 +52,9 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/api/signin/customersignin", "anon");//前台登陆请求
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/templates/**", "anon");
+        filterChainDefinitionMap.put("/api/signin/**", "anon");//发送验证码匿名访问
        /* filterChainDefinitionMap.put("/", "user");*/
+
         filterChainDefinitionMap.put("/**", "authc");//表示所有url必须通过认证才能访问
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
@@ -122,11 +124,6 @@ public class ShiroConfig {
         return shiroLoginFilter;
     }
 
-//    @Bean(name = "sessionDAO")
-//    public MemorySessionDAO memorySessionDAO() {
-//        return new MemorySessionDAO();
-//    }
-
     @Bean(name = "customSessionDAO")
     public CustomSessionDAO customSessionDao() {
         return new CustomSessionDAO();
@@ -156,7 +153,36 @@ public class ShiroConfig {
         return securityManager;
     }
 
-   /* @Bean(name = "rememberMe")
+    @Bean(name = "sessionManager")
+    public DefaultWebSessionManager sessionManager() {
+        DefaultWebSessionManager defaultWebSessionManager = new DefaultWebSessionManager();
+        defaultWebSessionManager.setGlobalSessionTimeout(1800000);
+        defaultWebSessionManager.setDeleteInvalidSessions(true);
+        defaultWebSessionManager.setSessionValidationSchedulerEnabled(true);
+        defaultWebSessionManager.setSessionValidationInterval(1800000);
+        defaultWebSessionManager.setSessionDAO(customSessionDao());
+//        defaultWebSessionManager.setSessionDAO(memorySessionDAO());
+        return defaultWebSessionManager;
+    }
+
+    @Bean(name = "cacheManager")
+    public EhCacheManager ehCacheManager() {
+        EhCacheManager ehCacheManager = new EhCacheManager();
+        return ehCacheManager;
+    }
+
+
+
+//    @Bean
+//    public HashedCredentialsMatcher hashedCredentialsMatcher() {
+//        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
+//        hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
+//        hashedCredentialsMatcher.setHashAlgorithmName("MD5");
+//        hashedCredentialsMatcher.setHashIterations(1024);
+//        return hashedCredentialsMatcher;
+//    }
+
+      /* @Bean(name = "rememberMe")
     public SimpleCookie rememberMeCookie() {
         //System.out.println("ShiroConfiguration.rememberMeCookie()");
         //这个参数是cookie的名称，对应前端的checkbox的name = rememberMe
@@ -176,31 +202,10 @@ public class ShiroConfig {
         return cookieRememberMeManager;
     }*/
 
-    @Bean
-    public HashedCredentialsMatcher hashedCredentialsMatcher() {
-        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
-        hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
-        hashedCredentialsMatcher.setHashAlgorithmName("MD5");
-        hashedCredentialsMatcher.setHashIterations(1024);
-        return hashedCredentialsMatcher;
-    }
 
-    @Bean(name = "sessionManager")
-    public DefaultWebSessionManager sessionManager() {
-        DefaultWebSessionManager defaultWebSessionManager = new DefaultWebSessionManager();
-        defaultWebSessionManager.setGlobalSessionTimeout(1800000);
-        defaultWebSessionManager.setDeleteInvalidSessions(true);
-        defaultWebSessionManager.setSessionValidationSchedulerEnabled(true);
-        defaultWebSessionManager.setSessionValidationInterval(1800000);
-        defaultWebSessionManager.setSessionDAO(customSessionDao());
-//        defaultWebSessionManager.setSessionDAO(memorySessionDAO());
-        return defaultWebSessionManager;
-    }
-
-    @Bean(name = "cacheManager")
-    public EhCacheManager ehCacheManager() {
-        EhCacheManager ehCacheManager = new EhCacheManager();
-        return ehCacheManager;
-    }
+//    @Bean(name = "sessionDAO")
+//    public MemorySessionDAO memorySessionDAO() {
+//        return new MemorySessionDAO();
+//    }
 
 }
