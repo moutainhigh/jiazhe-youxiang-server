@@ -53,7 +53,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/templates/**", "anon");
        /* filterChainDefinitionMap.put("/", "user");*/
-        filterChainDefinitionMap.put("/**", "authc");//表示所有url必须通过认证才能访问
+        filterChainDefinitionMap.put("/**", "anon");//表示所有url必须通过认证才能访问
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }
@@ -122,15 +122,15 @@ public class ShiroConfig {
         return shiroLoginFilter;
     }
 
-//    @Bean(name = "sessionDAO")
-//    public MemorySessionDAO memorySessionDAO() {
-//        return new MemorySessionDAO();
-//    }
-
-    @Bean(name = "customSessionDAO")
-    public CustomSessionDAO customSessionDao() {
-        return new CustomSessionDAO();
+    @Bean(name = "sessionDAO")
+    public MemorySessionDAO memorySessionDAO() {
+        return new MemorySessionDAO();
     }
+
+//    @Bean(name = "customSessionDAO")
+//    public CustomSessionDAO customSessionDao() {
+//        return new CustomSessionDAO();
+//    }
 
     @Bean
     public ModularRealmAuthenticator modularRealmAuthenticator() {
@@ -192,8 +192,8 @@ public class ShiroConfig {
         defaultWebSessionManager.setDeleteInvalidSessions(true);
         defaultWebSessionManager.setSessionValidationSchedulerEnabled(true);
         defaultWebSessionManager.setSessionValidationInterval(1800000);
-        defaultWebSessionManager.setSessionDAO(customSessionDao());
-//        defaultWebSessionManager.setSessionDAO(memorySessionDAO());
+//        defaultWebSessionManager.setSessionDAO(customSessionDao());
+        defaultWebSessionManager.setSessionDAO(memorySessionDAO());
         return defaultWebSessionManager;
     }
 

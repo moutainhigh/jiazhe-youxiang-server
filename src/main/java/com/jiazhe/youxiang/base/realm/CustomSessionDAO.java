@@ -47,8 +47,8 @@ public class CustomSessionDAO extends AbstractSessionDAO {
         SimpleSessionPO simpleSessionPO = new SimpleSessionPO();
         simpleSessionPO.setCookie(sessionId.toString());
         simpleSessionPO.setSession(SerializableUtils.serialize(session));
-        simpleSessionPO.setExtInfo("");
-        simpleSessionPO.setIsDeleted(Byte.valueOf("0"));
+//        simpleSessionPO.setExtInfo("");
+//        simpleSessionPO.setIsDeleted(Byte.valueOf("0"));
         simpleSessionPO.setAddTime(new Date());
         simpleSessionPO.setModTime(new Date());
         simpleSessionPO.setStatus(Byte.valueOf("1"));
@@ -112,7 +112,7 @@ public class CustomSessionDAO extends AbstractSessionDAO {
         SimpleSessionPOExample example = new SimpleSessionPOExample();
         SimpleSessionPOExample.Criteria criteria = example.createCriteria();
         criteria.andCookieEqualTo(sessionId.toString());
-        criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
+//        criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
         criteria.andStatusEqualTo(Byte.valueOf("1"));
         List<SimpleSessionPO> simpleSessionPOList = simpleSessionPOMapper.selectByExample(example);
         return simpleSessionPOList.isEmpty() ? null : simpleSessionPOList.get(0);
