@@ -4,6 +4,7 @@ import com.jiazhe.youxiang.server.domain.po.ElectronicProductExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.eleproductexcode.BatchNameDTO;
 import com.jiazhe.youxiang.server.dto.eleproductexcode.EleProductCodeDTO;
 import com.jiazhe.youxiang.server.vo.resp.eleproductcode.BatchNameResp;
+import com.jiazhe.youxiang.server.vo.resp.eleproductcode.EleProductCodeBatchResp;
 import com.jiazhe.youxiang.server.vo.resp.eleproductcode.EleProductCodeResp;
 
 /**
@@ -33,7 +34,7 @@ public class EleProductCodeAdapter {
         eleProductCodeResp.setCode(eleProductCodeDTO.getCode());
         eleProductCodeResp.setKeyt(eleProductCodeDTO.getKeyt());
         eleProductCodeResp.setStatus(eleProductCodeDTO.getStatus());
-        eleProductCodeResp.setExpiryTime(eleProductCodeDTO.getExpiryTime());
+        eleProductCodeResp.setExpiryTime(eleProductCodeDTO.getExpiryTime().getTime());
         return eleProductCodeResp;
     }
 
@@ -65,5 +66,14 @@ public class EleProductCodeAdapter {
         electronicProductExchangeCodePO.setStatus(eleProductCodeDTO.getStatus());
         electronicProductExchangeCodePO.setExpiryTime(eleProductCodeDTO.getExpiryTime());
         return electronicProductExchangeCodePO;
+    }
+
+    public static EleProductCodeBatchResp DTO2BatchResp(EleProductCodeDTO eleProductCodeDTO) {
+        if (eleProductCodeDTO == null) {
+            return null;
+        }
+        EleProductCodeBatchResp eleProductCodeBatchResp = new EleProductCodeBatchResp();
+        eleProductCodeBatchResp.setBatchName(eleProductCodeDTO.getBatchName());
+        return eleProductCodeBatchResp;
     }
 }

@@ -26,10 +26,10 @@ public class VoucherAdapter {
         voucherResp.setCityCodes(voucherDTO.getCityCodes());
         voucherResp.setProductIds(voucherDTO.getProductIds());
         voucherResp.setCount(voucherDTO.getCount());
-        voucherResp.setExpiryTime(voucherDTO.getExpiryTime());
+        voucherResp.setExpiryTime(voucherDTO.getExpiryTime().getTime());
         voucherResp.setStatus(voucherDTO.getStatus());
         voucherResp.setUsed(voucherDTO.getUsed());
-        voucherResp.setAddTime(voucherDTO.getAddTime());
+        voucherResp.setAddTime(voucherDTO.getAddTime().getTime());
         voucherResp.setCustomerResp(CustomerAdapter.customerDTO2VO(voucherDTO.getCustomerDTO()));
         voucherResp.setVoucherExchangeRecordResp(VoucherExchangeRecordAdapter.DTO2Resp(voucherDTO.getVoucherExchangeRecordDTO()));
         return voucherResp;

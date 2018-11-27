@@ -29,8 +29,8 @@ public class VoucherExchangeCodeAdapter {
         voucherExchangeCodeResp.setCount(dto.getCount());
         voucherExchangeCodeResp.setCode(dto.getCode());
         voucherExchangeCodeResp.setKeyt(dto.getKeyt());
-        voucherExchangeCodeResp.setExpiryTime(dto.getExpiryTime());
-        voucherExchangeCodeResp.setVoucherExpiryTime(dto.getVoucherExpiryTime());
+        voucherExchangeCodeResp.setExpiryTime(dto.getExpiryTime().getTime());
+        voucherExchangeCodeResp.setVoucherExpiryTime(dto.getVoucherExpiryTime().getTime());
         voucherExchangeCodeResp.setValidityPeriod(dto.getValidityPeriod());
         voucherExchangeCodeResp.setExpiryType(dto.getExpiryType());
         voucherExchangeCodeResp.setStatus(dto.getStatus());

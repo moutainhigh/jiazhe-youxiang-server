@@ -60,13 +60,13 @@ public class OrderInfoResp extends BaseVO {
     private String workerMobile;
 
     @ApiModelProperty("下单时间")
-    private Date orderTime;
+    private Long orderTime;
 
     @ApiModelProperty("预约时间")
-    private Date serviceTime;
+    private Long serviceTime;
 
     @ApiModelProperty("服务时间")
-    private Date realServiceTime;
+    private Long realServiceTime;
 
     @ApiModelProperty("充值卡支付金额")
     private BigDecimal payRechargeCard;
@@ -195,27 +195,27 @@ public class OrderInfoResp extends BaseVO {
         this.workerMobile = workerMobile;
     }
 
-    public Date getOrderTime() {
+    public Long getOrderTime() {
         return orderTime;
     }
 
-    public void setOrderTime(Date orderTime) {
+    public void setOrderTime(Long orderTime) {
         this.orderTime = orderTime;
     }
 
-    public Date getServiceTime() {
+    public Long getServiceTime() {
         return serviceTime;
     }
 
-    public void setServiceTime(Date serviceTime) {
+    public void setServiceTime(Long serviceTime) {
         this.serviceTime = serviceTime;
     }
 
-    public Date getRealServiceTime() {
+    public Long getRealServiceTime() {
         return realServiceTime;
     }
 
-    public void setRealServiceTime(Date realServiceTime) {
+    public void setRealServiceTime(Long realServiceTime) {
         this.realServiceTime = realServiceTime;
     }
 

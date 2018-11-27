@@ -14,6 +14,7 @@ import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.eleproductcode.EleProductCodePageReq;
 import com.jiazhe.youxiang.server.vo.req.eleproductcode.ExpiryTimeEditReq;
 import com.jiazhe.youxiang.server.vo.req.eleproductcode.ImportCodeReq;
+import com.jiazhe.youxiang.server.vo.resp.eleproductcode.EleProductCodeBatchResp;
 import com.jiazhe.youxiang.server.vo.resp.eleproductcode.EleProductCodeResp;
 import com.jiazhe.youxiang.server.vo.resp.eleproductcode.UploadExcelResp;
 import io.swagger.annotations.ApiOperation;
@@ -64,13 +65,12 @@ public class APIEleProductCodeController extends BaseController {
         return ResponseFactory.buildPaginationResponse(eleProductExCodeRespList,paging);
     }
 
-    @ApiOperation(value = "【后台】获取所有批次", httpMethod = "GET",response = EleProductCodeResp.class ,responseContainer = "List" ,notes = "获取所有批次，无条件")
+    @ApiOperation(value = "【后台】获取所有批次", httpMethod = "GET",response = EleProductCodeBatchResp.class ,responseContainer = "List" ,notes = "获取所有批次，无条件")
     @RequestMapping(value = "/getallbatch", method = RequestMethod.GET)
     public Object getAllBatch() {
-        //参数检查
         List<EleProductCodeDTO> eleProductExCodeDTOList = eleProductCodeBiz.getAllBatch();
-        List<EleProductCodeResp> eleProductExCodeRespList = eleProductExCodeDTOList.stream().map(EleProductCodeAdapter::DTO2Resp).collect(Collectors.toList());
-        return ResponseFactory.buildResponse(eleProductExCodeRespList);
+        List<EleProductCodeBatchResp> eleProductExCodeBatchRespList = eleProductExCodeDTOList.stream().map(EleProductCodeAdapter::DTO2BatchResp).collect(Collectors.toList());
+        return ResponseFactory.buildResponse(eleProductExCodeBatchRespList);
     }
 
     @ApiOperation(value = "【后台】上传电子码excel并校验", httpMethod = "POST",response = UploadExcelResp.class ,notes = "上传电子码excel并校验")

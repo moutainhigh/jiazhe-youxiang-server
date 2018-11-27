@@ -32,9 +32,9 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
 
     private Integer count;
 
-    private Date expiryTime;
+    private Long expiryTime;
 
-    private Date voucherExpiryTime;
+    private Long voucherExpiryTime;
 
     private Integer validityPeriod;
 
@@ -112,28 +112,12 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
         this.amount = amount;
     }
 
-    public Date getExpiryTime() {
-        return expiryTime;
-    }
-
-    public void setExpiryTime(Date expiryTime) {
-        this.expiryTime = expiryTime;
-    }
-
     public Integer getCount() {
         return count;
     }
 
     public void setCount(Integer count) {
         this.count = count;
-    }
-
-    public Date getVoucherExpiryTime() {
-        return voucherExpiryTime;
-    }
-
-    public void setVoucherExpiryTime(Date voucherExpiryTime) {
-        this.voucherExpiryTime = voucherExpiryTime;
     }
 
     public Integer getValidityPeriod() {
@@ -150,5 +134,21 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
 
     public void setExpiryType(Byte expiryType) {
         this.expiryType = expiryType;
+    }
+
+    public Long getExpiryTime() {
+        return expiryTime;
+    }
+
+    public void setExpiryTime(Long expiryTime) {
+        this.expiryTime = expiryTime;
+    }
+
+    public Long getVoucherExpiryTime() {
+        return voucherExpiryTime;
+    }
+
+    public void setVoucherExpiryTime(Long voucherExpiryTime) {
+        this.voucherExpiryTime = voucherExpiryTime;
     }
 }

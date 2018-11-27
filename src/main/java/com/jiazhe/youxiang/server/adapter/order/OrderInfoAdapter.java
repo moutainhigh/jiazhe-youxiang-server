@@ -35,9 +35,9 @@ public class OrderInfoAdapter {
         orderInfoResp.setCustomerRemark(dto.getCustomerRemark());
         orderInfoResp.setWorkerName(dto.getWorkerName());
         orderInfoResp.setWorkerMobile(dto.getWorkerMobile());
-        orderInfoResp.setOrderTime(dto.getOrderTime());
-        orderInfoResp.setServiceTime(dto.getServiceTime());
-        orderInfoResp.setRealServiceTime(dto.getRealServiceTime());
+        orderInfoResp.setOrderTime(dto.getOrderTime().getTime());
+        orderInfoResp.setServiceTime(dto.getServiceTime().getTime());
+        orderInfoResp.setRealServiceTime(dto.getRealServiceTime().getTime());
         orderInfoResp.setPayRechargeCard(dto.getPayRechargeCard());
         orderInfoResp.setPayVoucher(dto.getPayVoucher());
         orderInfoResp.setPayCash(dto.getPayCash());

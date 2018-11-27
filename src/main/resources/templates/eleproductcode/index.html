@@ -401,7 +401,14 @@
             async: false,
             data: transformToJson($('#eleProductCodeEditForm').serializeArray()),
             type: "POST",
-            success:success,
+            success:function(data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $("#edit-modal-form").modal('hide');
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
             error: error
         });
     }
@@ -413,7 +420,14 @@
             async: false,
             data: transformToJson($('#eleProductCodeSaveForm').serializeArray()),
             type: "POST",
-            success:success,
+            success:function(data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $("#new-modal-form").modal('hide');
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
             error: error
         });
     }

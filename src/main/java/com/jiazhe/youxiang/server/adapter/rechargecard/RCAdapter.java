@@ -47,9 +47,9 @@ public class RCAdapter {
         rCResp.setProductIds(rcdto.getProductIds());
         rCResp.setFaceValue(rcdto.getFaceValue());
         rCResp.setBalance(rcdto.getBalance());
-        rCResp.setExpiryTime(rcdto.getExpiryTime());
+        rCResp.setExpiryTime(rcdto.getExpiryTime().getTime());
         rCResp.setStatus(rcdto.getStatus());
-        rCResp.setAddTime(rcdto.getAddTime());
+        rCResp.setAddTime(rcdto.getAddTime().getTime());
         rCResp.setCustomerResp(CustomerAdapter.customerDTO2VO(rcdto.getCustomerDTO()));
         rCResp.setRcExchangeRecordResp(RCExchangeRecordAdapter.DTO2Resp(rcdto.getRcExchangeRecordDTO()));
         return rCResp;

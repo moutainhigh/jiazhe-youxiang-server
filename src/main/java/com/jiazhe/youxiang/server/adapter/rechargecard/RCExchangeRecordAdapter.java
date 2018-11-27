@@ -19,7 +19,7 @@ public class RCExchangeRecordAdapter {
         rCExchangeRecordListResp.setExchangeCodeId(dto.getExchangeCodeId());
         rCExchangeRecordListResp.setExchangeType(dto.getExchangeType());
         rCExchangeRecordListResp.setOperatorName(dto.getOperatorName());
-        rCExchangeRecordListResp.setAddTime(dto.getAddTime());
+        rCExchangeRecordListResp.setAddTime(dto.getAddTime().getTime());
         return rCExchangeRecordListResp;
     }
 

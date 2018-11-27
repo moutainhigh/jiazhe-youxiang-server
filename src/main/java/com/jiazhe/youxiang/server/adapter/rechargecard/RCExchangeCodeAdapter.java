@@ -75,11 +75,11 @@ public class RCExchangeCodeAdapter {
         rCExchangeCodeResp.setProductIds(dto.getProductIds());
         rCExchangeCodeResp.setCode(dto.getCode());
         rCExchangeCodeResp.setKeyt(dto.getKeyt());
-        rCExchangeCodeResp.setRechargeCardExpiryTime(dto.getRechargeCardExpiryTime());
+        rCExchangeCodeResp.setRechargeCardExpiryTime(dto.getRechargeCardExpiryTime().getTime());
         rCExchangeCodeResp.setValidityPeriod(dto.getValidityPeriod());
         rCExchangeCodeResp.setExpiryType(dto.getExpiryType());
         rCExchangeCodeResp.setFaceValue(dto.getFaceValue());
-        rCExchangeCodeResp.setExpiryTime(dto.getExpiryTime());
+        rCExchangeCodeResp.setExpiryTime(dto.getExpiryTime().getTime());
         rCExchangeCodeResp.setStatus(dto.getStatus());
         rCExchangeCodeResp.setUsed(dto.getUsed());
         return rCExchangeCodeResp;
