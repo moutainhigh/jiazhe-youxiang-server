@@ -9,6 +9,8 @@ import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.biz.ProductBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.enums.ProductCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.ProductException;
 import com.jiazhe.youxiang.server.dao.mapper.ProductPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.product.ProductPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.ProductPO;
@@ -54,7 +56,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void add(ProductAddDTO productAddDTO) {
-        //TODO niexiao 验证商品分类是否存在
+        //验证商品分类是否存在
+        ProductCategoryDTO productCategoryDTO = productCategoryService.getCategoryById(productAddDTO.getProductCategoryId());
+        if (productCategoryDTO == null) {
+            throw new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_IS_NULL);
+        }
         ProductPO productPO = ProductAdapter.productAddDTO2PO(productAddDTO);
         productPOMapper.insertSelective(productPO);
     }

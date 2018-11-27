@@ -126,7 +126,6 @@ public class APIProductController {
     public Object updateCategory(@ModelAttribute ProductCategoryUpdateReq req) {
         CommonValidator.validateId(req);
         CommonValidator.validateNull(req.getName(), new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_NAME_IS_NULL));
-        //TODO niexiao 验证图片地址
         ProductCategoryDTO productCategoryDTO = ProductAdapter.productCategoryUpdateReq2DTO(req);
         //调用BIZ方法
         productBiz.updateCategory(productCategoryDTO);

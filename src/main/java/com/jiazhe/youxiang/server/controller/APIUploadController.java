@@ -7,18 +7,15 @@ package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.UploadUtil;
-import com.jiazhe.youxiang.server.common.enums.CommonCodeEnum;
-import com.jiazhe.youxiang.server.common.exceptions.CommonException;
+import com.jiazhe.youxiang.server.common.enums.UploadCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.UploadException;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
-import com.jiazhe.youxiang.server.vo.req.UploadImageReq;
 import com.jiazhe.youxiang.server.vo.resp.UploadImageResp;
-import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,14 +56,16 @@ public class APIUploadController {
     }
 
     private void validateFileType(MultipartFile file) {
-        String contentType = file.getContentType();
-        //TODO niexiao 判断文件类型
-
+        //判断文件类型
+        if (file != null && file.getContentType() != null && !file.getContentType().toLowerCase().startsWith("image")) {
+            LOGGER.error("文件类型不符");
+            throw new UploadException(UploadCodeEnum.IMG_TYPE_ERROR);
+        }
     }
 
     private void validateEmpty(MultipartFile file) {
         if (file.isEmpty() || StringUtils.isBlank(file.getOriginalFilename())) {
-            throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getCode(), CommonCodeEnum.PARAMS_ILLEGAL_ERROR.getType(), "上传文件不能为空");
+            throw new UploadException(UploadCodeEnum.IMG_IS_NOT_NULL);
         }
     }
 

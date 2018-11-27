@@ -5,19 +5,17 @@
  */
 package com.jiazhe.youxiang.server.common.exceptions;
 
-import com.jiazhe.youxiang.server.common.enums.CommonCodeEnum;
-import com.jiazhe.youxiang.server.common.enums.ProductCodeEnum;
-import com.jiazhe.youxiang.server.vo.ResponseMsg;
+import com.jiazhe.youxiang.server.common.enums.UploadCodeEnum;
 
 /**
- * 在这里编写类的功能描述
+ * 上传异常类
  *
  * @author niexiao
  * @created 2018/10/30
  */
-public class ProductException extends CommonException {
+public class UploadException extends CommonException {
 
-    public ProductException(ProductCodeEnum productCodeEnum) {
-        super(productCodeEnum.getCode(), productCodeEnum.getType(), productCodeEnum.getMessage());
+    public UploadException(UploadCodeEnum uploadCodeEnum) {
+        super(uploadCodeEnum.getCode(), uploadCodeEnum.getType(), uploadCodeEnum.getMessage());
     }
 }
