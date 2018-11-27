@@ -105,72 +105,44 @@
 <script type="text/javascript">
     var permission = getCookie("permission");
 
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
-            alert("ad");
             $("#grid-table").setGridWidth($(window).width() * 0.96);
-            alert($(window).height());
         });
+
+
+        var tableOption = {
+            url: "/api/syslog/getlist",// 获取数据的地址
+            postData: transformToJson($('#userSearchForm').serializeArray()),
+            colNames: ['', '模块名称', '日志级别', '操作', '日志详情','', '操作人姓名', 'IP', '时间'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'moduleName', index: 'moduleName', width: 30, sortable: false},
+                {name: 'level', index: 'level', width: 15, sortable: false},
+                {name: 'operate', index: 'operate',width: 30, sortable: false},
+                {name: 'detail', index: 'detail', sortable: false},
+                {name: 'operatorId', index: 'operatorId', sortable: false, hidden: true},
+                {name: 'operatorName', index: 'operatorName',width: 30, sortable: false},
+                {name: 'ip', index: 'ip',width: 30, sortable: false},
+                {name: 'addTime', index: 'addTime', width: 40,sortable: false, formatter: timeFormatter}
+            ],
+            caption: "操作日志"
+        }
+
+        initTable(grid_selector, pager_selector, tableOption);
+
     });
 
-    var grid_selector = "#grid-table";
-    var pager_selector = "#grid-pager";
-    jQuery(grid_selector).jqGrid({
-        subGrid: false, // 此处设置为true时可以打开子项,子项用不到已删除
-        url: "../api/syslog/getlist",// 获取数据的地址
-        postData: transformToJson($('#userSearchForm').serializeArray()),
-        rownumbers: true,
-        datatype: "json",
-        mtype: "GET",
-        hidegrid: false,//收缩列表按钮
-        prmNames: {
-            page: "pageNum",
-            rows: "pageSize"
-        },// 重新定义分页信息
-        width: "100%",
-        autowidth: true,
-        height: 350,
-        colNames: ['', '模块名称', '日志级别', '操作', '日志详情','', '操作人姓名', 'IP', '时间'],
-        colModel: [
-            {name: 'id', index: 'id', sortable: false, hidden: true},
-            {name: 'moduleName', index: 'moduleName', width: 30, sortable: false},
-            {name: 'level', index: 'level', width: 15, sortable: false},
-            {name: 'operate', index: 'operate',width: 30, sortable: false},
-            {name: 'detail', index: 'detail', sortable: false},
-            {name: 'operatorId', index: 'operatorId', sortable: false, hidden: true},
-            {name: 'operatorName', index: 'operatorName',width: 30, sortable: false},
-            {name: 'ip', index: 'ip',width: 30, sortable: false},
-            {name: 'addTime', index: 'addTime', width: 40,sortable: false, formatter: timeFormatter}
-        ],
-        rowNum: 10,
-        rowList: [10, 20, 30],
-        pager: pager_selector,
-        altRows: true,
-        viewrecords: true,
-        emptyrecords: "0条数据",
-        loadComplete: function (data) {
-            var table = this;
-            setTimeout(function () {
-                $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
-                updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
-            }, 0);
-        },
-        jsonReader: { // jsonReader来跟服务器端返回的数据做对应
-            root: "data", // 包含实际数据的数组
-            page: "paging.currPage", // 当前页
-            total: "paging.totalPage",// 总页数
-            records: "paging.total", // 查询出的记录数
-            repeatitems: false
-        },
-        caption: "操作日志"
-    });
     $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
 
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/syslog/getlist",// 获取数据的地址
+            url: "/api/syslog/getlist",// 获取数据的地址
             postData: transformToJson($('#userSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
