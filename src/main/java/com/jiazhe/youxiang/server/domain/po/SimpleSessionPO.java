@@ -12,6 +12,8 @@ public class SimpleSessionPO implements Serializable {
 
     private Byte status;
 
+    private String extInfo;
+
     private Date addTime;
 
     private Date modTime;
@@ -48,6 +50,14 @@ public class SimpleSessionPO implements Serializable {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getExtInfo() {
+        return extInfo;
+    }
+
+    public void setExtInfo(String extInfo) {
+        this.extInfo = extInfo == null ? null : extInfo.trim();
     }
 
     public Date getAddTime() {

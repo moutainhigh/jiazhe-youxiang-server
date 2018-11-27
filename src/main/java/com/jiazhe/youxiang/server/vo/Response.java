@@ -22,31 +22,7 @@ public class Response<T> extends BaseObject {
     }
 
     public Response(T data) {
-        Class c = data.getClass();
-        System.out.println(c.getName());
-        Field[] fields = c.getDeclaredFields();
-        AccessibleObject.setAccessible(fields, true);
-        for(Field field:fields){
-            field.setAccessible(true);
-            System.out.println(field.getName());
-            System.out.println(field.getType().getName());
-            if(field.getType().getName().equals("java.util.Date")){
-                try {
-                    System.out.println(field.getName());
-                    System.out.println(field.getType().getName());
-                    Object obj = field.get(data);
-                    Long l = Date.parse(obj.toString());
-
-                    System.out.println(obj.toString());
-                    System.out.println(l);
-                    field.setLong(data,l);
-
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    this.data = data;
+        this.data = data;
     }
 
     public T getData() {

@@ -365,6 +365,76 @@ public class SimpleSessionPOExample {
             return (Criteria) this;
         }
 
+        public Criteria andExtInfoIsNull() {
+            addCriterion("ext_info is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtInfoIsNotNull() {
+            addCriterion("ext_info is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtInfoEqualTo(String value) {
+            addCriterion("ext_info =", value, "extInfo");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtInfoNotEqualTo(String value) {
+            addCriterion("ext_info <>", value, "extInfo");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtInfoGreaterThan(String value) {
+            addCriterion("ext_info >", value, "extInfo");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtInfoGreaterThanOrEqualTo(String value) {
+            addCriterion("ext_info >=", value, "extInfo");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtInfoLessThan(String value) {
+            addCriterion("ext_info <", value, "extInfo");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtInfoLessThanOrEqualTo(String value) {
+            addCriterion("ext_info <=", value, "extInfo");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtInfoLike(String value) {
+            addCriterion("ext_info like", value, "extInfo");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtInfoNotLike(String value) {
+            addCriterion("ext_info not like", value, "extInfo");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtInfoIn(List<String> values) {
+            addCriterion("ext_info in", values, "extInfo");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtInfoNotIn(List<String> values) {
+            addCriterion("ext_info not in", values, "extInfo");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtInfoBetween(String value1, String value2) {
+            addCriterion("ext_info between", value1, value2, "extInfo");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtInfoNotBetween(String value1, String value2) {
+            addCriterion("ext_info not between", value1, value2, "extInfo");
+            return (Criteria) this;
+        }
+
         public Criteria andAddTimeIsNull() {
             addCriterion("add_time is null");
             return (Criteria) this;

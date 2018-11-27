@@ -6,6 +6,7 @@
     <result column="cookie" property="cookie" jdbcType="VARCHAR" />
     <result column="session" property="session" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
     <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
     <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, cookie, session, status, add_time, mod_time
+    id, cookie, session, status, ext_info, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.SimpleSessionPOExample" >
     select
@@ -101,12 +102,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.SimpleSessionPO" >
-    insert into simple_session (id, cookie, session, 
-      status, add_time, mod_time
-      )
+    insert into simple_session (id, cookie, session,
+      status, ext_info, add_time, 
+      mod_time)
     values (#{id,jdbcType=INTEGER}, #{cookie,jdbcType=VARCHAR}, #{session,jdbcType=VARCHAR}, 
-      #{status,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}
-      )
+      #{status,jdbcType=TINYINT}, #{extInfo,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.SimpleSessionPO" >
     insert into simple_session
@@ -122,6 +123,9 @@
       </if>
       <if test="status != null" >
         status,
+      </if>
+      <if test="extInfo != null" >
+        ext_info,
       </if>
       <if test="addTime != null" >
         add_time,
@@ -142,6 +146,9 @@
       </if>
       <if test="status != null" >
         #{status,jdbcType=TINYINT},
+      </if>
+      <if test="extInfo != null" >
+        #{extInfo,jdbcType=VARCHAR},
       </if>
       <if test="addTime != null" >
         #{addTime,jdbcType=TIMESTAMP},
@@ -172,6 +179,9 @@
       <if test="record.status != null" >
         status = #{record.status,jdbcType=TINYINT},
       </if>
+      <if test="record.extInfo != null" >
+        ext_info = #{record.extInfo,jdbcType=VARCHAR},
+      </if>
       <if test="record.addTime != null" >
         add_time = #{record.addTime,jdbcType=TIMESTAMP},
       </if>
@@ -189,6 +199,7 @@
       cookie = #{record.cookie,jdbcType=VARCHAR},
       session = #{record.session,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=TINYINT},
+      ext_info = #{record.extInfo,jdbcType=VARCHAR},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
       mod_time = #{record.modTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
@@ -207,6 +218,9 @@
       <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
       </if>
+      <if test="extInfo != null" >
+        ext_info = #{extInfo,jdbcType=VARCHAR},
+      </if>
       <if test="addTime != null" >
         add_time = #{addTime,jdbcType=TIMESTAMP},
       </if>
@@ -221,6 +235,7 @@
     set cookie = #{cookie,jdbcType=VARCHAR},
       session = #{session,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
+      ext_info = #{extInfo,jdbcType=VARCHAR},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       mod_time = #{modTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}

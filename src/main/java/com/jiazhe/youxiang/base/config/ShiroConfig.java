@@ -52,8 +52,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/api/signin/customersignin", "anon");//前台登陆请求
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/templates/**", "anon");
-       /* filterChainDefinitionMap.put("/", "user");*/
-        filterChainDefinitionMap.put("/**", "anon");//表示所有url必须通过认证才能访问
+        filterChainDefinitionMap.put("/api/signin/**", "anon");//发送验证码匿名访问
+        filterChainDefinitionMap.put("/**", "authc");//表示所有url必须通过认证才能访问
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }
@@ -122,15 +122,10 @@ public class ShiroConfig {
         return shiroLoginFilter;
     }
 
-    @Bean(name = "sessionDAO")
-    public MemorySessionDAO memorySessionDAO() {
-        return new MemorySessionDAO();
+    @Bean(name = "customSessionDAO")
+    public CustomSessionDAO customSessionDao() {
+        return new CustomSessionDAO();
     }
-
-//    @Bean(name = "customSessionDAO")
-//    public CustomSessionDAO customSessionDao() {
-//        return new CustomSessionDAO();
-//    }
 
     @Bean
     public ModularRealmAuthenticator modularRealmAuthenticator() {
@@ -150,39 +145,9 @@ public class ShiroConfig {
         realms.add(userRealm());
         realms.add(customerRealm());
         securityManager.setRealms(realms);
-       /* securityManager.setRememberMeManager(rememberMeManager());*/
         securityManager.setCacheManager(ehCacheManager());
         securityManager.setSessionManager(sessionManager());
         return securityManager;
-    }
-
-   /* @Bean(name = "rememberMe")
-    public SimpleCookie rememberMeCookie() {
-        //System.out.println("ShiroConfiguration.rememberMeCookie()");
-        //这个参数是cookie的名称，对应前端的checkbox的name = rememberMe
-        SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
-        //<!-- 记住我cookie生效时间30天 ,单位秒;-->
-        simpleCookie.setMaxAge(259200);
-        return simpleCookie;
-    }*/
-
-    /*@Bean(name = "rememberMeManager")
-    public CookieRememberMeManager rememberMeManager() {
-        CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
-        cookieRememberMeManager.setCookie(rememberMeCookie());
-        //rememberMe cookie加密的密钥 建议每个项目都不一样 默认AES算法 密钥长度(128 256 512 位)
-        byte[] cipherKey = Base64.decode("2AvVhdsgUs0FSA3SDFAdag==");
-        cookieRememberMeManager.setCipherKey(cipherKey);
-        return cookieRememberMeManager;
-    }*/
-
-    @Bean
-    public HashedCredentialsMatcher hashedCredentialsMatcher() {
-        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
-        hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
-        hashedCredentialsMatcher.setHashAlgorithmName("MD5");
-        hashedCredentialsMatcher.setHashIterations(1024);
-        return hashedCredentialsMatcher;
     }
 
     @Bean(name = "sessionManager")
@@ -192,8 +157,7 @@ public class ShiroConfig {
         defaultWebSessionManager.setDeleteInvalidSessions(true);
         defaultWebSessionManager.setSessionValidationSchedulerEnabled(true);
         defaultWebSessionManager.setSessionValidationInterval(1800000);
-//        defaultWebSessionManager.setSessionDAO(customSessionDao());
-        defaultWebSessionManager.setSessionDAO(memorySessionDAO());
+        defaultWebSessionManager.setSessionDAO(customSessionDao());
         return defaultWebSessionManager;
     }
 
