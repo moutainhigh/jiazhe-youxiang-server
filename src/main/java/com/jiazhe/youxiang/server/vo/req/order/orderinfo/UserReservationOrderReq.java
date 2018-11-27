@@ -24,9 +24,8 @@ public class UserReservationOrderReq {
     @ApiModelProperty("服务人联系方式")
     private String workerMobile;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @ApiModelProperty("真实服务时间")
-    private Date realServiceTime;
+    private Long realServiceTime;
 
     @ApiModelProperty("订单成本")
     private BigDecimal cost;
@@ -47,11 +46,11 @@ public class UserReservationOrderReq {
         this.workerMobile = workerMobile;
     }
 
-    public Date getRealServiceTime() {
+    public Long getRealServiceTime() {
         return realServiceTime;
     }
 
-    public void setRealServiceTime(Date realServiceTime) {
+    public void setRealServiceTime(Long realServiceTime) {
         this.realServiceTime = realServiceTime;
     }
 

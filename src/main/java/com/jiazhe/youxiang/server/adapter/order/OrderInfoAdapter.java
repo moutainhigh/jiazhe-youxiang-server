@@ -10,6 +10,8 @@ import com.jiazhe.youxiang.server.dto.order.orderinfo.UserReservationOrderDTO;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.*;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
 
+import java.util.Date;
+
 /**
  * @author TU
  * @description
@@ -138,7 +140,7 @@ public class OrderInfoAdapter {
         userReservationOrderDTO.setOrderId(req.getOrderId());
         userReservationOrderDTO.setWorkerName(req.getWorkerName());
         userReservationOrderDTO.setWorkerMobile(req.getWorkerMobile());
-        userReservationOrderDTO.setRealServiceTime(req.getRealServiceTime());
+        userReservationOrderDTO.setRealServiceTime(new Date(req.getRealServiceTime()));
         userReservationOrderDTO.setCost(req.getCost());
         return userReservationOrderDTO;
     }

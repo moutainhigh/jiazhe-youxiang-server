@@ -124,8 +124,12 @@ function initDatePicker(){
     $('.date-picker').datepicker({
         language: 'zh-CN',
         autoclose: true,
-        todayHighlight: true
-    }).next().on(ace.click_event, function () {
+        todayHighlight: true,
+        clearBtn: true,  //添加清除按钮，可选值：true/false
+    }).on('changeDate',function () {
+        $(this).next().next().val($(this).val()==''?0:new Date($(this).val()).getTime());
+    }).
+    next().on(ace.click_event, function () {
         $(this).prev().focus();
     });
 }

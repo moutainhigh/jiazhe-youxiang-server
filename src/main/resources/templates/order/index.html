@@ -20,11 +20,17 @@
             width: 4px;
             height: 10px;
         }
+
+        /*input[readonly] {
+            color: #FFFFFF;
+            background: #FFFFFF!important;
+            cursor: default;
+        }*/
     </style>
 </head>
 
 <body class="no-skin">
-    <div class="main-container ace-save-state" id="main-container">
+<div class="main-container ace-save-state" id="main-container">
     <div class="main-content">
         <div class="main-content-inner">
             <div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -86,10 +92,11 @@
                                     <div class="pos-rel">
                                         <div class="input-group">
                                             <input class="form-control date-picker" id="searchOrderStartTime"
-                                                   name="orderStartTime" type="text"/>
+                                                   type="text" readonly/>
                                             <span class="input-group-addon">
                                                 <i class="fa fa-calendar bigger-110"></i>
                                             </span>
+                                            <input type="hidden" name="orderStartTime" value=0 />
                                         </div>
                                     </div>
                                 </div>
@@ -99,10 +106,11 @@
                                     <div class="pos-rel">
                                         <div class="input-group">
                                             <input class="form-control date-picker" id="searchOrderEndTime"
-                                                   name="orderEndTime" type="text"/>
+                                                   type="text" readonly/>
                                             <span class="input-group-addon">
                                                 <i class="fa fa-calendar bigger-110"></i>
                                             </span>
+                                            <input type="hidden" name="orderEndTime" value=0 />
                                         </div>
                                     </div>
                                 </div>
@@ -259,11 +267,11 @@
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control datetime-picker"
-                                                                   id="re_realServiceTime"
-                                                                   name="realServiceTime" type="text"/>
+                                                                   id="re_realServiceTime" type="text"/>
                                                             <span class="input-group-addon">
                                                                     <i class="fa fa-calendar bigger-110"></i>
                                                                 </span>
+                                                            <input type="hidden" name="realServiceTime" value=0 />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -559,7 +567,7 @@
     var orderStatus = ['待付款', '待派单', '待服务', '服务完成', '取消待审核', '取消未通过', '已取消'];
     $(function () {
         $(document).on("hidden.bs.modal", ".bootbox", function () {
-            if($(".modal-backdrop").length > 0){
+            if ($(".modal-backdrop").length > 0) {
                 $("body").addClass("modal-open");
             }
         })
@@ -571,8 +579,7 @@
         $("#appendCount").ace_spinner({
             value: 1, min: 1, max: 100, step: 1, on_sides: true, icon_up: 'ace-icon fa fa-plus',
             icon_down: 'ace-icon fa fa-minus', btn_up_class: 'btn-success', btn_down_class: 'btn-danger'
-        })
-        .closest('.ace-spinner')
+        }).closest('.ace-spinner')
         .on('changed.fu.spinbox', function () {
 
         });
@@ -581,6 +588,8 @@
 
         $('#re_realServiceTime').datetimepicker({
             format: "YYYY-MM-DD HH:mm"
+        }).on('changeDate',function () {
+            $(this).next().next().val($(this).val()==''?0:new Date($(this).val()).getTime());
         }).next().on(ace.click_event, function () {
             $(this).prev().focus();
         });
@@ -619,9 +628,9 @@
                     $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
                     updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
                 }, 0);
-                if (data.data.length == 0){//解决没有数据时，不出现横向滚动条的问题
+                if (data.data.length == 0) {//解决没有数据时，不出现横向滚动条的问题
                     $('head').append('<style> .ui-jqgrid .ui-jqgrid-hdiv{overflow:auto}</style>');
-                }else{
+                } else {
                     $('head').append('<style> .ui-jqgrid .ui-jqgrid-hdiv{overflow:hidden}</style>');
                 }
             },
@@ -736,7 +745,7 @@
                     }
                 }
             },
-            error:error
+            error: error
         });
         $.ajax({
             url: "../api/rc/findbygoodsattrpage",
@@ -804,10 +813,10 @@
                 }
             });
         }
-        if(left == 0){
+        if (left == 0) {
             appendOrder()
         }
-        if(left < 0){
+        if (left < 0) {
             bootboxalert("所选的付款内容超额支付追加的订单，不能追加！");
         }
     }
@@ -889,7 +898,7 @@
     function showOrder(id) {
         $("#modal-title").html("查看");
         $("#reservationSaveBtn").css("display", "none");
-        $("#reservationChangeBtn").css("display","none");
+        $("#reservationChangeBtn").css("display", "none");
         fillOrderInfo(id);
         $("#re_realServiceTime").attr("readonly", "readonly");
         $("#re_workerMobile").attr("readonly", "readonly");
@@ -900,7 +909,7 @@
     function userReservationOrder(id) {
         $("#modal-title").html("预约");
         $("#reservationSaveBtn").css("display", "");
-        $("#reservationChangeBtn").css("display","none");
+        $("#reservationChangeBtn").css("display", "none");
         fillOrderInfo(id);
         $("#re_realServiceTime").removeAttr("readonly");
         $("#re_workerMobile").removeAttr("readonly");
@@ -908,15 +917,15 @@
         $("#re_cost").removeAttr("readonly");
     }
 
-    function changeOrderReservation(id){
+    function changeOrderReservation(id) {
         $("#modal-title").html("修改预约信息");
         $("#reservationSaveBtn").css("display", "none");
-        $("#reservationChangeBtn").css("display","");
+        $("#reservationChangeBtn").css("display", "");
         fillOrderInfo(id);
         $("#re_realServiceTime").removeAttr("readonly");
         $("#re_workerMobile").removeAttr("readonly");
         $("#re_workerName").removeAttr("readonly");
-        $("#re_cost").attr("readonly","readonly");
+        $("#re_cost").attr("readonly", "readonly");
     }
 
     function saveReservationInfo() {
