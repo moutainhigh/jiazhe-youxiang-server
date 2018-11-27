@@ -33,6 +33,7 @@ function getCookie(key) {
 }
 
 function timeFormat(time) {
+    // return time.replace('T',' ').substring(0,19);
     var d = new Date(time);
     var year = d.getFullYear();
     var month = (d.getMonth() + 1) > 9 ? (d.getMonth() + 1) : '0' + (d.getMonth());
@@ -44,6 +45,7 @@ function timeFormat(time) {
 }
 
 function dateFormat(time) {
+    // return time.substring(0,10);
     var d = new Date(time);
     var year = d.getFullYear();
     var month = (d.getMonth() + 1) > 9 ? (d.getMonth() + 1) : '0' + (d.getMonth());

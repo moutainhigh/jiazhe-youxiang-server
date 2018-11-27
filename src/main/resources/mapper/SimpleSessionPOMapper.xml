@@ -102,7 +102,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.SimpleSessionPO" >
-    insert into simple_session (id, cookie, session, 
+    insert into simple_session (id, cookie, session,
       status, ext_info, add_time, 
       mod_time)
     values (#{id,jdbcType=INTEGER}, #{cookie,jdbcType=VARCHAR}, #{session,jdbcType=VARCHAR}, 

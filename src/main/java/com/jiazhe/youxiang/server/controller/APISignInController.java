@@ -18,6 +18,7 @@ import com.jiazhe.youxiang.server.vo.req.login.CustomerLoginReq;
 import com.jiazhe.youxiang.server.vo.req.login.SendMsgToCustomerReq;
 import com.jiazhe.youxiang.server.vo.req.login.SendMsgToUserReq;
 import com.jiazhe.youxiang.server.vo.req.login.UserLoginReq;
+import com.jiazhe.youxiang.server.vo.resp.login.CustomerLoginResp;
 import com.jiazhe.youxiang.server.vo.resp.login.SendMsgResp;
 import com.jiazhe.youxiang.server.vo.resp.login.SessionResp;
 import io.swagger.annotations.ApiOperation;
@@ -73,7 +74,6 @@ public class APISignInController extends BaseController {
         String password = req.getPassword();
         String identifyingCode = req.getIdentifyingCode();
         String bizId = req.getBizId();
-        //首先判断用户是否存在且唯一
         CommonValidator.validateNull(req.getLoginname(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         CommonValidator.validateNull(req.getPassword(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(loginName);
@@ -107,14 +107,12 @@ public class APISignInController extends BaseController {
         }
         try {
             AuthToken authToken = new AuthToken(loginName, password, LoginType.USER.toString());
-            /*authToken.setRememberMe(req.getRememberMe().equals("1"));*/
             subject.login(authToken);
         } catch (Exception e) {
             if (e instanceof IncorrectCredentialsException) {
                 throw new LoginException(LoginCodeEnum.LOGIN_PASSWRLD_WRONG);
             }
         }
-        // 将seesion过期时间设置为8小时
         SessionResp sessionResp = new SessionResp();
         subject.getSession().setTimeout(ConstantFetchUtil.hour_8);
         sessionResp.setSessionId(subject.getSession().getId().toString());
@@ -159,12 +157,39 @@ public class APISignInController extends BaseController {
         if (null == customerDTO) {
             throw new LoginException(LoginCodeEnum.LOGIN_CUSTOMER_NOT_EXISTED);
         }
+        //判断验证码是否正确
+        if (!AliUtils.isVerified(customerDTO.getMobile(), identifyingCode, bizId)) {
+            throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
+        }
         Subject subject = SecurityUtils.getSubject();
-        AuthToken authToken = new AuthToken(mobile, "", LoginType.CUSTOMER.toString());
-        subject.login(authToken);
-        // 将seesion过期时间设置为8小时
-        subject.getSession().setTimeout(ConstantFetchUtil.hour_8);
-        return ResponseFactory.buildSuccess();
+        Collection<Session> sessions = sessionDAO.getActiveSessions();
+        for (Session session : sessions) {
+            if (null != session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)) {
+                Subject s = new Subject.Builder().session(session).buildSubject();
+                if(s.getPrincipal() instanceof CustomerDTO ){
+                    CustomerDTO temp = (CustomerDTO) s.getPrincipal();
+                    if (mobile.equals(temp.getMobile())) {
+                        logger.info(("删除客户" + temp.getMobile() + "的登陆session"));
+                        sessionDAO.delete(session);
+                    }
+                }
+            }
+        }
+        try {
+            AuthToken authToken = new AuthToken(mobile, "", LoginType.CUSTOMER.toString());
+            subject.login(authToken);
+        } catch (Exception e) {
+            if (e instanceof IncorrectCredentialsException) {
+                throw new LoginException(LoginCodeEnum.LOGIN_PASSWRLD_WRONG);
+            }
+        }
+        CustomerLoginResp customerLoginResp = new CustomerLoginResp();
+        subject.getSession().setTimeout(ConstantFetchUtil.hour_1);
+        customerLoginResp.setSessionId(subject.getSession().getId().toString());
+        customerLoginResp.setCustomerId(customerDTO.getId());
+        customerLoginResp.setCustomerMobile(customerDTO.getMobile());
+        customerLoginResp.setCustomerName(customerDTO.getName());
+        return ResponseFactory.buildResponse(customerLoginResp);
     }
 
     @ApiOperation(value = "根据电话号码，发送验证码", httpMethod = "GET", response = SendMsgResp.class, notes = "根据电话号码，发送验证码")

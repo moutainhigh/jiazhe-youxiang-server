@@ -53,8 +53,6 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/templates/**", "anon");
         filterChainDefinitionMap.put("/api/signin/**", "anon");//发送验证码匿名访问
-       /* filterChainDefinitionMap.put("/", "user");*/
-
         filterChainDefinitionMap.put("/**", "authc");//表示所有url必须通过认证才能访问
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
@@ -147,7 +145,6 @@ public class ShiroConfig {
         realms.add(userRealm());
         realms.add(customerRealm());
         securityManager.setRealms(realms);
-       /* securityManager.setRememberMeManager(rememberMeManager());*/
         securityManager.setCacheManager(ehCacheManager());
         securityManager.setSessionManager(sessionManager());
         return securityManager;
@@ -161,7 +158,6 @@ public class ShiroConfig {
         defaultWebSessionManager.setSessionValidationSchedulerEnabled(true);
         defaultWebSessionManager.setSessionValidationInterval(1800000);
         defaultWebSessionManager.setSessionDAO(customSessionDao());
-//        defaultWebSessionManager.setSessionDAO(memorySessionDAO());
         return defaultWebSessionManager;
     }
 
@@ -170,42 +166,5 @@ public class ShiroConfig {
         EhCacheManager ehCacheManager = new EhCacheManager();
         return ehCacheManager;
     }
-
-
-
-//    @Bean
-//    public HashedCredentialsMatcher hashedCredentialsMatcher() {
-//        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
-//        hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
-//        hashedCredentialsMatcher.setHashAlgorithmName("MD5");
-//        hashedCredentialsMatcher.setHashIterations(1024);
-//        return hashedCredentialsMatcher;
-//    }
-
-      /* @Bean(name = "rememberMe")
-    public SimpleCookie rememberMeCookie() {
-        //System.out.println("ShiroConfiguration.rememberMeCookie()");
-        //这个参数是cookie的名称，对应前端的checkbox的name = rememberMe
-        SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
-        //<!-- 记住我cookie生效时间30天 ,单位秒;-->
-        simpleCookie.setMaxAge(259200);
-        return simpleCookie;
-    }*/
-
-    /*@Bean(name = "rememberMeManager")
-    public CookieRememberMeManager rememberMeManager() {
-        CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
-        cookieRememberMeManager.setCookie(rememberMeCookie());
-        //rememberMe cookie加密的密钥 建议每个项目都不一样 默认AES算法 密钥长度(128 256 512 位)
-        byte[] cipherKey = Base64.decode("2AvVhdsgUs0FSA3SDFAdag==");
-        cookieRememberMeManager.setCipherKey(cipherKey);
-        return cookieRememberMeManager;
-    }*/
-
-
-//    @Bean(name = "sessionDAO")
-//    public MemorySessionDAO memorySessionDAO() {
-//        return new MemorySessionDAO();
-//    }
 
 }
