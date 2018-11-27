@@ -6,7 +6,10 @@ import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.base.util.UploadUtil;
 import com.jiazhe.youxiang.server.adapter.EleProductCodeAdapter;
 import com.jiazhe.youxiang.server.biz.EleProductCodeBiz;
+import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.enums.EleProductCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
+import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.exceptions.EleProductCodeException;
 import com.jiazhe.youxiang.server.dto.eleproductexcode.EleProductCodeDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -57,6 +60,7 @@ public class APIEleProductCodeController extends BaseController {
 
     @ApiOperation(value = "【后台】查询所有电子码", httpMethod = "GET",response = EleProductCodeResp.class ,responseContainer = "List" ,notes = "查询批次下所有电子码，有条件查询")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ELE_PRODUCT, operate = "查询所有电子码", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute EleProductCodePageReq req) {
         //参数检查
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
@@ -67,6 +71,7 @@ public class APIEleProductCodeController extends BaseController {
 
     @ApiOperation(value = "【后台】获取所有批次", httpMethod = "GET",response = EleProductCodeBatchResp.class ,responseContainer = "List" ,notes = "获取所有批次，无条件")
     @RequestMapping(value = "/getallbatch", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ELE_PRODUCT, operate = "获取所有批次", level = LogLevelEnum.LEVEL_1)
     public Object getAllBatch() {
         List<EleProductCodeDTO> eleProductExCodeDTOList = eleProductCodeBiz.getAllBatch();
         List<EleProductCodeBatchResp> eleProductExCodeBatchRespList = eleProductExCodeDTOList.stream().map(EleProductCodeAdapter::DTO2BatchResp).collect(Collectors.toList());
@@ -75,6 +80,7 @@ public class APIEleProductCodeController extends BaseController {
 
     @ApiOperation(value = "【后台】上传电子码excel并校验", httpMethod = "POST",response = UploadExcelResp.class ,notes = "上传电子码excel并校验")
     @RequestMapping(value = "uploadexcel", method = RequestMethod.POST, headers = ("content-type=multipart/*"), consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @CustomLog(moduleName = ModuleEnum.ELE_PRODUCT, operate = "上传电子码excel并校验", level = LogLevelEnum.LEVEL_2)
     public Object uploadExcel(@RequestParam("file") MultipartFile file) throws IOException {
         //参数检查
         String url = UploadUtil.uploadImage(file, excelpath);
@@ -98,6 +104,7 @@ public class APIEleProductCodeController extends BaseController {
 
     @ApiOperation(value = "【后台】导入电子码", httpMethod = "POST",notes = "导入电子码")
     @RequestMapping(value = "/importcode", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.ELE_PRODUCT, operate = "导入电子码", level = LogLevelEnum.LEVEL_2)
     public Object importCode(@ModelAttribute ImportCodeReq req) throws IOException {
         //参数检查
         CommonValidator.validateNull(req.getProductId(),new EleProductCodeException(EleProductCodeEnum.PRODUCT_IS_NULL));
@@ -110,6 +117,7 @@ public class APIEleProductCodeController extends BaseController {
 
     @ApiOperation(value = "【后台】批量修改电子码有效期", httpMethod = "POST",notes = "批量修改电子码有效期")
     @RequestMapping(value = "/batchchangeexpirytime", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.ELE_PRODUCT, operate = "批量修改电子码有效期", level = LogLevelEnum.LEVEL_2)
     public Object batchChangeExpiryTime(@ModelAttribute ExpiryTimeEditReq req) {
         //参数检查
         CommonValidator.validateNull(req.getExpiryTime(),new EleProductCodeException(EleProductCodeEnum.EXPIRY_TIME_IS_NULL));

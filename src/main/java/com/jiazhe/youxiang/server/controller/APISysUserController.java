@@ -7,7 +7,10 @@ import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.base.util.ValidateUtils;
 import com.jiazhe.youxiang.server.adapter.SysUserAdapter;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
+import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.UserCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.common.exceptions.UserException;
@@ -50,6 +53,7 @@ public class APISysUserController extends BaseController {
 
     @ApiOperation(value = "【后台】员工列表", httpMethod = "GET", response = SysUserResp.class, responseContainer = "List", notes = "查询所有员工信息，无查询条件")
     @RequestMapping(value = "/listall", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.USER,operate = "查看员工列表",level = LogLevelEnum.LEVEL_1)
     public Object listAll() {
         List<SysUserDTO> sysUserDTOList = sysUserBiz.findAll();
         List<SysUserResp> sysUserRespList = sysUserDTOList.stream().map(SysUserAdapter::DTO2RespVO).collect(Collectors.toList());
@@ -58,6 +62,7 @@ public class APISysUserController extends BaseController {
 
     @ApiOperation(value = "【后台】员工列表（分页）", httpMethod = "GET", response = SysUserResp.class, responseContainer = "List", notes = "分页查询员工信息，带查询条件")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.USER,operate = "查看员工列表",level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute UserPageReq req) {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
@@ -68,6 +73,7 @@ public class APISysUserController extends BaseController {
 
     @ApiOperation(value = "【后台】删除员工", httpMethod = "POST", notes = "根据id删除员工信息（并软删除对应角色）")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.USER,operate = "删除员工",level = LogLevelEnum.LEVEL_3)
     public Object delete(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         sysUserBiz.deleteUserWithRole(req.getId());
@@ -76,6 +82,7 @@ public class APISysUserController extends BaseController {
 
     @ApiOperation(value = "【后台】获取员工信息", httpMethod = "GET", response = UserWithRoleResp.class, notes = "根据id获取员工信息（包含角色id，多个角色id用逗号连接）")
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.USER,operate = "获取员工信息",level = LogLevelEnum.LEVEL_1)
     public Object getById(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //当前员工信息(包括角色字符串）DTO
@@ -87,6 +94,7 @@ public class APISysUserController extends BaseController {
 
     @ApiOperation(value = "【后台】保存员工信息", httpMethod = "POST", notes = "保存员工信息、员工对应角色信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.USER,operate = "保存员工信息",level = LogLevelEnum.LEVEL_1)
     public Object save(@ModelAttribute UserSaveReq req) {
         /*参数检查*/
         CommonValidator.validateNull(req);
@@ -112,6 +120,7 @@ public class APISysUserController extends BaseController {
 
     @ApiOperation(value = "【后台】获取登录员工信息", httpMethod = "GET", response = SysUserResp.class, notes = "获取登陆员工信息，无入参")
     @RequestMapping(value = "/getuserinfo", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.USER,operate = "获取登录员工信息",level = LogLevelEnum.LEVEL_1)
     public Object getUserInfo() {
         SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
         //将DTO转为respVO返回
@@ -124,6 +133,7 @@ public class APISysUserController extends BaseController {
 
     @ApiOperation(value = "【后台】修改密码", httpMethod = "POST", notes = "员工自行修改登陆密码")
     @RequestMapping(value = "/changepassword", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.USER,operate = "修改密码",level = LogLevelEnum.LEVEL_2)
     public Object changePassword(@ModelAttribute ChangePasswordReq req) {
         CommonValidator.validateNull(req.getOldPassword(),new UserException(UserCodeEnum.USEER_PASSWORD_IS_NULL));
         CommonValidator.validateNull(req.getPassword1(),new UserException(UserCodeEnum.USEER_PASSWORD_IS_NULL));
@@ -146,6 +156,7 @@ public class APISysUserController extends BaseController {
 
     @ApiOperation(value = "【后台】重置员工密码", httpMethod = "POST", notes = "重置员工密码，重置为123456")
     @RequestMapping(value = "/resetpassword", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.USER,operate = "重置员工密码",level = LogLevelEnum.LEVEL_2)
     public Object resetPassword(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req.getId());
         sysUserBiz.changePassword(req.getId(),"123456");

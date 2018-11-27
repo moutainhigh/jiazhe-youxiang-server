@@ -5,8 +5,8 @@
  */
 package com.jiazhe.youxiang.base.util;
 
-import com.jiazhe.youxiang.server.common.enums.CommonCodeEnum;
-import com.jiazhe.youxiang.server.common.exceptions.CommonException;
+import com.jiazhe.youxiang.server.common.enums.UploadCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.UploadException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedOutputStream;
@@ -48,8 +48,8 @@ public class UploadUtil {
             bos.flush();
             bos.close();
         } catch (IOException e) {
-            //TODO niexiao 抛出自定义异常
-            throw new CommonException(CommonCodeEnum.INTERNAL_ERROR.getCode(), CommonCodeEnum.INTERNAL_ERROR.getType(), e.getMessage());
+            //抛出自定义异常
+            throw new UploadException(UploadCodeEnum.OTHER_ERROR);
         }
         return fileName;
     }

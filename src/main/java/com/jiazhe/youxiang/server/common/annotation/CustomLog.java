@@ -36,5 +36,5 @@ public @interface CustomLog {
     /**
      * 日志级别
      */
-    LogLevelEnum level() default LogLevelEnum.LEVEL_0;
+    LogLevelEnum level() default LogLevelEnum.LEVEL_1;
 }

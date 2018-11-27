@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.server.biz;
 
+import com.jiazhe.youxiang.base.util.MathlUtil;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCBiz;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherBiz;
 import com.jiazhe.youxiang.server.dto.customer.AddressAddDTO;
@@ -19,7 +20,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -77,9 +77,9 @@ public class CustomerBiz {
 
         if (CollectionUtils.isNotEmpty(result)) {
             result.stream().forEach(item -> {
-                //TODO niexiao 添加有效余额和张数
-                item.setRechargeCardBalance(BigDecimal.ZERO);
-                item.setVoucherCount(1);
+                //填充有效余额和张数
+                item.setRechargeCardBalance(MathlUtil.getValue(rcBiz.totalValidBalance(item.getId())));
+                item.setVoucherCount(MathlUtil.getValue(voucherBiz.totalValidVoucher(item.getId())));
             });
         }
         return result;

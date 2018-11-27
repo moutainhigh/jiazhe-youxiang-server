@@ -161,65 +161,39 @@
 </div>
 </body>
 <script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
+
+
+        var tableOption = {
+            url: "/api/project/getlist",// 获取数据的地址
+            postData: transformToJson($('#searchForm').serializeArray()),
+            colNames: ['', '项目名称', '项目描述', '项目状态', '排序', '操作'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'name', index: 'name', width: 50, sortable: false},
+                {name: 'description', index: 'description', sortable: false},
+                {name: 'status', index: 'status', width: 50, sortable: false, formatter: statusFormatter},
+                {name: 'priority', index: 'priority', width: 20, sortable: false},
+                {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
+            ],
+            caption: "项目列表"
+        }
+
+        initTable(grid_selector, pager_selector, tableOption);
     });
 
-    var grid_selector = "#grid-table";
-    var pager_selector = "#grid-pager";
-    jQuery(grid_selector).jqGrid({
-        url: "../api/project/getlist",// 获取数据的地址
-        postData: transformToJson($('#searchForm').serializeArray()),
-        rownumbers: true,
-        datatype: "json",
-        mtype: "GET",
-        hidegrid: false,//收缩列表按钮
-        prmNames: {
-            page: "pageNum",
-            rows: "pageSize"
-        },// 重新定义分页信息
-        width: "100%",
-        autowidth: true,
-        height: 350,
-        colNames: ['', '项目名称', '项目描述', '项目状态', '排序', '操作'],
-        colModel: [
-            {name: 'id', index: 'id', sortable: false, hidden: true},
-            {name: 'name', index: 'name', width: 50, sortable: false},
-            {name: 'description', index: 'description', sortable: false},
-            {name: 'status', index: 'status', width: 50, sortable: false, formatter: statusFormatter},
-            {name: 'priority', index: 'priority', width: 20, sortable: false},
-            {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
-        ],
-        rowNum: 10,
-        rowList: [10, 20, 30],
-        pager: pager_selector,
-        altRows: true,
-        viewrecords: true,
-        emptyrecords: "0条数据",
-        loadComplete: function (data) {
-            var table = this;
-            setTimeout(function () {
-                $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
-                updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
-            }, 0);
-        },
-        jsonReader: { // jsonReader来跟服务器端返回的数据做对应
-            root: "data", // 包含实际数据的数组
-            page: "paging.currPage", // 当前页
-            total: "paging.totalPage",// 总页数
-            records: "paging.total", // 查询出的记录数
-            repeatitems: false
-        },
-        caption: "项目列表"
-    });
     $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/project/getlist",// 获取数据的地址
+            url: "/api/project/getlist",// 获取数据的地址
             postData: transformToJson($('#searchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
@@ -239,24 +213,30 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:deleteOne('" + rowObject.id + "')\">" +
-            "<i class='ace-icon'>删除</i>" +
-            "</a>&nbsp;&nbsp;";
-        str = str + "<a class='btn btn-minier btn-info' href=\"javascript:openEdit('" + rowObject.id + "')\">" +
-            "<i class='ace-icon'>修改</i>" +
-            "</a>&nbsp;&nbsp;";
+        str += getFunctionButton("btn-danger", "deleteOne(" + rowObject.id + ")", "删除");
+        str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
 
         if (rowObject.status == 0) {
-            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:begin('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>启动</i>" +
-                "</a>&nbsp;&nbsp;";
+            str += getFunctionButton("btn-success", "begin(" + rowObject.id + ")", "启动");
         }
         if (rowObject.status == 1) {
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:end('" + rowObject.id + "')\">" +
-                "<i class='ace-icon'>停止</i>" +
-                "</a>&nbsp;&nbsp;";
+            str += getFunctionButton("btn-danger", "end(" + rowObject.id + ")", "启动");
         }
         return str;
+    }
+
+    function openNew() {
+        $("#modal-title").html("项目信息-添加");
+        $("#projectId").val(0);
+        $("#inputName").val("");
+        $("#inputDescription").val("");
+        $("#inputPriority").val("");
+    }
+
+    function openEdit(id) {
+        $("#modal-title").html("项目信息-修改");
+        $(".modal-footer-btn").show();
+        getById(id);
     }
 
     function addOrUpdate() {
@@ -270,7 +250,7 @@
 
     function add() {
         $.ajax({
-            url: "../api/project/add",
+            url: "/api/project/add",
             dataType: "json",
             async: false,
             data: {
@@ -286,7 +266,7 @@
 
     function update() {
         $.ajax({
-            url: "../api/project/update",
+            url: "/api/project/update",
             dataType: "json",
             async: false,
             data: {
@@ -305,7 +285,7 @@
         confirm("确定要删除该项目吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/project/delete",    //请求的url地址
+                    url: "/api/project/delete",    //请求的url地址
                     dataType: "json",
                     async: false,
                     data: {
@@ -319,15 +299,9 @@
         });
     }
 
-    function openEdit(id) {
-        $("#modal-title").html("项目信息-修改");
-        $(".modal-footer-btn").show();
-        getById(id);
-    }
-
     function getById(id) {
         $.ajax({
-            url: "../api/project/getbyid",    //请求的url地址
+            url: "/api/project/getbyid",    //请求的url地址
             dataType: "json",
             async: false,
             data: {
@@ -350,13 +324,7 @@
         });
     }
 
-    function openNew() {
-        $("#modal-title").html("项目信息-添加");
-        $("#projectId").val(0);
-        $("#inputName").val("");
-        $("#inputDescription").val("");
-        $("#inputPriority").val("");
-    }
+
 
     function begin(id) {
         confirm("确定要启动该项目吗？", function (result) {
@@ -392,15 +360,6 @@
                 });
             }
         });
-    }
-
-    function success(data) {
-        if ('error' in data) {
-            bootboxalert(data.error.message);
-        } else {
-            $("#modal-form").modal('hide');
-            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-        }
     }
 
 </script>

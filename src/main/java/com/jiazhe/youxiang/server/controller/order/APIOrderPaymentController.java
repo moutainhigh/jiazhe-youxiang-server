@@ -3,6 +3,9 @@ package com.jiazhe.youxiang.server.controller.order;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.server.adapter.order.OrderPaymentAdapter;
 import com.jiazhe.youxiang.server.biz.order.OrderPaymentBiz;
+import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
+import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.VoucherCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
@@ -35,6 +38,7 @@ public class APIOrderPaymentController extends BaseController{
     private OrderPaymentBiz orderPaymentBiz;
     @ApiOperation(value = "根据充值卡id获取支付记录", httpMethod = "GET", response = OrderPaymentResp.class,notes = "根据充值卡id获取支付记录")
     @RequestMapping(value = "/getbyrechargecardid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "根据充值卡id获取支付记录", level = LogLevelEnum.LEVEL_1)
     public Object getByRechargeCardId(@ModelAttribute IdReq req) {
         List<OrderPaymentDTO> orderPaymentDTOList = orderPaymentBiz.getByRechargeCardId(req.getId());
         if(orderPaymentDTOList.isEmpty()){
@@ -46,6 +50,7 @@ public class APIOrderPaymentController extends BaseController{
 
     @ApiOperation(value = "根据充值卡兑换码id获取支付记录", httpMethod = "GET", response = OrderPaymentResp.class,notes = "根据充值卡兑换码id获取支付记录")
     @RequestMapping(value = "/getbyrechargecardcodeid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "根据充值卡兑换码id获取支付记录", level = LogLevelEnum.LEVEL_1)
     public Object getByRechargeCardCodeId(@ModelAttribute IdReq req) {
         List<OrderPaymentDTO> orderPaymentDTOList = orderPaymentBiz.getByRechargeCardCodeId(req.getId());
         if(orderPaymentDTOList.isEmpty()){
@@ -57,6 +62,7 @@ public class APIOrderPaymentController extends BaseController{
 
     @ApiOperation(value = "根据代金券id获取支付记录", httpMethod = "GET", response = OrderPaymentResp.class,notes = "根据代金券id获取支付记录")
     @RequestMapping(value = "/getbyvoucherid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "根据代金券id获取支付记录", level = LogLevelEnum.LEVEL_1)
     public Object getByVoucherId(@ModelAttribute IdReq req) {
         List<OrderPaymentDTO> orderPaymentDTOList = orderPaymentBiz.getByVoucherId(req.getId());
         if(orderPaymentDTOList.isEmpty()){
@@ -68,6 +74,7 @@ public class APIOrderPaymentController extends BaseController{
 
     @ApiOperation(value = "根据代金券兑换码id获取支付记录", httpMethod = "GET", response = OrderPaymentResp.class,notes = "根据代金券兑换码id获取支付记录")
     @RequestMapping(value = "/getbyvouchercodeid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "根据代金券兑换码id获取支付记录", level = LogLevelEnum.LEVEL_1)
     public Object getByVoucherCodeId(@ModelAttribute IdReq req) {
         List<OrderPaymentDTO> orderPaymentDTOList = orderPaymentBiz.getByVoucherCodeId(req.getId());
         if(orderPaymentDTOList.isEmpty()){

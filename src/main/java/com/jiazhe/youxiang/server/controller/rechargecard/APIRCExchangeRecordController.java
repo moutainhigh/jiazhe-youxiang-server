@@ -7,6 +7,9 @@ import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeRecordAdapter;
 import com.jiazhe.youxiang.server.biz.order.OrderInfoBiz;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCExchangeRecordBiz;
+import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
+import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord.RCExchangeRecordDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -41,6 +44,7 @@ public class APIRCExchangeRecordController extends BaseController {
 
     @ApiOperation(value = "【后台，暂时无用】分页查询充值卡兑换记录", httpMethod = "GET", response = RCExchangeRecordResp.class, responseContainer = "List", notes = "【组合条件】分页查询充值卡兑换记录")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "分页查询充值卡兑换记录", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute RCExchangeRecordPageReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validatePaging(req);
@@ -52,6 +56,7 @@ public class APIRCExchangeRecordController extends BaseController {
 
     @ApiOperation(value = "【后台，暂时无用】通过充值卡id，查找兑换记录", httpMethod = "GET", response = RCExchangeRecordResp.class, notes = "通过充值卡id，查找兑换记录")
     @RequestMapping(value = "/getbyrcid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "通过充值卡id，查找兑换记录", level = LogLevelEnum.LEVEL_1)
     public Object getByRCId(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         RCExchangeRecordDTO rcExchangeCodeBatchDTO = rcExchangeRecordBiz.getByRCId(req.getId());
@@ -61,6 +66,7 @@ public class APIRCExchangeRecordController extends BaseController {
 
     @ApiOperation(value = "【后台，暂时无用】通过充值卡id，查找该充值卡消费记录", httpMethod = "GET", response = OrderInfoResp.class, notes = "通过充值卡id，查找该充值卡消费记录")
     @RequestMapping(value = "/getorderbyrcid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "通过充值卡id，查找该充值卡消费记录", level = LogLevelEnum.LEVEL_1)
     public Object getOrderByRCId(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getOrderByRCId(req.getId());

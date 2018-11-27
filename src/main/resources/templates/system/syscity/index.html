@@ -60,44 +60,9 @@
 </body>
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
-    var grid_data =
-        [
-            {id: "1", name: "Desktop Computer", note: "note", stock: "Yes", ship: "FedEx", sdate: "2007-12-03"},
-            {id: "2", name: "Laptop", note: "Long text ", stock: "Yes", ship: "InTime", sdate: "2007-12-03"},
-            {id: "3", name: "LCD Monitor", note: "note3", stock: "Yes", ship: "TNT", sdate: "2007-12-03"},
-            {id: "4", name: "Speakers", note: "note", stock: "No", ship: "ARAMEX", sdate: "2007-12-03"},
-            {id: "5", name: "Laser Printer", note: "note2", stock: "Yes", ship: "FedEx", sdate: "2007-12-03"},
-            {id: "6", name: "Play Station", note: "note3", stock: "No", ship: "FedEx", sdate: "2007-12-03"},
-            {id: "7", name: "Mobile Telephone", note: "note", stock: "Yes", ship: "ARAMEX", sdate: "2007-12-03"},
-            {id: "8", name: "Server", note: "note2", stock: "Yes", ship: "TNT", sdate: "2007-12-03"},
-            {id: "9", name: "Matrix Printer", note: "note3", stock: "No", ship: "FedEx", sdate: "2007-12-03"},
-            {id: "10", name: "Desktop Computer", note: "note", stock: "Yes", ship: "FedEx", sdate: "2007-12-03"},
-            {id: "11", name: "Laptop", note: "Long text ", stock: "Yes", ship: "InTime", sdate: "2007-12-03"},
-            {id: "12", name: "LCD Monitor", note: "note3", stock: "Yes", ship: "TNT", sdate: "2007-12-03"},
-            {id: "13", name: "Speakers", note: "note", stock: "No", ship: "ARAMEX", sdate: "2007-12-03"},
-            {id: "14", name: "Laser Printer", note: "note2", stock: "Yes", ship: "FedEx", sdate: "2007-12-03"},
-            {id: "15", name: "Play Station", note: "note3", stock: "No", ship: "FedEx", sdate: "2007-12-03"},
-            {id: "16", name: "Mobile Telephone", note: "note", stock: "Yes", ship: "ARAMEX", sdate: "2007-12-03"},
-            {id: "17", name: "Server", note: "note2", stock: "Yes", ship: "TNT", sdate: "2007-12-03"},
-            {id: "18", name: "Matrix Printer", note: "note3", stock: "No", ship: "FedEx", sdate: "2007-12-03"},
-            {id: "19", name: "Matrix Printer", note: "note3", stock: "No", ship: "FedEx", sdate: "2007-12-03"},
-            {id: "20", name: "Desktop Computer", note: "note", stock: "Yes", ship: "FedEx", sdate: "2007-12-03"},
-            {id: "21", name: "Laptop", note: "Long text ", stock: "Yes", ship: "InTime", sdate: "2007-12-03"},
-            {id: "22", name: "LCD Monitor", note: "note3", stock: "Yes", ship: "TNT", sdate: "2007-12-03"},
-            {id: "23", name: "Speakers", note: "note", stock: "No", ship: "ARAMEX", sdate: "2007-12-03"}
-        ];
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
 
-    var subgrid_data =
-        [
-            {id: "1", name: "sub grid item 1", qty: 11},
-            {id: "2", name: "sub grid item 2", qty: 3},
-            {id: "3", name: "sub grid item 3", qty: 12},
-            {id: "4", name: "sub grid item 4", qty: 5},
-            {id: "5", name: "sub grid item 5", qty: 2},
-            {id: "6", name: "sub grid item 6", qty: 9},
-            {id: "7", name: "sub grid item 7", qty: 3},
-            {id: "8", name: "sub grid item 8", qty: 8}
-        ];
 
     $(function () {
         //重新修改表格宽度
@@ -105,8 +70,7 @@
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
     });
-    var grid_selector = "#grid-table";
-    var pager_selector = "#grid-pager";
+
     var parent_column = $(grid_selector).closest('[class*="col-"]');
     jQuery(function ($) {
 
@@ -119,7 +83,7 @@
             //direction: "rtl",
             //subgrid options
             subGrid: true,
-            url: "../api/syscity/getlist",// 获取数据的地址
+            url: "/api/syscity/getlist",// 获取数据的地址
             datatype: "json",
             mtype: "GET",
             hidegrid: false,//收缩列表按钮
@@ -139,7 +103,7 @@
                 var subgridTableId = subgridDivId + "_t";
                 $("#" + subgridDivId).html("<table id='" + subgridTableId + "'></table>");
                 $("#" + subgridTableId).jqGrid({
-                    url: "../api/syscity/getlist?parentCode=" + cityCode,// 获取数据的地址
+                    url: "/api/syscity/getlist?parentCode=" + cityCode,// 获取数据的地址
                     datatype: "json",
                     mtype: "GET",
                     width: "100%",
@@ -202,22 +166,18 @@
 
     });
 
-    function customFormatter(cellvalue, options, cell) {
+    function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        if (cell.status == 0) {
-            str = str + "<a class='btn btn-minier btn-success' href=\"javascript:open('" + cell.cityCode + "')\">" +
-                "<i class='ace-icon'>开通</i>" +
-                "</a>&nbsp;&nbsp;";
+        if (rowObject.status == 0) {
+            str += getFunctionButton("btn-success", "open(" + rowObject.cityCode + ")", "开通");
         } else {
-            str = str + "<a class='btn btn-minier btn-danger' href=\"javascript:close('" + cell.cityCode + "')\">" +
-                "<i class='ace-icon'>关闭</i>" +
-                "</a>&nbsp;&nbsp;";
+            str += getFunctionButton("btn-danger", "close(" + rowObject.cityCode + ")", "关闭");
         }
         return str;
     }
 
-    function statusFormatter(cellvalue, options, cell) {
-        return cell.status == 1 ? "开通" : "未开通";
+    function statusFormatter(cellvalue, options, rowObject) {
+        return rowObject.status == 1 ? "开通" : "未开通";
     }
 
     function open(cityCode) {
