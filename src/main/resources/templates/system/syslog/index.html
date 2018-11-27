@@ -52,11 +52,27 @@
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">模块：</label>
                                 <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <input id="moduleName" name="moduleName" class="form-control" type="text"
-                                               style="height:30px"/>
-                                    </div>
+
+                                    <select id="moduleName" name="moduleName"
+                                            class="selectpicker show-tick form-control">
+                                        <option value="">所有</option>
+                                        <option value="用户管理">用户管理</option>
+                                        <option value="权限管理">权限管理</option>
+                                        <option value="城市管理">城市管理</option>
+                                        <option value="日志管理">日志管理</option>
+                                        <option value="项目管理">项目管理</option>
+                                        <option value="充值卡管理">充值卡管理</option>
+                                        <option value="代金券管理">代金券管理</option>
+                                        <option value="订单管理">订单管理</option>
+                                        <option value="客户管理">客户管理</option>
+                                        <option value="商品管理">商品管理</option>
+                                        <option value="审核管理">审核管理</option>
+                                        <option value="登录">登录</option>
+                                        <option value="商品电子码管理">商品电子码管理</option>
+                                        <option value="文件上传管理">文件上传管理</option>
+                                    </select>
                                 </div>
+
                                 <label class="col-sm-1 control-label no-padding-right">操作：</label>
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
@@ -118,17 +134,17 @@
         var tableOption = {
             url: "/api/syslog/getlist",// 获取数据的地址
             postData: transformToJson($('#userSearchForm').serializeArray()),
-            colNames: ['', '模块名称', '日志级别', '操作', '日志详情','', '操作人姓名', 'IP', '时间'],
+            colNames: ['', '模块名称', '日志级别', '操作', '日志详情', '', '操作人姓名', 'IP', '时间'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'moduleName', index: 'moduleName', width: 30, sortable: false},
                 {name: 'level', index: 'level', width: 15, sortable: false},
-                {name: 'operate', index: 'operate',width: 30, sortable: false},
+                {name: 'operate', index: 'operate', width: 30, sortable: false},
                 {name: 'detail', index: 'detail', sortable: false},
                 {name: 'operatorId', index: 'operatorId', sortable: false, hidden: true},
-                {name: 'operatorName', index: 'operatorName',width: 30, sortable: false},
-                {name: 'ip', index: 'ip',width: 30, sortable: false},
-                {name: 'addTime', index: 'addTime', width: 40,sortable: false, formatter: timeFormatter}
+                {name: 'operatorName', index: 'operatorName', width: 30, sortable: false},
+                {name: 'ip', index: 'ip', width: 30, sortable: false},
+                {name: 'addTime', index: 'addTime', width: 40, sortable: false, formatter: timeFormatter}
             ],
             caption: "操作日志"
         }
