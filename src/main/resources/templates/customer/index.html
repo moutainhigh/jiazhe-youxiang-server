@@ -267,23 +267,22 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         return getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
-        ;
     }
 
     function operate() {
         var operationType = $("#inputOperationType").val();
         switch (operationType) {
-            case 1://添加
+            case "1"://添加
                 add();
                 break;
-            case 2://修改
+            case "2"://修改
                 update();
                 break;
-            case 3://充值卡绑定
+            case "3"://充值卡绑定
                 break;
-            case 4://代金券绑定
+            case "4": //代金券绑定
                 break;
-            case 5://直接充值
+            case "5"://直接充值
                 break;
             default:
         }
@@ -291,7 +290,7 @@
 
     function add() {
         $.ajax({
-            url: "../api/customer/add",
+            url: "/api/customer/add",
             dataType: "json",
             async: false,
             data: {
@@ -307,7 +306,7 @@
 
     function update() {
         $.ajax({
-            url: "../api/customer/update",
+            url: "/api/customer/update",
             dataType: "json",
             async: false,
             data: {
