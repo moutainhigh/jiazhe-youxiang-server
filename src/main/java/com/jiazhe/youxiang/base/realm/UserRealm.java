@@ -8,7 +8,10 @@ import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRolePermissionDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserRoleDTO;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -76,33 +79,35 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     public AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal) {
         logger.info("=========进入用户授权============");
-        //用户一个
-        SysUserDTO sysUserDTO = (SysUserDTO) principal.getPrimaryPrincipal();
-        List<String> permissionList = new ArrayList<String>();
-        //一个用户对应一个User_Role_list
-        List<SysUserRoleDTO> sysUserRoleDTOList = sysUserRoleBiz.findByUserId(sysUserDTO.getId());
-        //遍历User_Role_list
-        for (SysUserRoleDTO sysUserRoleDTO : sysUserRoleDTOList) {
-            //每个User_Role对应一个Role
-            SysRoleDTO sysRoleDTO = sysRoleBiz.findById(sysUserRoleDTO.getRoleId());
-            //判断此角色是否删除
-            if (null != sysRoleDTO) {
-                //是超级用户
-                if (sysRoleDTO.getIsSuper() == 1) {
-                    permissionList.removeAll(permissionList);
-                    permissionList.add("*");
-                    break;
-                } else {
-                    //每个Role对应Role_Permission_list
-                    List<SysRolePermissionDTO> sysRolePermissionDTOList = sysRolePermissionBiz.findByRoleId(sysRoleDTO.getId());
-                    for (SysRolePermissionDTO tempSysRolePermissionDTO : sysRolePermissionDTOList) {
-                        permissionList.add(tempSysRolePermissionDTO.getPermUrl());
+        if (principal.getPrimaryPrincipal() instanceof SysUserDTO) {
+            SysUserDTO sysUserDTO = (SysUserDTO) principal.getPrimaryPrincipal();
+            List<String> permissionList = new ArrayList<String>();
+            //一个用户对应一个User_Role_list
+            List<SysUserRoleDTO> sysUserRoleDTOList = sysUserRoleBiz.findByUserId(sysUserDTO.getId());
+            //遍历User_Role_list
+            for (SysUserRoleDTO sysUserRoleDTO : sysUserRoleDTOList) {
+                //每个User_Role对应一个Role
+                SysRoleDTO sysRoleDTO = sysRoleBiz.findById(sysUserRoleDTO.getRoleId());
+                //判断此角色是否删除
+                if (null != sysRoleDTO) {
+                    //是超级用户
+                    if (sysRoleDTO.getIsSuper() == 1) {
+                        permissionList.removeAll(permissionList);
+                        permissionList.add("*");
+                        break;
+                    } else {
+                        //每个Role对应Role_Permission_list
+                        List<SysRolePermissionDTO> sysRolePermissionDTOList = sysRolePermissionBiz.findByRoleId(sysRoleDTO.getId());
+                        for (SysRolePermissionDTO tempSysRolePermissionDTO : sysRolePermissionDTOList) {
+                            permissionList.add(tempSysRolePermissionDTO.getPermUrl());
+                        }
                     }
                 }
             }
+            SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+            info.addStringPermissions(permissionList);
+            return info;
         }
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        info.addStringPermissions(permissionList);
-        return info;
+        return null;
     }
 }

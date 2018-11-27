@@ -5,14 +5,17 @@
  */
 package com.jiazhe.youxiang.server.dto.customer;
 
+import java.io.Serializable;
+
 /**
  * 在这里编写类的功能描述
  *
  * @author niexiao
  * @created 2018/10/31
  */
-public class AddressDTO {
+public class AddressDTO implements Serializable {
 
+    private static final long serialVersionUID = -3643680631608388108L;
     /**
      * 关联的客户ID,必填
      */

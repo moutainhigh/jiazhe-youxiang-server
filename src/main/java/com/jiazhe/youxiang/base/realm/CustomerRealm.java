@@ -7,6 +7,7 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
@@ -44,6 +45,16 @@ public class CustomerRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+        logger.info("=========进入客户授权============");
+        if (principalCollection.getPrimaryPrincipal() instanceof CustomerDTO) {
+            CustomerDTO customerDTO = (CustomerDTO) principalCollection.getPrimaryPrincipal();
+            if (customerDTO != null) {
+                SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+                info.addStringPermission("test:ajaxtest");
+                //TODO niexiao 修改成客户可用的权限列表
+                return info;
+            }
+        }
         return null;
     }
 }

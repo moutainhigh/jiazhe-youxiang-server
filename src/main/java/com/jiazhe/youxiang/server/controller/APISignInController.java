@@ -96,10 +96,12 @@ public class APISignInController extends BaseController {
         for (Session session : sessions) {
             if (null != session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)) {
                 Subject s = new Subject.Builder().session(session).buildSubject();
-                SysUserDTO temp = (SysUserDTO) s.getPrincipal();
-                if (loginName.equals(temp.getLoginName())) {
-                    logger.info(("删除员工" + temp.getLoginName() + "的登陆session"));
-                    sessionDAO.delete(session);
+                if(s.getPrincipal() instanceof SysUserDTO ){
+                    SysUserDTO temp = (SysUserDTO) s.getPrincipal();
+                    if (loginName.equals(temp.getLoginName())) {
+                        logger.info(("删除员工" + temp.getLoginName() + "的登陆session"));
+                        sessionDAO.delete(session);
+                    }
                 }
             }
         }
@@ -142,7 +144,7 @@ public class APISignInController extends BaseController {
     }
 
     @ApiOperation(value = "客户登录", httpMethod = "GET", notes = "客户登录")
-    @RequestMapping(value = "/customerSignin")
+    @RequestMapping(value = "/customersignin")
     public Object customerSignin(@ModelAttribute CustomerLoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
         String mobile = req.getMobile();
         String identifyingCode = req.getIdentifyingCode();
@@ -158,17 +160,6 @@ public class APISignInController extends BaseController {
             throw new LoginException(LoginCodeEnum.LOGIN_CUSTOMER_NOT_EXISTED);
         }
         Subject subject = SecurityUtils.getSubject();
-        Collection<Session> sessions = sessionDAO.getActiveSessions();
-        for (Session session : sessions) {
-            if (null != session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)) {
-                Subject s = new Subject.Builder().session(session).buildSubject();
-                CustomerDTO temp = (CustomerDTO) s.getPrincipal();
-                if (mobile.equals(temp.getMobile())) {
-                    logger.info(("删除客户" + temp.getMobile() + "的登陆session"));
-                    sessionDAO.delete(session);
-                }
-            }
-        }
         AuthToken authToken = new AuthToken(mobile, "", LoginType.CUSTOMER.toString());
         subject.login(authToken);
         // 将seesion过期时间设置为8小时
