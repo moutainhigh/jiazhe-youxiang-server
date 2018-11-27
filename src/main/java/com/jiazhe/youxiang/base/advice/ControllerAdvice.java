@@ -21,6 +21,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -42,6 +43,10 @@ import java.util.Map;
 @Aspect
 public class ControllerAdvice {
     private static final Logger LOGGER = LoggerFactory.getLogger("Out_Request");
+
+
+    @Value("${log.level}")
+    private Integer logLevel;
 
     @Pointcut("execution(* com.jiazhe.youxiang.server.controller..*(..))")
     private void anyMethod() {
@@ -113,7 +118,7 @@ public class ControllerAdvice {
 
         if (method != null) {
             CustomLog customLog = method.getAnnotation(CustomLog.class);
-            if (customLog != null) {
+            if (customLog != null && customLog.level().getId() >= logLevel) {
                 //异步插入数据库日志记录
                 SysLogBiz.insert(customLog.moduleName().getName(), customLog.operate(), customLog.level().getId(), IpAdrressUtil.getIpAdrress(request), detail);
             }

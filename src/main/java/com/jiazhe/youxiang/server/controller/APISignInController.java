@@ -8,8 +8,11 @@ import com.jiazhe.youxiang.base.realm.UserRealm;
 import com.jiazhe.youxiang.base.util.*;
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
+import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginType;
+import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
@@ -69,6 +72,7 @@ public class APISignInController extends BaseController {
 
     @ApiOperation(value = "员工登录", httpMethod = "GET", response = SessionResp.class ,notes = "员工登录")
     @RequestMapping(value = "/usersignin")
+    @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "员工登录", level = LogLevelEnum.LEVEL_2)
     public Object userSignin(@ModelAttribute UserLoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
         String loginName = req.getLoginname();
         String password = req.getPassword();
@@ -127,6 +131,7 @@ public class APISignInController extends BaseController {
 
     @ApiOperation(value = "根据登陆名，发送验证码", httpMethod = "GET", response = SendMsgResp.class, notes = "根据登陆名，发送验证码")
     @RequestMapping(value = "/usersendcode")
+    @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "根据登陆名，发送验证码", level = LogLevelEnum.LEVEL_2)
     public Object userSendCode(@ModelAttribute SendMsgToUserReq req) throws ClientException {
         List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(req.getLoginname());
         if (sysUserDTOList.size() != 1) {
@@ -143,6 +148,7 @@ public class APISignInController extends BaseController {
 
     @ApiOperation(value = "客户登录", httpMethod = "GET", notes = "客户登录")
     @RequestMapping(value = "/customersignin")
+    @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "客户登录", level = LogLevelEnum.LEVEL_2)
     public Object customerSignin(@ModelAttribute CustomerLoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
         String mobile = req.getMobile();
         String identifyingCode = req.getIdentifyingCode();
@@ -194,6 +200,7 @@ public class APISignInController extends BaseController {
 
     @ApiOperation(value = "根据电话号码，发送验证码", httpMethod = "GET", response = SendMsgResp.class, notes = "根据电话号码，发送验证码")
     @RequestMapping(value = "/customersendcode")
+    @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "根据电话号码，发送验证码", level = LogLevelEnum.LEVEL_2)
     public Object customerSendCode(@ModelAttribute SendMsgToCustomerReq req) throws ClientException {
         if (!ValidateUtils.phoneValidate(req.getMobile())) {
             throw new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL);

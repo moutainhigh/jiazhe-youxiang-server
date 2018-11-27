@@ -50,9 +50,9 @@ public class APISysLogController extends BaseController {
      *
      * @return
      */
-//    @CustomLog(moduleName = ModuleEnum.LOG, operate = "日志查询", level = LogLevelEnum.LEVEL_1)
     @ApiOperation(value = "查询日志信息", httpMethod = "GET", response = SysLogResp.class, responseContainer = "List", notes = "查询日志信息")
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.LOG, operate = "日志查询", level = LogLevelEnum.LEVEL_1)
     public Object getList(@ModelAttribute SysLogListReq req) {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);

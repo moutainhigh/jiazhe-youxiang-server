@@ -56,7 +56,7 @@ public class APISysCityController extends BaseController {
      */
     @ApiOperation(value = "获取城市列表信息", httpMethod = "GET", response = SysCityResp.class, responseContainer = "List", notes = "获取城市列表信息")
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.CITY,operate = "城市查询",level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.CITY,operate = "获取城市列表信息",level = LogLevelEnum.LEVEL_1)
     public Object getList(@ModelAttribute SysCityListReq req) {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
@@ -75,6 +75,7 @@ public class APISysCityController extends BaseController {
      */
     @ApiOperation(value = "获取已开通城市列表", httpMethod = "GET", response = SysCityResp.class, responseContainer = "List", notes = "获取已开通城市列表")
     @RequestMapping(value = "getopenlist", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.CITY,operate = "获取已开通城市列表",level = LogLevelEnum.LEVEL_1)
     public Object getOpenList() {
         //调用BIZ方法
         List<SysCityDTO> sysCityDTOS = sysCityBiz.getOpenList();
@@ -91,6 +92,7 @@ public class APISysCityController extends BaseController {
      */
     @ApiOperation(value = "开通城市（其下级城市全部开通）", httpMethod = "POST", notes = "开通省份（其下级城市全部开通）")
     @RequestMapping(value = "open", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.CITY,operate = "开通城市",level = LogLevelEnum.LEVEL_2)
     public Object open(@ModelAttribute CityCodeReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getCityCode(),new CityException(CityCodeEnum.CITY_CODE_IS_NULL));
@@ -107,6 +109,7 @@ public class APISysCityController extends BaseController {
      */
     @ApiOperation(value = "关闭城市（其下级城市全部关闭）", httpMethod = "POST", notes = "关闭省份（其下级城市全部关闭）")
     @RequestMapping(value = "close", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.CITY,operate = "关闭城市",level = LogLevelEnum.LEVEL_2)
     public Object close(@ModelAttribute CityCodeReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getCityCode(),new CityException(CityCodeEnum.CITY_CODE_IS_NULL));
@@ -123,6 +126,7 @@ public class APISysCityController extends BaseController {
      */
     @ApiOperation(value = "批量开通城市", httpMethod = "POST", notes = "批量开通城市")
     @RequestMapping(value = "batchopen", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.CITY,operate = "批量开通城市",level = LogLevelEnum.LEVEL_2)
     public Object batchOpen(@ModelAttribute CityCodesReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getCityCodes(),new CityException(CityCodeEnum.CITY_CODE_IS_NULL));
@@ -139,6 +143,7 @@ public class APISysCityController extends BaseController {
      */
     @ApiOperation(value = "批量关闭城市", httpMethod = "POST", notes = "批量关闭城市")
     @RequestMapping(value = "batchclose", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.CITY,operate = "批量关闭城市",level = LogLevelEnum.LEVEL_2)
     public Object batchClose(@ModelAttribute CityCodesReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getCityCodes(),new CityException(CityCodeEnum.CITY_CODE_IS_NULL));

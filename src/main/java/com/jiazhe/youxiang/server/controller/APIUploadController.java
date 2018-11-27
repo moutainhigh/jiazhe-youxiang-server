@@ -7,6 +7,9 @@ package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.UploadUtil;
+import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
+import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.UploadCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.UploadException;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
@@ -43,6 +46,7 @@ public class APIUploadController {
      * @return
      */
     @RequestMapping(value = "uploadimage", method = RequestMethod.POST, headers = ("content-type=multipart/*"), consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @CustomLog(moduleName = ModuleEnum.UPLOAD, operate = "上传图片", level = LogLevelEnum.LEVEL_2)
     public Object uploadImage(@RequestParam("file") MultipartFile file) {
         CommonValidator.validateNull(file);
         validateEmpty(file);

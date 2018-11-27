@@ -7,8 +7,11 @@ import com.jiazhe.youxiang.server.adapter.rechargecard.RCAdapter;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
+import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CustomerCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
+import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.CommonException;
 import com.jiazhe.youxiang.server.common.exceptions.CustomerException;
@@ -45,6 +48,7 @@ public class APIRCController extends BaseController{
 
     @ApiOperation(value = "【后台】充值卡列表（用于信息查询页面）", httpMethod = "GET", response = RCResp.class, responseContainer = "List",notes = "信息查询页查询充值卡")
     @RequestMapping(value = "/searchlistpage", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "充值卡列表", level = LogLevelEnum.LEVEL_1)
     public Object searchListPage(@ModelAttribute RCPageReq req) {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
@@ -56,6 +60,7 @@ public class APIRCController extends BaseController{
     @AppApi
     @ApiOperation(value = "【APP端】客户查询所有充值卡（分页）", httpMethod = "GET", response = RCResp.class, responseContainer = "List",notes = "客户查询所有充值卡，分页")
     @RequestMapping(value = "/findbycustomeridpage", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "客户查询所有充值卡", level = LogLevelEnum.LEVEL_1)
     public Object findByCustomerIdPage(@ModelAttribute RCCustomerPageReq req) {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
@@ -67,6 +72,7 @@ public class APIRCController extends BaseController{
     @AppApi
     @ApiOperation(value = "【后台、APP端】根据购买物属性（商品和城市），查询客户可使用的充值卡，分页", httpMethod = "GET", response = RCResp.class, responseContainer = "List",notes = "根据购买物属性（商品和城市），查询客户可使用的充值卡，分页")
     @RequestMapping(value = "/findbygoodsattrpage", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "根据购买物属性（商品和城市），查询客户可使用的充值卡，分页", level = LogLevelEnum.LEVEL_1)
     public Object findByGoodsAttrPage(@ModelAttribute RCGoodsAttrPageReq req) {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
@@ -77,6 +83,7 @@ public class APIRCController extends BaseController{
 
     @ApiOperation(value = "【后台】启用充值卡", httpMethod = "POST",notes = "启用充值卡")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "启用充值卡", level = LogLevelEnum.LEVEL_2)
     public Object startUsing(@ModelAttribute IdReq req) {
         //参数检查
         CommonValidator.validateId(req);
@@ -86,6 +93,7 @@ public class APIRCController extends BaseController{
 
     @ApiOperation(value = "【后台】停用充值卡", httpMethod = "POST",notes = "停用充值卡")
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "停用充值卡", level = LogLevelEnum.LEVEL_2)
     public Object stopUsing(@ModelAttribute IdReq req) {
         //参数检查
         CommonValidator.validateId(req);
@@ -95,6 +103,7 @@ public class APIRCController extends BaseController{
 
     @ApiOperation(value = "【后台】直接给客户充值任意分数", httpMethod = "POST",notes = "直接给客户充值任意分数")
     @RequestMapping(value = "/directcharge", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "直接给客户充值任意分数", level = LogLevelEnum.LEVEL_3)
     public Object directCharge(@ModelAttribute DirectChargeReq req) {
         //参数检查
         CommonValidator.validateId(req.getId());
@@ -106,6 +115,7 @@ public class APIRCController extends BaseController{
 
     @ApiOperation(value = "【后台】回显充值卡信息", httpMethod = "GET",response = RCResp.class,notes = "回显充值卡信息")
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "回显充值卡信息", level = LogLevelEnum.LEVEL_1)
     public Object getById(@ModelAttribute IdReq req) {
         //参数检查
         CommonValidator.validateId(req);
@@ -116,6 +126,7 @@ public class APIRCController extends BaseController{
 
     @ApiOperation(value = "【后台】修改充值卡信息", httpMethod = "POST",notes = "修改充值卡信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "修改充值卡信息", level = LogLevelEnum.LEVEL_2)
     public Object editSave(@ModelAttribute RCEditReq req) {
         //参数检查
         CommonValidator.validateNull(req);

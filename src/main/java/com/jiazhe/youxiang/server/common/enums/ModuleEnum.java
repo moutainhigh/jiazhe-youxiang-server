@@ -12,18 +12,22 @@ package com.jiazhe.youxiang.server.common.enums;
  * @created 2018/10/18
  */
 public enum ModuleEnum {
-
-    LOG(0, "日志管理"),
-    REGISTER(1, "登录管理"),
-    PRODUCT(2, "商品管理"),
-    PROJECT(3, "项目管理"),
-    RECORD(4, "订单管理"),
-    CUSTOMER(5, "客户管理"),
-    RECHARGE(6, "充值卡管理"),
-    VOUCHER(7, "代金券管理"),
-    CITY(8, "城市管理"),
-    USER(9, "用户管理"),
-    OTHER(99, "其他模块");
+    USER(101, "用户管理"),
+    ROLE(102, "权限管理"),
+    CITY(103, "城市管理"),
+    LOG(104, "日志管理"),
+    PROJECT(105, "项目管理"),
+    RECHARGE(106, "充值卡管理"),
+    VOUCHER(107, "代金券管理"),
+    ORDER(108, "订单管理"),
+    RECORD(108, "订单管理"),
+    CUSTOMER(109, "客户管理"),
+    PRODUCT(110, "商品管理"),
+    AUDIT_RECORD(111, "审核管理"),
+    REGISTER(112, "登录管理"),
+    ELE_PRODUCT(113, "商品电子码管理"),
+    UPLOAD(114, "文件上传管理"),
+    OTHER(999, "其他模块");
 
     private Integer id;
     private String name;
@@ -48,6 +52,5 @@ public enum ModuleEnum {
     public void setName(String name) {
         this.name = name;
     }
-
 
 }
