@@ -13,4 +13,5 @@
 | 商品管理| 110 | com.jiazhe.youxiang.server.common.enums.ProductCodeEnum |
 | 审核管理| 111 | com.jiazhe.youxiang.server.common.enums.AuditRecordCodeEnum |
 | 登录   |112   |com.jiazhe.youxiang.server.common.enums.LoginCodeEnum|
-| 商品电子码管理|113|com.jiazhe.youxiang.server.common.enums.EleProductCodeEnum/
+| 商品电子码管理|113|com.jiazhe.youxiang.server.common.enums.EleProductCodeEnum |
+| 文件上传管理|114|com.jiazhe.youxiang.server.common.enums.UploadCodeEnum |

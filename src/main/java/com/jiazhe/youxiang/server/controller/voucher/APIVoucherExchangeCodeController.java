@@ -6,8 +6,11 @@ import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherExchangeCodeBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
+import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CustomerCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
+import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.VoucherCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.CustomerException;
 import com.jiazhe.youxiang.server.common.exceptions.VoucherException;
@@ -49,6 +52,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
 
     @ApiOperation(value = "分页查询代金券兑换码（根据批次id和兑换码的码和密钥查询）", httpMethod = "GET", response = VoucherExchangeCodeResp.class, responseContainer = "List",notes = "分页查询代金券兑换码（根据批次id和兑换码的码和密钥查询）")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "分页查询代金券兑换码", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute VoucherExchangeCodePageReq req) {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
@@ -59,6 +63,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
 
     @ApiOperation(value = "信息查询页查询代金券兑换码", httpMethod = "GET", response = VoucherExchangeCodeResp.class, responseContainer = "List",notes = "信息查询页查询代金券兑换码")
     @RequestMapping(value = "/searchlistpage", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "信息查询页查询代金券兑换码", level = LogLevelEnum.LEVEL_1)
     public Object searchListPage(@ModelAttribute VoucherExchangeCodePageReq req) {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
@@ -73,6 +78,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
 
     @ApiOperation(value = "启用代金券兑换码", httpMethod = "POST",notes = "启用代金券兑换码")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "启用代金券兑换码", level = LogLevelEnum.LEVEL_2)
     public Object startUsing(@ModelAttribute IdReq req) {
         //参数检查
         CommonValidator.validateId(req);
@@ -82,6 +88,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
 
     @ApiOperation(value = "停用代金券兑换码", httpMethod = "POST",notes = "停用代金券兑换码")
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "停用代金券兑换码", level = LogLevelEnum.LEVEL_2)
     public Object stopUsing(@ModelAttribute IdReq req) {
         //参数检查
         CommonValidator.validateId(req);
@@ -91,6 +98,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
 
     @ApiOperation(value = "获取兑换码信息", httpMethod = "GET",response = VoucherExchangeCodeResp.class,notes = "获取兑换码信息")
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "获取兑换码信息", level = LogLevelEnum.LEVEL_1)
     public Object getById(@ModelAttribute IdReq req) {
         //参数检查
         CommonValidator.validateId(req);
@@ -101,6 +109,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
 
     @ApiOperation(value = "修改兑换码信息", httpMethod = "POST",notes = "修改兑换码信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "修改兑换码信息", level = LogLevelEnum.LEVEL_2)
     public Object editSave(@ModelAttribute VoucherExchangeCodeEditReq req) {
         //参数检查
         CommonValidator.validateNull(req);
@@ -121,6 +130,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
     @AppApi
     @ApiOperation(value = "【APP端】客户用代金券兑换码兑换", httpMethod = "POST",notes = "【APP端】客户用代金券兑换码兑换")
     @RequestMapping(value = "/customerselfcodecharge", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "客户用代金券兑换码兑换", level = LogLevelEnum.LEVEL_2)
     public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) {
         //参数检查
         CommonValidator.validateId(req.getId());
@@ -130,6 +140,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
 
     @ApiOperation(value = "后台用兑换码进行充值", httpMethod = "POST",notes = "后台用兑换码进行充值")
     @RequestMapping(value = "/backstagecodecharge", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "后台用兑换码进行充值", level = LogLevelEnum.LEVEL_3)
     public Object customerSelfCharge(@ModelAttribute CodeChargeReq req) {
         //参数检查
         CommonValidator.validateId(req.getId());

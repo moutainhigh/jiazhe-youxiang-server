@@ -9,6 +9,9 @@ import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.ProjectAdapter;
 import com.jiazhe.youxiang.server.biz.ProjectBiz;
+import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
+import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.ProjectCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.ProjectException;
 import com.jiazhe.youxiang.server.dto.project.ProjectAddDTO;
@@ -56,6 +59,7 @@ public class APIProjectController {
      */
     @ApiOperation(value = "添加项目", httpMethod = "POST", notes = "添加项目")
     @RequestMapping(value = "add", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.PROJECT, operate = "添加项目", level = LogLevelEnum.LEVEL_2)
     public Object add(@ModelAttribute ProjectAddReq req) {
         CommonValidator.validateNull(req);
         if (Strings.isBlank(req.getName())) {
@@ -75,6 +79,7 @@ public class APIProjectController {
      */
     @ApiOperation(value = "获得某一具体项目信息", httpMethod = "GET", response = ProjectResp.class, notes = "获得某一具体项目信息")
     @RequestMapping(value = "getbyid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.PROJECT, operate = "获得某一具体项目信息", level = LogLevelEnum.LEVEL_1)
     public Object getById(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
@@ -90,6 +95,7 @@ public class APIProjectController {
      */
     @ApiOperation(value = "查询项目信息", httpMethod = "GET", response = ProjectResp.class, responseContainer = "List", notes = "查询项目信息")
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.PROJECT, operate = "查询项目信息", level = LogLevelEnum.LEVEL_1)
     public Object getList(@ModelAttribute ProjectListReq req) {
         CommonValidator.validatePaging(req);
         Paging paging =  PagingParamUtil.pagingParamSwitch(req);
@@ -108,6 +114,7 @@ public class APIProjectController {
      */
     @ApiOperation(value = "编辑项目信息", httpMethod = "POST", notes = "编辑项目信息")
     @RequestMapping(value = "update", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.PROJECT, operate = "编辑项目信息", level = LogLevelEnum.LEVEL_2)
     public Object update(@ModelAttribute ProjectUpdateReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateId(req.getId());
@@ -124,6 +131,7 @@ public class APIProjectController {
      */
     @ApiOperation(value = "删除项目", httpMethod = "POST", notes = "删除项目")
     @RequestMapping(value = "delete", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.PROJECT, operate = "删除项目", level = LogLevelEnum.LEVEL_3)
     public Object delete(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
@@ -138,6 +146,7 @@ public class APIProjectController {
      */
     @ApiOperation(value = "启动项目", httpMethod = "GET", response = ProjectResp.class, notes = "启动项目")
     @RequestMapping(value = "begin", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.PROJECT, operate = "启动项目", level = LogLevelEnum.LEVEL_2)
     public Object begin(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法

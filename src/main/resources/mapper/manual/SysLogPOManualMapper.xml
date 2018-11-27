@@ -28,7 +28,7 @@
                 AND module_name = #{moduleName}
             </if>
             <if test="operate != null and operate!=''">
-                AND operate = #{operate}
+                AND operate like concat('%',#{operate},'%')
             </if>
             <if test="level != null and level!=''">
                 AND level = #{level}
@@ -46,7 +46,7 @@
                 AND module_name = #{moduleName}
             </if>
             <if test="operate != null and operate!=''">
-                AND operate = #{operate}
+                AND operate like concat('%',#{operate},'%')
             </if>
             <if test="level != null and level!=''">
                 AND level = #{level}

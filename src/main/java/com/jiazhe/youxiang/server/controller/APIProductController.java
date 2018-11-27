@@ -10,6 +10,9 @@ import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.biz.ProductBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
+import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
+import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.ProductCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.ProductException;
 import com.jiazhe.youxiang.server.dto.product.ProductAddDTO;
@@ -73,6 +76,7 @@ public class APIProductController {
      */
     @ApiOperation(value = "【后台】添加商品分类", httpMethod = "POST", notes = "【后台】添加商品分类")
     @RequestMapping(value = "addcategory", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "添加商品分类", level = LogLevelEnum.LEVEL_2)
     public Object addCategory(@ModelAttribute ProductCategoryAddReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getName(), new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_NAME_IS_NULL));
@@ -90,6 +94,7 @@ public class APIProductController {
      */
     @ApiOperation(value = "【后台】获得商品分类", httpMethod = "GET", response = ProductCategoryResp.class, notes = "【后台】获得商品分类")
     @RequestMapping(value = "getcategorybyid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "获得商品分类", level = LogLevelEnum.LEVEL_1)
     public Object getCategoryById(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
@@ -105,6 +110,7 @@ public class APIProductController {
      */
     @ApiOperation(value = "查询商品分类列表", httpMethod = "GET", response = ProductCategoryResp.class, responseContainer = "List", notes = "查询商品分类列表")
     @RequestMapping(value = "getcategorylist", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "查询商品分类列表", level = LogLevelEnum.LEVEL_1)
     public Object getCategoryList(@ModelAttribute ProductCategoryListReq req) {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
@@ -123,10 +129,10 @@ public class APIProductController {
      */
     @ApiOperation(value = "编辑商品分类", httpMethod = "POST", notes = "编辑商品分类")
     @RequestMapping(value = "updatecategory", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "编辑商品分类", level = LogLevelEnum.LEVEL_2)
     public Object updateCategory(@ModelAttribute ProductCategoryUpdateReq req) {
         CommonValidator.validateId(req);
         CommonValidator.validateNull(req.getName(), new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_NAME_IS_NULL));
-        //TODO niexiao 验证图片地址
         ProductCategoryDTO productCategoryDTO = ProductAdapter.productCategoryUpdateReq2DTO(req);
         //调用BIZ方法
         productBiz.updateCategory(productCategoryDTO);
@@ -141,6 +147,7 @@ public class APIProductController {
      */
     @ApiOperation(value = "编辑商品分类状态", httpMethod = "POST", notes = "编辑商品分类状态")
     @RequestMapping(value = "updatecategorystatus", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "编辑商品分类状态", level = LogLevelEnum.LEVEL_2)
     public Object updateCategoryStatus(@ModelAttribute StatusReq req) {
         validateStatus(req);
         //调用BIZ方法
@@ -156,6 +163,7 @@ public class APIProductController {
      */
     @ApiOperation(value = "删除商品分类", httpMethod = "POST", notes = "删除商品分类")
     @RequestMapping(value = "deletecategory", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "删除商品分类", level = LogLevelEnum.LEVEL_3)
     public Object deleteCategory(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
@@ -172,6 +180,7 @@ public class APIProductController {
      */
     @ApiOperation(value = "添加商品", httpMethod = "POST", notes = "添加商品")
     @RequestMapping(value = "add", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "添加商品", level = LogLevelEnum.LEVEL_2)
     public Object add(@ModelAttribute ProductAddReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateId(req.getProductCategoryId(), new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_ID_IS_NULL));
@@ -191,6 +200,7 @@ public class APIProductController {
      */
     @ApiOperation(value = "获得某一商品", httpMethod = "GET", response = ProductResp.class, notes = "获得某一商品")
     @RequestMapping(value = "getbyid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "获得某一商品", level = LogLevelEnum.LEVEL_1)
     public Object getById(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
@@ -206,6 +216,7 @@ public class APIProductController {
      */
     @ApiOperation(value = "查询商品列表", httpMethod = "GET", response = ProductResp.class, responseContainer = "List", notes = "查询商品列表")
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "查询商品列表", level = LogLevelEnum.LEVEL_1)
     public Object getList(@ModelAttribute ProductListReq req) {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
@@ -225,6 +236,7 @@ public class APIProductController {
     @AppApi
     @ApiOperation(value = "获得商品列表（前端客户专用）", httpMethod = "GET", response = ProductResp.class, responseContainer = "List", notes = "获得商品列表（前端客户专用）")
     @RequestMapping(value = "getlistforcustomer", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "获得商品列表", level = LogLevelEnum.LEVEL_1)
     public Object getListForCustomer(@ModelAttribute ProductListForCustomerReq req) {
         CommonValidator.validatePaging(req);
         CommonValidator.validateId(req.getProductCategoryId(), new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_ID_IS_NULL));
@@ -246,6 +258,7 @@ public class APIProductController {
      */
     @ApiOperation(value = "编辑商品", httpMethod = "POST", notes = "编辑商品")
     @RequestMapping(value = "update", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "编辑商品", level = LogLevelEnum.LEVEL_2)
     public Object update(@ModelAttribute ProductUpdateReq req) {
         CommonValidator.validateId(req);
         CommonValidator.validateNull(req.getName(), new ProductException(ProductCodeEnum.PRODUCT_NAME_IS_NULL));
@@ -263,6 +276,7 @@ public class APIProductController {
      */
     @ApiOperation(value = "编辑商品状态", httpMethod = "POST", notes = "编辑商品状态")
     @RequestMapping(value = "updatestatus", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "编辑商品状态", level = LogLevelEnum.LEVEL_2)
     public Object updateStatus(@ModelAttribute StatusReq req) {
         validateStatus(req);
         //调用BIZ方法
@@ -278,6 +292,7 @@ public class APIProductController {
      */
     @ApiOperation(value = "删除商品", httpMethod = "POST", notes = "删除商品")
     @RequestMapping(value = "delete", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "删除商品", level = LogLevelEnum.LEVEL_3)
     public Object delete(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
@@ -295,6 +310,7 @@ public class APIProductController {
      */
     @ApiOperation(value = "批量添加或修改商品价格", httpMethod = "POST", notes = "批量添加或修改商品价格")
     @RequestMapping(value = "batchaddorupdateprice", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "批量添加或修改商品价格", level = LogLevelEnum.LEVEL_2)
     public Object batchAddOrUpdatePrice(@ModelAttribute ProductPriceBatchAddOrUpdateReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateId(req.getProductId(), new ProductException(ProductCodeEnum.PRODUCT_ID_IS_NULL));
@@ -313,6 +329,7 @@ public class APIProductController {
      */
     @ApiOperation(value = "根据价格ID获得某一商品价格", httpMethod = "GET", response = ProductPriceResp.class, notes = "根据价格ID获得某一商品价格")
     @RequestMapping(value = "getpricebyid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "根据价格ID获得某一商品价格", level = LogLevelEnum.LEVEL_1)
     public Object getPriceById(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
@@ -329,6 +346,7 @@ public class APIProductController {
      */
     @ApiOperation(value = "获得某一商品在某城市的价格", httpMethod = "GET", response = ProductPriceResp.class, notes = "获得某一商品在某城市的价格")
     @RequestMapping(value = "getpricebycity", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "获得某一商品在某城市的价格", level = LogLevelEnum.LEVEL_1)
     public Object getPriceByCity(@ModelAttribute GetProductPriceByCityReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateId(req.getProductId(), new ProductException(ProductCodeEnum.PRODUCT_ID_IS_NULL));
@@ -346,6 +364,7 @@ public class APIProductController {
      */
     @ApiOperation(value = "获得商品的价格列表", httpMethod = "GET", response = ProductPriceResp.class, responseContainer = "List", notes = "获得商品的价格列表")
     @RequestMapping(value = "getpricelist", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "获得商品的价格列表", level = LogLevelEnum.LEVEL_1)
     public Object getPriceList(@ModelAttribute ProductPriceListReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validatePaging(req);
@@ -365,6 +384,7 @@ public class APIProductController {
      */
     @ApiOperation(value = "批量删除商品价格", httpMethod = "GET", notes = "批量删除商品价格")
     @RequestMapping(value = "batchdeleteprice", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "批量删除商品价格", level = LogLevelEnum.LEVEL_2)
     public Object batchDeletePrice(@ModelAttribute IdListReq req) {
         CommonValidator.validateIdList(req, new ProductException(ProductCodeEnum.PRODUCT_PRICE_ID_IS_NULL));
         //调用BIZ方法
@@ -379,6 +399,7 @@ public class APIProductController {
      */
     @ApiOperation(value = "更新价格", httpMethod = "POST", notes = "更新价格")
     @RequestMapping(value = "updateprice", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "更新价格", level = LogLevelEnum.LEVEL_2)
     public Object updatePrice(@ModelAttribute ProductPriceUpdateReq req) {
         CommonValidator.validateId(req);
         validatePrice(req.getPrice());
@@ -395,6 +416,7 @@ public class APIProductController {
      */
     @ApiOperation(value = "更新价格状态", httpMethod = "POST", notes = "更新价格状态")
     @RequestMapping(value = "updatepricestatus", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "更新价格状态", level = LogLevelEnum.LEVEL_2)
     public Object updatePriceStatus(@ModelAttribute StatusReq req) {
         validateStatus(req);
         //调用BIZ方法

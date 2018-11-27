@@ -2,6 +2,9 @@ package com.jiazhe.youxiang.server.controller.voucher;
 
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherExchangeRecordAdapter;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherExchangeRecordBiz;
+import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
+import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.dto.voucher.exchangerecord.VoucherExchangeRecordDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
@@ -31,6 +34,7 @@ public class APIVoucherExchangeRecordController {
 
     @ApiOperation(value = "【后台、暂时无用】分页查询代金券兑换记录", httpMethod = "GET", response = VoucherExchangeRecordResp.class, responseContainer = "List",notes = "【组合条件】分页查询代金券兑换记录")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "分页查询代金券兑换记录", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute VoucherExchangeRecordPageReq req) {
         Paging paging = new Paging();
         paging.setOffset((req.getPageNum()-1)*req.getPageSize());

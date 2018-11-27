@@ -13,8 +13,8 @@ package com.jiazhe.youxiang.server.common.enums;
  */
 public enum LogLevelEnum {
 
-    LEVEL_0(0, "0级"), LEVEL_1(1, "一级"), LEVEL_2(2, "二级"),
-
+    LEVEL_1(1, "一级"),
+    LEVEL_2(2, "二级"),
     LEVEL_3(3, "三级");
 
     private Integer id;

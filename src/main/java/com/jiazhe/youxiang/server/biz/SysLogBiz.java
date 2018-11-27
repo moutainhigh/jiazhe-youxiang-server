@@ -13,6 +13,7 @@ import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class SysLogBiz {
     private static ExecutorService executorService = Executors.newFixedThreadPool(2);
 
     private static SysLogService sysLogService;
+
 
     @Autowired
     public void setSysLogService(SysLogService sysLogService) {

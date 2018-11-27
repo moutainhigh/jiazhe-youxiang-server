@@ -6,6 +6,9 @@ import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.order.OrderInfoBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
+import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
+import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.OrderException;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
@@ -43,6 +46,7 @@ public class APIOrderInfoController extends BaseController {
 
     @ApiOperation(value = "【后台】分页查询订单信息", httpMethod = "GET", response = OrderInfoResp.class, responseContainer = "List", notes = "【后台】分页查询订单信息")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "分页查询订单信息", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute OrderInfoPageReq req) {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getStatus(), req.getOrderCode(), req.getMobile(), req.getCustomerMobile(), req.getOrderStartTime(), req.getOrderEndTime(), req.getWorkerMobile(), paging);
@@ -53,6 +57,7 @@ public class APIOrderInfoController extends BaseController {
     @AppApi
     @ApiOperation(value = "【APP端】分页查询订单信息", httpMethod = "GET", response = OrderInfoResp.class, responseContainer = "List", notes = "【后台】分页查询订单信息")
     @RequestMapping(value = "/customerlistpage", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "分页查询订单信息", level = LogLevelEnum.LEVEL_1)
     public Object customerListPage(@ModelAttribute CustomerOrderInfoPageReq req) {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.customerGetList(req.getCustomerId(), req.getStatus(), paging);
@@ -63,6 +68,7 @@ public class APIOrderInfoController extends BaseController {
     @AppApi
     @ApiOperation(value = "【APP端】客户取消订单", httpMethod = "POST", notes = "【APP端】客户取消订单")
     @RequestMapping(value = "/customercancelorder", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "客户取消订单", level = LogLevelEnum.LEVEL_2)
     public Object customerCancelOrder(@ModelAttribute IdReq req) {
         orderInfoBiz.customerCancelOrder(req.getId());
         return ResponseFactory.buildSuccess();
@@ -71,6 +77,7 @@ public class APIOrderInfoController extends BaseController {
     @AppApi
     @ApiOperation(value = "【APP端】计算客户需要在线支付的金额", httpMethod = "GET", response = NeedPayResp.class, notes = "计算客户需要在线支付的金额")
     @RequestMapping(value = "/customerneedpaycash", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "计算客户需要在线支付的金额", level = LogLevelEnum.LEVEL_1)
     public Object customerNeedPayCash(@ModelAttribute IdReq req) {
         BigDecimal needPayCash = orderInfoBiz.customerNeedPayCash(req.getId());
         NeedPayResp needPayResp = new NeedPayResp();
@@ -81,6 +88,7 @@ public class APIOrderInfoController extends BaseController {
     @AppApi
     @ApiOperation(value = "【APP端】支付前检查", httpMethod = "GET", notes = "支付前检查")
     @RequestMapping(value = "/prepaymentcheck", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "支付前检查", level = LogLevelEnum.LEVEL_1)
     public Object prePaymentCheck(@ModelAttribute IdReq req) {
         orderInfoBiz.prePaymentCheck(req.getId());
         return ResponseFactory.buildSuccess();
@@ -89,6 +97,7 @@ public class APIOrderInfoController extends BaseController {
     @AppApi
     @ApiOperation(value = "【APP端】客户支付", httpMethod = "POST", response = NeedPayResp.class, notes = "客户支付")
     @RequestMapping(value = "/customerpay", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "客户支付", level = LogLevelEnum.LEVEL_2)
     public Object customerPay(@ModelAttribute CustomerPayReq req) {
         BigDecimal needPayCash = orderInfoBiz.customerPay(req.getOrderId(), req.getPayCash(), req.getSerialNumber());
         NeedPayResp needPayResp = new NeedPayResp();
@@ -98,6 +107,7 @@ public class APIOrderInfoController extends BaseController {
 
     @ApiOperation(value = "审核通过", httpMethod = "POST", notes = "审核通过")
     @RequestMapping(value = "/ordercancelpass", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "审核通过", level = LogLevelEnum.LEVEL_2)
     public Object orderCancelPass(@ModelAttribute IdReq req) {
         orderInfoBiz.orderCancelPass(req.getId());
         return ResponseFactory.buildSuccess();
@@ -105,6 +115,7 @@ public class APIOrderInfoController extends BaseController {
 
     @ApiOperation(value = "审核不通过", httpMethod = "POST", notes = "审核不通过")
     @RequestMapping(value = "/ordercancelunpass", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "审核不通过", level = LogLevelEnum.LEVEL_2)
     public Object orderCancelUnpass(@ModelAttribute OrderCancelUnpassReq req) {
         orderInfoBiz.orderCancelUnpass(req.getOrderId(), req.getAuditReason());
         return ResponseFactory.buildSuccess();
@@ -112,6 +123,7 @@ public class APIOrderInfoController extends BaseController {
 
     @ApiOperation(value = "员工取消订单", httpMethod = "POST", notes = "员工取消订单")
     @RequestMapping(value = "/usercancelorder", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "员工取消订单", level = LogLevelEnum.LEVEL_2)
     public Object userCancelOrder(@ModelAttribute IdReq req) {
         orderInfoBiz.userCancelOrder(req.getId());
         return ResponseFactory.buildSuccess();
@@ -119,6 +131,7 @@ public class APIOrderInfoController extends BaseController {
 
     @ApiOperation(value = "员工完成订单", httpMethod = "POST", notes = "员工完成订单")
     @RequestMapping(value = "/usercompleteorder", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "员工完成订单", level = LogLevelEnum.LEVEL_2)
     public Object userCompleteOrder(@ModelAttribute IdReq req) {
         orderInfoBiz.userCompleteOrder(req.getId());
         return ResponseFactory.buildSuccess();
@@ -126,6 +139,7 @@ public class APIOrderInfoController extends BaseController {
 
     @ApiOperation(value = "【后端】下单", httpMethod = "POST", response = NeedPayResp.class, notes = "【后端】下单")
     @RequestMapping(value = "/userplaceorder", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "下单", level = LogLevelEnum.LEVEL_2)
     public Object userPlaceOrder(@ModelAttribute UserPlaceOrderReq req) throws ParseException {
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqUserPlaceOrder2DTOPlaceOrder(req);
         placeOrderDTO.setType(Byte.valueOf("0"));
@@ -139,6 +153,7 @@ public class APIOrderInfoController extends BaseController {
     @AppApi
     @ApiOperation(value = "【APP端】下单", httpMethod = "POST", response = NeedPayResp.class, notes = "【APP端】下单")
     @RequestMapping(value = "/customerplaceorder", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "下单", level = LogLevelEnum.LEVEL_2)
     public Object customerPlaceOrder(@ModelAttribute CustomerPlaceOrderReq req) throws ParseException {
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqCustomerPlaceOrder2DTOPlaceOrder(req);
         placeOrderDTO.setWorkerMobile("");
@@ -155,6 +170,7 @@ public class APIOrderInfoController extends BaseController {
 
     @ApiOperation(value = "员工预约服务、派单", httpMethod = "POST", notes = "员工预约服务、派单")
     @RequestMapping(value = "/userreservationorder", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "员工预约服务、派单", level = LogLevelEnum.LEVEL_2)
     public Object userReservationOrder(@ModelAttribute UserReservationOrderReq req) {
         CommonValidator.validateNull(req.getRealServiceTime(), new OrderException(OrderCodeEnum.REAL_SERVICE_TIME_IS_NULL));
         CommonValidator.validateNull(req.getWorkerName(), new OrderException(OrderCodeEnum.WORKER_NAME_IS_NAME));
@@ -166,6 +182,7 @@ public class APIOrderInfoController extends BaseController {
 
     @ApiOperation(value = "员工修改预约信息", httpMethod = "POST", notes = "员工修改预约信息")
     @RequestMapping(value = "/userchangereservationinfo", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "员工修改预约信息", level = LogLevelEnum.LEVEL_2)
     public Object userChangeReservationInfo(@ModelAttribute UserReservationOrderReq req) {
         CommonValidator.validateNull(req.getRealServiceTime(), new OrderException(OrderCodeEnum.REAL_SERVICE_TIME_IS_NULL));
         CommonValidator.validateNull(req.getWorkerName(), new OrderException(OrderCodeEnum.WORKER_NAME_IS_NAME));
@@ -176,6 +193,7 @@ public class APIOrderInfoController extends BaseController {
 
     @ApiOperation(value = "员工追加订单", httpMethod = "POST", notes = "员工追加订单")
     @RequestMapping(value = "/appendorder", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "员工追加订单", level = LogLevelEnum.LEVEL_2)
     public Object appendOrder(@ModelAttribute AppendOrderReq req) {
         orderInfoBiz.appendOrder(OrderInfoAdapter.ReqAppendOrder2DTOAppendOrder(req));
         return ResponseFactory.buildSuccess();
@@ -183,6 +201,7 @@ public class APIOrderInfoController extends BaseController {
 
     @ApiOperation(value = "获取订单信息", httpMethod = "GET", response = OrderInfoResp.class, notes = "客户支付")
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "获取订单信息", level = LogLevelEnum.LEVEL_1)
     public Object getById(@ModelAttribute IdReq req) {
         OrderInfoDTO orderInfoDTO = orderInfoBiz.getById(req.getId());
         OrderInfoResp orderInfoResp = OrderInfoAdapter.DTO2Resp(orderInfoDTO);
@@ -191,6 +210,7 @@ public class APIOrderInfoController extends BaseController {
 
     @ApiOperation(value = "待预约订单数量", httpMethod = "GET", response = WaitingDealCountResp.class, notes = "待预约订单数量")
     @RequestMapping(value = "/getunsentordercount", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "待预约订单数量", level = LogLevelEnum.LEVEL_1)
     public Object getUnsentOrderCount() {
         Integer count = orderInfoBiz.getUnsentOrderCount();
         WaitingDealCountResp waitingDealCountResp = new WaitingDealCountResp();
@@ -200,6 +220,7 @@ public class APIOrderInfoController extends BaseController {
 
     @ApiOperation(value = "取消待审核订单数量", httpMethod = "GET", response = WaitingDealCountResp.class, notes = "取消待审核订单数量")
     @RequestMapping(value = "/getunauditordercount", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "取消待审核订单数量", level = LogLevelEnum.LEVEL_1)
     public Object getUnauditOrderCount() {
         Integer count = orderInfoBiz.getUnauditOrderCount();
         WaitingDealCountResp waitingDealCountResp = new WaitingDealCountResp();
