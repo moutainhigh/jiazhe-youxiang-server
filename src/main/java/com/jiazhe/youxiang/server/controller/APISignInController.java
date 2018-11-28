@@ -8,6 +8,7 @@ import com.jiazhe.youxiang.base.realm.UserRealm;
 import com.jiazhe.youxiang.base.util.*;
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
+import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
@@ -146,6 +147,7 @@ public class APISignInController extends BaseController {
         return ResponseFactory.buildResponse(sendMsgResp);
     }
 
+    @AppApi
     @ApiOperation(value = "客户登录", httpMethod = "GET", response = CustomerLoginResp.class, notes = "客户登录")
     @RequestMapping(value = "/customersignin")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "客户登录", level = LogLevelEnum.LEVEL_2)
@@ -197,7 +199,7 @@ public class APISignInController extends BaseController {
         customerLoginResp.setCustomerName(customerDTO.getName());
         return ResponseFactory.buildResponse(customerLoginResp);
     }
-
+    @AppApi
     @ApiOperation(value = "根据电话号码，发送验证码", httpMethod = "GET", response = SendMsgResp.class, notes = "根据电话号码，发送验证码")
     @RequestMapping(value = "/customersendcode")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "根据电话号码，发送验证码", level = LogLevelEnum.LEVEL_2)
