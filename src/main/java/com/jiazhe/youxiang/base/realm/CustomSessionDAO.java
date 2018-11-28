@@ -36,7 +36,7 @@ public class CustomSessionDAO extends AbstractSessionDAO {
     @Override
     protected Serializable doCreate(Session session) {
         Serializable sessionId = this.generateSessionId(session);
-        LOGGER.info("doCreate sessionId:{}", sessionId);
+        LOGGER.debug("doCreate sessionId:{}", sessionId);
         SimpleSessionPO simpleSessionPO = new SimpleSessionPO();
         simpleSessionPO.setCookie(sessionId.toString());
         simpleSessionPO.setSession(SerializableUtils.serialize(session));
@@ -48,7 +48,7 @@ public class CustomSessionDAO extends AbstractSessionDAO {
 
     @Override
     protected Session doReadSession(Serializable sessionId) {
-        LOGGER.info("doReadSession sessionId:{}", sessionId);
+        LOGGER.debug("doReadSession sessionId:{}", sessionId);
         Session session = this.sessions.get(sessionId);
         //是否有active的session
         if (null == session) {
@@ -75,7 +75,7 @@ public class CustomSessionDAO extends AbstractSessionDAO {
 
     @Override
     public void update(Session session) throws UnknownSessionException {
-        LOGGER.info("update sessionId:{}", session.getId());
+        LOGGER.debug("update sessionId:{}", session.getId());
         this.storeSession(session.getId(), session);
         if (session instanceof ValidatingSession
                 && !((ValidatingSession) session).isValid()) {
@@ -91,7 +91,7 @@ public class CustomSessionDAO extends AbstractSessionDAO {
 
     @Override
     public void delete(Session session) {
-        LOGGER.info("delete sessionId:{}", session.getId());
+        LOGGER.debug("delete sessionId:{}", session.getId());
         if (session == null) {
             throw new NullPointerException("session argument cannot be null.");
         } else {
@@ -114,7 +114,7 @@ public class CustomSessionDAO extends AbstractSessionDAO {
     }
 
     protected Session storeSession(Serializable id, Session session) {
-        LOGGER.info("storeSession sessionId:{}", id);
+        LOGGER.debug("storeSession sessionId:{}", id);
         if (id == null) {
             throw new NullPointerException("id argument cannot be null.");
         } else {
