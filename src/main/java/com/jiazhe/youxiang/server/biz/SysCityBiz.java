@@ -70,4 +70,11 @@ public class SysCityBiz {
         return sysCityService.getOpenList();
     }
 
+    public List<SysCityDTO> getProvinceList() {
+        return sysCityService.getProvinceList();
+    }
+
+    public List<SysCityDTO> getCityList(String cityCode) {
+        return sysCityService.getCityList(cityCode);
+    }
 }
