@@ -9,7 +9,7 @@ function initImgControl(file_selector, img_selector, input_selector) {
         allowExt: ['jpg', 'jpeg', 'png', 'gif', 'tif', 'tiff', 'bmp'],
         allowMime: ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/tif', 'image/tiff', 'image/bmp'],
         before_remove: function () {
-            imgControl.attr('hidden', 'hidden');
+            $(img_selector).attr('hidden', 'hidden');
             return true;
         }
     }).on('change', function () {
