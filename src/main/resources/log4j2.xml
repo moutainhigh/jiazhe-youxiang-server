@@ -20,16 +20,16 @@
             </Policies>
         </RollingFile>
 
-        <RollingFile name="WarnLog" fileName="${log.home}/error.log" filePattern="${log.home}/warn.log.%d{yyyy-MM-dd}.gz">
-            <Filters>
-                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
-                <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
-            </Filters>
-            <PatternLayout pattern="${FILE_LOG_PATTERN}" />
-            <Policies>
-                <TimeBasedTriggeringPolicy/>
-            </Policies>
-        </RollingFile>
+        <!--<RollingFile name="WarnLog" fileName="${log.home}/error.log" filePattern="${log.home}/warn.log.%d{yyyy-MM-dd}.gz">-->
+            <!--<Filters>-->
+                <!--<ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>-->
+                <!--<ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>-->
+            <!--</Filters>-->
+            <!--<PatternLayout pattern="${FILE_LOG_PATTERN}" />-->
+            <!--<Policies>-->
+                <!--<TimeBasedTriggeringPolicy/>-->
+            <!--</Policies>-->
+        <!--</RollingFile>-->
 
         <RollingFile name="ErrorLog" fileName="${log.home}/error.log" filePattern="${log.home}/error.log.%d{yyyy-MM-dd}.gz">
             <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
@@ -44,7 +44,7 @@
         <Root level="INFO" includeLocation="true">
             <appender-ref ref="Stdout"/>
             <appender-ref ref="AllLog"/>
-            <appender-ref ref="WarnLog"/>
+            <!--<appender-ref ref="WarnLog"/>-->
             <appender-ref ref="ErrorLog"/>
         </Root>
 
@@ -52,7 +52,7 @@
         <Logger name="org.springframework" level="INFO" includeLocation="true" additivity="false">
             <appender-ref ref="Stdout"/>
             <appender-ref ref="AllLog"/>
-            <appender-ref ref="WarnLog"/>
+            <!--<appender-ref ref="WarnLog"/>-->
             <appender-ref ref="ErrorLog"/>
         </Logger>
 
@@ -60,7 +60,7 @@
         <Logger name="youxiang" level="INFO" includeLocation="true" additivity="false">
             <appender-ref ref="Stdout"/>
             <appender-ref ref="AllLog"/>
-            <appender-ref ref="WarnLog"/>
+            <!--<appender-ref ref="WarnLog"/>-->
             <appender-ref ref="ErrorLog"/>
         </Logger>
     </Loggers>
