@@ -190,7 +190,7 @@ public class APIOrderInfoController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "员工修改预约信息", level = LogLevelEnum.LEVEL_2)
     public Object userChangeReservationInfo(@ModelAttribute UserReservationOrderReq req) {
         if(req.getRealServiceTime()==0){
-            new OrderException(OrderCodeEnum.REAL_SERVICE_TIME_IS_NULL);
+            throw new OrderException(OrderCodeEnum.REAL_SERVICE_TIME_IS_NULL);
         }
         CommonValidator.validateNull(req.getWorkerName(), new OrderException(OrderCodeEnum.WORKER_NAME_IS_NAME));
         CommonValidator.validateNull(req.getWorkerMobile(), new OrderException(OrderCodeEnum.WORKER_MOBILE_IS_NAME));

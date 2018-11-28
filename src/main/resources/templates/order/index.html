@@ -96,7 +96,7 @@
                                             <span class="input-group-addon">
                                                 <i class="fa fa-calendar bigger-110"></i>
                                             </span>
-                                            <input type="hidden" name="orderStartTime" value=0 />
+                                            <input type="hidden" value=0 name="orderStartTime"/>
                                         </div>
                                     </div>
                                 </div>
@@ -110,7 +110,7 @@
                                             <span class="input-group-addon">
                                                 <i class="fa fa-calendar bigger-110"></i>
                                             </span>
-                                            <input type="hidden" name="orderEndTime" value=0 />
+                                            <input type="hidden" value=0 name="orderEndTime"/>
                                         </div>
                                     </div>
                                 </div>
@@ -267,11 +267,11 @@
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control datetime-picker"
-                                                                   id="re_realServiceTime" type="text" readonly/>
+                                                                   id="re_realServiceTime" type="text"/>
                                                             <span class="input-group-addon">
                                                                     <i class="fa fa-calendar bigger-110"></i>
                                                                 </span>
-                                                            <input type="hidden" name="realServiceTime" value=0 />
+                                                            <input type="hidden" value=0 name="realServiceTime"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -580,17 +580,14 @@
             value: 1, min: 1, max: 100, step: 1, on_sides: true, icon_up: 'ace-icon fa fa-plus',
             icon_down: 'ace-icon fa fa-minus', btn_up_class: 'btn-success', btn_down_class: 'btn-danger'
         }).closest('.ace-spinner')
-        .on('changed.fu.spinbox', function () {
+            .on('changed.fu.spinbox', function () {
 
-        });
+            });
 
         initDatePicker();
 
         $('#re_realServiceTime').datetimepicker({
             format: "YYYY-MM-DD HH:mm"
-        }).click(function () {
-            $(this).next().next().val($(this).val()==''?0:new Date($(this).val()).getTime());
-            console.log($(this).val());
         }).next().on(ace.click_event, function () {
             $(this).prev().focus();
         });
@@ -886,6 +883,7 @@
                     $("#re_customerAddress").val(result.customerAddress);
                     $("#re_serviceTime").val(timeFormat(result.serviceTime).substring(0, 16));
                     $("#re_realServiceTime").val(timeFormat(result.realServiceTime).substring(0, 16));
+                    $("#re_realServiceTime").next().next().val(result.realServiceTime);
                     $("#re_workerMobile").val(result.workerMobile);
                     $("#re_workerName").val(result.workerName);
                     $("#re_cost").val(result.cost);
@@ -930,6 +928,7 @@
     }
 
     function saveReservationInfo() {
+        $("#re_realServiceTime").next().next().val($("#re_realServiceTime").val() == '' ? 0 : new Date($("#re_realServiceTime").val()).getTime());
         $.ajax({
             url: "../api/orderinfo/userreservationorder",
             dataType: "json",
@@ -950,6 +949,7 @@
     }
 
     function changeReservationInfo() {
+        $("#re_realServiceTime").next().next().val($("#re_realServiceTime").val() == '' ? 0 : new Date($("#re_realServiceTime").val()).getTime());
         $.ajax({
             url: "../api/orderinfo/userchangereservationinfo",
             dataType: "json",
