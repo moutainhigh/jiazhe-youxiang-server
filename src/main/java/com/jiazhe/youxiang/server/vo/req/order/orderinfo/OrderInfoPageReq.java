@@ -25,13 +25,11 @@ public class OrderInfoPageReq extends PageSizeNumReq {
     @ApiModelProperty("收货手机号")
     private String customerMobile;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty("下单期间起")
-    private Date orderStartTime;
+    private Long orderStartTime;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty("下单时间止")
-    private Date orderEndTime;
+    private Long orderEndTime;
 
     @ApiModelProperty("服务人员电话")
     private String workerMobile;
@@ -69,19 +67,19 @@ public class OrderInfoPageReq extends PageSizeNumReq {
         this.orderCode = orderCode;
     }
 
-    public Date getOrderStartTime() {
+    public Long getOrderStartTime() {
         return orderStartTime;
     }
 
-    public void setOrderStartTime(Date orderStartTime) {
+    public void setOrderStartTime(Long orderStartTime) {
         this.orderStartTime = orderStartTime;
     }
 
-    public Date getOrderEndTime() {
+    public Long getOrderEndTime() {
         return orderEndTime;
     }
 
-    public void setOrderEndTime(Date orderEndTime) {
+    public void setOrderEndTime(Long orderEndTime) {
         this.orderEndTime = orderEndTime;
     }
 

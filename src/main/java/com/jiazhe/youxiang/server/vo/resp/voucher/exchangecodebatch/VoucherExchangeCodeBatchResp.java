@@ -22,7 +22,7 @@ public class VoucherExchangeCodeBatchResp extends BaseVO {
 
     private Integer count;
 
-    private Date expiryTime;
+    private Long expiryTime;
 
     private Byte status;
 
@@ -60,11 +60,11 @@ public class VoucherExchangeCodeBatchResp extends BaseVO {
         this.count = count;
     }
 
-    public Date getExpiryTime() {
+    public Long getExpiryTime() {
         return expiryTime;
     }
 
-    public void setExpiryTime(Date expiryTime) {
+    public void setExpiryTime(Long expiryTime) {
         this.expiryTime = expiryTime;
     }
 

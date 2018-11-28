@@ -36,7 +36,7 @@ public class EleProductCodeResp extends BaseVO {
     private Byte status;
 
     @ApiModelProperty("过期时间，指在本系统过期时间，过期后不发放给客户")
-    private Date expiryTime;
+    private Long expiryTime;
 
     public Integer getId() {
         return id;
@@ -86,11 +86,11 @@ public class EleProductCodeResp extends BaseVO {
         this.status = status;
     }
 
-    public Date getExpiryTime() {
+    public Long getExpiryTime() {
         return expiryTime;
     }
 
-    public void setExpiryTime(Date expiryTime) {
+    public void setExpiryTime(Long expiryTime) {
         this.expiryTime = expiryTime;
     }
 

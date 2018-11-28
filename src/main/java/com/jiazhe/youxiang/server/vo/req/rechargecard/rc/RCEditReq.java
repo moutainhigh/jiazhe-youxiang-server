@@ -28,9 +28,8 @@ public class RCEditReq extends BaseVO {
     @ApiModelProperty("描述")
     private String description;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty("过期时间")
-    private Date expiryTime;
+    private Long expiryTime;
 
     public Integer getId() {
         return id;
@@ -72,11 +71,11 @@ public class RCEditReq extends BaseVO {
         this.description = description;
     }
 
-    public Date getExpiryTime() {
+    public Long getExpiryTime() {
         return expiryTime;
     }
 
-    public void setExpiryTime(Date expiryTime) {
+    public void setExpiryTime(Long expiryTime) {
         this.expiryTime = expiryTime;
     }
 }

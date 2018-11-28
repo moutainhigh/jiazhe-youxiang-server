@@ -17,6 +17,7 @@ import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.eleproductcode.EleProductCodePageReq;
 import com.jiazhe.youxiang.server.vo.req.eleproductcode.ExpiryTimeEditReq;
 import com.jiazhe.youxiang.server.vo.req.eleproductcode.ImportCodeReq;
+import com.jiazhe.youxiang.server.vo.resp.eleproductcode.EleProductCodeBatchResp;
 import com.jiazhe.youxiang.server.vo.resp.eleproductcode.EleProductCodeResp;
 import com.jiazhe.youxiang.server.vo.resp.eleproductcode.UploadExcelResp;
 import io.swagger.annotations.ApiOperation;
@@ -37,6 +38,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,14 +70,13 @@ public class APIEleProductCodeController extends BaseController {
         return ResponseFactory.buildPaginationResponse(eleProductExCodeRespList,paging);
     }
 
-    @ApiOperation(value = "【后台】获取所有批次", httpMethod = "GET",response = EleProductCodeResp.class ,responseContainer = "List" ,notes = "获取所有批次，无条件")
+    @ApiOperation(value = "【后台】获取所有批次", httpMethod = "GET",response = EleProductCodeBatchResp.class ,responseContainer = "List" ,notes = "获取所有批次，无条件")
     @RequestMapping(value = "/getallbatch", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ELE_PRODUCT, operate = "获取所有批次", level = LogLevelEnum.LEVEL_1)
     public Object getAllBatch() {
-        //参数检查
         List<EleProductCodeDTO> eleProductExCodeDTOList = eleProductCodeBiz.getAllBatch();
-        List<EleProductCodeResp> eleProductExCodeRespList = eleProductExCodeDTOList.stream().map(EleProductCodeAdapter::DTO2Resp).collect(Collectors.toList());
-        return ResponseFactory.buildResponse(eleProductExCodeRespList);
+        List<EleProductCodeBatchResp> eleProductExCodeBatchRespList = eleProductExCodeDTOList.stream().map(EleProductCodeAdapter::DTO2BatchResp).collect(Collectors.toList());
+        return ResponseFactory.buildResponse(eleProductExCodeBatchRespList);
     }
 
     @ApiOperation(value = "【后台】上传电子码excel并校验", httpMethod = "POST",response = UploadExcelResp.class ,notes = "上传电子码excel并校验")
@@ -109,9 +110,11 @@ public class APIEleProductCodeController extends BaseController {
         //参数检查
         CommonValidator.validateNull(req.getProductId(),new EleProductCodeException(EleProductCodeEnum.PRODUCT_IS_NULL));
         CommonValidator.validateNull(req.getBatchName(),new EleProductCodeException(EleProductCodeEnum.BATCH_NAME_IS_NULL));
-        CommonValidator.validateNull(req.getExpiryTime(),new EleProductCodeException(EleProductCodeEnum.EXPIRY_TIME_IS_NULL));
+        if(req.getExpiryTime()==0){
+            throw new EleProductCodeException(EleProductCodeEnum.EXPIRY_TIME_IS_NULL);
+        }
         CommonValidator.validateNull(req.getExcelUrl(),new EleProductCodeException(EleProductCodeEnum.FILE_NOT_EXIST));
-        eleProductCodeBiz.importCode(excelpath+"/"+req.getExcelUrl(),req.getProductId(),req.getBatchName(),req.getExpiryTime());
+        eleProductCodeBiz.importCode(excelpath+"/"+req.getExcelUrl(),req.getProductId(),req.getBatchName(),new Date(req.getExpiryTime()));
         return ResponseFactory.buildSuccess();
     }
 
@@ -120,8 +123,10 @@ public class APIEleProductCodeController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.ELE_PRODUCT, operate = "批量修改电子码有效期", level = LogLevelEnum.LEVEL_2)
     public Object batchChangeExpiryTime(@ModelAttribute ExpiryTimeEditReq req) {
         //参数检查
-        CommonValidator.validateNull(req.getExpiryTime(),new EleProductCodeException(EleProductCodeEnum.EXPIRY_TIME_IS_NULL));
-        eleProductCodeBiz.batchChangeExpiryTime(req.getBatchName(),req.getExpiryTime());
+        if(req.getExpiryTime()==0){
+            throw new EleProductCodeException(EleProductCodeEnum.EXPIRY_TIME_IS_NULL);
+        }
+        eleProductCodeBiz.batchChangeExpiryTime(req.getBatchName(),new Date(req.getExpiryTime()));
         return ResponseFactory.buildSuccess();
     }
 

@@ -51,7 +51,7 @@
 
     <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.OrderInfoPO">
         SELECT
-        o.id,o.order_code,o.customer_id,o.product_id,o.customer_city_code,o.customer_city_name,o.product_price,o.count,o.customer_address,o.customer_mobile,o.customer_name,o.customer_remark,o.worker_name,o.worker_mobile,o.order_time
+        o.id,o.order_code,o.customer_id,o.product_id,o.customer_city_code,o.customer_city_name,o.product_price,o.count,o.customer_address,o.customer_mobile,o.customer_name,o.customer_remark,o.worker_name,o.worker_mobile,o.order_time,
         service_time,o.real_service_time,o.pay_recharge_card,o.pay_voucher,o.pay_cash,o.total_amount,o.cost,o.comments,o.type,o.status,o.audit_reason,o.ext_info,o.
         is_deleted,o.add_time,o.mod_time
         FROM order_info o

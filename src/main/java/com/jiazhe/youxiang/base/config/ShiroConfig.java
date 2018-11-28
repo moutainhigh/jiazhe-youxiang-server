@@ -46,13 +46,9 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/system/index", "anon"); //登录页url匿名访问
         filterChainDefinitionMap.put("/system/login", "anon");//登陆系统匿名访问
         filterChainDefinitionMap.put("/system/logout", "anon");//退出系统匿名访问
-        filterChainDefinitionMap.put("/api/signin/usersendcode", "anon");//发送验证码匿名访问
-        filterChainDefinitionMap.put("/api/signin/usersignin", "anon");//后台登陆请求
-        filterChainDefinitionMap.put("/api/signin/customersendcode", "anon");//发送验证码匿名访问
-        filterChainDefinitionMap.put("/api/signin/customersignin", "anon");//前台登陆请求
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/templates/**", "anon");
-        filterChainDefinitionMap.put("/api/signin/**", "anon");//发送验证码匿名访问
+        filterChainDefinitionMap.put("/api/signin/**", "anon");//登录、发送验证码等匿名访问
         filterChainDefinitionMap.put("/**", "authc");//表示所有url必须通过认证才能访问
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;

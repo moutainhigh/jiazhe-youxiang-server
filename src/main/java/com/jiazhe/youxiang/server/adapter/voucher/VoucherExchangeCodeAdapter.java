@@ -9,6 +9,8 @@ import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeC
 import com.jiazhe.youxiang.server.vo.req.voucher.exchangecode.VoucherExchangeCodeEditReq;
 import com.jiazhe.youxiang.server.vo.resp.voucher.exchangecode.VoucherExchangeCodeResp;
 
+import java.util.Date;
+
 /**
  * @author TU
  * @description
@@ -29,8 +31,8 @@ public class VoucherExchangeCodeAdapter {
         voucherExchangeCodeResp.setCount(dto.getCount());
         voucherExchangeCodeResp.setCode(dto.getCode());
         voucherExchangeCodeResp.setKeyt(dto.getKeyt());
-        voucherExchangeCodeResp.setExpiryTime(dto.getExpiryTime());
-        voucherExchangeCodeResp.setVoucherExpiryTime(dto.getVoucherExpiryTime());
+        voucherExchangeCodeResp.setExpiryTime(dto.getExpiryTime().getTime());
+        voucherExchangeCodeResp.setVoucherExpiryTime(dto.getVoucherExpiryTime().getTime());
         voucherExchangeCodeResp.setValidityPeriod(dto.getValidityPeriod());
         voucherExchangeCodeResp.setExpiryType(dto.getExpiryType());
         voucherExchangeCodeResp.setStatus(dto.getStatus());
@@ -121,8 +123,8 @@ public class VoucherExchangeCodeAdapter {
         voucherExchangeCodeEditDTO.setBatchDescription(req.getBatchDescription());
         voucherExchangeCodeEditDTO.setCityCodes(req.getCityCodes());
         voucherExchangeCodeEditDTO.setProductIds(req.getProductIds());
-        voucherExchangeCodeEditDTO.setExpiryTime(req.getExpiryTime());
-        voucherExchangeCodeEditDTO.setVoucherExpiryTime(req.getVoucherExpiryTime());
+        voucherExchangeCodeEditDTO.setExpiryTime(new Date(req.getExpiryTime()));
+        voucherExchangeCodeEditDTO.setVoucherExpiryTime(new Date(req.getVoucherExpiryTime()));
         voucherExchangeCodeEditDTO.setValidityPeriod(req.getValidityPeriod());
         voucherExchangeCodeEditDTO.setExpiryType(req.getExpiryType());
         return voucherExchangeCodeEditDTO;

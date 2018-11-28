@@ -33,9 +33,9 @@ public class VoucherExchangeCodeResp extends BaseVO{
 
     private Integer count;
 
-    private Date expiryTime;
+    private Long expiryTime;
 
-    private Date voucherExpiryTime;
+    private Long voucherExpiryTime;
 
     private Integer validityPeriod;
 
@@ -75,14 +75,6 @@ public class VoucherExchangeCodeResp extends BaseVO{
 
     public void setKeyt(String keyt) {
         this.keyt = keyt;
-    }
-
-    public Date getExpiryTime() {
-        return expiryTime;
-    }
-
-    public void setExpiryTime(Date expiryTime) {
-        this.expiryTime = expiryTime;
     }
 
     public Byte getStatus() {
@@ -141,11 +133,19 @@ public class VoucherExchangeCodeResp extends BaseVO{
         this.count = count;
     }
 
-    public Date getVoucherExpiryTime() {
+    public Long getExpiryTime() {
+        return expiryTime;
+    }
+
+    public void setExpiryTime(Long expiryTime) {
+        this.expiryTime = expiryTime;
+    }
+
+    public Long getVoucherExpiryTime() {
         return voucherExpiryTime;
     }
 
-    public void setVoucherExpiryTime(Date voucherExpiryTime) {
+    public void setVoucherExpiryTime(Long voucherExpiryTime) {
         this.voucherExpiryTime = voucherExpiryTime;
     }
 

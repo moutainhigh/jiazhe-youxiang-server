@@ -31,7 +31,7 @@ public class RCExchangeCodeBatchResp extends BaseVO{
     private BigDecimal faceValue;
 
     @ApiModelProperty("批次过期时间")
-    private Date expiryTime;
+    private Long expiryTime;
 
     @ApiModelProperty("批次状态，0停用、1启用")
     private Byte status;
@@ -74,11 +74,15 @@ public class RCExchangeCodeBatchResp extends BaseVO{
         this.faceValue = faceValue;
     }
 
-    public Date getExpiryTime() {
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Long getExpiryTime() {
         return expiryTime;
     }
 
-    public void setExpiryTime(Date expiryTime) {
+    public void setExpiryTime(Long expiryTime) {
         this.expiryTime = expiryTime;
     }
 

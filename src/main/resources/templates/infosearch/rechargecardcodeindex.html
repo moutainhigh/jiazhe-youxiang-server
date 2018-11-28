@@ -119,10 +119,11 @@
                                                         <div class="col-sm-8">
                                                             <div class="input-group">
                                                                 <input class="form-control date-picker" id="saveExpiryTime"
-                                                                       name="expiryTime" type="text"/>
+                                                                       type="text" readonly />
                                                                 <span class="input-group-addon">
                                                                             <i class="fa fa-calendar bigger-110"></i>
                                                                         </span>
+                                                                <input type="hidden" value=0 name="expiryTime"/>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -153,11 +154,11 @@
                                                         <div class="col-sm-8">
                                                             <div class="input-group">
                                                                 <input class="form-control date-picker"
-                                                                       id="saveRechargeCardExpiryTime"
-                                                                       name="rechargeCardExpiryTime" type="text"/>
+                                                                       id="saveRechargeCardExpiryTime" type="text" readonly />
                                                                 <span class="input-group-addon">
                                                                             <i class="fa fa-calendar bigger-110"></i>
                                                                         </span>
+                                                                <input type="hidden" value=0 name="rechargeCardExpiryTime"/>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -412,6 +413,7 @@
                     $("#codeSaveForm #saveCityCodes").val(result.cityCodes);
                     $("#codeSaveForm #saveProductIds").val(result.productIds);
                     $("#codeSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
+                    $("#codeSaveForm #saveExpiryTime").next().next().val(result.expiryTime);
                     if (result.expiryType == 0) {
                         $("#codeSaveForm #saveDeadLineRadio").click();
                     } else {
@@ -419,6 +421,7 @@
                     }
                     $("#codeSaveForm #saveValidityPeriod").val(result.validityPeriod);
                     $("#codeSaveForm #saveRechargeCardExpiryTime").val(dateFormat(result.rechargeCardExpiryTime));
+                    $("#codeSaveForm #saveRechargeCardExpiryTime").next().next().val(result.rechargeCardExpiryTime);
                     $("#codeSaveForm #saveDescription").val(result.batchDescription);
                     $("#modal-form").modal('show');
                 }

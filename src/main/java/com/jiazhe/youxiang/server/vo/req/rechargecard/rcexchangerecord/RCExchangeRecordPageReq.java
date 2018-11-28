@@ -13,10 +13,10 @@ import java.util.Date;
 public class RCExchangeRecordPageReq extends PageSizeNumReq {
 
     @ApiModelProperty("充值起始时间")
-    private Date beginDate;
+    private Long beginDate;
 
     @ApiModelProperty("充值结束时间")
-    private Date endDate;
+    private Long endDate;
 
     @ApiModelProperty("兑换码")
     private String code;
@@ -24,19 +24,19 @@ public class RCExchangeRecordPageReq extends PageSizeNumReq {
     @ApiModelProperty("密钥")
     private String keyt;
 
-    public Date getBeginDate() {
+    public Long getBeginDate() {
         return beginDate;
     }
 
-    public void setBeginDate(Date beginDate) {
+    public void setBeginDate(Long beginDate) {
         this.beginDate = beginDate;
     }
 
-    public Date getEndDate() {
+    public Long getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(Long endDate) {
         this.endDate = endDate;
     }
 

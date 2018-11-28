@@ -30,12 +30,10 @@ public class RCExchangeCodeEditReq extends BaseVO {
     private String productIds;
 
     @ApiModelProperty("兑换码本身过期时间")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date expiryTime;
+    private Long expiryTime;
 
     @ApiModelProperty("充值卡过期时间")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date rechargeCardExpiryTime;
+    private Long rechargeCardExpiryTime;
 
     @ApiModelProperty("自兑换之日起，充值卡有效期天数")
     private Integer validityPeriod;
@@ -83,19 +81,19 @@ public class RCExchangeCodeEditReq extends BaseVO {
         this.productIds = productIds;
     }
 
-    public Date getExpiryTime() {
+    public Long getExpiryTime() {
         return expiryTime;
     }
 
-    public void setExpiryTime(Date expiryTime) {
+    public void setExpiryTime(Long expiryTime) {
         this.expiryTime = expiryTime;
     }
 
-    public Date getRechargeCardExpiryTime() {
+    public Long getRechargeCardExpiryTime() {
         return rechargeCardExpiryTime;
     }
 
-    public void setRechargeCardExpiryTime(Date rechargeCardExpiryTime) {
+    public void setRechargeCardExpiryTime(Long rechargeCardExpiryTime) {
         this.rechargeCardExpiryTime = rechargeCardExpiryTime;
     }
 

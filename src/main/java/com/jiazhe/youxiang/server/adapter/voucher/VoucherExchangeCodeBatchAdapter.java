@@ -8,6 +8,8 @@ import com.jiazhe.youxiang.server.vo.req.voucher.exchangecodebatch.VoucherExchan
 import com.jiazhe.youxiang.server.vo.resp.voucher.exchangecodebatch.VoucherExchangeCodeBatchEditResp;
 import com.jiazhe.youxiang.server.vo.resp.voucher.exchangecodebatch.VoucherExchangeCodeBatchResp;
 
+import java.util.Date;
+
 /**
  * @author TU
  * @description
@@ -24,7 +26,7 @@ public class VoucherExchangeCodeBatchAdapter {
         voucherExchangeCodeBatchResp.setVoucherName(dto.getVoucherName());
         voucherExchangeCodeBatchResp.setAmount(dto.getAmount());
         voucherExchangeCodeBatchResp.setCount(dto.getCount());
-        voucherExchangeCodeBatchResp.setExpiryTime(dto.getExpiryTime());
+        voucherExchangeCodeBatchResp.setExpiryTime(dto.getExpiryTime().getTime());
         voucherExchangeCodeBatchResp.setStatus(dto.getStatus());
         voucherExchangeCodeBatchResp.setIsMade(dto.getIsMade());
         return voucherExchangeCodeBatchResp;
@@ -43,8 +45,8 @@ public class VoucherExchangeCodeBatchAdapter {
         voucherExchangeCodeBatchSaveDTO.setProjectId(req.getProjectId());
         voucherExchangeCodeBatchSaveDTO.setCityCodes(req.getCityCodes());
         voucherExchangeCodeBatchSaveDTO.setProductIds(req.getProductIds());
-        voucherExchangeCodeBatchSaveDTO.setExpiryTime(req.getExpiryTime());
-        voucherExchangeCodeBatchSaveDTO.setVoucherExpiryTime(req.getVoucherExpiryTime());
+        voucherExchangeCodeBatchSaveDTO.setExpiryTime(new Date(req.getExpiryTime()));
+        voucherExchangeCodeBatchSaveDTO.setVoucherExpiryTime(new Date(req.getVoucherExpiryTime()));
         voucherExchangeCodeBatchSaveDTO.setValidityPeriod(req.getValidityPeriod());
         voucherExchangeCodeBatchSaveDTO.setExpiryType(req.getExpiryType());
         voucherExchangeCodeBatchSaveDTO.setDescription(req.getDescription());
@@ -66,8 +68,8 @@ public class VoucherExchangeCodeBatchAdapter {
         voucherExchangeCodeBatchEditResp.setProductIds(voucherExchangeCodeBatchEditDTO.getProductIds());
         voucherExchangeCodeBatchEditResp.setAmount(voucherExchangeCodeBatchEditDTO.getAmount());
         voucherExchangeCodeBatchEditResp.setCount(voucherExchangeCodeBatchEditDTO.getCount());
-        voucherExchangeCodeBatchEditResp.setExpiryTime(voucherExchangeCodeBatchEditDTO.getExpiryTime());
-        voucherExchangeCodeBatchEditResp.setVoucherExpiryTime(voucherExchangeCodeBatchEditDTO.getVoucherExpiryTime());
+        voucherExchangeCodeBatchEditResp.setExpiryTime(voucherExchangeCodeBatchEditDTO.getExpiryTime().getTime());
+        voucherExchangeCodeBatchEditResp.setVoucherExpiryTime(voucherExchangeCodeBatchEditDTO.getVoucherExpiryTime().getTime());
         voucherExchangeCodeBatchEditResp.setValidityPeriod(voucherExchangeCodeBatchEditDTO.getValidityPeriod());
         voucherExchangeCodeBatchEditResp.setExpiryType(voucherExchangeCodeBatchEditDTO.getExpiryType());
         return voucherExchangeCodeBatchEditResp;

@@ -139,10 +139,11 @@
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker" id="saveExpiryTime"
-                                                                   name="expiryTime" type="text"/>
+                                                                   type="text" readonly />
                                                             <span class="input-group-addon">
                                                                         <i class="fa fa-calendar bigger-110"></i>
                                                                     </span>
+                                                            <input type="hidden" value=0 name="expiryTime"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -407,6 +408,7 @@
                     $("#cardSaveForm #saveCityCodes").val(result.cityCodes);
                     $("#cardSaveForm #saveProductIds").val(result.productIds);
                     $("#cardSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
+                    $("#cardSaveForm #saveExpiryTime").next().next().val(result.expiryTime);
                     $("#cardSaveForm #saveDescription").val(result.description);
                     $("#modal-form").modal('show');
                 }

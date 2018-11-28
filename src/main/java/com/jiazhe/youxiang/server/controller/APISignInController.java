@@ -70,7 +70,7 @@ public class APISignInController extends BaseController {
     @Autowired
     private CustomerBiz customerBiz;
 
-    @ApiOperation(value = "员工登录", httpMethod = "GET", response = SessionResp.class ,notes = "员工登录")
+    @ApiOperation(value = "员工登录", httpMethod = "GET", response = SessionResp.class, notes = "员工登录")
     @RequestMapping(value = "/usersignin")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "员工登录", level = LogLevelEnum.LEVEL_2)
     public Object userSignin(@ModelAttribute UserLoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
@@ -100,7 +100,7 @@ public class APISignInController extends BaseController {
         for (Session session : sessions) {
             if (null != session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)) {
                 Subject s = new Subject.Builder().session(session).buildSubject();
-                if(s.getPrincipal() instanceof SysUserDTO ){
+                if (s.getPrincipal() instanceof SysUserDTO) {
                     SysUserDTO temp = (SysUserDTO) s.getPrincipal();
                     if (loginName.equals(temp.getLoginName())) {
                         logger.info(("删除员工" + temp.getLoginName() + "的登陆session"));
@@ -146,10 +146,10 @@ public class APISignInController extends BaseController {
         return ResponseFactory.buildResponse(sendMsgResp);
     }
 
-    @ApiOperation(value = "客户登录", httpMethod = "GET", notes = "客户登录")
+    @ApiOperation(value = "客户登录", httpMethod = "GET", response = CustomerLoginResp.class, notes = "客户登录")
     @RequestMapping(value = "/customersignin")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "客户登录", level = LogLevelEnum.LEVEL_2)
-    public Object customerSignin(@ModelAttribute CustomerLoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
+    public Object customerSignin(@ModelAttribute CustomerLoginReq req) throws IOException, ClientException, ParseException {
         String mobile = req.getMobile();
         String identifyingCode = req.getIdentifyingCode();
         String bizId = req.getBizId();
@@ -172,7 +172,7 @@ public class APISignInController extends BaseController {
         for (Session session : sessions) {
             if (null != session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)) {
                 Subject s = new Subject.Builder().session(session).buildSubject();
-                if(s.getPrincipal() instanceof CustomerDTO ){
+                if (s.getPrincipal() instanceof CustomerDTO) {
                     CustomerDTO temp = (CustomerDTO) s.getPrincipal();
                     if (mobile.equals(temp.getMobile())) {
                         logger.info(("删除客户" + temp.getMobile() + "的登陆session"));

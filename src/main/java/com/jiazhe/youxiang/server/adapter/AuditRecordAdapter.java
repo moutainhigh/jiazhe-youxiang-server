@@ -26,12 +26,12 @@ public class AuditRecordAdapter {
         auditRecordResp.setSubmitterName(auditRecordDTO.getSubmitterName());
         auditRecordResp.setSubmitterRemark(auditRecordDTO.getSubmitterRemark());
         auditRecordResp.setStatus(auditRecordDTO.getStatus());
-        auditRecordResp.setAuditTime(auditRecordDTO.getAuditTime());
+        auditRecordResp.setAuditTime(auditRecordDTO.getAuditTime().getTime());
         auditRecordResp.setAuditorId(auditRecordDTO.getAuditorId());
         auditRecordResp.setAuditorName(auditRecordDTO.getAuditorName());
         auditRecordResp.setVersion(auditRecordDTO.getVersion());
-        auditRecordResp.setAddTime(auditRecordDTO.getAddTime());
-        auditRecordResp.setModTime(auditRecordDTO.getModTime());
+        auditRecordResp.setAddTime(auditRecordDTO.getAddTime().getTime());
+        auditRecordResp.setModTime(auditRecordDTO.getModTime().getTime());
         return auditRecordResp;
     }
 

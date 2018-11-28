@@ -10,6 +10,8 @@ import com.jiazhe.youxiang.server.dto.order.orderinfo.UserReservationOrderDTO;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.*;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
 
+import java.util.Date;
+
 /**
  * @author TU
  * @description
@@ -35,9 +37,9 @@ public class OrderInfoAdapter {
         orderInfoResp.setCustomerRemark(dto.getCustomerRemark());
         orderInfoResp.setWorkerName(dto.getWorkerName());
         orderInfoResp.setWorkerMobile(dto.getWorkerMobile());
-        orderInfoResp.setOrderTime(dto.getOrderTime());
-        orderInfoResp.setServiceTime(dto.getServiceTime());
-        orderInfoResp.setRealServiceTime(dto.getRealServiceTime());
+        orderInfoResp.setOrderTime(dto.getOrderTime().getTime());
+        orderInfoResp.setServiceTime(dto.getServiceTime().getTime());
+        orderInfoResp.setRealServiceTime(dto.getRealServiceTime().getTime());
         orderInfoResp.setPayRechargeCard(dto.getPayRechargeCard());
         orderInfoResp.setPayVoucher(dto.getPayVoucher());
         orderInfoResp.setPayCash(dto.getPayCash());
@@ -101,7 +103,7 @@ public class OrderInfoAdapter {
         placeOrderDTO.setCustomerRemark(req.getCustomerRemark());
         placeOrderDTO.setWorkerName(req.getWorkerName());
         placeOrderDTO.setWorkerMobile(req.getWorkerMobile());
-        placeOrderDTO.setRealServiceTime(req.getRealServiceTime());
+        placeOrderDTO.setRealServiceTime(new Date(req.getRealServiceTime()));
         placeOrderDTO.setVoucherIds(req.getVoucherIds());
         placeOrderDTO.setRechargeCardIds(req.getRechargeCardIds());
         placeOrderDTO.setCardMoneys(req.getCardMoneys());
@@ -123,7 +125,7 @@ public class OrderInfoAdapter {
         placeOrderDTO.setCustomerMobile(req.getCustomerMobile());
         placeOrderDTO.setCustomerName(req.getCustomerName());
         placeOrderDTO.setCustomerRemark(req.getCustomerRemark());
-        placeOrderDTO.setServiceTime(req.getServiceTime());
+        placeOrderDTO.setServiceTime(new Date(req.getServiceTime()));
         placeOrderDTO.setVoucherIds(req.getVoucherIds());
         placeOrderDTO.setRechargeCardIds(req.getRechargeCardIds());
         placeOrderDTO.setCardMoneys(req.getCardMoneys());
@@ -138,7 +140,7 @@ public class OrderInfoAdapter {
         userReservationOrderDTO.setOrderId(req.getOrderId());
         userReservationOrderDTO.setWorkerName(req.getWorkerName());
         userReservationOrderDTO.setWorkerMobile(req.getWorkerMobile());
-        userReservationOrderDTO.setRealServiceTime(req.getRealServiceTime());
+        userReservationOrderDTO.setRealServiceTime(new Date(req.getRealServiceTime()));
         userReservationOrderDTO.setCost(req.getCost());
         return userReservationOrderDTO;
     }

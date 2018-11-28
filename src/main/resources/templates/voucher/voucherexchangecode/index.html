@@ -140,10 +140,11 @@
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker" id="saveExpiryTime"
-                                                                   name="expiryTime" type="text"/>
+                                                                  type="text" readonly />
                                                             <span class="input-group-addon">
                                                                         <i class="fa fa-calendar bigger-110"></i>
                                                                     </span>
+                                                            <input type="hidden" value=0 name="expiryTime"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -174,11 +175,11 @@
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker"
-                                                                   id="saveVoucherExpiryTime"
-                                                                   name="voucherExpiryTime" type="text"/>
+                                                                   id="saveVoucherExpiryTime" type="text" readonly />
                                                             <span class="input-group-addon">
                                                                         <i class="fa fa-calendar bigger-110"></i>
                                                                     </span>
+                                                            <input type="hidden" value=0 name="voucherExpiryTime"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -245,13 +246,7 @@
         });
         $('#selectCityAndProduct').load('../pageimport/selectcityandproduct');
 
-        $('.date-picker').datepicker({
-            language: 'zh-CN',//选择语言
-            autoclose: true,
-            todayHighlight: true
-        }).next().on(ace.click_event, function () {
-            $(this).prev().focus();
-        });
+        initDatePicker();
 
         $("input[name=expiryTypeRadio]").bind("change", function () {
             if ($("input[name=expiryTypeRadio]:checked").val() == 0) {
@@ -409,6 +404,7 @@
                     $("#codeSaveForm #saveCityCodes").val(result.cityCodes);
                     $("#codeSaveForm #saveProductIds").val(result.productIds);
                     $("#codeSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
+                    $("#codeSaveForm #saveExpiryTime").next().next().val(result.expiryTime);
                     if (result.expiryType == 0) {
                         $("#codeSaveForm #saveDeadLineRadio").click();
                     } else {
@@ -416,6 +412,7 @@
                     }
                     $("#codeSaveForm #saveValidityPeriod").val(result.validityPeriod);
                     $("#codeSaveForm #saveVoucherExpiryTime").val(dateFormat(result.voucherExpiryTime));
+                    $("#codeSaveForm #saveVoucherExpiryTime").next().next().val(result.voucherExpiryTime);
                     $("#codeSaveForm #saveDescription").val(result.batchDescription);
                     $("#modal-form").modal('show');
                 }

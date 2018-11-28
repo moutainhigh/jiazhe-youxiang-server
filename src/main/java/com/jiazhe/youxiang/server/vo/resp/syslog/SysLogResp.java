@@ -36,7 +36,7 @@ public class SysLogResp extends BaseVO {
     @ApiModelProperty("日志详情")
     private String detail;
     @ApiModelProperty("添加时间")
-    private Date addTime;
+    private Long addTime;
 
     public Integer getId() {
         return id;
@@ -102,11 +102,15 @@ public class SysLogResp extends BaseVO {
         this.detail = detail;
     }
 
-    public Date getAddTime() {
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Long getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Date addTime) {
+    public void setAddTime(Long addTime) {
         this.addTime = addTime;
     }
 }

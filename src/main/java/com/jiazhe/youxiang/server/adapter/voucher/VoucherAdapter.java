@@ -7,6 +7,8 @@ import com.jiazhe.youxiang.server.dto.voucher.voucher.VoucherEditDTO;
 import com.jiazhe.youxiang.server.vo.req.voucher.voucher.VoucherEditReq;
 import com.jiazhe.youxiang.server.vo.resp.voucher.voucher.VoucherResp;
 
+import java.util.Date;
+
 /**
  * @author TU
  * @description
@@ -26,10 +28,10 @@ public class VoucherAdapter {
         voucherResp.setCityCodes(voucherDTO.getCityCodes());
         voucherResp.setProductIds(voucherDTO.getProductIds());
         voucherResp.setCount(voucherDTO.getCount());
-        voucherResp.setExpiryTime(voucherDTO.getExpiryTime());
+        voucherResp.setExpiryTime(voucherDTO.getExpiryTime().getTime());
         voucherResp.setStatus(voucherDTO.getStatus());
         voucherResp.setUsed(voucherDTO.getUsed());
-        voucherResp.setAddTime(voucherDTO.getAddTime());
+        voucherResp.setAddTime(voucherDTO.getAddTime().getTime());
         voucherResp.setCustomerResp(CustomerAdapter.customerDTO2VO(voucherDTO.getCustomerDTO()));
         voucherResp.setVoucherExchangeRecordResp(VoucherExchangeRecordAdapter.DTO2Resp(voucherDTO.getVoucherExchangeRecordDTO()));
         return voucherResp;
@@ -65,7 +67,7 @@ public class VoucherAdapter {
         voucherEditDTO.setProductIds(req.getProductIds());
         voucherEditDTO.setName(req.getName());
         voucherEditDTO.setDescription(req.getDescription());
-        voucherEditDTO.setExpiryTime(req.getExpiryTime());
+        voucherEditDTO.setExpiryTime(new Date(req.getExpiryTime()));
         return voucherEditDTO;
     }
 }

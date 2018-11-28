@@ -41,10 +41,10 @@ public class RCExchangeCodeResp extends BaseObject {
     private BigDecimal faceValue;
 
     @ApiModelProperty("兑换码过期时间")
-    private Date expiryTime;
+    private Long expiryTime;
 
     @ApiModelProperty("充值卡过期时间")
-    private Date rechargeCardExpiryTime;
+    private Long rechargeCardExpiryTime;
 
     @ApiModelProperty("自兑换之日起，有效期的天数")
     private Integer validityPeriod;
@@ -98,14 +98,6 @@ public class RCExchangeCodeResp extends BaseObject {
         this.faceValue = faceValue;
     }
 
-    public Date getExpiryTime() {
-        return expiryTime;
-    }
-
-    public void setExpiryTime(Date expiryTime) {
-        this.expiryTime = expiryTime;
-    }
-
     public Byte getStatus() {
         return status;
     }
@@ -154,11 +146,19 @@ public class RCExchangeCodeResp extends BaseObject {
         this.productIds = productIds;
     }
 
-    public Date getRechargeCardExpiryTime() {
+    public Long getExpiryTime() {
+        return expiryTime;
+    }
+
+    public void setExpiryTime(Long expiryTime) {
+        this.expiryTime = expiryTime;
+    }
+
+    public Long getRechargeCardExpiryTime() {
         return rechargeCardExpiryTime;
     }
 
-    public void setRechargeCardExpiryTime(Date rechargeCardExpiryTime) {
+    public void setRechargeCardExpiryTime(Long rechargeCardExpiryTime) {
         this.rechargeCardExpiryTime = rechargeCardExpiryTime;
     }
 

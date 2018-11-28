@@ -30,7 +30,7 @@ public class SysLogAdapter {
         sysLogResp.setOperatorName(dto.getOperatorName());
         sysLogResp.setIp(dto.getIp());
         sysLogResp.setDetail(dto.getDetail());
-        sysLogResp.setAddTime(dto.getAddTime());
+        sysLogResp.setAddTime(dto.getAddTime().getTime());
         return sysLogResp;
     }
 

@@ -47,7 +47,7 @@ public class AuditRecordResp extends BaseVO {
     private Byte status;
 
     @ApiModelProperty("审核时间")
-    private Date auditTime;
+    private Long auditTime;
 
     @ApiModelProperty("审核人id")
     private Integer auditorId;
@@ -59,10 +59,10 @@ public class AuditRecordResp extends BaseVO {
     private Integer version;
 
     @ApiModelProperty("提交时间")
-    private Date addTime;
+    private Long addTime;
 
-    @ApiModelProperty("审核时间")
-    private Date modTime;
+    @ApiModelProperty("修改时间")
+    private Long modTime;
 
     public Integer getId() {
         return id;
@@ -152,14 +152,6 @@ public class AuditRecordResp extends BaseVO {
         this.status = status;
     }
 
-    public Date getAuditTime() {
-        return auditTime;
-    }
-
-    public void setAuditTime(Date auditTime) {
-        this.auditTime = auditTime;
-    }
-
     public Integer getAuditorId() {
         return auditorId;
     }
@@ -184,19 +176,27 @@ public class AuditRecordResp extends BaseVO {
         this.version = version;
     }
 
-    public Date getModTime() {
-        return modTime;
+    public Long getAuditTime() {
+        return auditTime;
     }
 
-    public void setModTime(Date modTime) {
-        this.modTime = modTime;
+    public void setAuditTime(Long auditTime) {
+        this.auditTime = auditTime;
     }
 
-    public Date getAddTime() {
+    public Long getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Date addTime) {
+    public void setAddTime(Long addTime) {
         this.addTime = addTime;
+    }
+
+    public Long getModTime() {
+        return modTime;
+    }
+
+    public void setModTime(Long modTime) {
+        this.modTime = modTime;
     }
 }

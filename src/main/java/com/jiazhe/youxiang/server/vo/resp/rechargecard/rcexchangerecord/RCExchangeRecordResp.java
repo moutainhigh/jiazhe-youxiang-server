@@ -27,7 +27,7 @@ public class RCExchangeRecordResp extends BaseVO{
     private String operatorName;
 
     @ApiModelProperty("兑换记录生成时间")
-    private Date addTime;
+    private Long addTime;
 
     public Integer getId() {
         return id;
@@ -61,11 +61,15 @@ public class RCExchangeRecordResp extends BaseVO{
         this.operatorName = operatorName;
     }
 
-    public Date getAddTime() {
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Long getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Date addTime) {
+    public void setAddTime(Long addTime) {
         this.addTime = addTime;
     }
 }

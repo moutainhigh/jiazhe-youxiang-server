@@ -22,9 +22,8 @@ public class ImportCodeReq extends BaseVO {
     @ApiModelProperty("批次名称")
     private String batchName;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty("过期时间")
-    private Date expiryTime;
+    private Long expiryTime;
 
     public String getExcelUrl() {
         return excelUrl;
@@ -42,11 +41,11 @@ public class ImportCodeReq extends BaseVO {
         this.batchName = batchName;
     }
 
-    public Date getExpiryTime() {
+    public Long getExpiryTime() {
         return expiryTime;
     }
 
-    public void setExpiryTime(Date expiryTime) {
+    public void setExpiryTime(Long expiryTime) {
         this.expiryTime = expiryTime;
     }
 

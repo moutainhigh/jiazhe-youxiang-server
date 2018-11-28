@@ -7,6 +7,8 @@ import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCEditDTO;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.RCEditReq;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rc.RCResp;
 
+import java.util.Date;
+
 /**
  * @author tu
  * @description：
@@ -47,9 +49,9 @@ public class RCAdapter {
         rCResp.setProductIds(rcdto.getProductIds());
         rCResp.setFaceValue(rcdto.getFaceValue());
         rCResp.setBalance(rcdto.getBalance());
-        rCResp.setExpiryTime(rcdto.getExpiryTime());
+        rCResp.setExpiryTime(rcdto.getExpiryTime().getTime());
         rCResp.setStatus(rcdto.getStatus());
-        rCResp.setAddTime(rcdto.getAddTime());
+        rCResp.setAddTime(rcdto.getAddTime().getTime());
         rCResp.setCustomerResp(CustomerAdapter.customerDTO2VO(rcdto.getCustomerDTO()));
         rCResp.setRcExchangeRecordResp(RCExchangeRecordAdapter.DTO2Resp(rcdto.getRcExchangeRecordDTO()));
         return rCResp;
@@ -65,7 +67,7 @@ public class RCAdapter {
         rCEditDTO.setProductIds(req.getProductIds());
         rCEditDTO.setName(req.getName());
         rCEditDTO.setDescription(req.getDescription());
-        rCEditDTO.setExpiryTime(req.getExpiryTime());
+        rCEditDTO.setExpiryTime(new Date(req.getExpiryTime()));
         return rCEditDTO;
     }
 

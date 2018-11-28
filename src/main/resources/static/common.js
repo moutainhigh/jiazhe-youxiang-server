@@ -36,7 +36,7 @@ function timeFormat(time) {
     // return time.replace('T',' ').substring(0,19);
     var d = new Date(time);
     var year = d.getFullYear();
-    var month = (d.getMonth() + 1) > 9 ? (d.getMonth() + 1) : '0' + (d.getMonth());
+    var month = (d.getMonth() + 1) > 9 ? (d.getMonth() + 1) : '0' + (d.getMonth()+1);
     var date = d.getDate() > 9 ? d.getDate() : '0' + d.getDate();
     var hours = d.getHours() > 9 ? d.getHours() : '0' + d.getHours();
     var minutes = d.getMinutes() > 9 ? d.getMinutes() : '0' + d.getMinutes();
@@ -48,7 +48,7 @@ function dateFormat(time) {
     // return time.substring(0,10);
     var d = new Date(time);
     var year = d.getFullYear();
-    var month = (d.getMonth() + 1) > 9 ? (d.getMonth() + 1) : '0' + (d.getMonth());
+    var month = (d.getMonth() + 1) > 9 ? (d.getMonth() + 1) : '0' + (d.getMonth()+1);
     var date = d.getDate() > 9 ? d.getDate() : '0' + d.getDate();
     return year + '-' + month + '-' + date;
 }
@@ -124,8 +124,12 @@ function initDatePicker(){
     $('.date-picker').datepicker({
         language: 'zh-CN',
         autoclose: true,
-        todayHighlight: true
-    }).next().on(ace.click_event, function () {
+        todayHighlight: true,
+        clearBtn: true,  //添加清除按钮，可选值：true/false
+    }).on('changeDate',function () {
+        $(this).next().next().val($(this).val()==''?0:new Date($(this).val()).getTime());
+    }).
+    next().on(ace.click_event, function () {
         $(this).prev().focus();
     });
 }

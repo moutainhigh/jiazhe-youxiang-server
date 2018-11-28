@@ -40,7 +40,7 @@ public class VoucherResp extends BaseObject {
     private Integer count;
 
     @ApiModelProperty("过期时间")
-    private Date expiryTime;
+    private Long expiryTime;
 
     @ApiModelProperty("状态 0停用 1启用")
     private Byte status;
@@ -49,7 +49,7 @@ public class VoucherResp extends BaseObject {
     private Byte used;
 
     @ApiModelProperty("兑换时间")
-    private Date addTime;
+    private Long addTime;
 
     private CustomerResp customerResp;
 
@@ -119,14 +119,6 @@ public class VoucherResp extends BaseObject {
         this.count = count;
     }
 
-    public Date getExpiryTime() {
-        return expiryTime;
-    }
-
-    public void setExpiryTime(Date expiryTime) {
-        this.expiryTime = expiryTime;
-    }
-
     public Byte getStatus() {
         return status;
     }
@@ -143,11 +135,19 @@ public class VoucherResp extends BaseObject {
         this.used = used;
     }
 
-    public Date getAddTime() {
+    public Long getExpiryTime() {
+        return expiryTime;
+    }
+
+    public void setExpiryTime(Long expiryTime) {
+        this.expiryTime = expiryTime;
+    }
+
+    public Long getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Date addTime) {
+    public void setAddTime(Long addTime) {
         this.addTime = addTime;
     }
 

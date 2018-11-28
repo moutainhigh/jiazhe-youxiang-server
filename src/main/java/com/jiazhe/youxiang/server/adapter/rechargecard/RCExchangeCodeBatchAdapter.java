@@ -8,6 +8,8 @@ import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch.RCExch
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditResp;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchResp;
 
+import java.util.Date;
+
 /**
  * @author tu
  * @description：
@@ -25,7 +27,7 @@ public class RCExchangeCodeBatchAdapter {
         rCExchangeCodeBatchResp.setRechargeCardName(dto.getRechargeCardName());
         rCExchangeCodeBatchResp.setAmount(dto.getAmount());
         rCExchangeCodeBatchResp.setFaceValue(dto.getFaceValue());
-        rCExchangeCodeBatchResp.setExpiryTime(dto.getExpiryTime());
+        rCExchangeCodeBatchResp.setExpiryTime(dto.getExpiryTime().getTime());
         rCExchangeCodeBatchResp.setStatus(dto.getStatus());
         rCExchangeCodeBatchResp.setIsVirtual(dto.getIsVirtual());
         rCExchangeCodeBatchResp.setIsMade(dto.getIsMade());
@@ -63,8 +65,8 @@ public class RCExchangeCodeBatchAdapter {
         rCExchangeCodeBatchSaveDTO.setProjectId(req.getProjectId());
         rCExchangeCodeBatchSaveDTO.setCityCodes(req.getCityCodes());
         rCExchangeCodeBatchSaveDTO.setProductIds(req.getProductIds());
-        rCExchangeCodeBatchSaveDTO.setExpiryTime(req.getExpiryTime());
-        rCExchangeCodeBatchSaveDTO.setRechargeCardExpiryTime(req.getRechargeCardExpiryTime());
+        rCExchangeCodeBatchSaveDTO.setExpiryTime(new Date(req.getExpiryTime()));
+        rCExchangeCodeBatchSaveDTO.setRechargeCardExpiryTime(new Date(req.getRechargeCardExpiryTime()));
         rCExchangeCodeBatchSaveDTO.setValidityPeriod(req.getValidityPeriod());
         rCExchangeCodeBatchSaveDTO.setExpiryType(req.getExpiryType());
         rCExchangeCodeBatchSaveDTO.setDescription(req.getDescription());
@@ -109,8 +111,8 @@ public class RCExchangeCodeBatchAdapter {
         rCExchangeCodeBatchEditResp.setProductIds(rcExchangeCodeBatchEditDTO.getProductIds());
         rCExchangeCodeBatchEditResp.setAmount(rcExchangeCodeBatchEditDTO.getAmount());
         rCExchangeCodeBatchEditResp.setFaceValue(rcExchangeCodeBatchEditDTO.getFaceValue());
-        rCExchangeCodeBatchEditResp.setExpiryTime(rcExchangeCodeBatchEditDTO.getExpiryTime());
-        rCExchangeCodeBatchEditResp.setRechargeCardExpiryTime(rcExchangeCodeBatchEditDTO.getRechargeCardExpiryTime());
+        rCExchangeCodeBatchEditResp.setExpiryTime(rcExchangeCodeBatchEditDTO.getExpiryTime().getTime());
+        rCExchangeCodeBatchEditResp.setRechargeCardExpiryTime(rcExchangeCodeBatchEditDTO.getRechargeCardExpiryTime().getTime());
         rCExchangeCodeBatchEditResp.setValidityPeriod(rcExchangeCodeBatchEditDTO.getValidityPeriod());
         rCExchangeCodeBatchEditResp.setExpiryType(rcExchangeCodeBatchEditDTO.getExpiryType());
         return rCExchangeCodeBatchEditResp;
