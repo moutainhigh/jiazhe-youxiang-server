@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,7 +50,9 @@ public class APIRCExchangeRecordController extends BaseController {
         CommonValidator.validateNull(req);
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        List<RCExchangeRecordDTO> rcExchangeCodeBatchDTOList = rcExchangeRecordBiz.getList(req.getBeginDate(), req.getEndDate(), req.getCode(), req.getKeyt(), paging);
+        Date beginDate = req.getBeginDate()==0?null:new Date(req.getBeginDate());
+        Date endDate = req.getEndDate()==0?null:new Date(req.getEndDate());
+        List<RCExchangeRecordDTO> rcExchangeCodeBatchDTOList = rcExchangeRecordBiz.getList(beginDate, endDate, req.getCode(), req.getKeyt(), paging);
         List<RCExchangeRecordResp> rcExchangeCodeBatchRespList = rcExchangeCodeBatchDTOList.stream().map(RCExchangeRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(rcExchangeCodeBatchRespList, paging);
     }

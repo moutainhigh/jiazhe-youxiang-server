@@ -146,7 +146,7 @@ public class APIOrderInfoController extends BaseController {
     public Object userPlaceOrder(@ModelAttribute UserPlaceOrderReq req) throws ParseException {
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqUserPlaceOrder2DTOPlaceOrder(req);
         placeOrderDTO.setType(Byte.valueOf("0"));
-        placeOrderDTO.setServiceTime(req.getRealServiceTime());
+        placeOrderDTO.setServiceTime(new Date(req.getRealServiceTime()));
         BigDecimal needPayCash = orderInfoBiz.placeOrder(placeOrderDTO);
         NeedPayResp needPayResp = new NeedPayResp();
         needPayResp.setPayCash(needPayCash);
@@ -163,7 +163,7 @@ public class APIOrderInfoController extends BaseController {
         placeOrderDTO.setWorkerName("");
         placeOrderDTO.setCost(new BigDecimal(0));
         placeOrderDTO.setType(Byte.valueOf("1"));
-        placeOrderDTO.setRealServiceTime(req.getServiceTime());
+        placeOrderDTO.setRealServiceTime(new Date(req.getServiceTime()));
         placeOrderDTO.setComments("");
         BigDecimal needPayCash = orderInfoBiz.placeOrder(placeOrderDTO);
         NeedPayResp needPayResp = new NeedPayResp();
@@ -175,7 +175,9 @@ public class APIOrderInfoController extends BaseController {
     @RequestMapping(value = "/userreservationorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "员工预约服务、派单", level = LogLevelEnum.LEVEL_2)
     public Object userReservationOrder(@ModelAttribute UserReservationOrderReq req) {
-        CommonValidator.validateNull(req.getRealServiceTime(), new OrderException(OrderCodeEnum.REAL_SERVICE_TIME_IS_NULL));
+        if(req.getRealServiceTime()==0){
+            throw new OrderException(OrderCodeEnum.REAL_SERVICE_TIME_IS_NULL);
+        }
         CommonValidator.validateNull(req.getWorkerName(), new OrderException(OrderCodeEnum.WORKER_NAME_IS_NAME));
         CommonValidator.validateNull(req.getWorkerMobile(), new OrderException(OrderCodeEnum.WORKER_MOBILE_IS_NAME));
         CommonValidator.validateNull(req.getCost(), new OrderException(OrderCodeEnum.ORDER_COST_IS_NULL));

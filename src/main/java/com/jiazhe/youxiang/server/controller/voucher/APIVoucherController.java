@@ -117,7 +117,9 @@ public class APIVoucherController extends BaseController{
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(),new VoucherException(VoucherCodeEnum.VOUCHER_NAME_IS_NULL));
-        CommonValidator.validateNull(req.getExpiryTime(),new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL));
+        if(req.getExpiryTime()==0){
+            throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
+        }
         VoucherEditDTO dto = VoucherAdapter.EditReq2EditDTO(req);
         voucherBiz.editSave(dto);
         return ResponseFactory.buildSuccess();

@@ -145,10 +145,11 @@
                                                         <div class="col-sm-8">
                                                             <div class="input-group">
                                                                 <input class="form-control date-picker" id="saveExpiryTime"
-                                                                       name="expiryTime" type="text"/>
+                                                                     type="text" readonly />
                                                                 <span class="input-group-addon">
                                                                             <i class="fa fa-calendar bigger-110"></i>
                                                                         </span>
+                                                                <input type="hidden" value=0 name="expiryTime"/>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -213,10 +214,11 @@
                                                         <div class="col-sm-8">
                                                             <div class="input-group">
                                                                 <input class="form-control date-picker" id="editExpiryTime"
-                                                                       name="expiryTime" type="text"/>
+                                                                       type="text" readonly />
                                                                 <span class="input-group-addon">
                                                                             <i class="fa fa-calendar bigger-110"></i>
                                                                         </span>
+                                                                <input type="hidden" value=0 name="expiryTime"/>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -281,25 +283,7 @@
         });
 
         //填充批次下拉框
-        $.ajax({
-            url: "../api/eleproductcode/getallbatch",
-            dataType: "json",
-            async: false,
-            data: {},
-            type: "GET",
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    var result = data.data;
-                    for (var i = 0; i < result.length; i++) {
-                        $("#searchBatchName").append("<option value=" + result[i].batchName + ">" + result[i].batchName + "</option>");
-                        $("#editBatchName").append("<option value=" + result[i].batchName + ">" + result[i].batchName + "</option>");
-                    }
-                }
-            },
-            error: error
-        });
+        refreshBatch();
 
         var tableOption = {
             url: "../api/eleproductcode/listpage",
@@ -385,6 +369,7 @@
         $("#saveProductId option:first").prop("selected", 'selected');
         $("#saveBatchName").val('');
         $("#saveExpiryTime").val('');
+        $("#saveExpiryTime").next().next().val(0);
         $("#excelUrl").val('');
         $('#eleProductCodeFile').ace_file_input('reset_input');
     }
@@ -392,6 +377,7 @@
     function openEdit() {
         $("#editBatchName option:first").prop("selected", 'selected');
         $("#editExpiryTime").val('');
+        $("#editExpiryTime").next().next().val(0);
     }
 
     function edit() {
@@ -426,11 +412,38 @@
                 } else {
                     $("#new-modal-form").modal('hide');
                     jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                    refreshBatch();
                 }
             },
             error: error
         });
     }
+
+        //填充批次下拉框
+        function refreshBatch(){
+            $("#searchBatchName").empty();
+            $("#editBatchName").empty();
+            $("#searchBatchName").append("<option value=>所有</option>");
+            $.ajax({
+                url: "../api/eleproductcode/getallbatch",
+                dataType: "json",
+                async: false,
+                data: {},
+                type: "GET",
+                success: function (data) {
+                    if ('error' in data) {
+                        bootboxalert(data.error.message);
+                    } else {
+                        var result = data.data;
+                        for (var i = 0; i < result.length; i++) {
+                            $("#searchBatchName").append("<option value=" + result[i].batchName + ">" + result[i].batchName + "</option>");
+                            $("#editBatchName").append("<option value=" + result[i].batchName + ">" + result[i].batchName + "</option>");
+                        }
+                    }
+                },
+                error: error
+            });
+        }
 </script>
 </html>
 

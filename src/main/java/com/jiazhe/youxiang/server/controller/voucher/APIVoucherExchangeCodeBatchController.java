@@ -77,9 +77,13 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
         CommonValidator.validateNull(req.getVoucherName(), new VoucherException(VoucherCodeEnum.VOUCHER_NAME_IS_NULL));
         CommonValidator.validateNull(req.getAmount(), new VoucherException(VoucherCodeEnum.AMOUNT_IS_NULL));
         CommonValidator.validateNull(req.getCount(), new VoucherException(VoucherCodeEnum.COUNT_IS_NULL));
-        CommonValidator.validateNull(req.getExpiryTime(), new VoucherException(VoucherCodeEnum.BATCH_EXPIRY_TIME_IS_NULL));
+        if (req.getExpiryTime() == 0) {
+            throw new VoucherException(VoucherCodeEnum.BATCH_EXPIRY_TIME_IS_NULL);
+        }
         if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXPIRY_TIME)) {
-            CommonValidator.validateNull(req.getVoucherExpiryTime(), new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL));
+            if (req.getVoucherExpiryTime() == 0) {
+                throw new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL);
+            }
         }
         if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_PERIOD)) {
             CommonValidator.validateNull(req.getValidityPeriod(), new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL));
@@ -101,10 +105,10 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
         CommonValidator.validateId(req);
         //参数检查,检查是否是虚拟批次，检查该批次是否已经生成过兑换码
         VoucherExchangeCodeBatchEditDTO dto = voucherExchangeCodeBatchBiz.getById(req.getId());
-        if(null == dto){
+        if (null == dto) {
             throw new VoucherException(VoucherCodeEnum.BATCH_NOT_EXISTED);
         }
-        if(dto.getIsMade().equals(CommonConstant.EXCHANGE_CODE_HAS_MADE)){
+        if (dto.getIsMade().equals(CommonConstant.EXCHANGE_CODE_HAS_MADE)) {
             throw new VoucherException(VoucherCodeEnum.CODE_GENERATED);
         }
         voucherExchangeCodeBatchBiz.generateCode(req.getId());
@@ -146,17 +150,17 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "导出批次下兑换码", level = LogLevelEnum.LEVEL_3)
     public void export(@ModelAttribute IdReq req, HttpServletResponse response) throws IOException {
-        List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOList= voucherExchangeCodeBiz.getByBatchId(req.getId());
-        ExportExcelUtils.exportVoucherCode(response,voucherExchangeCodeDTOList);
+        List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOList = voucherExchangeCodeBiz.getByBatchId(req.getId());
+        ExportExcelUtils.exportVoucherCode(response, voucherExchangeCodeDTOList);
     }
 
     @ApiOperation(value = "导出前检查", httpMethod = "GET", notes = "导出前检查")
     @RequestMapping(value = "/exportcheck", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "导出前检查", level = LogLevelEnum.LEVEL_1)
-    public Object exportCheck(@ModelAttribute IdReq req){
+    public Object exportCheck(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
-        List<VoucherExchangeCodeDTO> rcExchangeCodeDTOList= voucherExchangeCodeBiz.getByBatchId(req.getId());
-        if(rcExchangeCodeDTOList.isEmpty()){
+        List<VoucherExchangeCodeDTO> rcExchangeCodeDTOList = voucherExchangeCodeBiz.getByBatchId(req.getId());
+        if (rcExchangeCodeDTOList.isEmpty()) {
             throw new VoucherException(VoucherCodeEnum.NO_CODE_TO_EXPORT);
         }
         return ResponseFactory.buildSuccess();

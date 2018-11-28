@@ -115,9 +115,13 @@ public class APIVoucherExchangeCodeController extends BaseController {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getVoucherName(),new VoucherException(VoucherCodeEnum.VOUCHER_NAME_IS_NULL));
-        CommonValidator.validateNull(req.getExpiryTime(),new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL));
+        if(req.getExpiryTime()==0){
+            throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
+        }
         if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXPIRY_TIME)) {
-            CommonValidator.validateNull(req.getVoucherExpiryTime(),new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL));
+            if(req.getVoucherExpiryTime()==0){
+                throw new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL);
+            }
         }
         if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXPIRY_PERIOD)) {
             CommonValidator.validateNull(req.getValidityPeriod(),new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL));

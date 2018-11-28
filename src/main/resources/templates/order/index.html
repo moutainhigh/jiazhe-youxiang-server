@@ -267,7 +267,7 @@
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control datetime-picker"
-                                                                   id="re_realServiceTime" type="text"/>
+                                                                   id="re_realServiceTime" type="text" readonly/>
                                                             <span class="input-group-addon">
                                                                     <i class="fa fa-calendar bigger-110"></i>
                                                                 </span>
@@ -588,8 +588,9 @@
 
         $('#re_realServiceTime').datetimepicker({
             format: "YYYY-MM-DD HH:mm"
-        }).on('changeDate',function () {
+        }).click(function () {
             $(this).next().next().val($(this).val()==''?0:new Date($(this).val()).getTime());
+            console.log($(this).val());
         }).next().on(ace.click_event, function () {
             $(this).prev().focus();
         });

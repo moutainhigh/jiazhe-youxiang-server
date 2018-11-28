@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -109,9 +110,11 @@ public class APIEleProductCodeController extends BaseController {
         //参数检查
         CommonValidator.validateNull(req.getProductId(),new EleProductCodeException(EleProductCodeEnum.PRODUCT_IS_NULL));
         CommonValidator.validateNull(req.getBatchName(),new EleProductCodeException(EleProductCodeEnum.BATCH_NAME_IS_NULL));
-        CommonValidator.validateNull(req.getExpiryTime(),new EleProductCodeException(EleProductCodeEnum.EXPIRY_TIME_IS_NULL));
+        if(req.getExpiryTime()==0){
+            throw new EleProductCodeException(EleProductCodeEnum.EXPIRY_TIME_IS_NULL);
+        }
         CommonValidator.validateNull(req.getExcelUrl(),new EleProductCodeException(EleProductCodeEnum.FILE_NOT_EXIST));
-        eleProductCodeBiz.importCode(excelpath+"/"+req.getExcelUrl(),req.getProductId(),req.getBatchName(),req.getExpiryTime());
+        eleProductCodeBiz.importCode(excelpath+"/"+req.getExcelUrl(),req.getProductId(),req.getBatchName(),new Date(req.getExpiryTime()));
         return ResponseFactory.buildSuccess();
     }
 
@@ -120,8 +123,10 @@ public class APIEleProductCodeController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.ELE_PRODUCT, operate = "批量修改电子码有效期", level = LogLevelEnum.LEVEL_2)
     public Object batchChangeExpiryTime(@ModelAttribute ExpiryTimeEditReq req) {
         //参数检查
-        CommonValidator.validateNull(req.getExpiryTime(),new EleProductCodeException(EleProductCodeEnum.EXPIRY_TIME_IS_NULL));
-        eleProductCodeBiz.batchChangeExpiryTime(req.getBatchName(),req.getExpiryTime());
+        if(req.getExpiryTime()==0){
+            throw new EleProductCodeException(EleProductCodeEnum.EXPIRY_TIME_IS_NULL);
+        }
+        eleProductCodeBiz.batchChangeExpiryTime(req.getBatchName(),new Date(req.getExpiryTime()));
         return ResponseFactory.buildSuccess();
     }
 

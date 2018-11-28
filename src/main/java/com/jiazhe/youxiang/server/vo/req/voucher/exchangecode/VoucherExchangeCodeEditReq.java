@@ -22,11 +22,9 @@ public class VoucherExchangeCodeEditReq extends BaseVO {
 
     private String productIds;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date expiryTime;
+    private Long expiryTime;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date voucherExpiryTime;
+    private Long voucherExpiryTime;
 
     private Integer validityPeriod;
 
@@ -65,12 +63,20 @@ public class VoucherExchangeCodeEditReq extends BaseVO {
         this.productIds = productIds;
     }
 
-    public Date getExpiryTime() {
+    public Long getExpiryTime() {
         return expiryTime;
     }
 
-    public void setExpiryTime(Date expiryTime) {
+    public void setExpiryTime(Long expiryTime) {
         this.expiryTime = expiryTime;
+    }
+
+    public Long getVoucherExpiryTime() {
+        return voucherExpiryTime;
+    }
+
+    public void setVoucherExpiryTime(Long voucherExpiryTime) {
+        this.voucherExpiryTime = voucherExpiryTime;
     }
 
     public String getVoucherName() {
@@ -79,14 +85,6 @@ public class VoucherExchangeCodeEditReq extends BaseVO {
 
     public void setVoucherName(String voucherName) {
         this.voucherName = voucherName;
-    }
-
-    public Date getVoucherExpiryTime() {
-        return voucherExpiryTime;
-    }
-
-    public void setVoucherExpiryTime(Date voucherExpiryTime) {
-        this.voucherExpiryTime = voucherExpiryTime;
     }
 
     public Integer getValidityPeriod() {

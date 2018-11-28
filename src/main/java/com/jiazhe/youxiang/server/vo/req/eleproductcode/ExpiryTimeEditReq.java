@@ -18,9 +18,8 @@ public class ExpiryTimeEditReq extends BaseVO{
     @ApiModelProperty("批次名称")
     private String batchName;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty("新的过期时间")
-    private Date expiryTime;
+    private Long expiryTime;
 
     public String getBatchName() {
         return batchName;
@@ -30,11 +29,11 @@ public class ExpiryTimeEditReq extends BaseVO{
         this.batchName = batchName;
     }
 
-    public Date getExpiryTime() {
+    public Long getExpiryTime() {
         return expiryTime;
     }
 
-    public void setExpiryTime(Date expiryTime) {
+    public void setExpiryTime(Long expiryTime) {
         this.expiryTime = expiryTime;
     }
 }

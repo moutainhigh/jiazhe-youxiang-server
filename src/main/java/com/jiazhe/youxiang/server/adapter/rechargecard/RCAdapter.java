@@ -7,6 +7,8 @@ import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCEditDTO;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.RCEditReq;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rc.RCResp;
 
+import java.util.Date;
+
 /**
  * @author tu
  * @description：
@@ -65,7 +67,7 @@ public class RCAdapter {
         rCEditDTO.setProductIds(req.getProductIds());
         rCEditDTO.setName(req.getName());
         rCEditDTO.setDescription(req.getDescription());
-        rCEditDTO.setExpiryTime(req.getExpiryTime());
+        rCEditDTO.setExpiryTime(new Date(req.getExpiryTime()));
         return rCEditDTO;
     }
 

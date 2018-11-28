@@ -44,9 +44,8 @@ public class UserPlaceOrderReq extends BaseVO {
     @ApiModelProperty("服务人员电话")
     private String workerMobile;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @ApiModelProperty("服务时间")
-    private Date realServiceTime;
+    private Long realServiceTime;
 
     /**
      * 使用的代金券ids
@@ -152,11 +151,11 @@ public class UserPlaceOrderReq extends BaseVO {
         this.workerMobile = workerMobile;
     }
 
-    public Date getRealServiceTime() {
+    public Long getRealServiceTime() {
         return realServiceTime;
     }
 
-    public void setRealServiceTime(Date realServiceTime) {
+    public void setRealServiceTime(Long realServiceTime) {
         this.realServiceTime = realServiceTime;
     }
 

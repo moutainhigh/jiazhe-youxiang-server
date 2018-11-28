@@ -7,6 +7,8 @@ import com.jiazhe.youxiang.server.dto.voucher.voucher.VoucherEditDTO;
 import com.jiazhe.youxiang.server.vo.req.voucher.voucher.VoucherEditReq;
 import com.jiazhe.youxiang.server.vo.resp.voucher.voucher.VoucherResp;
 
+import java.util.Date;
+
 /**
  * @author TU
  * @description
@@ -65,7 +67,7 @@ public class VoucherAdapter {
         voucherEditDTO.setProductIds(req.getProductIds());
         voucherEditDTO.setName(req.getName());
         voucherEditDTO.setDescription(req.getDescription());
-        voucherEditDTO.setExpiryTime(req.getExpiryTime());
+        voucherEditDTO.setExpiryTime(new Date(req.getExpiryTime()));
         return voucherEditDTO;
     }
 }

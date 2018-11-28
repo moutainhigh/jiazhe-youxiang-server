@@ -9,6 +9,8 @@ import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchang
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecode.RCExchangeCodeEditReq;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecode.RCExchangeCodeResp;
 
+import java.util.Date;
+
 /**
  * @author tu
  * @description：
@@ -120,8 +122,8 @@ public class RCExchangeCodeAdapter {
         rCExchangeCodeEditDTO.setBatchDescription(req.getBatchDescription());
         rCExchangeCodeEditDTO.setCityCodes(req.getCityCodes());
         rCExchangeCodeEditDTO.setProductIds(req.getProductIds());
-        rCExchangeCodeEditDTO.setExpiryTime(req.getExpiryTime());
-        rCExchangeCodeEditDTO.setRechargeCardExpiryTime(req.getRechargeCardExpiryTime());
+        rCExchangeCodeEditDTO.setExpiryTime(new Date(req.getExpiryTime()));
+        rCExchangeCodeEditDTO.setRechargeCardExpiryTime(new Date(req.getRechargeCardExpiryTime()));
         rCExchangeCodeEditDTO.setValidityPeriod(req.getValidityPeriod());
         rCExchangeCodeEditDTO.setExpiryType(req.getExpiryType());
         return rCExchangeCodeEditDTO;

@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.vo.req.login;
 
 import com.fasterxml.jackson.databind.ser.Serializers;
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author TU
@@ -10,6 +11,7 @@ import com.jiazhe.youxiang.server.vo.BaseVO;
  */
 public class SendMsgToCustomerReq extends BaseVO {
 
+    @ApiModelProperty("电话")
     private String mobile;
 
     public String getMobile() {

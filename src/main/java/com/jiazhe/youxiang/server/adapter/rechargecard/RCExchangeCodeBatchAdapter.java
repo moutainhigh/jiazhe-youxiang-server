@@ -8,6 +8,8 @@ import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch.RCExch
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditResp;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchResp;
 
+import java.util.Date;
+
 /**
  * @author tu
  * @description：
@@ -63,8 +65,8 @@ public class RCExchangeCodeBatchAdapter {
         rCExchangeCodeBatchSaveDTO.setProjectId(req.getProjectId());
         rCExchangeCodeBatchSaveDTO.setCityCodes(req.getCityCodes());
         rCExchangeCodeBatchSaveDTO.setProductIds(req.getProductIds());
-        rCExchangeCodeBatchSaveDTO.setExpiryTime(req.getExpiryTime());
-        rCExchangeCodeBatchSaveDTO.setRechargeCardExpiryTime(req.getRechargeCardExpiryTime());
+        rCExchangeCodeBatchSaveDTO.setExpiryTime(new Date(req.getExpiryTime()));
+        rCExchangeCodeBatchSaveDTO.setRechargeCardExpiryTime(new Date(req.getRechargeCardExpiryTime()));
         rCExchangeCodeBatchSaveDTO.setValidityPeriod(req.getValidityPeriod());
         rCExchangeCodeBatchSaveDTO.setExpiryType(req.getExpiryType());
         rCExchangeCodeBatchSaveDTO.setDescription(req.getDescription());

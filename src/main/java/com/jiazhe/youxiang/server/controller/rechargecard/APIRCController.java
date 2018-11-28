@@ -132,7 +132,9 @@ public class APIRCController extends BaseController{
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));
-        CommonValidator.validateNull(req.getExpiryTime(),new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL));
+        if(req.getExpiryTime()==0){
+            throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
+        }
         RCEditDTO dto = RCAdapter.EditReq2EditDTO(req);
         rcBiz.editSave(dto);
         return ResponseFactory.buildSuccess();

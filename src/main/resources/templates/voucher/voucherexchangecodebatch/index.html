@@ -162,10 +162,11 @@
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker" id="saveExpiryTime"
-                                                                   name="expiryTime" type="text"/>
+                                                                   type="text" readonly />
                                                             <span class="input-group-addon">
                                                                             <i class="fa fa-calendar bigger-110"></i>
                                                                         </span>
+                                                            <input type="hidden" name="expiryTime" value=0 />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -196,11 +197,11 @@
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker"
-                                                                   id="saveVoucherExpiryTime"
-                                                                   name="voucherExpiryTime" type="text"/>
+                                                                   id="saveVoucherExpiryTime" type="text" readonly />
                                                             <span class="input-group-addon">
                                                                             <i class="fa fa-calendar bigger-110"></i>
                                                                         </span>
+                                                            <input type="hidden" name="voucherExpiryTime" value=0 />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -464,6 +465,7 @@
                     }
 
                     $("#batchSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
+                    $("#batchSaveForm #saveExpiryTime").next().next().val(result.expiryTime);
                     if (result.expiryType == 0) {
                         $("#batchSaveForm #saveDeadLineRadio").click();
                     } else {
@@ -471,6 +473,7 @@
                     }
                     $("#batchSaveForm #saveValidityPeriod").val(result.validityPeriod);
                     $("#batchSaveForm #saveVoucherExpiryTime").val(dateFormat(result.voucherExpiryTime));
+                    $("#batchSaveForm #saveVoucherExpiryTime").next().next().val(result.voucherExpiryTime);
                     $("#batchSaveForm #saveDescription").val(result.description);
                     $("#modal-form").modal('show');
                 }

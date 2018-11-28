@@ -38,9 +38,8 @@ public class CustomerPlaceOrderReq  extends BaseVO {
     @ApiModelProperty("客户留言")
     private String customerRemark;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @ApiModelProperty("预约时间")
-    private Date serviceTime;
+    private Long serviceTime;
 
     /**
      * 使用的代金券ids
@@ -124,11 +123,11 @@ public class CustomerPlaceOrderReq  extends BaseVO {
         this.customerRemark = customerRemark;
     }
 
-    public Date getServiceTime() {
+    public Long getServiceTime() {
         return serviceTime;
     }
 
-    public void setServiceTime(Date serviceTime) {
+    public void setServiceTime(Long serviceTime) {
         this.serviceTime = serviceTime;
     }
 

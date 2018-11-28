@@ -47,7 +47,7 @@ public class PlaceOrderReq extends BaseVO {
     private String workerMobile;
 
     @ApiModelProperty("服务时间")
-    private Date serviceTime;
+    private Long serviceTime;
 
     /**
      * 使用的代金券ids
@@ -153,11 +153,11 @@ public class PlaceOrderReq extends BaseVO {
         this.workerMobile = workerMobile;
     }
 
-    public Date getServiceTime() {
+    public Long getServiceTime() {
         return serviceTime;
     }
 
-    public void setServiceTime(Date serviceTime) {
+    public void setServiceTime(Long serviceTime) {
         this.serviceTime = serviceTime;
     }
 
