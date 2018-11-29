@@ -20,5 +20,5 @@ public interface SysLogService {
 
     int insert(SysLogDTO log);
 
-    List<SysLogDTO> getList(String moduleName, String operate, Integer level, Paging paging);
+    List<SysLogDTO> getList(String moduleName, String operate, Integer level, String operatorName, String ip, Long startTime, Long endTime, Paging paging);
 }

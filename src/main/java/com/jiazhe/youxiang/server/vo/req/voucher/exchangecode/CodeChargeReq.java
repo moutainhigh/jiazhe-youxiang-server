@@ -13,7 +13,7 @@ public class CodeChargeReq extends BaseVO{
     @ApiModelProperty("密钥")
     private String keyt ;
 
-    @ApiModelProperty("用户手机号")
+    @ApiModelProperty("客户ID")
     private Integer id;
 
     public String getKeyt() {

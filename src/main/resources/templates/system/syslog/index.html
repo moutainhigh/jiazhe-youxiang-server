@@ -67,19 +67,12 @@
                                         <option value="客户管理">客户管理</option>
                                         <option value="商品管理">商品管理</option>
                                         <option value="审核管理">审核管理</option>
-                                        <option value="登录">登录</option>
+                                        <option value="登录管理">登录管理</option>
                                         <option value="商品电子码管理">商品电子码管理</option>
                                         <option value="文件上传管理">文件上传管理</option>
                                     </select>
                                 </div>
 
-                                <label class="col-sm-1 control-label no-padding-right">操作：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <input id="operate" name="operate" class="form-control" type="text"
-                                               style="height:30px"/>
-                                    </div>
-                                </div>
                                 <label class="col-sm-1 control-label no-padding-right">日志级别：</label>
                                 <div class="col-sm-2">
                                     <select id="level" name="level" class="selectpicker show-tick form-control">
@@ -89,6 +82,63 @@
                                         <option value=3>三级</option>
                                     </select>
                                 </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-1 control-label no-padding-right">开始时间：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <div class="input-group">
+                                                <input class="form-control date-picker" id="searchOrderStartTime"
+                                                       type="text" readonly/>
+                                                <span class="input-group-addon">
+                                                <i class="fa fa-calendar bigger-110"></i>
+                                            </span>
+                                                <input type="hidden" value=0 name="startTime"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <label class="col-sm-1 control-label no-padding-right">结束时间：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <div class="input-group">
+                                                <input class="form-control date-picker" id="searchOrderEndTime"
+                                                       type="text" readonly/>
+                                                <span class="input-group-addon">
+                                                <i class="fa fa-calendar bigger-110"></i>
+                                            </span>
+                                                <input type="hidden" value=0 name="endTime"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                            </div>
+                            <div class="space-2"></div>
+                            <div class="form-group">
+
+                                <label class="col-sm-1 control-label no-padding-right">操作人：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input name="operatorName" class="form-control" type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">IP：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input name="ip" class="form-control" type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+
+                                <label class="col-sm-1 control-label no-padding-right">操作：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="operate" name="operate" class="form-control" type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+
                                 <div class="col-sm-3">
                                     <button class="btn btn-white btn-default btn-round btn-sm"
                                             onclick="return search()">
@@ -150,6 +200,7 @@
         }
 
         initTable(grid_selector, pager_selector, tableOption);
+        initDatePicker();
 
     });
 
