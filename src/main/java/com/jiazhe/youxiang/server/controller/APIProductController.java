@@ -92,6 +92,7 @@ public class APIProductController {
      *
      * @return
      */
+    @AppApi
     @ApiOperation(value = "【后台】获得商品分类", httpMethod = "GET", response = ProductCategoryResp.class, notes = "【后台】获得商品分类")
     @RequestMapping(value = "getcategorybyid", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "获得商品分类", level = LogLevelEnum.LEVEL_1)
@@ -108,6 +109,7 @@ public class APIProductController {
      *
      * @return
      */
+    @AppApi
     @ApiOperation(value = "查询商品分类列表", httpMethod = "GET", response = ProductCategoryResp.class, responseContainer = "List", notes = "查询商品分类列表")
     @RequestMapping(value = "getcategorylist", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "查询商品分类列表", level = LogLevelEnum.LEVEL_1)
@@ -198,6 +200,7 @@ public class APIProductController {
      *
      * @return
      */
+    @AppApi
     @ApiOperation(value = "获得某一商品", httpMethod = "GET", response = ProductResp.class, notes = "获得某一商品")
     @RequestMapping(value = "getbyid", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "获得某一商品", level = LogLevelEnum.LEVEL_1)
@@ -344,6 +347,7 @@ public class APIProductController {
      *
      * @return
      */
+    @AppApi
     @ApiOperation(value = "获得某一商品在某城市的价格", httpMethod = "GET", response = ProductPriceResp.class, notes = "获得某一商品在某城市的价格")
     @RequestMapping(value = "getpricebycity", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "获得某一商品在某城市的价格", level = LogLevelEnum.LEVEL_1)
