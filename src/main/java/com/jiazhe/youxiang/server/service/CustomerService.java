@@ -51,4 +51,6 @@ public interface CustomerService {
     AddressDTO getAddressById(Integer id);
 
     void addAddress(AddressAddDTO addressAddDTO);
+
+    AddressDTO getDefaultAddress(Integer customerId);
 }

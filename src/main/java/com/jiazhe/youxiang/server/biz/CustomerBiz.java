@@ -106,6 +106,10 @@ public class CustomerBiz {
 
     }
 
+    public AddressDTO getDefaultAddress(Integer customerId) {
+        return customerService.getDefaultAddress(customerId);
+    }
+
     public List<AddressDTO> getAddressList(Integer customerId, Paging paging) {
         return customerService.getAddressList(customerId, paging);
     }
@@ -123,4 +127,6 @@ public class CustomerBiz {
         customerService.setAddressDefault(id, isDefault);
 
     }
+
+
 }

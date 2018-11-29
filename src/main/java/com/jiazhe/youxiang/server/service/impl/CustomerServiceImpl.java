@@ -176,6 +176,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
+
     @Override
     public AddressDTO getAddressById(Integer id) {
         AddressDTO addressDTO = CustomerAdapter.addressPO2DTO(customerAddressPOMapper.selectByPrimaryKey(id));
@@ -185,6 +186,23 @@ public class CustomerServiceImpl implements CustomerService {
                 throw new CustomerException(CustomerCodeEnum.CUSTOMER_INEXISTENCE);
             }
             setIsDefault(customerPO, addressDTO);
+        }
+        return addressDTO;
+    }
+
+    @Override
+    public AddressDTO getDefaultAddress(Integer customerId) {
+        CustomerPO customerPO = customerPOMapper.selectByPrimaryKey(customerId);
+        if (customerPO == null) {
+            throw new CustomerException(CustomerCodeEnum.CUSTOMER_INEXISTENCE);
+        }
+        if (customerPO.getDefaultAddressId() == null) {
+            throw new CustomerException(CustomerCodeEnum.CUSTOMER_HAS_NOT_DEFAULT_ADDRESS);
+        }
+        AddressDTO addressDTO = CustomerAdapter.addressPO2DTO(customerAddressPOMapper.selectByPrimaryKey(customerPO.getDefaultAddressId()));
+        if (addressDTO == null) {
+            LOGGER.error("getDefaultAddress addressDTO不存在，addressId:{}", customerPO.getDefaultAddressId());
+            throw new CustomerException(CustomerCodeEnum.CUSTOMER_HAS_NOT_DEFAULT_ADDRESS);
         }
         return addressDTO;
     }

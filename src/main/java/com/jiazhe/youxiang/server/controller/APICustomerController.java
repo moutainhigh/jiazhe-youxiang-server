@@ -25,12 +25,13 @@ import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.customer.AddressAddReq;
+import com.jiazhe.youxiang.server.vo.req.customer.AddressListReq;
 import com.jiazhe.youxiang.server.vo.req.customer.AddressSetDefaultReq;
 import com.jiazhe.youxiang.server.vo.req.customer.AddressUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.customer.CustomerAddReq;
 import com.jiazhe.youxiang.server.vo.req.customer.CustomerListReq;
 import com.jiazhe.youxiang.server.vo.req.customer.CustomerUpdateReq;
-import com.jiazhe.youxiang.server.vo.req.customer.AddressListReq;
+import com.jiazhe.youxiang.server.vo.req.customer.DefaultAddressReq;
 import com.jiazhe.youxiang.server.vo.resp.customer.AddressResp;
 import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
 import io.swagger.annotations.ApiOperation;
@@ -107,7 +108,7 @@ public class APICustomerController {
     @CustomLog(moduleName = ModuleEnum.USER, operate = "查询客户列表", level = LogLevelEnum.LEVEL_1)
     public Object getList(@ModelAttribute CustomerListReq req) {
         CommonValidator.validatePaging(req);
-        Paging paging =  PagingParamUtil.pagingParamSwitch(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
         List<CustomerDTO> customerDTOList = customerBiz.getList(req.getMobile(), req.getName(), paging);
         //将DTO转成VO
@@ -196,6 +197,25 @@ public class APICustomerController {
 
 
     /**
+     * 查询客户的默认地址
+     *
+     * @return
+     */
+    @AppApi
+    @ApiOperation(value = "查询客户的默认地址", httpMethod = "GET", response = AddressResp.class, notes = "查询客户的默认地址")
+    @RequestMapping(value = "getdefaultaddress", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.USER, operate = "查询客户的默认地址", level = LogLevelEnum.LEVEL_1)
+    public Object getDefaultAddress(@ModelAttribute DefaultAddressReq req) {
+        CommonValidator.validateId(req.getCustomerId(), new CustomerException(CustomerCodeEnum.CUSTOMER_ID_IS_NULL));
+        //调用BIZ方法
+        AddressDTO addressDTO = customerBiz.getDefaultAddress(req.getCustomerId());
+        //将DTO转成VO
+        AddressResp result = CustomerAdapter.addressDTO2VO(addressDTO);
+        //用ResponseFactory将返回值包装
+        return ResponseFactory.buildResponse(result);
+    }
+
+    /**
      * 查询客户的地址列表
      *
      * @return
@@ -207,7 +227,7 @@ public class APICustomerController {
     public Object getAddressList(@ModelAttribute AddressListReq req) {
         CommonValidator.validatePaging(req);
         CommonValidator.validateId(req.getCustomerId(), new CustomerException(CustomerCodeEnum.CUSTOMER_ID_IS_NULL));
-        Paging paging =  PagingParamUtil.pagingParamSwitch(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
         List<AddressDTO> addressDTOList = customerBiz.getAddressList(req.getCustomerId(), paging);
         //将DTO转成VO
