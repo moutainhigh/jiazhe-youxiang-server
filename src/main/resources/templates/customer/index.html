@@ -10,7 +10,8 @@
 
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
-
+    <link rel="stylesheet" th:href="@{/static/zTree/css/metroStyle.css}" type="text/css">
+    <script th:src="@{/static/zTree/js/jquery.ztree.all.min.js}"></script>
 
     <style>
         .form-group {
@@ -175,6 +176,178 @@
                         </div>
                     </div>
 
+                    <!--下单modal-->
+                    <div id="order-modal" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger">追加订单</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-1"></div>
+                                        <div class="col-xs-12 col-sm-9">
+                                            <form id="appendOrderForm" class="form-horizontal" role="form">
+                                                <input type="hidden" name="customerId" id="orderCustomerId">
+                                                <input type="hidden" name="voucherIds" id="orderVoucherIds">
+                                                <input type="hidden" name="rechargeCardIds" id="orderRechargeCardIds">
+                                                <input type="hidden" name="cardMoneys" id="orderCardMoneys">
+                                                <input type="hidden" name="cityCode" id="orderCityCode">
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">商品：</label>
+                                                    <div class="col-sm-8">
+                                                        <select id="orderProductId" name="productId"
+                                                                onchange="productChanged()"
+                                                                class="selectpicker show-tick form-control">
+                                                            <option value=></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">城市：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <ul id="cityTree" class="ztree"
+                                                                style="margin-top:0; width:100%; height:auto;">
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">数量：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input type="text" name="count" id="orderCount" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">服务对象姓名：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="app_customerName" class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">服务对象电话：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="app_customerMobile" class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 virtual"></div>
+                                                <div class="form-group virtual">
+                                                    <label class="col-sm-4 control-label no-padding-right">服务地址：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="app_customerAddress" class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 virtual"></div>
+                                                <div class="form-group virtual">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="orderRealServiceTime">服务时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control datetime-picker"
+                                                                   id="orderRealServiceTime" type="text"/>
+                                                            <span class="input-group-addon">
+                                                                    <i class="fa fa-calendar bigger-110"></i>
+                                                                </span>
+                                                            <input type="hidden" value=0 name="realServiceTime"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 virtual"></div>
+                                                <div class="form-group virtual">
+                                                    <label class="col-sm-4 control-label no-padding-right">服务人员姓名：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="app_workerName" name="workerName"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 virtual"></div>
+                                                <div class="form-group virtual">
+                                                    <label class="col-sm-4 control-label no-padding-right">服务人员电话：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="app_workerMobile" name="workerMobile"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">订单成本：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="app_cost"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 hasVoucher"></div>
+                                                <div class="form-group hasVoucher">
+                                                    <label class="col-sm-4 control-label no-padding-right">可用代金券：</label>
+                                                    <div class="col-sm-8" id="orderVoucherArea">
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 hasRechargeCard"></div>
+                                                <div class="form-group hasRechargeCard">
+                                                    <label class="col-sm-4 control-label no-padding-right">可用充值卡：</label>
+                                                    <div class="col-sm-8" id="orderRechargeCardArea">
+
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="saveOrder()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        下单
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div><!-- /.row -->
             </div><!-- /.page-content -->
         </div>
@@ -186,11 +359,32 @@
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
-
+    var cityTree ;
     $(function () {
+        $(document).on("hidden.bs.modal", ".bootbox", function () {
+            if ($(".modal-backdrop").length > 0) {
+                $("body").addClass("modal-open");
+            }
+        })
         //重新修改表格宽度
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
+        });
+
+        //数量控件
+        $("#orderCount").ace_spinner({
+            value: 1, min: 1, max: 100, step: 1, on_sides: true, icon_up: 'ace-icon fa fa-plus',
+            icon_down: 'ace-icon fa fa-minus', btn_up_class: 'btn-success', btn_down_class: 'btn-danger'
+        }).closest('.ace-spinner')
+            .on('changed.fu.spinbox', function () {
+
+            });
+
+        //datatime控件
+        $('#orderRealServiceTime').datetimepicker({
+            format: "YYYY-MM-DD HH:mm"
+        }).next().on(ace.click_event, function () {
+            $(this).prev().focus();
         });
 
 
@@ -261,7 +455,7 @@
         var str = "";
         var orderUrl = "/order/orderindex?mobile=" + rowObject.mobile;
         str += getRedirectButton("btn-success", orderUrl, "详情");
-        str += getFunctionButton("btn-yellow", "", "下单");
+        str += getFunctionButton("btn-yellow", "openNewOrder(" + rowObject.id + ")", "下单");
         return str;
     }
 
@@ -434,6 +628,192 @@
 
     function directCharge(id, money) {
 
+    }
+
+    function openNewOrder(id) {
+        $("#orderCustomerId").val(id);
+        $("#order-modal").modal("show");
+        initProduct();
+    }
+
+    function initProduct() {
+        $("#orderProductId").empty();
+        $("#orderProductId").append("<option value='0'>请选择商品</option>");
+        $.ajax({
+            url: "../api/product/getlist",
+            dataType: "json",
+            async: false,
+            data: {
+                pageSize: 10000,
+                pageNum: 1
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#orderProductId").append("<option data-last-num="+result[i].lastNum+"data-product-type=" + result[i].productType + " value=" + result[i].id + ">" + result[i].name + "</option>");
+                    }
+                }
+            },
+            error: error
+        });
+    }
+
+    function productChanged() {
+        refreshCity();
+        var lastNum = parseInt($("#orderProductId").find("option:selected").attr("data-last-num"));
+        $("#orderCount").ace_spinner('value', lastNum);
+        if($("#orderProductId").find("option:selected").attr("data-product-type") == '0'){//服务类
+            $(".virtual").css("display", "");
+        }else{//电子卡
+            $(".virtual").css("display", "none");
+        }
+        $("#orderVoucherArea").empty();
+        $("#orderRechargeCardArea").empty();
+    }
+
+    function refreshCity() {
+        var setting = {
+            view: {selectedMulti: false},
+            check: {enable: true,chkStyle: "radio",radioType:"all"},
+            data: {simpleData: {enable: true}},
+            edit: {enable: false},
+            callback: {onClick: zTreeOnClick}
+        };
+        var zCityNodes = [];
+        $.ajax({
+            url: "../api/product/getpricelist",
+            data: {
+                pageSize: 10000,
+                pageNum: 1,
+                productId: $("#orderProductId").val(),
+                status: 1
+            },
+            dataType: "json",
+            async: false,
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        var zNode = {};
+                        zNode.id = parseInt(result[i].cityCode);
+                        zNode.pId = parseInt(result[i].cityCode.substring(0, 2) + "0000");
+                        zNode.name = result[i].cityName + "(" + result[i].price + "元)";
+                        zCityNodes.push(zNode);
+                    }
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+        cityTree = $.fn.zTree.init($("#cityTree"), setting, zCityNodes);
+    }
+    
+    function zTreeOnClick(event, treeId, treeNode) {
+        console.log(treeId);
+        var nodes = cityTree.getCheckedNodes(true);
+        if(nodes.length<1){
+            $("#orderCityCode").val('');
+            $("#orderVoucherArea").empty();
+            $("#orderRechargeCardArea").empty();
+        }else{
+            $("#orderCityCode").val(nodes[0].id);
+            refreshCard();
+        }
+    }
+
+    //更新代金券，充值卡区域
+    function refreshCard() {
+        $("#orderVoucherArea").empty();
+        $("#orderRechargeCardArea").empty();
+        $.ajax({
+            url: "../api/voucher/findbygoodsattrpage",
+            dataType: "json",
+            async: true,
+            data: {
+                pageSize: 10000,
+                pageNum: 1,
+                customerId: $("#orderCustomerId").val(),
+                productId: $("#orderProductId").val(),
+                cityCode: $("#orderCityCode").val()
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    if (result.length > 0) {
+                        $(".hasVoucher").css("display", "")
+                    }
+                    else {
+                        $(".hasVoucher").css("display", "none");
+                    }
+                    for (var i = 0; i < result.length; i++) {
+                        $("#orderVoucherArea").append("<div class='checkbox'><label>" +
+                            "<input name='voucherCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
+                            "<span class='lbl'> " + result[i].name + "（可抵扣商品数量：" + result[i].count + "）</span></label>" +
+                            "<input type='hidden' id='replaceCount_" + result[i].id + "'value=" + result[i].count + ">" +
+                            "</div>")
+                    }
+                }
+            },
+            error: error
+        });
+        $.ajax({
+            url: "../api/rc/findbygoodsattrpage",
+            dataType: "json",
+            async: false,
+            data: {
+                pageSize: 10000,
+                pageNum: 1,
+                customerId: $("#orderCustomerId").val(),
+                productId: $("#orderProductId").val(),
+                cityCode: $("#orderCityCode").val()
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    if (result.length > 0) {
+                        $(".hasRechargeCard").css("display", "")
+                    }
+                    else {
+                        $(".hasRechargeCard").css("display", "none");
+                    }
+                    for (var i = 0; i < result.length; i++) {
+                        $("#orderRechargeCardArea").append("<div class='checkbox'><label>" +
+                            "<input name='rechargeCardCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
+                            "<span class='lbl'> " + result[i].name + "（余额：" + result[i].balance + "）</span></label>" +
+                            "<input type='hidden' id='leftMoney_" + result[i].id + "' value=" + result[i].balance + ">" +
+                            "<input type='text' id='spendMoney_" + result[i].id + "' value=0>" +
+                            "</div>")
+                    }
+                }
+            },
+            error: error
+        });
+    }
+
+    function saveOrder() {
+        $("#orderRealServiceTime").next().next().val($("#orderRealServiceTime").val() == '' ? 0 : new Date($("#orderRealServiceTime").val()).getTime());
+        if($("#orderProductId").val()=='0'){
+            bootboxalert("请选择商品");
+            return false;
+        }
+        if( $("#orderCityCode").val()==""){
+            bootboxalert("请选择城市");
+            return false;
+        }
     }
 
 </script>
