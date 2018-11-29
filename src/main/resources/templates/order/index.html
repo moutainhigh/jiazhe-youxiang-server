@@ -793,29 +793,26 @@
         var moneyError = false;
         $("#rechargeCardArea input[type=checkbox]").each(function () {
             if ($(this).prop('checked')) {
-                if (parseInt($("#spendMoney_" + $(this).val()).val()) > parseInt($("#leftMoney_" + $(this).val()).val())) {
+                if (parseFloat($("#spendMoney_" + $(this).val()).val()) > parseFloat($("#leftMoney_" + $(this).val()).val())) {
                     moneyError = true;
                 }
-                money = money + parseInt($("#spendMoney_" + $(this).val()).val());
+                money = money + parseFloat($("#spendMoney_" + $(this).val()).val());
             }
         });
         if (moneyError) {
             bootboxalert("充值卡消费金额不能大于充值卡的余额");
             return false;
         }
-        var left = (parseInt($("#appendCount").val()) - count) * parseInt($("#app_productPrice").val()) - money;
-        if (left > 0) {
+        var left = (parseInt($("#appendCount").val()) - count) * parseFloat($("#app_productPrice").val()) - money;
+        if (left < 0) {
+            bootboxalert("所选的付款内容超额支付追加的订单，不能追加！");
+        }else{
+            var confirmText = "所选的付款内容"+(left == 0 ? "刚好" : "不足以")+"支付追加的订单，继续追加该订单吗？"
             confirm("所选的付款内容不足以支付追加的订单，继续追加该订单吗？", function (result) {
                 if (result) {
                     appendOrder();
                 }
             });
-        }
-        if (left == 0) {
-            appendOrder()
-        }
-        if (left < 0) {
-            bootboxalert("所选的付款内容超额支付追加的订单，不能追加！");
         }
     }
 

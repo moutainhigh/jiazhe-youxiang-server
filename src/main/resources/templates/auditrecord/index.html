@@ -240,7 +240,6 @@
         $(document).on('show.bs.modal', '.modal', function (event) {
             var zIndex = 1060 + (10 * $('.modal:visible').length);
             $(this).css('z-index', zIndex);
-            console.log(zIndex);
         });
     });
 
@@ -466,9 +465,7 @@
                     var result = data.data;
                     $("#batchId").append("<option value=>&nbsp;</option>");
                     for (var i = 0; i < result.length; i++) {
-                        if (result[i].status == 1) {//进行中的项目
-                            $("#batchId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
-                        }
+                        $("#batchId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
                     }
                 }
             },
