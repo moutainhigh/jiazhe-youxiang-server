@@ -13,7 +13,6 @@ import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,10 +58,10 @@ public class SysLogBiz {
                     sysLogDTO.setOperate(operate);
                     sysLogDTO.setLevel(level);
                     SysUserDTO userDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
-                    if(userDTO!=null){
+                    if (userDTO != null) {
                         sysLogDTO.setOperatorId(userDTO.getId());
                         sysLogDTO.setOperatorName(userDTO.getLoginName());
-                    }else {
+                    } else {
                         sysLogDTO.setOperatorId(0);
                         sysLogDTO.setOperatorName("未知");
                     }
@@ -79,8 +78,8 @@ public class SysLogBiz {
 
     }
 
-    public List<SysLogDTO> getList(String moduleName, String operate, Integer level, Paging paging) {
+    public List<SysLogDTO> getList(String moduleName, String operate, Integer level, String operatorName, String ip, Long startTime, Long endTime, Paging paging) {
         //这里面给paging的hasMore和total赋值
-        return sysLogService.getList(moduleName, operate, level, paging);
+        return sysLogService.getList(moduleName, operate, level, operatorName, ip, startTime, endTime, paging);
     }
 }

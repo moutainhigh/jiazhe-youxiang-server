@@ -10,6 +10,7 @@ import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.SysLogAdapter;
 import com.jiazhe.youxiang.server.biz.SysLogBiz;
+import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
@@ -50,6 +51,7 @@ public class APISysLogController extends BaseController {
      *
      * @return
      */
+    @AppApi
     @ApiOperation(value = "查询日志信息", httpMethod = "GET", response = SysLogResp.class, responseContainer = "List", notes = "查询日志信息")
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.LOG, operate = "日志查询", level = LogLevelEnum.LEVEL_1)
@@ -57,7 +59,7 @@ public class APISysLogController extends BaseController {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
-        List<SysLogDTO> sysLogDTOList = sysLogBiz.getList(req.getModuleName(), req.getOperate(), req.getLevel(), paging);
+        List<SysLogDTO> sysLogDTOList = sysLogBiz.getList(req.getModuleName(), req.getOperate(), req.getLevel(), req.getOperatorName(), req.getIp(), req.getStartTime(), req.getEndTime(), paging);
         //将DTO转成VO
         List<SysLogResp> result = sysLogDTOList.stream().map(SysLogAdapter::sysLogDTO2VO).collect(Collectors.toList());
 
