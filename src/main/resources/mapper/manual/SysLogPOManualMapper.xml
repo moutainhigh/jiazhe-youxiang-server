@@ -39,6 +39,12 @@
             <if test="ip != null and ip!=''">
                 AND ip = #{ip}
             </if>
+            <if test="startTime != null and startTime > 0">
+                AND add_time >= from_unixtime(#{startTime}/1000)
+            </if>
+            <if test="endTime != null and endTime > 0">
+                AND from_unixtime(#{endTime}/1000) >= add_time
+            </if>
             AND is_deleted = 0
         </where>
         order by add_time desc
@@ -62,6 +68,12 @@
             </if>
             <if test="ip != null and ip!=''">
                 AND ip = #{ip}
+            </if>
+            <if test="startTime != null and startTime > 0">
+                AND add_time >= from_unixtime(#{startTime}/1000)
+            </if>
+            <if test="endTime != null and endTime > 0">
+                AND from_unixtime(#{endTime}/1000) >= add_time
             </if>
             AND is_deleted = 0
         </where>

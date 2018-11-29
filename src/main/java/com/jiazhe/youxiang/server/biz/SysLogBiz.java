@@ -78,8 +78,8 @@ public class SysLogBiz {
 
     }
 
-    public List<SysLogDTO> getList(String moduleName, String operate, Integer level, String operatorName, String ip, Paging paging) {
+    public List<SysLogDTO> getList(String moduleName, String operate, Integer level, String operatorName, String ip, Long startTime, Long endTime, Paging paging) {
         //这里面给paging的hasMore和total赋值
-        return sysLogService.getList(moduleName, operate, level, operatorName, ip, paging);
+        return sysLogService.getList(moduleName, operate, level, operatorName, ip, startTime, endTime, paging);
     }
 }

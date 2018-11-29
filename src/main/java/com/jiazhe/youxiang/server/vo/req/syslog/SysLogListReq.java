@@ -5,7 +5,6 @@
  */
 package com.jiazhe.youxiang.server.vo.req.syslog;
 
-import com.jiazhe.youxiang.server.vo.req.OffsetLimitReq;
 import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -28,6 +27,10 @@ public class SysLogListReq extends PageSizeNumReq {
     private String operatorName;
     @ApiModelProperty("操作IP")
     private String ip;
+    @ApiModelProperty("开始时间")
+    private Long startTime;
+    @ApiModelProperty("结束时间")
+    private Long endTime;
 
     public String getModuleName() {
         return moduleName;
@@ -67,5 +70,21 @@ public class SysLogListReq extends PageSizeNumReq {
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    public Long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
+    }
+
+    public Long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Long endTime) {
+        this.endTime = endTime;
     }
 }

@@ -59,7 +59,7 @@ public class APISysLogController extends BaseController {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
-        List<SysLogDTO> sysLogDTOList = sysLogBiz.getList(req.getModuleName(), req.getOperate(), req.getLevel(), req.getOperatorName(), req.getIp(), paging);
+        List<SysLogDTO> sysLogDTOList = sysLogBiz.getList(req.getModuleName(), req.getOperate(), req.getLevel(), req.getOperatorName(), req.getIp(), req.getStartTime(), req.getEndTime(), paging);
         //将DTO转成VO
         List<SysLogResp> result = sysLogDTOList.stream().map(SysLogAdapter::sysLogDTO2VO).collect(Collectors.toList());
 

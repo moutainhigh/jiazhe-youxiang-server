@@ -39,9 +39,9 @@ public class SysLogServiceImpl implements SysLogService {
     }
 
     @Override
-    public List<SysLogDTO> getList(String moduleName, String operate, Integer level, String operatorName, String ip, Paging paging) {
-        Integer count = sysLogPOManualMapper.count(moduleName, operate, level, operatorName, ip);
-        List<SysLogPO> sysLogPOList = sysLogPOManualMapper.query(moduleName, operate, level, operatorName, ip, paging.getOffset(), paging.getLimit());
+    public List<SysLogDTO> getList(String moduleName, String operate, Integer level, String operatorName, String ip, Long startTime, Long endTime, Paging paging) {
+        Integer count = sysLogPOManualMapper.count(moduleName, operate, level, operatorName, ip, startTime, endTime);
+        List<SysLogPO> sysLogPOList = sysLogPOManualMapper.query(moduleName, operate, level, operatorName, ip, startTime, endTime, paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
         return sysLogPOList.stream().map(SysLogAdapter::sysLogPO2DTO).collect(Collectors.toList());
     }
