@@ -10,6 +10,7 @@ import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.SysCityAdapter;
 import com.jiazhe.youxiang.server.biz.SysCityBiz;
+import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.enums.CityCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
@@ -151,6 +152,45 @@ public class APISysCityController extends BaseController {
         sysCityBiz.batchClose(req.getCityCodes());
         //用ResponseFactory将返回值包装,简单的返回成功
         return ResponseFactory.buildSuccess();
+    }
+
+
+    /**
+     * 获取省级城市列表
+     *
+     * @return
+     */
+    @AppApi
+    @ApiOperation(value = "【APP】获取省级城市列表", httpMethod = "GET", response = SysCityResp.class, responseContainer = "List", notes = "【APP】获取省级城市列表")
+    @RequestMapping(value = "getprovincelist", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.CITY,operate = "获取省级城市列表",level = LogLevelEnum.LEVEL_1)
+    public Object getProvinceList() {
+        //调用BIZ方法
+        List<SysCityDTO> sysCityDTOS = sysCityBiz.getProvinceList();
+        //将DTO转成VO
+        List<SysCityResp> result = sysCityDTOS.stream().map(SysCityAdapter::sysCityDTO2VO).collect(Collectors.toList());
+        //用ResponseFactory将返回值包装
+        return ResponseFactory.buildResponse(result);
+    }
+
+    /**
+     * 获取市级城市列表
+     *
+     * @return
+     */
+    @AppApi
+    @ApiOperation(value = "【APP】获取市级城市列表", httpMethod = "GET", response = SysCityResp.class, responseContainer = "List", notes = "【APP】获取市级城市列表")
+    @RequestMapping(value = "getcitylist", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.CITY,operate = "获取市级城市列表",level = LogLevelEnum.LEVEL_1)
+    public Object getCityList(@ModelAttribute CityCodeReq req) {
+        CommonValidator.validateNull(req);
+        CommonValidator.validateNull(req.getCityCode(),new CityException(CityCodeEnum.CITY_CODE_IS_NULL));
+        //调用BIZ方法
+        List<SysCityDTO> sysCityDTOS = sysCityBiz.getCityList(req.getCityCode());
+        //将DTO转成VO
+        List<SysCityResp> result = sysCityDTOS.stream().map(SysCityAdapter::sysCityDTO2VO).collect(Collectors.toList());
+        //用ResponseFactory将返回值包装
+        return ResponseFactory.buildResponse(result);
     }
 
 }

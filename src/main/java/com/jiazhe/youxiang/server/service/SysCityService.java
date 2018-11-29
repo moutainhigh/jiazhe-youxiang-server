@@ -28,4 +28,8 @@ public interface SysCityService {
     List<SysCityDTO> getOpenList();
 
     Map<String, String> getCityMapByCodes(List<String> cityCodes);
+
+    List<SysCityDTO> getProvinceList();
+
+    List<SysCityDTO> getCityList(String cityCode);
 }

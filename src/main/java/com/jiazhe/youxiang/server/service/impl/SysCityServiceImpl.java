@@ -67,6 +67,27 @@ public class SysCityServiceImpl implements SysCityService {
         return sysCityPOList.stream().collect(Collectors.toMap(SysCityPO::getCityCode, SysCityPO::getCityName));
     }
 
+    @Override
+    public List<SysCityDTO> getProvinceList() {
+        SysCityPOExample sysCityPOExample = new SysCityPOExample();
+        SysCityPOExample.Criteria criteria = sysCityPOExample.createCriteria();
+        criteria.andCityLevelEqualTo(SysCityBiz.CITY_LEVEL_1);
+        criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+        List<SysCityPO> sysCityPOList = sysCityPOMapper.selectByExample(sysCityPOExample);
+        return sysCityPOList.stream().map(SysCityAdapter::sysCityPO2DTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SysCityDTO> getCityList(String cityCode) {
+        SysCityPOExample sysCityPOExample = new SysCityPOExample();
+        SysCityPOExample.Criteria criteria = sysCityPOExample.createCriteria();
+        criteria.andCityLevelEqualTo(SysCityBiz.CITY_LEVEL_2);
+        criteria.andParentCodeEqualTo(cityCode);
+        criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+        List<SysCityPO> sysCityPOList = sysCityPOMapper.selectByExample(sysCityPOExample);
+        return sysCityPOList.stream().map(SysCityAdapter::sysCityPO2DTO).collect(Collectors.toList());
+    }
+
     @Transactional
     @Override
     public void updateStatusByCityCode(String cityCode, Byte status) {
