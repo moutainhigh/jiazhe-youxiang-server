@@ -33,6 +33,12 @@
             <if test="level != null and level!=''">
                 AND level = #{level}
             </if>
+            <if test="operatorName != null and operatorName!=''">
+                AND operator_name like concat('%',#{operatorName},'%')
+            </if>
+            <if test="ip != null and ip!=''">
+                AND ip = #{ip}
+            </if>
             AND is_deleted = 0
         </where>
         order by add_time desc
@@ -50,6 +56,12 @@
             </if>
             <if test="level != null and level!=''">
                 AND level = #{level}
+            </if>
+            <if test="operatorName != null and operatorName!=''">
+                AND operator_name like concat('%',#{operatorName},'%')
+            </if>
+            <if test="ip != null and ip!=''">
+                AND ip = #{ip}
             </if>
             AND is_deleted = 0
         </where>

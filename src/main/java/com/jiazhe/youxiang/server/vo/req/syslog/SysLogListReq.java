@@ -24,6 +24,10 @@ public class SysLogListReq extends PageSizeNumReq {
     private String operate;
     @ApiModelProperty("日志级别")
     private Integer level;
+    @ApiModelProperty("操作人姓名")
+    private String operatorName;
+    @ApiModelProperty("操作IP")
+    private String ip;
 
     public String getModuleName() {
         return moduleName;
@@ -47,5 +51,21 @@ public class SysLogListReq extends PageSizeNumReq {
 
     public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    public String getOperatorName() {
+        return operatorName;
+    }
+
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 }

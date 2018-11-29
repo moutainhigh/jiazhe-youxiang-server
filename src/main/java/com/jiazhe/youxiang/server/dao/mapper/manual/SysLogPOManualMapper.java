@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface SysLogPOManualMapper {
 
-    List<SysLogPO> query(@Param("moduleName") String moduleName, @Param("operate") String operate, @Param("level") Integer level, @Param("offset") Integer offset, @Param("limit") Integer limit);
+    List<SysLogPO> query(@Param("moduleName") String moduleName, @Param("operate") String operate, @Param("level") Integer level, @Param("operatorName") String operatorName, @Param("ip") String ip, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
-    Integer count(@Param("moduleName") String moduleName, @Param("operate") String operate, @Param("level") Integer level);
+    Integer count(@Param("moduleName") String moduleName, @Param("operate") String operate, @Param("level") Integer level, @Param("operatorName") String operatorName, @Param("ip") String ip);
 
 }
