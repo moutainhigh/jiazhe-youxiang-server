@@ -17,9 +17,9 @@ import io.swagger.annotations.ApiModelProperty;
 public class ProductCategoryAddReq extends BaseVO {
 
     private static final long serialVersionUID = -6301676705699423049L;
-    @ApiModelProperty("商品分类名称,必填")
+    @ApiModelProperty("商品大类名称,必填")
     private String name;
-    @ApiModelProperty("商品分类描述,可空")
+    @ApiModelProperty("商品大类描述,可空")
     private String description;
     @ApiModelProperty("缩略图url，可空")
     private String thumbnailUrl;
