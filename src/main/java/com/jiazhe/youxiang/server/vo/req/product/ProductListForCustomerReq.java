@@ -21,9 +21,9 @@ public class ProductListForCustomerReq extends OffsetLimitReq {
     private Integer productCategoryId;
     @ApiModelProperty("商品名称")
     private String name;
-    @ApiModelProperty("商品分类，0-服务，1-电子卡")
+    @ApiModelProperty("商品分类，0-服务，1-电子卡，可空")
     private Integer productType;
-    @ApiModelProperty("可用城市code集合")
+    @ApiModelProperty("可用城市code")
     private String cityCode;
 
     public Integer getProductCategoryId() {
