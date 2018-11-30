@@ -17,7 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class ProductListForCustomerReq extends OffsetLimitReq {
 
     private static final long serialVersionUID = 2486773458943698457L;
-    @ApiModelProperty("商品类别Id")
+    @ApiModelProperty("商品大类Id")
     private Integer productCategoryId;
     @ApiModelProperty("商品名称")
     private String name;

@@ -17,7 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class ProductAddReq extends BaseVO {
 
     private static final long serialVersionUID = -735115738153523093L;
-    @ApiModelProperty("商品分类ID，必填")
+    @ApiModelProperty("商品大类ID，必填")
     private Integer productCategoryId;
     @ApiModelProperty("商品名称，必填")
     private String name;

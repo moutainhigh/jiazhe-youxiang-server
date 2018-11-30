@@ -244,7 +244,6 @@ public class APIProductController {
         CommonValidator.validatePaging(req);
         CommonValidator.validateId(req.getProductCategoryId(), new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_ID_IS_NULL));
         CommonValidator.validateNull(req.getCityCode(), new ProductException(ProductCodeEnum.PRODUCT_CITY_CODE_IS_NULL));
-        validateProductType(req.getProductType());
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
         List<ProductDTO> productDTOList = productBiz.getListForCustomer(req.getProductCategoryId(), req.getName(), req.getProductType(), req.getCityCode(), paging);

@@ -19,7 +19,7 @@ import java.util.List;
 public class ProductListReq extends PageSizeNumReq {
 
     private static final long serialVersionUID = 6324763709129013284L;
-    @ApiModelProperty("商品类别Id")
+    @ApiModelProperty("商品大类Id")
     private Integer productCategoryId;
     @ApiModelProperty("商品名称")
     private String name;
