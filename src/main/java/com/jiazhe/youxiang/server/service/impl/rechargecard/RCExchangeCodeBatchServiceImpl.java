@@ -175,10 +175,10 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
     public List<RCExchangeCodeBatchDTO> getByProjectId(Integer projectId) {
         RechargeCardExchangeCodeBatchPOExample example = new RechargeCardExchangeCodeBatchPOExample();
         RechargeCardExchangeCodeBatchPOExample.Criteria criteria = example.createCriteria();
-        if(!projectId.equals(0)){
-            criteria.andProjectIdEqualTo(projectId);
-        }
+        criteria.andProjectIdEqualTo(projectId);
+        criteria.andStatusEqualTo(Byte.valueOf("1"));
         criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
+        criteria.andIsVirtualEqualTo(CommonConstant.BATCH_IS_VIRTUAL);
         List<RechargeCardExchangeCodeBatchPO> poList = rechargeCardExchangeCodeBatchPOMapper.selectByExample(example);
         return poList.stream().map(RCExchangeCodeBatchAdapter::PO2DTO).collect(Collectors.toList());
     }
