@@ -272,7 +272,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                     .collect(Collectors.toList());
             List<RCDTO> rcdtoList = rcService.findByIds(rechargeCardIds);
             rcdtoList.stream().forEach(bean -> {
-                int ii = rechargeCardIds.lastIndexOf(bean.getId());
+                int index = rechargeCardIds.lastIndexOf(bean.getId());
                 if (!bean.getCustomerId().equals(customerDTO.getId())) {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_NOT_YOURS);
                 }
@@ -285,16 +285,16 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if (!productIds.contains(dto.getProductId())) {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_NOT_SUPPORT_PRODUCT);
                 }
-                if (bean.getBalance().compareTo(cardMoneys.get(ii)) == -1) {
+                if (bean.getBalance().compareTo(cardMoneys.get(index)) == -1) {
                     throw new OrderException(OrderCodeEnum.ORDER_RECHARGE_CARD_PAY_ERROR);
                 }
-                bean.setBalance(bean.getBalance().subtract(cardMoneys.get(ii)));
-                rechargeCardPayMoney[0] = rechargeCardPayMoney[0].add(cardMoneys.get(ii));
+                bean.setBalance(bean.getBalance().subtract(cardMoneys.get(index)));
+                rechargeCardPayMoney[0] = rechargeCardPayMoney[0].add(cardMoneys.get(index));
                 OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
                 orderPaymentPO.setOrderCode(orderCode);
                 orderPaymentPO.setPayType(CommonConstant.PAY_RECHARGE_CARD);
                 orderPaymentPO.setRechargeCardId(bean.getId());
-                orderPaymentPO.setPayMoney(cardMoneys.get(ii));
+                orderPaymentPO.setPayMoney(cardMoneys.get(index));
                 orderPaymentPO.setSerialNumber("");
                 orderPaymentPOList.add(orderPaymentPO);
             });
@@ -439,7 +439,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                     .collect(Collectors.toList());
             List<RCDTO> rcdtoList = rcService.findByIds(rechargeCardIds);
             rcdtoList.stream().forEach(bean -> {
-                int ii = rechargeCardIds.lastIndexOf(bean.getId());
+                int index = rechargeCardIds.lastIndexOf(bean.getId());
                 if (!bean.getCustomerId().equals(orderInfoPO.getCustomerId())) {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_NOT_YOURS);
                 }
@@ -452,17 +452,17 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if (!productIds.contains(orderInfoPO.getProductId())) {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_NOT_SUPPORT_PRODUCT);
                 }
-                if (bean.getBalance().compareTo(cardMoneys.get(ii)) == -1) {
+                if (bean.getBalance().compareTo(cardMoneys.get(index)) == -1) {
                     throw new OrderException(OrderCodeEnum.ORDER_RECHARGE_CARD_PAY_ERROR);
                 }
-                bean.setBalance(bean.getBalance().subtract(cardMoneys.get(ii)));
-                rechargeCardPayMoney[0] = rechargeCardPayMoney[0].add(cardMoneys.get(ii));
+                bean.setBalance(bean.getBalance().subtract(cardMoneys.get(index)));
+                rechargeCardPayMoney[0] = rechargeCardPayMoney[0].add(cardMoneys.get(index));
                 OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
                 orderPaymentPO.setOrderId(appendOrderDTO.getOrderId());
                 orderPaymentPO.setOrderCode(orderInfoPO.getOrderCode());
                 orderPaymentPO.setPayType(CommonConstant.PAY_RECHARGE_CARD);
                 orderPaymentPO.setRechargeCardId(bean.getId());
-                orderPaymentPO.setPayMoney(cardMoneys.get(ii));
+                orderPaymentPO.setPayMoney(cardMoneys.get(index));
                 orderPaymentPO.setSerialNumber("");
                 orderPaymentPOList.add(orderPaymentPO);
             });
