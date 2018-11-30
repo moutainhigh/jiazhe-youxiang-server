@@ -17,9 +17,9 @@ import io.swagger.annotations.ApiModelProperty;
 public class ProductCategoryUpdateReq extends IdReq {
 
     private static final long serialVersionUID = -8395554053259564961L;
-    @ApiModelProperty("商品分类名称")
+    @ApiModelProperty("商品大类名称")
     private String name;
-    @ApiModelProperty("商品分类描述")
+    @ApiModelProperty("商品大类描述")
     private String description;
     @ApiModelProperty("缩略图url")
     private String thumbnailUrl;

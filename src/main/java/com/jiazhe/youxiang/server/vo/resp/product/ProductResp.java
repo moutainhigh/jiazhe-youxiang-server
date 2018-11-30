@@ -44,7 +44,7 @@ public class ProductResp extends BaseVO {
     private String smsTemplate;
     @ApiModelProperty("有效期天数")
     private Integer effectiveDays;
-    @ApiModelProperty("商品类别")
+    @ApiModelProperty("商品大类")
     private ProductCategoryResp productCategory;
     @ApiModelProperty("商品价格列表")
     private List<ProductPriceResp> productPriceList;

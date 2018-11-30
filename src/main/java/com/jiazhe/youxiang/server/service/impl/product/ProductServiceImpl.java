@@ -106,7 +106,7 @@ public class ProductServiceImpl implements ProductService {
         List<ProductDTO> result = Lists.newArrayList();
         ProductCategoryDTO productCategory = productCategoryService.getCategoryById(productCategoryId);
         //首先判断商品分类是否上架
-        if (productCategory != null && productCategory.getStatus().equals(ProductBiz.CODE_PRODUCT_SELL.byteValue())) {
+        if (productCategory != null && productCategory.getStatus().equals(ProductBiz.CODE_PRODUCT_SELL)) {
             Integer count = productPOManualMapper.count(productCategoryId, name, productType, ProductBiz.CODE_PRODUCT_SELL, null);
             List<ProductPO> productPOList = productPOManualMapper.query(productCategoryId, name, productType, ProductBiz.CODE_PRODUCT_SELL, null, paging.getOffset(), paging.getLimit());
             paging.setTotal(count);
