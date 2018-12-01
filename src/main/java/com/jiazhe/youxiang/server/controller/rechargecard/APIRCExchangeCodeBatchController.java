@@ -72,7 +72,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
     @RequestMapping(value = "/findvirtualbyprojectid", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "根据项目id查询充值卡兑换码虚拟批次", level = LogLevelEnum.LEVEL_1)
     public Object findVirtualByProjectId(@ModelAttribute IdReq req) {
-        List<RCExchangeCodeBatchDTO> rcExchangeCodeBatchDTOList = rcExchangeCodeBatchBiz.getByProjectId(req.getId());
+        List<RCExchangeCodeBatchDTO> rcExchangeCodeBatchDTOList = rcExchangeCodeBatchBiz.getVirtualByProjectId(req.getId());
         List<RCExchangeCodeBatchDTO> virtualList = rcExchangeCodeBatchDTOList.stream().filter(bean-> bean.getStatus().equals(CommonConstant.BATCH_IS_VIRTUAL)).collect(Collectors.toList());
         List<RCExchangeCodeBatchResp> rcExchangeCodeBatchRespList = virtualList.stream().map(RCExchangeCodeBatchAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildResponse(rcExchangeCodeBatchRespList);

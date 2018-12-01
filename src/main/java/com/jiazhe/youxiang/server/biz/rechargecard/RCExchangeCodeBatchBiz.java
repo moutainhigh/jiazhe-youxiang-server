@@ -75,8 +75,8 @@ public class RCExchangeCodeBatchBiz {
 
     }
 
-    public List<RCExchangeCodeBatchDTO> getByProjectId(Integer projectId) {
-        return rcExchangeCodeBatchService.getByProjectId(projectId);
+    public List<RCExchangeCodeBatchDTO> getVirtualByProjectId(Integer projectId) {
+        return rcExchangeCodeBatchService.getVirtualByProjectId(projectId);
     }
 
     public void generateCode(Integer id) {
