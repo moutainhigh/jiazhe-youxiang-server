@@ -351,7 +351,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderPaymentService.batchInsert(orderPaymentPOList);
         NeedPayResp needPayResp = new NeedPayResp();
         needPayResp.setOrderId(orderInfoPO.getId());
-        needPayResp.setPayCash(rechargeCardPayMoney[0].subtract(needPay));
+        needPayResp.setPayCash(needPay.subtract(rechargeCardPayMoney[0]));
         return needPayResp;
     }
 
