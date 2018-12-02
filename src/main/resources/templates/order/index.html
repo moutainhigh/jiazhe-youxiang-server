@@ -597,7 +597,7 @@
             postData: transformToJson($('#orderInfoSearchForm').serializeArray()),
             shrinkToFit: false,
             autoScroll: true,
-            colNames: ['', '操作', '订单号', '状态', '商品名称', '单价', '数量', '下单账号', '服务对象电话', '服务对象姓名', '代金券抵扣数量', '充值卡支付金额', '在线支付金额'],
+            colNames: ['', '操作', '订单号', '状态','待支付金额', '商品名称', '单价', '数量', '下单账号', '服务对象电话', '服务对象姓名', '代金券抵扣数量', '充值卡支付金额', '在线支付金额'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: '_action', index: '_action', width: 260, sortable: false, formatter: customFormatter},
@@ -610,6 +610,7 @@
                         return orderStatus[rowObject.status - 1];
                     }
                 },
+                {name: 'payment', index: 'payment', sortable: false},
                 {name: 'productResp.name', index: 'productResp.name', sortable: false},
                 {name: 'productPrice', index: 'productPrice', sortable: false},
                 {name: 'count', index: 'count', sortable: false},

@@ -34,6 +34,7 @@ import com.jiazhe.youxiang.server.service.product.ProductService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCService;
 import com.jiazhe.youxiang.server.service.voucher.VoucherService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -208,7 +209,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public BigDecimal placeOrder(PlaceOrderDTO dto) throws ParseException {
+    public NeedPayResp placeOrder(PlaceOrderDTO dto) throws ParseException {
         List<OrderPaymentPO> orderPaymentPOList = Lists.newArrayList();
         List<EleProductCodeDTO> eleProductCodeDTOList = Lists.newArrayList();
         CustomerDTO customerDTO = customerService.getById(dto.getCustomerId());
@@ -348,7 +349,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderCode);
         }
         orderPaymentService.batchInsert(orderPaymentPOList);
-        return rechargeCardPayMoney[0].subtract(needPay);
+        NeedPayResp needPayResp = new NeedPayResp();
+        needPayResp.setOrderId(orderInfoPO.getId());
+        needPayResp.setPayCash(rechargeCardPayMoney[0].subtract(needPay));
+        return needPayResp;
     }
 
     @Override

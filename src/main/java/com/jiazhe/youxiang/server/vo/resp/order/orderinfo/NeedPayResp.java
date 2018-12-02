@@ -12,6 +12,9 @@ import java.math.BigDecimal;
  */
 public class NeedPayResp extends BaseObject {
 
+    @ApiModelProperty("订单id")
+    private Integer orderId;
+
     @ApiModelProperty("待在线支付金额")
     private BigDecimal payCash;
 
@@ -21,5 +24,13 @@ public class NeedPayResp extends BaseObject {
 
     public void setPayCash(BigDecimal payCash) {
         this.payCash = payCash;
+    }
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 }

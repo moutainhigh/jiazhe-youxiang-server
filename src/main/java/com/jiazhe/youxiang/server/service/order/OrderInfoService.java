@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.UserReservationOrderDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
+import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -85,7 +86,7 @@ public interface OrderInfoService {
      * 下单
      * @param dto
      */
-    BigDecimal placeOrder(PlaceOrderDTO dto) throws ParseException;
+    NeedPayResp placeOrder(PlaceOrderDTO dto) throws ParseException;
 
     /**
      * 预约订单
