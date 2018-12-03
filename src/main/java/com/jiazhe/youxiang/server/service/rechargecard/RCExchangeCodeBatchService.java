@@ -65,5 +65,5 @@ public interface RCExchangeCodeBatchService {
      * @param projectId
      * @return
      */
-    List<RCExchangeCodeBatchDTO> getByProjectId(Integer projectId);
+    List<RCExchangeCodeBatchDTO> getVirtualByProjectId(Integer projectId);
 }

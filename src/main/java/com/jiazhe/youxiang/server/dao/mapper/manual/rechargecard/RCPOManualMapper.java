@@ -21,7 +21,7 @@ public interface RCPOManualMapper {
     void insert(RechargeCardPO rechargeCardPO);
 
     /**
-     * 根据id获取充值卡
+     * 根据ids获取充值卡list
      * @param ids
      * @return
      */
@@ -69,4 +69,11 @@ public interface RCPOManualMapper {
      * @return
      */
     BigDecimal totalValidBalance(@Param("customerId")Integer customerId);
+
+    /**
+     * 根据ids获取充值卡list，按ids的原始顺序排列
+     * @param ids
+     * @return
+     */
+    List<RechargeCardPO> findByIdsInOrder(List<Integer> ids);
 }

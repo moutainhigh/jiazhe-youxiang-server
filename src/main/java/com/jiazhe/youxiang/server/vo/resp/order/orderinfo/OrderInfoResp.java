@@ -77,6 +77,9 @@ public class OrderInfoResp extends BaseVO {
     @ApiModelProperty("在线支付金额")
     private BigDecimal payCash;
 
+    @ApiModelProperty("待支付金额")
+    private BigDecimal payment;
+
     @ApiModelProperty("订单总金额")
     private BigDecimal totalAmount;
 
@@ -241,6 +244,14 @@ public class OrderInfoResp extends BaseVO {
 
     public void setPayCash(BigDecimal payCash) {
         this.payCash = payCash;
+    }
+
+    public BigDecimal getPayment() {
+        return payment;
+    }
+
+    public void setPayment(BigDecimal payment) {
+        this.payment = payment;
     }
 
     public BigDecimal getTotalAmount() {

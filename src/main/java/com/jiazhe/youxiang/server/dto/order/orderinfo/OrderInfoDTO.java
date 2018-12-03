@@ -53,6 +53,8 @@ public class OrderInfoDTO {
 
     private BigDecimal payCash;
 
+    private BigDecimal payment;
+
     private BigDecimal cost;
 
     private BigDecimal totalAmount;
@@ -211,6 +213,14 @@ public class OrderInfoDTO {
 
     public void setPayCash(BigDecimal payCash) {
         this.payCash = payCash;
+    }
+
+    public BigDecimal getPayment() {
+        return payment;
+    }
+
+    public void setPayment(BigDecimal payment) {
+        this.payment = payment;
     }
 
     public BigDecimal getCost() {

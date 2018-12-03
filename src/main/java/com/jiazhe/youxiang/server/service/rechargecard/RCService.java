@@ -121,4 +121,11 @@ public interface RCService {
      * @param customerId
      */
     BigDecimal totalValidBalance(Integer customerId);
+
+    /**
+     * 根据充值卡ids，查找充值卡list，按ids的原始顺序排列
+     * @param ids
+     * @return
+     */
+    List<RCDTO> findByIdsInOrder(List<Integer> ids);
 }

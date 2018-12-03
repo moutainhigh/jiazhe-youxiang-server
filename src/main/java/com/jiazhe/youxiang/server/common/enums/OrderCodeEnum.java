@@ -30,6 +30,7 @@ public enum OrderCodeEnum {
     ORDER_COST_IS_NULL(108021, "ORDER_COST_IS_NULL", "订单成本不能为空"),
     ELE_PRODUCT_CODE_NOT_ENOUGH(108022, "ELE_PRODUCT_CODE_NOT_ENOUGH", "商品库存不足，请联系管理员"),
     ORDER_COUNT_LESS_THAN_LAST_NUM(108023, "ORDER_COUNT_LESS_THAN_LAST_NUM", "下单数量不能少于最小下单数量"),
+    ORDER_OVER_PAYMENT(108024, "ORDER_OVER_PAYMENT", "支付金额超过订单金额，支付失败"),
     ;
 
     OrderCodeEnum(Integer code, String type, String message) {

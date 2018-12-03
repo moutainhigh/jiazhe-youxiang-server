@@ -43,6 +43,7 @@ public class OrderInfoAdapter {
         orderInfoResp.setPayRechargeCard(dto.getPayRechargeCard());
         orderInfoResp.setPayVoucher(dto.getPayVoucher());
         orderInfoResp.setPayCash(dto.getPayCash());
+        orderInfoResp.setPayment(dto.getPayment());
         orderInfoResp.setTotalAmount(dto.getTotalAmount());
         orderInfoResp.setCost(dto.getCost());
         orderInfoResp.setComments(dto.getComments());
@@ -128,7 +129,6 @@ public class OrderInfoAdapter {
         placeOrderDTO.setServiceTime(new Date(req.getServiceTime()));
         placeOrderDTO.setVoucherIds(req.getVoucherIds());
         placeOrderDTO.setRechargeCardIds(req.getRechargeCardIds());
-        placeOrderDTO.setCardMoneys(req.getCardMoneys());
         return placeOrderDTO;
     }
 

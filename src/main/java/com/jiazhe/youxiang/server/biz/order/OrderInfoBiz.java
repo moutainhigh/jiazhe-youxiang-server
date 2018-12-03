@@ -12,6 +12,7 @@ import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.order.OrderInfoService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserReservationOrderReq;
+import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,11 @@ public class OrderInfoBiz {
     private CustomerService customerService;
 
     public List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String worekerMobile, Paging paging) {
-        return orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, worekerMobile, paging);
+        List<OrderInfoDTO> orderInfoDTOList = orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, worekerMobile, paging);
+        orderInfoDTOList.stream().forEach(bean->{
+            bean.setPayment(calculateOrderNeedPay(bean));//计算待支付金额放入订单信息中
+        });
+        return orderInfoDTOList;
     }
 
     public void customerCancelOrder(Integer id) {
@@ -116,7 +121,7 @@ public class OrderInfoBiz {
         return needPayMoney;
     }
 
-    public BigDecimal placeOrder(PlaceOrderDTO placeOrderDTO) throws ParseException {
+    public NeedPayResp placeOrder(PlaceOrderDTO placeOrderDTO) throws ParseException {
         return orderInfoService.placeOrder(placeOrderDTO);
     }
 
@@ -130,5 +135,9 @@ public class OrderInfoBiz {
 
     public void userChangeReservationInfo(UserReservationOrderDTO userReservationOrderDTO) {
         orderInfoService.userChangeReservationInfo(userReservationOrderDTO);
+    }
+
+    public NeedPayResp customerPlaceOrder(PlaceOrderDTO placeOrderDTO) throws ParseException {
+        return orderInfoService.customerPlaceOrder(placeOrderDTO);
     }
 }

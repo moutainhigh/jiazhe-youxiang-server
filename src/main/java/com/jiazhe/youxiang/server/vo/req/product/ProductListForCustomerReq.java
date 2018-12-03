@@ -23,7 +23,7 @@ public class ProductListForCustomerReq extends OffsetLimitReq {
     private String name;
     @ApiModelProperty("商品分类，0-服务，1-电子卡，可空")
     private Integer productType;
-    @ApiModelProperty("可用城市code")
+    @ApiModelProperty("可用城市code，多个code用英文逗号连接")
     private String cityCode;
 
     public Integer getProductCategoryId() {
