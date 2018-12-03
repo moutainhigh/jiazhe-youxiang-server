@@ -136,4 +136,8 @@ public class OrderInfoBiz {
     public void userChangeReservationInfo(UserReservationOrderDTO userReservationOrderDTO) {
         orderInfoService.userChangeReservationInfo(userReservationOrderDTO);
     }
+
+    public NeedPayResp customerPlaceOrder(PlaceOrderDTO placeOrderDTO) throws ParseException {
+        return orderInfoService.customerPlaceOrder(placeOrderDTO);
+    }
 }

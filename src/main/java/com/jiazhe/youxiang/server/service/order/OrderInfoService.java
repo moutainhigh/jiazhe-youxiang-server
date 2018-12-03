@@ -83,7 +83,7 @@ public interface OrderInfoService {
     void userCompleteOrder(Integer id);
 
     /**
-     * 下单
+     * 员工下单
      * @param dto
      */
     NeedPayResp placeOrder(PlaceOrderDTO dto) throws ParseException;
@@ -119,4 +119,9 @@ public interface OrderInfoService {
      */
     void prePaymentCheck(Integer id);
 
+    /**
+     * 客户下单
+     * @param dto
+     */
+    NeedPayResp customerPlaceOrder(PlaceOrderDTO dto) throws ParseException;
 }

@@ -103,6 +103,23 @@
         </foreach>
     </select>
 
+    <select id="findByIdsInOrder" parameterType="java.util.List"
+            resultType="com.jiazhe.youxiang.server.domain.po.RechargeCardPO">
+        select
+        <include refid="Base_Column_List"/>
+        FROM recharge_card
+        where id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by field(
+        id,
+        <foreach collection="list" separator="," item="item">
+            #{item}
+        </foreach>
+        )
+    </select>
+
     <update id="batchUpdate" parameterType="java.util.List">
         <foreach collection="list" item="item" index="index" open="" close="" separator=";">
             update recharge_card

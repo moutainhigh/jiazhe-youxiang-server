@@ -163,7 +163,7 @@ public class APIOrderInfoController extends BaseController {
         placeOrderDTO.setType(Byte.valueOf("1"));
         placeOrderDTO.setRealServiceTime(new Date(req.getServiceTime()));
         placeOrderDTO.setComments("");
-        NeedPayResp needPayResp = orderInfoBiz.placeOrder(placeOrderDTO);
+        NeedPayResp needPayResp = orderInfoBiz.customerPlaceOrder(placeOrderDTO);
         return ResponseFactory.buildResponse(needPayResp);
     }
 
