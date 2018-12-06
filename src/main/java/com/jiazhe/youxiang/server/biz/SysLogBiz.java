@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.server.biz;
 
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.syslog.SysLogDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.SysLogService;
@@ -57,17 +58,24 @@ public class SysLogBiz {
                     sysLogDTO.setModuleName(moduleName);
                     sysLogDTO.setOperate(operate);
                     sysLogDTO.setLevel(level);
-                    SysUserDTO userDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
-                    if (userDTO != null) {
+                    if (SecurityUtils.getSubject().getPrincipal() == null) {
+                        sysLogDTO.setOperatorId(0);
+                        sysLogDTO.setOperatorName("未登录");
+                    } else if (SecurityUtils.getSubject().getPrincipal() instanceof SysUserDTO) {
+                        SysUserDTO userDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
                         sysLogDTO.setOperatorId(userDTO.getId());
                         sysLogDTO.setOperatorName(userDTO.getLoginName());
+                    } else if (SecurityUtils.getSubject().getPrincipal() instanceof CustomerDTO) {
+                        CustomerDTO customerDTO = (CustomerDTO) SecurityUtils.getSubject().getPrincipal();
+                        sysLogDTO.setOperatorId(customerDTO.getId());
+                        sysLogDTO.setOperatorName(customerDTO.getMobile());
                     } else {
                         sysLogDTO.setOperatorId(0);
                         sysLogDTO.setOperatorName("未知");
                     }
                     sysLogDTO.setIp(ip);
                     sysLogDTO.setDetail(detail);
-                    int success = sysLogService.insert(sysLogDTO);
+                    sysLogService.insert(sysLogDTO);
                 } else {
                     LOGGER.error("spring init bean sysLogService fail,please check configs");
                 }

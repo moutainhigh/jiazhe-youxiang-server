@@ -4,6 +4,7 @@ import com.jiazhe.youxiang.server.biz.SysRoleBiz;
 import com.jiazhe.youxiang.server.biz.SysRolePermissionBiz;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
 import com.jiazhe.youxiang.server.biz.SysUserRoleBiz;
+import com.jiazhe.youxiang.server.common.enums.LoginType;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRolePermissionDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
@@ -54,15 +55,17 @@ public class UserRealm extends AuthorizingRealm {
         try {
             /*获取用户输入的token*/
             AuthToken utoken = (AuthToken) token;
-            String loginname = utoken.getUsername();
-            List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(loginname);
-            if (sysUserDTOList.size() == 1) {
-                SysUserDTO sysUserDTO = sysUserDTOList.get(0);
-                //若存在，将此用户存放到登录认证info中，无需自己做密码对比，Shiro会为我们进行密码对比校验
-                ByteSource salt = ByteSource.Util.bytes(sysUserDTO.getSalt());
-                //放入shiro.调用CredentialsMatcher检验密码
-                return new SimpleAuthenticationInfo(sysUserDTO, sysUserDTO.getPassword(),
-                        salt, this.getName());
+            if (utoken.getUserType().equals(LoginType.USER.toString())) {
+                String loginName = utoken.getUsername();
+                List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(loginName);
+                if (sysUserDTOList.size() == 1) {
+                    SysUserDTO sysUserDTO = sysUserDTOList.get(0);
+                    //若存在，将此用户存放到登录认证info中，无需自己做密码对比，Shiro会为我们进行密码对比校验
+                    ByteSource salt = ByteSource.Util.bytes(sysUserDTO.getSalt());
+                    //放入shiro.调用CredentialsMatcher检验密码
+                    return new SimpleAuthenticationInfo(sysUserDTO, sysUserDTO.getPassword(),
+                            salt, this.getName());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

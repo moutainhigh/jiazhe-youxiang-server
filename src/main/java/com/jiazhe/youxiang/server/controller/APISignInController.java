@@ -5,7 +5,14 @@ import com.aliyuncs.exceptions.ClientException;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.realm.AuthToken;
 import com.jiazhe.youxiang.base.realm.UserRealm;
-import com.jiazhe.youxiang.base.util.*;
+import com.jiazhe.youxiang.base.util.AliUtils;
+import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.ConstantFetchUtil;
+import com.jiazhe.youxiang.base.util.CookieUtil;
+import com.jiazhe.youxiang.base.util.IpAdrressUtil;
+import com.jiazhe.youxiang.base.util.ResponseUtil;
+import com.jiazhe.youxiang.base.util.ResultPackage;
+import com.jiazhe.youxiang.base.util.ValidateUtils;
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
@@ -30,7 +37,6 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
@@ -192,13 +198,14 @@ public class APISignInController extends BaseController {
             }
         }
         CustomerLoginResp customerLoginResp = new CustomerLoginResp();
-        subject.getSession().setTimeout(ConstantFetchUtil.hour_1);
+        subject.getSession().setTimeout(ConstantFetchUtil.nerver);
         customerLoginResp.setSessionId(subject.getSession().getId().toString());
         customerLoginResp.setCustomerId(customerDTO.getId());
         customerLoginResp.setCustomerMobile(customerDTO.getMobile());
         customerLoginResp.setCustomerName(customerDTO.getName());
         return ResponseFactory.buildResponse(customerLoginResp);
     }
+
     @AppApi
     @ApiOperation(value = "根据电话号码，发送验证码", httpMethod = "GET", response = SendMsgResp.class, notes = "根据电话号码，发送验证码")
     @RequestMapping(value = "/customersendcode")
