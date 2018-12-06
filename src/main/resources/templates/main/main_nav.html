@@ -202,7 +202,7 @@
 </div><!-- /.main-container -->
 <script>
     $.ajax({
-        url: "../api/orderinfo/getunsentordercount",
+        url: "/api/orderinfo/getunsentordercount",
         dataType: "json",
         async: false,
         data: {},
@@ -216,7 +216,7 @@
     });
 
     $.ajax({
-        url: "../api/orderinfo/getunauditordercount",
+        url: "/api/orderinfo/getunauditordercount",
         dataType: "json",
         async: false,
         data: {},
@@ -230,7 +230,7 @@
     });
 
     $.ajax({
-        url: "../api/auditrecord/getwaitcheckcount",
+        url: "/api/auditrecord/getwaitcheckcount",
         dataType: "json",
         async: false,
         data: {},

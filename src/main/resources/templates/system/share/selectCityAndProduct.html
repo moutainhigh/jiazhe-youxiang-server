@@ -59,7 +59,7 @@
     var zCityNodes = [];
     var zProductNodes = [];
     $.ajax({
-        url: "../api/syscity/getopenlist",
+        url: "/api/syscity/getopenlist",
         dataType: "json",
         async: false,
         type: "GET",
@@ -83,7 +83,7 @@
         }
     });
     $.ajax({
-        url: "../api/product/getlist",
+        url: "/api/product/getlist",
         dataType: "json",
         async: false,
         data: {

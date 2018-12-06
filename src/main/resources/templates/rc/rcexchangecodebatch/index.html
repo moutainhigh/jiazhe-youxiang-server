@@ -295,7 +295,7 @@
         $('#selectCityAndProduct').load('../pageimport/selectcityandproduct');
         //将项目列表填入到projectId中
         $.ajax({
-            url: "../api/project/getlist",
+            url: "/api/project/getlist",
             dataType: "json",
             async: false,
             data: {
@@ -347,7 +347,7 @@
         });
 
         var tableOption = {
-            url: "../api/rcexchangecodebatch/listpage",
+            url: "/api/rcexchangecodebatch/listpage",
             postData: transformToJson($('#batchSearchForm').serializeArray()),
             colNames: ['', '批次名称', '充值卡名称', '是否是虚拟批次', '状态', '面额', '数量', '过期时间', '操作'],
             colModel: [
@@ -402,7 +402,7 @@
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/rcexchangecodebatch/listpage",
+            url: "/api/rcexchangecodebatch/listpage",
             postData: transformToJson($('#batchSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
@@ -474,7 +474,7 @@
             }
         }
         $.ajax({
-            url: "../api/rcexchangecodebatch/save",
+            url: "/api/rcexchangecodebatch/save",
             dataType: "json",
             async: false,
             data: transformToJson($('#batchSaveForm').serializeArray()),
@@ -486,7 +486,7 @@
 
     function huixian(id) {
         $.ajax({
-            url: "../api/rcexchangecodebatch/getbyid",
+            url: "/api/rcexchangecodebatch/getbyid",
             dataType: "json",
             async: false,
             data: {
@@ -540,7 +540,7 @@
     //生成兑换码
     function generateCode(id) {
         $.ajax({
-            url: "../api/rcexchangecodebatch/generatecode",
+            url: "/api/rcexchangecodebatch/generatecode",
             dataType: "json",
             async: false,
             data: {
@@ -558,7 +558,7 @@
     //导出为excel
     function exportExcel(id) {
         $.ajax({
-            url: "../api/rcexchangecodebatch/exportcheck",
+            url: "/api/rcexchangecodebatch/exportcheck",
             dataType: "json",
             async: false,
             data: {
@@ -569,7 +569,7 @@
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
-                    window.location.href = "../api/rcexchangecodebatch/export?id=" + id;
+                    window.location.href = "/api/rcexchangecodebatch/export?id=" + id;
                 }
             },
             error: error
@@ -581,7 +581,7 @@
         confirm("确定要启用该批次吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/rcexchangecodebatch/startusing",
+                    url: "/api/rcexchangecodebatch/startusing",
                     dataType: "json",
                     async: false,
                     data: {
@@ -600,7 +600,7 @@
         confirm("确定要停用该批次吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/rcexchangecodebatch/stopusing",
+                    url: "/api/rcexchangecodebatch/stopusing",
                     dataType: "json",
                     async: false,
                     data: {

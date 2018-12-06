@@ -456,7 +456,7 @@
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/customer/getlist",// 获取数据的地址
+            url: "/api/customer/getlist",// 获取数据的地址
             postData: transformToJson($('#searchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
@@ -684,7 +684,7 @@
 
     function getById(id) {
         $.ajax({
-            url: "../api/customer/getbyid",    //请求的url地址
+            url: "/api/customer/getbyid",    //请求的url地址
             dataType: "json",
             async: false,
             data: {
@@ -783,7 +783,7 @@
         $("#orderProductId").empty();
         $("#orderProductId").append("<option value=>请选择商品</option>");
         $.ajax({
-            url: "../api/product/getlist",
+            url: "/api/product/getlist",
             dataType: "json",
             async: false,
             data: {
@@ -833,7 +833,7 @@
         };
         var zCityNodes = [];
         $.ajax({
-            url: "../api/product/getpricelist",
+            url: "/api/product/getpricelist",
             data: {
                 pageSize: 10000,
                 pageNum: 1,
@@ -884,7 +884,7 @@
         $("#orderVoucherArea").empty();
         $("#orderRechargeCardArea").empty();
         $.ajax({
-            url: "../api/voucher/findbygoodsattrpage",
+            url: "/api/voucher/findbygoodsattrpage",
             dataType: "json",
             async: true,
             data: {
@@ -912,7 +912,7 @@
             error: error
         });
         $.ajax({
-            url: "../api/rc/findbygoodsattrpage",
+            url: "/api/rc/findbygoodsattrpage",
             dataType: "json",
             async: false,
             data: {
@@ -1006,7 +1006,7 @@
         $("#orderRechargeCardIds").val(rechargeCardIds);
         $("#orderCardMoneys").val(cardMoneys);
         $.ajax({
-            url: "../api/orderinfo/userplaceorder",
+            url: "/api/orderinfo/userplaceorder",
             dataType: "json",
             async: false,
             data: transformToJson($('#orderForm').serializeArray()),

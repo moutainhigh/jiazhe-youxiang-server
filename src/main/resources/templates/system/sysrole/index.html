@@ -194,7 +194,7 @@
 //        ];
 
         $.ajax({
-            url: "../api/sysrole/getpermissiontree",
+            url: "/api/sysrole/getpermissiontree",
             dataType: "json",
             async: false,
             type: "get",
@@ -270,7 +270,7 @@
         });
 
         var tableOption = {
-            url: "../api/sysrole/listpage",// 获取数据的地址
+            url: "/api/sysrole/listpage",// 获取数据的地址
             postData: transformToJson($('#roleSearchForm').serializeArray()),
             colNames: ['', '角色名称', '拥有所有权限', '排序序号', '操作'],
             colModel: [
@@ -294,7 +294,7 @@
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/sysrole/listpage",
+            url: "/api/sysrole/listpage",
             postData: transformToJson($('#roleSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
@@ -312,7 +312,7 @@
         confirm("确定要删除该角色吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/sysrole/delete",
+                    url: "/api/sysrole/delete",
                     dataType: "json",
                     async: false,
                     data: {
@@ -363,7 +363,7 @@
         }
         submitNodes();
         $.ajax({
-            url: "../api/sysrole/save",
+            url: "/api/sysrole/save",
             dataType: "json",
             async: false,
             data: {
@@ -381,7 +381,7 @@
 
     function huixian(id) {
         $.ajax({
-            url: "../api/sysrole/getbyid",
+            url: "/api/sysrole/getbyid",
             dataType: "json",
             async: false,
             data: {

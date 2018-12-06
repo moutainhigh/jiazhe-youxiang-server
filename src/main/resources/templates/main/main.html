@@ -178,7 +178,7 @@
         var password1 = $("#password1").val();
         var password2 = $("#password2").val();
         $.ajax({
-            url: "../api/sysuser/changepassword",
+            url: "/api/sysuser/changepassword",
             dataType: "json",
             data: {
                 "oldPassword": oldPassword,

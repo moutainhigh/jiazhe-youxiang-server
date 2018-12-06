@@ -178,7 +178,7 @@
         });
         //将角色列表填入到select中
         $.ajax({
-            url: "../api/sysrole/listall",
+            url: "/api/sysrole/listall",
             dataType: "json",
             async: true,
             type: "GET",
@@ -196,7 +196,7 @@
         });
 
         var tableOption = {
-            url: "../api/sysuser/listpage",
+            url: "/api/sysuser/listpage",
             postData: transformToJson($('#userSearchForm').serializeArray()),
             colNames: ['', '登录名', '员工姓名', '电话', '最后登录时间', '最后登录ip', '操作'],
             colModel: [
@@ -231,7 +231,7 @@
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/sysuser/listpage",
+            url: "/api/sysuser/listpage",
             postData: transformToJson($('#userSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
@@ -241,7 +241,7 @@
         confirm("确定要删除该员工码？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/sysuser/delete",
+                    url: "/api/sysuser/delete",
                     dataType: "json",
                     async: false,
                     data: {
@@ -314,7 +314,7 @@
     function save() {
         var roleIds = submitRoles();
         $.ajax({
-            url: "../api/sysuser/save",
+            url: "/api/sysuser/save",
             dataType: "json",
             async: false,
             data: {
@@ -333,7 +333,7 @@
 
     function huixian(id) {
         $.ajax({
-            url: "../api/sysuser/getbyid",
+            url: "/api/sysuser/getbyid",
             dataType: "json",
             async: false,
             data: {
@@ -361,7 +361,7 @@
         confirm("确定重置【" + displayName + "】的密码为【123456】吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/sysuser/resetpassword",
+                    url: "/api/sysuser/resetpassword",
                     dataType: "json",
                     async: false,
                     data: {

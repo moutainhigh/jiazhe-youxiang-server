@@ -7,6 +7,7 @@ import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.SysRoleAdapter;
 import com.jiazhe.youxiang.server.biz.SysRoleBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.PermissionTreeEnum;
@@ -117,15 +118,6 @@ public class APISysRoleController extends BaseController {
     @RequestMapping(value = "/getpermissiontree", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ROLE, operate = "获取权限树", level = LogLevelEnum.LEVEL_1)
     public Object getPermissionTree() {
-        List<PermissionTreeResp> treeRespList = Lists.newArrayList();
-        for (PermissionTreeEnum temp : PermissionTreeEnum.values()) {
-            PermissionTreeResp tree = new PermissionTreeResp();
-            tree.setId(temp.getId());
-            tree.setpId(temp.getpId());
-            tree.setName(temp.getName());
-            tree.setPerm(temp.getPerm());
-            treeRespList.add(tree);
-        }
-        return ResponseFactory.buildResponse(treeRespList);
+        return ResponseFactory.buildResponse(PermissionConstant.treeRespList);
     }
 }

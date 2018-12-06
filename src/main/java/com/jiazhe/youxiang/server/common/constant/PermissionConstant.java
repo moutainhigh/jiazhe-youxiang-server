@@ -1,11 +1,31 @@
 package com.jiazhe.youxiang.server.common.constant;
 
+import com.google.common.collect.Lists;
+import com.jiazhe.youxiang.server.common.enums.PermissionTreeEnum;
+import com.jiazhe.youxiang.server.vo.resp.sysrole.PermissionTreeResp;
+
+import java.util.List;
+
 /**
  * @author TU
  * @description 权限字符串
  * @date 2018/12/6.
  */
-public class PermissionStr {
+public class PermissionConstant {
+
+    public static List<PermissionTreeResp> treeRespList = Lists.newArrayList();
+
+    static{
+        for (PermissionTreeEnum temp : PermissionTreeEnum.values()) {
+            PermissionTreeResp tree = new PermissionTreeResp();
+            tree.setId(temp.getId());
+            tree.setpId(temp.getpId());
+            tree.setName(temp.getName());
+            tree.setPerm(temp.getPerm());
+            treeRespList.add(tree);
+        }
+    }
+
     //客户管理
     public static String CUSTOMER_MANAGEMENT = "customerManagement";
     //添加客户

@@ -272,7 +272,7 @@
         });
 
         var tableOption = {
-            url: "../api/rcexchangecode/listpage",
+            url: "/api/rcexchangecode/listpage",
             postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
             colNames: ['', '批次名称', '充值卡名称', '兑换码', '密钥', '启用状态', '使用状态', '面额', '过期时间', '操作'],
             colModel: [
@@ -320,7 +320,7 @@
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/rcexchangecode/listpage",
+            url: "/api/rcexchangecode/listpage",
             postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
@@ -344,7 +344,7 @@
         confirm("确定启用该兑换码吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/rcexchangecode/startusing",
+                    url: "/api/rcexchangecode/startusing",
                     dataType: "json",
                     async: false,
                     data: {
@@ -363,7 +363,7 @@
         confirm("确定要停用该兑换码吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/rcexchangecode/stopusing",
+                    url: "/api/rcexchangecode/stopusing",
                     dataType: "json",
                     async: false,
                     data: {
@@ -385,7 +385,7 @@
             }
         }
         $.ajax({
-            url: "../api/rcexchangecode/editsave",
+            url: "/api/rcexchangecode/editsave",
             dataType: "json",
             async: false,
             data: transformToJson($('#codeSaveForm').serializeArray()),
@@ -397,7 +397,7 @@
 
     function openEdit(id) {
         $.ajax({
-            url: "../api/rcexchangecode/getbyid",
+            url: "/api/rcexchangecode/getbyid",
             dataType: "json",
             async: false,
             data: {

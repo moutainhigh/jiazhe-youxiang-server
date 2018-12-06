@@ -259,7 +259,7 @@
         initDatePicker();
         //填充电子商品下拉框
         $.ajax({
-            url: "../api/product/getlist",
+            url: "/api/product/getlist",
             dataType: "json",
             async: false,
             data: {
@@ -286,7 +286,7 @@
         refreshBatch();
 
         var tableOption = {
-            url: "../api/eleproductcode/listpage",
+            url: "/api/eleproductcode/listpage",
             postData: transformToJson($('#eleProductCodeSearchForm').serializeArray()),
             colNames: ['', '批次名称', '商品名称', '兑换码', '密钥', '使用状态', '过期时间'],
             colModel: [
@@ -321,7 +321,7 @@
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/eleproductcode/listpage",
+            url: "/api/eleproductcode/listpage",
             postData: transformToJson($('#eleProductCodeSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
@@ -345,7 +345,7 @@
         formData.append('file', image);
 
         $.ajax({
-            url: "../api/eleproductcode/uploadexcel",
+            url: "/api/eleproductcode/uploadexcel",
             dataType: "json",
             type: 'POST',
             async: true,
@@ -382,7 +382,7 @@
 
     function edit() {
         $.ajax({
-            url: "../api/eleproductcode/batchchangeexpirytime",
+            url: "/api/eleproductcode/batchchangeexpirytime",
             dataType: "json",
             async: false,
             data: transformToJson($('#eleProductCodeEditForm').serializeArray()),
@@ -401,7 +401,7 @@
 
     function save() {
         $.ajax({
-            url: "../api/eleproductcode/importcode",
+            url: "/api/eleproductcode/importcode",
             dataType: "json",
             async: false,
             data: transformToJson($('#eleProductCodeSaveForm').serializeArray()),
@@ -425,7 +425,7 @@
             $("#editBatchName").empty();
             $("#searchBatchName").append("<option value=>所有</option>");
             $.ajax({
-                url: "../api/eleproductcode/getallbatch",
+                url: "/api/eleproductcode/getallbatch",
                 dataType: "json",
                 async: false,
                 data: {},
