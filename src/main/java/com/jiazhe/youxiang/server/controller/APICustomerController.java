@@ -70,7 +70,7 @@ public class APICustomerController {
      */
     @ApiOperation(value = "添加用户", httpMethod = "POST", notes = "添加用户")
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.USER, operate = "添加用户", level = LogLevelEnum.LEVEL_2)
+    @CustomLog(moduleName = ModuleEnum.CUSTOMER, operate = "添加用户", level = LogLevelEnum.LEVEL_2)
     public Object add(@ModelAttribute CustomerAddReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateMobile(req.getMobile(), new CustomerException(CustomerCodeEnum.CUSTOMER_MOBILE_ERROR));
@@ -89,7 +89,7 @@ public class APICustomerController {
      */
     @ApiOperation(value = "查询某一用户信息", httpMethod = "GET", response = CustomerResp.class, notes = "查询某一用户信息")
     @RequestMapping(value = "getbyid", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.USER, operate = "查询某一用户信息", level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.CUSTOMER, operate = "查询某一用户信息", level = LogLevelEnum.LEVEL_1)
     public Object getById(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
@@ -105,7 +105,7 @@ public class APICustomerController {
      */
     @ApiOperation(value = "查询客户列表", httpMethod = "GET", response = CustomerResp.class, responseContainer = "List", notes = "查询客户列表")
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.USER, operate = "查询客户列表", level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.CUSTOMER, operate = "查询客户列表", level = LogLevelEnum.LEVEL_1)
     public Object getList(@ModelAttribute CustomerListReq req) {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
@@ -124,7 +124,7 @@ public class APICustomerController {
      */
     @ApiOperation(value = "编辑客户信息", httpMethod = "POST", notes = "编辑客户信息")
     @RequestMapping(value = "update", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.USER, operate = "编辑客户信息", level = LogLevelEnum.LEVEL_2)
+    @CustomLog(moduleName = ModuleEnum.CUSTOMER, operate = "编辑客户信息", level = LogLevelEnum.LEVEL_2)
     public Object update(@ModelAttribute CustomerUpdateReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateId(req);
@@ -144,7 +144,7 @@ public class APICustomerController {
      */
     @ApiOperation(value = "删除客户", httpMethod = "POST", notes = "删除客户")
     @RequestMapping(value = "delete", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.USER, operate = "删除客户", level = LogLevelEnum.LEVEL_3)
+    @CustomLog(moduleName = ModuleEnum.CUSTOMER, operate = "删除客户", level = LogLevelEnum.LEVEL_3)
     public Object delete(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
@@ -162,7 +162,7 @@ public class APICustomerController {
     @AppApi
     @ApiOperation(value = "添加地址", httpMethod = "POST", notes = "添加地址")
     @RequestMapping(value = "addaddress", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.USER, operate = "添加地址", level = LogLevelEnum.LEVEL_2)
+    @CustomLog(moduleName = ModuleEnum.CUSTOMER, operate = "添加地址", level = LogLevelEnum.LEVEL_2)
     public Object addAddress(@ModelAttribute AddressAddReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateId(req.getCustomerId(), new CustomerException(CustomerCodeEnum.CUSTOMER_ID_IS_NULL));
@@ -186,7 +186,7 @@ public class APICustomerController {
     @AppApi
     @ApiOperation(value = "查询某一地址信息", httpMethod = "GET", response = AddressResp.class, notes = "查询某一地址信息")
     @RequestMapping(value = "getaddressbyid", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.USER, operate = "查询某一地址信息", level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.CUSTOMER, operate = "查询某一地址信息", level = LogLevelEnum.LEVEL_1)
     public Object getAddressById(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
@@ -204,7 +204,7 @@ public class APICustomerController {
     @AppApi
     @ApiOperation(value = "查询客户的默认地址", httpMethod = "GET", response = AddressResp.class, notes = "查询客户的默认地址")
     @RequestMapping(value = "getdefaultaddress", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.USER, operate = "查询客户的默认地址", level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.CUSTOMER, operate = "查询客户的默认地址", level = LogLevelEnum.LEVEL_1)
     public Object getDefaultAddress(@ModelAttribute DefaultAddressReq req) {
         CommonValidator.validateId(req.getCustomerId(), new CustomerException(CustomerCodeEnum.CUSTOMER_ID_IS_NULL));
         //调用BIZ方法
@@ -223,7 +223,7 @@ public class APICustomerController {
     @AppApi
     @ApiOperation(value = "查询客户的地址列表", httpMethod = "GET", response = AddressResp.class, responseContainer = "List", notes = "查询客户的地址列表")
     @RequestMapping(value = "getaddresslist", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.USER, operate = "查询客户的地址列表", level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.CUSTOMER, operate = "查询客户的地址列表", level = LogLevelEnum.LEVEL_1)
     public Object getAddressList(@ModelAttribute AddressListReq req) {
         CommonValidator.validatePaging(req);
         CommonValidator.validateId(req.getCustomerId(), new CustomerException(CustomerCodeEnum.CUSTOMER_ID_IS_NULL));
@@ -245,7 +245,7 @@ public class APICustomerController {
     @AppApi
     @ApiOperation(value = "编辑地址信息", httpMethod = "POST", notes = "编辑地址信息")
     @RequestMapping(value = "updateaddress", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.USER, operate = "编辑地址信息", level = LogLevelEnum.LEVEL_2)
+    @CustomLog(moduleName = ModuleEnum.CUSTOMER, operate = "编辑地址信息", level = LogLevelEnum.LEVEL_2)
     public Object updateAddress(@ModelAttribute AddressUpdateReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateId(req.getId());
@@ -269,7 +269,7 @@ public class APICustomerController {
     @AppApi
     @ApiOperation(value = "删除地址信息", httpMethod = "POST", notes = "删除地址信息")
     @RequestMapping(value = "deleteaddress", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.USER, operate = "删除地址信息", level = LogLevelEnum.LEVEL_2)
+    @CustomLog(moduleName = ModuleEnum.CUSTOMER, operate = "删除地址信息", level = LogLevelEnum.LEVEL_2)
     public Object deleteAddress(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //调用BIZ方法
@@ -285,7 +285,7 @@ public class APICustomerController {
     @AppApi
     @ApiOperation(value = "设置某一地址为默认", httpMethod = "POST", response = AddressResp.class, notes = "设置某一地址为默认")
     @RequestMapping(value = "setaddressdefault", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.USER, operate = "设置某一地址为默认", level = LogLevelEnum.LEVEL_2)
+    @CustomLog(moduleName = ModuleEnum.CUSTOMER, operate = "设置某一地址为默认", level = LogLevelEnum.LEVEL_2)
     public Object setAddressDefault(@ModelAttribute AddressSetDefaultReq req) {
         CommonValidator.validateId(req);
         validateIsDefault(req.getIsDefault());

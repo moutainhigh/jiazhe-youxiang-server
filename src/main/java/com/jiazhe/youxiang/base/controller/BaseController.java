@@ -6,6 +6,8 @@ import com.jiazhe.youxiang.base.util.ResultPackage;
 import net.sf.json.JSONObject;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +19,9 @@ import java.io.IOException;
  * 处理无权限状态下的ajax请求，或页面跳转请求的异常处理【跳转到登403页面】
  */
 public abstract class BaseController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BaseController.class);
+
     /**
      * 权限异常
      */
@@ -25,11 +30,11 @@ public abstract class BaseController {
         if (ProjectUtil.isAjax(request)) {
             String code = "000002";
             String msg = "无权限";
-            System.out.println("BaseController：ajax请求，无权限");
+            LOGGER.info("BaseController：ajax请求，无权限");
             ResponseUtil.responseUtils(response, ResultPackage.resultPackage(code, new JSONObject(), msg));
             return null;
         } else {
-            System.out.println("BaseController：页面跳转，无权限");
+            LOGGER.info("BaseController：页面跳转，无权限");
             return "redirect:/system/403";
         }
     }
