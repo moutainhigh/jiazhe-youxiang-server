@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.controller;
 
+import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
@@ -8,6 +9,7 @@ import com.jiazhe.youxiang.server.biz.SysRoleBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
+import com.jiazhe.youxiang.server.common.enums.PermissionTreeEnum;
 import com.jiazhe.youxiang.server.common.enums.RoleCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.RoleException;
 import com.jiazhe.youxiang.server.dto.sysrole.RoleWithPermDTO;
@@ -17,6 +19,7 @@ import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.sysrole.RolePageReq;
 import com.jiazhe.youxiang.server.vo.req.sysrole.RoleSaveReq;
+import com.jiazhe.youxiang.server.vo.resp.sysrole.PermissionTreeResp;
 import com.jiazhe.youxiang.server.vo.resp.sysrole.RoleWithPermResp;
 import com.jiazhe.youxiang.server.vo.resp.sysrole.SysRoleResp;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +37,7 @@ import java.util.stream.Collectors;
 
 /**
  * 所有关于角色的接口
+ *
  * @author TU
  * @date 2018/10/14.
  */
@@ -46,18 +50,18 @@ public class APISysRoleController extends BaseController {
     @Autowired
     private SysRoleBiz sysRoleBiz;
 
-    @ApiOperation(value = "【后台】角色列表", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List",notes = "查询所有角色信息，无条件查询")
+    @ApiOperation(value = "【后台】角色列表", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List", notes = "查询所有角色信息，无条件查询")
     @RequestMapping(value = "/listall", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.ROLE,operate = "查看角色列表",level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.ROLE, operate = "查看角色列表", level = LogLevelEnum.LEVEL_1)
     public Object listAll() {
         List<SysRoleDTO> sysRoleDTOList = sysRoleBiz.findAll();
         List<SysRoleResp> sysRoleRespList = sysRoleDTOList.stream().map(SysRoleAdapter::DTO2RespVO).collect(Collectors.toList());
         return ResponseFactory.buildResponse(sysRoleRespList);
     }
 
-    @ApiOperation(value = "【后台】角色列表（分页）", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List",notes = "分页查询角色信息，有条件查询")
+    @ApiOperation(value = "【后台】角色列表（分页）", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List", notes = "分页查询角色信息，有条件查询")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.ROLE,operate = "查看角色列表",level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.ROLE, operate = "查看角色列表", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute RolePageReq req) {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
@@ -66,9 +70,9 @@ public class APISysRoleController extends BaseController {
         return ResponseFactory.buildPaginationResponse(sysRoleRespList, paging);
     }
 
-    @ApiOperation(value = "【后台】删除角色", httpMethod = "POST",notes = "根据id删除角色信息和角色对应的权限信息，此处未删除员工和角色的绑定关系")
+    @ApiOperation(value = "【后台】删除角色", httpMethod = "POST", notes = "根据id删除角色信息和角色对应的权限信息，此处未删除员工和角色的绑定关系")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.ROLE,operate = "删除角色",level = LogLevelEnum.LEVEL_3)
+    @CustomLog(moduleName = ModuleEnum.ROLE, operate = "删除角色", level = LogLevelEnum.LEVEL_3)
     public Object delete(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         sysRoleBiz.deleteRoleWithPerms(req.getId());
@@ -77,7 +81,7 @@ public class APISysRoleController extends BaseController {
 
     @ApiOperation(value = "【后台】获取角色信息", httpMethod = "GET", response = RoleWithPermResp.class, notes = "根据id获取角色信息（包含权限）")
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.ROLE,operate = "获取角色信息",level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.ROLE, operate = "获取角色信息", level = LogLevelEnum.LEVEL_1)
     public Object getById(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
         //当前角色信息(包括权限字符串）DTO
@@ -89,12 +93,12 @@ public class APISysRoleController extends BaseController {
 
     @ApiOperation(value = "【后台】保存角色信息", httpMethod = "POST", notes = "新建、修改保存角色信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.ROLE,operate = "保存角色信息",level = LogLevelEnum.LEVEL_2)
+    @CustomLog(moduleName = ModuleEnum.ROLE, operate = "保存角色信息", level = LogLevelEnum.LEVEL_2)
     public Object save(@ModelAttribute RoleSaveReq req) {
         /*参数检查*/
         CommonValidator.validateNull(req);
         CommonValidator.validateId(req.getId());
-        CommonValidator.validateNull(req.getName(),new RoleException(RoleCodeEnum.ROLE_NAME_IS_NULL));
+        CommonValidator.validateNull(req.getName(), new RoleException(RoleCodeEnum.ROLE_NAME_IS_NULL));
         /*非管理员，还不带权限字符串*/
         if (req.getIsSuper() == 0 && Strings.isBlank(req.getPermsStr())) {
             throw new RoleException(RoleCodeEnum.ROLE_PERMISSION_NOTCHOOSE);
@@ -107,5 +111,21 @@ public class APISysRoleController extends BaseController {
         }
         sysRoleBiz.saveRoleWithPerm(roleWithPermDTO);
         return ResponseFactory.buildSuccess();
+    }
+
+    @ApiOperation(value = "【后台】获取权限树", httpMethod = "GET", response = PermissionTreeResp.class, notes = "获取权限树")
+    @RequestMapping(value = "/getpermissiontree", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ROLE, operate = "获取权限树", level = LogLevelEnum.LEVEL_1)
+    public Object getPermissionTree() {
+        List<PermissionTreeResp> treeRespList = Lists.newArrayList();
+        for (PermissionTreeEnum temp : PermissionTreeEnum.values()) {
+            PermissionTreeResp tree = new PermissionTreeResp();
+            tree.setId(temp.getId());
+            tree.setpId(temp.getpId());
+            tree.setName(temp.getName());
+            tree.setPerm(temp.getPerm());
+            treeRespList.add(tree);
+        }
+        return ResponseFactory.buildResponse(treeRespList);
     }
 }

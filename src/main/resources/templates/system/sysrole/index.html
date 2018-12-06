@@ -160,40 +160,53 @@
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
     var permission = getCookie("permission");
-    var setting = {
-        view: {
-            selectedMulti: true
-        },
-        check: {
-            enable: true
-        },
-        data: {
-            simpleData: {
+    $(function () {
+        var setting = {
+            view: {
+                selectedMulti: true
+            },
+            check: {
                 enable: true
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            edit: {
+                enable: false
             }
-        },
-        edit: {
-            enable: false
-        }
-    };
-    var zNodes = [
-        {id: 1, pId: 0, name: "客户管理", perm: "customer-index"},
-        {id: 2, pId: 0, name: "商品管理", perm: "product-index"},
-        {id: 3, pId: 0, name: "订单管理", perm: "record-index"},
-        {id: 4, pId: 0, name: "项目管理", perm: "project-index"},
-        {id: 5, pId: 0, name: "审核管理", perm: "audit-index"},
-        {id: 6, pId: 0, name: "系统管理", perm: "system-index"},
-        {id: 61, pId: 6, name: "代金券兑换码管理", perm: "vouchercode-index"},
-        {id: 62, pId: 6, name: "充值卡兑换码管理", perm: "rechargecode-index"},
-        {id: 63, pId: 6, name: "商品兑换码管理", perm: "productcode-index"},
-        {id: 64, pId: 6, name: "城市管理", perm: "syscity-index"},
-        {id: 65, pId: 6, name: "员工管理", perm: "sysuser-index"},
-        {id: 66, pId: 6, name: "角色管理", perm: "sysrole-index"},
-        {id: 67, pId: 6, name: "日志管理", perm: "syslog-index"}
-    ];
+        };
+//        var zNodes = [
+//        {id: 1, pId: 0, name: "客户管理", perm: "customer-index"},
+//        {id: 2, pId: 0, name: "商品管理", perm: "product-index"},
+//        {id: 3, pId: 0, name: "订单管理", perm: "record-index"},
+//        {id: 4, pId: 0, name: "项目管理", perm: "project-index"},
+//        {id: 5, pId: 0, name: "审核管理", perm: "audit-index"},
+//        {id: 6, pId: 0, name: "系统管理", perm: "system-index"},
+//        {id: 61, pId: 6, name: "代金券兑换码管理", perm: "vouchercode-index"},
+//        {id: 62, pId: 6, name: "充值卡兑换码管理", perm: "rechargecode-index"},
+//        {id: 63, pId: 6, name: "商品兑换码管理", perm: "productcode-index"},
+//        {id: 64, pId: 6, name: "城市管理", perm: "syscity-index"},
+//        {id: 65, pId: 6, name: "员工管理", perm: "sysuser-index"},
+//        {id: 66, pId: 6, name: "角色管理", perm: "sysrole-index"},
+//        {id: 67, pId: 6, name: "日志管理", perm: "syslog-index"}
+//        ];
 
-    //初始化权限树
-    permsTree = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+        $.ajax({
+            url: "../api/sysrole/getpermissiontree",
+            dataType: "json",
+            async: false,
+            type: "get",
+            success: function (data) {
+                var zNodes = data.data;
+                //初始化权限树
+                permsTree = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+            },
+            error: error
+        });
+    });
+
 
     //将勾选的权限id放到隐藏的input中，用英文逗号连接
     function submitNodes() {
