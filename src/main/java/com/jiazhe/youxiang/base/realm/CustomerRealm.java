@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.base.realm;
 
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
+import com.jiazhe.youxiang.server.common.enums.LoginType;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -31,10 +32,12 @@ public class CustomerRealm extends AuthorizingRealm {
         logger.info("=========进入客户登录验证============");
         try {
             AuthToken utoken = (AuthToken) token;
-            String mobile = utoken.getUsername();
-            CustomerDTO customerDTO = customerBiz.getByMobile(mobile);
-            if (null != customerDTO) {
-                return new SimpleAuthenticationInfo(customerDTO, null, null, this.getName());
+            if (utoken.getUserType().equals(LoginType.CUSTOMER.toString())) {
+                String mobile = utoken.getUsername();
+                CustomerDTO customerDTO = customerBiz.getByMobile(mobile);
+                if (null != customerDTO) {
+                    return new SimpleAuthenticationInfo(customerDTO, null, null, this.getName());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
