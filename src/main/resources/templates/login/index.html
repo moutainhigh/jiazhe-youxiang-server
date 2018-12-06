@@ -128,7 +128,7 @@
     function getCode() {
         var loginname = $("#loginname").val();
         $.ajax({
-            url: "../api/signin/usersendcode", //登陆请求
+            url: "/api/signin/usersendcode", //登陆请求
             dataType: "json",
             async: false,
             data: {
@@ -161,7 +161,7 @@
             return false;
         }
         $.ajax({
-            url: "../api/signin/usersignin", //登陆请求
+            url: "/api/signin/usersignin", //登陆请求
             dataType: "json",
             async: false,
             data: {

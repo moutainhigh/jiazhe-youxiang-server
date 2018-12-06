@@ -280,7 +280,7 @@
         $('#selectCityAndProduct').load('../pageimport/selectcityandproduct');
         //将项目列表填入到projectId中
         $.ajax({
-            url: "../api/project/getlist",
+            url: "/api/project/getlist",
             dataType: "json",
             async: false,
             data: {
@@ -321,7 +321,7 @@
         });
 
         var tableOption = {
-            url: "../api/voucherexchangecodebatch/listpage",
+            url: "/api/voucherexchangecodebatch/listpage",
             postData: transformToJson($('#batchSearchForm').serializeArray()),
             colNames: ['', '批次名称', '代金券名称', '状态', '可兑换商品数量', '数量', '过期时间', '操作'],
             colModel: [
@@ -359,7 +359,7 @@
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/voucherexchangecodebatch/listpage",
+            url: "/api/voucherexchangecodebatch/listpage",
             postData: transformToJson($('#batchSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
@@ -424,7 +424,7 @@
             }
         }
         $.ajax({
-            url: "../api/voucherexchangecodebatch/save",
+            url: "/api/voucherexchangecodebatch/save",
             dataType: "json",
             async: false,
             data: transformToJson($('#batchSaveForm').serializeArray()),
@@ -436,7 +436,7 @@
 
     function huixian(id) {
         $.ajax({
-            url: "../api/voucherexchangecodebatch/getbyid",
+            url: "/api/voucherexchangecodebatch/getbyid",
             dataType: "json",
             async: false,
             data: {
@@ -485,7 +485,7 @@
     //生成兑换码
     function generateCode(id) {
         $.ajax({
-            url: "../api/voucherexchangecodebatch/generatecode",
+            url: "/api/voucherexchangecodebatch/generatecode",
             dataType: "json",
             async: false,
             data: {
@@ -503,7 +503,7 @@
     //导出为excel
     function exportExcel(id) {
         $.ajax({
-            url: "../api/voucherexchangecodebatch/exportcheck",
+            url: "/api/voucherexchangecodebatch/exportcheck",
             dataType: "json",
             async: false,
             data: {
@@ -514,7 +514,7 @@
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
-                    window.location.href = "../api/voucherexchangecodebatch/export?id=" + id;
+                    window.location.href = "/api/voucherexchangecodebatch/export?id=" + id;
                 }
             },
             error: error
@@ -526,7 +526,7 @@
         confirm("是否要启用该批次吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/voucherexchangecodebatch/startusing",
+                    url: "/api/voucherexchangecodebatch/startusing",
                     dataType: "json",
                     async: false,
                     data: {
@@ -545,7 +545,7 @@
         confirm("是否要停用该批次吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/voucherexchangecodebatch/stopusing",
+                    url: "/api/voucherexchangecodebatch/stopusing",
                     dataType: "json",
                     async: false,
                     data: {

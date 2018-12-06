@@ -330,7 +330,7 @@
         confirm("确定要启动该项目吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/project/begin",    //请求的url地址
+                    url: "/api/project/begin",    //请求的url地址
                     dataType: "json",
                     async: false,
                     data: {
@@ -348,7 +348,7 @@
         confirm("确定要停止该项目吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/project/end",    //请求的url地址
+                    url: "/api/project/end",    //请求的url地址
                     dataType: "json",
                     async: false,
                     data: {

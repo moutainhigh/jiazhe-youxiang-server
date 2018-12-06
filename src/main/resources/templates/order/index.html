@@ -593,7 +593,7 @@
         });
 
         var tableOption = {
-            url: "../api/orderinfo/listpage",
+            url: "/api/orderinfo/listpage",
             postData: transformToJson($('#orderInfoSearchForm').serializeArray()),
             shrinkToFit: false,
             autoScroll: true,
@@ -641,7 +641,7 @@
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/orderinfo/listpage",
+            url: "/api/orderinfo/listpage",
             postData: transformToJson($('#orderInfoSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
@@ -678,7 +678,7 @@
         $("#voucherArea").empty();
         $("#rechargeCardArea").empty();
         $.ajax({
-            url: "../api/orderinfo/getbyid",
+            url: "/api/orderinfo/getbyid",
             dataType: "json",
             async: false,
             data: {
@@ -713,7 +713,7 @@
             error: error
         });
         $.ajax({
-            url: "../api/voucher/findbygoodsattrpage",
+            url: "/api/voucher/findbygoodsattrpage",
             dataType: "json",
             async: true,
             data: {
@@ -747,7 +747,7 @@
             error: error
         });
         $.ajax({
-            url: "../api/rc/findbygoodsattrpage",
+            url: "/api/rc/findbygoodsattrpage",
             dataType: "json",
             async: false,
             data: {
@@ -838,7 +838,7 @@
         $("#app_rechargeCardIds").val(rechargeCardIds);
         $("#app_cardMoneys").val(cardMoneys);
         $.ajax({
-            url: "../api/orderinfo/appendorder",
+            url: "/api/orderinfo/appendorder",
             dataType: "json",
             async: false,
             data: transformToJson($('#appendOrderForm').serializeArray()),
@@ -859,7 +859,7 @@
     function fillOrderInfo(id) {
         $("#re_orderId").val(id);
         $.ajax({
-            url: "../api/orderinfo/getbyid",
+            url: "/api/orderinfo/getbyid",
             dataType: "json",
             async: false,
             data: {
@@ -928,7 +928,7 @@
     function saveReservationInfo() {
         $("#re_realServiceTime").next().next().val($("#re_realServiceTime").val() == '' ? 0 : new Date($("#re_realServiceTime").val()).getTime());
         $.ajax({
-            url: "../api/orderinfo/userreservationorder",
+            url: "/api/orderinfo/userreservationorder",
             dataType: "json",
             async: false,
             data: transformToJson($('#orderReservationForm').serializeArray()),
@@ -949,7 +949,7 @@
     function changeReservationInfo() {
         $("#re_realServiceTime").next().next().val($("#re_realServiceTime").val() == '' ? 0 : new Date($("#re_realServiceTime").val()).getTime());
         $.ajax({
-            url: "../api/orderinfo/userchangereservationinfo",
+            url: "/api/orderinfo/userchangereservationinfo",
             dataType: "json",
             async: false,
             data: transformToJson($('#orderReservationForm').serializeArray()),
@@ -971,7 +971,7 @@
         confirm("确定要取消该订单吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/orderinfo/usercancelorder",
+                    url: "/api/orderinfo/usercancelorder",
                     dataType: "json",
                     async: false,
                     data: {
@@ -996,7 +996,7 @@
         confirm("确定要完成该订单吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/orderinfo/usercompleteorder",
+                    url: "/api/orderinfo/usercompleteorder",
                     dataType: "json",
                     async: false,
                     data: {
@@ -1021,7 +1021,7 @@
         confirm("确定通过审核该订单的取消？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/orderinfo/ordercancelpass",
+                    url: "/api/orderinfo/ordercancelpass",
                     dataType: "json",
                     async: false,
                     data: {
@@ -1046,7 +1046,7 @@
         bootbox.prompt("请输入审核不通过理由", function (result) {
             if (!result == "") {
                 $.ajax({
-                    url: "../api/orderinfo/ordercancelunpass",
+                    url: "/api/orderinfo/ordercancelunpass",
                     dataType: "json",
                     async: false,
                     data: {

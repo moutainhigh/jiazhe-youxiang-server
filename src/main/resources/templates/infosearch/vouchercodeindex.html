@@ -270,7 +270,7 @@
         });
 
         var tableOption = {
-            url: "../api/voucherexchangecode/searchlistpage",
+            url: "/api/voucherexchangecode/searchlistpage",
             postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
             colNames: ['', '批次名称', '代金券名称', '兑换码', '密钥', '停用状态', '使用状态', '兑换商品数量', '过期时间', '操作'],
             colModel: [
@@ -320,7 +320,7 @@
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "../api/voucherexchangecode/searchlistpage",
+            url: "/api/voucherexchangecode/searchlistpage",
             postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
@@ -346,7 +346,7 @@
         confirm("确定启用该充值卡吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/voucherexchangecode/startusing",
+                    url: "/api/voucherexchangecode/startusing",
                     dataType: "json",
                     async: false,
                     data: {
@@ -365,7 +365,7 @@
         confirm("确定停用该充值卡吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "../api/voucherexchangecode/stopusing",
+                    url: "/api/voucherexchangecode/stopusing",
                     dataType: "json",
                     async: false,
                     data: {
@@ -387,7 +387,7 @@
             }
         }
         $.ajax({
-            url: "../api/voucherexchangecode/editsave",
+            url: "/api/voucherexchangecode/editsave",
             dataType: "json",
             async: false,
             data: transformToJson($('#codeSaveForm').serializeArray()),
@@ -399,7 +399,7 @@
 
     function openEdit(id) {
         $.ajax({
-            url: "../api/voucherexchangecode/getbyid",
+            url: "/api/voucherexchangecode/getbyid",
             dataType: "json",
             async: false,
             data: {
@@ -436,7 +436,7 @@
     function getOrderPaymentList(id) {//显示消费记录
         $("#modelTbody").empty();
         $.ajax({
-            url: "../api/orderpayment/getbyvouchercodeid",
+            url: "/api/orderpayment/getbyvouchercodeid",
             dataType: "json",
             async: false,
             data: {

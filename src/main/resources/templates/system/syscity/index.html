@@ -190,7 +190,7 @@
 
     function openOrClose(isOpen, cityCode) {
 
-        var url = "../api/syscity/";
+        var url = "/api/syscity/";
         url += isOpen ? "open" : "close";
         $.ajax({
             url: url,    //请求的url地址
