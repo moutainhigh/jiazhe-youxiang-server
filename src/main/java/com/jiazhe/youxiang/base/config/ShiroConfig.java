@@ -63,7 +63,7 @@ public class ShiroConfig {
         userRealm.setName("userRealm");
         userRealm.setCredentialsMatcher(credentialsMatcher());
         userRealm.setAuthorizationCacheName("shiro-authorizationCache");
-        userRealm.setCacheManager(ehCacheManager());
+        userRealm.setCacheManager(shiroEhCacheManager());
        /* userRealm.setCredentialsMatcher(hashedCredentialsMatcher());*/
         return userRealm;
     }
@@ -77,7 +77,7 @@ public class ShiroConfig {
         customerRealm.setName("customerRealm");
         customerRealm.setCredentialsMatcher(credentialsMatcher());
         customerRealm.setAuthorizationCacheName("shiro-authorizationCache");
-        customerRealm.setCacheManager(ehCacheManager());
+        customerRealm.setCacheManager(shiroEhCacheManager());
         return customerRealm;
     }
 
@@ -141,7 +141,7 @@ public class ShiroConfig {
         realms.add(userRealm());
         realms.add(customerRealm());
         securityManager.setRealms(realms);
-        securityManager.setCacheManager(ehCacheManager());
+        securityManager.setCacheManager(shiroEhCacheManager());
         securityManager.setSessionManager(sessionManager());
         return securityManager;
     }
@@ -157,8 +157,8 @@ public class ShiroConfig {
         return defaultWebSessionManager;
     }
 
-    @Bean(name = "cacheManager")
-    public EhCacheManager ehCacheManager() {
+    @Bean(name = "shiroEhCacheManager")
+    public EhCacheManager shiroEhCacheManager() {
         EhCacheManager ehCacheManager = new EhCacheManager();
         return ehCacheManager;
     }

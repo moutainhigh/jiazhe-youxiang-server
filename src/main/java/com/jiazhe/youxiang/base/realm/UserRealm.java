@@ -21,6 +21,7 @@ import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +35,16 @@ public class UserRealm extends AuthorizingRealm {
     private static final Logger logger = LoggerFactory.getLogger(UserRealm.class);
 
     @Autowired
+    @Lazy
     private SysUserBiz sysUserBiz;
     @Autowired
+    @Lazy
     private SysUserRoleBiz sysUserRoleBiz;
     @Autowired
+    @Lazy
     private SysRoleBiz sysRoleBiz;
     @Autowired
+    @Lazy
     private SysRolePermissionBiz sysRolePermissionBiz;
 
     /**

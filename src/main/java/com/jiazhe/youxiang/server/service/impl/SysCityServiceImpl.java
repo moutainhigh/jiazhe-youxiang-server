@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.server.service.impl;
 
+import com.jiazhe.youxiang.base.util.CacheKeyGenerator;
 import com.jiazhe.youxiang.server.adapter.SysCityAdapter;
 import com.jiazhe.youxiang.server.biz.SysCityBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
@@ -20,6 +21,9 @@ import com.jiazhe.youxiang.server.service.SysCityService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +37,7 @@ import java.util.stream.Collectors;
  * @author niexiao
  * @created 2018/10/16
  */
+@CacheConfig(cacheNames = "city-cache")
 @Service("sysCityService")
 public class SysCityServiceImpl implements SysCityService {
 
@@ -41,7 +46,10 @@ public class SysCityServiceImpl implements SysCityService {
 
     @Autowired
     private SysCityPOManualMapper sysCityPOManualMapper;
+    @Autowired
+    CacheKeyGenerator cacheKeyGenerator;
 
+    @Cacheable(keyGenerator = "cacheKeyGenerator")
     @Override
     public List<SysCityDTO> getList(String parentCode, Integer level, Paging paging) {
         Integer count = sysCityPOManualMapper.count(parentCode, level);
@@ -51,6 +59,7 @@ public class SysCityServiceImpl implements SysCityService {
 
     }
 
+    @Cacheable
     @Override
     public List<SysCityDTO> getOpenList() {
         SysCityPOExample sysCityPOExample = new SysCityPOExample();
@@ -61,12 +70,14 @@ public class SysCityServiceImpl implements SysCityService {
         return sysCityPOList.stream().map(SysCityAdapter::sysCityPO2DTO).collect(Collectors.toList());
     }
 
+    @Cacheable
     @Override
     public Map<String, String> getCityMapByCodes(List<String> cityCodes) {
         List<SysCityPO> sysCityPOList = getPOListByCityCodes(cityCodes);
         return sysCityPOList.stream().collect(Collectors.toMap(SysCityPO::getCityCode, SysCityPO::getCityName));
     }
 
+    @Cacheable
     @Override
     public List<SysCityDTO> getProvinceList() {
         SysCityPOExample sysCityPOExample = new SysCityPOExample();
@@ -77,6 +88,7 @@ public class SysCityServiceImpl implements SysCityService {
         return sysCityPOList.stream().map(SysCityAdapter::sysCityPO2DTO).collect(Collectors.toList());
     }
 
+    @Cacheable
     @Override
     public List<SysCityDTO> getCityList(String cityCode) {
         SysCityPOExample sysCityPOExample = new SysCityPOExample();
@@ -88,6 +100,7 @@ public class SysCityServiceImpl implements SysCityService {
         return sysCityPOList.stream().map(SysCityAdapter::sysCityPO2DTO).collect(Collectors.toList());
     }
 
+    @CacheEvict(allEntries = true)
     @Transactional
     @Override
     public void updateStatusByCityCode(String cityCode, Byte status) {
@@ -118,7 +131,7 @@ public class SysCityServiceImpl implements SysCityService {
         }
     }
 
-
+    @CacheEvict(allEntries = true)
     @Override
     public void updateStatusByCityCodes(List<String> cityCodes, Byte status) {
         sysCityPOManualMapper.updateStatusByCityCodes(cityCodes, status);
