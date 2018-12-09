@@ -1,7 +1,10 @@
 package com.jiazhe.youxiang.server.biz.partnerorder;
 
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
+import com.jiazhe.youxiang.server.dto.partnerorder.PartnerOrderInfoDTO;
+import com.jiazhe.youxiang.server.service.partnerorder.PartnerOrderInfoService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -15,7 +18,10 @@ import java.util.List;
 @Service("partnerOrderInfoBiz")
 public class PartnerOrderInfoBiz {
 
-    public List<OrderInfoDTO> getList(Byte status, String customerCityCode, Integer partnerId, Integer serviceItemId, Date serviceTimeStart, Date serviceTimeEnd, String customerMobile, Paging paging) {
-        return null;
+    @Autowired
+    private PartnerOrderInfoService partnerOrderInfoService ;
+
+    public List<PartnerOrderInfoDTO> getList(Byte status, String customerCityCode, Integer partnerId, Integer serviceItemId, Date serviceTimeStart, Date serviceTimeEnd, String customerMobile, Paging paging) {
+        return partnerOrderInfoService.getList(status, customerCityCode, partnerId, serviceItemId, serviceTimeStart, serviceTimeEnd, customerMobile, paging);
     }
 }

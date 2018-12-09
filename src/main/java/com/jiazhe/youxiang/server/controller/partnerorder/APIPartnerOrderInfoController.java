@@ -2,16 +2,19 @@ package com.jiazhe.youxiang.server.controller.partnerorder;
 
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
+import com.jiazhe.youxiang.server.adapter.partnerorder.PartnerOrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.partnerorder.PartnerOrderInfoBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
+import com.jiazhe.youxiang.server.dto.partnerorder.PartnerOrderInfoDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderInfoPageReq;
 import com.jiazhe.youxiang.server.vo.req.partnerorder.PartnerOrderInfoPageReq;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
+import com.jiazhe.youxiang.server.vo.resp.partnerorder.PartnerOrderInfoResp;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -43,8 +46,8 @@ public class APIPartnerOrderInfoController {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         Date serviceTimeStart = req.getServiceTimeStart() == 0 ? null : new Date(req.getServiceTimeStart());
         Date serviceTimeEnd = req.getServiceTimeEnd() == 0 ? null : new Date(req.getServiceTimeEnd());
-        List<OrderInfoDTO> orderInfoDTOList = partnerOrderInfoBiz.getList(req.getStatus(), req.getCustomerCityCode(),req.getPartnerId(),req.getServiceItemId(), serviceTimeStart, serviceTimeEnd, req.getCustomerMobile(), paging);
-        List<OrderInfoResp> orderInfoRespList = orderInfoDTOList.stream().map(OrderInfoAdapter::DTO2Resp).collect(Collectors.toList());
-        return ResponseFactory.buildPaginationResponse(orderInfoRespList, paging);
+        List<PartnerOrderInfoDTO> dtoList = partnerOrderInfoBiz.getList(req.getStatus(), req.getCustomerCityCode(),req.getPartnerId(),req.getServiceItemId(), serviceTimeStart, serviceTimeEnd, req.getCustomerMobile(), paging);
+        List<PartnerOrderInfoResp> respList = dtoList.stream().map(PartnerOrderInfoAdapter::DTO2Resp).collect(Collectors.toList());
+        return ResponseFactory.buildPaginationResponse(respList, paging);
     }
 }

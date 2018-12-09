@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.partnerorder.PartnerOrderInfoPOManualMapper">
+    <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.PartnerOrderInfoPO">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+        <result column="customer_mobile" property="customerMobile" jdbcType="VARCHAR" />
+        <result column="customer_address" property="customerAddress" jdbcType="VARCHAR" />
+        <result column="customer_city_code" property="customerCityCode" jdbcType="VARCHAR" />
+        <result column="customer_city_name" property="customerCityName" jdbcType="VARCHAR" />
+        <result column="keyt" property="keyt" jdbcType="VARCHAR" />
+        <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+        <result column="service_time" property="serviceTime" jdbcType="TIMESTAMP" />
+        <result column="product_type" property="productType" jdbcType="VARCHAR" />
+        <result column="worker_name" property="workerName" jdbcType="VARCHAR" />
+        <result column="worker_mobile" property="workerMobile" jdbcType="VARCHAR" />
+        <result column="service_item_id" property="serviceItemId" jdbcType="INTEGER" />
+        <result column="pre_pay" property="prePay" jdbcType="DECIMAL" />
+        <result column="append_pay" property="appendPay" jdbcType="DECIMAL" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="partner_id" property="partnerId" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="TINYINT" />
+        <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,customer_name,customer_mobile,customer_address,customer_city_code,customer_city_name,keyt,order_time,service_time,product_type,
+        worker_name,worker_mobile,service_item_id,pre_pay,append_pay,remark,partner_id,status,ext_info, is_deleted,add_time,mod_time
+    </sql>
+
+    <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.PartnerOrderInfoPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from partner_order_info
+        <where>
+            <if test="status != null and status != 0">
+                AND status = #{status}
+            </if>
+            <if test="customerCityCode != null and customerCityCode !='000000'">
+                AND customer_city_code = #{customerCityCode}
+            </if>
+            <if test="partnerId != null and partnerId != 0">
+                AND partner_id = #{partnerId}
+            </if>
+            <if test="serviceItemId != null and serviceItemId != 0">
+                AND service_item_id = #{serviceItemId}
+            </if>
+            <if test="serviceTimeStart != null">
+                AND service_time &gt;= #{serviceTimeStart}
+            </if>
+            <if test="serviceTimeEnd != null">
+                AND service_time &lt;= #{serviceTimeEnd}
+            </if>
+            <if test="customerMobile != null and customerMobile !=''">
+                AND customer_mobile = #{customerMobile}
+            </if>
+            AND is_deleted = 0 ORDER BY  add_time desc
+        </where>
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM partner_order_info
+        <where>
+            <if test="status != null and status != 0">
+                AND status = #{status}
+            </if>
+            <if test="customerCityCode != null and customerCityCode !='000000'">
+                AND customer_city_code = #{customerCityCode}
+            </if>
+            <if test="partnerId != null and partnerId != 0">
+                AND partner_id = #{partnerId}
+            </if>
+            <if test="serviceItemId != null and serviceItemId != 0">
+                AND service_item_id = #{serviceItemId}
+            </if>
+            <if test="serviceTimeStart != null">
+                AND service_time &gt;= #{serviceTimeStart}
+            </if>
+            <if test="serviceTimeEnd != null">
+                AND service_time &lt;= #{serviceTimeEnd}
+            </if>
+            <if test="customerMobile != null and customerMobile !=''">
+                AND customer_mobile = #{customerMobile}
+            </if>
+            AND is_deleted = 0
+        </where>
+    </select>
+
+</mapper>

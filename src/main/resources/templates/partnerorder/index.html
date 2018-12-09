@@ -45,28 +45,28 @@
                                 <label class="col-sm-1 control-label no-padding-right">状态：</label>
                                 <div class="col-sm-2">
                                     <select id="searchStatus" name="status" class="selectpicker show-tick form-control">
-                                        <option value=0>所有</option>
-                                        <option value=1 th:selected="${status} == 0">待服务</option>
-                                        <option value=2 th:selected="${status} == 1">已完成</option>
-                                        <option value=3 th:selected="${status} == 2">已取消</option>
+                                        <option value=0 >所有</option>
+                                        <option value=1 >待服务</option>
+                                        <option value=2 >已完成</option>
+                                        <option value=3 >已取消</option>
                                     </select>
                                 </div>
                                 <label class="col-sm-1 control-label no-padding-right">城市：</label>
                                 <div class="col-sm-2">
                                     <select id="searchCity" name="customer_city_code" class="selectpicker show-tick form-control">
-                                        <option value=0>所有</option>
+                                        <option value="000000">所有</option>
                                     </select>
                                 </div>
                                 <label class="col-sm-1 control-label no-padding-right">服务商家：</label>
                                 <div class="col-sm-2">
                                     <select id="searchPartner" name="partnerId" class="selectpicker show-tick form-control">
-                                        <option value=0>所有</option>
+                                        <option value=0 >所有</option>
                                     </select>
                                 </div>
                                 <label class="col-sm-1 control-label no-padding-right">服务项目：</label>
                                 <div class="col-sm-2">
                                     <select id="searchServiceItem" name="serviceItemId" class="selectpicker show-tick form-control">
-                                        <option value=0>所有</option>
+                                        <option value=0 >所有</option>
                                     </select>
                                 </div>
                             </div>
@@ -167,7 +167,7 @@
             colNames: ['', '操作', '状态','客户姓名', '客户手机号', '城市', '兑换码密钥', '兑换时间', '预约时间', '产品类型', '服务人员姓名', '服务项目','预付', '再支付'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
-                {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter},
+                {name: '_action', index: '_action', width: 200, sortable: false, formatter: customFormatter},
                 {
                     name: 'status',
                     index: 'status',
@@ -183,7 +183,7 @@
                 {
                     name: 'orderTime',
                     index: 'orderTime',
-                    width: 50,
+                    width: 100,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return dateFormat(rowObject.orderTime);
@@ -192,7 +192,7 @@
                 {
                     name: 'serviceTime',
                     index: 'serviceTime',
-                    width: 50,
+                    width: 100,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return dateFormat(rowObject.serviceTime);
@@ -200,7 +200,7 @@
                 },
                 {name: 'productType', index: 'productType', sortable: false},
                 {name: 'workerName', index: 'workerName', sortable: false},
-                {name: 'serviceItem', index: 'serviceItem', sortable: false},
+                {name: 'serviceItemResp.name', index: 'serviceItem', sortable: false},
                 {name: 'prePay', index: 'prePay', sortable: false},
                 {name: 'appendPay', index: 'appendPay', sortable: false}
             ],
@@ -233,19 +233,9 @@
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
         str += getFunctionButton("btn-success", "showOrder(" + rowObject.id + ")", "查看");
-        if (rowObject.status == 0) {
-            str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
-            str += getFunctionButton("btn-primary", "userReservationOrder(" + rowObject.id + ")", "预约");
-        }
         if (rowObject.status == 1) {
-            str += getFunctionButton("btn-danger", "changeOrderReservation(" + rowObject.id + ")", "修改订单");
-            str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + ")", "完成订单");
-            str += getFunctionButton("btn-primary", "showAppendOrder(" + rowObject.id + ")", "追加订单");
-        }
-        if (rowObject.status == 2) {
-            str += getFunctionButton("btn-primary", "orderCancelPass(" + rowObject.id + ")", "审核通过");
-            str += getFunctionButton("btn-danger", "orderCancelUnpass(" + rowObject.id + ")", "审核不通过");
-            str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + ")", "完成订单");
+            str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
+            str += getFunctionButton("btn-primary", "userReservationOrder(" + rowObject.id + ")", "完成订单");
         }
         return str;
     }
