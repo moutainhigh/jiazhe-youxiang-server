@@ -79,6 +79,10 @@
         <!--<table tableName="voucher_exchange_code_batch" domainObjectName="VoucherExchangeCodeBatchPO"/>-->
         <!--<table tableName="voucher_exchange_record" domainObjectName="VoucherExchangeRecordPO"/>-->
         <!--<table tableName="simple_session" domainObjectName="SimpleSessionPO"/>-->
+        <!--<table tableName="advance_pay" domainObjectName="AdvancePayPO"/>-->
+        <!--<table tableName="partner" domainObjectName="PartnerPO"/>-->
+        <!--<table tableName="service_item" domainObjectName="ServiceItemPO"/>-->
+        <!--<table tableName="partner_order_info" domainObjectName="PartnerOrderInfoPO"/>-->
 
     </context>
 </generatorConfiguration>

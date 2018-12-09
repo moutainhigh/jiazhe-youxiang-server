@@ -493,3 +493,66 @@ CREATE TABLE `simple_session` (
     PRIMARY KEY (`id`)
 )  ENGINE=INNODB COMMENT='登录记录信息表';
 
+drop table if exists `advance_pay`;
+CREATE TABLE `advance_pay` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
+    `advance_pay` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '预支金额',
+    `advance_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '预支时间',
+    `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
+    `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
+    `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+    PRIMARY KEY (`id`)
+)  ENGINE=INNODB COMMENT='预支记录';
+
+drop table if exists `partner`;
+CREATE TABLE `partner` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
+    `name` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '合作商名称',
+    `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '状态 0-不可用，1-可用',
+    `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
+    `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
+    `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+    PRIMARY KEY (`id`)
+)  ENGINE=INNODB COMMENT='合作商';
+
+drop table if exists `service_item`;
+CREATE TABLE `service_item` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
+    `name` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '服务项目名称',
+    `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '状态 0-不可用，1-可用',
+    `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
+    `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
+    `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+    PRIMARY KEY (`id`)
+)  ENGINE=INNODB COMMENT='服务项目';
+
+drop table if exists `partner_order_info`;
+CREATE TABLE `partner_order_info` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
+    `customer_name` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '客户姓名',
+    `customer_mobile` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '客户电话',
+    `customer_address` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '联系地址',
+    `customer_city_code` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '客户下单的城市code',
+    `customer_city_name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '客户下单的城市名称',
+    `keyt` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '兑换密钥',
+    `order_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '兑换时间',
+    `service_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '预约时间',
+    `product_type` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '产品类型',
+    `worker_name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '服务人员姓名',
+    `worker_mobile` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '服务人员联系方式',
+    `service_item_id` INT(10) UNSIGNED NOT NULL COMMENT '服务项目id',
+    `pre_pay` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '预付',
+    `append_pay` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '二次支付',
+    `remark` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '备注',
+    `partner_id` INT(10) UNSIGNED NOT NULL COMMENT '合作商id',
+    `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '订单状态 0待服务，1已完成，2已取消',
+    `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
+    `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
+    `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+    PRIMARY KEY (`id`)
+)  ENGINE=INNODB COMMENT='在合作商那下的订单';
+
