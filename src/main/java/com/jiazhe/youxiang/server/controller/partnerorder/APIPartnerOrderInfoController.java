@@ -15,6 +15,7 @@ import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderInfoPageReq;
 import com.jiazhe.youxiang.server.vo.req.partnerorder.PartnerOrderInfoPageReq;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
 import com.jiazhe.youxiang.server.vo.resp.partnerorder.PartnerOrderInfoResp;
+import com.jiazhe.youxiang.server.vo.resp.partnerorder.ThreeMoneyResp;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -39,7 +40,7 @@ public class APIPartnerOrderInfoController {
     @Autowired
     private PartnerOrderInfoBiz partnerOrderInfoBiz;
 
-    @ApiOperation(value = "【后台】分页查询商家订单信息", httpMethod = "GET", response = OrderInfoResp.class, responseContainer = "List", notes = "【后台】分页查询商家订单信息")
+    @ApiOperation(value = "【后台】分页查询商家订单信息", httpMethod = "GET", response = PartnerOrderInfoResp.class, responseContainer = "List", notes = "【后台】分页查询商家订单信息")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "分页查询商家订单信息", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute PartnerOrderInfoPageReq req) {
@@ -49,5 +50,15 @@ public class APIPartnerOrderInfoController {
         List<PartnerOrderInfoDTO> dtoList = partnerOrderInfoBiz.getList(req.getStatus(), req.getCustomerCityCode(),req.getPartnerId(),req.getServiceItemId(), serviceTimeStart, serviceTimeEnd, req.getCustomerMobile(), paging);
         List<PartnerOrderInfoResp> respList = dtoList.stream().map(PartnerOrderInfoAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(respList, paging);
+    }
+
+    @ApiOperation(value = "【后台】查询预付款相关信息", httpMethod = "GET", response = ThreeMoneyResp.class, responseContainer = "List", notes = "【后台】查询预付款相关信息")
+    @RequestMapping(value = "/calthreemoney", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "查询预付款相关信息", level = LogLevelEnum.LEVEL_1)
+    public Object calThreeMoney(@ModelAttribute PartnerOrderInfoPageReq req) {
+        Date timeStart = req.getServiceTimeStart() == 0 ? null : new Date(req.getServiceTimeStart());
+        Date timeEnd = req.getServiceTimeEnd() == 0 ? null : new Date(req.getServiceTimeEnd());
+        ThreeMoneyResp resp = partnerOrderInfoBiz.calThreeMoney(timeStart,timeEnd);
+        return ResponseFactory.buildResponse(resp);
     }
 }

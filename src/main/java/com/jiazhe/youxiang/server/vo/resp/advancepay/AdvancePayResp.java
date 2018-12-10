@@ -1,27 +1,32 @@
-package com.jiazhe.youxiang.server.domain.po;
+package com.jiazhe.youxiang.server.vo.resp.advancepay;
 
-import java.io.Serializable;
+import com.jiazhe.youxiang.server.vo.BaseVO;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class AdvancePayPO implements Serializable {
+/**
+ * @author TU
+ * @description 预支记录
+ * @date 2018/12/10.
+ */
+public class AdvancePayResp extends BaseVO {
+
     private Integer id;
 
     private BigDecimal advancePay;
 
-    private Date advanceTime;
+    private Long advanceTime;
+
+    private String remark;
 
     private String extInfo;
 
     private Byte isDeleted;
 
-    private Date addTime;
+    private Long addTime;
 
-    private Date modTime;
-
-    private String remark;
-
-    private static final long serialVersionUID = 1L;
+    private Long modTime;
 
     public Integer getId() {
         return id;
@@ -39,11 +44,11 @@ public class AdvancePayPO implements Serializable {
         this.advancePay = advancePay;
     }
 
-    public Date getAdvanceTime() {
+    public Long getAdvanceTime() {
         return advanceTime;
     }
 
-    public void setAdvanceTime(Date advanceTime) {
+    public void setAdvanceTime(Long advanceTime) {
         this.advanceTime = advanceTime;
     }
 
@@ -52,7 +57,7 @@ public class AdvancePayPO implements Serializable {
     }
 
     public void setExtInfo(String extInfo) {
-        this.extInfo = extInfo == null ? null : extInfo.trim();
+        this.extInfo = extInfo;
     }
 
     public Byte getIsDeleted() {
@@ -63,19 +68,19 @@ public class AdvancePayPO implements Serializable {
         this.isDeleted = isDeleted;
     }
 
-    public Date getAddTime() {
+    public Long getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Date addTime) {
+    public void setAddTime(Long addTime) {
         this.addTime = addTime;
     }
 
-    public Date getModTime() {
+    public Long getModTime() {
         return modTime;
     }
 
-    public void setModTime(Date modTime) {
+    public void setModTime(Long modTime) {
         this.modTime = modTime;
     }
 
@@ -84,6 +89,6 @@ public class AdvancePayPO implements Serializable {
     }
 
     public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
+        this.remark = remark;
     }
 }

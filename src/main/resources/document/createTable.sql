@@ -498,6 +498,7 @@ CREATE TABLE `advance_pay` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
     `advance_pay` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '预支金额',
     `advance_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '预支时间',
+    `remark` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '备注',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

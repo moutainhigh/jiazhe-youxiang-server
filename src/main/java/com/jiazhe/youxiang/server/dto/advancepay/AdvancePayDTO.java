@@ -1,15 +1,24 @@
-package com.jiazhe.youxiang.server.domain.po;
+package com.jiazhe.youxiang.server.dto.advancepay;
 
-import java.io.Serializable;
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class AdvancePayPO implements Serializable {
+/**
+ * @author TU
+ * @description
+ * @date 2018/12/10.
+ */
+public class AdvancePayDTO extends BaseObject {
+
     private Integer id;
 
     private BigDecimal advancePay;
 
     private Date advanceTime;
+
+    private String remark;
 
     private String extInfo;
 
@@ -18,10 +27,6 @@ public class AdvancePayPO implements Serializable {
     private Date addTime;
 
     private Date modTime;
-
-    private String remark;
-
-    private static final long serialVersionUID = 1L;
 
     public Integer getId() {
         return id;
@@ -52,7 +57,7 @@ public class AdvancePayPO implements Serializable {
     }
 
     public void setExtInfo(String extInfo) {
-        this.extInfo = extInfo == null ? null : extInfo.trim();
+        this.extInfo = extInfo;
     }
 
     public Byte getIsDeleted() {
@@ -84,6 +89,6 @@ public class AdvancePayPO implements Serializable {
     }
 
     public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
+        this.remark = remark;
     }
 }

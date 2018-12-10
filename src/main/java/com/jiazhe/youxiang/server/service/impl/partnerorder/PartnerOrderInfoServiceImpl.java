@@ -4,8 +4,8 @@ import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.adapter.partnerorder.PartnerOrderInfoAdapter;
 import com.jiazhe.youxiang.server.dao.mapper.PartnerOrderInfoPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.partnerorder.PartnerOrderInfoPOManualMapper;
-import com.jiazhe.youxiang.server.domain.po.OrderInfoPO;
-import com.jiazhe.youxiang.server.domain.po.PartnerOrderInfoPO;
+import com.jiazhe.youxiang.server.domain.po.*;
+import com.jiazhe.youxiang.server.dto.advancepay.AdvancePayDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.partner.PartnerDTO;
@@ -14,12 +14,15 @@ import com.jiazhe.youxiang.server.dto.product.ProductDTO;
 import com.jiazhe.youxiang.server.dto.serviceitem.ServiceItemDTO;
 import com.jiazhe.youxiang.server.service.PartnerService;
 import com.jiazhe.youxiang.server.service.ServiceItemService;
+import com.jiazhe.youxiang.server.service.advancepay.AdvancePayService;
 import com.jiazhe.youxiang.server.service.partnerorder.PartnerOrderInfoService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import com.jiazhe.youxiang.server.vo.resp.partnerorder.ThreeMoneyResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +34,7 @@ import java.util.stream.Collectors;
  */
 @Service("partnerOrderInfoService")
 @Transactional(rollbackFor = Exception.class)
-public class PartnerOrderInfoServiceImpl implements PartnerOrderInfoService{
+public class PartnerOrderInfoServiceImpl implements PartnerOrderInfoService {
 
     @Autowired
     private PartnerOrderInfoPOMapper partnerOrderInfoPOMapper;
@@ -41,6 +44,8 @@ public class PartnerOrderInfoServiceImpl implements PartnerOrderInfoService{
     private PartnerService partnerService;
     @Autowired
     private ServiceItemService serviceItemService;
+    @Autowired
+    private AdvancePayService advancePayService;
 
 
     @Override
@@ -56,5 +61,31 @@ public class PartnerOrderInfoServiceImpl implements PartnerOrderInfoService{
         });
         paging.setTotal(count);
         return dtoList;
+    }
+
+    @Override
+    public ThreeMoneyResp calThreeMoney(Date timeStart, Date timeEnd) {
+        ThreeMoneyResp threeMoneyResp = new ThreeMoneyResp();
+        PartnerOrderInfoPOExample pExample = new PartnerOrderInfoPOExample();
+        PartnerOrderInfoPOExample.Criteria pCriteria = pExample.createCriteria();
+        if (timeStart != null) {
+            pCriteria.andOrderTimeGreaterThan(timeStart);
+        }
+        if (timeEnd != null) {
+            pCriteria.andOrderTimeLessThanOrEqualTo(timeEnd);
+        }
+        pCriteria.andIsDeletedEqualTo(Byte.valueOf("0"));
+        List<PartnerOrderInfoPO> pPOList = partnerOrderInfoPOMapper.selectByExample(pExample);
+        if (!pPOList.isEmpty()) {
+            BigDecimal prePay = pPOList.stream().map(PartnerOrderInfoPO::getPrePay).reduce(BigDecimal.ZERO, BigDecimal::add);
+            BigDecimal appendPay = pPOList.stream().map(PartnerOrderInfoPO::getAppendPay).reduce(BigDecimal.ZERO, BigDecimal::add);
+            threeMoneyResp.setSpend(prePay.add(appendPay));
+        }
+        List<AdvancePayDTO> aPOList = advancePayService.getList(timeStart, timeEnd);
+        if (!aPOList.isEmpty()) {
+            threeMoneyResp.setTotal(aPOList.stream().map(AdvancePayDTO::getAdvancePay).reduce(BigDecimal.ZERO, BigDecimal::add));
+        }
+        threeMoneyResp.setLeft(threeMoneyResp.getTotal().subtract(threeMoneyResp.getSpend()));
+        return threeMoneyResp;
     }
 }
