@@ -237,15 +237,15 @@
                             <div class="space-2"></div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label no-padding-right"
-                                       for="saveAdvanceTimeStr">充值时间：</label>
+                                       for="saveAdvanceTime">充值时间：</label>
                                 <div class="col-sm-8">
                                     <div class="input-group">
-                                        <input class="form-control date-picker" id="saveAdvanceTimeStr"
+                                        <input class="form-control date-picker" id="saveAdvanceTime"
                                                type="text" readonly/>
                                         <span class="input-group-addon">
                                             <i class="fa fa-calendar bigger-110"></i>
                                         </span>
-                                        <input type="hidden" value=0 id="saveAdvanceTime" name="advanceTime"/>
+                                        <input type="hidden" value=0 name="advanceTime"/>
                                     </div>
                                 </div>
                             </div>
@@ -254,7 +254,7 @@
                                 <label class="col-sm-4 control-label no-padding-right">备注：</label>
                                 <div class="col-sm-8">
                                     <div class="pos-rel">
-                                        <input id="saveRemark" name="remark"
+                                        <input id="saveOrderRemark" name="remark"
                                                class="form-control" type="text"
                                                style="height:30px"/>
                                     </div>
@@ -280,6 +280,125 @@
         </div>
     </div>
 </div>
+
+<!--商户订单modal-->
+<div id="modal-partnerOrder" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="blue bigger">预支充值</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-1"></div>
+                    <div class="col-xs-12 col-sm-9">
+                        <form id="partnerOrderForm" class="form-horizontal" role="form">
+                            <input id="partnerOrderId" type="hidden" name="id" value=0 />
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">客户姓名：</label>
+                                <div class="col-sm-8">
+                                    <div class="pos-rel">
+                                        <input id="saveCustomerName" name="customerName" class="form-control"
+                                               type="text" style="height:30px"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">客户电话：</label>
+                                <div class="col-sm-8">
+                                    <div class="pos-rel">
+                                        <input id="saveCustomerMobile" name="customerMobile" class="form-control"
+                                               type="text" style="height:30px"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">客户地址：</label>
+                                <div class="col-sm-8">
+                                    <div class="pos-rel">
+                                        <input id="saveCustomerAddress" name="customerAddress" class="form-control"
+                                               type="text" style="height:30px"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+                            <!--此处选择城市-->
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">兑换密钥：</label>
+                                <div class="col-sm-8">
+                                    <div class="pos-rel">
+                                        <input id="saveKeyt" name="keyt" class="form-control"
+                                               type="text" style="height:30px"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right"
+                                       for="saveOrderTime">兑换时间：</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <input class="form-control date-picker" id="saveOrderTime"
+                                               type="text" readonly/>
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                        <input type="hidden" value=0 name="orderTime"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right"
+                                       for="saveServiceTime">服务时间：</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <input class="form-control date-picker" id="saveServiceTime"
+                                               type="text" readonly/>
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                        <input type="hidden" value=0 name="serviceTime"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-2"></div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">备注：</label>
+                                <div class="col-sm-8">
+                                    <div class="pos-rel">
+                                        <input id="saveRemark" name="remark"
+                                               class="form-control" type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    取消
+                </button>
+
+                <button class="btn btn-sm btn-primary modal-footer-btn modal-footer-btn-save"
+                        onclick="savePartnerOrder()">
+                    <i class="ace-icon fa fa-check"></i>
+                    保存
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 </body>
 <script type="text/javascript">
     var grid_selector = "#grid-table";
@@ -376,12 +495,34 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str += getFunctionButton("btn-success", "showOrder(" + rowObject.id + ")", "查看");
+        str += getFunctionButton("btn-success", "openShow(" + rowObject.id + ")", "查看");
         if (rowObject.status == 1) {
-            str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
-            str += getFunctionButton("btn-primary", "userReservationOrder(" + rowObject.id + ")", "完成订单");
+            str += getFunctionButton("btn-primary", "openEdit(" + rowObject.id + ")", "修改");
         }
         return str;
+    }
+
+    function openShow(id) {
+        $("#partnerOrderId").val(id);
+        $("#partnerOrderForm").modal("show");
+    }
+
+    function openEdit(id) {
+        $("#partnerOrderId").val(id);
+        $("#partnerOrderForm").modal("show");
+    }
+
+    function openNew() {
+        $("#partnerOrderId").val(0);
+        $("#partnerOrderForm").modal("show");
+    }
+
+    function fillPartnerOrderForm() {
+
+    }
+
+    function savePartnerOrder() {
+
     }
 
     function refreshThreeMoney() {
@@ -453,7 +594,8 @@
         $("#saveRemark").val('');
         var time = new Date().getTime();
         $("#saveAdvanceTime").val(time);
-        $("#saveAdvanceTimeStr").val(dateFormat(time));
+        $("#saveAdvanceTime").val(dateFormat(time));
+        $("#saveAdvanceTime").next().next().val(time);
         $("#modal-advancePay").modal('show');
     }
 
