@@ -41,4 +41,20 @@ public class AdvancePayAdapter {
         advancePayResp.setModTime(advancePayDTO.getModTime().getTime());
         return advancePayResp;
     }
+
+    public static AdvancePayPO DTO2PO(AdvancePayDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+        AdvancePayPO advancePayPO = new AdvancePayPO();
+        advancePayPO.setId(dto.getId());
+        advancePayPO.setAdvancePay(dto.getAdvancePay());
+        advancePayPO.setAdvanceTime(dto.getAdvanceTime());
+        advancePayPO.setRemark(dto.getRemark());
+        advancePayPO.setExtInfo(dto.getExtInfo());
+        advancePayPO.setIsDeleted(dto.getIsDeleted());
+        advancePayPO.setAddTime(dto.getAddTime());
+        advancePayPO.setModTime(dto.getModTime());
+        return advancePayPO;
+    }
 }

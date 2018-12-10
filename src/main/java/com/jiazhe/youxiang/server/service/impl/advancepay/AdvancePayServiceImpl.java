@@ -6,10 +6,13 @@ import com.jiazhe.youxiang.server.domain.po.AdvancePayPO;
 import com.jiazhe.youxiang.server.domain.po.AdvancePayPOExample;
 import com.jiazhe.youxiang.server.dto.advancepay.AdvancePayDTO;
 import com.jiazhe.youxiang.server.service.advancepay.AdvancePayService;
+import jdk.internal.org.objectweb.asm.commons.AdviceAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +39,14 @@ public class AdvancePayServiceImpl implements AdvancePayService {
             aCriteria.andAdvanceTimeLessThanOrEqualTo(timeEnd);
         }
         List<AdvancePayPO> poList = advancePayPOMapper.selectByExample(aExample);
-        return poList.stream().map(AdvancePayAdapter::PO2DTO).collect(Collectors.toList());
+        List<AdvancePayDTO> dtoList = poList.stream().map(AdvancePayAdapter::PO2DTO).collect(Collectors.toList());
+        dtoList.sort(Comparator.comparing(AdvancePayDTO::getAdvanceTime).reversed());
+        return dtoList;
+    }
+
+    @Override
+    public void save(AdvancePayDTO dto) {
+       AdvancePayPO po = AdvancePayAdapter.DTO2PO(dto);
+        advancePayPOMapper.insert(po);
     }
 }

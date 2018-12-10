@@ -2,12 +2,14 @@ package com.jiazhe.youxiang.server.controller.advancepay;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.server.adapter.advancepay.AdvancePayAdapter;
+import com.jiazhe.youxiang.server.biz.advancepay.AdvancePayBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.dto.advancepay.AdvancePayDTO;
 import com.jiazhe.youxiang.server.service.advancepay.AdvancePayService;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
+import com.jiazhe.youxiang.server.vo.req.AdvancePaySaveReq;
 import com.jiazhe.youxiang.server.vo.req.partnerorder.PartnerOrderInfoPageReq;
 import com.jiazhe.youxiang.server.vo.resp.advancepay.AdvancePayResp;
 import com.jiazhe.youxiang.server.vo.resp.partnerorder.ThreeMoneyResp;
@@ -32,7 +34,7 @@ import java.util.stream.Collectors;
 public class APIAdvancePayController extends BaseController{
 
     @Autowired
-    private AdvancePayService advancePayService;
+    private AdvancePayBiz advancePayBiz;
 
     @ApiOperation(value = "【后台】查询预付款充值信息", httpMethod = "GET", response = AdvancePayResp.class, responseContainer = "List", notes = "【后台】查询预付款充值信息")
     @RequestMapping(value = "/listall", method = RequestMethod.GET)
@@ -40,8 +42,17 @@ public class APIAdvancePayController extends BaseController{
     public Object listAll(@ModelAttribute PartnerOrderInfoPageReq req) {
         Date timeStart = req.getServiceTimeStart() == 0 ? null : new Date(req.getServiceTimeStart());
         Date timeEnd = req.getServiceTimeEnd() == 0 ? null : new Date(req.getServiceTimeEnd());
-        List<AdvancePayDTO> advancePayDTOList = advancePayService.getList(timeStart,timeEnd);
+        List<AdvancePayDTO> advancePayDTOList = advancePayBiz.getList(timeStart,timeEnd);
         List<AdvancePayResp> advancePayRespList = advancePayDTOList.stream().map(AdvancePayAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildResponse(advancePayRespList);
+    }
+
+
+    @ApiOperation(value = "【后台】保存预支信息", httpMethod = "POST", notes = "保存预支信息")
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.ORDER,operate = "保存预支信息",level = LogLevelEnum.LEVEL_1)
+    public Object save(@ModelAttribute AdvancePaySaveReq req) {
+        advancePayBiz.save(req.getAdvancePay(),req.getAdvanceTime(),req.getRemark());
+        return ResponseFactory.buildSuccess();
     }
 }

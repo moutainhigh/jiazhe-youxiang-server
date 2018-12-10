@@ -45,28 +45,31 @@
                                 <label class="col-sm-1 control-label no-padding-right">状态：</label>
                                 <div class="col-sm-2">
                                     <select id="searchStatus" name="status" class="selectpicker show-tick form-control">
-                                        <option value=0 >所有</option>
-                                        <option value=1 >待服务</option>
-                                        <option value=2 >已完成</option>
-                                        <option value=3 >已取消</option>
+                                        <option value=0>所有</option>
+                                        <option value=1>待服务</option>
+                                        <option value=2>已完成</option>
+                                        <option value=3>已取消</option>
                                     </select>
                                 </div>
                                 <label class="col-sm-1 control-label no-padding-right">城市：</label>
                                 <div class="col-sm-2">
-                                    <select id="searchCity" name="customer_city_code" class="selectpicker show-tick form-control">
+                                    <select id="searchCity" name="customer_city_code"
+                                            class="selectpicker show-tick form-control">
                                         <option value="000000">所有</option>
                                     </select>
                                 </div>
                                 <label class="col-sm-1 control-label no-padding-right">服务商家：</label>
                                 <div class="col-sm-2">
-                                    <select id="searchPartner" name="partnerId" class="selectpicker show-tick form-control">
-                                        <option value=0 >所有</option>
+                                    <select id="searchPartner" name="partnerId"
+                                            class="selectpicker show-tick form-control">
+                                        <option value=0>所有</option>
                                     </select>
                                 </div>
                                 <label class="col-sm-1 control-label no-padding-right">服务项目：</label>
                                 <div class="col-sm-2">
-                                    <select id="searchServiceItem" name="serviceItemId" class="selectpicker show-tick form-control">
-                                        <option value=0 >所有</option>
+                                    <select id="searchServiceItem" name="serviceItemId"
+                                            class="selectpicker show-tick form-control">
+                                        <option value=0>所有</option>
                                     </select>
                                 </div>
                             </div>
@@ -128,15 +131,9 @@
 
                     <div class="col-xs-12">
                         <div class="col-sm-3" style="height: 400px">
-                            <div class="alert alert-info">
-                                <button class="close" data-dismiss="alert">
-                                    <i class="ace-icon fa fa-times"></i>
-                                </button>
-                                刷新成功 !
-                            </div>
                             <div class="profile-user-info profile-user-info-striped">
                                 <div class="profile-info-row">
-                                    <div class="profile-info-name"> 预支、消费情况 </div>
+                                    <div class="profile-info-name"> 预支、消费情况</div>
                                     <div class="profile-info-value">
                                         <!--<a class="btn btn-minier btn-default" href="javascript:showOrder(1)">刷新</a>-->
                                         <a href="javascript:refreshThreeMoney()" data-action="reload">
@@ -146,16 +143,18 @@
                                 </div>
 
                                 <div class="profile-info-row">
-                                    <div class="profile-info-name"> 总预支 </div>
+                                    <div class="profile-info-name"> 总预支</div>
                                     <div class="profile-info-value">
                                         <span id="total"> 加载中...</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <a class="btn btn-minier btn-primary" href="javascript:getAdvancePayList()">明细</a>&nbsp;&nbsp;
-                                        <a class="btn btn-minier btn-success" href="javascript:showOrder(1)">充值</a>
+                                        <a class="btn btn-minier btn-primary"
+                                           href="javascript:getAdvancePayList()">明细</a>&nbsp;&nbsp;
+                                        <a class="btn btn-minier btn-success"
+                                           href="javascript:openAdvancePayModal()">充值</a>
                                     </div>
                                 </div>
 
                                 <div class="profile-info-row">
-                                    <div class="profile-info-name"> 已消费 </div>
+                                    <div class="profile-info-name"> 已消费</div>
 
                                     <div class="profile-info-value">
                                         <span id="spend">加载中...</span>
@@ -163,12 +162,14 @@
                                 </div>
 
                                 <div class="profile-info-row">
-                                    <div class="profile-info-name"> 余额 </div>
+                                    <div class="profile-info-name"> 余额</div>
 
                                     <div class="profile-info-value">
                                         <span id="left">加载中...</span>
                                     </div>
                                 </div>
+                            </div>
+                            <div id="alert-info" style="padding-top: 20px">
                             </div>
                         </div>
                         <div class="col-sm-9">
@@ -193,7 +194,7 @@
                     预支记录
                 </div>
             </div>
-            <div class="modal-body no-padding" style="height:250px">
+            <div class="modal-body no-padding" style="height:250px;overflow-y:scroll;">
                 <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
                     <thead>
                     <tr>
@@ -210,12 +211,81 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
+
+<!--充值modal-->
+<div id="modal-advancePay" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="blue bigger">预支充值</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-1"></div>
+                    <div class="col-xs-12 col-sm-9">
+                        <form id="advancePayForm" class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">充值金额：</label>
+                                <div class="col-sm-8">
+                                    <div class="pos-rel">
+                                        <input id="saveAdvancePay" name="advancePay" class="form-control"
+                                               type="text" style="height:30px"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right"
+                                       for="saveAdvanceTimeStr">充值时间：</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <input class="form-control date-picker" id="saveAdvanceTimeStr"
+                                               type="text" readonly/>
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                        <input type="hidden" value=0 id="saveAdvanceTime" name="advanceTime"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">备注：</label>
+                                <div class="col-sm-8">
+                                    <div class="pos-rel">
+                                        <input id="saveRemark" name="remark"
+                                               class="form-control" type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    取消
+                </button>
+
+                <button class="btn btn-sm btn-primary modal-footer-btn modal-footer-btn-save"
+                        onclick="saveAdvancePay()">
+                    <i class="ace-icon fa fa-check"></i>
+                    保存
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
     var permission = getCookie("permission");
-    var orderStatus = [ '待服务', '已完成', '已取消'];
+    var orderStatus = ['待服务', '已完成', '已取消'];
     $(function () {
         $(document).on("hidden.bs.modal", ".bootbox", function () {
             if ($(".modal-backdrop").length > 0) {
@@ -234,7 +304,7 @@
             postData: transformToJson($('#partnerOrderInfoSearchForm').serializeArray()),
             shrinkToFit: false,
             autoScroll: true,
-            colNames: ['', '操作', '状态','客户姓名', '客户手机号', '城市', '兑换码密钥', '兑换时间', '预约时间', '产品类型', '服务人员姓名', '服务项目','预付', '再支付'],
+            colNames: ['', '操作', '状态', '客户姓名', '客户手机号', '城市', '兑换码密钥', '兑换时间', '预约时间', '产品类型', '服务人员姓名', '服务项目', '预付', '再支付'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: '_action', index: '_action', width: 200, sortable: false, formatter: customFormatter},
@@ -247,9 +317,9 @@
                         return orderStatus[rowObject.status - 1];
                     }
                 },
-                {name: 'customerName', index: 'customerName', width: 70,sortable: false},
-                {name: 'customerMobile', index: 'customerMobile', width: 100,sortable: false},
-                {name: 'customerCityName', index: 'customerCityName', width: 50,sortable: false},
+                {name: 'customerName', index: 'customerName', width: 70, sortable: false},
+                {name: 'customerMobile', index: 'customerMobile', width: 100, sortable: false},
+                {name: 'customerCityName', index: 'customerCityName', width: 50, sortable: false},
                 {name: 'keyt', index: 'keyt', sortable: false},
                 {
                     name: 'orderTime',
@@ -313,7 +383,7 @@
         }
         return str;
     }
-    
+
     function refreshThreeMoney() {
         $("#total").html("加载中...");
         $("#spend").html("加载中...");
@@ -332,6 +402,7 @@
                     $("#total").html(result.total);
                     $("#spend").html(result.spend);
                     $("#left").html(result.left);
+                    showAlertInfo();
                 }
             },
             error: error
@@ -360,6 +431,53 @@
                         $("#modelTbody").append(str);
                     }
                     $("#modal-table").modal('show');
+                }
+            },
+            error: error
+        });
+    }
+
+    function showAlertInfo() {
+        $("#alert-info").empty();
+        $("#alert-info").append("<div class='alert alert-info'>" +
+            "<button class='close' data-dismiss='alert'>" +
+            "<i class='ace-icon fa fa-times'></i>" +
+            "</button> 刷新成功 ! </div>");
+        setTimeout(function () {
+            $("#alert-info").empty()
+        }, 2000);
+    }
+
+    function openAdvancePayModal() {
+        $("#saveAdvancePay").val(0);
+        $("#saveRemark").val('');
+        var time = new Date().getTime();
+        $("#saveAdvanceTime").val(time);
+        $("#saveAdvanceTimeStr").val(dateFormat(time));
+        $("#modal-advancePay").modal('show');
+    }
+
+    function saveAdvancePay() {
+        if (isNumber($("#saveAdvancePay")) || $("#saveAdvancePay").val() == 0) {
+            bootboxalert("充值金额非法");
+            return false;
+        }
+        if ($("#saveAdvanceTimeStr").val() == '' || $("#saveAdvanceTime").val() == 0) {
+            bootboxalert("充值时间不能为空");
+            return false;
+        }
+        $.ajax({
+            url: "/api/advancepay/save",
+            dataType: "json",
+            async: false,
+            data: transformToJson($('#advancePayForm').serializeArray()),
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    refreshThreeMoney();
+                    $("#modal-advancePay").modal('hide');
                 }
             },
             error: error
