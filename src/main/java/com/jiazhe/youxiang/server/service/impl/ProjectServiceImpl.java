@@ -16,6 +16,9 @@ import com.jiazhe.youxiang.server.service.ProjectService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -28,6 +31,7 @@ import java.util.stream.Collectors;
  * @author niexiao
  * @created 2018/10/29
  */
+@CacheConfig(cacheNames = "project_cache")
 @Service("projectService")
 public class ProjectServiceImpl implements ProjectService {
 
@@ -37,6 +41,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ProjectPOManualMapper projectPOManualMapper;
 
+    @CacheEvict(allEntries = true, beforeInvocation = true)
     @Override
     public void add(ProjectAddDTO projectAddDTO) {
         ProjectPO projectPO = ProjectAdapter.projectAddDTO2PO(projectAddDTO);
@@ -51,11 +56,13 @@ public class ProjectServiceImpl implements ProjectService {
         return projectPOList.stream().map(ProjectAdapter::projectPO2DTO).collect(Collectors.toList());
     }
 
+    @CachePut(keyGenerator = "cacheKeyGenerator")
     @Override
     public ProjectDTO getById(Integer id) {
         return ProjectAdapter.projectPO2DTO(projectPOMapper.selectByPrimaryKey(id));
     }
 
+    @CacheEvict(allEntries = true, beforeInvocation = true)
     @Override
     public void update(Integer id, String name, String description, Integer priority, Integer status) {
         ProjectPO record = new ProjectPO();
@@ -76,6 +83,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectPOMapper.updateByPrimaryKeySelective(record);
     }
 
+    @CacheEvict(allEntries = true, beforeInvocation = true)
     @Override
     public void delete(Integer id) {
         ProjectPO record = new ProjectPO();

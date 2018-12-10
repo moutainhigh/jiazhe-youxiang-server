@@ -5,14 +5,17 @@
  */
 package com.jiazhe.youxiang.server.dto.project;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 /**
  * 在这里编写类的功能描述
  *
  * @author niexiao
  * @created 2018/10/24
  */
-public class ProjectAddDTO {
+public class ProjectAddDTO extends BaseObject {
 
+    private static final long serialVersionUID = 28694609692564715L;
     /**
      * 项目名称
      */

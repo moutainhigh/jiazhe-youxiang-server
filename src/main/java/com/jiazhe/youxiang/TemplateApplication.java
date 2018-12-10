@@ -6,10 +6,11 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration;
+import org.springframework.cache.annotation.EnableCaching;
 
 import java.util.Set;
 
+@EnableCaching
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = {
         DataSourceAutoConfiguration.class,
