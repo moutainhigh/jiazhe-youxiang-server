@@ -21,6 +21,9 @@ public class WeChatUnifiedOrderReq extends BaseVO{
     @ApiModelProperty("支付金额，以分为单位")
     private Integer total_fee;
 
+    @ApiModelProperty("支付用户open_id")
+    private String open_id;
+
     public String getBody() {
         return body;
     }
@@ -43,5 +46,13 @@ public class WeChatUnifiedOrderReq extends BaseVO{
 
     public void setTotal_fee(Integer total_fee) {
         this.total_fee = total_fee;
+    }
+
+    public String getOpen_id() {
+        return open_id;
+    }
+
+    public void setOpen_id(String open_id) {
+        this.open_id = open_id;
     }
 }
