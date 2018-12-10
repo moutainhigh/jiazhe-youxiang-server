@@ -5,7 +5,7 @@
  */
 package com.jiazhe.youxiang.server.dto.syscity;
 
-import java.io.Serializable;
+import com.jiazhe.youxiang.server.vo.BaseObject;
 
 /**
  * 城市信息DTO
@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @author niexiao
  * @created 2018/10/16
  */
-public class SysCityDTO implements Serializable{
+public class SysCityDTO extends BaseObject {
 
     private static final long serialVersionUID = 5165916632715370425L;
     private Integer id;
