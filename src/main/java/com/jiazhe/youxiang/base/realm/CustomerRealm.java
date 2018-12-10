@@ -14,6 +14,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 /**
  * @author TU
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class CustomerRealm extends AuthorizingRealm {
 
     @Autowired
+    @Lazy
     private CustomerBiz customerBiz;
 
     private static final Logger logger = LoggerFactory.getLogger(CustomerRealm.class);

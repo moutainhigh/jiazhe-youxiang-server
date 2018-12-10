@@ -7,6 +7,8 @@ package com.jiazhe.youxiang.server.dao.mapper.manual;
 
 import com.jiazhe.youxiang.server.domain.po.SysCityPO;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -16,6 +18,7 @@ import java.util.List;
  * @author niexiao
  * @created 2018/10/17
  */
+@CacheConfig(cacheNames = "sys_city_cache")
 public interface SysCityPOManualMapper {
 
     /**
@@ -36,8 +39,10 @@ public interface SysCityPOManualMapper {
      */
     int updateStatusByCityCode(@Param("cityCode") String cityCode, @Param("status") Byte status, @Param("isCascade") Boolean isCascade);
 
+    @Cacheable(keyGenerator = "cacheKeyGenerator")
     List<SysCityPO> query(@Param("parentCode") String parentCode, @Param("level") Integer level, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
+    @Cacheable(keyGenerator = "cacheKeyGenerator")
     Integer count(@Param("parentCode") String parentCode, @Param("level") Integer level);
 
 
