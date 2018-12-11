@@ -88,4 +88,24 @@ public class PartnerOrderInfoServiceImpl implements PartnerOrderInfoService {
         threeMoneyResp.setLeft(threeMoneyResp.getTotal().subtract(threeMoneyResp.getSpend()));
         return threeMoneyResp;
     }
+
+    @Override
+    public PartnerOrderInfoDTO getById(Integer id) {
+        PartnerOrderInfoPO po = partnerOrderInfoPOMapper.selectByPrimaryKey(id);
+        return PartnerOrderInfoAdapter.PO2DTO(po);
+    }
+
+    @Override
+    public void save(PartnerOrderInfoDTO dto) {
+        PartnerOrderInfoPO poIn = PartnerOrderInfoAdapter.DTO2PO(dto);
+        if(poIn.getId() == 0){
+            partnerOrderInfoPOMapper.insert(poIn);
+        }else{
+            PartnerOrderInfoPO po = partnerOrderInfoPOMapper.selectByPrimaryKey(dto.getId());
+            poIn.setAddTime(po.getAddTime());
+            poIn.setExtInfo(po.getExtInfo());
+            poIn.setIsDeleted(po.getIsDeleted());
+            partnerOrderInfoPOMapper.updateByPrimaryKey(poIn);
+        }
+    }
 }

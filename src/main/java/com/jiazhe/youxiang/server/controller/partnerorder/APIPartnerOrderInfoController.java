@@ -1,6 +1,8 @@
 package com.jiazhe.youxiang.server.controller.partnerorder;
 
+import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
+import com.jiazhe.youxiang.server.adapter.PartnerAdapter;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.adapter.partnerorder.PartnerOrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.partnerorder.PartnerOrderInfoBiz;
@@ -11,8 +13,10 @@ import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.partnerorder.PartnerOrderInfoDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
+import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderInfoPageReq;
 import com.jiazhe.youxiang.server.vo.req.partnerorder.PartnerOrderInfoPageReq;
+import com.jiazhe.youxiang.server.vo.req.partnerorder.PartnerOrderSaveReq;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
 import com.jiazhe.youxiang.server.vo.resp.partnerorder.PartnerOrderInfoResp;
 import com.jiazhe.youxiang.server.vo.resp.partnerorder.ThreeMoneyResp;
@@ -35,7 +39,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/partnerorderinfo")
-public class APIPartnerOrderInfoController {
+public class APIPartnerOrderInfoController extends BaseController {
 
     @Autowired
     private PartnerOrderInfoBiz partnerOrderInfoBiz;
@@ -50,6 +54,30 @@ public class APIPartnerOrderInfoController {
         List<PartnerOrderInfoDTO> dtoList = partnerOrderInfoBiz.getList(req.getStatus(), req.getCustomerCityCode(),req.getPartnerId(),req.getServiceItemId(), serviceTimeStart, serviceTimeEnd, req.getCustomerMobile(), paging);
         List<PartnerOrderInfoResp> respList = dtoList.stream().map(PartnerOrderInfoAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(respList, paging);
+    }
+
+    @ApiOperation(value = "【后台】回显商家订单信息", httpMethod = "GET", response = PartnerOrderInfoResp.class, notes = "【后台】回显商家订单信息")
+    @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "回显商家订单信息", level = LogLevelEnum.LEVEL_1)
+    public Object getById(@ModelAttribute IdReq req) {
+        PartnerOrderInfoDTO dto = partnerOrderInfoBiz.getById(req.getId());
+        PartnerOrderInfoResp resp = PartnerOrderInfoAdapter.DTO2Resp(dto);
+        return ResponseFactory.buildResponse(resp);
+    }
+
+    @ApiOperation(value = "【后台】保存商家订单信息", httpMethod = "POST", notes = "【后台】保存商家订单信息")
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "保存商家订单信息", level = LogLevelEnum.LEVEL_1)
+    public Object save(@ModelAttribute PartnerOrderSaveReq req) {
+        PartnerOrderInfoDTO dto = PartnerOrderInfoAdapter.saveReq2DTO(req);
+        dto.setModTime(new Date());
+        if(req.getId() == 0){
+            dto.setAddTime(new Date());
+            dto.setExtInfo("");
+            dto.setIsDeleted(Byte.valueOf("0"));
+        }
+        partnerOrderInfoBiz.save(dto);
+        return ResponseFactory.buildSuccess();
     }
 
     @ApiOperation(value = "【后台】查询预付款相关信息", httpMethod = "GET", response = ThreeMoneyResp.class, responseContainer = "List", notes = "【后台】查询预付款相关信息")

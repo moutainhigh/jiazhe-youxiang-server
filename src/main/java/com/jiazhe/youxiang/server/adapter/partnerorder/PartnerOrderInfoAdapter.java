@@ -4,7 +4,10 @@ import com.jiazhe.youxiang.server.adapter.PartnerAdapter;
 import com.jiazhe.youxiang.server.adapter.ServiceItemAdapter;
 import com.jiazhe.youxiang.server.domain.po.PartnerOrderInfoPO;
 import com.jiazhe.youxiang.server.dto.partnerorder.PartnerOrderInfoDTO;
+import com.jiazhe.youxiang.server.vo.req.partnerorder.PartnerOrderSaveReq;
 import com.jiazhe.youxiang.server.vo.resp.partnerorder.PartnerOrderInfoResp;
+
+import java.util.Date;
 
 /**
  * @author tu
@@ -73,5 +76,61 @@ public class PartnerOrderInfoAdapter {
         partnerOrderInfoDTO.setAddTime(partnerOrderInfoPO.getAddTime());
         partnerOrderInfoDTO.setModTime(partnerOrderInfoPO.getModTime());
         return partnerOrderInfoDTO;
+    }
+
+    public static PartnerOrderInfoDTO saveReq2DTO(PartnerOrderSaveReq req) {
+        if (req == null) {
+            return null;
+        }
+        PartnerOrderInfoDTO partnerOrderInfoDTO = new PartnerOrderInfoDTO();
+        partnerOrderInfoDTO.setId(req.getId());
+        partnerOrderInfoDTO.setCustomerName(req.getCustomerName());
+        partnerOrderInfoDTO.setCustomerMobile(req.getCustomerMobile());
+        partnerOrderInfoDTO.setCustomerAddress(req.getCustomerAddress());
+        partnerOrderInfoDTO.setCustomerCityCode(req.getCustomerCityCode());
+        partnerOrderInfoDTO.setCustomerCityName(req.getCustomerCityName());
+        partnerOrderInfoDTO.setKeyt(req.getKeyt());
+        partnerOrderInfoDTO.setOrderTime(new Date(req.getOrderTime()));
+        partnerOrderInfoDTO.setServiceTime(new Date(req.getServiceTime()));
+        partnerOrderInfoDTO.setProductType(req.getProductType());
+        partnerOrderInfoDTO.setWorkerName(req.getWorkerName());
+        partnerOrderInfoDTO.setWorkerMobile(req.getWorkerMobile());
+        partnerOrderInfoDTO.setServiceItemId(req.getServiceItemId());
+        partnerOrderInfoDTO.setPrePay(req.getPrePay());
+        partnerOrderInfoDTO.setAppendPay(req.getAppendPay());
+        partnerOrderInfoDTO.setRemark(req.getRemark());
+        partnerOrderInfoDTO.setPartnerId(req.getPartnerId());
+        partnerOrderInfoDTO.setStatus(req.getStatus());
+        return partnerOrderInfoDTO;
+    }
+
+    public static PartnerOrderInfoPO DTO2PO(PartnerOrderInfoDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+        PartnerOrderInfoPO partnerOrderInfoPO = new PartnerOrderInfoPO();
+        partnerOrderInfoPO.setId(dto.getId());
+        partnerOrderInfoPO.setCustomerName(dto.getCustomerName());
+        partnerOrderInfoPO.setCustomerMobile(dto.getCustomerMobile());
+        partnerOrderInfoPO.setCustomerAddress(dto.getCustomerAddress());
+        partnerOrderInfoPO.setCustomerCityCode(dto.getCustomerCityCode());
+        partnerOrderInfoPO.setCustomerCityName(dto.getCustomerCityName());
+        partnerOrderInfoPO.setKeyt(dto.getKeyt());
+        partnerOrderInfoPO.setOrderTime(dto.getOrderTime());
+        partnerOrderInfoPO.setServiceTime(dto.getServiceTime());
+        partnerOrderInfoPO.setProductType(dto.getProductType());
+        partnerOrderInfoPO.setWorkerName(dto.getWorkerName());
+        partnerOrderInfoPO.setWorkerMobile(dto.getWorkerMobile());
+        partnerOrderInfoPO.setServiceItemId(dto.getServiceItemId());
+        partnerOrderInfoPO.setPrePay(dto.getPrePay());
+        partnerOrderInfoPO.setAppendPay(dto.getAppendPay());
+        partnerOrderInfoPO.setRemark(dto.getRemark());
+        partnerOrderInfoPO.setPartnerId(dto.getPartnerId());
+        partnerOrderInfoPO.setStatus(dto.getStatus());
+        partnerOrderInfoPO.setExtInfo(dto.getExtInfo());
+        partnerOrderInfoPO.setIsDeleted(dto.getIsDeleted());
+        partnerOrderInfoPO.setAddTime(dto.getAddTime());
+        partnerOrderInfoPO.setModTime(dto.getModTime());
+        return partnerOrderInfoPO;
     }
 }

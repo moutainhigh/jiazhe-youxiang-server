@@ -29,4 +29,12 @@ public class PartnerOrderInfoBiz {
     public ThreeMoneyResp calThreeMoney(Date timeStart, Date timeEnd) {
         return partnerOrderInfoService.calThreeMoney(timeStart,timeEnd);
     }
+
+    public PartnerOrderInfoDTO getById(Integer id) {
+        return partnerOrderInfoService.getById(id);
+    }
+
+    public void save(PartnerOrderInfoDTO dto) {
+        partnerOrderInfoService.save(dto);
+    }
 }

@@ -2,6 +2,8 @@ package com.jiazhe.youxiang.server.service;
 
 import com.jiazhe.youxiang.server.dto.serviceitem.ServiceItemDTO;
 
+import java.util.List;
+
 /**
  * @author tu
  * @description：
@@ -10,4 +12,6 @@ import com.jiazhe.youxiang.server.dto.serviceitem.ServiceItemDTO;
 public interface ServiceItemService {
 
     ServiceItemDTO getById(Integer serviceItemId);
+
+    List<ServiceItemDTO> getList();
 }

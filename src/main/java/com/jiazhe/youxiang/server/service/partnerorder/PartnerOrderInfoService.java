@@ -18,4 +18,8 @@ public interface PartnerOrderInfoService {
     List<PartnerOrderInfoDTO> getList(Byte status, String customerCityCode, Integer partnerId, Integer serviceItemId, Date serviceTimeStart, Date serviceTimeEnd, String customerMobile, Paging paging);
 
     ThreeMoneyResp calThreeMoney(Date timeStart, Date timeEnd);
+
+    PartnerOrderInfoDTO getById(Integer id);
+
+    void save(PartnerOrderInfoDTO dto);
 }

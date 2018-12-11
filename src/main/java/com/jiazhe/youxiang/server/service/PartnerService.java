@@ -2,6 +2,8 @@ package com.jiazhe.youxiang.server.service;
 
 import com.jiazhe.youxiang.server.dto.partner.PartnerDTO;
 
+import java.util.List;
+
 /**
  * @author tu
  * @description：
@@ -10,4 +12,6 @@ import com.jiazhe.youxiang.server.dto.partner.PartnerDTO;
 public interface PartnerService {
 
     PartnerDTO getById(Integer partnerId);
+
+    List<PartnerDTO> getList();
 }

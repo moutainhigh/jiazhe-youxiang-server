@@ -53,7 +53,7 @@
                                 </div>
                                 <label class="col-sm-1 control-label no-padding-right">城市：</label>
                                 <div class="col-sm-2">
-                                    <select id="searchCity" name="customer_city_code"
+                                    <select id="searchCustomerCityCode" name="customerCityCode"
                                             class="selectpicker show-tick form-control">
                                         <option value="000000">所有</option>
                                     </select>
@@ -254,7 +254,7 @@
                                 <label class="col-sm-4 control-label no-padding-right">备注：</label>
                                 <div class="col-sm-8">
                                     <div class="pos-rel">
-                                        <input id="saveOrderRemark" name="remark"
+                                        <input id="saveAdvanceRemark" name="remark"
                                                class="form-control" type="text"
                                                style="height:30px"/>
                                     </div>
@@ -287,7 +287,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="blue bigger">预支充值</h4>
+                <h4 class="blue bigger" id="partnerOrderModalTitle"></h4>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -305,6 +305,7 @@
                                 </div>
                             </div>
                             <div class="space-2"></div>
+
                             <div class="form-group">
                                 <label class="col-sm-4 control-label no-padding-right">客户电话：</label>
                                 <div class="col-sm-8">
@@ -315,17 +316,18 @@
                                 </div>
                             </div>
                             <div class="space-2"></div>
+
+                            <!--此处选择城市-->
                             <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right">客户地址：</label>
+                                <label class="col-sm-4 control-label no-padding-right">所属城市：</label>
                                 <div class="col-sm-8">
-                                    <div class="pos-rel">
-                                        <input id="saveCustomerAddress" name="customerAddress" class="form-control"
-                                               type="text" style="height:30px"/>
-                                    </div>
+                                    <select id="saveCustomerCityCode" name="customerCityCode"
+                                            class="selectpicker show-tick form-control">
+                                    </select>
                                 </div>
                             </div>
                             <div class="space-2"></div>
-                            <!--此处选择城市-->
+
                             <div class="form-group">
                                 <label class="col-sm-4 control-label no-padding-right">兑换密钥：</label>
                                 <div class="col-sm-8">
@@ -336,6 +338,7 @@
                                 </div>
                             </div>
                             <div class="space-2"></div>
+
                             <div class="form-group">
                                 <label class="col-sm-4 control-label no-padding-right"
                                        for="saveOrderTime">兑换时间：</label>
@@ -351,9 +354,10 @@
                                 </div>
                             </div>
                             <div class="space-2"></div>
+
                             <div class="form-group">
                                 <label class="col-sm-4 control-label no-padding-right"
-                                       for="saveServiceTime">服务时间：</label>
+                                       for="saveServiceTime">预约时间：</label>
                                 <div class="col-sm-8">
                                     <div class="input-group">
                                         <input class="form-control date-picker" id="saveServiceTime"
@@ -365,8 +369,73 @@
                                     </div>
                                 </div>
                             </div>
-                            
                             <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">预约地点：</label>
+                                <div class="col-sm-8">
+                                    <div class="pos-rel">
+                                        <input id="saveCustomerAddress" name="customerAddress" class="form-control"
+                                               type="text" style="height:30px"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">产品类型：</label>
+                                <div class="col-sm-8">
+                                    <div class="pos-rel">
+                                        <input id="saveProductType" name="productType" class="form-control"
+                                               type="text" style="height:30px"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">保洁师姓名：</label>
+                                <div class="col-sm-8">
+                                    <div class="pos-rel">
+                                        <input id="saveWorkerName" name="workerName" class="form-control"
+                                               type="text" style="height:30px"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">保洁师电话：</label>
+                                <div class="col-sm-8">
+                                    <div class="pos-rel">
+                                        <input id="saveWorkerMobile" name="workerMobile" class="form-control"
+                                               type="text" style="height:30px"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <!--此处选择服务商家-->
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">服务商家：</label>
+                                <div class="col-sm-8">
+                                    <select id="savePartner" name="partnerId"
+                                            class="selectpicker show-tick form-control">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+                            <!--此处选择服务项目-->
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">服务项目：</label>
+                                <div class="col-sm-8">
+                                    <select id="saveServiceItem" name="serviceItemId"
+                                            class="selectpicker show-tick form-control">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
                             <div class="form-group">
                                 <label class="col-sm-4 control-label no-padding-right">备注：</label>
                                 <div class="col-sm-8">
@@ -377,6 +446,45 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">预付：</label>
+                                <div class="col-sm-8">
+                                    <div class="pos-rel">
+                                        <input id="savePrePay" name="prePay"
+                                               class="form-control" type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">再次支付：</label>
+                                <div class="col-sm-8">
+                                    <div class="pos-rel">
+                                        <input id="saveAppendPay" name="appendPay"
+                                               class="form-control" type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">订单状态：</label>
+                                <div class="col-sm-8">
+                                    <select id="saveStatus" name="status"
+                                            class="selectpicker show-tick form-control">
+                                        <option value=1>待服务</option>
+                                        <option value=2>已完成</option>
+                                        <option value=3>已取消</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
                         </form>
                     </div>
                 </div>
@@ -389,7 +497,7 @@
                 </button>
 
                 <button class="btn btn-sm btn-primary modal-footer-btn modal-footer-btn-save"
-                        onclick="savePartnerOrder()">
+                        onclick="savePartnerOrder()" id="partnerOrderSaveBtn">
                     <i class="ace-icon fa fa-check"></i>
                     保存
                 </button>
@@ -417,6 +525,68 @@
         });
 
         initDatePicker();
+
+        //初始化二级城市
+        $.ajax({
+            url: "/api/syscity/getopenlist",
+            dataType: "json",
+            async: true,
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                       if(result[i].cityLevel == 2){
+                           $("#searchCustomerCityCode").append("<option value=" + result[i].cityCode + ">" + result[i].cityName + "</option>");
+                           $("#saveCustomerCityCode").append("<option value=" + result[i].cityCode + ">" + result[i].cityName + "</option>");
+                       }
+                    }
+                }
+            },
+            error: error
+        });
+
+        //初始化服务商家
+        $.ajax({
+            url: "/api/partner/listall",
+            dataType: "json",
+            async: true,
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#searchPartner").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                        $("#savePartner").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                    }
+                }
+            },
+            error: error
+        });
+
+        //初始化服务项目
+        $.ajax({
+            url: "/api/serviceitem/listall",
+            dataType: "json",
+            async: true,
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#searchServiceItem").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                        $("#saveServiceItem").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                    }
+                }
+            },
+            error: error
+        });
 
         var tableOption = {
             url: "/api/partnerorderinfo/listpage",
@@ -503,26 +673,88 @@
     }
 
     function openShow(id) {
-        $("#partnerOrderId").val(id);
-        $("#partnerOrderForm").modal("show");
+        fillPartnerOrderForm(id)
+        $("#partnerOrderModalTitle").html("商家订单-查看");
+        $("#partnerOrderSaveBtn").hide();
+        $("#modal-partnerOrder").modal("show");
     }
 
     function openEdit(id) {
-        $("#partnerOrderId").val(id);
-        $("#partnerOrderForm").modal("show");
+        fillPartnerOrderForm(id);
+        $("#partnerOrderModalTitle").html("商家订单-修改");
+        $("#partnerOrderSaveBtn").show();
+        $("#modal-partnerOrder").modal("show");
     }
 
     function openNew() {
+        initForm();
         $("#partnerOrderId").val(0);
-        $("#partnerOrderForm").modal("show");
+        $("#partnerOrderModalTitle").html("商家订单-新建");
+        $("#partnerOrderSaveBtn").show();
+        $("#modal-partnerOrder").modal("show");
+    }
+    
+    function initForm() {
+        $("#partnerOrderForm input").val('');
+        $("#saveCustomerCityCode option:first").prop("selected", 'selected');
+        $("#savePartner option:first").prop("selected", 'selected');
+        $("#saveServiceItem option:first").prop("selected", 'selected');
+        $("#saveStatus option:first").prop("selected", 'selected');
+
     }
 
-    function fillPartnerOrderForm() {
-
+    function fillPartnerOrderForm(id) {
+        initForm();
+        $.ajax({
+            url: "/api/partnerorderinfo/getbyid",
+            dataType: "json",
+            async: false,
+            data: {
+                id:id
+            },
+            type: "GET",
+            success: function (data) {
+                var result = data.data;
+                $("#partnerOrderForm #partnerOrderId").val(result.id);
+                $("#partnerOrderForm #saveCustomerName").val(result.customerName);
+                $("#partnerOrderForm #saveCustomerMobile").val(result.customerMobile);
+                $("#partnerOrderForm #saveCustomerCityCode").val(result.customerCityCode);
+                $("#partnerOrderForm #saveKeyt").val(result.keyt);
+                $("#partnerOrderForm #saveOrderTime").val(dateFormat(result.orderTime));
+                $("#partnerOrderForm #saveOrderTime").next().next().val(result.orderTime);
+                $("#partnerOrderForm #saveServiceTime").val(dateFormat(result.serviceTime));
+                $("#partnerOrderForm #saveServiceTime").next().next().val(result.serviceTime);
+                $("#partnerOrderForm #saveCustomerAddress").val(result.customerAddress);
+                $("#partnerOrderForm #saveProductType").val(result.productType);
+                $("#partnerOrderForm #saveWorkerName").val(result.workerName);
+                $("#partnerOrderForm #saveWorkerMobile").val(result.workerMobile);
+                $("#partnerOrderForm #savePartner").val(result.partnerId);
+                $("#partnerOrderForm #saveServiceItem").val(result.serviceItemId);
+                $("#partnerOrderForm #saveRemark").val(result.remark);
+                $("#partnerOrderForm #savePrePay").val(result.prePay);
+                $("#partnerOrderForm #saveAppendPay").val(result.appendPay);
+                $("#partnerOrderForm #saveStatus").val(result.status);
+            },
+            error: error
+        });
     }
 
     function savePartnerOrder() {
-
+        var data = transformToJson($('#partnerOrderForm').serializeArray());
+        data.customerCityName = $("#saveCustomerCityCode option:selected").text();
+        $.ajax({
+            url: "/api/partnerorderinfo/save",
+            dataType: "json",
+            async: false,
+            data: data,
+            type: "POST",
+            success: function (data) {
+                $("#modal-partnerOrder").modal('hide');
+                jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                refreshThreeMoney();
+            },
+            error: error
+        });
     }
 
     function refreshThreeMoney() {
