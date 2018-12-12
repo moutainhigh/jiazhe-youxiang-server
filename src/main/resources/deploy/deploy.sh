@@ -11,6 +11,7 @@ start(){
     echo "$APP_NAME start..."
     JAVA_CMD="nohup java -jar $APP_DIR/$APP_NAME.jar "
     $JAVA_CMD > /dev/null 2>&1 &
+    sleep 4s
     echo Start Success!
   else
       echo "$APP_NAME is runing PID: $pid"
