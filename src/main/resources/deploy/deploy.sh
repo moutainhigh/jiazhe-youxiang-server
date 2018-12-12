@@ -9,6 +9,7 @@ start(){
   checkpid
   if [ ! -n "$pid" ]; then
     echo "$APP_NAME start..."
+    cd $APP_DIR
     JAVA_CMD="nohup java -jar $APP_DIR/$APP_NAME.jar > /dev/null 2>&1 &"
     $JAVA_CMD
     echo $?
