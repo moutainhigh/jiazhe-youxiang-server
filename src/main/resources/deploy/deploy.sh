@@ -12,7 +12,6 @@ start(){
     JAVA_CMD="nohup java -jar $APP_DIR/$APP_NAME.jar > /dev/null 2>&1 &"
     echo $JAVA_CMD
     $JAVA_CMD
-    echo $! > $APP_DIR/pid
     echo Start Success!
   else
       echo "$APP_NAME is runing PID: $pid"
