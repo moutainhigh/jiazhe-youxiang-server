@@ -9,7 +9,7 @@ start(){
   checkpid
   if [ ! -n "$pid" ]; then
     echo "$APP_NAME start..."
-    nohup java -jar $APP_DIR/$APP_NAME.jar > /dev/null 2>&1 &
+    nohup java -jar /opt/jiazhe/webserver/youxiang-server.jar > /dev/null 2>&1 &
     echo $?
     echo Start Success!
   else
