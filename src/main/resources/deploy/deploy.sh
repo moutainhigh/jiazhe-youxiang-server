@@ -10,7 +10,8 @@ start(){
   if [ ! -n "$pid" ]; then
     echo "$APP_NAME start..."
     JAVA_CMD="nohup java -jar $APP_DIR/$APP_NAME.jar > /dev/null 2>&1 &"
-    $JAVA_CMD
+    echo $JAVA_CMD
+    su - root -c "$JAVA_CMD"
     echo Start Success!
   else
       echo "$APP_NAME is runing PID: $pid"
