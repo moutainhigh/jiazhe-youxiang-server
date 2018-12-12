@@ -3,6 +3,8 @@ package com.jiazhe.youxiang.base.util;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
@@ -192,4 +194,29 @@ public class WeChatPayUtils {
                       throw ex;
             }
   }
+
+    public static String parseRequst(HttpServletRequest request) throws UnsupportedEncodingException {
+        request.setCharacterEncoding("utf-8");
+        String body = "";
+        try {
+            ServletInputStream inputStream = request.getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "utf-8")); // 设置编码格式“utf-8”否则获取中文为乱码
+            while (true) {
+                String info = br.readLine();
+                if (info == null) {
+                    break;
+                }
+                if (body == null || "".equals(body)) {
+                    body = info;
+                } else {
+                    body += info;
+                }
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return body;
+    }
 }

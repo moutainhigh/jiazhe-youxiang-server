@@ -22,4 +22,8 @@ public class WeChatPayConstant {
     //交易类型
     public static String TRADE_TYPE = "APP";
 
+    public static String API_KEY = "111";
+
+    public static String AppSecret = "111";
+
 }

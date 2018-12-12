@@ -15,3 +15,4 @@
 | 登录   |112   |com.jiazhe.youxiang.server.common.enums.LoginCodeEnum|
 | 商品电子码管理|113|com.jiazhe.youxiang.server.common.enums.EleProductCodeEnum |
 | 文件上传管理|114|com.jiazhe.youxiang.server.common.enums.UploadCodeEnum |
+|微信支付相关|115|com.jiazhe.youxiang.server.common.enums.WeChatPayCodeEnum|
