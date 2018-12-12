@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.server.dto.voucher.exchangecode;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 import java.util.Date;
 
 /**
@@ -7,7 +9,7 @@ import java.util.Date;
  * @description：
  * @date 2018/11/3
  */
-public class VoucherExchangeCodeSaveDTO {
+public class VoucherExchangeCodeSaveDTO extends BaseObject{
 
     private Integer batchId;
 

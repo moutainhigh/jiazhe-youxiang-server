@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.dto.voucher.voucher;
 
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangerecord.VoucherExchangeRecordDTO;
+import com.jiazhe.youxiang.server.vo.BaseObject;
 import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
 
 import java.util.Date;
@@ -11,7 +12,7 @@ import java.util.Date;
  * @description
  * @date 2018/10/24.
  */
-public class VoucherDTO {
+public class VoucherDTO extends BaseObject {
 
     private Integer id;
 

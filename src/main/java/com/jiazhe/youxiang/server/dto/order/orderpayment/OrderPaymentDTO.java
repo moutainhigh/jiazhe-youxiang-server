@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.dto.order.orderpayment;
 
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
+import com.jiazhe.youxiang.server.vo.BaseObject;
 
 import java.math.BigDecimal;
 
@@ -9,7 +10,7 @@ import java.math.BigDecimal;
  * @description：
  * @date 2018/11/7
  */
-public class OrderPaymentDTO {
+public class OrderPaymentDTO extends BaseObject {
 
     private Integer id;
 

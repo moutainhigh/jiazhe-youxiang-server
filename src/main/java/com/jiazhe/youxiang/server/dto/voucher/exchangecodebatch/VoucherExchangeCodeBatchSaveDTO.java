@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -10,7 +11,7 @@ import java.util.Date;
  * @description：
  * @date 2018/11/3
  */
-public class VoucherExchangeCodeBatchSaveDTO {
+public class VoucherExchangeCodeBatchSaveDTO extends BaseObject {
 
     private Integer id;
 

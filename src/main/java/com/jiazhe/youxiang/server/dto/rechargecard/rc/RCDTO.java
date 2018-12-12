@@ -2,6 +2,8 @@ package com.jiazhe.youxiang.server.dto.rechargecard.rc;
 
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord.RCExchangeRecordDTO;
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -10,7 +12,7 @@ import java.util.Date;
  * @description
  * @date 2018/10/23.
  */
-public class RCDTO {
+public class RCDTO extends BaseObject {
 
     private Integer id;
 

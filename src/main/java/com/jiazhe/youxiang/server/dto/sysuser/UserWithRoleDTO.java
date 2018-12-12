@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.server.dto.sysuser;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 import java.util.Date;
 
 /**
@@ -7,7 +9,7 @@ import java.util.Date;
  * @description：
  * @date 2018/10/19
  */
-public class UserWithRoleDTO {
+public class UserWithRoleDTO extends BaseObject {
 
     private Integer id;
 

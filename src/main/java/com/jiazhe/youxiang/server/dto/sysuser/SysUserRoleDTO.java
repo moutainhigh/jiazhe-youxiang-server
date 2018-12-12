@@ -1,11 +1,13 @@
 package com.jiazhe.youxiang.server.dto.sysuser;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 /**
  * @author tu
  * @description：
  * @date 2018/10/19
  */
-public class SysUserRoleDTO {
+public class SysUserRoleDTO extends BaseObject {
 
     private Integer id;
 

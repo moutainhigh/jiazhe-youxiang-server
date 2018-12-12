@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -8,7 +10,7 @@ import java.util.Date;
  * @description：
  * @date 2018/11/3
  */
-public class VoucherExchangeCodeBatchEditDTO {
+public class VoucherExchangeCodeBatchEditDTO extends BaseObject {
 
     private Integer id;
 

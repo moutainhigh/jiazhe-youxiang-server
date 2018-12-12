@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.server.dto.partner;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 import java.util.Date;
 
 /**
@@ -7,7 +9,7 @@ import java.util.Date;
  * @description：
  * @date 2018/12/9
  */
-public class PartnerDTO {
+public class PartnerDTO extends BaseObject {
 
     private Integer id;
 

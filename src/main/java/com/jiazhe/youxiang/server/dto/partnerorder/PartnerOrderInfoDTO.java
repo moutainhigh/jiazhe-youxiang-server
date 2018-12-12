@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.dto.partnerorder;
 
 import com.jiazhe.youxiang.server.dto.partner.PartnerDTO;
 import com.jiazhe.youxiang.server.dto.serviceitem.ServiceItemDTO;
+import com.jiazhe.youxiang.server.vo.BaseObject;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -11,7 +12,7 @@ import java.util.Date;
  * @description：
  * @date 2018/12/9
  */
-public class PartnerOrderInfoDTO {
+public class PartnerOrderInfoDTO extends BaseObject {
 
     private Integer id;
 
