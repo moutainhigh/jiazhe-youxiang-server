@@ -11,6 +11,7 @@ import com.jiazhe.youxiang.server.dao.mapper.OrderInfoPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.order.OrderInfoPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.ElectronicProductExchangeCodePO;
 import com.jiazhe.youxiang.server.domain.po.OrderInfoPO;
+import com.jiazhe.youxiang.server.domain.po.OrderInfoPOExample;
 import com.jiazhe.youxiang.server.domain.po.OrderPaymentPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.eleproductexcode.EleProductCodeDTO;
@@ -652,6 +653,22 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         needPayResp.setOrderId(orderInfoPO.getId());
         needPayResp.setPayCash(needPay[0]);
         return needPayResp;
+    }
+
+    @Override
+    public OrderInfoDTO getByOrderNo(String orderNo) {
+        OrderInfoPOExample example = new OrderInfoPOExample();
+        OrderInfoPOExample.Criteria criteria = example.createCriteria();
+        criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
+        criteria.andOrderCodeEqualTo(orderNo);
+        List<OrderInfoPO> poList = orderInfoPOMapper.selectByExample(example);
+        if(poList.isEmpty()){
+            return null;
+        }
+        if(poList.size()>1){
+            throw new OrderException(OrderCodeEnum.ORDER_CODE_REPEAT);
+        }
+        return OrderInfoAdapter.PO2DTO(poList.get(0));
     }
 
     private OrderRefundDTO paymentDto2RefundDto(OrderPaymentDTO paymentDTO) {

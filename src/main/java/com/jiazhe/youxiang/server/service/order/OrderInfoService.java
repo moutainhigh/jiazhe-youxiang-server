@@ -124,4 +124,11 @@ public interface OrderInfoService {
      * @param dto
      */
     NeedPayResp customerPlaceOrder(PlaceOrderDTO dto) throws ParseException;
+
+    /**
+     * 通过订单号查找订单
+     * @param orderNo
+     * @return
+     */
+    OrderInfoDTO getByOrderNo(String orderNo);
 }

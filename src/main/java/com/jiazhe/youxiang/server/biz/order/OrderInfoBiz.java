@@ -140,4 +140,8 @@ public class OrderInfoBiz {
     public NeedPayResp customerPlaceOrder(PlaceOrderDTO placeOrderDTO) throws ParseException {
         return orderInfoService.customerPlaceOrder(placeOrderDTO);
     }
+
+    public OrderInfoDTO getByOrderNo(String orderNo) {
+        return orderInfoService.getByOrderNo(orderNo);
+    }
 }
