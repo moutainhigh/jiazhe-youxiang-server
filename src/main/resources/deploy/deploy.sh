@@ -3,9 +3,11 @@
 APP_DIR=/opt/jiazhe/webserver
 APP_NAME=youxiang-server
 JAR_FILE=$APP_NAME.jar
+pid=0
 
 start(){
   checkpid
+  echo "$APP_NAME start..."
   if [ ! -n "$pid" ]; then
     nohup java -jar $APP_DIR/$APP_NAME.jar > /dev/null 2>&1 &
     echo "---------------------------------"
@@ -28,7 +30,9 @@ status(){
 }
 
 checkpid(){
+    echo "$APP_NAME checkpid..."
     pid=`ps -ef |grep $JAR_FILE |grep -v grep |awk '{print $2}'`
+    echo "$APP_NAME pid="+pid
 }
 
 stop(){
