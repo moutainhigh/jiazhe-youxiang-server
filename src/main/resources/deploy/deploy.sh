@@ -2,11 +2,12 @@
 
 APP_DIR=/opt/jiazhe/webserver
 APP_NAME=youxiang-server
+JAR_FILE=$APP_NAME.jar
 
 start(){
   checkpid
   if [ ! -n "$pid" ]; then
-    nohup java -jar $APP_DIR/"$APP_NAME".jar > /dev/null 2>&1 &
+    nohup java -jar $APP_DIR/$APP_NAME.jar > /dev/null 2>&1 &
     echo "---------------------------------"
     echo "启动完成，按CTRL+C退出日志界面即可>>>>>"
     echo "---------------------------------"
