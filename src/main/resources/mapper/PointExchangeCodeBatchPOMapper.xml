@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.PointExchangeCodeBatchPOMapper" >
+  <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="point_name" property="pointName" jdbcType="VARCHAR" />
+    <result column="is_virtual" property="isVirtual" jdbcType="TINYINT" />
+    <result column="is_made" property="isMade" jdbcType="TINYINT" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="city_codes" property="cityCodes" jdbcType="VARCHAR" />
+    <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
+    <result column="face_value" property="faceValue" jdbcType="DECIMAL" />
+    <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
+    <result column="recharge_point_expiry_time" property="rechargePointExpiryTime" jdbcType="TIMESTAMP" />
+    <result column="validity_period" property="validityPeriod" jdbcType="INTEGER" />
+    <result column="expiry_type" property="expiryType" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name, point_name, is_virtual, is_made, description, amount, project_id, city_codes, 
+    product_ids, face_value, expiry_time, recharge_point_expiry_time, validity_period, 
+    expiry_type, status, ext_info, is_deleted, add_time, mod_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPOExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from point_exchange_code_batch
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from point_exchange_code_batch
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from point_exchange_code_batch
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPOExample" >
+    delete from point_exchange_code_batch
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO" >
+    insert into point_exchange_code_batch (id, name, point_name, 
+      is_virtual, is_made, description, 
+      amount, project_id, city_codes, 
+      product_ids, face_value, expiry_time, 
+      recharge_point_expiry_time, validity_period, 
+      expiry_type, status, ext_info, 
+      is_deleted, add_time, mod_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{pointName,jdbcType=VARCHAR}, 
+      #{isVirtual,jdbcType=TINYINT}, #{isMade,jdbcType=TINYINT}, #{description,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR}, 
+      #{productIds,jdbcType=VARCHAR}, #{faceValue,jdbcType=DECIMAL}, #{expiryTime,jdbcType=TIMESTAMP}, 
+      #{rechargePointExpiryTime,jdbcType=TIMESTAMP}, #{validityPeriod,jdbcType=INTEGER}, 
+      #{expiryType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{extInfo,jdbcType=VARCHAR}, 
+      #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO" >
+    insert into point_exchange_code_batch
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="pointName != null" >
+        point_name,
+      </if>
+      <if test="isVirtual != null" >
+        is_virtual,
+      </if>
+      <if test="isMade != null" >
+        is_made,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="cityCodes != null" >
+        city_codes,
+      </if>
+      <if test="productIds != null" >
+        product_ids,
+      </if>
+      <if test="faceValue != null" >
+        face_value,
+      </if>
+      <if test="expiryTime != null" >
+        expiry_time,
+      </if>
+      <if test="rechargePointExpiryTime != null" >
+        recharge_point_expiry_time,
+      </if>
+      <if test="validityPeriod != null" >
+        validity_period,
+      </if>
+      <if test="expiryType != null" >
+        expiry_type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="extInfo != null" >
+        ext_info,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="modTime != null" >
+        mod_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pointName != null" >
+        #{pointName,jdbcType=VARCHAR},
+      </if>
+      <if test="isVirtual != null" >
+        #{isVirtual,jdbcType=TINYINT},
+      </if>
+      <if test="isMade != null" >
+        #{isMade,jdbcType=TINYINT},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="cityCodes != null" >
+        #{cityCodes,jdbcType=VARCHAR},
+      </if>
+      <if test="productIds != null" >
+        #{productIds,jdbcType=VARCHAR},
+      </if>
+      <if test="faceValue != null" >
+        #{faceValue,jdbcType=DECIMAL},
+      </if>
+      <if test="expiryTime != null" >
+        #{expiryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rechargePointExpiryTime != null" >
+        #{rechargePointExpiryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="validityPeriod != null" >
+        #{validityPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="expiryType != null" >
+        #{expiryType,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="extInfo != null" >
+        #{extInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modTime != null" >
+        #{modTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPOExample" resultType="java.lang.Integer" >
+    select count(*) from point_exchange_code_batch
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update point_exchange_code_batch
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pointName != null" >
+        point_name = #{record.pointName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isVirtual != null" >
+        is_virtual = #{record.isVirtual,jdbcType=TINYINT},
+      </if>
+      <if test="record.isMade != null" >
+        is_made = #{record.isMade,jdbcType=TINYINT},
+      </if>
+      <if test="record.description != null" >
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.amount != null" >
+        amount = #{record.amount,jdbcType=INTEGER},
+      </if>
+      <if test="record.projectId != null" >
+        project_id = #{record.projectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.cityCodes != null" >
+        city_codes = #{record.cityCodes,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productIds != null" >
+        product_ids = #{record.productIds,jdbcType=VARCHAR},
+      </if>
+      <if test="record.faceValue != null" >
+        face_value = #{record.faceValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.expiryTime != null" >
+        expiry_time = #{record.expiryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.rechargePointExpiryTime != null" >
+        recharge_point_expiry_time = #{record.rechargePointExpiryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.validityPeriod != null" >
+        validity_period = #{record.validityPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="record.expiryType != null" >
+        expiry_type = #{record.expiryType,jdbcType=TINYINT},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.extInfo != null" >
+        ext_info = #{record.extInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDeleted != null" >
+        is_deleted = #{record.isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="record.addTime != null" >
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modTime != null" >
+        mod_time = #{record.modTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update point_exchange_code_batch
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      point_name = #{record.pointName,jdbcType=VARCHAR},
+      is_virtual = #{record.isVirtual,jdbcType=TINYINT},
+      is_made = #{record.isMade,jdbcType=TINYINT},
+      description = #{record.description,jdbcType=VARCHAR},
+      amount = #{record.amount,jdbcType=INTEGER},
+      project_id = #{record.projectId,jdbcType=INTEGER},
+      city_codes = #{record.cityCodes,jdbcType=VARCHAR},
+      product_ids = #{record.productIds,jdbcType=VARCHAR},
+      face_value = #{record.faceValue,jdbcType=DECIMAL},
+      expiry_time = #{record.expiryTime,jdbcType=TIMESTAMP},
+      recharge_point_expiry_time = #{record.rechargePointExpiryTime,jdbcType=TIMESTAMP},
+      validity_period = #{record.validityPeriod,jdbcType=INTEGER},
+      expiry_type = #{record.expiryType,jdbcType=TINYINT},
+      status = #{record.status,jdbcType=TINYINT},
+      ext_info = #{record.extInfo,jdbcType=VARCHAR},
+      is_deleted = #{record.isDeleted,jdbcType=TINYINT},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      mod_time = #{record.modTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO" >
+    update point_exchange_code_batch
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pointName != null" >
+        point_name = #{pointName,jdbcType=VARCHAR},
+      </if>
+      <if test="isVirtual != null" >
+        is_virtual = #{isVirtual,jdbcType=TINYINT},
+      </if>
+      <if test="isMade != null" >
+        is_made = #{isMade,jdbcType=TINYINT},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="cityCodes != null" >
+        city_codes = #{cityCodes,jdbcType=VARCHAR},
+      </if>
+      <if test="productIds != null" >
+        product_ids = #{productIds,jdbcType=VARCHAR},
+      </if>
+      <if test="faceValue != null" >
+        face_value = #{faceValue,jdbcType=DECIMAL},
+      </if>
+      <if test="expiryTime != null" >
+        expiry_time = #{expiryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rechargePointExpiryTime != null" >
+        recharge_point_expiry_time = #{rechargePointExpiryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="validityPeriod != null" >
+        validity_period = #{validityPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="expiryType != null" >
+        expiry_type = #{expiryType,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="extInfo != null" >
+        ext_info = #{extInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modTime != null" >
+        mod_time = #{modTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO" >
+    update point_exchange_code_batch
+    set name = #{name,jdbcType=VARCHAR},
+      point_name = #{pointName,jdbcType=VARCHAR},
+      is_virtual = #{isVirtual,jdbcType=TINYINT},
+      is_made = #{isMade,jdbcType=TINYINT},
+      description = #{description,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=INTEGER},
+      project_id = #{projectId,jdbcType=INTEGER},
+      city_codes = #{cityCodes,jdbcType=VARCHAR},
+      product_ids = #{productIds,jdbcType=VARCHAR},
+      face_value = #{faceValue,jdbcType=DECIMAL},
+      expiry_time = #{expiryTime,jdbcType=TIMESTAMP},
+      recharge_point_expiry_time = #{rechargePointExpiryTime,jdbcType=TIMESTAMP},
+      validity_period = #{validityPeriod,jdbcType=INTEGER},
+      expiry_type = #{expiryType,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      ext_info = #{extInfo,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      mod_time = #{modTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
