@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
  * @date 2018/12/9
  */
 @Service("serviceItemService")
-@Transactional(rollbackFor = Exception.class)
 public class ServiceItemServiceImpl implements ServiceItemService {
     @Autowired
     private ServiceItemPOMapper serviceItemPOMapper;

@@ -9,6 +9,8 @@ import com.jiazhe.youxiang.server.vo.BaseObject;
  */
 public class VoucherExchangeRecordDTO extends BaseObject {
 
+    private static final long serialVersionUID = 3062807199072680884L;
+
     private Integer id;
 
     private Integer voucherId;

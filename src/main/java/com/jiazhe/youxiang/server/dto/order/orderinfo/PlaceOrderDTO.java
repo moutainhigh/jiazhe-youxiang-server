@@ -13,6 +13,8 @@ import java.util.Date;
  */
 public class PlaceOrderDTO extends BaseObject {
 
+    private static final long serialVersionUID = 1198479968361607256L;
+
     private Byte type;
 
     private Integer customerId;

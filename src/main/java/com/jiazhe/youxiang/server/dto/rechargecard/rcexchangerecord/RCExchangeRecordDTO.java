@@ -11,6 +11,8 @@ import java.util.Date;
  */
 public class RCExchangeRecordDTO extends BaseObject {
 
+    private static final long serialVersionUID = 4747573226760027226L;
+
     private Integer id;
 
     private Integer rechargeCardId;

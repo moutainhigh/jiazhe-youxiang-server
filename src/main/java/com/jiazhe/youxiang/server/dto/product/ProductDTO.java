@@ -5,6 +5,8 @@
  */
 package com.jiazhe.youxiang.server.dto.product;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 import java.util.List;
 
 /**
@@ -13,7 +15,8 @@ import java.util.List;
  * @author niexiao
  * @created 2018/10/18
  */
-public class ProductDTO {
+public class ProductDTO extends BaseObject{
+    private static final long serialVersionUID = -4433094311734261831L;
     /**
      * 商品ID
      */

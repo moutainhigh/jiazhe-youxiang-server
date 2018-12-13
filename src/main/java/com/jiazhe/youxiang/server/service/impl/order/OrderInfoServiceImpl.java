@@ -55,7 +55,6 @@ import java.util.stream.Collectors;
  * @date 2018/11/7.
  */
 @Service("orderInfoService")
-@Transactional(rollbackFor = Exception.class)
 public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Autowired
@@ -105,6 +104,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         return dto;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void customerCancelOrder(Integer id) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
@@ -123,6 +123,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public BigDecimal customerPay(Integer orderId, BigDecimal payCash, String serialNumber) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(orderId);
@@ -161,6 +162,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         return left;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void orderCancelPass(Integer id) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
@@ -175,6 +177,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void orderCancelUnpass(Integer id, String auditReason) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
@@ -188,6 +191,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void userCancelOrder(Integer id) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
@@ -202,6 +206,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void userCompleteOrder(Integer id) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
@@ -209,6 +214,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public NeedPayResp placeOrder(PlaceOrderDTO dto) throws ParseException {
         List<OrderPaymentPO> orderPaymentPOList = Lists.newArrayList();
@@ -388,6 +394,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void appendOrder(AppendOrderDTO appendOrderDTO) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(appendOrderDTO.getOrderId());
@@ -501,6 +508,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public NeedPayResp customerPlaceOrder(PlaceOrderDTO dto) throws ParseException {
         List<OrderPaymentPO> orderPaymentPOList = Lists.newArrayList();

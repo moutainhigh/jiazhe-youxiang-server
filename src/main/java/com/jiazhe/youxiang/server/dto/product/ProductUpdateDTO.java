@@ -5,14 +5,17 @@
  */
 package com.jiazhe.youxiang.server.dto.product;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 /**
  * 在这里编写类的功能描述
  *
  * @author niexiao
  * @created 2018/10/30
  */
-public class ProductUpdateDTO {
+public class ProductUpdateDTO extends BaseObject{
 
+    private static final long serialVersionUID = -5221913951608425363L;
     /**
      * 商品ID
      */

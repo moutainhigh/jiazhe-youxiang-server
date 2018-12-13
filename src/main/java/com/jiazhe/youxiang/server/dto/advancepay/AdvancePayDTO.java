@@ -12,6 +12,8 @@ import java.util.Date;
  */
 public class AdvancePayDTO extends BaseObject {
 
+    private static final long serialVersionUID = -1049801025684813196L;
+
     private Integer id;
 
     private BigDecimal advancePay;

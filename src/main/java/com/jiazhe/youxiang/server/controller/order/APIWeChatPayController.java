@@ -46,12 +46,12 @@ import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("api/wxpay")
-public class WeChatPayController {
+public class APIWeChatPayController {
 
     @Autowired
     private OrderInfoBiz orderInfoBiz;
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(WeChatPayController.class);
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(APIWeChatPayController.class);
 
     @AppApi
     @ApiOperation(value = "微信统一下单", httpMethod = "POST", response = UnifiedOrderResp.class, notes = "微信统一下单")
@@ -63,14 +63,14 @@ public class WeChatPayController {
         wxparam.put("appid", WeChatPayConstant.APP_ID);
         wxparam.put("mch_id", WeChatPayConstant.MCH_ID);
         String nonceStr = RandomUtil.generateVerifyCode(32);
-        OrderInfoDTO orderInfoDTO = orderInfoBiz.getByOrderNo(req.getOut_trade_no());
+        OrderInfoDTO orderInfoDTO = orderInfoBiz.getByOrderNo(req.getOutTradeNo());
         if(null == orderInfoDTO){
             throw new OrderException(OrderCodeEnum.ORDER_NOT_EXIST);
         }
         wxparam.put("nonce_str", nonceStr);
         wxparam.put("body", req.getBody());
-        wxparam.put("out_trade_no", req.getOut_trade_no());
-        wxparam.put("total_fee", req.getTotal_fee());
+        wxparam.put("out_trade_no", req.getOutTradeNo());
+        wxparam.put("total_fee", req.getTotalFee());
         wxparam.put("spbill_create_ip", IpAdrressUtil.getIpAdrress(request));
         wxparam.put("notify_url", WeChatPayConstant.NOTIFY_URL);
         wxparam.put("trade_type", WeChatPayConstant.TRADE_TYPE);

@@ -16,6 +16,7 @@ import java.io.Serializable;
 public class AddressDTO implements Serializable {
 
     private static final long serialVersionUID = -3643680631608388108L;
+
     /**
      * 关联的客户ID,必填
      */

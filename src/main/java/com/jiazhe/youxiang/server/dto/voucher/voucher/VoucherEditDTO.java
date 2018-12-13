@@ -13,6 +13,8 @@ import java.util.Date;
  */
 public class VoucherEditDTO extends BaseObject {
 
+    private static final long serialVersionUID = -5249943207183544890L;
+
     private Integer id;
 
     private String cityCodes;

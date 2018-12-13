@@ -11,6 +11,8 @@ import java.util.Date;
  */
 public class ServiceItemDTO extends BaseObject {
 
+    private static final long serialVersionUID = 5786942737198739191L;
+
     private Integer id;
 
     private String name;

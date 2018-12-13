@@ -12,6 +12,8 @@ import java.util.Date;
  */
 public class RCExchangeCodeBatchSaveDTO extends BaseObject {
 
+    private static final long serialVersionUID = -4966611817676061229L;
+
     private Integer id;
 
     private String name;

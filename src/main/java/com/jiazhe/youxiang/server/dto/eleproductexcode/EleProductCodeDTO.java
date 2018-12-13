@@ -12,6 +12,8 @@ import java.util.Date;
  */
 public class EleProductCodeDTO extends BaseObject {
 
+    private static final long serialVersionUID = 8953367776219805313L;
+
     private Integer id;
 
     private Integer productId;

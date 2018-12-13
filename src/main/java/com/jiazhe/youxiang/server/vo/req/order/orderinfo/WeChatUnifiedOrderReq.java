@@ -16,13 +16,13 @@ public class WeChatUnifiedOrderReq extends BaseVO{
     private String body;
 
     @ApiModelProperty("订单号")
-    private String out_trade_no;
+    private String outTradeNo;
 
     @ApiModelProperty("支付金额，以分为单位")
-    private Integer total_fee;
+    private Integer totalFee;
 
     @ApiModelProperty("支付用户open_id")
-    private String open_id;
+    private String openId;
 
     public String getBody() {
         return body;
@@ -32,27 +32,27 @@ public class WeChatUnifiedOrderReq extends BaseVO{
         this.body = body;
     }
 
-    public String getOut_trade_no() {
-        return out_trade_no;
+    public String getOutTradeNo() {
+        return outTradeNo;
     }
 
-    public void setOut_trade_no(String out_trade_no) {
-        this.out_trade_no = out_trade_no;
+    public void setOutTradeNo(String outTradeNo) {
+        this.outTradeNo = outTradeNo;
     }
 
-    public Integer getTotal_fee() {
-        return total_fee;
+    public Integer getTotalFee() {
+        return totalFee;
     }
 
-    public void setTotal_fee(Integer total_fee) {
-        this.total_fee = total_fee;
+    public void setTotalFee(Integer totalFee) {
+        this.totalFee = totalFee;
     }
 
-    public String getOpen_id() {
-        return open_id;
+    public String getOpenId() {
+        return openId;
     }
 
-    public void setOpen_id(String open_id) {
-        this.open_id = open_id;
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

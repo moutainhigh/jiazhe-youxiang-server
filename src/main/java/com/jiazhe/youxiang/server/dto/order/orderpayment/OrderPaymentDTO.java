@@ -12,6 +12,8 @@ import java.math.BigDecimal;
  */
 public class OrderPaymentDTO extends BaseObject {
 
+    private static final long serialVersionUID = 1873099784488178942L;
+
     private Integer id;
 
     private String orderCode;

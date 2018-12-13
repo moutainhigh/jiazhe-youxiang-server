@@ -13,6 +13,8 @@ import java.util.Date;
  */
 public class UserReservationOrderDTO extends BaseObject {
 
+    private static final long serialVersionUID = -5146329092962661235L;
+
     private Integer orderId;
 
     private String workerName;

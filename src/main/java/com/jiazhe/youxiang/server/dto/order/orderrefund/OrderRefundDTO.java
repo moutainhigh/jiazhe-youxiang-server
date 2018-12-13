@@ -12,6 +12,8 @@ import java.util.Date;
  */
 public class OrderRefundDTO extends BaseObject {
 
+    private static final long serialVersionUID = 6589158636539180860L;
+
     private Integer id;
 
     private String orderCode;

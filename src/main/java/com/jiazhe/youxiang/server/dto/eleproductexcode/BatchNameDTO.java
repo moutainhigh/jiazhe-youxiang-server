@@ -9,6 +9,8 @@ import com.jiazhe.youxiang.server.vo.BaseObject;
  */
 public class BatchNameDTO extends BaseObject {
 
+    private static final long serialVersionUID = 2273983701750899124L;
+
     private String name ;
 
     public String getName() {

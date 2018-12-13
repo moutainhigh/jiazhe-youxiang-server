@@ -12,6 +12,8 @@ import java.util.Date;
  */
 public class AuditRecordDTO extends BaseObject {
 
+    private static final long serialVersionUID = -5810254475809554514L;
+
     private Integer id;
 
     private Integer rechargeCardId;

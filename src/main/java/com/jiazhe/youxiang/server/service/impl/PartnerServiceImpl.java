@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
  * @date 2018/12/9
  */
 @Service("partnerService")
-@Transactional(rollbackFor = Exception.class)
 public class PartnerServiceImpl implements PartnerService {
     @Autowired
     private PartnerPOMapper partnerPOMapper;

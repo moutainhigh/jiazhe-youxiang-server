@@ -42,7 +42,6 @@ import java.util.stream.Collectors;
  * @date 2018/11/20.
  */
 @Service("auditRecordService")
-@Transactional(rollbackFor = Exception.class)
 public class AuditRecordServiceImpl implements AuditRecordService {
 
     @Autowired
@@ -98,6 +97,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void auditRecordPass(Integer auditRecordId, Integer version, Integer batchId) {
         AuditRecordPO auditRecordPO = auditRecordPOMapper.selectByPrimaryKey(auditRecordId);

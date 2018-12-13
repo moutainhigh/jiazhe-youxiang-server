@@ -9,6 +9,8 @@ import com.jiazhe.youxiang.server.vo.BaseObject;
  */
 public class SysUserRoleDTO extends BaseObject {
 
+    private static final long serialVersionUID = 5557152588900589210L;
+
     private Integer id;
 
     private Integer userId;

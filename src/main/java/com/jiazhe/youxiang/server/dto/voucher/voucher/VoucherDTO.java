@@ -14,6 +14,8 @@ import java.util.Date;
  */
 public class VoucherDTO extends BaseObject {
 
+    private static final long serialVersionUID = 7763521783096653317L;
+
     private Integer id;
 
     private String name;

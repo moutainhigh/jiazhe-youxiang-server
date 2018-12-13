@@ -13,6 +13,8 @@ import java.math.BigDecimal;
  */
 public class AppendOrderDTO extends BaseObject {
 
+    private static final long serialVersionUID = -8243202991008065231L;
+
     private Integer orderId;
 
     private Integer count;

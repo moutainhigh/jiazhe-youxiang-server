@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
  * @date 2018/12/9
  */
 @Service("partnerOrderInfoService")
-@Transactional(rollbackFor = Exception.class)
 public class PartnerOrderInfoServiceImpl implements PartnerOrderInfoService {
 
     @Autowired

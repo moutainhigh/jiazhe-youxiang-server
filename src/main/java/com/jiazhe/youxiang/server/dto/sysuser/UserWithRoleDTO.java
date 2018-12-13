@@ -11,6 +11,8 @@ import java.util.Date;
  */
 public class UserWithRoleDTO extends BaseObject {
 
+    private static final long serialVersionUID = -2506514569930577071L;
+
     private Integer id;
 
     private String mobile;

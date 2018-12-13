@@ -11,6 +11,8 @@ import java.util.Date;
  */
 public class VoucherExchangeCodeDTO extends BaseObject {
 
+    private static final long serialVersionUID = -7270754279593747411L;
+
     private Integer id;
 
     private Integer batchId;

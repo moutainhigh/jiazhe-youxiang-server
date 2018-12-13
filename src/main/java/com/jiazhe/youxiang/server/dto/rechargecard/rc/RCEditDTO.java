@@ -13,6 +13,8 @@ import java.util.Date;
  */
 public class RCEditDTO extends BaseObject {
 
+    private static final long serialVersionUID = 7265932338117984398L;
+
     private Integer id;
 
     private String cityCodes;

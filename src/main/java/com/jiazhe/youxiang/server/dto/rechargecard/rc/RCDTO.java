@@ -14,6 +14,8 @@ import java.util.Date;
  */
 public class RCDTO extends BaseObject {
 
+    private static final long serialVersionUID = -7779771272762567263L;
+
     private Integer id;
 
     private String name;

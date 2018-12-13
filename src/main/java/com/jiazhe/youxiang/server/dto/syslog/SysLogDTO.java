@@ -5,6 +5,8 @@
  */
 package com.jiazhe.youxiang.server.dto.syslog;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 import java.util.Date;
 
 /**
@@ -13,8 +15,9 @@ import java.util.Date;
  * @author niexiao
  * @created 2018/10/17
  */
-public class SysLogDTO {
+public class SysLogDTO extends BaseObject{
 
+    private static final long serialVersionUID = 2789376780207198013L;
     /**
      * ID
      */

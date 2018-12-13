@@ -10,6 +10,8 @@ import java.util.Date;
  */
 public class SysRolePermissionDTO extends BaseObject {
 
+    private static final long serialVersionUID = -6896992881908407547L;
+
     private Integer id;
 
     private Integer roleId;

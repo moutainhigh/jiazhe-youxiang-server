@@ -16,6 +16,8 @@ import java.util.Date;
  */
 public class SysRoleDTO extends BaseObject {
 
+    private static final long serialVersionUID = 6305284462567729237L;
+
     private Integer id;
 
     private String name;

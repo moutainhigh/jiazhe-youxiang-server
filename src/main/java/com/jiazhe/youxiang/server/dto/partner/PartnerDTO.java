@@ -11,6 +11,8 @@ import java.util.Date;
  */
 public class PartnerDTO extends BaseObject {
 
+    private static final long serialVersionUID = 400804155848602154L;
+
     private Integer id;
 
     private String name;

@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
  * @date 2018/11/12.
  */
 @Service("eleProductCodeService")
-@Transactional(rollbackFor = Exception.class)
 public class EleProductCodeServiceImpl implements EleProductCodeService {
 
     @Autowired

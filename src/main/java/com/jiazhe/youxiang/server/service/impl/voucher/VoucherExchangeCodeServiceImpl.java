@@ -75,6 +75,7 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
         return voucherExchangeCodePOList.stream().map(VoucherExchangeCodeAdapter::PO2DTO).collect(Collectors.toList());
     }
 
+    @Transactional(rollbackFor=Exception.class)
     @Override
     public void updateWithBatch(VoucherExchangeCodeBatchSaveDTO batchSaveDTO) {
         VoucherExchangeCodePOExample example = new VoucherExchangeCodePOExample();
@@ -102,6 +103,7 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
         }
     }
 
+    @Transactional(rollbackFor=Exception.class)
     @Override
     public void batchChangeStatus(Integer batchId, Byte status) {
         voucherExchangeCodePOManualMapper.batchChangeStatus(batchId,status);
@@ -156,6 +158,7 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
         voucherExchangeCodePOMapper.updateByPrimaryKeySelective(voucherExchangeCodePO);
     }
 
+    @Transactional(rollbackFor=Exception.class)
     @Override
     public void codeCharge(Integer exchangeType, Integer id, String keyt) {
         VoucherExchangeCodePO voucherExchangeCodePO = findByKeyt(keyt);

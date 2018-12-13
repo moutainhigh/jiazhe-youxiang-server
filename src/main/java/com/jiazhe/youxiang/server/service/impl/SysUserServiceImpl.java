@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.Date;
@@ -64,6 +65,7 @@ public class SysUserServiceImpl implements SysUserService{
         return sysUserPOList.stream().map(SysUserAdapter::PO2DTO).collect(Collectors.toList());
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteUserWithRole(Integer userId) {
         SysUserPO sysUserPO = sysUserPOMapper.selectByPrimaryKey(userId);
@@ -111,6 +113,7 @@ public class SysUserServiceImpl implements SysUserService{
         return SysUserAdapter.PO2DTO(sysUserPO);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveUserWithRole(boolean isAdd, SysUserDTO sysUserDTO, List<SysUserRoleDTO> newRolesDto, List<SysUserRoleDTO> oldRolesDto) {
         SysUserPO sysUserPO = SysUserAdapter.DTO2PO(sysUserDTO);
