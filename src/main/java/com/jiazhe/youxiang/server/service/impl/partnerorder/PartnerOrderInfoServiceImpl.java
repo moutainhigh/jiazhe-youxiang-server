@@ -1,23 +1,19 @@
 package com.jiazhe.youxiang.server.service.impl.partnerorder;
 
-import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.adapter.partnerorder.PartnerOrderInfoAdapter;
 import com.jiazhe.youxiang.server.dao.mapper.PartnerOrderInfoPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.partnerorder.PartnerOrderInfoPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.*;
 import com.jiazhe.youxiang.server.dto.advancepay.AdvancePayDTO;
-import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
-import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.partner.PartnerDTO;
 import com.jiazhe.youxiang.server.dto.partnerorder.PartnerOrderInfoDTO;
-import com.jiazhe.youxiang.server.dto.product.ProductDTO;
 import com.jiazhe.youxiang.server.dto.serviceitem.ServiceItemDTO;
 import com.jiazhe.youxiang.server.service.PartnerService;
 import com.jiazhe.youxiang.server.service.ServiceItemService;
 import com.jiazhe.youxiang.server.service.advancepay.AdvancePayService;
 import com.jiazhe.youxiang.server.service.partnerorder.PartnerOrderInfoService;
 import com.jiazhe.youxiang.server.vo.Paging;
-import com.jiazhe.youxiang.server.vo.resp.partnerorder.ThreeMoneyResp;
+import com.jiazhe.youxiang.server.vo.resp.partnerorder.OverviewMoneyResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,8 +60,8 @@ public class PartnerOrderInfoServiceImpl implements PartnerOrderInfoService {
     }
 
     @Override
-    public ThreeMoneyResp calThreeMoney(Date timeStart, Date timeEnd) {
-        ThreeMoneyResp threeMoneyResp = new ThreeMoneyResp();
+    public OverviewMoneyResp calOverviewMoney(Date timeStart, Date timeEnd) {
+        OverviewMoneyResp overviewMoneyResp = new OverviewMoneyResp();
         PartnerOrderInfoPOExample pExample = new PartnerOrderInfoPOExample();
         PartnerOrderInfoPOExample.Criteria pCriteria = pExample.createCriteria();
         if (timeStart != null) {
@@ -79,14 +75,14 @@ public class PartnerOrderInfoServiceImpl implements PartnerOrderInfoService {
         if (!pPOList.isEmpty()) {
             BigDecimal prePay = pPOList.stream().map(PartnerOrderInfoPO::getPrePay).reduce(BigDecimal.ZERO, BigDecimal::add);
             BigDecimal appendPay = pPOList.stream().map(PartnerOrderInfoPO::getAppendPay).reduce(BigDecimal.ZERO, BigDecimal::add);
-            threeMoneyResp.setSpend(prePay.add(appendPay));
+            overviewMoneyResp.setSpend(prePay.add(appendPay));
         }
         List<AdvancePayDTO> aPOList = advancePayService.getList(timeStart, timeEnd);
         if (!aPOList.isEmpty()) {
-            threeMoneyResp.setTotal(aPOList.stream().map(AdvancePayDTO::getAdvancePay).reduce(BigDecimal.ZERO, BigDecimal::add));
+            overviewMoneyResp.setTotal(aPOList.stream().map(AdvancePayDTO::getAdvancePay).reduce(BigDecimal.ZERO, BigDecimal::add));
         }
-        threeMoneyResp.setLeft(threeMoneyResp.getTotal().subtract(threeMoneyResp.getSpend()));
-        return threeMoneyResp;
+        overviewMoneyResp.setLeft(overviewMoneyResp.getTotal().subtract(overviewMoneyResp.getSpend()));
+        return overviewMoneyResp;
     }
 
     @Override

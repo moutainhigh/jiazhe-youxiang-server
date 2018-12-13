@@ -136,7 +136,7 @@
                                     <div class="profile-info-name"> 预支、消费情况</div>
                                     <div class="profile-info-value">
                                         <!--<a class="btn btn-minier btn-default" href="javascript:showOrder(1)">刷新</a>-->
-                                        <a href="javascript:refreshThreeMoney()" data-action="reload">
+                                        <a href="javascript:refreshOverviewMoney()" data-action="reload">
                                             <i class="ace-icon fa fa-refresh"></i>
                                         </a>
                                     </div>
@@ -651,7 +651,7 @@
 
         initTable(grid_selector, pager_selector, tableOption);
 
-        refreshThreeMoney();
+        refreshOverviewMoney();
     });
 
     function search() {
@@ -659,7 +659,7 @@
             url: "/api/partnerorderinfo/listpage",
             postData: transformToJson($('#partnerOrderInfoSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
-        refreshThreeMoney();
+        refreshOverviewMoney();
         return false;
     }
 
@@ -751,18 +751,18 @@
             success: function (data) {
                 $("#modal-partnerOrder").modal('hide');
                 jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                refreshThreeMoney();
+                refreshOverviewMoney();
             },
             error: error
         });
     }
 
-    function refreshThreeMoney() {
+    function refreshOverviewMoney() {
         $("#total").html("加载中...");
         $("#spend").html("加载中...");
         $("#left").html("加载中...");
         $.ajax({
-            url: "/api/partnerorderinfo/calthreemoney",
+            url: "/api/partnerorderinfo/caloverviewmoney",
             dataType: "json",
             async: false,
             data: transformToJson($('#partnerOrderInfoSearchForm').serializeArray()),
@@ -850,7 +850,7 @@
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
-                    refreshThreeMoney();
+                    refreshOverviewMoney();
                     $("#modal-advancePay").modal('hide');
                 }
             },

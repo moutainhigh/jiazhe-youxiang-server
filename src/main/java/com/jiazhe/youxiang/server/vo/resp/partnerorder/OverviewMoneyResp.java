@@ -10,9 +10,9 @@ import java.math.BigDecimal;
  * @description 预付金额、消费总金额和余额
  * @date 2018/12/10.
  */
-public class ThreeMoneyResp extends BaseVO {
+public class OverviewMoneyResp extends BaseVO {
 
-    public ThreeMoneyResp(){
+    public OverviewMoneyResp(){
         this.total = BigDecimal.ZERO;
         this.spend = BigDecimal.ZERO;
         this.left = BigDecimal.ZERO;

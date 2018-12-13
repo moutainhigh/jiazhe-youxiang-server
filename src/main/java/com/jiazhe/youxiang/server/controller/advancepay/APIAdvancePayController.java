@@ -12,7 +12,7 @@ import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.AdvancePaySaveReq;
 import com.jiazhe.youxiang.server.vo.req.partnerorder.PartnerOrderInfoPageReq;
 import com.jiazhe.youxiang.server.vo.resp.advancepay.AdvancePayResp;
-import com.jiazhe.youxiang.server.vo.resp.partnerorder.ThreeMoneyResp;
+import com.jiazhe.youxiang.server.vo.resp.partnerorder.OverviewMoneyResp;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;

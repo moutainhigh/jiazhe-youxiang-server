@@ -1,9 +1,8 @@
 package com.jiazhe.youxiang.server.service.partnerorder;
 
-import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.partnerorder.PartnerOrderInfoDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
-import com.jiazhe.youxiang.server.vo.resp.partnerorder.ThreeMoneyResp;
+import com.jiazhe.youxiang.server.vo.resp.partnerorder.OverviewMoneyResp;
 
 import java.util.Date;
 import java.util.List;
@@ -17,7 +16,7 @@ public interface PartnerOrderInfoService {
 
     List<PartnerOrderInfoDTO> getList(Byte status, String customerCityCode, Integer partnerId, Integer serviceItemId, Date serviceTimeStart, Date serviceTimeEnd, String customerMobile, Paging paging);
 
-    ThreeMoneyResp calThreeMoney(Date timeStart, Date timeEnd);
+    OverviewMoneyResp calOverviewMoney(Date timeStart, Date timeEnd);
 
     PartnerOrderInfoDTO getById(Integer id);
 

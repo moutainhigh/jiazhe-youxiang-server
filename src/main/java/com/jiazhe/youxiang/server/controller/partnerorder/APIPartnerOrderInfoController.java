@@ -2,24 +2,19 @@ package com.jiazhe.youxiang.server.controller.partnerorder;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
-import com.jiazhe.youxiang.server.adapter.PartnerAdapter;
-import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.adapter.partnerorder.PartnerOrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.partnerorder.PartnerOrderInfoBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
-import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.partnerorder.PartnerOrderInfoDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderInfoPageReq;
 import com.jiazhe.youxiang.server.vo.req.partnerorder.PartnerOrderInfoPageReq;
 import com.jiazhe.youxiang.server.vo.req.partnerorder.PartnerOrderSaveReq;
-import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
+import com.jiazhe.youxiang.server.vo.resp.partnerorder.OverviewMoneyResp;
 import com.jiazhe.youxiang.server.vo.resp.partnerorder.PartnerOrderInfoResp;
-import com.jiazhe.youxiang.server.vo.resp.partnerorder.ThreeMoneyResp;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -80,13 +75,13 @@ public class APIPartnerOrderInfoController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "【后台】查询预付款相关信息", httpMethod = "GET", response = ThreeMoneyResp.class, responseContainer = "List", notes = "【后台】查询预付款相关信息")
-    @RequestMapping(value = "/calthreemoney", method = RequestMethod.GET)
+    @ApiOperation(value = "【后台】查询预付款相关信息", httpMethod = "GET", response = OverviewMoneyResp.class, responseContainer = "List", notes = "【后台】查询预付款相关信息")
+    @RequestMapping(value = "/caloverviewmoney", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "查询预付款相关信息", level = LogLevelEnum.LEVEL_1)
-    public Object calThreeMoney(@ModelAttribute PartnerOrderInfoPageReq req) {
+    public Object calOverviewMoney(@ModelAttribute PartnerOrderInfoPageReq req) {
         Date timeStart = req.getServiceTimeStart() == 0 ? null : new Date(req.getServiceTimeStart());
         Date timeEnd = req.getServiceTimeEnd() == 0 ? null : new Date(req.getServiceTimeEnd());
-        ThreeMoneyResp resp = partnerOrderInfoBiz.calThreeMoney(timeStart,timeEnd);
+        OverviewMoneyResp resp = partnerOrderInfoBiz.calOverviewMoney(timeStart,timeEnd);
         return ResponseFactory.buildResponse(resp);
     }
 }
