@@ -29,7 +29,7 @@ public class PointExchangeCodeBatchPO implements Serializable {
 
     private Date expiryTime;
 
-    private Date rechargePointExpiryTime;
+    private Date pointExpiryTime;
 
     private Integer validityPeriod;
 
@@ -143,12 +143,12 @@ public class PointExchangeCodeBatchPO implements Serializable {
         this.expiryTime = expiryTime;
     }
 
-    public Date getRechargePointExpiryTime() {
-        return rechargePointExpiryTime;
+    public Date getPointExpiryTime() {
+        return pointExpiryTime;
     }
 
-    public void setRechargePointExpiryTime(Date rechargePointExpiryTime) {
-        this.rechargePointExpiryTime = rechargePointExpiryTime;
+    public void setPointExpiryTime(Date pointExpiryTime) {
+        this.pointExpiryTime = pointExpiryTime;
     }
 
     public Integer getValidityPeriod() {

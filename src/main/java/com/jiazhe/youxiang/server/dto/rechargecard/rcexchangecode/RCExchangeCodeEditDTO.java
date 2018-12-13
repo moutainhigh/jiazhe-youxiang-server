@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -8,7 +10,9 @@ import java.util.Date;
  * @description：
  * @date 2018/10/21
  */
-public class RCExchangeCodeEditDTO {
+public class RCExchangeCodeEditDTO extends BaseObject {
+
+    private static final long serialVersionUID = -2191285881552897331L;
 
     private Integer id;
 

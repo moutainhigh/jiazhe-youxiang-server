@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.Date;
@@ -100,6 +101,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         return SysRoleAdapter.PO2DTO(sysRolePO);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveRoleWithPerm(boolean isAdd, SysRoleDTO sysRoleDTO, List<SysRolePermissionDTO> newPermsDto, List<SysRolePermissionDTO> oldPermsDto) {
         SysRolePO sysRolePO = SysRoleAdapter.DTO2PO(sysRoleDTO);

@@ -71,12 +71,47 @@
                 <b class="arrow"></b>
             </li>
 
+            <!--<li class="">-->
+                <!--<a th:href="@{/order/orderindex}" target="iframeCenter">-->
+                    <!--<i class="menu-icon fa fa-list-ul"></i>-->
+                    <!--<span class="menu-text"> 订单管理 </span>-->
+                <!--</a>-->
+                <!--<b class="arrow"></b>-->
+            <!--</li>-->
+
+            <!--<li class="">-->
+                <!--<a th:href="@{/partnerorder/index}" target="iframeCenter">-->
+                    <!--<i class="menu-icon fa fa-list-ul"></i>-->
+                    <!--<span class="menu-text"> 商家订单记录 </span>-->
+                <!--</a>-->
+                <!--<b class="arrow"></b>-->
+            <!--</li>-->
+
             <li class="">
-                <a th:href="@{/order/orderindex}" target="iframeCenter">
+                <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-list-ul"></i>
-                    <span class="menu-text"> 订单管理 </span>
+                    <span class="menu-text">订单管理</span>
+                    <b class="arrow fa fa-angle-down"></b>
                 </a>
+
                 <b class="arrow"></b>
+
+                <ul class="submenu">
+
+                    <li class="">
+                        <a th:href="@{/order/orderindex}" target="iframeCenter">
+                            内部订单
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
+                        <a th:href="@{/partnerorder/index}" target="iframeCenter">
+                            商家订单
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                </ul>
             </li>
 
             <li class="">
@@ -105,6 +140,20 @@
                 <b class="arrow"></b>
 
                 <ul class="submenu">
+
+                    <li class="">
+                        <a th:href="@{/infosearch/pointcodeindex}" target="iframeCenter">
+                            积分兑换码查询
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+
+                    <li class="">
+                        <a th:href="@{/infosearch/pointindex}" target="iframeCenter">
+                            积分查询
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
 
                     <li class="">
                         <a th:href="@{/infosearch/rechargecardcodeindex}" target="iframeCenter">
@@ -146,6 +195,13 @@
                 <b class="arrow"></b>
 
                 <ul class="submenu">
+
+                    <li class="">
+                        <a th:href="@{/point/exchangecodebatchindex}" target="iframeCenter">
+                            积分兑换码管理
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
 
                     <li class="">
                         <a th:href="@{/rechargecard/exchangecodebatchindex}" target="iframeCenter">

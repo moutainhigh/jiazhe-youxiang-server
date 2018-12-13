@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.server.dto.sysuser;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -8,7 +10,7 @@ import java.util.Date;
  * @description：
  * @date 2018/10/19
  */
-public class SysUserDTO implements Serializable {
+public class SysUserDTO extends BaseObject {
 
     private static final long serialVersionUID = 3868043216372041696L;
 

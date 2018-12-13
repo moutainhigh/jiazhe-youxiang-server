@@ -5,7 +5,7 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="batch_id" property="batchId" jdbcType="INTEGER" />
     <result column="batch_name" property="batchName" jdbcType="VARCHAR" />
-    <result column="recharge_point_name" property="rechargePointName" jdbcType="VARCHAR" />
+    <result column="point_name" property="pointName" jdbcType="VARCHAR" />
     <result column="batch_description" property="batchDescription" jdbcType="VARCHAR" />
     <result column="project_id" property="projectId" jdbcType="INTEGER" />
     <result column="city_codes" property="cityCodes" jdbcType="VARCHAR" />
@@ -14,7 +14,7 @@
     <result column="keyt" property="keyt" jdbcType="VARCHAR" />
     <result column="face_value" property="faceValue" jdbcType="DECIMAL" />
     <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
-    <result column="recharge_point_expiry_time" property="rechargePointExpiryTime" jdbcType="TIMESTAMP" />
+    <result column="point_expiry_time" property="pointExpiryTime" jdbcType="TIMESTAMP" />
     <result column="validity_period" property="validityPeriod" jdbcType="INTEGER" />
     <result column="expiry_type" property="expiryType" jdbcType="TINYINT" />
     <result column="status" property="status" jdbcType="TINYINT" />
@@ -84,8 +84,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, batch_id, batch_name, recharge_point_name, batch_description, project_id, city_codes, 
-    product_ids, code, keyt, face_value, expiry_time, recharge_point_expiry_time, validity_period, 
+    id, batch_id, batch_name, point_name, batch_description, project_id, city_codes, 
+    product_ids, code, keyt, face_value, expiry_time, point_expiry_time, validity_period, 
     expiry_type, status, used, customer_id, ext_info, is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodePOExample" >
@@ -120,21 +120,21 @@
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO" >
     insert into point_exchange_code (id, batch_id, batch_name, 
-      recharge_point_name, batch_description, project_id, 
+      point_name, batch_description, project_id, 
       city_codes, product_ids, code, 
       keyt, face_value, expiry_time, 
-      recharge_point_expiry_time, validity_period, 
-      expiry_type, status, used, 
-      customer_id, ext_info, is_deleted, 
-      add_time, mod_time)
+      point_expiry_time, validity_period, expiry_type, 
+      status, used, customer_id, 
+      ext_info, is_deleted, add_time, 
+      mod_time)
     values (#{id,jdbcType=INTEGER}, #{batchId,jdbcType=INTEGER}, #{batchName,jdbcType=VARCHAR}, 
-      #{rechargePointName,jdbcType=VARCHAR}, #{batchDescription,jdbcType=VARCHAR}, #{projectId,jdbcType=INTEGER}, 
+      #{pointName,jdbcType=VARCHAR}, #{batchDescription,jdbcType=VARCHAR}, #{projectId,jdbcType=INTEGER}, 
       #{cityCodes,jdbcType=VARCHAR}, #{productIds,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
       #{keyt,jdbcType=VARCHAR}, #{faceValue,jdbcType=DECIMAL}, #{expiryTime,jdbcType=TIMESTAMP}, 
-      #{rechargePointExpiryTime,jdbcType=TIMESTAMP}, #{validityPeriod,jdbcType=INTEGER}, 
-      #{expiryType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{used,jdbcType=TINYINT}, 
-      #{customerId,jdbcType=INTEGER}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
-      #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
+      #{pointExpiryTime,jdbcType=TIMESTAMP}, #{validityPeriod,jdbcType=INTEGER}, #{expiryType,jdbcType=TINYINT}, 
+      #{status,jdbcType=TINYINT}, #{used,jdbcType=TINYINT}, #{customerId,jdbcType=INTEGER}, 
+      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO" >
     insert into point_exchange_code
@@ -148,8 +148,8 @@
       <if test="batchName != null" >
         batch_name,
       </if>
-      <if test="rechargePointName != null" >
-        recharge_point_name,
+      <if test="pointName != null" >
+        point_name,
       </if>
       <if test="batchDescription != null" >
         batch_description,
@@ -175,8 +175,8 @@
       <if test="expiryTime != null" >
         expiry_time,
       </if>
-      <if test="rechargePointExpiryTime != null" >
-        recharge_point_expiry_time,
+      <if test="pointExpiryTime != null" >
+        point_expiry_time,
       </if>
       <if test="validityPeriod != null" >
         validity_period,
@@ -216,8 +216,8 @@
       <if test="batchName != null" >
         #{batchName,jdbcType=VARCHAR},
       </if>
-      <if test="rechargePointName != null" >
-        #{rechargePointName,jdbcType=VARCHAR},
+      <if test="pointName != null" >
+        #{pointName,jdbcType=VARCHAR},
       </if>
       <if test="batchDescription != null" >
         #{batchDescription,jdbcType=VARCHAR},
@@ -243,8 +243,8 @@
       <if test="expiryTime != null" >
         #{expiryTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="rechargePointExpiryTime != null" >
-        #{rechargePointExpiryTime,jdbcType=TIMESTAMP},
+      <if test="pointExpiryTime != null" >
+        #{pointExpiryTime,jdbcType=TIMESTAMP},
       </if>
       <if test="validityPeriod != null" >
         #{validityPeriod,jdbcType=INTEGER},
@@ -293,8 +293,8 @@
       <if test="record.batchName != null" >
         batch_name = #{record.batchName,jdbcType=VARCHAR},
       </if>
-      <if test="record.rechargePointName != null" >
-        recharge_point_name = #{record.rechargePointName,jdbcType=VARCHAR},
+      <if test="record.pointName != null" >
+        point_name = #{record.pointName,jdbcType=VARCHAR},
       </if>
       <if test="record.batchDescription != null" >
         batch_description = #{record.batchDescription,jdbcType=VARCHAR},
@@ -320,8 +320,8 @@
       <if test="record.expiryTime != null" >
         expiry_time = #{record.expiryTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.rechargePointExpiryTime != null" >
-        recharge_point_expiry_time = #{record.rechargePointExpiryTime,jdbcType=TIMESTAMP},
+      <if test="record.pointExpiryTime != null" >
+        point_expiry_time = #{record.pointExpiryTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.validityPeriod != null" >
         validity_period = #{record.validityPeriod,jdbcType=INTEGER},
@@ -360,7 +360,7 @@
     set id = #{record.id,jdbcType=INTEGER},
       batch_id = #{record.batchId,jdbcType=INTEGER},
       batch_name = #{record.batchName,jdbcType=VARCHAR},
-      recharge_point_name = #{record.rechargePointName,jdbcType=VARCHAR},
+      point_name = #{record.pointName,jdbcType=VARCHAR},
       batch_description = #{record.batchDescription,jdbcType=VARCHAR},
       project_id = #{record.projectId,jdbcType=INTEGER},
       city_codes = #{record.cityCodes,jdbcType=VARCHAR},
@@ -369,7 +369,7 @@
       keyt = #{record.keyt,jdbcType=VARCHAR},
       face_value = #{record.faceValue,jdbcType=DECIMAL},
       expiry_time = #{record.expiryTime,jdbcType=TIMESTAMP},
-      recharge_point_expiry_time = #{record.rechargePointExpiryTime,jdbcType=TIMESTAMP},
+      point_expiry_time = #{record.pointExpiryTime,jdbcType=TIMESTAMP},
       validity_period = #{record.validityPeriod,jdbcType=INTEGER},
       expiry_type = #{record.expiryType,jdbcType=TINYINT},
       status = #{record.status,jdbcType=TINYINT},
@@ -392,8 +392,8 @@
       <if test="batchName != null" >
         batch_name = #{batchName,jdbcType=VARCHAR},
       </if>
-      <if test="rechargePointName != null" >
-        recharge_point_name = #{rechargePointName,jdbcType=VARCHAR},
+      <if test="pointName != null" >
+        point_name = #{pointName,jdbcType=VARCHAR},
       </if>
       <if test="batchDescription != null" >
         batch_description = #{batchDescription,jdbcType=VARCHAR},
@@ -419,8 +419,8 @@
       <if test="expiryTime != null" >
         expiry_time = #{expiryTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="rechargePointExpiryTime != null" >
-        recharge_point_expiry_time = #{rechargePointExpiryTime,jdbcType=TIMESTAMP},
+      <if test="pointExpiryTime != null" >
+        point_expiry_time = #{pointExpiryTime,jdbcType=TIMESTAMP},
       </if>
       <if test="validityPeriod != null" >
         validity_period = #{validityPeriod,jdbcType=INTEGER},
@@ -456,7 +456,7 @@
     update point_exchange_code
     set batch_id = #{batchId,jdbcType=INTEGER},
       batch_name = #{batchName,jdbcType=VARCHAR},
-      recharge_point_name = #{rechargePointName,jdbcType=VARCHAR},
+      point_name = #{pointName,jdbcType=VARCHAR},
       batch_description = #{batchDescription,jdbcType=VARCHAR},
       project_id = #{projectId,jdbcType=INTEGER},
       city_codes = #{cityCodes,jdbcType=VARCHAR},
@@ -465,7 +465,7 @@
       keyt = #{keyt,jdbcType=VARCHAR},
       face_value = #{faceValue,jdbcType=DECIMAL},
       expiry_time = #{expiryTime,jdbcType=TIMESTAMP},
-      recharge_point_expiry_time = #{rechargePointExpiryTime,jdbcType=TIMESTAMP},
+      point_expiry_time = #{pointExpiryTime,jdbcType=TIMESTAMP},
       validity_period = #{validityPeriod,jdbcType=INTEGER},
       expiry_type = #{expiryType,jdbcType=TINYINT},
       status = #{status,jdbcType=TINYINT},

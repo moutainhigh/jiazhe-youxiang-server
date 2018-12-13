@@ -42,7 +42,6 @@ import java.util.stream.Collectors;
  * @date 2018/10/22.
  */
 @Service("rcExchangeCodeService")
-@Transactional(rollbackFor=Exception.class)
 public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
 
     @Autowired
@@ -77,6 +76,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         rechargeCardExchangeCodePOMapper.updateByPrimaryKeySelective(rechargeCardExchangeCodePO);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void codeCharge(Integer type,Integer id, String keyt) {
         RechargeCardExchangeCodePO rechargeCardExchangeCodePO = findByKeyt(keyt);
@@ -154,6 +154,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         return poList.stream().map(RCExchangeCodeAdapter::PO2DTO).collect(Collectors.toList());
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateWithBatch(RCExchangeCodeBatchSaveDTO batchSaveDTO) {
         RechargeCardExchangeCodePOExample example = new RechargeCardExchangeCodePOExample();
@@ -181,6 +182,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void batchChangeStatus(Integer batchId, Byte status) {
         rcExchangeCodePOManualMapper.batchChangeStatus(batchId,status);

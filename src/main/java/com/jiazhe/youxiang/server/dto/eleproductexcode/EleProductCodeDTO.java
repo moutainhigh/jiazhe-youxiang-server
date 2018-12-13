@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.dto.eleproductexcode;
 
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
+import com.jiazhe.youxiang.server.vo.BaseObject;
 
 import java.util.Date;
 
@@ -9,7 +10,9 @@ import java.util.Date;
  * @description
  * @date 2018/10/25.
  */
-public class EleProductCodeDTO {
+public class EleProductCodeDTO extends BaseObject {
+
+    private static final long serialVersionUID = 8953367776219805313L;
 
     private Integer id;
 

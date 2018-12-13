@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.server.dto.order.orderrefund;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -8,7 +10,9 @@ import java.util.Date;
  * @description
  * @date 2018/11/9.
  */
-public class OrderRefundDTO {
+public class OrderRefundDTO extends BaseObject {
+
+    private static final long serialVersionUID = 6589158636539180860L;
 
     private Integer id;
 

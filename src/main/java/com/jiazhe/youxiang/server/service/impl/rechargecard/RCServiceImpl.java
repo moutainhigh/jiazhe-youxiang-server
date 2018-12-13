@@ -43,7 +43,6 @@ import java.util.stream.Collectors;
  * @date 2018/10/23.
  */
 @Service("rcService")
-@Transactional(rollbackFor=Exception.class)
 public class RCServiceImpl implements RCService {
 
     @Autowired
@@ -96,6 +95,7 @@ public class RCServiceImpl implements RCService {
         return rcdtoList;
     }
 
+    @Transactional(rollbackFor=Exception.class)
     @Override
     public void directCharge(Integer id, Integer batchId, BigDecimal faceValue) {
         CustomerDTO customerDTO = customerService.getById(id);

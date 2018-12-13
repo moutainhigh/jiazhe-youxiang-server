@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.server.dto.auditrecord;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -8,7 +10,9 @@ import java.util.Date;
  * @description
  * @date 2018/10/25.
  */
-public class AuditRecordDTO {
+public class AuditRecordDTO extends BaseObject {
+
+    private static final long serialVersionUID = -5810254475809554514L;
 
     private Integer id;
 

@@ -20,7 +20,8 @@
     <result column="service_time" property="serviceTime" jdbcType="TIMESTAMP" />
     <result column="real_service_time" property="realServiceTime" jdbcType="TIMESTAMP" />
     <result column="pay_recharge_card" property="payRechargeCard" jdbcType="DECIMAL" />
-    <result column="pay_voucher" property="payVoucher" jdbcType="INTEGER" />
+    <result column="pay_point" property="payPoint" jdbcType="DECIMAL" />
+    <result column="pay_voucher" property="payVoucher" jdbcType="DECIMAL" />
     <result column="pay_cash" property="payCash" jdbcType="DECIMAL" />
     <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
     <result column="cost" property="cost" jdbcType="DECIMAL" />
@@ -95,7 +96,7 @@
     id, order_code, customer_id, product_id, customer_city_code, customer_city_name, 
     product_price, count, customer_address, customer_mobile, customer_name, customer_remark, 
     worker_name, worker_mobile, order_time, service_time, real_service_time, pay_recharge_card, 
-    pay_voucher, pay_cash, total_amount, cost, comments, type, status, audit_reason, 
+    pay_point, pay_voucher, pay_cash, total_amount, cost, comments, type, status, audit_reason, 
     ext_info, is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.OrderInfoPOExample" >
@@ -135,22 +136,22 @@
       customer_mobile, customer_name, customer_remark, 
       worker_name, worker_mobile, order_time, 
       service_time, real_service_time, pay_recharge_card, 
-      pay_voucher, pay_cash, total_amount, 
-      cost, comments, type, 
-      status, audit_reason, ext_info, 
-      is_deleted, add_time, mod_time
-      )
+      pay_point, pay_voucher, pay_cash, 
+      total_amount, cost, comments, 
+      type, status, audit_reason, 
+      ext_info, is_deleted, add_time, 
+      mod_time)
     values (#{id,jdbcType=INTEGER}, #{orderCode,jdbcType=VARCHAR}, #{customerId,jdbcType=INTEGER}, 
       #{productId,jdbcType=INTEGER}, #{customerCityCode,jdbcType=VARCHAR}, #{customerCityName,jdbcType=VARCHAR}, 
       #{productPrice,jdbcType=DECIMAL}, #{count,jdbcType=INTEGER}, #{customerAddress,jdbcType=VARCHAR}, 
       #{customerMobile,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, #{customerRemark,jdbcType=VARCHAR}, 
       #{workerName,jdbcType=VARCHAR}, #{workerMobile,jdbcType=VARCHAR}, #{orderTime,jdbcType=TIMESTAMP}, 
       #{serviceTime,jdbcType=TIMESTAMP}, #{realServiceTime,jdbcType=TIMESTAMP}, #{payRechargeCard,jdbcType=DECIMAL}, 
-      #{payVoucher,jdbcType=INTEGER}, #{payCash,jdbcType=DECIMAL}, #{totalAmount,jdbcType=DECIMAL}, 
-      #{cost,jdbcType=DECIMAL}, #{comments,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
-      #{status,jdbcType=TINYINT}, #{auditReason,jdbcType=VARCHAR}, #{extInfo,jdbcType=VARCHAR}, 
-      #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}
-      )
+      #{payPoint,jdbcType=DECIMAL}, #{payVoucher,jdbcType=DECIMAL}, #{payCash,jdbcType=DECIMAL}, 
+      #{totalAmount,jdbcType=DECIMAL}, #{cost,jdbcType=DECIMAL}, #{comments,jdbcType=VARCHAR}, 
+      #{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{auditReason,jdbcType=VARCHAR}, 
+      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.OrderInfoPO" >
     insert into order_info
@@ -208,6 +209,9 @@
       </if>
       <if test="payRechargeCard != null" >
         pay_recharge_card,
+      </if>
+      <if test="payPoint != null" >
+        pay_point,
       </if>
       <if test="payVoucher != null" >
         pay_voucher,
@@ -301,8 +305,11 @@
       <if test="payRechargeCard != null" >
         #{payRechargeCard,jdbcType=DECIMAL},
       </if>
+      <if test="payPoint != null" >
+        #{payPoint,jdbcType=DECIMAL},
+      </if>
       <if test="payVoucher != null" >
-        #{payVoucher,jdbcType=INTEGER},
+        #{payVoucher,jdbcType=DECIMAL},
       </if>
       <if test="payCash != null" >
         #{payCash,jdbcType=DECIMAL},
@@ -402,8 +409,11 @@
       <if test="record.payRechargeCard != null" >
         pay_recharge_card = #{record.payRechargeCard,jdbcType=DECIMAL},
       </if>
+      <if test="record.payPoint != null" >
+        pay_point = #{record.payPoint,jdbcType=DECIMAL},
+      </if>
       <if test="record.payVoucher != null" >
-        pay_voucher = #{record.payVoucher,jdbcType=INTEGER},
+        pay_voucher = #{record.payVoucher,jdbcType=DECIMAL},
       </if>
       <if test="record.payCash != null" >
         pay_cash = #{record.payCash,jdbcType=DECIMAL},
@@ -463,7 +473,8 @@
       service_time = #{record.serviceTime,jdbcType=TIMESTAMP},
       real_service_time = #{record.realServiceTime,jdbcType=TIMESTAMP},
       pay_recharge_card = #{record.payRechargeCard,jdbcType=DECIMAL},
-      pay_voucher = #{record.payVoucher,jdbcType=INTEGER},
+      pay_point = #{record.payPoint,jdbcType=DECIMAL},
+      pay_voucher = #{record.payVoucher,jdbcType=DECIMAL},
       pay_cash = #{record.payCash,jdbcType=DECIMAL},
       total_amount = #{record.totalAmount,jdbcType=DECIMAL},
       cost = #{record.cost,jdbcType=DECIMAL},
@@ -533,8 +544,11 @@
       <if test="payRechargeCard != null" >
         pay_recharge_card = #{payRechargeCard,jdbcType=DECIMAL},
       </if>
+      <if test="payPoint != null" >
+        pay_point = #{payPoint,jdbcType=DECIMAL},
+      </if>
       <if test="payVoucher != null" >
-        pay_voucher = #{payVoucher,jdbcType=INTEGER},
+        pay_voucher = #{payVoucher,jdbcType=DECIMAL},
       </if>
       <if test="payCash != null" >
         pay_cash = #{payCash,jdbcType=DECIMAL},
@@ -591,7 +605,8 @@
       service_time = #{serviceTime,jdbcType=TIMESTAMP},
       real_service_time = #{realServiceTime,jdbcType=TIMESTAMP},
       pay_recharge_card = #{payRechargeCard,jdbcType=DECIMAL},
-      pay_voucher = #{payVoucher,jdbcType=INTEGER},
+      pay_point = #{payPoint,jdbcType=DECIMAL},
+      pay_voucher = #{payVoucher,jdbcType=DECIMAL},
       pay_cash = #{payCash,jdbcType=DECIMAL},
       total_amount = #{totalAmount,jdbcType=DECIMAL},
       cost = #{cost,jdbcType=DECIMAL},

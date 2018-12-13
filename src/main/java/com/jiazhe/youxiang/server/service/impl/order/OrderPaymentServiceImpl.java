@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
  * @date 2018/11/7
  */
 @Service("orderPaymentService")
-@Transactional(rollbackFor = Exception.class)
 public class OrderPaymentServiceImpl implements OrderPaymentService {
 
     @Autowired

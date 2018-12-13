@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.dto.order.orderinfo;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
@@ -10,7 +11,9 @@ import java.util.Date;
  * @description：
  * @date 2018/11/10
  */
-public class PlaceOrderDTO {
+public class PlaceOrderDTO extends BaseObject {
+
+    private static final long serialVersionUID = 1198479968361607256L;
 
     private Byte type;
 

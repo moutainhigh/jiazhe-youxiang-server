@@ -1,11 +1,15 @@
 package com.jiazhe.youxiang.server.dto.sysuser;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 /**
  * @author tu
  * @description：
  * @date 2018/10/19
  */
-public class SysUserRoleDTO {
+public class SysUserRoleDTO extends BaseObject {
+
+    private static final long serialVersionUID = 5557152588900589210L;
 
     private Integer id;
 

@@ -41,7 +41,9 @@ public class OrderInfoPO implements Serializable {
 
     private BigDecimal payRechargeCard;
 
-    private Integer payVoucher;
+    private BigDecimal payPoint;
+
+    private BigDecimal payVoucher;
 
     private BigDecimal payCash;
 
@@ -211,11 +213,19 @@ public class OrderInfoPO implements Serializable {
         this.payRechargeCard = payRechargeCard;
     }
 
-    public Integer getPayVoucher() {
+    public BigDecimal getPayPoint() {
+        return payPoint;
+    }
+
+    public void setPayPoint(BigDecimal payPoint) {
+        this.payPoint = payPoint;
+    }
+
+    public BigDecimal getPayVoucher() {
         return payVoucher;
     }
 
-    public void setPayVoucher(Integer payVoucher) {
+    public void setPayVoucher(BigDecimal payVoucher) {
         this.payVoucher = payVoucher;
     }
 

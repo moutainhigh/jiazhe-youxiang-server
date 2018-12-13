@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.server.dto.customer;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -16,7 +17,7 @@ import java.math.BigDecimal;
  * @author niexiao
  * @created 2018/10/23
  */
-public class CustomerDTO implements Serializable{
+public class CustomerDTO extends BaseObject{
 
     private static final long serialVersionUID = -765735040551457029L;
     /**

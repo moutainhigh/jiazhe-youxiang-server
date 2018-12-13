@@ -5,14 +5,17 @@
  */
 package com.jiazhe.youxiang.server.dto.customer;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 /**
  * 在这里编写类的功能描述
  *
  * @author niexiao
  * @created 2018/10/31
  */
-public class AddressUpdateDTO {
+public class AddressUpdateDTO extends BaseObject{
 
+    private static final long serialVersionUID = 3406805021992223072L;
     /**
      * 地址id
      */

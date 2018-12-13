@@ -11,7 +11,7 @@ public class PointExchangeCodePO implements Serializable {
 
     private String batchName;
 
-    private String rechargePointName;
+    private String pointName;
 
     private String batchDescription;
 
@@ -29,7 +29,7 @@ public class PointExchangeCodePO implements Serializable {
 
     private Date expiryTime;
 
-    private Date rechargePointExpiryTime;
+    private Date pointExpiryTime;
 
     private Integer validityPeriod;
 
@@ -75,12 +75,12 @@ public class PointExchangeCodePO implements Serializable {
         this.batchName = batchName == null ? null : batchName.trim();
     }
 
-    public String getRechargePointName() {
-        return rechargePointName;
+    public String getPointName() {
+        return pointName;
     }
 
-    public void setRechargePointName(String rechargePointName) {
-        this.rechargePointName = rechargePointName == null ? null : rechargePointName.trim();
+    public void setPointName(String pointName) {
+        this.pointName = pointName == null ? null : pointName.trim();
     }
 
     public String getBatchDescription() {
@@ -147,12 +147,12 @@ public class PointExchangeCodePO implements Serializable {
         this.expiryTime = expiryTime;
     }
 
-    public Date getRechargePointExpiryTime() {
-        return rechargePointExpiryTime;
+    public Date getPointExpiryTime() {
+        return pointExpiryTime;
     }
 
-    public void setRechargePointExpiryTime(Date rechargePointExpiryTime) {
-        this.rechargePointExpiryTime = rechargePointExpiryTime;
+    public void setPointExpiryTime(Date pointExpiryTime) {
+        this.pointExpiryTime = pointExpiryTime;
     }
 
     public Integer getValidityPeriod() {

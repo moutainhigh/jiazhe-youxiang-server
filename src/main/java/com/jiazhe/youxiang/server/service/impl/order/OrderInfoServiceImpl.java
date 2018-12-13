@@ -11,6 +11,7 @@ import com.jiazhe.youxiang.server.dao.mapper.OrderInfoPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.order.OrderInfoPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.ElectronicProductExchangeCodePO;
 import com.jiazhe.youxiang.server.domain.po.OrderInfoPO;
+import com.jiazhe.youxiang.server.domain.po.OrderInfoPOExample;
 import com.jiazhe.youxiang.server.domain.po.OrderPaymentPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.eleproductexcode.EleProductCodeDTO;
@@ -54,7 +55,6 @@ import java.util.stream.Collectors;
  * @date 2018/11/7.
  */
 @Service("orderInfoService")
-@Transactional(rollbackFor = Exception.class)
 public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Autowired
@@ -104,6 +104,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         return dto;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void customerCancelOrder(Integer id) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
@@ -122,12 +123,13 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public BigDecimal customerPay(Integer orderId, BigDecimal payCash, String serialNumber) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(orderId);
         List<EleProductCodeDTO> eleProductCodeDTOList = Lists.newArrayList();
-        Integer needPayCount = orderInfoPO.getCount() - orderInfoPO.getPayVoucher();
-        BigDecimal needPayMoney = orderInfoPO.getProductPrice().multiply(new BigDecimal(needPayCount));
+        Integer needPayCount = orderInfoPO.getCount();
+        BigDecimal needPayMoney = orderInfoPO.getProductPrice().multiply(new BigDecimal(needPayCount)).subtract(orderInfoPO.getPayVoucher());
         BigDecimal left = needPayMoney.subtract(orderInfoPO.getPayRechargeCard().add(orderInfoPO.getPayCash().add(payCash)));
         orderInfoPO.setPayCash(orderInfoPO.getPayCash().add(payCash));
         if (payCash.compareTo(new BigDecimal(0)) == 1) {
@@ -160,6 +162,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         return left;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void orderCancelPass(Integer id) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
@@ -174,6 +177,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void orderCancelUnpass(Integer id, String auditReason) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
@@ -187,6 +191,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void userCancelOrder(Integer id) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
@@ -201,6 +206,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void userCompleteOrder(Integer id) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
@@ -208,6 +214,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public NeedPayResp placeOrder(PlaceOrderDTO dto) throws ParseException {
         List<OrderPaymentPO> orderPaymentPOList = Lists.newArrayList();
@@ -323,7 +330,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPO.setServiceTime(dto.getServiceTime());
         orderInfoPO.setRealServiceTime(dto.getServiceTime());
         orderInfoPO.setPayRechargeCard(rechargeCardPayMoney[0]);
-        orderInfoPO.setPayVoucher(voucherPayCount[0]);
+        orderInfoPO.setPayVoucher(orderInfoPO.getProductPrice().multiply(new BigDecimal(voucherPayCount[0])));
         orderInfoPO.setPayCash(new BigDecimal(0));
         orderInfoPO.setTotalAmount(productPriceDTO.getPrice().multiply(new BigDecimal(dto.getCount())));
         orderInfoPO.setCost(dto.getCost());
@@ -387,6 +394,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void appendOrder(AppendOrderDTO appendOrderDTO) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(appendOrderDTO.getOrderId());
@@ -475,7 +483,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderPaymentService.batchInsert(orderPaymentPOList);
         orderInfoPO.setCount(orderInfoPO.getCount() + appendOrderDTO.getCount());
         orderInfoPO.setPayRechargeCard(orderInfoPO.getPayRechargeCard().add(rechargeCardPayMoney[0]));
-        orderInfoPO.setPayVoucher(orderInfoPO.getPayVoucher() + voucherPayCount[0]);
+        orderInfoPO.setPayVoucher(orderInfoPO.getPayVoucher().add(orderInfoPO.getProductPrice().multiply(new BigDecimal(voucherPayCount[0]))));
         orderInfoPO.setCost(appendOrderDTO.getCost());
         orderInfoPO.setTotalAmount(orderInfoPO.getProductPrice().multiply(new BigDecimal(orderInfoPO.getCount())));
         orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
@@ -500,6 +508,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public NeedPayResp customerPlaceOrder(PlaceOrderDTO dto) throws ParseException {
         List<OrderPaymentPO> orderPaymentPOList = Lists.newArrayList();
@@ -581,9 +590,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 }
                 if (needPay[0].compareTo(new BigDecimal(0)) == 1) {
                     BigDecimal thisCardPay = new BigDecimal(0);
-                    if(needPay[0].compareTo(bean.getBalance())==1){
+                    if (needPay[0].compareTo(bean.getBalance()) == 1) {
                         thisCardPay = bean.getBalance();
-                    }else{
+                    } else {
                         thisCardPay = needPay[0];
                     }
                     bean.setBalance(bean.getBalance().subtract(thisCardPay));
@@ -600,7 +609,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             });
             rcService.batchUpdate(rcdtoList);
         }
-        if(needPay[0].compareTo(new BigDecimal(0))==-1){//超额支付
+        if (needPay[0].compareTo(new BigDecimal(0)) == -1) {//超额支付
             throw new OrderException(OrderCodeEnum.ORDER_OVER_PAYMENT);
         }
         //计算订单下单完成后应该置为什么状态
@@ -622,7 +631,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPO.setServiceTime(dto.getServiceTime());
         orderInfoPO.setRealServiceTime(dto.getServiceTime());
         orderInfoPO.setPayRechargeCard(rechargeCardPayMoney[0]);
-        orderInfoPO.setPayVoucher(voucherPayCount[0]);
+        orderInfoPO.setPayVoucher(productPriceDTO.getPrice().multiply(new BigDecimal(voucherPayCount[0])));
         orderInfoPO.setPayCash(new BigDecimal(0));
         orderInfoPO.setTotalAmount(productPriceDTO.getPrice().multiply(new BigDecimal(dto.getCount())));
         orderInfoPO.setCost(dto.getCost());
@@ -652,6 +661,22 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         needPayResp.setOrderId(orderInfoPO.getId());
         needPayResp.setPayCash(needPay[0]);
         return needPayResp;
+    }
+
+    @Override
+    public OrderInfoDTO getByOrderNo(String orderNo) {
+        OrderInfoPOExample example = new OrderInfoPOExample();
+        OrderInfoPOExample.Criteria criteria = example.createCriteria();
+        criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
+        criteria.andOrderCodeEqualTo(orderNo);
+        List<OrderInfoPO> poList = orderInfoPOMapper.selectByExample(example);
+        if (poList.isEmpty()) {
+            return null;
+        }
+        if (poList.size() > 1) {
+            throw new OrderException(OrderCodeEnum.ORDER_CODE_REPEAT);
+        }
+        return OrderInfoAdapter.PO2DTO(poList.get(0));
     }
 
     private OrderRefundDTO paymentDto2RefundDto(OrderPaymentDTO paymentDTO) {

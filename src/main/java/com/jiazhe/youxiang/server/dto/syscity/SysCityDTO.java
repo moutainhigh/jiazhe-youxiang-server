@@ -16,6 +16,7 @@ import com.jiazhe.youxiang.server.vo.BaseObject;
 public class SysCityDTO extends BaseObject {
 
     private static final long serialVersionUID = 5165916632715370425L;
+
     private Integer id;
 
     private String cityCode;

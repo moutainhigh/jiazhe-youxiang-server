@@ -72,7 +72,7 @@ public class OrderInfoResp extends BaseVO {
     private BigDecimal payRechargeCard;
 
     @ApiModelProperty("代金券代替数量")
-    private Integer payVoucher;
+    private BigDecimal payVoucher;
 
     @ApiModelProperty("在线支付金额")
     private BigDecimal payCash;
@@ -230,11 +230,11 @@ public class OrderInfoResp extends BaseVO {
         this.payRechargeCard = payRechargeCard;
     }
 
-    public Integer getPayVoucher() {
+    public BigDecimal getPayVoucher() {
         return payVoucher;
     }
 
-    public void setPayVoucher(Integer payVoucher) {
+    public void setPayVoucher(BigDecimal payVoucher) {
         this.payVoucher = payVoucher;
     }
 

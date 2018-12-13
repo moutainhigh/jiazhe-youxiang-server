@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -8,7 +10,9 @@ import java.util.Date;
  * @description
  * @date 2018/10/24.
  */
-public class VoucherExchangeCodeBatchDTO {
+public class VoucherExchangeCodeBatchDTO extends BaseObject {
+
+    private static final long serialVersionUID = 3301950794869973885L;
 
     private Integer id;
 
