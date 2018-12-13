@@ -35,6 +35,10 @@ public class ProductDTO {
      */
     private String thumbnailUrl;
     /**
+     * 商品头部图url
+     */
+    private String headerImgUrl;
+    /**
      * 商品详情图url
      */
     private String detailImgUrl;
@@ -118,6 +122,14 @@ public class ProductDTO {
 
     public void setThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public String getHeaderImgUrl() {
+        return headerImgUrl;
+    }
+
+    public void setHeaderImgUrl(String headerImgUrl) {
+        this.headerImgUrl = headerImgUrl;
     }
 
     public String getDetailImgUrl() {

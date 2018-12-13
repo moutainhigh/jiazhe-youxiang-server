@@ -57,6 +57,7 @@ public class ProductAdapter {
         productResp.setDescription(dto.getDescription());
         productResp.setDelayDays(dto.getDelayDays());
         productResp.setThumbnailUrl(dto.getThumbnailUrl());
+        productResp.setHeaderImgUrl(dto.getHeaderImgUrl());
         productResp.setDetailImgUrl(dto.getDetailImgUrl());
         productResp.setProductType(dto.getProductType());
         productResp.setUnitName(dto.getUnitName());
@@ -83,6 +84,7 @@ public class ProductAdapter {
         productAddDTO.setDescription(req.getDescription());
         productAddDTO.setDelayDays(req.getDelayDays());
         productAddDTO.setThumbnailUrl(req.getThumbnailUrl());
+        productAddDTO.setHeaderImgUrl(req.getHeaderImgUrl());
         productAddDTO.setDetailImgUrl(req.getDetailImgUrl());
         productAddDTO.setProductType(req.getProductType());
         productAddDTO.setUnitName(req.getUnitName());
@@ -129,6 +131,7 @@ public class ProductAdapter {
         productUpdateDTO.setDescription(req.getDescription());
         productUpdateDTO.setDelayDays(req.getDelayDays());
         productUpdateDTO.setThumbnailUrl(req.getThumbnailUrl());
+        productUpdateDTO.setHeaderImgUrl(req.getHeaderImgUrl());
         productUpdateDTO.setDetailImgUrl(req.getDetailImgUrl());
         productUpdateDTO.setProductType(req.getProductType());
         productUpdateDTO.setUnitName(req.getUnitName());
@@ -196,6 +199,7 @@ public class ProductAdapter {
         productPO.setDescription(productAddDTO.getDescription());
         productPO.setDelayDays(productAddDTO.getDelayDays());
         productPO.setThumbnailUrl(productAddDTO.getThumbnailUrl());
+        productPO.setHeaderImgUrl(productAddDTO.getHeaderImgUrl());
         productPO.setDetailImgUrl(productAddDTO.getDetailImgUrl());
         productPO.setProductType(productAddDTO.getProductType());
         productPO.setUnitName(productAddDTO.getUnitName());
@@ -238,6 +242,7 @@ public class ProductAdapter {
         productPO.setDescription(productUpdateDTO.getDescription());
         productPO.setDelayDays(productUpdateDTO.getDelayDays());
         productPO.setThumbnailUrl(productUpdateDTO.getThumbnailUrl());
+        productPO.setHeaderImgUrl(productUpdateDTO.getHeaderImgUrl());
         productPO.setDetailImgUrl(productUpdateDTO.getDetailImgUrl());
         productPO.setProductType(productUpdateDTO.getProductType());
         productPO.setUnitName(productUpdateDTO.getUnitName());
