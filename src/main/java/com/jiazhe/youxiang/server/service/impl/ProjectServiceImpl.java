@@ -12,6 +12,7 @@ import com.jiazhe.youxiang.server.dao.mapper.manual.ProjectPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.ProjectPO;
 import com.jiazhe.youxiang.server.dto.project.ProjectAddDTO;
 import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
+import com.jiazhe.youxiang.server.dto.project.ProjectUpdateDTO;
 import com.jiazhe.youxiang.server.service.ProjectService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.logging.log4j.util.Strings;
@@ -64,24 +65,13 @@ public class ProjectServiceImpl implements ProjectService {
 
     @CacheEvict(allEntries = true, beforeInvocation = true)
     @Override
-    public void update(Integer id, String name, String description, Integer priority, Integer status) {
-        ProjectPO record = new ProjectPO();
-        record.setId(id);
-        if (!Strings.isBlank(name)) {
-            record.setName(name);
-        }
-        if (!Strings.isBlank(description)) {
-            record.setDescription(description);
-        }
-        if (priority != null) {
-            record.setPriority(priority);
-        }
-        if (status != null) {
-            record.setStatus(status.byteValue());
-        }
+    public void update(ProjectUpdateDTO projectUpdateDTO) {
+        ProjectPO record = ProjectAdapter.projectUpdateDTO2PO(projectUpdateDTO);
         record.setModTime(new Date());
         projectPOMapper.updateByPrimaryKeySelective(record);
     }
+
+
 
     @CacheEvict(allEntries = true, beforeInvocation = true)
     @Override

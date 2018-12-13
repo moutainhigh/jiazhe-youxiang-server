@@ -120,6 +120,8 @@
                                                        name="productCategoryId" th:value="${productCategoryId}">
                                                 <input type="hidden" name="thumbnailUrl" id="inputThumbnailUrl"
                                                        value="">
+                                                <input type="hidden" name="headerImgUrl" id="inputHeaderImgUrl"
+                                                       value="">
                                                 <input type="hidden" name="detailImgUrl" id="inputDetailImgUrl"
                                                        value="">
                                                 <div class="form-group">
@@ -215,6 +217,19 @@
                                                                 <div class="col-xs-12">
                                                                     <input type="file" id="fileThumbnail"/>
                                                                     <img id="imgThumbnail" width="200" height="200"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">头部图：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="widget-main">
+                                                            <div class="form-group">
+                                                                <div class="col-xs-12">
+                                                                    <input type="file" id="fileHeader"/>
+                                                                    <img id="imgHeader" width="200" height="200"/>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -321,6 +336,7 @@
 
         initTable(grid_selector, pager_selector, tableOption);
         initImgControl("#fileThumbnail", "#imgThumbnail", "#inputThumbnailUrl");
+        initImgControl("#fileHeader", "#imgHeader", "#inputHeaderImgUrl");
         initImgControl("#fileDetail", "#imgDetail", "#inputDetailImgUrl");
     });
 
@@ -434,9 +450,11 @@
         $("#inputEffectiveDays").val("");
         $("#inputSmsTemplate").val("");
         $('#inputThumbnailUrl').val("");
+        $('#inputHeaderImgUrl').val("");
         $('#inputDetailImgUrl').val("");
         $("#inputPriority").val("");
         $('#imgThumbnail').attr('hidden', 'hidden');
+        $('#imgHeader').attr('hidden', 'hidden');
         $('#imgDetail').attr('hidden', 'hidden');
     }
 
@@ -475,7 +493,9 @@
                     }
                     $('#fileThumbnail').ace_file_input('show_file_list', [getImageUrl(result.thumbnailUrl)]);
                     $('#imgThumbnail').attr('src', getImageUrl(result.thumbnailUrl));
-                    $('#fileDetail').ace_file_input('show_file_list', [getImageUrl(result.thumbnailUrl)]);
+                    $('#fileHeader').ace_file_input('show_file_list', [getImageUrl(result.headerImgUrl)]);
+                    $('#imgHeader').attr('src', getImageUrl(result.headerImgUrl));
+                    $('#fileDetail').ace_file_input('show_file_list', [getImageUrl(result.detailImgUrl)]);
                     $('#imgDetail').attr('src', getImageUrl(result.detailImgUrl));
                     $("#modal-form").modal('show');
                 }

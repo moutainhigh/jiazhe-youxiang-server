@@ -5,14 +5,13 @@
  */
 package com.jiazhe.youxiang.server.vo.resp.product;
 
-import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
 /**
- * 在这里编写类的功能描述
+ * 商品Resp
  *
  * @author niexiao
  * @created 2018/10/18
@@ -30,6 +29,8 @@ public class ProductResp extends BaseVO {
     private Integer delayDays;
     @ApiModelProperty("商品缩略图url")
     private String thumbnailUrl;
+    @ApiModelProperty("商品头部图url")
+    private String headerImgUrl;
     @ApiModelProperty("商品详情图url")
     private String detailImgUrl;
     @ApiModelProperty("商品分类，0-服务，1-电子卡")
@@ -89,6 +90,14 @@ public class ProductResp extends BaseVO {
 
     public void setThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public String getHeaderImgUrl() {
+        return headerImgUrl;
+    }
+
+    public void setHeaderImgUrl(String headerImgUrl) {
+        this.headerImgUrl = headerImgUrl;
     }
 
     public String getDetailImgUrl() {

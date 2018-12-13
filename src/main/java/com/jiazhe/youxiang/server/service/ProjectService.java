@@ -7,6 +7,7 @@ package com.jiazhe.youxiang.server.service;
 
 import com.jiazhe.youxiang.server.dto.project.ProjectAddDTO;
 import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
+import com.jiazhe.youxiang.server.dto.project.ProjectUpdateDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
 import java.util.List;
@@ -24,7 +25,9 @@ public interface ProjectService {
 
     ProjectDTO getById(Integer id);
 
-    void update(Integer id, String name, String description, Integer priority, Integer status);
+    void update(ProjectUpdateDTO projectUpdateDTO);
 
     void delete(Integer id);
+
+
 }

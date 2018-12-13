@@ -16,6 +16,7 @@ import com.jiazhe.youxiang.server.common.enums.ProjectCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.ProjectException;
 import com.jiazhe.youxiang.server.dto.project.ProjectAddDTO;
 import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
+import com.jiazhe.youxiang.server.dto.project.ProjectUpdateDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
@@ -62,9 +63,8 @@ public class APIProjectController {
     @CustomLog(moduleName = ModuleEnum.PROJECT, operate = "添加项目", level = LogLevelEnum.LEVEL_2)
     public Object add(@ModelAttribute ProjectAddReq req) {
         CommonValidator.validateNull(req);
-        if (Strings.isBlank(req.getName())) {
-            throw new ProjectException(ProjectCodeEnum.PROJECT_NAME_IS_NULL);
-        }
+        validateProjectName(req.getName());
+        validatePointConversionRate(req.getPointConversionRate());
         ProjectAddDTO projectAddDTO = ProjectAdapter.projectAddReq2DTO(req);
         //调用BIZ方法
         projectBiz.add(projectAddDTO);
@@ -98,7 +98,7 @@ public class APIProjectController {
     @CustomLog(moduleName = ModuleEnum.PROJECT, operate = "查询项目信息", level = LogLevelEnum.LEVEL_1)
     public Object getList(@ModelAttribute ProjectListReq req) {
         CommonValidator.validatePaging(req);
-        Paging paging =  PagingParamUtil.pagingParamSwitch(req);
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
         List<ProjectDTO> projectDTOList = projectBiz.getList(req.getName(), req.getStatus(), paging);
         //将DTO转成VO
@@ -118,8 +118,12 @@ public class APIProjectController {
     public Object update(@ModelAttribute ProjectUpdateReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateId(req.getId());
+        validateProjectName(req.getName());
+        validatePointConversionRate(req.getPointConversionRate());
+
+        ProjectUpdateDTO projectUpdateDTO = ProjectAdapter.projectUpdateReq2DTO(req);
         //调用BIZ方法
-        projectBiz.update(req.getId(), req.getName(), req.getDescription(), req.getPriority(), req.getStatus());
+        projectBiz.update(projectUpdateDTO);
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
@@ -167,4 +171,18 @@ public class APIProjectController {
         projectBiz.end(req.getId());
         return ResponseFactory.buildSuccess();
     }
+
+    private static void validatePointConversionRate(Integer rate) {
+        if (rate == null || rate < 0) {
+            throw new ProjectException(ProjectCodeEnum.PROJECT_NAME_IS_NULL);
+
+        }
+    }
+
+    private static void validateProjectName(String name) {
+        if (Strings.isBlank(name)) {
+            throw new ProjectException(ProjectCodeEnum.PROJECT_NAME_IS_NULL);
+        }
+    }
+
 }

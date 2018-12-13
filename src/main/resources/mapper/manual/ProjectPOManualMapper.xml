@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.ProjectPOManualMapper">
-    <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.ProjectPO">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="name" property="name" jdbcType="VARCHAR"/>
-        <result column="description" property="description" jdbcType="VARCHAR"/>
-        <result column="priority" property="priority" jdbcType="INTEGER"/>
-        <result column="status" property="status" jdbcType="TINYINT"/>
-        <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
-        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
-        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
-        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP"/>
+    <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.ProjectPO" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="description" property="description" jdbcType="VARCHAR" />
+        <result column="priority" property="priority" jdbcType="INTEGER" />
+        <result column="point_conversion_rate" property="pointConversionRate" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="TINYINT" />
+        <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
     </resultMap>
-    <sql id="Base_Column_List">
-    id, name, description, priority, status, ext_info, is_deleted, add_time, mod_time
-    </sql>
+    <sql id="Base_Column_List" >
+    id, name, description, priority, point_conversion_rate, status, ext_info, is_deleted,
+    add_time, mod_time
+  </sql>
 
     <select id="query" resultMap="BaseResultMap">
         select

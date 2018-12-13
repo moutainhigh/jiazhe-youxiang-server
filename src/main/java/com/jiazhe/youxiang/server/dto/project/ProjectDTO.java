@@ -33,9 +33,14 @@ public class ProjectDTO extends BaseObject {
      */
     private Integer priority;
     /**
+     * 积分兑换比例
+     */
+    private Integer pointConversionRate;
+
+    /**
      * 项目状态
      */
-    private Byte status;
+    private Integer status;
 
     public Integer getId() {
         return id;
@@ -69,11 +74,19 @@ public class ProjectDTO extends BaseObject {
         this.priority = priority;
     }
 
-    public Byte getStatus() {
+    public Integer getPointConversionRate() {
+        return pointConversionRate;
+    }
+
+    public void setPointConversionRate(Integer pointConversionRate) {
+        this.pointConversionRate = pointConversionRate;
+    }
+
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }
