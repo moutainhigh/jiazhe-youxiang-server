@@ -12,6 +12,8 @@ public class ProjectPO implements Serializable {
 
     private Integer priority;
 
+    private Integer pointConversionRate;
+
     private Byte status;
 
     private String extInfo;
@@ -54,6 +56,14 @@ public class ProjectPO implements Serializable {
 
     public void setPriority(Integer priority) {
         this.priority = priority;
+    }
+
+    public Integer getPointConversionRate() {
+        return pointConversionRate;
+    }
+
+    public void setPointConversionRate(Integer pointConversionRate) {
+        this.pointConversionRate = pointConversionRate;
     }
 
     public Byte getStatus() {

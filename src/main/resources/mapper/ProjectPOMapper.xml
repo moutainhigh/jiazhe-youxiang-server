@@ -6,6 +6,7 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="priority" property="priority" jdbcType="INTEGER" />
+    <result column="point_conversion_rate" property="pointConversionRate" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
@@ -71,7 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, name, description, priority, status, ext_info, is_deleted, add_time, mod_time
+    id, name, description, priority, point_conversion_rate, status, ext_info, is_deleted, 
+    add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.ProjectPOExample" >
     select
@@ -105,13 +107,13 @@
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.ProjectPO" >
     insert into project (id, name, description, 
-      priority, status, ext_info, 
-      is_deleted, add_time, mod_time
-      )
+      priority, point_conversion_rate, status, 
+      ext_info, is_deleted, add_time, 
+      mod_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
-      #{priority,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{extInfo,jdbcType=VARCHAR}, 
-      #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}
-      )
+      #{priority,jdbcType=INTEGER}, #{pointConversionRate,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, 
+      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.ProjectPO" >
     insert into project
@@ -127,6 +129,9 @@
       </if>
       <if test="priority != null" >
         priority,
+      </if>
+      <if test="pointConversionRate != null" >
+        point_conversion_rate,
       </if>
       <if test="status != null" >
         status,
@@ -156,6 +161,9 @@
       </if>
       <if test="priority != null" >
         #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="pointConversionRate != null" >
+        #{pointConversionRate,jdbcType=INTEGER},
       </if>
       <if test="status != null" >
         #{status,jdbcType=TINYINT},
@@ -195,6 +203,9 @@
       <if test="record.priority != null" >
         priority = #{record.priority,jdbcType=INTEGER},
       </if>
+      <if test="record.pointConversionRate != null" >
+        point_conversion_rate = #{record.pointConversionRate,jdbcType=INTEGER},
+      </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=TINYINT},
       </if>
@@ -221,6 +232,7 @@
       name = #{record.name,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR},
       priority = #{record.priority,jdbcType=INTEGER},
+      point_conversion_rate = #{record.pointConversionRate,jdbcType=INTEGER},
       status = #{record.status,jdbcType=TINYINT},
       ext_info = #{record.extInfo,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=TINYINT},
@@ -241,6 +253,9 @@
       </if>
       <if test="priority != null" >
         priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="pointConversionRate != null" >
+        point_conversion_rate = #{pointConversionRate,jdbcType=INTEGER},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
@@ -265,6 +280,7 @@
     set name = #{name,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       priority = #{priority,jdbcType=INTEGER},
+      point_conversion_rate = #{pointConversionRate,jdbcType=INTEGER},
       status = #{status,jdbcType=TINYINT},
       ext_info = #{extInfo,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=TINYINT},

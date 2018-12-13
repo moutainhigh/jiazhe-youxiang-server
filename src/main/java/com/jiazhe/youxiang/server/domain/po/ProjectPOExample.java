@@ -365,6 +365,66 @@ public class ProjectPOExample {
             return (Criteria) this;
         }
 
+        public Criteria andPointConversionRateIsNull() {
+            addCriterion("point_conversion_rate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointConversionRateIsNotNull() {
+            addCriterion("point_conversion_rate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointConversionRateEqualTo(Integer value) {
+            addCriterion("point_conversion_rate =", value, "pointConversionRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointConversionRateNotEqualTo(Integer value) {
+            addCriterion("point_conversion_rate <>", value, "pointConversionRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointConversionRateGreaterThan(Integer value) {
+            addCriterion("point_conversion_rate >", value, "pointConversionRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointConversionRateGreaterThanOrEqualTo(Integer value) {
+            addCriterion("point_conversion_rate >=", value, "pointConversionRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointConversionRateLessThan(Integer value) {
+            addCriterion("point_conversion_rate <", value, "pointConversionRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointConversionRateLessThanOrEqualTo(Integer value) {
+            addCriterion("point_conversion_rate <=", value, "pointConversionRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointConversionRateIn(List<Integer> values) {
+            addCriterion("point_conversion_rate in", values, "pointConversionRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointConversionRateNotIn(List<Integer> values) {
+            addCriterion("point_conversion_rate not in", values, "pointConversionRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointConversionRateBetween(Integer value1, Integer value2) {
+            addCriterion("point_conversion_rate between", value1, value2, "pointConversionRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointConversionRateNotBetween(Integer value1, Integer value2) {
+            addCriterion("point_conversion_rate not between", value1, value2, "pointConversionRate");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;
