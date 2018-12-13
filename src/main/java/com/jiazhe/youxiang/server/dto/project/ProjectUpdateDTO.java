@@ -8,14 +8,18 @@ package com.jiazhe.youxiang.server.dto.project;
 import com.jiazhe.youxiang.server.vo.BaseObject;
 
 /**
- * 在这里编写类的功能描述
+ * 项目编辑DTO
  *
  * @author niexiao
  * @created 2018/10/24
  */
-public class ProjectAddDTO extends BaseObject {
+public class ProjectUpdateDTO extends BaseObject {
 
-    private static final long serialVersionUID = 28694609692564715L;
+    private static final long serialVersionUID = -6227848372301346180L;
+    /**
+     * 项目ID
+     */
+    private Integer id;
     /**
      * 项目名称
      */
@@ -28,11 +32,23 @@ public class ProjectAddDTO extends BaseObject {
      * 排序
      */
     private Integer priority;
-
     /**
      * 积分兑换比例
      */
     private Integer pointConversionRate;
+
+    /**
+     * 项目状态
+     */
+    private Integer status;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -64,5 +80,13 @@ public class ProjectAddDTO extends BaseObject {
 
     public void setPointConversionRate(Integer pointConversionRate) {
         this.pointConversionRate = pointConversionRate;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

@@ -9,7 +9,7 @@ import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * 在这里编写类的功能描述
+ * 项目更新Req
  *
  * @author niexiao
  * @created 2018/10/18
@@ -25,6 +25,8 @@ public class ProjectUpdateReq extends BaseVO {
     private String description;
     @ApiModelProperty("排序")
     private Integer priority;
+    @ApiModelProperty("积分兑换比例，默认5")
+    private Integer pointConversionRate = 5;
     @ApiModelProperty("项目状态")
     private Integer status;
 
@@ -58,6 +60,14 @@ public class ProjectUpdateReq extends BaseVO {
 
     public void setPriority(Integer priority) {
         this.priority = priority;
+    }
+
+    public Integer getPointConversionRate() {
+        return pointConversionRate;
+    }
+
+    public void setPointConversionRate(Integer pointConversionRate) {
+        this.pointConversionRate = pointConversionRate;
     }
 
     public Integer getStatus() {

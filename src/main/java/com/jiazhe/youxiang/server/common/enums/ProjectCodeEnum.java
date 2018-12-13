@@ -13,7 +13,9 @@ package com.jiazhe.youxiang.server.common.enums;
  */
 public enum ProjectCodeEnum {
 
-    PROJECT_NAME_IS_NULL(105001, "PROJECT_NAME_IS_NULL", "项目名称为空");
+    PROJECT_NAME_IS_NULL(105001, "PROJECT_NAME_IS_NULL", "项目名称为空"),
+    PROJECT_POINT_CONVERSION_RATE_ERROR(105002, "PROJECT_POINT_CONVERSION_RATE_ERROR", "积分兑换比例有误"),
+    ;
 
     ProjectCodeEnum(Integer code, String type, String message) {
         this.code = code;

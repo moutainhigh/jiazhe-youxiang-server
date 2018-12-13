@@ -23,8 +23,10 @@ public class ProjectAddReq extends BaseVO {
     private String description;
     @ApiModelProperty("排序，可空，默认1")
     private Integer priority = 1;
-    @ApiModelProperty("项目状态,可空，默认关闭")
-    private Byte status;
+    @ApiModelProperty("积分兑换比例，默认5")
+    private Integer pointConversionRate = 5;
+    @ApiModelProperty("项目状态：0:未启动，1：进行中，2：已结束")
+    private Integer status;
 
     public String getName() {
         return name;
@@ -50,11 +52,19 @@ public class ProjectAddReq extends BaseVO {
         this.priority = priority;
     }
 
-    public Byte getStatus() {
+    public Integer getPointConversionRate() {
+        return pointConversionRate;
+    }
+
+    public void setPointConversionRate(Integer pointConversionRate) {
+        this.pointConversionRate = pointConversionRate;
+    }
+
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }
