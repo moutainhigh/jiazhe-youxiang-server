@@ -8,11 +8,13 @@
         <result column="description" property="description" jdbcType="VARCHAR"/>
         <result column="delay_days" property="delayDays" jdbcType="INTEGER"/>
         <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR"/>
+        <result column="header_img_url" property="headerImgUrl" jdbcType="VARCHAR"/>
         <result column="detail_img_url" property="detailImgUrl" jdbcType="VARCHAR"/>
         <result column="product_type" property="productType" jdbcType="INTEGER"/>
         <result column="unit_name" property="unitName" jdbcType="VARCHAR"/>
         <result column="last_num" property="lastNum" jdbcType="INTEGER"/>
         <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="priority" property="priority" jdbcType="INTEGER"/>
         <result column="sms_template" property="smsTemplate" jdbcType="VARCHAR"/>
         <result column="effective_days" property="effectiveDays" jdbcType="INTEGER"/>
         <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
@@ -21,10 +23,10 @@
         <result column="mod_time" property="modTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <sql id="Base_Column_List" >
-    id, product_category_id, name, description, delay_days, thumbnail_url, detail_img_url,
-    product_type, unit_name, last_num, status, priority, sms_template, effective_days,
-    ext_info, is_deleted, add_time, mod_time
+    <sql id="Base_Column_List">
+    id, product_category_id, name, description, delay_days, thumbnail_url, header_img_url,
+    detail_img_url, product_type, unit_name, last_num, status, priority, sms_template,
+    effective_days, ext_info, is_deleted, add_time, mod_time
     </sql>
 
     <select id="query" resultMap="BaseResultMap">

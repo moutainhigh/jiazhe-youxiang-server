@@ -289,6 +289,7 @@ CREATE TABLE `product` (
     `description` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '商品描述信息',
     `delay_days` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '需提前预定的天数',
     `thumbnail_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '缩略图url',
+    `header_img_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '头部图url',
     `detail_img_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '详情图url',
     `product_type` INT(10) NOT NULL DEFAULT '0' COMMENT '0-服务，1-电子卡',
     `unit_name` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '计量单位名称',
