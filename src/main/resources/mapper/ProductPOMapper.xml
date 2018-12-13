@@ -8,6 +8,7 @@
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="delay_days" property="delayDays" jdbcType="INTEGER" />
     <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR" />
+    <result column="header_img_url" property="headerImgUrl" jdbcType="VARCHAR" />
     <result column="detail_img_url" property="detailImgUrl" jdbcType="VARCHAR" />
     <result column="product_type" property="productType" jdbcType="INTEGER" />
     <result column="unit_name" property="unitName" jdbcType="VARCHAR" />
@@ -80,9 +81,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, product_category_id, name, description, delay_days, thumbnail_url, detail_img_url, 
-    product_type, unit_name, last_num, status, priority, sms_template, effective_days, 
-    ext_info, is_deleted, add_time, mod_time
+    id, product_category_id, name, description, delay_days, thumbnail_url, header_img_url, 
+    detail_img_url, product_type, unit_name, last_num, status, priority, sms_template, 
+    effective_days, ext_info, is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.ProductPOExample" >
     select
@@ -117,18 +118,18 @@
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.ProductPO" >
     insert into product (id, product_category_id, name, 
       description, delay_days, thumbnail_url, 
-      detail_img_url, product_type, unit_name, 
-      last_num, status, priority, 
-      sms_template, effective_days, ext_info, 
-      is_deleted, add_time, mod_time
-      )
+      header_img_url, detail_img_url, product_type, 
+      unit_name, last_num, status, 
+      priority, sms_template, effective_days, 
+      ext_info, is_deleted, add_time, 
+      mod_time)
     values (#{id,jdbcType=INTEGER}, #{productCategoryId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{description,jdbcType=VARCHAR}, #{delayDays,jdbcType=INTEGER}, #{thumbnailUrl,jdbcType=VARCHAR}, 
-      #{detailImgUrl,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER}, #{unitName,jdbcType=VARCHAR}, 
-      #{lastNum,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{priority,jdbcType=INTEGER}, 
-      #{smsTemplate,jdbcType=VARCHAR}, #{effectiveDays,jdbcType=INTEGER}, #{extInfo,jdbcType=VARCHAR}, 
-      #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}
-      )
+      #{headerImgUrl,jdbcType=VARCHAR}, #{detailImgUrl,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER}, 
+      #{unitName,jdbcType=VARCHAR}, #{lastNum,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, 
+      #{priority,jdbcType=INTEGER}, #{smsTemplate,jdbcType=VARCHAR}, #{effectiveDays,jdbcType=INTEGER}, 
+      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.ProductPO" >
     insert into product
@@ -150,6 +151,9 @@
       </if>
       <if test="thumbnailUrl != null" >
         thumbnail_url,
+      </if>
+      <if test="headerImgUrl != null" >
+        header_img_url,
       </if>
       <if test="detailImgUrl != null" >
         detail_img_url,
@@ -206,6 +210,9 @@
       </if>
       <if test="thumbnailUrl != null" >
         #{thumbnailUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="headerImgUrl != null" >
+        #{headerImgUrl,jdbcType=VARCHAR},
       </if>
       <if test="detailImgUrl != null" >
         #{detailImgUrl,jdbcType=VARCHAR},
@@ -272,6 +279,9 @@
       <if test="record.thumbnailUrl != null" >
         thumbnail_url = #{record.thumbnailUrl,jdbcType=VARCHAR},
       </if>
+      <if test="record.headerImgUrl != null" >
+        header_img_url = #{record.headerImgUrl,jdbcType=VARCHAR},
+      </if>
       <if test="record.detailImgUrl != null" >
         detail_img_url = #{record.detailImgUrl,jdbcType=VARCHAR},
       </if>
@@ -321,6 +331,7 @@
       description = #{record.description,jdbcType=VARCHAR},
       delay_days = #{record.delayDays,jdbcType=INTEGER},
       thumbnail_url = #{record.thumbnailUrl,jdbcType=VARCHAR},
+      header_img_url = #{record.headerImgUrl,jdbcType=VARCHAR},
       detail_img_url = #{record.detailImgUrl,jdbcType=VARCHAR},
       product_type = #{record.productType,jdbcType=INTEGER},
       unit_name = #{record.unitName,jdbcType=VARCHAR},
@@ -354,6 +365,9 @@
       </if>
       <if test="thumbnailUrl != null" >
         thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="headerImgUrl != null" >
+        header_img_url = #{headerImgUrl,jdbcType=VARCHAR},
       </if>
       <if test="detailImgUrl != null" >
         detail_img_url = #{detailImgUrl,jdbcType=VARCHAR},
@@ -401,6 +415,7 @@
       description = #{description,jdbcType=VARCHAR},
       delay_days = #{delayDays,jdbcType=INTEGER},
       thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
+      header_img_url = #{headerImgUrl,jdbcType=VARCHAR},
       detail_img_url = #{detailImgUrl,jdbcType=VARCHAR},
       product_type = #{productType,jdbcType=INTEGER},
       unit_name = #{unitName,jdbcType=VARCHAR},

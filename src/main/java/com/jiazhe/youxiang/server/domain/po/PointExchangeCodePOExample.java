@@ -296,73 +296,73 @@ public class PointExchangeCodePOExample {
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointNameIsNull() {
-            addCriterion("recharge_point_name is null");
+        public Criteria andPointNameIsNull() {
+            addCriterion("point_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointNameIsNotNull() {
-            addCriterion("recharge_point_name is not null");
+        public Criteria andPointNameIsNotNull() {
+            addCriterion("point_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointNameEqualTo(String value) {
-            addCriterion("recharge_point_name =", value, "rechargePointName");
+        public Criteria andPointNameEqualTo(String value) {
+            addCriterion("point_name =", value, "pointName");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointNameNotEqualTo(String value) {
-            addCriterion("recharge_point_name <>", value, "rechargePointName");
+        public Criteria andPointNameNotEqualTo(String value) {
+            addCriterion("point_name <>", value, "pointName");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointNameGreaterThan(String value) {
-            addCriterion("recharge_point_name >", value, "rechargePointName");
+        public Criteria andPointNameGreaterThan(String value) {
+            addCriterion("point_name >", value, "pointName");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointNameGreaterThanOrEqualTo(String value) {
-            addCriterion("recharge_point_name >=", value, "rechargePointName");
+        public Criteria andPointNameGreaterThanOrEqualTo(String value) {
+            addCriterion("point_name >=", value, "pointName");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointNameLessThan(String value) {
-            addCriterion("recharge_point_name <", value, "rechargePointName");
+        public Criteria andPointNameLessThan(String value) {
+            addCriterion("point_name <", value, "pointName");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointNameLessThanOrEqualTo(String value) {
-            addCriterion("recharge_point_name <=", value, "rechargePointName");
+        public Criteria andPointNameLessThanOrEqualTo(String value) {
+            addCriterion("point_name <=", value, "pointName");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointNameLike(String value) {
-            addCriterion("recharge_point_name like", value, "rechargePointName");
+        public Criteria andPointNameLike(String value) {
+            addCriterion("point_name like", value, "pointName");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointNameNotLike(String value) {
-            addCriterion("recharge_point_name not like", value, "rechargePointName");
+        public Criteria andPointNameNotLike(String value) {
+            addCriterion("point_name not like", value, "pointName");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointNameIn(List<String> values) {
-            addCriterion("recharge_point_name in", values, "rechargePointName");
+        public Criteria andPointNameIn(List<String> values) {
+            addCriterion("point_name in", values, "pointName");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointNameNotIn(List<String> values) {
-            addCriterion("recharge_point_name not in", values, "rechargePointName");
+        public Criteria andPointNameNotIn(List<String> values) {
+            addCriterion("point_name not in", values, "pointName");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointNameBetween(String value1, String value2) {
-            addCriterion("recharge_point_name between", value1, value2, "rechargePointName");
+        public Criteria andPointNameBetween(String value1, String value2) {
+            addCriterion("point_name between", value1, value2, "pointName");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointNameNotBetween(String value1, String value2) {
-            addCriterion("recharge_point_name not between", value1, value2, "rechargePointName");
+        public Criteria andPointNameNotBetween(String value1, String value2) {
+            addCriterion("point_name not between", value1, value2, "pointName");
             return (Criteria) this;
         }
 
@@ -896,63 +896,63 @@ public class PointExchangeCodePOExample {
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeIsNull() {
-            addCriterion("recharge_point_expiry_time is null");
+        public Criteria andPointExpiryTimeIsNull() {
+            addCriterion("point_expiry_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeIsNotNull() {
-            addCriterion("recharge_point_expiry_time is not null");
+        public Criteria andPointExpiryTimeIsNotNull() {
+            addCriterion("point_expiry_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeEqualTo(Date value) {
-            addCriterion("recharge_point_expiry_time =", value, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeEqualTo(Date value) {
+            addCriterion("point_expiry_time =", value, "pointExpiryTime");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeNotEqualTo(Date value) {
-            addCriterion("recharge_point_expiry_time <>", value, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeNotEqualTo(Date value) {
+            addCriterion("point_expiry_time <>", value, "pointExpiryTime");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeGreaterThan(Date value) {
-            addCriterion("recharge_point_expiry_time >", value, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeGreaterThan(Date value) {
+            addCriterion("point_expiry_time >", value, "pointExpiryTime");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("recharge_point_expiry_time >=", value, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("point_expiry_time >=", value, "pointExpiryTime");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeLessThan(Date value) {
-            addCriterion("recharge_point_expiry_time <", value, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeLessThan(Date value) {
+            addCriterion("point_expiry_time <", value, "pointExpiryTime");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeLessThanOrEqualTo(Date value) {
-            addCriterion("recharge_point_expiry_time <=", value, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeLessThanOrEqualTo(Date value) {
+            addCriterion("point_expiry_time <=", value, "pointExpiryTime");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeIn(List<Date> values) {
-            addCriterion("recharge_point_expiry_time in", values, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeIn(List<Date> values) {
+            addCriterion("point_expiry_time in", values, "pointExpiryTime");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeNotIn(List<Date> values) {
-            addCriterion("recharge_point_expiry_time not in", values, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeNotIn(List<Date> values) {
+            addCriterion("point_expiry_time not in", values, "pointExpiryTime");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeBetween(Date value1, Date value2) {
-            addCriterion("recharge_point_expiry_time between", value1, value2, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeBetween(Date value1, Date value2) {
+            addCriterion("point_expiry_time between", value1, value2, "pointExpiryTime");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeNotBetween(Date value1, Date value2) {
-            addCriterion("recharge_point_expiry_time not between", value1, value2, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeNotBetween(Date value1, Date value2) {
+            addCriterion("point_expiry_time not between", value1, value2, "pointExpiryTime");
             return (Criteria) this;
         }
 

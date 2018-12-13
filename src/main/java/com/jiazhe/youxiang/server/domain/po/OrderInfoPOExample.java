@@ -1276,6 +1276,66 @@ public class OrderInfoPOExample {
             return (Criteria) this;
         }
 
+        public Criteria andPayPointIsNull() {
+            addCriterion("pay_point is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayPointIsNotNull() {
+            addCriterion("pay_point is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayPointEqualTo(BigDecimal value) {
+            addCriterion("pay_point =", value, "payPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayPointNotEqualTo(BigDecimal value) {
+            addCriterion("pay_point <>", value, "payPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayPointGreaterThan(BigDecimal value) {
+            addCriterion("pay_point >", value, "payPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayPointGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("pay_point >=", value, "payPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayPointLessThan(BigDecimal value) {
+            addCriterion("pay_point <", value, "payPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayPointLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("pay_point <=", value, "payPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayPointIn(List<BigDecimal> values) {
+            addCriterion("pay_point in", values, "payPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayPointNotIn(List<BigDecimal> values) {
+            addCriterion("pay_point not in", values, "payPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayPointBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("pay_point between", value1, value2, "payPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayPointNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("pay_point not between", value1, value2, "payPoint");
+            return (Criteria) this;
+        }
+
         public Criteria andPayVoucherIsNull() {
             addCriterion("pay_voucher is null");
             return (Criteria) this;
@@ -1286,52 +1346,52 @@ public class OrderInfoPOExample {
             return (Criteria) this;
         }
 
-        public Criteria andPayVoucherEqualTo(Integer value) {
+        public Criteria andPayVoucherEqualTo(BigDecimal value) {
             addCriterion("pay_voucher =", value, "payVoucher");
             return (Criteria) this;
         }
 
-        public Criteria andPayVoucherNotEqualTo(Integer value) {
+        public Criteria andPayVoucherNotEqualTo(BigDecimal value) {
             addCriterion("pay_voucher <>", value, "payVoucher");
             return (Criteria) this;
         }
 
-        public Criteria andPayVoucherGreaterThan(Integer value) {
+        public Criteria andPayVoucherGreaterThan(BigDecimal value) {
             addCriterion("pay_voucher >", value, "payVoucher");
             return (Criteria) this;
         }
 
-        public Criteria andPayVoucherGreaterThanOrEqualTo(Integer value) {
+        public Criteria andPayVoucherGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("pay_voucher >=", value, "payVoucher");
             return (Criteria) this;
         }
 
-        public Criteria andPayVoucherLessThan(Integer value) {
+        public Criteria andPayVoucherLessThan(BigDecimal value) {
             addCriterion("pay_voucher <", value, "payVoucher");
             return (Criteria) this;
         }
 
-        public Criteria andPayVoucherLessThanOrEqualTo(Integer value) {
+        public Criteria andPayVoucherLessThanOrEqualTo(BigDecimal value) {
             addCriterion("pay_voucher <=", value, "payVoucher");
             return (Criteria) this;
         }
 
-        public Criteria andPayVoucherIn(List<Integer> values) {
+        public Criteria andPayVoucherIn(List<BigDecimal> values) {
             addCriterion("pay_voucher in", values, "payVoucher");
             return (Criteria) this;
         }
 
-        public Criteria andPayVoucherNotIn(List<Integer> values) {
+        public Criteria andPayVoucherNotIn(List<BigDecimal> values) {
             addCriterion("pay_voucher not in", values, "payVoucher");
             return (Criteria) this;
         }
 
-        public Criteria andPayVoucherBetween(Integer value1, Integer value2) {
+        public Criteria andPayVoucherBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("pay_voucher between", value1, value2, "payVoucher");
             return (Criteria) this;
         }
 
-        public Criteria andPayVoucherNotBetween(Integer value1, Integer value2) {
+        public Criteria andPayVoucherNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("pay_voucher not between", value1, value2, "payVoucher");
             return (Criteria) this;
         }

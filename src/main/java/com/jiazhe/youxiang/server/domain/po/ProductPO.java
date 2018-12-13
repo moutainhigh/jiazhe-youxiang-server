@@ -16,6 +16,8 @@ public class ProductPO implements Serializable {
 
     private String thumbnailUrl;
 
+    private String headerImgUrl;
+
     private String detailImgUrl;
 
     private Integer productType;
@@ -88,6 +90,14 @@ public class ProductPO implements Serializable {
 
     public void setThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl == null ? null : thumbnailUrl.trim();
+    }
+
+    public String getHeaderImgUrl() {
+        return headerImgUrl;
+    }
+
+    public void setHeaderImgUrl(String headerImgUrl) {
+        this.headerImgUrl = headerImgUrl == null ? null : headerImgUrl.trim();
     }
 
     public String getDetailImgUrl() {

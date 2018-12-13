@@ -36,7 +36,7 @@ public class OrderInfoBiz {
 
     public List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String worekerMobile, Paging paging) {
         List<OrderInfoDTO> orderInfoDTOList = orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, worekerMobile, paging);
-        orderInfoDTOList.stream().forEach(bean->{
+        orderInfoDTOList.stream().forEach(bean -> {
             bean.setPayment(calculateOrderNeedPay(bean));//计算待支付金额放入订单信息中
         });
         return orderInfoDTOList;
@@ -50,8 +50,8 @@ public class OrderInfoBiz {
         orderInfoService.orderCancelPass(id);
     }
 
-    public void orderCancelUnpass(Integer id,String auditReason) {
-        orderInfoService.orderCancelUnpass(id,auditReason);
+    public void orderCancelUnpass(Integer id, String auditReason) {
+        orderInfoService.orderCancelUnpass(id, auditReason);
     }
 
     public void userCancelOrder(Integer id) {
@@ -115,8 +115,8 @@ public class OrderInfoBiz {
      * @return
      */
     private BigDecimal calculateOrderNeedPay(OrderInfoDTO dto) {
-        Integer needPayCount = dto.getCount() - dto.getPayVoucher();
-        BigDecimal needPay = dto.getProductPrice().multiply(new BigDecimal(needPayCount));
+        Integer needPayCount = dto.getCount();
+        BigDecimal needPay = dto.getProductPrice().multiply(new BigDecimal(needPayCount)).subtract(dto.getPayVoucher());
         BigDecimal needPayMoney = needPay.subtract(dto.getPayRechargeCard().add(dto.getPayCash()));
         return needPayMoney;
     }

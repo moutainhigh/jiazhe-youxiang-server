@@ -6,7 +6,7 @@ import java.util.Date;
 public class PointExchangeRecordPO implements Serializable {
     private Integer id;
 
-    private Integer rechargePointId;
+    private Integer pointId;
 
     private Integer exchangeCodeId;
 
@@ -34,12 +34,12 @@ public class PointExchangeRecordPO implements Serializable {
         this.id = id;
     }
 
-    public Integer getRechargePointId() {
-        return rechargePointId;
+    public Integer getPointId() {
+        return pointId;
     }
 
-    public void setRechargePointId(Integer rechargePointId) {
-        this.rechargePointId = rechargePointId;
+    public void setPointId(Integer pointId) {
+        this.pointId = pointId;
     }
 
     public Integer getExchangeCodeId() {

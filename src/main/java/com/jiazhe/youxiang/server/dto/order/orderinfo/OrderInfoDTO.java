@@ -52,7 +52,7 @@ public class OrderInfoDTO extends BaseObject {
 
     private BigDecimal payRechargeCard;
 
-    private Integer payVoucher;
+    private BigDecimal payVoucher;
 
     private BigDecimal payCash;
 
@@ -202,11 +202,11 @@ public class OrderInfoDTO extends BaseObject {
         this.payRechargeCard = payRechargeCard;
     }
 
-    public Integer getPayVoucher() {
+    public BigDecimal getPayVoucher() {
         return payVoucher;
     }
 
-    public void setPayVoucher(Integer payVoucher) {
+    public void setPayVoucher(BigDecimal payVoucher) {
         this.payVoucher = payVoucher;
     }
 
