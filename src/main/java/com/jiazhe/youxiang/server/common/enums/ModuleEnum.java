@@ -27,6 +27,8 @@ public enum ModuleEnum {
     REGISTER(112, "登录管理"),
     ELE_PRODUCT(113, "商品电子码管理"),
     UPLOAD(114, "文件上传管理"),
+    PARTNER_ORDER(115, "商家订单管理"),
+    POINT(116, "积分管理"),
     OTHER(999, "其他模块");
 
     private Integer id;

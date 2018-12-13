@@ -103,10 +103,10 @@
 
                                                     <div class="space-2"></div>
                                                     <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right">充值卡名称：</label>
+                                                        <label class="col-sm-4 control-label no-padding-right">积分卡名称：</label>
                                                         <div class="col-sm-8">
                                                             <div class="pos-rel">
-                                                                <input id="savePointName" name="pointCardName"
+                                                                <input id="savePointName" name="pointName"
                                                                        class="form-control"
                                                                        type="text" style="height:30px"/>
                                                             </div>
@@ -200,7 +200,7 @@
 
                                                     <div class="space-2"></div>
                                                     <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right">充值卡过期类型：</label>
+                                                        <label class="col-sm-4 control-label no-padding-right">积分卡过期类型：</label>
                                                         <div class="col-sm-8">
                                                             <div class="pos-rel">
                                                                 <label class="radio-inline ">
@@ -220,15 +220,15 @@
                                                     <div class="space-2 saveDeadLine"></div>
                                                     <div class="form-group saveDeadLine">
                                                         <label class="col-sm-4 control-label no-padding-right"
-                                                               for="savePointCardExpiryTime">充值卡过期时间：</label>
+                                                               for="savePointExpiryTime">积分卡过期时间：</label>
                                                         <div class="col-sm-8">
                                                             <div class="input-group">
                                                                 <input class="form-control date-picker"
-                                                                       id="savePointCardExpiryTime" type="text" readonly />
+                                                                       id="savePointExpiryTime" type="text" readonly />
                                                                 <span class="input-group-addon">
                                                                             <i class="fa fa-calendar bigger-110"></i>
                                                                         </span>
-                                                                <input type="hidden" value=0 name="pointCardExpiryTime"/>
+                                                                <input type="hidden" value=0 name="pointExpiryTime"/>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -349,11 +349,11 @@
         var tableOption = {
             url: "/api/pointexchangecodebatch/listpage",
             postData: transformToJson($('#batchSearchForm').serializeArray()),
-            colNames: ['', '批次名称', '充值卡名称', '是否是虚拟批次', '状态', '面额', '数量', '过期时间', '操作'],
+            colNames: ['', '批次名称', '积分卡名称', '是否是虚拟批次', '状态', '面额', '数量', '过期时间', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 100, sortable: false},
-                {name: 'pointCardName', index: 'pointCardName', width: 50, sortable: false},
+                {name: 'pointName', index: 'pointName', width: 50, sortable: false},
                 {
                     name: 'isVirtual',
                     index: 'isVirtual',
@@ -418,7 +418,7 @@
         }
         if (rowObject.isVirtual == 0) {
             if (rowObject.isMade == 1) {
-                str += getRedirectButton("btn-primary", "../pointcard/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name, "兑换码管理");
+                str += getRedirectButton("btn-primary", "../point/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name, "兑换码管理");
                 str += getFunctionButton("btn-yellow", "exportExcel(" + rowObject.id + ")", "导出");
             } else {
                 str += getFunctionButton("btn-danger", "generateCode(" + rowObject.id + ")", "生成兑换码");
@@ -434,7 +434,7 @@
         $("#batchSaveForm #saveAmount").removeAttr('readonly');
         $("#batchId").val(0);
         $("#batchSaveForm #saveName").val("");
-        $("#batchSaveForm #savePointCardName").val("");
+        $("#batchSaveForm #savePointName").val("");
         $("#batchSaveForm #saveProjectId").prop('selectedIndex', 0);
         $("#batchSaveForm #saveCityCodes").val("");
         $("#batchSaveForm #saveProductIds").val("");
@@ -443,7 +443,7 @@
         $("#batchSaveForm #saveAmount").val("");
         $("#batchSaveForm #saveExpiryTime").val("");
         $("#batchSaveForm #saveDeadLineRadio").click();
-        $("#batchSaveForm #savePointCardExpiryTime").val("");
+        $("#batchSaveForm #savePointExpiryTime").val("");
         $("#batchSaveForm #saveValidityPeriod").val("");
         $("#batchSaveForm #saveDescription").val("");
     }
@@ -500,7 +500,7 @@
                     var result = data.data;
                     $("#batchId").val(result.id);
                     $("#batchSaveForm #saveName").val(result.name);
-                    $("#batchSaveForm #savePointCardName").val(result.pointCardName);
+                    $("#batchSaveForm #savePointName").val(result.pointName);
                     $("#batchSaveForm #saveProjectId").val(result.projectId);
                     $("#batchSaveForm #saveCityCodes").val(result.cityCodes);
                     $("#batchSaveForm #saveProductIds").val(result.productIds);
@@ -526,8 +526,8 @@
                         $("#batchSaveForm #saveValidityPeriodRadio").click();
                     }
                     $("#batchSaveForm #saveValidityPeriod").val(result.validityPeriod);
-                    $("#batchSaveForm #savePointCardExpiryTime").val(dateFormat(result.pointExpiryTime));
-                    $("#batchSaveForm #savePointCardExpiryTime").next().next().val(result.pointExpiryTime);
+                    $("#batchSaveForm #savePointExpiryTime").val(dateFormat(result.pointExpiryTime));
+                    $("#batchSaveForm #savePointExpiryTime").next().next().val(result.pointExpiryTime);
                     $("#batchSaveForm #saveDescription").val(result.description);
                     $("input[name=isVirtualRadio]").attr('disabled', 'disabled');
                     $("#modal-form").modal('show');
