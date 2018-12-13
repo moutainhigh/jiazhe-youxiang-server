@@ -272,6 +272,7 @@ CREATE TABLE `project` (
     `name` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '项目名称',
     `description` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '项目描述信息',
     `priority` INT(10) NOT NULL DEFAULT '0' COMMENT '排序序号',
+    `conversion_rate` INT(10) UNSIGNED NOT NULL DEFAULT '5' COMMENT '兑换比例',
     `status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '状态：0:未启动，1：进行中，2：已结束',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
@@ -406,6 +407,7 @@ CREATE TABLE `order_info` (
     `service_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '预约服务时间',
     `real_service_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '真实服务时间',
     `pay_recharge_card` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '充值卡支付',
+    `pay_point` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '积分支付对应的金额',
     `pay_voucher` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '代金券支付',
     `pay_cash` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '现金支付',
     `total_amount` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '订单总金额',
@@ -492,4 +494,94 @@ CREATE TABLE `simple_session` (
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
     PRIMARY KEY (`id`)
 )  ENGINE=INNODB COMMENT='登录记录信息表';
+
+drop table if exists point;
+CREATE TABLE `point` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
+    `name` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '积分卡名称',
+    `description` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '积分详细信息',
+    `customer_id` INT(10) UNSIGNED NOT NULL COMMENT '绑定客户的id',
+    `project_id` INT(10) UNSIGNED NOT NULL COMMENT '对应项目id，积分必须有对应的项目',
+    `city_codes` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '适用城市Code集合，粒度到2级城市，以逗号隔开',
+    `product_ids` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '适用商品ID集合，以逗号隔开',
+    `face_value` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '原始积分值（类比充值卡面值）',
+    `balance` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '积分余额',
+    `exchange_record_id` INT(10) UNSIGNED NOT NULL COMMENT '兑换记录ID',
+    `expiry_time` DATETIME COMMENT '过期时间，为空永不过期',
+    `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '状态：0:停用,1:启用',
+    `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
+    `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
+    `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+    PRIMARY KEY (`id`)
+)  ENGINE=INNODB COMMENT='积分信息表';
+
+
+drop table if exists point_exchange_code_batch;
+CREATE TABLE `point_exchange_code_batch` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
+    `name` VARCHAR(255) NOT NULL COMMENT '批次名称',
+    `point_name` VARCHAR(255) NOT NULL COMMENT '兑换成积分的名称',
+    `is_virtual` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否是虚拟批次,0:否,1:是',
+    `is_made` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已经生成,0:否,1:是',
+    `description` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '积分详细信息',
+    `amount` INT(10) NOT NULL DEFAULT '0' COMMENT '积分卡数量',
+    `project_id` INT(10) NOT NULL COMMENT '对应项目id，积分必须有对应项目',
+    `city_codes` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '适用城市code集合，粒度到2级城市，以逗号隔开',
+    `product_ids` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '适用商品ID集合，以逗号隔开',
+    `face_value` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '对应的金额',
+    `expiry_time` DATETIME NOT NULL COMMENT '兑换码本身过期时间',
+    `recharge_point_expiry_time` DATETIME NOT NULL COMMENT '积分卡过期时间',
+    `validity_period` INT(10) NOT NULL DEFAULT '0' COMMENT '兑换之日起多少天有效',
+    `expiry_type` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '过期时间类型 0-积分过期时间，1-兑换之日起多少天有效',
+    `status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '状态：0:停用,1:启用',
+    `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
+    `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
+    `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+    PRIMARY KEY (`id`)
+)  ENGINE=INNODB COMMENT='积分兑换码批次信息表';
+
+drop table if exists point_exchange_code;
+CREATE TABLE `point_exchange_code` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
+    `batch_id` INT(10) UNSIGNED NOT NULL COMMENT '批次id',
+    `batch_name` VARCHAR(255) NOT NULL COMMENT '批次名称',
+    `recharge_point_name` VARCHAR(255) NOT NULL COMMENT '兑换成积分卡的卡名',
+    `batch_description` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '积分详细信息',
+    `project_id` INT(10) NOT NULL COMMENT '对应项目id，积分必须有对应项目',
+    `city_codes` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '适用城市code集合，粒度到2级城市，以逗号隔开',
+    `product_ids` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '适用商品ID集合，以逗号隔开',
+    `code` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '兑换码',
+    `keyt` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '密钥',
+    `face_value` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '对应的金额',
+    `expiry_time` DATETIME COMMENT '过期时间，为空永不过期',
+    `recharge_point_expiry_time` DATETIME NOT NULL COMMENT '积分过期时间',
+    `validity_period` INT(10) NOT NULL DEFAULT '0' COMMENT '兑换之日起多少天有效',
+    `expiry_type` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '过期时间类型 0-积分过期时间，1-兑换之日起多少天有效',
+    `status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '状态：0:停用,1:启用',
+    `used` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '0-未使用，1-已使用',
+    `customer_id` INT(10) UNSIGNED COMMENT '客户id',
+    `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
+    `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
+    `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+    PRIMARY KEY (`id`)
+)  ENGINE=INNODB COMMENT='积分兑换码信息表';
+
+
+drop table if exists point_exchange_record;
+CREATE TABLE `point_exchange_record` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
+    `recharge_point_id` INT(10) UNSIGNED NOT NULL COMMENT '积分卡Id',
+    `exchange_code_id` INT(10) UNSIGNED COMMENT '兑换码id',
+    `exchange_type` INT(10) NOT NULL DEFAULT '0' COMMENT '0-后台兑换码兑换，1-客户自行兑换码兑换，2-直接充值，3-消费记录审核而来',
+    `operator_id` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '操作人id',
+    `operator_name` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '操作人名称',
+    `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
+    `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
+    `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+    PRIMARY KEY (`id`)
+)  ENGINE=INNODB COMMENT='积分兑换记录表';
 
