@@ -18,12 +18,8 @@ import java.util.stream.Collectors;
  * @date 2018/11/9.
  */
 @Service("orderRefundService")
-@Transactional(rollbackFor = Exception.class)
-
 public class OrderRefundServiceImpl implements OrderRefundService {
 
-    @Autowired
-    private OrderRefundPOMapper orderRefundPOMapper;
     @Autowired
     private OrderRefundPOManualMapper orderRefundPOManualMapper;
 

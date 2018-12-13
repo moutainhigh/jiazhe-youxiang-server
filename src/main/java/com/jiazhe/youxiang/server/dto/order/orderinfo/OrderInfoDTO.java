@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.dto.order.orderinfo;
 
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
+import com.jiazhe.youxiang.server.vo.BaseObject;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -11,7 +12,9 @@ import java.util.Date;
  * @description：
  * @date 2018/10/24
  */
-public class OrderInfoDTO {
+public class OrderInfoDTO extends BaseObject {
+
+    private static final long serialVersionUID = -5589390964080530151L;
 
     private Integer id;
 
@@ -49,7 +52,7 @@ public class OrderInfoDTO {
 
     private BigDecimal payRechargeCard;
 
-    private Integer payVoucher;
+    private BigDecimal payVoucher;
 
     private BigDecimal payCash;
 
@@ -199,11 +202,11 @@ public class OrderInfoDTO {
         this.payRechargeCard = payRechargeCard;
     }
 
-    public Integer getPayVoucher() {
+    public BigDecimal getPayVoucher() {
         return payVoucher;
     }
 
-    public void setPayVoucher(Integer payVoucher) {
+    public void setPayVoucher(BigDecimal payVoucher) {
         this.payVoucher = payVoucher;
     }
 

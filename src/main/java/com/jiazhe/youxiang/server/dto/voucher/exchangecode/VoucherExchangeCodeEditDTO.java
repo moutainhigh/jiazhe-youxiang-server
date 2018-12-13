@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.server.dto.voucher.exchangecode;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 import java.util.Date;
 
 /**
@@ -7,7 +9,9 @@ import java.util.Date;
  * @description：
  * @date 2018/11/4
  */
-public class VoucherExchangeCodeEditDTO {
+public class VoucherExchangeCodeEditDTO extends BaseObject {
+
+    private static final long serialVersionUID = -4753245377896796359L;
 
     private Integer id;
 

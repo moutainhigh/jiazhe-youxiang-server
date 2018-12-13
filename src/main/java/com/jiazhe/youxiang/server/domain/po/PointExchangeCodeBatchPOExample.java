@@ -876,63 +876,63 @@ public class PointExchangeCodeBatchPOExample {
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeIsNull() {
-            addCriterion("recharge_point_expiry_time is null");
+        public Criteria andPointExpiryTimeIsNull() {
+            addCriterion("point_expiry_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeIsNotNull() {
-            addCriterion("recharge_point_expiry_time is not null");
+        public Criteria andPointExpiryTimeIsNotNull() {
+            addCriterion("point_expiry_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeEqualTo(Date value) {
-            addCriterion("recharge_point_expiry_time =", value, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeEqualTo(Date value) {
+            addCriterion("point_expiry_time =", value, "pointExpiryTime");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeNotEqualTo(Date value) {
-            addCriterion("recharge_point_expiry_time <>", value, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeNotEqualTo(Date value) {
+            addCriterion("point_expiry_time <>", value, "pointExpiryTime");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeGreaterThan(Date value) {
-            addCriterion("recharge_point_expiry_time >", value, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeGreaterThan(Date value) {
+            addCriterion("point_expiry_time >", value, "pointExpiryTime");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("recharge_point_expiry_time >=", value, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("point_expiry_time >=", value, "pointExpiryTime");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeLessThan(Date value) {
-            addCriterion("recharge_point_expiry_time <", value, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeLessThan(Date value) {
+            addCriterion("point_expiry_time <", value, "pointExpiryTime");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeLessThanOrEqualTo(Date value) {
-            addCriterion("recharge_point_expiry_time <=", value, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeLessThanOrEqualTo(Date value) {
+            addCriterion("point_expiry_time <=", value, "pointExpiryTime");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeIn(List<Date> values) {
-            addCriterion("recharge_point_expiry_time in", values, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeIn(List<Date> values) {
+            addCriterion("point_expiry_time in", values, "pointExpiryTime");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeNotIn(List<Date> values) {
-            addCriterion("recharge_point_expiry_time not in", values, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeNotIn(List<Date> values) {
+            addCriterion("point_expiry_time not in", values, "pointExpiryTime");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeBetween(Date value1, Date value2) {
-            addCriterion("recharge_point_expiry_time between", value1, value2, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeBetween(Date value1, Date value2) {
+            addCriterion("point_expiry_time between", value1, value2, "pointExpiryTime");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointExpiryTimeNotBetween(Date value1, Date value2) {
-            addCriterion("recharge_point_expiry_time not between", value1, value2, "rechargePointExpiryTime");
+        public Criteria andPointExpiryTimeNotBetween(Date value1, Date value2) {
+            addCriterion("point_expiry_time not between", value1, value2, "pointExpiryTime");
             return (Criteria) this;
         }
 

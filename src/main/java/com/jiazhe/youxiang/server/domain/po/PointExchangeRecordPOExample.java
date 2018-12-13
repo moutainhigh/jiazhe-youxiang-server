@@ -165,63 +165,63 @@ public class PointExchangeRecordPOExample {
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointIdIsNull() {
-            addCriterion("recharge_point_id is null");
+        public Criteria andPointIdIsNull() {
+            addCriterion("point_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointIdIsNotNull() {
-            addCriterion("recharge_point_id is not null");
+        public Criteria andPointIdIsNotNull() {
+            addCriterion("point_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointIdEqualTo(Integer value) {
-            addCriterion("recharge_point_id =", value, "rechargePointId");
+        public Criteria andPointIdEqualTo(Integer value) {
+            addCriterion("point_id =", value, "pointId");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointIdNotEqualTo(Integer value) {
-            addCriterion("recharge_point_id <>", value, "rechargePointId");
+        public Criteria andPointIdNotEqualTo(Integer value) {
+            addCriterion("point_id <>", value, "pointId");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointIdGreaterThan(Integer value) {
-            addCriterion("recharge_point_id >", value, "rechargePointId");
+        public Criteria andPointIdGreaterThan(Integer value) {
+            addCriterion("point_id >", value, "pointId");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("recharge_point_id >=", value, "rechargePointId");
+        public Criteria andPointIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("point_id >=", value, "pointId");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointIdLessThan(Integer value) {
-            addCriterion("recharge_point_id <", value, "rechargePointId");
+        public Criteria andPointIdLessThan(Integer value) {
+            addCriterion("point_id <", value, "pointId");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointIdLessThanOrEqualTo(Integer value) {
-            addCriterion("recharge_point_id <=", value, "rechargePointId");
+        public Criteria andPointIdLessThanOrEqualTo(Integer value) {
+            addCriterion("point_id <=", value, "pointId");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointIdIn(List<Integer> values) {
-            addCriterion("recharge_point_id in", values, "rechargePointId");
+        public Criteria andPointIdIn(List<Integer> values) {
+            addCriterion("point_id in", values, "pointId");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointIdNotIn(List<Integer> values) {
-            addCriterion("recharge_point_id not in", values, "rechargePointId");
+        public Criteria andPointIdNotIn(List<Integer> values) {
+            addCriterion("point_id not in", values, "pointId");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointIdBetween(Integer value1, Integer value2) {
-            addCriterion("recharge_point_id between", value1, value2, "rechargePointId");
+        public Criteria andPointIdBetween(Integer value1, Integer value2) {
+            addCriterion("point_id between", value1, value2, "pointId");
             return (Criteria) this;
         }
 
-        public Criteria andRechargePointIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("recharge_point_id not between", value1, value2, "rechargePointId");
+        public Criteria andPointIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("point_id not between", value1, value2, "pointId");
             return (Criteria) this;
         }
 

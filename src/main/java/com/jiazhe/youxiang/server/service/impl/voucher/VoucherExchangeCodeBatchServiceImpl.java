@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
  * @date 2018/11/3
  */
 @Service("voucherExchangeCodeBatchService")
-@Transactional(rollbackFor=Exception.class)
 public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeBatchService {
 
     @Autowired
@@ -64,6 +63,7 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
         voucherExchangeCodeBatchPOMapper.insert(po);
     }
 
+    @Transactional(rollbackFor=Exception.class)
     @Override
     public void editSave(VoucherExchangeCodeBatchSaveDTO batchSaveDTO) {
         VoucherExchangeCodeBatchPO batchPO = voucherExchangeCodeBatchPOMapper.selectByPrimaryKey(batchSaveDTO.getId());
@@ -104,6 +104,7 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
         return voucherExchangeCodeBatchEditDTO;
     }
 
+    @Transactional(rollbackFor=Exception.class)
     @Override
     public void generateCode(Integer id) {
         VoucherExchangeCodeBatchPO batchPO = voucherExchangeCodeBatchPOMapper.selectByPrimaryKey(id);
@@ -144,6 +145,7 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
         voucherExchangeCodeService.batchInsert(voucherExchangeCodePOList);
     }
 
+    @Transactional(rollbackFor=Exception.class)
     @Override
     public void changeBatchStatus(Integer id, Byte status) {
         VoucherExchangeCodeBatchPO batchPO = voucherExchangeCodeBatchPOMapper.selectByPrimaryKey(id);

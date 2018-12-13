@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.dto.rechargecard.rc;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -10,7 +11,9 @@ import java.util.Date;
  * @description
  * @date 2018/11/2.
  */
-public class RCEditDTO {
+public class RCEditDTO extends BaseObject {
+
+    private static final long serialVersionUID = 7265932338117984398L;
 
     private Integer id;
 

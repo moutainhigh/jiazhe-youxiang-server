@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
  * @date 2018/11/3
  */
 @Service("voucherService")
-@Transactional(rollbackFor=Exception.class)
 public class VoucherServiceImpl implements VoucherService {
 
     @Autowired

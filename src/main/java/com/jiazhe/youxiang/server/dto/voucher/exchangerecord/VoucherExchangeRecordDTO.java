@@ -1,11 +1,15 @@
 package com.jiazhe.youxiang.server.dto.voucher.exchangerecord;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 /**
  * @author TU
  * @description
  * @date 2018/10/24.
  */
-public class VoucherExchangeRecordDTO {
+public class VoucherExchangeRecordDTO extends BaseObject {
+
+    private static final long serialVersionUID = 3062807199072680884L;
 
     private Integer id;
 

@@ -21,7 +21,7 @@ public class RechargeCardController extends BaseController {
     //跳转到充值卡兑换码批次管理页面
     @RequestMapping(value = "/exchangecodebatchindex")
     public String exchangeCodeBatchIndex() {
-        return "rc/rcexchangecodebatch/index";
+        return "rc/exchangecodebatch/index";
     }
 
     //跳转到充值卡兑换码页面
@@ -29,6 +29,6 @@ public class RechargeCardController extends BaseController {
     public String exchangeCodeIndex(String batchId , String batchName , Model model) {
         model.addAttribute("batchId",batchId);
         model.addAttribute("batchName",batchName);
-        return "rc/rcexchangecode/index";
+        return "rc/exchangecode/index";
     }
 }

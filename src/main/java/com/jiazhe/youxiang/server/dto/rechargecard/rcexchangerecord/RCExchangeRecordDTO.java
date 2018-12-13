@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 import java.util.Date;
 
 /**
@@ -7,7 +9,9 @@ import java.util.Date;
  * @description
  * @date 2018/10/24.
  */
-public class RCExchangeRecordDTO {
+public class RCExchangeRecordDTO extends BaseObject {
+
+    private static final long serialVersionUID = 4747573226760027226L;
 
     private Integer id;
 

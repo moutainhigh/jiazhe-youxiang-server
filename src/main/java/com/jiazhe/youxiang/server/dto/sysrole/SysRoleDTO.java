@@ -5,6 +5,8 @@
  */
 package com.jiazhe.youxiang.server.dto.sysrole;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 import java.util.Date;
 
 /**
@@ -12,7 +14,9 @@ import java.util.Date;
  * @author  tu
  * @date 2018/10/17
  */
-public class SysRoleDTO {
+public class SysRoleDTO extends BaseObject {
+
+    private static final long serialVersionUID = 6305284462567729237L;
 
     private Integer id;
 

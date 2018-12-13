@@ -5,6 +5,8 @@
  */
 package com.jiazhe.youxiang.server.dto.product;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
+
 import java.math.BigDecimal;
 
 /**
@@ -13,8 +15,9 @@ import java.math.BigDecimal;
  * @author niexiao
  * @created 2018/10/19
  */
-public class ProductPriceDTO {
+public class ProductPriceDTO extends BaseObject{
 
+    private static final long serialVersionUID = -3643888829745678544L;
     /**
      * id
      */

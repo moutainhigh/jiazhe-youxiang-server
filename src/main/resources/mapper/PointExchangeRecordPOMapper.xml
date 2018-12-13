@@ -3,7 +3,7 @@
 <mapper namespace="com.jiazhe.youxiang.server.dao.mapper.PointExchangeRecordPOMapper" >
   <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.PointExchangeRecordPO" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="recharge_point_id" property="rechargePointId" jdbcType="INTEGER" />
+    <result column="point_id" property="pointId" jdbcType="INTEGER" />
     <result column="exchange_code_id" property="exchangeCodeId" jdbcType="INTEGER" />
     <result column="exchange_type" property="exchangeType" jdbcType="INTEGER" />
     <result column="operator_id" property="operatorId" jdbcType="INTEGER" />
@@ -72,8 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, recharge_point_id, exchange_code_id, exchange_type, operator_id, operator_name, 
-    ext_info, is_deleted, add_time, mod_time
+    id, point_id, exchange_code_id, exchange_type, operator_id, operator_name, ext_info, 
+    is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.PointExchangeRecordPOExample" >
     select
@@ -106,11 +106,11 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.PointExchangeRecordPO" >
-    insert into point_exchange_record (id, recharge_point_id, exchange_code_id, 
+    insert into point_exchange_record (id, point_id, exchange_code_id, 
       exchange_type, operator_id, operator_name, 
       ext_info, is_deleted, add_time, 
       mod_time)
-    values (#{id,jdbcType=INTEGER}, #{rechargePointId,jdbcType=INTEGER}, #{exchangeCodeId,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{pointId,jdbcType=INTEGER}, #{exchangeCodeId,jdbcType=INTEGER}, 
       #{exchangeType,jdbcType=INTEGER}, #{operatorId,jdbcType=INTEGER}, #{operatorName,jdbcType=VARCHAR}, 
       #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
       #{modTime,jdbcType=TIMESTAMP})
@@ -121,8 +121,8 @@
       <if test="id != null" >
         id,
       </if>
-      <if test="rechargePointId != null" >
-        recharge_point_id,
+      <if test="pointId != null" >
+        point_id,
       </if>
       <if test="exchangeCodeId != null" >
         exchange_code_id,
@@ -153,8 +153,8 @@
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="rechargePointId != null" >
-        #{rechargePointId,jdbcType=INTEGER},
+      <if test="pointId != null" >
+        #{pointId,jdbcType=INTEGER},
       </if>
       <if test="exchangeCodeId != null" >
         #{exchangeCodeId,jdbcType=INTEGER},
@@ -194,8 +194,8 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.rechargePointId != null" >
-        recharge_point_id = #{record.rechargePointId,jdbcType=INTEGER},
+      <if test="record.pointId != null" >
+        point_id = #{record.pointId,jdbcType=INTEGER},
       </if>
       <if test="record.exchangeCodeId != null" >
         exchange_code_id = #{record.exchangeCodeId,jdbcType=INTEGER},
@@ -229,7 +229,7 @@
   <update id="updateByExample" parameterType="map" >
     update point_exchange_record
     set id = #{record.id,jdbcType=INTEGER},
-      recharge_point_id = #{record.rechargePointId,jdbcType=INTEGER},
+      point_id = #{record.pointId,jdbcType=INTEGER},
       exchange_code_id = #{record.exchangeCodeId,jdbcType=INTEGER},
       exchange_type = #{record.exchangeType,jdbcType=INTEGER},
       operator_id = #{record.operatorId,jdbcType=INTEGER},
@@ -245,8 +245,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jiazhe.youxiang.server.domain.po.PointExchangeRecordPO" >
     update point_exchange_record
     <set >
-      <if test="rechargePointId != null" >
-        recharge_point_id = #{rechargePointId,jdbcType=INTEGER},
+      <if test="pointId != null" >
+        point_id = #{pointId,jdbcType=INTEGER},
       </if>
       <if test="exchangeCodeId != null" >
         exchange_code_id = #{exchangeCodeId,jdbcType=INTEGER},
@@ -277,7 +277,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jiazhe.youxiang.server.domain.po.PointExchangeRecordPO" >
     update point_exchange_record
-    set recharge_point_id = #{rechargePointId,jdbcType=INTEGER},
+    set point_id = #{pointId,jdbcType=INTEGER},
       exchange_code_id = #{exchangeCodeId,jdbcType=INTEGER},
       exchange_type = #{exchangeType,jdbcType=INTEGER},
       operator_id = #{operatorId,jdbcType=INTEGER},

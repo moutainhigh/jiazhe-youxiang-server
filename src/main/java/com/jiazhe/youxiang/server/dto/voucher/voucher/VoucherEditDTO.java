@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.dto.voucher.voucher;
 
+import com.jiazhe.youxiang.server.vo.BaseObject;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -10,7 +11,9 @@ import java.util.Date;
  * @description：
  * @date 2018/11/4
  */
-public class VoucherEditDTO {
+public class VoucherEditDTO extends BaseObject {
+
+    private static final long serialVersionUID = -5249943207183544890L;
 
     private Integer id;
 
