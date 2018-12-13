@@ -80,5 +80,10 @@
         <!--<table tableName="voucher_exchange_record" domainObjectName="VoucherExchangeRecordPO"/>-->
         <!--<table tableName="simple_session" domainObjectName="SimpleSessionPO"/>-->
 
+        <!--<table tableName="point" domainObjectName="PointPO"/>-->
+        <!--<table tableName="point_exchange_code" domainObjectName="PointExchangeCodePO"/>-->
+        <!--<table tableName="point_exchange_code_batch" domainObjectName="PointExchangeCodeBatchPO"/>-->
+        <!--<table tableName="point_exchange_record" domainObjectName="PointExchangeRecordPO"/>-->
+
     </context>
 </generatorConfiguration>
