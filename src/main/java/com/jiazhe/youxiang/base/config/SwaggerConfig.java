@@ -33,10 +33,10 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-//                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation
-//                        .class))
-                .apis(RequestHandlerSelectors.withMethodAnnotation(AppApi
+                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation
                         .class))
+//                .apis(RequestHandlerSelectors.withMethodAnnotation(AppApi
+//                        .class))
                 .paths(PathSelectors.any())
                 .build();
     }
