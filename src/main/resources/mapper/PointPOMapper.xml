@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.ProjectPOMapper" >
-  <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.ProjectPO" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.PointPOMapper" >
+  <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.PointPO" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
-    <result column="priority" property="priority" jdbcType="INTEGER" />
-    <result column="point_conversion_rate" property="pointConversionRate" jdbcType="INTEGER" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="city_codes" property="cityCodes" jdbcType="VARCHAR" />
+    <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
+    <result column="face_value" property="faceValue" jdbcType="DECIMAL" />
+    <result column="balance" property="balance" jdbcType="DECIMAL" />
+    <result column="exchange_record_id" property="exchangeRecordId" jdbcType="INTEGER" />
+    <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
@@ -72,16 +78,17 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, name, description, priority, point_conversion_rate, status, ext_info, is_deleted, 
-    add_time, mod_time
+    id, name, description, customer_id, project_id, city_codes, product_ids, face_value, 
+    balance, exchange_record_id, expiry_time, status, ext_info, is_deleted, add_time, 
+    mod_time
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.ProjectPOExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.PointPOExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from project
+    from point
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -92,31 +99,35 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from project
+    from point
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from project
+    delete from point
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jiazhe.youxiang.server.domain.po.ProjectPOExample" >
-    delete from project
+  <delete id="deleteByExample" parameterType="com.jiazhe.youxiang.server.domain.po.PointPOExample" >
+    delete from point
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.ProjectPO" >
-    insert into project (id, name, description, 
-      priority, point_conversion_rate, status, 
+  <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.PointPO" >
+    insert into point (id, name, description, 
+      customer_id, project_id, city_codes, 
+      product_ids, face_value, balance, 
+      exchange_record_id, expiry_time, status, 
       ext_info, is_deleted, add_time, 
       mod_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
-      #{priority,jdbcType=INTEGER}, #{pointConversionRate,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, 
+      #{customerId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR}, 
+      #{productIds,jdbcType=VARCHAR}, #{faceValue,jdbcType=DECIMAL}, #{balance,jdbcType=DECIMAL}, 
+      #{exchangeRecordId,jdbcType=INTEGER}, #{expiryTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, 
       #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
       #{modTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.ProjectPO" >
-    insert into project
+  <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.PointPO" >
+    insert into point
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -127,11 +138,29 @@
       <if test="description != null" >
         description,
       </if>
-      <if test="priority != null" >
-        priority,
+      <if test="customerId != null" >
+        customer_id,
       </if>
-      <if test="pointConversionRate != null" >
-        point_conversion_rate,
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="cityCodes != null" >
+        city_codes,
+      </if>
+      <if test="productIds != null" >
+        product_ids,
+      </if>
+      <if test="faceValue != null" >
+        face_value,
+      </if>
+      <if test="balance != null" >
+        balance,
+      </if>
+      <if test="exchangeRecordId != null" >
+        exchange_record_id,
+      </if>
+      <if test="expiryTime != null" >
+        expiry_time,
       </if>
       <if test="status != null" >
         status,
@@ -159,11 +188,29 @@
       <if test="description != null" >
         #{description,jdbcType=VARCHAR},
       </if>
-      <if test="priority != null" >
-        #{priority,jdbcType=INTEGER},
+      <if test="customerId != null" >
+        #{customerId,jdbcType=INTEGER},
       </if>
-      <if test="pointConversionRate != null" >
-        #{pointConversionRate,jdbcType=INTEGER},
+      <if test="projectId != null" >
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="cityCodes != null" >
+        #{cityCodes,jdbcType=VARCHAR},
+      </if>
+      <if test="productIds != null" >
+        #{productIds,jdbcType=VARCHAR},
+      </if>
+      <if test="faceValue != null" >
+        #{faceValue,jdbcType=DECIMAL},
+      </if>
+      <if test="balance != null" >
+        #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="exchangeRecordId != null" >
+        #{exchangeRecordId,jdbcType=INTEGER},
+      </if>
+      <if test="expiryTime != null" >
+        #{expiryTime,jdbcType=TIMESTAMP},
       </if>
       <if test="status != null" >
         #{status,jdbcType=TINYINT},
@@ -182,14 +229,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jiazhe.youxiang.server.domain.po.ProjectPOExample" resultType="java.lang.Integer" >
-    select count(*) from project
+  <select id="countByExample" parameterType="com.jiazhe.youxiang.server.domain.po.PointPOExample" resultType="java.lang.Integer" >
+    select count(*) from point
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update project
+    update point
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
@@ -200,11 +247,29 @@
       <if test="record.description != null" >
         description = #{record.description,jdbcType=VARCHAR},
       </if>
-      <if test="record.priority != null" >
-        priority = #{record.priority,jdbcType=INTEGER},
+      <if test="record.customerId != null" >
+        customer_id = #{record.customerId,jdbcType=INTEGER},
       </if>
-      <if test="record.pointConversionRate != null" >
-        point_conversion_rate = #{record.pointConversionRate,jdbcType=INTEGER},
+      <if test="record.projectId != null" >
+        project_id = #{record.projectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.cityCodes != null" >
+        city_codes = #{record.cityCodes,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productIds != null" >
+        product_ids = #{record.productIds,jdbcType=VARCHAR},
+      </if>
+      <if test="record.faceValue != null" >
+        face_value = #{record.faceValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.balance != null" >
+        balance = #{record.balance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.exchangeRecordId != null" >
+        exchange_record_id = #{record.exchangeRecordId,jdbcType=INTEGER},
+      </if>
+      <if test="record.expiryTime != null" >
+        expiry_time = #{record.expiryTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=TINYINT},
@@ -227,12 +292,18 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update project
+    update point
     set id = #{record.id,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR},
-      priority = #{record.priority,jdbcType=INTEGER},
-      point_conversion_rate = #{record.pointConversionRate,jdbcType=INTEGER},
+      customer_id = #{record.customerId,jdbcType=INTEGER},
+      project_id = #{record.projectId,jdbcType=INTEGER},
+      city_codes = #{record.cityCodes,jdbcType=VARCHAR},
+      product_ids = #{record.productIds,jdbcType=VARCHAR},
+      face_value = #{record.faceValue,jdbcType=DECIMAL},
+      balance = #{record.balance,jdbcType=DECIMAL},
+      exchange_record_id = #{record.exchangeRecordId,jdbcType=INTEGER},
+      expiry_time = #{record.expiryTime,jdbcType=TIMESTAMP},
       status = #{record.status,jdbcType=TINYINT},
       ext_info = #{record.extInfo,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=TINYINT},
@@ -242,8 +313,8 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jiazhe.youxiang.server.domain.po.ProjectPO" >
-    update project
+  <update id="updateByPrimaryKeySelective" parameterType="com.jiazhe.youxiang.server.domain.po.PointPO" >
+    update point
     <set >
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
@@ -251,11 +322,29 @@
       <if test="description != null" >
         description = #{description,jdbcType=VARCHAR},
       </if>
-      <if test="priority != null" >
-        priority = #{priority,jdbcType=INTEGER},
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=INTEGER},
       </if>
-      <if test="pointConversionRate != null" >
-        point_conversion_rate = #{pointConversionRate,jdbcType=INTEGER},
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="cityCodes != null" >
+        city_codes = #{cityCodes,jdbcType=VARCHAR},
+      </if>
+      <if test="productIds != null" >
+        product_ids = #{productIds,jdbcType=VARCHAR},
+      </if>
+      <if test="faceValue != null" >
+        face_value = #{faceValue,jdbcType=DECIMAL},
+      </if>
+      <if test="balance != null" >
+        balance = #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="exchangeRecordId != null" >
+        exchange_record_id = #{exchangeRecordId,jdbcType=INTEGER},
+      </if>
+      <if test="expiryTime != null" >
+        expiry_time = #{expiryTime,jdbcType=TIMESTAMP},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
@@ -275,12 +364,18 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jiazhe.youxiang.server.domain.po.ProjectPO" >
-    update project
+  <update id="updateByPrimaryKey" parameterType="com.jiazhe.youxiang.server.domain.po.PointPO" >
+    update point
     set name = #{name,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
-      priority = #{priority,jdbcType=INTEGER},
-      point_conversion_rate = #{pointConversionRate,jdbcType=INTEGER},
+      customer_id = #{customerId,jdbcType=INTEGER},
+      project_id = #{projectId,jdbcType=INTEGER},
+      city_codes = #{cityCodes,jdbcType=VARCHAR},
+      product_ids = #{productIds,jdbcType=VARCHAR},
+      face_value = #{faceValue,jdbcType=DECIMAL},
+      balance = #{balance,jdbcType=DECIMAL},
+      exchange_record_id = #{exchangeRecordId,jdbcType=INTEGER},
+      expiry_time = #{expiryTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=TINYINT},
       ext_info = #{extInfo,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=TINYINT},

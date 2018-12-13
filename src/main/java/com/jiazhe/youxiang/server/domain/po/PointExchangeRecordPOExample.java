@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ProjectPOExample {
+public class PointExchangeRecordPOExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ProjectPOExample() {
+    public PointExchangeRecordPOExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -165,323 +165,313 @@ public class ProjectPOExample {
             return (Criteria) this;
         }
 
-        public Criteria andNameIsNull() {
-            addCriterion("name is null");
+        public Criteria andRechargePointIdIsNull() {
+            addCriterion("recharge_point_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andNameIsNotNull() {
-            addCriterion("name is not null");
+        public Criteria andRechargePointIdIsNotNull() {
+            addCriterion("recharge_point_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andNameEqualTo(String value) {
-            addCriterion("name =", value, "name");
+        public Criteria andRechargePointIdEqualTo(Integer value) {
+            addCriterion("recharge_point_id =", value, "rechargePointId");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotEqualTo(String value) {
-            addCriterion("name <>", value, "name");
+        public Criteria andRechargePointIdNotEqualTo(Integer value) {
+            addCriterion("recharge_point_id <>", value, "rechargePointId");
             return (Criteria) this;
         }
 
-        public Criteria andNameGreaterThan(String value) {
-            addCriterion("name >", value, "name");
+        public Criteria andRechargePointIdGreaterThan(Integer value) {
+            addCriterion("recharge_point_id >", value, "rechargePointId");
             return (Criteria) this;
         }
 
-        public Criteria andNameGreaterThanOrEqualTo(String value) {
-            addCriterion("name >=", value, "name");
+        public Criteria andRechargePointIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("recharge_point_id >=", value, "rechargePointId");
             return (Criteria) this;
         }
 
-        public Criteria andNameLessThan(String value) {
-            addCriterion("name <", value, "name");
+        public Criteria andRechargePointIdLessThan(Integer value) {
+            addCriterion("recharge_point_id <", value, "rechargePointId");
             return (Criteria) this;
         }
 
-        public Criteria andNameLessThanOrEqualTo(String value) {
-            addCriterion("name <=", value, "name");
+        public Criteria andRechargePointIdLessThanOrEqualTo(Integer value) {
+            addCriterion("recharge_point_id <=", value, "rechargePointId");
             return (Criteria) this;
         }
 
-        public Criteria andNameLike(String value) {
-            addCriterion("name like", value, "name");
+        public Criteria andRechargePointIdIn(List<Integer> values) {
+            addCriterion("recharge_point_id in", values, "rechargePointId");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotLike(String value) {
-            addCriterion("name not like", value, "name");
+        public Criteria andRechargePointIdNotIn(List<Integer> values) {
+            addCriterion("recharge_point_id not in", values, "rechargePointId");
             return (Criteria) this;
         }
 
-        public Criteria andNameIn(List<String> values) {
-            addCriterion("name in", values, "name");
+        public Criteria andRechargePointIdBetween(Integer value1, Integer value2) {
+            addCriterion("recharge_point_id between", value1, value2, "rechargePointId");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotIn(List<String> values) {
-            addCriterion("name not in", values, "name");
+        public Criteria andRechargePointIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("recharge_point_id not between", value1, value2, "rechargePointId");
             return (Criteria) this;
         }
 
-        public Criteria andNameBetween(String value1, String value2) {
-            addCriterion("name between", value1, value2, "name");
+        public Criteria andExchangeCodeIdIsNull() {
+            addCriterion("exchange_code_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotBetween(String value1, String value2) {
-            addCriterion("name not between", value1, value2, "name");
+        public Criteria andExchangeCodeIdIsNotNull() {
+            addCriterion("exchange_code_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionIsNull() {
-            addCriterion("description is null");
+        public Criteria andExchangeCodeIdEqualTo(Integer value) {
+            addCriterion("exchange_code_id =", value, "exchangeCodeId");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionIsNotNull() {
-            addCriterion("description is not null");
+        public Criteria andExchangeCodeIdNotEqualTo(Integer value) {
+            addCriterion("exchange_code_id <>", value, "exchangeCodeId");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionEqualTo(String value) {
-            addCriterion("description =", value, "description");
+        public Criteria andExchangeCodeIdGreaterThan(Integer value) {
+            addCriterion("exchange_code_id >", value, "exchangeCodeId");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionNotEqualTo(String value) {
-            addCriterion("description <>", value, "description");
+        public Criteria andExchangeCodeIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("exchange_code_id >=", value, "exchangeCodeId");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionGreaterThan(String value) {
-            addCriterion("description >", value, "description");
+        public Criteria andExchangeCodeIdLessThan(Integer value) {
+            addCriterion("exchange_code_id <", value, "exchangeCodeId");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionGreaterThanOrEqualTo(String value) {
-            addCriterion("description >=", value, "description");
+        public Criteria andExchangeCodeIdLessThanOrEqualTo(Integer value) {
+            addCriterion("exchange_code_id <=", value, "exchangeCodeId");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionLessThan(String value) {
-            addCriterion("description <", value, "description");
+        public Criteria andExchangeCodeIdIn(List<Integer> values) {
+            addCriterion("exchange_code_id in", values, "exchangeCodeId");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionLessThanOrEqualTo(String value) {
-            addCriterion("description <=", value, "description");
+        public Criteria andExchangeCodeIdNotIn(List<Integer> values) {
+            addCriterion("exchange_code_id not in", values, "exchangeCodeId");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionLike(String value) {
-            addCriterion("description like", value, "description");
+        public Criteria andExchangeCodeIdBetween(Integer value1, Integer value2) {
+            addCriterion("exchange_code_id between", value1, value2, "exchangeCodeId");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionNotLike(String value) {
-            addCriterion("description not like", value, "description");
+        public Criteria andExchangeCodeIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("exchange_code_id not between", value1, value2, "exchangeCodeId");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionIn(List<String> values) {
-            addCriterion("description in", values, "description");
+        public Criteria andExchangeTypeIsNull() {
+            addCriterion("exchange_type is null");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionNotIn(List<String> values) {
-            addCriterion("description not in", values, "description");
+        public Criteria andExchangeTypeIsNotNull() {
+            addCriterion("exchange_type is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionBetween(String value1, String value2) {
-            addCriterion("description between", value1, value2, "description");
+        public Criteria andExchangeTypeEqualTo(Integer value) {
+            addCriterion("exchange_type =", value, "exchangeType");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionNotBetween(String value1, String value2) {
-            addCriterion("description not between", value1, value2, "description");
+        public Criteria andExchangeTypeNotEqualTo(Integer value) {
+            addCriterion("exchange_type <>", value, "exchangeType");
             return (Criteria) this;
         }
 
-        public Criteria andPriorityIsNull() {
-            addCriterion("priority is null");
+        public Criteria andExchangeTypeGreaterThan(Integer value) {
+            addCriterion("exchange_type >", value, "exchangeType");
             return (Criteria) this;
         }
 
-        public Criteria andPriorityIsNotNull() {
-            addCriterion("priority is not null");
+        public Criteria andExchangeTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("exchange_type >=", value, "exchangeType");
             return (Criteria) this;
         }
 
-        public Criteria andPriorityEqualTo(Integer value) {
-            addCriterion("priority =", value, "priority");
+        public Criteria andExchangeTypeLessThan(Integer value) {
+            addCriterion("exchange_type <", value, "exchangeType");
             return (Criteria) this;
         }
 
-        public Criteria andPriorityNotEqualTo(Integer value) {
-            addCriterion("priority <>", value, "priority");
+        public Criteria andExchangeTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("exchange_type <=", value, "exchangeType");
             return (Criteria) this;
         }
 
-        public Criteria andPriorityGreaterThan(Integer value) {
-            addCriterion("priority >", value, "priority");
+        public Criteria andExchangeTypeIn(List<Integer> values) {
+            addCriterion("exchange_type in", values, "exchangeType");
             return (Criteria) this;
         }
 
-        public Criteria andPriorityGreaterThanOrEqualTo(Integer value) {
-            addCriterion("priority >=", value, "priority");
+        public Criteria andExchangeTypeNotIn(List<Integer> values) {
+            addCriterion("exchange_type not in", values, "exchangeType");
             return (Criteria) this;
         }
 
-        public Criteria andPriorityLessThan(Integer value) {
-            addCriterion("priority <", value, "priority");
+        public Criteria andExchangeTypeBetween(Integer value1, Integer value2) {
+            addCriterion("exchange_type between", value1, value2, "exchangeType");
             return (Criteria) this;
         }
 
-        public Criteria andPriorityLessThanOrEqualTo(Integer value) {
-            addCriterion("priority <=", value, "priority");
+        public Criteria andExchangeTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("exchange_type not between", value1, value2, "exchangeType");
             return (Criteria) this;
         }
 
-        public Criteria andPriorityIn(List<Integer> values) {
-            addCriterion("priority in", values, "priority");
+        public Criteria andOperatorIdIsNull() {
+            addCriterion("operator_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andPriorityNotIn(List<Integer> values) {
-            addCriterion("priority not in", values, "priority");
+        public Criteria andOperatorIdIsNotNull() {
+            addCriterion("operator_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPriorityBetween(Integer value1, Integer value2) {
-            addCriterion("priority between", value1, value2, "priority");
+        public Criteria andOperatorIdEqualTo(Integer value) {
+            addCriterion("operator_id =", value, "operatorId");
             return (Criteria) this;
         }
 
-        public Criteria andPriorityNotBetween(Integer value1, Integer value2) {
-            addCriterion("priority not between", value1, value2, "priority");
+        public Criteria andOperatorIdNotEqualTo(Integer value) {
+            addCriterion("operator_id <>", value, "operatorId");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateIsNull() {
-            addCriterion("point_conversion_rate is null");
+        public Criteria andOperatorIdGreaterThan(Integer value) {
+            addCriterion("operator_id >", value, "operatorId");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateIsNotNull() {
-            addCriterion("point_conversion_rate is not null");
+        public Criteria andOperatorIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("operator_id >=", value, "operatorId");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateEqualTo(Integer value) {
-            addCriterion("point_conversion_rate =", value, "pointConversionRate");
+        public Criteria andOperatorIdLessThan(Integer value) {
+            addCriterion("operator_id <", value, "operatorId");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateNotEqualTo(Integer value) {
-            addCriterion("point_conversion_rate <>", value, "pointConversionRate");
+        public Criteria andOperatorIdLessThanOrEqualTo(Integer value) {
+            addCriterion("operator_id <=", value, "operatorId");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateGreaterThan(Integer value) {
-            addCriterion("point_conversion_rate >", value, "pointConversionRate");
+        public Criteria andOperatorIdIn(List<Integer> values) {
+            addCriterion("operator_id in", values, "operatorId");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateGreaterThanOrEqualTo(Integer value) {
-            addCriterion("point_conversion_rate >=", value, "pointConversionRate");
+        public Criteria andOperatorIdNotIn(List<Integer> values) {
+            addCriterion("operator_id not in", values, "operatorId");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateLessThan(Integer value) {
-            addCriterion("point_conversion_rate <", value, "pointConversionRate");
+        public Criteria andOperatorIdBetween(Integer value1, Integer value2) {
+            addCriterion("operator_id between", value1, value2, "operatorId");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateLessThanOrEqualTo(Integer value) {
-            addCriterion("point_conversion_rate <=", value, "pointConversionRate");
+        public Criteria andOperatorIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("operator_id not between", value1, value2, "operatorId");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateIn(List<Integer> values) {
-            addCriterion("point_conversion_rate in", values, "pointConversionRate");
+        public Criteria andOperatorNameIsNull() {
+            addCriterion("operator_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateNotIn(List<Integer> values) {
-            addCriterion("point_conversion_rate not in", values, "pointConversionRate");
+        public Criteria andOperatorNameIsNotNull() {
+            addCriterion("operator_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateBetween(Integer value1, Integer value2) {
-            addCriterion("point_conversion_rate between", value1, value2, "pointConversionRate");
+        public Criteria andOperatorNameEqualTo(String value) {
+            addCriterion("operator_name =", value, "operatorName");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateNotBetween(Integer value1, Integer value2) {
-            addCriterion("point_conversion_rate not between", value1, value2, "pointConversionRate");
+        public Criteria andOperatorNameNotEqualTo(String value) {
+            addCriterion("operator_name <>", value, "operatorName");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIsNull() {
-            addCriterion("status is null");
+        public Criteria andOperatorNameGreaterThan(String value) {
+            addCriterion("operator_name >", value, "operatorName");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIsNotNull() {
-            addCriterion("status is not null");
+        public Criteria andOperatorNameGreaterThanOrEqualTo(String value) {
+            addCriterion("operator_name >=", value, "operatorName");
             return (Criteria) this;
         }
 
-        public Criteria andStatusEqualTo(Byte value) {
-            addCriterion("status =", value, "status");
+        public Criteria andOperatorNameLessThan(String value) {
+            addCriterion("operator_name <", value, "operatorName");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotEqualTo(Byte value) {
-            addCriterion("status <>", value, "status");
+        public Criteria andOperatorNameLessThanOrEqualTo(String value) {
+            addCriterion("operator_name <=", value, "operatorName");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThan(Byte value) {
-            addCriterion("status >", value, "status");
+        public Criteria andOperatorNameLike(String value) {
+            addCriterion("operator_name like", value, "operatorName");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThanOrEqualTo(Byte value) {
-            addCriterion("status >=", value, "status");
+        public Criteria andOperatorNameNotLike(String value) {
+            addCriterion("operator_name not like", value, "operatorName");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThan(Byte value) {
-            addCriterion("status <", value, "status");
+        public Criteria andOperatorNameIn(List<String> values) {
+            addCriterion("operator_name in", values, "operatorName");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThanOrEqualTo(Byte value) {
-            addCriterion("status <=", value, "status");
+        public Criteria andOperatorNameNotIn(List<String> values) {
+            addCriterion("operator_name not in", values, "operatorName");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIn(List<Byte> values) {
-            addCriterion("status in", values, "status");
+        public Criteria andOperatorNameBetween(String value1, String value2) {
+            addCriterion("operator_name between", value1, value2, "operatorName");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotIn(List<Byte> values) {
-            addCriterion("status not in", values, "status");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatusBetween(Byte value1, Byte value2) {
-            addCriterion("status between", value1, value2, "status");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatusNotBetween(Byte value1, Byte value2) {
-            addCriterion("status not between", value1, value2, "status");
+        public Criteria andOperatorNameNotBetween(String value1, String value2) {
+            addCriterion("operator_name not between", value1, value2, "operatorName");
             return (Criteria) this;
         }
 
