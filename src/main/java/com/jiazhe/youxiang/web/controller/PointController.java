@@ -8,20 +8,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- *@author TU
- * @description 用于充值卡相关管理页面转发
- * @date 2018/10/13.
+ * @author TU
+ * @description
+ * @date 2018/12/13.
  */
 @Controller
-@RequestMapping("/rechargecard")
-public class RechargeCardController extends BaseController {
+@RequestMapping("/point")
+public class PointController extends BaseController{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RechargeCardController.class);
 
     //跳转到充值卡兑换码批次管理页面
     @RequestMapping(value = "/exchangecodebatchindex")
     public String exchangeCodeBatchIndex() {
-        return "rc/exchangecodebatch/index";
+        return "point/exchangecodebatch/index";
     }
 
     //跳转到充值卡兑换码页面
@@ -29,6 +29,6 @@ public class RechargeCardController extends BaseController {
     public String exchangeCodeIndex(String batchId , String batchName , Model model) {
         model.addAttribute("batchId",batchId);
         model.addAttribute("batchName",batchName);
-        return "rc/exchangecode/index";
+        return "point/exchangecode/index";
     }
 }

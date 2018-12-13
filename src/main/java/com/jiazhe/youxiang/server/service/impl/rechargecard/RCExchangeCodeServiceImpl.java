@@ -42,7 +42,6 @@ import java.util.stream.Collectors;
  * @date 2018/10/22.
  */
 @Service("rcExchangeCodeService")
-@Transactional(rollbackFor=Exception.class)
 public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
 
     @Autowired
