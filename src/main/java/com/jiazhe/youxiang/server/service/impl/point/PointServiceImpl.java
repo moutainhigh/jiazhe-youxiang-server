@@ -8,11 +8,14 @@ import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.dao.mapper.RechargeCardPOMapper;
+import com.jiazhe.youxiang.server.dao.mapper.manual.point.PointPOManualMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCPOManualMapper;
+import com.jiazhe.youxiang.server.domain.po.PointPO;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeRecordPO;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardPO;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardPOExample;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
@@ -46,4 +49,33 @@ import java.util.stream.Collectors;
 @Service("pointService")
 public class PointServiceImpl implements PointService {
 
+    @Autowired
+    private PointPOManualMapper pointPOManualMapper;
+
+    @Override
+    public void batchUpdate(List<Integer> ids, PointExchangeCodeBatchSaveDTO batchSaveDTO) {
+        List<PointPO> rcPOList = pointPOManualMapper.findByIds(ids);
+        rcPOList.stream().forEach(bean -> {
+            bean.setName(batchSaveDTO.getPointName());
+            bean.setDescription(batchSaveDTO.getDescription());
+            bean.setProjectId(batchSaveDTO.getProjectId());
+            bean.setCityCodes(batchSaveDTO.getCityCodes());
+            bean.setProductIds(batchSaveDTO.getProductIds());
+            //直接指定过期时间
+            if(batchSaveDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)){
+                bean.setExpiryTime(batchSaveDTO.getPointExpiryTime());
+            }else{
+                bean.setExpiryTime(new Date(bean.getAddTime().getTime()+batchSaveDTO.getValidityPeriod()* CommonConstant.ONE_DAY));
+            }
+        });
+        pointPOManualMapper.batchUpdate(rcPOList);
+    }
+
+    @Override
+    public void batchChangeStatus(List<Integer> ids, Byte status) {
+        Map<String, Object> map = new HashMap<String, Object>(2);
+        map.put("status",status);
+        map.put("ids",ids);
+        pointPOManualMapper.batchChangeStatus(map);
+    }
 }

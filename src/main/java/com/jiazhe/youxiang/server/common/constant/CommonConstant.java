@@ -52,6 +52,11 @@ public class CommonConstant {
     public static final String VOUCHER_EXCHANGE_CODE_PREFIX = "1";
 
     /**
+     * 积分兑换码前缀
+     */
+    public static final String POINT_EXCHANGE_CODE_PREFIX = "2";
+
+    /**
      * 订单号前缀
      */
     public static final String ORDER_CODE_PREFIX = "2";

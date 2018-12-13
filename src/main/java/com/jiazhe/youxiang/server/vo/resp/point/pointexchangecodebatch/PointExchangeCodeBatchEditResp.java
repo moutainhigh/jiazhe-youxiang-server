@@ -1,48 +1,61 @@
-package com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch;
+package com.jiazhe.youxiang.server.vo.resp.point.pointexchangecodebatch;
 
-import com.jiazhe.youxiang.server.vo.BaseObject;
+import com.jiazhe.youxiang.server.vo.BaseVO;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @author tu
  * @description：
- * @date 2018/10/21
+ * @date 2018/12/13
  */
-public class PointExchangeCodeBatchEditDTO extends BaseObject {
+public class PointExchangeCodeBatchEditResp extends BaseVO {
 
-    private static final long serialVersionUID = -7328144726210066664L;
-
+    @ApiModelProperty("批次id")
     private Integer id;
 
+    @ApiModelProperty("批次名称")
     private String name;
 
+    @ApiModelProperty("积分卡名称")
     private String pointName;
 
+    @ApiModelProperty("是否是虚拟批次")
     private Byte isVirtual;
 
-    private Byte isMade;
-
+    @ApiModelProperty("批次描述信息")
     private String description;
 
+    @ApiModelProperty("所属项目")
     private Integer projectId;
 
+    @ApiModelProperty("可用城市的code，多个code用,连接")
     private String cityCodes;
 
+    @ApiModelProperty("可用商品的id，多个id用,连接")
     private String productIds;
 
+    @ApiModelProperty("兑换码数量")
     private Integer amount;
 
+    @ApiModelProperty("充值卡面额")
     private BigDecimal faceValue;
 
-    private Date expiryTime;
+    @ApiModelProperty("过期时间")
+    private Long expiryTime;
 
-    private Date pointExpiryTime;
+    @ApiModelProperty("积分卡过期时间")
+    private Long pointExpiryTime;
 
+    @ApiModelProperty("自兑换之日起，**天有效")
     private Integer validityPeriod;
 
+    @ApiModelProperty("过期类型")
     private Byte expiryType;
+
+    @ApiModelProperty("是否已经制作")
+    private Byte isMade;
 
     public Integer getId() {
         return id;
@@ -74,14 +87,6 @@ public class PointExchangeCodeBatchEditDTO extends BaseObject {
 
     public void setIsVirtual(Byte isVirtual) {
         this.isVirtual = isVirtual;
-    }
-
-    public Byte getIsMade() {
-        return isMade;
-    }
-
-    public void setIsMade(Byte isMade) {
-        this.isMade = isMade;
     }
 
     public String getDescription() {
@@ -132,19 +137,19 @@ public class PointExchangeCodeBatchEditDTO extends BaseObject {
         this.faceValue = faceValue;
     }
 
-    public Date getExpiryTime() {
+    public Long getExpiryTime() {
         return expiryTime;
     }
 
-    public void setExpiryTime(Date expiryTime) {
+    public void setExpiryTime(Long expiryTime) {
         this.expiryTime = expiryTime;
     }
 
-    public Date getPointExpiryTime() {
+    public Long getPointExpiryTime() {
         return pointExpiryTime;
     }
 
-    public void setPointExpiryTime(Date pointExpiryTime) {
+    public void setPointExpiryTime(Long pointExpiryTime) {
         this.pointExpiryTime = pointExpiryTime;
     }
 
@@ -162,5 +167,13 @@ public class PointExchangeCodeBatchEditDTO extends BaseObject {
 
     public void setExpiryType(Byte expiryType) {
         this.expiryType = expiryType;
+    }
+
+    public Byte getIsMade() {
+        return isMade;
+    }
+
+    public void setIsMade(Byte isMade) {
+        this.isMade = isMade;
     }
 }

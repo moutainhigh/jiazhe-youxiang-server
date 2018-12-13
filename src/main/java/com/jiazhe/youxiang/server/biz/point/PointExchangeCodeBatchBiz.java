@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.biz.point;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchDTO;
+import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
@@ -50,6 +51,23 @@ public class PointExchangeCodeBatchBiz {
     }
 
     public void editSave(PointExchangeCodeBatchSaveDTO pointExchangeCodeBatchSaveDTO) {
-        pointExchangeCodeBatchService.editSave(rcExchangeCodeBatchSaveDTO);
+        pointExchangeCodeBatchService.editSave(pointExchangeCodeBatchSaveDTO);
+    }
+
+    public PointExchangeCodeBatchEditDTO getById(Integer id) {
+        PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO = pointExchangeCodeBatchService.getById(id);
+        return pointExchangeCodeBatchEditDTO;
+    }
+
+    public void generateCode(Integer id) {
+        pointExchangeCodeBatchService.generateCode(id);
+    }
+
+    public void startUsing(Integer id) {
+        pointExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
+    }
+
+    public void stopUsing(Integer id) {
+        pointExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
     }
 }

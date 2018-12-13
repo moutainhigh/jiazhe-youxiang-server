@@ -3,12 +3,14 @@ package com.jiazhe.youxiang.server.adapter.point;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchDTO;
+import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.vo.req.point.poingexchangecodebatch.PointExchangeCodeBatchSaveReq;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveReq;
+import com.jiazhe.youxiang.server.vo.resp.point.pointexchangecodebatch.PointExchangeCodeBatchEditResp;
 import com.jiazhe.youxiang.server.vo.resp.point.pointexchangecodebatch.PointExchangeCodeBatchResp;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditResp;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchResp;
@@ -76,5 +78,50 @@ public class PointExchangeCodeBatchAdapter {
         pointExchangeCodeBatchSaveDTO.setExpiryType(req.getExpiryType());
         pointExchangeCodeBatchSaveDTO.setDescription(req.getDescription());
         return pointExchangeCodeBatchSaveDTO;
+    }
+
+    public static PointExchangeCodeBatchPO dtoSave2Po(PointExchangeCodeBatchSaveDTO pointExchangeCodeBatchSaveDTO) {
+        if (pointExchangeCodeBatchSaveDTO == null) {
+            return null;
+        }
+        PointExchangeCodeBatchPO pointExchangeCodeBatchPO = new PointExchangeCodeBatchPO();
+        pointExchangeCodeBatchPO.setId(pointExchangeCodeBatchSaveDTO.getId());
+        pointExchangeCodeBatchPO.setName(pointExchangeCodeBatchSaveDTO.getName());
+        pointExchangeCodeBatchPO.setPointName(pointExchangeCodeBatchSaveDTO.getPointName());
+        pointExchangeCodeBatchPO.setIsVirtual(pointExchangeCodeBatchSaveDTO.getIsVirtual());
+        pointExchangeCodeBatchPO.setDescription(pointExchangeCodeBatchSaveDTO.getDescription());
+        pointExchangeCodeBatchPO.setAmount(pointExchangeCodeBatchSaveDTO.getAmount());
+        pointExchangeCodeBatchPO.setProjectId(pointExchangeCodeBatchSaveDTO.getProjectId());
+        pointExchangeCodeBatchPO.setCityCodes(pointExchangeCodeBatchSaveDTO.getCityCodes());
+        pointExchangeCodeBatchPO.setProductIds(pointExchangeCodeBatchSaveDTO.getProductIds());
+        pointExchangeCodeBatchPO.setFaceValue(pointExchangeCodeBatchSaveDTO.getFaceValue());
+        pointExchangeCodeBatchPO.setExpiryTime(pointExchangeCodeBatchSaveDTO.getExpiryTime());
+        pointExchangeCodeBatchPO.setPointExpiryTime(pointExchangeCodeBatchSaveDTO.getPointExpiryTime());
+        pointExchangeCodeBatchPO.setValidityPeriod(pointExchangeCodeBatchSaveDTO.getValidityPeriod());
+        pointExchangeCodeBatchPO.setExpiryType(pointExchangeCodeBatchSaveDTO.getExpiryType());
+        return pointExchangeCodeBatchPO;
+    }
+
+    public static PointExchangeCodeBatchEditResp DtoEdit2RespEdit(PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO) {
+        if (pointExchangeCodeBatchEditDTO == null) {
+            return null;
+        }
+        PointExchangeCodeBatchEditResp pointExchangeCodeBatchEditResp = new PointExchangeCodeBatchEditResp();
+        pointExchangeCodeBatchEditResp.setId(pointExchangeCodeBatchEditDTO.getId());
+        pointExchangeCodeBatchEditResp.setName(pointExchangeCodeBatchEditDTO.getName());
+        pointExchangeCodeBatchEditResp.setPointName(pointExchangeCodeBatchEditDTO.getPointName());
+        pointExchangeCodeBatchEditResp.setIsVirtual(pointExchangeCodeBatchEditDTO.getIsVirtual());
+        pointExchangeCodeBatchEditResp.setIsMade(pointExchangeCodeBatchEditDTO.getIsMade());
+        pointExchangeCodeBatchEditResp.setDescription(pointExchangeCodeBatchEditDTO.getDescription());
+        pointExchangeCodeBatchEditResp.setProjectId(pointExchangeCodeBatchEditDTO.getProjectId());
+        pointExchangeCodeBatchEditResp.setCityCodes(pointExchangeCodeBatchEditDTO.getCityCodes());
+        pointExchangeCodeBatchEditResp.setProductIds(pointExchangeCodeBatchEditDTO.getProductIds());
+        pointExchangeCodeBatchEditResp.setAmount(pointExchangeCodeBatchEditDTO.getAmount());
+        pointExchangeCodeBatchEditResp.setFaceValue(pointExchangeCodeBatchEditDTO.getFaceValue());
+        pointExchangeCodeBatchEditResp.setExpiryTime(pointExchangeCodeBatchEditDTO.getExpiryTime().getTime());
+        pointExchangeCodeBatchEditResp.setPointExpiryTime(pointExchangeCodeBatchEditDTO.getPointExpiryTime().getTime());
+        pointExchangeCodeBatchEditResp.setValidityPeriod(pointExchangeCodeBatchEditDTO.getValidityPeriod());
+        pointExchangeCodeBatchEditResp.setExpiryType(pointExchangeCodeBatchEditDTO.getExpiryType());
+        return pointExchangeCodeBatchEditResp;
     }
 }

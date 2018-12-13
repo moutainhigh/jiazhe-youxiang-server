@@ -160,7 +160,7 @@
 
                                                     <div class="space-2 saveIsVirtual"></div>
                                                     <div class="form-group saveIsVirtual">
-                                                        <label class="col-sm-4 control-label no-padding-right">面额：</label>
+                                                        <label class="col-sm-4 control-label no-padding-right">积分：</label>
                                                         <div class="col-sm-8">
                                                             <div class="pos-rel">
                                                                 <input id="saveFaceValue" name="faceValue"
@@ -349,7 +349,7 @@
         var tableOption = {
             url: "/api/pointexchangecodebatch/listpage",
             postData: transformToJson($('#batchSearchForm').serializeArray()),
-            colNames: ['', '批次名称', '积分卡名称', '是否是虚拟批次', '状态', '面额', '数量', '过期时间', '操作'],
+            colNames: ['', '批次名称', '积分卡名称', '是否是虚拟批次', '状态', '积分', '数量', '过期时间', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 100, sortable: false},
@@ -459,7 +459,7 @@
     function save() {
         if ($("input[name=isVirtualRadio]:checked").val() == 0) {
             if(!isNumber($("#saveFaceValue").val())){
-                bootboxalert("面额非法");
+                bootboxalert("积分非法");
                 return false;
             }
             if (!isInteger($("#saveAmount").val())) {

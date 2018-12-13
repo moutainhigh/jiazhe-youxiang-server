@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.service.point;
 
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeRecordPO;
+import com.jiazhe.youxiang.server.dto.point.pointexchangerecord.PointExchangeRecordDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord.RCExchangeRecordDTO;
 
 import java.util.List;
@@ -12,4 +13,5 @@ import java.util.List;
  */
 public interface PointExchangeRecordService {
 
+    List<PointExchangeRecordDTO> findByCodeIds(List<Integer> usedIds);
 }

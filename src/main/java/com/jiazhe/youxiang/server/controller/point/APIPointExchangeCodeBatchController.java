@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.controller.point;
 import com.jiazhe.youxiang.base.controller.BaseController;
 
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.ExportExcelUtils;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeBatchAdapter;
 import com.jiazhe.youxiang.server.biz.point.PointExchangeCodeBatchBiz;
@@ -13,14 +14,19 @@ import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.PointCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.PointException;
+import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchDTO;
+import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchSaveDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.point.poingexchangecodebatch.PointExchangeCodeBatchPageReq;
 import com.jiazhe.youxiang.server.vo.req.point.poingexchangecodebatch.PointExchangeCodeBatchSaveReq;
+import com.jiazhe.youxiang.server.vo.resp.point.pointexchangecodebatch.PointExchangeCodeBatchEditResp;
 import com.jiazhe.youxiang.server.vo.resp.point.pointexchangecodebatch.PointExchangeCodeBatchResp;
+import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditResp;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchResp;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -31,6 +37,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,7 +74,7 @@ public class APIPointExchangeCodeBatchController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "根据项目id查询积分卡兑换码虚拟批次", level = LogLevelEnum.LEVEL_1)
     public Object findVirtualByProjectId(@ModelAttribute IdReq req) {
         List<PointExchangeCodeBatchDTO> dtoList = pointExchangeCodeBatchBiz.getVirtualByProjectId(req.getId());
-        List<RCExchangeCodeBatchResp> respList = dtoList.stream().map(PointExchangeCodeBatchAdapter::dto2Resp).collect(Collectors.toList());
+        List<PointExchangeCodeBatchResp> respList = dtoList.stream().map(PointExchangeCodeBatchAdapter::dto2Resp).collect(Collectors.toList());
         return ResponseFactory.buildResponse(respList);
     }
 
@@ -103,77 +111,74 @@ public class APIPointExchangeCodeBatchController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-//    @ApiOperation(value = "【后台】生成积分卡兑换码", httpMethod = "POST", notes = "生成批次下的积分卡兑换码")
-//    @RequestMapping(value = "/generatecode", method = RequestMethod.POST)
-//    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "生成积分卡兑换码", level = LogLevelEnum.LEVEL_3)
-//    public Object generateCode(@ModelAttribute IdReq req) {
-//        CommonValidator.validateId(req);
-//        //参数检查,检查是否是虚拟批次，检查该批次是否已经生成过兑换码
-//        RCExchangeCodeBatchEditDTO dto = rcExchangeCodeBatchBiz.getById(req.getId());
-//        if(null == dto){
-//            throw new pointException(PointCodeEnum.BATCH_NOT_EXISTED);
-//        }
-//        if (dto.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
-//            throw new pointException(PointCodeEnum.VIRTUAL_BATCH_CANNOT_GENERATE);
-//        }
-//        if(dto.getIsMade().equals(CommonConstant.EXCHANGE_CODE_HAS_MADE)){
-//            throw new pointException(PointCodeEnum.CODE_GENERATED);
-//        }
-//        rcExchangeCodeBatchBiz.generateCode(req.getId());
-//        return ResponseFactory.buildSuccess();
-//    }
-//
-//    @ApiOperation(value = "【后台】积分卡兑换码批次信息回显", httpMethod = "GET", response = RCExchangeCodeBatchEditResp.class, notes = "积分卡兑换码批次信息回显")
-//    @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
-//    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "积分卡兑换码批次信息回显", level = LogLevelEnum.LEVEL_1)
-//    public Object getById(@ModelAttribute IdReq req) {
-//        //参数检查
-//        CommonValidator.validateId(req);
-//        RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchBiz.getById(req.getId());
-//        RCExchangeCodeBatchEditResp rcExchangeCodeBatchEditResp = RCExchangeCodeBatchAdapter.DTOEdit2RespEdit(rcExchangeCodeBatchEditDTO);
-//        return ResponseFactory.buildResponse(rcExchangeCodeBatchEditResp);
-//    }
-//
-//    @ApiOperation(value = "【后台】启用批次", httpMethod = "POST", notes = "启用批次，同时改变批次下兑换码和已经兑换成积分卡的状态")
-//    @RequestMapping(value = "/startusing", method = RequestMethod.POST)
-//    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "启用批次", level = LogLevelEnum.LEVEL_2)
-//    public Object startUsing(@ModelAttribute IdReq req) {
-//        //参数检查
-//        CommonValidator.validateId(req);
-//        rcExchangeCodeBatchBiz.startUsing(req.getId());
-//        return ResponseFactory.buildSuccess();
-//    }
-//
-//    @ApiOperation(value = "【后台】停用批次", httpMethod = "POST", notes = "停用批次，同时改变批次下兑换码和已经兑换成积分卡的状态")
-//    @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
-//    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "停用批次", level = LogLevelEnum.LEVEL_2)
-//    public Object stopUsing(@ModelAttribute IdReq req) {
-//        //参数检查
-//        CommonValidator.validateId(req);
-//        rcExchangeCodeBatchBiz.stopUsing(req.getId());
-//        return ResponseFactory.buildSuccess();
-//    }
-//
-//    @ApiOperation(value = "【后台】导出批次下兑换码", httpMethod = "GET", notes = "导出批次下兑换码")
-//    @RequestMapping(value = "/export", method = RequestMethod.GET)
-//    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "导出批次下兑换码", level = LogLevelEnum.LEVEL_3)
-//    public void export(@ModelAttribute IdReq req, HttpServletResponse response) throws IOException {
-//        List<RCExchangeCodeDTO> rcExchangeCodeDTOList= rcExchangeCodeBiz.getByBatchId(req.getId());
-//        ExportExcelUtils.exportPointCode(response,rcExchangeCodeDTOList);
-//    }
-//
-//    @ApiOperation(value = "【后台】导出前检查", httpMethod = "GET", notes = "导出前检查，看批次下是否有兑换码")
-//    @RequestMapping(value = "/exportcheck", method = RequestMethod.GET)
-//    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "导出前检查", level = LogLevelEnum.LEVEL_1)
-//    public Object exportCheck(@ModelAttribute IdReq req){
-//        CommonValidator.validateId(req);
-//        List<RCExchangeCodeDTO> rcExchangeCodeDTOList= rcExchangeCodeBiz.getByBatchId(req.getId());
-//        if(rcExchangeCodeDTOList.isEmpty()){
-//            throw new pointException(PointCodeEnum.NO_CODE_TO_EXPORT);
-//        }
-//        return ResponseFactory.buildSuccess();
-//    }
+    @ApiOperation(value = "【后台】生成积分卡兑换码", httpMethod = "POST", notes = "生成批次下的积分卡兑换码")
+    @RequestMapping(value = "/generatecode", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.POINT, operate = "生成积分卡兑换码", level = LogLevelEnum.LEVEL_3)
+    public Object generateCode(@ModelAttribute IdReq req) {
+        CommonValidator.validateId(req);
+        //参数检查,检查是否是虚拟批次，检查该批次是否已经生成过兑换码
+        PointExchangeCodeBatchEditDTO dto = pointExchangeCodeBatchBiz.getById(req.getId());
+        if(null == dto){
+            throw new PointException(PointCodeEnum.BATCH_NOT_EXISTED);
+        }
+        if (dto.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
+            throw new PointException(PointCodeEnum.VIRTUAL_BATCH_CANNOT_GENERATE);
+        }
+        if(dto.getIsMade().equals(CommonConstant.EXCHANGE_CODE_HAS_MADE)){
+            throw new PointException(PointCodeEnum.CODE_GENERATED);
+        }
+        pointExchangeCodeBatchBiz.generateCode(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
 
+    @ApiOperation(value = "【后台】积分卡兑换码批次信息回显", httpMethod = "GET", response = PointExchangeCodeBatchEditResp.class, notes = "积分卡兑换码批次信息回显")
+    @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.POINT, operate = "积分卡兑换码批次信息回显", level = LogLevelEnum.LEVEL_1)
+    public Object getById(@ModelAttribute IdReq req) {
+        //参数检查
+        CommonValidator.validateId(req);
+        PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO = pointExchangeCodeBatchBiz.getById(req.getId());
+        PointExchangeCodeBatchEditResp pointExchangeCodeBatchEditResp = PointExchangeCodeBatchAdapter.DtoEdit2RespEdit(pointExchangeCodeBatchEditDTO);
+        return ResponseFactory.buildResponse(pointExchangeCodeBatchEditResp);
+    }
 
+    @ApiOperation(value = "【后台】启用批次", httpMethod = "POST", notes = "启用批次，同时改变批次下兑换码和已经兑换成积分卡的状态")
+    @RequestMapping(value = "/startusing", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.POINT, operate = "启用批次", level = LogLevelEnum.LEVEL_2)
+    public Object startUsing(@ModelAttribute IdReq req) {
+        //参数检查
+        CommonValidator.validateId(req);
+        pointExchangeCodeBatchBiz.startUsing(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
 
+    @ApiOperation(value = "【后台】停用批次", httpMethod = "POST", notes = "停用批次，同时改变批次下兑换码和已经兑换成积分卡的状态")
+    @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.POINT, operate = "停用批次", level = LogLevelEnum.LEVEL_2)
+    public Object stopUsing(@ModelAttribute IdReq req) {
+        //参数检查
+        CommonValidator.validateId(req);
+        pointExchangeCodeBatchBiz.stopUsing(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
+    @ApiOperation(value = "【后台】导出批次下兑换码", httpMethod = "GET", notes = "导出批次下兑换码")
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "导出批次下兑换码", level = LogLevelEnum.LEVEL_3)
+    public void export(@ModelAttribute IdReq req, HttpServletResponse response) throws IOException {
+        List<PointExchangeCodeDTO> pointExchangeCodeDTOList= pointExchangeCodeBiz.getByBatchId(req.getId());
+        ExportExcelUtils.exportPointCode(response,pointExchangeCodeDTOList);
+    }
+
+    @ApiOperation(value = "【后台】导出前检查", httpMethod = "GET", notes = "导出前检查，看批次下是否有兑换码")
+    @RequestMapping(value = "/exportcheck", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "导出前检查", level = LogLevelEnum.LEVEL_1)
+    public Object exportCheck(@ModelAttribute IdReq req){
+        CommonValidator.validateId(req);
+        List<PointExchangeCodeDTO> pointExchangeCodeDTOList= pointExchangeCodeBiz.getByBatchId(req.getId());
+        if(pointExchangeCodeDTOList.isEmpty()){
+            throw new PointException(PointCodeEnum.NO_CODE_TO_EXPORT);
+        }
+        return ResponseFactory.buildSuccess();
+    }
 }

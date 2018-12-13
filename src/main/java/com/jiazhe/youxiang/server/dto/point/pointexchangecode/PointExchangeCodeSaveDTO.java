@@ -1,4 +1,4 @@
-package com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch;
+package com.jiazhe.youxiang.server.dto.point.pointexchangecode;
 
 import com.jiazhe.youxiang.server.vo.BaseObject;
 
@@ -8,23 +8,19 @@ import java.util.Date;
 /**
  * @author tu
  * @description：
- * @date 2018/10/21
+ * @date 2018/12/13
  */
-public class PointExchangeCodeBatchEditDTO extends BaseObject {
+public class PointExchangeCodeSaveDTO extends BaseObject {
 
-    private static final long serialVersionUID = -7328144726210066664L;
+    private static final long serialVersionUID = 7773973288028641897L;
 
-    private Integer id;
+    private Integer batchId;
 
-    private String name;
+    private String batchName;
 
     private String pointName;
 
-    private Byte isVirtual;
-
-    private Byte isMade;
-
-    private String description;
+    private String batchDescription;
 
     private Integer projectId;
 
@@ -32,7 +28,9 @@ public class PointExchangeCodeBatchEditDTO extends BaseObject {
 
     private String productIds;
 
-    private Integer amount;
+    private String code;
+
+    private String keyt;
 
     private BigDecimal faceValue;
 
@@ -44,20 +42,26 @@ public class PointExchangeCodeBatchEditDTO extends BaseObject {
 
     private Byte expiryType;
 
-    public Integer getId() {
-        return id;
+    private Byte status;
+
+    private Byte used;
+
+    private Integer customerId;
+
+    public Integer getBatchId() {
+        return batchId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setBatchId(Integer batchId) {
+        this.batchId = batchId;
     }
 
-    public String getName() {
-        return name;
+    public String getBatchName() {
+        return batchName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setBatchName(String batchName) {
+        this.batchName = batchName;
     }
 
     public String getPointName() {
@@ -68,28 +72,12 @@ public class PointExchangeCodeBatchEditDTO extends BaseObject {
         this.pointName = pointName;
     }
 
-    public Byte getIsVirtual() {
-        return isVirtual;
+    public String getBatchDescription() {
+        return batchDescription;
     }
 
-    public void setIsVirtual(Byte isVirtual) {
-        this.isVirtual = isVirtual;
-    }
-
-    public Byte getIsMade() {
-        return isMade;
-    }
-
-    public void setIsMade(Byte isMade) {
-        this.isMade = isMade;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setBatchDescription(String batchDescription) {
+        this.batchDescription = batchDescription;
     }
 
     public Integer getProjectId() {
@@ -116,12 +104,20 @@ public class PointExchangeCodeBatchEditDTO extends BaseObject {
         this.productIds = productIds;
     }
 
-    public Integer getAmount() {
-        return amount;
+    public String getCode() {
+        return code;
     }
 
-    public void setAmount(Integer amount) {
-        this.amount = amount;
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getKeyt() {
+        return keyt;
+    }
+
+    public void setKeyt(String keyt) {
+        this.keyt = keyt;
     }
 
     public BigDecimal getFaceValue() {
@@ -162,5 +158,29 @@ public class PointExchangeCodeBatchEditDTO extends BaseObject {
 
     public void setExpiryType(Byte expiryType) {
         this.expiryType = expiryType;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public Byte getUsed() {
+        return used;
+    }
+
+    public void setUsed(Byte used) {
+        this.used = used;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 }
