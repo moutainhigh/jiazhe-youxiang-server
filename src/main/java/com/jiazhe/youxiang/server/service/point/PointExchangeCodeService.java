@@ -26,4 +26,6 @@ public interface PointExchangeCodeService {
     void batchInsert(List<PointExchangeCodePO> pointExchangeCodePOList);
 
     void batchChangeStatus(Integer id, Byte status);
+
+    List<PointExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Byte status, Byte used, Paging paging);
 }

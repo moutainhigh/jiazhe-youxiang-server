@@ -1,4 +1,4 @@
-package com.jiazhe.youxiang.server.vo.req.point.poingexchangecodebatch;
+package com.jiazhe.youxiang.server.vo.req.point.exchangecodebatch;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;

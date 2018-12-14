@@ -12,6 +12,7 @@ import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCode
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeSaveDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecode.RCExchangeCodeEditReq;
+import com.jiazhe.youxiang.server.vo.resp.point.exchangecode.PointExchangeCodeResp;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecode.RCExchangeCodeResp;
 
 import java.util.Date;
@@ -94,5 +95,28 @@ public class PointExchangeCodeAdapter {
         pointExchangeCodePO.setUsed(pointExchangeCodeSaveDTO.getUsed());
         pointExchangeCodePO.setCustomerId(pointExchangeCodeSaveDTO.getCustomerId());
         return pointExchangeCodePO;
+    }
+
+    public static PointExchangeCodeResp dto2Resp(PointExchangeCodeDTO pointExchangeCodeDTO) {
+        if (pointExchangeCodeDTO == null) {
+            return null;
+        }
+        PointExchangeCodeResp pointExchangeCodeResp = new PointExchangeCodeResp();
+        pointExchangeCodeResp.setId(pointExchangeCodeDTO.getId());
+        pointExchangeCodeResp.setBatchName(pointExchangeCodeDTO.getBatchName());
+        pointExchangeCodeResp.setPointName(pointExchangeCodeDTO.getPointName());
+        pointExchangeCodeResp.setBatchDescription(pointExchangeCodeDTO.getBatchDescription());
+        pointExchangeCodeResp.setCityCodes(pointExchangeCodeDTO.getCityCodes());
+        pointExchangeCodeResp.setProductIds(pointExchangeCodeDTO.getProductIds());
+        pointExchangeCodeResp.setCode(pointExchangeCodeDTO.getCode());
+        pointExchangeCodeResp.setKeyt(pointExchangeCodeDTO.getKeyt());
+        pointExchangeCodeResp.setPointExpiryTime(pointExchangeCodeDTO.getPointExpiryTime().getTime());
+        pointExchangeCodeResp.setValidityPeriod(pointExchangeCodeDTO.getValidityPeriod());
+        pointExchangeCodeResp.setExpiryType(pointExchangeCodeDTO.getExpiryType());
+        pointExchangeCodeResp.setFaceValue(pointExchangeCodeDTO.getFaceValue());
+        pointExchangeCodeResp.setExpiryTime(pointExchangeCodeDTO.getExpiryTime().getTime());
+        pointExchangeCodeResp.setStatus(pointExchangeCodeDTO.getStatus());
+        pointExchangeCodeResp.setUsed(pointExchangeCodeDTO.getUsed());
+        return pointExchangeCodeResp;
     }
 }

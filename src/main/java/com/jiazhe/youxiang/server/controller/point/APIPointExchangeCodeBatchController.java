@@ -18,15 +18,13 @@ import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeD
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchSaveDTO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
-import com.jiazhe.youxiang.server.vo.req.point.poingexchangecodebatch.PointExchangeCodeBatchPageReq;
-import com.jiazhe.youxiang.server.vo.req.point.poingexchangecodebatch.PointExchangeCodeBatchSaveReq;
-import com.jiazhe.youxiang.server.vo.resp.point.pointexchangecodebatch.PointExchangeCodeBatchEditResp;
-import com.jiazhe.youxiang.server.vo.resp.point.pointexchangecodebatch.PointExchangeCodeBatchResp;
-import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditResp;
+import com.jiazhe.youxiang.server.vo.req.point.exchangecodebatch.PointExchangeCodeBatchPageReq;
+import com.jiazhe.youxiang.server.vo.req.point.exchangecodebatch.PointExchangeCodeBatchSaveReq;
+import com.jiazhe.youxiang.server.vo.resp.point.exchangecodebatch.PointExchangeCodeBatchEditResp;
+import com.jiazhe.youxiang.server.vo.resp.point.exchangecodebatch.PointExchangeCodeBatchResp;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchResp;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -87,6 +85,7 @@ public class APIPointExchangeCodeBatchController extends BaseController {
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(),new PointException(PointCodeEnum.BATCH_NAME_IS_NULL));
         CommonValidator.validateNull(req.getPointName(),new PointException(PointCodeEnum.POINT_NAME_IS_NULL));
+        CommonValidator.validateNull(req.getProjectId(),new PointException(PointCodeEnum.PROJECT_IS_NULL));
         if (!req.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
             CommonValidator.validateNull(req.getAmount(),new PointException(PointCodeEnum.NOT_VIRTUAL_NEED_AMOUNT));
             CommonValidator.validateNull(req.getFaceValue(),new PointException(PointCodeEnum.NOT_VIRTUAL_NEED_FACE_VALUE));

@@ -18,4 +18,8 @@ public interface PointExchangeCodePOManualMapper {
     void batchInsert(List<PointExchangeCodePO> pointExchangeCodePOList);
 
     void batchChangeStatus(@Param("batchId") Integer batchId, @Param("status") Byte status);
+
+    Integer count(@Param("batchId") Integer batchId, @Param("code") String code, @Param("keyt") String keyt, @Param("status") Byte status, @Param("used") Byte used);
+
+    List<PointExchangeCodePO> query(@Param("batchId") Integer batchId, @Param("code") String code, @Param("keyt") String keyt, @Param("status") Byte status, @Param("used") Byte used, @Param("offset") Integer offset, @Param("limit") Integer limit);
 }

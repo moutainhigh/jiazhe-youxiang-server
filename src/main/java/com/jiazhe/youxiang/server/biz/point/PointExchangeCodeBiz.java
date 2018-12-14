@@ -28,4 +28,8 @@ public class PointExchangeCodeBiz {
     public List<PointExchangeCodeDTO> getByBatchId(Integer id) {
         return pointExchangeCodeService.getByBatchId(id);
     }
+
+    public List<PointExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Byte status, Byte used, Paging paging) {
+        return pointExchangeCodeService.getList(batchId,code,keyt,status,used,paging);
+    }
 }

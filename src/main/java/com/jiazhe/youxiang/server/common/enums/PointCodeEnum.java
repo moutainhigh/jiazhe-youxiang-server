@@ -27,6 +27,7 @@ public enum PointCodeEnum {
     EXCHANGE_CODE_HAS_NO_PAYMENT(106018, "EXCHANGE_CODE_HAS_NO_PAYMENT", "该兑换码还没有消费记录"),
     CARD_HAS_NO_PAYMENT(106019, "CARD_HAS_NO_PAYMENT", "该积分卡还没有消费记录"),
     CUSTOMER_NOT_EXIST(106020, "CUSTOMER_NOT_EXIST", "该客户不存在"),
+    PROJECT_IS_NULL(106021, "PROJECT_IS_NULL", "项目不能为空"),
     ;
 
     PointCodeEnum(Integer code, String type, String message) {

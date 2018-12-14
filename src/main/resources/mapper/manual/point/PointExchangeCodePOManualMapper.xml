@@ -75,4 +75,51 @@
         where batch_id = #{batchId}
     </update>
 
+    <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM point_exchange_code
+        <where>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+            <if test="used != null">
+                AND used = #{used}
+            </if>
+            <if test="code != null  and code != ''">
+                AND code = #{code}
+            </if>
+            <if test="keyt != null  and keyt != ''">
+                AND keyt = #{keyt}
+            </if>
+            <if test="batchId != null  and batchId != 0">
+                AND batch_id = #{batchId}
+            </if>
+            AND is_deleted = 0 ORDER BY id ASC
+        </where>
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from point_exchange_code
+        <where>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+            <if test="used != null">
+                AND used = #{used}
+            </if>
+            <if test="code != null  and code != ''">
+                AND code = #{code}
+            </if>
+            <if test="keyt != null  and keyt != ''">
+                AND keyt = #{keyt}
+            </if>
+            <if test="batchId != null  and batchId != 0">
+                AND batch_id = #{batchId}
+            </if>
+            AND is_deleted = 0
+        </where>
+    </select>
+
 </mapper>

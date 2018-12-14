@@ -11,6 +11,7 @@ import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord.RCExchangeRe
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeRecordService;
 import com.jiazhe.youxiang.server.service.point.PointService;
+import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,5 +92,13 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
             List<Integer> cardIds = recordDTOList.stream().map(PointExchangeRecordDTO::getPointId).collect(Collectors.toList());
             pointService.batchChangeStatus(cardIds,status);
         }
+    }
+
+    @Override
+    public List<PointExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Byte status, Byte used, Paging paging) {
+        Integer count = pointExchangeCodePOManualMapper.count(batchId, code,keyt,status,used);
+        List<PointExchangeCodePO> pointExchangeCodePOList = pointExchangeCodePOManualMapper.query(batchId, code,keyt,status,used, paging.getOffset(), paging.getLimit());
+        paging.setTotal(count);
+        return pointExchangeCodePOList.stream().map(PointExchangeCodeAdapter::po2Dto).collect(Collectors.toList());
     }
 }

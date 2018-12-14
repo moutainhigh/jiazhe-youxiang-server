@@ -29,13 +29,13 @@ public class InfoSerach extends BaseController {
         return "infosearch/rechargecardindex";
     }
 
-    //跳转到充值卡兑换码查询页面
+    //跳转到积分卡兑换码查询页面
     @RequestMapping(value = "/pointcodeindex")
     public String pointCodeIndex() {
-        return "infosearch/pointindex";
+        return "infosearch/pointcodeindex";
     }
 
-    //跳转到充值卡查询页面
+    //跳转到积分卡查询页面
     @RequestMapping(value = "/pointindex")
     public String pointIndex(String mobile,Model model) {
         model.addAttribute("mobile",mobile);

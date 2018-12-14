@@ -1,4 +1,4 @@
-package com.jiazhe.youxiang.server.vo.req.point.poingexchangecodebatch;
+package com.jiazhe.youxiang.server.vo.req.point.exchangecodebatch;
 
 import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import io.swagger.annotations.ApiModelProperty;

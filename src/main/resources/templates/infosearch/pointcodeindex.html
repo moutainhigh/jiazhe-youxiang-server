@@ -22,14 +22,14 @@
                             <i class="ace-icon fa fa-home home-icon"></i>
                             <a th:href="@{/main/main_center}">主页</a>
                         </li>
-                        <li class="active">充值卡兑换码查询</li>
+                        <li class="active">积分卡兑换码查询</li>
                     </ul><!-- /.breadcrumb -->
                 </div>
 
                 <div class="page-content">
                     <div class="row">
                         <div class="col-xs-12" style="padding-top:40px">
-                            <form id="rcExchangeCodeSearchForm" class="form-horizontal" role="form">
+                            <form id="pointExchangeCodeSearchForm" class="form-horizontal" role="form">
                                 <input type="hidden" value=0 id="searchBatchId" name="batchId"/>
                                 <input type="hidden" value="" id="searchStatus" name="status"/>
                                 <input type="hidden" value="" id="searchUsed" name="used"/>
@@ -90,10 +90,10 @@
 
                                                     <div class="space-2"></div>
                                                     <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right">充值卡名称：</label>
+                                                        <label class="col-sm-4 control-label no-padding-right">积分卡名称：</label>
                                                         <div class="col-sm-8">
                                                             <div class="pos-rel">
-                                                                <input id="saveRechargeCardName" name="rechargeCardName"
+                                                                <input id="savePointName" name="pointName"
                                                                        class="form-control"
                                                                        type="text" style="height:30px"/>
                                                             </div>
@@ -130,7 +130,7 @@
 
                                                     <div class="space-2"></div>
                                                     <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right">充值卡过期类型：</label>
+                                                        <label class="col-sm-4 control-label no-padding-right">积分卡过期类型：</label>
                                                         <div class="col-sm-8">
                                                             <div class="pos-rel">
                                                                 <label class="radio-inline ">
@@ -150,15 +150,15 @@
                                                     <div class="space-2 saveDeadLine"></div>
                                                     <div class="form-group saveDeadLine">
                                                         <label class="col-sm-4 control-label no-padding-right"
-                                                               for="saveRechargeCardExpiryTime">充值卡过期时间：</label>
+                                                               for="savePointExpiryTime">积分卡过期时间：</label>
                                                         <div class="col-sm-8">
                                                             <div class="input-group">
                                                                 <input class="form-control date-picker"
-                                                                       id="saveRechargeCardExpiryTime" type="text" readonly />
+                                                                       id="savePointExpiryTime" type="text" readonly />
                                                                 <span class="input-group-addon">
                                                                             <i class="fa fa-calendar bigger-110"></i>
                                                                         </span>
-                                                                <input type="hidden" value=0 name="rechargeCardExpiryTime"/>
+                                                                <input type="hidden" value=0 name="pointExpiryTime"/>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -269,13 +269,13 @@
         });
 
         var tableOption = {
-            url: "/api/rcexchangecode/searchlistpage",// 获取数据的地址
-            postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
-            colNames: ['', '批次名称', '充值卡名称', '兑换码', '密钥', '停用状态', '使用状态', '面额', '过期时间', '操作'],
+            url: "/api/pointexchangecode/searchlistpage",// 获取数据的地址
+            postData: transformToJson($('#pointExchangeCodeSearchForm').serializeArray()),
+            colNames: ['', '批次名称', '积分卡名称', '兑换码', '密钥', '停用状态', '使用状态', '面额', '过期时间', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'batchName', index: 'batchName', width: 100, sortable: false},
-                {name: 'rechargeCardName', index: 'rechargeCardName', width: 50, sortable: false},
+                {name: 'pointName', index: 'pointName', width: 50, sortable: false},
                 {name: 'code', index: 'code', width: 80, sortable: false},
                 {name: 'keyt', index: 'keyt', width: 80, sortable: false},
                 {
@@ -310,15 +310,15 @@
                 },
                 {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
             ],
-            caption: "充值卡兑换码查询结果列表"
+            caption: "积分卡兑换码查询结果列表"
         };
         initTable(grid_selector, pager_selector, tableOption);
     });
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "/api/rcexchangecode/searchlistpage",
-            postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
+            url: "/api/pointexchangecode/searchlistpage",
+            postData: transformToJson($('#pointExchangeCodeSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
     }
@@ -343,7 +343,7 @@
         confirm("确定启用该兑换码吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "/api/rcexchangecode/startusing",
+                    url: "/api/pointexchangecode/startusing",
                     dataType: "json",
                     async: false,
                     data: {
@@ -362,7 +362,7 @@
         confirm("确定启用该兑换码吗？", function (result) {
             if (result) {
                 $.ajax({
-                    url: "/api/rcexchangecode/stopusing",    //请求的url地址
+                    url: "/api/pointexchangecode/stopusing",    //请求的url地址
                     dataType: "json",
                     async: false,
                     data: {
@@ -384,7 +384,7 @@
             }
         }
         $.ajax({
-            url: "/api/rcexchangecode/editsave",
+            url: "/api/pointexchangecode/editsave",
             dataType: "json",
             async: false,
             data: transformToJson($('#codeSaveForm').serializeArray()),
@@ -396,7 +396,7 @@
 
     function openEdit(id) {
         $.ajax({
-            url: "/api/rcexchangecode/getbyid",
+            url: "/api/pointexchangecode/getbyid",
             dataType: "json",
             async: false,
             data: {
@@ -409,7 +409,7 @@
                 } else {
                     var result = data.data;
                     $("#saveCodeId").val(result.id);
-                    $("#codeSaveForm #saveRechargeCardName").val(result.rechargeCardName);
+                    $("#codeSaveForm #savePointName").val(result.pointName);
                     $("#codeSaveForm #saveCityCodes").val(result.cityCodes);
                     $("#codeSaveForm #saveProductIds").val(result.productIds);
                     $("#codeSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
@@ -420,8 +420,8 @@
                         $("#codeSaveForm #saveValidityPeriodRadio").click();
                     }
                     $("#codeSaveForm #saveValidityPeriod").val(result.validityPeriod);
-                    $("#codeSaveForm #saveRechargeCardExpiryTime").val(dateFormat(result.rechargeCardExpiryTime));
-                    $("#codeSaveForm #saveRechargeCardExpiryTime").next().next().val(result.rechargeCardExpiryTime);
+                    $("#codeSaveForm #savePointExpiryTime").val(dateFormat(result.pointExpiryTime));
+                    $("#codeSaveForm #savePointExpiryTime").next().next().val(result.pointExpiryTime);
                     $("#codeSaveForm #saveDescription").val(result.batchDescription);
                     $("#modal-form").modal('show');
                 }
