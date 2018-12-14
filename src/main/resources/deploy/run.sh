@@ -1,7 +1,7 @@
 #!/bin/bash
 
 APP_DIR=/opt/jiazhe/webserver/youxiang
-APP_NAME=youxiang-server-0.0.1-SNAPSHOT
+APP_NAME=youxiang-server
 JAR_FILE=$APP_NAME.jar
 pid=0
 
