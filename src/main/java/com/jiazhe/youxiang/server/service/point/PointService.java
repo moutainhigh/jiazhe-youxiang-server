@@ -38,4 +38,6 @@ public interface PointService {
     PointDTO getById(Integer id);
 
     void editSave(PointEditDTO dto);
+
+    BigDecimal totalValidBalance(Integer customerId);
 }

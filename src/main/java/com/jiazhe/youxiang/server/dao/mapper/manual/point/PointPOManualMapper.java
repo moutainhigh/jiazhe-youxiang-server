@@ -26,4 +26,6 @@ public interface PointPOManualMapper {
     List<PointPO> query(@Param("mobile") String mobile, @Param("exchangeType") Integer exchangeType, @Param("status") Byte status, @Param("expiry") Byte expiry, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
     Integer count(@Param("mobile") String mobile, @Param("exchangeType") Integer exchangeType, @Param("status") Byte status, @Param("expiry") Byte expiry);
+
+    BigDecimal totalValidBalance(@Param("customerId")Integer customerId);
 }

@@ -98,4 +98,9 @@ public class PointBiz {
     public void editSave(PointEditDTO dto) {
         pointService.editSave(dto);
     }
+
+    public BigDecimal totalValidBalance(Integer customerId){
+        return pointService.totalValidBalance(customerId);
+    }
+
 }

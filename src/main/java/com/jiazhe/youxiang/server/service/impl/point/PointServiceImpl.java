@@ -185,4 +185,9 @@ public class PointServiceImpl implements PointService {
         po.setDescription(dto.getDescription());
         pointPOMapper.updateByPrimaryKeySelective(po);
     }
+
+    @Override
+    public BigDecimal totalValidBalance(Integer customerId) {
+        return pointPOManualMapper.totalValidBalance(customerId);
+    }
 }

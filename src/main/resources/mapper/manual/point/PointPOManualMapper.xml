@@ -125,4 +125,12 @@
         </where>
     </select>
 
+    <select id="totalValidBalance" resultType="java.math.BigDecimal">
+        SELECT sum(balance) FROM point where
+        customer_id = #{customerId}
+        AND status = 1
+        AND expiry_time &gt; NOW()
+        AND is_deleted = 0
+    </select>
+
 </mapper>
