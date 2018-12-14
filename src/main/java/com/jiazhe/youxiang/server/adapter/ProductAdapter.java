@@ -221,6 +221,7 @@ public class ProductAdapter {
         productDTO.setDescription(productPO.getDescription());
         productDTO.setDelayDays(productPO.getDelayDays());
         productDTO.setThumbnailUrl(productPO.getThumbnailUrl());
+        productDTO.setHeaderImgUrl(productPO.getHeaderImgUrl());
         productDTO.setDetailImgUrl(productPO.getDetailImgUrl());
         productDTO.setProductType(productPO.getProductType());
         productDTO.setUnitName(productPO.getUnitName());

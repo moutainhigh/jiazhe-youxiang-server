@@ -39,7 +39,7 @@ stop(){
     checkpid
     if [ ! -n "$pid" ]; then
      echo "$APP_NAME not runing"
-    els
+    else
       echo "$APP_NAME stop..."
       kill -9 $pid
     fi
