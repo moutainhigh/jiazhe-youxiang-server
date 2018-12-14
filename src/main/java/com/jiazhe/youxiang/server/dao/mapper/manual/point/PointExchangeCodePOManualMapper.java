@@ -22,4 +22,6 @@ public interface PointExchangeCodePOManualMapper {
     Integer count(@Param("batchId") Integer batchId, @Param("code") String code, @Param("keyt") String keyt, @Param("status") Byte status, @Param("used") Byte used);
 
     List<PointExchangeCodePO> query(@Param("batchId") Integer batchId, @Param("code") String code, @Param("keyt") String keyt, @Param("status") Byte status, @Param("used") Byte used, @Param("offset") Integer offset, @Param("limit") Integer limit);
+
+    PointExchangeCodePO findByKeyt(@Param("keyt") String keyt);
 }

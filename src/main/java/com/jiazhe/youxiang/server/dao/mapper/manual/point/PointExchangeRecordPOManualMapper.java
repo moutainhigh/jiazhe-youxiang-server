@@ -13,4 +13,6 @@ import java.util.List;
 public interface PointExchangeRecordPOManualMapper {
 
     List<PointExchangeRecordPO> findByCodeIds(List<Integer> codeIds);
+
+    void insert(PointExchangeRecordPO pointRecordPO);
 }

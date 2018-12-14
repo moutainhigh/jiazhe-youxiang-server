@@ -1,4 +1,4 @@
-package com.jiazhe.youxiang.server.vo.req.rechargecard.rc;
+package com.jiazhe.youxiang.server.vo.req.point.point;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 /**
  * @author TU
  * @description
- * @date 2018/10/23.
+ * @date 2018/12/14.
  */
 public class DirectChargeReq extends BaseVO {
 
@@ -18,7 +18,7 @@ public class DirectChargeReq extends BaseVO {
     @ApiModelProperty("虚拟批次的id")
     Integer batchId;
 
-    @ApiModelProperty("充值金额")
+    @ApiModelProperty("充值积分数")
     BigDecimal faceValue;
 
     public Integer getId() {

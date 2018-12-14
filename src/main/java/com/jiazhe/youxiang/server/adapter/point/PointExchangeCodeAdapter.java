@@ -5,12 +5,14 @@ import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
+import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeSaveDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeSaveDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
+import com.jiazhe.youxiang.server.vo.req.point.exchangecode.PointExchangeCodeEditReq;
 import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecode.RCExchangeCodeEditReq;
 import com.jiazhe.youxiang.server.vo.resp.point.exchangecode.PointExchangeCodeResp;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecode.RCExchangeCodeResp;
@@ -118,5 +120,22 @@ public class PointExchangeCodeAdapter {
         pointExchangeCodeResp.setStatus(pointExchangeCodeDTO.getStatus());
         pointExchangeCodeResp.setUsed(pointExchangeCodeDTO.getUsed());
         return pointExchangeCodeResp;
+    }
+
+    public static PointExchangeCodeEditDTO editReq2EditDto(PointExchangeCodeEditReq req) {
+        if (req == null) {
+            return null;
+        }
+        PointExchangeCodeEditDTO pointExchangeCodeEditDTO = new PointExchangeCodeEditDTO();
+        pointExchangeCodeEditDTO.setId(req.getId());
+        pointExchangeCodeEditDTO.setPointName(req.getPointName());
+        pointExchangeCodeEditDTO.setBatchDescription(req.getBatchDescription());
+        pointExchangeCodeEditDTO.setCityCodes(req.getCityCodes());
+        pointExchangeCodeEditDTO.setProductIds(req.getProductIds());
+        pointExchangeCodeEditDTO.setExpiryTime(new Date(req.getExpiryTime()));
+        pointExchangeCodeEditDTO.setPointExpiryTime(new Date(req.getPointExpiryTime()));
+        pointExchangeCodeEditDTO.setValidityPeriod(req.getValidityPeriod());
+        pointExchangeCodeEditDTO.setExpiryType(req.getExpiryType());
+        return pointExchangeCodeEditDTO;
     }
 }

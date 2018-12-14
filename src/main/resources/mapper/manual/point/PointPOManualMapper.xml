@@ -58,4 +58,71 @@
         </foreach>
     </select>
 
+    <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.PointPO" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into point (id, name, description,
+        customer_id, project_id, city_codes,
+        product_ids, face_value, balance,
+        exchange_record_id, expiry_time, status,
+        ext_info, is_deleted, add_time,
+        mod_time)
+        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+        #{customerId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR},
+        #{productIds,jdbcType=VARCHAR}, #{faceValue,jdbcType=DECIMAL}, #{balance,jdbcType=DECIMAL},
+        #{exchangeRecordId,jdbcType=INTEGER}, #{expiryTime,jdbcType=TIMESTAMP}, 1,
+        "", 0, NOW(),NOW())
+    </insert>
+
+    <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.PointPO">
+        SELECT p.id, p.name,p.description,p.customer_id, p.project_id,
+        p.city_codes,p.product_ids,p.face_value,p.balance,
+        p.exchange_record_id,p.expiry_time,p.status,p.ext_info, p.is_deleted,p.add_time, p.mod_time
+        FROM point p LEFT JOIN
+        point_exchange_record pec ON p.id = pec.point_id
+        LEFT JOIN customer c ON c.id = p.customer_id
+        <where>
+            <if test="mobile != null and mobile != ''">
+                AND c.mobile = #{mobile}
+            </if>
+            <if test="exchangeType != null">
+                AND pec.exchange_type = #{exchangeType}
+            </if>
+            <if test="status != null">
+                AND p.status = #{status}
+            </if>
+            <if test="expiry == 0">
+                AND p.expiry_time &gt; NOW()
+            </if>
+            <if test="expiry == 1">
+                AND p.expiry_time &lt;= NOW()
+            </if>
+            AND p.is_deleted = 0 ORDER BY p.add_time desc
+        </where>
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) FROM point p
+        LEFT JOIN point_exchange_record pec ON p.id = pec.point_id
+        LEFT JOIN customer c ON c.id = p.customer_id
+        <where>
+            <if test="mobile != null and mobile != ''">
+                AND c.mobile = #{mobile}
+            </if>
+            <if test="exchangeType != null">
+                AND pec.exchange_type = #{exchangeType}
+            </if>
+            <if test="status != null">
+                AND p.status = #{status}
+            </if>
+            <if test="expiry == 0">
+                AND p.expiry_time &gt; NOW()
+            </if>
+            <if test="expiry == 1">
+                AND p.expiry_time &lt;= NOW()
+            </if>
+            AND p.is_deleted = 0 ORDER BY p.add_time desc
+        </where>
+    </select>
+
 </mapper>
