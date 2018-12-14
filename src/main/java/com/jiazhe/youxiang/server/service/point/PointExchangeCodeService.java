@@ -36,7 +36,7 @@ public interface PointExchangeCodeService {
 
     void editSave(PointExchangeCodeEditDTO dto);
 
-    void codeCharge(Integer exchangetypeCustomerCodeExchange, Integer id, String keyt);
+    void codeCharge(Integer type, Integer id, String keyt);
 
     PointExchangeCodePO findByKeyt(String keyt);
 }
