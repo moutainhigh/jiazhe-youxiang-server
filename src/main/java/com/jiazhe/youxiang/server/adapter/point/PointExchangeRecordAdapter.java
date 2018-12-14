@@ -20,6 +20,7 @@ public class PointExchangeRecordAdapter {
         }
         PointExchangeRecordDTO pointExchangeRecordDTO = new PointExchangeRecordDTO();
         pointExchangeRecordDTO.setId(pointExchangeRecordPO.getId());
+        pointExchangeRecordDTO.setPointId(pointExchangeRecordPO.getPointId());
         pointExchangeRecordDTO.setExchangeCodeId(pointExchangeRecordPO.getExchangeCodeId());
         pointExchangeRecordDTO.setExchangeType(pointExchangeRecordPO.getExchangeType());
         pointExchangeRecordDTO.setOperatorId(pointExchangeRecordPO.getOperatorId());

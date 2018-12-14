@@ -129,11 +129,12 @@ public class CommonConstant {
     public static final Byte EXCHANGE_CODE_NOT_MADE = Byte.valueOf("0");
 
     /**
-     * 支付类型【1为充值卡支付，2为代金券支付，3为在线支付】
+     * 支付类型【1为积分卡支付，2为充值卡支付，3为代金券支付，4为在线支付】
      */
-    public static final Byte PAY_RECHARGE_CARD = Byte.valueOf("1");
-    public static final Byte PAY_VOUCHER = Byte.valueOf("2");
-    public static final Byte PAY_CASH = Byte.valueOf("3");
+    public static final Byte PAY_POINT = Byte.valueOf("1");
+    public static final Byte PAY_RECHARGE_CARD = Byte.valueOf("2");
+    public static final Byte PAY_VOUCHER = Byte.valueOf("3");
+    public static final Byte PAY_CASH = Byte.valueOf("4");
 
     /**
      * 商品类型【0为服务型商品，1为电子商品】

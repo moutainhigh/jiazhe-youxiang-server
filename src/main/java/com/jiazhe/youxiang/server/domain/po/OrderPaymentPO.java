@@ -13,6 +13,8 @@ public class OrderPaymentPO implements Serializable {
 
     private Byte payType;
 
+    private Integer pointId;
+
     private Integer rechargeCardId;
 
     private Integer voucherId;
@@ -61,6 +63,14 @@ public class OrderPaymentPO implements Serializable {
 
     public void setPayType(Byte payType) {
         this.payType = payType;
+    }
+
+    public Integer getPointId() {
+        return pointId;
+    }
+
+    public void setPointId(Integer pointId) {
+        this.pointId = pointId;
     }
 
     public Integer getRechargeCardId() {

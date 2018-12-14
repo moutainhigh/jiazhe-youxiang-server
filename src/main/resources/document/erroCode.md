@@ -16,3 +16,4 @@
 | 商品电子码管理|113|com.jiazhe.youxiang.server.common.enums.EleProductCodeEnum |
 | 文件上传管理|114|com.jiazhe.youxiang.server.common.enums.UploadCodeEnum |
 |微信支付相关|115|com.jiazhe.youxiang.server.common.enums.WeChatPayCodeEnum|
+|积分卡管理|116|com.jiazhe.youxiang.server.common.enum.PointCodeEnum|

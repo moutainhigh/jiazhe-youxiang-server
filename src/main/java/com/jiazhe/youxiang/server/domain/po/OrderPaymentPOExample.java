@@ -356,6 +356,66 @@ public class OrderPaymentPOExample {
             return (Criteria) this;
         }
 
+        public Criteria andPointIdIsNull() {
+            addCriterion("point_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIdIsNotNull() {
+            addCriterion("point_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIdEqualTo(Integer value) {
+            addCriterion("point_id =", value, "pointId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIdNotEqualTo(Integer value) {
+            addCriterion("point_id <>", value, "pointId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIdGreaterThan(Integer value) {
+            addCriterion("point_id >", value, "pointId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("point_id >=", value, "pointId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIdLessThan(Integer value) {
+            addCriterion("point_id <", value, "pointId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIdLessThanOrEqualTo(Integer value) {
+            addCriterion("point_id <=", value, "pointId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIdIn(List<Integer> values) {
+            addCriterion("point_id in", values, "pointId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIdNotIn(List<Integer> values) {
+            addCriterion("point_id not in", values, "pointId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIdBetween(Integer value1, Integer value2) {
+            addCriterion("point_id between", value1, value2, "pointId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("point_id not between", value1, value2, "pointId");
+            return (Criteria) this;
+        }
+
         public Criteria andRechargeCardIdIsNull() {
             addCriterion("recharge_card_id is null");
             return (Criteria) this;

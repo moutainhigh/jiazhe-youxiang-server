@@ -20,4 +20,6 @@ public interface PointExchangeRecordService {
     void insert(PointExchangeRecordPO pointRecordPO);
 
     PointExchangeRecordDTO findByPointId(Integer id);
+
+    PointExchangeRecordDTO findByCodeId(Integer id);
 }

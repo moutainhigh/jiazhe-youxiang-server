@@ -434,7 +434,7 @@
         var orderStatus = ['待付款', '待派单', '待服务', '服务完成', '取消待审核', '取消未通过', '已取消'];
         $("#modelTbody").empty();
         $.ajax({
-            url: "/api/orderpayment/getbyrechargecardcodeid",
+            url: "/api/orderpayment/getbypointcodeid",
             dataType: "json",
             async: false,
             data: {

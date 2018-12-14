@@ -51,4 +51,20 @@ public class PointExchangeRecordServiceImpl implements PointExchangeRecordServic
         PointExchangeRecordDTO dto = PointExchangeRecordAdapter.po2Dto(poList.get(0));
         return dto;
     }
+
+    @Override
+    public PointExchangeRecordDTO findByCodeId(Integer id) {
+        PointExchangeRecordPOExample example = new PointExchangeRecordPOExample();
+        PointExchangeRecordPOExample.Criteria criteria = example.createCriteria();
+        criteria.andExchangeCodeIdEqualTo(id);
+        List<PointExchangeRecordPO> poList =pointExchangeRecordPOMapper.selectByExample(example);
+        if(poList.isEmpty()){
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_NOT_USED);
+        }
+        if(poList.size()>1){
+            throw new PointException(PointCodeEnum.CODE_2_RECORD_EXCEPTION);
+        }
+        PointExchangeRecordDTO dto = PointExchangeRecordAdapter.po2Dto(poList.get(0));
+        return dto;
+    }
 }

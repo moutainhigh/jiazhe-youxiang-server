@@ -4,10 +4,8 @@ import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.server.adapter.order.OrderPaymentAdapter;
 import com.jiazhe.youxiang.server.biz.order.OrderPaymentBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
-import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
-import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
-import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
-import com.jiazhe.youxiang.server.common.enums.VoucherCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.*;
+import com.jiazhe.youxiang.server.common.exceptions.PointException;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.common.exceptions.VoucherException;
 import com.jiazhe.youxiang.server.dto.order.orderpayment.OrderPaymentDTO;
@@ -32,55 +30,80 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("api/orderpayment")
-public class APIOrderPaymentController extends BaseController{
+public class APIOrderPaymentController extends BaseController {
 
     @Autowired
     private OrderPaymentBiz orderPaymentBiz;
-    @ApiOperation(value = "根据充值卡id获取支付记录", httpMethod = "GET", response = OrderPaymentResp.class,notes = "根据充值卡id获取支付记录")
+
+    @ApiOperation(value = "根据积分卡id获取支付记录", httpMethod = "GET", response = OrderPaymentResp.class, notes = "根据积分卡id获取支付记录")
+    @RequestMapping(value = "/getbypointid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "根据积分卡id获取支付记录", level = LogLevelEnum.LEVEL_1)
+    public Object getByPointId(@ModelAttribute IdReq req) {
+        List<OrderPaymentDTO> orderPaymentDTOList = orderPaymentBiz.getByPointId(req.getId());
+        if (orderPaymentDTOList.isEmpty()) {
+            throw new PointException(PointCodeEnum.CARD_HAS_NO_PAYMENT);
+        }
+        List<OrderPaymentResp> orderPaymentRespList = orderPaymentDTOList.stream().map(OrderPaymentAdapter::DTO2Resp).collect(Collectors.toList());
+        return ResponseFactory.buildResponse(orderPaymentRespList);
+    }
+
+    @ApiOperation(value = "根据积分卡兑换码id获取支付记录", httpMethod = "GET", response = OrderPaymentResp.class, notes = "根据积分卡兑换码id获取支付记录")
+    @RequestMapping(value = "/getbypointcodeid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "根据积分卡兑换码id获取支付记录", level = LogLevelEnum.LEVEL_1)
+    public Object getByPointCodeId(@ModelAttribute IdReq req) {
+        List<OrderPaymentDTO> orderPaymentDTOList = orderPaymentBiz.getByPointCodeId(req.getId());
+        if (orderPaymentDTOList.isEmpty()) {
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_NO_PAYMENT);
+        }
+        List<OrderPaymentResp> orderPaymentRespList = orderPaymentDTOList.stream().map(OrderPaymentAdapter::DTO2Resp).collect(Collectors.toList());
+        return ResponseFactory.buildResponse(orderPaymentRespList);
+    }
+
+    @ApiOperation(value = "根据充值卡id获取支付记录", httpMethod = "GET", response = OrderPaymentResp.class, notes = "根据充值卡id获取支付记录")
     @RequestMapping(value = "/getbyrechargecardid", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "根据充值卡id获取支付记录", level = LogLevelEnum.LEVEL_1)
     public Object getByRechargeCardId(@ModelAttribute IdReq req) {
         List<OrderPaymentDTO> orderPaymentDTOList = orderPaymentBiz.getByRechargeCardId(req.getId());
-        if(orderPaymentDTOList.isEmpty()){
+        if (orderPaymentDTOList.isEmpty()) {
             throw new RechargeCardException(RechargeCardCodeEnum.CARD_HAS_NO_PAYMENT);
         }
-        List<OrderPaymentResp> orderPaymentRespList =orderPaymentDTOList.stream().map(OrderPaymentAdapter::DTO2Resp).collect(Collectors.toList());
+        List<OrderPaymentResp> orderPaymentRespList = orderPaymentDTOList.stream().map(OrderPaymentAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildResponse(orderPaymentRespList);
     }
 
-    @ApiOperation(value = "根据充值卡兑换码id获取支付记录", httpMethod = "GET", response = OrderPaymentResp.class,notes = "根据充值卡兑换码id获取支付记录")
+    @ApiOperation(value = "根据充值卡兑换码id获取支付记录", httpMethod = "GET", response = OrderPaymentResp.class, notes = "根据充值卡兑换码id获取支付记录")
     @RequestMapping(value = "/getbyrechargecardcodeid", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "根据充值卡兑换码id获取支付记录", level = LogLevelEnum.LEVEL_1)
     public Object getByRechargeCardCodeId(@ModelAttribute IdReq req) {
         List<OrderPaymentDTO> orderPaymentDTOList = orderPaymentBiz.getByRechargeCardCodeId(req.getId());
-        if(orderPaymentDTOList.isEmpty()){
+        if (orderPaymentDTOList.isEmpty()) {
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_HAS_NO_PAYMENT);
         }
-        List<OrderPaymentResp> orderPaymentRespList =orderPaymentDTOList.stream().map(OrderPaymentAdapter::DTO2Resp).collect(Collectors.toList());
+        List<OrderPaymentResp> orderPaymentRespList = orderPaymentDTOList.stream().map(OrderPaymentAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildResponse(orderPaymentRespList);
     }
 
-    @ApiOperation(value = "根据代金券id获取支付记录", httpMethod = "GET", response = OrderPaymentResp.class,notes = "根据代金券id获取支付记录")
+    @ApiOperation(value = "根据代金券id获取支付记录", httpMethod = "GET", response = OrderPaymentResp.class, notes = "根据代金券id获取支付记录")
     @RequestMapping(value = "/getbyvoucherid", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "根据代金券id获取支付记录", level = LogLevelEnum.LEVEL_1)
     public Object getByVoucherId(@ModelAttribute IdReq req) {
         List<OrderPaymentDTO> orderPaymentDTOList = orderPaymentBiz.getByVoucherId(req.getId());
-        if(orderPaymentDTOList.isEmpty()){
+        if (orderPaymentDTOList.isEmpty()) {
             throw new VoucherException(VoucherCodeEnum.VOUCHER_HAS_NO_PAYMENT);
         }
-        List<OrderPaymentResp> orderPaymentRespList =orderPaymentDTOList.stream().map(OrderPaymentAdapter::DTO2Resp).collect(Collectors.toList());
+        List<OrderPaymentResp> orderPaymentRespList = orderPaymentDTOList.stream().map(OrderPaymentAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildResponse(orderPaymentRespList);
     }
 
-    @ApiOperation(value = "根据代金券兑换码id获取支付记录", httpMethod = "GET", response = OrderPaymentResp.class,notes = "根据代金券兑换码id获取支付记录")
+    @ApiOperation(value = "根据代金券兑换码id获取支付记录", httpMethod = "GET", response = OrderPaymentResp.class, notes = "根据代金券兑换码id获取支付记录")
     @RequestMapping(value = "/getbyvouchercodeid", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "根据代金券兑换码id获取支付记录", level = LogLevelEnum.LEVEL_1)
     public Object getByVoucherCodeId(@ModelAttribute IdReq req) {
         List<OrderPaymentDTO> orderPaymentDTOList = orderPaymentBiz.getByVoucherCodeId(req.getId());
-        if(orderPaymentDTOList.isEmpty()){
+        if (orderPaymentDTOList.isEmpty()) {
             throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_HAS_NO_PAYMENT);
         }
-        List<OrderPaymentResp> orderPaymentRespList =orderPaymentDTOList.stream().map(OrderPaymentAdapter::DTO2Resp).collect(Collectors.toList());
+        List<OrderPaymentResp> orderPaymentRespList = orderPaymentDTOList.stream().map(OrderPaymentAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildResponse(orderPaymentRespList);
     }
 }
