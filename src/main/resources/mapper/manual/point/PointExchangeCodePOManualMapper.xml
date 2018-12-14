@@ -125,7 +125,7 @@
     <select id="findByKeyt" resultType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM poing_exchange_code WHERE keyt = #{keyt} AND is_deleted = 0
+        FROM point_exchange_code WHERE keyt = #{keyt} AND is_deleted = 0
     </select>
 
 </mapper>

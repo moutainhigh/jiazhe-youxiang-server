@@ -25,6 +25,16 @@ public class OrderPaymentBiz {
     private RCExchangeRecordService rcExchangeRecordService;
     @Autowired
     private VoucherExchangeRecordService voucherExchangeRecordService;
+
+    /**
+     * 通过充值卡id获取支付记录
+     * @param id
+     * @return
+     */
+    public List<OrderPaymentDTO> getByPointId(Integer id) {
+        return orderPaymentService.getByPointId(id);
+    }
+
     /**
      * 通过充值卡id获取支付记录
      * @param id

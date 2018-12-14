@@ -20,7 +20,7 @@
                     <ul class="breadcrumb">
                         <li>
                             <i class="ace-icon fa fa-home home-icon"></i>
-                            <a th:href="@{/main/main_center}">主页1</a>
+                            <a th:href="@{/main/main_center}">主页</a>
                         </li>
                         <li>
                             <a th:href="@{/point/exchangecodebatchindex}">积分卡兑换码批次管理</a>
@@ -110,7 +110,7 @@
 
                                                     <div class="space-2"></div>
                                                     <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right">充值卡名称：</label>
+                                                        <label class="col-sm-4 control-label no-padding-right">积分卡名称：</label>
                                                         <div class="col-sm-8">
                                                             <div class="pos-rel">
                                                                 <input id="savePointName" name="pointName"
@@ -150,7 +150,7 @@
 
                                                     <div class="space-2"></div>
                                                     <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right">充值卡过期类型：</label>
+                                                        <label class="col-sm-4 control-label no-padding-right">积分卡过期类型：</label>
                                                         <div class="col-sm-8">
                                                             <div class="pos-rel">
                                                                 <label class="radio-inline ">
@@ -170,7 +170,7 @@
                                                     <div class="space-2 saveDeadLine"></div>
                                                     <div class="form-group saveDeadLine">
                                                         <label class="col-sm-4 control-label no-padding-right"
-                                                               for="savePointExpiryTime">充值卡过期时间：</label>
+                                                               for="savePointExpiryTime">积分卡过期时间：</label>
                                                         <div class="col-sm-8">
                                                             <div class="input-group">
                                                                 <input class="form-control date-picker"
@@ -274,7 +274,7 @@
         var tableOption = {
             url: "/api/pointexchangecode/listpage",
             postData: transformToJson($('#pointExchangeCodeSearchForm').serializeArray()),
-            colNames: ['', '批次名称', '充值卡名称', '兑换码', '密钥', '启用状态', '使用状态', '面额', '过期时间', '操作'],
+            colNames: ['', '批次名称', '积分卡名称', '兑换码', '密钥', '启用状态', '使用状态', '面额', '过期时间', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'batchName', index: 'batchName', width: 100, sortable: false},
@@ -313,7 +313,7 @@
                 },
                 {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
             ],
-            caption: "充值卡兑换码列表"
+            caption: "积分卡兑换码列表"
         };
         initTable(grid_selector, pager_selector, tableOption);
     });

@@ -47,4 +47,6 @@ public interface OrderPaymentService {
      * @param orderPaymentPOList
      */
     void batchInsert(List<OrderPaymentPO> orderPaymentPOList);
+
+    List<OrderPaymentDTO> getByPointId(Integer id);
 }
