@@ -41,7 +41,7 @@ public class APIPartnerOrderInfoController extends BaseController {
 
     @ApiOperation(value = "【后台】分页查询商家订单信息", httpMethod = "GET", response = PartnerOrderInfoResp.class, responseContainer = "List", notes = "【后台】分页查询商家订单信息")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "分页查询商家订单信息", level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER, operate = "分页查询商家订单信息", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute PartnerOrderInfoPageReq req) {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         Date serviceTimeStart = req.getServiceTimeStart() == 0 ? null : new Date(req.getServiceTimeStart());
@@ -53,7 +53,7 @@ public class APIPartnerOrderInfoController extends BaseController {
 
     @ApiOperation(value = "【后台】回显商家订单信息", httpMethod = "GET", response = PartnerOrderInfoResp.class, notes = "【后台】回显商家订单信息")
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "回显商家订单信息", level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER, operate = "回显商家订单信息", level = LogLevelEnum.LEVEL_1)
     public Object getById(@ModelAttribute IdReq req) {
         PartnerOrderInfoDTO dto = partnerOrderInfoBiz.getById(req.getId());
         PartnerOrderInfoResp resp = PartnerOrderInfoAdapter.DTO2Resp(dto);
@@ -62,7 +62,7 @@ public class APIPartnerOrderInfoController extends BaseController {
 
     @ApiOperation(value = "【后台】保存商家订单信息", httpMethod = "POST", notes = "【后台】保存商家订单信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "保存商家订单信息", level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER, operate = "保存商家订单信息", level = LogLevelEnum.LEVEL_1)
     public Object save(@ModelAttribute PartnerOrderSaveReq req) {
         PartnerOrderInfoDTO dto = PartnerOrderInfoAdapter.saveReq2DTO(req);
         dto.setModTime(new Date());
@@ -77,7 +77,7 @@ public class APIPartnerOrderInfoController extends BaseController {
 
     @ApiOperation(value = "【后台】查询预付款相关信息", httpMethod = "GET", response = OverviewMoneyResp.class, responseContainer = "List", notes = "【后台】查询预付款相关信息")
     @RequestMapping(value = "/caloverviewmoney", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "查询预付款相关信息", level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER, operate = "查询预付款相关信息", level = LogLevelEnum.LEVEL_1)
     public Object calOverviewMoney(@ModelAttribute PartnerOrderInfoPageReq req) {
         Date timeStart = req.getServiceTimeStart() == 0 ? null : new Date(req.getServiceTimeStart());
         Date timeEnd = req.getServiceTimeEnd() == 0 ? null : new Date(req.getServiceTimeEnd());
