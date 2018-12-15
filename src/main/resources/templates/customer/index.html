@@ -196,7 +196,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="blue bigger">追加订单</h4>
+                                    <h4 class="blue bigger">后台下单</h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
@@ -427,11 +427,12 @@
         var tableOption = {
             url: "/api/customer/getlist",// 获取数据的地址
             postData: transformToJson($('#searchForm').serializeArray()),
-            colNames: ['', '客户名称', '手机号码','积分', '充值卡', '代金券', '订单', '默认地址', '客户备注', '操作'],
+//            colNames: ['', '客户名称', '手机号码', '积分', '充值卡', '代金券', '订单', '默认地址', '客户备注', '操作'],
+            colNames: ['', '客户名称', '手机号码', '积分', '充值卡', '代金券', '订单', '客户备注', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 50, sortable: false},
-                {name: 'mobile', index: 'mobile', width: 50, sortable: false},
+                {name: 'mobile', index: 'mobile', width: 100, sortable: false},
                 {
                     name: 'point',
                     index: '_point',
@@ -448,7 +449,7 @@
                 },
                 {name: '_voucher', index: '_voucher', width: 150, sortable: false, formatter: voucherFormatter},
                 {name: '_order', index: '_order', width: 60, sortable: false, formatter: orderFormatter},
-                {name: 'defaultAddress', index: 'defaultAddress', sortable: false, formatter: addressFormatter},
+//                {name: 'defaultAddress', index: 'defaultAddress', sortable: false, formatter: addressFormatter},
                 {name: 'remark', index: 'remark', width: 70, sortable: false},
                 {name: '_action', index: '_action', width: 50, sortable: false, formatter: customFormatter}
             ],
@@ -816,10 +817,10 @@
             return;
         }
         url = "";
-        if($("#inputOperationType").val()== "5"){
+        if ($("#inputOperationType").val() == "5") {
             url = "/api/rcexchangecodebatch/findvirtualbyprojectid";
         }
-        if($("#inputOperationType").val()== "7"){
+        if ($("#inputOperationType").val() == "7") {
             url = "/api/pointexchangecodebatch/findvirtualbyprojectid";
         }
         $("#selectBatch").empty();
@@ -871,7 +872,7 @@
                 } else {
                     var result = data.data;
                     for (var i = 0; i < result.length; i++) {
-                        $("#orderProductId").append("<option data-last-num=" + result[i].lastNum + "data-product-type=" + result[i].productType + " value=" + result[i].id + ">" + result[i].name + "</option>");
+                        $("#orderProductId").append("<option data-last-num=" + result[i].lastNum + " data-product-type=" + result[i].productType + " value=" + result[i].id + ">" + result[i].name + "</option>");
                     }
                 }
             },
