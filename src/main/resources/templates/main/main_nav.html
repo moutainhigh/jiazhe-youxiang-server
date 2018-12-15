@@ -24,23 +24,29 @@
 
         <div class="sidebar-shortcuts" id="sidebar-shortcuts">
             <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-                <a th:title="待预约订单" class="btn btn-success" th:href="@{/order/orderindex(status=2)}" target="iframeCenter">
-                    <i class="ace-icon fa fa-truck" id="waitingSendOrderCount">
+                <shiro:hasPermission name="orderReservation">
+                    <a th:title="待预约订单" class="btn btn-success" th:href="@{/order/orderindex(status=2)}" target="iframeCenter">
+                        <i class="ace-icon fa fa-truck" id="waitingSendOrderCount">
 
-                    </i>
-                </a>
+                        </i>
+                    </a>
+                </shiro:hasPermission>
 
-                <a th:title="待审核订单" class="btn btn-info" th:href="@{/order/orderindex(status=5)}" target="iframeCenter">
-                    <i class="ace-icon fa fa-trash" id="waitingCheckOrderCount">
+                <shiro:hasPermission name="orderCheck">
+                    <a th:title="待审核订单" class="btn btn-info" th:href="@{/order/orderindex(status=5)}" target="iframeCenter">
+                        <i class="ace-icon fa fa-trash" id="waitingCheckOrderCount">
 
-                    </i>
-                </a>
+                        </i>
+                    </a>
+                </shiro:hasPermission>
 
-                <a th:title="待审核消费" class="btn btn-warning" th:href="@{/auditrecord/index(status=0)}" target="iframeCenter">
-                    <i class="ace-icon fa fa-check" id="waitingCheckRecordCount">
+                <shiro:hasPermission name="auditRecordManagement">
+                    <a th:title="待审核消费" class="btn btn-warning" th:href="@{/auditrecord/index(status=0)}" target="iframeCenter">
+                        <i class="ace-icon fa fa-check" id="waitingCheckRecordCount">
 
-                    </i>
-                </a>
+                        </i>
+                    </a>
+                </shiro:hasPermission>
             </div>
         </div><!-- /.sidebar-shortcuts -->
 

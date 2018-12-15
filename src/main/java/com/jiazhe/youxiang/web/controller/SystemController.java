@@ -19,13 +19,17 @@ public class SystemController extends BaseController{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemController.class);
 
-    //进入登陆页面
+    /**
+     * 进入登陆页面
+     */
     @RequestMapping(value = "/index")
     public String main() {
         return "login/index";
     }
 
-    //系统退出
+    /**
+     * 系统退出
+     */
     @RequestMapping("/logout")
     public String logout() {
         Subject subject = SecurityUtils.getSubject();
@@ -33,7 +37,9 @@ public class SystemController extends BaseController{
         return "login/index";
     }
 
-    //无权限
+    /**
+     * 无权限
+     */
     @RequestMapping("/403")
     public String noPermission() {
         return "error/403";

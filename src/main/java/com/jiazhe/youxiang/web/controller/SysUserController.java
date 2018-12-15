@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.web.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +20,10 @@ public class SysUserController extends BaseController {
 
     /**
      * 跳转到用户管理页面
+     *
      * @return 页面
      */
-    /*@RequiresPermissions("sysuser-index")*/
+    @RequiresPermissions(PermissionConstant.USER_MANAGEMENT)
     @RequestMapping(value = "/index")
     public String main() {
         return "system/sysuser/index";

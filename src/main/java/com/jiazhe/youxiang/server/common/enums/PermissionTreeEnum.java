@@ -14,20 +14,26 @@ public enum PermissionTreeEnum {
     CUSTOMER_ADD(101, 1, "添加客户", PermissionConstant.CUSTOMER_ADD),
     //修改客户
     CUSTOMER_EDIT(102, 1, "修改客户", PermissionConstant.CUSTOMER_EDIT),
+    //查看客户积分卡
+    CUSTOMER_POINT_DETAIL(103, 1, "查看客户积分卡", PermissionConstant.CUSTOMER_POINT_DETAIL),
+    //绑定积分卡
+    CUSTOMER_POINT_BINDING(104, 1, "绑定积分卡", PermissionConstant.CUSTOMER_POINT_BINDING),
+    //直接充值积分卡
+    CUSTOMER_POINT_RECHARGE(105, 1, "直接充值积分卡", PermissionConstant.CUSTOMER_POINT_RECHARGE),
     //查看客户充值卡
-    CUSTOMER_RECHARGE_CARD_DETAIL(103, 1, "查看客户充值卡", PermissionConstant.CUSTOMER_RECHARGE_CARD_DETAIL),
+    CUSTOMER_RECHARGE_CARD_DETAIL(106, 1, "查看客户充值卡", PermissionConstant.CUSTOMER_RECHARGE_CARD_DETAIL),
     //绑定充值卡
-    CUSTOMER_RECHARGE_CARD_BINDING(104, 1, "绑定充值卡", PermissionConstant.CUSTOMER_RECHARGE_CARD_BINDING),
-    //直接充值
-    CUSTOMER_RECHARGE_CARD_RECHARGE(105, 1, "直接充值", PermissionConstant.CUSTOMER_RECHARGE_CARD_RECHARGE),
+    CUSTOMER_RECHARGE_CARD_BINDING(107, 1, "绑定充值卡", PermissionConstant.CUSTOMER_RECHARGE_CARD_BINDING),
+    //直接充值充值卡
+    CUSTOMER_RECHARGE_CARD_RECHARGE(108, 1, "直接充值充值卡", PermissionConstant.CUSTOMER_RECHARGE_CARD_RECHARGE),
     //查看客户代金券
-    CUSTOMER_VOUCHER_DETAIL(106, 1, "查看客户代金券", PermissionConstant.CUSTOMER_VOUCHER_DETAIL),
+    CUSTOMER_VOUCHER_DETAIL(109, 1, "查看客户代金券", PermissionConstant.CUSTOMER_VOUCHER_DETAIL),
     //绑定代金券
-    CUSTOMER_VOUCHER_BINDING(107, 1, "绑定代金券", PermissionConstant.CUSTOMER_VOUCHER_BINDING),
+    CUSTOMER_VOUCHER_BINDING(110, 1, "绑定代金券", PermissionConstant.CUSTOMER_VOUCHER_BINDING),
     //查看客户订单
-    CUSTOMER_ORDER_DETAIL(108, 1, "查看客户订单", PermissionConstant.CUSTOMER_ORDER_DETAIL),
+    CUSTOMER_ORDER_DETAIL(111, 1, "查看客户订单", PermissionConstant.CUSTOMER_ORDER_DETAIL),
     //后台下单
-    CUSTOMER_USER_PLACE_ORDER(109, 1, "后台下单", PermissionConstant.CUSTOMER_USER_PLACE_ORDER),
+    CUSTOMER_USER_PLACE_ORDER(112, 1, "后台下单", PermissionConstant.CUSTOMER_USER_PLACE_ORDER),
     //商品大类管理
     PRODUCT_CATEGORY_MANAGEMENT(2, 0, "商品大类管理", PermissionConstant.PRODUCT_CATEGORY_MANAGEMENT),
     //商品大类添加

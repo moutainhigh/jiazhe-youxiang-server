@@ -1,6 +1,8 @@
 package com.jiazhe.youxiang.web.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -17,9 +19,10 @@ public class AuditController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuditController.class);
 
+    @RequiresPermissions(PermissionConstant.AUDIT_RECORD_MANAGEMENT)
     @RequestMapping(value = "/index")
-    public String index(Integer status,Model model) {
-        model.addAttribute("status",status);
+    public String index(Integer status, Model model) {
+        model.addAttribute("status", status);
         return "auditrecord/index";
     }
 }
