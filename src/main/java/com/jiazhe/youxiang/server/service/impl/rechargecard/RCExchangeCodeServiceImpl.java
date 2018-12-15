@@ -119,6 +119,8 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         RechargeCardExchangeRecordPO rechargeCardRecordPO = new RechargeCardExchangeRecordPO();
         rechargeCardRecordPO.setExchangeCodeId(rechargeCardExchangeCodePO.getId());
         rechargeCardRecordPO.setExchangeType(type);
+        rechargeCardRecordPO.setOperatorId(0);
+        rechargeCardRecordPO.setOperatorName("");
         //如果后台用兑换码帮客户充值，同样记录操作人员的信息
         if(type.equals(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE)){
             SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
@@ -129,8 +131,6 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
             rechargeCardRecordPO.setOperatorName(sysUserDTO.getLoginName());
         }
         rechargeCardRecordPO.setRechargeCardId(rechargeCardPO.getId());
-        rechargeCardRecordPO.setOperatorId(0);
-        rechargeCardRecordPO.setOperatorName("");
         rechargeCardRecordPO.setExtInfo("");
         rechargeCardRecordPO.setIsDeleted(Byte.valueOf("0"));
         rechargeCardRecordPO.setAddTime(new Date());

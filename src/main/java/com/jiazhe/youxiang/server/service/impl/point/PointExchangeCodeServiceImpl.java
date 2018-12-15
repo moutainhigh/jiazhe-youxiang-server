@@ -198,6 +198,8 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         PointExchangeRecordPO pointRecordPO = new PointExchangeRecordPO();
         pointRecordPO.setExchangeCodeId(pointExchangeCodePO.getId());
         pointRecordPO.setExchangeType(type);
+        pointRecordPO.setOperatorId(0);
+        pointRecordPO.setOperatorName("");
         //如果后台用兑换码帮客户充值，同样记录操作人员的信息
         if(type.equals(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE)){
             SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
@@ -208,8 +210,6 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
             pointRecordPO.setOperatorName(sysUserDTO.getLoginName());
         }
         pointRecordPO.setPointId(pointPO.getId());
-        pointRecordPO.setOperatorId(0);
-        pointRecordPO.setOperatorName("");
         pointRecordPO.setExtInfo("");
         pointRecordPO.setIsDeleted(Byte.valueOf("0"));
         pointRecordPO.setAddTime(new Date());
