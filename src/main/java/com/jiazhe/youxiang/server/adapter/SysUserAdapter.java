@@ -14,7 +14,7 @@ import com.jiazhe.youxiang.server.vo.resp.sysuser.UserWithRoleResp;
  */
 public class SysUserAdapter {
 
-    public static SysUserDTO PO2DTO(SysUserPO sysUserPO) {
+    public static SysUserDTO po2Dto(SysUserPO sysUserPO) {
         if (sysUserPO == null) {
             return null;
         }
@@ -30,7 +30,7 @@ public class SysUserAdapter {
         return sysUserDTO;
     }
 
-    public static SysUserPO DTO2PO(SysUserDTO sysUserDTO) {
+    public static SysUserPO dto2Po(SysUserDTO sysUserDTO) {
         if (sysUserDTO == null) {
             return null;
         }
@@ -46,7 +46,7 @@ public class SysUserAdapter {
         return sysUserPO;
     }
 
-    public static SysUserResp DTO2RespVO(SysUserDTO sysUserDTO) {
+    public static SysUserResp dto2RespVo(SysUserDTO sysUserDTO) {
         if (sysUserDTO == null) {
             return null;
         }

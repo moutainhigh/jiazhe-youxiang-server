@@ -1,15 +1,13 @@
 package com.jiazhe.youxiang.server.service.impl;
 
 import com.jiazhe.youxiang.server.adapter.SysUserRoleAdapter;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.dao.mapper.SysUserRolePOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.SysUserRolePOManualMapper;
-import com.jiazhe.youxiang.server.domain.po.SysUserPO;
-import com.jiazhe.youxiang.server.domain.po.SysUserPOExample;
 import com.jiazhe.youxiang.server.domain.po.SysUserRolePO;
 import com.jiazhe.youxiang.server.domain.po.SysUserRolePOExample;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserRoleDTO;
 import com.jiazhe.youxiang.server.service.SysUserRoleService;
-import com.jiazhe.youxiang.server.service.SysUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,7 @@ import java.util.stream.Collectors;
 @Service("sysUserRoleService")
 public class SysUserRoleServiceImpl implements SysUserRoleService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SysUserRoleServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(SysUserRoleServiceImpl.class);
 
     @Autowired
     private SysUserRolePOMapper sysUserRolePOMapper;
@@ -36,7 +34,7 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
         SysUserRolePOExample sysUserRolePOExample = new SysUserRolePOExample();
         SysUserRolePOExample.Criteria criteria = sysUserRolePOExample.createCriteria();
         criteria.andUserIdEqualTo(userId);
-        criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
+        criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
         List<SysUserRolePO> sysUserRolePOList = sysUserRolePOMapper.selectByExample(sysUserRolePOExample);
         return sysUserRolePOList.stream().map(SysUserRoleAdapter::PO2DTO).collect(Collectors.toList());
     }

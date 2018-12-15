@@ -3,10 +3,11 @@ package com.jiazhe.youxiang.server.common.enums;
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 /**
  * @author TU
- * @description 权限树枚举类 【
+ * @description 权限树枚举类
  * @date 2018/12/6.
  */
 public enum PermissionTreeEnum {
+
     //客户管理
     CUSTOMER_MANAGEMENT(1, 0, "客户管理", PermissionConstant.CUSTOMER_MANAGEMENT),
     //添加客户
@@ -86,57 +87,77 @@ public enum PermissionTreeEnum {
     //信息查询
     INFO_SEARCH(6, 0, "信息查询", PermissionConstant.INFO_SEARCH),
     //充值卡查询
-    RECHARGE_CARD_SEARCH(601, 6, "充值卡查询", PermissionConstant.RECHARGE_CARD_SEARCH),
+    POINT_SEARCH(601, 6, "积分卡查询", PermissionConstant.POINT_SEARCH),
     //充值卡修改
-    RECHARGE_CARD_SEARCH_EDIT(602, 6, "充值卡修改", PermissionConstant.RECHARGE_CARD_SEARCH_EDIT),
+    POINT_SEARCH_EDIT(602, 6, "积分卡修改", PermissionConstant.POINT_SEARCH_EDIT),
     //充值卡兑换码查询
-    RECHARGE_CARD_CODE_SEARCH(603, 6, "充值卡兑换码查询", PermissionConstant.RECHARGE_CARD_CODE_SEARCH),
+    POINT_CODE_SEARCH(603, 6, "积分卡兑换码查询", PermissionConstant.POINT_CODE_SEARCH),
     //充值卡兑换码修改
-    RECHARGE_CARD_CODE_SEARCH_EDIT(604, 6, "充值卡兑换码修改", PermissionConstant.RECHARGE_CARD_CODE_SEARCH_EDIT),
+    POINT_CODE_SEARCH_EDIT(604, 6, "积分卡兑换码修改", PermissionConstant.POINT_CODE_SEARCH_EDIT),
+    //充值卡查询
+    RECHARGE_CARD_SEARCH(605, 6, "充值卡查询", PermissionConstant.RECHARGE_CARD_SEARCH),
+    //充值卡修改
+    RECHARGE_CARD_SEARCH_EDIT(606, 6, "充值卡修改", PermissionConstant.RECHARGE_CARD_SEARCH_EDIT),
+    //充值卡兑换码查询
+    RECHARGE_CARD_CODE_SEARCH(607, 6, "充值卡兑换码查询", PermissionConstant.RECHARGE_CARD_CODE_SEARCH),
+    //充值卡兑换码修改
+    RECHARGE_CARD_CODE_SEARCH_EDIT(608, 6, "充值卡兑换码修改", PermissionConstant.RECHARGE_CARD_CODE_SEARCH_EDIT),
     //代金券查询
-    VOUCHER_SEARCH (605, 6, "代金券查询", PermissionConstant.VOUCHER_SEARCH),
+    VOUCHER_SEARCH (609, 6, "代金券查询", PermissionConstant.VOUCHER_SEARCH),
     //代金券修改
-    VOUCHER_SEARCH_EDIT(606, 6, "代金券修改", PermissionConstant.VOUCHER_SEARCH_EDIT),
+    VOUCHER_SEARCH_EDIT(610, 6, "代金券修改", PermissionConstant.VOUCHER_SEARCH_EDIT),
     //代金券兑换码查询
-    VOUCHER_CODE_SEARCH(607, 6, "代金券兑换码查询", PermissionConstant.VOUCHER_CODE_SEARCH),
+    VOUCHER_CODE_SEARCH(611, 6, "代金券兑换码查询", PermissionConstant.VOUCHER_CODE_SEARCH),
     //代金券兑换码修改
-    VOUCHER_CODE_SEARCH_EIDT(608, 6, "代金券兑换码修改", PermissionConstant.VOUCHER_CODE_SEARCH_EIDT),
+    VOUCHER_CODE_SEARCH_EIDT(612, 6, "代金券兑换码修改", PermissionConstant.VOUCHER_CODE_SEARCH_EIDT),
     //系统管理
     SYSTEM_MANAGEMENT(7, 0, "系统管理", PermissionConstant.SYSTEM_MANAGEMENT),
+    //积分卡兑换码批次管理
+    POINT_BATCH_MANAGEMENT(701, 7, "积分卡兑换码批次管理", PermissionConstant.POINT_BATCH_MANAGEMENT),
+    //积分卡兑换码批次添加
+    POINT_BATCH_ADD(702, 7, "积分卡兑换码批次添加", PermissionConstant.POINT_BATCH_ADD),
+    //积分卡兑换码批次修改
+    POINT_BATCH_EDIT(703, 7, "积分卡兑换码批次修改", PermissionConstant.POINT_BATCH_EDIT),
+    //积分卡兑换码管理
+    POINT_CODE_MANAGEMENT(704, 7, "积分卡兑换码管理", PermissionConstant.POINT_CODE_MANAGEMENT),
+    //积分卡兑换码修改
+    POINT_CODE_EDIT(705, 7, "积分卡兑换码修改", PermissionConstant.POINT_CODE_EDIT),
     //充值卡兑换码批次管理
-    RC_BATCH_MANAGEMENT(701, 7, "充值卡兑换码批次管理", PermissionConstant.RC_BATCH_MANAGEMENT),
+    RC_BATCH_MANAGEMENT(706, 7, "充值卡兑换码批次管理", PermissionConstant.RC_BATCH_MANAGEMENT),
     //充值卡兑换码批次添加
-    RC_BATCH_ADD(702, 7, "充值卡兑换码批次添加", PermissionConstant.RC_BATCH_ADD),
+    RC_BATCH_ADD(707, 7, "充值卡兑换码批次添加", PermissionConstant.RC_BATCH_ADD),
     //充值卡兑换码批次修改
-    RC_BATCH_EDIT(703, 7, "充值卡兑换码批次修改", PermissionConstant.RC_BATCH_EDIT),
+    RC_BATCH_EDIT(708, 7, "充值卡兑换码批次修改", PermissionConstant.RC_BATCH_EDIT),
     //充值卡兑换码管理
-    RC_CODE_MANAGEMENT(704, 7, "充值卡兑换码管理", PermissionConstant.RC_CODE_MANAGEMENT),
+    RC_CODE_MANAGEMENT(709, 7, "充值卡兑换码管理", PermissionConstant.RC_CODE_MANAGEMENT),
     //充值卡兑换码修改
-    RC_CODE_EDIT(705, 7, "充值卡兑换码修改", PermissionConstant.RC_CODE_EDIT),
+    RC_CODE_EDIT(710, 7, "充值卡兑换码修改", PermissionConstant.RC_CODE_EDIT),
     //代金券兑换码批次管理
-    VOUCHER_BATCH_MANAGEMENT(706, 7, "代金券兑换码批次管理", PermissionConstant.VOUCHER_BATCH_MANAGEMENT),
+    VOUCHER_BATCH_MANAGEMENT(711, 7, "代金券兑换码批次管理", PermissionConstant.VOUCHER_BATCH_MANAGEMENT),
     //代金券兑换码批次添加
-    VOUCHER_BATCH_ADD(707, 7, "代金券兑换码批次添加", PermissionConstant.VOUCHER_BATCH_ADD),
+    VOUCHER_BATCH_ADD(712, 7, "代金券兑换码批次添加", PermissionConstant.VOUCHER_BATCH_ADD),
     //代金券兑换码批次修改
-    VOUCHER_BATCH_EDIT(708, 7, "代金券兑换码批次修改", PermissionConstant.VOUCHER_BATCH_EDIT),
+    VOUCHER_BATCH_EDIT(713, 7, "代金券兑换码批次修改", PermissionConstant.VOUCHER_BATCH_EDIT),
     //代金券兑换码管理
-    VOUCHER_CODE_MANAGEMENT(709, 7, "代金券兑换码管理", PermissionConstant.VOUCHER_CODE_MANAGEMENT),
+    VOUCHER_CODE_MANAGEMENT(714, 7, "代金券兑换码管理", PermissionConstant.VOUCHER_CODE_MANAGEMENT),
     //代金券兑换码修改
-    VOUCHER_CODE_EDIT(710, 7, "代金券兑换码修改", PermissionConstant.VOUCHER_CODE_EDIT),
+    VOUCHER_CODE_EDIT(715, 7, "代金券兑换码修改", PermissionConstant.VOUCHER_CODE_EDIT),
     //电子商品管理
-    ELE_CODE_MANAGEMENT(711, 7, "电子商品管理", PermissionConstant.ELE_CODE_MANAGEMENT),
+    ELE_CODE_MANAGEMENT(716, 7, "电子商品管理", PermissionConstant.ELE_CODE_MANAGEMENT),
     //电子商品添加
-    ELE_CODE_ADD(712, 7, "电子商品添加", PermissionConstant.ELE_CODE_ADD),
+    ELE_CODE_ADD(717, 7, "电子商品添加", PermissionConstant.ELE_CODE_ADD),
     //电子商品修改
-    ELE_CODE_EDIT(713, 7, "电子商品修改", PermissionConstant.ELE_CODE_EDIT),
+    ELE_CODE_EDIT(718, 7, "电子商品修改", PermissionConstant.ELE_CODE_EDIT),
     //员工管理
-    USER_MANAGEMENT(714, 7, "员工管理", PermissionConstant.USER_MANAGEMENT),
+    USER_MANAGEMENT(719, 7, "员工管理", PermissionConstant.USER_MANAGEMENT),
     //角色管理
-    ROLE_MANAGEMENT(715, 7, "角色管理", PermissionConstant.ROLE_MANAGEMENT),
+    ROLE_MANAGEMENT(720, 7, "角色管理", PermissionConstant.ROLE_MANAGEMENT),
     //城市管理
-    CITY_MANAGEMENT(716, 7, "城市管理", PermissionConstant.CITY_MANAGEMENT),
+    CITY_MANAGEMENT(721, 7, "城市管理", PermissionConstant.CITY_MANAGEMENT),
     //日志管理
-    LOG_MANAGEMENT(717, 7, "日志管理", PermissionConstant.LOG_MANAGEMENT),
+    LOG_MANAGEMENT(722, 7, "日志管理", PermissionConstant.LOG_MANAGEMENT),
+    //商家订单
+    PARTNER_ORDER_MANAGEMENT(8, 0, "商家订单", PermissionConstant.PARTNER_ORDER_MANAGEMENT)
     ;
 
     PermissionTreeEnum(Integer id, Integer pId, String name, String perm) {

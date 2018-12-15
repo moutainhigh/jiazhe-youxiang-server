@@ -1,16 +1,14 @@
 package com.jiazhe.youxiang.server.vo.resp.sysuser;
 
-import com.jiazhe.youxiang.server.vo.BaseObject;
+import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
-
-import java.util.Date;
 
 /**
  * @author tu
  * @description：
  * @date 2018/10/19
  */
-public class SysUserResp extends BaseObject {
+public class SysUserResp extends BaseVO {
 
     @ApiModelProperty("员工id")
     private Integer id;

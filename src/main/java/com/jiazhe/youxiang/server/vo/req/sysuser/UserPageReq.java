@@ -1,6 +1,5 @@
 package com.jiazhe.youxiang.server.vo.req.sysuser;
 
-import com.jiazhe.youxiang.server.vo.req.OffsetLimitReq;
 import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -18,10 +17,6 @@ public class UserPageReq extends PageSizeNumReq {
 
     @ApiModelProperty("员工名称")
     private String displayName;
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
 
     public String getLoginName() {
         return loginName;

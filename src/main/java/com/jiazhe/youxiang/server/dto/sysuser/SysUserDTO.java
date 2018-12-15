@@ -1,8 +1,6 @@
 package com.jiazhe.youxiang.server.dto.sysuser;
 
 import com.jiazhe.youxiang.server.vo.BaseObject;
-
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -14,20 +12,44 @@ public class SysUserDTO extends BaseObject {
 
     private static final long serialVersionUID = 3868043216372041696L;
 
+    /**
+     * 员工id
+     */
     private Integer id;
 
+    /**
+     * 员工电话
+     */
     private String mobile;
 
+    /**
+     * 员工登录名
+     */
     private String loginName;
 
+    /**
+     * 员工显示名
+     */
     private String displayName;
 
+    /**
+     * 员工最后一次登录时间
+     */
     private Date lastLoginTime;
 
+    /**
+     * 员工密码加密的盐值
+     */
     private String salt;
 
+    /**
+     * 员工密码
+     */
     private String password;
 
+    /**
+     * 员工最后一次登录IP
+     */
     private String lastLoginIp;
 
     public Integer getId() {

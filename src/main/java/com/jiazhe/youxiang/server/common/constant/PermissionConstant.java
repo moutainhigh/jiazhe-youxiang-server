@@ -13,19 +13,6 @@ import java.util.List;
  */
 public class PermissionConstant {
 
-    public static List<PermissionTreeResp> treeRespList = Lists.newArrayList();
-
-    static{
-        for (PermissionTreeEnum temp : PermissionTreeEnum.values()) {
-            PermissionTreeResp tree = new PermissionTreeResp();
-            tree.setId(temp.getId());
-            tree.setpId(temp.getpId());
-            tree.setName(temp.getName());
-            tree.setPerm(temp.getPerm());
-            treeRespList.add(tree);
-        }
-    }
-
     //客户管理
     public static String CUSTOMER_MANAGEMENT = "customerManagement";
     //添加客户
@@ -72,6 +59,8 @@ public class PermissionConstant {
     public static String PRODUCT_PRICE_EDIT = "productPriceEdit";
     //商品价格生效失效
     public static String PRODUCT_PRICE_EFFECT = "productPriceEffect";
+    //商家订单
+    public static String PARTNER_ORDER_MANAGEMENT = "partnerOrderManagement";
     //订单管理
     public static String ORDER_MANAGEMENT = "orderManagement";
     //订单预约
@@ -104,6 +93,14 @@ public class PermissionConstant {
     public static String AUDIT_RECORD_CHECK = "auditRecordCheck";
     //信息查询
     public static String INFO_SEARCH = "infoSearch";
+    //积分卡查询
+    public static String POINT_SEARCH = "pointSearch";
+    //积分卡修改
+    public static String POINT_SEARCH_EDIT = "pointSearchEdit";
+    //积分卡兑换码查询
+    public static String POINT_CODE_SEARCH = "pointCodeSearch";
+    //积分卡兑换码修改
+    public static String POINT_CODE_SEARCH_EDIT = "pointCodeSearchEdit";
     //充值卡查询
     public static String RECHARGE_CARD_SEARCH = "rechargeCardSearch";
     //充值卡修改
@@ -122,6 +119,16 @@ public class PermissionConstant {
     public static String VOUCHER_CODE_SEARCH_EIDT = "voucherCodeSearchEdit";
     //系统管理
     public static String SYSTEM_MANAGEMENT = "systemManagement";
+    //积分卡兑换码批次管理
+    public static String POINT_BATCH_MANAGEMENT = "pointBatchManagement";
+    //积分卡兑换码批次添加
+    public static String POINT_BATCH_ADD = "pointBatchAdd";
+    //积分卡兑换码批次修改
+    public static String POINT_BATCH_EDIT = "rcBatchEdit";
+    //积分卡兑换码管理
+    public static String POINT_CODE_MANAGEMENT = "rcCodeManagement";
+    //积分卡兑换码修改
+    public static String POINT_CODE_EDIT = "rcCodeEdit";
     //充值卡兑换码批次管理
     public static String RC_BATCH_MANAGEMENT = "rcBatchManagement";
     //充值卡兑换码批次添加

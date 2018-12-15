@@ -12,6 +12,11 @@ import java.util.List;
  */
 public interface SysUserRoleService {
 
+    /**
+     * 通过用户id，查找用户对应的权限
+     * @param userId
+     * @return
+     */
     List<SysUserRoleDTO> findByUserId(Integer userId);
 
     void batchDelete(List<Integer> ids);
