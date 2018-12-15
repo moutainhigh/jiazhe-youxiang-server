@@ -18,7 +18,7 @@ public class DirectChargeReq extends BaseVO {
     @ApiModelProperty("虚拟批次的id")
     Integer batchId;
 
-    @ApiModelProperty("充值分数")
+    @ApiModelProperty("充值金额")
     BigDecimal faceValue;
 
     public Integer getId() {

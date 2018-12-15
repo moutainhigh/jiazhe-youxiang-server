@@ -427,11 +427,18 @@
         var tableOption = {
             url: "/api/customer/getlist",// 获取数据的地址
             postData: transformToJson($('#searchForm').serializeArray()),
-            colNames: ['', '客户名称', '手机号码', '充值卡', '代金券', '订单', '默认地址', '客户备注', '操作'],
+            colNames: ['', '客户名称', '手机号码','积分', '充值卡', '代金券', '订单', '默认地址', '客户备注', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 50, sortable: false},
                 {name: 'mobile', index: 'mobile', width: 50, sortable: false},
+                {
+                    name: 'point',
+                    index: '_point',
+                    width: 150,
+                    sortable: false,
+                    formatter: pointFormatter
+                },
                 {
                     name: '_rechargeCard',
                     index: '_rechargeCard',
@@ -468,6 +475,15 @@
         } else {
             return "未知";
         }
+    }
+
+    function pointFormatter(cellvalue, options, rowObject) {
+        var str = "剩余积分：" + rowObject.pointBalance + " ";
+        var pointUrl = "/infosearch/pointindex?mobile=" + rowObject.mobile;
+        str += getRedirectButton("btn-success", pointUrl, "详情");
+        str += getFunctionButton("btn-yellow", "openPointCharge(" + rowObject.id + ")", "绑定");
+        str += getFunctionButton("btn-yellow", "openPointDirectCharge(" + rowObject.id + ")", "充值");
+        return str;
     }
 
     function rechargeCardFormatter(cellvalue, options, rowObject) {
@@ -515,8 +531,14 @@
             case "4": //代金券绑定
                 voucherBinding();
                 break;
-            case "5"://直接充值
-                recharge()
+            case "5"://充值卡直接充值
+                recharge();
+                break;
+            case "6"://积分码绑定
+                pointBinding();
+                break;
+            case "7"://积分直接充值
+                pointRecharge();
                 break;
             default:
         }
@@ -570,6 +592,21 @@
         });
     }
 
+    function pointBinding() {
+        $.ajax({
+            url: "/api/pointexchangecode/backstagecodecharge",
+            dataType: "json",
+            async: false,
+            data: {
+                id: $("#inputCustomerId").val(),
+                keyt: $("#inputKeyt").val(),
+            },
+            type: "POST",
+            success: success,
+            error: error
+        });
+    }
+
     function voucherBinding() {
         $.ajax({
             url: "/api/voucherexchangecode/backstagecodecharge",
@@ -599,7 +636,22 @@
             success: success,
             error: error
         });
+    }
 
+    function pointRecharge() {
+        $.ajax({
+            url: "/api/point/directcharge",
+            dataType: "json",
+            async: false,
+            data: {
+                id: $("#inputCustomerId").val(),
+                batchId: $("#selectBatch").val(),
+                faceValue: $("#inputChargeMoney").val(),
+            },
+            type: "POST",
+            success: success,
+            error: error
+        });
     }
 
     function initModel() {
@@ -670,8 +722,32 @@
 
     function openDirectCharge(id) {
         initModel()
-        $("#inputOperationType").val(5);//直接充值
-        $("#modal-title").html("直接充值");
+        $("#inputOperationType").val(5);//充值卡直接充值
+        $("#modal-title").html("充值卡直接充值");
+        $('#inputChargeMoney').removeAttr('disabled');
+        $('#divMobile').removeAttr('hidden');
+        $('#divProject').removeAttr('hidden');
+        $('#divBatch').removeAttr('hidden');
+        $('#divChargeMoney').removeAttr('hidden');
+        $(".modal-footer-btn").show();
+        getById(id);
+    }
+
+    function openPointCharge(id) {
+        initModel()
+        $("#inputOperationType").val(6);//积分卡绑定
+        $("#modal-title").html("积分卡绑定");
+        $('#inputKeyt').removeAttr('disabled');
+        $('#divMobile').removeAttr('hidden');
+        $('#divKeyt').removeAttr('hidden');
+        $(".modal-footer-btn").show();
+        getById(id);
+    }
+
+    function openPointDirectCharge(id) {
+        initModel()
+        $("#inputOperationType").val(7);//积分直接充值
+        $("#modal-title").html("积分直接充值");
         $('#inputChargeMoney').removeAttr('disabled');
         $('#divMobile').removeAttr('hidden');
         $('#divProject').removeAttr('hidden');
@@ -707,16 +783,6 @@
         });
     }
 
-
-    function success(data) {
-        if ('error' in data) {
-            bootboxalert(data.error.message);
-        } else {
-            $("#modal-form").modal('hide');
-            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-        }
-    }
-
     function initSelectProject() {
         //将项目列表填入到单选框中
         $.ajax({
@@ -749,9 +815,16 @@
         if (projectId == "") {
             return;
         }
+        url = "";
+        if($("#inputOperationType").val()== "5"){
+            url = "/api/rcexchangecodebatch/findvirtualbyprojectid";
+        }
+        if($("#inputOperationType").val()== "7"){
+            url = "/api/pointexchangecodebatch/findvirtualbyprojectid";
+        }
         $("#selectBatch").empty();
         $.ajax({
-            url: "/api/rcexchangecodebatch/findvirtualbyprojectid",
+            url: url,
             dataType: "json",
             async: false,
             data: {

@@ -20,13 +20,15 @@ public enum ModuleEnum {
     RECHARGE(106, "充值卡管理"),
     VOUCHER(107, "代金券管理"),
     ORDER(108, "订单管理"),
-    RECORD(108, "订单管理"),
     CUSTOMER(109, "客户管理"),
     PRODUCT(110, "商品管理"),
     AUDIT_RECORD(111, "审核管理"),
     REGISTER(112, "登录管理"),
     ELE_PRODUCT(113, "商品电子码管理"),
     UPLOAD(114, "文件上传管理"),
+    WECHAT_PAY(115, "微信支付相关"),
+    POINT(116, "积分管理"),
+    PARTNER_ORDER(117,"商家订单管理"),
     OTHER(999, "其他模块");
 
     private Integer id;

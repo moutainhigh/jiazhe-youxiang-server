@@ -10,7 +10,6 @@ import com.jiazhe.youxiang.server.service.order.OrderInfoService;
 import com.jiazhe.youxiang.server.service.order.OrderPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,5 +78,19 @@ public class OrderPaymentServiceImpl implements OrderPaymentService {
         if(!orderPaymentPOList.isEmpty()){
             orderPaymentPOManualMapper.batchInsert(orderPaymentPOList);
         }
+    }
+
+    @Override
+    public List<OrderPaymentDTO> getByPointId(Integer id) {
+        OrderPaymentPOExample example = new OrderPaymentPOExample();
+        OrderPaymentPOExample.Criteria criteria = example.createCriteria();
+        criteria.andPointIdEqualTo(id);
+        criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
+        List<OrderPaymentPO> poList = orderPaymentPOMapper.selectByExample(example);
+        List<OrderPaymentDTO> orderPaymentDTOList = poList.stream().map(OrderPaymentAdapter::PO2DTO).collect(Collectors.toList());
+        orderPaymentDTOList.forEach(bean -> {
+            bean.setOrderInfoDTO(orderInfoService.getById(bean.getOrderId()));
+        });
+        return orderPaymentDTOList;
     }
 }

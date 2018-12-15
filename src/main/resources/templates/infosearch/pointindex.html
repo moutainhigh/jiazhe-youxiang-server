@@ -22,14 +22,14 @@
                         <i class="ace-icon fa fa-home home-icon"></i>
                         <a th:href="@{/main/main_center}">主页</a>
                     </li>
-                    <li class="active">充值卡查询</li>
+                    <li class="active">积分卡查询</li>
                 </ul><!-- /.breadcrumb -->
             </div>
 
             <div class="page-content">
                 <div class="row">
                     <div class="col-xs-12" style="padding-top:40px">
-                        <form id="rcSearchForm" class="form-horizontal" role="form">
+                        <form id="pointSearchForm" class="form-horizontal" role="form">
                             <div class="form-group">
                                 <div class="col-sm-6">
                                     <label class="col-sm-2 control-label no-padding-right">状态：</label>
@@ -98,7 +98,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="blue bigger" id="modal-title">修改充值卡信息</h4>
+                                    <h4 class="blue bigger" id="modal-title">修改积分卡信息</h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
@@ -110,10 +110,10 @@
                                                 <input type="hidden" name="cityCodes" id="saveCityCodes">
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">充值卡名称：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">积分卡名称：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveRechargeCardName" name="name"
+                                                            <input id="savePointName" name="name"
                                                                    class="form-control"
                                                                    type="text" style="height:30px"/>
                                                         </div>
@@ -233,9 +233,9 @@
         initDatePicker();
 
         var tableOption = {
-            url: "/api/rc/searchlistpage",
-            postData: transformToJson($('#rcSearchForm').serializeArray()),
-            colNames: ['', '充值卡名称', '状态', '面额', '余额', '兑换时间', '客户手机号', '客户姓名', '过期时间', '兑换类型', '后台操作人', '操作'],
+            url: "/api/point/searchlistpage",
+            postData: transformToJson($('#pointSearchForm').serializeArray()),
+            colNames: ['', '积分卡名称', '状态', '面额', '余额', '兑换时间', '客户手机号', '客户姓名', '过期时间', '兑换类型', '后台操作人', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 40, sortable: false},
@@ -290,33 +290,33 @@
                 },
                 {
                     name: 'exchangeType',
-                    index: 'rcExchangeRecordResp.exchangeType',
+                    index: 'pointExchangeRecordResp.exchangeType',
                     width: 40,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return exchangeType[rowObject.rcExchangeRecordResp.exchangeType];
+                        return exchangeType[rowObject.pointExchangeRecordResp.exchangeType];
                     }
                 },
                 {
                     name: 'operatorName',
-                    index: 'rcExchangeRecordResp.operatorName',
+                    index: 'pointExchangeRecordResp.operatorName',
                     width: 40,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.rcExchangeRecordResp.operatorName;
+                        return rowObject.pointExchangeRecordResp.operatorName;
                     }
                 },
                 {name: '_action', index: '_action', width: 70, sortable: false, formatter: customFormatter}
             ],
-            caption: "充值卡查询结果列表"
+            caption: "积分卡查询结果列表"
         };
         initTable(grid_selector, pager_selector, tableOption);
     });
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "/api/rc/searchlistpage",// 获取数据的地址
-            postData: transformToJson($('#rcSearchForm').serializeArray()),
+            url: "/api/point/searchlistpage",// 获取数据的地址
+            postData: transformToJson($('#pointSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
     }
@@ -333,12 +333,12 @@
         return str;
     }
 
-    //启用充值卡
+    //启用积分卡
     function startUsing(id) {
-        confirm("确定启用该充值卡吗？",function (result) {
+        confirm("确定启用该积分卡吗？",function (result) {
             if (result) {
                 $.ajax({
-                    url: "/api/rc/startusing",
+                    url: "/api/point/startusing",
                     dataType: "json",
                     async: false,
                     data: {
@@ -352,12 +352,12 @@
         })
     }
 
-    //停用充值卡
+    //停用积分卡
     function stopUsing(id) {
-        confirm("确定停用该充值卡吗？",function (result) {
+        confirm("确定停用该积分卡吗？",function (result) {
             if(result){
                 $.ajax({
-                    url: "/api/rc/stopusing",
+                    url: "/api/point/stopusing",
                     dataType: "json",
                     async: false,
                     data: {
@@ -379,7 +379,7 @@
             }
         }
         $.ajax({
-            url: "/api/rc/editsave",
+            url: "/api/point/editsave",
             dataType: "json",
             async: false,
             data: transformToJson($('#cardSaveForm').serializeArray()),
@@ -391,7 +391,7 @@
 
     function openEdit(id) {
         $.ajax({
-            url: "/api/rc/getbyid",
+            url: "/api/point/getbyid",
             dataType: "json",
             async: false,
             data: {
@@ -404,7 +404,7 @@
                 } else {
                     var result = data.data;
                     $("#saveCardId").val(result.id);
-                    $("#cardSaveForm #saveRechargeCardName").val(result.name);
+                    $("#cardSaveForm #savePointName").val(result.name);
                     $("#cardSaveForm #saveCityCodes").val(result.cityCodes);
                     $("#cardSaveForm #saveProductIds").val(result.productIds);
                     $("#cardSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
@@ -420,7 +420,7 @@
     function getOrderPaymentList(id) {//显示消费记录
         $("#modelTbody").empty();
         $.ajax({
-            url: "/api/orderpayment/getbyrechargecardid",
+            url: "/api/orderpayment/getbypointid",
             dataType: "json",
             async: false,
             data: {

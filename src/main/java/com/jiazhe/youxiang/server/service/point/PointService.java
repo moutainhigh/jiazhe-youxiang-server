@@ -1,6 +1,10 @@
 package com.jiazhe.youxiang.server.service.point;
 
+import com.jiazhe.youxiang.server.domain.po.PointPO;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardPO;
+import com.jiazhe.youxiang.server.dto.point.point.PointDTO;
+import com.jiazhe.youxiang.server.dto.point.point.PointEditDTO;
+import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
@@ -17,4 +21,23 @@ import java.util.List;
  */
 public interface PointService {
 
+    void batchUpdate(List<Integer> cardIds, PointExchangeCodeBatchSaveDTO batchSaveDTO);
+
+    void batchChangeStatus(List<Integer> cardIds, Byte status);
+
+    void insert(PointPO pointPO);
+
+    void update(PointPO pointPO);
+
+    List<PointDTO> getList(String mobile, Integer exchangeType, Byte status, Byte expiry, Paging paging);
+
+    void changeStatus(Integer id, Byte status);
+
+    void directCharge(Integer id, Integer batchId, BigDecimal faceValue);
+
+    PointDTO getById(Integer id);
+
+    void editSave(PointEditDTO dto);
+
+    BigDecimal totalValidBalance(Integer customerId);
 }

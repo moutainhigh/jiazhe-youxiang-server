@@ -52,6 +52,11 @@ public class CommonConstant {
     public static final String VOUCHER_EXCHANGE_CODE_PREFIX = "1";
 
     /**
+     * 积分兑换码前缀
+     */
+    public static final String POINT_EXCHANGE_CODE_PREFIX = "2";
+
+    /**
      * 订单号前缀
      */
     public static final String ORDER_CODE_PREFIX = "2";
@@ -78,6 +83,12 @@ public class CommonConstant {
     public static final Byte ORDER_CANCEL = 7;
 
     public static final Byte BATCH_IS_VIRTUAL = Byte.valueOf("1");
+
+    /**
+     * 积分卡过期时间来源,0为直接指定过期时间，1为指定兑换之日起有效期天数
+     */
+    public static final Byte POINT_EXPIRY_TIME = Byte.valueOf("0");
+    public static final Byte POINT_EXPIRY_PERIOD = Byte.valueOf("1");
 
     /**
      * 充值卡过期时间来源,0为直接指定过期时间，1为指定兑换之日起有效期天数
@@ -118,11 +129,12 @@ public class CommonConstant {
     public static final Byte EXCHANGE_CODE_NOT_MADE = Byte.valueOf("0");
 
     /**
-     * 支付类型【1为充值卡支付，2为代金券支付，3为在线支付】
+     * 支付类型【1为积分卡支付，2为充值卡支付，3为代金券支付，4为在线支付】
      */
-    public static final Byte PAY_RECHARGE_CARD = Byte.valueOf("1");
-    public static final Byte PAY_VOUCHER = Byte.valueOf("2");
-    public static final Byte PAY_CASH = Byte.valueOf("3");
+    public static final Byte PAY_POINT = Byte.valueOf("1");
+    public static final Byte PAY_RECHARGE_CARD = Byte.valueOf("2");
+    public static final Byte PAY_VOUCHER = Byte.valueOf("3");
+    public static final Byte PAY_CASH = Byte.valueOf("4");
 
     /**
      * 商品类型【0为服务型商品，1为电子商品】

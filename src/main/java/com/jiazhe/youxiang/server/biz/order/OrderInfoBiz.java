@@ -144,4 +144,8 @@ public class OrderInfoBiz {
     public OrderInfoDTO getByOrderNo(String orderNo) {
         return orderInfoService.getByOrderNo(orderNo);
     }
+
+    public List<OrderInfoDTO> getOrderByPointId(Integer id) {
+        return null;
+    }
 }

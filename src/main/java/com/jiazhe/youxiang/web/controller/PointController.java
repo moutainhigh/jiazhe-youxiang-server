@@ -21,7 +21,7 @@ public class PointController extends BaseController{
     //跳转到充值卡兑换码批次管理页面
     @RequestMapping(value = "/exchangecodebatchindex")
     public String exchangeCodeBatchIndex() {
-        return "point/exchangecodebatch/index";
+        return "point/pointexchangecodebatch/index";
     }
 
     //跳转到充值卡兑换码页面
@@ -29,6 +29,6 @@ public class PointController extends BaseController{
     public String exchangeCodeIndex(String batchId , String batchName , Model model) {
         model.addAttribute("batchId",batchId);
         model.addAttribute("batchName",batchName);
-        return "point/exchangecode/index";
+        return "point/pointexchangecode/index";
     }
 }

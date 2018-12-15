@@ -13,6 +13,8 @@ public class OrderRefundPO implements Serializable {
 
     private Byte refundType;
 
+    private Integer pointId;
+
     private Integer rechargeCardId;
 
     private Integer voucherId;
@@ -61,6 +63,14 @@ public class OrderRefundPO implements Serializable {
 
     public void setRefundType(Byte refundType) {
         this.refundType = refundType;
+    }
+
+    public Integer getPointId() {
+        return pointId;
+    }
+
+    public void setPointId(Integer pointId) {
+        this.pointId = pointId;
     }
 
     public Integer getRechargeCardId() {

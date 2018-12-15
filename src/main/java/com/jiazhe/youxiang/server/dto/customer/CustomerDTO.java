@@ -32,6 +32,12 @@ public class CustomerDTO extends BaseObject{
      * 客户名称
      */
     private String name;
+
+    /**
+     * 充值卡余额
+     */
+    private BigDecimal pointBalance;
+
     /**
      * 充值卡余额
      */
@@ -71,6 +77,18 @@ public class CustomerDTO extends BaseObject{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public BigDecimal getPointBalance() {
+        return pointBalance;
+    }
+
+    public void setPointBalance(BigDecimal pointBalance) {
+        this.pointBalance = pointBalance;
     }
 
     public BigDecimal getRechargeCardBalance() {

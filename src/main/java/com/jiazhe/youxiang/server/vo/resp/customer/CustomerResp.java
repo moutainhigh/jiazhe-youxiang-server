@@ -22,6 +22,8 @@ public class CustomerResp extends BaseVO {
     private Integer id;
     @ApiModelProperty("手机号码")
     private String mobile;
+    @ApiModelProperty("剩余积分")
+    private BigDecimal pointBalance;
     @ApiModelProperty("充值卡余额")
     private BigDecimal rechargeCardBalance;
     @ApiModelProperty("代金劵张数")
@@ -47,6 +49,14 @@ public class CustomerResp extends BaseVO {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public BigDecimal getPointBalance() {
+        return pointBalance;
+    }
+
+    public void setPointBalance(BigDecimal pointBalance) {
+        this.pointBalance = pointBalance;
     }
 
     public BigDecimal getRechargeCardBalance() {

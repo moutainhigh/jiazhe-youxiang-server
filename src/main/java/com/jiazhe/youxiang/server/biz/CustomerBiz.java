@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.server.biz;
 
 import com.jiazhe.youxiang.base.util.MathlUtil;
+import com.jiazhe.youxiang.server.biz.point.PointBiz;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCBiz;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherBiz;
 import com.jiazhe.youxiang.server.dto.customer.AddressAddDTO;
@@ -37,6 +38,8 @@ public class CustomerBiz {
     private RCBiz rcBiz;
     @Autowired
     private VoucherBiz voucherBiz;
+    @Autowired
+    private PointBiz pointBiz;
 
     /**
      * 默认地址代码
@@ -77,7 +80,8 @@ public class CustomerBiz {
 
         if (CollectionUtils.isNotEmpty(result)) {
             result.stream().forEach(item -> {
-                //填充有效余额和张数
+                //填充有效积分、充值卡余额和代金券张数
+                item.setPointBalance(MathlUtil.getValue(pointBiz.totalValidBalance(item.getId())));
                 item.setRechargeCardBalance(MathlUtil.getValue(rcBiz.totalValidBalance(item.getId())));
                 item.setVoucherCount(MathlUtil.getValue(voucherBiz.totalValidVoucher(item.getId())));
             });
