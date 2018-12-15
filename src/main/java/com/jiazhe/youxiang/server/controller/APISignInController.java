@@ -128,7 +128,7 @@ public class APISignInController extends BaseController {
         subject.getSession().setTimeout(ConstantFetchUtil.hour_8);
         sessionResp.setSessionId(subject.getSession().getId().toString());
         AuthorizationInfo info = userRealm.doGetAuthorizationInfo(subject.getPrincipals());
-        String permission = StringUtils.join(info.getStringPermissions(), ",");
+        String permission = StringUtils.join(info.getStringPermissions(), "#");
         CookieUtil.addCookie(response, "permission", permission);
         CookieUtil.addCookie(response, "displayName", URLEncoder.encode(sysUserDTO.getDisplayName(), "UTF-8"));
         logger.info("登陆ip为：" + IpAdrressUtil.getIpAdrress(request));

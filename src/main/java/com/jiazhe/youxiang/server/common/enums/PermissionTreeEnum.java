@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.common.enums;
 
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
+
 /**
  * @author TU
  * @description 权限树枚举类
@@ -8,32 +9,37 @@ import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
  */
 public enum PermissionTreeEnum {
 
+    /***************************客户相关**************************************/
     //客户管理
     CUSTOMER_MANAGEMENT(1, 0, "客户管理", PermissionConstant.CUSTOMER_MANAGEMENT),
-    //添加客户
-    CUSTOMER_ADD(101, 1, "添加客户", PermissionConstant.CUSTOMER_ADD),
-    //修改客户
-    CUSTOMER_EDIT(102, 1, "修改客户", PermissionConstant.CUSTOMER_EDIT),
-    //查看客户积分卡
-    CUSTOMER_POINT_DETAIL(103, 1, "查看客户积分卡", PermissionConstant.CUSTOMER_POINT_DETAIL),
+    //客户查询
+    CUSTOMER_SEARCH(101, 1, "客户查询", PermissionConstant.CUSTOMER_SEARCH),
+    //客户添加
+    CUSTOMER_ADD(102, 1, "客户添加", PermissionConstant.CUSTOMER_ADD),
+    //客户修改
+    CUSTOMER_EDIT(103, 1, "修改客户", PermissionConstant.CUSTOMER_EDIT),
+    //查看积分卡
+    CUSTOMER_POINT_DETAIL(104, 1, "查看积分卡", PermissionConstant.CUSTOMER_POINT_DETAIL),
     //绑定积分卡
-    CUSTOMER_POINT_BINDING(104, 1, "绑定积分卡", PermissionConstant.CUSTOMER_POINT_BINDING),
+    CUSTOMER_POINT_BINDING(105, 1, "绑定积分卡", PermissionConstant.CUSTOMER_POINT_BINDING),
     //直接充值积分卡
-    CUSTOMER_POINT_RECHARGE(105, 1, "直接充值积分卡", PermissionConstant.CUSTOMER_POINT_RECHARGE),
-    //查看客户充值卡
-    CUSTOMER_RECHARGE_CARD_DETAIL(106, 1, "查看客户充值卡", PermissionConstant.CUSTOMER_RECHARGE_CARD_DETAIL),
+    CUSTOMER_POINT_RECHARGE(106, 1, "直接充值积分卡", PermissionConstant.CUSTOMER_POINT_RECHARGE),
+    //查看充值卡
+    CUSTOMER_RECHARGE_CARD_DETAIL(107, 1, "查看充值卡", PermissionConstant.CUSTOMER_RECHARGE_CARD_DETAIL),
     //绑定充值卡
-    CUSTOMER_RECHARGE_CARD_BINDING(107, 1, "绑定充值卡", PermissionConstant.CUSTOMER_RECHARGE_CARD_BINDING),
+    CUSTOMER_RECHARGE_CARD_BINDING(108, 1, "绑定充值卡", PermissionConstant.CUSTOMER_RECHARGE_CARD_BINDING),
     //直接充值充值卡
-    CUSTOMER_RECHARGE_CARD_RECHARGE(108, 1, "直接充值充值卡", PermissionConstant.CUSTOMER_RECHARGE_CARD_RECHARGE),
-    //查看客户代金券
-    CUSTOMER_VOUCHER_DETAIL(109, 1, "查看客户代金券", PermissionConstant.CUSTOMER_VOUCHER_DETAIL),
+    CUSTOMER_RECHARGE_CARD_RECHARGE(109, 1, "直接充值充值卡", PermissionConstant.CUSTOMER_RECHARGE_CARD_RECHARGE),
+    //查看代金券
+    CUSTOMER_VOUCHER_DETAIL(110, 1, "查看代金券", PermissionConstant.CUSTOMER_VOUCHER_DETAIL),
     //绑定代金券
-    CUSTOMER_VOUCHER_BINDING(110, 1, "绑定代金券", PermissionConstant.CUSTOMER_VOUCHER_BINDING),
+    CUSTOMER_VOUCHER_BINDING(111, 1, "绑定代金券", PermissionConstant.CUSTOMER_VOUCHER_BINDING),
     //查看客户订单
-    CUSTOMER_ORDER_DETAIL(111, 1, "查看客户订单", PermissionConstant.CUSTOMER_ORDER_DETAIL),
+    CUSTOMER_ORDER_DETAIL(112, 1, "查看客户订单", PermissionConstant.CUSTOMER_ORDER_DETAIL),
     //后台下单
     CUSTOMER_USER_PLACE_ORDER(112, 1, "后台下单", PermissionConstant.CUSTOMER_USER_PLACE_ORDER),
+
+    /***************************商品相关**************************************/
     //商品大类管理
     PRODUCT_CATEGORY_MANAGEMENT(2, 0, "商品大类管理", PermissionConstant.PRODUCT_CATEGORY_MANAGEMENT),
     //商品大类添加
@@ -109,7 +115,7 @@ public enum PermissionTreeEnum {
     //充值卡兑换码修改
     RECHARGE_CARD_CODE_SEARCH_EDIT(608, 6, "充值卡兑换码修改", PermissionConstant.RECHARGE_CARD_CODE_SEARCH_EDIT),
     //代金券查询
-    VOUCHER_SEARCH (609, 6, "代金券查询", PermissionConstant.VOUCHER_SEARCH),
+    VOUCHER_SEARCH(609, 6, "代金券查询", PermissionConstant.VOUCHER_SEARCH),
     //代金券修改
     VOUCHER_SEARCH_EDIT(610, 6, "代金券修改", PermissionConstant.VOUCHER_SEARCH_EDIT),
     //代金券兑换码查询
@@ -163,8 +169,7 @@ public enum PermissionTreeEnum {
     //日志管理
     LOG_MANAGEMENT(722, 7, "日志管理", PermissionConstant.LOG_MANAGEMENT),
     //商家订单
-    PARTNER_ORDER_MANAGEMENT(8, 0, "商家订单", PermissionConstant.PARTNER_ORDER_MANAGEMENT)
-    ;
+    PARTNER_ORDER_MANAGEMENT(8, 0, "商家订单", PermissionConstant.PARTNER_ORDER_MANAGEMENT);
 
     PermissionTreeEnum(Integer id, Integer pId, String name, String perm) {
         this.id = id;

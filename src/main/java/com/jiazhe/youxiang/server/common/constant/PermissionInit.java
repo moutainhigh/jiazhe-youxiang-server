@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * @author tu
- * @description：
+ * @description：初始化权限树
  * @date 2018/12/15
  */
 public class PermissionInit  {

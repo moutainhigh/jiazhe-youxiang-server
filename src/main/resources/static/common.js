@@ -1,3 +1,7 @@
+/**
+ * 权限字符串的cookie
+ */
+var permission = getCookie("permission");
 
 function transformToJson(formData) {
     var obj = {}

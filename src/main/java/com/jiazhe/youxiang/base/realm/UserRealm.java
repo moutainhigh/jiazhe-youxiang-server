@@ -1,14 +1,17 @@
 package com.jiazhe.youxiang.base.realm;
 
+import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.server.biz.SysRoleBiz;
 import com.jiazhe.youxiang.server.biz.SysRolePermissionBiz;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
 import com.jiazhe.youxiang.server.biz.SysUserRoleBiz;
+import com.jiazhe.youxiang.server.common.constant.PermissionInit;
 import com.jiazhe.youxiang.server.common.enums.LoginType;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRolePermissionDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserRoleDTO;
+import com.jiazhe.youxiang.server.vo.resp.sysrole.PermissionTreeResp;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -25,6 +28,7 @@ import org.springframework.context.annotation.Lazy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author tu
@@ -89,7 +93,7 @@ public class UserRealm extends AuthorizingRealm {
         logger.info("=========进入用户授权============");
         if (principal.getPrimaryPrincipal() instanceof SysUserDTO) {
             SysUserDTO sysUserDTO = (SysUserDTO) principal.getPrimaryPrincipal();
-            List<String> permissionList = new ArrayList<String>();
+            List<String> permissionList = Lists.newArrayList();
             //一个用户对应一个User_Role_list
             List<SysUserRoleDTO> sysUserRoleDTOList = sysUserRoleBiz.findByUserId(sysUserDTO.getId());
             //遍历User_Role_list
@@ -100,8 +104,7 @@ public class UserRealm extends AuthorizingRealm {
                 if (null != sysRoleDTO) {
                     //是超级用户
                     if (sysRoleDTO.getIsSuper() == 1) {
-                        permissionList.removeAll(permissionList);
-                        permissionList.add("*");
+                        permissionList = PermissionInit.treeRespList.stream().map(PermissionTreeResp::getPerm).collect(Collectors.toList());
                         break;
                     } else {
                         //每个Role对应Role_Permission_list

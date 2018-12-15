@@ -15,23 +15,25 @@ public class PermissionConstant {
 
     //客户管理
     public static final String CUSTOMER_MANAGEMENT = "customerManagement";
-    //添加客户
+    //客户查询
+    public static final String CUSTOMER_SEARCH = "customerSearch";
+    //客户添加
     public static final String CUSTOMER_ADD = "customerAdd";
-    //修改客户
+    //客户修改
     public static final String CUSTOMER_EDIT = "customerEdit";
-    //查看客户积分卡
+    //查看积分卡
     public static final String CUSTOMER_POINT_DETAIL = "customerPointDetail";
     //绑定积分卡
     public static final String CUSTOMER_POINT_BINDING = "customerPointBindig";
     //直接充值积分卡
     public static final String CUSTOMER_POINT_RECHARGE = "customerPointRecharge";
-    //查看客户充值卡
+    //查看充值卡
     public static final String CUSTOMER_RECHARGE_CARD_DETAIL = "customerRechargeCardDetail";
     //绑定充值卡
     public static final String CUSTOMER_RECHARGE_CARD_BINDING = "customerRechargeCardBindig";
     //直接充值充值卡
     public static final String CUSTOMER_RECHARGE_CARD_RECHARGE = "customerRechargeCardRecharge";
-    //查看客户代金券
+    //查看代金券
     public static final String CUSTOMER_VOUCHER_DETAIL = "customerVoucherDetail";
     //绑定代金券
     public static final String CUSTOMER_VOUCHER_BINDING = "customerVoucherBinding";
