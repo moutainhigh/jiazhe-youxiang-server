@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.base.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -20,8 +22,12 @@ import java.util.*;
  */
 public class WeChatPayUtils {
 
-    //随机字符串生成
-    public static String getRandomString(int length) { //length表示生成字符串的长度
+    private static final Logger logger = LoggerFactory.getLogger(WeChatPayUtils.class);
+
+    /**
+     * 随机字符串生成   length表示生成字符串的长度
+     */
+    public static String getRandomString(int length) {
         String base = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         Random random = new Random();
         StringBuffer sb = new StringBuffer();
@@ -66,7 +72,6 @@ public class WeChatPayUtils {
             }
         }
         sb.append("key=" + apiKey);
-        System.out.println(sb.toString());
         String sign = MD5Utils.MD5Encode(sb.toString(), characterEncoding).toUpperCase();
         return sign;
     }
@@ -82,10 +87,10 @@ public class WeChatPayUtils {
         String charset = "utf-8";
         String signFromAPIResponse = map.get("sign");
         if (signFromAPIResponse == null || signFromAPIResponse.equals("")) {
-            System.out.println("API返回的数据签名数据不存在，有可能被第三方篡改!!!");
+            logger.info("API返回的数据签名数据不存在，有可能被第三方篡改!!!");
             return false;
         }
-        System.out.println("服务器回包里面的签名是:" + signFromAPIResponse);
+        logger.info("服务器回包里面的签名是:" + signFromAPIResponse);
         //过滤空 设置 TreeMap
         SortedMap<String, String> packageParams = new TreeMap<>();
         for (String parameter : map.keySet()) {
@@ -161,9 +166,9 @@ public class WeChatPayUtils {
             conn.disconnect();
             return buffer.toString();
         } catch (ConnectException ce) {
-            System.out.println("连接超时：{}" + ce);
+            logger.info("连接超时：{}" + ce);
         } catch (Exception e) {
-            System.out.println("https请求异常：{}" + e);
+            logger.info("https请求异常：{}" + e);
         }
         return null;
     }
@@ -200,7 +205,7 @@ public class WeChatPayUtils {
         String body = "";
         try {
             ServletInputStream inputStream = request.getInputStream();
-            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "utf-8")); // 设置编码格式“utf-8”否则获取中文为乱码
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
             while (true) {
                 String info = br.readLine();
                 if (info == null) {

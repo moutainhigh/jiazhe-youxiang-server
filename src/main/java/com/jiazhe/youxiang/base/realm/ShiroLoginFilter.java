@@ -14,6 +14,8 @@ import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.ResponseMsg;
 import net.sf.json.JSONObject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -23,6 +25,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class ShiroLoginFilter extends FormAuthenticationFilter {
+
+    private static final Logger logger = LoggerFactory.getLogger(ShiroLoginFilter.class);
     /**
      * 在访问controller前判断是否登录，返回json，不进行重定向。
      *
@@ -36,7 +40,7 @@ public class ShiroLoginFilter extends FormAuthenticationFilter {
 //        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 //        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         if (ProjectUtil.isAjax(request)) {
-            System.out.println("ShiroLoginFilter：ajax请求，未登录");
+            logger.info("ShiroLoginFilter：ajax请求，未登录");
             JSONObject obj = new JSONObject();
             obj.put("code", LoginCodeEnum.LOGIN_NOT_SIGNIN_IN.getCode());
             obj.put("type", LoginCodeEnum.LOGIN_NOT_SIGNIN_IN.getType());
@@ -51,7 +55,7 @@ public class ShiroLoginFilter extends FormAuthenticationFilter {
              * @Mark 非ajax请求重定向为登录页面
              * 由于是iframe里的请求，所以需要通过js来跳转到父层页面，用_parent来指定
              */
-            System.out.println("ShiroLoginFilter：页面跳转，未登录");
+            logger.info("ShiroLoginFilter：页面跳转，未登录");
             PrintWriter out = response.getWriter();
             out.println("<html>");
             out.println("<script>");
