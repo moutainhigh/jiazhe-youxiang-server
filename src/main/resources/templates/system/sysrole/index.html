@@ -159,7 +159,6 @@
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
-    var permission = getCookie("permission");
     $(function () {
         var setting = {
             view: {
@@ -185,7 +184,6 @@
             type: "get",
             success: function (data) {
                 var zNodes = data.data;
-                console.log(zNodes);
                 //初始化权限树
                 permsTree = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
             },
@@ -197,7 +195,6 @@
     //将勾选的权限id放到隐藏的input中，用英文逗号连接
     function submitNodes() {
         var nodes = permsTree.getCheckedNodes(true);
-        console.log(nodes);
         var str = "";
         var perms = "";
         for (var i = 0; i < nodes.length; i++) {
@@ -209,8 +206,6 @@
         if (perms.length > 0) {
             perms = perms.substring(0, perms.length - 1);
         }
-        console.log('-----------------');
-        console.log(perms);
         $("#perms").val(perms);
     }
 

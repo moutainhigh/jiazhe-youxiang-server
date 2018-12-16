@@ -10,6 +10,7 @@ import com.jiazhe.youxiang.server.biz.point.PointExchangeCodeBatchBiz;
 import com.jiazhe.youxiang.server.biz.point.PointExchangeCodeBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.PointCodeEnum;
@@ -27,6 +28,8 @@ import com.jiazhe.youxiang.server.vo.resp.point.exchangecodebatch.PointExchangeC
 import com.jiazhe.youxiang.server.vo.resp.point.exchangecodebatch.PointExchangeCodeBatchResp;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +59,7 @@ public class APIPointExchangeCodeBatchController extends BaseController {
     @Autowired
     private PointExchangeCodeBiz pointExchangeCodeBiz;
 
+    @RequiresPermissions(value = {PermissionConstant.POINT_BATCH_MANAGEMENT,PermissionConstant.POINT_BATCH_SEARCH},logical = Logical.OR)
     @ApiOperation(value = "【后台】积分卡兑换码批次信息列表（分页）", httpMethod = "GET", response = PointExchangeCodeBatchResp.class, responseContainer = "List", notes = "积分卡兑换码批次信息列表（根据项目id和批次名称查询）")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "积分卡兑换码批次信息列表", level = LogLevelEnum.LEVEL_1)
@@ -76,11 +80,11 @@ public class APIPointExchangeCodeBatchController extends BaseController {
         return ResponseFactory.buildResponse(respList);
     }
 
+    @RequiresPermissions(value = {PermissionConstant.POINT_BATCH_ADD,PermissionConstant.POINT_BATCH_EDIT},logical = Logical.OR)
     @ApiOperation(value = "【后台】保存积分卡兑换码批次信息", httpMethod = "POST", notes = "【新建、修改】保存积分卡兑换码批次信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "保存积分卡兑换码批次信息", level = LogLevelEnum.LEVEL_2)
     public Object save(@ModelAttribute PointExchangeCodeBatchSaveReq req) {
-        //参数检查
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(),new PointException(PointCodeEnum.BATCH_NAME_IS_NULL));
@@ -110,6 +114,7 @@ public class APIPointExchangeCodeBatchController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.POINT_CODE_GENERATE)
     @ApiOperation(value = "【后台】生成积分卡兑换码", httpMethod = "POST", notes = "生成批次下的积分卡兑换码")
     @RequestMapping(value = "/generatecode", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "生成积分卡兑换码", level = LogLevelEnum.LEVEL_3)
@@ -134,33 +139,33 @@ public class APIPointExchangeCodeBatchController extends BaseController {
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "积分卡兑换码批次信息回显", level = LogLevelEnum.LEVEL_1)
     public Object getById(@ModelAttribute IdReq req) {
-        //参数检查
         CommonValidator.validateId(req);
         PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO = pointExchangeCodeBatchBiz.getById(req.getId());
         PointExchangeCodeBatchEditResp pointExchangeCodeBatchEditResp = PointExchangeCodeBatchAdapter.DtoEdit2RespEdit(pointExchangeCodeBatchEditDTO);
         return ResponseFactory.buildResponse(pointExchangeCodeBatchEditResp);
     }
 
+    @RequiresPermissions(PermissionConstant.POINT_BATCH_STATUS_CHANGE)
     @ApiOperation(value = "【后台】启用批次", httpMethod = "POST", notes = "启用批次，同时改变批次下兑换码和已经兑换成积分卡的状态")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "启用批次", level = LogLevelEnum.LEVEL_2)
     public Object startUsing(@ModelAttribute IdReq req) {
-        //参数检查
         CommonValidator.validateId(req);
         pointExchangeCodeBatchBiz.startUsing(req.getId());
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.POINT_BATCH_STATUS_CHANGE)
     @ApiOperation(value = "【后台】停用批次", httpMethod = "POST", notes = "停用批次，同时改变批次下兑换码和已经兑换成积分卡的状态")
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "停用批次", level = LogLevelEnum.LEVEL_2)
     public Object stopUsing(@ModelAttribute IdReq req) {
-        //参数检查
         CommonValidator.validateId(req);
         pointExchangeCodeBatchBiz.stopUsing(req.getId());
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.POINT_CODE_EXPORT)
     @ApiOperation(value = "【后台】导出批次下兑换码", httpMethod = "GET", notes = "导出批次下兑换码")
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "导出批次下兑换码", level = LogLevelEnum.LEVEL_3)
@@ -169,6 +174,7 @@ public class APIPointExchangeCodeBatchController extends BaseController {
         ExportExcelUtils.exportPointCode(response,pointExchangeCodeDTOList);
     }
 
+    @RequiresPermissions(PermissionConstant.POINT_CODE_EXPORT)
     @ApiOperation(value = "【后台】导出前检查", httpMethod = "GET", notes = "导出前检查，看批次下是否有兑换码")
     @RequestMapping(value = "/exportcheck", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "导出前检查", level = LogLevelEnum.LEVEL_1)

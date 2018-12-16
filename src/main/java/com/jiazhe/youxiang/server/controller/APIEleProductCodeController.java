@@ -63,7 +63,6 @@ public class APIEleProductCodeController extends BaseController {
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ELE_PRODUCT, operate = "查询所有电子码", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute EleProductCodePageReq req) {
-        //参数检查
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         List<EleProductCodeDTO> eleProductExCodeDTOList = eleProductCodeBiz.getList(req.getProductId(),req.getBatchName(),req.getStatus(),req.getCode(),req.getKeyt(),paging);
         List<EleProductCodeResp> eleProductExCodeRespList = eleProductExCodeDTOList.stream().map(EleProductCodeAdapter::DTO2Resp).collect(Collectors.toList());
@@ -83,7 +82,6 @@ public class APIEleProductCodeController extends BaseController {
     @RequestMapping(value = "uploadexcel", method = RequestMethod.POST, headers = ("content-type=multipart/*"), consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @CustomLog(moduleName = ModuleEnum.ELE_PRODUCT, operate = "上传电子码excel并校验", level = LogLevelEnum.LEVEL_2)
     public Object uploadExcel(@RequestParam("file") MultipartFile file) throws IOException {
-        //参数检查
         String url = UploadUtil.uploadImage(file, excelpath);
         UploadExcelResp result = new UploadExcelResp();
         result.setUrl(url);
@@ -107,7 +105,6 @@ public class APIEleProductCodeController extends BaseController {
     @RequestMapping(value = "/importcode", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ELE_PRODUCT, operate = "导入电子码", level = LogLevelEnum.LEVEL_2)
     public Object importCode(@ModelAttribute ImportCodeReq req) throws IOException {
-        //参数检查
         CommonValidator.validateNull(req.getProductId(),new EleProductCodeException(EleProductCodeEnum.PRODUCT_IS_NULL));
         CommonValidator.validateNull(req.getBatchName(),new EleProductCodeException(EleProductCodeEnum.BATCH_NAME_IS_NULL));
         if(req.getExpiryTime()==0){
@@ -122,7 +119,6 @@ public class APIEleProductCodeController extends BaseController {
     @RequestMapping(value = "/batchchangeexpirytime", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ELE_PRODUCT, operate = "批量修改电子码有效期", level = LogLevelEnum.LEVEL_2)
     public Object batchChangeExpiryTime(@ModelAttribute ExpiryTimeEditReq req) {
-        //参数检查
         if(req.getExpiryTime()==0){
             throw new EleProductCodeException(EleProductCodeEnum.EXPIRY_TIME_IS_NULL);
         }

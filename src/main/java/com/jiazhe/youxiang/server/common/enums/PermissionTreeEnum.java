@@ -66,6 +66,8 @@ public enum PermissionTreeEnum {
     PRODUCT_PRICE_EDIT(211, 2, "商品价格编辑", PermissionConstant.PRODUCT_PRICE_EDIT),
     //商品价格生效失效
     PRODUCT_PRICE_EFFECT(212, 2, "商品价格生效失效", PermissionConstant.PRODUCT_PRICE_EFFECT),
+
+    /***************************订单相关**************************************/
     //订单管理
     ORDER_MANAGEMENT(3, 0, "订单管理", PermissionConstant.ORDER_MANAGEMENT),
     //订单预约
@@ -80,6 +82,8 @@ public enum PermissionTreeEnum {
     ORDER_CHECK(305, 3, "订单审核", PermissionConstant.ORDER_CHECK),
     //订单取消
     ORDER_CANCEL(306, 3, "订单取消", PermissionConstant.ORDER_CANCEL),
+
+    /***************************项目相关**************************************/
     //项目管理
     PROJECT_MANAGEMENT(4, 0, "项目管理", PermissionConstant.PROJECT_MANAGEMENT),
     //项目添加
@@ -92,82 +96,131 @@ public enum PermissionTreeEnum {
     PROJECT_START(404, 4, "项目开始", PermissionConstant.PROJECT_START),
     //项目结束
     PROJECT_STOP(405, 4, "项目结束", PermissionConstant.PROJECT_STOP),
+
+    /***************************消费记录相关相关**************************************/
     //消费记录管理
     AUDIT_RECORD_MANAGEMENT(5, 0, "消费记录管理", PermissionConstant.AUDIT_RECORD_MANAGEMENT),
     //消费记录审核
     AUDIT_RECORD_CHECK(501, 5, "消费记录审核", PermissionConstant.AUDIT_RECORD_CHECK),
+
+    /***************************查询模块相关**************************************/
     //信息查询
     INFO_SEARCH(6, 0, "信息查询", PermissionConstant.INFO_SEARCH),
-    //充值卡查询
-    POINT_SEARCH(601, 6, "积分卡查询", PermissionConstant.POINT_SEARCH),
-    //充值卡修改
-    POINT_SEARCH_EDIT(602, 6, "积分卡修改", PermissionConstant.POINT_SEARCH_EDIT),
+    //积分卡兑换码查询
+    POINT_CODE_SEARCH(601, 6, "积分卡兑换码查询", PermissionConstant.POINT_CODE_SEARCH),
+    //积分卡兑换码修改
+    POINT_CODE_SEARCH_EDIT(60101, 601, "积分卡兑换码修改", PermissionConstant.POINT_CODE_SEARCH_EDIT),
+    //积分卡兑换码启、停用
+    POINT_CODE_SEARCH_STATUS_CHANGE(60102, 601, "积分卡兑换码启、停用", PermissionConstant.POINT_CODE_SEARCH_STATUS_CHANGE),
+    //积分卡查询
+    POINT_SEARCH(602, 6, "积分卡查询", PermissionConstant.POINT_SEARCH),
+    //积分卡修改
+    POINT_SEARCH_EDIT(60201, 602, "积分卡修改", PermissionConstant.POINT_SEARCH_EDIT),
+    //积分卡启、停用
+    POINT_SEARCH_STATUS_CHANGE(60202, 602, "积分卡启、停用", PermissionConstant.POINT_SEARCH_STATUS_CHANGE),
     //充值卡兑换码查询
-    POINT_CODE_SEARCH(603, 6, "积分卡兑换码查询", PermissionConstant.POINT_CODE_SEARCH),
+    RECHARGE_CARD_CODE_SEARCH(603, 6, "充值卡兑换码查询", PermissionConstant.RECHARGE_CARD_CODE_SEARCH),
     //充值卡兑换码修改
-    POINT_CODE_SEARCH_EDIT(604, 6, "积分卡兑换码修改", PermissionConstant.POINT_CODE_SEARCH_EDIT),
+    RECHARGE_CARD_CODE_SEARCH_EDIT(60301, 603, "充值卡兑换码修改", PermissionConstant.RECHARGE_CARD_CODE_SEARCH_EDIT),
+    //充值卡兑换码启、停用
+    RECHARGE_CARD_CODE_SEARCH_STATUS_CHANGE(60302, 603, "充值卡兑换码启、停用", PermissionConstant.RECHARGE_CARD_CODE_SEARCH_STATUS_CHANGE),
     //充值卡查询
-    RECHARGE_CARD_SEARCH(605, 6, "充值卡查询", PermissionConstant.RECHARGE_CARD_SEARCH),
+    RECHARGE_CARD_SEARCH(604, 6, "充值卡查询", PermissionConstant.RECHARGE_CARD_SEARCH),
     //充值卡修改
-    RECHARGE_CARD_SEARCH_EDIT(606, 6, "充值卡修改", PermissionConstant.RECHARGE_CARD_SEARCH_EDIT),
-    //充值卡兑换码查询
-    RECHARGE_CARD_CODE_SEARCH(607, 6, "充值卡兑换码查询", PermissionConstant.RECHARGE_CARD_CODE_SEARCH),
-    //充值卡兑换码修改
-    RECHARGE_CARD_CODE_SEARCH_EDIT(608, 6, "充值卡兑换码修改", PermissionConstant.RECHARGE_CARD_CODE_SEARCH_EDIT),
-    //代金券查询
-    VOUCHER_SEARCH(609, 6, "代金券查询", PermissionConstant.VOUCHER_SEARCH),
-    //代金券修改
-    VOUCHER_SEARCH_EDIT(610, 6, "代金券修改", PermissionConstant.VOUCHER_SEARCH_EDIT),
+    RECHARGE_CARD_SEARCH_EDIT(60401, 604, "充值卡修改", PermissionConstant.RECHARGE_CARD_SEARCH_EDIT),
+    //充值卡启、停用
+    RECHARGE_CARD_SEARCH_STATUS_CHANGE(60402, 604, "充值卡启、停用", PermissionConstant.RECHARGE_CARD_SEARCH_STATUS_CHANGE),
     //代金券兑换码查询
-    VOUCHER_CODE_SEARCH(611, 6, "代金券兑换码查询", PermissionConstant.VOUCHER_CODE_SEARCH),
+    VOUCHER_CODE_SEARCH(605, 6, "代金券兑换码查询", PermissionConstant.VOUCHER_CODE_SEARCH),
     //代金券兑换码修改
-    VOUCHER_CODE_SEARCH_EIDT(612, 6, "代金券兑换码修改", PermissionConstant.VOUCHER_CODE_SEARCH_EIDT),
+    VOUCHER_CODE_SEARCH_EDIT(60501, 605, "代金券兑换码修改", PermissionConstant.VOUCHER_CODE_SEARCH_EDIT),
+    //代金券兑换码启、停用
+    VOUCHER_CODE_SEARCH_STATUS_CHANGE(60502, 605, "代金券兑换码修改", PermissionConstant.VOUCHER_CODE_SEARCH_STATUS_CHANGE),
+    //代金券查询
+    VOUCHER_SEARCH(606, 6, "代金券查询", PermissionConstant.VOUCHER_SEARCH),
+    //代金券修改
+    VOUCHER_SEARCH_EDIT(60601, 606, "代金券修改", PermissionConstant.VOUCHER_SEARCH_EDIT),
+    //代金券启、停用
+    VOUCHER_SEARCH_STATUS_CHANGE(60602, 606, "代金券启、停用", PermissionConstant.VOUCHER_SEARCH_STATUS_CHANGE),
+
+
+    /***************************系统管理相关**************************************/
     //系统管理
     SYSTEM_MANAGEMENT(7, 0, "系统管理", PermissionConstant.SYSTEM_MANAGEMENT),
     //积分卡兑换码批次管理
     POINT_BATCH_MANAGEMENT(701, 7, "积分卡兑换码批次管理", PermissionConstant.POINT_BATCH_MANAGEMENT),
+    //积分卡兑换码批次查询
+    POINT_BATCH_SEARCH(70101, 701, "积分卡兑换码批次查询", PermissionConstant.POINT_BATCH_SEARCH),
     //积分卡兑换码批次添加
-    POINT_BATCH_ADD(702, 7, "积分卡兑换码批次添加", PermissionConstant.POINT_BATCH_ADD),
+    POINT_BATCH_ADD(70102, 701, "积分卡兑换码批次添加", PermissionConstant.POINT_BATCH_ADD),
     //积分卡兑换码批次修改
-    POINT_BATCH_EDIT(703, 7, "积分卡兑换码批次修改", PermissionConstant.POINT_BATCH_EDIT),
+    POINT_BATCH_EDIT(70103, 701, "积分卡兑换码批次修改", PermissionConstant.POINT_BATCH_EDIT),
+    //积分卡兑换码批次启、停用
+    POINT_BATCH_STATUS_CHANGE(70104, 701, "积分卡兑换码批次启、停用", PermissionConstant.POINT_BATCH_STATUS_CHANGE),
+    //积分卡兑换码生成
+    POINT_CODE_GENERATE(70105, 701, "积分卡兑换码生成", PermissionConstant.POINT_CODE_GENERATE),
+    //积分卡兑换码导出
+    POINT_CODE_EXPORT(70106, 701, "积分卡兑换码导出", PermissionConstant.POINT_CODE_EXPORT),
     //积分卡兑换码管理
-    POINT_CODE_MANAGEMENT(704, 7, "积分卡兑换码管理", PermissionConstant.POINT_CODE_MANAGEMENT),
+    POINT_CODE_MANAGEMENT(70107, 701, "积分卡兑换码管理", PermissionConstant.POINT_CODE_MANAGEMENT),
     //积分卡兑换码修改
-    POINT_CODE_EDIT(705, 7, "积分卡兑换码修改", PermissionConstant.POINT_CODE_EDIT),
+    POINT_CODE_EDIT(70108, 701, "积分卡兑换码修改", PermissionConstant.POINT_CODE_EDIT),
+    //积分卡兑换码启、停用
+    POINT_CODE_STATUS_CHANGE(70109, 701, "积分卡兑换码启、停用", PermissionConstant.POINT_CODE_STATUS_CHANGE),
     //充值卡兑换码批次管理
-    RC_BATCH_MANAGEMENT(706, 7, "充值卡兑换码批次管理", PermissionConstant.RC_BATCH_MANAGEMENT),
+    RC_BATCH_MANAGEMENT(702, 7, "充值卡兑换码批次管理", PermissionConstant.RC_BATCH_MANAGEMENT),
+    //充值卡兑换码批次查询
+    RC_BATCH_SEARCH(70201, 702, "充值卡兑换码批次查询", PermissionConstant.RC_BATCH_SEARCH),
     //充值卡兑换码批次添加
-    RC_BATCH_ADD(707, 7, "充值卡兑换码批次添加", PermissionConstant.RC_BATCH_ADD),
+    RC_BATCH_ADD(70202, 702, "充值卡兑换码批次添加", PermissionConstant.RC_BATCH_ADD),
     //充值卡兑换码批次修改
-    RC_BATCH_EDIT(708, 7, "充值卡兑换码批次修改", PermissionConstant.RC_BATCH_EDIT),
+    RC_BATCH_EDIT(70203, 702, "充值卡兑换码批次修改", PermissionConstant.RC_BATCH_EDIT),
+    //充值卡兑换码批次启、停用
+    RC_BATCH_STATUS_CHANGE(70204, 702, "充值卡兑换码批次启、停用", PermissionConstant.RC_BATCH_STATUS_CHANGE),
+    //充值卡兑换码生成
+    RC_CODE_GENERATE(70205, 702, "充值卡兑换码生成", PermissionConstant.RC_CODE_GENERATE),
+    //充值卡兑换码导出
+    RC_CODE_EXPORT(70206, 702, "充值卡兑换码导出", PermissionConstant.RC_CODE_EXPORT),
     //充值卡兑换码管理
-    RC_CODE_MANAGEMENT(709, 7, "充值卡兑换码管理", PermissionConstant.RC_CODE_MANAGEMENT),
+    RC_CODE_MANAGEMENT(70207, 702, "充值卡兑换码管理", PermissionConstant.RC_CODE_MANAGEMENT),
     //充值卡兑换码修改
-    RC_CODE_EDIT(710, 7, "充值卡兑换码修改", PermissionConstant.RC_CODE_EDIT),
+    RC_CODE_EDIT(70208, 702, "充值卡兑换码修改", PermissionConstant.RC_CODE_EDIT),
+    //积分卡兑换码启、停用
+    RC_CODE_STATUS_CHANGE(70209, 702, "充值卡兑换码启、停用", PermissionConstant.RC_CODE_STATUS_CHANGE),
     //代金券兑换码批次管理
-    VOUCHER_BATCH_MANAGEMENT(711, 7, "代金券兑换码批次管理", PermissionConstant.VOUCHER_BATCH_MANAGEMENT),
+    VOUCHER_BATCH_MANAGEMENT(703, 7, "代金券兑换码批次管理", PermissionConstant.VOUCHER_BATCH_MANAGEMENT),
+    //代金券兑换码批次查询
+    VOUCHER_BATCH_SEARCH(70301, 703, "代金券兑换码批次查询", PermissionConstant.VOUCHER_BATCH_SEARCH),
     //代金券兑换码批次添加
-    VOUCHER_BATCH_ADD(712, 7, "代金券兑换码批次添加", PermissionConstant.VOUCHER_BATCH_ADD),
+    VOUCHER_BATCH_ADD(70302, 703, "代金券兑换码批次添加", PermissionConstant.VOUCHER_BATCH_ADD),
     //代金券兑换码批次修改
-    VOUCHER_BATCH_EDIT(713, 7, "代金券兑换码批次修改", PermissionConstant.VOUCHER_BATCH_EDIT),
+    VOUCHER_BATCH_EDIT(70303, 703, "代金券兑换码批次修改", PermissionConstant.VOUCHER_BATCH_EDIT),
+    //代金券兑换码批次启、停用
+    VOUCHER_BATCH_STATUS_CHANGE(70304, 703, "代金券兑换码批次启、停用", PermissionConstant.VOUCHER_BATCH_STATUS_CHANGE),
+    //代金券兑换码生成
+    VOUCHER_CODE_GENERATE(70305, 703, "代金券兑换码生成", PermissionConstant.VOUCHER_CODE_GENERATE),
+    //代金券兑换码导出
+    VOUCHER_CODE_EXPORT(70306, 703, "代金券兑换码导出", PermissionConstant.VOUCHER_CODE_EXPORT),
     //代金券兑换码管理
-    VOUCHER_CODE_MANAGEMENT(714, 7, "代金券兑换码管理", PermissionConstant.VOUCHER_CODE_MANAGEMENT),
+    VOUCHER_CODE_MANAGEMENT(70307, 703, "代金券兑换码管理", PermissionConstant.VOUCHER_CODE_MANAGEMENT),
     //代金券兑换码修改
-    VOUCHER_CODE_EDIT(715, 7, "代金券兑换码修改", PermissionConstant.VOUCHER_CODE_EDIT),
+    VOUCHER_CODE_EDIT(70308, 703, "代金券兑换码修改", PermissionConstant.VOUCHER_CODE_EDIT),
+    //代金券兑换码启、停用
+    VOUCHER_CODE_STATUS_CHANGE(70309, 703, "代金券兑换码启、停用", PermissionConstant.VOUCHER_CODE_STATUS_CHANGE),
     //电子商品管理
-    ELE_CODE_MANAGEMENT(716, 7, "电子商品管理", PermissionConstant.ELE_CODE_MANAGEMENT),
+    ELE_CODE_MANAGEMENT(704, 7, "电子商品管理", PermissionConstant.ELE_CODE_MANAGEMENT),
     //电子商品添加
-    ELE_CODE_ADD(717, 7, "电子商品添加", PermissionConstant.ELE_CODE_ADD),
+    ELE_CODE_ADD(70401, 704, "电子商品添加", PermissionConstant.ELE_CODE_ADD),
     //电子商品修改
-    ELE_CODE_EDIT(718, 7, "电子商品修改", PermissionConstant.ELE_CODE_EDIT),
+    ELE_CODE_EDIT(70402, 704, "电子商品修改", PermissionConstant.ELE_CODE_EDIT),
     //员工管理
-    USER_MANAGEMENT(719, 7, "员工管理", PermissionConstant.USER_MANAGEMENT),
+    USER_MANAGEMENT(705, 7, "员工管理", PermissionConstant.USER_MANAGEMENT),
     //角色管理
-    ROLE_MANAGEMENT(720, 7, "角色管理", PermissionConstant.ROLE_MANAGEMENT),
+    ROLE_MANAGEMENT(706, 7, "角色管理", PermissionConstant.ROLE_MANAGEMENT),
     //城市管理
-    CITY_MANAGEMENT(721, 7, "城市管理", PermissionConstant.CITY_MANAGEMENT),
+    CITY_MANAGEMENT(707, 7, "城市管理", PermissionConstant.CITY_MANAGEMENT),
     //日志管理
-    LOG_MANAGEMENT(722, 7, "日志管理", PermissionConstant.LOG_MANAGEMENT),
+    LOG_MANAGEMENT(708, 7, "日志管理", PermissionConstant.LOG_MANAGEMENT),
     //商家订单
     PARTNER_ORDER_MANAGEMENT(8, 0, "商家订单", PermissionConstant.PARTNER_ORDER_MANAGEMENT);
 

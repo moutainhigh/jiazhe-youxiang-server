@@ -44,21 +44,21 @@ public class PermissionConstant {
     //商品大类管理
     public static final String PRODUCT_CATEGORY_MANAGEMENT = "productCategoryManagement";
     //商品大类添加
-    public static final String PRODUCT_CATEGORY_ADD= "productCategoryAdd";
+    public static final String PRODUCT_CATEGORY_ADD = "productCategoryAdd";
     //商品大类修改
     public static final String PRODUCT_CATEGORY_EDIT = "productCategoryEdit";
     //商品大类删除
-    public static final String PRODUCT_CATEGORY_DELETE= "productCategoryDelete";
+    public static final String PRODUCT_CATEGORY_DELETE = "productCategoryDelete";
     //商品上下架
     public static final String PRODUCT_CATEGORY_ONOFFLINE = "productCategoryOnOffLine";
     //商品管理
     public static final String PRODUCT_MANAGEMENT = "productManagement";
     //商品添加
-    public static final String PRODUCT_ADD= "productAdd";
+    public static final String PRODUCT_ADD = "productAdd";
     //商品修改
     public static final String PRODUCT_EDIT = "productEdit";
     //商品删除
-    public static final String PRODUCT_DELETE= "productDelete";
+    public static final String PRODUCT_DELETE = "productDelete";
     //商品上下架
     public static final String PRODUCT_ONOFFLINE = "productOnOffLine";
     //商品价格管理
@@ -90,7 +90,7 @@ public class PermissionConstant {
     //项目修改
     public static final String PROJECT_EDIT = "projectEdit";
     //项目删除
-    public static final String PROJECT_DELETE= "projectDelete";
+    public static final String PROJECT_DELETE = "projectDelete";
     //项目开始
     public static final String PROJECT_START = "projectStart";
     //项目结束
@@ -105,58 +105,101 @@ public class PermissionConstant {
     public static final String POINT_SEARCH = "pointSearch";
     //积分卡修改
     public static final String POINT_SEARCH_EDIT = "pointSearchEdit";
+    //积分卡启、停用
+    public static final String POINT_SEARCH_STATUS_CHANGE = "pointSearchStatusChange";
     //积分卡兑换码查询
     public static final String POINT_CODE_SEARCH = "pointCodeSearch";
     //积分卡兑换码修改
     public static final String POINT_CODE_SEARCH_EDIT = "pointCodeSearchEdit";
+    //积分卡兑换码启、停用
+    public static final String POINT_CODE_SEARCH_STATUS_CHANGE = "pointCodeSearchStatusChange";
     //充值卡查询
     public static final String RECHARGE_CARD_SEARCH = "rechargeCardSearch";
     //充值卡修改
     public static final String RECHARGE_CARD_SEARCH_EDIT = "rechargeCardSearchEdit";
+    //充值卡启、停用
+    public static final String RECHARGE_CARD_SEARCH_STATUS_CHANGE = "rechargeCardSearchStatusChange";
     //充值卡兑换码查询
     public static final String RECHARGE_CARD_CODE_SEARCH = "rechargeCardCodeSearch";
     //充值卡兑换码修改
     public static final String RECHARGE_CARD_CODE_SEARCH_EDIT = "rechargeCardCodeSearchEdit";
+    //充值卡兑换码启、停用
+    public static final String RECHARGE_CARD_CODE_SEARCH_STATUS_CHANGE = "rechargeCardCodeSearchStatusChange";
     //代金券查询
     public static final String VOUCHER_SEARCH = "voucherSearch";
     //代金券修改
     public static final String VOUCHER_SEARCH_EDIT = "voucherSearchEdit";
+    //代金券启、停用
+    public static final String VOUCHER_SEARCH_STATUS_CHANGE = "voucherSearchStatusChange";
     //代金券兑换码查询
     public static final String VOUCHER_CODE_SEARCH = "voucherCodeSearch";
     //代金券兑换码修改
-    public static final String VOUCHER_CODE_SEARCH_EIDT = "voucherCodeSearchEdit";
+    public static final String VOUCHER_CODE_SEARCH_EDIT = "voucherCodeSearchEdit";
+    //代金券兑换码启、停用
+    public static final String VOUCHER_CODE_SEARCH_STATUS_CHANGE = "voucherCodeSearchStatusChange";
+
     //系统管理
     public static final String SYSTEM_MANAGEMENT = "systemManagement";
     //积分卡兑换码批次管理
     public static final String POINT_BATCH_MANAGEMENT = "pointBatchManagement";
+    //积分卡兑换码批次查询
+    public static final String POINT_BATCH_SEARCH = "pointBatchSearch";
     //积分卡兑换码批次添加
     public static final String POINT_BATCH_ADD = "pointBatchAdd";
     //积分卡兑换码批次修改
-    public static final String POINT_BATCH_EDIT = "rcBatchEdit";
+    public static final String POINT_BATCH_EDIT = "pointBatchEdit";
+    //积分卡兑换码批次启、停用
+    public static final String POINT_BATCH_STATUS_CHANGE = "pointBatchStatusChange";
+    //积分卡兑换码生成
+    public static final String POINT_CODE_GENERATE = "pointCodeGenerate";
+    //积分卡兑换码导出
+    public static final String POINT_CODE_EXPORT = "pointCodeExport";
     //积分卡兑换码管理
-    public static final String POINT_CODE_MANAGEMENT = "rcCodeManagement";
+    public static final String POINT_CODE_MANAGEMENT = "pointCodeManagement";
     //积分卡兑换码修改
-    public static final String POINT_CODE_EDIT = "rcCodeEdit";
+    public static final String POINT_CODE_EDIT = "pointCodeEdit";
+    //积分卡兑换码启、停用
+    public static final String POINT_CODE_STATUS_CHANGE = "pointCodeStatusChange";
     //充值卡兑换码批次管理
     public static final String RC_BATCH_MANAGEMENT = "rcBatchManagement";
+    //充值卡兑换码批次查询
+    public static final String RC_BATCH_SEARCH = "rcBatchSearch";
     //充值卡兑换码批次添加
     public static final String RC_BATCH_ADD = "rcBatchAdd";
     //充值卡兑换码批次修改
     public static final String RC_BATCH_EDIT = "rcBatchEdit";
+    //充值卡兑换码批次启、停用
+    public static final String RC_BATCH_STATUS_CHANGE = "rcBatchStatusChange";
+    //充值卡兑换码生成
+    public static final String RC_CODE_GENERATE = "rcCodeGenerate";
+    //充值卡兑换码导出
+    public static final String RC_CODE_EXPORT = "rcCodeExport";
     //充值卡兑换码管理
     public static final String RC_CODE_MANAGEMENT = "rcCodeManagement";
     //充值卡兑换码修改
     public static final String RC_CODE_EDIT = "rcCodeEdit";
+    //充值卡兑换码启、停用
+    public static final String RC_CODE_STATUS_CHANGE = "rcCodeStatusChange";
     //代金券兑换码批次管理
     public static final String VOUCHER_BATCH_MANAGEMENT = "voucherBatchManagement";
+    //代金券兑换码批次查询
+    public static final String VOUCHER_BATCH_SEARCH = "voucherBatchSearch";
     //代金券兑换码批次添加
     public static final String VOUCHER_BATCH_ADD = "voucherBatchAdd";
     //代金券兑换码批次修改
     public static final String VOUCHER_BATCH_EDIT = "voucherBatchEdit";
+    //代金券兑换码批次启、停用
+    public static final String VOUCHER_BATCH_STATUS_CHANGE = "voucherBatchStatusChange";
+    //代金券兑换码生成
+    public static final String VOUCHER_CODE_GENERATE = "voucherCodeGenerate";
+    //代金券兑换码导出
+    public static final String VOUCHER_CODE_EXPORT = "voucherCodeExport";
     //代金券兑换码管理
     public static final String VOUCHER_CODE_MANAGEMENT = "voucherCodeManagement";
     //代金券兑换码修改
     public static final String VOUCHER_CODE_EDIT = "voucherCodeEdit";
+    //代金券兑换码启、停用
+    public static final String VOUCHER_CODE_STATUS_CHANGE = "voucherCodeStatusChange";
     //电子商品管理
     public static final String ELE_CODE_MANAGEMENT = "eleCodeManagement";
     //电子商品添加
@@ -171,5 +214,8 @@ public class PermissionConstant {
     public static final String CITY_MANAGEMENT = "cityManagement";
     //日志管理
     public static final String LOG_MANAGEMENT = "logManagement";
+
+    //客户端访问固定权限
+    public static final String CUSTOMER_PERMISSION = "customerPermission";
 
 }

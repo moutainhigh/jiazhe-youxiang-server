@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.base.realm;
 
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LoginType;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import org.apache.shiro.authc.AuthenticationException;
@@ -55,8 +56,7 @@ public class CustomerRealm extends AuthorizingRealm {
             CustomerDTO customerDTO = (CustomerDTO) principalCollection.getPrimaryPrincipal();
             if (customerDTO != null) {
                 SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-                info.addStringPermission("test:ajaxtest");
-                //TODO niexiao 修改成客户可用的权限列表
+                info.addStringPermission(PermissionConstant.CUSTOMER_PERMISSION);
                 return info;
             }
         }

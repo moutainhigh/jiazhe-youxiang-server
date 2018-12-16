@@ -9,6 +9,7 @@ import com.jiazhe.youxiang.server.biz.voucher.VoucherExchangeCodeBatchBiz;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherExchangeCodeBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
@@ -26,6 +27,8 @@ import com.jiazhe.youxiang.server.vo.req.voucher.exchangecodebatch.VoucherExchan
 import com.jiazhe.youxiang.server.vo.resp.voucher.exchangecodebatch.VoucherExchangeCodeBatchEditResp;
 import com.jiazhe.youxiang.server.vo.resp.voucher.exchangecodebatch.VoucherExchangeCodeBatchResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +58,8 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
     @Autowired
     private VoucherExchangeCodeBiz voucherExchangeCodeBiz;
 
-    @ApiOperation(value = "分页查询代金券兑换码批次信息（根据项目和批次名称查询）", httpMethod = "GET", response = VoucherExchangeCodeBatchResp.class, responseContainer = "List", notes = "分页查询代金券兑换码批次信息（根据项目和批次名称查询）")
+    @RequiresPermissions(value = {PermissionConstant.VOUCHER_BATCH_MANAGEMENT, PermissionConstant.VOUCHER_BATCH_SEARCH}, logical = Logical.OR)
+    @ApiOperation(value = "分页查询代金券兑换码批次信息", httpMethod = "GET", response = VoucherExchangeCodeBatchResp.class, responseContainer = "List", notes = "分页查询代金券兑换码批次信息（根据项目和批次名称查询）")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "分页查询代金券兑换码批次信息", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute VoucherExchangeCodeBatchPageReq req) {
@@ -66,11 +70,11 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
         return ResponseFactory.buildPaginationResponse(voucherExchangeCodeBatchRespList, paging);
     }
 
+    @RequiresPermissions(value = {PermissionConstant.VOUCHER_BATCH_ADD, PermissionConstant.VOUCHER_BATCH_EDIT}, logical = Logical.OR)
     @ApiOperation(value = "【新建、修改】保存代金券兑换码批次信息", httpMethod = "POST", notes = "【新建、修改】保存代金券兑换码批次信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "保存代金券兑换码批次信息", level = LogLevelEnum.LEVEL_2)
     public Object save(@ModelAttribute VoucherExchangeCodeBatchSaveReq req) {
-        //参数检查
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(), new VoucherException(VoucherCodeEnum.BATCH_NAME_IS_NULL));
@@ -97,11 +101,11 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.VOUCHER_CODE_GENERATE)
     @ApiOperation(value = "生成代金券兑换码", httpMethod = "POST", notes = "生成代金券兑换码")
     @RequestMapping(value = "/generatecode", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "生成代金券兑换码", level = LogLevelEnum.LEVEL_2)
     public Object generateCode(@ModelAttribute IdReq req) {
-        //参数检查
         CommonValidator.validateId(req);
         //参数检查,检查是否是虚拟批次，检查该批次是否已经生成过兑换码
         VoucherExchangeCodeBatchEditDTO dto = voucherExchangeCodeBatchBiz.getById(req.getId());
@@ -119,33 +123,33 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "代金券兑换码批次信息回显", level = LogLevelEnum.LEVEL_1)
     public Object getById(@ModelAttribute IdReq req) {
-        //参数检查
         CommonValidator.validateId(req);
         VoucherExchangeCodeBatchEditDTO voucherExchangeCodeBatchEditDTO = voucherExchangeCodeBatchBiz.getById(req.getId());
         VoucherExchangeCodeBatchEditResp voucherExchangeCodeBatchEditResp = VoucherExchangeCodeBatchAdapter.DTOEdit2RespEdit(voucherExchangeCodeBatchEditDTO);
         return ResponseFactory.buildResponse(voucherExchangeCodeBatchEditResp);
     }
 
+    @RequiresPermissions(PermissionConstant.VOUCHER_BATCH_STATUS_CHANGE)
     @ApiOperation(value = "启用批次【同时改变批次下兑换码状态】", httpMethod = "POST", notes = "启用批次【同时改变批次下兑换码状态】")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "启用批次", level = LogLevelEnum.LEVEL_2)
     public Object startUsing(@ModelAttribute IdReq req) {
-        //参数检查
         CommonValidator.validateId(req);
         voucherExchangeCodeBatchBiz.startUsing(req.getId());
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.VOUCHER_BATCH_STATUS_CHANGE)
     @ApiOperation(value = "停用批次【同时改变批次下兑换码状态】", httpMethod = "POST", notes = "停用批次【同时改变批次下兑换码状态】")
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "停用批次", level = LogLevelEnum.LEVEL_2)
     public Object stopUsing(@ModelAttribute IdReq req) {
-        //参数检查
         CommonValidator.validateId(req);
         voucherExchangeCodeBatchBiz.stopUsing(req.getId());
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.VOUCHER_CODE_EXPORT)
     @ApiOperation(value = "导出批次下兑换码", httpMethod = "GET", notes = "导出批次下兑换码")
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "导出批次下兑换码", level = LogLevelEnum.LEVEL_3)
@@ -154,6 +158,7 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
         ExportExcelUtils.exportVoucherCode(response, voucherExchangeCodeDTOList);
     }
 
+    @RequiresPermissions(PermissionConstant.VOUCHER_CODE_EXPORT)
     @ApiOperation(value = "导出前检查", httpMethod = "GET", notes = "导出前检查")
     @RequestMapping(value = "/exportcheck", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "导出前检查", level = LogLevelEnum.LEVEL_1)

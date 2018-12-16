@@ -95,7 +95,6 @@ public class APISysRoleController extends BaseController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ROLE, operate = "保存角色信息", level = LogLevelEnum.LEVEL_2)
     public Object save(@ModelAttribute RoleSaveReq req) {
-        /*参数检查*/
         CommonValidator.validateNull(req);
         CommonValidator.validateId(req.getId());
         CommonValidator.validateNull(req.getName(), new RoleException(RoleCodeEnum.ROLE_NAME_IS_NULL));
