@@ -40,4 +40,8 @@ public interface PointService {
     void editSave(PointEditDTO dto);
 
     BigDecimal totalValidBalance(Integer customerId);
+
+    void batchUpdate(List<PointDTO> pointDTOList);
+
+    List<PointDTO> findByIds(List<Integer> pointIds);
 }

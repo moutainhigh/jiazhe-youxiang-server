@@ -116,9 +116,10 @@ public class OrderInfoBiz {
      */
     private BigDecimal calculateOrderNeedPay(OrderInfoDTO dto) {
         Integer needPayCount = dto.getCount();
-        BigDecimal needPay = dto.getProductPrice().multiply(new BigDecimal(needPayCount)).subtract(dto.getPayVoucher());
-        BigDecimal needPayMoney = needPay.subtract(dto.getPayRechargeCard().add(dto.getPayCash()));
-        return needPayMoney;
+        BigDecimal needPay = dto.getProductPrice().multiply(new BigDecimal(needPayCount));
+        BigDecimal hasPay = dto.getPayPoint().add(dto.getPayRechargeCard()).add(dto.getPayVoucher().add(dto.getPayCash()));
+        BigDecimal left = needPay.subtract(hasPay);
+        return left;
     }
 
     public NeedPayResp placeOrder(PlaceOrderDTO placeOrderDTO) throws ParseException {
