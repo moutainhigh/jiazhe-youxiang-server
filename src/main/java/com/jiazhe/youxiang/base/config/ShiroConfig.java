@@ -12,7 +12,6 @@ import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
-import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
@@ -50,7 +49,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/system/logout", "anon");//退出系统匿名访问
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/templates/**", "anon");
-        filterChainDefinitionMap.put("/api/**", "anon");//接口通过权限认证
+        filterChainDefinitionMap.put("/api/**", "perms");//接口通过权限认证
         filterChainDefinitionMap.put("/api/signin/**", "anon");//登录、发送验证码等匿名访问
 
 
@@ -114,12 +113,13 @@ public class ShiroConfig {
         return creator;
     }
 
-    @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor() {
-        AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
-        advisor.setSecurityManager(securityManager());
-        return advisor;
-    }
+    //TODO niexiao  临时取消权限认证
+//    @Bean
+//    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor() {
+//        AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
+//        advisor.setSecurityManager(securityManager());
+//        return advisor;
+//    }
 
     @Bean
     public ShiroDialect shiroDialect() {
