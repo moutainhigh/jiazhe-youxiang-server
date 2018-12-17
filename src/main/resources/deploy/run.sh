@@ -3,17 +3,19 @@
 ENV=$2
 
 APP_NAME=youxiang-server
-
 APP_DIR=/opt/jiazhe/webserver/$APP_NAME
 JAR_FILE=$APP_NAME.jar
 pid=0
+
+#JVM参数
+JVM_OPTS="-Duser.timezone=Asia/Shanghai -Xms2G -Xmx2G -XX:PermSize=256M -XX:MaxPermSize=512M -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDateStamps -XX:+UseParallelGC -XX:+UseParallelOldGC"
 
 start(){
   checkpid
   if [ ! -n "$pid" ]; then
     echo "$APP_NAME start..."
     cd $APP_DIR
-    JAVA_CMD="nohup java -jar $APP_DIR/$APP_NAME.jar --spring.profiles.active=$ENV > /dev/null 2>&1 &"
+    JAVA_CMD="nohup java -jar $JVM_OPTSg $APP_DIR/$APP_NAME.jar --spring.profiles.active=$ENV > /dev/null 2>&1 &"
     $JAVA_CMD
     echo Start Success!
   else
