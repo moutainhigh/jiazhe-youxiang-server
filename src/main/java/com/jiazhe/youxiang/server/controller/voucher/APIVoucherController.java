@@ -7,6 +7,7 @@ import com.jiazhe.youxiang.server.adapter.voucher.VoucherAdapter;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.VoucherCodeEnum;
@@ -22,6 +23,8 @@ import com.jiazhe.youxiang.server.vo.req.voucher.voucher.VoucherGoodsAttrPageReq
 import com.jiazhe.youxiang.server.vo.req.voucher.voucher.VoucherPageReq;
 import com.jiazhe.youxiang.server.vo.resp.voucher.voucher.VoucherResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +46,7 @@ public class APIVoucherController extends BaseController{
     @Autowired
     private VoucherBiz voucherBiz;
 
+    @RequiresPermissions(value = {PermissionConstant.CUSTOMER_VOUCHER_DETAIL,PermissionConstant.VOUCHER_SEARCH},logical = Logical.OR)
     @ApiOperation(value = "【后台】信息查询页查询代金券", httpMethod = "GET", response = VoucherResp.class, responseContainer = "List",notes = "【后台】信息查询页查询代金券")
     @RequestMapping(value = "/searchlistpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "信息查询页查询代金券", level = LogLevelEnum.LEVEL_1)
@@ -54,6 +58,7 @@ public class APIVoucherController extends BaseController{
         return ResponseFactory.buildPaginationResponse(rcRespList, paging);
     }
 
+    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
     @ApiOperation(value = "【APP端】查询客户的代金券", httpMethod = "GET", response = VoucherResp.class, responseContainer = "List",notes = "查询客户可用的代金券")
     @RequestMapping(value = "/findbycustomeridpage", method = RequestMethod.GET)
@@ -78,21 +83,21 @@ public class APIVoucherController extends BaseController{
         return ResponseFactory.buildPaginationResponse(rcRespList, paging);
     }
 
+    @RequiresPermissions(PermissionConstant.VOUCHER_SEARCH_STATUS_CHANGE)
     @ApiOperation(value = "启用代金券", httpMethod = "POST",notes = "启用代金券")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "启用代金券", level = LogLevelEnum.LEVEL_2)
     public Object startUsing(@ModelAttribute IdReq req) {
-        //参数检查
         CommonValidator.validateId(req);
         voucherBiz.startUsing(req.getId());
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.VOUCHER_SEARCH_STATUS_CHANGE)
     @ApiOperation(value = "停用代金券", httpMethod = "POST",notes = "停用代金券")
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "停用代金券", level = LogLevelEnum.LEVEL_2)
     public Object stopUsing(@ModelAttribute IdReq req) {
-        //参数检查
         CommonValidator.validateId(req);
         voucherBiz.stopUsing(req.getId());
         return ResponseFactory.buildSuccess();
@@ -102,18 +107,17 @@ public class APIVoucherController extends BaseController{
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "回显代金券信息", level = LogLevelEnum.LEVEL_1)
     public Object getById(@ModelAttribute IdReq req) {
-        //参数检查
         CommonValidator.validateId(req);
         VoucherDTO voucher = voucherBiz.getById(req.getId());
         VoucherResp voucherResp = VoucherAdapter.DTO2Resp(voucher);
         return ResponseFactory.buildResponse(voucherResp);
     }
 
+    @RequiresPermissions(PermissionConstant.VOUCHER_SEARCH_EDIT)
     @ApiOperation(value = "修改代金券信息", httpMethod = "POST",notes = "修改代金券信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "修改代金券信息", level = LogLevelEnum.LEVEL_2)
     public Object editSave(@ModelAttribute VoucherEditReq req) {
-        //参数检查
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(),new VoucherException(VoucherCodeEnum.VOUCHER_NAME_IS_NULL));

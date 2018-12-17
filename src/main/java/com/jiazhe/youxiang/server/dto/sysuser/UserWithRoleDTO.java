@@ -2,8 +2,6 @@ package com.jiazhe.youxiang.server.dto.sysuser;
 
 import com.jiazhe.youxiang.server.vo.BaseObject;
 
-import java.util.Date;
-
 /**
  * @author tu
  * @description：
@@ -13,18 +11,39 @@ public class UserWithRoleDTO extends BaseObject {
 
     private static final long serialVersionUID = -2506514569930577071L;
 
+    /**
+     * 员工id
+     */
     private Integer id;
 
+    /**
+     * 员工电话
+     */
     private String mobile;
 
+    /**
+     * 员工登录名
+     */
     private String loginName;
 
+    /**
+     * 员工显示名
+     */
     private String displayName;
 
+    /**
+     * 员工密码
+     */
     private String password;
 
+    /**
+     * 员工密码盐值
+     */
     private String salt;
 
+    /**
+     * 角色id，多个id用英文逗号连接
+     */
     private String roleIds;
 
     public Integer getId() {

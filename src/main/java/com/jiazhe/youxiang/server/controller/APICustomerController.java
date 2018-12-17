@@ -11,6 +11,7 @@ import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.CustomerCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
@@ -35,6 +36,7 @@ import com.jiazhe.youxiang.server.vo.req.customer.DefaultAddressReq;
 import com.jiazhe.youxiang.server.vo.resp.customer.AddressResp;
 import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +70,7 @@ public class APICustomerController {
      *
      * @return
      */
+    @RequiresPermissions(PermissionConstant.CUSTOMER_ADD)
     @ApiOperation(value = "添加用户", httpMethod = "POST", notes = "添加用户")
     @RequestMapping(value = "add", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.CUSTOMER, operate = "添加用户", level = LogLevelEnum.LEVEL_2)
@@ -122,6 +125,7 @@ public class APICustomerController {
      *
      * @return
      */
+    @RequiresPermissions(PermissionConstant.CUSTOMER_EDIT)
     @ApiOperation(value = "编辑客户信息", httpMethod = "POST", notes = "编辑客户信息")
     @RequestMapping(value = "update", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.CUSTOMER, operate = "编辑客户信息", level = LogLevelEnum.LEVEL_2)

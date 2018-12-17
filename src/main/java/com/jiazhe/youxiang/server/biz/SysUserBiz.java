@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.biz;
 
+import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.base.util.EncryptPasswordUtil;
 import com.jiazhe.youxiang.base.util.RandomUtil;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
@@ -28,17 +29,35 @@ public class SysUserBiz {
     @Autowired
     private SysUserRoleBiz sysUserRoleBiz;
     @Autowired
-    private SysUserService sysUserService ;
+    private SysUserService sysUserService;
 
+    /**
+     * 查询所有员工信息
+     *
+     * @return
+     */
     public List<SysUserDTO> findAll() {
         List<SysUserDTO> sysUserDTOList = sysUserService.findAll();
-        return  sysUserDTOList;
+        return sysUserDTOList;
     }
 
-    public List<SysUserDTO> getList(String loginName, String displayName,Paging paging) {
-        return sysUserService.getList(loginName,displayName,paging);
+    /**
+     * 通过员工登录名、显示名和分页参数，分页查询员工信息
+     *
+     * @param loginName
+     * @param displayName
+     * @param paging
+     * @return
+     */
+    public List<SysUserDTO> getList(String loginName, String displayName, Paging paging) {
+        return sysUserService.getList(loginName, displayName, paging);
     }
 
+    /**
+     * 根据id删除员工信息（并删除对应角色）
+     *
+     * @param userId
+     */
     public void deleteUserWithRole(Integer userId) {
         sysUserService.deleteUserWithRole(userId);
     }
@@ -49,7 +68,7 @@ public class SysUserBiz {
 
     public boolean userHasExisted(UserWithRoleDTO userWithRoleDTO) {
         List<SysUserDTO> sysUserDTOList = sysUserService.findByLoginName(userWithRoleDTO.getLoginName());
-        return (2 == sysUserDTOList.size()) || (sysUserDTOList.size() == 1 && !sysUserDTOList.get(0).getId().equals(userWithRoleDTO.getId()));
+        return (sysUserDTOList.size() > 1) || (sysUserDTOList.size() == 1 && !sysUserDTOList.get(0).getId().equals(userWithRoleDTO.getId()));
     }
 
     public void saveRoleWithPerm(UserWithRoleDTO userWithRoleDTO) {
@@ -58,15 +77,15 @@ public class SysUserBiz {
         /*用户信息DTO*/
         SysUserDTO sysUserDTO;
         /*新添加的角色DTO*/
-        List<SysUserRoleDTO> newRolesDto = new ArrayList<SysUserRoleDTO>();
-        /*修改后减少的权限DTO*/
-        List<SysUserRoleDTO> oldRolesDto = new ArrayList<SysUserRoleDTO>();
+        List<SysUserRoleDTO> newRolesDto = Lists.newArrayList();
+        /*修改后减少的角色DTO*/
+        List<SysUserRoleDTO> oldRolesDto = Lists.newArrayList();
         String[] roleIds = Strings.isBlank(userWithRoleDTO.getRoleIds()) ? null : userWithRoleDTO.getRoleIds().split(",");
-        if (isAdd){
+        if (isAdd) {
             sysUserDTO = new SysUserDTO();
             String salt = RandomUtil.generateSalt(6);
             sysUserDTO.setSalt(salt);
-            sysUserDTO.setPassword(EncryptPasswordUtil.encrypt(salt,userWithRoleDTO.getPassword()));
+            sysUserDTO.setPassword(EncryptPasswordUtil.encrypt(salt, userWithRoleDTO.getPassword()));
             for (String roleId : roleIds) {
                 SysUserRoleDTO sysUserRoleDTO = new SysUserRoleDTO();
                 sysUserRoleDTO.setRoleId(Integer.valueOf(roleId));
@@ -83,7 +102,7 @@ public class SysUserBiz {
                     /*判断该角色是否已经存在*/
                     for (SysUserRoleDTO temp : oldRolesDto) {
                         if (temp.getRoleId().equals(Integer.valueOf(id))) {
-                                /*已经存在，则移除*/
+                            /*已经存在，则移除*/
                             Iterator<SysUserRoleDTO> iterator = oldRolesDto.iterator();
                             while (iterator.hasNext()) {
                                 SysUserRoleDTO temp1 = iterator.next();
@@ -114,12 +133,12 @@ public class SysUserBiz {
         return sysUserService.findByLoginName(loginName);
     }
 
-    public void updateLastLoginInfo(Integer userId , String ipAdrress) {
-        sysUserService.updateLastLoginInfo(userId,ipAdrress);
+    public void updateLastLoginInfo(Integer userId, String ipAdrress) {
+        sysUserService.updateLastLoginInfo(userId, ipAdrress);
     }
 
     public void changePassword(Integer id, String newPassword) {
-        sysUserService.changePassword(id,newPassword);
+        sysUserService.changePassword(id, newPassword);
     }
 
 }

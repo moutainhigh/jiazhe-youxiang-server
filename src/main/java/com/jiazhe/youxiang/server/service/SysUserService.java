@@ -15,18 +15,45 @@ import java.util.List;
  */
 public interface SysUserService {
 
+    /**
+     * 查询所有员工信息
+     * @return
+     */
     List<SysUserDTO> findAll();
 
+    /**
+     * 通过员工登录名、显示名、分页参数分页查询员工信息
+     * @param loginName
+     * @param displayName
+     * @param paging
+     * @return
+     */
     List<SysUserDTO> getList(String loginName,String displayName, Paging paging);
 
+    /**
+     * 根据用户id删除用户和绑定的角色信息
+     * @param userId
+     */
     void deleteUserWithRole(Integer userId);
 
     UserWithRoleDTO findUserWithRoleById(Integer id);
 
     SysUserDTO findById(Integer id);
 
+    /**
+     * 保存用户信息
+     * @param isAdd
+     * @param sysUserDTO
+     * @param newRolesDto
+     * @param oldRolesDto
+     */
     void saveUserWithRole(boolean isAdd, SysUserDTO sysUserDTO, List<SysUserRoleDTO> newRolesDto, List<SysUserRoleDTO> oldRolesDto);
 
+    /**
+     * 通过登录名查找员工信息
+     * @param loginName
+     * @return
+     */
     List<SysUserDTO> findByLoginName(String loginName);
 
     void updateLastLoginInfo(Integer userId, String ipAdrress);

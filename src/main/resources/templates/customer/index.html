@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta charset="utf-8"/>
@@ -42,42 +42,42 @@
 
             <div class="page-content">
                 <div class="row">
-                    <div class="col-xs-12" style="padding-top:40px">
-                        <form id="searchForm" class="form-horizontal" role="form">
-                            <div class="form-group">
-                                <label class="col-sm-1 control-label no-padding-right">客户名称：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <input id="name" name="name" class="form-control" type="text"
-                                               style="height:30px"/>
+                    <div class="col-xs-12" style="padding-top:20px">
+                        <shiro:hasPermission name="customerSearch">
+                            <form id="searchForm" class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label class="col-sm-1 control-label no-padding-right">客户名称：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <input id="name" name="name" class="form-control" type="text"
+                                                   style="height:30px"/>
+                                        </div>
+                                    </div>
+                                    <label class="col-sm-1 control-label no-padding-right">手机号码：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <input id="mobile" name="mobile" class="form-control" type="text"
+                                                   style="height:30px"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <button class="btn btn-white btn-default btn-round btn-sm"
+                                                onclick="return search()">
+                                            <i class="ace-icon fa fa-search red2"></i>
+                                            查询
+                                        </button>
                                     </div>
                                 </div>
-                                <label class="col-sm-1 control-label no-padding-right">手机号码：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <input id="mobile" name="mobile" class="form-control" type="text"
-                                               style="height:30px"/>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <button class="btn btn-white btn-default btn-round btn-sm"
-                                            onclick="return search()">
-                                        <i class="ace-icon fa fa-search red2"></i>
-                                        查询
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        </shiro:hasPermission>
                     </div><!-- /.col -->
-                    <div class="col-xs-12" style="text-align: right" id="buttonDiv">
-                        <p style="margin:1px;">
-                            <!--<shiro:hasPermission name="sysrole:add">-->
+                    <div class="col-xs-12" style="text-align: right">
+                        <shiro:hasPermission name="customerAdd">
                             <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
                                data-toggle="modal" onclick="openNew()">
                                 <i class="ace-icon fa fa-plus"></i>新建
                             </a>
-                            <!--</shiro:hasPermission>-->
-                        </p>
+                        </shiro:hasPermission>
                     </div><!-- /.col -->
                     <div class="col-xs-12">
                         <table id="grid-table"></table>
@@ -196,7 +196,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="blue bigger">追加订单</h4>
+                                    <h4 class="blue bigger">后台下单</h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
@@ -427,11 +427,12 @@
         var tableOption = {
             url: "/api/customer/getlist",// 获取数据的地址
             postData: transformToJson($('#searchForm').serializeArray()),
-            colNames: ['', '客户名称', '手机号码','积分', '充值卡', '代金券', '订单', '默认地址', '客户备注', '操作'],
+//            colNames: ['', '客户名称', '手机号码', '积分', '充值卡', '代金券', '订单', '默认地址', '客户备注', '操作'],
+            colNames: ['', '客户名称', '手机号码', '积分', '充值卡', '代金券', '订单', '客户备注', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 50, sortable: false},
-                {name: 'mobile', index: 'mobile', width: 50, sortable: false},
+                {name: 'mobile', index: 'mobile', width: 100, sortable: false},
                 {
                     name: 'point',
                     index: '_point',
@@ -448,7 +449,7 @@
                 },
                 {name: '_voucher', index: '_voucher', width: 150, sortable: false, formatter: voucherFormatter},
                 {name: '_order', index: '_order', width: 60, sortable: false, formatter: orderFormatter},
-                {name: 'defaultAddress', index: 'defaultAddress', sortable: false, formatter: addressFormatter},
+//                {name: 'defaultAddress', index: 'defaultAddress', sortable: false, formatter: addressFormatter},
                 {name: 'remark', index: 'remark', width: 70, sortable: false},
                 {name: '_action', index: '_action', width: 50, sortable: false, formatter: customFormatter}
             ],
@@ -480,26 +481,42 @@
     function pointFormatter(cellvalue, options, rowObject) {
         var str = "剩余积分：" + rowObject.pointBalance + " ";
         var pointUrl = "/infosearch/pointindex?mobile=" + rowObject.mobile;
-        str += getRedirectButton("btn-success", pointUrl, "详情");
-        str += getFunctionButton("btn-yellow", "openPointCharge(" + rowObject.id + ")", "绑定");
-        str += getFunctionButton("btn-yellow", "openPointDirectCharge(" + rowObject.id + ")", "充值");
+        if (permission.indexOf("customerPointDetail") != -1) {
+            str += getRedirectButton("btn-success", pointUrl, "详情");
+        }
+        if (permission.indexOf("customerPointBindig") != -1) {
+            str += getFunctionButton("btn-yellow", "openPointCharge(" + rowObject.id + ")", "绑定");
+        }
+        if (permission.indexOf("customerPointRecharge") != -1) {
+            str += getFunctionButton("btn-yellow", "openPointDirectCharge(" + rowObject.id + ")", "充值");
+        }
         return str;
     }
 
     function rechargeCardFormatter(cellvalue, options, rowObject) {
         var str = "余额：" + rowObject.rechargeCardBalance + " ";
         var rechargeCardUrl = "/infosearch/rechargecardindex?mobile=" + rowObject.mobile;
-        str += getRedirectButton("btn-success", rechargeCardUrl, "详情");
-        str += getFunctionButton("btn-yellow", "openCharge(" + rowObject.id + ")", "绑定");
-        str += getFunctionButton("btn-yellow", "openDirectCharge(" + rowObject.id + ")", "充值");
+        if (permission.indexOf("customerRechargeCardDetail") != -1) {
+            str += getRedirectButton("btn-success", rechargeCardUrl, "详情");
+        }
+        if (permission.indexOf("customerRechargeCardBindig") != -1) {
+            str += getFunctionButton("btn-yellow", "openCharge(" + rowObject.id + ")", "绑定");
+        }
+        if (permission.indexOf("customerRechargeCardRecharge") != -1) {
+            str += getFunctionButton("btn-yellow", "openDirectCharge(" + rowObject.id + ")", "充值");
+        }
         return str;
     }
 
     function voucherFormatter(cellvalue, options, rowObject) {
         var str = "剩余张数：" + rowObject.voucherCount + " ";
         var voucherUrl = "/infosearch/voucherindex?mobile=" + rowObject.mobile;
-        str += getRedirectButton("btn-success", voucherUrl, "详情");
-        str += getFunctionButton("btn-yellow", "openVoucher(" + rowObject.id + ")", "绑定");
+        if (permission.indexOf("customerVoucherDetail") != -1) {
+            str += getRedirectButton("btn-success", voucherUrl, "详情");
+        }
+        if (permission.indexOf("customerVoucherBinding") != -1) {
+            str += getFunctionButton("btn-yellow", "openVoucher(" + rowObject.id + ")", "绑定");
+        }
         return str;
 
     }
@@ -507,13 +524,21 @@
     function orderFormatter(cellvalue, options, rowObject) {
         var str = "";
         var orderUrl = "/order/orderindex?mobile=" + rowObject.mobile;
-        str += getRedirectButton("btn-success", orderUrl, "详情");
-        str += getFunctionButton("btn-yellow", "openNewOrder(" + rowObject.id + ")", "下单");
+        if (permission.indexOf("customerOrderDetail") != -1) {
+            str += getRedirectButton("btn-success", orderUrl, "详情");
+        }
+        if (permission.indexOf("customerUserPlaceOrder") != -1) {
+            str += getFunctionButton("btn-yellow", "openNewOrder(" + rowObject.id + ")", "下单");
+        }
         return str;
     }
 
     function customFormatter(cellvalue, options, rowObject) {
-        return getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
+        var str = "";
+        if (permission.indexOf("customerEdit") != -1) {
+            str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
+        }
+        return str;
     }
 
     function operate() {
@@ -816,10 +841,10 @@
             return;
         }
         url = "";
-        if($("#inputOperationType").val()== "5"){
+        if ($("#inputOperationType").val() == "5") {
             url = "/api/rcexchangecodebatch/findvirtualbyprojectid";
         }
-        if($("#inputOperationType").val()== "7"){
+        if ($("#inputOperationType").val() == "7") {
             url = "/api/pointexchangecodebatch/findvirtualbyprojectid";
         }
         $("#selectBatch").empty();
@@ -871,7 +896,7 @@
                 } else {
                     var result = data.data;
                     for (var i = 0; i < result.length; i++) {
-                        $("#orderProductId").append("<option data-last-num=" + result[i].lastNum + "data-product-type=" + result[i].productType + " value=" + result[i].id + ">" + result[i].name + "</option>");
+                        $("#orderProductId").append("<option data-last-num=" + result[i].lastNum + " data-product-type=" + result[i].productType + " value=" + result[i].id + ">" + result[i].name + "</option>");
                     }
                 }
             },

@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.partnerorder.PartnerOrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.partnerorder.PartnerOrderInfoBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.dto.partnerorder.PartnerOrderInfoDTO;
@@ -16,6 +17,8 @@ import com.jiazhe.youxiang.server.vo.req.partnerorder.PartnerOrderSaveReq;
 import com.jiazhe.youxiang.server.vo.resp.partnerorder.OverviewMoneyResp;
 import com.jiazhe.youxiang.server.vo.resp.partnerorder.PartnerOrderInfoResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +42,7 @@ public class APIPartnerOrderInfoController extends BaseController {
     @Autowired
     private PartnerOrderInfoBiz partnerOrderInfoBiz;
 
+    @RequiresPermissions(value = {PermissionConstant.PARTNER_ORDER_MANAGEMENT, PermissionConstant.PARTNER_ORDER_SEARCH}, logical = Logical.OR)
     @ApiOperation(value = "【后台】分页查询商家订单信息", httpMethod = "GET", response = PartnerOrderInfoResp.class, responseContainer = "List", notes = "【后台】分页查询商家订单信息")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER, operate = "分页查询商家订单信息", level = LogLevelEnum.LEVEL_1)
@@ -46,7 +50,7 @@ public class APIPartnerOrderInfoController extends BaseController {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         Date serviceTimeStart = req.getServiceTimeStart() == 0 ? null : new Date(req.getServiceTimeStart());
         Date serviceTimeEnd = req.getServiceTimeEnd() == 0 ? null : new Date(req.getServiceTimeEnd());
-        List<PartnerOrderInfoDTO> dtoList = partnerOrderInfoBiz.getList(req.getStatus(), req.getCustomerCityCode(),req.getPartnerId(),req.getServiceItemId(), serviceTimeStart, serviceTimeEnd, req.getCustomerMobile(), paging);
+        List<PartnerOrderInfoDTO> dtoList = partnerOrderInfoBiz.getList(req.getStatus(), req.getCustomerCityCode(), req.getPartnerId(), req.getServiceItemId(), serviceTimeStart, serviceTimeEnd, req.getCustomerMobile(), paging);
         List<PartnerOrderInfoResp> respList = dtoList.stream().map(PartnerOrderInfoAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(respList, paging);
     }
@@ -60,13 +64,14 @@ public class APIPartnerOrderInfoController extends BaseController {
         return ResponseFactory.buildResponse(resp);
     }
 
+    @RequiresPermissions(value = {PermissionConstant.PARTNER_ORDER_ADD, PermissionConstant.PARTNER_ORDER_EDIT}, logical = Logical.OR)
     @ApiOperation(value = "【后台】保存商家订单信息", httpMethod = "POST", notes = "【后台】保存商家订单信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER, operate = "保存商家订单信息", level = LogLevelEnum.LEVEL_1)
     public Object save(@ModelAttribute PartnerOrderSaveReq req) {
         PartnerOrderInfoDTO dto = PartnerOrderInfoAdapter.saveReq2DTO(req);
         dto.setModTime(new Date());
-        if(req.getId() == 0){
+        if (req.getId() == 0) {
             dto.setAddTime(new Date());
             dto.setExtInfo("");
             dto.setIsDeleted(Byte.valueOf("0"));
@@ -81,7 +86,7 @@ public class APIPartnerOrderInfoController extends BaseController {
     public Object calOverviewMoney(@ModelAttribute PartnerOrderInfoPageReq req) {
         Date timeStart = req.getServiceTimeStart() == 0 ? null : new Date(req.getServiceTimeStart());
         Date timeEnd = req.getServiceTimeEnd() == 0 ? null : new Date(req.getServiceTimeEnd());
-        OverviewMoneyResp resp = partnerOrderInfoBiz.calOverviewMoney(timeStart,timeEnd);
+        OverviewMoneyResp resp = partnerOrderInfoBiz.calOverviewMoney(timeStart, timeEnd);
         return ResponseFactory.buildResponse(resp);
     }
 }

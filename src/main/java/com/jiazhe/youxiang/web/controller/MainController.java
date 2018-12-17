@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2017 maoyan.com
- * All rights reserved.
- *
- */
 package com.jiazhe.youxiang.web.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
@@ -10,10 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 /**
  * 用于首页iframe每个部分页面的转发

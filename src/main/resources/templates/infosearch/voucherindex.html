@@ -29,54 +29,56 @@
             <div class="page-content">
                 <div class="row">
                     <div class="col-xs-12" style="padding-top:40px">
-                        <form id="rcSearchForm" class="form-horizontal" role="form">
-                            <div class="form-group">
-                                <div class="col-sm-6">
-                                    <label class="col-sm-2 control-label no-padding-right">状态：</label>
-                                    <div class="col-sm-2">
-                                        <select id="searchStatus" name="status"
-                                                class="selectpicker show-tick form-control">
-                                            <option value="">所有</option>
-                                            <option value=1>启用</option>
-                                            <option value=0>停用</option>
-                                        </select>
+                        <shiro:hasPermission name="voucherSearch">
+                            <form id="rcSearchForm" class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <div class="col-sm-6">
+                                        <label class="col-sm-2 control-label no-padding-right">状态：</label>
+                                        <div class="col-sm-2">
+                                            <select id="searchStatus" name="status"
+                                                    class="selectpicker show-tick form-control">
+                                                <option value="">所有</option>
+                                                <option value=1>启用</option>
+                                                <option value=0>停用</option>
+                                            </select>
+                                        </div>
+                                        <label class="col-sm-2 control-label no-padding-right">过期状态：</label>
+                                        <div class="col-sm-2">
+                                            <select id="searchExpiry" name="expiry"
+                                                    class="selectpicker show-tick form-control">
+                                                <option value="">所有</option>
+                                                <option value=1>已过期</option>
+                                                <option value=0>未过期</option>
+                                            </select>
+                                        </div>
+                                        <label class="col-sm-2 control-label no-padding-right">兑换方式：</label>
+                                        <div class="col-sm-2">
+                                            <select id="searchExchangeType" name="exchangeType"
+                                                    class="selectpicker show-tick form-control">
+                                                <option value="">所有</option>
+                                                <option value=0>后台兑换</option>
+                                                <option value=1>前台兑换</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <label class="col-sm-2 control-label no-padding-right">过期状态：</label>
+                                    <label class="col-sm-1 control-label no-padding-right">客户电话：</label>
                                     <div class="col-sm-2">
-                                        <select id="searchExpiry" name="expiry"
-                                                class="selectpicker show-tick form-control">
-                                            <option value="">所有</option>
-                                            <option value=1>已过期</option>
-                                            <option value=0>未过期</option>
-                                        </select>
+                                        <div class="pos-rel">
+                                            <input id="searchMobile" name="mobile" class="form-control" type="text"
+                                                   th:value="${mobile}"
+                                                   style="height:30px"/>
+                                        </div>
                                     </div>
-                                    <label class="col-sm-2 control-label no-padding-right">兑换方式：</label>
-                                    <div class="col-sm-2">
-                                        <select id="searchExchangeType" name="exchangeType"
-                                                class="selectpicker show-tick form-control">
-                                            <option value="">所有</option>
-                                            <option value=0>后台兑换</option>
-                                            <option value=1>前台兑换</option>
-                                        </select>
+                                    <div class="col-sm-3">
+                                        <button class="btn btn-white btn-default btn-round btn-sm"
+                                                onclick="return search()">
+                                            <i class="ace-icon fa fa-search red2"></i>
+                                            查询
+                                        </button>
                                     </div>
                                 </div>
-                                <label class="col-sm-1 control-label no-padding-right">客户电话：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <input id="searchMobile" name="mobile" class="form-control" type="text"
-                                               th:value="${mobile}"
-                                               style="height:30px"/>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <button class="btn btn-white btn-default btn-round btn-sm"
-                                            onclick="return search()">
-                                        <i class="ace-icon fa fa-search red2"></i>
-                                        查询
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        </shiro:hasPermission>
                     </div><!-- /.col -->
 
                     <div class="col-xs-12" style="text-align: right" id="buttonDiv">
@@ -137,7 +139,7 @@
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker" id="saveExpiryTime"
-                                                                   type="text" readonly />
+                                                                   type="text" readonly/>
                                                             <span class="input-group-addon">
                                                                         <i class="fa fa-calendar bigger-110"></i>
                                                                     </span>
@@ -217,7 +219,6 @@
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
-    var permission = getCookie("permission");
     var orderStatus = ['待付款', '待派单', '待服务', '服务完成', '取消待审核', '取消未通过', '已取消'];
 
     $(function () {
@@ -329,11 +330,15 @@
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
         if (rowObject.used == 0) {
-            str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
-            if (rowObject.status == 0) {
-                str += getFunctionButton("btn-success", "startUsing(" + rowObject.id + ")", "启用");
-            } else {
-                str += getFunctionButton("btn-danger", "stopUsing(" + rowObject.id + ")", "停用");
+            if (permission.indexOf("voucherSearchEdit") != -1) {
+                str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
+            }
+            if (permission.indexOf("voucherSearchStatusChange") != -1) {
+                if (rowObject.status == 0) {
+                    str += getFunctionButton("btn-success", "startUsing(" + rowObject.id + ")", "启用");
+                } else {
+                    str += getFunctionButton("btn-danger", "stopUsing(" + rowObject.id + ")", "停用");
+                }
             }
         } else {
             str += getFunctionButton("btn-green", "getOrderPaymentList(" + rowObject.id + ")", "消费记录");

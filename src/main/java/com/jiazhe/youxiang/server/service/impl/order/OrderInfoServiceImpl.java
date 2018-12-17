@@ -40,7 +40,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -226,6 +228,11 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
         if (productDTO.getLastNum() > dto.getCount()) {
             throw new OrderException(OrderCodeEnum.ORDER_COUNT_LESS_THAN_LAST_NUM);
+        }
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        long delayDays = (df.parse(df.format(dto.getServiceTime())).getTime() - df.parse(df.format(new Date())).getTime()) / (24 * 60 * 60 * 1000);
+        if (productDTO.getDelayDays()>delayDays) {
+            throw new OrderException(OrderCodeEnum.SERVICE_TIME_ERROR);
         }
         String orderCode = GenerateCode.generateOrderCode(customerDTO.getMobile());
         //代金券支付数量
@@ -520,6 +527,11 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
         if (productDTO.getLastNum() > dto.getCount()) {
             throw new OrderException(OrderCodeEnum.ORDER_COUNT_LESS_THAN_LAST_NUM);
+        }
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        long delayDays = (df.parse(df.format(dto.getServiceTime())).getTime() - df.parse(df.format(new Date())).getTime()) / (24 * 60 * 60 * 1000);
+        if (productDTO.getDelayDays()>delayDays) {
+            throw new OrderException(OrderCodeEnum.SERVICE_TIME_ERROR);
         }
         String orderCode = GenerateCode.generateOrderCode(customerDTO.getMobile());
         //代金券支付数量

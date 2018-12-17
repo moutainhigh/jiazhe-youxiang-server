@@ -4,6 +4,7 @@ import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.server.adapter.advancepay.AdvancePayAdapter;
 import com.jiazhe.youxiang.server.biz.advancepay.AdvancePayBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.dto.advancepay.AdvancePayDTO;
@@ -14,6 +15,7 @@ import com.jiazhe.youxiang.server.vo.req.partnerorder.PartnerOrderInfoPageReq;
 import com.jiazhe.youxiang.server.vo.resp.advancepay.AdvancePayResp;
 import com.jiazhe.youxiang.server.vo.resp.partnerorder.OverviewMoneyResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +38,7 @@ public class APIAdvancePayController extends BaseController{
     @Autowired
     private AdvancePayBiz advancePayBiz;
 
+    @RequiresPermissions(PermissionConstant.ADVANCE_PAY_MANAGEMENT)
     @ApiOperation(value = "【后台】查询预付款充值信息", httpMethod = "GET", response = AdvancePayResp.class, responseContainer = "List", notes = "【后台】查询预付款充值信息")
     @RequestMapping(value = "/listall", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "查询预付款充值信息", level = LogLevelEnum.LEVEL_1)
@@ -47,7 +50,7 @@ public class APIAdvancePayController extends BaseController{
         return ResponseFactory.buildResponse(advancePayRespList);
     }
 
-
+    @RequiresPermissions(PermissionConstant.ADVANCE_PAY_ADD)
     @ApiOperation(value = "【后台】保存预支信息", httpMethod = "POST", notes = "保存预支信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER,operate = "保存预支信息",level = LogLevelEnum.LEVEL_1)

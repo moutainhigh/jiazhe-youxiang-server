@@ -1,11 +1,16 @@
 package com.jiazhe.youxiang.base.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 public class PropertyUtils {
+
+    private static final Logger logger = LoggerFactory.getLogger(PropertyUtils.class);
 
     private static Properties props;
     static{
@@ -19,20 +24,19 @@ public class PropertyUtils {
             in = PropertyUtils.class.getClassLoader().getResourceAsStream("ali.properties");
             props.load(in);
         } catch (FileNotFoundException e) {
-            System.out.println("ali.properties文件未找到");
+            logger.error("ali.properties文件未找到");
         } catch (IOException e) {
-        	System.out.println("出现IOException");
+            logger.error("出现IOException");
         } finally {
             try {
                 if(null != in) {
                     in.close();
                 }
             } catch (IOException e) {
-            	System.out.println("ali.properties文件流关闭出现异常");
+                logger.error("ali.properties文件流关闭出现异常");
             }
         }
-        System.out.println("加载properties文件内容完成...........");
-        System.out.println("properties文件内容：" + props);
+        logger.info("加载完成，properties文件内容：" + props);
     }
 
     public static String getProperty(String key){

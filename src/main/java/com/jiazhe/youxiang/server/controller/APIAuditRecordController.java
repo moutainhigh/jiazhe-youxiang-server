@@ -7,6 +7,7 @@ import com.jiazhe.youxiang.server.adapter.AuditRecordAdapter;
 import com.jiazhe.youxiang.server.biz.AuditRecordBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.AuditRecordCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
@@ -24,6 +25,7 @@ import com.jiazhe.youxiang.server.vo.resp.auditrecord.AuditRecordResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.WaitingDealCountResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,11 +50,11 @@ public class APIAuditRecordController extends BaseController{
     @Autowired
     private AuditRecordBiz auditRecordBiz;
 
+    @RequiresPermissions(PermissionConstant.AUDIT_RECORD_CHECK)
     @ApiOperation(value = "【后台】审核", httpMethod = "POST",notes = "审核")
     @RequestMapping(value = "/auditrecordcheck", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "审核", level = LogLevelEnum.LEVEL_2)
     public Object auditRecordPass(@ModelAttribute AuditRecordCheckReq req) {
-        //参数检查
         if(req.getStatus().equals(Byte.valueOf("1"))){
             CommonValidator.validateNull(req.getRemark(),new AuditRecordException(AuditRecordCodeEnum.AUDIT_REASON_IS_NULL));
             auditRecordBiz.auditRecordUnpass(req.getId(),req.getVersion(),req.getRemark());
@@ -64,6 +66,7 @@ public class APIAuditRecordController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.AUDIT_RECORD_CHECK)
     @ApiOperation(value = "【后台】待审核消费记录条数", httpMethod = "GET",response = WaitingDealCountResp.class ,notes = "待审核消费记录条数")
     @RequestMapping(value = "/getwaitcheckcount", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "待审核消费记录条数", level = LogLevelEnum.LEVEL_1)
@@ -84,6 +87,7 @@ public class APIAuditRecordController extends BaseController{
         return ResponseFactory.buildResponse(auditRecordResp);
     }
 
+    @RequiresPermissions(PermissionConstant.AUDIT_RECORD_MANAGEMENT)
     @ApiOperation(value = "【后台】消费记录列表", httpMethod = "GET",response = AuditRecordResp.class,responseContainer = "List" ,notes = "【后台】消费记录列表")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "消费记录列表", level = LogLevelEnum.LEVEL_1)
@@ -112,7 +116,6 @@ public class APIAuditRecordController extends BaseController{
     @RequestMapping(value = "/addsave", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "提交消费记录信息", level = LogLevelEnum.LEVEL_1)
     public Object addSave(@ModelAttribute AuditRecordAddReq req) {
-        //参数检查
         CommonValidator.validateNull(req.getCustomerName(),new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_NAME_IS_NULL));
         CommonValidator.validateNull(req.getCustomerMobile(),new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_MOBILE_IS_NULL));
         CommonValidator.validateNull(req.getExchangeMoney(),new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_MONEY_IS_NULL));
@@ -125,7 +128,6 @@ public class APIAuditRecordController extends BaseController{
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "修改消费记录信息", level = LogLevelEnum.LEVEL_2)
     public Object editSave(@ModelAttribute AuditRecordEditReq req) {
-        //参数检查
         CommonValidator.validateNull(req.getCustomerName(),new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_NAME_IS_NULL));
         CommonValidator.validateNull(req.getCustomerMobile(),new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_MOBILE_IS_NULL));
         CommonValidator.validateNull(req.getExchangeMoney(),new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_MONEY_IS_NULL));

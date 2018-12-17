@@ -35,10 +35,7 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <!-- PAGE CONTENT BEGINS -->
-                        <button class="btn btn-white btn-default btn-round btn-sm" onclick="ajaxTest()">
-                            <i class="ace-icon fa fa-search red2"></i>
-                            ajax权限测试
-                        </button>
+
                         <!-- PAGE CONTENT ENDS -->
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -60,21 +57,7 @@
 </div><!-- /.main-container -->
 </body>
 <script>
-    function ajaxTest() {
-        $.ajax({
-            url: "/api/signin/ajaxtest",
-            dataType: "json",
-            async: false,
-            data: {},
-            type: "GET",
-            success: function (result) {
 
-            },
-            error: function () {
-                bootboxalert("服务器异常，请联系管理员");
-            }
-        });
-    }
 </script>
 </html>
 

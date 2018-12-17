@@ -237,7 +237,6 @@
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
-    var permission = getCookie("permission");
 
     $(function () {
         //重新修改表格宽度
@@ -319,11 +318,15 @@
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
         if (rowObject.used == 0) {
-            str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
-            if (rowObject.status == 0) {
-                str += getFunctionButton("btn-success", "startUsing(" + rowObject.id + ")", "启用");
-            } else {
-                str += getFunctionButton("btn-danger", "stopUsing(" + rowObject.id + ")", "停用");
+            if(permission.indexOf("voucherCodeEdit")!= -1){
+                str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
+            }
+            if(permission.indexOf("voucherCodeStatusChange")!= -1) {
+                if (rowObject.status == 0) {
+                    str += getFunctionButton("btn-success", "startUsing(" + rowObject.id + ")", "启用");
+                } else {
+                    str += getFunctionButton("btn-danger", "stopUsing(" + rowObject.id + ")", "停用");
+                }
             }
         }
         return str;

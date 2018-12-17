@@ -6,7 +6,7 @@ import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 
 /**
  * @author TU
- * @description
+ * @description  将传过来的分页参数转为Paging
  * @date 2018/11/1.
  */
 public class PagingParamUtil {

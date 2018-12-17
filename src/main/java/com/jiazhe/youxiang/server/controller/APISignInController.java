@@ -128,7 +128,7 @@ public class APISignInController extends BaseController {
         subject.getSession().setTimeout(ConstantFetchUtil.hour_8);
         sessionResp.setSessionId(subject.getSession().getId().toString());
         AuthorizationInfo info = userRealm.doGetAuthorizationInfo(subject.getPrincipals());
-        String permission = StringUtils.join(info.getStringPermissions(), ",");
+        String permission = StringUtils.join(info.getStringPermissions(), "#");
         CookieUtil.addCookie(response, "permission", permission);
         CookieUtil.addCookie(response, "displayName", URLEncoder.encode(sysUserDTO.getDisplayName(), "UTF-8"));
         logger.info("登陆ip为：" + IpAdrressUtil.getIpAdrress(request));
@@ -222,17 +222,5 @@ public class APISignInController extends BaseController {
         SendMsgResp sendMsgResp = new SendMsgResp();
         sendMsgResp.setBizId(res.getBizId());
         return ResponseFactory.buildResponse(sendMsgResp);
-    }
-
-    @RequiresPermissions("test:pagetest")
-    @RequestMapping(value = "/pagetest")
-    public String pageTest(HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
-        return null;
-    }
-
-    @RequiresPermissions("test:ajaxtest")
-    @RequestMapping(value = "/ajaxtest")
-    public void ajaxTest(HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
-        ResponseUtil.responseUtils(response, ResultPackage.resultPackage("000000", new JSONObject(), "ajax有权限访问，测试成功"));
     }
 }

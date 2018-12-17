@@ -7,6 +7,7 @@ import com.jiazhe.youxiang.server.adapter.point.PointAdapter;
 import com.jiazhe.youxiang.server.biz.point.PointBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.PointCodeEnum;
@@ -21,6 +22,8 @@ import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.point.point.*;
 import com.jiazhe.youxiang.server.vo.resp.point.point.PointResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +45,7 @@ public class APIPointController extends BaseController{
     @Autowired
     private PointBiz pointBiz;
 
+    @RequiresPermissions(value = {PermissionConstant.CUSTOMER_POINT_DETAIL,PermissionConstant.POINT_SEARCH},logical = Logical.OR)
     @ApiOperation(value = "【后台】积分卡列表（用于信息查询页面）", httpMethod = "GET", response = PointResp.class, responseContainer = "List",notes = "信息查询页查询积分卡")
     @RequestMapping(value = "/searchlistpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "积分卡列表", level = LogLevelEnum.LEVEL_1)
@@ -53,6 +57,7 @@ public class APIPointController extends BaseController{
         return ResponseFactory.buildPaginationResponse(pointRespList, paging);
     }
 
+    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
     @ApiOperation(value = "【APP端】客户查询所有积分卡（分页）", httpMethod = "GET", response = PointResp.class, responseContainer = "List",notes = "客户查询所有积分卡，分页")
     @RequestMapping(value = "/findbycustomeridpage", method = RequestMethod.GET)
@@ -77,31 +82,31 @@ public class APIPointController extends BaseController{
         return ResponseFactory.buildPaginationResponse(pointRespList, paging);
     }
 
+    @RequiresPermissions(PermissionConstant.POINT_SEARCH_STATUS_CHANGE)
     @ApiOperation(value = "【后台】启用积分卡", httpMethod = "POST",notes = "启用积分卡")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "启用积分卡", level = LogLevelEnum.LEVEL_2)
     public Object startUsing(@ModelAttribute IdReq req) {
-        //参数检查
         CommonValidator.validateId(req);
         pointBiz.startUsing(req.getId());
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.POINT_SEARCH_STATUS_CHANGE)
     @ApiOperation(value = "【后台】停用积分卡", httpMethod = "POST",notes = "停用积分卡")
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "停用积分卡", level = LogLevelEnum.LEVEL_2)
     public Object stopUsing(@ModelAttribute IdReq req) {
-        //参数检查
         CommonValidator.validateId(req);
         pointBiz.stopUsing(req.getId());
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.CUSTOMER_POINT_RECHARGE)
     @ApiOperation(value = "【后台】直接给客户充值任意分数", httpMethod = "POST",notes = "直接给客户充值任意分数")
     @RequestMapping(value = "/directcharge", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "直接给客户充值任意分数", level = LogLevelEnum.LEVEL_3)
     public Object directCharge(@ModelAttribute DirectChargeReq req) {
-        //参数检查
         CommonValidator.validateId(req.getId());
         CommonValidator.validateId(req.getBatchId());
         CommonValidator.validateNull(req.getFaceValue());
@@ -113,18 +118,17 @@ public class APIPointController extends BaseController{
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "回显积分卡信息", level = LogLevelEnum.LEVEL_1)
     public Object getById(@ModelAttribute IdReq req) {
-        //参数检查
         CommonValidator.validateId(req);
         PointDTO pointDTO = pointBiz.getById(req.getId());
         PointResp pointResp = PointAdapter.Dto2Resp(pointDTO);
         return ResponseFactory.buildResponse(pointResp);
     }
 
+    @RequiresPermissions(PermissionConstant.POINT_SEARCH_EDIT)
     @ApiOperation(value = "【后台】修改积分卡信息", httpMethod = "POST",notes = "修改积分卡信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "修改积分卡信息", level = LogLevelEnum.LEVEL_2)
     public Object editSave(@ModelAttribute PointEditReq req) {
-        //参数检查
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));

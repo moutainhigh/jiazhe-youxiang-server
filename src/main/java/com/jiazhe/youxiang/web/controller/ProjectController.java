@@ -1,6 +1,8 @@
 package com.jiazhe.youxiang.web.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,12 @@ public class ProjectController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProjectController.class);
 
+    /**
+     * 项目管理页面跳转
+     *
+     * @return
+     */
+    @RequiresPermissions(PermissionConstant.PROJECT_MANAGEMENT)
     @RequestMapping(value = "/index")
     public String index() {
         return "project/index";

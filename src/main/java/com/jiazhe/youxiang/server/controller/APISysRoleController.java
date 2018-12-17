@@ -1,6 +1,5 @@
 package com.jiazhe.youxiang.server.controller;
 
-import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
@@ -8,9 +7,9 @@ import com.jiazhe.youxiang.server.adapter.SysRoleAdapter;
 import com.jiazhe.youxiang.server.biz.SysRoleBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
+import com.jiazhe.youxiang.server.common.constant.PermissionInit;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
-import com.jiazhe.youxiang.server.common.enums.PermissionTreeEnum;
 import com.jiazhe.youxiang.server.common.enums.RoleCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.RoleException;
 import com.jiazhe.youxiang.server.dto.sysrole.RoleWithPermDTO;
@@ -25,6 +24,8 @@ import com.jiazhe.youxiang.server.vo.resp.sysrole.RoleWithPermResp;
 import com.jiazhe.youxiang.server.vo.resp.sysrole.SysRoleResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.util.Strings;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,7 @@ public class APISysRoleController extends BaseController {
         return ResponseFactory.buildResponse(sysRoleRespList);
     }
 
+    @RequiresPermissions(value = {PermissionConstant.ROLE_MANAGEMENT, PermissionConstant.ROLE_SEARCH}, logical = Logical.OR)
     @ApiOperation(value = "【后台】角色列表（分页）", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List", notes = "分页查询角色信息，有条件查询")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ROLE, operate = "查看角色列表", level = LogLevelEnum.LEVEL_1)
@@ -71,6 +73,7 @@ public class APISysRoleController extends BaseController {
         return ResponseFactory.buildPaginationResponse(sysRoleRespList, paging);
     }
 
+    @RequiresPermissions(PermissionConstant.ROLE_DELETE)
     @ApiOperation(value = "【后台】删除角色", httpMethod = "POST", notes = "根据id删除角色信息和角色对应的权限信息，此处未删除员工和角色的绑定关系")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ROLE, operate = "删除角色", level = LogLevelEnum.LEVEL_3)
@@ -92,11 +95,11 @@ public class APISysRoleController extends BaseController {
         return ResponseFactory.buildResponse(result);
     }
 
+    @RequiresPermissions(value = {PermissionConstant.ROLE_ADD, PermissionConstant.ROLE_EDIT}, logical = Logical.OR)
     @ApiOperation(value = "【后台】保存角色信息", httpMethod = "POST", notes = "新建、修改保存角色信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ROLE, operate = "保存角色信息", level = LogLevelEnum.LEVEL_2)
     public Object save(@ModelAttribute RoleSaveReq req) {
-        /*参数检查*/
         CommonValidator.validateNull(req);
         CommonValidator.validateId(req.getId());
         CommonValidator.validateNull(req.getName(), new RoleException(RoleCodeEnum.ROLE_NAME_IS_NULL));
@@ -118,6 +121,6 @@ public class APISysRoleController extends BaseController {
     @RequestMapping(value = "/getpermissiontree", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ROLE, operate = "获取权限树", level = LogLevelEnum.LEVEL_1)
     public Object getPermissionTree() {
-        return ResponseFactory.buildResponse(PermissionConstant.treeRespList);
+        return ResponseFactory.buildResponse(PermissionInit.treeRespList);
     }
 }

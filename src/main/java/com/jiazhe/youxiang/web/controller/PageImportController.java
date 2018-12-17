@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/pageimport")
-public class PageImportController extends BaseController{
+public class PageImportController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PageImportController.class);
+
     /**
-     *选择城市和商品页面
+     * 选择城市和商品页面
      */
     @RequestMapping(value = "/selectcityandproduct")
     public String selectCitys() {

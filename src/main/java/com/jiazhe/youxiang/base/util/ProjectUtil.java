@@ -13,7 +13,6 @@ public class ProjectUtil {
      */
     public static boolean isAjax(ServletRequest request){
         String accept = ((HttpServletRequest) request).getHeader("Accept");
-        System.out.println(accept);
         if(accept.contains("text/html")){
             return Boolean.FALSE;
         }

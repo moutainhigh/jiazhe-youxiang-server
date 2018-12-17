@@ -24,208 +24,246 @@
 
         <div class="sidebar-shortcuts" id="sidebar-shortcuts">
             <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-                <a th:title="待预约订单" class="btn btn-success" th:href="@{/order/orderindex(status=2)}" target="iframeCenter">
-                    <i class="ace-icon fa fa-truck" id="waitingSendOrderCount">
+                <shiro:hasPermission name="orderReservation">
+                    <a th:title="待预约订单" class="btn btn-success" th:href="@{/order/orderindex(status=2)}" target="iframeCenter">
+                        <i class="ace-icon fa fa-truck" id="waitingSendOrderCount">
 
-                    </i>
-                </a>
+                        </i>
+                    </a>
+                </shiro:hasPermission>
 
-                <a th:title="待审核订单" class="btn btn-info" th:href="@{/order/orderindex(status=5)}" target="iframeCenter">
-                    <i class="ace-icon fa fa-trash" id="waitingCheckOrderCount">
+                <shiro:hasPermission name="orderCheck">
+                    <a th:title="待审核订单" class="btn btn-info" th:href="@{/order/orderindex(status=5)}" target="iframeCenter">
+                        <i class="ace-icon fa fa-trash" id="waitingCheckOrderCount">
 
-                    </i>
-                </a>
+                        </i>
+                    </a>
+                </shiro:hasPermission>
 
-                <a th:title="待审核消费" class="btn btn-warning" th:href="@{/auditrecord/index(status=0)}" target="iframeCenter">
-                    <i class="ace-icon fa fa-check" id="waitingCheckRecordCount">
+                <shiro:hasPermission name="auditRecordManagement">
+                    <a th:title="待审核消费" class="btn btn-warning" th:href="@{/auditrecord/index(status=0)}" target="iframeCenter">
+                        <i class="ace-icon fa fa-check" id="waitingCheckRecordCount">
 
-                    </i>
-                </a>
+                        </i>
+                    </a>
+                </shiro:hasPermission>
             </div>
         </div><!-- /.sidebar-shortcuts -->
 
         <ul class="nav nav-list">
+            <shiro:hasPermission name="customerManagement">
+                <li class="">
+                    <a th:href="@{/customer/index}" target="iframeCenter">
+                        <i class="menu-icon fa fa-user"></i>
+                        <span class="menu-text"> 客户管理 </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </shiro:hasPermission>
 
-            <li class="">
-                <a th:href="@{/api/signin/pagetest}" target="iframeCenter">
-                    <i class="menu-icon fa fa-desktop"></i>
-                    <span class="menu-text"> 权限测试页面 </span>
-                </a>
+            <shiro:hasPermission name="productCategoryManagement">
+                <li class="">
+                    <a th:href="@{/product/productcategory/index}" target="iframeCenter">
+                        <i class="menu-icon fa fa-product-hunt"></i>
+                        <span class="menu-text"> 商品管理 </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </shiro:hasPermission>
 
-                <b class="arrow"></b>
-            </li>
+            <shiro:hasPermission name="orderManagement">
+                <li class="">
+                    <a th:href="@{/order/orderindex}" target="iframeCenter">
+                        <i class="menu-icon fa fa-list-ul"></i>
+                        <span class="menu-text"> 订单管理 </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </shiro:hasPermission>
 
-            <li class="">
-                <a th:href="@{/customer/index}" target="iframeCenter">
-                    <i class="menu-icon fa fa-user"></i>
-                    <span class="menu-text"> 客户管理 </span>
-                </a>
-                <b class="arrow"></b>
-            </li>
+            <shiro:hasPermission name="partnerOrderManagement">
+                <li class="">
+                    <a th:href="@{/partnerorder/index}" target="iframeCenter">
+                        <i class="menu-icon fa fa-money"></i>
+                        <span class="menu-text"> 商家订单 </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </shiro:hasPermission>
 
-            <li class="">
-                <a th:href="@{/product/productcategory/index}" target="iframeCenter">
-                    <i class="menu-icon fa fa-product-hunt"></i>
-                    <span class="menu-text"> 商品管理 </span>
-                </a>
-                <b class="arrow"></b>
-            </li>
+            <shiro:hasPermission name="projectManagement">
+                <li class="">
+                    <a th:href="@{/project/index}" target="iframeCenter">
+                        <i class="menu-icon fa fa-book"></i>
+                        <span class="menu-text"> 项目管理 </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </shiro:hasPermission>
 
-            <li class="">
-                <a th:href="@{/order/orderindex}" target="iframeCenter">
-                    <i class="menu-icon fa fa-list-ul"></i>
-                    <span class="menu-text"> 订单管理 </span>
-                </a>
-                <b class="arrow"></b>
-            </li>
+            <shiro:hasPermission name="auditRecordManagement">
+                <li class="">
+                    <a th:href="@{/auditrecord/index}" target="iframeCenter">
+                        <i class="menu-icon fa fa-check"></i>
+                        <span class="menu-text"> 消费审核 </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </shiro:hasPermission>
 
-            <li class="">
-                <a th:href="@{/partnerorder/index}" target="iframeCenter">
-                    <i class="menu-icon fa fa-money"></i>
-                    <span class="menu-text"> 商家订单 </span>
-                </a>
-                <b class="arrow"></b>
-            </li>
+            <shiro:hasPermission name="infoSearch">
+                <li class="">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-info-circle"></i>
+                        <span class="menu-text">信息查询</span>
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
 
-            <li class="">
-                <a th:href="@{/project/index}" target="iframeCenter">
-                    <i class="menu-icon fa fa-book"></i>
-                    <span class="menu-text"> 项目管理 </span>
-                </a>
-                <b class="arrow"></b>
-            </li>
+                    <b class="arrow"></b>
 
-            <li class="">
-                <a th:href="@{/auditrecord/index}" target="iframeCenter">
-                    <i class="menu-icon fa fa-check"></i>
-                    <span class="menu-text"> 消费审核 </span>
-                </a>
-                <b class="arrow"></b>
-            </li>
+                    <ul class="submenu">
+                        <shiro:hasPermission name="pointCodeSearch">
+                            <li class="">
+                                <a th:href="@{/infosearch/pointcodeindex}" target="iframeCenter">
+                                    积分卡兑换码查询
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
 
-            <li class="">
-                <a href="#" class="dropdown-toggle">
-                    <i class="menu-icon fa fa-info-circle"></i>
-                    <span class="menu-text">信息查询</span>
-                    <b class="arrow fa fa-angle-down"></b>
-                </a>
+                        <shiro:hasPermission name="pointSearch">
+                            <li class="">
+                                <a th:href="@{/infosearch/pointindex}" target="iframeCenter">
+                                    积分卡查询
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
 
-                <b class="arrow"></b>
+                        <shiro:hasPermission name="rechargeCardCodeSearch">
+                            <li class="">
+                                <a th:href="@{/infosearch/rechargecardcodeindex}" target="iframeCenter">
+                                    充值卡兑换码查询
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
 
-                <ul class="submenu">
+                        <shiro:hasPermission name="rechargeCardSearch">
+                            <li class="">
+                                <a th:href="@{/infosearch/rechargecardindex}" target="iframeCenter">
+                                    充值卡查询
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
 
-                    <li class="">
-                        <a th:href="@{/infosearch/pointcodeindex}" target="iframeCenter">
-                            积分卡兑换码查询
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
+                        <shiro:hasPermission name="voucherCodeSearch">
+                            <li class="">
+                                <a th:href="@{/infosearch/vouchercodeindex}" target="iframeCenter">
+                                    代金券兑换码查询
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
 
-                    <li class="">
-                        <a th:href="@{/infosearch/pointindex}" target="iframeCenter">
-                            积分卡查询
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
+                        <shiro:hasPermission name="voucherSearch">
+                            <li class="">
+                                <a th:href="@{/infosearch/voucherindex}" target="iframeCenter">
+                                    代金券查询
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
+                    </ul>
+                </li>
+            </shiro:hasPermission>
 
-                    <li class="">
-                        <a th:href="@{/infosearch/rechargecardcodeindex}" target="iframeCenter">
-                            充值卡兑换码查询
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
+            <shiro:hasPermission name="systemManagement">
+                <li class="">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-cog"></i>
+                        <span class="menu-text">系统管理</span>
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
 
-                    <li class="">
-                        <a th:href="@{/infosearch/rechargecardindex}" target="iframeCenter">
-                            充值卡查询
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
+                    <b class="arrow"></b>
 
-                    <li class="">
-                        <a th:href="@{/infosearch/vouchercodeindex}" target="iframeCenter">
-                            代金券兑换码查询
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
+                    <ul class="submenu">
+                        <shiro:hasPermission name="pointBatchManagement">
+                            <li class="">
+                                <a th:href="@{/point/exchangecodebatchindex}" target="iframeCenter">
+                                    积分卡兑换码管理
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
 
-                    <li class="">
-                        <a th:href="@{/infosearch/voucherindex}" target="iframeCenter">
-                            代金券查询
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-                </ul>
-            </li>
+                        <shiro:hasPermission name="rcBatchManagement">
+                            <li class="">
+                                <a th:href="@{/rechargecard/exchangecodebatchindex}" target="iframeCenter">
+                                    充值卡兑换码管理
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
 
-            <li class="">
-                <a href="#" class="dropdown-toggle">
-                    <i class="menu-icon fa fa-cog"></i>
-                    <span class="menu-text">系统管理</span>
-                    <b class="arrow fa fa-angle-down"></b>
-                </a>
+                        <shiro:hasPermission name="voucherBatchManagement">
+                            <li class="">
+                                <a th:href="@{/voucher/exchangecodebatchindex}" target="iframeCenter">
+                                    代金券兑换码管理
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
 
-                <b class="arrow"></b>
+                        <shiro:hasPermission name="eleCodeManagement">
+                            <li class="">
+                                <a th:href="@{/eleproductcode/index}" target="iframeCenter">
+                                    商品兑换码管理
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
 
-                <ul class="submenu">
+                        <shiro:hasPermission name="cityManagement">
+                            <li class="">
+                                <a th:href="@{/syscity/index}" target="iframeCenter">
+                                    城市管理
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
 
-                    <li class="">
-                        <a th:href="@{/point/exchangecodebatchindex}" target="iframeCenter">
-                            积分卡兑换码管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
+                        <shiro:hasPermission name="userManagement">
+                            <li class="">
+                                <a th:href="@{/sysuser/index}" target="iframeCenter">
+                                    员工管理
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
 
-                    <li class="">
-                        <a th:href="@{/rechargecard/exchangecodebatchindex}" target="iframeCenter">
-                            充值卡兑换码管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
+                        <shiro:hasPermission name="roleManagement">
+                            <li class="">
+                                <a th:href="@{/sysrole/index}" target="iframeCenter">
+                                    角色管理
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
 
-                    <li class="">
-                        <a th:href="@{/voucher/exchangecodebatchindex}" target="iframeCenter">
-                            代金券兑换码管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a th:href="@{/eleproductcode/index}" target="iframeCenter">
-                            商品兑换码管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a th:href="@{/syscity/index}" target="iframeCenter">
-                            城市管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a th:href="@{/sysuser/index}" target="iframeCenter">
-                            员工管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a th:href="@{/sysrole/index}" target="iframeCenter">
-                            角色管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a th:href="@{/syslog/index}" target="iframeCenter">
-                            日志管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-                </ul>
-            </li>
+                        <shiro:hasPermission name="logManagement">
+                            <li class="">
+                                <a th:href="@{/syslog/index}" target="iframeCenter">
+                                    日志管理
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
+                    </ul>
+                </li>
+            </shiro:hasPermission>
         </ul><!-- /.nav-list -->
     </div>
 </div><!-- /.main-container -->

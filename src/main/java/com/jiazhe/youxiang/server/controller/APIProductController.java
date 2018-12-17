@@ -11,6 +11,7 @@ import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.biz.ProductBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.ProductCodeEnum;
@@ -41,6 +42,7 @@ import com.jiazhe.youxiang.server.vo.resp.product.ProductPriceResp;
 import com.jiazhe.youxiang.server.vo.resp.product.ProductResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +76,7 @@ public class APIProductController {
      *
      * @return
      */
+    @RequiresPermissions(PermissionConstant.PRODUCT_CATEGORY_ADD)
     @ApiOperation(value = "【后台】添加商品分类", httpMethod = "POST", notes = "【后台】添加商品分类")
     @RequestMapping(value = "addcategory", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "添加商品分类", level = LogLevelEnum.LEVEL_2)
@@ -129,6 +132,7 @@ public class APIProductController {
      *
      * @return
      */
+    @RequiresPermissions(PermissionConstant.PRODUCT_CATEGORY_ADD)
     @ApiOperation(value = "编辑商品分类", httpMethod = "POST", notes = "编辑商品分类")
     @RequestMapping(value = "updatecategory", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "编辑商品分类", level = LogLevelEnum.LEVEL_2)
@@ -147,6 +151,7 @@ public class APIProductController {
      *
      * @return
      */
+    @RequiresPermissions(PermissionConstant.PRODUCT_CATEGORY_ONOFFLINE)
     @ApiOperation(value = "编辑商品分类状态", httpMethod = "POST", notes = "编辑商品分类状态")
     @RequestMapping(value = "updatecategorystatus", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "编辑商品分类状态", level = LogLevelEnum.LEVEL_2)
@@ -163,6 +168,7 @@ public class APIProductController {
      *
      * @return
      */
+    @RequiresPermissions(PermissionConstant.PRODUCT_CATEGORY_DELETE)
     @ApiOperation(value = "删除商品分类", httpMethod = "POST", notes = "删除商品分类")
     @RequestMapping(value = "deletecategory", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "删除商品分类", level = LogLevelEnum.LEVEL_3)
@@ -180,6 +186,7 @@ public class APIProductController {
      *
      * @return
      */
+    @RequiresPermissions(PermissionConstant.PRODUCT_ADD)
     @ApiOperation(value = "添加商品", httpMethod = "POST", notes = "添加商品")
     @RequestMapping(value = "add", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "添加商品", level = LogLevelEnum.LEVEL_2)
@@ -258,6 +265,7 @@ public class APIProductController {
      *
      * @return
      */
+    @RequiresPermissions(PermissionConstant.PRODUCT_EDIT)
     @ApiOperation(value = "编辑商品", httpMethod = "POST", notes = "编辑商品")
     @RequestMapping(value = "update", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "编辑商品", level = LogLevelEnum.LEVEL_2)
@@ -276,6 +284,7 @@ public class APIProductController {
      *
      * @return
      */
+    @RequiresPermissions(PermissionConstant.PRODUCT_ONOFFLINE)
     @ApiOperation(value = "编辑商品状态", httpMethod = "POST", notes = "编辑商品状态")
     @RequestMapping(value = "updatestatus", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "编辑商品状态", level = LogLevelEnum.LEVEL_2)
@@ -292,6 +301,7 @@ public class APIProductController {
      *
      * @return
      */
+    @RequiresPermissions(PermissionConstant.PRODUCT_DELETE)
     @ApiOperation(value = "删除商品", httpMethod = "POST", notes = "删除商品")
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "删除商品", level = LogLevelEnum.LEVEL_3)
@@ -310,6 +320,7 @@ public class APIProductController {
      *
      * @return
      */
+
     @ApiOperation(value = "批量添加或修改商品价格", httpMethod = "POST", notes = "批量添加或修改商品价格")
     @RequestMapping(value = "batchaddorupdateprice", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "批量添加或修改商品价格", level = LogLevelEnum.LEVEL_2)
@@ -400,6 +411,7 @@ public class APIProductController {
      *
      * @return
      */
+    @RequiresPermissions(PermissionConstant.PRODUCT_PRICE_EDIT)
     @ApiOperation(value = "更新价格", httpMethod = "POST", notes = "更新价格")
     @RequestMapping(value = "updateprice", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "更新价格", level = LogLevelEnum.LEVEL_2)
@@ -417,6 +429,7 @@ public class APIProductController {
      *
      * @return
      */
+    @RequiresPermissions(PermissionConstant.PRODUCT_PRICE_EFFECT)
     @ApiOperation(value = "更新价格状态", httpMethod = "POST", notes = "更新价格状态")
     @RequestMapping(value = "updatepricestatus", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "更新价格状态", level = LogLevelEnum.LEVEL_2)

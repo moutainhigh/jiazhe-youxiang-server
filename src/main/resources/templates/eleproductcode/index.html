@@ -13,22 +13,23 @@
 </head>
 
 <body class="no-skin">
-    <div class="main-container ace-save-state" id="main-container">
-        <div class="main-content">
-            <div class="main-content-inner">
-                <div class="breadcrumbs ace-save-state" id="breadcrumbs">
-                    <ul class="breadcrumb">
-                        <li>
-                            <i class="ace-icon fa fa-home home-icon"></i>
-                            <a th:href="@{/main/main_center}">主页</a>
-                        </li>
-                        <li class="active" th:text="商品兑换码管理"></li>
-                    </ul><!-- /.breadcrumb -->
-                </div>
+<div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a th:href="@{/main/main_center}">主页</a>
+                    </li>
+                    <li class="active" th:text="商品兑换码管理"></li>
+                </ul><!-- /.breadcrumb -->
+            </div>
 
-                <div class="page-content">
-                    <div class="row">
-                        <div class="col-xs-12" style="padding-top:40px">
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xs-12" style="padding-top:40px">
+                        <shiro:hasPermission name="eleCodeSearch">
                             <form id="eleProductCodeSearchForm" class="form-horizontal" role="form">
                                 <div class="form-group">
                                     <div class="col-sm-6">
@@ -81,171 +82,174 @@
                                     </div>
                                 </div>
                             </form>
-                        </div><!-- /.col -->
+                        </shiro:hasPermission>
+                    </div><!-- /.col -->
 
-                        <div class="col-xs-12" style="text-align: right" id="buttonDiv">
-                            <p style="margin:1px;height: 31px">
-                                <!--<shiro:hasPermission name="sysrole:add">-->
+                    <div class="col-xs-12" style="text-align: right" id="buttonDiv">
+                        <p style="margin:1px;height: 31px">
+                            <shiro:hasPermission name="eleCodeAdd">
                                 <a class="btn btn-success btn-round btn-sm" role="button" href="#new-modal-form"
                                    data-toggle="modal" onclick="openNew()">
                                     <i class="ace-icon fa fa-plus"></i>新建
                                 </a>&nbsp;&nbsp;
-                                <!--</shiro:hasPermission>-->
+                            </shiro:hasPermission>
+                            <shiro:hasPermission name="eleCodeEdit">
                                 <a class="btn btn-primary btn-round btn-sm" role="button" href="#edit-modal-form"
                                    data-toggle="modal" onclick="openEdit()">
                                     <i class="ace-icon fa fa-edit"></i>修改
                                 </a>
-                            </p>
-                        </div><!-- /.col -->
+                            </shiro:hasPermission>
+                        </p>
+                    </div><!-- /.col -->
 
-                        <div class="col-xs-12">
-                            <table id="grid-table"></table>
+                    <div class="col-xs-12">
+                        <table id="grid-table"></table>
 
-                            <div id="grid-pager"></div>
-                        </div><!-- /.col -->
+                        <div id="grid-pager"></div>
+                    </div><!-- /.col -->
 
-                        <div id="new-modal-form" class="modal fade" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="blue bigger">导入电子商品兑换码</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-xs-12 col-sm-1"></div>
-                                            <div class="col-xs-12 col-sm-9">
-                                                <form id="eleProductCodeSaveForm" class="form-horizontal" role="form">
-                                                    <input type="hidden" name="excelUrl" id="excelUrl">
-                                                    <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right">所属商品：</label>
-                                                        <div class="col-sm-8">
-                                                            <select id="saveProductId" name="productId"
-                                                                    class="selectpicker show-tick form-control">
-                                                                <option value=></option>
-                                                            </select>
+                    <div id="new-modal-form" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger">导入电子商品兑换码</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-1"></div>
+                                        <div class="col-xs-12 col-sm-9">
+                                            <form id="eleProductCodeSaveForm" class="form-horizontal" role="form">
+                                                <input type="hidden" name="excelUrl" id="excelUrl">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">所属商品：</label>
+                                                    <div class="col-sm-8">
+                                                        <select id="saveProductId" name="productId"
+                                                                class="selectpicker show-tick form-control">
+                                                            <option value=></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">批次名称：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="saveBatchName" name="batchName"
+                                                                   class="form-control"
+                                                                   type="text" style="height: 30px;"/>
+
                                                         </div>
                                                     </div>
-                                                    <div class="space-2"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right">批次名称：</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="pos-rel">
-                                                                <input id="saveBatchName" name="batchName"
-                                                                       class="form-control"
-                                                                       type="text" style="height: 30px;"/>
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="space-2"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right"
-                                                               for="saveExpiryTime">过期时间：</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="input-group">
-                                                                <input class="form-control date-picker" id="saveExpiryTime"
-                                                                     type="text" readonly />
-                                                                <span class="input-group-addon">
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveExpiryTime">过期时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker" id="saveExpiryTime"
+                                                                   type="text" readonly/>
+                                                            <span class="input-group-addon">
                                                                             <i class="fa fa-calendar bigger-110"></i>
                                                                         </span>
-                                                                <input type="hidden" value=0 name="expiryTime"/>
-                                                            </div>
+                                                            <input type="hidden" value=0 name="expiryTime"/>
                                                         </div>
                                                     </div>
-                                                    <div class="space-2"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right">电子码excel：</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="widget-main">
-                                                                <div class="form-group">
-                                                                    <div class="col-xs-12">
-                                                                        <input type="file" id="eleProductCodeFile"/>
-                                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">电子码excel：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="widget-main">
+                                                            <div class="form-group">
+                                                                <div class="col-xs-12">
+                                                                    <input type="file" id="eleProductCodeFile"/>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </form>
-                                            </div>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div class="modal-footer">
-                                        <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
-                                            <i class="ace-icon fa fa-times"></i>
-                                            取消
-                                        </button>
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
 
-                                        <button class="btn btn-sm btn-primary modal-footer-btn" onclick="save()">
-                                            <i class="ace-icon fa fa-check"></i>
-                                            保存
-                                        </button>
-                                    </div>
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="save()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        保存
+                                    </button>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div id="edit-modal-form" class="modal fade" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="blue bigger">批量修改</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-xs-12 col-sm-1"></div>
-                                            <div class="col-xs-12 col-sm-9">
-                                                <form id="eleProductCodeEditForm" class="form-horizontal" role="form">
-                                                    <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right">批次名称：</label>
-                                                        <div class="col-sm-8">
-                                                            <select id="editBatchName" name="batchName"
-                                                                    class="selectpicker show-tick form-control">
+                    <div id="edit-modal-form" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger">批量修改</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-1"></div>
+                                        <div class="col-xs-12 col-sm-9">
+                                            <form id="eleProductCodeEditForm" class="form-horizontal" role="form">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">批次名称：</label>
+                                                    <div class="col-sm-8">
+                                                        <select id="editBatchName" name="batchName"
+                                                                class="selectpicker show-tick form-control">
 
-                                                            </select>
-                                                        </div>
+                                                        </select>
                                                     </div>
-                                                    <div class="space-2"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right"
-                                                               for="saveExpiryTime">过期时间：</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="input-group">
-                                                                <input class="form-control date-picker" id="editExpiryTime"
-                                                                       type="text" readonly />
-                                                                <span class="input-group-addon">
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveExpiryTime">过期时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker" id="editExpiryTime"
+                                                                   type="text" readonly/>
+                                                            <span class="input-group-addon">
                                                                             <i class="fa fa-calendar bigger-110"></i>
                                                                         </span>
-                                                                <input type="hidden" value=0 name="expiryTime"/>
-                                                            </div>
+                                                            <input type="hidden" value=0 name="expiryTime"/>
                                                         </div>
                                                     </div>
-                                                </form>
-                                            </div>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div class="modal-footer">
-                                        <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
-                                            <i class="ace-icon fa fa-times"></i>
-                                            取消
-                                        </button>
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
 
-                                        <button class="btn btn-sm btn-primary modal-footer-btn" onclick="edit()">
-                                            <i class="ace-icon fa fa-check"></i>
-                                            修改
-                                        </button>
-                                    </div>
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="edit()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        修改
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                    </div><!-- /.row -->
-                </div><!-- /.page-content -->
-            </div>
-        </div><!-- /.main-content -->
-    </div><!-- /.main-container -->
+                    </div>
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+</div><!-- /.main-container -->
 </body>
 <script type="text/javascript">
     var grid_selector = "#grid-table";
@@ -387,7 +391,7 @@
             async: false,
             data: transformToJson($('#eleProductCodeEditForm').serializeArray()),
             type: "POST",
-            success:function(data) {
+            success: function (data) {
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
@@ -406,7 +410,7 @@
             async: false,
             data: transformToJson($('#eleProductCodeSaveForm').serializeArray()),
             type: "POST",
-            success:function(data) {
+            success: function (data) {
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
@@ -419,31 +423,31 @@
         });
     }
 
-        //填充批次下拉框
-        function refreshBatch(){
-            $("#searchBatchName").empty();
-            $("#editBatchName").empty();
-            $("#searchBatchName").append("<option value=>所有</option>");
-            $.ajax({
-                url: "/api/eleproductcode/getallbatch",
-                dataType: "json",
-                async: false,
-                data: {},
-                type: "GET",
-                success: function (data) {
-                    if ('error' in data) {
-                        bootboxalert(data.error.message);
-                    } else {
-                        var result = data.data;
-                        for (var i = 0; i < result.length; i++) {
-                            $("#searchBatchName").append("<option value=" + result[i].batchName + ">" + result[i].batchName + "</option>");
-                            $("#editBatchName").append("<option value=" + result[i].batchName + ">" + result[i].batchName + "</option>");
-                        }
+    //填充批次下拉框
+    function refreshBatch() {
+        $("#searchBatchName").empty();
+        $("#editBatchName").empty();
+        $("#searchBatchName").append("<option value=>所有</option>");
+        $.ajax({
+            url: "/api/eleproductcode/getallbatch",
+            dataType: "json",
+            async: false,
+            data: {},
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#searchBatchName").append("<option value=" + result[i].batchName + ">" + result[i].batchName + "</option>");
+                        $("#editBatchName").append("<option value=" + result[i].batchName + ">" + result[i].batchName + "</option>");
                     }
-                },
-                error: error
-            });
-        }
+                }
+            },
+            error: error
+        });
+    }
 </script>
 </html>
 

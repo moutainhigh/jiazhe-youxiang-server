@@ -13,28 +13,30 @@
 </head>
 
 <body class="no-skin">
-    <div class="main-container ace-save-state" id="main-container">
-        <div class="main-content">
-            <div class="main-content-inner">
-                <div class="breadcrumbs ace-save-state" id="breadcrumbs">
-                    <ul class="breadcrumb">
-                        <li>
-                            <i class="ace-icon fa fa-home home-icon"></i>
-                            <a th:href="@{/main/main_center}">主页</a>
-                        </li>
-                        <li class="active">充值卡兑换码批次管理</li>
-                    </ul><!-- /.breadcrumb -->
-                </div>
+<div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a th:href="@{/main/main_center}">主页</a>
+                    </li>
+                    <li class="active">充值卡兑换码批次管理</li>
+                </ul><!-- /.breadcrumb -->
+            </div>
 
-                <div class="page-content">
-                    <div class="row">
-                        <div class="col-xs-12" style="padding-top:40px">
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xs-12" style="padding-top:40px">
+                        <shiro:hasPermission name="rcBatchSearch">
                             <form id="batchSearchForm" class="form-horizontal" role="form">
                                 <div class="form-group">
                                     <label class="col-sm-1 control-label no-padding-right">所属项目：</label>
                                     <div class="col-sm-2">
                                         <div class="pos-rel">
-                                            <select id="searchProjectId" name="projectId" class="form-control" type="text"
+                                            <select id="searchProjectId" name="projectId" class="form-control"
+                                                    type="text"
                                                     style="height:30px">
                                             </select>
                                             <!--<select id="searchProjectId" name="projectId" class="select2 tag-input-style"
@@ -58,235 +60,236 @@
                                     </div>
                                 </div>
                             </form>
-                        </div><!-- /.col -->
-                        <div class="col-xs-12" style="text-align: right" id="buttonDiv">
-                            <p style="margin:1px;">
-                                <!--<shiro:hasPermission name="sysrole:add">-->
+                        </shiro:hasPermission>
+                    </div><!-- /.col -->
+                    <div class="col-xs-12" style="text-align: right" id="buttonDiv">
+                        <p style="margin:1px;">
+                            <shiro:hasPermission name="rcBatchAdd">
                                 <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
                                    data-toggle="modal" onclick="openNew()">
                                     <i class="ace-icon fa fa-plus"></i>新建
                                 </a>
-                                <!--</shiro:hasPermission>-->
-                            </p>
-                        </div><!-- /.col -->
-                        <div class="col-xs-12">
-                            <table id="grid-table"></table>
+                            </shiro:hasPermission>
+                        </p>
+                    </div><!-- /.col -->
+                    <div class="col-xs-12">
+                        <table id="grid-table"></table>
 
-                            <div id="grid-pager"></div>
-                        </div><!-- /.col -->
-                        <div id="modal-form" class="modal fade" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="blue bigger" id="modal-title"></h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-xs-12 col-sm-1"></div>
-                                            <div class="col-xs-12 col-sm-9">
-                                                <form id="batchSaveForm" class="form-horizontal" role="form">
-                                                    <input type="hidden" name="id" id="batchId">
-                                                    <input type="hidden" name="productIds" id="saveProductIds">
-                                                    <input type="hidden" name="cityCodes" id="saveCityCodes">
-                                                    <input type="hidden" name="expiryType" id="saveExpiryType" value=0>
-                                                    <input type="hidden" name="isVirtual" id="saveIsVirtual" value=0>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right">批次名称：</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="pos-rel">
-                                                                <input id="saveName" name="name" class="form-control"
-                                                                       type="text" style="height:30px"/>
-                                                            </div>
+                        <div id="grid-pager"></div>
+                    </div><!-- /.col -->
+                    <div id="modal-form" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger" id="modal-title"></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-1"></div>
+                                        <div class="col-xs-12 col-sm-9">
+                                            <form id="batchSaveForm" class="form-horizontal" role="form">
+                                                <input type="hidden" name="id" id="batchId">
+                                                <input type="hidden" name="productIds" id="saveProductIds">
+                                                <input type="hidden" name="cityCodes" id="saveCityCodes">
+                                                <input type="hidden" name="expiryType" id="saveExpiryType" value=0>
+                                                <input type="hidden" name="isVirtual" id="saveIsVirtual" value=0>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">批次名称：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="saveName" name="name" class="form-control"
+                                                                   type="text" style="height:30px"/>
                                                         </div>
                                                     </div>
+                                                </div>
 
-                                                    <div class="space-2"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right">充值卡名称：</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="pos-rel">
-                                                                <input id="saveRechargeCardName" name="rechargeCardName"
-                                                                       class="form-control"
-                                                                       type="text" style="height:30px"/>
-                                                            </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">充值卡名称：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="saveRechargeCardName" name="rechargeCardName"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
                                                         </div>
                                                     </div>
+                                                </div>
 
-                                                    <div class="space-2"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right">所属项目：</label>
-                                                        <div class="col-sm-8">
-                                                            <select id="saveProjectId" name="projectId"
-                                                                    class="selectpicker show-tick form-control">
-                                                            </select>
-                                                            <!--<select id="saveProjectId" name="projectId"
-                                                                    class="select2 tag-input-style" data-placeholder=""
-                                                                    style="height: 30px">
-                                                            </select>-->
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">所属项目：</label>
+                                                    <div class="col-sm-8">
+                                                        <select id="saveProjectId" name="projectId"
+                                                                class="selectpicker show-tick form-control">
+                                                        </select>
+                                                        <!--<select id="saveProjectId" name="projectId"
+                                                                class="select2 tag-input-style" data-placeholder=""
+                                                                style="height: 30px">
+                                                        </select>-->
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">适用范围：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input class="form-control" onclick="showChooseModal();"
+                                                                   type="text" value="点击选择适用范围" style="height:30px"
+                                                                   readonly/>
                                                         </div>
                                                     </div>
+                                                </div>
 
-                                                    <div class="space-2"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right">适用范围：</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="pos-rel">
-                                                                <input class="form-control" onclick="showChooseModal();"
-                                                                       type="text" value="点击选择适用范围" style="height:30px"
-                                                                       readonly/>
-                                                            </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">虚拟批次：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <label class="radio-inline ">
+                                                                <input id="saveNotVirtualRadio" type="radio"
+                                                                       name="isVirtualRadio"
+                                                                       value="0" checked="checked"/>否
+                                                            </label>
+                                                            <label class="radio-inline">
+                                                                <input id="saveIsVirtualRadio" type="radio"
+                                                                       name="isVirtualRadio"
+                                                                       value="1"/>是
+                                                            </label>
                                                         </div>
                                                     </div>
+                                                </div>
 
-                                                    <div class="space-2"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right">虚拟批次：</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="pos-rel">
-                                                                <label class="radio-inline ">
-                                                                    <input id="saveNotVirtualRadio" type="radio"
-                                                                           name="isVirtualRadio"
-                                                                           value="0" checked="checked"/>否
-                                                                </label>
-                                                                <label class="radio-inline">
-                                                                    <input id="saveIsVirtualRadio" type="radio"
-                                                                           name="isVirtualRadio"
-                                                                           value="1"/>是
-                                                                </label>
-                                                            </div>
+                                                <div class="space-2 saveIsVirtual"></div>
+                                                <div class="form-group saveIsVirtual">
+                                                    <label class="col-sm-4 control-label no-padding-right">面额：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="saveFaceValue" name="faceValue"
+                                                                   class="form-control" type="text"
+                                                                   style="height:30px"/>
                                                         </div>
                                                     </div>
+                                                </div>
 
-                                                    <div class="space-2 saveIsVirtual"></div>
-                                                    <div class="form-group saveIsVirtual">
-                                                        <label class="col-sm-4 control-label no-padding-right">面额：</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="pos-rel">
-                                                                <input id="saveFaceValue" name="faceValue"
-                                                                       class="form-control" type="text"
-                                                                       style="height:30px"/>
-                                                            </div>
+                                                <div class="space-2 saveIsVirtual"></div>
+                                                <div class="form-group saveIsVirtual">
+                                                    <label class="col-sm-4 control-label no-padding-right">数量：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="saveAmount" name="amount"
+                                                                   class="form-control" type="text"
+                                                                   style="height:30px"/>
                                                         </div>
                                                     </div>
+                                                </div>
 
-                                                    <div class="space-2 saveIsVirtual"></div>
-                                                    <div class="form-group saveIsVirtual">
-                                                        <label class="col-sm-4 control-label no-padding-right">数量：</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="pos-rel">
-                                                                <input id="saveAmount" name="amount"
-                                                                       class="form-control" type="text"
-                                                                       style="height:30px" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="space-2"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right"
-                                                               for="saveExpiryTime">过期时间：</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="input-group">
-                                                                <input class="form-control date-picker" id="saveExpiryTime"
-                                                                      type="text" readonly />
-                                                                <span class="input-group-addon">
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveExpiryTime">过期时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker" id="saveExpiryTime"
+                                                                   type="text" readonly/>
+                                                            <span class="input-group-addon">
                                                                             <i class="fa fa-calendar bigger-110"></i>
                                                                         </span>
-                                                                <input type="hidden" value=0 name="expiryTime"/>
-                                                            </div>
+                                                            <input type="hidden" value=0 name="expiryTime"/>
                                                         </div>
                                                     </div>
+                                                </div>
 
-                                                    <div class="space-2"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right">充值卡过期类型：</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="pos-rel">
-                                                                <label class="radio-inline ">
-                                                                    <input id="saveDeadLineRadio" type="radio"
-                                                                           name="expiryTypeRadio"
-                                                                           value="0" checked="checked"/>指定截止日期
-                                                                </label>
-                                                                <label class="radio-inline">
-                                                                    <input id="saveValidityPeriodRadio" type="radio"
-                                                                           name="expiryTypeRadio"
-                                                                           value="1"/>兑换之日起算
-                                                                </label>
-                                                            </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">充值卡过期类型：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <label class="radio-inline ">
+                                                                <input id="saveDeadLineRadio" type="radio"
+                                                                       name="expiryTypeRadio"
+                                                                       value="0" checked="checked"/>指定截止日期
+                                                            </label>
+                                                            <label class="radio-inline">
+                                                                <input id="saveValidityPeriodRadio" type="radio"
+                                                                       name="expiryTypeRadio"
+                                                                       value="1"/>兑换之日起算
+                                                            </label>
                                                         </div>
                                                     </div>
+                                                </div>
 
-                                                    <div class="space-2 saveDeadLine"></div>
-                                                    <div class="form-group saveDeadLine">
-                                                        <label class="col-sm-4 control-label no-padding-right"
-                                                               for="saveRechargeCardExpiryTime">充值卡过期时间：</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="input-group">
-                                                                <input class="form-control date-picker"
-                                                                       id="saveRechargeCardExpiryTime" type="text" readonly />
-                                                                <span class="input-group-addon">
+                                                <div class="space-2 saveDeadLine"></div>
+                                                <div class="form-group saveDeadLine">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveRechargeCardExpiryTime">充值卡过期时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker"
+                                                                   id="saveRechargeCardExpiryTime" type="text"
+                                                                   readonly/>
+                                                            <span class="input-group-addon">
                                                                             <i class="fa fa-calendar bigger-110"></i>
                                                                         </span>
-                                                                <input type="hidden" value=0 name="rechargeCardExpiryTime"/>
-                                                            </div>
+                                                            <input type="hidden" value=0 name="rechargeCardExpiryTime"/>
                                                         </div>
                                                     </div>
+                                                </div>
 
-                                                    <div class="space-2 saveValidityPeriod" style="display:none;"></div>
-                                                    <div class="form-group saveValidityPeriod" style="display:none;">
-                                                        <label class="col-sm-4 control-label no-padding-right">兑换之日有效天数：</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="pos-rel">
-                                                                <input id="saveValidityPeriod" name="validityPeriod"
-                                                                       class="form-control"
-                                                                       type="text" style="height:30px"/>
-                                                            </div>
+                                                <div class="space-2 saveValidityPeriod" style="display:none;"></div>
+                                                <div class="form-group saveValidityPeriod" style="display:none;">
+                                                    <label class="col-sm-4 control-label no-padding-right">兑换之日有效天数：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="saveValidityPeriod" name="validityPeriod"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
                                                         </div>
                                                     </div>
+                                                </div>
 
-                                                    <div class="space-2"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-4 control-label no-padding-right"
-                                                               for="saveDescription">描述信息：</label>
-                                                        <div class="col-sm-8">
-                                                            <div class="pos-rel">
-                                                                <input id="saveDescription" name="description"
-                                                                       class="form-control"
-                                                                       type="text" style="height:30px"/>
-                                                            </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveDescription">描述信息：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="saveDescription" name="description"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
                                                         </div>
                                                     </div>
-                                                </form>
-                                            </div>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div class="modal-footer">
-                                        <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
-                                            <i class="ace-icon fa fa-times"></i>
-                                            取消
-                                        </button>
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
 
-                                        <button class="btn btn-sm btn-primary modal-footer-btn" onclick="save()">
-                                            <i class="ace-icon fa fa-check"></i>
-                                            保存
-                                        </button>
-                                    </div>
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="save()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        保存
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                    </div><!-- /.row -->
-                </div><!-- /.page-content -->
-            </div>
-        </div><!-- /.main-content -->
-    </div><!-- /.main-container -->
-    <div id="selectCityAndProduct"></div>
+                    </div>
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+</div><!-- /.main-container -->
+<div id="selectCityAndProduct"></div>
 </body>
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
-    var permission = getCookie("permission");
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -410,18 +413,28 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
-        if (rowObject.status == 0) {
-            str += getFunctionButton("btn-success", "startUsing(" + rowObject.id + ")", "启用");
-        } else {
-            str += getFunctionButton("btn-danger", "stopUsing(" + rowObject.id + ")", "停用");
+        if (permission.indexOf("rcBatchEdit") != -1) {
+            str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
+        }
+        if (permission.indexOf("rcBatchStatusChange") != -1) {
+            if (rowObject.status == 0) {
+                str += getFunctionButton("btn-success", "startUsing(" + rowObject.id + ")", "启用");
+            } else {
+                str += getFunctionButton("btn-danger", "stopUsing(" + rowObject.id + ")", "停用");
+            }
         }
         if (rowObject.isVirtual == 0) {
             if (rowObject.isMade == 1) {
-                str += getRedirectButton("btn-primary", "../rechargecard/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name, "兑换码管理");
-                str += getFunctionButton("btn-yellow", "exportExcel(" + rowObject.id + ")", "导出");
+                if (permission.indexOf("rcCodeManagement") != -1) {
+                    str += getRedirectButton("btn-primary", "../rechargecard/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name, "兑换码管理");
+                }
+                if (permission.indexOf("rcCodeExport") != -1) {
+                    str += getFunctionButton("btn-yellow", "exportExcel(" + rowObject.id + ")", "导出");
+                }
             } else {
-                str += getFunctionButton("btn-danger", "generateCode(" + rowObject.id + ")", "生成兑换码");
+                if (permission.indexOf("rcCodeGenerate") != -1) {
+                    str += getFunctionButton("btn-danger", "generateCode(" + rowObject.id + ")", "生成兑换码");
+                }
             }
         }
         return str;
@@ -458,7 +471,7 @@
 
     function save() {
         if ($("input[name=isVirtualRadio]:checked").val() == 0) {
-            if(!isNumber($("#saveFaceValue").val())){
+            if (!isNumber($("#saveFaceValue").val())) {
                 bootboxalert("面额非法");
                 return false;
             }
@@ -467,8 +480,8 @@
                 return false;
             }
         }
-        if($("input[name=expiryTypeRadio]:checked").val() == 1){
-            if(!isNumber($("#saveValidityPeriod").val())){
+        if ($("input[name=expiryTypeRadio]:checked").val() == 1) {
+            if (!isNumber($("#saveValidityPeriod").val())) {
                 bootboxalert("兑换之日有效天数非法");
                 return false;
             }

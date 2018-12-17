@@ -33,40 +33,42 @@
             <div class="page-content">
                 <div class="row">
                     <div class="col-xs-12" style="padding-top:40px">
-                        <form id="userSearchForm" class="form-horizontal" role="form">
-                            <div class="form-group">
-                                <label class="col-sm-1 control-label no-padding-right">登录名：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <input id="loginName" name="loginName" class="form-control" type="text"
-                                               style="height:30px"/>
+                        <shiro:hasPermission name="userSearch">
+                            <form id="userSearchForm" class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label class="col-sm-1 control-label no-padding-right">登录名：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <input id="loginName" name="loginName" class="form-control" type="text"
+                                                   style="height:30px"/>
+                                        </div>
+                                    </div>
+                                    <label class="col-sm-1 control-label no-padding-right">用户姓名：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <input id="displayName" name="displayName" class="form-control" type="text"
+                                                   style="height:30px"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <button class="btn btn-white btn-default btn-round btn-sm"
+                                                onclick="return search()">
+                                            <i class="ace-icon fa fa-search red2"></i>
+                                            查询
+                                        </button>
                                     </div>
                                 </div>
-                                <label class="col-sm-1 control-label no-padding-right">用户姓名：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <input id="displayName" name="displayName" class="form-control" type="text"
-                                               style="height:30px"/>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <button class="btn btn-white btn-default btn-round btn-sm"
-                                            onclick="return search()">
-                                        <i class="ace-icon fa fa-search red2"></i>
-                                        查询
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        </shiro:hasPermission>
                     </div><!-- /.col -->
                     <div class="col-xs-12" style="text-align: right" id="buttonDiv">
                         <p style="margin:1px;">
-                            <!--<shiro:hasPermission name="sysrole:add">-->
-                            <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
-                               data-toggle="modal" onclick="openNew()">
-                                <i class="ace-icon fa fa-plus"></i>新建
-                            </a>
-                            <!--</shiro:hasPermission>-->
+                            <shiro:hasPermission name="userAdd">
+                                <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
+                                   data-toggle="modal" onclick="openNew()">
+                                    <i class="ace-icon fa fa-plus"></i>新建
+                                </a>
+                            </shiro:hasPermission>
                         </p>
                     </div><!-- /.col -->
                     <div class="col-xs-12">
@@ -222,10 +224,16 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str += getFunctionButton("btn-danger", "deleteOne(" + rowObject.id + ")", "删除");
-        str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
         str += getFunctionButton("btn-success", "openShow(" + rowObject.id + ")", "查看");
-        str += getFunctionButton("btn-danger", "resetPassword(\"" + rowObject.displayName + "\"," + rowObject.id + ")", "重置密码");
+        if (permission.indexOf("userDelete") != -1) {
+            str += getFunctionButton("btn-danger", "deleteOne(" + rowObject.id + ")", "删除");
+        }
+        if (permission.indexOf("userEdit") != -1) {
+            str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
+        }
+        if (permission.indexOf("userPasswordReset") != -1) {
+            str += getFunctionButton("btn-danger", "resetPassword(\"" + rowObject.displayName + "\"," + rowObject.id + ")", "重置密码");
+        }
         return str;
     }
 
