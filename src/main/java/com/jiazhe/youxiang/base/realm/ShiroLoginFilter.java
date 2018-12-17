@@ -43,20 +43,20 @@ public class ShiroLoginFilter extends FormAuthenticationFilter {
             result.put("error", obj);
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
-            response.getWriter().write(result.toString());
-        } else {
-            /**
-             * @Mark 非ajax请求重定向为登录页面
-             * 由于是iframe里的请求，所以需要通过js来跳转到父层页面，用_parent来指定
-             */
-            logger.info("ShiroLoginFilter：页面跳转，未登录");
-            PrintWriter out = response.getWriter();
-            out.println("<html>");
-            out.println("<script>");
-            out.println("window.open('" + "/system/index','_parent')");
-            out.println("</script>");
-            out.println("</html>");
-        }
+            response.getWriter().write(result.toString());}
+//        } else {
+//            /**
+//             * @Mark 非ajax请求重定向为登录页面
+//             * 由于是iframe里的请求，所以需要通过js来跳转到父层页面，用_parent来指定
+//             */
+//            logger.info("ShiroLoginFilter：页面跳转，未登录");
+//            PrintWriter out = response.getWriter();
+//            out.println("<html>");
+//            out.println("<script>");
+//            out.println("window.open('" + "/system/index','_parent')");
+//            out.println("</script>");
+//            out.println("</html>");
+//        }
         return false;
     }
 }

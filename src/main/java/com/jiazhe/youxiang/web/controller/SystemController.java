@@ -10,19 +10,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * 用于系统登录、退出、无权限相关页面转发
+ *
  * @author niexiao
  * @created 2018/9/29
  */
 @Controller
-@RequestMapping("/system")
-public class SystemController extends BaseController{
+public class SystemController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemController.class);
 
     /**
      * 进入登陆页面
      */
-    @RequestMapping(value = "/index")
+    @RequestMapping(value = {"/", "/system/index"})
     public String main() {
         return "login/index";
     }
@@ -30,7 +30,7 @@ public class SystemController extends BaseController{
     /**
      * 系统退出
      */
-    @RequestMapping("/logout")
+    @RequestMapping("/system/logout")
     public String logout() {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
@@ -40,7 +40,7 @@ public class SystemController extends BaseController{
     /**
      * 无权限
      */
-    @RequestMapping("/403")
+    @RequestMapping("/system/403")
     public String noPermission() {
         return "error/403";
     }

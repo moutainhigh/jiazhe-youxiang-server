@@ -25,7 +25,7 @@ public class SysLogController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SysUserController.class);
 
-    @RequiresPermissions(PermissionConstant.CITY_MANAGEMENT)
+    @RequiresPermissions(PermissionConstant.LOG_MANAGEMENT)
     @RequestMapping(value = "/index")
     public String index() {
         return "system/syslog/index";
