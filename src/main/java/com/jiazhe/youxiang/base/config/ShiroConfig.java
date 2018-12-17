@@ -64,6 +64,7 @@ public class ShiroConfig {
 
         filterChainDefinitionMap.put("/**", "authc");//表示所有url必须通过认证才能访问
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+        bean.setUnauthorizedUrl("/system/index");
         return bean;
     }
 

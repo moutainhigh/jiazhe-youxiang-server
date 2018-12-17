@@ -6,12 +6,7 @@ package com.jiazhe.youxiang.base.realm;
  */
 
 import com.jiazhe.youxiang.base.util.ProjectUtil;
-import com.jiazhe.youxiang.base.util.ResponseUtil;
-import com.jiazhe.youxiang.base.util.ResultPackage;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
-import com.jiazhe.youxiang.server.common.exceptions.LoginException;
-import com.jiazhe.youxiang.server.vo.ResponseFactory;
-import com.jiazhe.youxiang.server.vo.ResponseMsg;
 import net.sf.json.JSONObject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.slf4j.Logger;
@@ -19,14 +14,12 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class ShiroLoginFilter extends FormAuthenticationFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(ShiroLoginFilter.class);
+
     /**
      * 在访问controller前判断是否登录，返回json，不进行重定向。
      *
@@ -46,23 +39,24 @@ public class ShiroLoginFilter extends FormAuthenticationFilter {
             obj.put("type", LoginCodeEnum.LOGIN_NOT_SIGNIN_IN.getType());
             obj.put("message", LoginCodeEnum.LOGIN_NOT_SIGNIN_IN.getMessage());
             JSONObject result = new JSONObject();
-            result.put("error",obj);
+            result.put("error", obj);
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             response.getWriter().write(result.toString());
-        } else {
-            /**
-             * @Mark 非ajax请求重定向为登录页面
-             * 由于是iframe里的请求，所以需要通过js来跳转到父层页面，用_parent来指定
-             */
-            logger.info("ShiroLoginFilter：页面跳转，未登录");
-            PrintWriter out = response.getWriter();
-            out.println("<html>");
-            out.println("<script>");
-            out.println("window.open('" + "/system/index','_parent')");
-            out.println("</script>");
-            out.println("</html>");
         }
+//        else {
+//            /**
+//             * @Mark 非ajax请求重定向为登录页面
+//             * 由于是iframe里的请求，所以需要通过js来跳转到父层页面，用_parent来指定
+//             */
+//            logger.info("ShiroLoginFilter：页面跳转，未登录");
+//            PrintWriter out = response.getWriter();
+//            out.println("<html>");
+//            out.println("<script>");
+//            out.println("window.open('" + "/system/index','_parent')");
+//            out.println("</script>");
+//            out.println("</html>");
+//        }
         return false;
     }
 }
