@@ -31,16 +31,6 @@ public class DemoController {
     private static final Logger LOGGER = LoggerFactory.getLogger(DemoController.class);
 
 
-    @Value("${environment}")
-    private String ENVIRONMENT;
-
-
-    @RequestMapping(value = "/environment", method = RequestMethod.GET)
-    public String environment() {
-        LOGGER.info("environment");
-        return null;
-    }
-
     @ApiOperation(value = "demo", httpMethod = "GET", response = DemoResp.class, notes = "接口的描述性文字")
     @RequestMapping(value = "/demo", method = RequestMethod.GET)
     public Object demo(@ModelAttribute DemoReq req) {
