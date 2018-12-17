@@ -21,6 +21,7 @@ import com.jiazhe.youxiang.server.dto.customer.AddressDTO;
 import com.jiazhe.youxiang.server.dto.customer.AddressUpdateDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.customer.CustomerRegisterDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerUpdateDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
@@ -31,10 +32,12 @@ import com.jiazhe.youxiang.server.vo.req.customer.AddressSetDefaultReq;
 import com.jiazhe.youxiang.server.vo.req.customer.AddressUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.customer.CustomerAddReq;
 import com.jiazhe.youxiang.server.vo.req.customer.CustomerListReq;
+import com.jiazhe.youxiang.server.vo.req.customer.CustomerRegisterReq;
 import com.jiazhe.youxiang.server.vo.req.customer.CustomerUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.customer.DefaultAddressReq;
 import com.jiazhe.youxiang.server.vo.resp.customer.AddressResp;
 import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -64,6 +67,27 @@ public class APICustomerController {
     private CustomerBiz customerBiz;
 
     /********************客户相关***********************/
+
+
+    /**
+     * 注册
+     *
+     * @return
+     */
+    @AppApi
+    @ApiOperation(value = "注册用户", httpMethod = "POST", notes = "注册用户")
+    @RequestMapping(value = "register", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.CUSTOMER, operate = "注册用户", level = LogLevelEnum.LEVEL_2)
+    public Object register(@ModelAttribute CustomerRegisterReq req) {
+        CommonValidator.validateNull(req);
+        CommonValidator.validateMobile(req.getMobile(), new CustomerException(CustomerCodeEnum.CUSTOMER_MOBILE_ERROR));
+        CommonValidator.validateNull(req.getName(), new CustomerException(CustomerCodeEnum.CUSTOMER_NAME_IS_NULL));
+        CustomerAddDTO customerRegisterDTO = CustomerAdapter.CustomerRegisterReq2DTO(req);
+        //调用BIZ方法
+        customerBiz.add(customerRegisterDTO);
+        //用ResponseFactory将返回值包装
+        return ResponseFactory.buildSuccess();
+    }
 
     /**
      * 添加用户

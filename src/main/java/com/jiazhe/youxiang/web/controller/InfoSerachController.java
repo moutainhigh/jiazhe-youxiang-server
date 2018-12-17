@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/infosearch")
-public class InfoSerach extends BaseController {
+public class InfoSerachController extends BaseController {
 
     /**
      * 跳转到充值卡兑换码查询页面
