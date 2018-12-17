@@ -135,5 +135,9 @@ public class CustomerBiz {
 
 
     public void register(CustomerRegisterDTO customerRegisterDTO) {
+        customerService.register(customerRegisterDTO);
+    }
+
+    public void add(CustomerRegisterDTO customerRegisterDTO) {
     }
 }

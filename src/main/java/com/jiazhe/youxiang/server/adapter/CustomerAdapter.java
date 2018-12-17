@@ -198,13 +198,13 @@ public class CustomerAdapter {
         return customerAddressPO;
     }
 
-    public static CustomerRegisterDTO CustomerRegisterReq2DTO(CustomerRegisterReq req) {
+    public static CustomerAddDTO CustomerRegisterReq2DTO(CustomerRegisterReq req) {
         if (req == null) {
             return null;
         }
-        CustomerRegisterDTO customerRegisterDTO = new CustomerRegisterDTO();
-        customerRegisterDTO.setMobile(req.getMobile());
-        customerRegisterDTO.setName(req.getName());
-        return customerRegisterDTO;
+        CustomerAddDTO customerAddDTO = new CustomerAddDTO();
+        customerAddDTO.setMobile(req.getMobile());
+        customerAddDTO.setName(req.getName());
+        return customerAddDTO;
     }
 }

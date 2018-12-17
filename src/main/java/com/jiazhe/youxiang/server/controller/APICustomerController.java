@@ -37,6 +37,7 @@ import com.jiazhe.youxiang.server.vo.req.customer.CustomerUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.customer.DefaultAddressReq;
 import com.jiazhe.youxiang.server.vo.resp.customer.AddressResp;
 import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -68,22 +69,22 @@ public class APICustomerController {
     /********************客户相关***********************/
 
 
-
     /**
      * 注册
      *
      * @return
      */
+    @AppApi
     @ApiOperation(value = "注册用户", httpMethod = "POST", notes = "注册用户")
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.CUSTOMER, operate = "添加用户", level = LogLevelEnum.LEVEL_2)
+    @CustomLog(moduleName = ModuleEnum.CUSTOMER, operate = "注册用户", level = LogLevelEnum.LEVEL_2)
     public Object register(@ModelAttribute CustomerRegisterReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateMobile(req.getMobile(), new CustomerException(CustomerCodeEnum.CUSTOMER_MOBILE_ERROR));
         CommonValidator.validateNull(req.getName(), new CustomerException(CustomerCodeEnum.CUSTOMER_NAME_IS_NULL));
-        CustomerRegisterDTO customerRegisterDTO = CustomerAdapter.CustomerRegisterReq2DTO(req);
+        CustomerAddDTO customerRegisterDTO = CustomerAdapter.CustomerRegisterReq2DTO(req);
         //调用BIZ方法
-        customerBiz.register(customerRegisterDTO);
+        customerBiz.add(customerRegisterDTO);
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildSuccess();
     }
