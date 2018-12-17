@@ -413,10 +413,10 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        if (permission.indexOf("pointBatchEdit")) {
+        if (permission.indexOf("pointBatchEdit") != -1) {
             str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
         }
-        if (permission.index("pointBatchStatusChange") != -1) {
+        if (permission.indexOf("pointBatchStatusChange") != -1) {
             if (rowObject.status == 0) {
                 str += getFunctionButton("btn-success", "startUsing(" + rowObject.id + ")", "启用");
             } else {
@@ -425,10 +425,10 @@
         }
         if (rowObject.isVirtual == 0) {
             if (rowObject.isMade == 1) {
-                if (permission.indexOf("pointCodeManagement") != -1){
+                if (permission.indexOf("pointCodeManagement") != -1) {
                     str += getRedirectButton("btn-primary", "../point/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name, "兑换码管理");
                 }
-                if (permission.indexOf("pointCodeExport") != -1){
+                if (permission.indexOf("pointCodeExport") != -1) {
                     str += getFunctionButton("btn-yellow", "exportExcel(" + rowObject.id + ")", "导出");
                 }
             } else {
