@@ -1,6 +1,8 @@
 #!/bin/bash
 
-APP_DIR=/opt/jiazhe/webserver
+ENV=$2
+
+APP_DIR=/opt/jiazhe/webserver/youxiang-server
 APP_NAME=youxiang-server
 JAR_FILE=$APP_NAME.jar
 pid=0
@@ -10,7 +12,7 @@ start(){
   if [ ! -n "$pid" ]; then
     echo "$APP_NAME start..."
     cd $APP_DIR
-    JAVA_CMD="nohup java -jar $APP_DIR/$APP_NAME.jar > /dev/null 2>&1 &"
+    JAVA_CMD="nohup java -jar $APP_DIR/$APP_NAME.jar --spring.profiles.active=$ENV > /dev/null 2>&1 &"
     $JAVA_CMD
     echo Start Success!
   else
