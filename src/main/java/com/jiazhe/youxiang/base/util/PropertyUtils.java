@@ -24,20 +24,19 @@ public class PropertyUtils {
             in = PropertyUtils.class.getClassLoader().getResourceAsStream("ali.properties");
             props.load(in);
         } catch (FileNotFoundException e) {
-            logger.info("ali.properties文件未找到");
+            logger.error("ali.properties文件未找到");
         } catch (IOException e) {
-            logger.info("出现IOException");
+            logger.error("出现IOException");
         } finally {
             try {
                 if(null != in) {
                     in.close();
                 }
             } catch (IOException e) {
-                logger.info("ali.properties文件流关闭出现异常");
+                logger.error("ali.properties文件流关闭出现异常");
             }
         }
-        logger.info("加载properties文件内容完成...........");
-        logger.info("properties文件内容：" + props);
+        logger.info("加载完成，properties文件内容：" + props);
     }
 
     public static String getProperty(String key){
