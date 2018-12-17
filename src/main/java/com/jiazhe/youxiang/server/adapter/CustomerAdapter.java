@@ -12,10 +12,12 @@ import com.jiazhe.youxiang.server.dto.customer.AddressDTO;
 import com.jiazhe.youxiang.server.dto.customer.AddressUpdateDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.customer.CustomerRegisterDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerUpdateDTO;
 import com.jiazhe.youxiang.server.vo.req.customer.AddressAddReq;
 import com.jiazhe.youxiang.server.vo.req.customer.AddressUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.customer.CustomerAddReq;
+import com.jiazhe.youxiang.server.vo.req.customer.CustomerRegisterReq;
 import com.jiazhe.youxiang.server.vo.req.customer.CustomerUpdateReq;
 import com.jiazhe.youxiang.server.vo.resp.customer.AddressResp;
 import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
@@ -194,5 +196,15 @@ public class CustomerAdapter {
         customerAddressPO.setName(addressUpdateDTO.getName());
         customerAddressPO.setRemark(addressUpdateDTO.getRemark());
         return customerAddressPO;
+    }
+
+    public static CustomerRegisterDTO CustomerRegisterReq2DTO(CustomerRegisterReq req) {
+        if (req == null) {
+            return null;
+        }
+        CustomerRegisterDTO customerRegisterDTO = new CustomerRegisterDTO();
+        customerRegisterDTO.setMobile(req.getMobile());
+        customerRegisterDTO.setName(req.getName());
+        return customerRegisterDTO;
     }
 }

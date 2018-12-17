@@ -14,6 +14,7 @@ import com.jiazhe.youxiang.server.dto.customer.AddressDTO;
 import com.jiazhe.youxiang.server.dto.customer.AddressUpdateDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.customer.CustomerRegisterDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerUpdateDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -133,4 +134,6 @@ public class CustomerBiz {
     }
 
 
+    public void register(CustomerRegisterDTO customerRegisterDTO) {
+    }
 }
