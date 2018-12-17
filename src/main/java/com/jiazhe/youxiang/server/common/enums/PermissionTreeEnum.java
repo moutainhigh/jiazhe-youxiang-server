@@ -64,12 +64,16 @@ public enum PermissionTreeEnum {
     PRODUCT_PRICE_MANAGEMENT(210, 2, "商品价格管理", PermissionConstant.PRODUCT_PRICE_MANAGEMENT),
     //商品价格编辑
     PRODUCT_PRICE_EDIT(211, 2, "商品价格编辑", PermissionConstant.PRODUCT_PRICE_EDIT),
+    //商品价格删除
+    PRODUCT_PRICE_DELETE(212, 2, "商品价格删除", PermissionConstant.PRODUCT_PRICE_DELETE),
     //商品价格生效失效
-    PRODUCT_PRICE_EFFECT(212, 2, "商品价格生效失效", PermissionConstant.PRODUCT_PRICE_EFFECT),
+    PRODUCT_PRICE_EFFECT(2132, 2, "商品价格生效失效", PermissionConstant.PRODUCT_PRICE_EFFECT),
 
     /***************************订单相关**************************************/
     //订单管理
     ORDER_MANAGEMENT(3, 0, "订单管理", PermissionConstant.ORDER_MANAGEMENT),
+    //订单查询
+    ORDER_SEARCH(301, 3, "订单查询", PermissionConstant.ORDER_SEARCH),
     //订单预约
     ORDER_RESERVATION(301, 3, "订单预约", PermissionConstant.ORDER_RESERVATION),
     //订单修改
@@ -86,16 +90,16 @@ public enum PermissionTreeEnum {
     /***************************项目相关**************************************/
     //项目管理
     PROJECT_MANAGEMENT(4, 0, "项目管理", PermissionConstant.PROJECT_MANAGEMENT),
+    //项目查询
+    PROJECT_SEARCH(401, 4, "项目查询", PermissionConstant.PROJECT_SEARCH),
     //项目添加
-    PROJECT_ADD(401, 4, "项目添加", PermissionConstant.PROJECT_ADD),
+    PROJECT_ADD(402, 4, "项目添加", PermissionConstant.PROJECT_ADD),
     //项目修改
-    PROJECT_EDIT(402, 4, "项目修改", PermissionConstant.PROJECT_EDIT),
+    PROJECT_EDIT(403, 4, "项目修改", PermissionConstant.PROJECT_EDIT),
     //项目删除
-    PROJECT_DELETE(403, 4, "项目删除", PermissionConstant.PROJECT_DELETE),
+    PROJECT_DELETE(404, 4, "项目删除", PermissionConstant.PROJECT_DELETE),
     //项目开始
-    PROJECT_START(404, 4, "项目开始", PermissionConstant.PROJECT_START),
-    //项目结束
-    PROJECT_STOP(405, 4, "项目结束", PermissionConstant.PROJECT_STOP),
+    PROJECT_STATUS_CHANGE(405, 4, "项目开始、结束", PermissionConstant.PROJECT_STATUS_CHANGE),
 
     /***************************消费记录相关相关**************************************/
     //消费记录管理
@@ -207,22 +211,53 @@ public enum PermissionTreeEnum {
     VOUCHER_CODE_EDIT(70308, 703, "代金券兑换码修改", PermissionConstant.VOUCHER_CODE_EDIT),
     //代金券兑换码启、停用
     VOUCHER_CODE_STATUS_CHANGE(70309, 703, "代金券兑换码启、停用", PermissionConstant.VOUCHER_CODE_STATUS_CHANGE),
-    //电子商品管理
-    ELE_CODE_MANAGEMENT(704, 7, "电子商品管理", PermissionConstant.ELE_CODE_MANAGEMENT),
-    //电子商品添加
-    ELE_CODE_ADD(70401, 704, "电子商品添加", PermissionConstant.ELE_CODE_ADD),
-    //电子商品修改
-    ELE_CODE_EDIT(70402, 704, "电子商品修改", PermissionConstant.ELE_CODE_EDIT),
+    //电子商品码管理
+    ELE_CODE_MANAGEMENT(704, 7, "电子码商品管理", PermissionConstant.ELE_CODE_MANAGEMENT),
+    //电子商品码查询
+    ELE_CODE_SEARCH(70401, 704, "电子码商品查询", PermissionConstant.ELE_CODE_SEARCH),
+    //电子商品码添加
+    ELE_CODE_ADD(70402, 704, "电子商品码添加", PermissionConstant.ELE_CODE_ADD),
+    //电子商品码修改
+    ELE_CODE_EDIT(704032, 704, "电子商品码修改", PermissionConstant.ELE_CODE_EDIT),
     //员工管理
     USER_MANAGEMENT(705, 7, "员工管理", PermissionConstant.USER_MANAGEMENT),
+    //员工查询
+    USER_SEARCH(70501, 7, "员工查询", PermissionConstant.USER_SEARCH),
+    //员工添加
+    USER_ADD(70502, 705, "员工添加", PermissionConstant.USER_ADD),
+    //员工修改
+    USER_EDIT(70503, 705, "员工修改", PermissionConstant.USER_EDIT),
+    //员工删除
+    USER_DELETE(70504, 705, "员工删除", PermissionConstant.USER_DELETE),
+    //员工密码重置
+    USER_PASSWORD_RESET(70505, 705, "员工密码重置", PermissionConstant.USER_PASSWORD_RESET),
     //角色管理
     ROLE_MANAGEMENT(706, 7, "角色管理", PermissionConstant.ROLE_MANAGEMENT),
+    //角色查询
+    ROLE_SEARCH(70601, 706, "角色查询", PermissionConstant.ROLE_SEARCH),
+    //角色添加
+    ROLE_ADD(70602, 706, "角色添加", PermissionConstant.ROLE_ADD),
+    //角色修改
+    ROLE_EDIT(70603, 706, "角色修改", PermissionConstant.ROLE_EDIT),
+    //角色删除
+    ROLE_DELETE(70604, 706, "角色删除", PermissionConstant.ROLE_DELETE),
     //城市管理
     CITY_MANAGEMENT(707, 7, "城市管理", PermissionConstant.CITY_MANAGEMENT),
     //日志管理
     LOG_MANAGEMENT(708, 7, "日志管理", PermissionConstant.LOG_MANAGEMENT),
-    //商家订单
-    PARTNER_ORDER_MANAGEMENT(8, 0, "商家订单", PermissionConstant.PARTNER_ORDER_MANAGEMENT);
+    //商家订单管理
+    PARTNER_ORDER_MANAGEMENT(8, 0, "商家订单管理", PermissionConstant.PARTNER_ORDER_MANAGEMENT),
+    //商家订单查询
+    PARTNER_ORDER_SEARCH(801, 8, "商家订单查询", PermissionConstant.PARTNER_ORDER_SEARCH),
+    //商家订单添加
+    PARTNER_ORDER_ADD(802, 8, "商家订单添加", PermissionConstant.PARTNER_ORDER_ADD),
+    //商家订单修改
+    PARTNER_ORDER_EDIT(803, 8, "商家订单修改", PermissionConstant.PARTNER_ORDER_EDIT),
+    //预支付记录查看
+    ADVANCE_PAY_MANAGEMENT(804, 8, "预支付记录查看", PermissionConstant.ADVANCE_PAY_MANAGEMENT),
+    //预支付记录添加
+    ADVANCE_PAY_ADD(805, 8, "预支付记录添加", PermissionConstant.ADVANCE_PAY_ADD),
+    ;
 
     PermissionTreeEnum(Integer id, Integer pId, String name, String perm) {
         this.id = id;

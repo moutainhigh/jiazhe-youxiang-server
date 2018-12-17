@@ -10,6 +10,7 @@ import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.ProjectAdapter;
 import com.jiazhe.youxiang.server.biz.ProjectBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.ProjectCodeEnum;
@@ -26,6 +27,8 @@ import com.jiazhe.youxiang.server.vo.req.project.ProjectUpdateReq;
 import com.jiazhe.youxiang.server.vo.resp.project.ProjectResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.util.Strings;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +61,7 @@ public class APIProjectController {
      *
      * @return
      */
+    @RequiresPermissions(PermissionConstant.PROJECT_ADD)
     @ApiOperation(value = "添加项目", httpMethod = "POST", notes = "添加项目")
     @RequestMapping(value = "add", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.PROJECT, operate = "添加项目", level = LogLevelEnum.LEVEL_2)
@@ -93,6 +97,7 @@ public class APIProjectController {
      *
      * @return
      */
+    @RequiresPermissions(value = {PermissionConstant.PROJECT_MANAGEMENT, PermissionConstant.PROJECT_SEARCH}, logical = Logical.OR)
     @ApiOperation(value = "查询项目信息", httpMethod = "GET", response = ProjectResp.class, responseContainer = "List", notes = "查询项目信息")
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.PROJECT, operate = "查询项目信息", level = LogLevelEnum.LEVEL_1)
@@ -112,6 +117,7 @@ public class APIProjectController {
      *
      * @return
      */
+    @RequiresPermissions(PermissionConstant.PROJECT_EDIT)
     @ApiOperation(value = "编辑项目信息", httpMethod = "POST", notes = "编辑项目信息")
     @RequestMapping(value = "update", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.PROJECT, operate = "编辑项目信息", level = LogLevelEnum.LEVEL_2)
@@ -120,7 +126,6 @@ public class APIProjectController {
         CommonValidator.validateId(req.getId());
         validateProjectName(req.getName());
         validatePointConversionRate(req.getPointConversionRate());
-
         ProjectUpdateDTO projectUpdateDTO = ProjectAdapter.projectUpdateReq2DTO(req);
         //调用BIZ方法
         projectBiz.update(projectUpdateDTO);
@@ -133,6 +138,7 @@ public class APIProjectController {
      *
      * @return
      */
+    @RequiresPermissions(PermissionConstant.PROJECT_DELETE)
     @ApiOperation(value = "删除项目", httpMethod = "POST", notes = "删除项目")
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.PROJECT, operate = "删除项目", level = LogLevelEnum.LEVEL_3)
@@ -148,6 +154,7 @@ public class APIProjectController {
      *
      * @return
      */
+    @RequiresPermissions(PermissionConstant.PROJECT_STATUS_CHANGE)
     @ApiOperation(value = "启动项目", httpMethod = "GET", response = ProjectResp.class, notes = "启动项目")
     @RequestMapping(value = "begin", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.PROJECT, operate = "启动项目", level = LogLevelEnum.LEVEL_2)
@@ -163,6 +170,7 @@ public class APIProjectController {
      *
      * @return
      */
+    @RequiresPermissions(PermissionConstant.PROJECT_STATUS_CHANGE)
     @ApiOperation(value = "停止项目", httpMethod = "GET", response = ProjectResp.class, notes = "停止项目")
     @RequestMapping(value = "end", method = RequestMethod.GET)
     public Object end(@ModelAttribute IdReq req) {

@@ -40,93 +40,97 @@
             <div class="page-content">
                 <div class="row">
                     <div class="col-xs-12" style="padding-top:40px">
-                        <form id="partnerOrderInfoSearchForm" class="form-horizontal" role="form">
-                            <div class="form-group">
-                                <label class="col-sm-1 control-label no-padding-right">状态：</label>
-                                <div class="col-sm-2">
-                                    <select id="searchStatus" name="status" class="selectpicker show-tick form-control">
-                                        <option value=0>所有</option>
-                                        <option value=1>待服务</option>
-                                        <option value=2>已完成</option>
-                                        <option value=3>已取消</option>
-                                    </select>
-                                </div>
-                                <label class="col-sm-1 control-label no-padding-right">城市：</label>
-                                <div class="col-sm-2">
-                                    <select id="searchCustomerCityCode" name="customerCityCode"
-                                            class="selectpicker show-tick form-control">
-                                        <option value="000000">所有</option>
-                                    </select>
-                                </div>
-                                <label class="col-sm-1 control-label no-padding-right">服务商家：</label>
-                                <div class="col-sm-2">
-                                    <select id="searchPartner" name="partnerId"
-                                            class="selectpicker show-tick form-control">
-                                        <option value=0>所有</option>
-                                    </select>
-                                </div>
-                                <label class="col-sm-1 control-label no-padding-right">服务项目：</label>
-                                <div class="col-sm-2">
-                                    <select id="searchServiceItem" name="serviceItemId"
-                                            class="selectpicker show-tick form-control">
-                                        <option value=0>所有</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="space-2"></div>
-                            <div class="form-group">
-                                <label class="col-sm-1 control-label no-padding-right">预约时间起：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <div class="input-group">
-                                            <input class="form-control date-picker" id="searchServiceTimeStart"
-                                                   type="text" readonly/>
-                                            <span class="input-group-addon">
-                                                <i class="fa fa-calendar bigger-110"></i>
-                                            </span>
-                                            <input type="hidden" value=0 name="serviceTimeStart"/>
-                                        </div>
+                        <shiro:hasPermission name="partnerOrderSearch">
+                            <form id="partnerOrderInfoSearchForm" class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label class="col-sm-1 control-label no-padding-right">状态：</label>
+                                    <div class="col-sm-2">
+                                        <select id="searchStatus" name="status"
+                                                class="selectpicker show-tick form-control">
+                                            <option value=0>所有</option>
+                                            <option value=1>待服务</option>
+                                            <option value=2>已完成</option>
+                                            <option value=3>已取消</option>
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-1 control-label no-padding-right">城市：</label>
+                                    <div class="col-sm-2">
+                                        <select id="searchCustomerCityCode" name="customerCityCode"
+                                                class="selectpicker show-tick form-control">
+                                            <option value="000000">所有</option>
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-1 control-label no-padding-right">服务商家：</label>
+                                    <div class="col-sm-2">
+                                        <select id="searchPartner" name="partnerId"
+                                                class="selectpicker show-tick form-control">
+                                            <option value=0>所有</option>
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-1 control-label no-padding-right">服务项目：</label>
+                                    <div class="col-sm-2">
+                                        <select id="searchServiceItem" name="serviceItemId"
+                                                class="selectpicker show-tick form-control">
+                                            <option value=0>所有</option>
+                                        </select>
                                     </div>
                                 </div>
+                                <div class="space-2"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-1 control-label no-padding-right">预约时间起：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <div class="input-group">
+                                                <input class="form-control date-picker" id="searchServiceTimeStart"
+                                                       type="text" readonly/>
+                                                <span class="input-group-addon">
+                                                <i class="fa fa-calendar bigger-110"></i>
+                                            </span>
+                                                <input type="hidden" value=0 name="serviceTimeStart"/>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                <label class="col-sm-1 control-label no-padding-right">预约时间止：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <div class="input-group">
-                                            <input class="form-control date-picker" id="searchServiceTimeEnd"
-                                                   type="text" readonly/>
-                                            <span class="input-group-addon">
+                                    <label class="col-sm-1 control-label no-padding-right">预约时间止：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <div class="input-group">
+                                                <input class="form-control date-picker" id="searchServiceTimeEnd"
+                                                       type="text" readonly/>
+                                                <span class="input-group-addon">
                                                 <i class="fa fa-calendar bigger-110"></i>
                                             </span>
-                                            <input type="hidden" value=0 name="serviceTimeEnd"/>
+                                                <input type="hidden" value=0 name="serviceTimeEnd"/>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <label class="col-sm-1 control-label no-padding-right">客户电话：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <input id="searchMobile" name="customerMobile" class="form-control" type="text"
-                                               style="height:30px"/>
+                                    <label class="col-sm-1 control-label no-padding-right">客户电话：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <input id="searchMobile" name="customerMobile" class="form-control"
+                                                   type="text"
+                                                   style="height:30px"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <button class="btn btn-white btn-default btn-round btn-sm"
+                                                onclick="return search()">
+                                            <i class="ace-icon fa fa-search red2"></i>
+                                            查询
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="col-sm-3">
-                                    <button class="btn btn-white btn-default btn-round btn-sm"
-                                            onclick="return search()">
-                                        <i class="ace-icon fa fa-search red2"></i>
-                                        查询
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        </shiro:hasPermission>
                     </div><!-- /.col -->
 
                     <div class="col-xs-12" style="text-align: right" id="buttonDiv">
-                        <!--<shiro:hasPermission name="sysrole:add">-->
-                        <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
-                           data-toggle="modal" onclick="openNew()">
-                            <i class="ace-icon fa fa-plus"></i>新建
-                        </a>
-                        <!--</shiro:hasPermission>-->
+                        <shiro:hasPermission name="partnerOrderAdd">
+                            <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
+                               data-toggle="modal" onclick="openNew()">
+                                <i class="ace-icon fa fa-plus"></i>新建
+                            </a>
+                        </shiro:hasPermission>
                     </div><!-- /.col -->
 
                     <div class="col-xs-12">
@@ -146,10 +150,14 @@
                                     <div class="profile-info-name"> 总预支</div>
                                     <div class="profile-info-value">
                                         <span id="total"> 加载中...</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <a class="btn btn-minier btn-primary"
-                                           href="javascript:getAdvancePayList()">明细</a>&nbsp;&nbsp;
-                                        <a class="btn btn-minier btn-success"
-                                           href="javascript:openAdvancePayModal()">充值</a>
+                                        <shiro:hasPermission name="advancePayManagement">
+                                            <a class="btn btn-minier btn-primary"
+                                               href="javascript:getAdvancePayList()">明细</a>&nbsp;&nbsp;
+                                        </shiro:hasPermission>
+                                        <shiro:hasPermission name="advancePayAdd">
+                                            <a class="btn btn-minier btn-success"
+                                               href="javascript:openAdvancePayModal()">充值</a>
+                                        </shiro:hasPermission>
                                     </div>
                                 </div>
 
@@ -294,7 +302,7 @@
                     <div class="col-xs-12 col-sm-1"></div>
                     <div class="col-xs-12 col-sm-9">
                         <form id="partnerOrderForm" class="form-horizontal" role="form">
-                            <input id="partnerOrderId" type="hidden" name="id" value=0 />
+                            <input id="partnerOrderId" type="hidden" name="id" value=0/>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label no-padding-right">客户姓名：</label>
                                 <div class="col-sm-8">
@@ -511,7 +519,6 @@
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
-    var permission = getCookie("permission");
     var orderStatus = ['待服务', '已完成', '已取消'];
     $(function () {
         $(document).on("hidden.bs.modal", ".bootbox", function () {
@@ -538,10 +545,10 @@
                 } else {
                     var result = data.data;
                     for (var i = 0; i < result.length; i++) {
-                       if(result[i].cityLevel == 2){
-                           $("#searchCustomerCityCode").append("<option value=" + result[i].cityCode + ">" + result[i].cityName + "</option>");
-                           $("#saveCustomerCityCode").append("<option value=" + result[i].cityCode + ">" + result[i].cityName + "</option>");
-                       }
+                        if (result[i].cityLevel == 2) {
+                            $("#searchCustomerCityCode").append("<option value=" + result[i].cityCode + ">" + result[i].cityName + "</option>");
+                            $("#saveCustomerCityCode").append("<option value=" + result[i].cityCode + ">" + result[i].cityName + "</option>");
+                        }
                     }
                 }
             },
@@ -666,8 +673,10 @@
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
         str += getFunctionButton("btn-success", "openShow(" + rowObject.id + ")", "查看");
-        if (rowObject.status == 1) {
-            str += getFunctionButton("btn-primary", "openEdit(" + rowObject.id + ")", "修改");
+        if (permission.indexOf("partnerOrderEdit") != -1){
+            if (rowObject.status == 1) {
+                str += getFunctionButton("btn-primary", "openEdit(" + rowObject.id + ")", "修改");
+            }
         }
         return str;
     }
@@ -693,7 +702,7 @@
         $("#partnerOrderSaveBtn").show();
         $("#modal-partnerOrder").modal("show");
     }
-    
+
     function initForm() {
         $("#partnerOrderForm input").val('');
         $("#saveCustomerCityCode option:first").prop("selected", 'selected');
@@ -710,7 +719,7 @@
             dataType: "json",
             async: false,
             data: {
-                id:id
+                id: id
             },
             type: "GET",
             success: function (data) {

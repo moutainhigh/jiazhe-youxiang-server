@@ -46,7 +46,8 @@
             <div class="page-content">
                 <div class="row">
                     <div class="col-xs-12" style="padding-top:40px">
-                        <form id="orderInfoSearchForm" class="form-horizontal" role="form">
+                        <shiro:hasPermission name="orderSearch">
+                            <form id="orderInfoSearchForm" class="form-horizontal" role="form">
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">状态：</label>
                                 <div class="col-sm-2">
@@ -131,6 +132,7 @@
                                 </div>
                             </div>
                         </form>
+                        </shiro:hasPermission>
                     </div><!-- /.col -->
 
                     <div class="col-xs-12" style="text-align: right" id="buttonDiv">
@@ -563,7 +565,6 @@
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
-    var permission = getCookie("permission");
     var orderStatus = ['待付款', '待派单', '待服务', '服务完成', '取消待审核', '取消未通过', '已取消'];
     $(function () {
         $(document).on("hidden.bs.modal", ".bootbox", function () {
@@ -597,7 +598,7 @@
             postData: transformToJson($('#orderInfoSearchForm').serializeArray()),
             shrinkToFit: false,
             autoScroll: true,
-            colNames: ['', '操作', '订单号', '状态','待支付金额', '商品名称', '单价', '数量', '下单账号', '服务对象电话', '服务对象姓名', '代金券抵扣金额', '充值卡支付金额','积分支付金额', '在线支付金额'],
+            colNames: ['', '操作', '订单号', '状态', '待支付金额', '商品名称', '单价', '数量', '下单账号', '服务对象电话', '服务对象姓名', '代金券抵扣金额', '充值卡支付金额', '积分支付金额', '在线支付金额'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: '_action', index: '_action', width: 260, sortable: false, formatter: customFormatter},
@@ -652,22 +653,40 @@
         var str = "";
         str += getFunctionButton("btn-success", "showOrder(" + rowObject.id + ")", "查看");
         if (rowObject.status == 2) {
-            str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
-            str += getFunctionButton("btn-primary", "userReservationOrder(" + rowObject.id + ")", "预约");
+            if (permission.indexOf("orderCancel") != -1) {
+                str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
+            }
+            if (permission.indexOf("orderReservation") != -1) {
+                str += getFunctionButton("btn-primary", "userReservationOrder(" + rowObject.id + ")", "预约");
+            }
         }
         if (rowObject.status == 3) {
-            str += getFunctionButton("btn-danger", "changeOrderReservation(" + rowObject.id + ")", "修改订单");
-            str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + ")", "完成订单");
-            str += getFunctionButton("btn-primary", "showAppendOrder(" + rowObject.id + ")", "追加订单");
+            if (permission.indexOf("orderEdit") != -1) {
+                str += getFunctionButton("btn-danger", "changeOrderReservation(" + rowObject.id + ")", "修改订单");
+            }
+            if (permission.indexOf("orderComplete") != -1) {
+                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + ")", "完成订单");
+            }
+            if (permission.indexOf("orderAppend") != -1) {
+                str += getFunctionButton("btn-primary", "showAppendOrder(" + rowObject.id + ")", "追加订单");
+            }
         }
         if (rowObject.status == 5) {
-            str += getFunctionButton("btn-primary", "orderCancelPass(" + rowObject.id + ")", "审核通过");
-            str += getFunctionButton("btn-danger", "orderCancelUnpass(" + rowObject.id + ")", "审核不通过");
-            str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + ")", "完成订单");
+            if (permission.indexOf("orderCheck") != -1) {
+                str += getFunctionButton("btn-primary", "orderCancelPass(" + rowObject.id + ")", "审核通过");
+                str += getFunctionButton("btn-danger", "orderCancelUnpass(" + rowObject.id + ")", "审核不通过");
+            }
+            if (permission.indexOf("orderComplete") != -1) {
+                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + ")", "完成订单");
+            }
         }
         if (rowObject.status == 6) {
-            str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
-            str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + ")", "完成订单");
+            if (permission.indexOf("orderCancel") != -1) {
+                str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
+            }
+            if (permission.indexOf("orderComplete") != -1) {
+                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + ")", "完成订单");
+            }
         }
         return str;
     }
@@ -808,8 +827,8 @@
         var left = (parseInt($("#appendCount").val()) - count) * parseFloat($("#app_productPrice").val()) - money;
         if (left < 0) {
             bootboxalert("所选的付款内容超额支付追加的订单，不能追加！");
-        }else{
-            var confirmText = "所选的付款内容"+(left == 0 ? "刚好" : "不足以")+"支付追加的订单，继续追加该订单吗？"
+        } else {
+            var confirmText = "所选的付款内容" + (left == 0 ? "刚好" : "不足以") + "支付追加的订单，继续追加该订单吗？"
             confirm("所选的付款内容不足以支付追加的订单，继续追加该订单吗？", function (result) {
                 if (result) {
                     appendOrder();

@@ -7,6 +7,7 @@ import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.order.OrderInfoBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
@@ -21,6 +22,8 @@ import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.WaitingDealCountResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +48,7 @@ public class APIOrderInfoController extends BaseController {
     @Autowired
     private OrderInfoBiz orderInfoBiz;
 
+    @RequiresPermissions(value = {PermissionConstant.ORDER_MANAGEMENT, PermissionConstant.ORDER_SEARCH}, logical = Logical.OR)
     @ApiOperation(value = "【后台】分页查询订单信息", httpMethod = "GET", response = OrderInfoResp.class, responseContainer = "List", notes = "【后台】分页查询订单信息")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "分页查询订单信息", level = LogLevelEnum.LEVEL_1)
@@ -57,6 +61,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildPaginationResponse(orderInfoRespList, paging);
     }
 
+    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
     @ApiOperation(value = "【APP端】分页查询订单信息", httpMethod = "GET", response = OrderInfoResp.class, responseContainer = "List", notes = "【后台】分页查询订单信息")
     @RequestMapping(value = "/customerlistpage", method = RequestMethod.GET)
@@ -68,6 +73,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildPaginationResponse(orderInfoRespList, paging);
     }
 
+    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
     @ApiOperation(value = "【APP端】客户取消订单", httpMethod = "POST", notes = "【APP端】客户取消订单")
     @RequestMapping(value = "/customercancelorder", method = RequestMethod.POST)
@@ -77,6 +83,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
     @ApiOperation(value = "【APP端】计算客户需要在线支付的金额", httpMethod = "GET", response = NeedPayResp.class, notes = "计算客户需要在线支付的金额")
     @RequestMapping(value = "/customerneedpaycash", method = RequestMethod.GET)
@@ -88,6 +95,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildResponse(needPayResp);
     }
 
+    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
     @ApiOperation(value = "【APP端】支付前检查", httpMethod = "GET", notes = "支付前检查")
     @RequestMapping(value = "/prepaymentcheck", method = RequestMethod.POST)
@@ -97,6 +105,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
     @ApiOperation(value = "【APP端】客户支付", httpMethod = "POST", response = NeedPayResp.class, notes = "客户支付")
     @RequestMapping(value = "/customerpay", method = RequestMethod.POST)
@@ -108,6 +117,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildResponse(needPayResp);
     }
 
+    @RequiresPermissions(PermissionConstant.ORDER_CHECK)
     @ApiOperation(value = "审核通过", httpMethod = "POST", notes = "审核通过")
     @RequestMapping(value = "/ordercancelpass", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "审核通过", level = LogLevelEnum.LEVEL_2)
@@ -116,6 +126,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.ORDER_CHECK)
     @ApiOperation(value = "审核不通过", httpMethod = "POST", notes = "审核不通过")
     @RequestMapping(value = "/ordercancelunpass", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "审核不通过", level = LogLevelEnum.LEVEL_2)
@@ -124,6 +135,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.ORDER_CANCEL)
     @ApiOperation(value = "员工取消订单", httpMethod = "POST", notes = "员工取消订单")
     @RequestMapping(value = "/usercancelorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "员工取消订单", level = LogLevelEnum.LEVEL_2)
@@ -132,6 +144,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.ORDER_COMPLETE)
     @ApiOperation(value = "员工完成订单", httpMethod = "POST", notes = "员工完成订单")
     @RequestMapping(value = "/usercompleteorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "员工完成订单", level = LogLevelEnum.LEVEL_2)
@@ -140,6 +153,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.CUSTOMER_USER_PLACE_ORDER)
     @ApiOperation(value = "【后端】下单", httpMethod = "POST", response = NeedPayResp.class, notes = "【后端】下单")
     @RequestMapping(value = "/userplaceorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "下单", level = LogLevelEnum.LEVEL_2)
@@ -147,10 +161,11 @@ public class APIOrderInfoController extends BaseController {
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqUserPlaceOrder2DTOPlaceOrder(req);
         placeOrderDTO.setType(Byte.valueOf("0"));
         placeOrderDTO.setServiceTime(new Date(req.getRealServiceTime()));
-        NeedPayResp needPayResp  = orderInfoBiz.placeOrder(placeOrderDTO);
+        NeedPayResp needPayResp = orderInfoBiz.placeOrder(placeOrderDTO);
         return ResponseFactory.buildResponse(needPayResp);
     }
 
+    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
     @ApiOperation(value = "【APP端】下单", httpMethod = "POST", response = NeedPayResp.class, notes = "【APP端】下单")
     @RequestMapping(value = "/customerplaceorder", method = RequestMethod.POST)
@@ -167,11 +182,12 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildResponse(needPayResp);
     }
 
+    @RequiresPermissions(PermissionConstant.ORDER_RESERVATION)
     @ApiOperation(value = "员工预约服务、派单", httpMethod = "POST", notes = "员工预约服务、派单")
     @RequestMapping(value = "/userreservationorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "员工预约服务、派单", level = LogLevelEnum.LEVEL_2)
     public Object userReservationOrder(@ModelAttribute UserReservationOrderReq req) {
-        if(req.getRealServiceTime()==0){
+        if (req.getRealServiceTime() == 0) {
             throw new OrderException(OrderCodeEnum.REAL_SERVICE_TIME_IS_NULL);
         }
         CommonValidator.validateNull(req.getWorkerName(), new OrderException(OrderCodeEnum.WORKER_NAME_IS_NAME));
@@ -181,11 +197,12 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.ORDER_EDIT)
     @ApiOperation(value = "员工修改预约信息", httpMethod = "POST", notes = "员工修改预约信息")
     @RequestMapping(value = "/userchangereservationinfo", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "员工修改预约信息", level = LogLevelEnum.LEVEL_2)
     public Object userChangeReservationInfo(@ModelAttribute UserReservationOrderReq req) {
-        if(req.getRealServiceTime()==0){
+        if (req.getRealServiceTime() == 0) {
             throw new OrderException(OrderCodeEnum.REAL_SERVICE_TIME_IS_NULL);
         }
         CommonValidator.validateNull(req.getWorkerName(), new OrderException(OrderCodeEnum.WORKER_NAME_IS_NAME));
@@ -194,6 +211,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.ORDER_APPEND)
     @ApiOperation(value = "员工追加订单", httpMethod = "POST", notes = "员工追加订单")
     @RequestMapping(value = "/appendorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "员工追加订单", level = LogLevelEnum.LEVEL_2)
@@ -211,6 +229,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildResponse(orderInfoResp);
     }
 
+    @RequiresPermissions(PermissionConstant.ORDER_RESERVATION)
     @ApiOperation(value = "待预约订单数量", httpMethod = "GET", response = WaitingDealCountResp.class, notes = "待预约订单数量")
     @RequestMapping(value = "/getunsentordercount", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "待预约订单数量", level = LogLevelEnum.LEVEL_1)
@@ -221,6 +240,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildResponse(waitingDealCountResp);
     }
 
+    @RequiresPermissions(PermissionConstant.ORDER_CHECK)
     @ApiOperation(value = "取消待审核订单数量", httpMethod = "GET", response = WaitingDealCountResp.class, notes = "取消待审核订单数量")
     @RequestMapping(value = "/getunauditordercount", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "取消待审核订单数量", level = LogLevelEnum.LEVEL_1)

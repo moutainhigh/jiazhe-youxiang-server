@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta charset="utf-8"/>
@@ -90,12 +90,12 @@
                     </div><!-- /.col -->
                     <div class="col-xs-12" style="text-align: right" id="buttonDiv">
                         <p style="margin:1px;">
-                            <!--<shiro:hasPermission name="sysrole:add">-->
-                            <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
-                               data-toggle="modal" onclick="openNew()">
-                                <i class="ace-icon fa fa-plus"></i>新建
-                            </a>
-                            <!--</shiro:hasPermission>-->
+                            <shiro:hasPermission name="productAdd">
+                                <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
+                                   data-toggle="modal" onclick="openNew()">
+                                    <i class="ace-icon fa fa-plus"></i>新建
+                                </a>
+                            </shiro:hasPermission>
                         </p>
                     </div><!-- /.col -->
                     <div class="col-xs-12">
@@ -311,7 +311,7 @@
         var tableOption = {
             url: "/api/product/getlist",// 获取数据的地址
             postData: transformToJson($('#searchForm').serializeArray()),
-            colNames: ['', '商品名称', '商品描述', '最少购买数量', '单位', '需提前预约天数','有效期天数 ', '商品分类 ', '商品状态', '排序', '操作'],
+            colNames: ['', '商品名称', '商品描述', '最少购买数量', '单位', '需提前预约天数', '有效期天数 ', '商品分类 ', '商品状态', '排序', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 50, sortable: false},
@@ -374,18 +374,25 @@
     function customFormatter(cellvalue, options, rowObject) {
         var productCategoryId = $("#hiddenProductCategoryId").val();
         var productCategoryName = $("#hiddenProductCategoryName").val();
-
         var str = "";
-        str += getFunctionButton("btn-danger", "deleteOne(" + rowObject.id + ")", "删除");
-        str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
-        if (rowObject.status == 0) {
-            str += getFunctionButton("btn-success", "sold(" + rowObject.id + ")", "上架");
-        } else {
-            str += getFunctionButton("btn-danger", "soldOut(" + rowObject.id + ")", "下架");
+        if (permission.indexOf("productDelete") != -1) {
+            str += getFunctionButton("btn-danger", "deleteOne(" + rowObject.id + ")", "删除");
         }
-        var url = "/product//productprice/index?productId=" + rowObject.id + "&&productName=" + rowObject.name +
-            "&&productCategoryId=" + productCategoryId + "&&productCategoryName=" + productCategoryName;
-        str += getRedirectButton("btn-primary", url, "价格管理");
+        if (permission.indexOf("productEdit") != -1) {
+            str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
+        }
+        if (permission.indexOf("productOnOffLine") != -1) {
+            if (rowObject.status == 0) {
+                str += getFunctionButton("btn-success", "sold(" + rowObject.id + ")", "上架");
+            } else {
+                str += getFunctionButton("btn-danger", "soldOut(" + rowObject.id + ")", "下架");
+            }
+        }
+        if (permission.indexOf("productPriceManagement") != -1) {
+            var url = "/product//productprice/index?productId=" + rowObject.id + "&&productName=" + rowObject.name +
+                "&&productCategoryId=" + productCategoryId + "&&productCategoryName=" + productCategoryName;
+            str += getRedirectButton("btn-primary", url, "价格管理");
+        }
         return str;
     }
 

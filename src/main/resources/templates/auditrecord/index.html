@@ -20,13 +20,13 @@
             height: 10px;
         }
 
-         .float {
-             overflow: hidden;
-         }
+        .float {
+            overflow: hidden;
+        }
 
         .item {
             float: left;
-            height:100px;
+            height: 100px;
             width: 31%;
             border-right: 3px solid #fff;
             border-top: 3px solid #fff;
@@ -85,7 +85,7 @@
                         <div id="grid-pager"></div>
                     </div><!-- /.col -->
 
-                    <div id="modal-form" class="modal fade" tabindex="-1" >
+                    <div id="modal-form" class="modal fade" tabindex="-1">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -151,12 +151,12 @@
                                                             <label class="radio-inline">
                                                                 <input id="pass" type="radio"
                                                                        name="status"
-                                                                       value=2 />通过
+                                                                       value=2/>通过
                                                             </label>
                                                             <label class="radio-inline ">
                                                                 <input id="unpass" type="radio"
                                                                        name="status"
-                                                                       value=1 />不通过
+                                                                       value=1/>不通过
                                                             </label>
                                                         </div>
                                                     </div>
@@ -215,7 +215,8 @@
                     </div>
 
                     <!--放大图片模态框-->
-                    <div id="ShowImage_Form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div id="ShowImage_Form" class="modal fade" tabindex="-1" role="dialog"
+                         aria-labelledby="myModalLabel" aria-hidden="true">
                         <div class="modal-header" style="border-bottom: 0px">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         </div>
@@ -364,7 +365,9 @@
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
         if (rowObject.status == 0) {
-            str += getFunctionButton("btn-primary", "check(" + rowObject.id + ")", "审核");
+            if (permission.indexOf("auditRecordCheck") != -1) {
+                str += getFunctionButton("btn-primary", "check(" + rowObject.id + ")", "审核");
+            }
         } else {
             str += getFunctionButton("btn-success", "show(" + rowObject.id + ")", "查看");
         }
@@ -373,7 +376,7 @@
 
     function show(id) {
         huixian(id);
-        $("#remark").attr('readonly','readonly');
+        $("#remark").attr('readonly', 'readonly');
         $("#auditForm input[name=status]").attr('disabled', 'disabled');
         $("#saveBtn").hide();
         $("#modal-title").html("查看");
@@ -409,13 +412,13 @@
                     $("#exchangeMoney").val(result.exchangeMoney);
                     $("#remark").val(result.remark);
                     $("#auditForm input[name=status]").removeAttr('disabled');
-                    result.status == 1?$("#unpass").click():$("#pass").click();
-                    if(result.status == 2){
-                        $(".pass").css("display","none");
+                    result.status == 1 ? $("#unpass").click() : $("#pass").click();
+                    if (result.status == 2) {
+                        $(".pass").css("display", "none");
                     }
                     var imgUrls = result.imgUrls.split(",");
                     for (var i = 0; i < imgUrls.length; i++) {
-                        $("#pics").append("<img class='item' onmouseover=\"this.style.cursor='pointer';this.style.cursor='hand'\"  onmouseout=\"this.style.cursor='default'\" onclick=\"javascript:showimage('/api/preview/img/"+imgUrls[i]+"');\" src='/api/preview/img/"+imgUrls[i]+"'>")
+                        $("#pics").append("<img class='item' onmouseover=\"this.style.cursor='pointer';this.style.cursor='hand'\"  onmouseout=\"this.style.cursor='default'\" onclick=\"javascript:showimage('/api/preview/img/" + imgUrls[i] + "');\" src='/api/preview/img/" + imgUrls[i] + "'>")
                     }
                 }
             },
@@ -428,14 +431,14 @@
             url: "/api/auditrecord/auditrecordcheck",
             dataType: "json",
             async: false,
-            data:transformToJson($('#auditForm').serializeArray()),
+            data: transformToJson($('#auditForm').serializeArray()),
             type: "POST",
-            success: function(data){
+            success: function (data) {
                 if ('error' in data) {
-                    if(data.error.code == 111002){
+                    if (data.error.code == 111002) {
                         bootboxalert("记录已被修改，已重新载入，请重新审核");
                         huixian($("#auditRecordId").val());
-                    }else{
+                    } else {
                         bootboxalert(data.error.message);
                     }
                 } else {
@@ -454,8 +457,8 @@
             url: "/api/rcexchangecodebatch/findvirtualbyprojectid",
             dataType: "json",
             async: false,
-            data:{
-                id:projectId
+            data: {
+                id: projectId
             },
             type: "GET",
             success: function (data) {
@@ -473,16 +476,16 @@
         });
     }
 
-    function showimage(source){//图片单击放大显示
-        $("#ShowImage_Form").find("#img_show").html("<image src='"+source+"' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' />");
+    function showimage(source) {//图片单击放大显示
+        $("#ShowImage_Form").find("#img_show").html("<image src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' />");
         $("#ShowImage_Form").modal({backdrop: 'static', keyboard: true});
     }
 
-    function bigimg(obj){
-        var zoom = parseInt(obj.style.zoom,10)||100;
+    function bigimg(obj) {
+        var zoom = parseInt(obj.style.zoom, 10) || 100;
         zoom += event.wheelDelta / 12;
-        if(zoom > 0 )
-            obj.style.zoom=zoom+'%';
+        if (zoom > 0)
+            obj.style.zoom = zoom + '%';
         return false;
     }
 

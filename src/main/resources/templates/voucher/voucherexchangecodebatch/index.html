@@ -29,41 +29,44 @@
             <div class="page-content">
                 <div class="row">
                     <div class="col-xs-12" style="padding-top:40px">
-                        <form id="batchSearchForm" class="form-horizontal" role="form">
-                            <div class="form-group">
-                                <label class="col-sm-1 control-label no-padding-right">所属项目：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <select id="searchProjectId" name="projectId" class="form-control" type="text"
-                                                style="height:30px">
-                                        </select>
+                        <shiro:hasPermission name="sysrole:add">
+                            <form id="voucherBatchSearch" class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label class="col-sm-1 control-label no-padding-right">所属项目：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <select id="searchProjectId" name="projectId" class="form-control"
+                                                    type="text"
+                                                    style="height:30px">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <label class="col-sm-1 control-label no-padding-right">批次名称：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <input id="searchName" name="name" class="form-control" type="text"
+                                                   style="height:30px"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <button class="btn btn-white btn-default btn-round btn-sm"
+                                                onclick="return search()">
+                                            <i class="ace-icon fa fa-search red2"></i>
+                                            查询
+                                        </button>
                                     </div>
                                 </div>
-                                <label class="col-sm-1 control-label no-padding-right">批次名称：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <input id="searchName" name="name" class="form-control" type="text"
-                                               style="height:30px"/>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <button class="btn btn-white btn-default btn-round btn-sm"
-                                            onclick="return search()">
-                                        <i class="ace-icon fa fa-search red2"></i>
-                                        查询
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        </shiro:hasPermission>
                     </div><!-- /.col -->
                     <div class="col-xs-12" style="text-align: right" id="buttonDiv">
                         <p style="margin:1px;">
-                            <!--<shiro:hasPermission name="sysrole:add">-->
-                            <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
-                               data-toggle="modal" onclick="openNew()">
-                                <i class="ace-icon fa fa-plus"></i>新建
-                            </a>
-                            <!--</shiro:hasPermission>-->
+                            <shiro:hasPermission name="voucherBatchAdd">
+                                <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
+                                   data-toggle="modal" onclick="openNew()">
+                                    <i class="ace-icon fa fa-plus"></i>新建
+                                </a>
+                            </shiro:hasPermission>
                         </p>
                     </div><!-- /.col -->
                     <div class="col-xs-12">
@@ -162,7 +165,7 @@
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker" id="saveExpiryTime"
-                                                                   type="text" readonly />
+                                                                   type="text" readonly/>
                                                             <span class="input-group-addon">
                                                                             <i class="fa fa-calendar bigger-110"></i>
                                                                         </span>
@@ -197,7 +200,7 @@
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker"
-                                                                   id="saveVoucherExpiryTime" type="text" readonly />
+                                                                   id="saveVoucherExpiryTime" type="text" readonly/>
                                                             <span class="input-group-addon">
                                                                             <i class="fa fa-calendar bigger-110"></i>
                                                                         </span>
@@ -271,7 +274,6 @@
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
-    var permission = getCookie("permission");
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -367,17 +369,27 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
-        if (rowObject.status == 0) {
-            str += getFunctionButton("btn-success", "startUsing(" + rowObject.id + ")", "启用");
-        } else {
-            str += getFunctionButton("btn-danger", "stopUsing(" + rowObject.id + ")", "停用");
+        if (permission.indexOf("voucherBatchEdit") != -1) {
+            str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
+        }
+        if (permission.indexOf("voucherBatchStatusChange") != -1) {
+            if (rowObject.status == 0) {
+                str += getFunctionButton("btn-success", "startUsing(" + rowObject.id + ")", "启用");
+            } else {
+                str += getFunctionButton("btn-danger", "stopUsing(" + rowObject.id + ")", "停用");
+            }
         }
         if (rowObject.isMade == 1) {
-            str += getRedirectButton("btn-primary", "../voucher/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name, "兑换码管理");
-            str += getFunctionButton("btn-yellow", "exportExcel(" + rowObject.id + ")", "导出");
+            if (permission.indexOf("voucherCodeManagement") != -1) {
+                str += getRedirectButton("btn-primary", "../voucher/exchangecodeindex?batchId=" + rowObject.id + "&&batchName=" + rowObject.name, "兑换码管理");
+            }
+            if (permission.indexOf("voucherCodeExport") != -1) {
+                str += getFunctionButton("btn-yellow", "exportExcel(" + rowObject.id + ")", "导出");
+            }
         } else {
-            str += getFunctionButton("btn-danger", "generateCode(" + rowObject.id + ")", "生成兑换码");
+            if (permission.indexOf("voucherCodeGenerate") != -1) {
+                str += getFunctionButton("btn-danger", "generateCode(" + rowObject.id + ")", "生成兑换码");
+            }
         }
         return str;
     }
@@ -417,8 +429,8 @@
             bootboxalert("数量非法");
             return false;
         }
-        if($("input[name=expiryTypeRadio]:checked").val() == 1){
-            if(!isNumber($("#saveValidityPeriod").val())){
+        if ($("input[name=expiryTypeRadio]:checked").val() == 1) {
+            if (!isNumber($("#saveValidityPeriod").val())) {
                 bootboxalert("兑换之日有效天数非法");
                 return false;
             }

@@ -7,6 +7,7 @@ import com.jiazhe.youxiang.server.adapter.AuditRecordAdapter;
 import com.jiazhe.youxiang.server.biz.AuditRecordBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.AuditRecordCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
@@ -24,6 +25,7 @@ import com.jiazhe.youxiang.server.vo.resp.auditrecord.AuditRecordResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.WaitingDealCountResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,7 @@ public class APIAuditRecordController extends BaseController{
     @Autowired
     private AuditRecordBiz auditRecordBiz;
 
+    @RequiresPermissions(PermissionConstant.AUDIT_RECORD_CHECK)
     @ApiOperation(value = "【后台】审核", httpMethod = "POST",notes = "审核")
     @RequestMapping(value = "/auditrecordcheck", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "审核", level = LogLevelEnum.LEVEL_2)
@@ -63,6 +66,7 @@ public class APIAuditRecordController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.AUDIT_RECORD_CHECK)
     @ApiOperation(value = "【后台】待审核消费记录条数", httpMethod = "GET",response = WaitingDealCountResp.class ,notes = "待审核消费记录条数")
     @RequestMapping(value = "/getwaitcheckcount", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "待审核消费记录条数", level = LogLevelEnum.LEVEL_1)
@@ -83,6 +87,7 @@ public class APIAuditRecordController extends BaseController{
         return ResponseFactory.buildResponse(auditRecordResp);
     }
 
+    @RequiresPermissions(PermissionConstant.AUDIT_RECORD_MANAGEMENT)
     @ApiOperation(value = "【后台】消费记录列表", httpMethod = "GET",response = AuditRecordResp.class,responseContainer = "List" ,notes = "【后台】消费记录列表")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "消费记录列表", level = LogLevelEnum.LEVEL_1)

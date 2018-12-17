@@ -8,6 +8,7 @@ import com.jiazhe.youxiang.base.util.ValidateUtils;
 import com.jiazhe.youxiang.server.adapter.SysUserAdapter;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
@@ -26,6 +27,8 @@ import com.jiazhe.youxiang.server.vo.resp.sysuser.SysUserResp;
 import com.jiazhe.youxiang.server.vo.resp.sysuser.UserWithRoleResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +63,7 @@ public class APISysUserController extends BaseController {
         return ResponseFactory.buildResponse(respList);
     }
 
+    @RequiresPermissions(value = {PermissionConstant.USER_MANAGEMENT, PermissionConstant.USER_SEARCH}, logical = Logical.OR)
     @ApiOperation(value = "【后台】员工列表", httpMethod = "GET", response = SysUserResp.class, responseContainer = "List", notes = "员工列表（带条件、分页）")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.USER, operate = "员工列表", level = LogLevelEnum.LEVEL_1)
@@ -71,6 +75,7 @@ public class APISysUserController extends BaseController {
         return ResponseFactory.buildPaginationResponse(respList, paging);
     }
 
+    @RequiresPermissions(PermissionConstant.USER_DELETE)
     @ApiOperation(value = "【后台】删除员工", httpMethod = "POST", notes = "根据id删除员工信息（并删除对应角色）")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.USER, operate = "删除员工", level = LogLevelEnum.LEVEL_3)
@@ -90,6 +95,7 @@ public class APISysUserController extends BaseController {
         return ResponseFactory.buildResponse(resp);
     }
 
+    @RequiresPermissions(value = {PermissionConstant.USER_ADD, PermissionConstant.USER_EDIT}, logical = Logical.OR)
     @ApiOperation(value = "【后台】保存员工信息", httpMethod = "POST", notes = "保存员工、员工对应角色信息，新建和修改放一起了")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.USER, operate = "保存员工信息", level = LogLevelEnum.LEVEL_1)
@@ -97,7 +103,7 @@ public class APISysUserController extends BaseController {
         CommonValidator.validateNull(req.getLoginName(), new UserException(UserCodeEnum.USER_LOGIN_NAME_IS_NULL));
         CommonValidator.validateNull(req.getDisplayName(), new UserException(UserCodeEnum.USER_DISPLAY_NAME_IS_NULL));
         CommonValidator.validateNull(req.getMobile(), new UserException(UserCodeEnum.USEER_MOBILE_IS_NULL));
-        if(req.getId()==0){
+        if (req.getId() == 0) {
             CommonValidator.validateNull(req.getPassword(), new UserException(UserCodeEnum.USEER_PASSWORD_IS_NULL));
         }
         CommonValidator.validateNull(req.getRoleIds(), new UserException(UserCodeEnum.USER_ROLE_NOT_CHOOSE));
@@ -149,6 +155,7 @@ public class APISysUserController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.USER_PASSWORD_RESET)
     @ApiOperation(value = "【后台】重置员工密码", httpMethod = "POST", notes = "重置员工密码，重置为123456")
     @RequestMapping(value = "/resetpassword", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.USER, operate = "重置员工密码", level = LogLevelEnum.LEVEL_2)

@@ -41,6 +41,7 @@ public class PermissionConstant {
     public static final String CUSTOMER_ORDER_DETAIL = "customerOrderDetail";
     //后台下单
     public static final String CUSTOMER_USER_PLACE_ORDER = "customerUserPlaceOrder";
+
     //商品大类管理
     public static final String PRODUCT_CATEGORY_MANAGEMENT = "productCategoryManagement";
     //商品大类添加
@@ -65,12 +66,28 @@ public class PermissionConstant {
     public static final String PRODUCT_PRICE_MANAGEMENT = "productPriceManagement";
     //商品价格编辑
     public static final String PRODUCT_PRICE_EDIT = "productPriceEdit";
+    //商品价格删除
+    public static final String PRODUCT_PRICE_DELETE = "productPriceDelete";
     //商品价格生效失效
     public static final String PRODUCT_PRICE_EFFECT = "productPriceEffect";
-    //商家订单
+
+    //商家订单管理
     public static final String PARTNER_ORDER_MANAGEMENT = "partnerOrderManagement";
+    //商家订单查询
+    public static final String PARTNER_ORDER_SEARCH = "partnerOrderSearch";
+    //商家订单添加
+    public static final String PARTNER_ORDER_ADD = "partnerOrderAdd";
+    //商家订单修改
+    public static final String PARTNER_ORDER_EDIT = "partnerOrderEdit";
+    //查看预支付记录
+    public static final String ADVANCE_PAY_MANAGEMENT = "advancePayManagement";
+    //添加预支付记录
+    public static final String ADVANCE_PAY_ADD = "advancePayAdd";
+
     //订单管理
     public static final String ORDER_MANAGEMENT = "orderManagement";
+    //订单查询
+    public static final String ORDER_SEARCH = "orderSearch";
     //订单预约
     public static final String ORDER_RESERVATION = "orderReservation";
     //订单修改
@@ -83,22 +100,27 @@ public class PermissionConstant {
     public static final String ORDER_CHECK = "orderCheck";
     //订单取消
     public static final String ORDER_CANCEL = "orderCancel";
+
+
     //项目管理
     public static final String PROJECT_MANAGEMENT = "projectManagement";
+    //项目查询
+    public static final String PROJECT_SEARCH = "projectSearch";
     //项目添加
     public static final String PROJECT_ADD = "projectAdd";
     //项目修改
     public static final String PROJECT_EDIT = "projectEdit";
     //项目删除
     public static final String PROJECT_DELETE = "projectDelete";
-    //项目开始
-    public static final String PROJECT_START = "projectStart";
-    //项目结束
-    public static final String PROJECT_STOP = "projectStop";
+    //项目开始、结束
+    public static final String PROJECT_STATUS_CHANGE = "projectStatusChange";
+
     //消费记录管理
     public static final String AUDIT_RECORD_MANAGEMENT = "auditRecordManagement";
     //消费记录审核
     public static final String AUDIT_RECORD_CHECK = "auditRecordCheck";
+
+
     //信息查询
     public static final String INFO_SEARCH = "infoSearch";
     //积分卡查询
@@ -200,16 +222,36 @@ public class PermissionConstant {
     public static final String VOUCHER_CODE_EDIT = "voucherCodeEdit";
     //代金券兑换码启、停用
     public static final String VOUCHER_CODE_STATUS_CHANGE = "voucherCodeStatusChange";
-    //电子商品管理
+    //电子商品码管理
     public static final String ELE_CODE_MANAGEMENT = "eleCodeManagement";
+    //电子商品码查询
+    public static final String ELE_CODE_SEARCH = "eleCodeSearch";
     //电子商品添加
     public static final String ELE_CODE_ADD = "eleCodeAdd";
     //电子商品修改
     public static final String ELE_CODE_EDIT = "eleCodeEdit";
     //员工管理
     public static final String USER_MANAGEMENT = "userManagement";
+    //员工查询
+    public static final String USER_SEARCH = "userSearch";
+    //员工添加
+    public static final String USER_ADD = "userAdd";
+    //员工修改
+    public static final String USER_EDIT = "userEdit";
+    //员工删除
+    public static final String USER_DELETE = "userDelete";
+    //员工密码重置
+    public static final String USER_PASSWORD_RESET = "userPasswordReset";
     //角色管理
     public static final String ROLE_MANAGEMENT = "roleManagement";
+    //角色查询
+    public static final String ROLE_SEARCH = "roleSearch";
+    //角色添加
+    public static final String ROLE_ADD = "roleAdd";
+    //角色修改
+    public static final String ROLE_EDIT = "roleEdit";
+    //角色删除
+    public static final String ROLE_DELETE = "roleDelete";
     //城市管理
     public static final String CITY_MANAGEMENT = "cityManagement";
     //日志管理

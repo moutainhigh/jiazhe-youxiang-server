@@ -24,6 +24,8 @@ import com.jiazhe.youxiang.server.vo.resp.sysrole.RoleWithPermResp;
 import com.jiazhe.youxiang.server.vo.resp.sysrole.SysRoleResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.util.Strings;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +61,7 @@ public class APISysRoleController extends BaseController {
         return ResponseFactory.buildResponse(sysRoleRespList);
     }
 
+    @RequiresPermissions(value = {PermissionConstant.ROLE_MANAGEMENT, PermissionConstant.ROLE_SEARCH}, logical = Logical.OR)
     @ApiOperation(value = "【后台】角色列表（分页）", httpMethod = "GET", response = SysRoleResp.class, responseContainer = "List", notes = "分页查询角色信息，有条件查询")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ROLE, operate = "查看角色列表", level = LogLevelEnum.LEVEL_1)
@@ -70,6 +73,7 @@ public class APISysRoleController extends BaseController {
         return ResponseFactory.buildPaginationResponse(sysRoleRespList, paging);
     }
 
+    @RequiresPermissions(PermissionConstant.ROLE_DELETE)
     @ApiOperation(value = "【后台】删除角色", httpMethod = "POST", notes = "根据id删除角色信息和角色对应的权限信息，此处未删除员工和角色的绑定关系")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ROLE, operate = "删除角色", level = LogLevelEnum.LEVEL_3)
@@ -91,6 +95,7 @@ public class APISysRoleController extends BaseController {
         return ResponseFactory.buildResponse(result);
     }
 
+    @RequiresPermissions(value = {PermissionConstant.ROLE_ADD, PermissionConstant.ROLE_EDIT}, logical = Logical.OR)
     @ApiOperation(value = "【后台】保存角色信息", httpMethod = "POST", notes = "新建、修改保存角色信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ROLE, operate = "保存角色信息", level = LogLevelEnum.LEVEL_2)
