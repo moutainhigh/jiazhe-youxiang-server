@@ -556,6 +556,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         Integer[] voucherPayCount = {0};
         //充值卡支付金额
         BigDecimal[] rechargeCardPayMoney = {new BigDecimal(0)};
+        //积分卡支付金额
+        BigDecimal[] pointPayMoney = {new BigDecimal(0)};
         ProductPriceDTO productPriceDTO = productPriceService.getPriceByCity(dto.getProductId(), dto.getCustomerCityCode());
         if (null == productPriceDTO || productPriceDTO.getStatus().equals(Byte.valueOf("0"))) {
             throw new OrderException(OrderCodeEnum.PRODUCT_NOT_AVAILABLE);
@@ -711,6 +713,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         refundDTO.setOrderCode(paymentDTO.getOrderCode());
         refundDTO.setOrderId(paymentDTO.getOrderId());
         refundDTO.setRefundType(paymentDTO.getPayType());
+        refundDTO.setPointId(paymentDTO.getPointId());
         refundDTO.setRechargeCardId(paymentDTO.getRechargeCardId());
         refundDTO.setVoucherId(paymentDTO.getVoucherId());
         refundDTO.setRefundMoney(paymentDTO.getPayMoney());
