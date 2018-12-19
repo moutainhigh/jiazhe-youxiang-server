@@ -37,7 +37,8 @@ public class OrderInfoBiz {
     public List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String worekerMobile, Paging paging) {
         List<OrderInfoDTO> orderInfoDTOList = orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, worekerMobile, paging);
         orderInfoDTOList.stream().forEach(bean -> {
-            bean.setPayment(calculateOrderNeedPay(bean));//计算待支付金额放入订单信息中
+            //计算待支付金额放入订单信息中
+            bean.setPayment(calculateOrderNeedPay(bean));
         });
         return orderInfoDTOList;
     }

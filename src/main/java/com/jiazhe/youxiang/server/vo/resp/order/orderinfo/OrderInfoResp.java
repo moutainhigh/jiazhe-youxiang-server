@@ -68,6 +68,9 @@ public class OrderInfoResp extends BaseVO {
     @ApiModelProperty("服务时间")
     private Long realServiceTime;
 
+    @ApiModelProperty("积分卡支付金额")
+    private BigDecimal payPoint;
+
     @ApiModelProperty("充值卡支付金额")
     private BigDecimal payRechargeCard;
 
@@ -220,6 +223,14 @@ public class OrderInfoResp extends BaseVO {
 
     public void setRealServiceTime(Long realServiceTime) {
         this.realServiceTime = realServiceTime;
+    }
+
+    public BigDecimal getPayPoint() {
+        return payPoint;
+    }
+
+    public void setPayPoint(BigDecimal payPoint) {
+        this.payPoint = payPoint;
     }
 
     public BigDecimal getPayRechargeCard() {

@@ -103,9 +103,9 @@ public class APISignInController extends BaseController {
                 if (s.getPrincipal() instanceof SysUserDTO) {
                     SysUserDTO temp = (SysUserDTO) s.getPrincipal();
                     if (loginName.equals(temp.getLoginName())) {
-                        logger.info(("删除员工" + temp.getLoginName() + "的登陆session"));
                         //CookieUtil.getUid(request, "JSESSIONID"))可能为null，所以注意equals方法的比较顺序
                         if (!session.getId().equals(CookieUtil.getUid(request, "JSESSIONID"))) {
+                            logger.info(("删除员工" + temp.getLoginName() + "的登陆session"));
                             sessionDAO.delete(session);
                         }
                     }
