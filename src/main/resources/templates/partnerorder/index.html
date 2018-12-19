@@ -8,8 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <!-- CSS -->
     <link rel="stylesheet" th:href="@{/static/init.css}"/>
+    <link rel="stylesheet" th:href="@{/static/editable-select/css/jquery-editable-select.min.css}"/>
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
+    <script th:src="@{/static/editable-select/js/jquery-editable-select.min.js}"></script>
 
     <style>
         .ui-jqgrid .ui-jqgrid-bdiv {
@@ -393,10 +395,16 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label no-padding-right">产品类型：</label>
                                 <div class="col-sm-8">
-                                    <div class="pos-rel">
-                                        <input id="saveProductType" name="productType" class="form-control"
-                                               type="text" style="height:30px"/>
-                                    </div>
+                                    <!--<div class="pos-rel">-->
+                                        <!--<input id="saveProductType" name="productType" class="form-control"-->
+                                               <!--type="text" style="height:30px"/>-->
+                                    <!--</div>-->
+                                    <select id="saveProductType" name="productType" class="form-control">
+                                        <option>58到家</option>
+                                        <option>系统派单</option>
+                                        <option>后台派单</option>
+                                        <option>现金</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="space-2"></div>
@@ -529,6 +537,11 @@
         //重新修改表格宽度
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
+        });
+
+        $('#saveProductType').editableSelect({
+            effects: 'slide',
+            filter:false
         });
 
         initDatePicker();
@@ -673,7 +686,7 @@
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
         str += getFunctionButton("btn-success", "openShow(" + rowObject.id + ")", "查看");
-        if (permission.indexOf("partnerOrderEdit") != -1){
+        if (permission.indexOf("partnerOrderEdit") != -1) {
             if (rowObject.status == 1) {
                 str += getFunctionButton("btn-primary", "openEdit(" + rowObject.id + ")", "修改");
             }
@@ -698,6 +711,12 @@
     function openNew() {
         initForm();
         $("#partnerOrderId").val(0);
+        $("#partnerOrderForm #savePrePay").val(0);
+        $("#partnerOrderForm #saveAppendPay").val(0);
+        var time = new Date().getTime();
+        $("#saveOrderTime").val(dateFormat(time));
+        $("#saveOrderTime").next().next().val(time);
+        $("#saveServiceTime").next().next().val(0);
         $("#partnerOrderModalTitle").html("商家订单-新建");
         $("#partnerOrderSaveBtn").show();
         $("#modal-partnerOrder").modal("show");
@@ -749,6 +768,14 @@
     }
 
     function savePartnerOrder() {
+        if (!isNumber($("#savePrePay").val())) {
+            bootboxalert("预付必须为数字！");
+            return false;
+        }
+        if (!isNumber($("#saveAppendPay").val())) {
+            bootboxalert("再次支付必须为数字！");
+            return false;
+        }
         var data = transformToJson($('#partnerOrderForm').serializeArray());
         data.customerCityName = $("#saveCustomerCityCode option:selected").text();
         $.ajax({
@@ -758,9 +785,13 @@
             data: data,
             type: "POST",
             success: function (data) {
-                $("#modal-partnerOrder").modal('hide');
-                jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                refreshOverviewMoney();
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $("#modal-partnerOrder").modal('hide');
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                    refreshOverviewMoney();
+                }
             },
             error: error
         });
@@ -834,7 +865,6 @@
         $("#saveAdvancePay").val(0);
         $("#saveRemark").val('');
         var time = new Date().getTime();
-        $("#saveAdvanceTime").val(time);
         $("#saveAdvanceTime").val(dateFormat(time));
         $("#saveAdvanceTime").next().next().val(time);
         $("#modal-advancePay").modal('show');

@@ -22,6 +22,8 @@ public class OrderRefundDTO extends BaseObject {
 
     private Byte refundType;
 
+    private Integer pointId;
+
     private Integer rechargeCardId;
 
     private Integer voucherId;
@@ -60,6 +62,14 @@ public class OrderRefundDTO extends BaseObject {
 
     public void setRefundType(Byte refundType) {
         this.refundType = refundType;
+    }
+
+    public Integer getPointId() {
+        return pointId;
+    }
+
+    public void setPointId(Integer pointId) {
+        this.pointId = pointId;
     }
 
     public Integer getRechargeCardId() {

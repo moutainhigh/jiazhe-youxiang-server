@@ -1,6 +1,9 @@
 package com.jiazhe.youxiang.server.service.impl.order;
 
 import com.google.common.collect.Lists;
+import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.ConstantFetchUtil;
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.GenerateCode;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
@@ -37,6 +40,8 @@ import com.jiazhe.youxiang.server.service.voucher.VoucherService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
 import org.apache.logging.log4j.util.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,6 +63,8 @@ import java.util.stream.Collectors;
  */
 @Service("orderInfoService")
 public class OrderInfoServiceImpl implements OrderInfoService {
+
+    Logger logger = LoggerFactory.getLogger(OrderInfoServiceImpl.class);
 
     @Autowired
     private OrderInfoPOManualMapper orderInfoPOManualMapper;
@@ -236,10 +243,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         long delayDays = (df.parse(df.format(dto.getServiceTime())).getTime() - df.parse(df.format(new Date())).getTime()) / (24 * 60 * 60 * 1000);
-        if (productDTO.getDelayDays()>delayDays) {
+        if (productDTO.getDelayDays() > delayDays) {
             throw new OrderException(OrderCodeEnum.SERVICE_TIME_ERROR);
         }
-        String orderCode = GenerateCode.generateOrderCode(customerDTO.getMobile());
+        String orderCode = generateOrderCode();
         //代金券支付数量
         Integer[] voucherPayCount = {0};
         BigDecimal[] rechargeCardPayMoney = {new BigDecimal(0)};
@@ -247,9 +254,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (null == productPriceDTO || productPriceDTO.getStatus().equals(Byte.valueOf("0"))) {
             throw new OrderException(OrderCodeEnum.PRODUCT_NOT_AVAILABLE);
         }
-        if(!Strings.isBlank(dto.getPointIds())){
+        if (!Strings.isBlank(dto.getPointIds())) {
             List<Integer> pointIds = Arrays.asList(dto.getPointIds().split(","))
-                    .stream().map(s->Integer.parseInt(s.trim()))
+                    .stream().map(s -> Integer.parseInt(s.trim()))
                     .collect(Collectors.toList());
             List<PointDTO> pointDTOList = pointService.findByIds(pointIds);
         }
@@ -541,14 +548,16 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         long delayDays = (df.parse(df.format(dto.getServiceTime())).getTime() - df.parse(df.format(new Date())).getTime()) / (24 * 60 * 60 * 1000);
-        if (productDTO.getDelayDays()>delayDays) {
+        if (productDTO.getDelayDays() > delayDays) {
             throw new OrderException(OrderCodeEnum.SERVICE_TIME_ERROR);
         }
-        String orderCode = GenerateCode.generateOrderCode(customerDTO.getMobile());
+        String orderCode = generateOrderCode();
         //代金券支付数量
         Integer[] voucherPayCount = {0};
         //充值卡支付金额
         BigDecimal[] rechargeCardPayMoney = {new BigDecimal(0)};
+        //积分卡支付金额
+        BigDecimal[] pointPayMoney = {new BigDecimal(0)};
         ProductPriceDTO productPriceDTO = productPriceService.getPriceByCity(dto.getProductId(), dto.getCustomerCityCode());
         if (null == productPriceDTO || productPriceDTO.getStatus().equals(Byte.valueOf("0"))) {
             throw new OrderException(OrderCodeEnum.PRODUCT_NOT_AVAILABLE);
@@ -704,6 +713,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         refundDTO.setOrderCode(paymentDTO.getOrderCode());
         refundDTO.setOrderId(paymentDTO.getOrderId());
         refundDTO.setRefundType(paymentDTO.getPayType());
+        refundDTO.setPointId(paymentDTO.getPointId());
         refundDTO.setRechargeCardId(paymentDTO.getRechargeCardId());
         refundDTO.setVoucherId(paymentDTO.getVoucherId());
         refundDTO.setRefundMoney(paymentDTO.getPayMoney());
@@ -720,7 +730,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (!orderPaymentDTOList.isEmpty()) {
             orderPaymentDTOList.stream().forEach(bean -> {
                 orderRefundDTOList.add(paymentDto2RefundDto(bean));
-                if(bean.getPayType().equals(CommonConstant.PAY_POINT)){
+                if (bean.getPayType().equals(CommonConstant.PAY_POINT)) {
                     PointDTO pointDTO = pointService.getById(bean.getPointId());
                     pointDTO.setBalance(pointDTO.getBalance().add(bean.getPayMoney()));
                     pointDTOList.add(pointDTO);
@@ -738,7 +748,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 }
             });
         }
-        if(!pointDTOList.isEmpty()){
+        if (!pointDTOList.isEmpty()) {
             pointService.batchUpdate(pointDTOList);
         }
         if (!rcDTOList.isEmpty()) {
@@ -771,5 +781,21 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         });
         orderInfoPO.setComments(comments.toString());
         return eleProductCodeDTOList;
+    }
+
+    /**
+     * 生成订单号 yyyyMMddHH+3位序列号
+     */
+    private String generateOrderCode() {
+        Long beginHour = (System.currentTimeMillis() / ConstantFetchUtil.hour_1) * ConstantFetchUtil.hour_1;
+        Long endHour = beginHour + ConstantFetchUtil.hour_1;
+        Integer count = orderInfoPOManualMapper.getCountWithinThisHour(beginHour, endHour);
+        if (count >= CommonConstant.ORDER_CEILING_PER_HOUR) {
+            logger.error(OrderCodeEnum.ORDER_NO_GENERATE_ERROR.getMessage());
+            throw new OrderException(OrderCodeEnum.ORDER_NO_GENERATE_ERROR);
+        }
+        String index = String.format("%03d", count + 1);
+        String prefix = DateUtil.yyyyMMDDhh();
+        return prefix + index;
     }
 }
