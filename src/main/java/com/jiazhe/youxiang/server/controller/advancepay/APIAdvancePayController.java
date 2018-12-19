@@ -53,7 +53,7 @@ public class APIAdvancePayController extends BaseController{
     @RequiresPermissions(PermissionConstant.ADVANCE_PAY_ADD)
     @ApiOperation(value = "【后台】保存预支信息", httpMethod = "POST", notes = "保存预支信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.ORDER,operate = "保存预支信息",level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.ORDER,operate = "保存预支信息",level = LogLevelEnum.LEVEL_2)
     public Object save(@ModelAttribute AdvancePaySaveReq req) {
         advancePayBiz.save(req.getAdvancePay(),req.getAdvanceTime(),req.getRemark());
         return ResponseFactory.buildSuccess();
