@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCPOManualMapper">
+    <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.RechargeCardPO">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
+        <result column="project_id" property="projectId" jdbcType="INTEGER"/>
+        <result column="city_codes" property="cityCodes" jdbcType="VARCHAR"/>
+        <result column="product_ids" property="productIds" jdbcType="VARCHAR"/>
+        <result column="face_value" property="faceValue" jdbcType="DECIMAL"/>
+        <result column="balance" property="balance" jdbcType="DECIMAL"/>
+        <result column="exchange_record_id" property="exchangeRecordId" jdbcType="INTEGER"/>
+        <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, name,description,customer_id, project_id, city_codes,product_ids,face_value,balance,exchange_record_id,expiry_time,status,
+        ext_info, is_deleted,add_time, mod_time
+    </sql>
+
+    <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.RechargeCardPO" keyProperty="id"
+            useGeneratedKeys="true">
+    insert into recharge_card (id, name, description,
+      customer_id, project_id, city_codes,
+      product_ids, face_value, balance,
+      exchange_record_id, expiry_time, status,
+      ext_info, is_deleted, add_time,
+      mod_time)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+      #{customerId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR},
+      #{productIds,jdbcType=VARCHAR}, #{faceValue,jdbcType=DECIMAL}, #{balance,jdbcType=DECIMAL},
+      #{exchangeRecordId,jdbcType=INTEGER}, #{expiryTime,jdbcType=TIMESTAMP}, 1,
+      "", 0, NOW(),NOW())
+  </insert>
+
+    <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.RechargeCardPO">
+        SELECT rc.id, rc.name,rc.description,rc.customer_id, rc.project_id,
+        rc.city_codes,rc.product_ids,rc.face_value,rc.balance,
+        rc.exchange_record_id,rc.expiry_time,rc.status,rc.ext_info, rc.is_deleted,rc.add_time, rc.mod_time
+        FROM recharge_card rc LEFT JOIN
+        recharge_card_exchange_record rcec ON rc.id = rcec.recharge_card_id
+        LEFT JOIN customer c ON c.id = rc.customer_id
+        <where>
+            <if test="mobile != null and mobile != ''">
+                AND c.mobile = #{mobile}
+            </if>
+            <if test="exchangeType != null">
+                AND rcec.exchange_type = #{exchangeType}
+            </if>
+            <if test="status != null">
+                AND rc.status = #{status}
+            </if>
+            <if test="expiry == 0">
+                AND rc.expiry_time &gt; NOW()
+            </if>
+            <if test="expiry == 1">
+                AND rc.expiry_time &lt;= NOW()
+            </if>
+            AND rc.is_deleted = 0 ORDER BY rc.add_time desc
+        </where>
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) FROM recharge_card rc
+        LEFT JOIN recharge_card_exchange_record rcec ON rc.id = rcec.recharge_card_id
+        LEFT JOIN customer c ON c.id = rc.customer_id
+        <where>
+            <if test="mobile != null and mobile != ''">
+                AND c.mobile = #{mobile}
+            </if>
+            <if test="exchangeType != null">
+                AND rcec.exchange_type = #{exchangeType}
+            </if>
+            <if test="status != null">
+                AND rc.status = #{status}
+            </if>
+            <if test="expiry == 0">
+                AND rc.expiry_time &gt; NOW()
+            </if>
+            <if test="expiry == 1">
+                AND rc.expiry_time &lt;= NOW()
+            </if>
+            AND rc.is_deleted = 0 ORDER BY rc.add_time desc
+        </where>
+    </select>
+
+    <select id="findByIds" parameterType="java.util.List"
+            resultType="com.jiazhe.youxiang.server.domain.po.RechargeCardPO">
+        select
+        <include refid="Base_Column_List"/>
+        FROM recharge_card
+        where id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findByIdsInOrder" parameterType="java.util.List"
+            resultType="com.jiazhe.youxiang.server.domain.po.RechargeCardPO">
+        select
+        <include refid="Base_Column_List"/>
+        FROM recharge_card
+        where id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by field(
+        id,
+        <foreach collection="list" separator="," item="item">
+            #{item}
+        </foreach>
+        )
+    </select>
+
+    <update id="batchUpdate" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update recharge_card
+            <set>
+                name = #{item.name},description = #{item.description},project_id = #{item.projectId},city_codes =
+                #{item.cityCodes},product_ids = #{item.productIds},face_value = #{item.faceValue}, balance = #{item.balance},expiry_time = #{item.expiryTime},mod_time = NOW()
+            </set>
+            where id = #{item.id}
+        </foreach>
+    </update>
+
+    <select id="batchChangeStatus" parameterType="java.util.Map">
+        update recharge_card
+        <set>
+            status = #{status},mod_time = NOW()
+        </set>
+        where id in
+        <foreach collection="ids" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="totalValidBalance" resultType="java.math.BigDecimal">
+        SELECT sum(balance) FROM recharge_card where
+        customer_id = #{customerId}
+        AND status = 1
+        AND expiry_time &gt; NOW()
+        AND is_deleted = 0
+    </select>
+</mapper>

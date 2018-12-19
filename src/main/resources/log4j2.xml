@@ -1,132 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN" packages="org.apache.logging.log4j.core,net.kencochrane.raven.log4j2">
+    <Properties>
+        <Property name="PID">????</Property>
+        <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
+        <Property name="LOG_LEVEL_PATTERN">%5p</Property>
+        <Property name="FILE_LOG_PATTERN">[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n
+        </Property>
+        <Property name="LOG_PATTERN">%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{${LOG_LEVEL_PATTERN}}
+            %clr{${sys:PID}}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint}
+            %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}
+        </Property>
+        <Property name="LOG_HOME">logs</Property>
+    </Properties>
     <Appenders>
-        <Raven name="Sentry">
-            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY" />
-            <dsn>
-                ${sentry.dsn}
-            </dsn>
-        </Raven>
         <Console name="Stdout" target="SYSTEM_OUT" follow="true">
-            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
+            <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
-        <RollingFile name="AllLog" fileName="${jetty.logs}/all.log" filePattern="${jetty.logs}/all.log.%d{yyyy-MM-dd}.gz">
-            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
+
+
+        <RollingFile name="AllLog" fileName="${LOG_HOME}/all.log" filePattern="${LOG_HOME}/all.log.%d{yyyy-MM-dd}.gz">
+            <PatternLayout pattern="${FILE_LOG_PATTERN}"/>
             <Policies>
-                <TimeBasedTriggeringPolicy />
-            </Policies>
-        </RollingFile>
-        <RollingFile name="Error" fileName="${jetty.logs}/error.log" filePattern="${jetty.logs}/error.log.%d{yyyy-MM-dd}.gz">
-            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY" />
-            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
-            <Policies>
-                <TimeBasedTriggeringPolicy />
+                <TimeBasedTriggeringPolicy/>
             </Policies>
         </RollingFile>
 
-        <RollingFile name="DB" fileName="${jetty.logs}/db.log" filePattern="${jetty.logs}/db.log.%d{yyyy-MM-dd}.gz">
-            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY" />
-            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
+        <!--<RollingFile name="WarnLog" fileName="${LOG_HOME}/error.log" filePattern="${LOG_HOME}/warn.log.%d{yyyy-MM-dd}.gz">-->
+        <!--<Filters>-->
+        <!--<ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>-->
+        <!--<ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>-->
+        <!--</Filters>-->
+        <!--<PatternLayout pattern="${FILE_LOG_PATTERN}" />-->
+        <!--<Policies>-->
+        <!--<TimeBasedTriggeringPolicy/>-->
+        <!--</Policies>-->
+        <!--</RollingFile>-->
+
+        <RollingFile name="ErrorLog" fileName="${LOG_HOME}/error.log"
+                     filePattern="${LOG_HOME}/error.log.%d{yyyy-MM-dd}.gz">
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${FILE_LOG_PATTERN}"/>
             <Policies>
-                <TimeBasedTriggeringPolicy />
+                <TimeBasedTriggeringPolicy/>
             </Policies>
         </RollingFile>
-
-        <RollingFile name="JMonitor" fileName="${jetty.logs}/jmonitor.log" filePattern="${jetty.logs}/jmonitor.log.%d{yyyy-MM-dd}.gz">
-            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
-            <Policies>
-                <TimeBasedTriggeringPolicy />
-            </Policies>
-        </RollingFile>
-
-        <RollingFile name="JMonitorStore" fileName="${jetty.logs}/jmonitor.logstore.log" filePattern="${jetty.logs}/jmonitor.logstore.log.%d{yyyy-MM-dd}.gz">
-            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
-            <Policies>
-                <TimeBasedTriggeringPolicy />
-            </Policies>
-        </RollingFile>
-
-        <RollingFile name="XuanWu" fileName="${jetty.logs}/xuanwu.log" filePattern="${jetty.logs}/xuanwu.log.%d{yyyy-MM-dd}.gz">
-            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
-            <Policies>
-                <TimeBasedTriggeringPolicy />
-            </Policies>
-        </RollingFile>
-
-        <RollingFile name="Out_Request" fileName="${jetty.logs}/outRequest.log" filePattern="${jetty.logs}/outRequest.log.%d{yyyy-MM-dd}.gz">
-            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
-            <Policies>
-                <TimeBasedTriggeringPolicy />
-            </Policies>
-        </RollingFile>
-
-        <RollingFile name="Dubbo" fileName="${jetty.logs}/dubbo.log" filePattern="${jetty.logs}/dubbo.log.%d{yyyy-MM-dd}.gz">
-            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
-            <Policies>
-                <TimeBasedTriggeringPolicy />
-            </Policies>
-        </RollingFile>
-
-        <RollingFile name="ScheduleJob" fileName="${jetty.logs}/schedulejob.log" filePattern="${jetty.logs}/schedulejob.log.%d{yyyy-MM-dd}.gz">
-            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
-            <Policies>
-                <TimeBasedTriggeringPolicy />
-            </Policies>
-        </RollingFile>
-
-        <MmqAppender name="mmqAppender" env="${log.group}">
-            <XuanwuLayout/>
-        </MmqAppender>
-
     </Appenders>
 
     <Loggers>
         <Root level="INFO" includeLocation="true">
-            <AppenderRef ref="Stdout" />
-            <AppenderRef ref="Error" />
-            <AppenderRef ref="Sentry" />
-            <AppenderRef ref="AllLog" />
-            <AppenderRef ref="catAppender" />
-            <AppenderRef ref="mmqAppender"/>
+            <appender-ref ref="Stdout"/>
+            <appender-ref ref="AllLog"/>
+            <!--<appender-ref ref="WarnLog"/>-->
+            <appender-ref ref="ErrorLog"/>
         </Root>
 
-        <Logger name="db" level="INFO" includeLocation="true" additivity="false">
-            <AppenderRef ref="DB" />
-            <AppenderRef ref="Sentry" />
+        <!--  第三方的软件日志级别 -->
+        <Logger name="org.springframework" level="INFO" includeLocation="true" additivity="false">
+            <appender-ref ref="Stdout"/>
+            <appender-ref ref="AllLog"/>
+            <!--<appender-ref ref="WarnLog"/>-->
+            <appender-ref ref="ErrorLog"/>
         </Logger>
 
-        <Logger name="jmonitor" level="INFO" includeLocation="true" additivity="false">
-            <AppenderRef ref="JMonitor" />
+        <!-- 应用的日志级别  -->
+        <Logger name="youxiang" level="INFO" includeLocation="true" additivity="false">
+            <appender-ref ref="Stdout"/>
+            <appender-ref ref="AllLog"/>
+            <!--<appender-ref ref="WarnLog"/>-->
+            <appender-ref ref="ErrorLog"/>
         </Logger>
-
-        <Logger name="jmonitorlogstore" level="INFO" includeLocation="true" additivity="false">
-            <AppenderRef ref="JMonitorStore" />
-        </Logger>
-
-        <Logger name="com.maoyan.xuanwu.hanlinyuan.server.dao" level="DEBUG" includeLocation="true" additivity="false">
-            <AppenderRef ref="Stdout"/>
-        </Logger>
-
-        <Logger name="xuanwu" level="INFO" includeLocation="true" additivity="false">
-            <AppenderRef ref="Xuanwu" />
-            <AppenderRef ref="Stdout"/>
-            <AppenderRef ref="Sentry" />
-            <AppenderRef ref="mmqAppender"/>
-        </Logger>
-        <Logger name="Out_Request" level="INFO" includeLocation="true" additivity="false">
-            <AppenderRef ref="Out_Request" />
-            <AppenderRef ref="Stdout"/>
-            <AppenderRef ref="Sentry" />
-            <AppenderRef ref="mmqAppender"/>
-        </Logger>
-
-        <Logger name="com.alibaba.dubbo" level="INFO" includeLocation="true" additivity="false">
-            <AppenderRef ref="Dubbo" />
-        </Logger>
-
-        <Logger name="com.xxl.job" level="Error" additivity="false">
-            <AppenderRef ref="ScheduleJob"/>
-        </Logger>
-
     </Loggers>
 </Configuration>

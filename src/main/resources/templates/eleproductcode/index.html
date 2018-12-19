@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title></title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/static/init.css}"/>
+    <!-- Javascript -->
+    <script th:src="@{/static/init.js}"></script>
+</head>
+
+<body class="no-skin">
+<div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a th:href="@{/main/main_center}">主页</a>
+                    </li>
+                    <li class="active" th:text="商品兑换码管理"></li>
+                </ul><!-- /.breadcrumb -->
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xs-12" style="padding-top:40px">
+                        <shiro:hasPermission name="eleCodeSearch">
+                            <form id="eleProductCodeSearchForm" class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <div class="col-sm-6">
+                                        <label class="col-sm-2 control-label no-padding-right">商品：</label>
+                                        <div class="col-sm-2">
+                                            <select id="searchProductId" name="productId"
+                                                    class="selectpicker show-tick form-control">
+                                                <option value=>所有</option>
+                                            </select>
+                                        </div>
+                                        <label class="col-sm-2 control-label no-padding-right">批次：</label>
+                                        <div class="col-sm-2">
+                                            <select id="searchBatchName" name="batchName"
+                                                    class="selectpicker show-tick form-control">
+                                                <option value="">所有</option>
+                                            </select>
+                                        </div>
+                                        <label class="col-sm-2 control-label no-padding-right">状态：</label>
+                                        <div class="col-sm-2">
+                                            <select id="searchStatus" name="status"
+                                                    class="selectpicker show-tick form-control">
+                                                <option value=>所有</option>
+                                                <option value=1>已兑换</option>
+                                                <option value=0>未兑换</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-2 control-label no-padding-right">兑换码：</label>
+                                        <div class="col-sm-4">
+                                            <div class="pos-rel">
+                                                <input id="searchCode" name="code" class="form-control" type="text"
+                                                       style="height:30px"/>
+                                            </div>
+                                        </div>
+                                        <label class="col-sm-2 control-label no-padding-right">密钥：</label>
+                                        <div class="col-sm-4">
+                                            <div class="pos-rel">
+                                                <input id="searchKeyt" name="keyt" class="form-control" type="text"
+                                                       style="height:30px"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <button class="btn btn-white btn-default btn-round btn-sm"
+                                                onclick="return search()">
+                                            <i class="ace-icon fa fa-search red2"></i>
+                                            查询
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </shiro:hasPermission>
+                    </div><!-- /.col -->
+
+                    <div class="col-xs-12" style="text-align: right" id="buttonDiv">
+                        <p style="margin:1px;height: 31px">
+                            <shiro:hasPermission name="eleCodeAdd">
+                                <a class="btn btn-success btn-round btn-sm" role="button" href="#new-modal-form"
+                                   data-toggle="modal" onclick="openNew()">
+                                    <i class="ace-icon fa fa-plus"></i>新建
+                                </a>&nbsp;&nbsp;
+                            </shiro:hasPermission>
+                            <shiro:hasPermission name="eleCodeEdit">
+                                <a class="btn btn-primary btn-round btn-sm" role="button" href="#edit-modal-form"
+                                   data-toggle="modal" onclick="openEdit()">
+                                    <i class="ace-icon fa fa-edit"></i>修改
+                                </a>
+                            </shiro:hasPermission>
+                        </p>
+                    </div><!-- /.col -->
+
+                    <div class="col-xs-12">
+                        <table id="grid-table"></table>
+
+                        <div id="grid-pager"></div>
+                    </div><!-- /.col -->
+
+                    <div id="new-modal-form" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger">导入电子商品兑换码</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-1"></div>
+                                        <div class="col-xs-12 col-sm-9">
+                                            <form id="eleProductCodeSaveForm" class="form-horizontal" role="form">
+                                                <input type="hidden" name="excelUrl" id="excelUrl">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">所属商品：</label>
+                                                    <div class="col-sm-8">
+                                                        <select id="saveProductId" name="productId"
+                                                                class="selectpicker show-tick form-control">
+                                                            <option value=></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">批次名称：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="saveBatchName" name="batchName"
+                                                                   class="form-control"
+                                                                   type="text" style="height: 30px;"/>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveExpiryTime">过期时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker" id="saveExpiryTime"
+                                                                   type="text" readonly/>
+                                                            <span class="input-group-addon">
+                                                                            <i class="fa fa-calendar bigger-110"></i>
+                                                                        </span>
+                                                            <input type="hidden" value=0 name="expiryTime"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">电子码excel：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="widget-main">
+                                                            <div class="form-group">
+                                                                <div class="col-xs-12">
+                                                                    <input type="file" id="eleProductCodeFile"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="save()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        保存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="edit-modal-form" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger">批量修改</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-1"></div>
+                                        <div class="col-xs-12 col-sm-9">
+                                            <form id="eleProductCodeEditForm" class="form-horizontal" role="form">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">批次名称：</label>
+                                                    <div class="col-sm-8">
+                                                        <select id="editBatchName" name="batchName"
+                                                                class="selectpicker show-tick form-control">
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveExpiryTime">过期时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker" id="editExpiryTime"
+                                                                   type="text" readonly/>
+                                                            <span class="input-group-addon">
+                                                                            <i class="fa fa-calendar bigger-110"></i>
+                                                                        </span>
+                                                            <input type="hidden" value=0 name="expiryTime"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="edit()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        修改
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+</div><!-- /.main-container -->
+</body>
+<script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+    var permission = getCookie("permission");
+
+    $(function () {
+        $(window).resize(function () {
+            $("#grid-table").setGridWidth($(window).width() * 0.96);
+        });
+        initDatePicker();
+        //填充电子商品下拉框
+        $.ajax({
+            url: "/api/product/getlist",
+            dataType: "json",
+            async: false,
+            data: {
+                productType: 1,
+                pageSize: 10000,
+                pageNum: 1
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#searchProductId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                        $("#saveProductId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                    }
+                }
+            },
+            error: error
+        });
+
+        //填充批次下拉框
+        refreshBatch();
+
+        var tableOption = {
+            url: "/api/eleproductcode/listpage",
+            postData: transformToJson($('#eleProductCodeSearchForm').serializeArray()),
+            colNames: ['', '批次名称', '商品名称', '兑换码', '密钥', '使用状态', '过期时间'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'batchName', index: 'batchName', width: 100, sortable: false},
+                {name: 'productResp.name', index: 'productResp.name', width: 50, sortable: false},
+                {name: 'code', index: 'code', width: 80, sortable: false},
+                {name: 'keyt', index: 'keyt', width: 80, sortable: false},
+                {
+                    name: 'status',
+                    index: 'status',
+                    width: 30,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return rowObject.status == 1 ? "已兑换" : "未兑换";
+                    }
+                },
+                {
+                    name: 'expiryTime',
+                    index: 'expiryTime',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return dateFormat(rowObject.expiryTime);
+                    }
+                }
+            ],
+            caption: "电子商品兑换码列表"
+        };
+        initTable(grid_selector, pager_selector, tableOption);
+    });
+
+    function search() {
+        jQuery(grid_selector).setGridParam({
+            url: "/api/eleproductcode/listpage",
+            postData: transformToJson($('#eleProductCodeSearchForm').serializeArray()),
+        }).trigger("reloadGrid", [{page: 1}]);
+        return false;
+    }
+
+    $('#eleProductCodeFile').ace_file_input({
+        style: 'well',
+        btn_choose: '请选择电子商品兑换码',
+        btn_change: null,
+        no_icon: 'ace-icon fa fa-cloud-upload',
+        droppable: true,
+        thumbnail: 'large',
+        allowExt: ['xlsx'],
+//        allowMime: ['application/vnd.ms-excel'],
+    }).on('change', function () {
+        var image = $('#eleProductCodeFile')[0].files[0]
+        if (!image) {
+            return;
+        }
+        var formData = new FormData();
+        formData.append('file', image);
+
+        $.ajax({
+            url: "/api/eleproductcode/uploadexcel",
+            dataType: "json",
+            type: 'POST',
+            async: true,
+            processData: false, // 告诉jQuery不要去处理发送的数据
+            contentType: false,// 告诉jQuery不要去设置Content-Type请求头
+            data: formData,
+            cache: false,
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $('#excelUrl').val(data.data.url);
+                    bootboxalert(data.data.count + "个电子码检验合格");
+                }
+            },
+            error: error
+        });
+    });
+
+    function openNew() {
+        $("#saveProductId option:first").prop("selected", 'selected');
+        $("#saveBatchName").val('');
+        $("#saveExpiryTime").val('');
+        $("#saveExpiryTime").next().next().val(0);
+        $("#excelUrl").val('');
+        $('#eleProductCodeFile').ace_file_input('reset_input');
+    }
+
+    function openEdit() {
+        $("#editBatchName option:first").prop("selected", 'selected');
+        $("#editExpiryTime").val('');
+        $("#editExpiryTime").next().next().val(0);
+    }
+
+    function edit() {
+        $.ajax({
+            url: "/api/eleproductcode/batchchangeexpirytime",
+            dataType: "json",
+            async: false,
+            data: transformToJson($('#eleProductCodeEditForm').serializeArray()),
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $("#edit-modal-form").modal('hide');
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: error
+        });
+    }
+
+    function save() {
+        $.ajax({
+            url: "/api/eleproductcode/importcode",
+            dataType: "json",
+            async: false,
+            data: transformToJson($('#eleProductCodeSaveForm').serializeArray()),
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $("#new-modal-form").modal('hide');
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                    refreshBatch();
+                }
+            },
+            error: error
+        });
+    }
+
+    //填充批次下拉框
+    function refreshBatch() {
+        $("#searchBatchName").empty();
+        $("#editBatchName").empty();
+        $("#searchBatchName").append("<option value=>所有</option>");
+        $.ajax({
+            url: "/api/eleproductcode/getallbatch",
+            dataType: "json",
+            async: false,
+            data: {},
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#searchBatchName").append("<option value=" + result[i].batchName + ">" + result[i].batchName + "</option>");
+                        $("#editBatchName").append("<option value=" + result[i].batchName + ">" + result[i].batchName + "</option>");
+                    }
+                }
+            },
+            error: error
+        });
+    }
+</script>
+</html>
+

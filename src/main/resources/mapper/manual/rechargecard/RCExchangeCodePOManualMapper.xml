@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCExchangeCodePOManualMapper">
+    <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="batch_id" property="batchId" jdbcType="INTEGER"/>
+        <result column="batch_name" property="batchName" jdbcType="VARCHAR"/>
+        <result column="recharge_card_name" property="rechargeCardName" jdbcType="VARCHAR"/>
+        <result column="batch_description" property="batchDescription" jdbcType="VARCHAR"/>
+        <result column="project_id" property="projectId" jdbcType="INTEGER"/>
+        <result column="city_codes" property="cityCodes" jdbcType="VARCHAR"/>
+        <result column="product_ids" property="productIds" jdbcType="VARCHAR"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="keyt" property="keyt" jdbcType="VARCHAR"/>
+        <result column="face_value" property="faceValue" jdbcType="DECIMAL"/>
+        <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP"/>
+        <result column="recharge_card_expiry_time" property="rechargeCardExpiryTime" jdbcType="TIMESTAMP"/>
+        <result column="validity_period" property="validityPeriod" jdbcType="INTEGER"/>
+        <result column="expiry_type" property="expiryType" jdbcType="TINYINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="used" property="used" jdbcType="TINYINT"/>
+        <result column="customer_id" property="customerId" jdbcType="VARCHAR"/>
+        <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, batch_id,batch_name,recharge_card_name,batch_description,project_id,city_codes,product_ids,code,keyt,face_value,expiry_time,recharge_card_expiry_time,validity_period,expiry_type,status,
+        used,customer_id,ext_info, is_deleted,add_time, mod_time
+    </sql>
+
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT into recharge_card_exchange_code
+        (batch_id,batch_name,recharge_card_name,batch_description,project_id,city_codes,product_ids,code,keyt,face_value,expiry_time,recharge_card_expiry_time,
+        validity_period,expiry_type,status,used,ext_info,is_deleted,add_time,mod_time) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.batchId},#{item.batchName},#{item.rechargeCardName},#{item.batchDescription},#{item.projectId},#{item.cityCodes},#{item.productIds},
+            #{item.code},#{item.keyt},#{item.faceValue},#{item.expiryTime},#{item.rechargeCardExpiryTime},#{item.validityPeriod},#{item.expiryType},#{item.status},0,
+            "",0,NOW(),NOW())
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update recharge_card_exchange_code
+            <set>
+                batch_name = #{item.batchName},recharge_card_name = #{item.rechargeCardName},batch_description =
+                #{item.batchDescription},project_id = #{item.projectId},
+                city_codes = #{item.cityCodes},product_ids = #{item.productIds},expiry_time =
+                #{item.expiryTime},expiry_type = #{item.expiryType},
+                recharge_card_expiry_time = #{item.rechargeCardExpiryTime},validity_period =
+                #{item.validityPeriod},mod_time = NOW()
+            </set>
+            where id = #{item.id}
+        </foreach>
+    </update>
+
+    <update id="batchChangeStatus">
+        update recharge_card_exchange_code
+        <set>
+            status = #{status},mod_time = NOW()
+        </set>
+        where batch_id = #{batchId}
+    </update>
+
+    <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM recharge_card_exchange_code
+        <where>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+            <if test="used != null">
+                AND used = #{used}
+            </if>
+            <if test="code != null  and code != ''">
+                AND code = #{code}
+            </if>
+            <if test="keyt != null  and keyt != ''">
+                AND keyt = #{keyt}
+            </if>
+            <if test="batchId != null  and batchId != 0">
+                AND batch_id = #{batchId}
+            </if>
+            AND is_deleted = 0 ORDER BY id ASC
+        </where>
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from recharge_card_exchange_code
+        <where>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+            <if test="used != null">
+                AND used = #{used}
+            </if>
+            <if test="code != null  and code != ''">
+                AND code = #{code}
+            </if>
+            <if test="keyt != null  and keyt != ''">
+                AND keyt = #{keyt}
+            </if>
+            <if test="batchId != null  and batchId != 0">
+                AND batch_id = #{batchId}
+            </if>
+            AND is_deleted = 0
+        </where>
+    </select>
+
+    <select id="findByKeyt" resultType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM recharge_card_exchange_code WHERE keyt = #{keyt} AND is_deleted = 0
+    </select>
+</mapper>

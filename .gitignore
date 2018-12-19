@@ -1,5 +1,7 @@
 *.idea/
 *.iml
-*/target/
-${jetty.logs}
+*/target/*
+*target/
 *.DS_Store
+${log.home}
+logs/

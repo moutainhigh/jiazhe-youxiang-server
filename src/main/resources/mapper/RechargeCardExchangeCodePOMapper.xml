@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.RechargeCardExchangeCodePOMapper" >
+  <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="batch_id" property="batchId" jdbcType="INTEGER" />
+    <result column="batch_name" property="batchName" jdbcType="VARCHAR" />
+    <result column="recharge_card_name" property="rechargeCardName" jdbcType="VARCHAR" />
+    <result column="batch_description" property="batchDescription" jdbcType="VARCHAR" />
+    <result column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="city_codes" property="cityCodes" jdbcType="VARCHAR" />
+    <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="keyt" property="keyt" jdbcType="VARCHAR" />
+    <result column="face_value" property="faceValue" jdbcType="DECIMAL" />
+    <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
+    <result column="recharge_card_expiry_time" property="rechargeCardExpiryTime" jdbcType="TIMESTAMP" />
+    <result column="validity_period" property="validityPeriod" jdbcType="INTEGER" />
+    <result column="expiry_type" property="expiryType" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="used" property="used" jdbcType="TINYINT" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, batch_id, batch_name, recharge_card_name, batch_description, project_id, city_codes, 
+    product_ids, code, keyt, face_value, expiry_time, recharge_card_expiry_time, validity_period, 
+    expiry_type, status, used, customer_id, ext_info, is_deleted, add_time, mod_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePOExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from recharge_card_exchange_code
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from recharge_card_exchange_code
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from recharge_card_exchange_code
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePOExample" >
+    delete from recharge_card_exchange_code
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO" >
+    insert into recharge_card_exchange_code (id, batch_id, batch_name, 
+      recharge_card_name, batch_description, project_id, 
+      city_codes, product_ids, code, 
+      keyt, face_value, expiry_time, 
+      recharge_card_expiry_time, validity_period, 
+      expiry_type, status, used, 
+      customer_id, ext_info, is_deleted, 
+      add_time, mod_time)
+    values (#{id,jdbcType=INTEGER}, #{batchId,jdbcType=INTEGER}, #{batchName,jdbcType=VARCHAR}, 
+      #{rechargeCardName,jdbcType=VARCHAR}, #{batchDescription,jdbcType=VARCHAR}, #{projectId,jdbcType=INTEGER}, 
+      #{cityCodes,jdbcType=VARCHAR}, #{productIds,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{keyt,jdbcType=VARCHAR}, #{faceValue,jdbcType=DECIMAL}, #{expiryTime,jdbcType=TIMESTAMP}, 
+      #{rechargeCardExpiryTime,jdbcType=TIMESTAMP}, #{validityPeriod,jdbcType=INTEGER}, 
+      #{expiryType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{used,jdbcType=TINYINT}, 
+      #{customerId,jdbcType=INTEGER}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO" >
+    insert into recharge_card_exchange_code
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="batchId != null" >
+        batch_id,
+      </if>
+      <if test="batchName != null" >
+        batch_name,
+      </if>
+      <if test="rechargeCardName != null" >
+        recharge_card_name,
+      </if>
+      <if test="batchDescription != null" >
+        batch_description,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="cityCodes != null" >
+        city_codes,
+      </if>
+      <if test="productIds != null" >
+        product_ids,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="keyt != null" >
+        keyt,
+      </if>
+      <if test="faceValue != null" >
+        face_value,
+      </if>
+      <if test="expiryTime != null" >
+        expiry_time,
+      </if>
+      <if test="rechargeCardExpiryTime != null" >
+        recharge_card_expiry_time,
+      </if>
+      <if test="validityPeriod != null" >
+        validity_period,
+      </if>
+      <if test="expiryType != null" >
+        expiry_type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="used != null" >
+        used,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="extInfo != null" >
+        ext_info,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="modTime != null" >
+        mod_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="batchId != null" >
+        #{batchId,jdbcType=INTEGER},
+      </if>
+      <if test="batchName != null" >
+        #{batchName,jdbcType=VARCHAR},
+      </if>
+      <if test="rechargeCardName != null" >
+        #{rechargeCardName,jdbcType=VARCHAR},
+      </if>
+      <if test="batchDescription != null" >
+        #{batchDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="cityCodes != null" >
+        #{cityCodes,jdbcType=VARCHAR},
+      </if>
+      <if test="productIds != null" >
+        #{productIds,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="keyt != null" >
+        #{keyt,jdbcType=VARCHAR},
+      </if>
+      <if test="faceValue != null" >
+        #{faceValue,jdbcType=DECIMAL},
+      </if>
+      <if test="expiryTime != null" >
+        #{expiryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rechargeCardExpiryTime != null" >
+        #{rechargeCardExpiryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="validityPeriod != null" >
+        #{validityPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="expiryType != null" >
+        #{expiryType,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="used != null" >
+        #{used,jdbcType=TINYINT},
+      </if>
+      <if test="customerId != null" >
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="extInfo != null" >
+        #{extInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modTime != null" >
+        #{modTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePOExample" resultType="java.lang.Integer" >
+    select count(*) from recharge_card_exchange_code
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update recharge_card_exchange_code
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.batchId != null" >
+        batch_id = #{record.batchId,jdbcType=INTEGER},
+      </if>
+      <if test="record.batchName != null" >
+        batch_name = #{record.batchName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rechargeCardName != null" >
+        recharge_card_name = #{record.rechargeCardName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.batchDescription != null" >
+        batch_description = #{record.batchDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectId != null" >
+        project_id = #{record.projectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.cityCodes != null" >
+        city_codes = #{record.cityCodes,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productIds != null" >
+        product_ids = #{record.productIds,jdbcType=VARCHAR},
+      </if>
+      <if test="record.code != null" >
+        code = #{record.code,jdbcType=VARCHAR},
+      </if>
+      <if test="record.keyt != null" >
+        keyt = #{record.keyt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.faceValue != null" >
+        face_value = #{record.faceValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.expiryTime != null" >
+        expiry_time = #{record.expiryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.rechargeCardExpiryTime != null" >
+        recharge_card_expiry_time = #{record.rechargeCardExpiryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.validityPeriod != null" >
+        validity_period = #{record.validityPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="record.expiryType != null" >
+        expiry_type = #{record.expiryType,jdbcType=TINYINT},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.used != null" >
+        used = #{record.used,jdbcType=TINYINT},
+      </if>
+      <if test="record.customerId != null" >
+        customer_id = #{record.customerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.extInfo != null" >
+        ext_info = #{record.extInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDeleted != null" >
+        is_deleted = #{record.isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="record.addTime != null" >
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modTime != null" >
+        mod_time = #{record.modTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update recharge_card_exchange_code
+    set id = #{record.id,jdbcType=INTEGER},
+      batch_id = #{record.batchId,jdbcType=INTEGER},
+      batch_name = #{record.batchName,jdbcType=VARCHAR},
+      recharge_card_name = #{record.rechargeCardName,jdbcType=VARCHAR},
+      batch_description = #{record.batchDescription,jdbcType=VARCHAR},
+      project_id = #{record.projectId,jdbcType=INTEGER},
+      city_codes = #{record.cityCodes,jdbcType=VARCHAR},
+      product_ids = #{record.productIds,jdbcType=VARCHAR},
+      code = #{record.code,jdbcType=VARCHAR},
+      keyt = #{record.keyt,jdbcType=VARCHAR},
+      face_value = #{record.faceValue,jdbcType=DECIMAL},
+      expiry_time = #{record.expiryTime,jdbcType=TIMESTAMP},
+      recharge_card_expiry_time = #{record.rechargeCardExpiryTime,jdbcType=TIMESTAMP},
+      validity_period = #{record.validityPeriod,jdbcType=INTEGER},
+      expiry_type = #{record.expiryType,jdbcType=TINYINT},
+      status = #{record.status,jdbcType=TINYINT},
+      used = #{record.used,jdbcType=TINYINT},
+      customer_id = #{record.customerId,jdbcType=INTEGER},
+      ext_info = #{record.extInfo,jdbcType=VARCHAR},
+      is_deleted = #{record.isDeleted,jdbcType=TINYINT},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      mod_time = #{record.modTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO" >
+    update recharge_card_exchange_code
+    <set >
+      <if test="batchId != null" >
+        batch_id = #{batchId,jdbcType=INTEGER},
+      </if>
+      <if test="batchName != null" >
+        batch_name = #{batchName,jdbcType=VARCHAR},
+      </if>
+      <if test="rechargeCardName != null" >
+        recharge_card_name = #{rechargeCardName,jdbcType=VARCHAR},
+      </if>
+      <if test="batchDescription != null" >
+        batch_description = #{batchDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="cityCodes != null" >
+        city_codes = #{cityCodes,jdbcType=VARCHAR},
+      </if>
+      <if test="productIds != null" >
+        product_ids = #{productIds,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="keyt != null" >
+        keyt = #{keyt,jdbcType=VARCHAR},
+      </if>
+      <if test="faceValue != null" >
+        face_value = #{faceValue,jdbcType=DECIMAL},
+      </if>
+      <if test="expiryTime != null" >
+        expiry_time = #{expiryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rechargeCardExpiryTime != null" >
+        recharge_card_expiry_time = #{rechargeCardExpiryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="validityPeriod != null" >
+        validity_period = #{validityPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="expiryType != null" >
+        expiry_type = #{expiryType,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="used != null" >
+        used = #{used,jdbcType=TINYINT},
+      </if>
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="extInfo != null" >
+        ext_info = #{extInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modTime != null" >
+        mod_time = #{modTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO" >
+    update recharge_card_exchange_code
+    set batch_id = #{batchId,jdbcType=INTEGER},
+      batch_name = #{batchName,jdbcType=VARCHAR},
+      recharge_card_name = #{rechargeCardName,jdbcType=VARCHAR},
+      batch_description = #{batchDescription,jdbcType=VARCHAR},
+      project_id = #{projectId,jdbcType=INTEGER},
+      city_codes = #{cityCodes,jdbcType=VARCHAR},
+      product_ids = #{productIds,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      keyt = #{keyt,jdbcType=VARCHAR},
+      face_value = #{faceValue,jdbcType=DECIMAL},
+      expiry_time = #{expiryTime,jdbcType=TIMESTAMP},
+      recharge_card_expiry_time = #{rechargeCardExpiryTime,jdbcType=TIMESTAMP},
+      validity_period = #{validityPeriod,jdbcType=INTEGER},
+      expiry_type = #{expiryType,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      used = #{used,jdbcType=TINYINT},
+      customer_id = #{customerId,jdbcType=INTEGER},
+      ext_info = #{extInfo,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      mod_time = #{modTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

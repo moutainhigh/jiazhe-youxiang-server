@@ -1,38 +1,34 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta charset="utf-8" />
-    <title>CRM首页</title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title></title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <!-- CSS -->
-    <link rel="stylesheet" href="../static/init.css"/>
+    <link rel="stylesheet" th:href="@{/static/init.css}"/><!--通用的css-->
     <!-- Javascript -->
-    <script src="../static/init.js"></script><!--通用的js-->
+    <script th:src="@{/static/init.js}"></script><!--通用的js-->
 </head>
 
 <body class="no-skin">
 
 <div class="main-container ace-save-state" id="main-container">
-    <script type="text/javascript">
-        try{ace.settings.loadState('main-container')}catch(e){}
-    </script>
-
     <div class="main-content">
         <div class="main-content-inner">
             <div class="breadcrumbs ace-save-state" id="breadcrumbs">
-               <!-- <ul class="breadcrumb">
-                    <li>
-                        <i class="ace-icon fa fa-home home-icon"></i>
-                        <a href="#">Home</a>
-                    </li>
+                <!-- <ul class="breadcrumb">
+                     <li>
+                         <i class="ace-icon fa fa-home home-icon"></i>
+                         <a href="#">Home</a>
+                     </li>
 
-                    <li>
-                        <a href="#">Other Pages</a>
-                    </li>
-                    <li class="active">Blank Page</li>
-                </ul>--><!-- /.breadcrumb -->
+                     <li>
+                         <a href="#">Other Pages</a>
+                     </li>
+                     <li class="active">Blank Page</li>
+                 </ul>--><!-- /.breadcrumb -->
             </div>
 
             <div class="page-content">
@@ -52,7 +48,7 @@
             <div class="footer-content" style="padding: 0px;">
 						<span class="bigger-120">
 							<span class="blue bolder"></span>
-							中国通广电子有限公司CRM管理系统 &copy; 2018
+							悠享吧 &copy; 2018
 						</span>
                 &nbsp; &nbsp;
             </div>
@@ -60,5 +56,8 @@
     </div>
 </div><!-- /.main-container -->
 </body>
+<script>
+
+</script>
 </html>
 

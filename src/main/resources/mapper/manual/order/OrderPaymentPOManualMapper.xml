@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.order.OrderPaymentPOManualMapper">
+    <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.OrderPaymentPO">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="order_code" property="orderCode" jdbcType="VARCHAR" />
+        <result column="order_id" property="orderId" jdbcType="INTEGER" />
+        <result column="pay_type" property="payType" jdbcType="TINYINT" />
+        <result column="recharge_card_id" property="rechargeCardId" jdbcType="INTEGER" />
+        <result column="voucher_id" property="voucherId" jdbcType="INTEGER" />
+        <result column="pay_money" property="payMoney" jdbcType="DECIMAL" />
+        <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+        <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,order_code,order_id,pay_type,recharge_card_id,voucher_id,pay_money,serial_number,
+        ext_info,is_deleted,add_time,mod_time
+    </sql>
+
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT into order_payment
+        (order_code,order_id,pay_type,recharge_card_id,voucher_id,pay_money,serial_number,
+        ext_info,is_deleted,add_time,mod_time) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.orderCode},#{item.orderId},#{item.payType},#{item.rechargeCardId},#{item.voucherId},#{item.payMoney},#{item.serialNumber},"",0,NOW(),NOW())
+        </foreach>
+    </insert>
+
+</mapper>

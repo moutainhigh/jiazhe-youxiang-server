@@ -1,180 +1,195 @@
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-		<meta charset="utf-8" />
-		<title>CRM登陆页面</title>
-		<link rel="shortcut icon" href="../static/images/icon/logo.gif" type="image/x-icon" />
-		<meta name="description" content="User login page" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-		<!-- CSS -->
-		<link rel="stylesheet" href="../static/init.css"/>
-		<!-- Javascript -->
-		<script src="../static/init.js"></script><!--通用的js-->
-	</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title>悠享吧</title>
+    <link rel="shortcut icon" th:href="@{/static/images/icon/logo.png}" type="image/x-icon"/>
+    <meta name="description" content="User login page"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/static/init.css}"/>
+    <!-- Javascript -->
+    <script th:src="@{/static/init.js}"></script><!--通用的js-->
+</head>
 
-	<body class="login-layout" style="padding-bottom:70px">
-		<div class="main-container">
-			<div class="main-content">
-				<div class="row">
-					<div class="col-sm-10 col-sm-offset-1">
-						<div class="login-container" style="padding-top:30px">
-							<div class="center">
-								<h1>
-									<i class="ace-icon fa fa-leaf green"></i>
-									<span class="red">通广CRM管理系统</span>
-								</h1>
-								<h4 class="blue" id="id-company-text">中国通广电子有限公司</h4>
-							</div>
+<body class="login-layout" style="padding-bottom:70px">
+<div class="main-container">
+    <div class="main-content">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <div class="login-container" style="padding-top:30px">
+                    <div class="center">
+                        <h1>
+                            <i class="ace-icon fa fa-leaf green"></i>
+                            <span class="red">悠享后台管理系统</span>
+                        </h1>
+                        <h4 class="blue" id="id-company-text"><!--北京悠享互联信息技术有限公司--></h4>
+                    </div>
 
-							<div class="space-6" style="padding-top:30px"></div>
+                    <div class="space-6" style="padding-top:30px"></div>
 
-							<div class="position-relative">
-								<div id="login-box" class="login-box visible widget-box no-border">
-									<div class="widget-body">
-										<div class="widget-main">
-											<h4 class="header blue lighter bigger">
-												<i class="ace-icon fa fa-coffee green"></i>
-												请输入用户名和密码
-											</h4>
+                    <div class="position-relative">
+                        <div id="login-box" class="login-box visible widget-box no-border">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <h4 class="header blue lighter bigger">
+                                        <i class="ace-icon fa fa-coffee green"></i>
+                                        请输入用户名和密码
+                                    </h4>
 
-											<div class="space-6"></div>
+                                    <div class="space-6"></div>
 
-											<form>
-												<fieldset>
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input id="username" type="text" class="form-control" placeholder="用户名" />
-															<i class="ace-icon fa fa-user"></i>
-														</span>
-													</label>
+                                    <form id="loginForm" onsubmit="return login()">
+                                        <input type="hidden" id="bizId" name="bizId">
+                                        <fieldset>
+                                            <label class="block clearfix">
+                                                <span class="block input-icon input-icon-right">
+                                                    <input id="loginname" name="loginname" type="text"
+                                                           class="form-control" placeholder="用户名"/>
+                                                    <i class="ace-icon fa fa-user"></i>
+                                                </span>
+                                            </label>
 
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input id="password" type="password" class="form-control" placeholder="密码" />
-															<i class="ace-icon fa fa-lock"></i>
-														</span>
-													</label>
+                                            <label class="block clearfix">
+                                                <span class="block input-icon input-icon-right">
+                                                    <input id="password" name="password" type="password"
+                                                           class="form-control" placeholder="密码"/>
+                                                    <i class="ace-icon fa fa-lock"></i>
+                                                </span>
+                                            </label>
 
-													<div class="space"></div>
+                                            <label id="identifyingCodeLabel" class="clearfix" style="display: none">
+                                                <span class="block input-icon input-icon-right">
+                                                    <input id="identifyingCode" name="identifyingCode" type="text"
+                                                           class="form-control" placeholder="验证码"/>
+                                                    <i class="ace-icon" id="identifyingCodeButton" onclick="getCode()">
+                                                        获取验证码
+                                                    </i>
+                                                    <i class="ace-icon" id="identifyingCodeBadge" style="display: none">
+                                                        <span class="badge badge-danger">60</span>
+                                                    </i>
+                                                </span>
+                                            </label>
 
-													<div class="clearfix">
-														<label class="inline">
-															<input type="checkbox" class="ace"/>
-															<span class="lbl"> 记住我</span>
-														</label>
+                                            <div class="space"></div>
 
-														<button type="button" class="width-35 pull-right btn btn-sm btn-primary" id="login-btn">
-															<i class="ace-icon fa fa-key"></i>
-															<span class="bigger-110">登陆</span>
-														</button>
-													</div>
+                                            <div class="clearfix">
 
-													<div class="space-4"></div>
-												</fieldset>
-											</form>
-										</div><!-- /.widget-main -->
+                                               <!-- <label class="inline">
+                                                    <input id="rememberMe" type="checkbox" class="ace"/>
+                                                    <span class="lbl"> 记住我</span>
+                                                </label>-->
 
-										<div class="toolbar clearfix">
-											<div>
+                                                <button type="submit" class="width-35 pull-right btn btn-sm btn-primary"
+                                                        id="login-btn">
+                                                    <i class="ace-icon fa fa-key"></i>
+                                                    <span class="bigger-110">登录</span>
+                                                </button>
+                                            </div>
 
-											</div>
+                                            <div class="space-4"></div>
+                                        </fieldset>
+                                    </form>
+                                </div><!-- /.widget-main -->
+                            </div><!-- /.widget-body -->
+                        </div><!-- /.login-box -->
 
-											<div>
+                        <div class="center" style="padding-top:10px">
+                            <h6 class="blue">北京悠享互联信息技术有限公司版权所有</h6>
+                            <h6 class="blue">
+                               Copyright &copy; 2018 Beijing ue-link Internet Information Technology Co., Ltd.</h6>
+                        </div>
+                    </div><!-- /.position-relative -->
+                </div>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.main-content -->
+</div><!-- /.main-container -->
 
-											</div>
-										</div>
-									</div><!-- /.widget-body -->
-								</div><!-- /.login-box -->
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+    var countdown = 60;
 
-								<div class="center" style="padding-top:10px">
-									<h6 class="blue">中国通广电子有限公司版权所有  京ICP备号：328944859586</h6>
-									<h6 class="blue">Copyright &copy; 2018 China Tong Guang Electronics Co., Ltd.</h6>
-								</div>
-							</div><!-- /.position-relative -->
+    function settime(val) {
+        if (countdown == 0) {
+            $("#identifyingCodeBadge").css("display", "none");
+            $("#identifyingCodeButton").css("display", "");
+            countdown = 60;
+        } else {
+            countdown--;
+            $("#identifyingCodeBadge").find("span").text(countdown);
+            setTimeout(function () {
+                settime(val)
+            }, 1000);
+        }
+    }
 
-							<div class="navbar-fixed-top align-right">
-								<br />
-								&nbsp;
-								<a id="btn-login-dark" href="#">Dark</a>
-								&nbsp;
-								<span class="blue">/</span>
-								&nbsp;
-								<a id="btn-login-blur" href="#">Blur</a>
-								&nbsp;
-								<span class="blue">/</span>
-								&nbsp;
-								<a id="btn-login-light" href="#">Light</a>
-								&nbsp; &nbsp; &nbsp;
-							</div>
-						</div>
-					</div><!-- /.col -->
-				</div><!-- /.row -->
-			</div><!-- /.main-content -->
-		</div><!-- /.main-container -->
+    function getCode() {
+        var loginname = $("#loginname").val();
+        $.ajax({
+            url: "/api/signin/usersendcode", //登陆请求
+            dataType: "json",
+            async: false,
+            data: {
+                loginname: loginname,
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {//错误
+                    bootboxalert(data.error.message);
+                } else {//发送验证码成功
+                    $("#bizId").val(data.data.bizId);
+                    $("#identifyingCodeBadge").css("display", "");
+                    $("#identifyingCodeButton").css("display", "none");
+                    settime(60);
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+    function login() {
+        var loginname = $("#loginname").val();
+        var password = $("#password").val();
+        /*var rememberMe = $('#rememberMe').is(':checked')?1:0;*/
+        var identifyingCode = $("#identifyingCode").val();
+        var bizId = $("#bizId").val()
+        if (loginname == "" || password == "") {
+            bootboxalert("请将信息填写完整后再登录");
+            return false;
+        }
+        $.ajax({
+            url: "/api/signin/usersignin", //登陆请求
+            dataType: "json",
+            async: false,
+            data: {
+                loginname: loginname,
+                password: password,
+               /* rememberMe:rememberMe,*/
+                identifyingCode: identifyingCode,
+                bizId: bizId
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {//异客户端登陆了
+                    if (data.error.code == 112004) {//发送了验证码
+                        $('#identifyingCodeLabel').css("display", "block");
+                    } else {
+                        bootboxalert(data.error.message);
+                    }
+                } else {//登陆成功
+                    window.location.href = "../main/main";
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+        return false;
+    }
 
-		<!-- inline scripts related to this page -->
-		<script type="text/javascript">
-			jQuery(function($) {
-			 $(document).on('click', '.toolbar a[data-target]', function(e) {
-				e.preventDefault();
-				var target = $(this).data('target');
-				$('.widget-box.visible').removeClass('visible');//hide others
-				$(target).addClass('visible');//show target
-			 });
-			});
-			//you don't need this, just used for changing background
-			jQuery(function($) {
-			 $('#btn-login-dark').on('click', function(e) {
-				$('body').attr('class', 'login-layout');
-				$('#id-text2').attr('class', 'white');
-				$('#id-company-text').attr('class', 'blue');
-				e.preventDefault();
-			 });
-			 $('#btn-login-light').on('click', function(e) {
-				$('body').attr('class', 'login-layout light-login');
-				$('#id-text2').attr('class', 'grey');
-				$('#id-company-text').attr('class', 'blue');
-				e.preventDefault();
-			 });
-			 $('#btn-login-blur').on('click', function(e) {
-				$('body').attr('class', 'login-layout blur-login');
-				$('#id-text2').attr('class', 'white');
-				$('#id-company-text').attr('class', 'light-blue');
-				e.preventDefault();
-			 });
-
-			$(function () {
-				$("#login-btn").click(function () {
-					var username = $("#username").val();
-					var password = $("#password").val();
-					if(username==""||password==""){
-                        bootboxalert("请将信息填写完整后再登录");
-                		return false;
-					}
-					$.ajax({
-						url:"../system/login",    //请求的url地址
-						dataType:"json",
-						async:false,
-						data:{
-							"username":username,
-							"password":password
-						},
-						type:"GET",
-						success:function(result){
-							if(result.code=='000000'){
-								window.location.href = '../main/main'
-							}else{
-                                bootboxalert(result.msg);
-							}
-						},
-						error:function(){
-                            bootboxalert("服务器异常，请联系管理员");
-						}
-					});
-				});
-			})
-		});
-		</script>
-	</body>
+</script>
+</body>
 </html>

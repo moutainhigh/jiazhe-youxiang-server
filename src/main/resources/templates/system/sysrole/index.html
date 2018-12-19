@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title></title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/static/init.css}"/>
+    <!-- Javascript -->
+    <script th:src="@{/static/init.js}"></script>
+</head>
+
+<body class="no-skin">
+<div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a th:href="@{/main/main_center}">主页</a>
+                    </li>
+                    <li>
+                        <a href="#">系统管理</a>
+                    </li>
+                    <li class="active">角色管理</li>
+                </ul><!-- /.breadcrumb -->
+            </div>
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xs-12" style="padding-top:40px">
+                        <shiro:hasPermission name="roleSearch">
+                            <form id="roleSearchForm" class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label class="col-sm-1 control-label no-padding-right">角色名称：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <input id="name" name="name" class="form-control" type="text"
+                                                   style="height:30px"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <button class="btn btn-white btn-default btn-round btn-sm"
+                                                onclick="return search()">
+                                            <i class="ace-icon fa fa-search red2"></i>
+                                            查询
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </shiro:hasPermission>
+                    </div><!-- /.col -->
+                    <div class="col-xs-12" style="text-align: right" id="buttonDiv">
+                        <p style="margin:1px;">
+                            <shiro:hasPermission name="roleAdd">
+                                <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
+                                   data-toggle="modal" onclick="openNew()">
+                                    <i class="ace-icon fa fa-plus"></i>新建
+                                </a>
+                            </shiro:hasPermission>
+                        </p>
+                    </div><!-- /.col -->
+                    <div class="col-xs-12">
+                        <table id="grid-table"></table>
+
+                        <div id="grid-pager"></div>
+                    </div><!-- /.col -->
+                    <div id="modal-form" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger" id="modal-title"></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-1"></div>
+                                        <div class="col-xs-12 col-sm-9">
+                                            <form id="roleSaveForm" class="form-horizontal" role="form">
+                                                <input type="hidden" name="id" id="roleId" value="0">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">角色名称：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="saveName" name="name" class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">排序：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="savePriority" name="priority"
+                                                                   class="form-control" type="text"
+                                                                   style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">是否有所有权限：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <label class="radio-inline ">
+                                                                <input id="notSuper" type="radio" name="isSuper"
+                                                                       value="0" checked="checked"/>否
+                                                            </label>
+                                                            <label class="radio-inline">
+                                                                <input id="isSuper" type="radio" name="isSuper"
+                                                                       value="1"/>是
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">分配权限：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <div id="menuContent"
+                                                                 style="border:1px solid rgb(170,170,170);z-index:10;">
+                                                                <ul id="treeDemo" class="ztree"
+                                                                    style="margin-top:0; width:100%; height:auto;"></ul>
+                                                            </div>
+                                                            <input type="hidden" id="perms" placeholder=""
+                                                                   class="col-xs-10 col-sm-5" name="perms" value="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn modal-footer-btn-save"
+                                            onclick="save()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        保存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+</div><!-- /.main-container -->
+</div>
+</body>
+<script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+    $(function () {
+        var setting = {
+            view: {
+                selectedMulti: true
+            },
+            check: {
+                enable: true
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            edit: {
+                enable: false
+            }
+        };
+
+        $.ajax({
+            url: "/api/sysrole/getpermissiontree",
+            dataType: "json",
+            async: false,
+            type: "get",
+            success: function (data) {
+                var zNodes = data.data;
+                //初始化权限树
+                permsTree = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+            },
+            error: error
+        });
+    });
+
+
+    //将勾选的权限id放到隐藏的input中，用英文逗号连接
+    function submitNodes() {
+        var nodes = permsTree.getCheckedNodes(true);
+        var str = "";
+        var perms = "";
+        for (var i = 0; i < nodes.length; i++) {
+            if (nodes[i].perm != null) {
+                str += nodes[i].id + ",";
+                perms += nodes[i].perm + ",";
+            }
+        }
+        if (perms.length > 0) {
+            perms = perms.substring(0, perms.length - 1);
+        }
+        $("#perms").val(perms);
+    }
+
+    //将所有的节点置为不可勾选状态
+    function disablePerms() {
+        var nodes = permsTree.getNodes();
+        if ($("input[name=isSuper]:checked").val() == "1") {
+            permsTree.checkAllNodes(true);
+            for (var i = 0; i < nodes.length; i++) {
+                permsTree.setChkDisabled(nodes[i], true, false, true);
+            }
+        } else {
+            for (var i = 0; i < nodes.length; i++) {
+                permsTree.setChkDisabled(nodes[i], false, false, true);
+            }
+            permsTree.checkAllNodes(false);
+        }
+    }
+
+    //根据权限字符串，勾选checkbox
+    function checkNodes(perms) {
+        var nodes = permsTree.getCheckedNodes(false);
+        for (var i = 0; i < nodes.length; i++) {
+            if (nodes[i].perm != null) {
+                var nodePerms = nodes[i].perm.split(",");
+                if (perms.indexOf(nodes[i].perm) != -1) {
+                    //单菜单权限节点
+                    permsTree.checkNode(nodes[i], true, false);
+                } else if ((nodePerms.length > 1 && perms.indexOf(nodePerms[0]) != -1) && nodes[i].id != 1) {
+                    //alert(nodes[i].perm);
+                    //除根节点的带多个权限菜单的节点
+                    permsTree.checkNode(nodes[i], true, false);
+                }
+            }
+        }
+    }
+
+    $(function () {
+        //重新修改表格宽度
+        $(window).resize(function () {
+            $("#grid-table").setGridWidth($(window).width() * 0.96);
+        });
+        //为isSuper的radio按钮添加响应事件
+        $("input[name=isSuper]").bind("change", function () {
+            disablePerms();
+        });
+
+        var tableOption = {
+            url: "/api/sysrole/listpage",// 获取数据的地址
+            postData: transformToJson($('#roleSearchForm').serializeArray()),
+            colNames: ['', '角色名称', '拥有所有权限', '排序序号', '操作'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'name', index: 'name', sortable: false},
+                {
+                    name: 'isSuper',
+                    index: 'isSuper',
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return rowObject.isSuper == 1 ? '是' : '否';
+                    }
+                },
+                {name: 'priority', index: 'priority', sortable: false},
+                {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
+            ],
+            caption: "角色列表"
+        };
+        initTable(grid_selector, pager_selector, tableOption);
+    });
+
+    function search() {
+        jQuery(grid_selector).setGridParam({
+            url: "/api/sysrole/listpage",
+            postData: transformToJson($('#roleSearchForm').serializeArray()),
+        }).trigger("reloadGrid", [{page: 1}]);
+        return false;
+    }
+
+    function customFormatter(cellvalue, options, rowObject) {
+        var str = "";
+        str += getFunctionButton("btn-success", "openShow(" + rowObject.id + ")", "查看");
+        if (permission.indexOf("roleDelete") != -1) {
+            str += getFunctionButton("btn-danger", "deleteOne(" + rowObject.id + ")", "删除");
+        }
+        if (permission.indexOf("roleEdit") != -1) {
+            str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
+        }
+        return str;
+    }
+
+    function deleteOne(id) {
+        confirm("确定要删除该角色吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "/api/sysrole/delete",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    success: success,
+                    error: error
+                });
+            }
+        });
+    }
+
+    function openNew() {
+        $("#modal-title").html("角色信息-添加");
+        $("#roleId").val(0);
+        $("#roleSaveForm #saveName").val("");
+        $("#roleSaveForm #savePriority").val("");
+        $("#notSuper").prop('checked', true);
+        disablePerms();
+        $(".modal-footer-btn-save").show();
+        $('input,select', $('#roleSaveForm')).removeAttr('disabled');
+        $('#treeDemo').removeAttr('disabled');
+    }
+
+    function openEdit(id) {
+        $("#modal-title").html("角色信息-修改");
+        $(".modal-footer-btn-save").show();
+        $('input,select', $('#roleSaveForm')).removeAttr('disabled');
+        $('#treeDemo').removeAttr('disabled');
+        permsTree.checkAllNodes(false);
+        huixian(id);
+    }
+
+    function openShow(id) {
+        $("#modal-title").html("角色信息-查看");
+        $(".modal-footer-btn-save").hide();
+        $('input,select', $('#roleSaveForm')).attr('disabled', 'disabled');
+        $('#treeDemo').attr('disabled');
+        permsTree.checkAllNodes(false);
+        huixian(id);
+    }
+
+    function save() {
+        if (!isInteger($("#savePriority").val())) {
+            bootboxalert("排序必须为非负整数");
+            return false;
+        }
+        submitNodes();
+        $.ajax({
+            url: "/api/sysrole/save",
+            dataType: "json",
+            async: false,
+            data: {
+                id: $("#roleId").val(),
+                name: $("#saveName").val(),
+                isSuper: $("input[name=isSuper]:checked").val(),
+                priority: $("#savePriority").val(),
+                permsStr: $("#perms").val()
+            },
+            type: "POST",
+            success: success,
+            error: error
+        });
+    }
+
+    function huixian(id) {
+        $.ajax({
+            url: "/api/sysrole/getbyid",
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#roleId").val(result.id);
+                    $("#savePriority").val(result.priority);
+                    $("#saveName").val(result.name);
+                    if (result.isSuper == 1) {
+                        $("#isSuper").prop('checked', true);
+                        disablePerms();
+                    } else {
+                        $("#notSuper").prop('checked', true);
+                        disablePerms();
+                        checkNodes(result.permsStr);
+                    }
+                    $("#modal-form").modal('show');
+                }
+            },
+            error: error
+        });
+    }
+</script>
+</html>
+

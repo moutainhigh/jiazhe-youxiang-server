@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.CustomerPOManualMapper">
+    <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.CustomerPO">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="default_address_id" property="defaultAddressId" jdbcType="INTEGER"/>
+        <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, mobile, name, password, remark, default_address_id, ext_info, is_deleted, add_time, 
+    mod_time
+  </sql>
+
+    <select id="query" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from customer
+        <where>
+            <if test="name != null and name!=''">
+                AND name like concat('%',#{name},'%')
+            </if>
+            <if test="mobile != null and mobile!=''">
+                AND mobile = #{mobile}
+            </if>
+            AND is_deleted = 0
+        </where>
+        order by add_time desc
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from customer
+        <where>
+            <if test="name != null and name!=''">
+                AND name like concat('%',#{name},'%')
+            </if>
+            <if test="mobile != null and mobile!=''">
+                AND mobile = #{mobile}
+            </if>
+            AND is_deleted = 0
+        </where>
+    </select>
+</mapper>

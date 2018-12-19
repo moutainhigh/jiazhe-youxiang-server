@@ -1,22 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
     <title>无权限访问</title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <!-- CSS -->
-    <link rel="stylesheet" href="../static/init.css"/>
+    <link rel="stylesheet" th:href="@{/static/init.css}"/><!--通用的css-->
     <!-- Javascript -->
-    <script src="../static/init.js"></script><!--通用的js-->
+    <script th:src="@{/static/init.js}"></script><!--通用的js-->
 </head>
 
 <body class="no-skin">
 
 <div class="main-container ace-save-state" id="main-container">
     <script type="text/javascript">
-        try{ace.settings.loadState('main-container')}catch(e){}
+        try {
+            ace.settings.loadState('main-container')
+        } catch (e) {
+        }
     </script>
 
     <div class="main-content">
@@ -35,7 +38,7 @@
                                     Something Went Wrong
                                 </h1>
 
-                                <hr />
+                                <hr/>
                                 <h3 class="lighter smaller">
                                     But we are working
                                     <i class="ace-icon fa fa-wrench icon-animated-wrench bigger-125"></i>
@@ -65,7 +68,7 @@
                                     </ul>
                                 </div>
 
-                                <hr />
+                                <hr/>
                                 <div class="space"></div>
 
                                 <div class="center">
@@ -93,7 +96,7 @@
             <div class="footer-content" style="padding: 0px;">
 						<span class="bigger-120">
 							<span class="blue bolder"></span>
-							中国通广电子有限公司CRM管理系统 &copy; 2018
+							悠享后台管理系统 &copy; 2018
 						</span>
                 &nbsp; &nbsp;
             </div>

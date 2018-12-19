@@ -5,12 +5,15 @@
  */
 package com.jiazhe.youxiang.server.controller;
 
-import com.jiazhe.youxiang.server.biz.DemoBiz;
+import com.jiazhe.youxiang.server.common.enums.DemoCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.DemoException;
+import com.jiazhe.youxiang.server.vo.req.DemoReq;
+import com.jiazhe.youxiang.server.vo.resp.DemoResp;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,29 +25,23 @@ import org.springframework.web.bind.annotation.RestController;
  * @created 2018/8/13
  */
 @RestController
-@RequestMapping("server/demo")
+@RequestMapping("api/demo")
 public class DemoController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DemoController.class);
-    @Autowired
-    private DemoBiz demoBiz;
-
-    @Value("${environment}")
-    private String ENVIRONMENT;
 
 
-    @ApiOperation(value = "DEMO", httpMethod = "GET", response = String.class, responseContainer = "List", notes = "接口的描述性文字")
+    @ApiOperation(value = "demo", httpMethod = "GET", response = DemoResp.class, notes = "接口的描述性文字")
     @RequestMapping(value = "/demo", method = RequestMethod.GET)
-    public String demo() {
-        LOGGER.info("demo");
-        return "demo";
+    public Object demo(@ModelAttribute DemoReq req) {
+
+        DemoResp result = new DemoResp();
+        result.setParam1("sfsdf");
+        result.setParam2("resp" + req.getParam2());
+        boolean error = false;
+        if (error) {
+            throw new DemoException(DemoCodeEnum.INSERT_GOODS_ACTIVITY_ERROR);
+        }
+        return result;
     }
-
-    @RequestMapping(value = "/environment", method = RequestMethod.GET)
-    public String environment() {
-        LOGGER.info("environment");
-        return demoBiz.Demo();
-    }
-
-
 }

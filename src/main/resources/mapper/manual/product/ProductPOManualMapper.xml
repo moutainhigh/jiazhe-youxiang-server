@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.product.ProductPOManualMapper">
+    <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.ProductPO">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="product_category_id" property="productCategoryId" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="delay_days" property="delayDays" jdbcType="INTEGER"/>
+        <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR"/>
+        <result column="header_img_url" property="headerImgUrl" jdbcType="VARCHAR"/>
+        <result column="detail_img_url" property="detailImgUrl" jdbcType="VARCHAR"/>
+        <result column="product_type" property="productType" jdbcType="INTEGER"/>
+        <result column="unit_name" property="unitName" jdbcType="VARCHAR"/>
+        <result column="last_num" property="lastNum" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="priority" property="priority" jdbcType="INTEGER"/>
+        <result column="sms_template" property="smsTemplate" jdbcType="VARCHAR"/>
+        <result column="effective_days" property="effectiveDays" jdbcType="INTEGER"/>
+        <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, product_category_id, name, description, delay_days, thumbnail_url, header_img_url,
+    detail_img_url, product_type, unit_name, last_num, status, priority, sms_template,
+    effective_days, ext_info, is_deleted, add_time, mod_time
+    </sql>
+
+    <select id="query" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from product
+        <where>
+            <if test="productCategoryId != null and productCategoryId !=''">
+                AND product_category_id = #{productCategoryId}
+            </if>
+            <if test="name != null and name !=''">
+                AND name = #{name}
+            </if>
+            <if test="productType != null and productType >=0">
+                AND product_type = #{productType}
+            </if>
+            <if test="status != null and status >=0">
+                AND status = #{status}
+            </if>
+            <if test="productIds != null and productIds.size() >0 ">
+                AND id in
+                <foreach collection="productIds" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            AND is_deleted = 0
+        </where>
+        order by priority desc, add_time desc
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from product
+        <where>
+            <if test="productCategoryId != null and productCategoryId !=''">
+                AND product_category_id = #{productCategoryId}
+            </if>
+            <if test="name != null and name !=''">
+                AND name = #{name}
+            </if>
+            <if test="productType != null and productType >=0">
+                AND product_type = #{productType}
+            </if>
+            <if test="status != null and status >=0">
+                AND status = #{status}
+            </if>
+            <if test="productIds != null and productIds.size() >0 ">
+                AND id in
+                <foreach collection="productIds" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            AND is_deleted = 0
+        </where>
+    </select>
+</mapper>

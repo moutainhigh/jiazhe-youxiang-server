@@ -1,563 +1,315 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta charset="utf-8" />
-    <title>CRM首页</title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title></title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <!-- CSS -->
-    <link rel="stylesheet" href="../static/init.css"/>
+    <link rel="stylesheet" th:href="@{/static/init.css}"/>
     <!-- Javascript -->
-    <script src="../static/init.js"></script><!--通用的js-->
+    <script th:src="@{/static/init.js}"></script><!--通用的js-->
+
+    <style>
+        .sidebar .sidebar-shortcuts-large>.btn {
+            width: 55px;
+        }
+    </style>
 </head>
 
 <body class="no-skin">
 <div class="main-container ace-save-state" id="main-container">
-    <script type="text/javascript">
-        try{ace.settings.loadState('main-container')}catch(e){}
-    </script>
-
     <div id="sidebar" class="sidebar responsive ace-save-state display">
-        <script type="text/javascript">
-            try{ace.settings.loadState('sidebar')}catch(e){}
-        </script>
 
         <div class="sidebar-shortcuts" id="sidebar-shortcuts">
             <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-                <button class="btn btn-success">
-                    <i class="ace-icon fa fa-signal">
-                       4
-                    </i>
-                </button>
+                <shiro:hasPermission name="orderReservation">
+                    <a th:title="待预约订单" class="btn btn-success" th:href="@{/order/orderindex(status=2)}" target="iframeCenter">
+                        <i class="ace-icon fa fa-truck" id="waitingSendOrderCount">
 
-                <button class="btn btn-info">
-                    <i class="ace-icon fa fa-pencil">
-                        8
-                    </i>
-                </button>
+                        </i>
+                    </a>
+                </shiro:hasPermission>
 
-                <button class="btn btn-warning">
-                    <i class="ace-icon fa fa-users">
-                       5
-                    </i>
-                </button>
+                <shiro:hasPermission name="orderCheck">
+                    <a th:title="待审核订单" class="btn btn-info" th:href="@{/order/orderindex(status=5)}" target="iframeCenter">
+                        <i class="ace-icon fa fa-trash" id="waitingCheckOrderCount">
 
-                <button class="btn btn-danger">
-                    <i class="ace-icon fa fa-cogs">
-                        5
-                    </i>
-                </button>
-            </div>
+                        </i>
+                    </a>
+                </shiro:hasPermission>
 
-            <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
-                <span class="btn btn-success"></span>
+                <shiro:hasPermission name="auditRecordManagement">
+                    <a th:title="待审核消费" class="btn btn-warning" th:href="@{/auditrecord/index(status=0)}" target="iframeCenter">
+                        <i class="ace-icon fa fa-check" id="waitingCheckRecordCount">
 
-                <span class="btn btn-info"></span>
-
-                <span class="btn btn-warning"></span>
-
-                <span class="btn btn-danger"></span>
+                        </i>
+                    </a>
+                </shiro:hasPermission>
             </div>
         </div><!-- /.sidebar-shortcuts -->
 
         <ul class="nav nav-list">
-
-            <li class="">
-                <a href="../main/main_center" target="iframeCenter">
-                    <i class="menu-icon fa fa-desktop"></i>
-                    <span class="menu-text"> 我的桌面 </span>
-                </a>
-
-                <b class="arrow"></b>
-            </li>
-
-            <li class="">
-                <a href="#" class="dropdown-toggle">
-                    <i class="menu-icon fa fa-cog"></i>
-                    <span class="menu-text">
-								系统管理
-							</span>
-                    <b class="arrow fa fa-angle-down"></b>
-                </a>
-
-                <b class="arrow"></b>
-
-                <ul class="submenu">
-                    <li class="">
-                        <a href="../system/department/index" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            部门管理
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-
-                    <li class="">
-                        <a href="../position/index" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            职位管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-
-                    <shiro:hasPermission name="operator:list">
-                    <li class="">
-                        <a href="../operator/index" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            用户管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-                    </shiro:hasPermission>
-
-                    <shiro:hasPermission name="role:list">
-                    <li class="">
-                        <a href="../role/index" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            角色管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-                    </shiro:hasPermission>
-
-                    <li class="">
-                        <a href="../sysdictionary/index" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            系统字典
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            工作流字典
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="">
-                <a href="#" class="dropdown-toggle">
-                    <i class="menu-icon fa fa-key"></i>
-                    <span class="menu-text">
-								权限管理
-							</span>
-                    <b class="arrow fa fa-angle-down"></b>
-                </a>
-
-                <b class="arrow"></b>
-
-                <ul class="submenu">
-                    <li class="">
-                        <a href="../test/test" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            用户权限管理
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                           仓库权限管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="">
-                <a href="#" class="dropdown-toggle">
-                    <i class="menu-icon fa fa-key"></i>
-                    <span class="menu-text">
-								项目备案管理
-							</span>
-                    <b class="arrow fa fa-angle-down"></b>
-                </a>
-                <b class="arrow"></b>
-
-                <ul class="submenu">
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目备案
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="../cooperationcompany/index" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            合作单位
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="">
-                <a href="#" class="dropdown-toggle">
-                    <i class="menu-icon fa fa-key"></i>
-                    <span class="menu-text">
-								投标保证金
-							</span>
-                    <b class="arrow fa fa-angle-down"></b>
-                </a>
-
-                <b class="arrow"></b>
-
-                <ul class="submenu">
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            往来款收入
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            退回往来款
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            投标保证金/押金支出
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            退回投标保证金/押金
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            投标保证金支出审批
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            投标保证金利息收入
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            退回往来款审批
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            合作单位余额统计
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            投标保证金利息收入
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            投标项目往来资金统计
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="">
-                <a href="#" class="dropdown-toggle">
-                    <i class="menu-icon fa fa-key"></i>
-                    <span class="menu-text">
-								项目立项概算
-							</span>
-                    <b class="arrow fa fa-angle-down"></b>
-                </a>
-
-                <b class="arrow"></b>
-
-                <ul class="submenu">
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            财务立项
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目概算申请
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            已作废财务立项
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="">
-                <a href="#" class="dropdown-toggle">
-                    <i class="menu-icon fa fa-key"></i>
-                    <span class="menu-text">
-								合同管理
-							</span>
-                    <b class="arrow fa fa-angle-down"></b>
-                </a>
-
-                <b class="arrow"></b>
-
-                <ul class="submenu">
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            合同信息录入
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            合同作废终止变更审批
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            合同作废终止变更申请
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            合同待审批信息管理
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            合同信息管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            合同信息查询管理
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            零星合同信息管理
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            虚拟合同信息管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="">
-                <a href="#" class="dropdown-toggle">
-                    <i class="menu-icon fa fa-key"></i>
-                    <span class="menu-text">
-								项目预算管理
-							</span>
-                    <b class="arrow fa fa-angle-down"></b>
-                </a>
-
-                <b class="arrow"></b>
-
-                <ul class="submenu">
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目市场费用预算单
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目实施费用预算单
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目设备成本预算单
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                           项目预算待汇总
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目预算已汇总
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                           项目设备成本预算增加
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目实施费用预算增加
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目市场费用预算增加
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                           项目预算增加审批
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目其他费用预算增加
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目咨询费用预算增加
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目市场费用预算单管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目实施费用预算单管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目设备成本预算单管理
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-
-                    <li class="">
-                        <a href="javascript:void(0)" target="iframeCenter">
-                            <i class="menu-icon fa fa-caret-right"></i>
-                            项目预算管理费查询
-                        </a>
-                        <b class="arrow"></b>
-                    </li>
-                </ul>
-            </li>
-
+            <shiro:hasPermission name="customerManagement">
+                <li class="">
+                    <a th:href="@{/customer/index}" target="iframeCenter">
+                        <i class="menu-icon fa fa-user"></i>
+                        <span class="menu-text"> 客户管理 </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </shiro:hasPermission>
+
+            <shiro:hasPermission name="productCategoryManagement">
+                <li class="">
+                    <a th:href="@{/product/productcategory/index}" target="iframeCenter">
+                        <i class="menu-icon fa fa-product-hunt"></i>
+                        <span class="menu-text"> 商品管理 </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </shiro:hasPermission>
+
+            <shiro:hasPermission name="orderManagement">
+                <li class="">
+                    <a th:href="@{/order/orderindex}" target="iframeCenter">
+                        <i class="menu-icon fa fa-list-ul"></i>
+                        <span class="menu-text"> 订单管理 </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </shiro:hasPermission>
+
+            <shiro:hasPermission name="partnerOrderManagement">
+                <li class="">
+                    <a th:href="@{/partnerorder/index}" target="iframeCenter">
+                        <i class="menu-icon fa fa-money"></i>
+                        <span class="menu-text"> 商家订单 </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </shiro:hasPermission>
+
+            <shiro:hasPermission name="projectManagement">
+                <li class="">
+                    <a th:href="@{/project/index}" target="iframeCenter">
+                        <i class="menu-icon fa fa-book"></i>
+                        <span class="menu-text"> 项目管理 </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </shiro:hasPermission>
+
+            <shiro:hasPermission name="auditRecordManagement">
+                <li class="">
+                    <a th:href="@{/auditrecord/index}" target="iframeCenter">
+                        <i class="menu-icon fa fa-check"></i>
+                        <span class="menu-text"> 消费审核 </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </shiro:hasPermission>
+
+            <shiro:hasPermission name="infoSearch">
+                <li class="">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-info-circle"></i>
+                        <span class="menu-text">信息查询</span>
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+
+                    <b class="arrow"></b>
+
+                    <ul class="submenu">
+                        <shiro:hasPermission name="pointCodeSearch">
+                            <li class="">
+                                <a th:href="@{/infosearch/pointcodeindex}" target="iframeCenter">
+                                    积分卡兑换码查询
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
+
+                        <shiro:hasPermission name="pointSearch">
+                            <li class="">
+                                <a th:href="@{/infosearch/pointindex}" target="iframeCenter">
+                                    积分卡查询
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
+
+                        <shiro:hasPermission name="rechargeCardCodeSearch">
+                            <li class="">
+                                <a th:href="@{/infosearch/rechargecardcodeindex}" target="iframeCenter">
+                                    充值卡兑换码查询
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
+
+                        <shiro:hasPermission name="rechargeCardSearch">
+                            <li class="">
+                                <a th:href="@{/infosearch/rechargecardindex}" target="iframeCenter">
+                                    充值卡查询
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
+
+                        <shiro:hasPermission name="voucherCodeSearch">
+                            <li class="">
+                                <a th:href="@{/infosearch/vouchercodeindex}" target="iframeCenter">
+                                    代金券兑换码查询
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
+
+                        <shiro:hasPermission name="voucherSearch">
+                            <li class="">
+                                <a th:href="@{/infosearch/voucherindex}" target="iframeCenter">
+                                    代金券查询
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
+                    </ul>
+                </li>
+            </shiro:hasPermission>
+
+            <shiro:hasPermission name="systemManagement">
+                <li class="">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-cog"></i>
+                        <span class="menu-text">系统管理</span>
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+
+                    <b class="arrow"></b>
+
+                    <ul class="submenu">
+                        <shiro:hasPermission name="pointBatchManagement">
+                            <li class="">
+                                <a th:href="@{/point/exchangecodebatchindex}" target="iframeCenter">
+                                    积分卡兑换码管理
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
+
+                        <shiro:hasPermission name="rcBatchManagement">
+                            <li class="">
+                                <a th:href="@{/rechargecard/exchangecodebatchindex}" target="iframeCenter">
+                                    充值卡兑换码管理
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
+
+                        <shiro:hasPermission name="voucherBatchManagement">
+                            <li class="">
+                                <a th:href="@{/voucher/exchangecodebatchindex}" target="iframeCenter">
+                                    代金券兑换码管理
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
+
+                        <shiro:hasPermission name="eleCodeManagement">
+                            <li class="">
+                                <a th:href="@{/eleproductcode/index}" target="iframeCenter">
+                                    商品兑换码管理
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
+
+                        <shiro:hasPermission name="cityManagement">
+                            <li class="">
+                                <a th:href="@{/syscity/index}" target="iframeCenter">
+                                    城市管理
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
+
+                        <shiro:hasPermission name="userManagement">
+                            <li class="">
+                                <a th:href="@{/sysuser/index}" target="iframeCenter">
+                                    员工管理
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
+
+                        <shiro:hasPermission name="roleManagement">
+                            <li class="">
+                                <a th:href="@{/sysrole/index}" target="iframeCenter">
+                                    角色管理
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
+
+                        <shiro:hasPermission name="logManagement">
+                            <li class="">
+                                <a th:href="@{/syslog/index}" target="iframeCenter">
+                                    日志管理
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
+                    </ul>
+                </li>
+            </shiro:hasPermission>
         </ul><!-- /.nav-list -->
     </div>
 </div><!-- /.main-container -->
+<script>
+    $.ajax({
+        url: "/api/orderinfo/getunsentordercount",
+        dataType: "json",
+        async: false,
+        data: {},
+        type: "GET",
+        success: function (data) {
+            $("#waitingSendOrderCount").html("&nbsp;"+data.data.count);
+        },
+        error: function () {
+//            bootboxalert("服务器异常，请联系管理员");
+        }
+    });
+
+    $.ajax({
+        url: "/api/orderinfo/getunauditordercount",
+        dataType: "json",
+        async: false,
+        data: {},
+        type: "GET",
+        success: function (data) {
+            $("#waitingCheckOrderCount").html("&nbsp;"+data.data.count);
+        },
+        error: function () {
+//            bootboxalert("服务器异常，请联系管理员");
+        }
+    });
+
+    $.ajax({
+        url: "/api/auditrecord/getwaitcheckcount",
+        dataType: "json",
+        async: false,
+        data: {},
+        type: "GET",
+        success: function (data) {
+            $("#waitingCheckRecordCount").html("&nbsp;"+data.data.count);
+        },
+        error: function () {
+//            bootboxalert("服务器异常，请联系管理员");
+        }
+    });
+
+</script>
 </body>
 </html>

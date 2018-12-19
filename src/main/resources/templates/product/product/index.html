@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/static/init.css}"/>
+
+    <!-- Javascript -->
+    <script th:src="@{/static/init.js}"></script>
+    <script th:src="@{/static/img.js}"></script>
+
+    <style>
+        .form-group {
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+
+<body class="no-skin">
+
+<div class="main-container ace-save-state" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.loadState('main-container')
+        } catch (e) {
+        }
+    </script>
+
+    <input id="hiddenProductCategoryId" type="hidden" th:value="${productCategoryId}"/>
+    <input id="hiddenProductCategoryName" type="hidden" th:value="${productCategoryName}"/>
+
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a th:href="@{/main/main_center}">主页</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/product/productcategory/index}">商品大类管理</a>
+                    </li>
+                    <li class="active" th:text="${productCategoryName}"/>
+                </ul><!-- /.breadcrumb -->
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xs-12" style="padding-top:40px">
+                        <form id="searchForm" class="form-horizontal" role="form">
+                            <input id="searchProductCategoryId" name="productCategoryId" type="hidden"
+                                   th:value="${productCategoryId}"/>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">商品名称：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="name" name="name" class="form-control" type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">商品状态：</label>
+                                <div class="col-sm-2">
+                                    <select id="status" name="status" class="selectpicker show-tick form-control">
+                                        <option value="">所有</option>
+                                        <option value=0>下架</option>
+                                        <option value=1>上架</option>
+                                    </select>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">商品分类：</label>
+                                <div class="col-sm-2">
+                                    <select id="productType" name="productType"
+                                            class="selectpicker show-tick form-control">
+                                        <option value="">所有</option>
+                                        <option value=0>服务</option>
+                                        <option value=1>电子卡</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <button class="btn btn-white btn-default btn-round btn-sm"
+                                            onclick="return search()">
+                                        <i class="ace-icon fa fa-search red2"></i>
+                                        查询
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!-- /.col -->
+                    <div class="col-xs-12" style="text-align: right" id="buttonDiv">
+                        <p style="margin:1px;">
+                            <shiro:hasPermission name="productAdd">
+                                <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
+                                   data-toggle="modal" onclick="openNew()">
+                                    <i class="ace-icon fa fa-plus"></i>新建
+                                </a>
+                            </shiro:hasPermission>
+                        </p>
+                    </div><!-- /.col -->
+                    <div class="col-xs-12">
+                        <table id="grid-table"></table>
+
+                        <div id="grid-pager"></div>
+                    </div><!-- /.col -->
+                    <div id="modal-form" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger" id="modal-title"></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-1"></div>
+                                        <div class="col-xs-12 col-sm-9">
+                                            <form id="productSaveForm" class="form-horizontal" role="form">
+                                                <input type="hidden" id="inputProductId" name="id" value="0">
+                                                <input type="hidden" id="inputproductCategoryId"
+                                                       name="productCategoryId" th:value="${productCategoryId}">
+                                                <input type="hidden" name="thumbnailUrl" id="inputThumbnailUrl"
+                                                       value="">
+                                                <input type="hidden" name="headerImgUrl" id="inputHeaderImgUrl"
+                                                       value="">
+                                                <input type="hidden" name="detailImgUrl" id="inputDetailImgUrl"
+                                                       value="">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">商品名称：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputName" name="name"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">商品描述：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputDescription" name="description"
+                                                                   class="form-control"
+                                                                   type="text" style="height: 30px;"/>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">最少购买数量：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputLastNum" name="lastNum"
+                                                                   class="form-control"
+                                                                   type="text" style="height: 30px;"/>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">单位名称：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputUnitName" name="unitName"
+                                                                   class="form-control"
+                                                                   type="text" style="height: 30px;"/>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">需提前预约天数
+                                                        ：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputDelayDays" name="delayDays"
+                                                                   class="form-control"
+                                                                   type="text" style="height: 30px;"/>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">有效期天数
+                                                        ：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputEffectiveDays" name="effectiveDays"
+                                                                   class="form-control"
+                                                                   type="text" style="height: 30px;"/>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">商品分类：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <label class="radio-inline ">
+                                                                <input id="inputService" type="radio"
+                                                                       name="productType"
+                                                                       value="0" checked="checked"/>服务
+                                                            </label>
+                                                            <label class="radio-inline">
+                                                                <input type="radio"
+                                                                       name="productType"
+                                                                       value="1"/>电子卡
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">缩略图：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="widget-main">
+                                                            <div class="form-group">
+                                                                <div class="col-xs-12">
+                                                                    <input type="file" id="fileThumbnail"/>
+                                                                    <img id="imgThumbnail" width="200" height="200"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">头部图：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="widget-main">
+                                                            <div class="form-group">
+                                                                <div class="col-xs-12">
+                                                                    <input type="file" id="fileHeader"/>
+                                                                    <img id="imgHeader" width="200" height="200"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">详情图：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="widget-main">
+                                                            <div class="form-group">
+                                                                <div class="col-xs-12">
+                                                                    <input type="file" id="fileDetail"/>
+                                                                    <img id="imgDetail" width="200" height="200"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">短信发送模板
+                                                        ：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputSmsTemplate" name="smsTemplate"
+                                                                   class="form-control"
+                                                                   type="text" style="height: 30px;"/>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">排序：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputPriority" name="priority"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="addOrUpdate()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        保存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+
+</div><!-- /.main-container -->
+</div>
+</body>
+<script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+    $(function () {
+        //重新修改表格宽度
+        $(window).resize(function () {
+            $("#grid-table").setGridWidth($(window).width() * 0.96);
+        });
+
+
+        var tableOption = {
+            url: "/api/product/getlist",// 获取数据的地址
+            postData: transformToJson($('#searchForm').serializeArray()),
+            colNames: ['', '商品名称', '商品描述', '最少购买数量', '单位', '需提前预约天数', '有效期天数 ', '商品分类 ', '商品状态', '排序', '操作'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'name', index: 'name', width: 50, sortable: false},
+                {name: 'description', index: 'description', sortable: false},
+                {name: 'lastNum', index: 'lastNum', width: 50, sortable: false},
+                {name: 'unitName', index: 'unitName', width: 50, sortable: false},
+                {name: 'delayDays', index: 'delayDays', width: 50, sortable: false},
+                {name: 'effectiveDays', index: 'effectiveDays', width: 50, sortable: false},
+                {
+                    name: 'productType',
+                    index: 'productType',
+                    width: 50,
+                    sortable: false,
+                    formatter: productTypeFormatter
+                },
+                {name: 'status', index: 'status', width: 50, sortable: false, formatter: statusFormatter},
+                {name: 'priority', index: 'priority', width: 20, sortable: false},
+                {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
+            ],
+            caption: "商品列表"
+        }
+
+        initTable(grid_selector, pager_selector, tableOption);
+        initImgControl("#fileThumbnail", "#imgThumbnail", "#inputThumbnailUrl");
+        initImgControl("#fileHeader", "#imgHeader", "#inputHeaderImgUrl");
+        initImgControl("#fileDetail", "#imgDetail", "#inputDetailImgUrl");
+    });
+
+    $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
+
+    function search() {
+        jQuery(grid_selector).setGridParam({
+            url: "/api/product/getlist",// 获取数据的地址
+            postData: transformToJson($('#searchForm').serializeArray()),
+        }).trigger("reloadGrid", [{page: 1}]);
+        return false;
+    }
+
+    function statusFormatter(cellvalue, options, cell) {
+        switch (cell.status) {
+            case 0:
+            default:
+                return "下架";
+            case 1:
+                return "上架";
+        }
+    }
+
+    function productTypeFormatter(cellvalue, options, cell) {
+        switch (cell.productType) {
+            case 0:
+            default:
+                return "服务";
+            case 1:
+                return "电子卡";
+        }
+    }
+
+
+    function customFormatter(cellvalue, options, rowObject) {
+        var productCategoryId = $("#hiddenProductCategoryId").val();
+        var productCategoryName = $("#hiddenProductCategoryName").val();
+        var str = "";
+        if (permission.indexOf("productDelete") != -1) {
+            str += getFunctionButton("btn-danger", "deleteOne(" + rowObject.id + ")", "删除");
+        }
+        if (permission.indexOf("productEdit") != -1) {
+            str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
+        }
+        if (permission.indexOf("productOnOffLine") != -1) {
+            if (rowObject.status == 0) {
+                str += getFunctionButton("btn-success", "sold(" + rowObject.id + ")", "上架");
+            } else {
+                str += getFunctionButton("btn-danger", "soldOut(" + rowObject.id + ")", "下架");
+            }
+        }
+        if (permission.indexOf("productPriceManagement") != -1) {
+            var url = "/product//productprice/index?productId=" + rowObject.id + "&&productName=" + rowObject.name +
+                "&&productCategoryId=" + productCategoryId + "&&productCategoryName=" + productCategoryName;
+            str += getRedirectButton("btn-primary", url, "价格管理");
+        }
+        return str;
+    }
+
+    function addOrUpdate() {
+        var productId = $("#inputProductId").val();
+        if (productId <= 0) {
+            add();
+        } else {
+            update();
+        }
+    }
+
+    function add() {
+        $.ajax({
+            url: "/api/product/add",
+            dataType: "json",
+            async: false,
+            data: transformToJson($('#productSaveForm').serializeArray()),
+            type: "POST",
+            success: success,
+            error: error
+        });
+    }
+
+    function update() {
+        $.ajax({
+            url: "/api/product/update",
+            dataType: "json",
+            async: false,
+            data: transformToJson($('#productSaveForm').serializeArray()),
+            type: "POST",
+            success: success,
+            error: error
+        });
+    }
+
+    function deleteOne(id) {
+        confirm("确定要删除该商品吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "/api/product/delete",    //请求的url地址
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    success: success,
+                    error: error
+                });
+            }
+        });
+    }
+
+    function openNew() {
+        $("#modal-title").html("商品信息-添加");
+        $("#inputProductId").val(0);
+        $("#inputName").val("");
+        $("#inputDescription").val("");
+        $("#inputLastNum").val("");
+        $("#inputUnitName").val("");
+        $("#inputEffectiveDays").val("");
+        $("#inputSmsTemplate").val("");
+        $('#inputThumbnailUrl').val("");
+        $('#inputHeaderImgUrl').val("");
+        $('#inputDetailImgUrl').val("");
+        $("#inputPriority").val("");
+        $('#imgThumbnail').attr('hidden', 'hidden');
+        $('#imgHeader').attr('hidden', 'hidden');
+        $('#imgDetail').attr('hidden', 'hidden');
+        $('#fileThumbnail').ace_file_input('reset_input');
+        $('#fileHeader').ace_file_input('reset_input');
+        $('#fileDetail').ace_file_input('reset_input');
+    }
+
+    function openEdit(id) {
+        $("#modal-title").html("商品信息-修改");
+        $(".modal-footer-btn").show();
+        $('#imgThumbnail').removeAttr('hidden');
+        $('#imgDetail').removeAttr('hidden');
+        getById(id);
+    }
+
+    function getById(id) {
+        $.ajax({
+            url: "/api/product/getbyid",    //请求的url地址
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#inputProductId").val(result.id);
+                    $("#inputName").val(result.name);
+                    $("#inputDescription").val(result.description);
+                    $("#inputLastNum").val(result.lastNum);
+                    $("#inputUnitName").val(result.unitName);
+                    $("#inputEffectiveDays").val(result.effectiveDays);
+                    $("#inputSmsTemplate").val(result.smsTemplate);
+                    $("#inputPriority").val(result.priority);
+                    if (result.productType == 0) {
+                        $("#inputService").click();
+                    }
+                    $('#fileThumbnail').ace_file_input('show_file_list', [getImageUrl(result.thumbnailUrl)]);
+                    $('#imgThumbnail').attr('src', getImageUrl(result.thumbnailUrl));
+                    $('#fileHeader').ace_file_input('show_file_list', [getImageUrl(result.headerImgUrl)]);
+                    $('#imgHeader').attr('src', getImageUrl(result.headerImgUrl));
+                    $('#fileDetail').ace_file_input('show_file_list', [getImageUrl(result.detailImgUrl)]);
+                    $('#imgDetail').attr('src', getImageUrl(result.detailImgUrl));
+                    $("#modal-form").modal('show');
+                }
+            },
+            error: error
+        });
+    }
+
+    /**
+     * 上架
+     * @param id
+     */
+    function sold(id) {
+        updateCategoryStatus(id, 1);
+    }
+
+    /**
+     * 下架
+     * @param id
+     */
+    function soldOut(id) {
+        updateCategoryStatus(id, 0);
+    }
+
+    function updateCategoryStatus(id, status) {
+        confirm("确定要上架该商品吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "/api/product/updatestatus",    //请求的url地址
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id,
+                        status: status
+                    },
+                    type: "POST",
+                    success: success,
+                    error: error
+                });
+            }
+        });
+    }
+
+    function openPriceEdit(id) {
+        $("#price-modal-form").modal('show');
+    }
+
+</script>
+</html>
+

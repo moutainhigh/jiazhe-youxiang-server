@@ -5,10 +5,10 @@
 @import "/static/jquery-confirm-master/jquery-confirm.min.css";
 @import "/static/easyui-1.5/themes/default/easyui.css";
 @import "/static/easyui-1.5/themes/icon.css";*/
-
 /*ace admin 样式*/
 @import "/static/ace-master/css/jquery-ui.min.css";
 @import "/static/ace-master/css/bootstrap-datepicker3.min.css";
+@import "/static/ace-master/css/bootstrap-datetimepicker.min.css";
 @import "/static/ace-master/css/ui.jqgrid.min.css";
 @import "/static/ace-master/css/bootstrap.min.css";
 @import "/static/ace-master/font-awesome/4.5.0/css/font-awesome.min.css";
@@ -18,16 +18,25 @@
 @import "/static/ace-master/css/ace-skins.min.css";
 @import "/static/ace-master/css/ace-rtl.min.css";
 @import "/static/ace-master/css/ace-ie.min.css";
-
+@import "/static/ace-master/css/select2.min.css";
+@import "/static/zTree/css/metroStyle.css";
 /*滚动条宽度和长度,外层轨道*/
-::-webkit-scrollbar{
-    width:4px;
-    height:4px;
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
 }
 
 /*滚内层轨道*/
 ::-webkit-scrollbar-thumb {
-    background:#438EB9;/*和顶部一个颜色*/
+    background: #438EB9; /*和顶部一个颜色*/
 }
+
+/**
+*form表单中有margin-top和margin-bottom，导致两个input之间上下间距太大
+*/
+.form-group {
+    margin-bottom: 0px;
+}
+
 
 

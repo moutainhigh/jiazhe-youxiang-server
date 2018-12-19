@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/static/init.css}"/>
+
+    <!-- Javascript -->
+    <script th:src="@{/static/init.js}"></script>
+
+    <style>
+        .form-group {
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+
+<body class="no-skin">
+
+<div class="main-container ace-save-state" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.loadState('main-container')
+        } catch (e) {
+        }
+    </script>
+
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a th:href="@{/main/main_center}">主页</a>
+                    </li>
+                    <li class="active">客户管理</li>
+                </ul><!-- /.breadcrumb -->
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xs-12" style="padding-top:20px">
+                        <shiro:hasPermission name="customerSearch">
+                            <form id="searchForm" class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label class="col-sm-1 control-label no-padding-right">客户名称：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <input id="name" name="name" class="form-control" type="text"
+                                                   style="height:30px"/>
+                                        </div>
+                                    </div>
+                                    <label class="col-sm-1 control-label no-padding-right">手机号码：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <input id="mobile" name="mobile" class="form-control" type="text"
+                                                   style="height:30px"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <button class="btn btn-white btn-default btn-round btn-sm"
+                                                onclick="return search()">
+                                            <i class="ace-icon fa fa-search red2"></i>
+                                            查询
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </shiro:hasPermission>
+                    </div><!-- /.col -->
+                    <div class="col-xs-12" style="text-align: right">
+                        <shiro:hasPermission name="customerAdd">
+                            <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
+                               data-toggle="modal" onclick="openNew()">
+                                <i class="ace-icon fa fa-plus"></i>新建
+                            </a>
+                        </shiro:hasPermission>
+                    </div><!-- /.col -->
+                    <div class="col-xs-12">
+                        <table id="grid-table"></table>
+
+                        <div id="grid-pager"></div>
+                    </div><!-- /.col -->
+                    <div id="modal-form" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger" id="modal-title"></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-1"></div>
+                                        <div class="col-xs-12 col-sm-9">
+                                            <form id="projectSaveForm" class="form-horizontal" role="form">
+                                                <input type="hidden" name="id" id="inputCustomerId" value="0">
+                                                <input type="hidden" id="inputOperationType">
+                                                <div class="form-group" id="divName">
+                                                    <label class="col-sm-4 control-label no-padding-right">客户名称：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputName" name="inputName"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group" id="divMobile">
+                                                    <label class="col-sm-4 control-label no-padding-right">手机号码：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputMobile" name="inputMobile"
+                                                                   class="form-control"
+                                                                   type="text" style="height: 30px;"/>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group" id="divRemark">
+                                                    <label class="col-sm-4 control-label no-padding-right">备注：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputRemark" name="inputRemark"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group" id="divKeyt">
+                                                    <label class="col-sm-4 control-label no-padding-right">密钥：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputKeyt"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group" id="divProject">
+                                                    <label class="col-sm-4 control-label no-padding-right">所属项目：</label>
+                                                    <div class="col-sm-8">
+                                                        <select id="selectProject"
+                                                                class="selectpicker show-tick form-control"
+                                                                onchange="refreshBatch()"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group" id="divBatch">
+                                                    <label class="col-sm-4 control-label no-padding-right">所属批次：</label>
+                                                    <div class="col-sm-8">
+                                                        <select id="selectBatch"
+                                                                class="selectpicker show-tick form-control"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group" id="divChargeMoney">
+                                                    <label class="col-sm-4 control-label no-padding-right">充值金额：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputChargeMoney"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="operate()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        保存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--下单modal-->
+                    <div id="order-modal" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger">后台下单</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-1"></div>
+                                        <div class="col-xs-12 col-sm-9">
+                                            <form id="orderForm" class="form-horizontal" role="form">
+                                                <input type="hidden" name="customerId" id="orderCustomerId">
+                                                <input type="hidden" name="voucherIds" id="orderVoucherIds">
+                                                <input type="hidden" name="rechargeCardIds" id="orderRechargeCardIds">
+                                                <input type="hidden" name="cardMoneys" id="orderCardMoneys">
+                                                <input type="hidden" name="customerCityCode" id="orderCityCode">
+                                                <input type="hidden" name="productPrice" id="orderProductPrice">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">商品：</label>
+                                                    <div class="col-sm-8">
+                                                        <select id="orderProductId" name="productId"
+                                                                onchange="productChanged()"
+                                                                class="selectpicker show-tick form-control">
+                                                            <option value=></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">城市：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <ul id="cityTree" class="ztree"
+                                                                style="margin-top:0; width:100%; height:auto;">
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">数量：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input type="text" name="count" id="orderCount" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 virtual"></div>
+                                                <div class="form-group virtual">
+                                                    <label class="col-sm-4 control-label no-padding-right">服务对象姓名：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="orderCustomerName" class="form-control"
+                                                                   type="text" style="height:30px" name="customerName"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 virtual"></div>
+                                                <div class="form-group virtual">
+                                                    <label class="col-sm-4 control-label no-padding-right">服务对象电话：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="orderCustomerMobile" class="form-control"
+                                                                   name="customerMobile"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 virtual"></div>
+                                                <div class="form-group virtual">
+                                                    <label class="col-sm-4 control-label no-padding-right">服务地址：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="orderCustomerAddress" class="form-control"
+                                                                   name="customerAddress"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 virtual"></div>
+                                                <div class="form-group virtual">
+                                                    <label class="col-sm-4 control-label no-padding-right">客户留言：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="orderCustomerRemark" class="form-control"
+                                                                   name="customerRemark"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 virtual"></div>
+                                                <div class="form-group virtual">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="orderRealServiceTime">服务时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control datetime-picker"
+                                                                   id="orderRealServiceTime" type="text"/>
+                                                            <span class="input-group-addon">
+                                                                    <i class="fa fa-calendar bigger-110"></i>
+                                                                </span>
+                                                            <input type="hidden" value=0 name="realServiceTime"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 virtual"></div>
+                                                <div class="form-group virtual">
+                                                    <label class="col-sm-4 control-label no-padding-right">服务人员姓名：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="orderWorkerName" name="workerName"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 virtual"></div>
+                                                <div class="form-group virtual">
+                                                    <label class="col-sm-4 control-label no-padding-right">服务人员电话：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="orderWorkerMobile" name="workerMobile"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">订单备注：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="orderComments" class="form-control"
+                                                                   name="comments"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">订单成本：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="orderCost"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" name="cost"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">可用代金券：</label>
+                                                    <div class="col-sm-8" id="orderVoucherArea">
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">可用充值卡：</label>
+                                                    <div class="col-sm-8" id="orderRechargeCardArea">
+
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="placeOrder()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        下单
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+
+</div><!-- /.main-container -->
+</div>
+</body>
+<script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+    var cityTree;
+    $(function () {
+        $(document).on("hidden.bs.modal", ".bootbox", function () {
+            if ($(".modal-backdrop").length > 0) {
+                $("body").addClass("modal-open");
+            }
+        })
+        //重新修改表格宽度
+        $(window).resize(function () {
+            $("#grid-table").setGridWidth($(window).width() * 0.96);
+        });
+
+        $("#orderCount").ace_spinner({
+            value: 1, min: 1, max: 100, step: 1, on_sides: true, icon_up: 'ace-icon fa fa-plus',
+            icon_down: 'ace-icon fa fa-minus', btn_up_class: 'btn-success', btn_down_class: 'btn-danger'
+        }).closest('.ace-spinner');
+
+        //datatime控件
+        $('#orderRealServiceTime').datetimepicker({
+            format: "YYYY-MM-DD HH:mm"
+        }).next().on(ace.click_event, function () {
+            $(this).prev().focus();
+        });
+
+
+        var tableOption = {
+            url: "/api/customer/getlist",// 获取数据的地址
+            postData: transformToJson($('#searchForm').serializeArray()),
+//            colNames: ['', '客户名称', '手机号码', '积分', '充值卡', '代金券', '订单', '默认地址', '客户备注', '操作'],
+            colNames: ['', '客户名称', '手机号码', '积分', '充值卡', '代金券', '订单', '客户备注', '操作'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'name', index: 'name', width: 50, sortable: false},
+                {name: 'mobile', index: 'mobile', width: 100, sortable: false},
+                {
+                    name: 'point',
+                    index: '_point',
+                    width: 150,
+                    sortable: false,
+                    formatter: pointFormatter
+                },
+                {
+                    name: '_rechargeCard',
+                    index: '_rechargeCard',
+                    width: 150,
+                    sortable: false,
+                    formatter: rechargeCardFormatter
+                },
+                {name: '_voucher', index: '_voucher', width: 150, sortable: false, formatter: voucherFormatter},
+                {name: '_order', index: '_order', width: 60, sortable: false, formatter: orderFormatter},
+//                {name: 'defaultAddress', index: 'defaultAddress', sortable: false, formatter: addressFormatter},
+                {name: 'remark', index: 'remark', width: 70, sortable: false},
+                {name: '_action', index: '_action', width: 50, sortable: false, formatter: customFormatter}
+            ],
+            caption: "客户列表"
+        }
+
+        initTable(grid_selector, pager_selector, tableOption);
+        initSelectProject();
+    });
+
+    $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
+
+    function search() {
+        jQuery(grid_selector).setGridParam({
+            url: "/api/customer/getlist",// 获取数据的地址
+            postData: transformToJson($('#searchForm').serializeArray()),
+        }).trigger("reloadGrid", [{page: 1}]);
+        return false;
+    }
+
+    function addressFormatter(cellvalue, options, rowObject) {
+        if (rowObject.defaultAddress) {
+            return rowObject.defaultAddress.cityName + " " + rowObject.defaultAddress.address;
+        } else {
+            return "未知";
+        }
+    }
+
+    function pointFormatter(cellvalue, options, rowObject) {
+        var str = "剩余积分：" + rowObject.pointBalance + " ";
+        var pointUrl = "/infosearch/pointindex?mobile=" + rowObject.mobile;
+        if (permission.indexOf("customerPointDetail") != -1) {
+            str += getRedirectButton("btn-success", pointUrl, "详情");
+        }
+        if (permission.indexOf("customerPointBindig") != -1) {
+            str += getFunctionButton("btn-yellow", "openPointCharge(" + rowObject.id + ")", "绑定");
+        }
+        if (permission.indexOf("customerPointRecharge") != -1) {
+            str += getFunctionButton("btn-yellow", "openPointDirectCharge(" + rowObject.id + ")", "充值");
+        }
+        return str;
+    }
+
+    function rechargeCardFormatter(cellvalue, options, rowObject) {
+        var str = "余额：" + rowObject.rechargeCardBalance + " ";
+        var rechargeCardUrl = "/infosearch/rechargecardindex?mobile=" + rowObject.mobile;
+        if (permission.indexOf("customerRechargeCardDetail") != -1) {
+            str += getRedirectButton("btn-success", rechargeCardUrl, "详情");
+        }
+        if (permission.indexOf("customerRechargeCardBindig") != -1) {
+            str += getFunctionButton("btn-yellow", "openCharge(" + rowObject.id + ")", "绑定");
+        }
+        if (permission.indexOf("customerRechargeCardRecharge") != -1) {
+            str += getFunctionButton("btn-yellow", "openDirectCharge(" + rowObject.id + ")", "充值");
+        }
+        return str;
+    }
+
+    function voucherFormatter(cellvalue, options, rowObject) {
+        var str = "剩余张数：" + rowObject.voucherCount + " ";
+        var voucherUrl = "/infosearch/voucherindex?mobile=" + rowObject.mobile;
+        if (permission.indexOf("customerVoucherDetail") != -1) {
+            str += getRedirectButton("btn-success", voucherUrl, "详情");
+        }
+        if (permission.indexOf("customerVoucherBinding") != -1) {
+            str += getFunctionButton("btn-yellow", "openVoucher(" + rowObject.id + ")", "绑定");
+        }
+        return str;
+
+    }
+
+    function orderFormatter(cellvalue, options, rowObject) {
+        var str = "";
+        var orderUrl = "/order/orderindex?mobile=" + rowObject.mobile;
+        if (permission.indexOf("customerOrderDetail") != -1) {
+            str += getRedirectButton("btn-success", orderUrl, "详情");
+        }
+        if (permission.indexOf("customerUserPlaceOrder") != -1) {
+            str += getFunctionButton("btn-yellow", "openNewOrder(" + rowObject.id + ")", "下单");
+        }
+        return str;
+    }
+
+    function customFormatter(cellvalue, options, rowObject) {
+        var str = "";
+        if (permission.indexOf("customerEdit") != -1) {
+            str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
+        }
+        return str;
+    }
+
+    function operate() {
+        var operationType = $("#inputOperationType").val();
+        switch (operationType) {
+            case "1"://添加
+                add();
+                break;
+            case "2"://修改
+                update();
+                break;
+            case "3"://充值卡绑定
+                rechargecardBinding();
+                break;
+            case "4": //代金券绑定
+                voucherBinding();
+                break;
+            case "5"://充值卡直接充值
+                recharge();
+                break;
+            case "6"://积分码绑定
+                pointBinding();
+                break;
+            case "7"://积分直接充值
+                pointRecharge();
+                break;
+            default:
+        }
+    }
+
+    function add() {
+        $.ajax({
+            url: "/api/customer/add",
+            dataType: "json",
+            async: false,
+            data: {
+                name: $("#inputName").val(),
+                mobile: $("#inputMobile").val(),
+                remark: $("#inputRemark").val()
+            },
+            type: "POST",
+            success: success,
+            error: error
+        });
+    }
+
+    function update() {
+        $.ajax({
+            url: "/api/customer/update",
+            dataType: "json",
+            async: false,
+            data: {
+                id: $("#inputCustomerId").val(),
+                name: $("#inputName").val(),
+                mobile: $("#inputMobile").val(),
+                remark: $("#inputRemark").val()
+            },
+            type: "POST",
+            success: success,
+            error: error
+        });
+    }
+
+    function rechargecardBinding() {
+        $.ajax({
+            url: "/api/rcexchangecode/backstagecodecharge",
+            dataType: "json",
+            async: false,
+            data: {
+                id: $("#inputCustomerId").val(),
+                keyt: $("#inputKeyt").val(),
+            },
+            type: "POST",
+            success: success,
+            error: error
+        });
+    }
+
+    function pointBinding() {
+        $.ajax({
+            url: "/api/pointexchangecode/backstagecodecharge",
+            dataType: "json",
+            async: false,
+            data: {
+                id: $("#inputCustomerId").val(),
+                keyt: $("#inputKeyt").val(),
+            },
+            type: "POST",
+            success: success,
+            error: error
+        });
+    }
+
+    function voucherBinding() {
+        $.ajax({
+            url: "/api/voucherexchangecode/backstagecodecharge",
+            dataType: "json",
+            async: false,
+            data: {
+                id: $("#inputCustomerId").val(),
+                keyt: $("#inputKeyt").val(),
+            },
+            type: "POST",
+            success: success,
+            error: error
+        });
+    }
+
+    function recharge() {
+        $.ajax({
+            url: "/api/rc/directcharge",
+            dataType: "json",
+            async: false,
+            data: {
+                id: $("#inputCustomerId").val(),
+                batchId: $("#selectBatch").val(),
+                faceValue: $("#inputChargeMoney").val(),
+            },
+            type: "POST",
+            success: success,
+            error: error
+        });
+    }
+
+    function pointRecharge() {
+        $.ajax({
+            url: "/api/point/directcharge",
+            dataType: "json",
+            async: false,
+            data: {
+                id: $("#inputCustomerId").val(),
+                batchId: $("#selectBatch").val(),
+                faceValue: $("#inputChargeMoney").val(),
+            },
+            type: "POST",
+            success: success,
+            error: error
+        });
+    }
+
+    function initModel() {
+        $("#inputOperationType").val(0);//什么也不做
+        $('#inputMobile').attr('disabled', 'disabled').val("");
+        $('#inputName').attr('disabled', 'disabled').val("");
+        $('#inputRemark').attr('disabled', 'disabled').val("");
+        $('#inputKeyt').attr('disabled', 'disabled').val("");
+        $('#inputChargeMoney').attr('disabled', 'disabled').val("");
+        $("#selectProject").val("");
+
+        $('#divMobile').attr('hidden', 'hidden');
+        $('#divName').attr('hidden', 'hidden');
+        $('#divRemark').attr('hidden', 'hidden');
+        $('#divChargeMoney').attr('hidden', 'hidden');
+        $('#divKeyt').attr('hidden', 'hidden');
+        $('#divProject').attr('hidden', 'hidden');
+        $('#divBatch').attr('hidden', 'hidden');
+    }
+
+    function openNew() {
+        initModel()
+        $("#inputOperationType").val(1);//添加
+        $("#modal-title").html("客户信息-添加");
+        $('#inputMobile').removeAttr('disabled');
+        $('#inputName').removeAttr('disabled');
+        $('#inputRemark').removeAttr('disabled');
+        $('#divMobile').removeAttr('hidden');
+        $('#divName').removeAttr('hidden');
+        $('#divRemark').removeAttr('hidden');
+    }
+
+    function openEdit(id) {
+        initModel()
+        $("#inputOperationType").val(2);//修改
+        $("#modal-title").html("客户信息-修改");
+        $('#inputName').removeAttr('disabled');
+        $('#inputRemark').removeAttr('disabled');
+        $('#divMobile').removeAttr('hidden');
+        $('#divName').removeAttr('hidden');
+        $('#divRemark').removeAttr('hidden');
+        $(".modal-footer-btn").show();
+        getById(id);
+    }
+
+    function openCharge(id) {
+        initModel()
+        $("#inputOperationType").val(3);//充值卡绑定
+        $("#modal-title").html("充值卡绑定");
+        $('#inputKeyt').removeAttr('disabled');
+        $('#divMobile').removeAttr('hidden');
+        $('#divKeyt').removeAttr('hidden');
+        $(".modal-footer-btn").show();
+        getById(id);
+    }
+
+    function openVoucher(id) {
+        initModel()
+        $("#inputOperationType").val(4);//代金券绑定
+        $("#modal-title").html("代金券绑定");
+        $('#inputMobile');
+        $('#inputKeyt').removeAttr('disabled');
+        $('#divMobile').removeAttr('hidden');
+        $('#divKeyt').removeAttr('hidden');
+        $(".modal-footer-btn").show();
+        getById(id);
+    }
+
+    function openDirectCharge(id) {
+        initModel()
+        $("#inputOperationType").val(5);//充值卡直接充值
+        $("#modal-title").html("充值卡直接充值");
+        $('#inputChargeMoney').removeAttr('disabled');
+        $('#divMobile').removeAttr('hidden');
+        $('#divProject').removeAttr('hidden');
+        $('#divBatch').removeAttr('hidden');
+        $('#divChargeMoney').removeAttr('hidden');
+        $(".modal-footer-btn").show();
+        getById(id);
+    }
+
+    function openPointCharge(id) {
+        initModel()
+        $("#inputOperationType").val(6);//积分卡绑定
+        $("#modal-title").html("积分卡绑定");
+        $('#inputKeyt').removeAttr('disabled');
+        $('#divMobile').removeAttr('hidden');
+        $('#divKeyt').removeAttr('hidden');
+        $(".modal-footer-btn").show();
+        getById(id);
+    }
+
+    function openPointDirectCharge(id) {
+        initModel()
+        $("#inputOperationType").val(7);//积分直接充值
+        $("#modal-title").html("积分直接充值");
+        $('#inputChargeMoney').removeAttr('disabled');
+        $('#divMobile').removeAttr('hidden');
+        $('#divProject').removeAttr('hidden');
+        $('#divBatch').removeAttr('hidden');
+        $('#divChargeMoney').removeAttr('hidden');
+        $(".modal-footer-btn").show();
+        getById(id);
+    }
+
+
+    function getById(id) {
+        $.ajax({
+            url: "/api/customer/getbyid",    //请求的url地址
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#inputCustomerId").val(result.id);
+                    $("#inputName").val(result.name);
+                    $("#inputMobile").val(result.mobile);
+                    $("#inputRemark").val(result.remark);
+                    $("#modal-form").modal('show');
+                }
+            },
+            error: error
+        });
+    }
+
+    function initSelectProject() {
+        //将项目列表填入到单选框中
+        $.ajax({
+            url: "/api/project/getlist",
+            dataType: "json",
+            async: false,
+            data: {
+                status: 1,
+                pageSize: 10000,
+                pageNum: 1
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#selectProject").append("<option value=>&nbsp;</option>");
+                    for (var i = 0; i < result.length; i++) {
+                        $("#selectProject").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                    }
+                }
+            },
+            error: error
+        });
+    }
+
+    function refreshBatch() {
+        var projectId = $("#selectProject").val();
+        if (projectId == "") {
+            return;
+        }
+        url = "";
+        if ($("#inputOperationType").val() == "5") {
+            url = "/api/rcexchangecodebatch/findvirtualbyprojectid";
+        }
+        if ($("#inputOperationType").val() == "7") {
+            url = "/api/pointexchangecodebatch/findvirtualbyprojectid";
+        }
+        $("#selectBatch").empty();
+        $.ajax({
+            url: url,
+            dataType: "json",
+            async: false,
+            data: {
+                id: projectId
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#selectBatch").append("<option value=>&nbsp;</option>");
+                    for (var i = 0; i < result.length; i++) {
+                        $("#selectBatch").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                    }
+                }
+            },
+            error: error
+        });
+    }
+
+    function openNewOrder(id) {
+        $("#orderCustomerId").val(id);
+        $("#order-modal").modal("show");
+        initProduct();
+    }
+
+    function initProduct() {
+        $("#orderProductId").empty();
+        $("#orderProductId").append("<option value=>请选择商品</option>");
+        $.ajax({
+            url: "/api/product/getlist",
+            dataType: "json",
+            async: false,
+            data: {
+                pageSize: 10000,
+                pageNum: 1,
+                status: 1
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#orderProductId").append("<option data-last-num=" + result[i].lastNum + " data-product-type=" + result[i].productType + " value=" + result[i].id + ">" + result[i].name + "</option>");
+                    }
+                }
+            },
+            error: error
+        });
+    }
+
+    function productChanged() {
+        if ($("#orderProductId").val() == '') {
+            cityTree.destroy();
+        } else {
+            refreshCity();
+        }
+        var lastNum = parseFloat($("#orderProductId").find("option:selected").attr("data-last-num"));
+        $("#orderCount").ace_spinner('value', lastNum);
+        if ($("#orderProductId").find("option:selected").attr("data-product-type") == '0') {//服务类
+            $(".virtual").css("display", "");
+        } else {//电子卡
+            $(".virtual").css("display", "none");
+        }
+        $("#orderVoucherArea").empty();
+        $("#orderRechargeCardArea").empty();
+    }
+
+    function refreshCity() {
+        var setting = {
+            view: {selectedMulti: false},
+            check: {enable: true, chkStyle: "radio", radioType: "all"},
+            data: {simpleData: {enable: true}},
+            edit: {enable: false},
+            callback: {onCheck: zTreeOnClick}
+        };
+        var zCityNodes = [];
+        $.ajax({
+            url: "/api/product/getpricelist",
+            data: {
+                pageSize: 10000,
+                pageNum: 1,
+                productId: $("#orderProductId").val(),
+                status: 1
+            },
+            dataType: "json",
+            async: false,
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        var zNode = {};
+                        zNode.id = parseInt(result[i].cityCode);
+                        zNode.pId = parseInt(result[i].cityCode.substring(0, 2) + "0000");
+                        zNode.name = result[i].cityName + "(" + result[i].price + "元)";
+                        zNode.price = result[i].price;
+                        zCityNodes.push(zNode);
+                    }
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+        cityTree = $.fn.zTree.init($("#cityTree"), setting, zCityNodes);
+    }
+
+    function zTreeOnClick(event, treeId, treeNode) {
+        console.log(treeId);
+        var nodes = cityTree.getCheckedNodes(true);
+        if (nodes.length < 1) {
+            $("#orderCityCode").val('');
+            $("#orderVoucherArea").empty();
+            $("#orderRechargeCardArea").empty();
+        } else {
+            $("#orderCityCode").val(nodes[0].id);
+            $("#orderProductPrice").val(nodes[0].price);
+            refreshCard();
+        }
+    }
+
+    //更新代金券，充值卡区域
+    function refreshCard() {
+        $("#orderVoucherArea").empty();
+        $("#orderRechargeCardArea").empty();
+        $.ajax({
+            url: "/api/voucher/findbygoodsattrpage",
+            dataType: "json",
+            async: true,
+            data: {
+                pageSize: 10000,
+                pageNum: 1,
+                customerId: $("#orderCustomerId").val(),
+                productId: $("#orderProductId").val(),
+                cityCode: $("#orderCityCode").val()
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#orderVoucherArea").append("<div class='checkbox'><label>" +
+                            "<input name='voucherCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
+                            "<span class='lbl'> " + result[i].name + "（可抵扣商品数量：" + result[i].count + "）</span></label>" +
+                            "<input type='hidden' id='replaceCount_" + result[i].id + "'value=" + result[i].count + ">" +
+                            "</div>")
+                    }
+                }
+            },
+            error: error
+        });
+        $.ajax({
+            url: "/api/rc/findbygoodsattrpage",
+            dataType: "json",
+            async: false,
+            data: {
+                pageSize: 10000,
+                pageNum: 1,
+                customerId: $("#orderCustomerId").val(),
+                productId: $("#orderProductId").val(),
+                cityCode: $("#orderCityCode").val()
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#orderRechargeCardArea").append("<div class='checkbox'><label>" +
+                            "<input name='rechargeCardCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
+                            "<span class='lbl'> " + result[i].name + "（余额：" + result[i].balance + "）</span></label>" +
+                            "<input type='hidden' id='leftMoney_" + result[i].id + "' value=" + result[i].balance + ">" +
+                            "<input type='text' id='spendMoney_" + result[i].id + "' value=0>" +
+                            "</div>")
+                    }
+                }
+            },
+            error: error
+        });
+    }
+
+    function placeOrder() {
+        $("#orderRealServiceTime").next().next().val($("#orderRealServiceTime").val() == '' ? 0 : new Date($("#orderRealServiceTime").val()).getTime());
+        if ($("#orderProductId").val() == '0') {
+            bootboxalert("请选择商品");
+            return false;
+        }
+        if ($("#orderCityCode").val() == "") {
+            bootboxalert("请选择城市");
+            return false;
+        }
+        var count = 0;//用代金券支付的数量
+        var money = 0;//用充值卡支付的金额
+        $("#orderVoucherArea input[type=checkbox]").each(function () {
+            if ($(this).prop('checked')) {
+                count = count + parseInt($("#replaceCount_" + $(this).val()).val());
+            }
+        });
+        var moneyError = false;
+        $("#orderRechargeCardArea input[type=checkbox]").each(function () {
+            if ($(this).prop('checked')) {
+                if (parseFloat($("#spendMoney_" + $(this).val()).val()) > parseFloat($("#leftMoney_" + $(this).val()).val())) {
+                    moneyError = true;
+                }
+                money = money + parseFloat($("#spendMoney_" + $(this).val()).val());
+            }
+        });
+        if (moneyError) {
+            bootboxalert("充值卡消费金额不能大于充值卡的余额");
+            return false;
+        }
+        var left = (parseInt($("#orderCount").val()) - count) * parseFloat($("#orderProductPrice").val()) - money;
+        if (left < 0) {
+            bootboxalert("所选的付款内容超额支付订单，不能下单！");
+        } else {
+            var confirmText = "所选的付款内容" + (left == 0 ? "刚好" : "不足以") + "支付订单，继续下单吗？";
+            confirm(confirmText, function (result) {
+                if (result) {
+                    saveOrder();
+                }
+            });
+        }
+    }
+
+    function saveOrder() {
+        var voucherIds = "";
+        var rechargeCardIds = "";
+        var cardMoneys = "";
+        $("#orderVoucherArea input[type=checkbox]").each(function () {
+            if ($(this).prop('checked')) {
+                voucherIds = voucherIds + $(this).val() + ",";
+            }
+        });
+        $("#orderRechargeCardArea input[type=checkbox]").each(function () {
+            if ($(this).prop('checked')) {
+                if ($(this).val() > 0) {
+                    rechargeCardIds = rechargeCardIds + $(this).val() + ",";
+                    cardMoneys = cardMoneys + $("#spendMoney_" + $(this).val()).val() + ",";
+                }
+            }
+        });
+        $("#orderVoucherIds").val(voucherIds);
+        $("#orderRechargeCardIds").val(rechargeCardIds);
+        $("#orderCardMoneys").val(cardMoneys);
+        $.ajax({
+            url: "/api/orderinfo/userplaceorder",
+            dataType: "json",
+            async: false,
+            data: transformToJson($('#orderForm').serializeArray()),
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $("#order-modal").modal("hide");
+                    bootboxalert("下单成功");
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: error
+        });
+    }
+
+</script>
+</html>
+

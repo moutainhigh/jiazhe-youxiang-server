@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.PartnerOrderInfoPOMapper" >
+  <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.PartnerOrderInfoPO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="customer_mobile" property="customerMobile" jdbcType="VARCHAR" />
+    <result column="customer_address" property="customerAddress" jdbcType="VARCHAR" />
+    <result column="customer_city_code" property="customerCityCode" jdbcType="VARCHAR" />
+    <result column="customer_city_name" property="customerCityName" jdbcType="VARCHAR" />
+    <result column="keyt" property="keyt" jdbcType="VARCHAR" />
+    <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+    <result column="service_time" property="serviceTime" jdbcType="TIMESTAMP" />
+    <result column="product_type" property="productType" jdbcType="VARCHAR" />
+    <result column="worker_name" property="workerName" jdbcType="VARCHAR" />
+    <result column="worker_mobile" property="workerMobile" jdbcType="VARCHAR" />
+    <result column="service_item_id" property="serviceItemId" jdbcType="INTEGER" />
+    <result column="pre_pay" property="prePay" jdbcType="DECIMAL" />
+    <result column="append_pay" property="appendPay" jdbcType="DECIMAL" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="partner_id" property="partnerId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, customer_name, customer_mobile, customer_address, customer_city_code, customer_city_name, 
+    keyt, order_time, service_time, product_type, worker_name, worker_mobile, service_item_id, 
+    pre_pay, append_pay, remark, partner_id, status, ext_info, is_deleted, add_time, 
+    mod_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.PartnerOrderInfoPOExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from partner_order_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from partner_order_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from partner_order_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jiazhe.youxiang.server.domain.po.PartnerOrderInfoPOExample" >
+    delete from partner_order_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.PartnerOrderInfoPO" >
+    insert into partner_order_info (id, customer_name, customer_mobile, 
+      customer_address, customer_city_code, customer_city_name, 
+      keyt, order_time, service_time, 
+      product_type, worker_name, worker_mobile, 
+      service_item_id, pre_pay, append_pay, 
+      remark, partner_id, status, 
+      ext_info, is_deleted, add_time, 
+      mod_time)
+    values (#{id,jdbcType=INTEGER}, #{customerName,jdbcType=VARCHAR}, #{customerMobile,jdbcType=VARCHAR}, 
+      #{customerAddress,jdbcType=VARCHAR}, #{customerCityCode,jdbcType=VARCHAR}, #{customerCityName,jdbcType=VARCHAR}, 
+      #{keyt,jdbcType=VARCHAR}, #{orderTime,jdbcType=TIMESTAMP}, #{serviceTime,jdbcType=TIMESTAMP}, 
+      #{productType,jdbcType=VARCHAR}, #{workerName,jdbcType=VARCHAR}, #{workerMobile,jdbcType=VARCHAR}, 
+      #{serviceItemId,jdbcType=INTEGER}, #{prePay,jdbcType=DECIMAL}, #{appendPay,jdbcType=DECIMAL}, 
+      #{remark,jdbcType=VARCHAR}, #{partnerId,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, 
+      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{modTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.PartnerOrderInfoPO" >
+    insert into partner_order_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="customerMobile != null" >
+        customer_mobile,
+      </if>
+      <if test="customerAddress != null" >
+        customer_address,
+      </if>
+      <if test="customerCityCode != null" >
+        customer_city_code,
+      </if>
+      <if test="customerCityName != null" >
+        customer_city_name,
+      </if>
+      <if test="keyt != null" >
+        keyt,
+      </if>
+      <if test="orderTime != null" >
+        order_time,
+      </if>
+      <if test="serviceTime != null" >
+        service_time,
+      </if>
+      <if test="productType != null" >
+        product_type,
+      </if>
+      <if test="workerName != null" >
+        worker_name,
+      </if>
+      <if test="workerMobile != null" >
+        worker_mobile,
+      </if>
+      <if test="serviceItemId != null" >
+        service_item_id,
+      </if>
+      <if test="prePay != null" >
+        pre_pay,
+      </if>
+      <if test="appendPay != null" >
+        append_pay,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="partnerId != null" >
+        partner_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="extInfo != null" >
+        ext_info,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="modTime != null" >
+        mod_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerMobile != null" >
+        #{customerMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="customerAddress != null" >
+        #{customerAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCityCode != null" >
+        #{customerCityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCityName != null" >
+        #{customerCityName,jdbcType=VARCHAR},
+      </if>
+      <if test="keyt != null" >
+        #{keyt,jdbcType=VARCHAR},
+      </if>
+      <if test="orderTime != null" >
+        #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceTime != null" >
+        #{serviceTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="productType != null" >
+        #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="workerName != null" >
+        #{workerName,jdbcType=VARCHAR},
+      </if>
+      <if test="workerMobile != null" >
+        #{workerMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceItemId != null" >
+        #{serviceItemId,jdbcType=INTEGER},
+      </if>
+      <if test="prePay != null" >
+        #{prePay,jdbcType=DECIMAL},
+      </if>
+      <if test="appendPay != null" >
+        #{appendPay,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="partnerId != null" >
+        #{partnerId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="extInfo != null" >
+        #{extInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modTime != null" >
+        #{modTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jiazhe.youxiang.server.domain.po.PartnerOrderInfoPOExample" resultType="java.lang.Integer" >
+    select count(*) from partner_order_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update partner_order_info
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.customerName != null" >
+        customer_name = #{record.customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerMobile != null" >
+        customer_mobile = #{record.customerMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerAddress != null" >
+        customer_address = #{record.customerAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerCityCode != null" >
+        customer_city_code = #{record.customerCityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerCityName != null" >
+        customer_city_name = #{record.customerCityName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.keyt != null" >
+        keyt = #{record.keyt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderTime != null" >
+        order_time = #{record.orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.serviceTime != null" >
+        service_time = #{record.serviceTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.productType != null" >
+        product_type = #{record.productType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workerName != null" >
+        worker_name = #{record.workerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workerMobile != null" >
+        worker_mobile = #{record.workerMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceItemId != null" >
+        service_item_id = #{record.serviceItemId,jdbcType=INTEGER},
+      </if>
+      <if test="record.prePay != null" >
+        pre_pay = #{record.prePay,jdbcType=DECIMAL},
+      </if>
+      <if test="record.appendPay != null" >
+        append_pay = #{record.appendPay,jdbcType=DECIMAL},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.partnerId != null" >
+        partner_id = #{record.partnerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.extInfo != null" >
+        ext_info = #{record.extInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDeleted != null" >
+        is_deleted = #{record.isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="record.addTime != null" >
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modTime != null" >
+        mod_time = #{record.modTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update partner_order_info
+    set id = #{record.id,jdbcType=INTEGER},
+      customer_name = #{record.customerName,jdbcType=VARCHAR},
+      customer_mobile = #{record.customerMobile,jdbcType=VARCHAR},
+      customer_address = #{record.customerAddress,jdbcType=VARCHAR},
+      customer_city_code = #{record.customerCityCode,jdbcType=VARCHAR},
+      customer_city_name = #{record.customerCityName,jdbcType=VARCHAR},
+      keyt = #{record.keyt,jdbcType=VARCHAR},
+      order_time = #{record.orderTime,jdbcType=TIMESTAMP},
+      service_time = #{record.serviceTime,jdbcType=TIMESTAMP},
+      product_type = #{record.productType,jdbcType=VARCHAR},
+      worker_name = #{record.workerName,jdbcType=VARCHAR},
+      worker_mobile = #{record.workerMobile,jdbcType=VARCHAR},
+      service_item_id = #{record.serviceItemId,jdbcType=INTEGER},
+      pre_pay = #{record.prePay,jdbcType=DECIMAL},
+      append_pay = #{record.appendPay,jdbcType=DECIMAL},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      partner_id = #{record.partnerId,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=TINYINT},
+      ext_info = #{record.extInfo,jdbcType=VARCHAR},
+      is_deleted = #{record.isDeleted,jdbcType=TINYINT},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      mod_time = #{record.modTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jiazhe.youxiang.server.domain.po.PartnerOrderInfoPO" >
+    update partner_order_info
+    <set >
+      <if test="customerName != null" >
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerMobile != null" >
+        customer_mobile = #{customerMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="customerAddress != null" >
+        customer_address = #{customerAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCityCode != null" >
+        customer_city_code = #{customerCityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCityName != null" >
+        customer_city_name = #{customerCityName,jdbcType=VARCHAR},
+      </if>
+      <if test="keyt != null" >
+        keyt = #{keyt,jdbcType=VARCHAR},
+      </if>
+      <if test="orderTime != null" >
+        order_time = #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceTime != null" >
+        service_time = #{serviceTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="productType != null" >
+        product_type = #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="workerName != null" >
+        worker_name = #{workerName,jdbcType=VARCHAR},
+      </if>
+      <if test="workerMobile != null" >
+        worker_mobile = #{workerMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceItemId != null" >
+        service_item_id = #{serviceItemId,jdbcType=INTEGER},
+      </if>
+      <if test="prePay != null" >
+        pre_pay = #{prePay,jdbcType=DECIMAL},
+      </if>
+      <if test="appendPay != null" >
+        append_pay = #{appendPay,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="partnerId != null" >
+        partner_id = #{partnerId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="extInfo != null" >
+        ext_info = #{extInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modTime != null" >
+        mod_time = #{modTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jiazhe.youxiang.server.domain.po.PartnerOrderInfoPO" >
+    update partner_order_info
+    set customer_name = #{customerName,jdbcType=VARCHAR},
+      customer_mobile = #{customerMobile,jdbcType=VARCHAR},
+      customer_address = #{customerAddress,jdbcType=VARCHAR},
+      customer_city_code = #{customerCityCode,jdbcType=VARCHAR},
+      customer_city_name = #{customerCityName,jdbcType=VARCHAR},
+      keyt = #{keyt,jdbcType=VARCHAR},
+      order_time = #{orderTime,jdbcType=TIMESTAMP},
+      service_time = #{serviceTime,jdbcType=TIMESTAMP},
+      product_type = #{productType,jdbcType=VARCHAR},
+      worker_name = #{workerName,jdbcType=VARCHAR},
+      worker_mobile = #{workerMobile,jdbcType=VARCHAR},
+      service_item_id = #{serviceItemId,jdbcType=INTEGER},
+      pre_pay = #{prePay,jdbcType=DECIMAL},
+      append_pay = #{appendPay,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      partner_id = #{partnerId,jdbcType=INTEGER},
+      status = #{status,jdbcType=TINYINT},
+      ext_info = #{extInfo,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      mod_time = #{modTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
