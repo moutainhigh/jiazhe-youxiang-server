@@ -698,10 +698,12 @@
     function openNew() {
         initForm();
         $("#partnerOrderId").val(0);
+        $("#partnerOrderForm #savePrePay").val(0);
         $("#partnerOrderForm #saveAppendPay").val(0);
         var time = new Date().getTime();
         $("#saveOrderTime").val(dateFormat(time));
         $("#saveOrderTime").next().next().val(time);
+        $("#saveServiceTime").next().next().val(0);
         $("#partnerOrderModalTitle").html("商家订单-新建");
         $("#partnerOrderSaveBtn").show();
         $("#modal-partnerOrder").modal("show");
@@ -770,9 +772,13 @@
             data: data,
             type: "POST",
             success: function (data) {
-                $("#modal-partnerOrder").modal('hide');
-                jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                refreshOverviewMoney();
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $("#modal-partnerOrder").modal('hide');
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                    refreshOverviewMoney();
+                }
             },
             error: error
         });
