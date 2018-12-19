@@ -15,7 +15,7 @@ start(){
   if [ ! -n "$pid" ]; then
     echo "$APP_NAME start..."
     cd $APP_DIR
-    if [ "$ENV" -eq "online" ]; then
+    if [ "$ENV" = "online" ]; then
         nohup java -jar $JVM_OPTS $APP_DIR/$APP_NAME.jar --spring.profiles.active=$ENV > /dev/null 2>&1 &
     else
         nohup java -jar $APP_DIR/$APP_NAME.jar --spring.profiles.active=$ENV > /dev/null 2>&1 &
