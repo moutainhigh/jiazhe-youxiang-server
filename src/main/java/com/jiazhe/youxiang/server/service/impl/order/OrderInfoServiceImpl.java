@@ -1,10 +1,8 @@
 package com.jiazhe.youxiang.server.service.impl.order;
 
 import com.google.common.collect.Lists;
-import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.ConstantFetchUtil;
 import com.jiazhe.youxiang.base.util.DateUtil;
-import com.jiazhe.youxiang.base.util.GenerateCode;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
@@ -50,7 +48,6 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
