@@ -111,7 +111,8 @@
     </select>
 
     <select id="getCountWithinThisHour" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM order_info WHERE date_format(add_time,'%Y-%m-%d %H') = date_format(NOW(),'%Y-%m-%d %H')
+        SELECT COUNT(*) FROM order_info WHERE
+        add_time >= from_unixtime(#{beginHour}/1000) AND from_unixtime(#{endHour}/1000) >= add_time
     </select>
 
     <select id="getCountByStatus" resultType="java.lang.Integer">

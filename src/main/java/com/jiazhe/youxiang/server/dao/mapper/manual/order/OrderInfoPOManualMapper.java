@@ -56,7 +56,9 @@ public interface OrderInfoPOManualMapper {
 
     /**
      * 计算当前小时内的订单数量
+     * @param beginHour
+     * @param endHour
      * @return
      */
-    Integer getCountWithinThisHour();
+    Integer getCountWithinThisHour(@Param("beginHour")Long beginHour,@Param("endHour")Long endHour);
 }

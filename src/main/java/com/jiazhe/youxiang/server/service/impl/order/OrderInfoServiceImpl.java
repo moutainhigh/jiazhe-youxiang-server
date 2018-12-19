@@ -1,6 +1,8 @@
 package com.jiazhe.youxiang.server.service.impl.order;
 
 import com.google.common.collect.Lists;
+import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.ConstantFetchUtil;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.GenerateCode;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
@@ -782,7 +784,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
      * 生成订单号 yyyyMMddHH+3位序列号
      */
     private String generateOrderCode() {
-        Integer count = orderInfoPOManualMapper.getCountWithinThisHour();
+        Long beginHour = (System.currentTimeMillis() / ConstantFetchUtil.hour_1) * ConstantFetchUtil.hour_1;
+        Long endHour = beginHour + ConstantFetchUtil.hour_1;
+        Integer count = orderInfoPOManualMapper.getCountWithinThisHour(beginHour, endHour);
         if (count >= CommonConstant.ORDER_CEILING_PER_HOUR) {
             logger.error(OrderCodeEnum.ORDER_NO_GENERATE_ERROR.getMessage());
             throw new OrderException(OrderCodeEnum.ORDER_NO_GENERATE_ERROR);
