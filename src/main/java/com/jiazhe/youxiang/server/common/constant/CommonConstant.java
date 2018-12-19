@@ -147,4 +147,9 @@ public class CommonConstant {
      */
     public static final BigDecimal exchangeRate = new BigDecimal(5) ;
 
+    /**
+     * 一个小时内的订单上限，生成订单号的时候用到
+     */
+    public static final Integer ORDER_CEILING_PER_HOUR = 999;
+
 }

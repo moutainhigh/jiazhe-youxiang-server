@@ -49,6 +49,15 @@ public class DateUtil {
         return str;
     }
 
+    /**
+     * 返回yyyyMMDDhh
+     */
+    public static String yyyyMMDDhh() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHH");
+        String str = sdf.format(new Date());
+        return str;
+    }
+
 
 
 }

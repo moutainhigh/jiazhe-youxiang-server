@@ -33,6 +33,7 @@ public enum OrderCodeEnum {
     ORDER_COUNT_LESS_THAN_LAST_NUM(108024, "ORDER_COUNT_LESS_THAN_LAST_NUM", "下单数量不能少于最小下单数量"),
     ORDER_OVER_PAYMENT(108025, "ORDER_OVER_PAYMENT", "支付金额超过订单金额，支付失败"),
     SERVICE_TIME_ERROR(108026, "SERVICE_TIME_ERROR", "预约服务时间不符合要求"),
+    ORDER_NO_GENERATE_ERROR(108027, "ORDER_NO_GENERATE_ERROR", "订单号生成错误"),
     ;
 
     OrderCodeEnum(Integer code, String type, String message) {
