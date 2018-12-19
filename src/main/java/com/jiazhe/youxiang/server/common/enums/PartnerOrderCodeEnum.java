@@ -6,7 +6,7 @@ package com.jiazhe.youxiang.server.common.enums;
  * @date 2018/12/15
  */
 public enum PartnerOrderCodeEnum {
-
+    CUSTOMER_NAME_IS_NULL(117001, "CUSTOMER_NAME_IS_NULL", "客户姓名不能为空"),
     ;
 
     PartnerOrderCodeEnum(Integer code, String type, String message) {

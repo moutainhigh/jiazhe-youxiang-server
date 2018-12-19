@@ -673,7 +673,7 @@
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
         str += getFunctionButton("btn-success", "openShow(" + rowObject.id + ")", "查看");
-        if (permission.indexOf("partnerOrderEdit") != -1){
+        if (permission.indexOf("partnerOrderEdit") != -1) {
             if (rowObject.status == 1) {
                 str += getFunctionButton("btn-primary", "openEdit(" + rowObject.id + ")", "修改");
             }
@@ -698,6 +698,10 @@
     function openNew() {
         initForm();
         $("#partnerOrderId").val(0);
+        $("#partnerOrderForm #saveAppendPay").val(0);
+        var time = new Date().getTime();
+        $("#saveOrderTime").val(dateFormat(time));
+        $("#saveOrderTime").next().next().val(time);
         $("#partnerOrderModalTitle").html("商家订单-新建");
         $("#partnerOrderSaveBtn").show();
         $("#modal-partnerOrder").modal("show");
@@ -749,6 +753,14 @@
     }
 
     function savePartnerOrder() {
+        if (!isNumber($("#savePrePay").val())) {
+            bootboxalert("预付必须为数字！");
+            return false;
+        }
+        if (!isNumber($("#saveAppendPay").val())) {
+            bootboxalert("再次支付必须为数字！");
+            return false;
+        }
         var data = transformToJson($('#partnerOrderForm').serializeArray());
         data.customerCityName = $("#saveCustomerCityCode option:selected").text();
         $.ajax({
@@ -834,7 +846,6 @@
         $("#saveAdvancePay").val(0);
         $("#saveRemark").val('');
         var time = new Date().getTime();
-        $("#saveAdvanceTime").val(time);
         $("#saveAdvanceTime").val(dateFormat(time));
         $("#saveAdvanceTime").next().next().val(time);
         $("#modal-advancePay").modal('show');
