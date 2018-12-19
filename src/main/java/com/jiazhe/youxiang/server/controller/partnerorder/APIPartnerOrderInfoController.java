@@ -70,7 +70,7 @@ public class APIPartnerOrderInfoController extends BaseController {
     @RequiresPermissions(value = {PermissionConstant.PARTNER_ORDER_ADD, PermissionConstant.PARTNER_ORDER_EDIT}, logical = Logical.OR)
     @ApiOperation(value = "【后台】保存商家订单信息", httpMethod = "POST", notes = "【后台】保存商家订单信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER, operate = "保存商家订单信息", level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER, operate = "保存商家订单信息", level = LogLevelEnum.LEVEL_2)
     public Object save(@ModelAttribute PartnerOrderSaveReq req) {
         CommonValidator.validateNull(req.getCustomerName(), new PartnerOrderException(PartnerOrderCodeEnum.CUSTOMER_NAME_IS_NULL));
         CommonValidator.validateNull(req.getCustomerCityCode(), new PartnerOrderException(PartnerOrderCodeEnum.CUSTOMER_CITY_IS_NULL));
