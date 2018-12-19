@@ -5,14 +5,7 @@ import com.aliyuncs.exceptions.ClientException;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.realm.AuthToken;
 import com.jiazhe.youxiang.base.realm.UserRealm;
-import com.jiazhe.youxiang.base.util.AliUtils;
-import com.jiazhe.youxiang.base.util.CommonValidator;
-import com.jiazhe.youxiang.base.util.ConstantFetchUtil;
-import com.jiazhe.youxiang.base.util.CookieUtil;
-import com.jiazhe.youxiang.base.util.IpAdrressUtil;
-import com.jiazhe.youxiang.base.util.ResponseUtil;
-import com.jiazhe.youxiang.base.util.ResultPackage;
-import com.jiazhe.youxiang.base.util.ValidateUtils;
+import com.jiazhe.youxiang.base.util.*;
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
@@ -111,7 +104,10 @@ public class APISignInController extends BaseController {
                     SysUserDTO temp = (SysUserDTO) s.getPrincipal();
                     if (loginName.equals(temp.getLoginName())) {
                         logger.info(("删除员工" + temp.getLoginName() + "的登陆session"));
-                        sessionDAO.delete(session);
+                        //CookieUtil.getUid(request, "JSESSIONID"))可能为null，所以注意equals方法的比较顺序
+                        if (!session.getId().equals(CookieUtil.getUid(request, "JSESSIONID"))) {
+                            sessionDAO.delete(session);
+                        }
                     }
                 }
             }
