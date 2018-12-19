@@ -41,7 +41,7 @@ public class APIAdvancePayController extends BaseController{
     @RequiresPermissions(PermissionConstant.ADVANCE_PAY_MANAGEMENT)
     @ApiOperation(value = "【后台】查询预付款充值信息", httpMethod = "GET", response = AdvancePayResp.class, responseContainer = "List", notes = "【后台】查询预付款充值信息")
     @RequestMapping(value = "/listall", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "查询预付款充值信息", level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER, operate = "查询预付款充值信息", level = LogLevelEnum.LEVEL_1)
     public Object listAll(@ModelAttribute PartnerOrderInfoPageReq req) {
         Date timeStart = req.getServiceTimeStart() == 0 ? null : new Date(req.getServiceTimeStart());
         Date timeEnd = req.getServiceTimeEnd() == 0 ? null : new Date(req.getServiceTimeEnd());
@@ -53,7 +53,7 @@ public class APIAdvancePayController extends BaseController{
     @RequiresPermissions(PermissionConstant.ADVANCE_PAY_ADD)
     @ApiOperation(value = "【后台】保存预支信息", httpMethod = "POST", notes = "保存预支信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.ORDER,operate = "保存预支信息",level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER,operate = "保存预支信息",level = LogLevelEnum.LEVEL_2)
     public Object save(@ModelAttribute AdvancePaySaveReq req) {
         advancePayBiz.save(req.getAdvancePay(),req.getAdvanceTime(),req.getRemark());
         return ResponseFactory.buildSuccess();
