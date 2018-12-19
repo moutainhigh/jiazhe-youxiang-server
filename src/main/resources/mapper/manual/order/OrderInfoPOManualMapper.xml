@@ -110,6 +110,10 @@
         </where>
     </select>
 
+    <select id="getCountWithinThisHour" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM order_info WHERE date_format(add_time,'%Y-%m-%d %H') = date_format(NOW(),'%Y-%m-%d %H')
+    </select>
+
     <select id="getCountByStatus" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM order_info o
         <where>

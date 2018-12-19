@@ -53,4 +53,10 @@ public interface OrderInfoPOManualMapper {
      * @return
      */
     Integer getCountByStatus(@Param("status")Byte status);
+
+    /**
+     * 计算当前小时内的订单数量
+     * @return
+     */
+    Integer getCountWithinThisHour();
 }
