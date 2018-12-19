@@ -42,6 +42,11 @@ public class PlaceOrderDTO extends BaseObject {
     private Date realServiceTime;
 
     /**
+     * 使用的积分卡ids
+     */
+    private String pointIds;
+
+    /**
      * 使用的代金券ids
      */
     private String voucherIds;
@@ -138,6 +143,14 @@ public class PlaceOrderDTO extends BaseObject {
 
     public void setCustomerCityCode(String customerCityCode) {
         this.customerCityCode = customerCityCode;
+    }
+
+    public String getPointIds() {
+        return pointIds;
+    }
+
+    public void setPointIds(String pointIds) {
+        this.pointIds = pointIds;
     }
 
     public String getVoucherIds() {

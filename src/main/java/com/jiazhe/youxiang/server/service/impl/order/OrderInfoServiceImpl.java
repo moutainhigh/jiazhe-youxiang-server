@@ -19,6 +19,7 @@ import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.UserReservationOrderDTO;
 import com.jiazhe.youxiang.server.dto.order.orderpayment.OrderPaymentDTO;
 import com.jiazhe.youxiang.server.dto.order.orderrefund.OrderRefundDTO;
+import com.jiazhe.youxiang.server.dto.point.point.PointDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
@@ -28,6 +29,7 @@ import com.jiazhe.youxiang.server.service.EleProductCodeService;
 import com.jiazhe.youxiang.server.service.order.OrderInfoService;
 import com.jiazhe.youxiang.server.service.order.OrderPaymentService;
 import com.jiazhe.youxiang.server.service.order.OrderRefundService;
+import com.jiazhe.youxiang.server.service.point.PointService;
 import com.jiazhe.youxiang.server.service.product.ProductPriceService;
 import com.jiazhe.youxiang.server.service.product.ProductService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCService;
@@ -43,6 +45,7 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -74,6 +77,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     private ProductPriceService productPriceService;
     @Autowired
     private RCService rcService;
+    @Autowired
+    private PointService pointService;
     @Autowired
     private EleProductCodeService eleProductCodeService;
 
@@ -241,6 +246,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         ProductPriceDTO productPriceDTO = productPriceService.getPriceByCity(dto.getProductId(), dto.getCustomerCityCode());
         if (null == productPriceDTO || productPriceDTO.getStatus().equals(Byte.valueOf("0"))) {
             throw new OrderException(OrderCodeEnum.PRODUCT_NOT_AVAILABLE);
+        }
+        if(!Strings.isBlank(dto.getPointIds())){
+            List<Integer> pointIds = Arrays.asList(dto.getPointIds().split(","))
+                    .stream().map(s->Integer.parseInt(s.trim()))
+                    .collect(Collectors.toList());
+            List<PointDTO> pointDTOList = pointService.findByIds(pointIds);
         }
         if (!Strings.isBlank(dto.getVoucherIds())) {
             List<Integer> voucherIds = Arrays.asList(dto.getVoucherIds().split(","))
@@ -703,11 +714,17 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     public void orderRefund(Integer orderId) {
         List<OrderPaymentDTO> orderPaymentDTOList = orderPaymentService.getByOrderId(orderId);
         List<OrderRefundDTO> orderRefundDTOList = Lists.newArrayList();
+        List<PointDTO> pointDTOList = Lists.newArrayList();
         List<RCDTO> rcDTOList = Lists.newArrayList();
         List<Integer> voucherIds = Lists.newArrayList();
         if (!orderPaymentDTOList.isEmpty()) {
             orderPaymentDTOList.stream().forEach(bean -> {
                 orderRefundDTOList.add(paymentDto2RefundDto(bean));
+                if(bean.getPayType().equals(CommonConstant.PAY_POINT)){
+                    PointDTO pointDTO = pointService.getById(bean.getPointId());
+                    pointDTO.setBalance(pointDTO.getBalance().add(bean.getPayMoney()));
+                    pointDTOList.add(pointDTO);
+                }
                 if (bean.getPayType().equals(CommonConstant.PAY_RECHARGE_CARD)) {
                     RCDTO rcdto = rcService.getById(bean.getRechargeCardId());
                     rcdto.setBalance(rcdto.getBalance().add(bean.getPayMoney()));
@@ -717,9 +734,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                     voucherIds.add(bean.getVoucherId());
                 }
                 if (bean.getPayType().equals(CommonConstant.PAY_CASH)) {
-
+                    //微信退款
                 }
             });
+        }
+        if(!pointDTOList.isEmpty()){
+            pointService.batchUpdate(pointDTOList);
         }
         if (!rcDTOList.isEmpty()) {
             rcService.batchUpdate(rcDTOList);

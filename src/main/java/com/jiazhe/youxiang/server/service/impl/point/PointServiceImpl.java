@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl.point;
 
+import com.jiazhe.youxiang.server.adapter.ProjectAdapter;
 import com.jiazhe.youxiang.server.adapter.point.PointAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
@@ -19,6 +20,7 @@ import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchange
 import com.jiazhe.youxiang.server.dto.point.pointexchangerecord.PointExchangeRecordDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
+import com.jiazhe.youxiang.server.service.ProjectService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeRecordService;
 import com.jiazhe.youxiang.server.service.point.PointService;
@@ -56,6 +58,8 @@ public class PointServiceImpl implements PointService {
     private PointExchangeRecordService pointExchangeRecordService;
     @Autowired
     private PointExchangeCodeBatchService pointExchangeCodeBatchService;
+    @Autowired
+    private ProjectService projectService;
 
     @Override
     public void batchUpdate(List<Integer> ids, PointExchangeCodeBatchSaveDTO batchSaveDTO) {
@@ -189,5 +193,23 @@ public class PointServiceImpl implements PointService {
     @Override
     public BigDecimal totalValidBalance(Integer customerId) {
         return pointPOManualMapper.totalValidBalance(customerId);
+    }
+
+    @Override
+    public void batchUpdate(List<PointDTO> pointDTOList) {
+        if(!pointDTOList.isEmpty()){
+            List<PointPO> rcPOList = pointDTOList.stream().map(PointAdapter::dto2Po).collect(Collectors.toList());
+            pointPOManualMapper.batchUpdate(rcPOList);
+        }
+    }
+
+    @Override
+    public List<PointDTO> findByIds(List<Integer> ids) {
+        List<PointPO> poList = pointPOManualMapper.findByIds(ids);
+        List<PointDTO> pointDTOList = poList.stream().map(PointAdapter::po2Dto).collect(Collectors.toList());
+        pointDTOList.stream().forEach(bean->{
+            bean.setProjectDTO(projectService.getById(bean.getProjectId()));
+        });
+        return pointDTOList;
     }
 }

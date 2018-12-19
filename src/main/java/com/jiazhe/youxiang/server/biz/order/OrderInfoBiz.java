@@ -37,7 +37,8 @@ public class OrderInfoBiz {
     public List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String worekerMobile, Paging paging) {
         List<OrderInfoDTO> orderInfoDTOList = orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, worekerMobile, paging);
         orderInfoDTOList.stream().forEach(bean -> {
-            bean.setPayment(calculateOrderNeedPay(bean));//计算待支付金额放入订单信息中
+            //计算待支付金额放入订单信息中
+            bean.setPayment(calculateOrderNeedPay(bean));
         });
         return orderInfoDTOList;
     }
@@ -116,9 +117,10 @@ public class OrderInfoBiz {
      */
     private BigDecimal calculateOrderNeedPay(OrderInfoDTO dto) {
         Integer needPayCount = dto.getCount();
-        BigDecimal needPay = dto.getProductPrice().multiply(new BigDecimal(needPayCount)).subtract(dto.getPayVoucher());
-        BigDecimal needPayMoney = needPay.subtract(dto.getPayRechargeCard().add(dto.getPayCash()));
-        return needPayMoney;
+        BigDecimal needPay = dto.getProductPrice().multiply(new BigDecimal(needPayCount));
+        BigDecimal hasPay = dto.getPayPoint().add(dto.getPayRechargeCard()).add(dto.getPayVoucher().add(dto.getPayCash()));
+        BigDecimal left = needPay.subtract(hasPay);
+        return left;
     }
 
     public NeedPayResp placeOrder(PlaceOrderDTO placeOrderDTO) throws ParseException {

@@ -48,7 +48,7 @@ public class APIOrderInfoController extends BaseController {
     @Autowired
     private OrderInfoBiz orderInfoBiz;
 
-    @RequiresPermissions(value = {PermissionConstant.ORDER_MANAGEMENT, PermissionConstant.ORDER_SEARCH}, logical = Logical.OR)
+    @RequiresPermissions(value = {PermissionConstant.ORDER_MANAGEMENT, PermissionConstant.ORDER_SEARCH,PermissionConstant.CUSTOMER_ORDER_DETAIL}, logical = Logical.OR)
     @ApiOperation(value = "【后台】分页查询订单信息", httpMethod = "GET", response = OrderInfoResp.class, responseContainer = "List", notes = "【后台】分页查询订单信息")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "分页查询订单信息", level = LogLevelEnum.LEVEL_1)

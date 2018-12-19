@@ -50,6 +50,8 @@ public class OrderInfoDTO extends BaseObject {
 
     private Date realServiceTime;
 
+    private BigDecimal payPoint;
+
     private BigDecimal payRechargeCard;
 
     private BigDecimal payVoucher;
@@ -192,6 +194,14 @@ public class OrderInfoDTO extends BaseObject {
 
     public void setRealServiceTime(Date realServiceTime) {
         this.realServiceTime = realServiceTime;
+    }
+
+    public BigDecimal getPayPoint() {
+        return payPoint;
+    }
+
+    public void setPayPoint(BigDecimal payPoint) {
+        this.payPoint = payPoint;
     }
 
     public BigDecimal getPayRechargeCard() {

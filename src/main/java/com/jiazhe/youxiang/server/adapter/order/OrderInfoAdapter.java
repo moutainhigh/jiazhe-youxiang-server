@@ -41,6 +41,7 @@ public class OrderInfoAdapter {
         orderInfoResp.setServiceTime(dto.getServiceTime().getTime());
         orderInfoResp.setRealServiceTime(dto.getRealServiceTime().getTime());
         orderInfoResp.setPayRechargeCard(dto.getPayRechargeCard());
+        orderInfoResp.setPayPoint(dto.getPayPoint());
         orderInfoResp.setPayVoucher(dto.getPayVoucher());
         orderInfoResp.setPayCash(dto.getPayCash());
         orderInfoResp.setPayment(dto.getPayment());
@@ -77,6 +78,7 @@ public class OrderInfoAdapter {
         orderInfoDTO.setOrderTime(orderInfoPO.getOrderTime());
         orderInfoDTO.setServiceTime(orderInfoPO.getServiceTime());
         orderInfoDTO.setRealServiceTime(orderInfoPO.getRealServiceTime());
+        orderInfoDTO.setPayPoint(orderInfoPO.getPayPoint());
         orderInfoDTO.setPayRechargeCard(orderInfoPO.getPayRechargeCard());
         orderInfoDTO.setPayVoucher(orderInfoPO.getPayVoucher());
         orderInfoDTO.setPayCash(orderInfoPO.getPayCash());

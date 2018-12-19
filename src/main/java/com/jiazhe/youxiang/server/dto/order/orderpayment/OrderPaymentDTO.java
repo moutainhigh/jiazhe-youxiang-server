@@ -22,6 +22,8 @@ public class OrderPaymentDTO extends BaseObject {
 
     private Byte payType;
 
+    private Integer pointId;
+
     private Integer rechargeCardId;
 
     private Integer voucherId;
@@ -62,6 +64,14 @@ public class OrderPaymentDTO extends BaseObject {
 
     public void setPayType(Byte payType) {
         this.payType = payType;
+    }
+
+    public Integer getPointId() {
+        return pointId;
+    }
+
+    public void setPointId(Integer pointId) {
+        this.pointId = pointId;
     }
 
     public Integer getRechargeCardId() {

@@ -98,4 +98,24 @@ public class PointAdapter {
         pointEditDTO.setExpiryTime(new Date(req.getExpiryTime()));
         return pointEditDTO;
     }
+
+    public static PointPO dto2Po(PointDTO pointDTO) {
+        if (pointDTO == null) {
+            return null;
+        }
+        PointPO pointPO = new PointPO();
+        pointPO.setId(pointDTO.getId());
+        pointPO.setName(pointDTO.getName());
+        pointPO.setDescription(pointDTO.getDescription());
+        pointPO.setCustomerId(pointDTO.getCustomerId());
+        pointPO.setProjectId(pointDTO.getProjectId());
+        pointPO.setCityCodes(pointDTO.getCityCodes());
+        pointPO.setProductIds(pointDTO.getProductIds());
+        pointPO.setFaceValue(pointDTO.getFaceValue());
+        pointPO.setBalance(pointDTO.getBalance());
+        pointPO.setExpiryTime(pointDTO.getExpiryTime());
+        pointPO.setStatus(pointDTO.getStatus());
+        pointPO.setAddTime(pointDTO.getAddTime());
+        return pointPO;
+    }
 }
