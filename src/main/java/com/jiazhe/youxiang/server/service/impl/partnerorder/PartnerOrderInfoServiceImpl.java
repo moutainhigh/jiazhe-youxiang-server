@@ -60,27 +60,36 @@ public class PartnerOrderInfoServiceImpl implements PartnerOrderInfoService {
 
     @Override
     public OverviewMoneyResp calOverviewMoney(Date timeStart, Date timeEnd) {
+        BigDecimal[] spend = {BigDecimal.ZERO};
+        BigDecimal[] intervalSpend = {BigDecimal.ZERO};
+        BigDecimal[] total = {BigDecimal.ZERO};
+        BigDecimal[] intervalTotal = {BigDecimal.ZERO};
         OverviewMoneyResp overviewMoneyResp = new OverviewMoneyResp();
         PartnerOrderInfoPOExample pExample = new PartnerOrderInfoPOExample();
         PartnerOrderInfoPOExample.Criteria pCriteria = pExample.createCriteria();
-        if (timeStart != null) {
-            pCriteria.andOrderTimeGreaterThan(timeStart);
-        }
-        if (timeEnd != null) {
-            pCriteria.andOrderTimeLessThanOrEqualTo(timeEnd);
-        }
         pCriteria.andIsDeletedEqualTo(Byte.valueOf("0"));
+        //所有的商家订单
         List<PartnerOrderInfoPO> pPOList = partnerOrderInfoPOMapper.selectByExample(pExample);
-        if (!pPOList.isEmpty()) {
-            BigDecimal prePay = pPOList.stream().map(PartnerOrderInfoPO::getPrePay).reduce(BigDecimal.ZERO, BigDecimal::add);
-            BigDecimal appendPay = pPOList.stream().map(PartnerOrderInfoPO::getAppendPay).reduce(BigDecimal.ZERO, BigDecimal::add);
-            overviewMoneyResp.setSpend(prePay.add(appendPay));
-        }
-        List<AdvancePayDTO> aPOList = advancePayService.getList(timeStart, timeEnd);
-        if (!aPOList.isEmpty()) {
-            overviewMoneyResp.setTotal(aPOList.stream().map(AdvancePayDTO::getAdvancePay).reduce(BigDecimal.ZERO, BigDecimal::add));
-        }
+        pPOList.stream().forEach(bean -> {
+            spend[0] = spend[0].add(bean.getPrePay().add(bean.getAppendPay()));
+            if (isInInterval(bean.getServiceTime(), timeStart, timeEnd)) {
+                intervalSpend[0] = intervalSpend[0].add(bean.getPrePay().add(bean.getAppendPay()));
+            }
+        });
+        overviewMoneyResp.setSpend(spend[0]);
+        overviewMoneyResp.setIntervalSpend(intervalSpend[0]);
+        //所有的付款记录
+        List<AdvancePayDTO> aPOList = advancePayService.getList(null, null);
+        aPOList.stream().forEach(bean -> {
+            total[0] = total[0].add(bean.getAdvancePay());
+            if (isInInterval(bean.getAddTime(), timeStart, timeEnd)) {
+                intervalTotal[0] = intervalTotal[0].add(bean.getAdvancePay());
+            }
+        });
+        overviewMoneyResp.setTotal(total[0]);
+        overviewMoneyResp.setIntervalTotal(intervalTotal[0]);
         overviewMoneyResp.setLeft(overviewMoneyResp.getTotal().subtract(overviewMoneyResp.getSpend()));
+        overviewMoneyResp.setIntervalLeft(overviewMoneyResp.getIntervalTotal().subtract(overviewMoneyResp.getIntervalSpend()));
         return overviewMoneyResp;
     }
 
@@ -93,14 +102,26 @@ public class PartnerOrderInfoServiceImpl implements PartnerOrderInfoService {
     @Override
     public void save(PartnerOrderInfoDTO dto) {
         PartnerOrderInfoPO poIn = PartnerOrderInfoAdapter.DTO2PO(dto);
-        if(poIn.getId() == 0){
+        if (poIn.getId() == 0) {
             partnerOrderInfoPOMapper.insert(poIn);
-        }else{
+        } else {
             PartnerOrderInfoPO po = partnerOrderInfoPOMapper.selectByPrimaryKey(dto.getId());
             poIn.setAddTime(po.getAddTime());
             poIn.setExtInfo(po.getExtInfo());
             poIn.setIsDeleted(po.getIsDeleted());
             partnerOrderInfoPOMapper.updateByPrimaryKey(poIn);
         }
+    }
+
+    private boolean isInInterval(Date date, Date beginDate, Date endDate) {
+        Long begin = 0L;
+        Long end = Long.MAX_VALUE;
+        if (beginDate != null) {
+            begin = beginDate.getTime();
+        }
+        if (endDate != null) {
+            end = endDate.getTime();
+        }
+        return date.getTime() >= begin && date.getTime() <= end;
     }
 }

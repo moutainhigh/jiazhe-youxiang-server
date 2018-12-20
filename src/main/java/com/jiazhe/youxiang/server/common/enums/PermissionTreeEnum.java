@@ -253,10 +253,12 @@ public enum PermissionTreeEnum {
     PARTNER_ORDER_ADD(802, 8, "商家订单添加", PermissionConstant.PARTNER_ORDER_ADD),
     //商家订单修改
     PARTNER_ORDER_EDIT(803, 8, "商家订单修改", PermissionConstant.PARTNER_ORDER_EDIT),
+    //商家订单高级修改
+    PARTNER_ORDER_HIGHER_EDIT(804, 8, "商家订单高级修改", PermissionConstant.PARTNER_ORDER_HIGHER_EDIT),
     //预支付记录查看
-    ADVANCE_PAY_MANAGEMENT(804, 8, "预支付记录查看", PermissionConstant.ADVANCE_PAY_MANAGEMENT),
+    ADVANCE_PAY_MANAGEMENT(805, 8, "预支付记录查看", PermissionConstant.ADVANCE_PAY_MANAGEMENT),
     //预支付记录添加
-    ADVANCE_PAY_ADD(805, 8, "预支付记录添加", PermissionConstant.ADVANCE_PAY_ADD),
+    ADVANCE_PAY_ADD(806, 8, "预支付记录添加", PermissionConstant.ADVANCE_PAY_ADD),
     ;
 
     PermissionTreeEnum(Integer id, Integer pId, String name, String perm) {

@@ -79,6 +79,8 @@ public class PermissionConstant {
     public static final String PARTNER_ORDER_ADD = "partnerOrderAdd";
     //商家订单修改
     public static final String PARTNER_ORDER_EDIT = "partnerOrderEdit";
+    //商家订单高级修改
+    public static final String PARTNER_ORDER_HIGHER_EDIT = "partnerOrderHigherEdit";
     //查看预支付记录
     public static final String ADVANCE_PAY_MANAGEMENT = "advancePayManagement";
     //添加预支付记录
