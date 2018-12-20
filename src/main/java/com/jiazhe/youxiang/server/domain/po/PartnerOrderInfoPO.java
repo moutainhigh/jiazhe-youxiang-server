@@ -23,7 +23,7 @@ public class PartnerOrderInfoPO implements Serializable {
 
     private Date serviceTime;
 
-    private String productType;
+    private String orderSource;
 
     private String workerName;
 
@@ -123,12 +123,12 @@ public class PartnerOrderInfoPO implements Serializable {
         this.serviceTime = serviceTime;
     }
 
-    public String getProductType() {
-        return productType;
+    public String getOrderSource() {
+        return orderSource;
     }
 
-    public void setProductType(String productType) {
-        this.productType = productType == null ? null : productType.trim();
+    public void setOrderSource(String orderSource) {
+        this.orderSource = orderSource == null ? null : orderSource.trim();
     }
 
     public String getWorkerName() {

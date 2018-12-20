@@ -546,7 +546,7 @@ CREATE TABLE `partner_order_info` (
     `keyt` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '兑换密钥',
     `order_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '兑换时间',
     `service_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '预约时间',
-    `product_type` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '产品类型',
+    `order_source` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '订单来源',
     `worker_name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '服务人员姓名',
     `worker_mobile` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '服务人员联系方式',
     `service_item_id` INT(10) UNSIGNED NOT NULL COMMENT '服务项目id',

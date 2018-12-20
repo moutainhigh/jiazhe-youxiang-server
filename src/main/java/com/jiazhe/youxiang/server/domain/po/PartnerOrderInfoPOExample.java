@@ -706,73 +706,73 @@ public class PartnerOrderInfoPOExample {
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeIsNull() {
-            addCriterion("product_type is null");
+        public Criteria andOrderSourceIsNull() {
+            addCriterion("order_source is null");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeIsNotNull() {
-            addCriterion("product_type is not null");
+        public Criteria andOrderSourceIsNotNull() {
+            addCriterion("order_source is not null");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeEqualTo(String value) {
-            addCriterion("product_type =", value, "productType");
+        public Criteria andOrderSourceEqualTo(String value) {
+            addCriterion("order_source =", value, "orderSource");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeNotEqualTo(String value) {
-            addCriterion("product_type <>", value, "productType");
+        public Criteria andOrderSourceNotEqualTo(String value) {
+            addCriterion("order_source <>", value, "orderSource");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeGreaterThan(String value) {
-            addCriterion("product_type >", value, "productType");
+        public Criteria andOrderSourceGreaterThan(String value) {
+            addCriterion("order_source >", value, "orderSource");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeGreaterThanOrEqualTo(String value) {
-            addCriterion("product_type >=", value, "productType");
+        public Criteria andOrderSourceGreaterThanOrEqualTo(String value) {
+            addCriterion("order_source >=", value, "orderSource");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeLessThan(String value) {
-            addCriterion("product_type <", value, "productType");
+        public Criteria andOrderSourceLessThan(String value) {
+            addCriterion("order_source <", value, "orderSource");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeLessThanOrEqualTo(String value) {
-            addCriterion("product_type <=", value, "productType");
+        public Criteria andOrderSourceLessThanOrEqualTo(String value) {
+            addCriterion("order_source <=", value, "orderSource");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeLike(String value) {
-            addCriterion("product_type like", value, "productType");
+        public Criteria andOrderSourceLike(String value) {
+            addCriterion("order_source like", value, "orderSource");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeNotLike(String value) {
-            addCriterion("product_type not like", value, "productType");
+        public Criteria andOrderSourceNotLike(String value) {
+            addCriterion("order_source not like", value, "orderSource");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeIn(List<String> values) {
-            addCriterion("product_type in", values, "productType");
+        public Criteria andOrderSourceIn(List<String> values) {
+            addCriterion("order_source in", values, "orderSource");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeNotIn(List<String> values) {
-            addCriterion("product_type not in", values, "productType");
+        public Criteria andOrderSourceNotIn(List<String> values) {
+            addCriterion("order_source not in", values, "orderSource");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeBetween(String value1, String value2) {
-            addCriterion("product_type between", value1, value2, "productType");
+        public Criteria andOrderSourceBetween(String value1, String value2) {
+            addCriterion("order_source between", value1, value2, "orderSource");
             return (Criteria) this;
         }
 
-        public Criteria andProductTypeNotBetween(String value1, String value2) {
-            addCriterion("product_type not between", value1, value2, "productType");
+        public Criteria andOrderSourceNotBetween(String value1, String value2) {
+            addCriterion("order_source not between", value1, value2, "orderSource");
             return (Criteria) this;
         }
 

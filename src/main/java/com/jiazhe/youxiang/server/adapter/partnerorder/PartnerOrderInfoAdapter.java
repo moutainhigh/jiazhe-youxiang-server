@@ -30,7 +30,7 @@ public class PartnerOrderInfoAdapter {
         partnerOrderInfoResp.setKeyt(dto.getKeyt());
         partnerOrderInfoResp.setOrderTime(dto.getOrderTime().getTime());
         partnerOrderInfoResp.setServiceTime(dto.getServiceTime().getTime());
-        partnerOrderInfoResp.setProductType(dto.getProductType());
+        partnerOrderInfoResp.setOrderSource(dto.getOrderSource());
         partnerOrderInfoResp.setWorkerName(dto.getWorkerName());
         partnerOrderInfoResp.setWorkerMobile(dto.getWorkerMobile());
         partnerOrderInfoResp.setServiceItemId(dto.getServiceItemId());
@@ -62,7 +62,7 @@ public class PartnerOrderInfoAdapter {
         partnerOrderInfoDTO.setKeyt(partnerOrderInfoPO.getKeyt());
         partnerOrderInfoDTO.setOrderTime(partnerOrderInfoPO.getOrderTime());
         partnerOrderInfoDTO.setServiceTime(partnerOrderInfoPO.getServiceTime());
-        partnerOrderInfoDTO.setProductType(partnerOrderInfoPO.getProductType());
+        partnerOrderInfoDTO.setOrderSource(partnerOrderInfoPO.getOrderSource());
         partnerOrderInfoDTO.setWorkerName(partnerOrderInfoPO.getWorkerName());
         partnerOrderInfoDTO.setWorkerMobile(partnerOrderInfoPO.getWorkerMobile());
         partnerOrderInfoDTO.setServiceItemId(partnerOrderInfoPO.getServiceItemId());
@@ -92,7 +92,7 @@ public class PartnerOrderInfoAdapter {
         partnerOrderInfoDTO.setKeyt(req.getKeyt());
         partnerOrderInfoDTO.setOrderTime(new Date(req.getOrderTime()));
         partnerOrderInfoDTO.setServiceTime(new Date(req.getServiceTime()));
-        partnerOrderInfoDTO.setProductType(req.getProductType());
+        partnerOrderInfoDTO.setOrderSource(req.getOrderSource());
         partnerOrderInfoDTO.setWorkerName(req.getWorkerName());
         partnerOrderInfoDTO.setWorkerMobile(req.getWorkerMobile());
         partnerOrderInfoDTO.setServiceItemId(req.getServiceItemId());
@@ -118,7 +118,7 @@ public class PartnerOrderInfoAdapter {
         partnerOrderInfoPO.setKeyt(dto.getKeyt());
         partnerOrderInfoPO.setOrderTime(dto.getOrderTime());
         partnerOrderInfoPO.setServiceTime(dto.getServiceTime());
-        partnerOrderInfoPO.setProductType(dto.getProductType());
+        partnerOrderInfoPO.setOrderSource(dto.getOrderSource());
         partnerOrderInfoPO.setWorkerName(dto.getWorkerName());
         partnerOrderInfoPO.setWorkerMobile(dto.getWorkerMobile());
         partnerOrderInfoPO.setServiceItemId(dto.getServiceItemId());
