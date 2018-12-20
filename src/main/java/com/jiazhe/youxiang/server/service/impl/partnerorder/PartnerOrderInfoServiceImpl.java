@@ -109,7 +109,7 @@ public class PartnerOrderInfoServiceImpl implements PartnerOrderInfoService {
             poIn.setAddTime(po.getAddTime());
             poIn.setExtInfo(po.getExtInfo());
             poIn.setIsDeleted(po.getIsDeleted());
-            partnerOrderInfoPOMapper.updateByPrimaryKey(poIn);
+            partnerOrderInfoPOMapper.updateByPrimaryKeySelective(poIn);
         }
     }
 
