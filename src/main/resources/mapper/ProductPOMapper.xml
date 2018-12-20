@@ -10,7 +10,7 @@
     <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR" />
     <result column="header_img_url" property="headerImgUrl" jdbcType="VARCHAR" />
     <result column="detail_img_url" property="detailImgUrl" jdbcType="VARCHAR" />
-    <result column="product_type" property="productType" jdbcType="INTEGER" />
+    <result column="product_type" property="orderSource" jdbcType="INTEGER" />
     <result column="unit_name" property="unitName" jdbcType="VARCHAR" />
     <result column="last_num" property="lastNum" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="TINYINT" />
@@ -125,7 +125,7 @@
       mod_time)
     values (#{id,jdbcType=INTEGER}, #{productCategoryId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{description,jdbcType=VARCHAR}, #{delayDays,jdbcType=INTEGER}, #{thumbnailUrl,jdbcType=VARCHAR}, 
-      #{headerImgUrl,jdbcType=VARCHAR}, #{detailImgUrl,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER}, 
+      #{headerImgUrl,jdbcType=VARCHAR}, #{detailImgUrl,jdbcType=VARCHAR}, #{orderSource,jdbcType=INTEGER},
       #{unitName,jdbcType=VARCHAR}, #{lastNum,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, 
       #{priority,jdbcType=INTEGER}, #{smsTemplate,jdbcType=VARCHAR}, #{effectiveDays,jdbcType=INTEGER}, 
       #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
@@ -158,7 +158,7 @@
       <if test="detailImgUrl != null" >
         detail_img_url,
       </if>
-      <if test="productType != null" >
+      <if test="orderSource != null" >
         product_type,
       </if>
       <if test="unitName != null" >
@@ -217,8 +217,8 @@
       <if test="detailImgUrl != null" >
         #{detailImgUrl,jdbcType=VARCHAR},
       </if>
-      <if test="productType != null" >
-        #{productType,jdbcType=INTEGER},
+      <if test="orderSource != null" >
+        #{orderSource,jdbcType=INTEGER},
       </if>
       <if test="unitName != null" >
         #{unitName,jdbcType=VARCHAR},
@@ -285,8 +285,8 @@
       <if test="record.detailImgUrl != null" >
         detail_img_url = #{record.detailImgUrl,jdbcType=VARCHAR},
       </if>
-      <if test="record.productType != null" >
-        product_type = #{record.productType,jdbcType=INTEGER},
+      <if test="record.orderSource != null" >
+        product_type = #{record.orderSource,jdbcType=INTEGER},
       </if>
       <if test="record.unitName != null" >
         unit_name = #{record.unitName,jdbcType=VARCHAR},
@@ -333,7 +333,7 @@
       thumbnail_url = #{record.thumbnailUrl,jdbcType=VARCHAR},
       header_img_url = #{record.headerImgUrl,jdbcType=VARCHAR},
       detail_img_url = #{record.detailImgUrl,jdbcType=VARCHAR},
-      product_type = #{record.productType,jdbcType=INTEGER},
+      product_type = #{record.orderSource,jdbcType=INTEGER},
       unit_name = #{record.unitName,jdbcType=VARCHAR},
       last_num = #{record.lastNum,jdbcType=INTEGER},
       status = #{record.status,jdbcType=TINYINT},
@@ -372,8 +372,8 @@
       <if test="detailImgUrl != null" >
         detail_img_url = #{detailImgUrl,jdbcType=VARCHAR},
       </if>
-      <if test="productType != null" >
-        product_type = #{productType,jdbcType=INTEGER},
+      <if test="orderSource != null" >
+        product_type = #{orderSource,jdbcType=INTEGER},
       </if>
       <if test="unitName != null" >
         unit_name = #{unitName,jdbcType=VARCHAR},
@@ -417,7 +417,7 @@
       thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
       header_img_url = #{headerImgUrl,jdbcType=VARCHAR},
       detail_img_url = #{detailImgUrl,jdbcType=VARCHAR},
-      product_type = #{productType,jdbcType=INTEGER},
+      product_type = #{orderSource,jdbcType=INTEGER},
       unit_name = #{unitName,jdbcType=VARCHAR},
       last_num = #{lastNum,jdbcType=INTEGER},
       status = #{status,jdbcType=TINYINT},

@@ -71,7 +71,7 @@
                                 </div>
                                 <label class="col-sm-1 control-label no-padding-right">商品分类：</label>
                                 <div class="col-sm-2">
-                                    <select id="productType" name="productType"
+                                    <select id="orderSource" name="orderSource"
                                             class="selectpicker show-tick form-control">
                                         <option value="">所有</option>
                                         <option value=0>服务</option>
@@ -198,12 +198,12 @@
                                                         <div class="pos-rel">
                                                             <label class="radio-inline ">
                                                                 <input id="inputService" type="radio"
-                                                                       name="productType"
+                                                                       name="orderSource"
                                                                        value="0" checked="checked"/>服务
                                                             </label>
                                                             <label class="radio-inline">
                                                                 <input type="radio"
-                                                                       name="productType"
+                                                                       name="orderSource"
                                                                        value="1"/>电子卡
                                                             </label>
                                                         </div>
@@ -321,8 +321,8 @@
                 {name: 'delayDays', index: 'delayDays', width: 50, sortable: false},
                 {name: 'effectiveDays', index: 'effectiveDays', width: 50, sortable: false},
                 {
-                    name: 'productType',
-                    index: 'productType',
+                    name: 'orderSource',
+                    index: 'orderSource',
                     width: 50,
                     sortable: false,
                     formatter: productTypeFormatter
@@ -361,7 +361,7 @@
     }
 
     function productTypeFormatter(cellvalue, options, cell) {
-        switch (cell.productType) {
+        switch (cell.orderSource) {
             case 0:
             default:
                 return "服务";
@@ -498,7 +498,7 @@
                     $("#inputEffectiveDays").val(result.effectiveDays);
                     $("#inputSmsTemplate").val(result.smsTemplate);
                     $("#inputPriority").val(result.priority);
-                    if (result.productType == 0) {
+                    if (result.orderSource == 0) {
                         $("#inputService").click();
                     }
                     $('#fileThumbnail').ace_file_input('show_file_list', [getImageUrl(result.thumbnailUrl)]);

@@ -8,10 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <!-- CSS -->
     <link rel="stylesheet" th:href="@{/static/init.css}"/>
-    <link rel="stylesheet" th:href="@{/static/editable-select/css/jquery-editable-select.min.css}"/>
+    <!--<link rel="stylesheet" th:href="@{/static/editable-select/css/jquery-editable-select.min.css}"/>-->
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
-    <script th:src="@{/static/editable-select/js/jquery-editable-select.min.js}"></script>
+    <!--<script th:src="@{/static/editable-select/js/jquery-editable-select.min.js}"></script>-->
 
     <style>
         .ui-jqgrid .ui-jqgrid-bdiv {
@@ -420,17 +420,12 @@
                             <div class="space-2"></div>
 
                             <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right">产品类型：</label>
+                                <label class="col-sm-4 control-label no-padding-right">订单来源：</label>
                                 <div class="col-sm-8">
-                                    <!--<div class="pos-rel">-->
-                                    <!--<input id="saveProductType" name="productType" class="form-control"-->
-                                    <!--type="text" style="height:30px"/>-->
-                                    <!--</div>-->
-                                    <select id="saveProductType" name="productType" class="form-control">
-                                        <option>58到家</option>
-                                        <option>系统派单</option>
-                                        <option>后台派单</option>
-                                        <option>现金</option>
+                                    <select id="saveOrderSource" name="orderSource"
+                                            class="selectpicker show-tick form-control">>
+                                        <option value="400电话">400电话</option>
+                                        <option value="小程序">小程序</option>
                                     </select>
                                 </div>
                             </div>
@@ -566,10 +561,10 @@
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
 
-        $('#saveProductType').editableSelect({
-            effects: 'slide',
-            filter: false
-        });
+//        $('#saveProductType').editableSelect({
+//            effects: 'slide',
+//            filter: false
+//        });
 
         initDatePicker();
 
@@ -640,7 +635,7 @@
             postData: transformToJson($('#partnerOrderInfoSearchForm').serializeArray()),
             shrinkToFit: false,
             autoScroll: true,
-            colNames: ['', '操作', '状态', '客户姓名', '客户手机号', '城市', '兑换码密钥', '兑换时间', '预约时间', '产品类型', '服务人员姓名', '服务项目', '预付', '再支付'],
+            colNames: ['', '操作', '状态', '客户姓名', '客户手机号', '城市', '兑换码密钥', '兑换时间', '预约时间', '订单来源', '服务人员姓名', '服务项目', '预付', '再支付'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: '_action', index: '_action', width: 200, sortable: false, formatter: customFormatter},
@@ -675,7 +670,7 @@
                         return dateFormat(rowObject.serviceTime);
                     }
                 },
-                {name: 'productType', index: 'productType', sortable: false},
+                {name: 'orderSource', index: 'orderSource', sortable: false},
                 {name: 'workerName', index: 'workerName', sortable: false},
                 {name: 'serviceItemResp.name', index: 'serviceItem', sortable: false},
                 {name: 'prePay', index: 'prePay', sortable: false},
@@ -793,7 +788,7 @@
                 $('#saveServiceTime').datepicker('update');
                 $("#partnerOrderForm #saveServiceTime").next().next().val(result.serviceTime);
                 $("#partnerOrderForm #saveCustomerAddress").val(result.customerAddress);
-                $("#partnerOrderForm #saveProductType").val(result.productType);
+                $("#partnerOrderForm #saveOrderSource").val(result.orderSource);
                 $("#partnerOrderForm #saveWorkerName").val(result.workerName);
                 $("#partnerOrderForm #saveWorkerMobile").val(result.workerMobile);
                 $("#partnerOrderForm #savePartner").val(result.partnerId);
@@ -816,6 +811,14 @@
             bootboxalert("再次支付必须为数字！");
             return false;
         }
+        if($("#saveStatus").val()== "2"){
+            confirm("已完成订单，除了备注为非必填外，其他都为必填，需要继续保存吗？", save);
+        }else{
+            save();
+        }
+    }
+
+    function save(data) {
         var data = transformToJson($('#partnerOrderForm').serializeArray());
         data.customerCityName = $("#saveCustomerCityCode option:selected").text();
         $.ajax({

@@ -5,7 +5,6 @@ import com.jiazhe.youxiang.server.vo.resp.partner.PartnerResp;
 import com.jiazhe.youxiang.server.vo.resp.serviceitem.ServiceItemResp;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @author tu
@@ -32,7 +31,7 @@ public class PartnerOrderInfoResp extends BaseVO {
 
     private Long serviceTime;
 
-    private String productType;
+    private String orderSource;
 
     private String workerName;
 
@@ -134,12 +133,12 @@ public class PartnerOrderInfoResp extends BaseVO {
         this.serviceTime = serviceTime;
     }
 
-    public String getProductType() {
-        return productType;
+    public String getOrderSource() {
+        return orderSource;
     }
 
-    public void setProductType(String productType) {
-        this.productType = productType;
+    public void setOrderSource(String orderSource) {
+        this.orderSource = orderSource;
     }
 
     public String getWorkerName() {

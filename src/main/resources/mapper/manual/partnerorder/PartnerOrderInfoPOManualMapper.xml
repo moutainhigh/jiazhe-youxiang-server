@@ -11,7 +11,7 @@
         <result column="keyt" property="keyt" jdbcType="VARCHAR" />
         <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
         <result column="service_time" property="serviceTime" jdbcType="TIMESTAMP" />
-        <result column="product_type" property="productType" jdbcType="VARCHAR" />
+        <result column="order_source" property="orderSource" jdbcType="VARCHAR" />
         <result column="worker_name" property="workerName" jdbcType="VARCHAR" />
         <result column="worker_mobile" property="workerMobile" jdbcType="VARCHAR" />
         <result column="service_item_id" property="serviceItemId" jdbcType="INTEGER" />
@@ -27,8 +27,10 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,customer_name,customer_mobile,customer_address,customer_city_code,customer_city_name,keyt,order_time,service_time,product_type,
-        worker_name,worker_mobile,service_item_id,pre_pay,append_pay,remark,partner_id,status,ext_info, is_deleted,add_time,mod_time
+        id, customer_name, customer_mobile, customer_address, customer_city_code, customer_city_name,
+    keyt, order_time, service_time, order_source, worker_name, worker_mobile, service_item_id,
+    pre_pay, append_pay, remark, partner_id, status, ext_info, is_deleted, add_time,
+    mod_time
     </sql>
 
     <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.PartnerOrderInfoPO">

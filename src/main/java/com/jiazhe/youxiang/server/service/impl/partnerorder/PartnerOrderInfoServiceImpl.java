@@ -103,7 +103,7 @@ public class PartnerOrderInfoServiceImpl implements PartnerOrderInfoService {
     public void save(PartnerOrderInfoDTO dto) {
         PartnerOrderInfoPO poIn = PartnerOrderInfoAdapter.DTO2PO(dto);
         if (poIn.getId() == 0) {
-            partnerOrderInfoPOMapper.insert(poIn);
+            partnerOrderInfoPOMapper.insertSelective(poIn);
         } else {
             PartnerOrderInfoPO po = partnerOrderInfoPOMapper.selectByPrimaryKey(dto.getId());
             poIn.setAddTime(po.getAddTime());
