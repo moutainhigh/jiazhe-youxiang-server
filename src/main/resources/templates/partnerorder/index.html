@@ -154,7 +154,7 @@
                                         <span id="total"> 加载中...</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <shiro:hasPermission name="advancePayManagement">
                                             <a class="btn btn-minier btn-primary"
-                                               href="javascript:getAdvancePayList()">明细</a>&nbsp;&nbsp;
+                                               href="javascript:getAdvancePayList('1')">总明细</a>&nbsp;&nbsp;
                                         </shiro:hasPermission>
                                         <shiro:hasPermission name="advancePayAdd">
                                             <a class="btn btn-minier btn-success"
@@ -164,7 +164,7 @@
                                 </div>
 
                                 <div class="profile-info-row">
-                                    <div class="profile-info-name"> 已消费</div>
+                                    <div class="profile-info-name"> 总消费</div>
 
                                     <div class="profile-info-value">
                                         <span id="spend">加载中...</span>
@@ -172,10 +172,37 @@
                                 </div>
 
                                 <div class="profile-info-row">
-                                    <div class="profile-info-name"> 余额</div>
+                                    <div class="profile-info-name"> 总余额</div>
 
                                     <div class="profile-info-value">
                                         <span id="left">加载中...</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 区间预支</div>
+                                    <div class="profile-info-value">
+                                        <span id="intervalTotal"> 加载中...</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <shiro:hasPermission name="advancePayManagement">
+                                            <a class="btn btn-minier btn-primary"
+                                               href="javascript:getAdvancePayList('2')">区间明细</a>&nbsp;&nbsp;
+                                        </shiro:hasPermission>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 区间消费</div>
+
+                                    <div class="profile-info-value">
+                                        <span id="intervalSpend">加载中...</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 区间余额</div>
+
+                                    <div class="profile-info-value">
+                                        <span id="intervalLeft">加载中...</span>
                                     </div>
                                 </div>
                             </div>
@@ -396,8 +423,8 @@
                                 <label class="col-sm-4 control-label no-padding-right">产品类型：</label>
                                 <div class="col-sm-8">
                                     <!--<div class="pos-rel">-->
-                                        <!--<input id="saveProductType" name="productType" class="form-control"-->
-                                               <!--type="text" style="height:30px"/>-->
+                                    <!--<input id="saveProductType" name="productType" class="form-control"-->
+                                    <!--type="text" style="height:30px"/>-->
                                     <!--</div>-->
                                     <select id="saveProductType" name="productType" class="form-control">
                                         <option>58到家</option>
@@ -541,7 +568,7 @@
 
         $('#saveProductType').editableSelect({
             effects: 'slide',
-            filter:false
+            filter: false
         });
 
         initDatePicker();
@@ -686,8 +713,12 @@
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
         str += getFunctionButton("btn-success", "openShow(" + rowObject.id + ")", "查看");
-        if (permission.indexOf("partnerOrderEdit") != -1) {
-            if (rowObject.status == 1) {
+        if (rowObject.status == 1) {
+            if (permission.indexOf("partnerOrderEdit") != -1) {
+                str += getFunctionButton("btn-primary", "openEdit(" + rowObject.id + ")", "修改");
+            }
+        } else {
+            if (permission.indexOf("partnerOrderHigherEdit") != -1) {
                 str += getFunctionButton("btn-primary", "openEdit(" + rowObject.id + ")", "修改");
             }
         }
@@ -699,6 +730,8 @@
         $("#partnerOrderModalTitle").html("商家订单-查看");
         $("#partnerOrderSaveBtn").hide();
         $("#modal-partnerOrder").modal("show");
+        $("#partnerOrderForm input").attr("disabled", "disabled");
+        $("#partnerOrderForm select").attr("disabled", "disabled");
     }
 
     function openEdit(id) {
@@ -706,6 +739,8 @@
         $("#partnerOrderModalTitle").html("商家订单-修改");
         $("#partnerOrderSaveBtn").show();
         $("#modal-partnerOrder").modal("show");
+        $("#partnerOrderForm input").removeAttr("disabled");
+        $("#partnerOrderForm select").removeAttr("disabled");
     }
 
     function openNew() {
@@ -715,11 +750,14 @@
         $("#partnerOrderForm #saveAppendPay").val(0);
         var time = new Date().getTime();
         $("#saveOrderTime").val(dateFormat(time));
+        $('#saveOrderTime').datepicker('update');
         $("#saveOrderTime").next().next().val(time);
         $("#saveServiceTime").next().next().val(0);
         $("#partnerOrderModalTitle").html("商家订单-新建");
         $("#partnerOrderSaveBtn").show();
         $("#modal-partnerOrder").modal("show");
+        $("#partnerOrderForm input").removeAttr("disabled");
+        $("#partnerOrderForm select").removeAttr("disabled");
     }
 
     function initForm() {
@@ -749,8 +787,10 @@
                 $("#partnerOrderForm #saveCustomerCityCode").val(result.customerCityCode);
                 $("#partnerOrderForm #saveKeyt").val(result.keyt);
                 $("#partnerOrderForm #saveOrderTime").val(dateFormat(result.orderTime));
+                $('#saveOrderTime').datepicker('update');
                 $("#partnerOrderForm #saveOrderTime").next().next().val(result.orderTime);
                 $("#partnerOrderForm #saveServiceTime").val(dateFormat(result.serviceTime));
+                $('#saveServiceTime').datepicker('update');
                 $("#partnerOrderForm #saveServiceTime").next().next().val(result.serviceTime);
                 $("#partnerOrderForm #saveCustomerAddress").val(result.customerAddress);
                 $("#partnerOrderForm #saveProductType").val(result.productType);
@@ -801,6 +841,9 @@
         $("#total").html("加载中...");
         $("#spend").html("加载中...");
         $("#left").html("加载中...");
+        $("#intervalTotal").html("加载中...");
+        $("#intervalSpend").html("加载中...");
+        $("#intervalLeft").html("加载中...");
         $.ajax({
             url: "/api/partnerorderinfo/caloverviewmoney",
             dataType: "json",
@@ -815,6 +858,9 @@
                     $("#total").html(result.total);
                     $("#spend").html(result.spend);
                     $("#left").html(result.left);
+                    $("#intervalTotal").html(result.intervalTotal);
+                    $("#intervalSpend").html(result.intervalSpend);
+                    $("#intervalLeft").html(result.intervalLeft);
                     showAlertInfo();
                 }
             },
@@ -822,13 +868,18 @@
         });
     }
 
-    function getAdvancePayList() {//显示充值记录
+    function getAdvancePayList(type) {//显示充值记录
         $("#modelTbody").empty();
+        var data = transformToJson($('#partnerOrderInfoSearchForm').serializeArray());
+        if (type == 1) {//type=1为总充值记录，时间置为0
+            data.serviceTimeStart = 0;
+            data.serviceTimeEnd = 0;
+        }
         $.ajax({
             url: "/api/advancepay/listall",
             dataType: "json",
             async: false,
-            data: transformToJson($('#partnerOrderInfoSearchForm').serializeArray()),
+            data: data,
             type: "GET",
             success: function (data) {
                 if ('error' in data) {
@@ -866,6 +917,7 @@
         $("#saveRemark").val('');
         var time = new Date().getTime();
         $("#saveAdvanceTime").val(dateFormat(time));
+        $('#saveAdvanceTime').datepicker('update');
         $("#saveAdvanceTime").next().next().val(time);
         $("#modal-advancePay").modal('show');
     }
