@@ -89,7 +89,10 @@ public class APIPartnerOrderInfoController extends BaseController {
         if (req.getServiceTime() == 0) {
             throw new PartnerOrderException(PartnerOrderCodeEnum.SERVICE_TIME_IS_NULL);
         }
-        if(req.getStatus().equals(CommonConstant.PARTNER_ORDER_COMPLETE)){
+        if (req.getOrderTime() > req.getServiceTime()) {
+            throw new PartnerOrderException(PartnerOrderCodeEnum.SERVICE_TIME_ERROR);
+        }
+        if (req.getStatus().equals(CommonConstant.PARTNER_ORDER_COMPLETE)) {
             CommonValidator.validateNull(req.getCustomerMobile(), new PartnerOrderException(PartnerOrderCodeEnum.CUSTOMER_MOBILE_IS_NULL));
             CommonValidator.validateNull(req.getKeyt(), new PartnerOrderException(PartnerOrderCodeEnum.KEYT_IS_NULL));
             CommonValidator.validateNull(req.getCustomerAddress(), new PartnerOrderException(PartnerOrderCodeEnum.CUSTOMER_ADDRESS_IS_NULL));
