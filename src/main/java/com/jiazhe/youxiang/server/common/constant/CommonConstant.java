@@ -82,6 +82,13 @@ public class CommonConstant {
     public static final Byte ORDER_CANCELUNPASS = 6;
     public static final Byte ORDER_CANCEL = 7;
 
+    /**
+     * 商家订单状态【1待服务，2已完成，3已取消】
+     */
+    public static final Byte PARTNER_ORDER_UNSERVICE = 1;
+    public static final Byte PARTNER_ORDER_COMPLETE = 2;
+    public static final Byte PARTNER_ORDER_CANCEL = 3;
+
     public static final Byte BATCH_IS_VIRTUAL = Byte.valueOf("1");
 
     /**

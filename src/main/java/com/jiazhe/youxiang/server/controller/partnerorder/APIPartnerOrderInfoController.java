@@ -6,6 +6,7 @@ import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.partnerorder.PartnerOrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.partnerorder.PartnerOrderInfoBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
@@ -75,8 +76,8 @@ public class APIPartnerOrderInfoController extends BaseController {
         CommonValidator.validateNull(req.getCustomerName(), new PartnerOrderException(PartnerOrderCodeEnum.CUSTOMER_NAME_IS_NULL));
         CommonValidator.validateNull(req.getCustomerCityCode(), new PartnerOrderException(PartnerOrderCodeEnum.CUSTOMER_CITY_IS_NULL));
         CommonValidator.validateNull(req.getCustomerCityName(), new PartnerOrderException(PartnerOrderCodeEnum.CUSTOMER_CITY_IS_NULL));
-        CommonValidator.validateNull(req.getProductType(), new PartnerOrderException(PartnerOrderCodeEnum.PRODUCT_TYPE_IS_NULL));
         CommonValidator.validateNull(req.getServiceItemId(), new PartnerOrderException(PartnerOrderCodeEnum.SERVICE_ITEM_IS_NULL));
+        CommonValidator.validateNull(req.getOrderSource(), new PartnerOrderException(PartnerOrderCodeEnum.ORDER_SOURCE_IS_NULL));
         CommonValidator.validateNull(req.getPrePay(), new PartnerOrderException(PartnerOrderCodeEnum.PRE_PAY_IS_NULL));
         CommonValidator.validateNull(req.getAppendPay(), new PartnerOrderException(PartnerOrderCodeEnum.APPEND_PAY_IS_NULL));
         if (!"".equals(req.getCustomerMobile())) {
@@ -86,7 +87,16 @@ public class APIPartnerOrderInfoController extends BaseController {
             throw new PartnerOrderException(PartnerOrderCodeEnum.EXCHANGE_TIME_IS_NULL);
         }
         if (req.getServiceTime() == 0) {
-            req.setServiceTime(req.getOrderTime());
+            throw new PartnerOrderException(PartnerOrderCodeEnum.SERVICE_TIME_IS_NULL);
+        }
+        if(req.getStatus().equals(CommonConstant.PARTNER_ORDER_COMPLETE)){
+            CommonValidator.validateNull(req.getCustomerMobile(), new PartnerOrderException(PartnerOrderCodeEnum.CUSTOMER_MOBILE_IS_NULL));
+            CommonValidator.validateNull(req.getKeyt(), new PartnerOrderException(PartnerOrderCodeEnum.KEYT_IS_NULL));
+            CommonValidator.validateNull(req.getCustomerAddress(), new PartnerOrderException(PartnerOrderCodeEnum.CUSTOMER_ADDRESS_IS_NULL));
+            CommonValidator.validateNull(req.getWorkerName(), new PartnerOrderException(PartnerOrderCodeEnum.WORKER_NAME_IS_NULL));
+            CommonValidator.validateNull(req.getWorkerMobile(), new PartnerOrderException(PartnerOrderCodeEnum.WORKER_MOBILE_IS_NULL));
+            CommonValidator.validateMobile(req.getWorkerMobile(), new PartnerOrderException(PartnerOrderCodeEnum.WORKER_MOBILE_IS_VALID));
+            CommonValidator.validateNull(req.getPartnerId(), new PartnerOrderException(PartnerOrderCodeEnum.PARTNER_IS_NULL));
         }
         PartnerOrderInfoDTO dto = PartnerOrderInfoAdapter.saveReq2DTO(req);
         dto.setModTime(new Date());

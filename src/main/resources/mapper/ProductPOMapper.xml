@@ -125,7 +125,7 @@
       mod_time)
     values (#{id,jdbcType=INTEGER}, #{productCategoryId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{description,jdbcType=VARCHAR}, #{delayDays,jdbcType=INTEGER}, #{thumbnailUrl,jdbcType=VARCHAR}, 
-      #{headerImgUrl,jdbcType=VARCHAR}, #{detailImgUrl,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER}, 
+      #{headerImgUrl,jdbcType=VARCHAR}, #{detailImgUrl,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER},
       #{unitName,jdbcType=VARCHAR}, #{lastNum,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, 
       #{priority,jdbcType=INTEGER}, #{smsTemplate,jdbcType=VARCHAR}, #{effectiveDays,jdbcType=INTEGER}, 
       #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 

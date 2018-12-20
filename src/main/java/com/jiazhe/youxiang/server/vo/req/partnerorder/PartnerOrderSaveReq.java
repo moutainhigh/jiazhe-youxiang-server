@@ -32,7 +32,7 @@ public class PartnerOrderSaveReq extends BaseVO {
 
     private Long serviceTime;
 
-    private String productType;
+    private String orderSource;
 
     private String workerName;
 
@@ -122,12 +122,12 @@ public class PartnerOrderSaveReq extends BaseVO {
         this.serviceTime = serviceTime;
     }
 
-    public String getProductType() {
-        return productType;
+    public String getOrderSource() {
+        return orderSource;
     }
 
-    public void setProductType(String productType) {
-        this.productType = productType;
+    public void setOrderSource(String orderSource) {
+        this.orderSource = orderSource;
     }
 
     public String getWorkerName() {
