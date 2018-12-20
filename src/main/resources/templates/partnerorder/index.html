@@ -812,9 +812,13 @@
             bootboxalert("再次支付必须为数字！");
             return false;
         }
-        if($("#saveStatus").val()== "2"){
-            confirm("已完成订单，除了备注为非必填外，其他都为必填，需要继续保存吗？", save);
-        }else{
+        if ($("#saveStatus").val() == "2") {
+            confirm("已完成订单，除了备注为非必填外，其他都为必填，需要继续保存吗？", function (result) {
+                if (result) {
+                    save();
+                }
+            });
+        } else {
             save();
         }
     }
