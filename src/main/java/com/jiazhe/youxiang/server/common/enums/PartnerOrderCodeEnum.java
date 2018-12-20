@@ -21,7 +21,9 @@ public enum PartnerOrderCodeEnum {
     PARTNER_IS_NULL(117013, "PARTNER_IS_NULL", "服务商家不能为空"),
     SERVICE_ITEM_IS_NULL(117014, "SERVICE_ITEM_IS_NULL", "服务项目不能为空"),
     PRE_PAY_IS_NULL(117015, "PRE_PAY_IS_NULL", "预付款不能为空"),
-    APPEND_PAY_IS_NULL(117016, "APPEND_PAY_IS_NULL", "再次支付不能为空"),;
+    APPEND_PAY_IS_NULL(117016, "APPEND_PAY_IS_NULL", "再次支付不能为空"),
+    SERVICE_TIME_ERROR(117017, "SERVICE_TIME_ERROR", "预约时间不能早于兑换时间"),
+    ;
 
     PartnerOrderCodeEnum(Integer code, String type, String message) {
         this.code = code;
