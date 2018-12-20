@@ -10,7 +10,7 @@
         <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR"/>
         <result column="header_img_url" property="headerImgUrl" jdbcType="VARCHAR"/>
         <result column="detail_img_url" property="detailImgUrl" jdbcType="VARCHAR"/>
-        <result column="product_type" property="orderSource" jdbcType="INTEGER"/>
+        <result column="product_type" property="productType" jdbcType="INTEGER"/>
         <result column="unit_name" property="unitName" jdbcType="VARCHAR"/>
         <result column="last_num" property="lastNum" jdbcType="INTEGER"/>
         <result column="status" property="status" jdbcType="TINYINT"/>
@@ -40,8 +40,8 @@
             <if test="name != null and name !=''">
                 AND name = #{name}
             </if>
-            <if test="orderSource != null and orderSource >=0">
-                AND product_type = #{orderSource}
+            <if test="productType != null and productType >=0">
+                AND product_type = #{productType}
             </if>
             <if test="status != null and status >=0">
                 AND status = #{status}
@@ -67,8 +67,8 @@
             <if test="name != null and name !=''">
                 AND name = #{name}
             </if>
-            <if test="orderSource != null and orderSource >=0">
-                AND product_type = #{orderSource}
+            <if test="productType != null and productType >=0">
+                AND product_type = #{productType}
             </if>
             <if test="status != null and status >=0">
                 AND status = #{status}
