@@ -101,7 +101,7 @@
                                         <div class="col-xs-12 col-sm-9">
                                             <form id="productCategorySaveForm" class="form-horizontal" role="form">
                                                 <input type="hidden" name="id" id="inputProductCategoryId" value="0">
-                                                <input type="hidden" name="thumbnailUrl" id="inputThumbnailUrl"
+                                                <input type="text" name="thumbnailUrl" id="inputThumbnailUrl"
                                                        value="">
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">商品大类名称：</label>
@@ -161,7 +161,8 @@
                                         取消
                                     </button>
 
-                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="addOrUpdate()">
+                                    <button id="buttonSave" class="btn btn-sm btn-primary modal-footer-btn"
+                                            onclick="addOrUpdate()">
                                         <i class="ace-icon fa fa-check"></i>
                                         保存
                                     </button>
@@ -206,7 +207,7 @@
         }
 
         initTable(grid_selector, pager_selector, tableOption)
-        initImgControl("#fileThumbnail", "#imgThumbnail", "#inputThumbnailUrl");
+        initImgControl("#fileThumbnail", "#imgThumbnail", "#inputThumbnailUrl", "#buttonSave");
     });
 
 

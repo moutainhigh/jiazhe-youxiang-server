@@ -282,7 +282,8 @@
                                         取消
                                     </button>
 
-                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="addOrUpdate()">
+                                    <button id="buttonSave" class="btn btn-sm btn-primary modal-footer-btn"
+                                            onclick="addOrUpdate()">
                                         <i class="ace-icon fa fa-check"></i>
                                         保存
                                     </button>
@@ -335,9 +336,9 @@
         }
 
         initTable(grid_selector, pager_selector, tableOption);
-        initImgControl("#fileThumbnail", "#imgThumbnail", "#inputThumbnailUrl");
-        initImgControl("#fileHeader", "#imgHeader", "#inputHeaderImgUrl");
-        initImgControl("#fileDetail", "#imgDetail", "#inputDetailImgUrl");
+        initImgControl("#fileThumbnail", "#imgThumbnail", "#inputThumbnailUrl", "#buttonSave");
+        initImgControl("#fileHeader", "#imgHeader", "#inputHeaderImgUrl", "#buttonSave");
+        initImgControl("#fileDetail", "#imgDetail", "#inputDetailImgUrl", "#buttonSave");
     });
 
     $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
