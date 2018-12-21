@@ -23,7 +23,6 @@ function initImgControl(file_selector, img_selector, input_selector, button_sele
         }
         var formData = new FormData();
         formData.append('file', image);
-        alert(button_selector)
         if (button_selector) {
             $(button_selector).attr('disabled', 'disabled');
         }
