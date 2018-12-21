@@ -35,6 +35,8 @@ public class SysLogBiz {
 
     private static SysLogService sysLogService;
 
+    private static SysUserBiz sysUserBiz;
+
 
     @Autowired
     public void setSysLogService(SysLogService sysLogService) {
@@ -58,11 +60,12 @@ public class SysLogBiz {
                     sysLogDTO.setModuleName(moduleName);
                     sysLogDTO.setOperate(operate);
                     sysLogDTO.setLevel(level);
-                    if (SecurityUtils.getSubject().getPrincipal() == null) {
+                    if (SecurityUtils.getSubject() == null || SecurityUtils.getSubject().getSession() == null || SecurityUtils.getSubject().getSession() == null) {
                         sysLogDTO.setOperatorId(0);
                         sysLogDTO.setOperatorName("未登录");
                     } else if (SecurityUtils.getSubject().getPrincipal() instanceof SysUserDTO) {
-                        SysUserDTO userDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+                        Integer userId = Integer.valueOf(SecurityUtils.getSubject().getSession().getAttribute("id").toString());
+                        SysUserDTO userDTO = sysUserBiz.getById(userId);
                         sysLogDTO.setOperatorId(userDTO.getId());
                         sysLogDTO.setOperatorName(userDTO.getLoginName());
                     } else if (SecurityUtils.getSubject().getPrincipal() instanceof CustomerDTO) {
@@ -80,6 +83,7 @@ public class SysLogBiz {
                     LOGGER.error("spring init bean sysLogService fail,please check configs");
                 }
             } catch (Exception e) {
+                LOGGER.error("插入日志时发生错误：message:{}", e.getMessage());
                 e.printStackTrace();
             }
         });
