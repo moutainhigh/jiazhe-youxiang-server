@@ -1,4 +1,8 @@
 function initImgControl(file_selector, img_selector, input_selector) {
+    initImgControl(file_selector, img_selector, input_selector, null);
+}
+
+function initImgControl(file_selector, img_selector, input_selector, button_selector) {
     $(file_selector).ace_file_input({
         style: 'well',
         btn_choose: '把图片拖到这里或点击选择图片',
@@ -19,7 +23,9 @@ function initImgControl(file_selector, img_selector, input_selector) {
         }
         var formData = new FormData();
         formData.append('file', image);
-
+        if (button_selector) {
+            $(button_selector).attr('disabled', 'disabled');
+        }
         $.ajax({
             url: "/api/upload/uploadimage",    //请求的url地址
             dataType: "json",
@@ -33,6 +39,9 @@ function initImgControl(file_selector, img_selector, input_selector) {
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
+                    if (button_selector) {
+                        $(button_selector).removeAttr('disabled');
+                    }
                     $(input_selector).val(data.data.url)
                     $(img_selector).attr('hidden', 'hidden');
 //                    alert('文件上传成功!' + data.data.url);
