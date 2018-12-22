@@ -12,7 +12,7 @@
     <script th:src="@{/static/init.js}"></script><!--通用的js-->
 
     <style>
-        .sidebar .sidebar-shortcuts-large>.btn {
+        .sidebar .sidebar-shortcuts-large > .btn {
             width: 55px;
         }
     </style>
@@ -25,7 +25,8 @@
         <div class="sidebar-shortcuts" id="sidebar-shortcuts">
             <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
                 <shiro:hasPermission name="orderReservation">
-                    <a th:title="待预约订单" class="btn btn-success" th:href="@{/order/orderindex(status=2)}" target="iframeCenter">
+                    <a th:title="待预约订单" class="btn btn-success" th:href="@{/order/orderindex(status=2)}"
+                       target="iframeCenter">
                         <i class="ace-icon fa fa-truck" id="waitingSendOrderCount">
 
                         </i>
@@ -33,7 +34,8 @@
                 </shiro:hasPermission>
 
                 <shiro:hasPermission name="orderCheck">
-                    <a th:title="待审核订单" class="btn btn-info" th:href="@{/order/orderindex(status=5)}" target="iframeCenter">
+                    <a th:title="待审核订单" class="btn btn-info" th:href="@{/order/orderindex(status=5)}"
+                       target="iframeCenter">
                         <i class="ace-icon fa fa-trash" id="waitingCheckOrderCount">
 
                         </i>
@@ -41,7 +43,8 @@
                 </shiro:hasPermission>
 
                 <shiro:hasPermission name="auditRecordManagement">
-                    <a th:title="待审核消费" class="btn btn-warning" th:href="@{/auditrecord/index(status=0)}" target="iframeCenter">
+                    <a th:title="待审核消费" class="btn btn-warning" th:href="@{/auditrecord/index(status=0)}"
+                       target="iframeCenter">
                         <i class="ace-icon fa fa-check" id="waitingCheckRecordCount">
 
                         </i>
@@ -268,47 +271,53 @@
     </div>
 </div><!-- /.main-container -->
 <script>
-    $.ajax({
-        url: "/api/orderinfo/getunsentordercount",
-        dataType: "json",
-        async: false,
-        data: {},
-        type: "GET",
-        success: function (data) {
-            $("#waitingSendOrderCount").html("&nbsp;"+data.data.count);
-        },
-        error: function () {
+    if (permission.indexOf("orderReservation") != -1) {
+        $.ajax({
+            url: "/api/orderinfo/getunsentordercount",
+            dataType: "json",
+            async: false,
+            data: {},
+            type: "GET",
+            success: function (data) {
+                $("#waitingSendOrderCount").html("&nbsp;" + data.data.count);
+            },
+            error: function () {
 //            bootboxalert("服务器异常，请联系管理员");
-        }
-    });
+            }
+        });
+    }
 
-    $.ajax({
-        url: "/api/orderinfo/getunauditordercount",
-        dataType: "json",
-        async: false,
-        data: {},
-        type: "GET",
-        success: function (data) {
-            $("#waitingCheckOrderCount").html("&nbsp;"+data.data.count);
-        },
-        error: function () {
-//            bootboxalert("服务器异常，请联系管理员");
-        }
-    });
+    if (permission.indexOf("orderCheck") != -1) {
+        $.ajax({
+            url: "/api/orderinfo/getunauditordercount",
+            dataType: "json",
+            async: false,
+            data: {},
+            type: "GET",
+            success: function (data) {
+                $("#waitingCheckOrderCount").html("&nbsp;" + data.data.count);
+            },
+            error: function () {
+                //            bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
 
-    $.ajax({
-        url: "/api/auditrecord/getwaitcheckcount",
-        dataType: "json",
-        async: false,
-        data: {},
-        type: "GET",
-        success: function (data) {
-            $("#waitingCheckRecordCount").html("&nbsp;"+data.data.count);
-        },
-        error: function () {
-//            bootboxalert("服务器异常，请联系管理员");
-        }
-    });
+    if (permission.indexOf("auditRecordManagement") != -1) {
+        $.ajax({
+            url: "/api/auditrecord/getwaitcheckcount",
+            dataType: "json",
+            async: false,
+            data: {},
+            type: "GET",
+            success: function (data) {
+                $("#waitingCheckRecordCount").html("&nbsp;" + data.data.count);
+            },
+            error: function () {
+                //            bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
 
 </script>
 </body>

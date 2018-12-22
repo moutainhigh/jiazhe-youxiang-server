@@ -200,8 +200,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
-                                        <div class="col-xs-12 col-sm-1"></div>
-                                        <div class="col-xs-12 col-sm-9">
+                                        <div class="col-xs-12 col-sm-12">
                                             <form id="orderForm" class="form-horizontal" role="form">
                                                 <input type="hidden" name="customerId" id="orderCustomerId">
                                                 <input type="hidden" name="voucherIds" id="orderVoucherIds">
@@ -210,8 +209,8 @@
                                                 <input type="hidden" name="customerCityCode" id="orderCityCode">
                                                 <input type="hidden" name="productPrice" id="orderProductPrice">
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">商品：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">商品：</label>
+                                                    <div class="col-sm-9">
                                                         <select id="orderProductId" name="productId"
                                                                 onchange="productChanged()"
                                                                 class="selectpicker show-tick form-control">
@@ -222,8 +221,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">城市：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">城市：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <ul id="cityTree" class="ztree"
                                                                 style="margin-top:0; width:100%; height:auto;">
@@ -234,8 +233,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">数量：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">数量：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input type="text" name="count" id="orderCount" readonly/>
                                                         </div>
@@ -244,8 +243,8 @@
 
                                                 <div class="space-2 virtual"></div>
                                                 <div class="form-group virtual">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务对象姓名：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">服务对象姓名：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="orderCustomerName" class="form-control"
                                                                    type="text" style="height:30px" name="customerName"/>
@@ -255,8 +254,8 @@
 
                                                 <div class="space-2 virtual"></div>
                                                 <div class="form-group virtual">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务对象电话：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">服务对象电话：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="orderCustomerMobile" class="form-control"
                                                                    name="customerMobile"
@@ -267,8 +266,8 @@
 
                                                 <div class="space-2 virtual"></div>
                                                 <div class="form-group virtual">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务地址：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">服务地址：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="orderCustomerAddress" class="form-control"
                                                                    name="customerAddress"
@@ -279,8 +278,8 @@
 
                                                 <div class="space-2 virtual"></div>
                                                 <div class="form-group virtual">
-                                                    <label class="col-sm-4 control-label no-padding-right">客户留言：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">客户留言：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="orderCustomerRemark" class="form-control"
                                                                    name="customerRemark"
@@ -291,9 +290,9 @@
 
                                                 <div class="space-2 virtual"></div>
                                                 <div class="form-group virtual">
-                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                    <label class="col-sm-3 control-label no-padding-right"
                                                            for="orderRealServiceTime">服务时间：</label>
-                                                    <div class="col-sm-8">
+                                                    <div class="col-sm-9">
                                                         <div class="input-group">
                                                             <input class="form-control datetime-picker"
                                                                    id="orderRealServiceTime" type="text"/>
@@ -307,8 +306,8 @@
 
                                                 <div class="space-2 virtual"></div>
                                                 <div class="form-group virtual">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务人员姓名：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">服务人员姓名：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="orderWorkerName" name="workerName"
                                                                    class="form-control"
@@ -319,8 +318,8 @@
 
                                                 <div class="space-2 virtual"></div>
                                                 <div class="form-group virtual">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务人员电话：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">服务人员电话：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="orderWorkerMobile" name="workerMobile"
                                                                    class="form-control"
@@ -331,8 +330,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">订单备注：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">订单备注：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="orderComments" class="form-control"
                                                                    name="comments"
@@ -343,8 +342,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">订单成本：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">订单成本：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="orderCost"
                                                                    class="form-control"
@@ -355,16 +354,24 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">可用代金券：</label>
-                                                    <div class="col-sm-8" id="orderVoucherArea">
+                                                    <label class="col-sm-3 control-label no-padding-right">可用代金券：</label>
+                                                    <div class="col-sm-9" id="orderVoucherArea">
 
                                                     </div>
                                                 </div>
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">可用充值卡：</label>
-                                                    <div class="col-sm-8" id="orderRechargeCardArea">
+                                                    <label class="col-sm-3 control-label no-padding-right">可用充值卡：</label>
+                                                    <div class="col-sm-9" id="orderRechargeCardArea">
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label no-padding-right">可用积分卡：</label>
+                                                    <div class="col-sm-9" id="orderPointArea">
 
                                                     </div>
                                                 </div>
@@ -1001,7 +1008,7 @@
                     for (var i = 0; i < result.length; i++) {
                         $("#orderVoucherArea").append("<div class='checkbox'><label>" +
                             "<input name='voucherCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
-                            "<span class='lbl'> " + result[i].name + "（可抵扣商品数量：" + result[i].count + "）</span></label>" +
+                            "<span class='lbl'> " + result[i].name + "[" + dateFormat(result[i].expiryTime) + "]（抵扣数量：" + result[i].count + "）</span></label>" +
                             "<input type='hidden' id='replaceCount_" + result[i].id + "'value=" + result[i].count + ">" +
                             "</div>")
                     }
@@ -1029,9 +1036,36 @@
                     for (var i = 0; i < result.length; i++) {
                         $("#orderRechargeCardArea").append("<div class='checkbox'><label>" +
                             "<input name='rechargeCardCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
-                            "<span class='lbl'> " + result[i].name + "（余额：" + result[i].balance + "）</span></label>" +
+                            "<span class='lbl'> " + result[i].name + "[" + dateFormat(result[i].expiryTime) + "]（剩余金额：" + result[i].balance + "元）</span></label>" +
+                            "</div>")
+                    }
+                }
+            },
+            error: error
+        });
+        $.ajax({
+            url: "/api/point/findbygoodsattrpage",
+            dataType: "json",
+            async: false,
+            data: {
+                pageSize: 10000,
+                pageNum: 1,
+                customerId: $("#orderCustomerId").val(),
+                productId: $("#orderProductId").val(),
+                cityCode: $("#orderCityCode").val()
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#orderPointArea").append("<div class='checkbox'><label>" +
+                            "<input name='pointCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
+                            "<span class='lbl'> " + result[i].name + "[" + dateFormat(result[i].expiryTime) + "]（剩余积分：" + result[i].balance + "分；1积分="+result[i].projectResp.pointConversionRate+"元）</span></label>" +
                             "<input type='hidden' id='leftMoney_" + result[i].id + "' value=" + result[i].balance + ">" +
-                            "<input type='text' id='spendMoney_" + result[i].id + "' value=0>" +
+                            "<input type='hidden' id='conversionRate_" + result[i].id + "' value=" + result[i].projectResp.pointConversionRate + ">" +
                             "</div>")
                     }
                 }

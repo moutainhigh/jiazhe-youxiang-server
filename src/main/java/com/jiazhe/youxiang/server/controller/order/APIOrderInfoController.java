@@ -174,7 +174,7 @@ public class APIOrderInfoController extends BaseController {
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqCustomerPlaceOrder2DTOPlaceOrder(req);
         placeOrderDTO.setWorkerMobile("");
         placeOrderDTO.setWorkerName("");
-        placeOrderDTO.setCost(new BigDecimal(0));
+        placeOrderDTO.setCost(BigDecimal.ZERO);
         placeOrderDTO.setType(Byte.valueOf("1"));
         placeOrderDTO.setRealServiceTime(new Date(req.getServiceTime()));
         placeOrderDTO.setComments("");

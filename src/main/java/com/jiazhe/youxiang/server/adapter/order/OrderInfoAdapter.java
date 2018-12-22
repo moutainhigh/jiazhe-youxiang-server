@@ -107,6 +107,7 @@ public class OrderInfoAdapter {
         placeOrderDTO.setWorkerName(req.getWorkerName());
         placeOrderDTO.setWorkerMobile(req.getWorkerMobile());
         placeOrderDTO.setRealServiceTime(new Date(req.getRealServiceTime()));
+        placeOrderDTO.setPointIds(req.getPointIds());
         placeOrderDTO.setVoucherIds(req.getVoucherIds());
         placeOrderDTO.setRechargeCardIds(req.getRechargeCardIds());
         placeOrderDTO.setCardMoneys(req.getCardMoneys());
@@ -129,6 +130,7 @@ public class OrderInfoAdapter {
         placeOrderDTO.setCustomerName(req.getCustomerName());
         placeOrderDTO.setCustomerRemark(req.getCustomerRemark());
         placeOrderDTO.setServiceTime(new Date(req.getServiceTime()));
+        placeOrderDTO.setPointIds(req.getPointIds());
         placeOrderDTO.setVoucherIds(req.getVoucherIds());
         placeOrderDTO.setRechargeCardIds(req.getRechargeCardIds());
         return placeOrderDTO;
@@ -155,6 +157,7 @@ public class OrderInfoAdapter {
         appendOrderDTO.setOrderId(req.getOrderId());
         appendOrderDTO.setCount(req.getCount());
         appendOrderDTO.setCost(req.getCost());
+        appendOrderDTO.setPointIds(req.getPointIds());
         appendOrderDTO.setVoucherIds(req.getVoucherIds());
         appendOrderDTO.setRechargeCardIds(req.getRechargeCardIds());
         appendOrderDTO.setCardMoneys(req.getCardMoneys());

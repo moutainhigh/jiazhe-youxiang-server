@@ -352,7 +352,7 @@
         var tableOption = {
             url: "/api/pointexchangecodebatch/listpage",
             postData: transformToJson($('#batchSearchForm').serializeArray()),
-            colNames: ['', '批次名称', '积分卡名称', '是否是虚拟批次', '状态', '积分', '数量', '过期时间', '操作'],
+            colNames: ['', '批次名称', '积分卡名称', '是否是虚拟批次', '状态', '积分','兑换比例', '数量', '过期时间', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 100, sortable: false},
@@ -386,6 +386,7 @@
                         return rowObject.isVirtual == 1 ? "--" : rowObject.faceValue;
                     }
                 },
+                {name: 'projectResp.pointConversionRate', index: 'projectResp.pointConversionRate', width: 30, sortable: false},
                 {name: 'amount', index: 'amount', width: 30, sortable: false},
                 {
                     name: 'expiryTime',

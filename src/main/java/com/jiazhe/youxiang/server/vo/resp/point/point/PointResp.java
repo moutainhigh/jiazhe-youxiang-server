@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.vo.resp.point.point;
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
 import com.jiazhe.youxiang.server.vo.resp.point.exchangerecord.PointExchangeRecordResp;
+import com.jiazhe.youxiang.server.vo.resp.project.ProjectResp;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
@@ -49,6 +50,8 @@ public class PointResp extends BaseVO{
 
     @ApiModelProperty("充值时间")
     private Long addTime;
+
+    private ProjectResp projectResp;
 
     private CustomerResp customerResp;
 
@@ -148,6 +151,14 @@ public class PointResp extends BaseVO{
 
     public void setAddTime(Long addTime) {
         this.addTime = addTime;
+    }
+
+    public ProjectResp getProjectResp() {
+        return projectResp;
+    }
+
+    public void setProjectResp(ProjectResp projectResp) {
+        this.projectResp = projectResp;
     }
 
     public CustomerResp getCustomerResp() {

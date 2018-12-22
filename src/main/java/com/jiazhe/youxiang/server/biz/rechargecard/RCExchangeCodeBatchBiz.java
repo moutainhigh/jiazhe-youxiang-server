@@ -38,7 +38,7 @@ public class RCExchangeCodeBatchBiz {
     public void addSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {
         if(rcExchangeCodeBatchSaveDTO.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)){
             rcExchangeCodeBatchSaveDTO.setAmount(0);
-            rcExchangeCodeBatchSaveDTO.setFaceValue(new BigDecimal(0));
+            rcExchangeCodeBatchSaveDTO.setFaceValue(BigDecimal.ZERO);
         }
         if(rcExchangeCodeBatchSaveDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)){
             rcExchangeCodeBatchSaveDTO.setValidityPeriod(0);

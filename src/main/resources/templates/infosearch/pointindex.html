@@ -236,7 +236,7 @@
         var tableOption = {
             url: "/api/point/searchlistpage",
             postData: transformToJson($('#pointSearchForm').serializeArray()),
-            colNames: ['', '积分卡名称', '状态', '面额', '余额', '兑换时间', '客户手机号', '客户姓名', '过期时间', '兑换类型', '后台操作人', '操作'],
+            colNames: ['', '积分卡名称', '状态', '面额', '余额', '兑换比例', '兑换时间', '客户手机号', '客户姓名', '过期时间', '兑换类型', '后台操作人', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 40, sortable: false},
@@ -253,6 +253,7 @@
                 },
                 {name: 'faceValue', index: 'faceValue', width: 20, sortable: false},
                 {name: 'balance', index: 'balance', width: 20, sortable: false},
+                {name: 'projectResp.pointConversionRate', index: 'projectResp.pointConversionRate', width: 30, sortable: false},
                 {
                     name: 'addTime',
                     index: 'addTime',

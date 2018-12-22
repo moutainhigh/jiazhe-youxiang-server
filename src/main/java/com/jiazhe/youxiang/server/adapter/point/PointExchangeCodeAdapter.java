@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.adapter.point;
 
+import com.jiazhe.youxiang.server.adapter.ProjectAdapter;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO;
@@ -119,6 +120,7 @@ public class PointExchangeCodeAdapter {
         pointExchangeCodeResp.setExpiryTime(pointExchangeCodeDTO.getExpiryTime().getTime());
         pointExchangeCodeResp.setStatus(pointExchangeCodeDTO.getStatus());
         pointExchangeCodeResp.setUsed(pointExchangeCodeDTO.getUsed());
+        pointExchangeCodeResp.setProjectResp(ProjectAdapter.projectDTO2VO(pointExchangeCodeDTO.getProjectDTO()));
         return pointExchangeCodeResp;
     }
 

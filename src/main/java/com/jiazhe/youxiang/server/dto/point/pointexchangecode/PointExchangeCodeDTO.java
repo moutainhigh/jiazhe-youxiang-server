@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.dto.point.pointexchangecode;
 
+import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
 import com.jiazhe.youxiang.server.vo.BaseObject;
 
 import java.math.BigDecimal;
@@ -25,6 +26,8 @@ public class PointExchangeCodeDTO extends BaseObject {
     private String batchDescription;
 
     private Integer projectId;
+
+    private ProjectDTO projectDTO;
 
     private String cityCodes;
 
@@ -98,6 +101,14 @@ public class PointExchangeCodeDTO extends BaseObject {
 
     public void setProjectId(Integer projectId) {
         this.projectId = projectId;
+    }
+
+    public ProjectDTO getProjectDTO() {
+        return projectDTO;
+    }
+
+    public void setProjectDTO(ProjectDTO projectDTO) {
+        this.projectDTO = projectDTO;
     }
 
     public String getCityCodes() {

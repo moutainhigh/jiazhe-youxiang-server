@@ -48,6 +48,12 @@ public class UserPlaceOrderReq extends BaseVO {
     private Long realServiceTime;
 
     /**
+     * 使用的积分卡ids
+     */
+    @ApiModelProperty("积分卡ids")
+    private String pointIds;
+
+    /**
      * 使用的代金券ids
      */
     @ApiModelProperty("代金券ids")
@@ -197,5 +203,13 @@ public class UserPlaceOrderReq extends BaseVO {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public String getPointIds() {
+        return pointIds;
+    }
+
+    public void setPointIds(String pointIds) {
+        this.pointIds = pointIds;
     }
 }
