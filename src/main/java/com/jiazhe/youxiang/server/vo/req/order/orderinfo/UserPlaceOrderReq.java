@@ -65,12 +65,6 @@ public class UserPlaceOrderReq extends BaseVO {
     @ApiModelProperty("充值卡ids")
     private String rechargeCardIds;
 
-    /**
-     * 每张充值卡使用的金额
-     */
-    @ApiModelProperty("充值卡金额")
-    private String cardMoneys;
-
     @ApiModelProperty("订单成本")
     private BigDecimal cost;
 
@@ -179,14 +173,6 @@ public class UserPlaceOrderReq extends BaseVO {
 
     public void setRechargeCardIds(String rechargeCardIds) {
         this.rechargeCardIds = rechargeCardIds;
-    }
-
-    public String getCardMoneys() {
-        return cardMoneys;
-    }
-
-    public void setCardMoneys(String cardMoneys) {
-        this.cardMoneys = cardMoneys;
     }
 
     public BigDecimal getCost() {

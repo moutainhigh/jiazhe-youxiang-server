@@ -110,7 +110,6 @@ public class OrderInfoAdapter {
         placeOrderDTO.setPointIds(req.getPointIds());
         placeOrderDTO.setVoucherIds(req.getVoucherIds());
         placeOrderDTO.setRechargeCardIds(req.getRechargeCardIds());
-        placeOrderDTO.setCardMoneys(req.getCardMoneys());
         placeOrderDTO.setCost(req.getCost());
         placeOrderDTO.setComments(req.getComments());
         return placeOrderDTO;
