@@ -28,4 +28,6 @@ public interface PointPOManualMapper {
     Integer count(@Param("mobile") String mobile, @Param("exchangeType") Integer exchangeType, @Param("status") Byte status, @Param("expiry") Byte expiry);
 
     BigDecimal totalValidBalance(@Param("customerId")Integer customerId);
+
+    List<PointPO> findByIdsInOrder(List<Integer> ids);
 }

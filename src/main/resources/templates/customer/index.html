@@ -200,18 +200,17 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
-                                        <div class="col-xs-12 col-sm-1"></div>
-                                        <div class="col-xs-12 col-sm-9">
+                                        <div class="col-xs-12 col-sm-12">
                                             <form id="orderForm" class="form-horizontal" role="form">
                                                 <input type="hidden" name="customerId" id="orderCustomerId">
                                                 <input type="hidden" name="voucherIds" id="orderVoucherIds">
                                                 <input type="hidden" name="rechargeCardIds" id="orderRechargeCardIds">
-                                                <input type="hidden" name="cardMoneys" id="orderCardMoneys">
+                                                <input type="hidden" name="pointIds" id="orderPointIds">
                                                 <input type="hidden" name="customerCityCode" id="orderCityCode">
                                                 <input type="hidden" name="productPrice" id="orderProductPrice">
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">商品：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">商品：</label>
+                                                    <div class="col-sm-9">
                                                         <select id="orderProductId" name="productId"
                                                                 onchange="productChanged()"
                                                                 class="selectpicker show-tick form-control">
@@ -222,8 +221,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">城市：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">城市：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <ul id="cityTree" class="ztree"
                                                                 style="margin-top:0; width:100%; height:auto;">
@@ -234,8 +233,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">数量：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">数量：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input type="text" name="count" id="orderCount" readonly/>
                                                         </div>
@@ -244,8 +243,8 @@
 
                                                 <div class="space-2 virtual"></div>
                                                 <div class="form-group virtual">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务对象姓名：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">服务对象姓名：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="orderCustomerName" class="form-control"
                                                                    type="text" style="height:30px" name="customerName"/>
@@ -255,8 +254,8 @@
 
                                                 <div class="space-2 virtual"></div>
                                                 <div class="form-group virtual">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务对象电话：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">服务对象电话：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="orderCustomerMobile" class="form-control"
                                                                    name="customerMobile"
@@ -267,8 +266,8 @@
 
                                                 <div class="space-2 virtual"></div>
                                                 <div class="form-group virtual">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务地址：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">服务地址：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="orderCustomerAddress" class="form-control"
                                                                    name="customerAddress"
@@ -279,8 +278,8 @@
 
                                                 <div class="space-2 virtual"></div>
                                                 <div class="form-group virtual">
-                                                    <label class="col-sm-4 control-label no-padding-right">客户留言：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">客户留言：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="orderCustomerRemark" class="form-control"
                                                                    name="customerRemark"
@@ -291,9 +290,9 @@
 
                                                 <div class="space-2 virtual"></div>
                                                 <div class="form-group virtual">
-                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                    <label class="col-sm-3 control-label no-padding-right"
                                                            for="orderRealServiceTime">服务时间：</label>
-                                                    <div class="col-sm-8">
+                                                    <div class="col-sm-9">
                                                         <div class="input-group">
                                                             <input class="form-control datetime-picker"
                                                                    id="orderRealServiceTime" type="text"/>
@@ -307,8 +306,8 @@
 
                                                 <div class="space-2 virtual"></div>
                                                 <div class="form-group virtual">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务人员姓名：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">服务人员姓名：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="orderWorkerName" name="workerName"
                                                                    class="form-control"
@@ -319,8 +318,8 @@
 
                                                 <div class="space-2 virtual"></div>
                                                 <div class="form-group virtual">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务人员电话：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">服务人员电话：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="orderWorkerMobile" name="workerMobile"
                                                                    class="form-control"
@@ -331,8 +330,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">订单备注：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">订单备注：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="orderComments" class="form-control"
                                                                    name="comments"
@@ -343,8 +342,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">订单成本：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">订单成本：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="orderCost"
                                                                    class="form-control"
@@ -355,16 +354,24 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">可用代金券：</label>
-                                                    <div class="col-sm-8" id="orderVoucherArea">
+                                                    <label class="col-sm-3 control-label no-padding-right">可用代金券：</label>
+                                                    <div class="col-sm-9" id="orderVoucherArea">
 
                                                     </div>
                                                 </div>
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">可用充值卡：</label>
-                                                    <div class="col-sm-8" id="orderRechargeCardArea">
+                                                    <label class="col-sm-3 control-label no-padding-right">可用积分卡：</label>
+                                                    <div class="col-sm-9" id="orderPointArea">
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label no-padding-right">可用充值卡：</label>
+                                                    <div class="col-sm-9" id="orderRechargeCardArea">
 
                                                     </div>
                                                 </div>
@@ -414,7 +421,11 @@
         $("#orderCount").ace_spinner({
             value: 1, min: 1, max: 100, step: 1, on_sides: true, icon_up: 'ace-icon fa fa-plus',
             icon_down: 'ace-icon fa fa-minus', btn_up_class: 'btn-success', btn_down_class: 'btn-danger'
-        }).closest('.ace-spinner');
+        })
+            .closest('.ace-spinner')
+            .on('changed.fu.spinbox', function () {
+                initCheckbox();
+            });
 
         //datatime控件
         $('#orderRealServiceTime').datetimepicker({
@@ -422,7 +433,6 @@
         }).next().on(ace.click_event, function () {
             $(this).prev().focus();
         });
-
 
         var tableOption = {
             url: "/api/customer/getlist",// 获取数据的地址
@@ -458,6 +468,7 @@
 
         initTable(grid_selector, pager_selector, tableOption);
         initSelectProject();
+        initProduct();
     });
 
     $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
@@ -782,7 +793,6 @@
         getById(id);
     }
 
-
     function getById(id) {
         $.ajax({
             url: "/api/customer/getbyid",    //请求的url地址
@@ -874,10 +884,18 @@
     function openNewOrder(id) {
         $("#orderCustomerId").val(id);
         $("#order-modal").modal("show");
-        initProduct();
+        $("#orderProductId option:first").prop("selected", 'selected');
+        if ($("#orderProductId").val() == '') {
+            cityTree.destroy();
+        } else {
+            refreshCity();
+        }
     }
 
     function initProduct() {
+        $("#orderVoucherArea").empty();
+        $("#orderRechargeCardArea").empty();
+        $("#orderPointArea").empty();
         $("#orderProductId").empty();
         $("#orderProductId").append("<option value=>请选择商品</option>");
         $.ajax({
@@ -919,6 +937,7 @@
         }
         $("#orderVoucherArea").empty();
         $("#orderRechargeCardArea").empty();
+        $("#orderPointArea").empty();
     }
 
     function refreshCity() {
@@ -977,10 +996,11 @@
         }
     }
 
-    //更新代金券，充值卡区域
+    //更新代金券，充值卡，积分卡区域区域
     function refreshCard() {
         $("#orderVoucherArea").empty();
         $("#orderRechargeCardArea").empty();
+        $("#orderPointArea").empty();
         $.ajax({
             url: "/api/voucher/findbygoodsattrpage",
             dataType: "json",
@@ -1000,8 +1020,8 @@
                     var result = data.data;
                     for (var i = 0; i < result.length; i++) {
                         $("#orderVoucherArea").append("<div class='checkbox'><label>" +
-                            "<input name='voucherCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
-                            "<span class='lbl'> " + result[i].name + "（可抵扣商品数量：" + result[i].count + "）</span></label>" +
+                            "<input onchange='payMoneyChange()' name='voucherCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
+                            "<span class='lbl'> " + result[i].name + "[" + dateFormat(result[i].expiryTime) + "]（抵扣数量：" + result[i].count + "）</span></label>" +
                             "<input type='hidden' id='replaceCount_" + result[i].id + "'value=" + result[i].count + ">" +
                             "</div>")
                     }
@@ -1028,10 +1048,38 @@
                     var result = data.data;
                     for (var i = 0; i < result.length; i++) {
                         $("#orderRechargeCardArea").append("<div class='checkbox'><label>" +
-                            "<input name='rechargeCardCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
-                            "<span class='lbl'> " + result[i].name + "（余额：" + result[i].balance + "）</span></label>" +
+                            "<input onchange='payMoneyChange()' name='rechargeCardCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
+                            "<span class='lbl'> " + result[i].name + "[" + dateFormat(result[i].expiryTime) + "]（剩余金额：" + result[i].balance + "元）</span></label>" +
                             "<input type='hidden' id='leftMoney_" + result[i].id + "' value=" + result[i].balance + ">" +
-                            "<input type='text' id='spendMoney_" + result[i].id + "' value=0>" +
+                            "</div>")
+                    }
+                }
+            },
+            error: error
+        });
+        $.ajax({
+            url: "/api/point/findbygoodsattrpage",
+            dataType: "json",
+            async: false,
+            data: {
+                pageSize: 10000,
+                pageNum: 1,
+                customerId: $("#orderCustomerId").val(),
+                productId: $("#orderProductId").val(),
+                cityCode: $("#orderCityCode").val()
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#orderPointArea").append("<div class='checkbox'><label>" +
+                            "<input onchange='payMoneyChange()' name='pointCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
+                            "<span class='lbl'> " + result[i].name + "[" + dateFormat(result[i].expiryTime) + "]（剩余积分：" + result[i].balance + "分；1积分=" + result[i].projectResp.pointConversionRate + "元）</span></label>" +
+                            "<input type='hidden' id='leftMoney_" + result[i].id + "' value=" + result[i].balance + ">" +
+                            "<input type='hidden' id='conversionRate_" + result[i].id + "' value=" + result[i].projectResp.pointConversionRate + ">" +
                             "</div>")
                     }
                 }
@@ -1040,6 +1088,20 @@
         });
     }
 
+    //checkbox勾选响应事件
+    function payMoneyChange() {
+        var needPay = calNeedPay();
+        console.log(needPay);
+        if (needPay > 0) {
+            console.log("is not enough");
+            removeDisableAttr();
+        } else {
+            console.log("is enough");
+            disableNotChecked();
+        }
+    }
+
+    //下单
     function placeOrder() {
         $("#orderRealServiceTime").next().next().val($("#orderRealServiceTime").val() == '' ? 0 : new Date($("#orderRealServiceTime").val()).getTime());
         if ($("#orderProductId").val() == '0') {
@@ -1050,43 +1112,45 @@
             bootboxalert("请选择城市");
             return false;
         }
-        var count = 0;//用代金券支付的数量
-        var money = 0;//用充值卡支付的金额
-        $("#orderVoucherArea input[type=checkbox]").each(function () {
-            if ($(this).prop('checked')) {
-                count = count + parseInt($("#replaceCount_" + $(this).val()).val());
-            }
-        });
-        var moneyError = false;
-        $("#orderRechargeCardArea input[type=checkbox]").each(function () {
-            if ($(this).prop('checked')) {
-                if (parseFloat($("#spendMoney_" + $(this).val()).val()) > parseFloat($("#leftMoney_" + $(this).val()).val())) {
-                    moneyError = true;
-                }
-                money = money + parseFloat($("#spendMoney_" + $(this).val()).val());
-            }
-        });
-        if (moneyError) {
-            bootboxalert("充值卡消费金额不能大于充值卡的余额");
-            return false;
-        }
-        var left = (parseInt($("#orderCount").val()) - count) * parseFloat($("#orderProductPrice").val()) - money;
-        if (left < 0) {
-            bootboxalert("所选的付款内容超额支付订单，不能下单！");
-        } else {
-            var confirmText = "所选的付款内容" + (left == 0 ? "刚好" : "不足以") + "支付订单，继续下单吗？";
-            confirm(confirmText, function (result) {
+        var needPay = calNeedPay();
+        if (needPay > 0) {
+            confirm("所选金额不足以支付订单，还继续下单吗？", function (result) {
                 if (result) {
                     saveOrder();
                 }
             });
+        } else {
+            saveOrder();
         }
     }
 
+    //计算还需要支付的金额
+    function calNeedPay() {
+        var price = parseFloat($("#orderProductPrice").val());
+        var needPay = parseInt($("#orderCount").val()) * price;
+        $("#orderVoucherArea input[type=checkbox]").each(function () {
+            if ($(this).prop('checked')) {
+                needPay = needPay - price * parseInt($("#replaceCount_" + $(this).val()).val());
+            }
+        });
+        $("#orderRechargeCardArea input[type=checkbox]").each(function () {
+            if ($(this).prop('checked')) {
+                needPay = needPay - parseFloat($("#leftMoney_" + $(this).val()).val());
+            }
+        });
+        $("#orderPointArea input[type=checkbox]").each(function () {
+            if ($(this).prop('checked')) {
+                needPay = needPay - parseFloat($("#conversionRate_" + $(this).val()).val()) * parseFloat($("#leftMoney_" + $(this).val()).val());
+            }
+        });
+        return needPay;
+    }
+
+    //保存订单
     function saveOrder() {
         var voucherIds = "";
         var rechargeCardIds = "";
-        var cardMoneys = "";
+        var pointIds = "";
         $("#orderVoucherArea input[type=checkbox]").each(function () {
             if ($(this).prop('checked')) {
                 voucherIds = voucherIds + $(this).val() + ",";
@@ -1096,13 +1160,20 @@
             if ($(this).prop('checked')) {
                 if ($(this).val() > 0) {
                     rechargeCardIds = rechargeCardIds + $(this).val() + ",";
-                    cardMoneys = cardMoneys + $("#spendMoney_" + $(this).val()).val() + ",";
+                }
+            }
+        });
+        $("#orderPointArea input[type=checkbox]").each(function () {
+            if ($(this).prop('checked')) {
+                if ($(this).val() > 0) {
+                    pointIds = pointIds + $(this).val() + ",";
                 }
             }
         });
         $("#orderVoucherIds").val(voucherIds);
         $("#orderRechargeCardIds").val(rechargeCardIds);
-        $("#orderCardMoneys").val(cardMoneys);
+        $("#orderPointIds").val(pointIds);
+
         $.ajax({
             url: "/api/orderinfo/userplaceorder",
             dataType: "json",
@@ -1122,6 +1193,53 @@
         });
     }
 
+    //所选金额足够后，将其他未选的checkbox置为disabled状态
+    function disableNotChecked() {
+        $("#orderVoucherArea input[type=checkbox]").each(function () {
+            if (!$(this).prop('checked')) {
+                $(this).attr('disabled', "disabled");
+            }
+        });
+        $("#orderRechargeCardArea input[type=checkbox]").each(function () {
+            if (!$(this).prop('checked')) {
+                $(this).attr('disabled', "disabled");
+            }
+        });
+        $("#orderPointArea input[type=checkbox]").each(function () {
+            if (!$(this).prop('checked')) {
+                $(this).attr('disabled', "disabled");
+            }
+        });
+    }
+
+    //将所有checkbox置为可选状态
+    function removeDisableAttr() {
+        $("#orderVoucherArea input[type=checkbox]").each(function () {
+            $(this).removeAttr('disabled');
+        });
+        $("#orderRechargeCardArea input[type=checkbox]").each(function () {
+            $(this).removeAttr('disabled');
+        });
+        $("#orderPointArea input[type=checkbox]").each(function () {
+            $(this).removeAttr('disabled');
+        });
+    }
+
+    //重置checkbox状态，可选且未选中
+    function initCheckbox() {
+        $("#orderVoucherArea input[type=checkbox]").each(function () {
+            $(this).removeAttr('disabled');
+            $(this).prop("checked", false);
+        });
+        $("#orderRechargeCardArea input[type=checkbox]").each(function () {
+            $(this).removeAttr('disabled');
+            $(this).prop("checked", false);
+        });
+        $("#orderPointArea input[type=checkbox]").each(function () {
+            $(this).removeAttr('disabled');
+            $(this).prop("checked", false);
+        });
+    }
 </script>
 </html>
 

@@ -40,7 +40,7 @@ public class PointExchangeCodeBatchBiz {
     public void addSave(PointExchangeCodeBatchSaveDTO pointExchangeCodeBatchSaveDTO) {
         if(pointExchangeCodeBatchSaveDTO.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)){
             pointExchangeCodeBatchSaveDTO.setAmount(0);
-            pointExchangeCodeBatchSaveDTO.setFaceValue(new BigDecimal(0));
+            pointExchangeCodeBatchSaveDTO.setFaceValue(BigDecimal.ZERO);
         }
         if(pointExchangeCodeBatchSaveDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)){
             pointExchangeCodeBatchSaveDTO.setValidityPeriod(0);

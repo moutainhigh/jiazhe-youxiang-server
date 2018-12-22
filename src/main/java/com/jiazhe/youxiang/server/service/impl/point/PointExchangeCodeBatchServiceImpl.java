@@ -22,11 +22,13 @@ import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeS
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchSaveDTO;
+import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeSaveDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
+import com.jiazhe.youxiang.server.service.ProjectService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeBatchService;
@@ -56,13 +58,20 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
     private PointExchangeCodeBatchPOMapper pointExchangeCodeBatchPOMapper;
     @Autowired
     private PointExchangeCodeService pointExchangeCodeService;
+    @Autowired
+    private ProjectService projectService;
 
     @Override
     public List<PointExchangeCodeBatchDTO> getList(Integer projectId, String name, Paging paging) {
         Integer count = pointExchangeCodeBatchPOManualMapper.count(projectId, name);
         List<PointExchangeCodeBatchPO> poList = pointExchangeCodeBatchPOManualMapper.query(projectId, name, paging.getOffset(), paging.getLimit());
+        List<PointExchangeCodeBatchDTO> dtoList = poList.stream().map(PointExchangeCodeBatchAdapter::po2Dto).collect(Collectors.toList());
+        dtoList.stream().forEach(bean->{
+            ProjectDTO projectDTO = projectService.getById(bean.getProjectId());
+            bean.setProjectDTO(projectDTO);
+        });
         paging.setTotal(count);
-        return poList.stream().map(PointExchangeCodeBatchAdapter::po2Dto).collect(Collectors.toList());
+        return dtoList;
     }
 
     @Override

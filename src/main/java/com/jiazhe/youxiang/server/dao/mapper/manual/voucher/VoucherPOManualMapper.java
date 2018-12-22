@@ -15,11 +15,11 @@ import java.util.Map;
 public interface VoucherPOManualMapper {
 
     /**
-     * 根据cardIds查找代金券
-     * @param cardIds
+     * 根据ids查找代金券
+     * @param ids
      * @return
      */
-    List<VoucherPO> findByIds(List<Integer> cardIds);
+    List<VoucherPO> findByIds(List<Integer> ids);
 
     /**
      * 批量更新代金券信息
@@ -73,4 +73,11 @@ public interface VoucherPOManualMapper {
      * @return
      */
     Integer totalValidVoucher(@Param("customerId")Integer customerId);
+
+    /**
+     * 根据ids查找代金券，并按ids顺序排序
+     * @param ids
+     * @return
+     */
+    List<VoucherPO> findByIdsInOrder(List<Integer> ids);
 }

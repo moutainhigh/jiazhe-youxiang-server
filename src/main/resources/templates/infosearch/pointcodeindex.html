@@ -272,7 +272,7 @@
         var tableOption = {
             url: "/api/pointexchangecode/searchlistpage",// 获取数据的地址
             postData: transformToJson($('#pointExchangeCodeSearchForm').serializeArray()),
-            colNames: ['', '批次名称', '积分卡名称', '兑换码', '密钥', '停用状态', '使用状态', '面额', '过期时间', '操作'],
+            colNames: ['', '批次名称', '积分卡名称', '兑换码', '密钥', '停用状态', '使用状态', '面额','兑换比例', '过期时间', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'batchName', index: 'batchName', width: 100, sortable: false},
@@ -300,6 +300,7 @@
                     }
                 },
                 {name: 'faceValue', index: 'faceValue', width: 30, sortable: false},
+                {name: 'projectResp.pointConversionRate', index: 'projectResp.pointConversionRate', width: 30, sortable: false},
                 {
                     name: 'expiryTime',
                     index: 'expiryTime',

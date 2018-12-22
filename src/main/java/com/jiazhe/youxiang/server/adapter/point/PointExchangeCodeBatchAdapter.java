@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.adapter.point;
 
+import com.jiazhe.youxiang.server.adapter.ProjectAdapter;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
@@ -31,6 +32,8 @@ public class PointExchangeCodeBatchAdapter {
         pointExchangeCodeBatchResp.setStatus(pointExchangeCodeBatchDTO.getStatus());
         pointExchangeCodeBatchResp.setIsVirtual(pointExchangeCodeBatchDTO.getIsVirtual());
         pointExchangeCodeBatchResp.setIsMade(pointExchangeCodeBatchDTO.getIsMade());
+        pointExchangeCodeBatchResp.setProjectId(pointExchangeCodeBatchDTO.getProjectId());
+        pointExchangeCodeBatchResp.setProjectResp(ProjectAdapter.projectDTO2VO(pointExchangeCodeBatchDTO.getProjectDTO()));
         return pointExchangeCodeBatchResp;
     }
 
@@ -48,6 +51,7 @@ public class PointExchangeCodeBatchAdapter {
         pointExchangeCodeBatchDTO.setFaceValue(pointExchangeCodeBatchPO.getFaceValue());
         pointExchangeCodeBatchDTO.setExpiryTime(pointExchangeCodeBatchPO.getExpiryTime());
         pointExchangeCodeBatchDTO.setStatus(pointExchangeCodeBatchPO.getStatus());
+        pointExchangeCodeBatchDTO.setProjectId(pointExchangeCodeBatchPO.getProjectId());
         return pointExchangeCodeBatchDTO;
     }
 

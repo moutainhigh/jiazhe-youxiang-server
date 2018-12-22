@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch;
 
+import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
 import com.jiazhe.youxiang.server.vo.BaseObject;
 
 import java.math.BigDecimal;
@@ -23,6 +24,10 @@ public class PointExchangeCodeBatchDTO extends BaseObject {
     private Integer amount;
 
     private BigDecimal faceValue;
+
+    private Integer projectId;
+
+    private ProjectDTO projectDTO;
 
     private Date expiryTime;
 
@@ -106,5 +111,21 @@ public class PointExchangeCodeBatchDTO extends BaseObject {
 
     public void setIsMade(Byte isMade) {
         this.isMade = isMade;
+    }
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
+    public ProjectDTO getProjectDTO() {
+        return projectDTO;
+    }
+
+    public void setProjectDTO(ProjectDTO projectDTO) {
+        this.projectDTO = projectDTO;
     }
 }

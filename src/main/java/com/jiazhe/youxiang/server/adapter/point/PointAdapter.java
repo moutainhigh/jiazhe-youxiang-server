@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.adapter.point;
 
 import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
+import com.jiazhe.youxiang.server.adapter.ProjectAdapter;
 import com.jiazhe.youxiang.server.domain.po.PointPO;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardPO;
 import com.jiazhe.youxiang.server.dto.point.point.PointDTO;
@@ -40,6 +41,7 @@ public class PointAdapter {
         pointResp.setAddTime(pointDTO.getAddTime().getTime());
         pointResp.setCustomerResp(CustomerAdapter.customerDTO2VO(pointDTO.getCustomerDTO()));
         pointResp.setPointExchangeRecordResp(PointExchangeRecordAdapter.dto2Resp(pointDTO.getPointExchangeRecordDTO()));
+        pointResp.setProjectResp(ProjectAdapter.projectDTO2VO(pointDTO.getProjectDTO()));
         return pointResp;
     }
 
@@ -73,6 +75,7 @@ public class PointAdapter {
         pointResp.setDescription(pointDTO.getDescription());
         pointResp.setCustomerId(pointDTO.getCustomerId());
         pointResp.setProjectId(pointDTO.getProjectId());
+        pointResp.setProjectResp(ProjectAdapter.projectDTO2VO(pointDTO.getProjectDTO()));
         pointResp.setCityCodes(pointDTO.getCityCodes());
         pointResp.setProductIds(pointDTO.getProductIds());
         pointResp.setFaceValue(pointDTO.getFaceValue());

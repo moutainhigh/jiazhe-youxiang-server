@@ -25,6 +25,12 @@ public class AppendOrderReq extends BaseVO{
     private BigDecimal cost;
 
     /**
+     * 使用的积分卡ids
+     */
+    @ApiModelProperty("积分卡ids")
+    private String pointIds;
+
+    /**
      * 使用的代金券ids
      */
     @ApiModelProperty("代金券ids")
@@ -88,5 +94,13 @@ public class AppendOrderReq extends BaseVO{
 
     public void setCost(BigDecimal cost) {
         this.cost = cost;
+    }
+
+    public String getPointIds() {
+        return pointIds;
+    }
+
+    public void setPointIds(String pointIds) {
+        this.pointIds = pointIds;
     }
 }

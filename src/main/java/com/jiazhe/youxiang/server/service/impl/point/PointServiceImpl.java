@@ -18,6 +18,7 @@ import com.jiazhe.youxiang.server.dto.point.point.PointEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangerecord.PointExchangeRecordDTO;
+import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.ProjectService;
@@ -100,20 +101,22 @@ public class PointServiceImpl implements PointService {
 
     @Override
     public List<PointDTO> getList(String mobile, Integer exchangeType, Byte status, Byte expiry, Paging paging) {
-        final CustomerDTO customerDTO = customerService.getByMobile(mobile);
+        final CustomerDTO defaultCustomerDTO = customerService.getByMobile(mobile);
         List<PointPO> pointPOList = pointPOManualMapper.query(mobile,exchangeType,status,expiry,paging.getOffset(),paging.getLimit());
         List<PointDTO> pointDTOList = pointPOList.stream().map(PointAdapter::po2Dto).collect(Collectors.toList());
         Integer count = pointPOManualMapper.count(mobile,exchangeType,status,expiry);
         paging.setTotal(count);
         pointDTOList.stream().forEach(bean -> {
             if(Strings.isBlank(mobile)){
-                CustomerDTO customerDTO1 = customerService.getById(bean.getCustomerId());
-                bean.setCustomerDTO(customerDTO1);
-            }else{
+                CustomerDTO customerDTO = customerService.getById(bean.getCustomerId());
                 bean.setCustomerDTO(customerDTO);
+            }else{
+                bean.setCustomerDTO(defaultCustomerDTO);
             }
             PointExchangeRecordDTO pointExchangeRecordDTO = pointExchangeRecordService.findByPointId(bean.getId());
             bean.setPointExchangeRecordDTO(pointExchangeRecordDTO);
+            ProjectDTO projectDTO = projectService.getById(bean.getProjectId());
+            bean.setProjectDTO(projectDTO);
         });
         return pointDTOList;
     }
@@ -206,6 +209,16 @@ public class PointServiceImpl implements PointService {
     @Override
     public List<PointDTO> findByIds(List<Integer> ids) {
         List<PointPO> poList = pointPOManualMapper.findByIds(ids);
+        List<PointDTO> pointDTOList = poList.stream().map(PointAdapter::po2Dto).collect(Collectors.toList());
+        pointDTOList.stream().forEach(bean->{
+            bean.setProjectDTO(projectService.getById(bean.getProjectId()));
+        });
+        return pointDTOList;
+    }
+
+    @Override
+    public List<PointDTO> findByIdsInOrder(List<Integer> ids) {
+        List<PointPO> poList = pointPOManualMapper.findByIdsInOrder(ids);
         List<PointDTO> pointDTOList = poList.stream().map(PointAdapter::po2Dto).collect(Collectors.toList());
         pointDTOList.stream().forEach(bean->{
             bean.setProjectDTO(projectService.getById(bean.getProjectId()));
