@@ -8,7 +8,7 @@ package com.jiazhe.youxiang.server.common.enums;
 public enum OrderCodeEnum {
 
     ORDER_CAN_NOT_CANCEL(108001, "ORDER_CAN_NOT_CANCEL", "订单不能被取消"),
-    ORDER_CAN_CALCULATE_NEED_PAY(108002, "ORDER_CAN_CALCULATE_NEED_PAY","该订单不支持计算待付金额"),
+    ORDER_CAN_CALCULATE_NEED_PAY(108002, "ORDER_CAN_CALCULATE_NEED_PAY", "该订单不支持计算待付金额"),
     ORDER_CAN_NOT_CHECK(108003, "ORDER_CAN_NOT_CHECK", "订单不是待审核状态，不能被审核"),
     CUSTOMER_NOT_EXIST(108004, "CUSTOMER_NOT_EXIST", "客户不存在"),
     PRODUCT_NOT_AVAILABLE(108005, "PRODUCT_NOT_AVAILABLE", "该商品不可在该城市下下单"),
@@ -34,7 +34,11 @@ public enum OrderCodeEnum {
     ORDER_OVER_PAYMENT(108025, "ORDER_OVER_PAYMENT", "支付金额超过订单金额，支付失败"),
     SERVICE_TIME_ERROR(108026, "SERVICE_TIME_ERROR", "预约服务时间不符合要求"),
     ORDER_NO_GENERATE_ERROR(108027, "ORDER_NO_GENERATE_ERROR", "订单号生成错误"),
-    ;
+    POINT_IS_NOT_YOURS(108028, "POINT_IS_NOT_YOURS", "不能使用他人名下的积分卡"),
+    POINT_CARD_PAY_ERROR(108029, "POINT_CARD_PAY_ERROR", "积分卡支付信息有误"),
+    POINT_NOT_SUPPORT_PRODUCT(108030, "POINT_NOT_SUPPORT_PRODUCT", "积分卡不支持该商品"),
+    POINT_NOT_SUPPORT_CITY(108031, "POINT_NOT_SUPPORT_CITY", "积分卡不支持该城市"),
+    POINT_PAY_DECIMAL_APPEAR(108032, "POINT_PAY_DECIMAL_APPEAR", "积分卡支付出现小数"),;
 
     OrderCodeEnum(Integer code, String type, String message) {
         this.code = code;

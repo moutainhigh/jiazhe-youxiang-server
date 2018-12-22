@@ -44,4 +44,6 @@ public interface PointService {
     void batchUpdate(List<PointDTO> pointDTOList);
 
     List<PointDTO> findByIds(List<Integer> pointIds);
+
+    List<PointDTO> findByIdsInOrder(List<Integer> pointIds);
 }

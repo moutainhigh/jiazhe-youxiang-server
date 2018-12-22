@@ -69,4 +69,11 @@ public interface VoucherService {
      * @return
      */
     Integer totalValidVoucher(Integer customerId);
+
+    /**
+     * 查找代金券，按voucherIds顺序排序
+     * @param voucherIds
+     * @return
+     */
+    List<VoucherDTO> findByIdsInOrder(List<Integer> voucherIds);
 }

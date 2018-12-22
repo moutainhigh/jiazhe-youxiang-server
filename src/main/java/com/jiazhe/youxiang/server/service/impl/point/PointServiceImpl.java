@@ -212,4 +212,14 @@ public class PointServiceImpl implements PointService {
         });
         return pointDTOList;
     }
+
+    @Override
+    public List<PointDTO> findByIdsInOrder(List<Integer> ids) {
+        List<PointPO> poList = pointPOManualMapper.findByIdsInOrder(ids);
+        List<PointDTO> pointDTOList = poList.stream().map(PointAdapter::po2Dto).collect(Collectors.toList());
+        pointDTOList.stream().forEach(bean->{
+            bean.setProjectDTO(projectService.getById(bean.getProjectId()));
+        });
+        return pointDTOList;
+    }
 }
