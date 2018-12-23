@@ -19,7 +19,7 @@
         <result column="expiry_type" property="expiryType" jdbcType="TINYINT"/>
         <result column="status" property="status" jdbcType="TINYINT"/>
         <result column="used" property="used" jdbcType="TINYINT"/>
-        <result column="customer_id" property="customerId" jdbcType="VARCHAR"/>
+        <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
         <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
         <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
         <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
@@ -56,16 +56,6 @@
             where id = #{item.id}
         </foreach>
     </update>
-
-    <select id="findByCodeIds" parameterType="java.util.List" resultType="com.jiazhe.youxiang.server.domain.po.PointExchangeRecordPO">
-        select
-        <include refid="Base_Column_List"/>
-        FROM point_exchange_record
-        where exchange_code_id in
-        <foreach collection="list" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-    </select>
 
     <update id="batchChangeStatus">
         update point_exchange_code

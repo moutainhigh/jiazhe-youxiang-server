@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecode;
 
 import com.jiazhe.youxiang.server.vo.BaseObject;
+import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
@@ -57,6 +58,8 @@ public class RCExchangeCodeResp extends BaseObject {
 
     @ApiModelProperty("是否已经使用，1为已经使用，0为未使用")
     private Byte used;
+
+    private CustomerResp customerResp;
 
     public Integer getId() {
         return id;
@@ -176,5 +179,13 @@ public class RCExchangeCodeResp extends BaseObject {
 
     public void setExpiryType(Byte expiryType) {
         this.expiryType = expiryType;
+    }
+
+    public CustomerResp getCustomerResp() {
+        return customerResp;
+    }
+
+    public void setCustomerResp(CustomerResp customerResp) {
+        this.customerResp = customerResp;
     }
 }

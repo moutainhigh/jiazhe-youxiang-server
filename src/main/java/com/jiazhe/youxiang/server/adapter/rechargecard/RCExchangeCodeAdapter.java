@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.adapter.rechargecard;
 
+import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
@@ -84,6 +85,7 @@ public class RCExchangeCodeAdapter {
         rCExchangeCodeResp.setExpiryTime(dto.getExpiryTime().getTime());
         rCExchangeCodeResp.setStatus(dto.getStatus());
         rCExchangeCodeResp.setUsed(dto.getUsed());
+        rCExchangeCodeResp.setCustomerResp(CustomerAdapter.customerDTO2VO(dto.getCustomerDTO()));
         return rCExchangeCodeResp;
     }
 
@@ -109,6 +111,7 @@ public class RCExchangeCodeAdapter {
         rCExchangeCodeDTO.setExpiryType(rechargeCardExchangeCodePO.getExpiryType());
         rCExchangeCodeDTO.setStatus(rechargeCardExchangeCodePO.getStatus());
         rCExchangeCodeDTO.setUsed(rechargeCardExchangeCodePO.getUsed());
+        rCExchangeCodeDTO.setCustomerId(rechargeCardExchangeCodePO.getCustomerId());
         return rCExchangeCodeDTO;
     }
 
