@@ -19,6 +19,7 @@ public class OrderRefundAdapter {
         orderRefundPO.setOrderId(orderRefundDTO.getOrderId());
         orderRefundPO.setRefundType(orderRefundDTO.getRefundType());
         orderRefundPO.setRechargeCardId(orderRefundDTO.getRechargeCardId());
+        orderRefundPO.setPointId(orderRefundDTO.getPointId());
         orderRefundPO.setVoucherId(orderRefundDTO.getVoucherId());
         orderRefundPO.setRefundMoney(orderRefundDTO.getRefundMoney());
         orderRefundPO.setSerialNumber(orderRefundDTO.getSerialNumber());

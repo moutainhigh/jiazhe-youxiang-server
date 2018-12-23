@@ -20,6 +20,7 @@ public class OrderPaymentAdapter {
         orderPaymentDTO.setOrderCode(orderPaymentPO.getOrderCode());
         orderPaymentDTO.setOrderId(orderPaymentPO.getOrderId());
         orderPaymentDTO.setPayType(orderPaymentPO.getPayType());
+        orderPaymentDTO.setPointId(orderPaymentPO.getPointId());
         orderPaymentDTO.setRechargeCardId(orderPaymentPO.getRechargeCardId());
         orderPaymentDTO.setVoucherId(orderPaymentPO.getVoucherId());
         orderPaymentDTO.setPayMoney(orderPaymentPO.getPayMoney());
@@ -36,6 +37,7 @@ public class OrderPaymentAdapter {
         orderPaymentResp.setOrderCode(orderPaymentDTO.getOrderCode());
         orderPaymentResp.setOrderId(orderPaymentDTO.getOrderId());
         orderPaymentResp.setPayType(orderPaymentDTO.getPayType());
+        orderPaymentResp.setPointId(orderPaymentDTO.getPointId());
         orderPaymentResp.setRechargeCardId(orderPaymentDTO.getRechargeCardId());
         orderPaymentResp.setVoucherId(orderPaymentDTO.getVoucherId());
         orderPaymentResp.setPayMoney(orderPaymentDTO.getPayMoney());

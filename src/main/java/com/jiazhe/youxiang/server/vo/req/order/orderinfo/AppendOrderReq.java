@@ -42,12 +42,6 @@ public class AppendOrderReq extends BaseVO{
     @ApiModelProperty("充值卡ids")
     private String rechargeCardIds;
 
-    /**
-     * 每张充值卡使用的金额
-     */
-    @ApiModelProperty("充值卡金额")
-    private String cardMoneys;
-
     public Integer getOrderId() {
         return orderId;
     }
@@ -78,14 +72,6 @@ public class AppendOrderReq extends BaseVO{
 
     public void setRechargeCardIds(String rechargeCardIds) {
         this.rechargeCardIds = rechargeCardIds;
-    }
-
-    public String getCardMoneys() {
-        return cardMoneys;
-    }
-
-    public void setCardMoneys(String cardMoneys) {
-        this.cardMoneys = cardMoneys;
     }
 
     public BigDecimal getCost() {

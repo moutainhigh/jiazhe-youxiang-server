@@ -36,10 +36,6 @@ public class AppendOrderDTO extends BaseObject {
      */
     private String rechargeCardIds;
 
-    /**
-     * 每张充值卡使用的金额
-     */
-    private String cardMoneys;
 
     public Integer getOrderId() {
         return orderId;
@@ -79,14 +75,6 @@ public class AppendOrderDTO extends BaseObject {
 
     public void setRechargeCardIds(String rechargeCardIds) {
         this.rechargeCardIds = rechargeCardIds;
-    }
-
-    public String getCardMoneys() {
-        return cardMoneys;
-    }
-
-    public void setCardMoneys(String cardMoneys) {
-        this.cardMoneys = cardMoneys;
     }
 
     public BigDecimal getCost() {
