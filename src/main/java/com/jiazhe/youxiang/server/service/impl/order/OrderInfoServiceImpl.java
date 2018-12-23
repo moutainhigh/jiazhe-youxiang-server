@@ -343,10 +343,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                         thisPointPay = bean.getBalance();
                     } else {
                         //当【需支付的金额/兑换比例】不为整数时，则抛异常
-                        if (needPay[0].divide(conversionRate).setScale(0, RoundingMode.HALF_UP).compareTo(needPay[0].subtract(conversionRate)) != 0) {
+                        if (needPay[0].divide(conversionRate).setScale(0, RoundingMode.HALF_UP).compareTo(needPay[0].divide(conversionRate)) != 0) {
                             throw new OrderException(OrderCodeEnum.POINT_PAY_DECIMAL_APPEAR);
                         }
-                        thisPointPay = needPay[0].subtract(conversionRate);
+                        thisPointPay = needPay[0].divide(conversionRate);
                     }
                     bean.setBalance(bean.getBalance().subtract(thisPointPay));
                     pointPayMoney[0] = pointPayMoney[0].add(thisPointPay.multiply(conversionRate));
@@ -526,10 +526,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                         thisPointPay = bean.getBalance();
                     } else {
                         //当【需支付的金额/兑换比例】不为整数时，则抛异常
-                        if (needPay[0].divide(conversionRate).setScale(0, RoundingMode.HALF_UP).compareTo(needPay[0].subtract(conversionRate)) != 0) {
+                        if (needPay[0].divide(conversionRate).setScale(0, RoundingMode.HALF_UP).compareTo(needPay[0].divide(conversionRate)) != 0) {
                             throw new OrderException(OrderCodeEnum.POINT_PAY_DECIMAL_APPEAR);
                         }
-                        thisPointPay = needPay[0].subtract(conversionRate);
+                        thisPointPay = needPay[0].divide(conversionRate);
                     }
                     bean.setBalance(bean.getBalance().subtract(thisPointPay));
                     pointPayMoney[0] = pointPayMoney[0].add(thisPointPay.multiply(conversionRate));
