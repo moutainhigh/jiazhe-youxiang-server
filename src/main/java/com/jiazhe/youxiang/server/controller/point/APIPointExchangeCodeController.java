@@ -142,6 +142,7 @@ public class APIPointExchangeCodeController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "客户用兑换码进行兑换", level = LogLevelEnum.LEVEL_2)
     public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) {
         CommonValidator.validateId(req.getId());
+        CommonValidator.validateNull(req.getKeyt(),new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
         pointExchangeCodeBiz.customerSelfCharge(req.getId(), req.getKeyt());
         return ResponseFactory.buildSuccess();
     }
@@ -152,6 +153,7 @@ public class APIPointExchangeCodeController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "后台用兑换码进行兑换", level = LogLevelEnum.LEVEL_2)
     public Object backstageCodeCharge(@ModelAttribute CodeChargeReq req) {
         CommonValidator.validateId(req.getId());
+        CommonValidator.validateNull(req.getKeyt(),new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
         pointExchangeCodeBiz.backstageCodeCharge(req.getId(), req.getKeyt());
         return ResponseFactory.buildSuccess();
     }

@@ -101,7 +101,7 @@ public class APIPointExchangeCodeBatchController extends BaseController {
             CommonValidator.validateNull(req.getAmount(), new PointException(PointCodeEnum.NOT_VIRTUAL_NEED_AMOUNT));
             CommonValidator.validateNull(req.getFaceValue(), new PointException(PointCodeEnum.NOT_VIRTUAL_NEED_FACE_VALUE));
         }
-        //批次过期时间
+        //批次过期时间不为空
         if (req.getExpiryTime() == 0) {
             throw new PointException(PointCodeEnum.BATCH_EXPIRY_TIME_IS_NULL);
         }
