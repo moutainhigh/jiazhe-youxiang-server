@@ -273,6 +273,7 @@
         var tableOption = {
             url: "/api/rcexchangecode/searchlistpage",// 获取数据的地址
             postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
+            datatype:'local',//首次不加载数据
             colNames: ['', '批次名称', '充值卡名称', '兑换码', '密钥', '停用状态', '使用状态','客户电话', '面额', '过期时间', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
@@ -322,6 +323,7 @@
         jQuery(grid_selector).setGridParam({
             url: "/api/rcexchangecode/searchlistpage",
             postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
+            datatype:'json',
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
     }

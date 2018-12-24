@@ -273,6 +273,7 @@
         var tableOption = {
             url: "/api/voucherexchangecode/searchlistpage",
             postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
+            datatype:'local',
             colNames: ['', '批次名称', '代金券名称', '兑换码', '密钥', '停用状态', '使用状态', '客户电话','兑换商品数量', '过期时间', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
@@ -324,6 +325,7 @@
         jQuery(grid_selector).setGridParam({
             url: "/api/voucherexchangecode/searchlistpage",
             postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
+            datatype:'json',
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
     }
