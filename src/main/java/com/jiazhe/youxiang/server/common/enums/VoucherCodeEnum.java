@@ -26,6 +26,8 @@ public enum VoucherCodeEnum {
     EXCHANGE_CODE_HAS_NO_PAYMENT(107018, "EXCHANGE_CODE_HAS_NO_PAYMENT", "该兑换码没有消费记录"),
     VOUCHER_HAS_NO_PAYMENT(106019, "VOUCHER_HAS_NO_PAYMENT", "该代金券还没有消费记录"),
     CUSTOMER_NOT_EXIST(106020, "CUSTOMER_NOT_EXIST", "该客户不存在"),
+    CITY_IS_NULL(116021, "CITY_IS_NULL", "适用城市不能为空"),
+    PRODUCT_IS_NULL(116022, "PRODUCT_IS_NULL", "适用商品不能为空"),
     ;
 
     VoucherCodeEnum(Integer code, String type, String message) {

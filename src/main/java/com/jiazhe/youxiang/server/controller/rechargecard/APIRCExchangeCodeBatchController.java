@@ -90,6 +90,8 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(),new RechargeCardException(RechargeCardCodeEnum.BATCH_NAME_IS_NULL));
         CommonValidator.validateNull(req.getRechargeCardName(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));
+        CommonValidator.validateNull(req.getCityCodes(), new RechargeCardException(RechargeCardCodeEnum.CITY_IS_NULL));
+        CommonValidator.validateNull(req.getProductIds(), new RechargeCardException(RechargeCardCodeEnum.PRODUCT_IS_NULL));
         if (!req.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
            CommonValidator.validateNull(req.getAmount(),new RechargeCardException(RechargeCardCodeEnum.NOT_VIRTUAL_NEED_AMOUNT));
            CommonValidator.validateNull(req.getFaceValue(),new RechargeCardException(RechargeCardCodeEnum.NOT_VIRTUAL_NEED_FACE_VALUE));

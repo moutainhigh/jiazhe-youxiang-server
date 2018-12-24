@@ -202,9 +202,9 @@
                                                            for="saveDescription">描述信息：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveDescription" name="batchDescription"
-                                                                   class="form-control"
-                                                                   type="text" style="height:30px"/>
+                                                            <textarea id="saveDescription" name="batchDescription"
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -418,6 +418,7 @@
                     $("#codeSaveForm #saveCityCodes").val(result.cityCodes);
                     $("#codeSaveForm #saveProductIds").val(result.productIds);
                     $("#codeSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
+                    $('#saveExpiryTime').datepicker('update');
                     $("#codeSaveForm #saveExpiryTime").next().next().val(result.expiryTime);
                     if (result.expiryType == 0) {
                         $("#codeSaveForm #saveDeadLineRadio").click();
@@ -426,6 +427,7 @@
                     }
                     $("#codeSaveForm #saveValidityPeriod").val(result.validityPeriod);
                     $("#codeSaveForm #saveRechargeCardExpiryTime").val(dateFormat(result.rechargeCardExpiryTime));
+                    $('#saveRechargeCardExpiryTime').datepicker('update');
                     $("#codeSaveForm #saveRechargeCardExpiryTime").next().next().val(result.rechargeCardExpiryTime);
                     $("#codeSaveForm #saveDescription").val(result.batchDescription);
                     $("#modal-form").modal('show');
