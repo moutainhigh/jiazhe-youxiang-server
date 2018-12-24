@@ -419,6 +419,7 @@
                     $("#codeSaveForm #saveCityCodes").val(result.cityCodes);
                     $("#codeSaveForm #saveProductIds").val(result.productIds);
                     $("#codeSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
+                    $('#saveExpiryTime').datepicker('update');
                     $("#codeSaveForm #saveExpiryTime").next().next().val(result.expiryTime);
                     if (result.expiryType == 0) {
                         $("#codeSaveForm #saveDeadLineRadio").click();
@@ -427,6 +428,7 @@
                     }
                     $("#codeSaveForm #saveValidityPeriod").val(result.validityPeriod);
                     $("#codeSaveForm #savePointExpiryTime").val(dateFormat(result.pointExpiryTime));
+                    $('#savePointExpiryTime').datepicker('update');
                     $("#codeSaveForm #savePointExpiryTime").next().next().val(result.pointExpiryTime);
                     $("#codeSaveForm #saveDescription").val(result.batchDescription);
                     $("#modal-form").modal('show');

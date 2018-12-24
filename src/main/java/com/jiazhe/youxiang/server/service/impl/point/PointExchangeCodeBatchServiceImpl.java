@@ -161,8 +161,14 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
         if (null == batchPO) {
             throw new PointException(PointCodeEnum.BATCH_NOT_EXISTED);
         }
-        List<PointExchangeCodeDTO> pointExchangeCodeDTOList = pointExchangeCodeService.getByBatchId(id);
+        if (batchPO.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
+            throw new PointException(PointCodeEnum.VIRTUAL_BATCH_CANNOT_GENERATE);
+        }
+        if (batchPO.getIsMade().equals(CommonConstant.EXCHANGE_CODE_HAS_MADE)) {
+            throw new PointException(PointCodeEnum.CODE_GENERATED);
+        }
         //实际去查一下，批次下是否有兑换码
+        List<PointExchangeCodeDTO> pointExchangeCodeDTOList = pointExchangeCodeService.getByBatchId(id);
         if (!pointExchangeCodeDTOList.isEmpty()) {
             throw new RechargeCardException(RechargeCardCodeEnum.CODE_GENERATED);
         }
