@@ -9,10 +9,13 @@ import com.google.common.collect.Maps;
 import com.jiazhe.youxiang.base.util.IpAdrressUtil;
 import com.jiazhe.youxiang.server.biz.SysLogBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.logging.log4j.util.Strings;
+import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -119,8 +122,27 @@ public class ControllerAdvice {
         if (method != null) {
             CustomLog customLog = method.getAnnotation(CustomLog.class);
             if (customLog != null && customLog.level().getId() >= logLevel) {
+
+                Integer operatorId;
+                String operatorName;
+                if (SecurityUtils.getSubject().getPrincipal() == null) {
+                    operatorId = 0;
+                    operatorName = "未登录";
+                } else if (SecurityUtils.getSubject().getPrincipal() instanceof SysUserDTO) {
+                    SysUserDTO userDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+                    operatorId = userDTO.getId();
+                    operatorName = userDTO.getLoginName();
+                } else if (SecurityUtils.getSubject().getPrincipal() instanceof CustomerDTO) {
+                    CustomerDTO customerDTO = (CustomerDTO) SecurityUtils.getSubject().getPrincipal();
+                    operatorId = customerDTO.getId();
+                    operatorName = customerDTO.getMobile();
+                } else {
+                    operatorId = 0;
+                    operatorName = "未知";
+                }
+
                 //异步插入数据库日志记录
-                SysLogBiz.insert(customLog.moduleName().getName(), customLog.operate(), customLog.level().getId(), IpAdrressUtil.getIpAdrress(request), detail);
+                SysLogBiz.insert(customLog.moduleName().getName(), customLog.operate(), customLog.level().getId(), operatorId, operatorName, IpAdrressUtil.getIpAdrress(request), detail);
             }
         }
     }

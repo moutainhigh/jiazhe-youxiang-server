@@ -35,8 +35,6 @@ public class SysLogBiz {
 
     private static SysLogService sysLogService;
 
-    private static SysUserBiz sysUserBiz;
-
 
     @Autowired
     public void setSysLogService(SysLogService sysLogService) {
@@ -52,7 +50,7 @@ public class SysLogBiz {
      * @param ip
      * @param detail
      */
-    public static void insert(String moduleName, String operate, int level, String ip, String detail) {
+    public static void insert(String moduleName, String operate, int level, Integer operatorId,String operatorName,String ip, String detail) {
         executorService.execute(() -> {
             try {
                 if (sysLogService != null) {
@@ -60,22 +58,8 @@ public class SysLogBiz {
                     sysLogDTO.setModuleName(moduleName);
                     sysLogDTO.setOperate(operate);
                     sysLogDTO.setLevel(level);
-                    if (SecurityUtils.getSubject() == null || SecurityUtils.getSubject().getSession() == null || SecurityUtils.getSubject().getSession() == null) {
-                        sysLogDTO.setOperatorId(0);
-                        sysLogDTO.setOperatorName("未登录");
-                    } else if (SecurityUtils.getSubject().getPrincipal() instanceof SysUserDTO) {
-                        Integer userId = Integer.valueOf(SecurityUtils.getSubject().getSession().getAttribute("id").toString());
-                        SysUserDTO userDTO = sysUserBiz.getById(userId);
-                        sysLogDTO.setOperatorId(userDTO.getId());
-                        sysLogDTO.setOperatorName(userDTO.getLoginName());
-                    } else if (SecurityUtils.getSubject().getPrincipal() instanceof CustomerDTO) {
-                        CustomerDTO customerDTO = (CustomerDTO) SecurityUtils.getSubject().getPrincipal();
-                        sysLogDTO.setOperatorId(customerDTO.getId());
-                        sysLogDTO.setOperatorName(customerDTO.getMobile());
-                    } else {
-                        sysLogDTO.setOperatorId(0);
-                        sysLogDTO.setOperatorName("未知");
-                    }
+                    sysLogDTO.setOperatorId(operatorId);
+                    sysLogDTO.setOperatorName(operatorName);
                     sysLogDTO.setIp(ip);
                     sysLogDTO.setDetail(detail);
                     sysLogService.insert(sysLogDTO);
@@ -83,7 +67,6 @@ public class SysLogBiz {
                     LOGGER.error("spring init bean sysLogService fail,please check configs");
                 }
             } catch (Exception e) {
-                LOGGER.error("插入日志时发生错误：message:{}", e.getMessage());
                 e.printStackTrace();
             }
         });
