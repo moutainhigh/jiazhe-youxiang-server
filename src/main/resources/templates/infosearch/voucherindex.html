@@ -348,7 +348,7 @@
 
     //启用代金券
     function startUsing(id) {
-        confirm("确定启用该充值卡吗？", function (result) {
+        confirm("确定启用该代金券吗？", function (result) {
             if (result) {
                 $.ajax({
                     url: "/api/voucher/startusing",
@@ -367,7 +367,7 @@
 
     //停用代金券
     function stopUsing(id) {
-        confirm("确定停用该充值卡吗？", function (result) {
+        confirm("确定停用该代金券吗？", function (result) {
             if (result) {
                 $.ajax({
                     url: "/api/voucher/stopusing",

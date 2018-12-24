@@ -92,7 +92,7 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">充值卡名称：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">代金券名称：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
                                                             <input id="saveVoucherName" name="voucherName"
@@ -132,7 +132,7 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">充值卡过期类型：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">代金券过期类型：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
                                                             <label class="radio-inline ">
@@ -152,7 +152,7 @@
                                                 <div class="space-2 saveDeadLine"></div>
                                                 <div class="form-group saveDeadLine">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveVoucherExpiryTime">充值卡到期时间：</label>
+                                                           for="saveVoucherExpiryTime">代金券到期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker"
@@ -349,7 +349,7 @@
 
     //启用兑换码
     function startUsing(id) {
-        confirm("确定启用该充值卡吗？", function (result) {
+        confirm("确定启用该兑换码吗？", function (result) {
             if (result) {
                 $.ajax({
                     url: "/api/voucherexchangecode/startusing",
@@ -368,7 +368,7 @@
 
     //停用兑换码
     function stopUsing(id) {
-        confirm("确定停用该充值卡吗？", function (result) {
+        confirm("确定停用该兑换码吗？", function (result) {
             if (result) {
                 $.ajax({
                     url: "/api/voucherexchangecode/stopusing",
