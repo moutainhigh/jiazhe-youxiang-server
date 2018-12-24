@@ -65,4 +65,10 @@ public interface SysUserService {
      */
     void changePassword(Integer id, String newPassword);
 
+    /**
+     * 根据id查找员工
+     * @param id
+     * @return
+     */
+    SysUserDTO getById(Integer id);
 }

@@ -82,4 +82,43 @@
             AND is_deleted = 0
         </where>
     </select>
+
+    <select id="queryIds" resultType="java.lang.Integer">
+        select
+        id
+        from product
+        <where>
+            <if test="productCategoryId != null and productCategoryId !=''">
+                AND product_category_id = #{productCategoryId}
+            </if>
+            <if test="name != null and name !=''">
+                AND name = #{name}
+            </if>
+            <if test="productType != null and productType >=0">
+                AND product_type = #{productType}
+            </if>
+            <if test="status != null and status >=0">
+                AND status = #{status}
+            </if>
+            AND is_deleted = 0
+        </where>
+    </select>
+
+    <select id="queryByIds" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from product
+        <where>
+            <if test="productIds != null and productIds.size() >0 ">
+                AND id in
+                <foreach collection="productIds" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            AND is_deleted = 0
+        </where>
+        order by priority desc, add_time desc
+        limit #{offset},#{limit}
+    </select>
+
 </mapper>
