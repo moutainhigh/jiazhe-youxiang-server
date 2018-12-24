@@ -5,32 +5,27 @@ import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.AuditRecordCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
-import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.AuditRecordException;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
-import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.dao.mapper.AuditRecordPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.CustomerPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.AuditRecordPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.*;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
-import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
+import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.AuditRecordService;
 import com.jiazhe.youxiang.server.service.CustomerService;
-import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeBatchService;
-import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeRecordService;
-import com.jiazhe.youxiang.server.service.rechargecard.RCService;
+import com.jiazhe.youxiang.server.service.point.PointExchangeCodeBatchService;
+import com.jiazhe.youxiang.server.service.point.PointExchangeRecordService;
+import com.jiazhe.youxiang.server.service.point.PointService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.security.auth.Subject;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -49,15 +44,15 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     @Autowired
     private AuditRecordPOManualMapper auditRecordPOManualMapper;
     @Autowired
-    private RCExchangeCodeBatchService rcExchangeCodeBatchService;
+    private PointExchangeCodeBatchService pointExchangeCodeBatchService;
     @Autowired
     private CustomerService customerService;
     @Autowired
     private CustomerPOMapper customerPOMapper;
     @Autowired
-    private RCExchangeRecordService rcExchangeRecordService;
+    private PointExchangeRecordService pointExchangeRecordService;
     @Autowired
-    private RCService rcService;
+    private PointService pointService;
 
     @Override
     public List<AuditRecordDTO> getList(Integer submitterId, Byte status, Paging paging) {
@@ -116,49 +111,49 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         } else {
             customerId = customerDTO.getId();
         }
-        RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchService.getById(batchId);
-        RechargeCardPO rechargeCardPO = new RechargeCardPO();
+        PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO = pointExchangeCodeBatchService.getById(batchId);
+        PointPO pointPO = new PointPO();
         //直接指定过期时间
-        if (rcExchangeCodeBatchEditDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
-            rechargeCardPO.setExpiryTime(rcExchangeCodeBatchEditDTO.getRechargeCardExpiryTime());
+        if (pointExchangeCodeBatchEditDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
+            pointPO.setExpiryTime(pointExchangeCodeBatchEditDTO.getPointExpiryTime());
         } else {
-            rechargeCardPO.setExpiryTime(new Date(System.currentTimeMillis() + rcExchangeCodeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY));
+            pointPO.setExpiryTime(new Date(System.currentTimeMillis() + pointExchangeCodeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY));
         }
-        rechargeCardPO.setDescription(rcExchangeCodeBatchEditDTO.getDescription());
-        rechargeCardPO.setFaceValue(auditRecordPO.getExchangeMoney().multiply(CommonConstant.exchangeRate));
-        rechargeCardPO.setBalance(auditRecordPO.getExchangeMoney().multiply(CommonConstant.exchangeRate));
+        pointPO.setDescription(pointExchangeCodeBatchEditDTO.getDescription());
+        pointPO.setFaceValue(auditRecordPO.getExchangeMoney());
+        pointPO.setBalance(auditRecordPO.getExchangeMoney());
         //暂时置为0，等生成了兑换记录再修改
-        rechargeCardPO.setExchangeRecordId(0);
-        rechargeCardPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
-        rechargeCardPO.setProjectId(rcExchangeCodeBatchEditDTO.getProjectId());
-        rechargeCardPO.setName(rcExchangeCodeBatchEditDTO.getRechargeCardName());
-        rechargeCardPO.setCustomerId(customerId);
-        rechargeCardPO.setCityCodes(rcExchangeCodeBatchEditDTO.getCityCodes());
-        rechargeCardPO.setProductIds(rcExchangeCodeBatchEditDTO.getProductIds());
-        rcService.insert(rechargeCardPO);
+        pointPO.setExchangeRecordId(0);
+        pointPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
+        pointPO.setProjectId(pointExchangeCodeBatchEditDTO.getProjectId());
+        pointPO.setName(pointExchangeCodeBatchEditDTO.getPointName());
+        pointPO.setCustomerId(customerId);
+        pointPO.setCityCodes(pointExchangeCodeBatchEditDTO.getCityCodes());
+        pointPO.setProductIds(pointExchangeCodeBatchEditDTO.getProductIds());
+        pointService.insert(pointPO);
         //插入兑换记录信息
         SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
         if (null == sysUserDTO) {
             throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
-        RechargeCardExchangeRecordPO rechargeCardRecordPO = new RechargeCardExchangeRecordPO();
-        rechargeCardRecordPO.setOperatorId(sysUserDTO.getId());
-        rechargeCardRecordPO.setOperatorName(sysUserDTO.getLoginName());
-        rechargeCardRecordPO.setExchangeType(CommonConstant.EXCHANGETYPE_AUDITRECORD_PASS);
-        rechargeCardRecordPO.setRechargeCardId(rechargeCardPO.getId());
-        rechargeCardRecordPO.setExtInfo("");
-        rechargeCardRecordPO.setIsDeleted(Byte.valueOf("0"));
-        rechargeCardRecordPO.setAddTime(new Date());
-        rechargeCardRecordPO.setModTime(new Date());
-        rcExchangeRecordService.insert(rechargeCardRecordPO);
+        PointExchangeRecordPO pointRecordPO = new PointExchangeRecordPO();
+        pointRecordPO.setOperatorId(sysUserDTO.getId());
+        pointRecordPO.setOperatorName(sysUserDTO.getLoginName());
+        pointRecordPO.setExchangeType(CommonConstant.EXCHANGETYPE_AUDITRECORD_PASS);
+        pointRecordPO.setPointId(pointPO.getId());
+        pointRecordPO.setExtInfo("");
+        pointRecordPO.setIsDeleted(Byte.valueOf("0"));
+        pointRecordPO.setAddTime(new Date());
+        pointRecordPO.setModTime(new Date());
+        pointExchangeRecordService.insert(pointRecordPO);
         //修改充值卡对应的兑换记录id
-        rechargeCardPO.setExchangeRecordId(rechargeCardRecordPO.getId());
-        rcService.update(rechargeCardPO);
+        pointPO.setExchangeRecordId(pointRecordPO.getId());
+        pointService.update(pointPO);
         auditRecordPO.setVersion(version + 1);
         auditRecordPO.setAuditorId(sysUserDTO.getId());
         auditRecordPO.setAuditorName(sysUserDTO.getDisplayName());
         auditRecordPO.setAuditTime(new Date());
-        auditRecordPO.setRechargeCardId(rechargeCardPO.getId());
+        auditRecordPO.setPointId(pointPO.getId());
         auditRecordPO.setStatus(Byte.valueOf("2"));
         auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
     }
@@ -166,7 +161,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     @Override
     public void addSave(String customerName, String customerMobile, BigDecimal exchangeMoney, String imgUrls) {
         AuditRecordPO auditRecordPO = new AuditRecordPO();
-        auditRecordPO.setRechargeCardId(0);
+        auditRecordPO.setPointId(0);
         auditRecordPO.setCustomerName(customerName);
         auditRecordPO.setCustomerMobile(customerMobile);
         auditRecordPO.setExchangeMoney(exchangeMoney);

@@ -16,7 +16,7 @@ public class AuditRecordAdapter {
         }
         AuditRecordResp auditRecordResp = new AuditRecordResp();
         auditRecordResp.setId(auditRecordDTO.getId());
-        auditRecordResp.setRechargeCardId(auditRecordDTO.getRechargeCardId());
+        auditRecordResp.setPointId(auditRecordDTO.getPointId());
         auditRecordResp.setCustomerName(auditRecordDTO.getCustomerName());
         auditRecordResp.setCustomerMobile(auditRecordDTO.getCustomerMobile());
         auditRecordResp.setExchangeMoney(auditRecordDTO.getExchangeMoney());
@@ -41,7 +41,7 @@ public class AuditRecordAdapter {
         }
         AuditRecordDTO auditRecordDTO = new AuditRecordDTO();
         auditRecordDTO.setId(auditRecordPO.getId());
-        auditRecordDTO.setRechargeCardId(auditRecordPO.getRechargeCardId());
+        auditRecordDTO.setPointId(auditRecordPO.getPointId());
         auditRecordDTO.setCustomerName(auditRecordPO.getCustomerName());
         auditRecordDTO.setCustomerMobile(auditRecordPO.getCustomerMobile());
         auditRecordDTO.setExchangeMoney(auditRecordPO.getExchangeMoney());

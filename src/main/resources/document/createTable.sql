@@ -465,7 +465,7 @@ CREATE TABLE `order_refund` (
 drop table if exists `audit_record`;
 CREATE TABLE `audit_record` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
-    `recharge_card_id` INT(10) UNSIGNED NOT NULL COMMENT '充值卡id',
+    `point_id` INT(10) UNSIGNED NOT NULL COMMENT '积分卡id',
     `customer_name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '客户姓名',
     `customer_mobile` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '客户手机号',
     `exchange_money` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '兑换金额',
