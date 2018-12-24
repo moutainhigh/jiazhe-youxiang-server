@@ -107,12 +107,14 @@ public class ProductServiceImpl implements ProductService {
         ProductCategoryDTO productCategory = productCategoryService.getCategoryById(productCategoryId);
         //首先判断商品分类是否上架
         if (productCategory != null && productCategory.getStatus().equals(ProductBiz.CODE_PRODUCT_SELL)) {
-            Integer count = productPOManualMapper.count(productCategoryId, name, productType, ProductBiz.CODE_PRODUCT_SELL, null);
-            List<ProductPO> productPOList = productPOManualMapper.query(productCategoryId, name, productType, ProductBiz.CODE_PRODUCT_SELL, null, paging.getOffset(), paging.getLimit());
-            paging.setTotal(count);
-            if (CollectionUtils.isNotEmpty(productPOList)) {
+            //先找到所有符合条件的商品ID
+            List<Integer> productIds = productPOManualMapper.queryIds(productCategoryId, name, productType, ProductBiz.CODE_PRODUCT_SELL);
+            if (CollectionUtils.isNotEmpty(productIds)) {
                 //获得该城市所有的在售商品的价格列表
-                Map<Integer, List<ProductPriceDTO>> productPriceMap = productPriceService.getPriceMap(productPOList.stream().map(item -> item.getId()).collect(Collectors.toList()), Lists.newArrayList(cityCode), ProductBiz.CODE_PRODUCT_SELL);
+                Map<Integer, List<ProductPriceDTO>> productPriceMap = productPriceService.getPriceMap(productIds, Lists.newArrayList(cityCode), ProductBiz.CODE_PRODUCT_SELL);
+                //total值是所有在售且该城市价格生效的商品
+                paging.setTotal(productPriceMap.keySet().size());
+                List<ProductPO> productPOList = productPOManualMapper.queryByIds(productPriceMap.keySet().stream().collect(Collectors.toList()), paging.getOffset(), paging.getLimit());
                 if (MapUtils.isNotEmpty(productPriceMap)) {
                     result = productPOList.stream().map(ProductAdapter::productPO2DTO).collect(Collectors.toList());
                     result.forEach(item -> {
