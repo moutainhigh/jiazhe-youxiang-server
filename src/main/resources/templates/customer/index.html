@@ -125,9 +125,9 @@
                                                     <label class="col-sm-4 control-label no-padding-right">备注：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="inputRemark" name="inputRemark"
-                                                                   class="form-control"
-                                                                   type="text" style="height:30px"/>
+                                                            <textarea id="inputRemark" name="inputRemark"
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -281,9 +281,9 @@
                                                     <label class="col-sm-3 control-label no-padding-right">客户留言：</label>
                                                     <div class="col-sm-9">
                                                         <div class="pos-rel">
-                                                            <input id="orderCustomerRemark" class="form-control"
-                                                                   name="customerRemark"
-                                                                   type="text" style="height:30px"/>
+                                                            <textarea id="orderCustomerRemark" name="customerRemark"
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -333,9 +333,9 @@
                                                     <label class="col-sm-3 control-label no-padding-right">订单备注：</label>
                                                     <div class="col-sm-9">
                                                         <div class="pos-rel">
-                                                            <input id="orderComments" class="form-control"
-                                                                   name="comments"
-                                                                   type="text" style="height:30px"/>
+                                                            <textarea id="orderComments" name="comments"
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -759,6 +759,7 @@
     function openDirectCharge(id) {
         initModel()
         $("#inputOperationType").val(5);//充值卡直接充值
+        $("#selectBatch").empty();
         $("#modal-title").html("充值卡直接充值");
         $('#inputChargeMoney').removeAttr('disabled');
         $('#divMobile').removeAttr('hidden');
@@ -784,6 +785,7 @@
         initModel()
         $("#inputOperationType").val(7);//积分直接充值
         $("#modal-title").html("积分直接充值");
+        $("#selectBatch").empty();
         $('#inputChargeMoney').removeAttr('disabled');
         $('#divMobile').removeAttr('hidden');
         $('#divProject').removeAttr('hidden');
@@ -846,18 +848,18 @@
     }
 
     function refreshBatch() {
+        $("#selectBatch").empty();
         var projectId = $("#selectProject").val();
         if (projectId == "") {
             return;
         }
-        url = "";
+        var url = "";
         if ($("#inputOperationType").val() == "5") {
             url = "/api/rcexchangecodebatch/findvirtualbyprojectid";
         }
         if ($("#inputOperationType").val() == "7") {
             url = "/api/pointexchangecodebatch/findvirtualbyprojectid";
         }
-        $("#selectBatch").empty();
         $.ajax({
             url: url,
             dataType: "json",
