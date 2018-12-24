@@ -150,4 +150,13 @@ public class OrderInfoBiz {
     public List<OrderInfoDTO> getOrderByPointId(Integer id) {
         return null;
     }
+
+    /**
+     * 微信付款成功通知
+     * @param orderNo
+     * @param wxPay
+     */
+    public void wxNotify(String orderNo, BigDecimal wxPay) {
+        orderInfoService.wxNotify(orderNo,wxPay);
+    }
 }

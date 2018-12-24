@@ -38,7 +38,10 @@ public enum OrderCodeEnum {
     POINT_CARD_PAY_ERROR(108029, "POINT_CARD_PAY_ERROR", "积分卡支付信息有误"),
     POINT_NOT_SUPPORT_PRODUCT(108030, "POINT_NOT_SUPPORT_PRODUCT", "积分卡不支持该商品"),
     POINT_NOT_SUPPORT_CITY(108031, "POINT_NOT_SUPPORT_CITY", "积分卡不支持该城市"),
-    POINT_PAY_DECIMAL_APPEAR(108032, "POINT_PAY_DECIMAL_APPEAR", "积分卡支付出现小数"),;
+    POINT_PAY_DECIMAL_APPEAR(108032, "POINT_PAY_DECIMAL_APPEAR", "积分卡支付出现小数"),
+    ORDER_NOT_UNPAID(108033, "ORDER_NOT_UNPAID", "订单不是待支付状态，不能用微信支付"),
+    WECHAT_PAY_FEE_ERROR(108034, "WECHAT_PAY_FEE_ERROR", "微信支付金额和订单不一致"),
+    ;
 
     OrderCodeEnum(Integer code, String type, String message) {
         this.code = code;

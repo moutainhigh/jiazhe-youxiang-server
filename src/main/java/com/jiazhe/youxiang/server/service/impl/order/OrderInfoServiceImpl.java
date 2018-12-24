@@ -661,6 +661,41 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         return OrderInfoAdapter.PO2DTO(poList.get(0));
     }
 
+    @Override
+    public void wxNotify(String orderNo, BigDecimal wxPay) {
+        OrderInfoDTO orderInfoDTO = getByOrderNo(orderNo);
+        OrderInfoPO orderInfoPO = new OrderInfoPO();
+        orderInfoPO.setId(orderInfoDTO.getId());
+        if (orderInfoDTO == null) {
+            throw new OrderException(OrderCodeEnum.ORDER_NOT_EXIST);
+        }
+        if (!orderInfoDTO.getStatus().equals(CommonConstant.ORDER_UNPAID)) {
+            throw new OrderException(OrderCodeEnum.ORDER_NOT_UNPAID);
+        }
+        if (orderInfoDTO.getPayment().compareTo(wxPay) != 0) {
+            throw new OrderException(OrderCodeEnum.WECHAT_PAY_FEE_ERROR);
+        }
+        if(orderInfoDTO.getType().equals(CommonConstant.SERVICE_PRODUCT)){//服务型商品
+            orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
+        }
+        if(orderInfoDTO.getType().equals(CommonConstant.ELE_PRODUCT)){//电子码商品
+            orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
+            //发放电子码
+            List<EleProductCodeDTO> eleProductCodeDTOList = Lists.newArrayList();
+            eleProductCodeDTOList = sendEleProductCode(orderInfoDTO.getProductId(), orderInfoDTO.getCount());
+            eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderInfoDTO.getOrderCode());
+            StringBuilder comments = new StringBuilder();
+            eleProductCodeDTOList.stream().forEach(bean -> {
+                if (!Strings.isBlank(bean.getCode())) {
+                    comments.append("兑换码为：" + bean.getCode());
+                }
+                comments.append("，兑换密钥为：" + bean.getKeyt() + "；");
+            });
+            orderInfoPO.setComments(comments.toString());
+        }
+        orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
+    }
+
     private OrderRefundDTO paymentDto2RefundDto(OrderPaymentDTO paymentDTO) {
         OrderRefundDTO refundDTO = new OrderRefundDTO();
         refundDTO.setOrderCode(paymentDTO.getOrderCode());

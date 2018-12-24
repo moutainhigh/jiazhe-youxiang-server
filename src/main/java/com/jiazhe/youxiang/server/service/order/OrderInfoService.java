@@ -125,4 +125,11 @@ public interface OrderInfoService {
      * @return
      */
     OrderInfoDTO getByOrderNo(String orderNo);
+
+    /**
+     * 微信支付成功后，通知
+     * @param orderNo
+     * @param wxPay
+     */
+    void wxNotify(String orderNo, BigDecimal wxPay);
 }
