@@ -141,4 +141,14 @@ public class SysUserBiz {
         sysUserService.changePassword(id, newPassword);
     }
 
+
+    /**
+     * 根据id查找员工
+     * @param id
+     * @return
+     */
+    public SysUserDTO getById(Integer id) {
+        SysUserDTO dto = sysUserService.getById(id);
+        return dto;
+    }
 }

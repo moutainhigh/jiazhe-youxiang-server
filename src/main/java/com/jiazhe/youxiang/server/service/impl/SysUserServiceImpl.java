@@ -9,7 +9,9 @@ import com.jiazhe.youxiang.server.common.enums.UserCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.UserException;
 import com.jiazhe.youxiang.server.dao.mapper.SysUserPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.SysUserPOManualMapper;
-import com.jiazhe.youxiang.server.domain.po.*;
+import com.jiazhe.youxiang.server.domain.po.SysUserPO;
+import com.jiazhe.youxiang.server.domain.po.SysUserPOExample;
+import com.jiazhe.youxiang.server.domain.po.SysUserRolePO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserRoleDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.UserWithRoleDTO;
@@ -174,5 +176,14 @@ public class SysUserServiceImpl implements SysUserService {
         sysUserPO.setSalt(salt);
         sysUserPO.setPassword(EncryptPasswordUtil.encrypt(salt, newPassword));
         sysUserPOMapper.updateByPrimaryKeySelective(sysUserPO);
+    }
+
+    @Override
+    public SysUserDTO getById(Integer id) {
+        SysUserPO sysUserPO = sysUserPOMapper.selectByPrimaryKey(id);
+        if (null == sysUserPO) {
+            throw new UserException(UserCodeEnum.USER_NOT_EXISTED);
+        }
+        return SysUserAdapter.po2Dto(sysUserPO);
     }
 }
