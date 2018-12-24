@@ -12,6 +12,7 @@ import com.jiazhe.youxiang.server.dao.mapper.CustomerPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.AuditRecordPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.*;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
+import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
@@ -103,11 +104,12 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         CustomerDTO customerDTO = customerService.getByMobile(auditRecordPO.getCustomerMobile());
         if (null == customerDTO) {
             //throw new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_NOT_EXIST);
-            CustomerPO customerPO = new CustomerPO();
-            customerPO.setMobile(auditRecordPO.getCustomerMobile());
-            customerPO.setName(auditRecordPO.getCustomerName());
-            customerPO.setRemark("");
-            customerId = customerPOMapper.insertSelective(customerPO);
+            CustomerAddDTO customerAddDTO = new CustomerAddDTO();
+            customerAddDTO.setMobile(auditRecordPO.getCustomerMobile());
+            customerAddDTO.setName(auditRecordPO.getCustomerName());
+            customerService.add(customerAddDTO);
+            customerDTO = customerService.getByMobile(auditRecordPO.getCustomerMobile());
+            customerId = customerDTO.getId();
         } else {
             customerId = customerDTO.getId();
         }
