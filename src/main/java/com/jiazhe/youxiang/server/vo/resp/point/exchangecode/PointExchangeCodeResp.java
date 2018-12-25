@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.resp.point.exchangecode;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
 import com.jiazhe.youxiang.server.vo.resp.project.ProjectResp;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -58,6 +59,8 @@ public class PointExchangeCodeResp extends BaseVO {
     private Byte used;
 
     private ProjectResp projectResp;
+
+    private CustomerResp customerResp;
 
     public Integer getId() {
         return id;
@@ -185,5 +188,13 @@ public class PointExchangeCodeResp extends BaseVO {
 
     public void setProjectResp(ProjectResp projectResp) {
         this.projectResp = projectResp;
+    }
+
+    public CustomerResp getCustomerResp() {
+        return customerResp;
+    }
+
+    public void setCustomerResp(CustomerResp customerResp) {
+        this.customerResp = customerResp;
     }
 }

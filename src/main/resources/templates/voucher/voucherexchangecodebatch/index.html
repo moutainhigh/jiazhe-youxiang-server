@@ -227,9 +227,9 @@
                                                            for="saveDescription">描述信息：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveDescription" name="description"
-                                                                   class="form-control"
-                                                                   type="text" style="height:30px"/>
+                                                             <textarea id="saveDescription" name="description"
+                                                                       class="form-control"
+                                                                       style="resize:none;height: 100px"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -477,6 +477,7 @@
                     }
 
                     $("#batchSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
+                    $('#saveExpiryTime').datepicker('update');
                     $("#batchSaveForm #saveExpiryTime").next().next().val(result.expiryTime);
                     if (result.expiryType == 0) {
                         $("#batchSaveForm #saveDeadLineRadio").click();
@@ -485,6 +486,7 @@
                     }
                     $("#batchSaveForm #saveValidityPeriod").val(result.validityPeriod);
                     $("#batchSaveForm #saveVoucherExpiryTime").val(dateFormat(result.voucherExpiryTime));
+                    $('#saveVoucherExpiryTime').datepicker('update');
                     $("#batchSaveForm #saveVoucherExpiryTime").next().next().val(result.voucherExpiryTime);
                     $("#batchSaveForm #saveDescription").val(result.description);
                     $("#modal-form").modal('show');

@@ -202,9 +202,9 @@
                                                            for="saveDescription">描述信息：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveDescription" name="batchDescription"
-                                                                   class="form-control"
-                                                                   type="text" style="height:30px"/>
+                                                            <textarea id="saveDescription" name="batchDescription"
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -262,7 +262,7 @@
         var tableOption = {
             url: "/api/voucherexchangecode/listpage",
             postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
-            colNames: ['', '批次名称', '代金券名称', '兑换码', '密钥', '停用状态', '使用状态', '兑换商品数量', '过期时间', '操作'],
+            colNames: ['', '批次名称', '代金券名称', '兑换码', '密钥', '停用状态', '使用状态', '客户电话','兑换商品数量', '过期时间', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'batchName', index: 'batchName', width: 100, sortable: false},
@@ -289,6 +289,7 @@
                         return rowObject.used == 1 ? "已使用" : "未使用";
                     }
                 },
+                {name: 'customerResp.mobile', index: 'customerResp.mobile', width: 60, sortable: false},
                 {name: 'count', index: 'count', width: 50, sortable: false},
                 {
                     name: 'expiryTime',
@@ -407,6 +408,7 @@
                     $("#codeSaveForm #saveCityCodes").val(result.cityCodes);
                     $("#codeSaveForm #saveProductIds").val(result.productIds);
                     $("#codeSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
+                    $('#saveExpiryTime').datepicker('update');
                     $("#codeSaveForm #saveExpiryTime").next().next().val(result.expiryTime);
                     if (result.expiryType == 0) {
                         $("#codeSaveForm #saveDeadLineRadio").click();
@@ -415,6 +417,7 @@
                     }
                     $("#codeSaveForm #saveValidityPeriod").val(result.validityPeriod);
                     $("#codeSaveForm #saveVoucherExpiryTime").val(dateFormat(result.voucherExpiryTime));
+                    $('#saveVoucherExpiryTime').datepicker('update');
                     $("#codeSaveForm #saveVoucherExpiryTime").next().next().val(result.voucherExpiryTime);
                     $("#codeSaveForm #saveDescription").val(result.batchDescription);
                     $("#modal-form").modal('show');

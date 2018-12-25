@@ -32,7 +32,7 @@ public class APIServiceItemController extends BaseController{
 
     @ApiOperation(value = "【后台】查询所有服务项目", httpMethod = "GET", response =ServiceItemResp.class, responseContainer = "List", notes = "【后台】查询所有服务项目")
     @RequestMapping(value = "/listall", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "查询所有服务项目", level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER, operate = "查询所有服务项目", level = LogLevelEnum.LEVEL_1)
     public Object listAll() {
         List<ServiceItemDTO> dtoList = serviceItemBiz.getList();
         List<ServiceItemResp> respList = dtoList.stream().map(ServiceItemAdapter::DTO2Resp).collect(Collectors.toList());

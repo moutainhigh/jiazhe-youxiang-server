@@ -48,7 +48,6 @@ public class APIPointExchangeCodeController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(APIPointExchangeCodeController.class);
 
-
     @Autowired
     private PointExchangeCodeBiz pointExchangeCodeBiz;
 
@@ -118,6 +117,8 @@ public class APIPointExchangeCodeController extends BaseController {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getPointName(), new PointException(PointCodeEnum.POINT_NAME_IS_NULL));
+        CommonValidator.validateNull(req.getCityCodes(),new PointException(PointCodeEnum.CITY_IS_NULL));
+        CommonValidator.validateNull(req.getProductIds(),new PointException(PointCodeEnum.PRODUCT_IS_NULL));
         if (req.getExpiryTime() == 0) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
         }
@@ -141,6 +142,7 @@ public class APIPointExchangeCodeController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "客户用兑换码进行兑换", level = LogLevelEnum.LEVEL_2)
     public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) {
         CommonValidator.validateId(req.getId());
+        CommonValidator.validateNull(req.getKeyt(),new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
         pointExchangeCodeBiz.customerSelfCharge(req.getId(), req.getKeyt());
         return ResponseFactory.buildSuccess();
     }
@@ -151,6 +153,7 @@ public class APIPointExchangeCodeController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "后台用兑换码进行兑换", level = LogLevelEnum.LEVEL_2)
     public Object backstageCodeCharge(@ModelAttribute CodeChargeReq req) {
         CommonValidator.validateId(req.getId());
+        CommonValidator.validateNull(req.getKeyt(),new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
         pointExchangeCodeBiz.backstageCodeCharge(req.getId(), req.getKeyt());
         return ResponseFactory.buildSuccess();
     }

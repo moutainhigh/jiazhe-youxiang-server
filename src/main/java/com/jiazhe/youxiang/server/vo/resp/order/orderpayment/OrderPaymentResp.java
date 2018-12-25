@@ -22,8 +22,11 @@ public class OrderPaymentResp extends BaseVO {
     @ApiModelProperty("订单id")
     private Integer orderId;
 
-    @ApiModelProperty("支付类型 1为充值卡支付，2为代金券支付，3为在线支付 ")
+    @ApiModelProperty("支付类型 1为积分卡支付 2为充值卡支付，3为代金券支付，4为在线支付 ")
     private Byte payType;
+
+    @ApiModelProperty("积分卡id")
+    private Integer pointId;
 
     @ApiModelProperty("充值卡id")
     private Integer rechargeCardId;
@@ -70,6 +73,14 @@ public class OrderPaymentResp extends BaseVO {
 
     public void setPayType(Byte payType) {
         this.payType = payType;
+    }
+
+    public Integer getPointId() {
+        return pointId;
+    }
+
+    public void setPointId(Integer pointId) {
+        this.pointId = pointId;
     }
 
     public Integer getRechargeCardId() {

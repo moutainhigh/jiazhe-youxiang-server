@@ -125,9 +125,9 @@
                                                     <label class="col-sm-4 control-label no-padding-right">备注：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="inputRemark" name="inputRemark"
-                                                                   class="form-control"
-                                                                   type="text" style="height:30px"/>
+                                                            <textarea id="inputRemark" name="inputRemark"
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -281,9 +281,9 @@
                                                     <label class="col-sm-3 control-label no-padding-right">客户留言：</label>
                                                     <div class="col-sm-9">
                                                         <div class="pos-rel">
-                                                            <input id="orderCustomerRemark" class="form-control"
-                                                                   name="customerRemark"
-                                                                   type="text" style="height:30px"/>
+                                                            <textarea id="orderCustomerRemark" name="customerRemark"
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -333,9 +333,9 @@
                                                     <label class="col-sm-3 control-label no-padding-right">订单备注：</label>
                                                     <div class="col-sm-9">
                                                         <div class="pos-rel">
-                                                            <input id="orderComments" class="form-control"
-                                                                   name="comments"
-                                                                   type="text" style="height:30px"/>
+                                                            <textarea id="orderComments" name="comments"
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -352,24 +352,24 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
+                                                <div class="space-2 hasVoucher"></div>
+                                                <div class="form-group hasVoucher">
                                                     <label class="col-sm-3 control-label no-padding-right">可用代金券：</label>
                                                     <div class="col-sm-9" id="orderVoucherArea">
 
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
+                                                <div class="space-2 hasPoint"></div>
+                                                <div class="form-group hasPoint">
                                                     <label class="col-sm-3 control-label no-padding-right">可用积分卡：</label>
                                                     <div class="col-sm-9" id="orderPointArea">
 
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
+                                                <div class="space-2 hasRechargeCard"></div>
+                                                <div class="form-group hasRechargeCard">
                                                     <label class="col-sm-3 control-label no-padding-right">可用充值卡：</label>
                                                     <div class="col-sm-9" id="orderRechargeCardArea">
 
@@ -759,6 +759,7 @@
     function openDirectCharge(id) {
         initModel()
         $("#inputOperationType").val(5);//充值卡直接充值
+        $("#selectBatch").empty();
         $("#modal-title").html("充值卡直接充值");
         $('#inputChargeMoney').removeAttr('disabled');
         $('#divMobile').removeAttr('hidden');
@@ -784,6 +785,7 @@
         initModel()
         $("#inputOperationType").val(7);//积分直接充值
         $("#modal-title").html("积分直接充值");
+        $("#selectBatch").empty();
         $('#inputChargeMoney').removeAttr('disabled');
         $('#divMobile').removeAttr('hidden');
         $('#divProject').removeAttr('hidden');
@@ -846,18 +848,18 @@
     }
 
     function refreshBatch() {
+        $("#selectBatch").empty();
         var projectId = $("#selectProject").val();
         if (projectId == "") {
             return;
         }
-        url = "";
+        var url = "";
         if ($("#inputOperationType").val() == "5") {
             url = "/api/rcexchangecodebatch/findvirtualbyprojectid";
         }
         if ($("#inputOperationType").val() == "7") {
             url = "/api/pointexchangecodebatch/findvirtualbyprojectid";
         }
-        $("#selectBatch").empty();
         $.ajax({
             url: url,
             dataType: "json",
@@ -1018,12 +1020,18 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    for (var i = 0; i < result.length; i++) {
-                        $("#orderVoucherArea").append("<div class='checkbox'><label>" +
-                            "<input onchange='payMoneyChange()' name='voucherCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
-                            "<span class='lbl'> " + result[i].name + "[" + dateFormat(result[i].expiryTime) + "]（抵扣数量：" + result[i].count + "）</span></label>" +
-                            "<input type='hidden' id='replaceCount_" + result[i].id + "'value=" + result[i].count + ">" +
-                            "</div>")
+                    if (result.length > 0) {
+                        $(".hasVoucher").css("display", "");
+                        for (var i = 0; i < result.length; i++) {
+                            $("#orderVoucherArea").append("<div class='checkbox'><label>" +
+                                "<input onchange='payMoneyChange()' name='voucherCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
+                                "<span class='lbl'> " + result[i].name + "[" + dateFormat(result[i].expiryTime) + "]（抵扣数量：" + result[i].count + "）</span></label>" +
+                                "<input type='hidden' id='replaceCount_" + result[i].id + "'value=" + result[i].count + ">" +
+                                "</div>");
+                        }
+                    }
+                    else {
+                        $(".hasVoucher").css("display", "none");
                     }
                 }
             },
@@ -1046,12 +1054,18 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    for (var i = 0; i < result.length; i++) {
-                        $("#orderRechargeCardArea").append("<div class='checkbox'><label>" +
-                            "<input onchange='payMoneyChange()' name='rechargeCardCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
-                            "<span class='lbl'> " + result[i].name + "[" + dateFormat(result[i].expiryTime) + "]（剩余金额：" + result[i].balance + "元）</span></label>" +
-                            "<input type='hidden' id='leftMoney_" + result[i].id + "' value=" + result[i].balance + ">" +
-                            "</div>")
+                    if (result.length > 0) {
+                        $(".hasRechargeCard").css("display", "");
+                        for (var i = 0; i < result.length; i++) {
+                            $("#orderRechargeCardArea").append("<div class='checkbox'><label>" +
+                                "<input onchange='payMoneyChange()' name='rechargeCardCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
+                                "<span class='lbl'> " + result[i].name + "[" + dateFormat(result[i].expiryTime) + "]（剩余金额：" + result[i].balance + "元）</span></label>" +
+                                "<input type='hidden' id='leftMoney_" + result[i].id + "' value=" + result[i].balance + ">" +
+                                "</div>");
+                        }
+                    }
+                    else {
+                        $(".hasRechargeCard").css("display", "none");
                     }
                 }
             },
@@ -1074,14 +1088,21 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    for (var i = 0; i < result.length; i++) {
-                        $("#orderPointArea").append("<div class='checkbox'><label>" +
-                            "<input onchange='payMoneyChange()' name='pointCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
-                            "<span class='lbl'> " + result[i].name + "[" + dateFormat(result[i].expiryTime) + "]（剩余积分：" + result[i].balance + "分；1积分=" + result[i].projectResp.pointConversionRate + "元）</span></label>" +
-                            "<input type='hidden' id='leftMoney_" + result[i].id + "' value=" + result[i].balance + ">" +
-                            "<input type='hidden' id='conversionRate_" + result[i].id + "' value=" + result[i].projectResp.pointConversionRate + ">" +
-                            "</div>")
+                    if (result.length > 0) {
+                        $(".hasPoint").css("display", "");
+                        for (var i = 0; i < result.length; i++) {
+                            $("#orderPointArea").append("<div class='checkbox'><label>" +
+                                "<input onchange='payMoneyChange()' name='pointCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
+                                "<span class='lbl'> " + result[i].name + "[" + dateFormat(result[i].expiryTime) + "]（剩余积分：" + result[i].balance + "分；1积分=" + result[i].projectResp.pointConversionRate + "元）</span></label>" +
+                                "<input type='hidden' id='leftMoney_" + result[i].id + "' value=" + result[i].balance + ">" +
+                                "<input type='hidden' id='conversionRate_" + result[i].id + "' value=" + result[i].projectResp.pointConversionRate + ">" +
+                                "</div>");
+                        }
                     }
+                    else {
+                        $(".hasPoint").css("display", "none");
+                    }
+
                 }
             },
             error: error

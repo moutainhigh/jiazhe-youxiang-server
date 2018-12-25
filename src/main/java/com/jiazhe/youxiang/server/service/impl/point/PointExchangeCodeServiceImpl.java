@@ -121,6 +121,10 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         dtoList.stream().forEach(bean -> {
             ProjectDTO projectDTO = projectService.getById(bean.getProjectId());
             bean.setProjectDTO(projectDTO);
+            if(null != bean.getCustomerId()){
+                CustomerDTO customerDTO = customerService.getById(bean.getCustomerId());
+                bean.setCustomerDTO(customerDTO);
+            }
         });
         paging.setTotal(count);
         return dtoList;
@@ -229,6 +233,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         pointService.update(pointPO);
         //修改充值卡兑换码的使用状态
         pointExchangeCodePO.setUsed(Byte.valueOf("1"));
+        pointExchangeCodePO.setCustomerId(id);
         pointExchangeCodePOMapper.updateByPrimaryKeySelective(pointExchangeCodePO);
     }
 

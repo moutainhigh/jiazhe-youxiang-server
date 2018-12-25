@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.vo.resp.partnerorder;
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import com.jiazhe.youxiang.server.vo.resp.partner.PartnerResp;
 import com.jiazhe.youxiang.server.vo.resp.serviceitem.ServiceItemResp;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 
@@ -13,52 +14,74 @@ import java.math.BigDecimal;
  */
 public class PartnerOrderInfoResp extends BaseVO {
 
+    @ApiModelProperty("商家订单id")
     private Integer id;
 
+    @ApiModelProperty("客户姓名")
     private String customerName;
 
+    @ApiModelProperty("客户电话")
     private String customerMobile;
 
+    @ApiModelProperty("服务地址")
     private String customerAddress;
 
+    @ApiModelProperty("客户城市code")
     private String customerCityCode;
 
+    @ApiModelProperty("客户城市名称")
     private String customerCityName;
 
+    @ApiModelProperty("密钥")
     private String keyt;
 
+    @ApiModelProperty("兑换时间")
     private Long orderTime;
 
+    @ApiModelProperty("服务时间")
     private Long serviceTime;
 
+    @ApiModelProperty("订单来源")
     private String orderSource;
 
+    @ApiModelProperty("工作人姓名")
     private String workerName;
 
+    @ApiModelProperty("工作人电话")
     private String workerMobile;
 
+    @ApiModelProperty("服务项目")
     private Integer serviceItemId;
 
     private ServiceItemResp serviceItemResp;
 
+    @ApiModelProperty("预付金额")
     private BigDecimal prePay;
 
+    @ApiModelProperty("二次支付金额")
     private BigDecimal appendPay;
 
+    @ApiModelProperty("备注")
     private String remark;
 
+    @ApiModelProperty("合作伙伴id")
     private Integer partnerId;
 
     private PartnerResp partnerResp;
 
+    @ApiModelProperty("状态 1待服务 2已完成 3已取消 ")
     private Byte status;
 
+    @ApiModelProperty("附加字段")
     private String extInfo;
 
+    @ApiModelProperty("是否删除")
     private Byte isDeleted;
 
+    @ApiModelProperty("添加时间")
     private Long addTime;
 
+    @ApiModelProperty("修改时间")
     private Long modTime;
 
     public Integer getId() {

@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.resp.advancepay;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -12,20 +13,28 @@ import java.util.Date;
  */
 public class AdvancePayResp extends BaseVO {
 
+    @ApiModelProperty("预支记录id")
     private Integer id;
 
+    @ApiModelProperty("预支金额")
     private BigDecimal advancePay;
 
+    @ApiModelProperty("预支时间")
     private Long advanceTime;
 
+    @ApiModelProperty("预支备注")
     private String remark;
 
+    @ApiModelProperty("预留字段")
     private String extInfo;
 
+    @ApiModelProperty("是否删除")
     private Byte isDeleted;
 
+    @ApiModelProperty("添加时间")
     private Long addTime;
 
+    @ApiModelProperty("修改时间")
     private Long modTime;
 
     public Integer getId() {

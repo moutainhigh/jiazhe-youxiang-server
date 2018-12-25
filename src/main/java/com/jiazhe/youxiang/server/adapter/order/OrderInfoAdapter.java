@@ -159,7 +159,6 @@ public class OrderInfoAdapter {
         appendOrderDTO.setPointIds(req.getPointIds());
         appendOrderDTO.setVoucherIds(req.getVoucherIds());
         appendOrderDTO.setRechargeCardIds(req.getRechargeCardIds());
-        appendOrderDTO.setCardMoneys(req.getCardMoneys());
         return appendOrderDTO;
     }
 }

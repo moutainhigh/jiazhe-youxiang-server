@@ -119,6 +119,8 @@ public class APIRCExchangeCodeController extends BaseController{
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getRechargeCardName(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));
+        CommonValidator.validateNull(req.getCityCodes(), new RechargeCardException(RechargeCardCodeEnum.CITY_IS_NULL));
+        CommonValidator.validateNull(req.getProductIds(), new RechargeCardException(RechargeCardCodeEnum.PRODUCT_IS_NULL));
         if(req.getExpiryTime()==0){
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
         }
@@ -142,6 +144,7 @@ public class APIRCExchangeCodeController extends BaseController{
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "客户用兑换码进行兑换", level = LogLevelEnum.LEVEL_2)
     public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) {
         CommonValidator.validateId(req.getId());
+        CommonValidator.validateNull(req.getKeyt(),new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
         rcExchangeCodeBiz.customerSelfCharge(req.getId(),req.getKeyt());
         return ResponseFactory.buildSuccess();
     }
@@ -152,6 +155,7 @@ public class APIRCExchangeCodeController extends BaseController{
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "后台用兑换码进行兑换", level = LogLevelEnum.LEVEL_2)
     public Object backstageCodeCharge(@ModelAttribute CodeChargeReq req) {
         CommonValidator.validateId(req.getId());
+        CommonValidator.validateNull(req.getKeyt(),new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
         rcExchangeCodeBiz.backstageCodeCharge(req.getId(),req.getKeyt());
         return ResponseFactory.buildSuccess();
     }

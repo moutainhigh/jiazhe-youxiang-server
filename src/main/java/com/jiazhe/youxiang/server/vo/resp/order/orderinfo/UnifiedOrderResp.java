@@ -11,17 +11,17 @@ import io.swagger.annotations.ApiModelProperty;
 public class UnifiedOrderResp extends BaseVO {
 
     @ApiModelProperty("统一下单预付id")
-    private String prepay_id;
+    private String prepayId;
 
     @ApiModelProperty("签名")
     private String sign;
 
-    public String getPrepay_id() {
-        return prepay_id;
+    public String getPrepayId() {
+        return prepayId;
     }
 
-    public void setPrepay_id(String prepay_id) {
-        this.prepay_id = prepay_id;
+    public void setPrepayId(String prepayId) {
+        this.prepayId = prepayId;
     }
 
     public String getSign() {

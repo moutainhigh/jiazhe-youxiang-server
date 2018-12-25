@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.adapter.voucher;
 
+import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
 import com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
@@ -37,6 +38,7 @@ public class VoucherExchangeCodeAdapter {
         voucherExchangeCodeResp.setExpiryType(dto.getExpiryType());
         voucherExchangeCodeResp.setStatus(dto.getStatus());
         voucherExchangeCodeResp.setUsed(dto.getUsed());
+        voucherExchangeCodeResp.setCustomerResp(CustomerAdapter.customerDTO2VO(dto.getCustomerDTO()));
         return voucherExchangeCodeResp;
     }
 

@@ -16,8 +16,8 @@ public class AuditRecordResp extends BaseVO {
     @ApiModelProperty("消费记录id")
     private Integer id;
 
-    @ApiModelProperty("充值卡id")
-    private Integer rechargeCardId;
+    @ApiModelProperty("积分卡id")
+    private Integer pointId;
 
     @ApiModelProperty("客户姓名")
     private String customerName;
@@ -25,7 +25,7 @@ public class AuditRecordResp extends BaseVO {
     @ApiModelProperty("客户电话")
     private String customerMobile;
 
-    @ApiModelProperty("兑换金额")
+    @ApiModelProperty("兑换积分")
     private BigDecimal exchangeMoney;
 
     @ApiModelProperty("备注")
@@ -72,12 +72,12 @@ public class AuditRecordResp extends BaseVO {
         this.id = id;
     }
 
-    public Integer getRechargeCardId() {
-        return rechargeCardId;
+    public Integer getPointId() {
+        return pointId;
     }
 
-    public void setRechargeCardId(Integer rechargeCardId) {
-        this.rechargeCardId = rechargeCardId;
+    public void setPointId(Integer pointId) {
+        this.pointId = pointId;
     }
 
     public String getCustomerName() {

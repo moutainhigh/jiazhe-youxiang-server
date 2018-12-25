@@ -28,7 +28,8 @@ public enum PointCodeEnum {
     CARD_HAS_NO_PAYMENT(116019, "CARD_HAS_NO_PAYMENT", "该积分卡还没有消费记录"),
     CUSTOMER_NOT_EXIST(116020, "CUSTOMER_NOT_EXIST", "该客户不存在"),
     PROJECT_IS_NULL(116021, "PROJECT_IS_NULL", "项目不能为空"),
-    ;
+    CITY_IS_NULL(116022, "CITY_IS_NULL", "适用城市不能为空"),
+    PRODUCT_IS_NULL(116023, "PRODUCT_IS_NULL", "适用商品不能为空"),;
 
     PointCodeEnum(Integer code, String type, String message) {
         this.code = code;

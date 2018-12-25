@@ -48,90 +48,91 @@
                     <div class="col-xs-12" style="padding-top:40px">
                         <shiro:hasPermission name="orderSearch">
                             <form id="orderInfoSearchForm" class="form-horizontal" role="form">
-                            <div class="form-group">
-                                <label class="col-sm-1 control-label no-padding-right">状态：</label>
-                                <div class="col-sm-2">
-                                    <select id="searchStatus" name="status" class="selectpicker show-tick form-control">
-                                        <option value=0>所有</option>
-                                        <option value=1 th:selected="${status} == 1">待付款</option>
-                                        <option value=2 th:selected="${status} == 2">待派单</option>
-                                        <option value=3 th:selected="${status} == 3">待服务</option>
-                                        <option value=4 th:selected="${status} == 4">已完成</option>
-                                        <option value=5 th:selected="${status} == 5">取消待审核</option>
-                                        <option value=6 th:selected="${status} == 6">取消未通过</option>
-                                        <option value=7 th:selected="${status} == 7">已取消</option>
-                                    </select>
-                                </div>
-                                <label class="col-sm-1 control-label no-padding-right">订单号：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <input id="searchOrderCode" name="code" class="form-control" type="text"
-                                               style="height:30px"/>
+                                <div class="form-group">
+                                    <label class="col-sm-1 control-label no-padding-right">状态：</label>
+                                    <div class="col-sm-2">
+                                        <select id="searchStatus" name="status"
+                                                class="selectpicker show-tick form-control">
+                                            <option value=0>所有</option>
+                                            <option value=1 th:selected="${status} == 1">待付款</option>
+                                            <option value=2 th:selected="${status} == 2">待派单</option>
+                                            <option value=3 th:selected="${status} == 3">待服务</option>
+                                            <option value=4 th:selected="${status} == 4">已完成</option>
+                                            <option value=5 th:selected="${status} == 5">取消待审核</option>
+                                            <option value=6 th:selected="${status} == 6">取消未通过</option>
+                                            <option value=7 th:selected="${status} == 7">已取消</option>
+                                        </select>
                                     </div>
-                                </div>
-                                <label class="col-sm-1 control-label no-padding-right">下单账号：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <input id="searchMobile" name="mobile" class="form-control" type="text"
-                                               th:value="${mobile}"
-                                               style="height:30px"/>
+                                    <label class="col-sm-1 control-label no-padding-right">订单号：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <input id="searchOrderCode" name="code" class="form-control" type="text"
+                                                   style="height:30px"/>
+                                        </div>
                                     </div>
-                                </div>
-                                <label class="col-sm-1 control-label no-padding-right">服务对象电话：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <input id="searchCustomerMobile" name="customerMobile" class="form-control"
-                                               type="text"
-                                               style="height:30px"/>
+                                    <label class="col-sm-1 control-label no-padding-right">下单账号：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <input id="searchMobile" name="mobile" class="form-control" type="text"
+                                                   th:value="${mobile}"
+                                                   style="height:30px"/>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="space-2"></div>
-                            <div class="form-group">
-                                <label class="col-sm-1 control-label no-padding-right">订单时间起：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <div class="input-group">
-                                            <input class="form-control date-picker" id="searchOrderStartTime"
-                                                   type="text" readonly/>
-                                            <span class="input-group-addon">
-                                                <i class="fa fa-calendar bigger-110"></i>
-                                            </span>
-                                            <input type="hidden" value=0 name="orderStartTime"/>
+                                    <label class="col-sm-1 control-label no-padding-right">服务对象电话：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <input id="searchCustomerMobile" name="customerMobile" class="form-control"
+                                                   type="text"
+                                                   style="height:30px"/>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="space-2"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-1 control-label no-padding-right">订单时间起：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <div class="input-group">
+                                                <input class="form-control date-picker" id="searchOrderStartTime"
+                                                       type="text" readonly/>
+                                                <span class="input-group-addon">
+                                                <i class="fa fa-calendar bigger-110"></i>
+                                            </span>
+                                                <input type="hidden" value=0 name="orderStartTime"/>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                <label class="col-sm-1 control-label no-padding-right">订单时间止：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <div class="input-group">
-                                            <input class="form-control date-picker" id="searchOrderEndTime"
-                                                   type="text" readonly/>
-                                            <span class="input-group-addon">
+                                    <label class="col-sm-1 control-label no-padding-right">订单时间止：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <div class="input-group">
+                                                <input class="form-control date-picker" id="searchOrderEndTime"
+                                                       type="text" readonly/>
+                                                <span class="input-group-addon">
                                                 <i class="fa fa-calendar bigger-110"></i>
                                             </span>
-                                            <input type="hidden" value=0 name="orderEndTime"/>
+                                                <input type="hidden" value=0 name="orderEndTime"/>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <label class="col-sm-1 control-label no-padding-right">服务人员电话：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <input id="searchWorkerMobile" name="workerMobile" class="form-control"
-                                               type="text"
-                                               style="height:30px"/>
+                                    <label class="col-sm-1 control-label no-padding-right">服务人员电话：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <input id="searchWorkerMobile" name="workerMobile" class="form-control"
+                                                   type="text"
+                                                   style="height:30px"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <button class="btn btn-white btn-default btn-round btn-sm"
+                                                onclick="return search()">
+                                            <i class="ace-icon fa fa-search red2"></i>
+                                            查询
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="col-sm-3">
-                                    <button class="btn btn-white btn-default btn-round btn-sm"
-                                            onclick="return search()">
-                                        <i class="ace-icon fa fa-search red2"></i>
-                                        查询
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
                         </shiro:hasPermission>
                     </div><!-- /.col -->
 
@@ -349,8 +350,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
-                                        <div class="col-xs-12 col-sm-1"></div>
-                                        <div class="col-xs-12 col-sm-9">
+                                        <div class="col-xs-12 col-sm-12">
                                             <form id="appendOrderForm" class="form-horizontal" role="form">
                                                 <input type="hidden" id="app_customerId">
                                                 <input type="hidden" id="app_productId">
@@ -359,11 +359,11 @@
                                                 <input type="hidden" name="orderId" id="app_orderId">
                                                 <input type="hidden" name="voucherIds" id="app_voucherIds">
                                                 <input type="hidden" name="rechargeCardIds" id="app_rechargeCardIds">
-                                                <input type="hidden" name="cardMoneys" id="app_cardMoneys">
+                                                <input type="hidden" name="pointIds" id="app_pointIds">
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">订单号：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">订单号：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="app_orderCode"
                                                                    class="form-control"
@@ -374,8 +374,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">下单时间：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">下单时间：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="app_orderTime"
                                                                    class="form-control"
@@ -386,8 +386,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">商品名：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">商品名：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="app_productName"
                                                                    class="form-control"
@@ -398,8 +398,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">交易单价：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">交易单价：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="app_productPrice" class="form-control"
                                                                    type="text" style="height:30px" readonly/>
@@ -409,8 +409,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">原始数量：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">原始数量：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="app_count" class="form-control"
                                                                    type="text" style="height:30px" readonly/>
@@ -420,8 +420,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务对象姓名：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">服务对象姓名：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="app_customerName" class="form-control"
                                                                    type="text" style="height:30px" readonly/>
@@ -431,8 +431,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务对象电话：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">服务对象电话：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="app_customerMobile" class="form-control"
                                                                    type="text" style="height:30px" readonly/>
@@ -442,8 +442,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务地址：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">服务地址：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="app_customerAddress" class="form-control"
                                                                    type="text" style="height:30px" readonly/>
@@ -453,8 +453,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务时间：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">服务时间：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="app_realServiceTime" class="form-control"
                                                                    type="text" style="height:30px" readonly/>
@@ -464,8 +464,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务人员姓名：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">服务人员姓名：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="app_workerName" name="workerName"
                                                                    class="form-control"
@@ -476,8 +476,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">服务人员电话：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">服务人员电话：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="app_workerMobile" name="workerMobile"
                                                                    class="form-control"
@@ -488,8 +488,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">原订单成本：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">原订单成本：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="app_cost"
                                                                    class="form-control"
@@ -500,11 +500,9 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">追加数量：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">追加数量：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
-                                                            <!-- <input name="count" class="form-control"
-                                                                    type="text" style="height:30px"/>-->
                                                             <input type="text" name="count" id="appendCount" readonly/>
                                                         </div>
                                                     </div>
@@ -512,24 +510,32 @@
 
                                                 <div class="space-2 hasVoucher"></div>
                                                 <div class="form-group hasVoucher">
-                                                    <label class="col-sm-4 control-label no-padding-right">可用代金券：</label>
-                                                    <div class="col-sm-8" id="voucherArea">
+                                                    <label class="col-sm-3 control-label no-padding-right">可用代金券：</label>
+                                                    <div class="col-sm-9" id="voucherArea">
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 hasPoint"></div>
+                                                <div class="form-group hasPoint">
+                                                    <label class="col-sm-3 control-label no-padding-right">可用积分卡：</label>
+                                                    <div class="col-sm-9" id="pointArea">
 
                                                     </div>
                                                 </div>
 
                                                 <div class="space-2 hasRechargeCard"></div>
                                                 <div class="form-group hasRechargeCard">
-                                                    <label class="col-sm-4 control-label no-padding-right">可用充值卡：</label>
-                                                    <div class="col-sm-8" id="rechargeCardArea">
+                                                    <label class="col-sm-3 control-label no-padding-right">可用充值卡：</label>
+                                                    <div class="col-sm-9" id="rechargeCardArea">
 
                                                     </div>
                                                 </div>
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">新订单成本：</label>
-                                                    <div class="col-sm-8">
+                                                    <label class="col-sm-3 control-label no-padding-right">新订单成本：</label>
+                                                    <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input name="cost" id="orderNewCost"
                                                                    class="form-control"
@@ -548,7 +554,7 @@
                                         取消
                                     </button>
 
-                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="saveAppendOrder()">
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="appendOrder()">
                                         <i class="ace-icon fa fa-check"></i>
                                         保存
                                     </button>
@@ -582,7 +588,7 @@
             icon_down: 'ace-icon fa fa-minus', btn_up_class: 'btn-success', btn_down_class: 'btn-danger'
         }).closest('.ace-spinner')
             .on('changed.fu.spinbox', function () {
-
+                initCheckbox();
             });
 
         initDatePicker();
@@ -693,10 +699,11 @@
 
     function showAppendOrder(id) {
         $("#appendCount").ace_spinner('value', 1);
-        $("#orderNewCost").val('');
+        $("#orderNewCost").val('0');
         $("#app_orderId").val(id);
         $("#voucherArea").empty();
         $("#rechargeCardArea").empty();
+        $("#pointArea").empty();
         $.ajax({
             url: "/api/orderinfo/getbyid",
             dataType: "json",
@@ -750,18 +757,19 @@
                 } else {
                     var result = data.data;
                     if (result.length > 0) {
-                        $(".hasVoucher").css("display", "")
+                        $(".hasVoucher").css("display", "");
+                        for (var i = 0; i < result.length; i++) {
+                            $("#voucherArea").append("<div class='checkbox'><label>" +
+                                "<input onchange='payMoneyChange()' name='voucherCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
+                                "<span class='lbl'> " + result[i].name + "[" + dateFormat(result[i].expiryTime) + "]（抵扣数量：" + result[i].count + "）</span></label>" +
+                                "<input type='hidden' id='replaceCount_" + result[i].id + "'value=" + result[i].count + ">" +
+                                "</div>");
+                        }
                     }
                     else {
                         $(".hasVoucher").css("display", "none");
                     }
-                    for (var i = 0; i < result.length; i++) {
-                        $("#voucherArea").append("<div class='checkbox'><label>" +
-                            "<input name='voucherCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
-                            "<span class='lbl'> " + result[i].name + "（可抵扣商品数量：" + result[i].count + "）</span></label>" +
-                            "<input type='hidden' id='replaceCount_" + result[i].id + "'value=" + result[i].count + ">" +
-                            "</div>")
-                    }
+
                 }
             },
             error: error
@@ -784,18 +792,52 @@
                 } else {
                     var result = data.data;
                     if (result.length > 0) {
-                        $(".hasRechargeCard").css("display", "")
+                        $(".hasRechargeCard").css("display", "");
+                        for (var i = 0; i < result.length; i++) {
+                            $("#rechargeCardArea").append("<div class='checkbox'><label>" +
+                                "<input onchange='payMoneyChange()' name='rechargeCardCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
+                                "<span class='lbl'> " + result[i].name + "[" + dateFormat(result[i].expiryTime) + "]（剩余金额：" + result[i].balance + "元）</span></label>" +
+                                "<input type='hidden' id='leftMoney_" + result[i].id + "' value=" + result[i].balance + ">" +
+                                "</div>");
+                        }
                     }
                     else {
                         $(".hasRechargeCard").css("display", "none");
                     }
-                    for (var i = 0; i < result.length; i++) {
-                        $("#rechargeCardArea").append("<div class='checkbox'><label>" +
-                            "<input name='rechargeCardCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
-                            "<span class='lbl'> " + result[i].name + "（余额：" + result[i].balance + "）</span></label>" +
-                            "<input type='hidden' id='leftMoney_" + result[i].id + "' value=" + result[i].balance + ">" +
-                            "<input type='text' id='spendMoney_" + result[i].id + "' value=0>" +
-                            "</div>")
+                }
+            },
+            error: error
+        });
+        $.ajax({
+            url: "/api/point/findbygoodsattrpage",
+            dataType: "json",
+            async: false,
+            data: {
+                pageSize: 10000,
+                pageNum: 1,
+                customerId: $("#app_customerId").val(),
+                productId: $("#app_productId").val(),
+                cityCode: $("#app_cityCode").val()
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    if (result.length > 0) {
+                        $(".hasPoint").css("display", "");
+                        for (var i = 0; i < result.length; i++) {
+                            $("#pointArea").append("<div class='checkbox'><label>" +
+                                "<input onchange='payMoneyChange()' name='pointCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
+                                "<span class='lbl'> " + result[i].name + "[" + dateFormat(result[i].expiryTime) + "]（剩余积分：" + result[i].balance + "分；1积分=" + result[i].projectResp.pointConversionRate + "元）</span></label>" +
+                                "<input type='hidden' id='leftMoney_" + result[i].id + "' value=" + result[i].balance + ">" +
+                                "<input type='hidden' id='conversionRate_" + result[i].id + "' value=" + result[i].projectResp.pointConversionRate + ">" +
+                                "</div>");
+                        }
+                    }
+                    else {
+                        $(".hasPoint").css("display", "none");
                     }
                 }
             },
@@ -803,44 +845,106 @@
         });
     }
 
-    function saveAppendOrder() {
-        var count = 0;//用代金券支付的数量
-        var money = 0;//用充值卡支付的金额
-        $("#voucherArea input[type=checkbox]").each(function () {
-            if ($(this).prop('checked')) {
-                count = count + parseInt($("#replaceCount_" + $(this).val()).val());
-            }
-        });
-        var moneyError = false;
-        $("#rechargeCardArea input[type=checkbox]").each(function () {
-            if ($(this).prop('checked')) {
-                if (parseFloat($("#spendMoney_" + $(this).val()).val()) > parseFloat($("#leftMoney_" + $(this).val()).val())) {
-                    moneyError = true;
-                }
-                money = money + parseFloat($("#spendMoney_" + $(this).val()).val());
-            }
-        });
-        if (moneyError) {
-            bootboxalert("充值卡消费金额不能大于充值卡的余额");
-            return false;
-        }
-        var left = (parseInt($("#appendCount").val()) - count) * parseFloat($("#app_productPrice").val()) - money;
-        if (left < 0) {
-            bootboxalert("所选的付款内容超额支付追加的订单，不能追加！");
+    //checkbox勾选响应事件
+    function payMoneyChange() {
+        var needPay = calNeedPay();
+        console.log(needPay);
+        if (needPay > 0) {
+            console.log("is not enough");
+            removeDisableAttr();
         } else {
-            var confirmText = "所选的付款内容" + (left == 0 ? "刚好" : "不足以") + "支付追加的订单，继续追加该订单吗？"
-            confirm("所选的付款内容不足以支付追加的订单，继续追加该订单吗？", function (result) {
-                if (result) {
-                    appendOrder();
-                }
-            });
+            console.log("is enough");
+            disableNotChecked();
         }
     }
 
+    //计算还需要支付的金额
+    function calNeedPay() {
+        var price = parseFloat($("#app_productPrice").val());
+        var needPay = parseInt($("#appendCount").val()) * price;
+        $("#voucherArea input[type=checkbox]").each(function () {
+            if ($(this).prop('checked')) {
+                needPay = needPay - price * parseInt($("#replaceCount_" + $(this).val()).val());
+            }
+        });
+        $("#rechargeCardArea input[type=checkbox]").each(function () {
+            if ($(this).prop('checked')) {
+                needPay = needPay - parseFloat($("#leftMoney_" + $(this).val()).val());
+            }
+        });
+        $("#pointArea input[type=checkbox]").each(function () {
+            if ($(this).prop('checked')) {
+                needPay = needPay - parseFloat($("#conversionRate_" + $(this).val()).val()) * parseFloat($("#leftMoney_" + $(this).val()).val());
+            }
+        });
+        return needPay;
+    }
+
+    //所选金额足够后，将其他未选的checkbox置为disabled状态
+    function disableNotChecked() {
+        $("#voucherArea input[type=checkbox]").each(function () {
+            if (!$(this).prop('checked')) {
+                $(this).attr('disabled', "disabled");
+            }
+        });
+        $("#rechargeCardArea input[type=checkbox]").each(function () {
+            if (!$(this).prop('checked')) {
+                $(this).attr('disabled', "disabled");
+            }
+        });
+        $("#pointArea input[type=checkbox]").each(function () {
+            if (!$(this).prop('checked')) {
+                $(this).attr('disabled', "disabled");
+            }
+        });
+    }
+
+    //将所有checkbox置为可选状态
+    function removeDisableAttr() {
+        $("#voucherArea input[type=checkbox]").each(function () {
+            $(this).removeAttr('disabled');
+        });
+        $("#rechargeCardArea input[type=checkbox]").each(function () {
+            $(this).removeAttr('disabled');
+        });
+        $("#pointArea input[type=checkbox]").each(function () {
+            $(this).removeAttr('disabled');
+        });
+    }
+
+    //重置checkbox状态，可选且未选中
+    function initCheckbox() {
+        $("#voucherArea input[type=checkbox]").each(function () {
+            $(this).removeAttr('disabled');
+            $(this).prop("checked", false);
+        });
+        $("#rechargeCardArea input[type=checkbox]").each(function () {
+            $(this).removeAttr('disabled');
+            $(this).prop("checked", false);
+        });
+        $("#pointArea input[type=checkbox]").each(function () {
+            $(this).removeAttr('disabled');
+            $(this).prop("checked", false);
+        });
+    }
+
     function appendOrder() {
+        var needPay = calNeedPay();
+        if (needPay > 0) {
+            confirm("所选金额不足以支付该追加的订单，还继续追加订单吗？", function (result) {
+                if (result) {
+                    saveAppendOrder();
+                }
+            });
+        } else {
+            saveAppendOrder();
+        }
+    }
+
+    function saveAppendOrder() {
         var voucherIds = "";
         var rechargeCardIds = "";
-        var cardMoneys = "";
+        var pointIds = "";
         $("#voucherArea input[type=checkbox]").each(function () {
             if ($(this).prop('checked')) {
                 voucherIds = voucherIds + $(this).val() + ",";
@@ -850,13 +954,19 @@
             if ($(this).prop('checked')) {
                 if ($(this).val() > 0) {
                     rechargeCardIds = rechargeCardIds + $(this).val() + ",";
-                    cardMoneys = cardMoneys + $("#spendMoney_" + $(this).val()).val() + ",";
+                }
+            }
+        });
+        $("#pointArea input[type=checkbox]").each(function () {
+            if ($(this).prop('checked')) {
+                if ($(this).val() > 0) {
+                    pointIds = pointIds + $(this).val() + ",";
                 }
             }
         });
         $("#app_voucherIds").val(voucherIds);
         $("#app_rechargeCardIds").val(rechargeCardIds);
-        $("#app_cardMoneys").val(cardMoneys);
+        $("#app_pointIds").val(pointIds);
         $.ajax({
             url: "/api/orderinfo/appendorder",
             dataType: "json",

@@ -7,7 +7,7 @@ import java.util.Date;
 public class AuditRecordPO implements Serializable {
     private Integer id;
 
-    private Integer rechargeCardId;
+    private Integer pointId;
 
     private String customerName;
 
@@ -53,12 +53,12 @@ public class AuditRecordPO implements Serializable {
         this.id = id;
     }
 
-    public Integer getRechargeCardId() {
-        return rechargeCardId;
+    public Integer getPointId() {
+        return pointId;
     }
 
-    public void setRechargeCardId(Integer rechargeCardId) {
-        this.rechargeCardId = rechargeCardId;
+    public void setPointId(Integer pointId) {
+        this.pointId = pointId;
     }
 
     public String getCustomerName() {

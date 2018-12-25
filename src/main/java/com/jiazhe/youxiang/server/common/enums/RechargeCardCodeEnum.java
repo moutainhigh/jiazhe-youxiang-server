@@ -28,7 +28,9 @@ public enum RechargeCardCodeEnum {
     EXCHANGE_CODE_HAS_NO_PAYMENT(106018, "EXCHANGE_CODE_HAS_NO_PAYMENT", "该兑换码还没有消费记录"),
     CARD_HAS_NO_PAYMENT(106019, "CARD_HAS_NO_PAYMENT", "该充值卡还没有消费记录"),
     CUSTOMER_NOT_EXIST(106020, "CUSTOMER_NOT_EXIST", "该客户不存在"),
-    ;
+    PROJECT_IS_NULL(116021, "PROJECT_IS_NULL", "项目不能为空"),
+    CITY_IS_NULL(116022, "CITY_IS_NULL", "适用城市不能为空"),
+    PRODUCT_IS_NULL(116023, "PRODUCT_IS_NULL", "适用商品不能为空"),;
 
     RechargeCardCodeEnum(Integer code, String type, String message) {
         this.code = code;

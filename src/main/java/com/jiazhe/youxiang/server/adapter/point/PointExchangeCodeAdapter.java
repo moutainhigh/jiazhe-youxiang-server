@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.adapter.point;
 
+import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
 import com.jiazhe.youxiang.server.adapter.ProjectAdapter;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
@@ -49,6 +50,7 @@ public class PointExchangeCodeAdapter {
         pointExchangeCodeDTO.setExpiryType(pointExchangeCodePO.getExpiryType());
         pointExchangeCodeDTO.setStatus(pointExchangeCodePO.getStatus());
         pointExchangeCodeDTO.setUsed(pointExchangeCodePO.getUsed());
+        pointExchangeCodeDTO.setCustomerId(pointExchangeCodePO.getCustomerId());
         return pointExchangeCodeDTO;
     }
 
@@ -121,6 +123,7 @@ public class PointExchangeCodeAdapter {
         pointExchangeCodeResp.setStatus(pointExchangeCodeDTO.getStatus());
         pointExchangeCodeResp.setUsed(pointExchangeCodeDTO.getUsed());
         pointExchangeCodeResp.setProjectResp(ProjectAdapter.projectDTO2VO(pointExchangeCodeDTO.getProjectDTO()));
+        pointExchangeCodeResp.setCustomerResp(CustomerAdapter.customerDTO2VO(pointExchangeCodeDTO.getCustomerDTO()));
         return pointExchangeCodeResp;
     }
 

@@ -3,7 +3,7 @@
 <mapper namespace="com.jiazhe.youxiang.server.dao.mapper.AuditRecordPOMapper" >
   <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.AuditRecordPO" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="recharge_card_id" property="rechargeCardId" jdbcType="INTEGER" />
+    <result column="point_id" property="pointId" jdbcType="INTEGER" />
     <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
     <result column="customer_mobile" property="customerMobile" jdbcType="VARCHAR" />
     <result column="exchange_money" property="exchangeMoney" jdbcType="DECIMAL" />
@@ -81,9 +81,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, recharge_card_id, customer_name, customer_mobile, exchange_money, remark, img_urls, 
-    submitter_id, submitter_name, submitter_remark, status, audit_time, auditor_id, auditor_name, 
-    version, ext_info, is_deleted, add_time, mod_time
+    id, point_id, customer_name, customer_mobile, exchange_money, remark, img_urls, submitter_id, 
+    submitter_name, submitter_remark, status, audit_time, auditor_id, auditor_name, version, 
+    ext_info, is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.AuditRecordPOExample" >
     select
@@ -116,14 +116,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.AuditRecordPO" >
-    insert into audit_record (id, recharge_card_id, customer_name, 
+    insert into audit_record (id, point_id, customer_name, 
       customer_mobile, exchange_money, remark, 
       img_urls, submitter_id, submitter_name, 
       submitter_remark, status, audit_time, 
       auditor_id, auditor_name, version, 
       ext_info, is_deleted, add_time, 
       mod_time)
-    values (#{id,jdbcType=INTEGER}, #{rechargeCardId,jdbcType=INTEGER}, #{customerName,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{pointId,jdbcType=INTEGER}, #{customerName,jdbcType=VARCHAR}, 
       #{customerMobile,jdbcType=VARCHAR}, #{exchangeMoney,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
       #{imgUrls,jdbcType=VARCHAR}, #{submitterId,jdbcType=INTEGER}, #{submitterName,jdbcType=VARCHAR}, 
       #{submitterRemark,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{auditTime,jdbcType=TIMESTAMP}, 
@@ -137,8 +137,8 @@
       <if test="id != null" >
         id,
       </if>
-      <if test="rechargeCardId != null" >
-        recharge_card_id,
+      <if test="pointId != null" >
+        point_id,
       </if>
       <if test="customerName != null" >
         customer_name,
@@ -196,8 +196,8 @@
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="rechargeCardId != null" >
-        #{rechargeCardId,jdbcType=INTEGER},
+      <if test="pointId != null" >
+        #{pointId,jdbcType=INTEGER},
       </if>
       <if test="customerName != null" >
         #{customerName,jdbcType=VARCHAR},
@@ -264,8 +264,8 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.rechargeCardId != null" >
-        recharge_card_id = #{record.rechargeCardId,jdbcType=INTEGER},
+      <if test="record.pointId != null" >
+        point_id = #{record.pointId,jdbcType=INTEGER},
       </if>
       <if test="record.customerName != null" >
         customer_name = #{record.customerName,jdbcType=VARCHAR},
@@ -326,7 +326,7 @@
   <update id="updateByExample" parameterType="map" >
     update audit_record
     set id = #{record.id,jdbcType=INTEGER},
-      recharge_card_id = #{record.rechargeCardId,jdbcType=INTEGER},
+      point_id = #{record.pointId,jdbcType=INTEGER},
       customer_name = #{record.customerName,jdbcType=VARCHAR},
       customer_mobile = #{record.customerMobile,jdbcType=VARCHAR},
       exchange_money = #{record.exchangeMoney,jdbcType=DECIMAL},
@@ -351,8 +351,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jiazhe.youxiang.server.domain.po.AuditRecordPO" >
     update audit_record
     <set >
-      <if test="rechargeCardId != null" >
-        recharge_card_id = #{rechargeCardId,jdbcType=INTEGER},
+      <if test="pointId != null" >
+        point_id = #{pointId,jdbcType=INTEGER},
       </if>
       <if test="customerName != null" >
         customer_name = #{customerName,jdbcType=VARCHAR},
@@ -410,7 +410,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jiazhe.youxiang.server.domain.po.AuditRecordPO" >
     update audit_record
-    set recharge_card_id = #{rechargeCardId,jdbcType=INTEGER},
+    set point_id = #{pointId,jdbcType=INTEGER},
       customer_name = #{customerName,jdbcType=VARCHAR},
       customer_mobile = #{customerMobile,jdbcType=VARCHAR},
       exchange_money = #{exchangeMoney,jdbcType=DECIMAL},
