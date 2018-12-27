@@ -48,7 +48,9 @@ import java.util.Map;
 public class ControllerAdvice {
     private static final Logger LOGGER = LoggerFactory.getLogger("Out_Request");
 
-    private static final String PREFIX_HTTP_API = "http_api_req_count";
+    private static final String HTTP_API_REQ_COUNT = "http_api_req_count";
+    private static final String HTTP_API_REQ_DURATION = "http_api_req_duration";
+
 
     private static final String CODE_SUCCEED = "0";
 
@@ -68,7 +70,10 @@ public class ControllerAdvice {
         Object retVal = null;
         BindingResult bindingResult = null;
         StringBuilder methodName = new StringBuilder();
+        StringBuilder simpleMethodName = new StringBuilder();
         StringBuilder argsSB = new StringBuilder();
+        simpleMethodName.append(joinPoint.getTarget().getClass().getSimpleName())
+                .append(".").append(joinPoint.getSignature().getName()).append("()");
         methodName.append(joinPoint.getTarget().getClass().getCanonicalName())
                 .append(".").append(joinPoint.getSignature().getName()).append("()");
         try {
@@ -98,7 +103,7 @@ public class ControllerAdvice {
         } catch (Exception e) {
             isSuccess = false;
             long expendTime = System.currentTimeMillis() - start;
-            Metrics.counter(PREFIX_HTTP_API, "method", methodName.toString(), "code", CODE_NOT_SUCCEED, "duration", String.valueOf(expendTime)).increment();
+            Metrics.counter(HTTP_API_REQ_COUNT, "method", methodName.toString(), "code", CODE_NOT_SUCCEED, "duration", String.valueOf(expendTime)).increment();
             LOGGER.info("Exception HTTP调用{}方法发生问题,入参:{}，message:{},stack:{}", methodName, argsSB.toString(), e.getMessage(), e.fillInStackTrace());
             throw e;
         } finally {
@@ -106,8 +111,9 @@ public class ControllerAdvice {
                 long expendTime = System.currentTimeMillis() - start;
                 String retValInString = retVal != null ? customToString(retVal) : "null";
                 LOGGER.info("End HTTP调用{}方法成功,入参:{}，返回值:{},耗时:{}ms", methodName, argsSB.toString(), retValInString, expendTime);
-                insertLog(joinPoint, getDetail(methodName, argsSB.toString()));
-                Metrics.counter(PREFIX_HTTP_API, "method", methodName.toString(), "code", CODE_SUCCEED, "duration", String.valueOf(expendTime)).increment();
+                insertLog(joinPoint, getDetail(simpleMethodName, argsSB.toString()));
+                Metrics.counter(HTTP_API_REQ_COUNT, "method", simpleMethodName.toString(), "code", CODE_SUCCEED).increment();
+                Metrics.counter(HTTP_API_REQ_DURATION, "method", simpleMethodName.toString(), "code", CODE_SUCCEED).increment(expendTime);
             }
         }
         return retVal;
