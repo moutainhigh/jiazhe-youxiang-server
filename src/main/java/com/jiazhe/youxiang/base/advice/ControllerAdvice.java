@@ -51,9 +51,7 @@ public class ControllerAdvice {
     private static final String HTTP_API_REQ_COUNT = "http_api_req_count";
     private static final String HTTP_API_REQ_DURATION = "http_api_req_duration";
 
-
     private static final String CODE_SUCCEED = "0";
-
     private static final String CODE_NOT_SUCCEED = "1";
 
     @Value("${log.level}")
@@ -103,7 +101,7 @@ public class ControllerAdvice {
         } catch (Exception e) {
             isSuccess = false;
             long expendTime = System.currentTimeMillis() - start;
-            Metrics.counter(HTTP_API_REQ_COUNT, "method", methodName.toString(), "code", CODE_NOT_SUCCEED, "duration", String.valueOf(expendTime)).increment();
+            Metrics.counter(HTTP_API_REQ_COUNT, "method", methodName.toString(), "code", CODE_NOT_SUCCEED).increment();
             LOGGER.info("Exception HTTP调用{}方法发生问题,入参:{}，message:{},stack:{}", methodName, argsSB.toString(), e.getMessage(), e.fillInStackTrace());
             throw e;
         } finally {
