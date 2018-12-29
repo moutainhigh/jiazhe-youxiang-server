@@ -27,6 +27,7 @@ public enum CustomerCodeEnum {
     CUSTOMER_ADDRESS_ISDEFAULT_ERROR(109106, "CUSTOMER_ADDRESS_ISDEFAULT_ERROR", "地址是否是默认参数错误"),
     CUSTOMER_ADDRESS_INEXISTENCE(109107, "CUSTOMER_ADDRESS_INEXISTENCE", "地址不存在"),
     CUSTOMER_HAS_NOT_DEFAULT_ADDRESS(109108, "CUSTOMER_HAS_NOT_DEFAULT_ADDRESS", "该客户没有默认地址"),
+    CITY_CODE_ERROR(109109, "CITY_CODE_ERROR", "城市编码错误"),
     ;
 
     CustomerCodeEnum(Integer code, String type, String message) {
