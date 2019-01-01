@@ -122,8 +122,8 @@ public class AuditRecordServiceImpl implements AuditRecordService {
             pointPO.setExpiryTime(new Date(System.currentTimeMillis() + pointExchangeCodeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY));
         }
         pointPO.setDescription(pointExchangeCodeBatchEditDTO.getDescription());
-        pointPO.setFaceValue(auditRecordPO.getExchangeMoney());
-        pointPO.setBalance(auditRecordPO.getExchangeMoney());
+        pointPO.setFaceValue(auditRecordPO.getExchangePoint());
+        pointPO.setBalance(auditRecordPO.getExchangePoint());
         //暂时置为0，等生成了兑换记录再修改
         pointPO.setExchangeRecordId(0);
         pointPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
@@ -155,7 +155,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         auditRecordPO.setAuditorId(sysUserDTO.getId());
         auditRecordPO.setAuditorName(sysUserDTO.getDisplayName());
         auditRecordPO.setAuditTime(new Date());
-        auditRecordPO.setPointId(pointPO.getId());
+        auditRecordPO.setPointIds(pointPO.getId());
         auditRecordPO.setStatus(Byte.valueOf("2"));
         auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
     }
@@ -163,10 +163,10 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     @Override
     public void addSave(String customerName, String customerMobile, BigDecimal exchangeMoney, String imgUrls) {
         AuditRecordPO auditRecordPO = new AuditRecordPO();
-        auditRecordPO.setPointId(0);
+        auditRecordPO.setPointIds(0);
         auditRecordPO.setCustomerName(customerName);
         auditRecordPO.setCustomerMobile(customerMobile);
-        auditRecordPO.setExchangeMoney(exchangeMoney);
+        auditRecordPO.setExchangePoint(exchangeMoney);
         auditRecordPO.setImgUrls(imgUrls);
         auditRecordPO.setAddTime(new Date());
         auditRecordPO.setModTime(new Date());
@@ -183,7 +183,6 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         }
         auditRecordPO.setSubmitterId(sysUserDTO.getId());
         auditRecordPO.setSubmitterName(sysUserDTO.getDisplayName());
-        auditRecordPO.setSubmitterRemark("");
         auditRecordPO.setRemark("");
         auditRecordPOMapper.insert(auditRecordPO);
     }
@@ -201,7 +200,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         auditRecordPO.setStatus(Byte.valueOf(("0")));
         auditRecordPO.setCustomerName(customerName);
         auditRecordPO.setCustomerMobile(customerMobile);
-        auditRecordPO.setExchangeMoney(exchangeMoney);
+        auditRecordPO.setExchangePoint(exchangeMoney);
         auditRecordPO.setImgUrls(imgUrls);
         auditRecordPO.setModTime(new Date());
         auditRecordPOMapper.updateByPrimaryKey(auditRecordPO);

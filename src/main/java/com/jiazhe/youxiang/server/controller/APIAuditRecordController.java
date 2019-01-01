@@ -64,12 +64,12 @@ public class APIAuditRecordController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "审核", level = LogLevelEnum.LEVEL_2)
     public Object auditRecordPass(@ModelAttribute AuditRecordCheckReq req) {
         if (req.getStatus().equals(AUDIT_UNPASS)) {
-            CommonValidator.validateNull(req.getRemark(), new AuditRecordException(AuditRecordCodeEnum.AUDIT_REASON_IS_NULL));
-            auditRecordBiz.auditRecordUnpass(req.getId(), req.getVersion(), req.getRemark());
+            CommonValidator.validateNull(req.getAuditReason(), new AuditRecordException(AuditRecordCodeEnum.AUDIT_REASON_IS_NULL));
+            auditRecordBiz.auditRecordUnpass(req.getId(), req.getVersion(), req.getAuditReason());
         }
         if (req.getStatus().equals(AUDIT_PASS)) {
-            CommonValidator.validateNull(req.getBatchId(), new AuditRecordException(AuditRecordCodeEnum.NO_BATCH_INFO));
-            auditRecordBiz.auditRecordPass(req.getId(), req.getVersion(), req.getBatchId());
+            CommonValidator.validateNull(req.getExchangeBatchId(), new AuditRecordException(AuditRecordCodeEnum.NO_BATCH_INFO));
+            auditRecordBiz.auditRecordPass(req.getId(), req.getVersion(), req.getExchangeBatchId());
         }
         return ResponseFactory.buildSuccess();
     }

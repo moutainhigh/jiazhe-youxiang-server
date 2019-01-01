@@ -41,7 +41,7 @@ public class AuditRecordAdapter {
         }
         AuditRecordDTO auditRecordDTO = new AuditRecordDTO();
         auditRecordDTO.setId(auditRecordPO.getId());
-        auditRecordDTO.setPointId(auditRecordPO.getPointId());
+        auditRecordDTO.setPointId(auditRecordPO.getPointIds());
         auditRecordDTO.setCustomerName(auditRecordPO.getCustomerName());
         auditRecordDTO.setCustomerMobile(auditRecordPO.getCustomerMobile());
         auditRecordDTO.setExchangeMoney(auditRecordPO.getExchangeMoney());
