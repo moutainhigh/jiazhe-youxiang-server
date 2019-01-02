@@ -89,7 +89,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         auditRecordPO.setAuditorName(sysUserDTO.getDisplayName());
         auditRecordPO.setAuditTime(new Date());
         auditRecordPO.setStatus(Byte.valueOf("1"));
-        auditRecordPO.setRemark(reason);
+        auditRecordPO.setAuditReason(reason);
         auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
     }
 
@@ -153,7 +153,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
             //修改充值卡对应的兑换记录id
             pointPO.setExchangeRecordId(pointRecordPO.getId());
             pointService.update(pointPO);
-            pointIds = pointIds + pointPO.getId();
+            pointIds = pointIds + pointPO.getId() + ",";
         }
         if(auditRecordPO.getGivingPoint().compareTo(BigDecimal.ZERO)==1){
             PointExchangeCodeBatchEditDTO givingBatchEditDTO = pointExchangeCodeBatchService.getById(givingBatchId);

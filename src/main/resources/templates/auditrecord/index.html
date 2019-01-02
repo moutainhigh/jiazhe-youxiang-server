@@ -99,7 +99,7 @@
                                             <form id="auditForm" class="form-horizontal" role="form">
                                                 <input type="hidden" name="id" id="auditRecordId"/>
                                                 <input type="hidden" name="version" id="version">
-                                                <input type="hidden" name="status" id="status">
+                                                <input type="hidden" name="status" id="saveStatus">
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">客户姓名：</label>
@@ -275,8 +275,8 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
+                                                <div class="space-2 auditReason"></div>
+                                                <div class="form-group auditReason">
                                                     <label class="col-sm-4 control-label no-padding-right">不通过理由：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
@@ -299,13 +299,13 @@
 
                                     <button id="passBtn" class="btn btn-sm btn-primary modal-footer-btn"
                                             onclick="pass()">
-                                        <i class="ace-icon fa fa-check"></i>
+                                        <i class="ace-icon fa fa-thumbs-o-up"></i>
                                         通过
                                     </button>
 
                                     <button id="unpassBtn" class="btn btn-sm btn-primary modal-footer-btn"
                                             onclick="unpass()">
-                                        <i class="ace-icon fa fa-check"></i>
+                                        <i class="ace-icon fa fa-thumbs-o-down"></i>
                                         不通过
                                     </button>
                                 </div>
@@ -369,7 +369,8 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    $("#projectId").append("<option value=0>&nbsp;</option>");
+                    $("#exchangeProjectId").append("<option value='0'>&nbsp;</option>");
+                    $("#givingProjectId").append("<option value='0'>&nbsp;</option>");
                     for (var i = 0; i < result.length; i++) {
                         if (result[i].status == 1) {//进行中的项目
                             $("#exchangeProjectId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
@@ -380,10 +381,6 @@
             },
             error: error
         });
-
-        //根据项目初始化两个批次信息
-        refreshBatch(1);
-        refreshBatch(2);
 
         initDatePicker();
 
@@ -474,18 +471,32 @@
 
     function show(id) {
         huixian(id);
-        $("#remark").attr('readonly', 'readonly');
-        $("#auditForm input[name=status]").attr('disabled', 'disabled');
         $("#passBtn").hide();
         $("#unpassBtn").hide();
+        $("#auditReason").attr('readonly', 'readonly');
+        $("#posCode").attr('readonly', 'readonly');
+        $("#cardNo").attr('readonly', 'readonly');
+        $("#saveTradeTime").attr('disabled', 'disabled');
+        $("#exchangeProjectId").attr('disabled', "disabled");
+        $("#exchangeBatchId").attr('disabled', "disabled");
+        $("#givingProjectId").attr('disabled', "disabled");
+        $("#givingBatchId").attr('disabled', "disabled");
         $("#modal-title").html("查看");
+
     }
 
     function check(id) {
         huixian(id);
-        $("#remark").removeAttr('readonly');
         $("#passBtn").show();
         $("#unpassBtn").show();
+        $("#auditReason").removeAttr('readonly');
+        $("#posCode").removeAttr('readonly');
+        $("#cardNo").removeAttr('readonly');
+        $("#saveTradeTime").removeAttr('disabled');
+        $("#exchangeProjectId").removeAttr('disabled');
+        $("#exchangeBatchId").removeAttr('disabled');
+        $("#givingProjectId").removeAttr('disabled');
+        $("#givingBatchId").removeAttr('disabled');
         $("#modal-title").html("审核");
     }
 
@@ -513,11 +524,13 @@
                     $("#exchangeType").val(result.exchangeType);
                     $("#givingPoint").val(result.givingPoint);
                     $("#givingType").val(result.givingType);
+                    $("#auditReason").val(result.auditReason);
                     $("#remark").val(result.remark);
-                    $("#auditForm input[name=status]").removeAttr('disabled');
-                    result.status == 1 ? $("#unpass").click() : $("#pass").click();
-                    if (result.status == 2) {
-                        $(".pass").css("display", "none");
+                    $("#remark").attr('readonly', 'readonly');
+                    if (result.status == 1) {
+                        $(".auditReason").css("display", "");
+                    } else {
+                        $(".auditReason").css("display", "none");
                     }
                     var imgUrls = result.imgUrls.split(",");
                     for (var i = 0; i < imgUrls.length; i++) {
@@ -528,13 +541,27 @@
             error: error
         });
     }
-    
+
     function pass() {
-        
+        $("#saveStatus").val(2);
+        confirm("确定通过该条消费记录的审核？", function (result) {
+            if (result) {
+                save();
+            }
+        });
     }
 
-    function unpass(){
-
+    function unpass() {
+        $("#saveStatus").val(1);
+        bootbox.prompt({
+            title: "请填写审核不通过理由！",
+            callback: function (result) {
+                if (result) {
+                    $("#auditReason").val(result);
+                    save();
+                }
+            }
+        })
     }
 
     function save() {
