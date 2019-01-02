@@ -49,7 +49,7 @@ public class APIAuditRecordController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(APIAuditRecordController.class);
 
     /**
-     * 审核消费记录 【0未审核，1不通过，2通过】
+     * 审核消费记录 【0未审核，1未通过，2已通过】
      */
     private static Byte AUDIT_UNPASS = Byte.valueOf("1");
     private static Byte AUDIT_PASS = Byte.valueOf("2");

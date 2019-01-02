@@ -99,6 +99,7 @@
                                             <form id="auditForm" class="form-horizontal" role="form">
                                                 <input type="hidden" name="id" id="auditRecordId"/>
                                                 <input type="hidden" name="version" id="version">
+                                                <input type="hidden" name="status" id="status">
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">客户姓名：</label>
@@ -125,12 +126,103 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">兑换数量：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">兑换积分：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="exchangeMoney" name="exchangeMoney"
+                                                            <input id="exchangePoint" name="exchangePoint"
                                                                    class="form-control"
                                                                    type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">兑换类型：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="exchangeType" name="exchangeType"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">兑换积分所属项目：</label>
+                                                    <div class="col-sm-8">
+                                                        <select id="exchangeProjectId"
+                                                                onchange="refreshBatch(1)"
+                                                                class="selectpicker show-tick form-control">
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">兑换积分所属批次：</label>
+                                                    <div class="col-sm-8">
+                                                        <select id="exchangeBatchId" name="exchangeBatchId"
+                                                                class="selectpicker show-tick form-control">
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">赠送积分：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="givingPoint" name="givingPoint"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">赠送类型：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="givingType" name="givingType"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">赠送积分所属项目：</label>
+                                                    <div class="col-sm-8">
+                                                        <select id="givingProjectId"
+                                                                onchange="refreshBatch(2)"
+                                                                class="selectpicker show-tick form-control">
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">赠送积分所属批次：</label>
+                                                    <div class="col-sm-8">
+                                                        <select id="givingBatchId" name="givingBatchId"
+                                                                class="selectpicker show-tick form-control">
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">备注：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <textarea id="remark" name="remark"
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px"
+                                                                      readonly></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -145,49 +237,53 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">审核结果：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">POS机编号：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <label class="radio-inline">
-                                                                <input id="pass" type="radio" value=2 name="status"/>通过
-                                                            </label>
-                                                            <label class="radio-inline ">
-                                                                <input id="unpass" type="radio" value=1 name="status"/>不通过
-                                                            </label>
+                                                            <input id="posCode" name="posCode"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2 unpass"></div>
-                                                <div class="form-group unpass">
-                                                    <label class="col-sm-4 control-label no-padding-right">审核理由：</label>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">银行卡后四位：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <textarea id="remark" name="remark"
+                                                            <input id="cardNo" name="cardNo"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveTradeTime">交易时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker"
+                                                                   id="saveTradeTime" type="text" readonly/>
+                                                            <span class="input-group-addon">
+                                                                            <i class="fa fa-calendar bigger-110"></i>
+                                                                        </span>
+                                                            <input type="hidden" value=0 name="tradeTime"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">不通过理由：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <textarea id="auditReason" name="auditReason"
                                                                       class="form-control"
                                                                       style="resize:none;height: 100px"></textarea>
                                                         </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="space-2 pass"></div>
-                                                <div class="form-group pass">
-                                                    <label class="col-sm-4 control-label no-padding-right">所属项目：</label>
-                                                    <div class="col-sm-8">
-                                                        <select id="projectId" name="projectId"
-                                                                onchange="refreshBatch()"
-                                                                class="selectpicker show-tick form-control">
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="space-2 pass"></div>
-                                                <div class="form-group pass">
-                                                    <label class="col-sm-4 control-label no-padding-right">所属批次（积分）：</label>
-                                                    <div class="col-sm-8">
-                                                        <select id="batchId" name="batchId"
-                                                                class="selectpicker show-tick form-control">
-                                                        </select>
                                                     </div>
                                                 </div>
                                             </form>
@@ -201,10 +297,16 @@
                                         取消
                                     </button>
 
-                                    <button id="saveBtn" class="btn btn-sm btn-primary modal-footer-btn"
-                                            onclick="save()">
+                                    <button id="passBtn" class="btn btn-sm btn-primary modal-footer-btn"
+                                            onclick="pass()">
                                         <i class="ace-icon fa fa-check"></i>
-                                        提交
+                                        通过
+                                    </button>
+
+                                    <button id="unpassBtn" class="btn btn-sm btn-primary modal-footer-btn"
+                                            onclick="unpass()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        不通过
                                     </button>
                                 </div>
                             </div>
@@ -231,9 +333,14 @@
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
-    var permission = getCookie("permission");
     var auditRecordStatus = ['待审核', '未通过', '已通过'];
     $(document).ready(function () {
+        $(document).on("hidden.bs.modal", ".bootbox", function () {
+            if ($(".modal-backdrop").length > 0) {
+                $("body").addClass("modal-open");
+            }
+        })
+
         // 通过该方法来为每次弹出的模态框设置最新的zIndex值，从而使最新的modal显示在最前面
         $(document).on('show.bs.modal', '.modal', function (event) {
             var zIndex = 1060 + (10 * $('.modal:visible').length);
@@ -242,7 +349,6 @@
     });
 
     $(function () {
-
         //重新修改表格宽度
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
@@ -266,7 +372,8 @@
                     $("#projectId").append("<option value=0>&nbsp;</option>");
                     for (var i = 0; i < result.length; i++) {
                         if (result[i].status == 1) {//进行中的项目
-                            $("#projectId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                            $("#exchangeProjectId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                            $("#givingProjectId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
                         }
                     }
                 }
@@ -274,31 +381,26 @@
             error: error
         });
 
-        refreshBatch();
+        //根据项目初始化两个批次信息
+        refreshBatch(1);
+        refreshBatch(2);
 
-        $("#auditForm input[name=status]").bind("change", function () {
-            if ($("input[name=status]:checked").val() == 1) {
-                $(".pass").css("display", "none");
-                $(".unpass").css("display", "");
-            } else {
-                $(".pass").css("display", "");
-                $(".unpass").css("display", "none");
-            }
-        });
+        initDatePicker();
 
         var tableOption = {
             url: "/api/auditrecord/listpage",
             postData: transformToJson($('#auditRecordSearchForm').serializeArray()),
             shrinkToFit: false,
             autoScroll: true,
-            multiselect: true,
-            colNames: ['', '操作', '客户姓名', '客户电话', '分数', '状态', '提交人姓名', '提交时间', '审核人姓名', '审核时间'],
+//            multiselect: true,
+            colNames: ['', '操作', '客户姓名', '客户电话', '兑换积分', '赠送积分', '状态', '提交人姓名', '提交时间', '审核人姓名', '审核时间'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: '_action', index: '_action', sortable: false, formatter: customFormatter},
                 {name: 'customerName', index: 'customerName', sortable: false},
                 {name: 'customerMobile', index: 'customerMobile', sortable: false},
-                {name: 'exchangeMoney', index: 'exchangeMoney', sortable: false},
+                {name: 'exchangePoint', index: 'exchangePoint', sortable: false},
+                {name: 'givingPoint', index: 'givingPoint', sortable: false},
                 {
                     name: 'status',
                     index: 'status',
@@ -347,7 +449,6 @@
             },
             caption: "消费记录列表"
         };
-
         initTable(grid_selector, pager_selector, tableOption);
     });
 
@@ -375,14 +476,16 @@
         huixian(id);
         $("#remark").attr('readonly', 'readonly');
         $("#auditForm input[name=status]").attr('disabled', 'disabled');
-        $("#saveBtn").hide();
+        $("#passBtn").hide();
+        $("#unpassBtn").hide();
         $("#modal-title").html("查看");
     }
 
     function check(id) {
         huixian(id);
         $("#remark").removeAttr('readonly');
-        $("#saveBtn").show();
+        $("#passBtn").show();
+        $("#unpassBtn").show();
         $("#modal-title").html("审核");
     }
 
@@ -406,7 +509,10 @@
                     $("#version").val(result.version);
                     $("#customerName").val(result.customerName);
                     $("#customerMobile").val(result.customerMobile);
-                    $("#exchangeMoney").val(result.exchangeMoney);
+                    $("#exchangePoint").val(result.exchangePoint);
+                    $("#exchangeType").val(result.exchangeType);
+                    $("#givingPoint").val(result.givingPoint);
+                    $("#givingType").val(result.givingType);
                     $("#remark").val(result.remark);
                     $("#auditForm input[name=status]").removeAttr('disabled');
                     result.status == 1 ? $("#unpass").click() : $("#pass").click();
@@ -421,6 +527,14 @@
             },
             error: error
         });
+    }
+    
+    function pass() {
+        
+    }
+
+    function unpass(){
+
     }
 
     function save() {
@@ -447,9 +561,18 @@
         });
     }
 
-    function refreshBatch() {
-        var projectId = $("#projectId").val();
-        $("#batchId").empty();
+    function refreshBatch(type) {
+        var projectId;
+        var batchId;
+        if (type == 1) {
+            projectId = $("#exchangeProjectId").val();
+            batchId = "#exchangeBatchId";
+        }
+        if (type == 2) {
+            projectId = $("#givingProjectId").val();
+            batchId = "#givingBatchId";
+        }
+        $(batchId).empty();
         $.ajax({
             url: "/api/pointexchangecodebatch/findvirtualbyprojectid",
             dataType: "json",
@@ -463,9 +586,9 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    $("#batchId").append("<option value=>&nbsp;</option>");
+                    $(batchId).append("<option value=>&nbsp;</option>");
                     for (var i = 0; i < result.length; i++) {
-                        $("#batchId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                        $(batchId).append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
                     }
                 }
             },
