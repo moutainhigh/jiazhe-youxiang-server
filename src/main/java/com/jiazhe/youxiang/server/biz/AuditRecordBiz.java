@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,12 +24,12 @@ public class AuditRecordBiz {
     @Autowired
     private AuditRecordService auditRecordService;
 
-    public void auditRecordPass(Integer auditRecordId,Integer version, Integer batchId){
-        auditRecordService.auditRecordPass(auditRecordId,version,batchId);
+    public void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId,Integer givingBatchId,String posCode,String cardNo,Long tradeTime) {
+        auditRecordService.auditRecordPass(auditRecordId, version, exchangeBatchId,givingBatchId,posCode,cardNo,new Date(tradeTime));
     }
 
-    public void auditRecordUnpass(Integer auditRecordId, Integer version ,String reason) {
-        auditRecordService.auditRecordUnpass(auditRecordId,version,reason);
+    public void auditRecordUnpass(Integer auditRecordId, Integer version, String reason) {
+        auditRecordService.auditRecordUnpass(auditRecordId, version, reason);
     }
 
     public Integer getWaitCheckCount() {
@@ -39,19 +40,20 @@ public class AuditRecordBiz {
         return auditRecordService.getById(id);
     }
 
-    public List<AuditRecordDTO> getList(Byte status,Paging paging) {
-        return auditRecordService.getList(null,status,paging);
+    public List<AuditRecordDTO> getList(Byte status, Paging paging) {
+        return auditRecordService.getList(null, status, paging);
     }
 
     public List<AuditRecordDTO> getSubmitterList(Integer submitterId, Paging paging) {
-        return auditRecordService.getList(submitterId,null,paging);
+        return auditRecordService.getList(submitterId, null, paging);
     }
 
-    public void addSave(String customerName, String customerMobile, BigDecimal exchangeMoney, String imgUrls) {
-        auditRecordService.addSave(customerName,customerMobile,exchangeMoney,imgUrls);
+
+    public void editSave(Integer id, Integer version, String customerName, String customerMobile, BigDecimal exchangePoint, String exchangeType, BigDecimal givingPoint, String givingType, String remark, String imgUrls) {
+        auditRecordService.editSave(id, version, customerName, customerMobile, exchangePoint,exchangeType,givingPoint,givingType,remark, imgUrls);
     }
 
-    public void editSave(Integer id, Integer version, String customerName, String customerMobile, BigDecimal exchangeMoney, String imgUrls) {
-        auditRecordService.editSave(id,version,customerName,customerMobile,exchangeMoney,imgUrls);
+    public void addSave(String customerName, String customerMobile, BigDecimal exchangePoint, String exchangeType, BigDecimal givingPoint, String givingType, String remark, String imgUrls) {
+        auditRecordService.addSave(customerName, customerMobile, exchangePoint, exchangeType, givingPoint, givingType, remark, imgUrls);
     }
 }

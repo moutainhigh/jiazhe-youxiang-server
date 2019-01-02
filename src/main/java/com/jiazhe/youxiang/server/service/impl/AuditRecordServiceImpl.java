@@ -89,13 +89,14 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         auditRecordPO.setAuditorName(sysUserDTO.getDisplayName());
         auditRecordPO.setAuditTime(new Date());
         auditRecordPO.setStatus(Byte.valueOf("1"));
-        auditRecordPO.setRemark(reason);
+        auditRecordPO.setAuditReason(reason);
         auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void auditRecordPass(Integer auditRecordId, Integer version, Integer batchId) {
+    public void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId,Integer givingBatchId,String posCode,String cardNo,Date tradeTime) {
+        String pointIds = "";
         AuditRecordPO auditRecordPO = auditRecordPOMapper.selectByPrimaryKey(auditRecordId);
         if (!auditRecordPO.getVersion().equals(version)) {
             throw new AuditRecordException(AuditRecordCodeEnum.VERSION_IS_CHANGED);
@@ -113,65 +114,107 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         } else {
             customerId = customerDTO.getId();
         }
-        PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO = pointExchangeCodeBatchService.getById(batchId);
-        PointPO pointPO = new PointPO();
-        //直接指定过期时间
-        if (pointExchangeCodeBatchEditDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
-            pointPO.setExpiryTime(pointExchangeCodeBatchEditDTO.getPointExpiryTime());
-        } else {
-            pointPO.setExpiryTime(new Date(System.currentTimeMillis() + pointExchangeCodeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY));
-        }
-        pointPO.setDescription(pointExchangeCodeBatchEditDTO.getDescription());
-        pointPO.setFaceValue(auditRecordPO.getExchangeMoney());
-        pointPO.setBalance(auditRecordPO.getExchangeMoney());
-        //暂时置为0，等生成了兑换记录再修改
-        pointPO.setExchangeRecordId(0);
-        pointPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
-        pointPO.setProjectId(pointExchangeCodeBatchEditDTO.getProjectId());
-        pointPO.setName(pointExchangeCodeBatchEditDTO.getPointName());
-        pointPO.setCustomerId(customerId);
-        pointPO.setCityCodes(pointExchangeCodeBatchEditDTO.getCityCodes());
-        pointPO.setProductIds(pointExchangeCodeBatchEditDTO.getProductIds());
-        pointService.insert(pointPO);
         //插入兑换记录信息
         SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
         if (null == sysUserDTO) {
             throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
-        PointExchangeRecordPO pointRecordPO = new PointExchangeRecordPO();
-        pointRecordPO.setOperatorId(sysUserDTO.getId());
-        pointRecordPO.setOperatorName(sysUserDTO.getLoginName());
-        pointRecordPO.setExchangeType(CommonConstant.EXCHANGETYPE_AUDITRECORD_PASS);
-        pointRecordPO.setPointId(pointPO.getId());
-        pointRecordPO.setExtInfo("");
-        pointRecordPO.setIsDeleted(Byte.valueOf("0"));
-        pointRecordPO.setAddTime(new Date());
-        pointRecordPO.setModTime(new Date());
-        pointExchangeRecordService.insert(pointRecordPO);
-        //修改充值卡对应的兑换记录id
-        pointPO.setExchangeRecordId(pointRecordPO.getId());
-        pointService.update(pointPO);
+        if(auditRecordPO.getExchangePoint().compareTo(BigDecimal.ZERO) == 1){
+            PointExchangeCodeBatchEditDTO exchangeBatchEditDTO = pointExchangeCodeBatchService.getById(exchangeBatchId);
+            PointPO pointPO = new PointPO();
+            //直接指定过期时间
+            if (exchangeBatchEditDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
+                pointPO.setExpiryTime(exchangeBatchEditDTO.getPointExpiryTime());
+            } else {
+                pointPO.setExpiryTime(new Date(System.currentTimeMillis() + exchangeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY));
+            }
+            pointPO.setDescription(exchangeBatchEditDTO.getDescription());
+            pointPO.setFaceValue(auditRecordPO.getExchangePoint());
+            pointPO.setBalance(auditRecordPO.getExchangePoint());
+            //暂时置为0，等生成了兑换记录再修改
+            pointPO.setExchangeRecordId(0);
+            pointPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
+            pointPO.setProjectId(exchangeBatchEditDTO.getProjectId());
+            pointPO.setName(exchangeBatchEditDTO.getPointName());
+            pointPO.setCustomerId(customerId);
+            pointPO.setCityCodes(exchangeBatchEditDTO.getCityCodes());
+            pointPO.setProductIds(exchangeBatchEditDTO.getProductIds());
+            pointService.insert(pointPO);
+            PointExchangeRecordPO pointRecordPO = new PointExchangeRecordPO();
+            pointRecordPO.setOperatorId(sysUserDTO.getId());
+            pointRecordPO.setOperatorName(sysUserDTO.getLoginName());
+            pointRecordPO.setExchangeType(CommonConstant.EXCHANGETYPE_AUDITRECORD_PASS);
+            pointRecordPO.setPointId(pointPO.getId());
+            pointRecordPO.setExtInfo("");
+            pointRecordPO.setIsDeleted(Byte.valueOf("0"));
+            pointRecordPO.setAddTime(new Date());
+            pointRecordPO.setModTime(new Date());
+            pointExchangeRecordService.insert(pointRecordPO);
+            //修改充值卡对应的兑换记录id
+            pointPO.setExchangeRecordId(pointRecordPO.getId());
+            pointService.update(pointPO);
+            pointIds = pointIds + pointPO.getId() + ",";
+        }
+        if(auditRecordPO.getGivingPoint().compareTo(BigDecimal.ZERO)==1){
+            PointExchangeCodeBatchEditDTO givingBatchEditDTO = pointExchangeCodeBatchService.getById(givingBatchId);
+            PointPO pointPO = new PointPO();
+            //直接指定过期时间
+            if (givingBatchEditDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
+                pointPO.setExpiryTime(givingBatchEditDTO.getPointExpiryTime());
+            } else {
+                pointPO.setExpiryTime(new Date(System.currentTimeMillis() + givingBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY));
+            }
+            pointPO.setDescription(givingBatchEditDTO.getDescription());
+            pointPO.setFaceValue(auditRecordPO.getExchangePoint());
+            pointPO.setBalance(auditRecordPO.getExchangePoint());
+            //暂时置为0，等生成了兑换记录再修改
+            pointPO.setExchangeRecordId(0);
+            pointPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
+            pointPO.setProjectId(givingBatchEditDTO.getProjectId());
+            pointPO.setName(givingBatchEditDTO.getPointName());
+            pointPO.setCustomerId(customerId);
+            pointPO.setCityCodes(givingBatchEditDTO.getCityCodes());
+            pointPO.setProductIds(givingBatchEditDTO.getProductIds());
+            pointService.insert(pointPO);
+            PointExchangeRecordPO pointRecordPO = new PointExchangeRecordPO();
+            pointRecordPO.setOperatorId(sysUserDTO.getId());
+            pointRecordPO.setOperatorName(sysUserDTO.getLoginName());
+            pointRecordPO.setExchangeType(CommonConstant.EXCHANGETYPE_AUDITRECORD_PASS);
+            pointRecordPO.setPointId(pointPO.getId());
+            pointRecordPO.setExtInfo("");
+            pointRecordPO.setIsDeleted(Byte.valueOf("0"));
+            pointRecordPO.setAddTime(new Date());
+            pointRecordPO.setModTime(new Date());
+            pointExchangeRecordService.insert(pointRecordPO);
+            //修改充值卡对应的兑换记录id
+            pointPO.setExchangeRecordId(pointRecordPO.getId());
+            pointService.update(pointPO);
+            pointIds = pointIds + pointPO.getId();
+        }
         auditRecordPO.setVersion(version + 1);
         auditRecordPO.setAuditorId(sysUserDTO.getId());
         auditRecordPO.setAuditorName(sysUserDTO.getDisplayName());
         auditRecordPO.setAuditTime(new Date());
-        auditRecordPO.setPointId(pointPO.getId());
+        auditRecordPO.setPointIds(pointIds);
         auditRecordPO.setStatus(Byte.valueOf("2"));
+        auditRecordPO.setPosCode(posCode);
+        auditRecordPO.setCardNo(cardNo);
+        auditRecordPO.setTradeTime(tradeTime);
         auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
     }
 
     @Override
-    public void addSave(String customerName, String customerMobile, BigDecimal exchangeMoney, String imgUrls) {
+    public void addSave(String customerName, String customerMobile, BigDecimal exchangePoint, String exchangeType, BigDecimal givingPoint, String givingType, String remark, String imgUrls) {
         AuditRecordPO auditRecordPO = new AuditRecordPO();
-        auditRecordPO.setPointId(0);
+        auditRecordPO.setPointIds("");
         auditRecordPO.setCustomerName(customerName);
         auditRecordPO.setCustomerMobile(customerMobile);
-        auditRecordPO.setExchangeMoney(exchangeMoney);
+        auditRecordPO.setExchangePoint(exchangePoint);
+        auditRecordPO.setExchangeType(exchangeType);
+        auditRecordPO.setGivingPoint(givingPoint);
+        auditRecordPO.setGivingType(givingType);
+        auditRecordPO.setRemark(remark);
         auditRecordPO.setImgUrls(imgUrls);
-        auditRecordPO.setAddTime(new Date());
-        auditRecordPO.setModTime(new Date());
-        auditRecordPO.setExtInfo("");
-        auditRecordPO.setIsDeleted(Byte.valueOf("0"));
         auditRecordPO.setStatus(Byte.valueOf("0"));
         auditRecordPO.setVersion(0);
         auditRecordPO.setAuditorId(0);
@@ -183,13 +226,11 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         }
         auditRecordPO.setSubmitterId(sysUserDTO.getId());
         auditRecordPO.setSubmitterName(sysUserDTO.getDisplayName());
-        auditRecordPO.setSubmitterRemark("");
-        auditRecordPO.setRemark("");
-        auditRecordPOMapper.insert(auditRecordPO);
+        auditRecordPOMapper.insertSelective(auditRecordPO);
     }
 
     @Override
-    public void editSave(Integer id, Integer version, String customerName, String customerMobile, BigDecimal exchangeMoney, String imgUrls) {
+    public void editSave(Integer id, Integer version, String customerName, String customerMobile, BigDecimal exchangePoint, String exchangeType, BigDecimal givingPoint, String givingType, String remark, String imgUrls) {
         AuditRecordPO auditRecordPO = auditRecordPOMapper.selectByPrimaryKey(id);
         if (auditRecordPO.getStatus().equals(Byte.valueOf("2"))) {
             throw new AuditRecordException(AuditRecordCodeEnum.RECORD_HASS_PASSED);
@@ -201,9 +242,13 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         auditRecordPO.setStatus(Byte.valueOf(("0")));
         auditRecordPO.setCustomerName(customerName);
         auditRecordPO.setCustomerMobile(customerMobile);
-        auditRecordPO.setExchangeMoney(exchangeMoney);
+        auditRecordPO.setExchangePoint(exchangePoint);
+        auditRecordPO.setExchangeType(exchangeType);
+        auditRecordPO.setGivingPoint(givingPoint);
+        auditRecordPO.setGivingType(givingType);
+        auditRecordPO.setRemark(remark);
         auditRecordPO.setImgUrls(imgUrls);
         auditRecordPO.setModTime(new Date());
-        auditRecordPOMapper.updateByPrimaryKey(auditRecordPO);
+        auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
     }
 }
