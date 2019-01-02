@@ -16,15 +16,18 @@ public class AuditRecordAdapter {
         }
         AuditRecordResp auditRecordResp = new AuditRecordResp();
         auditRecordResp.setId(auditRecordDTO.getId());
-        auditRecordResp.setPointId(auditRecordDTO.getPointId());
+        auditRecordResp.setPointIds(auditRecordDTO.getPointIds());
         auditRecordResp.setCustomerName(auditRecordDTO.getCustomerName());
         auditRecordResp.setCustomerMobile(auditRecordDTO.getCustomerMobile());
-        auditRecordResp.setExchangeMoney(auditRecordDTO.getExchangeMoney());
+        auditRecordResp.setExchangePoint(auditRecordDTO.getExchangePoint());
+        auditRecordResp.setExchangeType(auditRecordDTO.getExchangeType());
+        auditRecordResp.setGivingPoint(auditRecordDTO.getGivingPoint());
+        auditRecordResp.setGivingType(auditRecordDTO.getGivingType());
+        auditRecordResp.setAuditReason(auditRecordDTO.getAuditReason());
         auditRecordResp.setRemark(auditRecordDTO.getRemark());
         auditRecordResp.setImgUrls(auditRecordDTO.getImgUrls());
         auditRecordResp.setSubmitterId(auditRecordDTO.getSubmitterId());
         auditRecordResp.setSubmitterName(auditRecordDTO.getSubmitterName());
-        auditRecordResp.setSubmitterRemark(auditRecordDTO.getSubmitterRemark());
         auditRecordResp.setStatus(auditRecordDTO.getStatus());
         auditRecordResp.setAuditTime(auditRecordDTO.getAuditTime().getTime());
         auditRecordResp.setAuditorId(auditRecordDTO.getAuditorId());
@@ -41,15 +44,18 @@ public class AuditRecordAdapter {
         }
         AuditRecordDTO auditRecordDTO = new AuditRecordDTO();
         auditRecordDTO.setId(auditRecordPO.getId());
-        auditRecordDTO.setPointId(auditRecordPO.getPointIds());
+        auditRecordDTO.setPointIds(auditRecordPO.getPointIds());
         auditRecordDTO.setCustomerName(auditRecordPO.getCustomerName());
         auditRecordDTO.setCustomerMobile(auditRecordPO.getCustomerMobile());
-        auditRecordDTO.setExchangeMoney(auditRecordPO.getExchangeMoney());
+        auditRecordDTO.setExchangePoint(auditRecordPO.getExchangePoint());
+        auditRecordDTO.setExchangeType(auditRecordPO.getExchangeType());
+        auditRecordDTO.setGivingPoint(auditRecordPO.getGivingPoint());
+        auditRecordDTO.setGivingType(auditRecordPO.getGivingType());
+        auditRecordDTO.setAuditReason(auditRecordPO.getAuditReason());
         auditRecordDTO.setRemark(auditRecordPO.getRemark());
         auditRecordDTO.setImgUrls(auditRecordPO.getImgUrls());
         auditRecordDTO.setSubmitterId(auditRecordPO.getSubmitterId());
         auditRecordDTO.setSubmitterName(auditRecordPO.getSubmitterName());
-        auditRecordDTO.setSubmitterRemark(auditRecordPO.getSubmitterRemark());
         auditRecordDTO.setStatus(auditRecordPO.getStatus());
         auditRecordDTO.setAuditTime(auditRecordPO.getAuditTime());
         auditRecordDTO.setAuditorId(auditRecordPO.getAuditorId());

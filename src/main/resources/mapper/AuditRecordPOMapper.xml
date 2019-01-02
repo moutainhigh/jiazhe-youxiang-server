@@ -3,7 +3,7 @@
 <mapper namespace="com.jiazhe.youxiang.server.dao.mapper.AuditRecordPOMapper" >
   <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.AuditRecordPO" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="point_ids" property="pointIds" jdbcType="INTEGER" />
+    <result column="point_ids" property="pointIds" jdbcType="VARCHAR" />
     <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
     <result column="customer_mobile" property="customerMobile" jdbcType="VARCHAR" />
     <result column="exchange_point" property="exchangePoint" jdbcType="DECIMAL" />
@@ -133,7 +133,7 @@
       audit_time, auditor_id, auditor_name, 
       version, ext_info, is_deleted, 
       add_time, mod_time)
-    values (#{id,jdbcType=INTEGER}, #{pointIds,jdbcType=INTEGER}, #{customerName,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{pointIds,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, 
       #{customerMobile,jdbcType=VARCHAR}, #{exchangePoint,jdbcType=DECIMAL}, #{exchangeType,jdbcType=VARCHAR}, 
       #{givingPoint,jdbcType=DECIMAL}, #{givingType,jdbcType=VARCHAR}, #{auditReason,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{imgUrls,jdbcType=VARCHAR}, #{posCode,jdbcType=VARCHAR}, 
@@ -230,7 +230,7 @@
         #{id,jdbcType=INTEGER},
       </if>
       <if test="pointIds != null" >
-        #{pointIds,jdbcType=INTEGER},
+        #{pointIds,jdbcType=VARCHAR},
       </if>
       <if test="customerName != null" >
         #{customerName,jdbcType=VARCHAR},
@@ -319,7 +319,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.pointIds != null" >
-        point_ids = #{record.pointIds,jdbcType=INTEGER},
+        point_ids = #{record.pointIds,jdbcType=VARCHAR},
       </if>
       <if test="record.customerName != null" >
         customer_name = #{record.customerName,jdbcType=VARCHAR},
@@ -401,7 +401,7 @@
   <update id="updateByExample" parameterType="map" >
     update audit_record
     set id = #{record.id,jdbcType=INTEGER},
-      point_ids = #{record.pointIds,jdbcType=INTEGER},
+      point_ids = #{record.pointIds,jdbcType=VARCHAR},
       customer_name = #{record.customerName,jdbcType=VARCHAR},
       customer_mobile = #{record.customerMobile,jdbcType=VARCHAR},
       exchange_point = #{record.exchangePoint,jdbcType=DECIMAL},
@@ -434,7 +434,7 @@
     update audit_record
     <set >
       <if test="pointIds != null" >
-        point_ids = #{pointIds,jdbcType=INTEGER},
+        point_ids = #{pointIds,jdbcType=VARCHAR},
       </if>
       <if test="customerName != null" >
         customer_name = #{customerName,jdbcType=VARCHAR},
@@ -513,7 +513,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jiazhe.youxiang.server.domain.po.AuditRecordPO" >
     update audit_record
-    set point_ids = #{pointIds,jdbcType=INTEGER},
+    set point_ids = #{pointIds,jdbcType=VARCHAR},
       customer_name = #{customerName,jdbcType=VARCHAR},
       customer_mobile = #{customerMobile,jdbcType=VARCHAR},
       exchange_point = #{exchangePoint,jdbcType=DECIMAL},

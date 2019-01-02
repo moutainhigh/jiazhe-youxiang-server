@@ -176,52 +176,62 @@ public class AuditRecordPOExample {
             return (Criteria) this;
         }
 
-        public Criteria andPointIdsEqualTo(Integer value) {
+        public Criteria andPointIdsEqualTo(String value) {
             addCriterion("point_ids =", value, "pointIds");
             return (Criteria) this;
         }
 
-        public Criteria andPointIdsNotEqualTo(Integer value) {
+        public Criteria andPointIdsNotEqualTo(String value) {
             addCriterion("point_ids <>", value, "pointIds");
             return (Criteria) this;
         }
 
-        public Criteria andPointIdsGreaterThan(Integer value) {
+        public Criteria andPointIdsGreaterThan(String value) {
             addCriterion("point_ids >", value, "pointIds");
             return (Criteria) this;
         }
 
-        public Criteria andPointIdsGreaterThanOrEqualTo(Integer value) {
+        public Criteria andPointIdsGreaterThanOrEqualTo(String value) {
             addCriterion("point_ids >=", value, "pointIds");
             return (Criteria) this;
         }
 
-        public Criteria andPointIdsLessThan(Integer value) {
+        public Criteria andPointIdsLessThan(String value) {
             addCriterion("point_ids <", value, "pointIds");
             return (Criteria) this;
         }
 
-        public Criteria andPointIdsLessThanOrEqualTo(Integer value) {
+        public Criteria andPointIdsLessThanOrEqualTo(String value) {
             addCriterion("point_ids <=", value, "pointIds");
             return (Criteria) this;
         }
 
-        public Criteria andPointIdsIn(List<Integer> values) {
+        public Criteria andPointIdsLike(String value) {
+            addCriterion("point_ids like", value, "pointIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIdsNotLike(String value) {
+            addCriterion("point_ids not like", value, "pointIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIdsIn(List<String> values) {
             addCriterion("point_ids in", values, "pointIds");
             return (Criteria) this;
         }
 
-        public Criteria andPointIdsNotIn(List<Integer> values) {
+        public Criteria andPointIdsNotIn(List<String> values) {
             addCriterion("point_ids not in", values, "pointIds");
             return (Criteria) this;
         }
 
-        public Criteria andPointIdsBetween(Integer value1, Integer value2) {
+        public Criteria andPointIdsBetween(String value1, String value2) {
             addCriterion("point_ids between", value1, value2, "pointIds");
             return (Criteria) this;
         }
 
-        public Criteria andPointIdsNotBetween(Integer value1, Integer value2) {
+        public Criteria andPointIdsNotBetween(String value1, String value2) {
             addCriterion("point_ids not between", value1, value2, "pointIds");
             return (Criteria) this;
         }
