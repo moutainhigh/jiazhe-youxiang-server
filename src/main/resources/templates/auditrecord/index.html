@@ -525,6 +525,15 @@
                     $("#givingPoint").val(result.givingPoint);
                     $("#givingType").val(result.givingType);
                     $("#auditReason").val(result.auditReason);
+                    $("#posCode").val(result.posCode);
+                    $("#cardNo").val(result.cardNo);
+                    if(result.status==2){
+                        $("#saveTradeTime").val(dateFormat(result.tradeTime));
+                        $("#saveTradeTime").next().next().val(result.tradeTime);
+                    }else{
+                        $("#saveTradeTime").val('');
+                        $("#saveTradeTime").next().next().val(0);
+                    }
                     $("#remark").val(result.remark);
                     $("#remark").attr('readonly', 'readonly');
                     if (result.status == 1) {

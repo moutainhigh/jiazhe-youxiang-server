@@ -36,6 +36,12 @@ public class AuditRecordDTO extends BaseObject {
 
     private String imgUrls;
 
+    private String posCode;
+
+    private String cardNo;
+
+    private Date tradeTime;
+
     private Integer submitterId;
 
     private String submitterName;
@@ -212,5 +218,29 @@ public class AuditRecordDTO extends BaseObject {
 
     public void setModTime(Date modTime) {
         this.modTime = modTime;
+    }
+
+    public String getPosCode() {
+        return posCode;
+    }
+
+    public void setPosCode(String posCode) {
+        this.posCode = posCode;
+    }
+
+    public String getCardNo() {
+        return cardNo;
+    }
+
+    public void setCardNo(String cardNo) {
+        this.cardNo = cardNo;
+    }
+
+    public Date getTradeTime() {
+        return tradeTime;
+    }
+
+    public void setTradeTime(Date tradeTime) {
+        this.tradeTime = tradeTime;
     }
 }

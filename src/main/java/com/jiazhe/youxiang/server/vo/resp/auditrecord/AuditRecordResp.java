@@ -46,6 +46,15 @@ public class AuditRecordResp extends BaseVO {
     @ApiModelProperty("消费记录图片，多张用,连接")
     private String imgUrls;
 
+    @ApiModelProperty("pos机编号")
+    private String posCode;
+
+    @ApiModelProperty("银行卡后四位")
+    private String cardNo;
+
+    @ApiModelProperty("交易时间")
+    private Long tradeTime;
+
     @ApiModelProperty("提交人id")
     private Integer submitterId;
 
@@ -231,5 +240,29 @@ public class AuditRecordResp extends BaseVO {
 
     public void setModTime(Long modTime) {
         this.modTime = modTime;
+    }
+
+    public String getPosCode() {
+        return posCode;
+    }
+
+    public void setPosCode(String posCode) {
+        this.posCode = posCode;
+    }
+
+    public String getCardNo() {
+        return cardNo;
+    }
+
+    public void setCardNo(String cardNo) {
+        this.cardNo = cardNo;
+    }
+
+    public Long getTradeTime() {
+        return tradeTime;
+    }
+
+    public void setTradeTime(Long tradeTime) {
+        this.tradeTime = tradeTime;
     }
 }
