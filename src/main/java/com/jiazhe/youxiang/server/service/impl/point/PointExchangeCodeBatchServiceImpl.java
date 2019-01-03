@@ -4,40 +4,31 @@ import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.base.util.GenerateCode;
 import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeBatchAdapter;
-import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
-import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeBatchAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.PointCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.PointException;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.dao.mapper.PointExchangeCodeBatchPOMapper;
-import com.jiazhe.youxiang.server.dao.mapper.PointExchangeCodePOMapper;
-import com.jiazhe.youxiang.server.dao.mapper.RechargeCardExchangeCodeBatchPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.point.PointExchangeCodeBatchPOManualMapper;
-import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCExchangeCodeBatchPOManualMapper;
-import com.jiazhe.youxiang.server.domain.po.*;
+import com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO;
+import com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPOExample;
+import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeSaveDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchSaveDTO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeSaveDTO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
+import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
+import com.jiazhe.youxiang.server.service.ProjectService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
-import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeBatchService;
-import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeService;
-import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeRecordService;
 import com.jiazhe.youxiang.server.vo.Paging;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,6 +47,8 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
     private PointExchangeCodeBatchPOMapper pointExchangeCodeBatchPOMapper;
     @Autowired
     private PointExchangeCodeService pointExchangeCodeService;
+    @Autowired
+    private ProjectService projectService;
 
     @Override
     public List<PointExchangeCodeBatchDTO> getList(Integer projectId, String name, Paging paging) {
@@ -205,5 +198,36 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
                 pointExchangeCodeService.batchChangeStatus(id, status);
             }
         }
+    }
+
+    @Override
+    public Integer getBatchIdByMerchantNo(String merchantNo) {
+        PointExchangeCodeBatchPOExample example = new PointExchangeCodeBatchPOExample();
+        PointExchangeCodeBatchPOExample.Criteria criteria = example.createCriteria();
+        criteria.andExtInfoEqualTo(merchantNo);
+        criteria.andIsVirtualEqualTo(CommonConstant.BATCH_IS_VIRTUAL);
+        criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+        criteria.andStatusEqualTo(CommonConstant.CODE_START_USING);
+        List<PointExchangeCodeBatchPO> poList = pointExchangeCodeBatchPOMapper.selectByExample(example);
+        if (poList.isEmpty()) {
+            throw new PointException(PointCodeEnum.QRCODE_HAS_NOT_BATCH);
+        } else if (poList.size() > 1) {
+            throw new PointException(PointCodeEnum.QRCODE_BATCH_ERROR);
+        }
+        return poList.get(0).getId();
+    }
+
+    @Override
+    public BigDecimal getFaceValue(Integer batchId, String bonus) {
+        PointExchangeCodeBatchPO pointExchangeCodeBatchPO = pointExchangeCodeBatchPOMapper.selectByPrimaryKey(batchId);
+        if (pointExchangeCodeBatchPO == null) {
+            throw new PointException(PointCodeEnum.QRCODE_HAS_NOT_BATCH);
+        }
+        ProjectDTO projectDTO = projectService.getById(pointExchangeCodeBatchPO.getProjectId());
+        if (projectDTO == null) {
+            throw new PointException(PointCodeEnum.PROJECT_IS_NULL);
+        }
+        BigDecimal result = new BigDecimal(bonus);
+        return result.multiply(new BigDecimal(projectDTO.getPointConversionRate()));
     }
 }

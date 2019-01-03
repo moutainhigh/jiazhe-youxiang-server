@@ -6,8 +6,6 @@ import com.jiazhe.youxiang.server.common.enums.*;
 import com.jiazhe.youxiang.server.common.enums.VoucherCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.common.exceptions.VoucherException;
-import com.jiazhe.youxiang.server.common.exceptions.UserException;
-import com.jiazhe.youxiang.server.common.exceptions.VoucherException;
 import com.jiazhe.youxiang.server.dao.mapper.VoucherExchangeCodePOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.voucher.VoucherExchangeCodePOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.*;
@@ -165,7 +163,7 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
         if(null == voucherExchangeCodePO){
             throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
         }
-        if(voucherExchangeCodePO.getStatus().equals(CommonConstant.STOPTUSING)){
+        if(voucherExchangeCodePO.getStatus().equals(CommonConstant.CODE_STOP_USING)){
             throw  new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_HAS_STOPED_USING);
         }
         if(voucherExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_USED)){

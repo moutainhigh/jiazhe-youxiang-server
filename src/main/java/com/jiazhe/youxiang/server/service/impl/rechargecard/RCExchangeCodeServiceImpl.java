@@ -1,19 +1,14 @@
 package com.jiazhe.youxiang.server.service.impl.rechargecard;
 
-import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
-import com.jiazhe.youxiang.server.common.enums.UserCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
-import com.jiazhe.youxiang.server.common.exceptions.UserException;
-import com.jiazhe.youxiang.server.dao.mapper.CustomerPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.RechargeCardExchangeCodePOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCExchangeCodePOManualMapper;
-import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.*;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
@@ -31,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -83,7 +77,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         if(null == rechargeCardExchangeCodePO){
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
         }
-        if(rechargeCardExchangeCodePO.getStatus().equals(CommonConstant.STOPTUSING)){
+        if(rechargeCardExchangeCodePO.getStatus().equals(CommonConstant.CODE_STOP_USING)){
             throw  new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_HAS_STOPED_USING);
         }
         if(rechargeCardExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_USED)){

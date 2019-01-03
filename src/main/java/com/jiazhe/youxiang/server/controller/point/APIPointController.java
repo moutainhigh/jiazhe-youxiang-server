@@ -139,4 +139,15 @@ public class APIPointController extends BaseController{
         pointBiz.editSave(dto);
         return ResponseFactory.buildSuccess();
     }
+
+    @AppApi
+    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
+    @ApiOperation(value = "通过二维码兑换积分卡", httpMethod = "POST",notes = "通过二维码兑换积分卡")
+    @RequestMapping(value = "/chargebyqrcode", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.POINT, operate = "通过二维码兑换积分卡", level = LogLevelEnum.LEVEL_2)
+    public Object chargeByQRCode(@ModelAttribute QRCodeReq req) {
+        CommonValidator.validateNull(req);
+        pointBiz.chargeByQRCode(req.getQrCode());
+        return ResponseFactory.buildSuccess();
+    }
 }

@@ -1,6 +1,5 @@
 package com.jiazhe.youxiang.server.service.impl.point;
 
-import com.jiazhe.youxiang.server.adapter.ProjectAdapter;
 import com.jiazhe.youxiang.server.adapter.point.PointAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
@@ -8,8 +7,11 @@ import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
+import com.jiazhe.youxiang.server.dao.mapper.PointExchangeCodeBatchPOMapper;
+import com.jiazhe.youxiang.server.dao.mapper.PointExchangeRecordPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.PointPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.point.PointPOManualMapper;
+import com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeRecordPO;
 import com.jiazhe.youxiang.server.domain.po.PointPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
@@ -50,6 +52,11 @@ public class PointServiceImpl implements PointService {
     private PointPOManualMapper pointPOManualMapper;
     @Autowired
     private PointPOMapper pointPOMapper;
+    @Autowired
+    private PointExchangeCodeBatchPOMapper pointExchangeCodeBatchPOMapper;
+
+    @Autowired
+    private PointExchangeRecordPOMapper pointExchangeRecordPOMapper;
     @Autowired
     private CustomerService customerService;
     @Autowired
@@ -211,5 +218,45 @@ public class PointServiceImpl implements PointService {
             bean.setProjectDTO(projectService.getById(bean.getProjectId()));
         });
         return pointDTOList;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void chargeByQRCode(String purchaseOrderStr, CustomerDTO customerDTO, Integer batchId, BigDecimal faceValue) {
+        PointExchangeCodeBatchPO batchPO = pointExchangeCodeBatchPOMapper.selectByPrimaryKey(batchId);
+        PointPO pointPO = new PointPO();
+        //直接指定过期时间
+        if(batchPO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)){
+            pointPO.setExpiryTime(batchPO.getPointExpiryTime());
+        }else{
+            pointPO.setExpiryTime(new Date(System.currentTimeMillis()+batchPO.getValidityPeriod()* CommonConstant.ONE_DAY));
+        }
+        pointPO.setDescription(batchPO.getDescription());
+        pointPO.setFaceValue(faceValue);
+        pointPO.setBalance(faceValue);
+        //暂时置为0，等生成了兑换记录再修改
+        pointPO.setExchangeRecordId(0);
+        pointPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
+        pointPO.setProjectId(batchPO.getProjectId());
+        pointPO.setName(batchPO.getPointName());
+        pointPO.setCustomerId(customerDTO.getId());
+        pointPO.setCityCodes(batchPO.getCityCodes());
+        pointPO.setProductIds(batchPO.getProductIds());
+        pointService.insert(pointPO);
+        //插入兑换记录
+        PointExchangeRecordPO pointRecordPO = new PointExchangeRecordPO();
+        pointRecordPO.setOperatorId(customerDTO.getId());
+        pointRecordPO.setOperatorName(customerDTO.getMobile());
+        pointRecordPO.setExchangeType(CommonConstant.EXCHANGETYPE_QRCODE_EXCHANGE);
+        pointRecordPO.setPointId(pointPO.getId());
+        //在兑换记录中记录签购单信息
+        pointRecordPO.setExtInfo(purchaseOrderStr);
+        pointRecordPO.setIsDeleted(Byte.valueOf("0"));
+        pointRecordPO.setAddTime(new Date());
+        pointRecordPO.setModTime(new Date());
+        pointExchangeRecordService.insert(pointRecordPO);
+        //修改充值卡对应的兑换记录id
+        pointPO.setExchangeRecordId(pointRecordPO.getId());
+        pointService.update(pointPO);
     }
 }
