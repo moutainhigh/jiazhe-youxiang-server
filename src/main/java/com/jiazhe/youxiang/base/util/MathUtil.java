@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  * @author niexiao
  * @created 2018/11/27
  */
-public class MathlUtil {
+public class MathUtil {
 
     public static BigDecimal getValue(BigDecimal value) {
         if (value == null) {

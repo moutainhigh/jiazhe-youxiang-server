@@ -22,4 +22,11 @@ public interface PointExchangeRecordService {
     PointExchangeRecordDTO findByPointId(Integer id);
 
     PointExchangeRecordDTO findByCodeId(Integer id);
+
+    /**
+     * 判断是否充过值
+     * @param purchaseOrderStr
+     * @return
+     */
+    boolean hasCharged(String purchaseOrderStr);
 }

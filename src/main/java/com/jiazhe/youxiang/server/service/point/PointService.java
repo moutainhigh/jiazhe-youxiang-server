@@ -1,17 +1,13 @@
 package com.jiazhe.youxiang.server.service.point;
 
 import com.jiazhe.youxiang.server.domain.po.PointPO;
-import com.jiazhe.youxiang.server.domain.po.RechargeCardPO;
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.point.point.PointDTO;
 import com.jiazhe.youxiang.server.dto.point.point.PointEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchSaveDTO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCEditDTO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,4 +42,6 @@ public interface PointService {
     List<PointDTO> findByIds(List<Integer> pointIds);
 
     List<PointDTO> findByIdsInOrder(List<Integer> pointIds);
+
+    void chargeByQRCode(String purchaseOrderStr, CustomerDTO customerDTO, Integer batchId, BigDecimal faceValue);
 }
