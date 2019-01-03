@@ -255,6 +255,7 @@ public class PointServiceImpl implements PointService {
         pointPO.setCustomerId(customerDTO.getId());
         pointPO.setCityCodes(batchPO.getCityCodes());
         pointPO.setProductIds(batchPO.getProductIds());
+        //TODO niexiao 设置生效时间
         pointService.insert(pointPO);
         //插入兑换记录
         PointExchangeRecordPO pointRecordPO = new PointExchangeRecordPO();
