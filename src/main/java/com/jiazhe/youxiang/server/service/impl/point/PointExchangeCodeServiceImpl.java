@@ -5,7 +5,6 @@ import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.PointCodeEnum;
-import com.jiazhe.youxiang.server.common.enums.PointCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.common.exceptions.PointException;
 import com.jiazhe.youxiang.server.dao.mapper.PointExchangeCodePOMapper;
@@ -175,7 +174,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         if (null == pointExchangeCodePO) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
         }
-        if (pointExchangeCodePO.getStatus().equals(CommonConstant.STOPTUSING)) {
+        if (pointExchangeCodePO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_STOPED_USING);
         }
         if (pointExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
