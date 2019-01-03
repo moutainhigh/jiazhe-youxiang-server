@@ -141,14 +141,13 @@ public class PointBiz {
         }
         //解析签购单信息
         PurchaseOrderDTO purchaseOrderDTO = createPurchaseOrderDTO(purchaseOrderStr);
-        //检查时间是否满足自交易日期后24个小时
-        checkDateTime(purchaseOrderDTO);
+
         if (SecurityUtils.getSubject().getPrincipal() == null || !(SecurityUtils.getSubject().getPrincipal() instanceof CustomerDTO)) {
             throw new PointException(PointCodeEnum.CUSTOMER_IS_NOT_LOGIN);
         }
         CustomerDTO customerDTO = (CustomerDTO) SecurityUtils.getSubject().getPrincipal();
         Integer batchId = pointExchangeCodeBatchService.getBatchIdByMerchantNo(purchaseOrderDTO.getMerchantNo());
-        BigDecimal faceValue = pointExchangeCodeBatchService.getFaceValue(batchId, purchaseOrderDTO.getBonus());
+        BigDecimal faceValue = new BigDecimal(purchaseOrderDTO.getBonus());
         //获得当前用户，给当前用户充值
         pointService.chargeByQRCode(purchaseOrderStr,customerDTO, batchId, faceValue);
     }
@@ -177,6 +176,7 @@ public class PointBiz {
      *
      * @param purchaseOrderDTO
      */
+    @Deprecated
     private void checkDateTime(PurchaseOrderDTO purchaseOrderDTO) {
         String dateTimeStr = purchaseOrderDTO.getDate() + purchaseOrderDTO.getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
