@@ -161,7 +161,7 @@ public class APIOrderInfoController extends BaseController {
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqUserPlaceOrder2DTOPlaceOrder(req);
         placeOrderDTO.setType(Byte.valueOf("0"));
         placeOrderDTO.setServiceTime(new Date(req.getRealServiceTime()));
-        NeedPayResp needPayResp = orderInfoBiz.placeOrder(placeOrderDTO);
+        NeedPayResp needPayResp = orderInfoBiz.userPlaceOrder(placeOrderDTO);
         return ResponseFactory.buildResponse(needPayResp);
     }
 
@@ -174,7 +174,7 @@ public class APIOrderInfoController extends BaseController {
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqCustomerPlaceOrder2DTOPlaceOrder(req);
         placeOrderDTO.setWorkerMobile("");
         placeOrderDTO.setWorkerName("");
-        placeOrderDTO.setCost(new BigDecimal(0));
+        placeOrderDTO.setCost(BigDecimal.ZERO);
         placeOrderDTO.setType(Byte.valueOf("1"));
         placeOrderDTO.setRealServiceTime(new Date(req.getServiceTime()));
         placeOrderDTO.setComments("");

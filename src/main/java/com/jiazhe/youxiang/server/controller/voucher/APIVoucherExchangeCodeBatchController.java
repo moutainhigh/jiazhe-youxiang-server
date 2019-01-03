@@ -12,7 +12,6 @@ import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
-import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.VoucherCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.VoucherException;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
@@ -81,16 +80,23 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
         CommonValidator.validateNull(req.getVoucherName(), new VoucherException(VoucherCodeEnum.VOUCHER_NAME_IS_NULL));
         CommonValidator.validateNull(req.getAmount(), new VoucherException(VoucherCodeEnum.AMOUNT_IS_NULL));
         CommonValidator.validateNull(req.getCount(), new VoucherException(VoucherCodeEnum.COUNT_IS_NULL));
+        CommonValidator.validateNull(req.getProjectId(), new VoucherException(VoucherCodeEnum.PROJECT_IS_NULL));
+        CommonValidator.validateNull(req.getCityCodes(), new VoucherException(VoucherCodeEnum.CITY_IS_NULL));
+        CommonValidator.validateNull(req.getProductIds(), new VoucherException(VoucherCodeEnum.PRODUCT_IS_NULL));
+        //批次过期时间不为空
         if (req.getExpiryTime() == 0) {
             throw new VoucherException(VoucherCodeEnum.BATCH_EXPIRY_TIME_IS_NULL);
         }
+        //代金券过期时间为指定的时间
         if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXPIRY_TIME)) {
             if (req.getVoucherExpiryTime() == 0) {
                 throw new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL);
             }
+            req.setValidityPeriod(0);
         }
         if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_PERIOD)) {
             CommonValidator.validateNull(req.getValidityPeriod(), new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL));
+            req.setVoucherExpiryTime(System.currentTimeMillis());
         }
         VoucherExchangeCodeBatchSaveDTO voucherExchangeCodeBatchSaveDTO = VoucherExchangeCodeBatchAdapter.ReqSave2DTOSave(req);
         if (req.getId() == 0) {
@@ -107,14 +113,6 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "生成代金券兑换码", level = LogLevelEnum.LEVEL_2)
     public Object generateCode(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
-        //参数检查,检查是否是虚拟批次，检查该批次是否已经生成过兑换码
-        VoucherExchangeCodeBatchEditDTO dto = voucherExchangeCodeBatchBiz.getById(req.getId());
-        if (null == dto) {
-            throw new VoucherException(VoucherCodeEnum.BATCH_NOT_EXISTED);
-        }
-        if (dto.getIsMade().equals(CommonConstant.EXCHANGE_CODE_HAS_MADE)) {
-            throw new VoucherException(VoucherCodeEnum.CODE_GENERATED);
-        }
         voucherExchangeCodeBatchBiz.generateCode(req.getId());
         return ResponseFactory.buildSuccess();
     }

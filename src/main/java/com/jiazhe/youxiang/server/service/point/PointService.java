@@ -41,5 +41,7 @@ public interface PointService {
 
     List<PointDTO> findByIds(List<Integer> pointIds);
 
+    List<PointDTO> findByIdsInOrder(List<Integer> pointIds);
+
     void chargeByQRCode(String purchaseOrderStr, CustomerDTO customerDTO, Integer batchId, BigDecimal faceValue);
 }

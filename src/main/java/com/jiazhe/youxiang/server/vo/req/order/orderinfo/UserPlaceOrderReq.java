@@ -48,6 +48,12 @@ public class UserPlaceOrderReq extends BaseVO {
     private Long realServiceTime;
 
     /**
+     * 使用的积分卡ids
+     */
+    @ApiModelProperty("积分卡ids")
+    private String pointIds;
+
+    /**
      * 使用的代金券ids
      */
     @ApiModelProperty("代金券ids")
@@ -58,12 +64,6 @@ public class UserPlaceOrderReq extends BaseVO {
      */
     @ApiModelProperty("充值卡ids")
     private String rechargeCardIds;
-
-    /**
-     * 每张充值卡使用的金额
-     */
-    @ApiModelProperty("充值卡金额")
-    private String cardMoneys;
 
     @ApiModelProperty("订单成本")
     private BigDecimal cost;
@@ -175,14 +175,6 @@ public class UserPlaceOrderReq extends BaseVO {
         this.rechargeCardIds = rechargeCardIds;
     }
 
-    public String getCardMoneys() {
-        return cardMoneys;
-    }
-
-    public void setCardMoneys(String cardMoneys) {
-        this.cardMoneys = cardMoneys;
-    }
-
     public BigDecimal getCost() {
         return cost;
     }
@@ -197,5 +189,13 @@ public class UserPlaceOrderReq extends BaseVO {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public String getPointIds() {
+        return pointIds;
+    }
+
+    public void setPointIds(String pointIds) {
+        this.pointIds = pointIds;
     }
 }

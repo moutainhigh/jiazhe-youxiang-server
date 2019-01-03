@@ -123,7 +123,7 @@ public class OrderInfoBiz {
         return left;
     }
 
-    public NeedPayResp placeOrder(PlaceOrderDTO placeOrderDTO) throws ParseException {
+    public NeedPayResp userPlaceOrder(PlaceOrderDTO placeOrderDTO) throws ParseException {
         return orderInfoService.placeOrder(placeOrderDTO);
     }
 
@@ -140,7 +140,7 @@ public class OrderInfoBiz {
     }
 
     public NeedPayResp customerPlaceOrder(PlaceOrderDTO placeOrderDTO) throws ParseException {
-        return orderInfoService.customerPlaceOrder(placeOrderDTO);
+        return orderInfoService.placeOrder(placeOrderDTO);
     }
 
     public OrderInfoDTO getByOrderNo(String orderNo) {
@@ -149,5 +149,14 @@ public class OrderInfoBiz {
 
     public List<OrderInfoDTO> getOrderByPointId(Integer id) {
         return null;
+    }
+
+    /**
+     * 微信付款成功通知
+     * @param orderNo
+     * @param wxPay
+     */
+    public void wxNotify(String orderNo, BigDecimal wxPay) {
+        orderInfoService.wxNotify(orderNo,wxPay);
     }
 }

@@ -157,9 +157,9 @@
                                                            for="saveDescription">描述信息：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveDescription" name="description"
-                                                                   class="form-control"
-                                                                   type="text" style="height:30px"/>
+                                                            <textarea id="saveDescription" name="description"
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -237,7 +237,7 @@
         var tableOption = {
             url: "/api/point/searchlistpage",
             postData: transformToJson($('#pointSearchForm').serializeArray()),
-            colNames: ['', '积分卡名称', '状态', '面额', '余额', '兑换时间', '客户手机号', '客户姓名', '过期时间', '兑换类型', '后台操作人', '操作'],
+            colNames: ['', '积分卡名称', '状态', '面额', '余额', '兑换比例', '兑换时间', '客户手机号', '客户姓名', '过期时间', '兑换类型', '后台操作人', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 40, sortable: false},
@@ -254,6 +254,7 @@
                 },
                 {name: 'faceValue', index: 'faceValue', width: 20, sortable: false},
                 {name: 'balance', index: 'balance', width: 20, sortable: false},
+                {name: 'projectResp.pointConversionRate', index: 'projectResp.pointConversionRate', width: 30, sortable: false},
                 {
                     name: 'addTime',
                     index: 'addTime',
@@ -414,6 +415,7 @@
                     $("#cardSaveForm #saveCityCodes").val(result.cityCodes);
                     $("#cardSaveForm #saveProductIds").val(result.productIds);
                     $("#cardSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
+                    $('#saveExpiryTime').datepicker('update');
                     $("#cardSaveForm #saveExpiryTime").next().next().val(result.expiryTime);
                     $("#cardSaveForm #saveDescription").val(result.description);
                     $("#modal-form").modal('show');

@@ -111,8 +111,12 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
         if(null == batchPO){
             throw new VoucherException(VoucherCodeEnum.BATCH_NOT_EXISTED);
         }
-        List<VoucherExchangeCodeDTO> rcExchangeCodeDTOList = voucherExchangeCodeService.getByBatchId(id);
+        if (batchPO.getIsMade().equals(CommonConstant.EXCHANGE_CODE_HAS_MADE)) {
+            throw new VoucherException(VoucherCodeEnum.CODE_GENERATED);
+        }
         //实际去查一下，批次下是否有兑换码
+        List<VoucherExchangeCodeDTO> rcExchangeCodeDTOList = voucherExchangeCodeService.getByBatchId(id);
+
         if (!rcExchangeCodeDTOList.isEmpty()) {
             throw new VoucherException(VoucherCodeEnum.CODE_GENERATED);
         }

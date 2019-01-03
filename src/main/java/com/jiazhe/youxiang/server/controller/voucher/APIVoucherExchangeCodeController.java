@@ -9,11 +9,7 @@ import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
-import com.jiazhe.youxiang.server.common.enums.CustomerCodeEnum;
-import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
-import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
-import com.jiazhe.youxiang.server.common.enums.VoucherCodeEnum;
-import com.jiazhe.youxiang.server.common.exceptions.CustomerException;
+import com.jiazhe.youxiang.server.common.enums.*;
 import com.jiazhe.youxiang.server.common.exceptions.VoucherException;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeEditDTO;
@@ -119,6 +115,8 @@ public class APIVoucherExchangeCodeController extends BaseController {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getVoucherName(),new VoucherException(VoucherCodeEnum.VOUCHER_NAME_IS_NULL));
+        CommonValidator.validateNull(req.getCityCodes(), new VoucherException(VoucherCodeEnum.CITY_IS_NULL));
+        CommonValidator.validateNull(req.getProductIds(), new VoucherException(VoucherCodeEnum.PRODUCT_IS_NULL));
         if(req.getExpiryTime()==0){
             throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
         }
@@ -142,6 +140,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "客户用代金券兑换码兑换", level = LogLevelEnum.LEVEL_2)
     public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) {
         CommonValidator.validateId(req.getId());
+        CommonValidator.validateNull(req.getKeyt(),new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
         voucherExchangeCodeBiz.customerSelfCharge(req.getId(),req.getKeyt());
         return ResponseFactory.buildSuccess();
     }
@@ -152,6 +151,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "后台用兑换码进行充值", level = LogLevelEnum.LEVEL_3)
     public Object backstageCodeCharge(@ModelAttribute CodeChargeReq req) {
         CommonValidator.validateId(req.getId());
+        CommonValidator.validateNull(req.getKeyt(),new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
         voucherExchangeCodeBiz.backstageCodeCharge(req.getId(),req.getKeyt());
         return ResponseFactory.buildSuccess();
     }

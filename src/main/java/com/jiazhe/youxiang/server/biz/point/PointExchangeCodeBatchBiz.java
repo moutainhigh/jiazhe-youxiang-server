@@ -38,15 +38,6 @@ public class PointExchangeCodeBatchBiz {
     }
 
     public void addSave(PointExchangeCodeBatchSaveDTO pointExchangeCodeBatchSaveDTO) {
-        if(pointExchangeCodeBatchSaveDTO.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)){
-            pointExchangeCodeBatchSaveDTO.setAmount(0);
-            pointExchangeCodeBatchSaveDTO.setFaceValue(new BigDecimal(0));
-        }
-        if(pointExchangeCodeBatchSaveDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)){
-            pointExchangeCodeBatchSaveDTO.setValidityPeriod(0);
-        }else{
-            pointExchangeCodeBatchSaveDTO.setPointExpiryTime(new Date());
-        }
         pointExchangeCodeBatchService.addSave(pointExchangeCodeBatchSaveDTO);
     }
 

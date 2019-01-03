@@ -20,6 +20,7 @@ import com.jiazhe.youxiang.server.dto.point.point.PointEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangerecord.PointExchangeRecordDTO;
+import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.ProjectService;
@@ -78,10 +79,10 @@ public class PointServiceImpl implements PointService {
             bean.setCityCodes(batchSaveDTO.getCityCodes());
             bean.setProductIds(batchSaveDTO.getProductIds());
             //直接指定过期时间
-            if(batchSaveDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)){
+            if (batchSaveDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
                 bean.setExpiryTime(batchSaveDTO.getPointExpiryTime());
-            }else{
-                bean.setExpiryTime(new Date(bean.getAddTime().getTime()+batchSaveDTO.getValidityPeriod()* CommonConstant.ONE_DAY));
+            } else {
+                bean.setExpiryTime(new Date(bean.getAddTime().getTime() + batchSaveDTO.getValidityPeriod() * CommonConstant.ONE_DAY));
             }
         });
         pointPOManualMapper.batchUpdate(pointPOList);
@@ -90,8 +91,8 @@ public class PointServiceImpl implements PointService {
     @Override
     public void batchChangeStatus(List<Integer> ids, Byte status) {
         Map<String, Object> map = new HashMap<String, Object>(2);
-        map.put("status",status);
-        map.put("ids",ids);
+        map.put("status", status);
+        map.put("ids", ids);
         pointPOManualMapper.batchChangeStatus(map);
     }
 
@@ -107,20 +108,22 @@ public class PointServiceImpl implements PointService {
 
     @Override
     public List<PointDTO> getList(String mobile, Integer exchangeType, Byte status, Byte expiry, Paging paging) {
-        final CustomerDTO customerDTO = customerService.getByMobile(mobile);
-        List<PointPO> pointPOList = pointPOManualMapper.query(mobile,exchangeType,status,expiry,paging.getOffset(),paging.getLimit());
+        final CustomerDTO defaultCustomerDTO = customerService.getByMobile(mobile);
+        List<PointPO> pointPOList = pointPOManualMapper.query(mobile, exchangeType, status, expiry, paging.getOffset(), paging.getLimit());
         List<PointDTO> pointDTOList = pointPOList.stream().map(PointAdapter::po2Dto).collect(Collectors.toList());
-        Integer count = pointPOManualMapper.count(mobile,exchangeType,status,expiry);
+        Integer count = pointPOManualMapper.count(mobile, exchangeType, status, expiry);
         paging.setTotal(count);
         pointDTOList.stream().forEach(bean -> {
-            if(Strings.isBlank(mobile)){
-                CustomerDTO customerDTO1 = customerService.getById(bean.getCustomerId());
-                bean.setCustomerDTO(customerDTO1);
-            }else{
+            if (Strings.isBlank(mobile)) {
+                CustomerDTO customerDTO = customerService.getById(bean.getCustomerId());
                 bean.setCustomerDTO(customerDTO);
+            } else {
+                bean.setCustomerDTO(defaultCustomerDTO);
             }
             PointExchangeRecordDTO pointExchangeRecordDTO = pointExchangeRecordService.findByPointId(bean.getId());
             bean.setPointExchangeRecordDTO(pointExchangeRecordDTO);
+            ProjectDTO projectDTO = projectService.getById(bean.getProjectId());
+            bean.setProjectDTO(projectDTO);
         });
         return pointDTOList;
     }
@@ -137,16 +140,16 @@ public class PointServiceImpl implements PointService {
     @Override
     public void directCharge(Integer id, Integer batchId, BigDecimal faceValue) {
         CustomerDTO customerDTO = customerService.getById(id);
-        if(null == customerDTO){
+        if (null == customerDTO) {
             throw new RechargeCardException(RechargeCardCodeEnum.CUSTOMER_NOT_EXIST);
         }
         PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO = pointExchangeCodeBatchService.getById(batchId);
         PointPO pointPO = new PointPO();
         //直接指定过期时间
-        if(pointExchangeCodeBatchEditDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)){
+        if (pointExchangeCodeBatchEditDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
             pointPO.setExpiryTime(pointExchangeCodeBatchEditDTO.getPointExpiryTime());
-        }else{
-            pointPO.setExpiryTime(new Date(System.currentTimeMillis()+pointExchangeCodeBatchEditDTO.getValidityPeriod()* CommonConstant.ONE_DAY));
+        } else {
+            pointPO.setExpiryTime(new Date(System.currentTimeMillis() + pointExchangeCodeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY));
         }
         pointPO.setDescription(pointExchangeCodeBatchEditDTO.getDescription());
         pointPO.setFaceValue(faceValue);
@@ -162,7 +165,7 @@ public class PointServiceImpl implements PointService {
         pointService.insert(pointPO);
         //插入兑换记录信息
         SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
-        if(null == sysUserDTO){
+        if (null == sysUserDTO) {
             throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
         PointExchangeRecordPO pointRecordPO = new PointExchangeRecordPO();
@@ -204,7 +207,7 @@ public class PointServiceImpl implements PointService {
 
     @Override
     public void batchUpdate(List<PointDTO> pointDTOList) {
-        if(!pointDTOList.isEmpty()){
+        if (!pointDTOList.isEmpty()) {
             List<PointPO> rcPOList = pointDTOList.stream().map(PointAdapter::dto2Po).collect(Collectors.toList());
             pointPOManualMapper.batchUpdate(rcPOList);
         }
@@ -214,7 +217,17 @@ public class PointServiceImpl implements PointService {
     public List<PointDTO> findByIds(List<Integer> ids) {
         List<PointPO> poList = pointPOManualMapper.findByIds(ids);
         List<PointDTO> pointDTOList = poList.stream().map(PointAdapter::po2Dto).collect(Collectors.toList());
-        pointDTOList.stream().forEach(bean->{
+        pointDTOList.stream().forEach(bean -> {
+            bean.setProjectDTO(projectService.getById(bean.getProjectId()));
+        });
+        return pointDTOList;
+    }
+
+    @Override
+    public List<PointDTO> findByIdsInOrder(List<Integer> ids) {
+        List<PointPO> poList = pointPOManualMapper.findByIdsInOrder(ids);
+        List<PointDTO> pointDTOList = poList.stream().map(PointAdapter::po2Dto).collect(Collectors.toList());
+        pointDTOList.stream().forEach(bean -> {
             bean.setProjectDTO(projectService.getById(bean.getProjectId()));
         });
         return pointDTOList;
@@ -226,10 +239,10 @@ public class PointServiceImpl implements PointService {
         PointExchangeCodeBatchPO batchPO = pointExchangeCodeBatchPOMapper.selectByPrimaryKey(batchId);
         PointPO pointPO = new PointPO();
         //直接指定过期时间
-        if(batchPO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)){
+        if (batchPO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
             pointPO.setExpiryTime(batchPO.getPointExpiryTime());
-        }else{
-            pointPO.setExpiryTime(new Date(System.currentTimeMillis()+batchPO.getValidityPeriod()* CommonConstant.ONE_DAY));
+        } else {
+            pointPO.setExpiryTime(new Date(System.currentTimeMillis() + batchPO.getValidityPeriod() * CommonConstant.ONE_DAY));
         }
         pointPO.setDescription(batchPO.getDescription());
         pointPO.setFaceValue(faceValue);

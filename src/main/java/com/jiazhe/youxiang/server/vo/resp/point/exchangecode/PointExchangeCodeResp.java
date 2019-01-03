@@ -1,6 +1,8 @@
 package com.jiazhe.youxiang.server.vo.resp.point.exchangecode;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
+import com.jiazhe.youxiang.server.vo.resp.project.ProjectResp;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
@@ -55,6 +57,10 @@ public class PointExchangeCodeResp extends BaseVO {
 
     @ApiModelProperty("是否已经使用，1为已经使用，0为未使用")
     private Byte used;
+
+    private ProjectResp projectResp;
+
+    private CustomerResp customerResp;
 
     public Integer getId() {
         return id;
@@ -174,5 +180,21 @@ public class PointExchangeCodeResp extends BaseVO {
 
     public void setUsed(Byte used) {
         this.used = used;
+    }
+
+    public ProjectResp getProjectResp() {
+        return projectResp;
+    }
+
+    public void setProjectResp(ProjectResp projectResp) {
+        this.projectResp = projectResp;
+    }
+
+    public CustomerResp getCustomerResp() {
+        return customerResp;
+    }
+
+    public void setCustomerResp(CustomerResp customerResp) {
+        this.customerResp = customerResp;
     }
 }

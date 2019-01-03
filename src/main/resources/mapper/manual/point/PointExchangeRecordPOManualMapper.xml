@@ -26,4 +26,14 @@
         values (#{id,jdbcType=INTEGER}, #{pointId,jdbcType=INTEGER},#{exchangeCodeId,jdbcType=INTEGER},#{exchangeType,jdbcType=TINYINT},#{operatorId,jdbcType=INTEGER},
         #{operatorName,jdbcType=VARCHAR}, #{extInfo,jdbcType=VARCHAR},#{isDeleted,jdbcType=TINYINT},#{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
     </insert>
+
+    <select id="findByCodeIds" parameterType="java.util.List" resultType="com.jiazhe.youxiang.server.domain.po.PointExchangeRecordPO">
+        select
+        <include refid="Base_Column_List"/>
+        FROM point_exchange_record
+        where exchange_code_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

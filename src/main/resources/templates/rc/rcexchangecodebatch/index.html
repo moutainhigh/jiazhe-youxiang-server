@@ -255,9 +255,9 @@
                                                            for="saveDescription">描述信息：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveDescription" name="description"
-                                                                   class="form-control"
-                                                                   type="text" style="height:30px"/>
+                                                            <textarea id="saveDescription" name="description"
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -532,6 +532,7 @@
                         $("#batchSaveForm #saveIsVirtualRadio").click();
                     }
                     $("#batchSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
+                    $('#saveExpiryTime').datepicker('update');
                     $("#batchSaveForm #saveExpiryTime").next().next().val(result.expiryTime);
                     if (result.expiryType == 0) {
                         $("#batchSaveForm #saveDeadLineRadio").click();
@@ -540,6 +541,7 @@
                     }
                     $("#batchSaveForm #saveValidityPeriod").val(result.validityPeriod);
                     $("#batchSaveForm #saveRechargeCardExpiryTime").val(dateFormat(result.rechargeCardExpiryTime));
+                    $('#saveRechargeCardExpiryTime').datepicker('update');
                     $("#batchSaveForm #saveRechargeCardExpiryTime").next().next().val(result.rechargeCardExpiryTime);
                     $("#batchSaveForm #saveDescription").val(result.description);
                     $("input[name=isVirtualRadio]").attr('disabled', 'disabled');

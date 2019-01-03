@@ -15,8 +15,10 @@ import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeD
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangerecord.PointExchangeRecordDTO;
+import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
+import com.jiazhe.youxiang.server.service.ProjectService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeRecordService;
 import com.jiazhe.youxiang.server.service.point.PointService;
@@ -48,6 +50,8 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     private PointService pointService;
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private ProjectService projectService;
 
     @Override
     public List<PointExchangeCodeDTO> getByBatchId(Integer id) {
@@ -111,9 +115,18 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     @Override
     public List<PointExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Byte status, Byte used, Paging paging) {
         Integer count = pointExchangeCodePOManualMapper.count(batchId, code, keyt, status, used);
-        List<PointExchangeCodePO> pointExchangeCodePOList = pointExchangeCodePOManualMapper.query(batchId, code, keyt, status, used, paging.getOffset(), paging.getLimit());
+        List<PointExchangeCodePO> poList = pointExchangeCodePOManualMapper.query(batchId, code, keyt, status, used, paging.getOffset(), paging.getLimit());
+        List<PointExchangeCodeDTO> dtoList = poList.stream().map(PointExchangeCodeAdapter::po2Dto).collect(Collectors.toList());
+        dtoList.stream().forEach(bean -> {
+            ProjectDTO projectDTO = projectService.getById(bean.getProjectId());
+            bean.setProjectDTO(projectDTO);
+            if(null != bean.getCustomerId()){
+                CustomerDTO customerDTO = customerService.getById(bean.getCustomerId());
+                bean.setCustomerDTO(customerDTO);
+            }
+        });
         paging.setTotal(count);
-        return pointExchangeCodePOList.stream().map(PointExchangeCodeAdapter::po2Dto).collect(Collectors.toList());
+        return dtoList;
     }
 
     @Override
@@ -137,15 +150,15 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     @Override
     public void editSave(PointExchangeCodeEditDTO dto) {
         PointExchangeCodePO po = pointExchangeCodePOMapper.selectByPrimaryKey(dto.getId());
-        if(null == po){
+        if (null == po) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
         }
         po.setPointName(dto.getPointName());
         po.setExpiryTime(dto.getExpiryTime());
         po.setExpiryType(dto.getExpiryType());
-        if(dto.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)){
+        if (dto.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
             po.setPointExpiryTime(dto.getPointExpiryTime());
-        }else{
+        } else {
             po.setValidityPeriod(dto.getValidityPeriod());
         }
         po.setBatchDescription(dto.getBatchDescription());
@@ -158,28 +171,28 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     @Override
     public void codeCharge(Integer type, Integer id, String keyt) {
         PointExchangeCodePO pointExchangeCodePO = findByKeyt(keyt);
-        if(null == pointExchangeCodePO){
+        if (null == pointExchangeCodePO) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
         }
-        if(pointExchangeCodePO.getStatus().equals(CommonConstant.CODE_STOP_USING)){
-            throw  new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_STOPED_USING);
+        if (pointExchangeCodePO.getStatus().equals(CommonConstant.STOPTUSING)) {
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_STOPED_USING);
         }
-        if(pointExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_USED)){
-            throw  new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_USED);
+        if (pointExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_USED);
         }
-        if(pointExchangeCodePO.getExpiryTime().getTime()< System.currentTimeMillis()){
-            throw  new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_EXPIRIED);
+        if (pointExchangeCodePO.getExpiryTime().getTime() < System.currentTimeMillis()) {
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_EXPIRIED);
         }
         CustomerDTO customerDTO = customerService.getById(id);
-        if(null == customerDTO){
+        if (null == customerDTO) {
             throw new PointException(PointCodeEnum.CUSTOMER_NOT_EXIST);
         }
         PointPO pointPO = new PointPO();
         //直接指定过期时间
-        if(pointExchangeCodePO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)){
+        if (pointExchangeCodePO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
             pointPO.setExpiryTime(pointExchangeCodePO.getPointExpiryTime());
-        }else{
-            pointPO.setExpiryTime(new Date(System.currentTimeMillis()+pointExchangeCodePO.getValidityPeriod()* CommonConstant.ONE_DAY));
+        } else {
+            pointPO.setExpiryTime(new Date(System.currentTimeMillis() + pointExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY));
         }
         pointPO.setDescription(pointExchangeCodePO.getBatchDescription());
         pointPO.setFaceValue(pointExchangeCodePO.getFaceValue());
@@ -200,9 +213,9 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         pointRecordPO.setOperatorId(0);
         pointRecordPO.setOperatorName("");
         //如果后台用兑换码帮客户充值，同样记录操作人员的信息
-        if(type.equals(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE)){
+        if (type.equals(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE)) {
             SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
-            if(null == sysUserDTO){
+            if (null == sysUserDTO) {
                 throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
             }
             pointRecordPO.setOperatorId(sysUserDTO.getId());
@@ -219,6 +232,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         pointService.update(pointPO);
         //修改充值卡兑换码的使用状态
         pointExchangeCodePO.setUsed(Byte.valueOf("1"));
+        pointExchangeCodePO.setCustomerId(id);
         pointExchangeCodePOMapper.updateByPrimaryKeySelective(pointExchangeCodePO);
     }
 

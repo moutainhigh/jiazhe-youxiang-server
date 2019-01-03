@@ -19,7 +19,7 @@
         <result column="expiry_type" property="expiryType" jdbcType="TINYINT"/>
         <result column="status" property="status" jdbcType="TINYINT"/>
         <result column="used" property="used" jdbcType="TINYINT"/>
-        <result column="customer_id" property="customerId" jdbcType="VARCHAR"/>
+        <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
         <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
         <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
         <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>

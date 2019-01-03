@@ -32,7 +32,7 @@ public class APIPartnerController extends BaseController {
 
     @ApiOperation(value = "【后台】查询所有服务商家", httpMethod = "GET", response =PartnerResp.class, responseContainer = "List", notes = "【后台】查询所有服务商家")
     @RequestMapping(value = "/listall", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "查询所有服务商家", level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER, operate = "查询所有服务商家", level = LogLevelEnum.LEVEL_1)
     public Object listAll() {
         List<PartnerDTO> dtoList = partnerBiz.getList();
         List<PartnerResp> respList = dtoList.stream().map(PartnerAdapter::DTO2Resp).collect(Collectors.toList());

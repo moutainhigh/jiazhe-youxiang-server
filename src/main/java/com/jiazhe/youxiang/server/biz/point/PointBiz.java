@@ -64,7 +64,7 @@ public class PointBiz {
                     .filter(bean ->
                             bean.getStatus().equals(Byte.valueOf("0"))
                                     || bean.getExpiryTime().compareTo(new Date()) == -1
-                                    || bean.getBalance().compareTo(new BigDecimal(0)) == 0
+                                    || bean.getBalance().compareTo(BigDecimal.ZERO) == 0
                     ).collect(Collectors.toList());
             paging.setTotal(pointdtoListUnusable.size());
             return pointdtoListUnusable;
@@ -72,7 +72,7 @@ public class PointBiz {
         if (status.equals(Byte.valueOf("2"))) {
             List<PointDTO> temp = pointService.getList(customerDTO.getMobile(), null, Byte.valueOf("1"), Byte.valueOf("0"), paging);
             List<PointDTO> pointdtoListUsable = temp.stream()
-                    .filter(bean -> bean.getBalance().compareTo(new BigDecimal(0)) == 1)
+                    .filter(bean -> bean.getBalance().compareTo(BigDecimal.ZERO) == 1)
                     .collect(Collectors.toList());
             paging.setTotal(pointdtoListUsable.size());
             return pointdtoListUsable;
@@ -85,7 +85,7 @@ public class PointBiz {
         List<PointDTO> temp = pointService.getList(customerDTO.getMobile(), null, Byte.valueOf("1"), Byte.valueOf("0"), paging);
         List<PointDTO> pointDtoListUsable = temp.stream()
                 .filter(bean ->
-                        bean.getBalance().compareTo(new BigDecimal(0)) == 1
+                        bean.getBalance().compareTo(BigDecimal.ZERO) == 1
                                 && bean.getCityCodes().contains(cityCode))
                 .filter(bean -> productsHasProduct(bean.getProductIds(), productId))
                 .collect(Collectors.toList());

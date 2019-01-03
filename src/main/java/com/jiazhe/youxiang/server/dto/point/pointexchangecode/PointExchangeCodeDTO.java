@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.server.dto.point.pointexchangecode;
 
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
 import com.jiazhe.youxiang.server.vo.BaseObject;
 
 import java.math.BigDecimal;
@@ -26,6 +28,8 @@ public class PointExchangeCodeDTO extends BaseObject {
 
     private Integer projectId;
 
+    private ProjectDTO projectDTO;
+
     private String cityCodes;
 
     private String productIds;
@@ -47,6 +51,10 @@ public class PointExchangeCodeDTO extends BaseObject {
     private Byte status;
 
     private Byte used;
+
+    private Integer customerId;
+
+    private CustomerDTO customerDTO;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -98,6 +106,14 @@ public class PointExchangeCodeDTO extends BaseObject {
 
     public void setProjectId(Integer projectId) {
         this.projectId = projectId;
+    }
+
+    public ProjectDTO getProjectDTO() {
+        return projectDTO;
+    }
+
+    public void setProjectDTO(ProjectDTO projectDTO) {
+        this.projectDTO = projectDTO;
     }
 
     public String getCityCodes() {
@@ -186,5 +202,21 @@ public class PointExchangeCodeDTO extends BaseObject {
 
     public void setUsed(Byte used) {
         this.used = used;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
+
+    public CustomerDTO getCustomerDTO() {
+        return customerDTO;
+    }
+
+    public void setCustomerDTO(CustomerDTO customerDTO) {
+        this.customerDTO = customerDTO;
     }
 }

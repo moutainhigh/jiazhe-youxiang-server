@@ -71,17 +71,17 @@ public class VoucherServiceImpl implements VoucherService {
 
     @Override
     public List<VoucherDTO> getList(String mobile, Integer exchangeType, Byte status, Byte expiry, Paging paging) {
-        final CustomerDTO customerDTO = customerService.getByMobile(mobile);
+        final CustomerDTO defaultCustomerDTO = customerService.getByMobile(mobile);
         List<VoucherPO> rechargeCardPOList = voucherPOManualMapper.query(mobile,exchangeType,status,expiry,paging.getOffset(),paging.getLimit());
         List<VoucherDTO> rcDTOList = rechargeCardPOList.stream().map(VoucherAdapter::PO2DTO).collect(Collectors.toList());
         Integer count = voucherPOManualMapper.count(mobile,exchangeType,status,expiry);
         paging.setTotal(count);
         rcDTOList.stream().forEach(bean -> {
             if(Strings.isBlank(mobile)){
-                CustomerDTO customerDTO1 = customerService.getById(bean.getCustomerId());
-                bean.setCustomerDTO(customerDTO1);
-            }else{
+                CustomerDTO customerDTO = customerService.getById(bean.getCustomerId());
                 bean.setCustomerDTO(customerDTO);
+            }else{
+                bean.setCustomerDTO(defaultCustomerDTO);
             }
             VoucherExchangeRecordDTO voucherExchangeRecordDTO = voucherExchangeRecordService.findByVoucherId(bean.getId());
             bean.setVoucherExchangeRecordDTO(voucherExchangeRecordDTO);
@@ -143,5 +143,11 @@ public class VoucherServiceImpl implements VoucherService {
     @Override
     public Integer totalValidVoucher(Integer customerId) {
         return voucherPOManualMapper.totalValidVoucher(customerId);
+    }
+
+    @Override
+    public List<VoucherDTO> findByIdsInOrder(List<Integer> voucherIds) {
+        List<VoucherPO> poList = voucherPOManualMapper.findByIdsInOrder(voucherIds);
+        return poList.stream().map(VoucherAdapter::PO2DTO).collect(Collectors.toList());
     }
 }

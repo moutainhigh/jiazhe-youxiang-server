@@ -46,11 +46,6 @@ public class VoucherExchangeCodeBatchBiz {
     }
 
     public void addSave(VoucherExchangeCodeBatchSaveDTO voucherExchangeCodeBatchSaveDTO) {
-        if(voucherExchangeCodeBatchSaveDTO.getExpiryType().equals(CommonConstant.VOUCHER_EXPIRY_TIME)){
-            voucherExchangeCodeBatchSaveDTO.setValidityPeriod(0);
-        }else{
-            voucherExchangeCodeBatchSaveDTO.setVoucherExpiryTime(new Date());
-        }
         voucherExchangeCodeBatchService.addSave(voucherExchangeCodeBatchSaveDTO);
     }
 

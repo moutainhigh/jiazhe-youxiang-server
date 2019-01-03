@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.resp.point.exchangecodebatch;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import com.jiazhe.youxiang.server.vo.resp.project.ProjectResp;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
@@ -40,6 +41,11 @@ public class PointExchangeCodeBatchResp extends BaseVO{
 
     @ApiModelProperty("批次下兑换码是否已经制作，0为未制作，1为已制作")
     private Byte isMade;
+
+    @ApiModelProperty("项目id")
+    private Integer projectId;
+
+    private ProjectResp projectResp;
 
     public Integer getId() {
         return id;
@@ -115,5 +121,21 @@ public class PointExchangeCodeBatchResp extends BaseVO{
 
     public void setPointName(String pointName) {
         this.pointName = pointName;
+    }
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
+    public ProjectResp getProjectResp() {
+        return projectResp;
+    }
+
+    public void setProjectResp(ProjectResp projectResp) {
+        this.projectResp = projectResp;
     }
 }

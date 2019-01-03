@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -90,20 +91,32 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(),new RechargeCardException(RechargeCardCodeEnum.BATCH_NAME_IS_NULL));
         CommonValidator.validateNull(req.getRechargeCardName(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));
-        if (!req.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
+        CommonValidator.validateNull(req.getProjectId(), new RechargeCardException(RechargeCardCodeEnum.PROJECT_IS_NULL));
+        CommonValidator.validateNull(req.getCityCodes(), new RechargeCardException(RechargeCardCodeEnum.CITY_IS_NULL));
+        CommonValidator.validateNull(req.getProductIds(), new RechargeCardException(RechargeCardCodeEnum.PRODUCT_IS_NULL));
+        //虚拟批次
+        if(req.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)){
+            req.setAmount(0);
+            req.setFaceValue(BigDecimal.ZERO);
+        }else{
            CommonValidator.validateNull(req.getAmount(),new RechargeCardException(RechargeCardCodeEnum.NOT_VIRTUAL_NEED_AMOUNT));
            CommonValidator.validateNull(req.getFaceValue(),new RechargeCardException(RechargeCardCodeEnum.NOT_VIRTUAL_NEED_FACE_VALUE));
         }
+        //批次过期时间不为空
         if(req.getExpiryTime()==0){
             throw new RechargeCardException(RechargeCardCodeEnum.BATCH_EXPIRY_TIME_IS_NULL);
         }
+        //充值卡过期时间为指定的时间
         if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
             if(req.getRechargeCardExpiryTime()==0){
                 throw new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRY_TIME_IS_NULL);
             }
+            req.setValidityPeriod(0);
         }
+        //积分卡时间为兑换后间隔的天数
         if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_PERIOD)) {
             CommonValidator.validateNull(req.getValidityPeriod(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRY_TIME_IS_NULL));
+            req.setRechargeCardExpiryTime(System.currentTimeMillis());
         }
         RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO = RCExchangeCodeBatchAdapter.ReqSave2DTOSave(req);
         if (req.getId() == 0) {
@@ -120,17 +133,6 @@ public class APIRCExchangeCodeBatchController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "生成充值卡兑换码", level = LogLevelEnum.LEVEL_3)
     public Object generateCode(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
-        //参数检查,检查是否是虚拟批次，检查该批次是否已经生成过兑换码
-        RCExchangeCodeBatchEditDTO dto = rcExchangeCodeBatchBiz.getById(req.getId());
-        if(null == dto){
-            throw new RechargeCardException(RechargeCardCodeEnum.BATCH_NOT_EXISTED);
-        }
-        if (dto.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
-            throw new RechargeCardException(RechargeCardCodeEnum.VIRTUAL_BATCH_CANNOT_GENERATE);
-        }
-        if(dto.getIsMade().equals(CommonConstant.EXCHANGE_CODE_HAS_MADE)){
-            throw new RechargeCardException(RechargeCardCodeEnum.CODE_GENERATED);
-        }
         rcExchangeCodeBatchBiz.generateCode(req.getId());
         return ResponseFactory.buildSuccess();
     }

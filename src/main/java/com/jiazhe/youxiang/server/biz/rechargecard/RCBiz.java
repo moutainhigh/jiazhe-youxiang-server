@@ -88,7 +88,7 @@ public class RCBiz {
                     .filter(bean ->
                             bean.getStatus().equals(Byte.valueOf("0"))
                                     || bean.getExpiryTime().compareTo(new Date()) == -1
-                                    || bean.getBalance().compareTo(new BigDecimal(0)) == 0
+                                    || bean.getBalance().compareTo(BigDecimal.ZERO) == 0
                     ).collect(Collectors.toList());
             paging.setTotal(rcdtoListUnusable.size());
             return rcdtoListUnusable;
@@ -96,7 +96,7 @@ public class RCBiz {
         if (status.equals(Byte.valueOf("2"))) {
             List<RCDTO> temp = rcService.getList(customerDTO.getMobile(), null, Byte.valueOf("1"), Byte.valueOf("0"), paging);
             List<RCDTO> rcdtoListUsable = temp.stream()
-                    .filter(bean -> bean.getBalance().compareTo(new BigDecimal(0)) == 1)
+                    .filter(bean -> bean.getBalance().compareTo(BigDecimal.ZERO) == 1)
                     .collect(Collectors.toList());
             paging.setTotal(rcdtoListUsable.size());
             return rcdtoListUsable;
@@ -109,7 +109,7 @@ public class RCBiz {
         List<RCDTO> temp = rcService.getList(customerDTO.getMobile(), null, Byte.valueOf("1"), Byte.valueOf("0"), paging);
         List<RCDTO> rcdtoListUsable = temp.stream()
                 .filter(bean ->
-                        bean.getBalance().compareTo(new BigDecimal(0)) == 1
+                        bean.getBalance().compareTo(BigDecimal.ZERO) == 1
                                 && bean.getCityCodes().contains(cityCode))
                 .filter(bean -> productsHasProduct(bean.getProductIds(), productId))
                 .collect(Collectors.toList());

@@ -19,26 +19,48 @@ public class AuditRecordCheckReq extends BaseVO {
     @ApiModelProperty("是否通过 1不通过 2通过")
     private Byte status ;
 
-    @ApiModelProperty("审核理由")
-    private String remark ;
+    @ApiModelProperty("pos机编号")
+    private String posCode ;
 
-    @ApiModelProperty("批次id")
-    private Integer batchId;
+    @ApiModelProperty("银行卡号")
+    private String cardNo ;
 
-    public Integer getBatchId() {
-        return batchId;
+    @ApiModelProperty("交易日期")
+    private Long tradeTime ;
+
+    @ApiModelProperty("兑换积分批次id")
+    private Integer exchangeBatchId;
+
+    @ApiModelProperty("赠送积分批次id")
+    private Integer givingBatchId;
+
+    @ApiModelProperty("审核不通过理由")
+    private String auditReason ;
+
+
+
+    public Integer getExchangeBatchId() {
+        return exchangeBatchId;
     }
 
-    public void setBatchId(Integer batchId) {
-        this.batchId = batchId;
+    public void setExchangeBatchId(Integer exchangeBatchId) {
+        this.exchangeBatchId = exchangeBatchId;
     }
 
-    public String getRemark() {
-        return remark;
+    public Integer getGivingBatchId() {
+        return givingBatchId;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setGivingBatchId(Integer givingBatchId) {
+        this.givingBatchId = givingBatchId;
+    }
+
+    public String getAuditReason() {
+        return auditReason;
+    }
+
+    public void setAuditReason(String auditReason) {
+        this.auditReason = auditReason;
     }
 
     public Integer getId() {
@@ -63,5 +85,29 @@ public class AuditRecordCheckReq extends BaseVO {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getPosCode() {
+        return posCode;
+    }
+
+    public void setPosCode(String posCode) {
+        this.posCode = posCode;
+    }
+
+    public String getCardNo() {
+        return cardNo;
+    }
+
+    public void setCardNo(String cardNo) {
+        this.cardNo = cardNo;
+    }
+
+    public Long getTradeTime() {
+        return tradeTime;
+    }
+
+    public void setTradeTime(Long tradeTime) {
+        this.tradeTime = tradeTime;
     }
 }
