@@ -174,7 +174,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         if (null == pointExchangeCodePO) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
         }
-        if (pointExchangeCodePO.getStatus().equals(CommonConstant.STOPTUSING)) {
+        if (pointExchangeCodePO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_STOPED_USING);
         }
         if (pointExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
