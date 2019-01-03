@@ -47,7 +47,7 @@ public class TestRSA {
             //=================客户端=================
             //hello, i am infi, good night!加密
 
-            String message = "104320173921060,32217035,815587014324,621786**********4817,10,20180605,114656";
+            String message = "104320173921060,32217035,815587014324,621786**********4817,1,20180608,114656";
 
             java.security.Security.addProvider(
                     new BouncyCastleProvider()
