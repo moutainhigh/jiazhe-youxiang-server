@@ -148,7 +148,7 @@
                         <div id="grid-pager"></div>
                     </div><!-- /.col -->
 
-                    <div id="orderReservationModal" class="modal fade" tabindex="-1">
+                    <div id="orderReservationModal" class="modal fade" tabindex="-1" style="overflow: scroll">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -341,7 +341,7 @@
                         </div>
                     </div>
 
-                    <div id="appendOrderModal" class="modal fade" tabindex="-1">
+                    <div id="appendOrderModal" class="modal fade" tabindex="-1" style="overflow: scroll">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -573,11 +573,6 @@
     var pager_selector = "#grid-pager";
     var orderStatus = ['待付款', '待派单', '待服务', '服务完成', '取消待审核', '取消未通过', '已取消'];
     $(function () {
-        $(document).on("hidden.bs.modal", ".bootbox", function () {
-            if ($(".modal-backdrop").length > 0) {
-                $("body").addClass("modal-open");
-            }
-        })
         //重新修改表格宽度
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);

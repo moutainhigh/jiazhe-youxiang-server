@@ -85,7 +85,7 @@
                         <div id="grid-pager"></div>
                     </div><!-- /.col -->
 
-                    <div id="modal-form" class="modal fade" tabindex="-1">
+                    <div id="modal-form" class="modal fade" tabindex="-1" style="overflow: scroll">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -334,20 +334,6 @@
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
     var auditRecordStatus = ['待审核', '未通过', '已通过'];
-    $(document).ready(function () {
-        $(document).on("hidden.bs.modal", ".bootbox", function () {
-            if ($(".modal-backdrop").length > 0) {
-                $("body").addClass("modal-open");
-            }
-        })
-
-        // 通过该方法来为每次弹出的模态框设置最新的zIndex值，从而使最新的modal显示在最前面
-        $(document).on('show.bs.modal', '.modal', function (event) {
-            var zIndex = 1060 + (10 * $('.modal:visible').length);
-            $(this).css('z-index', zIndex);
-        });
-    });
-
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {

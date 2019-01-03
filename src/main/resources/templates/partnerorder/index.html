@@ -319,7 +319,7 @@
 </div>
 
 <!--商户订单modal-->
-<div id="modal-partnerOrder" class="modal fade" tabindex="-1">
+<div id="modal-partnerOrder" class="modal fade" tabindex="-1" style="overflow: scroll">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -551,11 +551,6 @@
     var pager_selector = "#grid-pager";
     var orderStatus = ['待服务', '已完成', '已取消'];
     $(function () {
-        $(document).on("hidden.bs.modal", ".bootbox", function () {
-            if ($(".modal-backdrop").length > 0) {
-                $("body").addClass("modal-open");
-            }
-        })
         //重新修改表格宽度
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
