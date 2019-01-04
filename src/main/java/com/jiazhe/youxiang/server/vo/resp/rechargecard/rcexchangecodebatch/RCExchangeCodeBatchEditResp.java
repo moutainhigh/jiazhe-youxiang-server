@@ -46,6 +46,9 @@ public class RCExchangeCodeBatchEditResp extends BaseVO {
     @ApiModelProperty("过期时间")
     private Long expiryTime;
 
+    @ApiModelProperty("充值卡生效时间")
+    private Long rechargeCardEffectiveTime;
+
     @ApiModelProperty("充值卡过期时间")
     private Long rechargeCardExpiryTime;
 
@@ -176,5 +179,13 @@ public class RCExchangeCodeBatchEditResp extends BaseVO {
 
     public void setIsMade(Byte isMade) {
         this.isMade = isMade;
+    }
+
+    public Long getRechargeCardEffectiveTime() {
+        return rechargeCardEffectiveTime;
+    }
+
+    public void setRechargeCardEffectiveTime(Long rechargeCardEffectiveTime) {
+        this.rechargeCardEffectiveTime = rechargeCardEffectiveTime;
     }
 }

@@ -188,7 +188,7 @@
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveExpiryTime">过期时间：</label>
+                                                           for="saveExpiryTime">批次过期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker" id="saveExpiryTime"
@@ -197,6 +197,22 @@
                                                                             <i class="fa fa-calendar bigger-110"></i>
                                                                         </span>
                                                             <input type="hidden" value=0 name="expiryTime"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveRechargeCardEffectiveTime">充值卡生效时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker" id="saveRechargeCardEffectiveTime"
+                                                                   type="text" readonly/>
+                                                            <span class="input-group-addon">
+                                                                            <i class="fa fa-calendar bigger-110"></i>
+                                                                        </span>
+                                                            <input type="hidden" value=0 name="rechargeCardEffectiveTime"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -352,7 +368,7 @@
         var tableOption = {
             url: "/api/rcexchangecodebatch/listpage",
             postData: transformToJson($('#batchSearchForm').serializeArray()),
-            colNames: ['', '批次名称', '充值卡名称', '是否是虚拟批次', '状态', '面额', '数量', '过期时间', '操作'],
+            colNames: ['', '批次名称', '充值卡名称', '是否是虚拟批次', '状态', '面额', '数量', '批次过期时间','充值卡生效时间', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 100, sortable: false},
@@ -393,7 +409,16 @@
                     width: 50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return dateFormat(rowObject.expiryTime);
+                        return timeFormat(rowObject.expiryTime);
+                    }
+                },
+                {
+                    name: 'rechargeCardEffectiveTime',
+                    index: 'rechargeCardEffectiveTime',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return timeFormat(rowObject.rechargeCardEffectiveTime);
                     }
                 },
                 {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
@@ -534,6 +559,9 @@
                     $("#batchSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
                     $('#saveExpiryTime').datepicker('update');
                     $("#batchSaveForm #saveExpiryTime").next().next().val(result.expiryTime);
+                    $("#batchSaveForm #saveRechargeCardEffectiveTime").val(dateFormat(result.rechargeCardEffectiveTime));
+                    $('#saveRechargeCardEffectiveTime').datepicker('update');
+                    $("#batchSaveForm #saveRechargeCardEffectiveTime").next().next().val(result.rechargeCardEffectiveTime);
                     if (result.expiryType == 0) {
                         $("#batchSaveForm #saveDeadLineRadio").click();
                     } else {

@@ -72,7 +72,7 @@ public class RCBiz {
      * app端根据客户id，和是否可用查询充值卡列表
      *
      * @param customerId
-     * @param status     0为所有，1为不可用【包括过期、停用和余额为0】，2为可用
+     * @param status     0为所有，1为不可用【包括过期、停用和余额为0】，2为可用【包括未生效】
      * @param paging
      * @return
      */
@@ -87,7 +87,7 @@ public class RCBiz {
             List<RCDTO> rcdtoListUnusable = rcdtoListAll.stream()
                     .filter(bean ->
                             bean.getStatus().equals(Byte.valueOf("0"))
-                                    || bean.getExpiryTime().compareTo(new Date()) == -1
+                                    || bean.getExpiryTime().getTime() < System.currentTimeMillis()
                                     || bean.getBalance().compareTo(BigDecimal.ZERO) == 0
                     ).collect(Collectors.toList());
             paging.setTotal(rcdtoListUnusable.size());
@@ -112,6 +112,7 @@ public class RCBiz {
                         bean.getBalance().compareTo(BigDecimal.ZERO) == 1
                                 && bean.getCityCodes().contains(cityCode))
                 .filter(bean -> productsHasProduct(bean.getProductIds(), productId))
+                .filter(bean -> bean.getEffectiveTime().getTime() < System.currentTimeMillis())
                 .collect(Collectors.toList());
         paging.setTotal(rcdtoListUsable.size());
         return rcdtoListUsable;

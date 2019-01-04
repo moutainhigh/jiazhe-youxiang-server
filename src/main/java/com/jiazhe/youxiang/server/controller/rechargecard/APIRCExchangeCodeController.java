@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.controller.rechargecard;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCExchangeCodeBiz;
@@ -36,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -115,7 +117,7 @@ public class APIRCExchangeCodeController extends BaseController{
     @ApiOperation(value = "修改兑换码信息", httpMethod = "POST",notes = "修改兑换码信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "修改兑换码信息", level = LogLevelEnum.LEVEL_2)
-    public Object editSave(@ModelAttribute RCExchangeCodeEditReq req) {
+    public Object editSave(@ModelAttribute RCExchangeCodeEditReq req) throws ParseException {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getRechargeCardName(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));
@@ -124,10 +126,16 @@ public class APIRCExchangeCodeController extends BaseController{
         if(req.getExpiryTime()==0){
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
         }
+        req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
+        if(req.getRechargeCardEffectiveTime()==0){
+            throw new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EFFECTIVE_TIME_IS_NULL);
+        }
+        req.setRechargeCardEffectiveTime(DateUtil.getFirstSecond(req.getRechargeCardEffectiveTime()));
         if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
             if(req.getRechargeCardExpiryTime()==0){
                 throw new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRY_TIME_IS_NULL);
             }
+            req.setRechargeCardExpiryTime(DateUtil.getLastSecond(req.getRechargeCardExpiryTime()));
         }
         if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_PERIOD)) {
             CommonValidator.validateNull(req.getValidityPeriod(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRY_TIME_IS_NULL));

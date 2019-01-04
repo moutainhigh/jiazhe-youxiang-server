@@ -151,7 +151,7 @@
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveExpiryTime">代金券到期时间：</label>
+                                                           for="saveExpiryTime">代金券过期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker" id="saveExpiryTime"
@@ -248,7 +248,7 @@
         var tableOption = {
             url: "/api/voucher/searchlistpage",
             postData: transformToJson($('#rcSearchForm').serializeArray()),
-            colNames: ['', '代金券名称', '状态', '是否已经使用', '兑换时间', '客户手机号', '客户姓名', '代金券生效时间','代金券到期时间', '兑换类型', '后台操作人', '操作'],
+            colNames: ['', '代金券名称', '状态', '是否已经使用', '兑换时间', '客户手机号', '客户姓名', '代金券生效时间','代金券过期时间', '兑换类型', '后台操作人', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 50, sortable: false},

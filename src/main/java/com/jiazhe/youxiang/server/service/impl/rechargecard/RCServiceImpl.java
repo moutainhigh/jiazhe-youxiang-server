@@ -105,6 +105,7 @@ public class RCServiceImpl implements RCService {
         RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchService.getById(batchId);
         RechargeCardPO rechargeCardPO = new RechargeCardPO();
         //直接指定过期时间
+        rechargeCardPO.setEffectiveTime(rcExchangeCodeBatchEditDTO.getRechargeCardEffectiveTime());
         if(rcExchangeCodeBatchEditDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)){
             rechargeCardPO.setExpiryTime(rcExchangeCodeBatchEditDTO.getRechargeCardExpiryTime());
         }else{
@@ -151,6 +152,7 @@ public class RCServiceImpl implements RCService {
             bean.setProjectId(batchSaveDTO.getProjectId());
             bean.setCityCodes(batchSaveDTO.getCityCodes());
             bean.setProductIds(batchSaveDTO.getProductIds());
+            bean.setEffectiveTime(batchSaveDTO.getRechargeCardEffectiveTime());
             //直接指定过期时间
             if(batchSaveDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)){
                 bean.setExpiryTime(batchSaveDTO.getRechargeCardExpiryTime());
@@ -201,6 +203,7 @@ public class RCServiceImpl implements RCService {
         po.setProductIds(dto.getProductIds());
         po.setCityCodes(dto.getCityCodes());
         po.setName(dto.getName());
+        po.setEffectiveTime(dto.getEffectiveTime());
         po.setExpiryTime(dto.getExpiryTime());
         po.setDescription(dto.getDescription());
         rechargeCardPOMapper.updateByPrimaryKeySelective(po);

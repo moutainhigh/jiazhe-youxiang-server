@@ -333,7 +333,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                     throw new OrderException(OrderCodeEnum.POINT_IS_NOT_YOURS);
                 }
                 if (bean.getStatus().equals(Byte.valueOf("0"))) {
-                    throw new OrderException(OrderCodeEnum.POINT_CARD_PAY_ERROR);
+                    throw new OrderException(OrderCodeEnum.ORDER_POINT_CARD_PAY_ERROR);
                 }
                 if (!bean.getCityCodes().contains(orderInfoPO.getCustomerCityCode())) {
                     throw new OrderException(OrderCodeEnum.POINT_NOT_SUPPORT_CITY);
@@ -378,6 +378,15 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             rcdtoList.stream().forEach(bean -> {
                 if (!bean.getCustomerId().equals(orderInfoPO.getCustomerId())) {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_NOT_YOURS);
+                }
+                if (bean.getStatus().equals(Byte.valueOf("0"))) {
+                    throw new OrderException(OrderCodeEnum.ORDER_RECHARGE_CARD_PAY_ERROR);
+                }
+                if(bean.getExpiryTime().getTime()<System.currentTimeMillis()){
+                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_EXPIRY);
+                }
+                if(bean.getEffectiveTime().getTime()>System.currentTimeMillis()){
+                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_NOT_EFFECTIVE);
                 }
                 if (!bean.getCityCodes().contains(orderInfoPO.getCustomerCityCode())) {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_NOT_SUPPORT_CITY);
@@ -522,7 +531,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                     throw new OrderException(OrderCodeEnum.POINT_IS_NOT_YOURS);
                 }
                 if (bean.getStatus().equals(Byte.valueOf("0"))) {
-                    throw new OrderException(OrderCodeEnum.POINT_CARD_PAY_ERROR);
+                    throw new OrderException(OrderCodeEnum.ORDER_POINT_CARD_PAY_ERROR);
                 }
                 if (!bean.getCityCodes().contains(dto.getCustomerCityCode())) {
                     throw new OrderException(OrderCodeEnum.POINT_NOT_SUPPORT_CITY);
@@ -569,6 +578,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 }
                 if (bean.getStatus().equals(Byte.valueOf("0"))) {
                     throw new OrderException(OrderCodeEnum.ORDER_RECHARGE_CARD_PAY_ERROR);
+                }
+                if(bean.getExpiryTime().getTime()<System.currentTimeMillis()){
+                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_EXPIRY);
+                }
+                if(bean.getEffectiveTime().getTime()>System.currentTimeMillis()){
+                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_NOT_EFFECTIVE);
                 }
                 if (!bean.getCityCodes().contains(dto.getCustomerCityCode())) {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_NOT_SUPPORT_CITY);

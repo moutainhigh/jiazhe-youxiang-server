@@ -117,7 +117,7 @@
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveExpiryTime">兑换码到期时间：</label>
+                                                           for="saveExpiryTime">兑换码过期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker" id="saveExpiryTime"
@@ -168,7 +168,7 @@
                                                 <div class="space-2 saveDeadLine"></div>
                                                 <div class="form-group saveDeadLine">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveVoucherExpiryTime">代金券到期时间：</label>
+                                                           for="saveVoucherExpiryTime">代金券过期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker"
@@ -290,7 +290,7 @@
             url: "/api/voucherexchangecode/searchlistpage",
             postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
             datatype:'local',
-            colNames: ['', '批次名称', '代金券名称', '兑换码', '密钥', '停用状态', '使用状态', '客户电话','兑换商品数量', '兑换码到期时间','代金券生效时间', '操作'],
+            colNames: ['', '批次名称', '代金券名称', '兑换码', '密钥', '停用状态', '使用状态', '客户电话','兑换商品数量', '兑换码过期时间','代金券生效时间', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'batchName', index: 'batchName', width: 100, sortable: false},

@@ -38,6 +38,8 @@ public class RCExchangeCodeBatchEditDTO extends BaseObject {
 
     private Date expiryTime;
 
+    private Date rechargeCardEffectiveTime;
+
     private Date rechargeCardExpiryTime;
 
     private Integer validityPeriod;
@@ -162,5 +164,13 @@ public class RCExchangeCodeBatchEditDTO extends BaseObject {
 
     public void setIsMade(Byte isMade) {
         this.isMade = isMade;
+    }
+
+    public Date getRechargeCardEffectiveTime() {
+        return rechargeCardEffectiveTime;
+    }
+
+    public void setRechargeCardEffectiveTime(Date rechargeCardEffectiveTime) {
+        this.rechargeCardEffectiveTime = rechargeCardEffectiveTime;
     }
 }

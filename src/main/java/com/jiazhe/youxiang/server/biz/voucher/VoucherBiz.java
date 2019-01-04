@@ -72,7 +72,6 @@ public class VoucherBiz {
                     .filter(bean ->
                             bean.getStatus().equals(Byte.valueOf("0"))
                                     || bean.getExpiryTime().getTime() < System.currentTimeMillis()
-                                    ||bean.getEffectiveTime().getTime() > System.currentTimeMillis()
                                     || bean.getUsed().equals(Byte.valueOf("1"))
                     ).collect(Collectors.toList());
             paging.setTotal(voucherDTOListUsable.size());

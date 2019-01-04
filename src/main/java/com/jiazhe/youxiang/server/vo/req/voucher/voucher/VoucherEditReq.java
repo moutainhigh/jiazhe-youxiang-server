@@ -31,7 +31,7 @@ public class VoucherEditReq extends BaseVO{
     @ApiModelProperty("生效时间")
     private Long effectiveTime;
 
-    @ApiModelProperty("到期时间")
+    @ApiModelProperty("过期时间")
     private Long expiryTime;
 
     public Integer getId() {
