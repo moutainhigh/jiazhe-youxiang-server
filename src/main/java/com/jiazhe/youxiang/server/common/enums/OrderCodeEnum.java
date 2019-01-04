@@ -41,6 +41,12 @@ public enum OrderCodeEnum {
     POINT_PAY_DECIMAL_APPEAR(108032, "POINT_PAY_DECIMAL_APPEAR", "积分卡支付出现小数"),
     ORDER_NOT_UNPAID(108033, "ORDER_NOT_UNPAID", "订单不是待支付状态，不能用微信支付"),
     WECHAT_PAY_FEE_ERROR(108034, "WECHAT_PAY_FEE_ERROR", "微信支付金额和订单不一致"),
+    VOUCHER_IS_NOT_EFFECTIVE(108035,"VOUCHER_IS_NOT_EFFECTIVE" , "代金券还未生效，不能用于支付"),
+    VOUCHER_IS_EXPIRY(108036,"VOUCHER_IS_EXPIRY" , "代金券已过期，不能用于支付"),
+    POINT_IS_NOT_EFFECTIVE(108037,"POINT_IS_NOT_EFFECTIVE" , "积分卡还未生效，不能用于支付"),
+    POINT_IS_EXPIRY(108038,"POINT_IS_EXPIRY" , "积分卡已过期，不能用于支付"),
+    RECHARGE_CARD_IS_NOT_EFFECTIVE(108039,"RECHARGE_CARD_IS_NOT_EFFECTIVE" , "充值卡还未生效，不能用于支付"),
+    RECHARGE_CARD_IS_EXPIRY(108040,"RECHARGE_CARD_IS_EXPIRY" , "充值卡已过期，不能用于支付"),
     ;
 
     OrderCodeEnum(Integer code, String type, String message) {

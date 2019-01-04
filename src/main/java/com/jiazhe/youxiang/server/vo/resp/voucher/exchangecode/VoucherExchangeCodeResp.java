@@ -36,6 +36,8 @@ public class VoucherExchangeCodeResp extends BaseVO{
 
     private Long expiryTime;
 
+    private Long voucherEffectiveTime;
+
     private Long voucherExpiryTime;
 
     private Integer validityPeriod;
@@ -174,5 +176,13 @@ public class VoucherExchangeCodeResp extends BaseVO{
 
     public void setCustomerResp(CustomerResp customerResp) {
         this.customerResp = customerResp;
+    }
+
+    public Long getVoucherEffectiveTime() {
+        return voucherEffectiveTime;
+    }
+
+    public void setVoucherEffectiveTime(Long voucherEffectiveTime) {
+        this.voucherEffectiveTime = voucherEffectiveTime;
     }
 }

@@ -294,6 +294,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if (bean.getStatus().equals(Byte.valueOf("0")) || bean.getUsed().equals(Byte.valueOf("1"))) {
                     throw new OrderException(OrderCodeEnum.ORDER_VOUCHER_PAY_ERROR);
                 }
+                if(bean.getExpiryTime().getTime()<System.currentTimeMillis()){
+                    throw new OrderException(OrderCodeEnum.VOUCHER_IS_EXPIRY);
+                }
+                if(bean.getEffectiveTime().getTime()>System.currentTimeMillis()){
+                    throw new OrderException(OrderCodeEnum.VOUCHER_IS_NOT_EFFECTIVE);
+                }
                 if (!bean.getCityCodes().contains(orderInfoPO.getCustomerCityCode())) {
                     throw new OrderException(OrderCodeEnum.VOUCHER_NOT_SUPPORT_CITY);
                 }
@@ -477,6 +483,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 }
                 if (bean.getStatus().equals(Byte.valueOf("0")) || bean.getUsed().equals(Byte.valueOf("1"))) {
                     throw new OrderException(OrderCodeEnum.ORDER_VOUCHER_PAY_ERROR);
+                }
+                if(bean.getExpiryTime().getTime()<System.currentTimeMillis()){
+                    throw new OrderException(OrderCodeEnum.VOUCHER_IS_EXPIRY);
+                }
+                if(bean.getEffectiveTime().getTime()>System.currentTimeMillis()){
+                    throw new OrderException(OrderCodeEnum.VOUCHER_IS_NOT_EFFECTIVE);
                 }
                 if (!bean.getCityCodes().contains(dto.getCustomerCityCode())) {
                     throw new OrderException(OrderCodeEnum.VOUCHER_NOT_SUPPORT_CITY);

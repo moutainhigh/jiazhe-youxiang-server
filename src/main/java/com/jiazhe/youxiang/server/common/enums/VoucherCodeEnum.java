@@ -29,7 +29,7 @@ public enum VoucherCodeEnum {
     PROJECT_IS_NULL(116021, "PROJECT_IS_NULL", "项目不能为空"),
     CITY_IS_NULL(116022, "CITY_IS_NULL", "适用城市不能为空"),
     PRODUCT_IS_NULL(116023, "PRODUCT_IS_NULL", "适用商品不能为空"),
-    ;
+    VOUCHER_EFFECTIVE_TIME_IS_NULL(116024,"VOUCHER_EFFECTIVE_TIME_IS_NULL" , "代金券生效时间为空");
 
     VoucherCodeEnum(Integer code, String type, String message) {
         this.code = code;

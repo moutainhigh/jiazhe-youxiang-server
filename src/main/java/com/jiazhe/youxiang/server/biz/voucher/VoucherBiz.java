@@ -56,7 +56,7 @@ public class VoucherBiz {
      * app端根据客户id，和是否可用查询充值卡列表
      *
      * @param customerId
-     * @param status     0为所有，1为不可用【包括过期、停用和余额为0】，2为可用
+     * @param status     0为所有，1为不可用【包括过期、停用和已使用】，2为可用【包括未生效】
      * @param paging
      * @return
      */
@@ -71,7 +71,8 @@ public class VoucherBiz {
             List<VoucherDTO> voucherDTOListUsable = voucherDTOListAll.stream()
                     .filter(bean ->
                             bean.getStatus().equals(Byte.valueOf("0"))
-                                    || bean.getExpiryTime().compareTo(new Date()) == -1
+                                    || bean.getExpiryTime().getTime() < System.currentTimeMillis()
+                                    ||bean.getEffectiveTime().getTime() > System.currentTimeMillis()
                                     || bean.getUsed().equals(Byte.valueOf("1"))
                     ).collect(Collectors.toList());
             paging.setTotal(voucherDTOListUsable.size());
@@ -96,6 +97,7 @@ public class VoucherBiz {
                         bean.getUsed().equals(Byte.valueOf("0"))
                                 && bean.getCityCodes().contains(cityCode))
                 .filter(bean -> productsHasProduct(bean.getProductIds(), productId))
+                .filter(bean -> bean.getEffectiveTime().getTime() < System.currentTimeMillis())
                 .collect(Collectors.toList());
         paging.setTotal(voucherDTOListUsable.size());
         return voucherDTOListUsable;

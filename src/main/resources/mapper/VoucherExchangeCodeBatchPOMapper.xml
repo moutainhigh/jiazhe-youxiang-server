@@ -13,6 +13,7 @@
     <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
     <result column="count" property="count" jdbcType="INTEGER" />
     <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
+    <result column="voucher_effective_time" property="voucherEffectiveTime" jdbcType="TIMESTAMP" />
     <result column="voucher_expiry_time" property="voucherExpiryTime" jdbcType="TIMESTAMP" />
     <result column="validity_period" property="validityPeriod" jdbcType="INTEGER" />
     <result column="expiry_type" property="expiryType" jdbcType="TINYINT" />
@@ -82,8 +83,8 @@
   </sql>
   <sql id="Base_Column_List" >
     id, name, voucher_name, project_id, is_made, description, amount, city_codes, product_ids, 
-    count, expiry_time, voucher_expiry_time, validity_period, expiry_type, status, ext_info, 
-    is_deleted, add_time, mod_time
+    count, expiry_time, voucher_effective_time, voucher_expiry_time, validity_period, 
+    expiry_type, status, ext_info, is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodeBatchPOExample" >
     select
@@ -119,17 +120,17 @@
     insert into voucher_exchange_code_batch (id, name, voucher_name, 
       project_id, is_made, description, 
       amount, city_codes, product_ids, 
-      count, expiry_time, voucher_expiry_time, 
-      validity_period, expiry_type, status, 
-      ext_info, is_deleted, add_time, 
-      mod_time)
+      count, expiry_time, voucher_effective_time, 
+      voucher_expiry_time, validity_period, expiry_type, 
+      status, ext_info, is_deleted, 
+      add_time, mod_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{voucherName,jdbcType=VARCHAR}, 
       #{projectId,jdbcType=INTEGER}, #{isMade,jdbcType=TINYINT}, #{description,jdbcType=VARCHAR}, 
       #{amount,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR}, #{productIds,jdbcType=VARCHAR}, 
-      #{count,jdbcType=INTEGER}, #{expiryTime,jdbcType=TIMESTAMP}, #{voucherExpiryTime,jdbcType=TIMESTAMP}, 
-      #{validityPeriod,jdbcType=INTEGER}, #{expiryType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
-      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
-      #{modTime,jdbcType=TIMESTAMP})
+      #{count,jdbcType=INTEGER}, #{expiryTime,jdbcType=TIMESTAMP}, #{voucherEffectiveTime,jdbcType=TIMESTAMP}, 
+      #{voucherExpiryTime,jdbcType=TIMESTAMP}, #{validityPeriod,jdbcType=INTEGER}, #{expiryType,jdbcType=TINYINT}, 
+      #{status,jdbcType=TINYINT}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodeBatchPO" >
     insert into voucher_exchange_code_batch
@@ -166,6 +167,9 @@
       </if>
       <if test="expiryTime != null" >
         expiry_time,
+      </if>
+      <if test="voucherEffectiveTime != null" >
+        voucher_effective_time,
       </if>
       <if test="voucherExpiryTime != null" >
         voucher_expiry_time,
@@ -225,6 +229,9 @@
       </if>
       <if test="expiryTime != null" >
         #{expiryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="voucherEffectiveTime != null" >
+        #{voucherEffectiveTime,jdbcType=TIMESTAMP},
       </if>
       <if test="voucherExpiryTime != null" >
         #{voucherExpiryTime,jdbcType=TIMESTAMP},
@@ -294,6 +301,9 @@
       <if test="record.expiryTime != null" >
         expiry_time = #{record.expiryTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.voucherEffectiveTime != null" >
+        voucher_effective_time = #{record.voucherEffectiveTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.voucherExpiryTime != null" >
         voucher_expiry_time = #{record.voucherExpiryTime,jdbcType=TIMESTAMP},
       </if>
@@ -336,6 +346,7 @@
       product_ids = #{record.productIds,jdbcType=VARCHAR},
       count = #{record.count,jdbcType=INTEGER},
       expiry_time = #{record.expiryTime,jdbcType=TIMESTAMP},
+      voucher_effective_time = #{record.voucherEffectiveTime,jdbcType=TIMESTAMP},
       voucher_expiry_time = #{record.voucherExpiryTime,jdbcType=TIMESTAMP},
       validity_period = #{record.validityPeriod,jdbcType=INTEGER},
       expiry_type = #{record.expiryType,jdbcType=TINYINT},
@@ -381,6 +392,9 @@
       <if test="expiryTime != null" >
         expiry_time = #{expiryTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="voucherEffectiveTime != null" >
+        voucher_effective_time = #{voucherEffectiveTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="voucherExpiryTime != null" >
         voucher_expiry_time = #{voucherExpiryTime,jdbcType=TIMESTAMP},
       </if>
@@ -420,6 +434,7 @@
       product_ids = #{productIds,jdbcType=VARCHAR},
       count = #{count,jdbcType=INTEGER},
       expiry_time = #{expiryTime,jdbcType=TIMESTAMP},
+      voucher_effective_time = #{voucherEffectiveTime,jdbcType=TIMESTAMP},
       voucher_expiry_time = #{voucherExpiryTime,jdbcType=TIMESTAMP},
       validity_period = #{validityPeriod,jdbcType=INTEGER},
       expiry_type = #{expiryType,jdbcType=TINYINT},

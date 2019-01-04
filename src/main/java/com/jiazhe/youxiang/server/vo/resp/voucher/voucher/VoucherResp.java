@@ -39,6 +39,9 @@ public class VoucherResp extends BaseObject {
     @ApiModelProperty("替代商品数量")
     private Integer count;
 
+    @ApiModelProperty("生效时间")
+    private Long effectiveTime;
+
     @ApiModelProperty("过期时间")
     private Long expiryTime;
 
@@ -165,5 +168,13 @@ public class VoucherResp extends BaseObject {
 
     public void setVoucherExchangeRecordResp(VoucherExchangeRecordResp voucherExchangeRecordResp) {
         this.voucherExchangeRecordResp = voucherExchangeRecordResp;
+    }
+
+    public Long getEffectiveTime() {
+        return effectiveTime;
+    }
+
+    public void setEffectiveTime(Long effectiveTime) {
+        this.effectiveTime = effectiveTime;
     }
 }

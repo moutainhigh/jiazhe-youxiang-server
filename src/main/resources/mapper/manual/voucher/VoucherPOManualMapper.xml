@@ -11,6 +11,7 @@
         <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
         <result column="count" property="count" jdbcType="INTEGER" />
         <result column="exchange_record_id" property="exchangeRecordId" jdbcType="INTEGER" />
+        <result column="effective_time" property="effectiveTime" jdbcType="TIMESTAMP" />
         <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
         <result column="used" property="used" jdbcType="TINYINT" />
         <result column="status" property="status" jdbcType="TINYINT" />
@@ -21,7 +22,8 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-      id,name,description,customer_id,project_id,city_codes,product_ids,count,exchange_record_id,expiry_time,used,status,ext_info,is_deleted,add_time,mod_time
+      id, name, description, customer_id, project_id, city_codes, product_ids, count, exchange_record_id,
+    effective_time, expiry_time, used, status, ext_info, is_deleted, add_time, mod_time
     </sql>
 
     <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.VoucherPO" keyProperty="id"
@@ -29,19 +31,19 @@
         insert into voucher (id, name, description,
         customer_id, project_id, city_codes,
         product_ids, count,
-        exchange_record_id, expiry_time, used,status,
+        exchange_record_id, effective_time,expiry_time, used,status,
         ext_info, is_deleted, add_time,
         mod_time)
         values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
         #{customerId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR},
         #{productIds,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER},
-        #{exchangeRecordId,jdbcType=INTEGER}, #{expiryTime,jdbcType=TIMESTAMP}, 0,1,
+        #{exchangeRecordId,jdbcType=INTEGER}, #{effectiveTime,jdbcType=TIMESTAMP}, #{expiryTime,jdbcType=TIMESTAMP}, 0,1,
         "", 0, NOW(),NOW())
     </insert>
 
     <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.VoucherPO">
         SELECT rc.id, rc.name,rc.description,rc.customer_id, rc.project_id,
-        rc.city_codes,rc.product_ids,rc.count,rc.exchange_record_id,rc.expiry_time,rc.used,rc.status,rc.ext_info, rc.is_deleted,rc.add_time, rc.mod_time
+        rc.city_codes,rc.product_ids,rc.count,rc.exchange_record_id,rc.effective_time,rc.expiry_time,rc.used,rc.status,rc.ext_info, rc.is_deleted,rc.add_time, rc.mod_time
         FROM voucher rc LEFT JOIN
         voucher_exchange_record rcec ON rc.id = rcec.voucher_id
         LEFT JOIN customer c ON c.id = rc.customer_id
@@ -123,7 +125,7 @@
             update voucher
             <set>
                 name = #{item.name},description = #{item.description},project_id = #{item.projectId},city_codes =
-                #{item.cityCodes},product_ids = #{item.productIds},expiry_time = #{item.expiryTime},mod_time = NOW()
+                #{item.cityCodes},product_ids = #{item.productIds},effective_time = #{item.effectiveTime},expiry_time = #{item.expiryTime},mod_time = NOW()
             </set>
             where id = #{item.id}
         </foreach>

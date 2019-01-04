@@ -32,7 +32,7 @@ public class DateUtil {
     }
 
     /**
-     *     返回yyyyMMDDhhmmss
+     * 返回yyyyMMDDhhmmss
      */
     public static String yyyyMMDDhhmmss() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -58,6 +58,29 @@ public class DateUtil {
         return str;
     }
 
+    /**
+     * 将XXXX-XX-XX XX:XX:XX的Long型转为XXXX-XX-XX 00:00:00的Long型
+     */
+    public static Long getFirstSecond(Long time) throws ParseException {
+        Date date = new Date(time);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String str = sdf.format(date) + " 00:00:00";
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date convert = sdf1.parse(str);
+        return convert.getTime();
+    }
+
+    /**
+     * 将XXXX-XX-XX XX:XX:XX的Long型转为XXXX-XX-XX 23:59:59的Long型
+     */
+    public static Long getLastSecond(Long time) throws ParseException {
+        Date date = new Date(time);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String str = sdf.format(date) + " 23:59:59";
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date convert = sdf1.parse(str);
+        return convert.getTime();
+    }
 
 
 }

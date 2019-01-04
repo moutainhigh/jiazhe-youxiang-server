@@ -153,7 +153,7 @@ public class CommonConstant {
     /**
      * 1积分 = 5 元 汇率
      */
-    public static final BigDecimal exchangeRate = new BigDecimal(5) ;
+    public static final BigDecimal exchangeRate = new BigDecimal(5);
 
     /**
      * 一个小时内的订单上限，生成订单号的时候用到

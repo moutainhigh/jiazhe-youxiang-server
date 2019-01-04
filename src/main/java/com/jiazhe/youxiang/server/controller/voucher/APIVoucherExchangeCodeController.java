@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.controller.voucher;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherExchangeCodeBiz;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -111,7 +113,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
     @ApiOperation(value = "修改兑换码信息", httpMethod = "POST",notes = "修改兑换码信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "修改兑换码信息", level = LogLevelEnum.LEVEL_2)
-    public Object editSave(@ModelAttribute VoucherExchangeCodeEditReq req) {
+    public Object editSave(@ModelAttribute VoucherExchangeCodeEditReq req) throws ParseException {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getVoucherName(),new VoucherException(VoucherCodeEnum.VOUCHER_NAME_IS_NULL));
@@ -120,10 +122,17 @@ public class APIVoucherExchangeCodeController extends BaseController {
         if(req.getExpiryTime()==0){
             throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
         }
+        req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
+        //代金券生效时间为空
+        if (req.getVoucherEffectiveTime() == 0) {
+            throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_IS_NULL);
+        }
+        req.setVoucherEffectiveTime(DateUtil.getFirstSecond(req.getVoucherEffectiveTime()));
         if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXPIRY_TIME)) {
             if(req.getVoucherExpiryTime()==0){
                 throw new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL);
             }
+            req.setVoucherExpiryTime(DateUtil.getLastSecond(req.getVoucherExpiryTime()));
         }
         if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXPIRY_PERIOD)) {
             CommonValidator.validateNull(req.getValidityPeriod(),new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL));

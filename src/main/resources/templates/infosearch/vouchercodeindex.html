@@ -117,7 +117,7 @@
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveExpiryTime">到期时间：</label>
+                                                           for="saveExpiryTime">兑换码到期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker" id="saveExpiryTime"
@@ -126,6 +126,22 @@
                                                                             <i class="fa fa-calendar bigger-110"></i>
                                                                         </span>
                                                             <input type="hidden" value=0 name="expiryTime"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveVoucherEffectiveTime">代金券生效时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker" id="saveVoucherEffectiveTime"
+                                                                   type="text" readonly/>
+                                                            <span class="input-group-addon">
+                                                                            <i class="fa fa-calendar bigger-110"></i>
+                                                                        </span>
+                                                            <input type="hidden" value=0 name="voucherEffectiveTime"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -274,7 +290,7 @@
             url: "/api/voucherexchangecode/searchlistpage",
             postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
             datatype:'local',
-            colNames: ['', '批次名称', '代金券名称', '兑换码', '密钥', '停用状态', '使用状态', '客户电话','兑换商品数量', '过期时间', '操作'],
+            colNames: ['', '批次名称', '代金券名称', '兑换码', '密钥', '停用状态', '使用状态', '客户电话','兑换商品数量', '兑换码到期时间','代金券生效时间', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'batchName', index: 'batchName', width: 100, sortable: false},
@@ -309,7 +325,16 @@
                     width: 50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return dateFormat(rowObject.expiryTime);
+                        return timeFormat(rowObject.expiryTime);
+                    }
+                },
+                {
+                    name: 'voucherEffectiveTime',
+                    index: 'voucherEffectiveTime',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return timeFormat(rowObject.voucherEffectiveTime);
                     }
                 },
                 {
@@ -426,6 +451,9 @@
                     $("#codeSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
                     $('#saveExpiryTime').datepicker('update');
                     $("#codeSaveForm #saveExpiryTime").next().next().val(result.expiryTime);
+                    $("#codeSaveForm #saveVoucherEffectiveTime").val(dateFormat(result.voucherEffectiveTime));
+                    $('#saveVoucherEffectiveTime').datepicker('update');
+                    $("#codeSaveForm #saveVoucherEffectiveTime").next().next().val(result.voucherEffectiveTime);
                     if (result.expiryType == 0) {
                         $("#codeSaveForm #saveDeadLineRadio").click();
                     } else {

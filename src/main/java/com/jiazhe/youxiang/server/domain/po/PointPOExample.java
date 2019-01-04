@@ -746,6 +746,66 @@ public class PointPOExample {
             return (Criteria) this;
         }
 
+        public Criteria andEffectiveTimeIsNull() {
+            addCriterion("effective_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveTimeIsNotNull() {
+            addCriterion("effective_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveTimeEqualTo(Date value) {
+            addCriterion("effective_time =", value, "effectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveTimeNotEqualTo(Date value) {
+            addCriterion("effective_time <>", value, "effectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveTimeGreaterThan(Date value) {
+            addCriterion("effective_time >", value, "effectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("effective_time >=", value, "effectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveTimeLessThan(Date value) {
+            addCriterion("effective_time <", value, "effectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveTimeLessThanOrEqualTo(Date value) {
+            addCriterion("effective_time <=", value, "effectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveTimeIn(List<Date> values) {
+            addCriterion("effective_time in", values, "effectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveTimeNotIn(List<Date> values) {
+            addCriterion("effective_time not in", values, "effectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveTimeBetween(Date value1, Date value2) {
+            addCriterion("effective_time between", value1, value2, "effectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEffectiveTimeNotBetween(Date value1, Date value2) {
+            addCriterion("effective_time not between", value1, value2, "effectiveTime");
+            return (Criteria) this;
+        }
+
         public Criteria andExpiryTimeIsNull() {
             addCriterion("expiry_time is null");
             return (Criteria) this;

@@ -815,6 +815,66 @@ public class VoucherExchangeCodeBatchPOExample {
             return (Criteria) this;
         }
 
+        public Criteria andVoucherEffectiveTimeIsNull() {
+            addCriterion("voucher_effective_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherEffectiveTimeIsNotNull() {
+            addCriterion("voucher_effective_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherEffectiveTimeEqualTo(Date value) {
+            addCriterion("voucher_effective_time =", value, "voucherEffectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherEffectiveTimeNotEqualTo(Date value) {
+            addCriterion("voucher_effective_time <>", value, "voucherEffectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherEffectiveTimeGreaterThan(Date value) {
+            addCriterion("voucher_effective_time >", value, "voucherEffectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherEffectiveTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("voucher_effective_time >=", value, "voucherEffectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherEffectiveTimeLessThan(Date value) {
+            addCriterion("voucher_effective_time <", value, "voucherEffectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherEffectiveTimeLessThanOrEqualTo(Date value) {
+            addCriterion("voucher_effective_time <=", value, "voucherEffectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherEffectiveTimeIn(List<Date> values) {
+            addCriterion("voucher_effective_time in", values, "voucherEffectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherEffectiveTimeNotIn(List<Date> values) {
+            addCriterion("voucher_effective_time not in", values, "voucherEffectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherEffectiveTimeBetween(Date value1, Date value2) {
+            addCriterion("voucher_effective_time between", value1, value2, "voucherEffectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherEffectiveTimeNotBetween(Date value1, Date value2) {
+            addCriterion("voucher_effective_time not between", value1, value2, "voucherEffectiveTime");
+            return (Criteria) this;
+        }
+
         public Criteria andVoucherExpiryTimeIsNull() {
             addCriterion("voucher_expiry_time is null");
             return (Criteria) this;

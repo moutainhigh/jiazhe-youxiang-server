@@ -135,7 +135,23 @@
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveExpiryTime">到期时间：</label>
+                                                           for="saveEffectiveTime">代金券生效时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker" id="saveEffectiveTime"
+                                                                   type="text" readonly/>
+                                                            <span class="input-group-addon">
+                                                                            <i class="fa fa-calendar bigger-110"></i>
+                                                                        </span>
+                                                            <input type="hidden" value=0 name="effectiveTime"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveExpiryTime">代金券到期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker" id="saveExpiryTime"
@@ -232,7 +248,7 @@
         var tableOption = {
             url: "/api/voucher/searchlistpage",
             postData: transformToJson($('#rcSearchForm').serializeArray()),
-            colNames: ['', '代金券名称', '状态', '是否已经使用', '兑换时间', '客户手机号', '客户姓名', '过期时间', '兑换类型', '后台操作人', '操作'],
+            colNames: ['', '代金券名称', '状态', '是否已经使用', '兑换时间', '客户手机号', '客户姓名', '代金券生效时间','代金券到期时间', '兑换类型', '后台操作人', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 50, sortable: false},
@@ -284,12 +300,21 @@
                     }
                 },
                 {
+                    name: 'effectiveTime',
+                    index: 'effectiveTime',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return timeFormat(rowObject.effectiveTime);
+                    }
+                },
+                {
                     name: 'expiryTime',
                     index: 'expiryTime',
                     width: 40,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return dateFormat(rowObject.expiryTime)
+                        return timeFormat(rowObject.expiryTime)
                     }
                 },
                 {
@@ -417,6 +442,10 @@
                     $("#cardSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
                     $('#saveExpiryTime').datepicker('update');
                     $("#cardSaveForm #saveExpiryTime").next().next().val(result.expiryTime);
+                    $("#cardSaveForm #saveEffectiveTime").val(dateFormat(result.effectiveTime));
+                    $('#saveEffectiveTime').datepicker('update');
+                    $("#cardSaveForm #saveEffectiveTime").next().next().val(result.effectiveTime);
+
                     $("#cardSaveForm #saveDescription").val(result.description);
                     $("#modal-form").modal('show');
                 }

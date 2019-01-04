@@ -41,6 +41,9 @@ public class VoucherExchangeCodeBatchSaveReq  extends BaseVO{
     @ApiModelProperty("批次过期时间")
     private Long expiryTime;
 
+    @ApiModelProperty("代金券生效时间")
+    private Long voucherEffectiveTime;
+
     @ApiModelProperty("代金券过期时间")
     private Long voucherExpiryTime;
 
@@ -155,5 +158,13 @@ public class VoucherExchangeCodeBatchSaveReq  extends BaseVO{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getVoucherEffectiveTime() {
+        return voucherEffectiveTime;
+    }
+
+    public void setVoucherEffectiveTime(Long voucherEffectiveTime) {
+        this.voucherEffectiveTime = voucherEffectiveTime;
     }
 }

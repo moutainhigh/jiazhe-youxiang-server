@@ -5,11 +5,11 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="advance_pay" property="advancePay" jdbcType="DECIMAL" />
     <result column="advance_time" property="advanceTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
     <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
     <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -70,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, advance_pay, advance_time, ext_info, is_deleted, add_time, mod_time, remark
+    id, advance_pay, advance_time, remark, ext_info, is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.AdvancePayPOExample" >
     select
@@ -104,11 +104,11 @@
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.AdvancePayPO" >
     insert into advance_pay (id, advance_pay, advance_time, 
-      ext_info, is_deleted, add_time, 
-      mod_time, remark)
+      remark, ext_info, is_deleted, 
+      add_time, mod_time)
     values (#{id,jdbcType=INTEGER}, #{advancePay,jdbcType=DECIMAL}, #{advanceTime,jdbcType=TIMESTAMP}, 
-      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
-      #{modTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
+      #{remark,jdbcType=VARCHAR}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.AdvancePayPO" >
     insert into advance_pay
@@ -122,6 +122,9 @@
       <if test="advanceTime != null" >
         advance_time,
       </if>
+      <if test="remark != null" >
+        remark,
+      </if>
       <if test="extInfo != null" >
         ext_info,
       </if>
@@ -134,9 +137,6 @@
       <if test="modTime != null" >
         mod_time,
       </if>
-      <if test="remark != null" >
-        remark,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -147,6 +147,9 @@
       </if>
       <if test="advanceTime != null" >
         #{advanceTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
       </if>
       <if test="extInfo != null" >
         #{extInfo,jdbcType=VARCHAR},
@@ -159,9 +162,6 @@
       </if>
       <if test="modTime != null" >
         #{modTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="remark != null" >
-        #{remark,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -183,6 +183,9 @@
       <if test="record.advanceTime != null" >
         advance_time = #{record.advanceTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
       <if test="record.extInfo != null" >
         ext_info = #{record.extInfo,jdbcType=VARCHAR},
       </if>
@@ -195,9 +198,6 @@
       <if test="record.modTime != null" >
         mod_time = #{record.modTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.remark != null" >
-        remark = #{record.remark,jdbcType=VARCHAR},
-      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -208,11 +208,11 @@
     set id = #{record.id,jdbcType=INTEGER},
       advance_pay = #{record.advancePay,jdbcType=DECIMAL},
       advance_time = #{record.advanceTime,jdbcType=TIMESTAMP},
+      remark = #{record.remark,jdbcType=VARCHAR},
       ext_info = #{record.extInfo,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=TINYINT},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
-      mod_time = #{record.modTime,jdbcType=TIMESTAMP},
-      remark = #{record.remark,jdbcType=VARCHAR}
+      mod_time = #{record.modTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -226,6 +226,9 @@
       <if test="advanceTime != null" >
         advance_time = #{advanceTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
       <if test="extInfo != null" >
         ext_info = #{extInfo,jdbcType=VARCHAR},
       </if>
@@ -238,9 +241,6 @@
       <if test="modTime != null" >
         mod_time = #{modTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="remark != null" >
-        remark = #{remark,jdbcType=VARCHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -248,11 +248,11 @@
     update advance_pay
     set advance_pay = #{advancePay,jdbcType=DECIMAL},
       advance_time = #{advanceTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
       ext_info = #{extInfo,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=TINYINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},
-      mod_time = #{modTime,jdbcType=TIMESTAMP},
-      remark = #{remark,jdbcType=VARCHAR}
+      mod_time = #{modTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

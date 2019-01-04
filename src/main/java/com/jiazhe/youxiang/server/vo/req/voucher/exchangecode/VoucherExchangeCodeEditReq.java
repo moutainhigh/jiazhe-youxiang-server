@@ -24,6 +24,8 @@ public class VoucherExchangeCodeEditReq extends BaseVO {
 
     private Long expiryTime;
 
+    private Long voucherEffectiveTime;
+
     private Long voucherExpiryTime;
 
     private Integer validityPeriod;
@@ -101,5 +103,13 @@ public class VoucherExchangeCodeEditReq extends BaseVO {
 
     public void setExpiryType(Byte expiryType) {
         this.expiryType = expiryType;
+    }
+
+    public Long getVoucherEffectiveTime() {
+        return voucherEffectiveTime;
+    }
+
+    public void setVoucherEffectiveTime(Long voucherEffectiveTime) {
+        this.voucherEffectiveTime = voucherEffectiveTime;
     }
 }

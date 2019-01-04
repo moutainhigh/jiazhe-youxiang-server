@@ -28,6 +28,7 @@ public class VoucherAdapter {
         voucherResp.setCityCodes(voucherDTO.getCityCodes());
         voucherResp.setProductIds(voucherDTO.getProductIds());
         voucherResp.setCount(voucherDTO.getCount());
+        voucherResp.setEffectiveTime(voucherDTO.getEffectiveTime().getTime());
         voucherResp.setExpiryTime(voucherDTO.getExpiryTime().getTime());
         voucherResp.setStatus(voucherDTO.getStatus());
         voucherResp.setUsed(voucherDTO.getUsed());
@@ -50,6 +51,7 @@ public class VoucherAdapter {
         voucherDTO.setCityCodes(voucherPO.getCityCodes());
         voucherDTO.setProductIds(voucherPO.getProductIds());
         voucherDTO.setCount(voucherPO.getCount());
+        voucherDTO.setEffectiveTime(voucherPO.getEffectiveTime());
         voucherDTO.setExpiryTime(voucherPO.getExpiryTime());
         voucherDTO.setUsed(voucherPO.getUsed());
         voucherDTO.setStatus(voucherPO.getStatus());
@@ -67,6 +69,7 @@ public class VoucherAdapter {
         voucherEditDTO.setProductIds(req.getProductIds());
         voucherEditDTO.setName(req.getName());
         voucherEditDTO.setDescription(req.getDescription());
+        voucherEditDTO.setEffectiveTime(new Date(req.getEffectiveTime()));
         voucherEditDTO.setExpiryTime(new Date(req.getExpiryTime()));
         return voucherEditDTO;
     }
