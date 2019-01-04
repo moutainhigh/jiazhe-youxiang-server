@@ -402,7 +402,15 @@
                         return rowObject.isVirtual == 1 ? "--" : rowObject.faceValue;
                     }
                 },
-                {name: 'amount', index: 'amount', width: 30, sortable: false},
+                {
+                    name: 'amount',
+                    index: 'amount',
+                    width: 30,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return rowObject.isVirtual == 1 ? "--" : rowObject.amount;
+                    }
+                },
                 {
                     name: 'expiryTime',
                     index: 'expiryTime',
