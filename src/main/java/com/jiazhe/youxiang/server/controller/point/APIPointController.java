@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.controller.point;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.point.PointAdapter;
 import com.jiazhe.youxiang.server.biz.point.PointBiz;
@@ -129,13 +130,18 @@ public class APIPointController extends BaseController{
     @ApiOperation(value = "【后台】修改积分卡信息", httpMethod = "POST",notes = "修改积分卡信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "修改积分卡信息", level = LogLevelEnum.LEVEL_2)
-    public Object editSave(@ModelAttribute PointEditReq req) {
+    public Object editSave(@ModelAttribute PointEditReq req) throws ParseException {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));
         if(req.getExpiryTime()==0){
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
         }
+        req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
+        if(req.getEffectiveTime()==0){
+            throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_IS_NULL);
+        }
+        req.setEffectiveTime(DateUtil.getFirstSecond(req.getEffectiveTime()));
         PointEditDTO dto = PointAdapter.editReq2EditDTO(req);
         pointBiz.editSave(dto);
         return ResponseFactory.buildSuccess();

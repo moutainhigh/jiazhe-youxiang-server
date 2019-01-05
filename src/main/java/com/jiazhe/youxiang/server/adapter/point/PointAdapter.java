@@ -104,6 +104,7 @@ public class PointAdapter {
         pointEditDTO.setProductIds(req.getProductIds());
         pointEditDTO.setName(req.getName());
         pointEditDTO.setDescription(req.getDescription());
+        pointEditDTO.setEffectiveTime(new Date(req.getEffectiveTime()));
         pointEditDTO.setExpiryTime(new Date(req.getExpiryTime()));
         return pointEditDTO;
     }

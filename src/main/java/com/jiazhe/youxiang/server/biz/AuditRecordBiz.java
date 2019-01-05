@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class AuditRecordBiz {
     @Autowired
     private AuditRecordService auditRecordService;
 
-    public void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId,Integer givingBatchId,String posCode,String cardNo,Long tradeTime) {
+    public void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId,Integer givingBatchId,String posCode,String cardNo,Long tradeTime) throws ParseException {
         auditRecordService.auditRecordPass(auditRecordId, version, exchangeBatchId,givingBatchId,posCode,cardNo,new Date(tradeTime));
     }
 

@@ -86,8 +86,13 @@ public class PointServiceImpl implements PointService {
             if (batchSaveDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
                 bean.setExpiryTime(batchSaveDTO.getPointExpiryTime());
             } else {
-                bean.setExpiryTime(new Date(bean.getAddTime().getTime() + batchSaveDTO.getValidityPeriod() * CommonConstant.ONE_DAY));
+                try {
+                    bean.setExpiryTime(new Date(DateUtil.getLastSecond(bean.getAddTime().getTime() + batchSaveDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
+            bean.setEffectiveTime(batchSaveDTO.getPointEffectiveTime());
         });
         pointPOManualMapper.batchUpdate(pointPOList);
     }
@@ -201,6 +206,7 @@ public class PointServiceImpl implements PointService {
         po.setCityCodes(dto.getCityCodes());
         po.setName(dto.getName());
         po.setExpiryTime(dto.getExpiryTime());
+        po.setEffectiveTime(dto.getEffectiveTime());
         po.setDescription(dto.getDescription());
         pointPOMapper.updateByPrimaryKeySelective(po);
     }

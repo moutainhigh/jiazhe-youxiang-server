@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl;
 
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.AuditRecordAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.AuditRecordCodeEnum;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -95,7 +97,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId,Integer givingBatchId,String posCode,String cardNo,Date tradeTime) {
+    public void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId,Integer givingBatchId,String posCode,String cardNo,Date tradeTime) throws ParseException {
         String pointIds = "";
         AuditRecordPO auditRecordPO = auditRecordPOMapper.selectByPrimaryKey(auditRecordId);
         if (!auditRecordPO.getVersion().equals(version)) {
@@ -126,7 +128,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
             if (exchangeBatchEditDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
                 pointPO.setExpiryTime(exchangeBatchEditDTO.getPointExpiryTime());
             } else {
-                pointPO.setExpiryTime(new Date(System.currentTimeMillis() + exchangeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY));
+                pointPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + exchangeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
             }
             pointPO.setEffectiveTime(exchangeBatchEditDTO.getPointEffectiveTime());
             pointPO.setDescription(exchangeBatchEditDTO.getDescription());

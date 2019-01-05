@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Security;
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,7 +63,7 @@ public class APIAuditRecordController extends BaseController {
     @ApiOperation(value = "【后台】审核", httpMethod = "POST", notes = "审核")
     @RequestMapping(value = "/auditrecordcheck", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "审核", level = LogLevelEnum.LEVEL_2)
-    public Object auditRecordPass(@ModelAttribute AuditRecordCheckReq req) {
+    public Object auditRecordPass(@ModelAttribute AuditRecordCheckReq req) throws ParseException {
         if (req.getStatus().equals(AUDIT_UNPASS)) {
             CommonValidator.validateNull(req.getAuditReason(), new AuditRecordException(AuditRecordCodeEnum.AUDIT_REASON_IS_NULL));
             auditRecordBiz.auditRecordUnpass(req.getId(), req.getVersion(), req.getAuditReason());

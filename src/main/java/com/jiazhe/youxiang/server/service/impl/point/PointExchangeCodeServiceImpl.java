@@ -81,6 +81,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
             bean.setProductIds(batchSaveDTO.getProductIds());
             bean.setExpiryTime(batchSaveDTO.getExpiryTime());
             bean.setExpiryType(batchSaveDTO.getExpiryType());
+            bean.setPointEffectiveTime(batchSaveDTO.getPointEffectiveTime());
             bean.setPointExpiryTime(batchSaveDTO.getPointExpiryTime());
             bean.setValidityPeriod(batchSaveDTO.getValidityPeriod());
         });

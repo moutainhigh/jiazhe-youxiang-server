@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl.voucher;
 
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.dao.mapper.VoucherPOMapper;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +58,11 @@ public class VoucherServiceImpl implements VoucherService {
             if(batchSaveDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)){
                 bean.setExpiryTime(batchSaveDTO.getVoucherExpiryTime());
             }else{
-                bean.setExpiryTime(new Date(bean.getAddTime().getTime()+batchSaveDTO.getValidityPeriod()* CommonConstant.ONE_DAY));
+                try {
+                    bean.setExpiryTime(new Date(DateUtil.getLastSecond(bean.getAddTime().getTime()+batchSaveDTO.getValidityPeriod()* CommonConstant.ONE_DAY)));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         });
         voucherPOManualMapper.batchUpdate(voucherPOList);
