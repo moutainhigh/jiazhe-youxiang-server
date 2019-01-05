@@ -154,7 +154,7 @@ public class APISignInController extends BaseController {
     @ApiOperation(value = "客户登录", httpMethod = "GET", response = CustomerLoginResp.class, notes = "客户登录")
     @RequestMapping(value = "/customersignin")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "客户登录", level = LogLevelEnum.LEVEL_2)
-    public Object customerSignin(@ModelAttribute CustomerLoginReq req) throws IOException, ClientException, ParseException {
+    public Object customerSignin(@ModelAttribute CustomerLoginReq req,HttpServletRequest request) throws IOException, ClientException, ParseException {
         String mobile = req.getMobile();
         String identifyingCode = req.getIdentifyingCode();
         String bizId = req.getBizId();
@@ -182,8 +182,10 @@ public class APISignInController extends BaseController {
                 if (s.getPrincipal() instanceof CustomerDTO) {
                     CustomerDTO temp = (CustomerDTO) s.getPrincipal();
                     if (mobile.equals(temp.getMobile())) {
-                        logger.info(("删除客户" + temp.getMobile() + "的登陆session"));
-                        sessionDAO.delete(session);
+                        if (!session.getId().equals(CookieUtil.getUid(request, "JSESSIONID"))) {
+                            logger.info(("删除客户" + temp.getMobile() + "的登陆session"));
+                            sessionDAO.delete(session);
+                        }
                     }
                 }
             }
