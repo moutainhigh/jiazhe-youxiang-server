@@ -155,6 +155,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         }
         po.setPointName(dto.getPointName());
         po.setExpiryTime(dto.getExpiryTime());
+        po.setPointEffectiveTime(dto.getPointEffectiveTime());
         po.setExpiryType(dto.getExpiryType());
         if (dto.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
             po.setPointExpiryTime(dto.getPointExpiryTime());

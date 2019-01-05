@@ -26,6 +26,9 @@ public class PointExchangeCodeBatchSaveReq extends BaseVO{
     @ApiModelProperty("是否是虚拟批次")
     private Byte isVirtual;
 
+    @ApiModelProperty("绑定的商户号")
+    private String extInfo;
+
     @ApiModelProperty("兑换码数量")
     private Integer amount;
 
@@ -43,6 +46,9 @@ public class PointExchangeCodeBatchSaveReq extends BaseVO{
 
     @ApiModelProperty("批次过期时间")
     private Long expiryTime;
+
+    @ApiModelProperty("积分卡生效时间")
+    private Long pointEffectiveTime;
 
     @ApiModelProperty("积分卡过期时间")
     private Long pointExpiryTime;
@@ -166,5 +172,21 @@ public class PointExchangeCodeBatchSaveReq extends BaseVO{
 
     public void setPointExpiryTime(Long pointExpiryTime) {
         this.pointExpiryTime = pointExpiryTime;
+    }
+
+    public String getExtInfo() {
+        return extInfo;
+    }
+
+    public void setExtInfo(String extInfo) {
+        this.extInfo = extInfo;
+    }
+
+    public Long getPointEffectiveTime() {
+        return pointEffectiveTime;
+    }
+
+    public void setPointEffectiveTime(Long pointEffectiveTime) {
+        this.pointEffectiveTime = pointEffectiveTime;
     }
 }

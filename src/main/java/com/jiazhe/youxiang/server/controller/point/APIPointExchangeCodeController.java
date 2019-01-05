@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.controller.point;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.point.PointExchangeCodeBiz;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -113,7 +115,7 @@ public class APIPointExchangeCodeController extends BaseController {
     @ApiOperation(value = "修改兑换码信息", httpMethod = "POST", notes = "修改兑换码信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "修改兑换码信息", level = LogLevelEnum.LEVEL_2)
-    public Object editSave(@ModelAttribute PointExchangeCodeEditReq req) {
+    public Object editSave(@ModelAttribute PointExchangeCodeEditReq req) throws ParseException {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getPointName(), new PointException(PointCodeEnum.POINT_NAME_IS_NULL));
@@ -122,10 +124,16 @@ public class APIPointExchangeCodeController extends BaseController {
         if (req.getExpiryTime() == 0) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
         }
+        req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
+        if (req.getPointEffectiveTime() == 0) {
+            throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_IS_NULL);
+        }
+        req.setPointEffectiveTime(DateUtil.getFirstSecond(req.getPointEffectiveTime()));
         if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
             if (req.getPointExpiryTime() == 0) {
                 throw new PointException(PointCodeEnum.POINT_EXPIRY_TIME_IS_NULL);
             }
+            req.setPointExpiryTime(DateUtil.getLastSecond(req.getPointExpiryTime()));
         }
         if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_PERIOD)) {
             CommonValidator.validateNull(req.getValidityPeriod(), new PointException(PointCodeEnum.POINT_EXPIRY_TIME_IS_NULL));

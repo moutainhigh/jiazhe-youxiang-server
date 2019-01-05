@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.controller.point;
 import com.jiazhe.youxiang.base.controller.BaseController;
 
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.ExportExcelUtils;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeBatchAdapter;
@@ -41,6 +42,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -85,7 +88,7 @@ public class APIPointExchangeCodeBatchController extends BaseController {
     @ApiOperation(value = "【后台】保存积分卡兑换码批次信息", httpMethod = "POST", notes = "【新建、修改】保存积分卡兑换码批次信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "保存积分卡兑换码批次信息", level = LogLevelEnum.LEVEL_2)
-    public Object save(@ModelAttribute PointExchangeCodeBatchSaveReq req) {
+    public Object save(@ModelAttribute PointExchangeCodeBatchSaveReq req) throws ParseException {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(), new PointException(PointCodeEnum.BATCH_NAME_IS_NULL));
@@ -93,11 +96,17 @@ public class APIPointExchangeCodeBatchController extends BaseController {
         CommonValidator.validateNull(req.getProjectId(), new PointException(PointCodeEnum.PROJECT_IS_NULL));
         CommonValidator.validateNull(req.getCityCodes(), new PointException(PointCodeEnum.CITY_IS_NULL));
         CommonValidator.validateNull(req.getProductIds(), new PointException(PointCodeEnum.PRODUCT_IS_NULL));
-        //是否为虚拟批次
+        //是否为虚拟批次（是）
         if (req.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
             req.setAmount(0);
             req.setFaceValue(BigDecimal.ZERO);
+            //判断商户号是否重复
+            if(pointExchangeCodeBatchBiz.merchantNoIsRepeat(req.getId(),req.getExtInfo())){
+               throw new PointException(PointCodeEnum.MERCHANT_NO_REPEAT);
+            }
         } else {
+            //不是虚拟批次，将绑定商户号的入参置为空字符串
+            req.setExtInfo("");
             CommonValidator.validateNull(req.getAmount(), new PointException(PointCodeEnum.NOT_VIRTUAL_NEED_AMOUNT));
             CommonValidator.validateNull(req.getFaceValue(), new PointException(PointCodeEnum.NOT_VIRTUAL_NEED_FACE_VALUE));
         }
@@ -105,11 +114,18 @@ public class APIPointExchangeCodeBatchController extends BaseController {
         if (req.getExpiryTime() == 0) {
             throw new PointException(PointCodeEnum.BATCH_EXPIRY_TIME_IS_NULL);
         }
+        req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
+        //积分卡生效时间不为空
+        if (req.getPointEffectiveTime() == 0) {
+            throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_IS_NULL);
+        }
+        req.setPointEffectiveTime(DateUtil.getFirstSecond(req.getPointEffectiveTime()));
         //积分卡过期时间为指定的时间
         if (req.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
             if (req.getPointExpiryTime() == 0) {
                 throw new PointException(PointCodeEnum.POINT_EXPIRY_TIME_IS_NULL);
             }
+            req.setPointExpiryTime(DateUtil.getLastSecond(req.getPointExpiryTime()));
             req.setValidityPeriod(0);
         }
         //积分卡时间为兑换后间隔的天数
@@ -118,7 +134,7 @@ public class APIPointExchangeCodeBatchController extends BaseController {
             if (req.getValidityPeriod() == 0) {
                 throw new PointException(PointCodeEnum.POINT_EXPIRY_TIME_IS_NULL);
             }
-            req.setPointExpiryTime(System.currentTimeMillis());
+            req.setPointExpiryTime(DateUtil.getLastSecond(System.currentTimeMillis()));
         }
         PointExchangeCodeBatchSaveDTO pointExchangeCodeBatchSaveDTO = PointExchangeCodeBatchAdapter.reqSave2dtoSave(req);
         if (req.getId() == 0) {

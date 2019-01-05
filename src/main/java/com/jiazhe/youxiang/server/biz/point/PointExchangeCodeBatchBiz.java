@@ -61,4 +61,8 @@ public class PointExchangeCodeBatchBiz {
     public void stopUsing(Integer id) {
         pointExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
     }
+
+    public boolean merchantNoIsRepeat(Integer batchId,String merchantNo) {
+        return pointExchangeCodeBatchService.merchantNoIsRepeat(batchId,merchantNo);
+    }
 }
