@@ -6,7 +6,7 @@
 package com.jiazhe.youxiang.server;
 
 import com.jiazhe.youxiang.base.util.RSAUtil;
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
+//import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.Test;
 

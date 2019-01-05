@@ -6,6 +6,7 @@ import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCode
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public interface RCExchangeCodeService {
      * @param keyt
      * @return
      */
-    void codeCharge(Integer type, Integer id, String keyt);
+    void codeCharge(Integer type, Integer id, String keyt) throws ParseException;
 
     /**
      * 根据批次id，获取批次下码的数量

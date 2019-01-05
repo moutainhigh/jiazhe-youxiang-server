@@ -10,6 +10,7 @@ import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCode
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public interface PointExchangeCodeService {
 
     void editSave(PointExchangeCodeEditDTO dto);
 
-    void codeCharge(Integer type, Integer id, String keyt);
+    void codeCharge(Integer type, Integer id, String keyt) throws ParseException;
 
     PointExchangeCodePO findByKeyt(String keyt);
 }

@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl.rechargecard;
 
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
@@ -31,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -97,7 +99,7 @@ public class RCServiceImpl implements RCService {
 
     @Transactional(rollbackFor=Exception.class)
     @Override
-    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue) {
+    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue) throws ParseException {
         CustomerDTO customerDTO = customerService.getById(id);
         if(null == customerDTO){
             throw new RechargeCardException(RechargeCardCodeEnum.CUSTOMER_NOT_EXIST);
@@ -109,8 +111,9 @@ public class RCServiceImpl implements RCService {
         if(rcExchangeCodeBatchEditDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)){
             rechargeCardPO.setExpiryTime(rcExchangeCodeBatchEditDTO.getRechargeCardExpiryTime());
         }else{
-            rechargeCardPO.setExpiryTime(new Date(System.currentTimeMillis()+rcExchangeCodeBatchEditDTO.getValidityPeriod()* CommonConstant.ONE_DAY));
+            rechargeCardPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis()+rcExchangeCodeBatchEditDTO.getValidityPeriod()* CommonConstant.ONE_DAY)));
         }
+        rechargeCardPO.setEffectiveTime(rcExchangeCodeBatchEditDTO.getRechargeCardEffectiveTime());
         rechargeCardPO.setDescription(rcExchangeCodeBatchEditDTO.getDescription());
         rechargeCardPO.setFaceValue(faceValue);
         rechargeCardPO.setBalance(faceValue);

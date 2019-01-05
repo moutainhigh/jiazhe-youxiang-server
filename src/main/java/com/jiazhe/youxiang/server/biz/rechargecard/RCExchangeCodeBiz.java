@@ -9,6 +9,7 @@ import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -35,11 +36,11 @@ public class RCExchangeCodeBiz {
         rcExchangeCodeService.changeExpiryTime(id,expiryTime);
     }
 
-    public void customerSelfCharge(Integer id, String keyt) {
+    public void customerSelfCharge(Integer id, String keyt) throws ParseException {
         rcExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_CUSTOMER_CODE_EXCHANGE,id,keyt);
     }
 
-    public void backstageCodeCharge(Integer id, String keyt) {
+    public void backstageCodeCharge(Integer id, String keyt) throws ParseException {
         rcExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE,id,keyt);
     }
 

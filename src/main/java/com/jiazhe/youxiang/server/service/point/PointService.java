@@ -8,6 +8,7 @@ import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchange
 import com.jiazhe.youxiang.server.vo.Paging;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ public interface PointService {
 
     void changeStatus(Integer id, Byte status);
 
-    void directCharge(Integer id, Integer batchId, BigDecimal faceValue);
+    void directCharge(Integer id, Integer batchId, BigDecimal faceValue) throws ParseException;
 
     PointDTO getById(Integer id);
 
@@ -43,5 +44,5 @@ public interface PointService {
 
     List<PointDTO> findByIdsInOrder(List<Integer> pointIds);
 
-    void chargeByQRCode(String purchaseOrderStr, CustomerDTO customerDTO, Integer batchId, BigDecimal faceValue);
+    void chargeByQRCode(String purchaseOrderStr, CustomerDTO customerDTO, Integer batchId, BigDecimal faceValue) throws ParseException;
 }

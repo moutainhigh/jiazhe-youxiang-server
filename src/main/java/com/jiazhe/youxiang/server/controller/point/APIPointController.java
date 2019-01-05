@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -106,7 +107,7 @@ public class APIPointController extends BaseController{
     @ApiOperation(value = "【后台】直接给客户充值任意分数", httpMethod = "POST",notes = "直接给客户充值任意分数")
     @RequestMapping(value = "/directcharge", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "直接给客户充值任意分数", level = LogLevelEnum.LEVEL_3)
-    public Object directCharge(@ModelAttribute DirectChargeReq req) {
+    public Object directCharge(@ModelAttribute DirectChargeReq req) throws ParseException {
         CommonValidator.validateId(req.getId());
         CommonValidator.validateId(req.getBatchId());
         CommonValidator.validateNull(req.getFaceValue());
@@ -145,7 +146,7 @@ public class APIPointController extends BaseController{
     @ApiOperation(value = "通过二维码兑换积分卡", httpMethod = "POST",notes = "通过二维码兑换积分卡")
     @RequestMapping(value = "/chargebyqrcode", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "通过二维码兑换积分卡", level = LogLevelEnum.LEVEL_2)
-    public Object chargeByQRCode(@ModelAttribute QRCodeReq req) {
+    public Object chargeByQRCode(@ModelAttribute QRCodeReq req) throws ParseException {
         CommonValidator.validateNull(req);
         pointBiz.chargeByQRCode(req.getQrCode());
         return ResponseFactory.buildSuccess();

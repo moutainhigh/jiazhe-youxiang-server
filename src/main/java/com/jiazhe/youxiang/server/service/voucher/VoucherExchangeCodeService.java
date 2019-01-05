@@ -6,6 +6,7 @@ import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeEd
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -88,7 +89,7 @@ public interface VoucherExchangeCodeService {
      * @param id
      * @param keyt
      */
-    void codeCharge(Integer exchangeType, Integer id, String keyt);
+    void codeCharge(Integer exchangeType, Integer id, String keyt) throws ParseException;
 
     /**
      * 根据keyt查询代金券兑换码

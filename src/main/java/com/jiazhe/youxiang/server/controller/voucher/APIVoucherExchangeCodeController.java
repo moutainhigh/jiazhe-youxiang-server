@@ -147,7 +147,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
     @ApiOperation(value = "【APP端】客户用代金券兑换码兑换", httpMethod = "POST",notes = "【APP端】客户用代金券兑换码兑换")
     @RequestMapping(value = "/customerselfcodecharge", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "客户用代金券兑换码兑换", level = LogLevelEnum.LEVEL_2)
-    public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) {
+    public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) throws ParseException {
         CommonValidator.validateId(req.getId());
         CommonValidator.validateNull(req.getKeyt(),new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
         voucherExchangeCodeBiz.customerSelfCharge(req.getId(),req.getKeyt());
@@ -158,7 +158,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
     @ApiOperation(value = "后台用兑换码进行绑定", httpMethod = "POST",notes = "后台用兑换码进行充值")
     @RequestMapping(value = "/backstagecodecharge", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "后台用兑换码进行充值", level = LogLevelEnum.LEVEL_3)
-    public Object backstageCodeCharge(@ModelAttribute CodeChargeReq req) {
+    public Object backstageCodeCharge(@ModelAttribute CodeChargeReq req) throws ParseException {
         CommonValidator.validateId(req.getId());
         CommonValidator.validateNull(req.getKeyt(),new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
         voucherExchangeCodeBiz.backstageCodeCharge(req.getId(),req.getKeyt());

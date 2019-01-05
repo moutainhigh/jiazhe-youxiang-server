@@ -7,6 +7,7 @@ import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchang
 import com.jiazhe.youxiang.server.vo.Paging;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -61,7 +62,7 @@ public interface RCService {
      * @param faceValue  面额
      * @return
      */
-    void directCharge(Integer id ,Integer batchId, BigDecimal faceValue);
+    void directCharge(Integer id ,Integer batchId, BigDecimal faceValue) throws ParseException;
 
     /**
      * 根据充值卡ids，将充值卡信息修改为批次相关的信息

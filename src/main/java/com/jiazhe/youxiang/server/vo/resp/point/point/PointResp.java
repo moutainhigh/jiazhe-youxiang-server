@@ -42,6 +42,9 @@ public class PointResp extends BaseVO{
     @ApiModelProperty("积分卡余额")
     private BigDecimal balance;
 
+    @ApiModelProperty("积分卡生效时间")
+    private Long effectiveTime;
+
     @ApiModelProperty("积分卡过期时间")
     private Long expiryTime;
 
@@ -50,6 +53,9 @@ public class PointResp extends BaseVO{
 
     @ApiModelProperty("充值时间")
     private Long addTime;
+
+    @ApiModelProperty("签购单信息")
+    private String extInfo;
 
     private ProjectResp projectResp;
 
@@ -175,5 +181,21 @@ public class PointResp extends BaseVO{
 
     public void setPointExchangeRecordResp(PointExchangeRecordResp pointExchangeRecordResp) {
         this.pointExchangeRecordResp = pointExchangeRecordResp;
+    }
+
+    public Long getEffectiveTime() {
+        return effectiveTime;
+    }
+
+    public void setEffectiveTime(Long effectiveTime) {
+        this.effectiveTime = effectiveTime;
+    }
+
+    public String getExtInfo() {
+        return extInfo;
+    }
+
+    public void setExtInfo(String extInfo) {
+        this.extInfo = extInfo;
     }
 }

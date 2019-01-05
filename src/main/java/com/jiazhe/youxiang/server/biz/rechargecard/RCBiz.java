@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +47,7 @@ public class RCBiz {
     }
 
 
-    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue) {
+    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue) throws ParseException {
         rcService.directCharge(id, batchId, faceValue);
     }
 

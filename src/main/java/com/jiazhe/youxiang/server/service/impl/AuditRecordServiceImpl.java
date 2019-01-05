@@ -128,6 +128,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
             } else {
                 pointPO.setExpiryTime(new Date(System.currentTimeMillis() + exchangeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY));
             }
+            pointPO.setEffectiveTime(exchangeBatchEditDTO.getPointEffectiveTime());
             pointPO.setDescription(exchangeBatchEditDTO.getDescription());
             pointPO.setFaceValue(auditRecordPO.getExchangePoint());
             pointPO.setBalance(auditRecordPO.getExchangePoint());

@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl.voucher;
 
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
@@ -29,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -170,7 +172,7 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void codeCharge(Integer exchangeType, Integer id, String keyt) {
+    public void codeCharge(Integer exchangeType, Integer id, String keyt) throws ParseException {
         VoucherExchangeCodePO voucherExchangeCodePO = findByKeyt(keyt);
         if (null == voucherExchangeCodePO) {
             throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
@@ -197,8 +199,9 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
         if (voucherExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
             voucherPO.setExpiryTime(voucherExchangeCodePO.getVoucherExpiryTime());
         } else {
-            voucherPO.setExpiryTime(new Date(System.currentTimeMillis() + voucherExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY));
+            voucherPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + voucherExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY)));
         }
+        voucherPO.setEffectiveTime(voucherExchangeCodePO.getVoucherEffectiveTime());
         voucherPO.setDescription(voucherExchangeCodePO.getBatchDescription());
         voucherPO.setCount(voucherExchangeCodePO.getCount());
         //暂时置为0，等生成了兑换记录再修改
