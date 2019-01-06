@@ -36,11 +36,11 @@ public class RCExchangeCodeBiz {
         rcExchangeCodeService.changeExpiryTime(id,expiryTime);
     }
 
-    public void customerSelfCharge(Integer id, String keyt) throws ParseException {
+    public void customerSelfCharge(Integer id, String keyt)  {
         rcExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_CUSTOMER_CODE_EXCHANGE,id,keyt);
     }
 
-    public void backstageCodeCharge(Integer id, String keyt) throws ParseException {
+    public void backstageCodeCharge(Integer id, String keyt)  {
         rcExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE,id,keyt);
     }
 

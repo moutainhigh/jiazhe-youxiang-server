@@ -172,7 +172,7 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void codeCharge(Integer exchangeType, Integer id, String keyt) throws ParseException {
+    public void codeCharge(Integer exchangeType, Integer id, String keyt)  {
         VoucherExchangeCodePO voucherExchangeCodePO = findByKeyt(keyt);
         if (null == voucherExchangeCodePO) {
             throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_NOT_EXISTED);

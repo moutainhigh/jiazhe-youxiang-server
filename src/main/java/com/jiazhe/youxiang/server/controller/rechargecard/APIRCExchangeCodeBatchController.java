@@ -88,7 +88,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
     @ApiOperation(value = "【后台】保存充值卡兑换码批次信息", httpMethod = "POST", notes = "【新建、修改】保存充值卡兑换码批次信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "保存充值卡兑换码批次信息", level = LogLevelEnum.LEVEL_2)
-    public Object save(@ModelAttribute RCExchangeCodeBatchSaveReq req) throws ParseException {
+    public Object save(@ModelAttribute RCExchangeCodeBatchSaveReq req)  {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(),new RechargeCardException(RechargeCardCodeEnum.BATCH_NAME_IS_NULL));

@@ -1,7 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl.order;
 
 import com.google.common.collect.Lists;
-import com.jiazhe.youxiang.base.util.ConstantFetchUtil;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
@@ -46,9 +45,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -454,7 +450,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public NeedPayResp placeOrder(PlaceOrderDTO dto) throws ParseException {
+    public NeedPayResp placeOrder(PlaceOrderDTO dto)  {
         List<OrderPaymentPO> orderPaymentPOList = Lists.newArrayList();
         List<EleProductCodeDTO> eleProductCodeDTOList = Lists.newArrayList();
         CustomerDTO customerDTO = customerService.getById(dto.getCustomerId());
@@ -472,7 +468,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (productDTO.getLastNum() > dto.getCount()) {
             throw new OrderException(OrderCodeEnum.ORDER_COUNT_LESS_THAN_LAST_NUM);
         }
-        long delayDays = dto.getServiceTime().getTime() / ConstantFetchUtil.day_1 - System.currentTimeMillis() / ConstantFetchUtil.day_1;
+        long delayDays = dto.getServiceTime().getTime() / CommonConstant.ONE_DAY - System.currentTimeMillis() / CommonConstant.ONE_DAY;
         if (productDTO.getDelayDays() > delayDays) {
             throw new OrderException(OrderCodeEnum.SERVICE_TIME_ERROR);
         }
@@ -806,8 +802,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
      * 生成订单号 yyyyMMddHH+3位序列号
      */
     private String generateOrderCode() {
-        Long beginHour = (System.currentTimeMillis() / ConstantFetchUtil.hour_1) * ConstantFetchUtil.hour_1;
-        Long endHour = beginHour + ConstantFetchUtil.hour_1;
+        Long beginHour = (System.currentTimeMillis() / CommonConstant.ONE_HOUR) * CommonConstant.ONE_HOUR;
+        Long endHour = beginHour + CommonConstant.ONE_HOUR;
         Integer count = orderInfoPOManualMapper.getCountWithinThisHour(beginHour, endHour);
         if (count >= CommonConstant.ORDER_CEILING_PER_HOUR) {
             logger.error(OrderCodeEnum.ORDER_NO_GENERATE_ERROR.getMessage());

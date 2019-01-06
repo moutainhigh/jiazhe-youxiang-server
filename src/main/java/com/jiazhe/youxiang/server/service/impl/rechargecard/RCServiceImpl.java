@@ -97,21 +97,21 @@ public class RCServiceImpl implements RCService {
         return rcdtoList;
     }
 
-    @Transactional(rollbackFor=Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue) throws ParseException {
+    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue) {
         CustomerDTO customerDTO = customerService.getById(id);
-        if(null == customerDTO){
+        if (null == customerDTO) {
             throw new RechargeCardException(RechargeCardCodeEnum.CUSTOMER_NOT_EXIST);
         }
         RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchService.getById(batchId);
         RechargeCardPO rechargeCardPO = new RechargeCardPO();
         //直接指定过期时间
         rechargeCardPO.setEffectiveTime(rcExchangeCodeBatchEditDTO.getRechargeCardEffectiveTime());
-        if(rcExchangeCodeBatchEditDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)){
+        if (rcExchangeCodeBatchEditDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
             rechargeCardPO.setExpiryTime(rcExchangeCodeBatchEditDTO.getRechargeCardExpiryTime());
-        }else{
-            rechargeCardPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis()+rcExchangeCodeBatchEditDTO.getValidityPeriod()* CommonConstant.ONE_DAY)));
+        } else {
+            rechargeCardPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + rcExchangeCodeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
         }
         rechargeCardPO.setEffectiveTime(rcExchangeCodeBatchEditDTO.getRechargeCardEffectiveTime());
         rechargeCardPO.setDescription(rcExchangeCodeBatchEditDTO.getDescription());
@@ -128,7 +128,7 @@ public class RCServiceImpl implements RCService {
         rcService.insert(rechargeCardPO);
         //插入兑换记录信息
         SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
-        if(null == sysUserDTO){
+        if (null == sysUserDTO) {
             throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
         RechargeCardExchangeRecordPO rechargeCardRecordPO = new RechargeCardExchangeRecordPO();
@@ -157,39 +157,35 @@ public class RCServiceImpl implements RCService {
             bean.setProductIds(batchSaveDTO.getProductIds());
             bean.setEffectiveTime(batchSaveDTO.getRechargeCardEffectiveTime());
             //直接指定过期时间
-            if(batchSaveDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)){
+            if (batchSaveDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
                 bean.setExpiryTime(batchSaveDTO.getRechargeCardExpiryTime());
-            }else{
-                try {
-                    bean.setExpiryTime(new Date(DateUtil.getLastSecond(bean.getAddTime().getTime()+batchSaveDTO.getValidityPeriod()* CommonConstant.ONE_DAY)));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+            } else {
+                bean.setExpiryTime(new Date(DateUtil.getLastSecond(bean.getAddTime().getTime() + batchSaveDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
             }
         });
         rcPOManualMapper.batchUpdate(rcPOList);
     }
 
     @Override
-    public void batchChangeStatus(List<Integer> ids,Byte status) {
+    public void batchChangeStatus(List<Integer> ids, Byte status) {
         Map<String, Object> map = new HashMap<String, Object>(2);
-        map.put("status",status);
-        map.put("ids",ids);
+        map.put("status", status);
+        map.put("ids", ids);
         rcPOManualMapper.batchChangeStatus(map);
     }
 
     @Override
-    public List<RCDTO> getList(String mobile, Integer exchangeType,Byte status, Byte expiry, Paging paging) {
+    public List<RCDTO> getList(String mobile, Integer exchangeType, Byte status, Byte expiry, Paging paging) {
         final CustomerDTO defaultCustomerDTO = customerService.getByMobile(mobile);
-        List<RechargeCardPO> rechargeCardPOList = rcPOManualMapper.query(mobile,exchangeType,status,expiry,paging.getOffset(),paging.getLimit());
+        List<RechargeCardPO> rechargeCardPOList = rcPOManualMapper.query(mobile, exchangeType, status, expiry, paging.getOffset(), paging.getLimit());
         List<RCDTO> rcDTOList = rechargeCardPOList.stream().map(RCAdapter::PO2DTO).collect(Collectors.toList());
-        Integer count = rcPOManualMapper.count(mobile,exchangeType,status,expiry);
+        Integer count = rcPOManualMapper.count(mobile, exchangeType, status, expiry);
         paging.setTotal(count);
         rcDTOList.stream().forEach(bean -> {
-            if(Strings.isBlank(mobile)){
+            if (Strings.isBlank(mobile)) {
                 CustomerDTO customerDTO = customerService.getById(bean.getCustomerId());
                 bean.setCustomerDTO(customerDTO);
-            }else{
+            } else {
                 bean.setCustomerDTO(defaultCustomerDTO);
             }
             RCExchangeRecordDTO rcExchangeRecordDTO = rcExchangeRecordService.findByCardId(bean.getId());
@@ -218,7 +214,7 @@ public class RCServiceImpl implements RCService {
 
     @Override
     public void batchUpdate(List<RCDTO> rcDTOList) {
-        if(!rcDTOList.isEmpty()){
+        if (!rcDTOList.isEmpty()) {
             List<RechargeCardPO> rcPOList = rcDTOList.stream().map(RCAdapter::DTO2PO).collect(Collectors.toList());
             rcPOManualMapper.batchUpdate(rcPOList);
         }

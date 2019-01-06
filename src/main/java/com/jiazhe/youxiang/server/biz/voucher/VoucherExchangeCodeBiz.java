@@ -31,11 +31,11 @@ public class VoucherExchangeCodeBiz {
         voucherExchangeCodeService.changeCodeStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
     }
 
-    public void customerSelfCharge(Integer id , String keyt) throws ParseException {
+    public void customerSelfCharge(Integer id , String keyt)  {
         voucherExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_CUSTOMER_CODE_EXCHANGE,id,keyt);
     }
 
-    public void backstageCodeCharge(Integer id , String keyt) throws ParseException {
+    public void backstageCodeCharge(Integer id , String keyt)  {
         voucherExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE,id,keyt);
     }
 

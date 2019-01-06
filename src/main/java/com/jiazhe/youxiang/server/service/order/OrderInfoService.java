@@ -86,7 +86,7 @@ public interface OrderInfoService {
      * 下单
      * @param dto
      */
-    NeedPayResp placeOrder(PlaceOrderDTO dto) throws ParseException;
+    NeedPayResp placeOrder(PlaceOrderDTO dto) ;
 
     /**
      * 预约订单

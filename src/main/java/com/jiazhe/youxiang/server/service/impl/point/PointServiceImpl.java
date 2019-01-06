@@ -16,7 +16,6 @@ import com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeRecordPO;
 import com.jiazhe.youxiang.server.domain.po.PointPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
-import com.jiazhe.youxiang.server.dto.point.PurchaseOrderDTO;
 import com.jiazhe.youxiang.server.dto.point.point.PointDTO;
 import com.jiazhe.youxiang.server.dto.point.point.PointEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
@@ -37,7 +36,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -86,11 +84,7 @@ public class PointServiceImpl implements PointService {
             if (batchSaveDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
                 bean.setExpiryTime(batchSaveDTO.getPointExpiryTime());
             } else {
-                try {
-                    bean.setExpiryTime(new Date(DateUtil.getLastSecond(bean.getAddTime().getTime() + batchSaveDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                bean.setExpiryTime(new Date(DateUtil.getLastSecond(bean.getAddTime().getTime() + batchSaveDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
             }
             bean.setEffectiveTime(batchSaveDTO.getPointEffectiveTime());
         });
@@ -147,7 +141,7 @@ public class PointServiceImpl implements PointService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue) throws ParseException {
+    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue)  {
         CustomerDTO customerDTO = customerService.getById(id);
         if (null == customerDTO) {
             throw new RechargeCardException(RechargeCardCodeEnum.CUSTOMER_NOT_EXIST);
@@ -246,7 +240,7 @@ public class PointServiceImpl implements PointService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void chargeByQRCode(String purchaseOrderStr, CustomerDTO customerDTO, Integer batchId, BigDecimal faceValue) throws ParseException {
+    public void chargeByQRCode(String purchaseOrderStr, CustomerDTO customerDTO, Integer batchId, BigDecimal faceValue)  {
         PointExchangeCodeBatchPO batchPO = pointExchangeCodeBatchPOMapper.selectByPrimaryKey(batchId);
         PointPO pointPO = new PointPO();
         //直接指定过期时间
@@ -273,8 +267,9 @@ public class PointServiceImpl implements PointService {
         String date = stringArray[5];
         String time = stringArray[6];
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        Date effectiveTime = sdf.parse(date+time);
+        Date tradeTime = DateUtil.yyyyMMddHHmmssStrToSeconds(date+time);
         //TODO niexiao 设置生效时间
+        Date effectiveTime = new Date(tradeTime.getTime() + CommonConstant.ONE_DAY);
         pointPO.setEffectiveTime(effectiveTime);
         pointService.insert(pointPO);
         //插入兑换记录

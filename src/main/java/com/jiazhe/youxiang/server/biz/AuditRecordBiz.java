@@ -25,7 +25,7 @@ public class AuditRecordBiz {
     @Autowired
     private AuditRecordService auditRecordService;
 
-    public void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId,Integer givingBatchId,String posCode,String cardNo,Long tradeTime) throws ParseException {
+    public void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId,Integer givingBatchId,String posCode,String cardNo,Long tradeTime)  {
         auditRecordService.auditRecordPass(auditRecordId, version, exchangeBatchId,givingBatchId,posCode,cardNo,new Date(tradeTime));
     }
 

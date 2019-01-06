@@ -30,7 +30,7 @@ public interface PointService {
 
     void changeStatus(Integer id, Byte status);
 
-    void directCharge(Integer id, Integer batchId, BigDecimal faceValue) throws ParseException;
+    void directCharge(Integer id, Integer batchId, BigDecimal faceValue) ;
 
     PointDTO getById(Integer id);
 
@@ -44,5 +44,5 @@ public interface PointService {
 
     List<PointDTO> findByIdsInOrder(List<Integer> pointIds);
 
-    void chargeByQRCode(String purchaseOrderStr, CustomerDTO customerDTO, Integer batchId, BigDecimal faceValue) throws ParseException;
+    void chargeByQRCode(String purchaseOrderStr, CustomerDTO customerDTO, Integer batchId, BigDecimal faceValue) ;
 }

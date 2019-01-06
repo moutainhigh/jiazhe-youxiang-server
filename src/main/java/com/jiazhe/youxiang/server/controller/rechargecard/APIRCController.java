@@ -110,7 +110,7 @@ public class APIRCController extends BaseController{
     @ApiOperation(value = "【后台】直接给客户充值任意分数", httpMethod = "POST",notes = "直接给客户充值任意分数")
     @RequestMapping(value = "/directcharge", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "直接给客户充值任意分数", level = LogLevelEnum.LEVEL_3)
-    public Object directCharge(@ModelAttribute DirectChargeReq req) throws ParseException {
+    public Object directCharge(@ModelAttribute DirectChargeReq req)  {
         CommonValidator.validateId(req.getId());
         CommonValidator.validateId(req.getBatchId());
         CommonValidator.validateNull(req.getFaceValue());
@@ -132,7 +132,7 @@ public class APIRCController extends BaseController{
     @ApiOperation(value = "【后台】修改充值卡信息", httpMethod = "POST",notes = "修改充值卡信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "修改充值卡信息", level = LogLevelEnum.LEVEL_2)
-    public Object editSave(@ModelAttribute RCEditReq req) throws ParseException {
+    public Object editSave(@ModelAttribute RCEditReq req)  {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));

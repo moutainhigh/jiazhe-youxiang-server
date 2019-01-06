@@ -8,6 +8,7 @@ import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.order.OrderInfoBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
@@ -61,8 +62,8 @@ public class APIOrderInfoController extends BaseController {
             req.setStatus(null);
         }
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        Date orderStartTime = req.getOrderStartTime() == 0 ? null : new Date(req.getOrderStartTime());
-        Date orderEndTime = req.getOrderEndTime() == 0 ? null : new Date(req.getOrderEndTime());
+        Date orderStartTime = req.getOrderStartTime() == CommonConstant.NULL_TIME ? null : new Date(req.getOrderStartTime());
+        Date orderEndTime = req.getOrderEndTime() == CommonConstant.NULL_TIME ? null : new Date(req.getOrderEndTime());
         List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getStatus(), req.getOrderCode(), req.getMobile(), req.getCustomerMobile(), orderStartTime, orderEndTime, req.getWorkerMobile(), paging);
         List<OrderInfoResp> orderInfoRespList = orderInfoDTOList.stream().map(OrderInfoAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(orderInfoRespList, paging);
@@ -168,7 +169,7 @@ public class APIOrderInfoController extends BaseController {
     @ApiOperation(value = "【后端】下单", httpMethod = "POST", response = NeedPayResp.class, notes = "【后端】下单")
     @RequestMapping(value = "/userplaceorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "下单", level = LogLevelEnum.LEVEL_2)
-    public Object userPlaceOrder(@ModelAttribute UserPlaceOrderReq req) throws ParseException {
+    public Object userPlaceOrder(@ModelAttribute UserPlaceOrderReq req)  {
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqUserPlaceOrder2DTOPlaceOrder(req);
         placeOrderDTO.setType(Byte.valueOf("0"));
         placeOrderDTO.setServiceTime(new Date(req.getRealServiceTime()));
@@ -181,7 +182,7 @@ public class APIOrderInfoController extends BaseController {
     @ApiOperation(value = "【APP端】下单", httpMethod = "POST", response = NeedPayResp.class, notes = "【APP端】下单")
     @RequestMapping(value = "/customerplaceorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "下单", level = LogLevelEnum.LEVEL_2)
-    public Object customerPlaceOrder(@ModelAttribute CustomerPlaceOrderReq req) throws ParseException {
+    public Object customerPlaceOrder(@ModelAttribute CustomerPlaceOrderReq req)  {
         if((!req.getPointIds().isEmpty())&&(!req.getRechargeCardIds().isEmpty())){
             throw new OrderException(OrderCodeEnum.POINT_RECHARGE_CARD_CONCURRENT_PAY);
         }
@@ -201,7 +202,7 @@ public class APIOrderInfoController extends BaseController {
     @RequestMapping(value = "/userreservationorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "员工预约服务、派单", level = LogLevelEnum.LEVEL_2)
     public Object userReservationOrder(@ModelAttribute UserReservationOrderReq req) {
-        if (req.getRealServiceTime() == 0) {
+        if (req.getRealServiceTime() == CommonConstant.NULL_TIME) {
             throw new OrderException(OrderCodeEnum.REAL_SERVICE_TIME_IS_NULL);
         }
         CommonValidator.validateNull(req.getWorkerName(), new OrderException(OrderCodeEnum.WORKER_NAME_IS_NAME));
@@ -216,7 +217,7 @@ public class APIOrderInfoController extends BaseController {
     @RequestMapping(value = "/userchangereservationinfo", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "员工修改预约信息", level = LogLevelEnum.LEVEL_2)
     public Object userChangeReservationInfo(@ModelAttribute UserReservationOrderReq req) {
-        if (req.getRealServiceTime() == 0) {
+        if (req.getRealServiceTime() == CommonConstant.NULL_TIME) {
             throw new OrderException(OrderCodeEnum.REAL_SERVICE_TIME_IS_NULL);
         }
         CommonValidator.validateNull(req.getWorkerName(), new OrderException(OrderCodeEnum.WORKER_NAME_IS_NAME));

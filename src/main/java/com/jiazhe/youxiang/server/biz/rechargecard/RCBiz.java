@@ -47,7 +47,7 @@ public class RCBiz {
     }
 
 
-    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue) throws ParseException {
+    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue)  {
         rcService.directCharge(id, batchId, faceValue);
     }
 

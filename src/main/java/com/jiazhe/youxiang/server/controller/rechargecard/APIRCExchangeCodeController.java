@@ -117,7 +117,7 @@ public class APIRCExchangeCodeController extends BaseController{
     @ApiOperation(value = "修改兑换码信息", httpMethod = "POST",notes = "修改兑换码信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "修改兑换码信息", level = LogLevelEnum.LEVEL_2)
-    public Object editSave(@ModelAttribute RCExchangeCodeEditReq req) throws ParseException {
+    public Object editSave(@ModelAttribute RCExchangeCodeEditReq req)  {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getRechargeCardName(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));
@@ -150,7 +150,7 @@ public class APIRCExchangeCodeController extends BaseController{
     @ApiOperation(value = "【APP端】客户用兑换码进行兑换", httpMethod = "POST",notes = "客户用充值卡兑换码兑换")
     @RequestMapping(value = "/customerselfcodecharge", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "客户用兑换码进行兑换", level = LogLevelEnum.LEVEL_2)
-    public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) throws ParseException {
+    public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req)  {
         CommonValidator.validateId(req.getId());
         CommonValidator.validateNull(req.getKeyt(),new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
         rcExchangeCodeBiz.customerSelfCharge(req.getId(),req.getKeyt());
@@ -161,7 +161,7 @@ public class APIRCExchangeCodeController extends BaseController{
     @ApiOperation(value = "【后台】后台用兑换码进行兑换", httpMethod = "POST",notes = "后台用兑换码进行兑换")
     @RequestMapping(value = "/backstagecodecharge", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "后台用兑换码进行兑换", level = LogLevelEnum.LEVEL_2)
-    public Object backstageCodeCharge(@ModelAttribute CodeChargeReq req) throws ParseException {
+    public Object backstageCodeCharge(@ModelAttribute CodeChargeReq req)  {
         CommonValidator.validateId(req.getId());
         CommonValidator.validateNull(req.getKeyt(),new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
         rcExchangeCodeBiz.backstageCodeCharge(req.getId(),req.getKeyt());

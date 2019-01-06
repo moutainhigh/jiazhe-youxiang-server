@@ -37,7 +37,7 @@ public interface PointExchangeCodeService {
 
     void editSave(PointExchangeCodeEditDTO dto);
 
-    void codeCharge(Integer type, Integer id, String keyt) throws ParseException;
+    void codeCharge(Integer type, Integer id, String keyt) ;
 
     PointExchangeCodePO findByKeyt(String keyt);
 }

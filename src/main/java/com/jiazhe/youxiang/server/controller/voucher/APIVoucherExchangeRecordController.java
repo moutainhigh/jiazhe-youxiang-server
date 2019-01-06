@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.controller.voucher;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherExchangeRecordAdapter;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherExchangeRecordBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.dto.voucher.exchangerecord.VoucherExchangeRecordDTO;
@@ -40,8 +41,8 @@ public class APIVoucherExchangeRecordController {
         Paging paging = new Paging();
         paging.setOffset((req.getPageNum() - 1) * req.getPageSize());
         paging.setLimit(req.getPageSize());
-        Date beginDate = req.getBeginDate() == 0 ? null : new Date(req.getBeginDate());
-        Date endDate = req.getEndDate() == 0 ? null : new Date(req.getEndDate());
+        Date beginDate = req.getBeginDate() == CommonConstant.NULL_TIME ? null : new Date(req.getBeginDate());
+        Date endDate = req.getEndDate() == CommonConstant.NULL_TIME ? null : new Date(req.getEndDate());
         List<VoucherExchangeRecordDTO> voucherExchangeCodeBatchDTOList = voucherExchangeRecordBiz.getList(beginDate, endDate, req.getCode(), req.getKeyt(), paging);
         List<VoucherExchangeRecordResp> voucherExchangeCodeBatchRespList = voucherExchangeCodeBatchDTOList.stream().map(VoucherExchangeRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(voucherExchangeCodeBatchRespList, paging);

@@ -10,6 +10,7 @@ import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginType;
@@ -32,7 +33,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.Subject;
@@ -122,7 +122,7 @@ public class APISignInController extends BaseController {
             }
         }
         SessionResp sessionResp = new SessionResp();
-        subject.getSession().setTimeout(ConstantFetchUtil.hour_8);
+        subject.getSession().setTimeout(CommonConstant.EIGHT_HOUR);
         sessionResp.setSessionId(subject.getSession().getId().toString());
         AuthorizationInfo info = userRealm.doGetAuthorizationInfo(subject.getPrincipals());
         String permission = StringUtils.join(info.getStringPermissions(), "#");
@@ -199,7 +199,7 @@ public class APISignInController extends BaseController {
             }
         }
         CustomerLoginResp customerLoginResp = new CustomerLoginResp();
-        subject.getSession().setTimeout(ConstantFetchUtil.nerver);
+        subject.getSession().setTimeout(CommonConstant.NEVER);
         customerLoginResp.setSessionId(subject.getSession().getId().toString());
         customerLoginResp.setCustomerId(customerDTO.getId());
         customerLoginResp.setCustomerMobile(customerDTO.getMobile());

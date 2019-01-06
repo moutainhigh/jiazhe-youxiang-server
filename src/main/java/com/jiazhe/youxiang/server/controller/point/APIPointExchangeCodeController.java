@@ -115,22 +115,22 @@ public class APIPointExchangeCodeController extends BaseController {
     @ApiOperation(value = "修改兑换码信息", httpMethod = "POST", notes = "修改兑换码信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "修改兑换码信息", level = LogLevelEnum.LEVEL_2)
-    public Object editSave(@ModelAttribute PointExchangeCodeEditReq req) throws ParseException {
+    public Object editSave(@ModelAttribute PointExchangeCodeEditReq req)  {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getPointName(), new PointException(PointCodeEnum.POINT_NAME_IS_NULL));
         CommonValidator.validateNull(req.getCityCodes(),new PointException(PointCodeEnum.CITY_IS_NULL));
         CommonValidator.validateNull(req.getProductIds(),new PointException(PointCodeEnum.PRODUCT_IS_NULL));
-        if (req.getExpiryTime() == 0) {
+        if (req.getExpiryTime() == CommonConstant.NULL_TIME) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
         }
         req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
-        if (req.getPointEffectiveTime() == 0) {
+        if (req.getPointEffectiveTime() == CommonConstant.NULL_TIME) {
             throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_IS_NULL);
         }
         req.setPointEffectiveTime(DateUtil.getFirstSecond(req.getPointEffectiveTime()));
         if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
-            if (req.getPointExpiryTime() == 0) {
+            if (req.getPointExpiryTime() == CommonConstant.NULL_TIME) {
                 throw new PointException(PointCodeEnum.POINT_EXPIRY_TIME_IS_NULL);
             }
             req.setPointExpiryTime(DateUtil.getLastSecond(req.getPointExpiryTime()));
@@ -148,7 +148,7 @@ public class APIPointExchangeCodeController extends BaseController {
     @ApiOperation(value = "【APP端】客户用兑换码进行兑换", httpMethod = "POST", notes = "客户用积分卡兑换码兑换")
     @RequestMapping(value = "/customerselfcodecharge", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "客户用兑换码进行兑换", level = LogLevelEnum.LEVEL_2)
-    public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) throws ParseException {
+    public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req)  {
         CommonValidator.validateId(req.getId());
         CommonValidator.validateNull(req.getKeyt(),new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
         pointExchangeCodeBiz.customerSelfCharge(req.getId(), req.getKeyt());
@@ -159,7 +159,7 @@ public class APIPointExchangeCodeController extends BaseController {
     @ApiOperation(value = "【后台】后台用兑换码进行兑换", httpMethod = "POST", notes = "后台用兑换码进行兑换")
     @RequestMapping(value = "/backstagecodecharge", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "后台用兑换码进行兑换", level = LogLevelEnum.LEVEL_2)
-    public Object backstageCodeCharge(@ModelAttribute CodeChargeReq req) throws ParseException {
+    public Object backstageCodeCharge(@ModelAttribute CodeChargeReq req)  {
         CommonValidator.validateId(req.getId());
         CommonValidator.validateNull(req.getKeyt(),new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
         pointExchangeCodeBiz.backstageCodeCharge(req.getId(), req.getKeyt());

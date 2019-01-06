@@ -123,7 +123,7 @@ public class OrderInfoBiz {
         return left;
     }
 
-    public NeedPayResp userPlaceOrder(PlaceOrderDTO placeOrderDTO) throws ParseException {
+    public NeedPayResp userPlaceOrder(PlaceOrderDTO placeOrderDTO)  {
         return orderInfoService.placeOrder(placeOrderDTO);
     }
 
@@ -139,7 +139,7 @@ public class OrderInfoBiz {
         orderInfoService.userChangeReservationInfo(userReservationOrderDTO);
     }
 
-    public NeedPayResp customerPlaceOrder(PlaceOrderDTO placeOrderDTO) throws ParseException {
+    public NeedPayResp customerPlaceOrder(PlaceOrderDTO placeOrderDTO)  {
         return orderInfoService.placeOrder(placeOrderDTO);
     }
 

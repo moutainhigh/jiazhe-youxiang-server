@@ -51,11 +51,11 @@ public class PointExchangeCodeBiz {
         pointExchangeCodeService.editSave(dto);
     }
 
-    public void customerSelfCharge(Integer id, String keyt) throws ParseException {
+    public void customerSelfCharge(Integer id, String keyt)  {
         pointExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_CUSTOMER_CODE_EXCHANGE,id,keyt);
     }
 
-    public void backstageCodeCharge(Integer id, String keyt) throws ParseException {
+    public void backstageCodeCharge(Integer id, String keyt)  {
         pointExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE,id,keyt);
     }
 }

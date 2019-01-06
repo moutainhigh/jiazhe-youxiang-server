@@ -89,7 +89,7 @@ public interface VoucherExchangeCodeService {
      * @param id
      * @param keyt
      */
-    void codeCharge(Integer exchangeType, Integer id, String keyt) throws ParseException;
+    void codeCharge(Integer exchangeType, Integer id, String keyt) ;
 
     /**
      * 根据keyt查询代金券兑换码

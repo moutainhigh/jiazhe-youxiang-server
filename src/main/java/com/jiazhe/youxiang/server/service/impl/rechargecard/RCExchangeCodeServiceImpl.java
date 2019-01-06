@@ -77,7 +77,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void codeCharge(Integer type, Integer id, String keyt) throws ParseException {
+    public void codeCharge(Integer type, Integer id, String keyt)  {
         RechargeCardExchangeCodePO rechargeCardExchangeCodePO = findByKeyt(keyt);
         if (null == rechargeCardExchangeCodePO) {
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_NOT_EXISTED);

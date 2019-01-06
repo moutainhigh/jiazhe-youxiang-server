@@ -119,7 +119,7 @@ public class APIVoucherController extends BaseController{
     @ApiOperation(value = "修改代金券信息", httpMethod = "POST",notes = "修改代金券信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "修改代金券信息", level = LogLevelEnum.LEVEL_2)
-    public Object editSave(@ModelAttribute VoucherEditReq req) throws ParseException {
+    public Object editSave(@ModelAttribute VoucherEditReq req)  {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(),new VoucherException(VoucherCodeEnum.VOUCHER_NAME_IS_NULL));

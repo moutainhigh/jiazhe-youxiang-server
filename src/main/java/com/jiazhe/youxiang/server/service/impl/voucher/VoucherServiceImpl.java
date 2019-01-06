@@ -58,11 +58,7 @@ public class VoucherServiceImpl implements VoucherService {
             if(batchSaveDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)){
                 bean.setExpiryTime(batchSaveDTO.getVoucherExpiryTime());
             }else{
-                try {
-                    bean.setExpiryTime(new Date(DateUtil.getLastSecond(bean.getAddTime().getTime()+batchSaveDTO.getValidityPeriod()* CommonConstant.ONE_DAY)));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                bean.setExpiryTime(new Date(DateUtil.getLastSecond(bean.getAddTime().getTime()+batchSaveDTO.getValidityPeriod()* CommonConstant.ONE_DAY)));
             }
         });
         voucherPOManualMapper.batchUpdate(voucherPOList);

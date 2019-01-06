@@ -57,19 +57,24 @@ public class CommonConstant {
     public static final String POINT_EXCHANGE_CODE_PREFIX = "2";
 
     /**
-     * 订单号前缀
-     */
-    public static final String ORDER_CODE_PREFIX = "2";
-
-    /**
-     * 一天的毫秒数
+     * 时间相关的固定值
      */
     public static final long ONE_DAY = 24 * 3600 * 1000;
+    public static final long NEVER = -1;
+    public static final long ONE_HOUR = 3600 * 1000;
+    public static final long EIGHT_HOUR = 8 * 3600 * 1000;
+    public static final long THREE_MONTH = 3 * 30 * 24 * 3600 * 1000;
+    public static final long ONE_YEAR = 365 * 24 * 3600 * 1000;
 
     /**
-     * 短信有效时间
+     * 短信有效时间5分钟
      */
     public static final Integer FIVE_MINUTES = 5 * 60 * 1000;
+
+    /**
+     * 前台时间未选择，传过来的固定值为0
+     */
+    public static final long NULL_TIME = 0L;
 
     /**
      * 订单状态【1代付款，2待派单，3待服务，4已完成，5取消待审核，6取消审核未通过，7已取消】

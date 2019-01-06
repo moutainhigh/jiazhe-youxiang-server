@@ -97,7 +97,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId,Integer givingBatchId,String posCode,String cardNo,Date tradeTime) throws ParseException {
+    public void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId,Integer givingBatchId,String posCode,String cardNo,Date tradeTime)  {
         String pointIds = "";
         AuditRecordPO auditRecordPO = auditRecordPOMapper.selectByPrimaryKey(auditRecordId);
         if (!auditRecordPO.getVersion().equals(version)) {

@@ -88,7 +88,7 @@ public class APIPointExchangeCodeBatchController extends BaseController {
     @ApiOperation(value = "【后台】保存积分卡兑换码批次信息", httpMethod = "POST", notes = "【新建、修改】保存积分卡兑换码批次信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "保存积分卡兑换码批次信息", level = LogLevelEnum.LEVEL_2)
-    public Object save(@ModelAttribute PointExchangeCodeBatchSaveReq req) throws ParseException {
+    public Object save(@ModelAttribute PointExchangeCodeBatchSaveReq req)  {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(), new PointException(PointCodeEnum.BATCH_NAME_IS_NULL));
@@ -111,18 +111,18 @@ public class APIPointExchangeCodeBatchController extends BaseController {
             CommonValidator.validateNull(req.getFaceValue(), new PointException(PointCodeEnum.NOT_VIRTUAL_NEED_FACE_VALUE));
         }
         //批次过期时间不为空
-        if (req.getExpiryTime() == 0) {
+        if (req.getExpiryTime() == CommonConstant.NULL_TIME) {
             throw new PointException(PointCodeEnum.BATCH_EXPIRY_TIME_IS_NULL);
         }
         req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
         //积分卡生效时间不为空
-        if (req.getPointEffectiveTime() == 0) {
+        if (req.getPointEffectiveTime() == CommonConstant.NULL_TIME) {
             throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_IS_NULL);
         }
         req.setPointEffectiveTime(DateUtil.getFirstSecond(req.getPointEffectiveTime()));
         //积分卡过期时间为指定的时间
         if (req.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
-            if (req.getPointExpiryTime() == 0) {
+            if (req.getPointExpiryTime() == CommonConstant.NULL_TIME) {
                 throw new PointException(PointCodeEnum.POINT_EXPIRY_TIME_IS_NULL);
             }
             req.setPointExpiryTime(DateUtil.getLastSecond(req.getPointExpiryTime()));

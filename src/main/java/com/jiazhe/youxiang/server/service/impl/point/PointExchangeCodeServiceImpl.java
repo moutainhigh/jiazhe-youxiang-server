@@ -173,7 +173,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     }
 
     @Override
-    public void codeCharge(Integer type, Integer id, String keyt) throws ParseException {
+    public void codeCharge(Integer type, Integer id, String keyt)  {
         PointExchangeCodePO pointExchangeCodePO = findByKeyt(keyt);
         if (null == pointExchangeCodePO) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);

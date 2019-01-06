@@ -53,7 +53,7 @@ public interface RCExchangeCodeService {
      * @param keyt
      * @return
      */
-    void codeCharge(Integer type, Integer id, String keyt) throws ParseException;
+    void codeCharge(Integer type, Integer id, String keyt) ;
 
     /**
      * 根据批次id，获取批次下码的数量
