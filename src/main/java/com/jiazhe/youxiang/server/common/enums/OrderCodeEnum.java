@@ -47,6 +47,7 @@ public enum OrderCodeEnum {
     POINT_IS_EXPIRY(108038,"POINT_IS_EXPIRY" , "积分卡已过期，不能用于支付"),
     RECHARGE_CARD_IS_NOT_EFFECTIVE(108039,"RECHARGE_CARD_IS_NOT_EFFECTIVE" , "充值卡还未生效，不能用于支付"),
     RECHARGE_CARD_IS_EXPIRY(108040,"RECHARGE_CARD_IS_EXPIRY" , "充值卡已过期，不能用于支付"),
+    POINT_RECHARGE_CARD_CONCURRENT_PAY(108041,"POINT_RECHARGE_CARD_CONCURRENT_PAY" , "充值卡和积分卡不能同时支付"),
     ;
 
     OrderCodeEnum(Integer code, String type, String message) {

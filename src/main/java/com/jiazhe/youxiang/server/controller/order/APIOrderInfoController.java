@@ -56,10 +56,9 @@ public class APIOrderInfoController extends BaseController {
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "分页查询订单信息", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute OrderInfoPageReq req) {
+        //如果包含0，说明查全部订单，否则按需查询
         if (Arrays.binarySearch(req.getStatus().split(","), "0") > -1) {
             req.setStatus(null);
-        } else {
-            req.setStatus(req.getStatus());
         }
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         Date orderStartTime = req.getOrderStartTime() == 0 ? null : new Date(req.getOrderStartTime());
@@ -78,8 +77,6 @@ public class APIOrderInfoController extends BaseController {
         //如果包含0，说明查全部订单，否则按需查询
         if (Arrays.binarySearch(req.getStatus().split(","), "0") > -1) {
             req.setStatus(null);
-        } else {
-            req.setStatus("(" + req.getStatus() + ")");
         }
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.customerGetList(req.getCustomerId(), req.getStatus(), paging);
@@ -185,6 +182,9 @@ public class APIOrderInfoController extends BaseController {
     @RequestMapping(value = "/customerplaceorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "下单", level = LogLevelEnum.LEVEL_2)
     public Object customerPlaceOrder(@ModelAttribute CustomerPlaceOrderReq req) throws ParseException {
+        if((!req.getPointIds().isEmpty())&&(!req.getRechargeCardIds().isEmpty())){
+            throw new OrderException(OrderCodeEnum.POINT_RECHARGE_CARD_CONCURRENT_PAY);
+        }
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqCustomerPlaceOrder2DTOPlaceOrder(req);
         placeOrderDTO.setWorkerMobile("");
         placeOrderDTO.setWorkerName("");

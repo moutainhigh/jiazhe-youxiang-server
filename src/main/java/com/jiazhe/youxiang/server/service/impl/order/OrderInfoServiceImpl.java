@@ -294,10 +294,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if (bean.getStatus().equals(Byte.valueOf("0")) || bean.getUsed().equals(Byte.valueOf("1"))) {
                     throw new OrderException(OrderCodeEnum.ORDER_VOUCHER_PAY_ERROR);
                 }
-                if(bean.getExpiryTime().getTime()<System.currentTimeMillis()){
+                if (bean.getExpiryTime().getTime() < System.currentTimeMillis()) {
                     throw new OrderException(OrderCodeEnum.VOUCHER_IS_EXPIRY);
                 }
-                if(bean.getEffectiveTime().getTime()>System.currentTimeMillis()){
+                if (bean.getEffectiveTime().getTime() > System.currentTimeMillis()) {
                     throw new OrderException(OrderCodeEnum.VOUCHER_IS_NOT_EFFECTIVE);
                 }
                 if (!bean.getCityCodes().contains(orderInfoPO.getCustomerCityCode())) {
@@ -306,9 +306,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if (!idsContainsId(bean.getProductIds(), orderInfoPO.getProductId())) {
                     throw new OrderException(OrderCodeEnum.VOUCHER_NOT_SUPPORT_PRODUCT);
                 }
-                if(needPay[0].compareTo(BigDecimal.ZERO) == 1) {
+                if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
                     bean.setUsed(Byte.valueOf("1"));
-                    voucherPay[0] = voucherPay[0].add(orderInfoPO.getProductPrice().multiply(new BigDecimal(bean.getCount())));
                     OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
                     orderPaymentPO.setOrderId(orderInfoPO.getId());
                     orderPaymentPO.setOrderCode(orderInfoPO.getOrderCode());
@@ -316,8 +315,14 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                     orderPaymentPO.setVoucherId(bean.getId());
                     orderPaymentPO.setPayMoney(BigDecimal.ZERO);
                     orderPaymentPO.setSerialNumber("");
+                    if (needPay[0].subtract(orderInfoPO.getProductPrice().multiply(new BigDecimal(bean.getCount()))).compareTo(BigDecimal.ZERO) >= 0) {
+                        needPay[0] = needPay[0].subtract(orderInfoPO.getProductPrice().multiply(new BigDecimal(bean.getCount())));
+                        voucherPay[0] = voucherPay[0].add(orderInfoPO.getProductPrice().multiply(new BigDecimal(bean.getCount())));
+                    }else{
+                        voucherPay[0] = voucherPay[0].add(needPay[0]);
+                        needPay[0] = BigDecimal.ZERO;
+                    }
                     orderPaymentPOList.add(orderPaymentPO);
-                    needPay[0] = needPay[0].subtract(orderInfoPO.getProductPrice().multiply(new BigDecimal(bean.getCount())));
                 }
             });
             voucherService.batchChangeUsed(voucherIds, Byte.valueOf("1"));
@@ -382,10 +387,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if (bean.getStatus().equals(Byte.valueOf("0"))) {
                     throw new OrderException(OrderCodeEnum.ORDER_RECHARGE_CARD_PAY_ERROR);
                 }
-                if(bean.getExpiryTime().getTime()<System.currentTimeMillis()){
+                if (bean.getExpiryTime().getTime() < System.currentTimeMillis()) {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_EXPIRY);
                 }
-                if(bean.getEffectiveTime().getTime()>System.currentTimeMillis()){
+                if (bean.getEffectiveTime().getTime() > System.currentTimeMillis()) {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_NOT_EFFECTIVE);
                 }
                 if (!bean.getCityCodes().contains(orderInfoPO.getCustomerCityCode())) {
@@ -493,10 +498,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if (bean.getStatus().equals(Byte.valueOf("0")) || bean.getUsed().equals(Byte.valueOf("1"))) {
                     throw new OrderException(OrderCodeEnum.ORDER_VOUCHER_PAY_ERROR);
                 }
-                if(bean.getExpiryTime().getTime()<System.currentTimeMillis()){
+                if (bean.getExpiryTime().getTime() < System.currentTimeMillis()) {
                     throw new OrderException(OrderCodeEnum.VOUCHER_IS_EXPIRY);
                 }
-                if(bean.getEffectiveTime().getTime()>System.currentTimeMillis()){
+                if (bean.getEffectiveTime().getTime() > System.currentTimeMillis()) {
                     throw new OrderException(OrderCodeEnum.VOUCHER_IS_NOT_EFFECTIVE);
                 }
                 if (!bean.getCityCodes().contains(dto.getCustomerCityCode())) {
@@ -507,15 +512,20 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 }
                 if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
                     bean.setUsed(Byte.valueOf("1"));
-                    voucherPay[0] = voucherPay[0].add(productPriceDTO.getPrice().multiply(new BigDecimal(bean.getCount())));
                     OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
                     orderPaymentPO.setOrderCode(orderCode);
                     orderPaymentPO.setPayType(CommonConstant.PAY_VOUCHER);
                     orderPaymentPO.setVoucherId(bean.getId());
                     orderPaymentPO.setPayMoney(BigDecimal.ZERO);
                     orderPaymentPO.setSerialNumber("");
+                    if (needPay[0].subtract(productPriceDTO.getPrice().multiply(new BigDecimal(bean.getCount()))).compareTo(BigDecimal.ZERO) >= 0) {
+                        needPay[0] = needPay[0].subtract(productPriceDTO.getPrice().multiply(new BigDecimal(bean.getCount())));
+                        voucherPay[0] = voucherPay[0].add(productPriceDTO.getPrice().multiply(new BigDecimal(bean.getCount())));
+                    }else{
+                        voucherPay[0] = voucherPay[0].add(needPay[0]);
+                        needPay[0] = BigDecimal.ZERO;
+                    }
                     orderPaymentPOList.add(orderPaymentPO);
-                    needPay[0] = needPay[0].subtract(productPriceDTO.getPrice().multiply(new BigDecimal(bean.getCount())));
                 }
             });
             voucherService.batchChangeUsed(voucherIds, Byte.valueOf("1"));
@@ -579,10 +589,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if (bean.getStatus().equals(Byte.valueOf("0"))) {
                     throw new OrderException(OrderCodeEnum.ORDER_RECHARGE_CARD_PAY_ERROR);
                 }
-                if(bean.getExpiryTime().getTime()<System.currentTimeMillis()){
+                if (bean.getExpiryTime().getTime() < System.currentTimeMillis()) {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_EXPIRY);
                 }
-                if(bean.getEffectiveTime().getTime()>System.currentTimeMillis()){
+                if (bean.getEffectiveTime().getTime() > System.currentTimeMillis()) {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_NOT_EFFECTIVE);
                 }
                 if (!bean.getCityCodes().contains(dto.getCustomerCityCode())) {
@@ -702,10 +712,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (orderInfoDTO.getPayment().compareTo(wxPay) != 0) {
             throw new OrderException(OrderCodeEnum.WECHAT_PAY_FEE_ERROR);
         }
-        if(orderInfoDTO.getType().equals(CommonConstant.SERVICE_PRODUCT)){//服务型商品
+        if (orderInfoDTO.getType().equals(CommonConstant.SERVICE_PRODUCT)) {//服务型商品
             orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
         }
-        if(orderInfoDTO.getType().equals(CommonConstant.ELE_PRODUCT)){//电子码商品
+        if (orderInfoDTO.getType().equals(CommonConstant.ELE_PRODUCT)) {//电子码商品
             orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
             //发放电子码
             List<EleProductCodeDTO> eleProductCodeDTOList = Lists.newArrayList();
@@ -779,6 +789,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     /**
      * 根据电子商品id，数量获取电子码
+     *
      * @param productId
      * @param count
      * @return
