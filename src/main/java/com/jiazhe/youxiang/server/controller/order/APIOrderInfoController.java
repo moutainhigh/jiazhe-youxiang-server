@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.controller.order;
 
+import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
@@ -32,6 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,11 +51,16 @@ public class APIOrderInfoController extends BaseController {
     @Autowired
     private OrderInfoBiz orderInfoBiz;
 
-    @RequiresPermissions(value = {PermissionConstant.ORDER_MANAGEMENT, PermissionConstant.ORDER_SEARCH,PermissionConstant.CUSTOMER_ORDER_DETAIL}, logical = Logical.OR)
+    @RequiresPermissions(value = {PermissionConstant.ORDER_MANAGEMENT, PermissionConstant.ORDER_SEARCH, PermissionConstant.CUSTOMER_ORDER_DETAIL}, logical = Logical.OR)
     @ApiOperation(value = "【后台】分页查询订单信息", httpMethod = "GET", response = OrderInfoResp.class, responseContainer = "List", notes = "【后台】分页查询订单信息")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "分页查询订单信息", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute OrderInfoPageReq req) {
+        if (Arrays.binarySearch(req.getStatus().split(","), "0") > -1) {
+            req.setStatus(null);
+        } else {
+            req.setStatus(req.getStatus());
+        }
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         Date orderStartTime = req.getOrderStartTime() == 0 ? null : new Date(req.getOrderStartTime());
         Date orderEndTime = req.getOrderEndTime() == 0 ? null : new Date(req.getOrderEndTime());
@@ -67,6 +75,12 @@ public class APIOrderInfoController extends BaseController {
     @RequestMapping(value = "/customerlistpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "分页查询订单信息", level = LogLevelEnum.LEVEL_1)
     public Object customerListPage(@ModelAttribute CustomerOrderInfoPageReq req) {
+        //如果包含0，说明查全部订单，否则按需查询
+        if (Arrays.binarySearch(req.getStatus().split(","), "0") > -1) {
+            req.setStatus(null);
+        } else {
+            req.setStatus("(" + req.getStatus() + ")");
+        }
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.customerGetList(req.getCustomerId(), req.getStatus(), paging);
         List<OrderInfoResp> orderInfoRespList = orderInfoDTOList.stream().map(OrderInfoAdapter::DTO2Resp).collect(Collectors.toList());
