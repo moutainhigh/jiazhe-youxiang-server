@@ -47,7 +47,7 @@
                         <i class="ace-icon fa fa-home home-icon"></i>
                         <a th:href="@{/main/main_center}">主页</a>
                     </li>
-                    <li class="active">消费审核</li>
+                    <li class="active">充值审核</li>
                 </ul><!-- /.breadcrumb -->
             </div>
 
@@ -232,7 +232,7 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">消费凭证：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">充值凭证：</label>
                                                     <div class="col-sm-8 float" id="pics">
 
                                                     </div>
@@ -389,11 +389,11 @@
             shrinkToFit: false,
             autoScroll: true,
 //            multiselect: true,
-            colNames: ['', '操作', '客户姓名', '客户电话', '兑换积分', '赠送积分', '状态', '提交人姓名', '提交时间', '审核人姓名', '审核时间'],
+            colNames: ['', '操作', '提交人姓名', '客户电话', '兑换积分', '赠送积分', '状态', '客户姓名', '提交时间', '审核人姓名', '审核时间'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: '_action', index: '_action', sortable: false, formatter: customFormatter},
-                {name: 'customerName', index: 'customerName', sortable: false},
+                {name: 'submitterName', index: 'submitterName', sortable: false},
                 {name: 'customerMobile', index: 'customerMobile', sortable: false},
                 {name: 'exchangePoint', index: 'exchangePoint', sortable: false},
                 {name: 'givingPoint', index: 'givingPoint', sortable: false},
@@ -405,7 +405,7 @@
                         return auditRecordStatus[rowObject.status];
                     }
                 },
-                {name: 'submitterName', index: 'submitterName', sortable: false},
+                {name: 'customerName', index: 'customerName', sortable: false},
                 {
                     name: 'modTime',
                     index: 'modTime',
@@ -443,7 +443,7 @@
                     $('head').append('<style> .ui-jqgrid .ui-jqgrid-hdiv{overflow:hidden}</style>');
                 }
             },
-            caption: "消费记录列表"
+            caption: "充值记录列表"
         };
         initTable(grid_selector, pager_selector, tableOption);
     });
@@ -552,7 +552,7 @@
 
     function pass() {
         $("#saveStatus").val(2);
-        confirm("确定通过该条消费记录的审核？", function (result) {
+        confirm("确定通过该条充值记录的审核？", function (result) {
             if (result) {
                 save();
             }
