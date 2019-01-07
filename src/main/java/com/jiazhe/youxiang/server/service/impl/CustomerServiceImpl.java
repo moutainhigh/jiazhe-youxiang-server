@@ -10,12 +10,10 @@ import com.google.common.collect.Maps;
 import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
-import com.jiazhe.youxiang.server.common.enums.CityCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.CustomerCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.CustomerException;
 import com.jiazhe.youxiang.server.dao.mapper.CustomerAddressPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.CustomerPOMapper;
-import com.jiazhe.youxiang.server.dao.mapper.SysCityPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.CustomerAddressPOManualMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.CustomerPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.CustomerAddressPO;
@@ -23,7 +21,6 @@ import com.jiazhe.youxiang.server.domain.po.CustomerAddressPOExample;
 import com.jiazhe.youxiang.server.domain.po.CustomerPO;
 import com.jiazhe.youxiang.server.domain.po.CustomerPOExample;
 import com.jiazhe.youxiang.server.domain.po.SysCityPO;
-import com.jiazhe.youxiang.server.domain.po.SysCityPOExample;
 import com.jiazhe.youxiang.server.dto.customer.AddressAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.AddressDTO;
 import com.jiazhe.youxiang.server.dto.customer.AddressUpdateDTO;
@@ -31,6 +28,7 @@ import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerUpdateDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
+import com.jiazhe.youxiang.server.service.SysCityService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -71,7 +69,7 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerAddressPOManualMapper customerAddressPOManualMapper;
 
     @Autowired
-    private SysCityPOMapper sysCityPOMapper;
+    private SysCityService sysCityService;
 
 
     @Override
@@ -178,23 +176,13 @@ public class CustomerServiceImpl implements CustomerService {
     public void addAddress(AddressAddDTO addressAddDTO) {
         CustomerAddressPO customerAddressPO = CustomerAdapter.addressAddDTO2PO(addressAddDTO);
         //查询CityCode所对应城市
-        SysCityPOExample sysCityPOExample = new SysCityPOExample();
-        SysCityPOExample.Criteria criteria = sysCityPOExample.createCriteria();
-        criteria.andStatusEqualTo(CommonConstant.CODE_CITY_OPEN);
-        criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
-        criteria.andCityCodeEqualTo(addressAddDTO.getCityCode());
-        List<SysCityPO> sysCityPOList = sysCityPOMapper.selectByExample(sysCityPOExample);
-        if (CollectionUtils.isEmpty(sysCityPOList) || sysCityPOList.size() > 1) {
-            throw new CustomerException(CustomerCodeEnum.CITY_CODE_ERROR);
-        }
-        String cityName = sysCityPOList.get(0).getCityName();
-        customerAddressPO.setCityName(cityName);
+        SysCityPO sysCityPO = sysCityService.getCityByCityCode(addressAddDTO.getCityCode());
+        customerAddressPO.setCityName(sysCityPO.getCityName());
         customerAddressPOManualMapper.insertSelectiveGetID(customerAddressPO);
         if (customerAddressPO != null && addressAddDTO.getIsDefault() != null) {
             setAddressDefault(customerAddressPO.getCustomerId(), customerAddressPO.getId(), addressAddDTO.getIsDefault());
         }
     }
-
 
     @Override
     public AddressDTO getAddressById(Integer id) {
@@ -288,6 +276,9 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void updateAddress(AddressUpdateDTO addressUpdateDTO) {
         CustomerAddressPO customerAddressPO = CustomerAdapter.addressUpdateDTO2PO(addressUpdateDTO);
+        //查询CityCode所对应城市
+        SysCityPO sysCityPO = sysCityService.getCityByCityCode(addressUpdateDTO.getCityCode());
+        customerAddressPO.setCityName(sysCityPO.getCityName());
         customerAddressPO.setModTime(new Date());
         customerAddressPOMapper.updateByPrimaryKeySelective(customerAddressPO);
         setAddressDefault(addressUpdateDTO.getId(), addressUpdateDTO.getIsDefault());

@@ -47,6 +47,11 @@ public class ProductBiz {
      */
     public static final Integer CODE_PRODUCT_NOT_SELL = Integer.valueOf(0);
 
+    /**
+     * 电子商品类型码
+     */
+    public static final Integer CODE_TYPE_ELEPRODUCT = Integer.valueOf(1);
+
 
     /*************商品分类相关******************/
 
@@ -86,6 +91,10 @@ public class ProductBiz {
 
     public List<ProductDTO> getList(Integer productCategoryId, String name, Integer productType, List<String> cityCodes, Integer status, Paging paging) {
         return productService.getList(productCategoryId, name, productType, cityCodes, status, paging, false);
+    }
+
+    public List<ProductDTO> getAllList(Integer productType,  Integer status) {
+        return productService.getAllList(productType,status);
     }
 
     public List<ProductDTO> getListForCustomer(Integer productCategoryId, String name, Integer productType, String cityCode, Paging paging) {
