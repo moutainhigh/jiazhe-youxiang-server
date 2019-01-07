@@ -15,7 +15,9 @@ import com.jiazhe.youxiang.server.common.exceptions.ProductException;
 import com.jiazhe.youxiang.server.dao.mapper.ProductPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.EleProductCodePOManualMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.product.ProductPOManualMapper;
+import com.jiazhe.youxiang.server.domain.po.ProductCategoryPO;
 import com.jiazhe.youxiang.server.domain.po.ProductPO;
+import com.jiazhe.youxiang.server.domain.po.ProductPOExample;
 import com.jiazhe.youxiang.server.dto.product.ProductAddDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
@@ -170,5 +172,32 @@ public class ProductServiceImpl implements ProductService {
         productPO.setModTime(new Date());
         productPO.setStatus(status.byteValue());
         productPOMapper.updateByPrimaryKeySelective(productPO);
+    }
+
+    @Override
+    public List<ProductDTO> getAllList(Integer productType, Integer status) {
+        List<ProductDTO> result = Lists.newArrayList();
+        ProductPOExample productPOExample = new ProductPOExample();
+        ProductPOExample.Criteria criteria = productPOExample.createCriteria();
+        if (null != productType) {
+            criteria.andProductTypeEqualTo(productType);
+        }
+        if (null != status) {
+            criteria.andStatusEqualTo(status.byteValue());
+        }
+        criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+        List<ProductPO> productPOList = productPOMapper.selectByExample(productPOExample);
+
+        Map<Integer, ProductCategoryPO> categoryMap = productCategoryService.getCategoryMap();
+        productPOList.forEach(item -> {
+            ProductDTO productDTO = ProductAdapter.productPO2DTO(item);
+            ProductCategoryPO productCategoryPO = categoryMap.get(item.getProductCategoryId());
+            if (null == productCategoryPO) {
+                throw new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_IS_NULL);
+            }
+            productDTO.setProductCategory(ProductAdapter.productCategoryPO2DTO(productCategoryPO));
+            result.add(productDTO);
+        });
+        return result;
     }
 }
