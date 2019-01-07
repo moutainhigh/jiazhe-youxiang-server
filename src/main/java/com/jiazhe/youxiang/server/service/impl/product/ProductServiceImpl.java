@@ -190,13 +190,14 @@ public class ProductServiceImpl implements ProductService {
 
         Map<Integer, ProductCategoryPO> categoryMap = productCategoryService.getCategoryMap();
         productPOList.forEach(item -> {
-            ProductDTO productDTO = ProductAdapter.productPO2DTO(item);
             ProductCategoryPO productCategoryPO = categoryMap.get(item.getProductCategoryId());
-            if (null == productCategoryPO) {
-                throw new ProductException(ProductCodeEnum.PRODUCT_CATEGORY_IS_NULL);
+            //说明没有对应的大类，说明大类被删除了或者数据出错，总之没有对应大类的商品也是有问题的，不应显示出来
+            if (null != productCategoryPO) {
+                ProductDTO productDTO = ProductAdapter.productPO2DTO(item);
+                productDTO.setProductCategory(ProductAdapter.productCategoryPO2DTO(productCategoryPO));
+                result.add(productDTO);
             }
-            productDTO.setProductCategory(ProductAdapter.productCategoryPO2DTO(productCategoryPO));
-            result.add(productDTO);
+
         });
         return result;
     }
