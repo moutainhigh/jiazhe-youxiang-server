@@ -36,6 +36,8 @@ import com.jiazhe.youxiang.server.service.rechargecard.RCService;
 import com.jiazhe.youxiang.server.service.voucher.VoucherService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -665,14 +667,14 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
                 eleProductCodeDTOList = sendEleProductCode(dto.getProductId(), dto.getCount());
-                StringBuilder eleCodes = new StringBuilder();
+                JSONArray jsonArray = new JSONArray();
                 eleProductCodeDTOList.stream().forEach(bean -> {
-                    if (!Strings.isBlank(bean.getCode())) {
-                        eleCodes.append("兑换码为：" + bean.getCode()+"，");
-                    }
-                    eleCodes.append("兑换密钥为：" + bean.getKeyt() + "；");
+                    JSONObject json = new JSONObject();
+                    json.put("code",bean.getCode());
+                    json.put("keyt",bean.getKeyt());
+                    jsonArray.add(json);
                 });
-                orderInfoPO.setExtInfo(eleCodes.toString());
+                orderInfoPO.setExtInfo(jsonArray.toString());
             }
         } else { //需要在线支付
             orderInfoPO.setStatus(CommonConstant.ORDER_UNPAID);
