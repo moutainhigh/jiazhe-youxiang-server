@@ -64,13 +64,4 @@ public class GenerateCode {
             randomSet(min, max, n - setSize, set);
         }
     }
-
-    /**
-     * 生成21位订单号（XXXXyyyyMMDDhhmmssSSS ： 手机后四位+年月日时分秒毫秒）
-	 */
-    public static String generateOrderCode(String mobile)  {
-        String result = mobile.substring(mobile.length() - 4, mobile.length()) + DateUtil.yyyyMMDDhhmmssSSS();
-        return result;
-    }
-
 }
