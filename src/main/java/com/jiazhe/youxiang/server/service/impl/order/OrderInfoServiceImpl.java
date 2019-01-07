@@ -471,9 +471,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (productDTO.getLastNum() > dto.getCount()) {
             throw new OrderException(OrderCodeEnum.ORDER_COUNT_LESS_THAN_LAST_NUM);
         }
-        long delayDays = dto.getServiceTime().getTime() / CommonConstant.ONE_DAY - System.currentTimeMillis() / CommonConstant.ONE_DAY;
-        if (productDTO.getDelayDays() > delayDays) {
-            throw new OrderException(OrderCodeEnum.SERVICE_TIME_ERROR);
+        //电子商品才检查预约时间
+        if(productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
+            long delayDays = dto.getServiceTime().getTime() / CommonConstant.ONE_DAY - System.currentTimeMillis() / CommonConstant.ONE_DAY;
+            if (productDTO.getDelayDays() > delayDays) {
+                throw new OrderException(OrderCodeEnum.SERVICE_TIME_ERROR);
+            }
         }
         String orderCode = generateOrderCode();
         //待支付金额
@@ -660,7 +663,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
                 eleProductCodeDTOList = sendEleProductCode(dto.getProductId(), dto.getCount());
-                eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderCode);
                 StringBuilder comments = new StringBuilder();
                 eleProductCodeDTOList.stream().forEach(bean -> {
                     if (!Strings.isBlank(bean.getCode())) {
@@ -674,6 +676,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderInfoPO.setStatus(CommonConstant.ORDER_UNPAID);
         }
         orderInfoPOManualMapper.insert(orderInfoPO);
+        eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderCode);
         orderPaymentPOList.stream().forEach(bean -> {
             bean.setOrderId(orderInfoPO.getId());
         });

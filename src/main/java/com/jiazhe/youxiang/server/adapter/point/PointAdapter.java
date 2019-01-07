@@ -123,6 +123,7 @@ public class PointAdapter {
         pointPO.setProductIds(pointDTO.getProductIds());
         pointPO.setFaceValue(pointDTO.getFaceValue());
         pointPO.setBalance(pointDTO.getBalance());
+        pointPO.setEffectiveTime(pointDTO.getEffectiveTime());
         pointPO.setExpiryTime(pointDTO.getExpiryTime());
         pointPO.setStatus(pointDTO.getStatus());
         pointPO.setAddTime(pointDTO.getAddTime());

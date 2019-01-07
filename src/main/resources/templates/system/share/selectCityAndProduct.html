@@ -84,7 +84,7 @@
         }
     });
     $.ajax({
-        url: "/api/product/getlist",
+        url: "/api/product/getalllist",
         dataType: "json",
         async: false,
         data: {
@@ -100,8 +100,7 @@
                 for (var i = 0; i < result.length; i++) {
                     var zNode = {};
                     zNode.id = parseInt(result[i].id);
-                    zNode.pId = 0;
-//                    zNode.pId = 100000 + parseInt(result[i].productCategory.id);
+                    zNode.pId = 100000 + parseInt(result[i].productCategory.id);
                     zNode.name = result[i].name;
                     zProductNodes.push(zNode);
                 }

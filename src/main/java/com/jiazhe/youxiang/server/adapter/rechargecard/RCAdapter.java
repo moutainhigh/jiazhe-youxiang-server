@@ -88,6 +88,7 @@ public class RCAdapter {
         rechargeCardPO.setProductIds(rcdto.getProductIds());
         rechargeCardPO.setFaceValue(rcdto.getFaceValue());
         rechargeCardPO.setBalance(rcdto.getBalance());
+        rechargeCardPO.setEffectiveTime(rcdto.getEffectiveTime());
         rechargeCardPO.setExpiryTime(rcdto.getExpiryTime());
         rechargeCardPO.setStatus(rcdto.getStatus());
         rechargeCardPO.setAddTime(rcdto.getAddTime());
