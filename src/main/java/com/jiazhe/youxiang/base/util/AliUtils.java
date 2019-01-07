@@ -92,7 +92,7 @@ public class AliUtils {
     /**
      * 验证码验证
      */
-    public static boolean isVerified(String phone, String code, String bizId) throws ClientException, ParseException {
+    public static boolean isVerified(String phone, String code, String bizId) throws ClientException {
         QuerySendDetailsResponse querySendDetailsResponse = querySendDetails(phone, bizId);
         List<QuerySendDetailsResponse.SmsSendDetailDTO> smsSendDetailDTOList = querySendDetailsResponse.getSmsSendDetailDTOs();
         if (smsSendDetailDTOList.size() == 0) {

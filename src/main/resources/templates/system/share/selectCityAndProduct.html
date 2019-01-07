@@ -56,6 +56,7 @@
             enable: false
         }
     };
+
     var zCityNodes = [];
     var zProductNodes = [];
     $.ajax({
@@ -100,6 +101,7 @@
                     var zNode = {};
                     zNode.id = parseInt(result[i].id);
                     zNode.pId = 0;
+//                    zNode.pId = 100000 + parseInt(result[i].productCategory.id);
                     zNode.name = result[i].name;
                     zProductNodes.push(zNode);
                 }
@@ -110,7 +112,36 @@
             bootboxalert("服务器异常，请联系管理员");
         }
     });
-    //初始化权限树
+    $.ajax({
+        url: "/api/product/getcategorylist",
+        dataType: "json",
+        async: false,
+        data: {
+            status: 1,
+            pageSize: 10000,
+            pageNum: 1
+        },
+        type: "GET",
+        success: function (data) {
+            if ('error' in data) {
+                bootboxalert(data.error.message);
+            } else {
+                var result = data.data;
+                for (var i = 0; i < result.length; i++) {
+                    var zNode = {};
+                    zNode.id = 100000 + parseInt(result[i].id);
+                    zNode.pId = 0;
+                    zNode.name = result[i].name;
+                    zProductNodes.push(zNode);
+                }
+
+            }
+        },
+        error: function () {
+            bootboxalert("服务器异常，请联系管理员");
+        }
+    });
+    //初始化城市树和商品树
     cityTree = $.fn.zTree.init($("#cityTree"), setting, zCityNodes);
     productTree = $.fn.zTree.init($("#productTree"), setting, zProductNodes);
 
@@ -122,40 +153,44 @@
     }
 
     function submitNodes() {
-        var citynodes = cityTree.getCheckedNodes(true);
-        var productnodes = productTree.getCheckedNodes(true);
-        var str1 = "";
-        var str2 = "";
-        for (var i = 0; i < citynodes.length; i++) {
-            str1 += citynodes[i].id + ",";
+        var cityNodes = cityTree.getCheckedNodes(true);
+        var productNodes = productTree.getCheckedNodes(true);
+        var cityStr = "";
+        var productStr = "";
+        for (var i = 0; i < cityNodes.length; i++) {
+            if(cityNodes[i].level == 1){//选出二级城市，勾选的一级城市不计入
+                cityStr += cityNodes[i].id + ",";
+            }
         }
-        if (str1.length > 0) {
-            str1 = str1.substring(0, str1.length - 1);
+        if (cityStr.length > 0) {
+            cityStr = cityStr.substring(0, cityStr.length - 1);
         }
-        for (var i = 0; i < productnodes.length; i++) {
-            str2 += productnodes[i].id + ",";
+        for (var i = 0; i < productNodes.length; i++) {
+            if(productNodes[i].level == 1) {//选出商品，勾选的大类不计入
+                productStr += productNodes[i].id + ",";
+            }
         }
-        if (str2.length > 0) {
-            str2 = str2.substring(0, str2.length - 1);
+        if (productStr.length > 0) {
+            productStr = productStr.substring(0, productStr.length - 1);
         }
-        $("#saveCityCodes").val(str1);
-        $("#saveProductIds").val(str2);
+        $("#saveCityCodes").val(cityStr);
+        $("#saveProductIds").val(productStr);
     }
 
     //标识选中状态
     function checkNodes() {
-        var citycodes = $("#saveCityCodes").val();
-        var productids = $("#saveProductIds").val();
-        var nodes1 = cityTree.getCheckedNodes(false);
-        var nodes2 = productTree.getCheckedNodes(false);
-        for (var i = 0; i < nodes1.length; i++) {
-            if (citycodes.indexOf(nodes1[i].id) != -1) {
-                cityTree.checkNode(nodes1[i], true, false);
+        var cityCodes = $("#saveCityCodes").val();
+        var productIds = $("#saveProductIds").val();
+        var cityNodes = cityTree.getCheckedNodes(false);
+        var productNodes = productTree.getCheckedNodes(false);
+        for (var i = 0; i < cityNodes.length; i++) {
+            if (cityCodes.indexOf(cityNodes[i].id) != -1) {
+                cityTree.checkNode(cityNodes[i], true, false);
             }
         }
-        for (var i = 0; i < nodes2.length; i++) {
-            if (productids.indexOf(nodes2[i].id) != -1) {
-                productTree.checkNode(nodes2[i], true, false);
+        for (var i = 0; i < productNodes.length; i++) {
+            if (productIds.indexOf(productNodes[i].id) != -1) {
+                productTree.checkNode(productNodes[i], true, false);
             }
         }
     }
