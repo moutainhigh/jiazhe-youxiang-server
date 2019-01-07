@@ -402,6 +402,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                     } else {
                         thisCardPay = needPay[0];
                     }
+                    bean.setBalance(bean.getBalance().subtract(thisCardPay));
                     rechargeCardPayMoney[0] = rechargeCardPayMoney[0].add(thisCardPay);
                     OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
                     orderPaymentPO.setOrderId(orderInfoPO.getId());
