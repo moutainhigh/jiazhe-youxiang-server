@@ -660,18 +660,19 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (needPay[0].compareTo(BigDecimal.ZERO) == 0) {//刚好可以支付
             if (productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
+                orderInfoPO.setExtInfo("");
             }
             if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
                 eleProductCodeDTOList = sendEleProductCode(dto.getProductId(), dto.getCount());
-                StringBuilder comments = new StringBuilder();
+                StringBuilder eleCodes = new StringBuilder();
                 eleProductCodeDTOList.stream().forEach(bean -> {
                     if (!Strings.isBlank(bean.getCode())) {
-                        comments.append("兑换码为：" + bean.getCode());
+                        eleCodes.append("兑换码为：" + bean.getCode()+"，");
                     }
-                    comments.append("，兑换密钥为：" + bean.getKeyt() + "；");
+                    eleCodes.append("兑换密钥为：" + bean.getKeyt() + "；");
                 });
-                orderInfoPO.setComments(comments.toString());
+                orderInfoPO.setExtInfo(eleCodes.toString());
             }
         } else { //需要在线支付
             orderInfoPO.setStatus(CommonConstant.ORDER_UNPAID);

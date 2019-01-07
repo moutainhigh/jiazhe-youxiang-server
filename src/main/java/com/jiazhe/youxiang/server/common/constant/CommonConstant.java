@@ -79,6 +79,7 @@ public class CommonConstant {
     /**
      * 订单状态【1代付款，2待派单，3待服务，4已完成，5取消待审核，6取消审核未通过，7已取消】
      */
+    public static final Byte ORDER_ALL = 0;
     public static final Byte ORDER_UNPAID = 1;
     public static final Byte ORDER_UNSENT = 2;
     public static final Byte ORDER_UNSERVICE = 3;

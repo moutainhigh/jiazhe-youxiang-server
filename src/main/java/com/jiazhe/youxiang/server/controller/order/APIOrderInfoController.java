@@ -74,7 +74,7 @@ public class APIOrderInfoController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "分页查询订单信息", level = LogLevelEnum.LEVEL_1)
     public Object customerListPage(@ModelAttribute CustomerOrderInfoPageReq req) {
         //如果包含0，说明查全部订单，否则按需查询
-        if (Arrays.binarySearch(req.getStatus().split(","), "0") > -1) {
+        if (Arrays.binarySearch(req.getStatus().split(","), String.valueOf(CommonConstant.ORDER_ALL)) > -1) {
             req.setStatus(null);
         }
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
