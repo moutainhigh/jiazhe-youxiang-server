@@ -5,10 +5,12 @@
  */
 package com.jiazhe.youxiang.server.service.product;
 
+import com.jiazhe.youxiang.server.domain.po.ProductCategoryPO;
 import com.jiazhe.youxiang.server.dto.product.ProductCategoryDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 在这里编写类的功能描述
@@ -29,4 +31,10 @@ public interface ProductCategoryService {
     void updateCategory(ProductCategoryDTO productCategoryDTO);
 
     void updateCategoryStatus(Integer id, Integer status);
+
+    /**
+     * 获得商品大类map，key是大类id，value是值
+     * @return
+     */
+    Map<Integer,ProductCategoryPO> getCategoryMap();
 }

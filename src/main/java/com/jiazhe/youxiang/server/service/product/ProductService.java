@@ -10,7 +10,6 @@ import com.jiazhe.youxiang.server.dto.product.ProductDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductUpdateDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,5 +42,11 @@ public interface ProductService {
 
     void updateStatus(Integer id, Integer status);
 
-
+    /**
+     * 获取商品列表,不包含价格
+     * @return
+     * @param productType
+     * @param status
+     */
+    List<ProductDTO> getAllList(Integer productType, Integer status);
 }

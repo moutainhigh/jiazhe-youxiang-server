@@ -201,7 +201,7 @@
                                                                        name="productType"
                                                                        value="0" checked="checked"/>服务
                                                             </label>
-                                                            <label class="radio-inline">
+                                                            <label id="inputEleCard" class="radio-inline">
                                                                 <input type="radio"
                                                                        name="productType"
                                                                        value="1"/>电子卡
@@ -502,6 +502,8 @@
                     $("#inputPriority").val(result.priority);
                     if (result.productType == 0) {
                         $("#inputService").click();
+                    }else {
+                        $("#inputEleCard").click();
                     }
                     $('#fileThumbnail').ace_file_input('show_file_list', [getImageUrl(result.thumbnailUrl)]);
                     $('#imgThumbnail').attr('src', getImageUrl(result.thumbnailUrl));
