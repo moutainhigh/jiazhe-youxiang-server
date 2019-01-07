@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl.voucher;
 
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
@@ -98,6 +99,7 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
             bean.setCityCodes(batchSaveDTO.getCityCodes());
             bean.setProductIds(batchSaveDTO.getProductIds());
             bean.setExpiryTime(batchSaveDTO.getExpiryTime());
+            bean.setVoucherEffectiveTime(batchSaveDTO.getVoucherEffectiveTime());
             bean.setExpiryType(batchSaveDTO.getExpiryType());
             bean.setVoucherExpiryTime(batchSaveDTO.getVoucherExpiryTime());
             bean.setValidityPeriod(batchSaveDTO.getValidityPeriod());
@@ -145,6 +147,7 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
         }
         po.setVoucherName(dto.getVoucherName());
         po.setExpiryTime(dto.getExpiryTime());
+        po.setVoucherEffectiveTime(dto.getVoucherEffectiveTime());
         po.setExpiryType(dto.getExpiryType());
         if (dto.getExpiryType().equals(CommonConstant.VOUCHER_EXPIRY_TIME)) {
             po.setVoucherExpiryTime(dto.getVoucherExpiryTime());
@@ -168,7 +171,7 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void codeCharge(Integer exchangeType, Integer id, String keyt) {
+    public void codeCharge(Integer exchangeType, Integer id, String keyt)  {
         VoucherExchangeCodePO voucherExchangeCodePO = findByKeyt(keyt);
         if (null == voucherExchangeCodePO) {
             throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
@@ -191,11 +194,13 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
         }
         VoucherPO voucherPO = new VoucherPO();
         //直接指定过期时间
+        voucherPO.setEffectiveTime(voucherExchangeCodePO.getVoucherEffectiveTime());
         if (voucherExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
             voucherPO.setExpiryTime(voucherExchangeCodePO.getVoucherExpiryTime());
         } else {
-            voucherPO.setExpiryTime(new Date(System.currentTimeMillis() + voucherExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY));
+            voucherPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + voucherExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY)));
         }
+        voucherPO.setEffectiveTime(voucherExchangeCodePO.getVoucherEffectiveTime());
         voucherPO.setDescription(voucherExchangeCodePO.getBatchDescription());
         voucherPO.setCount(voucherExchangeCodePO.getCount());
         //暂时置为0，等生成了兑换记录再修改
@@ -233,6 +238,7 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
         voucherService.update(voucherPO);
         //修改充值卡兑换码的使用状态
         voucherExchangeCodePO.setUsed(Byte.valueOf("1"));
+        voucherExchangeCodePO.setCustomerId(customerDTO.getId());
         voucherExchangeCodePOMapper.updateByPrimaryKeySelective(voucherExchangeCodePO);
     }
 

@@ -38,6 +38,8 @@ public class VoucherExchangeCodeDTO extends BaseObject {
 
     private Date expiryTime;
 
+    private Date voucherEffectiveTime;
+
     private Date voucherExpiryTime;
 
     private Integer validityPeriod;
@@ -202,5 +204,13 @@ public class VoucherExchangeCodeDTO extends BaseObject {
 
     public void setCustomerDTO(CustomerDTO customerDTO) {
         this.customerDTO = customerDTO;
+    }
+
+    public Date getVoucherEffectiveTime() {
+        return voucherEffectiveTime;
+    }
+
+    public void setVoucherEffectiveTime(Date voucherEffectiveTime) {
+        this.voucherEffectiveTime = voucherEffectiveTime;
     }
 }

@@ -25,6 +25,8 @@ public class VoucherEditDTO extends BaseObject {
 
     private String description;
 
+    private Date effectiveTime;
+
     private Date expiryTime;
 
     public Integer getId() {
@@ -73,5 +75,13 @@ public class VoucherEditDTO extends BaseObject {
 
     public void setExpiryTime(Date expiryTime) {
         this.expiryTime = expiryTime;
+    }
+
+    public Date getEffectiveTime() {
+        return effectiveTime;
+    }
+
+    public void setEffectiveTime(Date effectiveTime) {
+        this.effectiveTime = effectiveTime;
     }
 }

@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.controller.voucher;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherAdapter;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherBiz;
@@ -117,13 +118,18 @@ public class APIVoucherController extends BaseController{
     @ApiOperation(value = "修改代金券信息", httpMethod = "POST",notes = "修改代金券信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "修改代金券信息", level = LogLevelEnum.LEVEL_2)
-    public Object editSave(@ModelAttribute VoucherEditReq req) {
+    public Object editSave(@ModelAttribute VoucherEditReq req)  {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(),new VoucherException(VoucherCodeEnum.VOUCHER_NAME_IS_NULL));
-        if(req.getExpiryTime()==0){
-            throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
+        if(req.getEffectiveTime()==0){
+            throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_IS_NULL);
         }
+        req.setEffectiveTime(DateUtil.getFirstSecond(req.getEffectiveTime()));
+        if(req.getExpiryTime()==0){
+            throw new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL);
+        }
+        req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
         VoucherEditDTO dto = VoucherAdapter.EditReq2EditDTO(req);
         voucherBiz.editSave(dto);
         return ResponseFactory.buildSuccess();

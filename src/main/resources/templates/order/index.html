@@ -20,12 +20,6 @@
             width: 4px;
             height: 10px;
         }
-
-        /*input[readonly] {
-            color: #FFFFFF;
-            background: #FFFFFF!important;
-            cursor: default;
-        }*/
     </style>
 </head>
 
@@ -53,14 +47,14 @@
                                     <div class="col-sm-2">
                                         <select id="searchStatus" name="status"
                                                 class="selectpicker show-tick form-control">
-                                            <option value=0>所有</option>
-                                            <option value=1 th:selected="${status} == 1">待付款</option>
-                                            <option value=2 th:selected="${status} == 2">待派单</option>
-                                            <option value=3 th:selected="${status} == 3">待服务</option>
-                                            <option value=4 th:selected="${status} == 4">已完成</option>
-                                            <option value=5 th:selected="${status} == 5">取消待审核</option>
-                                            <option value=6 th:selected="${status} == 6">取消未通过</option>
-                                            <option value=7 th:selected="${status} == 7">已取消</option>
+                                            <option value="0" th:selected="${status} == 0">所有</option>
+                                            <option value="1" th:selected="${status} == 1">待付款</option>
+                                            <option value="2" th:selected="${status} == 2">待派单</option>
+                                            <option value="3" th:selected="${status} == 3">待服务</option>
+                                            <option value="4" th:selected="${status} == 4">已完成</option>
+                                            <option value="5" th:selected="${status} == 5">取消待审核</option>
+                                            <option value="6" th:selected="${status} == 6">取消未通过</option>
+                                            <option value="7" th:selected="${status} == 7">已取消</option>
                                         </select>
                                     </div>
                                     <label class="col-sm-1 control-label no-padding-right">订单号：</label>
@@ -148,7 +142,7 @@
                         <div id="grid-pager"></div>
                     </div><!-- /.col -->
 
-                    <div id="orderReservationModal" class="modal fade" tabindex="-1">
+                    <div id="orderReservationModal" class="modal fade" tabindex="-1" style="overflow: scroll">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -341,7 +335,7 @@
                         </div>
                     </div>
 
-                    <div id="appendOrderModal" class="modal fade" tabindex="-1">
+                    <div id="appendOrderModal" class="modal fade" tabindex="-1" style="overflow: scroll">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -573,11 +567,6 @@
     var pager_selector = "#grid-pager";
     var orderStatus = ['待付款', '待派单', '待服务', '服务完成', '取消待审核', '取消未通过', '已取消'];
     $(function () {
-        $(document).on("hidden.bs.modal", ".bootbox", function () {
-            if ($(".modal-backdrop").length > 0) {
-                $("body").addClass("modal-open");
-            }
-        })
         //重新修改表格宽度
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);

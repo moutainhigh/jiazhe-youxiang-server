@@ -36,11 +36,15 @@ public class PointExchangeCodeBatchSaveDTO extends BaseObject {
 
     private Date expiryTime;
 
+    private Date pointEffectiveTime;
+
     private Date pointExpiryTime;
 
     private Integer validityPeriod;
 
     private Byte expiryType;
+
+    private String extInfo;
 
     public Integer getId() {
         return id;
@@ -152,5 +156,21 @@ public class PointExchangeCodeBatchSaveDTO extends BaseObject {
 
     public void setExpiryType(Byte expiryType) {
         this.expiryType = expiryType;
+    }
+
+    public String getExtInfo() {
+        return extInfo;
+    }
+
+    public void setExtInfo(String extInfo) {
+        this.extInfo = extInfo;
+    }
+
+    public Date getPointEffectiveTime() {
+        return pointEffectiveTime;
+    }
+
+    public void setPointEffectiveTime(Date pointEffectiveTime) {
+        this.pointEffectiveTime = pointEffectiveTime;
     }
 }

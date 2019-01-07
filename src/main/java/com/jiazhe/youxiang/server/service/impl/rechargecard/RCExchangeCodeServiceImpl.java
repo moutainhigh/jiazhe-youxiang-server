@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl.rechargecard;
 
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
@@ -75,7 +76,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void codeCharge(Integer type, Integer id, String keyt) {
+    public void codeCharge(Integer type, Integer id, String keyt)  {
         RechargeCardExchangeCodePO rechargeCardExchangeCodePO = findByKeyt(keyt);
         if (null == rechargeCardExchangeCodePO) {
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
@@ -98,8 +99,10 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         if (rechargeCardExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
             rechargeCardPO.setExpiryTime(rechargeCardExchangeCodePO.getRechargeCardExpiryTime());
         } else {
-            rechargeCardPO.setExpiryTime(new Date(System.currentTimeMillis() + rechargeCardExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY));
+            rechargeCardPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + rechargeCardExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY)));
         }
+        rechargeCardPO.setEffectiveTime(rechargeCardExchangeCodePO.getRechargeCardEffectiveTime());
+        rechargeCardPO.setEffectiveTime(rechargeCardExchangeCodePO.getRechargeCardEffectiveTime());
         rechargeCardPO.setDescription(rechargeCardExchangeCodePO.getBatchDescription());
         rechargeCardPO.setFaceValue(rechargeCardExchangeCodePO.getFaceValue());
         rechargeCardPO.setBalance(rechargeCardExchangeCodePO.getFaceValue());
@@ -167,6 +170,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
             bean.setCityCodes(batchSaveDTO.getCityCodes());
             bean.setProductIds(batchSaveDTO.getProductIds());
             bean.setExpiryTime(batchSaveDTO.getExpiryTime());
+            bean.setRechargeCardEffectiveTime(batchSaveDTO.getRechargeCardEffectiveTime());
             bean.setExpiryType(batchSaveDTO.getExpiryType());
             bean.setRechargeCardExpiryTime(batchSaveDTO.getRechargeCardExpiryTime());
             bean.setValidityPeriod(batchSaveDTO.getValidityPeriod());
@@ -229,6 +233,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         }
         po.setRechargeCardName(dto.getRechargeCardName());
         po.setExpiryTime(dto.getExpiryTime());
+        po.setRechargeCardEffectiveTime(dto.getRechargeCardEffectiveTime());
         po.setExpiryType(dto.getExpiryType());
         if (dto.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
             po.setRechargeCardExpiryTime(dto.getRechargeCardExpiryTime());

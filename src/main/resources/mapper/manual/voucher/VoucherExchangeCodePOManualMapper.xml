@@ -14,6 +14,7 @@
         <result column="code" property="code" jdbcType="VARCHAR" />
         <result column="keyt" property="keyt" jdbcType="VARCHAR" />
         <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
+        <result column="voucher_effective_time" property="voucherEffectiveTime" jdbcType="TIMESTAMP" />
         <result column="voucher_expiry_time" property="voucherExpiryTime" jdbcType="TIMESTAMP" />
         <result column="validity_period" property="validityPeriod" jdbcType="INTEGER" />
         <result column="expiry_type" property="expiryType" jdbcType="TINYINT" />
@@ -27,17 +28,19 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-      id,batch_id,batch_name,voucher_name,batch_description,project_id,city_codes,product_ids,count,code,keyt,expiry_time,voucher_expiry_time,
-        validity_period,expiry_type,status,used,customer_id,ext_info,is_deleted,add_time,mod_time
+       id, batch_id, batch_name, voucher_name, batch_description, project_id, city_codes,
+    product_ids, count, code, keyt, expiry_time, voucher_effective_time, voucher_expiry_time,
+    validity_period, expiry_type, status, used, customer_id, ext_info, is_deleted, add_time,
+    mod_time
     </sql>
 
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
         INSERT into voucher_exchange_code
-        (batch_id,batch_name,voucher_name,batch_description,project_id,city_codes,product_ids,code,keyt,count,expiry_time,voucher_expiry_time,
+        (batch_id,batch_name,voucher_name,batch_description,project_id,city_codes,product_ids,code,keyt,count,expiry_time,voucher_effective_time,voucher_expiry_time,
         validity_period,expiry_type,status,used,ext_info,is_deleted,add_time,mod_time) VALUES
         <foreach collection="list" item="item" separator=",">
             (#{item.batchId},#{item.batchName},#{item.voucherName},#{item.batchDescription},#{item.projectId},#{item.cityCodes},#{item.productIds},
-            #{item.code},#{item.keyt},#{item.count},#{item.expiryTime},#{item.voucherExpiryTime},#{item.validityPeriod},#{item.expiryType},#{item.status},0,
+            #{item.code},#{item.keyt},#{item.count},#{item.expiryTime},#{item.voucherEffectiveTime},#{item.voucherExpiryTime},#{item.validityPeriod},#{item.expiryType},#{item.status},0,
             "",0,NOW(),NOW())
         </foreach>
     </insert>
@@ -49,7 +52,7 @@
                 batch_name = #{item.batchName},voucher_name = #{item.voucherName},batch_description =
                 #{item.batchDescription},project_id = #{item.projectId},
                 city_codes = #{item.cityCodes},product_ids = #{item.productIds},expiry_time =
-                #{item.expiryTime},expiry_type = #{item.expiryType},
+                #{item.expiryTime},voucher_effective_time = #{item.voucherEffectiveTime},expiry_type = #{item.expiryType},
                 voucher_expiry_time = #{item.voucherExpiryTime},validity_period =
                 #{item.validityPeriod},mod_time = NOW()
             </set>

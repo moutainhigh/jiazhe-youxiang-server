@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl.point;
 
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.point.PointAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
@@ -35,6 +36,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -82,8 +84,9 @@ public class PointServiceImpl implements PointService {
             if (batchSaveDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
                 bean.setExpiryTime(batchSaveDTO.getPointExpiryTime());
             } else {
-                bean.setExpiryTime(new Date(bean.getAddTime().getTime() + batchSaveDTO.getValidityPeriod() * CommonConstant.ONE_DAY));
+                bean.setExpiryTime(new Date(DateUtil.getLastSecond(bean.getAddTime().getTime() + batchSaveDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
             }
+            bean.setEffectiveTime(batchSaveDTO.getPointEffectiveTime());
         });
         pointPOManualMapper.batchUpdate(pointPOList);
     }
@@ -138,7 +141,7 @@ public class PointServiceImpl implements PointService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue) {
+    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue)  {
         CustomerDTO customerDTO = customerService.getById(id);
         if (null == customerDTO) {
             throw new RechargeCardException(RechargeCardCodeEnum.CUSTOMER_NOT_EXIST);
@@ -149,8 +152,9 @@ public class PointServiceImpl implements PointService {
         if (pointExchangeCodeBatchEditDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
             pointPO.setExpiryTime(pointExchangeCodeBatchEditDTO.getPointExpiryTime());
         } else {
-            pointPO.setExpiryTime(new Date(System.currentTimeMillis() + pointExchangeCodeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY));
+            pointPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + pointExchangeCodeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
         }
+        pointPO.setEffectiveTime(pointExchangeCodeBatchEditDTO.getPointEffectiveTime());
         pointPO.setDescription(pointExchangeCodeBatchEditDTO.getDescription());
         pointPO.setFaceValue(faceValue);
         pointPO.setBalance(faceValue);
@@ -196,6 +200,7 @@ public class PointServiceImpl implements PointService {
         po.setCityCodes(dto.getCityCodes());
         po.setName(dto.getName());
         po.setExpiryTime(dto.getExpiryTime());
+        po.setEffectiveTime(dto.getEffectiveTime());
         po.setDescription(dto.getDescription());
         pointPOMapper.updateByPrimaryKeySelective(po);
     }
@@ -235,15 +240,16 @@ public class PointServiceImpl implements PointService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void chargeByQRCode(String purchaseOrderStr, CustomerDTO customerDTO, Integer batchId, BigDecimal faceValue) {
+    public void chargeByQRCode(String purchaseOrderStr, CustomerDTO customerDTO, Integer batchId, BigDecimal faceValue)  {
         PointExchangeCodeBatchPO batchPO = pointExchangeCodeBatchPOMapper.selectByPrimaryKey(batchId);
         PointPO pointPO = new PointPO();
         //直接指定过期时间
         if (batchPO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
             pointPO.setExpiryTime(batchPO.getPointExpiryTime());
         } else {
-            pointPO.setExpiryTime(new Date(System.currentTimeMillis() + batchPO.getValidityPeriod() * CommonConstant.ONE_DAY));
+            pointPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + batchPO.getValidityPeriod() * CommonConstant.ONE_DAY)));
         }
+        pointPO.setEffectiveTime(batchPO.getPointEffectiveTime());
         pointPO.setDescription(batchPO.getDescription());
         pointPO.setFaceValue(faceValue);
         pointPO.setBalance(faceValue);
@@ -255,7 +261,16 @@ public class PointServiceImpl implements PointService {
         pointPO.setCustomerId(customerDTO.getId());
         pointPO.setCityCodes(batchPO.getCityCodes());
         pointPO.setProductIds(batchPO.getProductIds());
+        pointPO.setExtInfo(purchaseOrderStr);
+        String[] stringArray = purchaseOrderStr.split(",");
+        //20180604,114656
+        String date = stringArray[5];
+        String time = stringArray[6];
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date tradeTime = DateUtil.yyyyMMddHHmmssStrToSeconds(date+time);
         //TODO niexiao 设置生效时间
+        Date effectiveTime = new Date(tradeTime.getTime() + CommonConstant.ONE_DAY);
+        pointPO.setEffectiveTime(effectiveTime);
         pointService.insert(pointPO);
         //插入兑换记录
         PointExchangeRecordPO pointRecordPO = new PointExchangeRecordPO();

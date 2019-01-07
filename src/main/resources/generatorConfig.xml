@@ -83,7 +83,6 @@
         <!--<table tableName="partner" domainObjectName="PartnerPO"/>-->
         <!--<table tableName="service_item" domainObjectName="ServiceItemPO"/>-->
         <!--<table tableName="partner_order_info" domainObjectName="PartnerOrderInfoPO"/>-->
-
         <!--<table tableName="point" domainObjectName="PointPO"/>-->
         <!--<table tableName="point_exchange_code" domainObjectName="PointExchangeCodePO"/>-->
         <!--<table tableName="point_exchange_code_batch" domainObjectName="PointExchangeCodeBatchPO"/>-->

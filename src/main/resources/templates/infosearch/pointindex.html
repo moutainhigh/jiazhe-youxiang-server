@@ -138,7 +138,23 @@
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveExpiryTime">过期时间：</label>
+                                                           for="saveEffectiveTime">积分卡生效时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker" id="saveEffectiveTime"
+                                                                   type="text" readonly/>
+                                                            <span class="input-group-addon">
+                                                                        <i class="fa fa-calendar bigger-110"></i>
+                                                                    </span>
+                                                            <input type="hidden" value=0 name="effectiveTime"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveExpiryTime">积分卡过期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker" id="saveExpiryTime"
@@ -160,6 +176,19 @@
                                                             <textarea id="saveDescription" name="description"
                                                                       class="form-control"
                                                                       style="resize:none;height: 100px"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveExtInfo">签购单信息：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <textarea id="saveExtInfo" name="extInfo"
+                                                                      class="form-control" disabled="disabled"
+                                                                      style="resize:none;height: 100px;"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -237,7 +266,7 @@
         var tableOption = {
             url: "/api/point/searchlistpage",
             postData: transformToJson($('#pointSearchForm').serializeArray()),
-            colNames: ['', '积分卡名称', '状态', '面额', '余额', '兑换比例', '兑换时间', '客户手机号', '客户姓名', '过期时间', '兑换类型', '后台操作人', '操作'],
+            colNames: ['', '积分卡名称', '状态', '面额', '余额', '兑换比例', '兑换时间', '客户手机号', '客户姓名', '积分卡生效时间', '积分卡过期时间', '兑换类型', '后台操作人', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 40, sortable: false},
@@ -283,12 +312,21 @@
                     }
                 },
                 {
+                    name: 'effectiveTime',
+                    index: 'effectiveTime',
+                    width: 40,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return timeFormat(rowObject.effectiveTime)
+                    }
+                },
+                {
                     name: 'expiryTime',
                     index: 'expiryTime',
                     width: 40,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return dateFormat(rowObject.expiryTime)
+                        return timeFormat(rowObject.expiryTime)
                     }
                 },
                 {
@@ -417,7 +455,11 @@
                     $("#cardSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
                     $('#saveExpiryTime').datepicker('update');
                     $("#cardSaveForm #saveExpiryTime").next().next().val(result.expiryTime);
+                    $("#cardSaveForm #saveEffectiveTime").val(dateFormat(result.effectiveTime));
+                    $('#saveEffectiveTime').datepicker('update');
+                    $("#cardSaveForm #saveEffectiveTime").next().next().val(result.effectiveTime);
                     $("#cardSaveForm #saveDescription").val(result.description);
+                    $("#cardSaveForm #saveExtInfo").val(result.extInfo);
                     $("#modal-form").modal('show');
                 }
             },

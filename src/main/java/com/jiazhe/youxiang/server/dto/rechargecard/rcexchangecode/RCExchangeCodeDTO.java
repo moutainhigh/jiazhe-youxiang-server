@@ -35,6 +35,8 @@ public class RCExchangeCodeDTO extends BaseObject {
 
     private String keyt;
 
+    private Date rechargeCardEffectiveTime;
+
     private Date rechargeCardExpiryTime;
 
     private Integer validityPeriod;
@@ -203,5 +205,13 @@ public class RCExchangeCodeDTO extends BaseObject {
 
     public void setCustomerDTO(CustomerDTO customerDTO) {
         this.customerDTO = customerDTO;
+    }
+
+    public Date getRechargeCardEffectiveTime() {
+        return rechargeCardEffectiveTime;
+    }
+
+    public void setRechargeCardEffectiveTime(Date rechargeCardEffectiveTime) {
+        this.rechargeCardEffectiveTime = rechargeCardEffectiveTime;
     }
 }

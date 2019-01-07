@@ -61,7 +61,7 @@ public interface RCService {
      * @param faceValue  面额
      * @return
      */
-    void directCharge(Integer id ,Integer batchId, BigDecimal faceValue);
+    void directCharge(Integer id ,Integer batchId, BigDecimal faceValue) ;
 
     /**
      * 根据充值卡ids，将充值卡信息修改为批次相关的信息

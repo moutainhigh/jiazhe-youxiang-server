@@ -11,6 +11,8 @@ public class AdvancePayPO implements Serializable {
 
     private Date advanceTime;
 
+    private String remark;
+
     private String extInfo;
 
     private Byte isDeleted;
@@ -18,8 +20,6 @@ public class AdvancePayPO implements Serializable {
     private Date addTime;
 
     private Date modTime;
-
-    private String remark;
 
     private static final long serialVersionUID = 1L;
 
@@ -45,6 +45,14 @@ public class AdvancePayPO implements Serializable {
 
     public void setAdvanceTime(Date advanceTime) {
         this.advanceTime = advanceTime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
     public String getExtInfo() {
@@ -77,13 +85,5 @@ public class AdvancePayPO implements Serializable {
 
     public void setModTime(Date modTime) {
         this.modTime = modTime;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
     }
 }

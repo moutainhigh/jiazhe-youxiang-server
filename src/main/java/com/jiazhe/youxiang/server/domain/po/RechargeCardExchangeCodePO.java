@@ -29,6 +29,8 @@ public class RechargeCardExchangeCodePO implements Serializable {
 
     private Date expiryTime;
 
+    private Date rechargeCardEffectiveTime;
+
     private Date rechargeCardExpiryTime;
 
     private Integer validityPeriod;
@@ -145,6 +147,14 @@ public class RechargeCardExchangeCodePO implements Serializable {
 
     public void setExpiryTime(Date expiryTime) {
         this.expiryTime = expiryTime;
+    }
+
+    public Date getRechargeCardEffectiveTime() {
+        return rechargeCardEffectiveTime;
+    }
+
+    public void setRechargeCardEffectiveTime(Date rechargeCardEffectiveTime) {
+        this.rechargeCardEffectiveTime = rechargeCardEffectiveTime;
     }
 
     public Date getRechargeCardExpiryTime() {

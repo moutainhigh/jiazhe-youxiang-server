@@ -8,7 +8,6 @@ import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +30,7 @@ public interface OrderInfoService {
      * @param paging
      * @return
      */
-    List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Paging paging);
+    List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Paging paging);
 
     /**
      * 获取订单信息
@@ -86,7 +85,7 @@ public interface OrderInfoService {
      * 下单
      * @param dto
      */
-    NeedPayResp placeOrder(PlaceOrderDTO dto) throws ParseException;
+    NeedPayResp placeOrder(PlaceOrderDTO dto) ;
 
     /**
      * 预约订单

@@ -135,7 +135,7 @@
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveExpiryTime">过期时间：</label>
+                                                           for="saveExpiryTime">兑换码过期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker" id="saveExpiryTime"
@@ -144,6 +144,22 @@
                                                                         <i class="fa fa-calendar bigger-110"></i>
                                                                     </span>
                                                             <input type="hidden" value=0 name="expiryTime"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="savePointEffectiveTime">积分卡生效时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker" id="savePointEffectiveTime"
+                                                                   type="text" readonly/>
+                                                            <span class="input-group-addon">
+                                                                        <i class="fa fa-calendar bigger-110"></i>
+                                                                    </span>
+                                                            <input type="hidden" value=0 name="pointEffectiveTime"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -274,7 +290,7 @@
         var tableOption = {
             url: "/api/pointexchangecode/listpage",
             postData: transformToJson($('#pointExchangeCodeSearchForm').serializeArray()),
-            colNames: ['', '批次名称', '积分卡名称', '兑换码', '密钥', '启用状态', '使用状态','客户电话', '面额','兑换比例', '过期时间', '操作'],
+            colNames: ['', '批次名称', '积分卡名称', '兑换码', '密钥', '启用状态', '使用状态','客户电话', '面额','兑换比例', '兑换码过期时间','充值卡生效时间', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'batchName', index: 'batchName', width: 100, sortable: false},
@@ -310,7 +326,16 @@
                     width: 50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return dateFormat(rowObject.expiryTime);
+                        return timeFormat(rowObject.expiryTime);
+                    }
+                },
+                {
+                    name: 'pointEffectiveTime',
+                    index: 'pointEffectiveTime',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return timeFormat(rowObject.pointEffectiveTime);
                     }
                 },
                 {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
@@ -431,6 +456,9 @@
                     $("#codeSaveForm #savePointExpiryTime").val(dateFormat(result.pointExpiryTime));
                     $('#savePointExpiryTime').datepicker('update');
                     $("#codeSaveForm #savePointExpiryTime").next().next().val(result.pointExpiryTime);
+                    $("#codeSaveForm #savePointEffectiveTime").val(dateFormat(result.pointEffectiveTime));
+                    $('#savePointEffectiveTime').datepicker('update');
+                    $("#codeSaveForm #savePointEffectiveTime").next().next().val(result.pointEffectiveTime);
                     $("#codeSaveForm #saveDescription").val(result.batchDescription);
                     $("#modal-form").modal('show');
                 }

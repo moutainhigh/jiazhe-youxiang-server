@@ -26,6 +26,9 @@ public class AuditRecordAdapter {
         auditRecordResp.setAuditReason(auditRecordDTO.getAuditReason());
         auditRecordResp.setRemark(auditRecordDTO.getRemark());
         auditRecordResp.setImgUrls(auditRecordDTO.getImgUrls());
+        auditRecordResp.setPosCode(auditRecordDTO.getPosCode());
+        auditRecordResp.setCardNo(auditRecordDTO.getCardNo());
+        auditRecordResp.setTradeTime(auditRecordDTO.getTradeTime().getTime());
         auditRecordResp.setSubmitterId(auditRecordDTO.getSubmitterId());
         auditRecordResp.setSubmitterName(auditRecordDTO.getSubmitterName());
         auditRecordResp.setStatus(auditRecordDTO.getStatus());
@@ -53,6 +56,9 @@ public class AuditRecordAdapter {
         auditRecordDTO.setGivingType(auditRecordPO.getGivingType());
         auditRecordDTO.setAuditReason(auditRecordPO.getAuditReason());
         auditRecordDTO.setRemark(auditRecordPO.getRemark());
+        auditRecordDTO.setPosCode(auditRecordPO.getPosCode());
+        auditRecordDTO.setCardNo(auditRecordPO.getCardNo());
+        auditRecordDTO.setTradeTime(auditRecordPO.getTradeTime());
         auditRecordDTO.setImgUrls(auditRecordPO.getImgUrls());
         auditRecordDTO.setSubmitterId(auditRecordPO.getSubmitterId());
         auditRecordDTO.setSubmitterName(auditRecordPO.getSubmitterName());

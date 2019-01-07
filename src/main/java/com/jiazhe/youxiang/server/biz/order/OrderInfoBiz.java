@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class OrderInfoBiz {
     @Autowired
     private CustomerService customerService;
 
-    public List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String worekerMobile, Paging paging) {
+    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String worekerMobile, Paging paging) {
         List<OrderInfoDTO> orderInfoDTOList = orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, worekerMobile, paging);
         orderInfoDTOList.stream().forEach(bean -> {
             //计算待支付金额放入订单信息中
@@ -104,13 +103,13 @@ public class OrderInfoBiz {
         return null;
     }
 
-    public List<OrderInfoDTO> customerGetList(Integer customerId, Byte status, Paging paging) {
+    public List<OrderInfoDTO> customerGetList(Integer customerId, String status, Paging paging) {
         CustomerDTO customerDTO = customerService.getById(customerId);
         return getList(status, null, customerDTO.getMobile(), null, null, null, null, paging);
     }
 
     /**
-     * 计算订单待支付金额，如果待支付金额大于0，返回待支付金额，如果小于等于0，返回0
+     * 计算订单待支付金额
      *
      * @param dto
      * @return
@@ -123,7 +122,7 @@ public class OrderInfoBiz {
         return left;
     }
 
-    public NeedPayResp userPlaceOrder(PlaceOrderDTO placeOrderDTO) throws ParseException {
+    public NeedPayResp userPlaceOrder(PlaceOrderDTO placeOrderDTO)  {
         return orderInfoService.placeOrder(placeOrderDTO);
     }
 
@@ -139,7 +138,7 @@ public class OrderInfoBiz {
         orderInfoService.userChangeReservationInfo(userReservationOrderDTO);
     }
 
-    public NeedPayResp customerPlaceOrder(PlaceOrderDTO placeOrderDTO) throws ParseException {
+    public NeedPayResp customerPlaceOrder(PlaceOrderDTO placeOrderDTO)  {
         return orderInfoService.placeOrder(placeOrderDTO);
     }
 

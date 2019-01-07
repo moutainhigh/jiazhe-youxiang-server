@@ -10,11 +10,13 @@ import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginType;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
+import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
@@ -31,7 +33,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.Subject;
@@ -73,7 +74,7 @@ public class APISignInController extends BaseController {
     @ApiOperation(value = "员工登录", httpMethod = "GET", response = SessionResp.class, notes = "员工登录")
     @RequestMapping(value = "/usersignin")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "员工登录", level = LogLevelEnum.LEVEL_2)
-    public Object userSignin(@ModelAttribute UserLoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException, ParseException {
+    public Object userSignin(@ModelAttribute UserLoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException {
         String loginName = req.getLoginname();
         String password = req.getPassword();
         String identifyingCode = req.getIdentifyingCode();
@@ -121,7 +122,7 @@ public class APISignInController extends BaseController {
             }
         }
         SessionResp sessionResp = new SessionResp();
-        subject.getSession().setTimeout(ConstantFetchUtil.hour_8);
+        subject.getSession().setTimeout(CommonConstant.EIGHT_HOUR);
         sessionResp.setSessionId(subject.getSession().getId().toString());
         AuthorizationInfo info = userRealm.doGetAuthorizationInfo(subject.getPrincipals());
         String permission = StringUtils.join(info.getStringPermissions(), "#");
@@ -153,23 +154,25 @@ public class APISignInController extends BaseController {
     @ApiOperation(value = "客户登录", httpMethod = "GET", response = CustomerLoginResp.class, notes = "客户登录")
     @RequestMapping(value = "/customersignin")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "客户登录", level = LogLevelEnum.LEVEL_2)
-    public Object customerSignin(@ModelAttribute CustomerLoginReq req) throws IOException, ClientException, ParseException {
+    public Object customerSignin(@ModelAttribute CustomerLoginReq req,HttpServletRequest request) throws IOException, ClientException {
         String mobile = req.getMobile();
         String identifyingCode = req.getIdentifyingCode();
         String bizId = req.getBizId();
-        //首先判断用户是否存在且唯一
         CommonValidator.validateNull(req.getMobile(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         CommonValidator.validateNull(req.getIdentifyingCode(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         if (!ValidateUtils.phoneValidate(req.getMobile())) {
             throw new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL);
         }
+        //判断验证码是否正确
+        if (!AliUtils.isVerified(req.getMobile(), identifyingCode, bizId)) {
+            throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
+        }
         CustomerDTO customerDTO = customerBiz.getByMobile(mobile);
         if (null == customerDTO) {
-            throw new LoginException(LoginCodeEnum.LOGIN_CUSTOMER_NOT_EXISTED);
-        }
-        //判断验证码是否正确
-        if (!AliUtils.isVerified(customerDTO.getMobile(), identifyingCode, bizId)) {
-            throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
+            CustomerAddDTO customerAddDTO = new CustomerAddDTO();
+            customerAddDTO.setMobile(req.getMobile());
+            customerBiz.add(customerAddDTO);
+            customerDTO = customerBiz.getByMobile(mobile);
         }
         Subject subject = SecurityUtils.getSubject();
         Collection<Session> sessions = sessionDAO.getActiveSessions();
@@ -179,8 +182,10 @@ public class APISignInController extends BaseController {
                 if (s.getPrincipal() instanceof CustomerDTO) {
                     CustomerDTO temp = (CustomerDTO) s.getPrincipal();
                     if (mobile.equals(temp.getMobile())) {
-                        logger.info(("删除客户" + temp.getMobile() + "的登陆session"));
-                        sessionDAO.delete(session);
+                        if (!session.getId().equals(CookieUtil.getUid(request, "JSESSIONID"))) {
+                            logger.info(("删除客户" + temp.getMobile() + "的登陆session"));
+                            sessionDAO.delete(session);
+                        }
                     }
                 }
             }
@@ -194,7 +199,7 @@ public class APISignInController extends BaseController {
             }
         }
         CustomerLoginResp customerLoginResp = new CustomerLoginResp();
-        subject.getSession().setTimeout(ConstantFetchUtil.nerver);
+        subject.getSession().setTimeout(CommonConstant.NEVER);
         customerLoginResp.setSessionId(subject.getSession().getId().toString());
         customerLoginResp.setCustomerId(customerDTO.getId());
         customerLoginResp.setCustomerMobile(customerDTO.getMobile());
@@ -209,10 +214,6 @@ public class APISignInController extends BaseController {
     public Object customerSendCode(@ModelAttribute SendMsgToCustomerReq req) throws ClientException {
         if (!ValidateUtils.phoneValidate(req.getMobile())) {
             throw new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL);
-        }
-        CustomerDTO customerDTO = customerBiz.getByMobile(req.getMobile());
-        if (null == customerDTO) {
-            throw new LoginException(LoginCodeEnum.LOGIN_CUSTOMER_NOT_EXISTED);
         }
         SendSmsResponse res = AliUtils.sendMsg(req.getMobile());
         SendMsgResp sendMsgResp = new SendMsgResp();

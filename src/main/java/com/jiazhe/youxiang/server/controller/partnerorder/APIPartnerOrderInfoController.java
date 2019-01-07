@@ -52,8 +52,8 @@ public class APIPartnerOrderInfoController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER, operate = "分页查询商家订单信息", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute PartnerOrderInfoPageReq req) {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        Date serviceTimeStart = req.getServiceTimeStart() == 0 ? null : new Date(req.getServiceTimeStart());
-        Date serviceTimeEnd = req.getServiceTimeEnd() == 0 ? null : new Date(req.getServiceTimeEnd());
+        Date serviceTimeStart = req.getServiceTimeStart() == CommonConstant.NULL_TIME ? null : new Date(req.getServiceTimeStart());
+        Date serviceTimeEnd = req.getServiceTimeEnd() == CommonConstant.NULL_TIME ? null : new Date(req.getServiceTimeEnd());
         List<PartnerOrderInfoDTO> dtoList = partnerOrderInfoBiz.getList(req.getStatus(), req.getCustomerCityCode(), req.getPartnerId(), req.getServiceItemId(), serviceTimeStart, serviceTimeEnd, req.getCustomerMobile(), paging);
         List<PartnerOrderInfoResp> respList = dtoList.stream().map(PartnerOrderInfoAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(respList, paging);
@@ -83,10 +83,10 @@ public class APIPartnerOrderInfoController extends BaseController {
         if (!"".equals(req.getCustomerMobile())) {
             CommonValidator.validateMobile(req.getCustomerMobile(), new PartnerOrderException(PartnerOrderCodeEnum.CUSTOMER_MOBILE_IS_VALID));
         }
-        if (req.getOrderTime() == 0) {
+        if (req.getOrderTime() == CommonConstant.NULL_TIME) {
             throw new PartnerOrderException(PartnerOrderCodeEnum.EXCHANGE_TIME_IS_NULL);
         }
-        if (req.getServiceTime() == 0) {
+        if (req.getServiceTime() == CommonConstant.NULL_TIME) {
             throw new PartnerOrderException(PartnerOrderCodeEnum.SERVICE_TIME_IS_NULL);
         }
         if (req.getOrderTime() > req.getServiceTime()) {
@@ -116,8 +116,8 @@ public class APIPartnerOrderInfoController extends BaseController {
     @RequestMapping(value = "/caloverviewmoney", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER, operate = "查询预付款相关信息", level = LogLevelEnum.LEVEL_1)
     public Object calOverviewMoney(@ModelAttribute PartnerOrderInfoPageReq req) {
-        Date timeStart = req.getServiceTimeStart() == 0 ? null : new Date(req.getServiceTimeStart());
-        Date timeEnd = req.getServiceTimeEnd() == 0 ? null : new Date(req.getServiceTimeEnd());
+        Date timeStart = req.getServiceTimeStart() == CommonConstant.NULL_TIME ? null : new Date(req.getServiceTimeStart());
+        Date timeEnd = req.getServiceTimeEnd() == CommonConstant.NULL_TIME ? null : new Date(req.getServiceTimeEnd());
         OverviewMoneyResp resp = partnerOrderInfoBiz.calOverviewMoney(timeStart, timeEnd);
         return ResponseFactory.buildResponse(resp);
     }

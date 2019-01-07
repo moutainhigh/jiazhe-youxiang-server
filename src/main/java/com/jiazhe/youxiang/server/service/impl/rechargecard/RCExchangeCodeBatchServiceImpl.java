@@ -60,11 +60,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         RechargeCardExchangeCodeBatchPO rcExchangeCodeBatchPO = RCExchangeCodeBatchAdapter.DTOSave2PO(rcExchangeCodeBatchSaveDTO);
         rcExchangeCodeBatchPO.setIsMade(Byte.valueOf("0"));
         rcExchangeCodeBatchPO.setStatus(Byte.valueOf("1"));
-        rcExchangeCodeBatchPO.setIsDeleted(Byte.valueOf("0"));
-        rcExchangeCodeBatchPO.setExtInfo("");
-        rcExchangeCodeBatchPO.setAddTime(new Date());
-        rcExchangeCodeBatchPO.setModTime(new Date());
-        rechargeCardExchangeCodeBatchPOMapper.insert(rcExchangeCodeBatchPO);
+        rechargeCardExchangeCodeBatchPOMapper.insertSelective(rcExchangeCodeBatchPO);
     }
 
     @Override
@@ -92,6 +88,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         batchPO.setProductIds(batchSaveDTO.getProductIds());
         batchPO.setExpiryTime(batchSaveDTO.getExpiryTime());
         batchPO.setExpiryType(batchSaveDTO.getExpiryType());
+        batchPO.setRechargeCardEffectiveTime(batchSaveDTO.getRechargeCardEffectiveTime());
         batchPO.setRechargeCardExpiryTime(batchSaveDTO.getRechargeCardExpiryTime());
         batchPO.setValidityPeriod(batchSaveDTO.getValidityPeriod());
         batchPO.setDescription(batchSaveDTO.getDescription());
@@ -168,6 +165,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
             rcExchangeCodeSaveDTO.setKeyt(codeAndKeyts[1][i]);
             rcExchangeCodeSaveDTO.setFaceValue(batchPO.getFaceValue());
             rcExchangeCodeSaveDTO.setExpiryTime(batchPO.getExpiryTime());
+            rcExchangeCodeSaveDTO.setRechargeCardEffectiveTime(batchPO.getRechargeCardEffectiveTime());
             rcExchangeCodeSaveDTO.setRechargeCardExpiryTime(batchPO.getRechargeCardExpiryTime());
             rcExchangeCodeSaveDTO.setValidityPeriod(batchPO.getValidityPeriod());
             rcExchangeCodeSaveDTO.setExpiryType(batchPO.getExpiryType());

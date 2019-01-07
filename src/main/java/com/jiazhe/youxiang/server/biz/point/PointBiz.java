@@ -106,7 +106,7 @@ public class PointBiz {
         pointService.changeStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
     }
 
-    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue) {
+    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue)  {
         pointService.directCharge(id, batchId, faceValue);
     }
 
@@ -127,7 +127,7 @@ public class PointBiz {
      *
      * @param qrCode
      */
-    public void chargeByQRCode(String qrCode) {
+    public void chargeByQRCode(String qrCode)  {
         //将二维码利用公钥解密
         String purchaseOrderStr = "";
         try {

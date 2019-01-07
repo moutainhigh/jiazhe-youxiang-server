@@ -29,6 +29,7 @@ public class PointExchangeCodeBatchAdapter {
         pointExchangeCodeBatchResp.setAmount(pointExchangeCodeBatchDTO.getAmount());
         pointExchangeCodeBatchResp.setFaceValue(pointExchangeCodeBatchDTO.getFaceValue());
         pointExchangeCodeBatchResp.setExpiryTime(pointExchangeCodeBatchDTO.getExpiryTime().getTime());
+        pointExchangeCodeBatchResp.setPointEffectiveTime(pointExchangeCodeBatchDTO.getPointEffectiveTime().getTime());
         pointExchangeCodeBatchResp.setStatus(pointExchangeCodeBatchDTO.getStatus());
         pointExchangeCodeBatchResp.setIsVirtual(pointExchangeCodeBatchDTO.getIsVirtual());
         pointExchangeCodeBatchResp.setIsMade(pointExchangeCodeBatchDTO.getIsMade());
@@ -50,6 +51,7 @@ public class PointExchangeCodeBatchAdapter {
         pointExchangeCodeBatchDTO.setAmount(pointExchangeCodeBatchPO.getAmount());
         pointExchangeCodeBatchDTO.setFaceValue(pointExchangeCodeBatchPO.getFaceValue());
         pointExchangeCodeBatchDTO.setExpiryTime(pointExchangeCodeBatchPO.getExpiryTime());
+        pointExchangeCodeBatchDTO.setPointEffectiveTime(pointExchangeCodeBatchPO.getPointEffectiveTime());
         pointExchangeCodeBatchDTO.setStatus(pointExchangeCodeBatchPO.getStatus());
         pointExchangeCodeBatchDTO.setProjectId(pointExchangeCodeBatchPO.getProjectId());
         return pointExchangeCodeBatchDTO;
@@ -70,6 +72,7 @@ public class PointExchangeCodeBatchAdapter {
         pointExchangeCodeBatchSaveDTO.setCityCodes(req.getCityCodes());
         pointExchangeCodeBatchSaveDTO.setProductIds(req.getProductIds());
         pointExchangeCodeBatchSaveDTO.setExpiryTime(new Date(req.getExpiryTime()));
+        pointExchangeCodeBatchSaveDTO.setPointEffectiveTime(new Date(req.getPointEffectiveTime()));
         pointExchangeCodeBatchSaveDTO.setPointExpiryTime(new Date(req.getPointExpiryTime()));
         pointExchangeCodeBatchSaveDTO.setValidityPeriod(req.getValidityPeriod());
         pointExchangeCodeBatchSaveDTO.setExpiryType(req.getExpiryType());
@@ -93,9 +96,11 @@ public class PointExchangeCodeBatchAdapter {
         pointExchangeCodeBatchPO.setProductIds(pointExchangeCodeBatchSaveDTO.getProductIds());
         pointExchangeCodeBatchPO.setFaceValue(pointExchangeCodeBatchSaveDTO.getFaceValue());
         pointExchangeCodeBatchPO.setExpiryTime(pointExchangeCodeBatchSaveDTO.getExpiryTime());
+        pointExchangeCodeBatchPO.setPointEffectiveTime(pointExchangeCodeBatchSaveDTO.getPointEffectiveTime());
         pointExchangeCodeBatchPO.setPointExpiryTime(pointExchangeCodeBatchSaveDTO.getPointExpiryTime());
         pointExchangeCodeBatchPO.setValidityPeriod(pointExchangeCodeBatchSaveDTO.getValidityPeriod());
         pointExchangeCodeBatchPO.setExpiryType(pointExchangeCodeBatchSaveDTO.getExpiryType());
+        pointExchangeCodeBatchPO.setExtInfo(pointExchangeCodeBatchSaveDTO.getExtInfo());
         return pointExchangeCodeBatchPO;
     }
 
@@ -116,9 +121,11 @@ public class PointExchangeCodeBatchAdapter {
         pointExchangeCodeBatchEditResp.setAmount(pointExchangeCodeBatchEditDTO.getAmount());
         pointExchangeCodeBatchEditResp.setFaceValue(pointExchangeCodeBatchEditDTO.getFaceValue());
         pointExchangeCodeBatchEditResp.setExpiryTime(pointExchangeCodeBatchEditDTO.getExpiryTime().getTime());
+        pointExchangeCodeBatchEditResp.setPointEffectiveTime(pointExchangeCodeBatchEditDTO.getPointEffectiveTime().getTime());
         pointExchangeCodeBatchEditResp.setPointExpiryTime(pointExchangeCodeBatchEditDTO.getPointExpiryTime().getTime());
         pointExchangeCodeBatchEditResp.setValidityPeriod(pointExchangeCodeBatchEditDTO.getValidityPeriod());
         pointExchangeCodeBatchEditResp.setExpiryType(pointExchangeCodeBatchEditDTO.getExpiryType());
+        pointExchangeCodeBatchEditResp.setExtInfo(pointExchangeCodeBatchEditDTO.getExtInfo());
         return pointExchangeCodeBatchEditResp;
     }
 }

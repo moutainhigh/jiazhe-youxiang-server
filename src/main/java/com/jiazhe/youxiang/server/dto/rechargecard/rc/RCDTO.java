@@ -36,6 +36,8 @@ public class RCDTO extends BaseObject {
 
     private Date expiryTime;
 
+    private Date effectiveTime;
+
     private Byte status;
 
     private Date addTime;
@@ -154,5 +156,13 @@ public class RCDTO extends BaseObject {
 
     public void setAddTime(Date addTime) {
         this.addTime = addTime;
+    }
+
+    public Date getEffectiveTime() {
+        return effectiveTime;
+    }
+
+    public void setEffectiveTime(Date effectiveTime) {
+        this.effectiveTime = effectiveTime;
     }
 }

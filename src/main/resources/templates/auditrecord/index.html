@@ -8,8 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <!-- CSS -->
     <link rel="stylesheet" th:href="@{/static/init.css}"/>
+    <link rel="stylesheet" th:href="@{/static/editable-select/css/jquery-editable-select.min.css}"/>
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
+    <script th:src="@{/static/editable-select/js/jquery-editable-select.min.js}"></script>
+
     <style>
         .ui-jqgrid .ui-jqgrid-bdiv {
             overflow-x: auto;
@@ -44,7 +47,7 @@
                         <i class="ace-icon fa fa-home home-icon"></i>
                         <a th:href="@{/main/main_center}">主页</a>
                     </li>
-                    <li class="active">消费审核</li>
+                    <li class="active">充值审核</li>
                 </ul><!-- /.breadcrumb -->
             </div>
 
@@ -85,7 +88,7 @@
                         <div id="grid-pager"></div>
                     </div><!-- /.col -->
 
-                    <div id="modal-form" class="modal fade" tabindex="-1">
+                    <div id="modal-form" class="modal fade" tabindex="-1" style="overflow: scroll">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -229,7 +232,7 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">消费凭证：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">充值凭证：</label>
                                                     <div class="col-sm-8 float" id="pics">
 
                                                     </div>
@@ -240,9 +243,14 @@
                                                     <label class="col-sm-4 control-label no-padding-right">POS机编号：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="posCode" name="posCode"
-                                                                   class="form-control"
-                                                                   type="text" style="height:30px"/>
+                                                            <select id="posCode" name="posCode" class="form-control">
+                                                                <option>POS1</option>
+                                                                <option>POS2</option>
+                                                                <option>POS3</option>
+                                                                <option>天津</option>
+                                                                <option>温州</option>
+                                                                <option>其他</option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -334,24 +342,15 @@
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
     var auditRecordStatus = ['待审核', '未通过', '已通过'];
-    $(document).ready(function () {
-        $(document).on("hidden.bs.modal", ".bootbox", function () {
-            if ($(".modal-backdrop").length > 0) {
-                $("body").addClass("modal-open");
-            }
-        })
-
-        // 通过该方法来为每次弹出的模态框设置最新的zIndex值，从而使最新的modal显示在最前面
-        $(document).on('show.bs.modal', '.modal', function (event) {
-            var zIndex = 1060 + (10 * $('.modal:visible').length);
-            $(this).css('z-index', zIndex);
-        });
-    });
-
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
+        });
+
+        $('#posCode').editableSelect({
+            effects: 'slide',
+            filter:false
         });
 
         //将项目列表填入到projectId中
@@ -390,11 +389,11 @@
             shrinkToFit: false,
             autoScroll: true,
 //            multiselect: true,
-            colNames: ['', '操作', '客户姓名', '客户电话', '兑换积分', '赠送积分', '状态', '提交人姓名', '提交时间', '审核人姓名', '审核时间'],
+            colNames: ['', '操作', '提交人姓名', '客户电话', '兑换积分', '赠送积分', '状态', '客户姓名', '提交时间', '审核人姓名', '审核时间'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: '_action', index: '_action', sortable: false, formatter: customFormatter},
-                {name: 'customerName', index: 'customerName', sortable: false},
+                {name: 'submitterName', index: 'submitterName', sortable: false},
                 {name: 'customerMobile', index: 'customerMobile', sortable: false},
                 {name: 'exchangePoint', index: 'exchangePoint', sortable: false},
                 {name: 'givingPoint', index: 'givingPoint', sortable: false},
@@ -406,7 +405,7 @@
                         return auditRecordStatus[rowObject.status];
                     }
                 },
-                {name: 'submitterName', index: 'submitterName', sortable: false},
+                {name: 'customerName', index: 'customerName', sortable: false},
                 {
                     name: 'modTime',
                     index: 'modTime',
@@ -444,7 +443,7 @@
                     $('head').append('<style> .ui-jqgrid .ui-jqgrid-hdiv{overflow:hidden}</style>');
                 }
             },
-            caption: "消费记录列表"
+            caption: "充值记录列表"
         };
         initTable(grid_selector, pager_selector, tableOption);
     });
@@ -525,6 +524,15 @@
                     $("#givingPoint").val(result.givingPoint);
                     $("#givingType").val(result.givingType);
                     $("#auditReason").val(result.auditReason);
+                    $("#posCode").val(result.posCode);
+                    $("#cardNo").val(result.cardNo);
+                    if(result.status==2){
+                        $("#saveTradeTime").val(dateFormat(result.tradeTime));
+                        $("#saveTradeTime").next().next().val(result.tradeTime);
+                    }else{
+                        $("#saveTradeTime").val('');
+                        $("#saveTradeTime").next().next().val(0);
+                    }
                     $("#remark").val(result.remark);
                     $("#remark").attr('readonly', 'readonly');
                     if (result.status == 1) {
@@ -544,7 +552,7 @@
 
     function pass() {
         $("#saveStatus").val(2);
-        confirm("确定通过该条消费记录的审核？", function (result) {
+        confirm("确定通过该条充值记录的审核？", function (result) {
             if (result) {
                 save();
             }

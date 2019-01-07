@@ -31,9 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.security.Security;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,7 +60,7 @@ public class APIAuditRecordController extends BaseController {
     @ApiOperation(value = "【后台】审核", httpMethod = "POST", notes = "审核")
     @RequestMapping(value = "/auditrecordcheck", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "审核", level = LogLevelEnum.LEVEL_2)
-    public Object auditRecordPass(@ModelAttribute AuditRecordCheckReq req) {
+    public Object auditRecordPass(@ModelAttribute AuditRecordCheckReq req)  {
         if (req.getStatus().equals(AUDIT_UNPASS)) {
             CommonValidator.validateNull(req.getAuditReason(), new AuditRecordException(AuditRecordCodeEnum.AUDIT_REASON_IS_NULL));
             auditRecordBiz.auditRecordUnpass(req.getId(), req.getVersion(), req.getAuditReason());
@@ -72,7 +70,7 @@ public class APIAuditRecordController extends BaseController {
                     CommonValidator.validateNull(req.getExchangeBatchId(),new AuditRecordException(AuditRecordCodeEnum.GIVING_BATCH_IS_NULL));
             CommonValidator.validateNull(req.getPosCode(), new AuditRecordException(AuditRecordCodeEnum.POS_CODE_IS_NULL));
             CommonValidator.validateNull(req.getCardNo(), new AuditRecordException(AuditRecordCodeEnum.CARD_NO_IS_NULL));
-            if(null == req.getTradeTime() ||req.getTradeTime() == 0){
+            if(req.getTradeTime() == CommonConstant.NULL_TIME){
                 throw new AuditRecordException(AuditRecordCodeEnum.TRADE_TIME_IS_NULL);
             }
             auditRecordBiz.auditRecordPass(req.getId(), req.getVersion(), req.getExchangeBatchId(),req.getGivingBatchId(),req.getPosCode(),req.getCardNo(),req.getTradeTime());

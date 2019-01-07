@@ -25,10 +25,13 @@ public class PointExchangeCodeEditReq extends BaseVO{
     @ApiModelProperty("适用的商品id，多个用,连接")
     private String productIds;
 
-    @ApiModelProperty("兑换码本身过期时间")
+    @ApiModelProperty("兑换码过期时间")
     private Long expiryTime;
 
-    @ApiModelProperty("充值卡过期时间")
+    @ApiModelProperty("积分卡生效时间")
+    private Long pointEffectiveTime;
+
+    @ApiModelProperty("积分卡过期时间")
     private Long pointExpiryTime;
 
     @ApiModelProperty("自兑换之日起，充值卡有效期天数")
@@ -107,5 +110,13 @@ public class PointExchangeCodeEditReq extends BaseVO{
 
     public void setExpiryType(Byte expiryType) {
         this.expiryType = expiryType;
+    }
+
+    public Long getPointEffectiveTime() {
+        return pointEffectiveTime;
+    }
+
+    public void setPointEffectiveTime(Long pointEffectiveTime) {
+        this.pointEffectiveTime = pointEffectiveTime;
     }
 }

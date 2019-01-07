@@ -31,6 +31,8 @@ public class PointExchangeCodeBatchDTO extends BaseObject {
 
     private Date expiryTime;
 
+    private Date pointEffectiveTime;
+
     private Byte status;
 
     private Byte isVirtual;
@@ -127,5 +129,13 @@ public class PointExchangeCodeBatchDTO extends BaseObject {
 
     public void setProjectDTO(ProjectDTO projectDTO) {
         this.projectDTO = projectDTO;
+    }
+
+    public Date getPointEffectiveTime() {
+        return pointEffectiveTime;
+    }
+
+    public void setPointEffectiveTime(Date pointEffectiveTime) {
+        this.pointEffectiveTime = pointEffectiveTime;
     }
 }

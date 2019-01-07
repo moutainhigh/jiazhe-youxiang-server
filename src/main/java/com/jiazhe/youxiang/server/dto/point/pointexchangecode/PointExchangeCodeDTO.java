@@ -38,6 +38,8 @@ public class PointExchangeCodeDTO extends BaseObject {
 
     private String keyt;
 
+    private Date pointEffectiveTime;
+
     private Date pointExpiryTime;
 
     private Integer validityPeriod;
@@ -218,5 +220,13 @@ public class PointExchangeCodeDTO extends BaseObject {
 
     public void setCustomerDTO(CustomerDTO customerDTO) {
         this.customerDTO = customerDTO;
+    }
+
+    public Date getPointEffectiveTime() {
+        return pointEffectiveTime;
+    }
+
+    public void setPointEffectiveTime(Date pointEffectiveTime) {
+        this.pointEffectiveTime = pointEffectiveTime;
     }
 }

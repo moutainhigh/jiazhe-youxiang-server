@@ -20,7 +20,7 @@ public class VoucherPageReq extends PageSizeNumReq {
     @ApiModelProperty("充值卡停用/启用状态")
     private Byte status;
 
-    @ApiModelProperty("是否过期")
+    @ApiModelProperty("是否过期【0未过期 1过期】")
     private Byte expiry;
 
     public String getMobile() {

@@ -4,6 +4,7 @@ import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.server.adapter.advancepay.AdvancePayAdapter;
 import com.jiazhe.youxiang.server.biz.advancepay.AdvancePayBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
@@ -43,8 +44,8 @@ public class APIAdvancePayController extends BaseController{
     @RequestMapping(value = "/listall", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER, operate = "查询预付款充值信息", level = LogLevelEnum.LEVEL_1)
     public Object listAll(@ModelAttribute PartnerOrderInfoPageReq req) {
-        Date timeStart = req.getServiceTimeStart() == 0 ? null : new Date(req.getServiceTimeStart());
-        Date timeEnd = req.getServiceTimeEnd() == 0 ? null : new Date(req.getServiceTimeEnd());
+        Date timeStart = req.getServiceTimeStart() == CommonConstant.NULL_TIME ? null : new Date(req.getServiceTimeStart());
+        Date timeEnd = req.getServiceTimeEnd() == CommonConstant.NULL_TIME ? null : new Date(req.getServiceTimeEnd());
         List<AdvancePayDTO> advancePayDTOList = advancePayBiz.getList(timeStart,timeEnd);
         List<AdvancePayResp> advancePayRespList = advancePayDTOList.stream().map(AdvancePayAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildResponse(advancePayRespList);

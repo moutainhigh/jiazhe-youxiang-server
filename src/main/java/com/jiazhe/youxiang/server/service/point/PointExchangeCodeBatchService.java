@@ -46,4 +46,12 @@ public interface PointExchangeCodeBatchService {
      * @return
      */
     BigDecimal getFaceValue(Integer batchId, String bonus);
+
+    /**
+     * 判断绑定该商户号的批次是否存在
+     * @param merchantNo
+     * @param batchId
+     * @return
+     */
+    boolean merchantNoIsRepeat(Integer batchId,String merchantNo);
 }

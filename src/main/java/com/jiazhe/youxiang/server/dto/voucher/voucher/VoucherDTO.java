@@ -32,6 +32,8 @@ public class VoucherDTO extends BaseObject {
 
     private Integer count;
 
+    private Date effectiveTime;
+
     private Date expiryTime;
 
     private Byte status;
@@ -154,5 +156,13 @@ public class VoucherDTO extends BaseObject {
 
     public void setVoucherExchangeRecordDTO(VoucherExchangeRecordDTO voucherExchangeRecordDTO) {
         this.voucherExchangeRecordDTO = voucherExchangeRecordDTO;
+    }
+
+    public Date getEffectiveTime() {
+        return effectiveTime;
+    }
+
+    public void setEffectiveTime(Date effectiveTime) {
+        this.effectiveTime = effectiveTime;
     }
 }

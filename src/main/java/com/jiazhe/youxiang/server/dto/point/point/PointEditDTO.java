@@ -25,6 +25,8 @@ public class PointEditDTO extends BaseObject{
 
     private Date expiryTime;
 
+    private Date effectiveTime;
+
     public Integer getId() {
         return id;
     }
@@ -71,5 +73,13 @@ public class PointEditDTO extends BaseObject{
 
     public void setExpiryTime(Date expiryTime) {
         this.expiryTime = expiryTime;
+    }
+
+    public Date getEffectiveTime() {
+        return effectiveTime;
+    }
+
+    public void setEffectiveTime(Date effectiveTime) {
+        this.effectiveTime = effectiveTime;
     }
 }

@@ -3,9 +3,6 @@ package com.jiazhe.youxiang.server.biz;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
 import com.jiazhe.youxiang.server.service.AuditRecordService;
 import com.jiazhe.youxiang.server.vo.Paging;
-import com.jiazhe.youxiang.server.vo.req.IdReq;
-import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordAddReq;
-import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordEditReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +21,7 @@ public class AuditRecordBiz {
     @Autowired
     private AuditRecordService auditRecordService;
 
-    public void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId,Integer givingBatchId,String posCode,String cardNo,Long tradeTime) {
+    public void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId,Integer givingBatchId,String posCode,String cardNo,Long tradeTime)  {
         auditRecordService.auditRecordPass(auditRecordId, version, exchangeBatchId,givingBatchId,posCode,cardNo,new Date(tradeTime));
     }
 

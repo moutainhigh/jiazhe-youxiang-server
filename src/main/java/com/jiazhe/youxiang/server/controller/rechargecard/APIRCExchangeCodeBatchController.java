@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.controller.rechargecard;
 import com.alibaba.druid.sql.PagerUtils;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.ExportExcelUtils;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeBatchAdapter;
@@ -86,7 +87,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
     @ApiOperation(value = "【后台】保存充值卡兑换码批次信息", httpMethod = "POST", notes = "【新建、修改】保存充值卡兑换码批次信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "保存充值卡兑换码批次信息", level = LogLevelEnum.LEVEL_2)
-    public Object save(@ModelAttribute RCExchangeCodeBatchSaveReq req) {
+    public Object save(@ModelAttribute RCExchangeCodeBatchSaveReq req)  {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(),new RechargeCardException(RechargeCardCodeEnum.BATCH_NAME_IS_NULL));
@@ -106,17 +107,24 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         if(req.getExpiryTime()==0){
             throw new RechargeCardException(RechargeCardCodeEnum.BATCH_EXPIRY_TIME_IS_NULL);
         }
+        req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
+        if(req.getRechargeCardEffectiveTime()==0){
+            throw new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EFFECTIVE_TIME_IS_NULL);
+        }
+        req.setRechargeCardEffectiveTime(DateUtil.getFirstSecond(req.getRechargeCardEffectiveTime()));
+        req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
         //充值卡过期时间为指定的时间
         if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
             if(req.getRechargeCardExpiryTime()==0){
                 throw new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRY_TIME_IS_NULL);
             }
+            req.setRechargeCardExpiryTime(DateUtil.getLastSecond(req.getRechargeCardExpiryTime()));
             req.setValidityPeriod(0);
         }
         //积分卡时间为兑换后间隔的天数
         if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_PERIOD)) {
             CommonValidator.validateNull(req.getValidityPeriod(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRY_TIME_IS_NULL));
-            req.setRechargeCardExpiryTime(System.currentTimeMillis());
+            req.setRechargeCardExpiryTime(DateUtil.getLastSecond(System.currentTimeMillis()));
         }
         RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO = RCExchangeCodeBatchAdapter.ReqSave2DTOSave(req);
         if (req.getId() == 0) {

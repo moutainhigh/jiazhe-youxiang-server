@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl.point;
 
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
@@ -79,6 +80,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
             bean.setProductIds(batchSaveDTO.getProductIds());
             bean.setExpiryTime(batchSaveDTO.getExpiryTime());
             bean.setExpiryType(batchSaveDTO.getExpiryType());
+            bean.setPointEffectiveTime(batchSaveDTO.getPointEffectiveTime());
             bean.setPointExpiryTime(batchSaveDTO.getPointExpiryTime());
             bean.setValidityPeriod(batchSaveDTO.getValidityPeriod());
         });
@@ -155,6 +157,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         }
         po.setPointName(dto.getPointName());
         po.setExpiryTime(dto.getExpiryTime());
+        po.setPointEffectiveTime(dto.getPointEffectiveTime());
         po.setExpiryType(dto.getExpiryType());
         if (dto.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
             po.setPointExpiryTime(dto.getPointExpiryTime());
@@ -169,7 +172,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     }
 
     @Override
-    public void codeCharge(Integer type, Integer id, String keyt) {
+    public void codeCharge(Integer type, Integer id, String keyt)  {
         PointExchangeCodePO pointExchangeCodePO = findByKeyt(keyt);
         if (null == pointExchangeCodePO) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
@@ -192,8 +195,9 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         if (pointExchangeCodePO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
             pointPO.setExpiryTime(pointExchangeCodePO.getPointExpiryTime());
         } else {
-            pointPO.setExpiryTime(new Date(System.currentTimeMillis() + pointExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY));
+            pointPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + pointExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY)));
         }
+        pointPO.setEffectiveTime(pointExchangeCodePO.getPointEffectiveTime());
         pointPO.setDescription(pointExchangeCodePO.getBatchDescription());
         pointPO.setFaceValue(pointExchangeCodePO.getFaceValue());
         pointPO.setBalance(pointExchangeCodePO.getFaceValue());

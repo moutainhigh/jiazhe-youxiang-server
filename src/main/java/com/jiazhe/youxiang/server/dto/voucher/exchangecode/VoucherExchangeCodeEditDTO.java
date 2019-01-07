@@ -25,6 +25,8 @@ public class VoucherExchangeCodeEditDTO extends BaseObject {
 
     private Date expiryTime;
 
+    private Date voucherEffectiveTime;
+
     private Date voucherExpiryTime;
 
     private Integer validityPeriod;
@@ -101,5 +103,13 @@ public class VoucherExchangeCodeEditDTO extends BaseObject {
 
     public void setExpiryType(Byte expiryType) {
         this.expiryType = expiryType;
+    }
+
+    public Date getVoucherEffectiveTime() {
+        return voucherEffectiveTime;
+    }
+
+    public void setVoucherEffectiveTime(Date voucherEffectiveTime) {
+        this.voucherEffectiveTime = voucherEffectiveTime;
     }
 }

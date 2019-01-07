@@ -43,7 +43,10 @@ public class PointExchangeCodeResp extends BaseVO {
     @ApiModelProperty("兑换码过期时间")
     private Long expiryTime;
 
-    @ApiModelProperty("充值卡过期时间")
+    @ApiModelProperty("积分卡生效时间")
+    private Long pointEffectiveTime;
+
+    @ApiModelProperty("积分卡过期时间")
     private Long pointExpiryTime;
 
     @ApiModelProperty("自兑换之日起，有效期的天数")
@@ -196,5 +199,13 @@ public class PointExchangeCodeResp extends BaseVO {
 
     public void setCustomerResp(CustomerResp customerResp) {
         this.customerResp = customerResp;
+    }
+
+    public Long getPointEffectiveTime() {
+        return pointEffectiveTime;
+    }
+
+    public void setPointEffectiveTime(Long pointEffectiveTime) {
+        this.pointEffectiveTime = pointEffectiveTime;
     }
 }

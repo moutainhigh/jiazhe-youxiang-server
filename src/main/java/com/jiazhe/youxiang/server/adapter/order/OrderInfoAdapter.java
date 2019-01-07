@@ -51,6 +51,7 @@ public class OrderInfoAdapter {
         orderInfoResp.setType(dto.getType());
         orderInfoResp.setStatus(dto.getStatus());
         orderInfoResp.setAuditReason(dto.getAuditReason());
+        orderInfoResp.setExtInfo(dto.getExtInfo());
         orderInfoResp.setProductResp(ProductAdapter.productDTO2VO(dto.getProductDTO()));
         orderInfoResp.setCustomerResp(CustomerAdapter.customerDTO2VO(dto.getCustomerDTO()));
         return orderInfoResp;
@@ -88,6 +89,7 @@ public class OrderInfoAdapter {
         orderInfoDTO.setType(orderInfoPO.getType());
         orderInfoDTO.setStatus(orderInfoPO.getStatus());
         orderInfoDTO.setAuditReason(orderInfoPO.getAuditReason());
+        orderInfoDTO.setExtInfo(orderInfoPO.getExtInfo());
         return orderInfoDTO;
     }
 
