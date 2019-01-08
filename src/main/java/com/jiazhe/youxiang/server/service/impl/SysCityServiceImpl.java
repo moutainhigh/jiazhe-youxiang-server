@@ -93,7 +93,9 @@ public class SysCityServiceImpl implements SysCityService {
         SysCityPOExample sysCityPOExample = new SysCityPOExample();
         SysCityPOExample.Criteria criteria = sysCityPOExample.createCriteria();
         criteria.andCityLevelEqualTo(SysCityBiz.CITY_LEVEL_2);
-        criteria.andParentCodeEqualTo(cityCode);
+        if(cityCode!=null){
+            criteria.andParentCodeEqualTo(cityCode);
+        }
         criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
         List<SysCityPO> sysCityPOList = sysCityPOMapper.selectByExample(sysCityPOExample);
         return sysCityPOList.stream().map(SysCityAdapter::sysCityPO2DTO).collect(Collectors.toList());
