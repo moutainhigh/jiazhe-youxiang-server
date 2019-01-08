@@ -115,12 +115,12 @@ public class ShiroConfig {
     }
 
     //    TODO niexiao  临时取消权限认证
-//    @Bean
-//    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor() {
-//        AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
-//        advisor.setSecurityManager(securityManager());
-//        return advisor;
-//    }
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor() {
+        AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
+        advisor.setSecurityManager(securityManager());
+        return advisor;
+    }
 
     @Bean
     public ShiroDialect shiroDialect() {
