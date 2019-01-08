@@ -52,7 +52,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/templates/**", "anon");
         filterChainDefinitionMap.put("/api/**", "perms");//接口通过权限认证
         filterChainDefinitionMap.put("/api/signin/**", "anon");//登录、发送验证码等匿名访问
-
+        filterChainDefinitionMap.put("api/product/**", "anon");//放开商品验证
 
         //swagger相关连接可以直接访问
         filterChainDefinitionMap.put("/swagger-ui.html", "anon");
