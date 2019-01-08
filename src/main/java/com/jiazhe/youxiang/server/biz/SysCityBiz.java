@@ -38,7 +38,7 @@ public class SysCityBiz {
     public static final Integer CITY_LEVEL_3 = 3;
 
     /**
-     * 三级城市级别
+     * 查询所有城市的代码
      */
     public static final String CODE_ALL_CITY = "all";
 
@@ -80,7 +80,10 @@ public class SysCityBiz {
     }
 
     public List<SysCityDTO> getCityList(String cityCode) {
-        if(cityCode.equals(CODE_ALL_CITY))
-        return sysCityService.getCityList(cityCode);
+        if (cityCode.equals(CODE_ALL_CITY)) {
+            return sysCityService.getCityList(null);
+        } else {
+            return sysCityService.getCityList(cityCode);
+        }
     }
 }
