@@ -37,6 +37,11 @@ public class SysCityBiz {
      */
     public static final Integer CITY_LEVEL_3 = 3;
 
+    /**
+     * 三级城市级别
+     */
+    public static final String CODE_ALL_CITY = "all";
+
 
     @Autowired
     private SysCityServiceImpl sysCityService;
@@ -75,6 +80,7 @@ public class SysCityBiz {
     }
 
     public List<SysCityDTO> getCityList(String cityCode) {
+        if(cityCode.equals(CODE_ALL_CITY))
         return sysCityService.getCityList(cityCode);
     }
 }

@@ -184,7 +184,7 @@ public class APISysCityController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.CITY,operate = "获取市级城市列表",level = LogLevelEnum.LEVEL_1)
     public Object getCityList(@ModelAttribute CityCodeReq req) {
         CommonValidator.validateNull(req);
-//        CommonValidator.validateNull(req.getCityCode(),new CityException(CityCodeEnum.CITY_CODE_IS_NULL));
+        CommonValidator.validateNull(req.getCityCode(),new CityException(CityCodeEnum.CITY_CODE_IS_NULL));
         //调用BIZ方法
         List<SysCityDTO> sysCityDTOS = sysCityBiz.getCityList(req.getCityCode());
         //将DTO转成VO
