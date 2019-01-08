@@ -175,21 +175,21 @@ public class APISignInController extends BaseController {
             customerDTO = customerBiz.getByMobile(mobile);
         }
         Subject subject = SecurityUtils.getSubject();
-        Collection<Session> sessions = sessionDAO.getActiveSessions();
-        for (Session session : sessions) {
-            if (null != session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)) {
-                Subject s = new Subject.Builder().session(session).buildSubject();
-                if (s.getPrincipal() instanceof CustomerDTO) {
-                    CustomerDTO temp = (CustomerDTO) s.getPrincipal();
-                    if (mobile.equals(temp.getMobile())) {
-                        if (!session.getId().equals(CookieUtil.getUid(request, "JSESSIONID"))) {
-                            logger.info(("删除客户" + temp.getMobile() + "的登陆session"));
-                            sessionDAO.delete(session);
-                        }
-                    }
-                }
-            }
-        }
+//        Collection<Session> sessions = sessionDAO.getActiveSessions();
+//        for (Session session : sessions) {
+//            if (null != session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)) {
+//                Subject s = new Subject.Builder().session(session).buildSubject();
+//                if (s.getPrincipal() instanceof CustomerDTO) {
+//                    CustomerDTO temp = (CustomerDTO) s.getPrincipal();
+//                    if (mobile.equals(temp.getMobile())) {
+//                        if (!session.getId().equals(CookieUtil.getUid(request, "JSESSIONID"))) {
+//                            logger.info(("删除客户" + temp.getMobile() + "的登陆session"));
+//                            sessionDAO.delete(session);
+//                        }
+//                    }
+//                }
+//            }
+//        }
         try {
             AuthToken authToken = new AuthToken(mobile, "", LoginType.CUSTOMER.toString());
             subject.login(authToken);
