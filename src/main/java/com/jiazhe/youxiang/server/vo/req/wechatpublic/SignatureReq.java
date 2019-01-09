@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  */
-package com.jiazhe.youxiang.server.vo.req;
+package com.jiazhe.youxiang.server.vo.req.wechatpublic;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;

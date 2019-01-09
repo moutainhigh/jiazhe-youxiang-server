@@ -35,6 +35,9 @@ public class WeChatPublicBiz {
     @Value("${wechat_public.secret}")
     private String WECHAT_PUBLIC_SECRET;
 
+    @Value("${wechat_public.token}")
+    private String WECHAT_PUBLIC_TOKEN;
+
     private static String URL_API_GET_TOKEN = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential";
     private static String URL_API_GET_JSAPI_TICKET = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi";
 
@@ -81,6 +84,26 @@ public class WeChatPublicBiz {
     }
 
     /**
+     * 检验signature是否来自微信服务器
+     *
+     * @param signature
+     * @param timestamp
+     * @param nonce
+     * @return
+     */
+    public boolean checkSignature(String signature, String timestamp, String nonce) {
+        /******
+         1）将token、timestamp、nonce三个参数进行字典序排序
+         2）将三个参数字符串拼接成一个字符串进行sha1加密
+         3）开发者获得加密后的字符串可与signature对比，标识该请求来源于微信
+         */
+        StringBuilder sb = new StringBuilder();
+        sb.append(nonce).append(timestamp).append(WECHAT_PUBLIC_TOKEN);
+        String checkSignature = DigestUtils.sha1Hex(sb.toString());
+        return signature.equals(checkSignature);
+    }
+
+    /**
      * 调用微信api获取公众号AccessToken
      *
      * @return
@@ -109,6 +132,7 @@ public class WeChatPublicBiz {
 
     /**
      * 调用微信api获取公众号JsapiTicket
+     *
      * @param accessToken
      * @return
      */

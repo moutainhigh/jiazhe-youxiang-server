@@ -16,8 +16,10 @@ import com.jiazhe.youxiang.server.common.enums.WeChatPublicCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.WeChatPublicException;
 import com.jiazhe.youxiang.server.dto.wechatpublic.SignatureDTO;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
-import com.jiazhe.youxiang.server.vo.req.SignatureReq;
-import com.jiazhe.youxiang.server.vo.resp.SignatureResp;
+import com.jiazhe.youxiang.server.vo.req.wechatpublic.CheckSignatureReq;
+import com.jiazhe.youxiang.server.vo.req.wechatpublic.SignatureReq;
+import com.jiazhe.youxiang.server.vo.resp.wechatpublic.CheckSignatureResp;
+import com.jiazhe.youxiang.server.vo.resp.wechatpublic.SignatureResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
@@ -71,9 +73,42 @@ public class APIWeChatPublicController {
             throw new WeChatPublicException(WeChatPublicCodeEnum.NONCE_STR_IS_NULL);
         }
         //调用BIZ方法
-        SignatureDTO dto = weChatPublicBiz.getSignature(req.getTimestamp(), req.getNonceStr(),req.getUrl());
+        SignatureDTO dto = weChatPublicBiz.getSignature(req.getTimestamp(), req.getNonceStr(), req.getUrl());
 
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildResponse(WeChatPublicAdapter.SignatureDTO2VO(dto));
+    }
+
+    /**
+     * 验证签名
+     *
+     * @return
+     */
+    @AppApi
+    @ApiOperation(value = "验证签名", httpMethod = "GET", response = CheckSignatureResp.class, notes = "验证签名")
+    @RequestMapping(value = "checkSignature", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.WECHAT_PUBLIC, operate = "验证签名", level = LogLevelEnum.LEVEL_2)
+    public Object checkSignature(@ModelAttribute CheckSignatureReq req) {
+        CommonValidator.validateNull(req);
+        if (Strings.isBlank(req.getSignature())) {
+            throw new WeChatPublicException(WeChatPublicCodeEnum.SIGNATURE_IS_NULL);
+        }
+        if (Strings.isBlank(req.getTimestamp())) {
+            throw new WeChatPublicException(WeChatPublicCodeEnum.TIMESTAMP_IS_NULL);
+        }
+        if (Strings.isBlank(req.getNonce())) {
+            throw new WeChatPublicException(WeChatPublicCodeEnum.NONCE_STR_IS_NULL);
+        }
+        if (Strings.isBlank(req.getEchostr())) {
+            throw new WeChatPublicException(WeChatPublicCodeEnum.NONCE_STR_IS_NULL);
+        }
+        //调用BIZ方法
+        boolean success = weChatPublicBiz.checkSignature(req.getSignature(), req.getTimestamp(), req.getNonce());
+        CheckSignatureResp resp = new CheckSignatureResp();
+        if (success) {
+            resp.setEchostr(req.getEchostr());
+        }
+        //用ResponseFactory将返回值包装
+        return ResponseFactory.buildResponse(resp);
     }
 }
