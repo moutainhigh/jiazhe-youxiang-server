@@ -175,9 +175,9 @@ public class WeChatPublicBiz {
          */
         StringBuilder sb = new StringBuilder();
         sb.append("jsapi_ticket=").append(jsapiTicket);
-        sb.append("noncestr=").append(nonceStr);
-        sb.append("timestamp=").append(timestamp);
-        sb.append("url=").append(url);
+        sb.append("&noncestr=").append(nonceStr);
+        sb.append("&timestamp=").append(timestamp);
+        sb.append("&url=").append(url);
         return DigestUtils.sha1Hex(sb.toString());
     }
 
