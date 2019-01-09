@@ -18,4 +18,4 @@
 |微信支付相关|115|com.jiazhe.youxiang.server.common.enums.WeChatPayCodeEnum|
 |积分卡管理|116|com.jiazhe.youxiang.server.common.enum.PointCodeEnum|
 |商家订单管理|117|com.jiazhe.youxiang.server.common.enum.PartnerOrderCodeEnum|
-|微信公众号相关|118|com.jiazhe.youxiang.server.common.enum.|
+|微信公众号相关|118|com.jiazhe.youxiang.server.common.enum.WeChatPublicCodeEnum|
