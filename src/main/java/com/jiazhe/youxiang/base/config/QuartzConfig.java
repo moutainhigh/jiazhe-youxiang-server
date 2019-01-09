@@ -25,7 +25,7 @@ public class QuartzConfig {
     /**
      * 微信接口获取结果过期时间(秒）
      */
-    private static final Integer WECHAT_API_EXPIRES_IN_TIME = 2;
+    private static final Integer WECHAT_API_EXPIRES_IN_TIME = 7200;
 
 //    @Bean
 //    public JobDetail orderQuartzDetail(){
