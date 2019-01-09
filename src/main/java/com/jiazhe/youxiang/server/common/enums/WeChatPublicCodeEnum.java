@@ -19,6 +19,8 @@ public enum WeChatPublicCodeEnum {
     URL_IS_NULL(118004, "URL_IS_NULL", "当前页面的url不能为空，且必须是完整的url"),
     GET_ACCESS_TOKEN_ERROR(118005, "GET_ACCESS_TOKEN_ERROR", "获取access_token失败"),
     GET_JSAPI_TICKET_ERROR(118006, "GET_JSAPI_TICKET_ERROR", "获取jsapi_ticket失败"),
+    SIGNATURE_IS_NULL(118007, "SIGNATURE_IS_NULL", "签名不能为空"),
+    ECHOSTR_IS_NULL(118008, "ECHOSTR_IS_NULL", "随机字符串不能为空"),
 
     ;
 

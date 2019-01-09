@@ -6,7 +6,7 @@
 package com.jiazhe.youxiang.server.adapter;
 
 import com.jiazhe.youxiang.server.dto.wechatpublic.SignatureDTO;
-import com.jiazhe.youxiang.server.vo.resp.SignatureResp;
+import com.jiazhe.youxiang.server.vo.resp.wechatpublic.SignatureResp;
 
 /**
  * 微信公众号相关Adapter
