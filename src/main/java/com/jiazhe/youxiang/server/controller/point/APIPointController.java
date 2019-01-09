@@ -58,7 +58,7 @@ public class APIPointController extends BaseController{
         return ResponseFactory.buildPaginationResponse(pointRespList, paging);
     }
 
-    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
+//    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
     @ApiOperation(value = "【APP端】客户查询所有积分卡（分页）", httpMethod = "GET", response = PointResp.class, responseContainer = "List",notes = "客户查询所有积分卡，分页")
     @RequestMapping(value = "/findbycustomeridpage", method = RequestMethod.GET)
@@ -147,7 +147,7 @@ public class APIPointController extends BaseController{
     }
 
     @AppApi
-    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
+//    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @ApiOperation(value = "通过二维码兑换积分卡", httpMethod = "POST",notes = "通过二维码兑换积分卡")
     @RequestMapping(value = "/chargebyqrcode", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "通过二维码兑换积分卡", level = LogLevelEnum.LEVEL_2)

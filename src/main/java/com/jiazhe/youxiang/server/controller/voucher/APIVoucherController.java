@@ -59,7 +59,7 @@ public class APIVoucherController extends BaseController{
         return ResponseFactory.buildPaginationResponse(rcRespList, paging);
     }
 
-    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
+//    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
     @ApiOperation(value = "【APP端】查询客户的代金券", httpMethod = "GET", response = VoucherResp.class, responseContainer = "List",notes = "查询客户可用的代金券")
     @RequestMapping(value = "/findbycustomeridpage", method = RequestMethod.GET)
