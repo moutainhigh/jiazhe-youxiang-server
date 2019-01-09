@@ -60,7 +60,7 @@ public class APIRCController extends BaseController{
         return ResponseFactory.buildPaginationResponse(rcRespList, paging);
     }
 
-    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
+//    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
     @ApiOperation(value = "【APP端】客户查询所有充值卡（分页）", httpMethod = "GET", response = RCResp.class, responseContainer = "List",notes = "客户查询所有充值卡，分页")
     @RequestMapping(value = "/findbycustomeridpage", method = RequestMethod.GET)

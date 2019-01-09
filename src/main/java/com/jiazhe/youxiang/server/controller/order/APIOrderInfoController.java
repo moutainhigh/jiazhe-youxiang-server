@@ -67,7 +67,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildPaginationResponse(orderInfoRespList, paging);
     }
 
-    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
+//    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
     @ApiOperation(value = "【APP端】分页查询订单信息", httpMethod = "GET", response = OrderInfoResp.class, responseContainer = "List", notes = "【后台】分页查询订单信息")
     @RequestMapping(value = "/customerlistpage", method = RequestMethod.GET)
@@ -83,7 +83,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildPaginationResponse(orderInfoRespList, paging);
     }
 
-    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
+//    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
     @ApiOperation(value = "【APP端】客户取消订单", httpMethod = "POST", notes = "【APP端】客户取消订单")
     @RequestMapping(value = "/customercancelorder", method = RequestMethod.POST)
@@ -93,7 +93,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
+//    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
     @ApiOperation(value = "【APP端】计算客户需要在线支付的金额", httpMethod = "GET", response = NeedPayResp.class, notes = "计算客户需要在线支付的金额")
     @RequestMapping(value = "/customerneedpaycash", method = RequestMethod.GET)
@@ -105,7 +105,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildResponse(needPayResp);
     }
 
-    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
+//    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
     @ApiOperation(value = "【APP端】支付前检查", httpMethod = "GET", notes = "支付前检查")
     @RequestMapping(value = "/prepaymentcheck", method = RequestMethod.POST)
@@ -115,7 +115,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
+//    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
     @ApiOperation(value = "【APP端】客户支付", httpMethod = "POST", response = NeedPayResp.class, notes = "客户支付")
     @RequestMapping(value = "/customerpay", method = RequestMethod.POST)
@@ -175,7 +175,7 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildResponse(needPayResp);
     }
 
-    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
+//    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
     @ApiOperation(value = "【APP端】下单", httpMethod = "POST", response = NeedPayResp.class, notes = "【APP端】下单")
     @RequestMapping(value = "/customerplaceorder", method = RequestMethod.POST)

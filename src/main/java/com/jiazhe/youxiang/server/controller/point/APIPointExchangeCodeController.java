@@ -142,7 +142,7 @@ public class APIPointExchangeCodeController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
+//    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
     @ApiOperation(value = "【APP端】客户用兑换码进行兑换", httpMethod = "POST", notes = "客户用积分卡兑换码兑换")
     @RequestMapping(value = "/customerselfcodecharge", method = RequestMethod.POST)
