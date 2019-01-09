@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.server.adapter.WeChatPublicAdapter;
 import com.jiazhe.youxiang.server.biz.WeChatPublicBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
@@ -13,6 +14,7 @@ import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.WeChatPublicCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.WeChatPublicException;
+import com.jiazhe.youxiang.server.dto.wechatpublic.SignatureDTO;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.SignatureReq;
 import com.jiazhe.youxiang.server.vo.resp.SignatureResp;
@@ -69,10 +71,9 @@ public class APIWeChatPublicController {
             throw new WeChatPublicException(WeChatPublicCodeEnum.NONCE_STR_IS_NULL);
         }
         //调用BIZ方法
-        String signature = weChatPublicBiz.getSignature(req.getTimestamp(), req.getNonceStr(),req.getUrl());
-        SignatureResp resp = new SignatureResp();
-        resp.setSignature(signature);
+        SignatureDTO dto = weChatPublicBiz.getSignature(req.getTimestamp(), req.getNonceStr(),req.getUrl());
+
         //用ResponseFactory将返回值包装
-        return ResponseFactory.buildResponse(resp);
+        return ResponseFactory.buildResponse(WeChatPublicAdapter.SignatureDTO2VO(dto));
     }
 }

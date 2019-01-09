@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSON;
 import com.jiazhe.youxiang.base.util.HttpUtil;
 import com.jiazhe.youxiang.server.common.enums.WeChatPublicCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.WeChatPublicException;
+import com.jiazhe.youxiang.server.dto.wechatpublic.SignatureDTO;
 import com.jiazhe.youxiang.server.dto.wechatpublic.WeChatAPIResultDTO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.logging.log4j.util.Strings;
@@ -16,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 在这里编写类的功能描述
@@ -32,9 +35,16 @@ public class WeChatPublicBiz {
     @Value("${wechat_public.secret}")
     private String WECHAT_PUBLIC_SECRET;
 
-
     private static String URL_API_GET_TOKEN = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential";
     private static String URL_API_GET_JSAPI_TICKET = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi";
+
+    private static String CACHE_KEY_ACCESS_TOKEN = "access_token";
+    private static String CACHE_KEY_JSAPI_TICKET = "jsapi_ticket";
+
+    /**
+     * 为减少对wechat api调用而加入的缓存，后续考虑用redis代替
+     */
+    public static ConcurrentHashMap<String, String> WECHAT_API_CACHE = new ConcurrentHashMap<>();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WeChatPublicBiz.class);
 
@@ -46,19 +56,28 @@ public class WeChatPublicBiz {
      * @param url
      * @return
      */
-    public String getSignature(String timestamp, String nonceStr, String url) {
-        //获得access_token
-        String accessToken = getAccessToken();
-        //获得jsapi_ticket
-        if (Strings.isBlank(accessToken)) {
-            throw new WeChatPublicException(WeChatPublicCodeEnum.GET_ACCESS_TOKEN_ERROR);
-        }
-        String jsapiTicket = getJsapiTicket(accessToken);
-        if (Strings.isBlank(jsapiTicket)) {
-            throw new WeChatPublicException(WeChatPublicCodeEnum.GET_JSAPI_TICKET_ERROR);
+    public SignatureDTO getSignature(String timestamp, String nonceStr, String url) {
+        String jsapiTicket = null;
+        if (Strings.isNotBlank(WECHAT_API_CACHE.get(CACHE_KEY_JSAPI_TICKET))) {
+            jsapiTicket = WECHAT_API_CACHE.get(CACHE_KEY_JSAPI_TICKET);
+        } else {
+            //获得access_token
+            String accessToken = getAccessToken();
+            //获得jsapi_ticket
+            if (Strings.isBlank(accessToken)) {
+                throw new WeChatPublicException(WeChatPublicCodeEnum.GET_ACCESS_TOKEN_ERROR);
+            }
+            jsapiTicket = getJsapiTicket(accessToken);
+            if (Strings.isBlank(jsapiTicket)) {
+                throw new WeChatPublicException(WeChatPublicCodeEnum.GET_JSAPI_TICKET_ERROR);
+            }
         }
         //执行签名算法并返回签名
-        return createSignature(jsapiTicket, timestamp, nonceStr, url);
+        String signature = createSignature(jsapiTicket, timestamp, nonceStr, url);
+        SignatureDTO signatureDTO = new SignatureDTO();
+        signatureDTO.setSignature(signature);
+        signatureDTO.setAppid(WECHAT_PUBLIC_APPID);
+        return signatureDTO;
     }
 
     /**
@@ -67,6 +86,9 @@ public class WeChatPublicBiz {
      * @return
      */
     private String getAccessToken() {
+        if (Strings.isNotBlank(WECHAT_API_CACHE.get(CACHE_KEY_ACCESS_TOKEN))) {
+            return WECHAT_API_CACHE.get(CACHE_KEY_ACCESS_TOKEN);
+        }
         StringBuilder sbURL = new StringBuilder();
         sbURL.append(URL_API_GET_TOKEN);
         sbURL.append("&appid=").append(WECHAT_PUBLIC_APPID);
@@ -75,6 +97,7 @@ public class WeChatPublicBiz {
         if (Strings.isNotBlank(resultJson)) {
             WeChatAPIResultDTO weChatAPIResultDTO = JSON.parseObject(resultJson, WeChatAPIResultDTO.class);
             if (weChatAPIResultDTO != null && Strings.isNotBlank(weChatAPIResultDTO.getAccessToken())) {
+                WECHAT_API_CACHE.put(CACHE_KEY_ACCESS_TOKEN, weChatAPIResultDTO.getAccessToken());
                 return weChatAPIResultDTO.getAccessToken();
             } else {
                 LOGGER.error("getAccessToken发生错误，api请求返回值为:{}", resultJson);
@@ -84,7 +107,15 @@ public class WeChatPublicBiz {
         return null;
     }
 
+    /**
+     * 调用微信api获取公众号JsapiTicket
+     * @param accessToken
+     * @return
+     */
     private String getJsapiTicket(String accessToken) {
+        if (Strings.isNotBlank(WECHAT_API_CACHE.get(CACHE_KEY_JSAPI_TICKET))) {
+            return WECHAT_API_CACHE.get(CACHE_KEY_JSAPI_TICKET);
+        }
         StringBuilder sbURL = new StringBuilder();
         sbURL.append(URL_API_GET_JSAPI_TICKET);
         sbURL.append("&access_token=").append(accessToken);
@@ -92,6 +123,7 @@ public class WeChatPublicBiz {
         if (Strings.isNotBlank(resultJson)) {
             WeChatAPIResultDTO weChatAPIResultDTO = JSON.parseObject(resultJson, WeChatAPIResultDTO.class);
             if (weChatAPIResultDTO != null && Strings.isNotBlank(weChatAPIResultDTO.getTicket())) {
+                WECHAT_API_CACHE.put(CACHE_KEY_JSAPI_TICKET, weChatAPIResultDTO.getTicket());
                 return weChatAPIResultDTO.getTicket();
             } else {
                 LOGGER.error("getJsapiTicket发生错误，api请求返回值为:{}", resultJson);
@@ -103,6 +135,7 @@ public class WeChatPublicBiz {
 
     /**
      * 生成签名
+     *
      * @param jsapiTicket
      * @param timestamp
      * @param nonceStr

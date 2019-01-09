@@ -3,24 +3,26 @@
  * All rights reserved.
  *
  */
-package com.jiazhe.youxiang.server.vo.resp;
+package com.jiazhe.youxiang.server.dto.wechatpublic;
 
-import com.jiazhe.youxiang.server.vo.BaseVO;
-import io.swagger.annotations.ApiModelProperty;
+import com.jiazhe.youxiang.server.vo.BaseObject;
 
 /**
- * 签名Resp
+ * 在这里编写类的功能描述
  *
  * @author niexiao
- * @created 2019/1/8
+ * @created 2019/1/9
  */
-public class SignatureResp extends BaseVO {
-    private static final long serialVersionUID = -8274751526345543268L;
+public class SignatureDTO extends BaseObject {
 
-    @ApiModelProperty("签名")
+    /**
+     * 签名
+     */
     private String signature;
 
-    @ApiModelProperty("appid")
+    /**
+     * appid
+     */
     private String appid;
 
     public String getSignature() {
