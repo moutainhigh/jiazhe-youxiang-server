@@ -542,7 +542,7 @@
                     }
                     var imgUrls = result.imgUrls.split(",");
                     for (var i = 0; i < imgUrls.length; i++) {
-                        $("#pics").append("<img class='item' onmouseover=\"this.style.cursor='pointer';this.style.cursor='hand'\"  onmouseout=\"this.style.cursor='default'\" onclick=\"javascript:showimage('/api/preview/img/" + imgUrls[i] + "');\" src='/api/preview/img/" + imgUrls[i] + "'>")
+                        $("#pics").append("<img class='item' onmouseover=\"this.style.cursor='pointer';this.style.cursor='hand'\"  onmouseout=\"this.style.cursor='default'\" onclick=\"javascript:showimage('/static/" + imgUrls[i] + "');\" src='/static/" + imgUrls[i] + "'>")
                     }
                 }
             },
