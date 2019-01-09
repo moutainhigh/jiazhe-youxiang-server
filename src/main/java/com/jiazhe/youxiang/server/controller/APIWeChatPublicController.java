@@ -104,11 +104,10 @@ public class APIWeChatPublicController {
         }
         //调用BIZ方法
         boolean success = weChatPublicBiz.checkSignature(req.getSignature(), req.getTimestamp(), req.getNonce());
-        CheckSignatureResp resp = new CheckSignatureResp();
         if (success) {
-            resp.setEchostr(req.getEchostr());
+            //特殊接口，不用包装
+            return req.getEchostr();
         }
-        //特殊接口，不用包装
-        return resp;
+        return "";
     }
 }
