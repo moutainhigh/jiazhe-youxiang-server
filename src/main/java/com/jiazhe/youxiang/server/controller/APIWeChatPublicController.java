@@ -84,7 +84,6 @@ public class APIWeChatPublicController {
      *
      * @return
      */
-    @AppApi
     @ApiOperation(value = "验证签名", httpMethod = "GET", response = CheckSignatureResp.class, notes = "验证签名")
     @RequestMapping(value = "checkSignature", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.WECHAT_PUBLIC, operate = "验证签名", level = LogLevelEnum.LEVEL_2)
