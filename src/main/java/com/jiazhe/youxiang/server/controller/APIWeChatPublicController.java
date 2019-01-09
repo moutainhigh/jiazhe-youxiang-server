@@ -108,7 +108,7 @@ public class APIWeChatPublicController {
         if (success) {
             resp.setEchostr(req.getEchostr());
         }
-        //用ResponseFactory将返回值包装
-        return ResponseFactory.buildResponse(resp);
+        //特殊接口，不用包装
+        return resp;
     }
 }
