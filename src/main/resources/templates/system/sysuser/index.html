@@ -203,19 +203,20 @@
             colNames: ['', '登录名', '员工姓名', '电话', '最后登录时间', '最后登录ip', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
-                {name: 'loginName', index: 'loginName', sortable: false},
-                {name: 'displayName', index: 'displayName', sortable: false},
-                {name: 'mobile', index: 'mobile', sortable: false},
+                {name: 'loginName', width:30, index: 'loginName', sortable: false},
+                {name: 'displayName', width:30, index: 'displayName', sortable: false},
+                {name: 'mobile', width:50, index: 'mobile', sortable: false},
                 {
                     name: 'lastLoginTime',
+                    width:80,
                     index: 'lastLoginTime',
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return timeFormat(rowObject.lastLoginTime);
                     }
                 },
-                {name: 'lastLoginIp', index: 'lastLoginIp', sortable: false},
-                {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
+                {name: 'lastLoginIp', width:70, index: 'lastLoginIp', sortable: false},
+                {name: '_action', width:110, index: '_action', sortable: false, formatter: customFormatter}
             ],
             caption: "员工列表"
         };

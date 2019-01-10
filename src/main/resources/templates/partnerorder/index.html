@@ -369,8 +369,11 @@
                                 <label class="col-sm-4 control-label no-padding-right">兑换密钥：</label>
                                 <div class="col-sm-8">
                                     <div class="pos-rel">
-                                        <input id="saveKeyt" name="keyt" class="form-control"
-                                               type="text" style="height:30px"/>
+                                        <!--<input id="saveKeyt" name="keyt" class="form-control"-->
+                                               <!--type="text" style="height:30px"/>-->
+                                        <textarea id="saveKeyt" name="keyt"
+                                                  class="form-control"
+                                                  style="resize:none;height: 100px"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -412,8 +415,11 @@
                                 <label class="col-sm-4 control-label no-padding-right">预约地点：</label>
                                 <div class="col-sm-8">
                                     <div class="pos-rel">
-                                        <input id="saveCustomerAddress" name="customerAddress" class="form-control"
-                                               type="text" style="height:30px"/>
+                                        <!--<input id="saveCustomerAddress" name="customerAddress" class="form-control"-->
+                                               <!--type="text" style="height:30px"/>-->
+                                        <textarea id="saveCustomerAddress" name="customerAddress"
+                                                  class="form-control"
+                                                  style="resize:none;height: 100px"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -722,6 +728,7 @@
         $("#modal-partnerOrder").modal("show");
         $("#partnerOrderForm input").attr("disabled", "disabled");
         $("#partnerOrderForm select").attr("disabled", "disabled");
+        $("#partnerOrderForm textarea").attr("disabled", "disabled");
     }
 
     function openEdit(id) {
@@ -731,6 +738,7 @@
         $("#modal-partnerOrder").modal("show");
         $("#partnerOrderForm input").removeAttr("disabled");
         $("#partnerOrderForm select").removeAttr("disabled");
+        $("#partnerOrderForm textarea").removeAttr("disabled");
     }
 
     function openNew() {
@@ -748,10 +756,12 @@
         $("#modal-partnerOrder").modal("show");
         $("#partnerOrderForm input").removeAttr("disabled");
         $("#partnerOrderForm select").removeAttr("disabled");
+        $("#partnerOrderForm textarea").removeAttr("disabled");
     }
 
     function initForm() {
         $("#partnerOrderForm input").val('');
+        $("#partnerOrderForm textarea").val('');
         $("#saveCustomerCityCode option:first").prop("selected", 'selected');
         $("#saveOrderSource option:first").prop("selected", 'selected');
         $("#savePartner option:first").prop("selected", 'selected');
