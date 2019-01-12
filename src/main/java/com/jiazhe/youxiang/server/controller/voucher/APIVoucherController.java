@@ -125,10 +125,13 @@ public class APIVoucherController extends BaseController{
         if(req.getEffectiveTime()==0){
             throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_IS_NULL);
         }
-        req.setEffectiveTime(DateUtil.getFirstSecond(req.getEffectiveTime()));
         if(req.getExpiryTime()==0){
             throw new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL);
         }
+        if(req.getEffectiveTime() > req.getExpiryTime()){
+            throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_LATER_VOUCHER_EXPIRY_TIME);
+        }
+        req.setEffectiveTime(DateUtil.getFirstSecond(req.getEffectiveTime()));
         req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
         VoucherEditDTO dto = VoucherAdapter.EditReq2EditDTO(req);
         voucherBiz.editSave(dto);

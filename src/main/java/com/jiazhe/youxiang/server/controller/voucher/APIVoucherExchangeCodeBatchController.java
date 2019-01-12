@@ -90,16 +90,22 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
         if (req.getVoucherEffectiveTime() == CommonConstant.NULL_TIME) {
             throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_IS_NULL);
         }
+        if(req.getVoucherEffectiveTime() > req.getExpiryTime()){
+            throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_LATER_BATCH_EXPIRY_TIME);
+        }
         req.setVoucherEffectiveTime(DateUtil.getFirstSecond(req.getVoucherEffectiveTime()));
         //代金券过期时间为指定的时间
         if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXPIRY_TIME)) {
             if (req.getVoucherExpiryTime() == CommonConstant.NULL_TIME) {
                 throw new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL);
             }
+            if(req.getVoucherEffectiveTime()> req.getVoucherExpiryTime()){
+                throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_LATER_VOUCHER_EXPIRY_TIME);
+            }
             req.setValidityPeriod(0);
             req.setVoucherExpiryTime(DateUtil.getLastSecond(req.getVoucherExpiryTime()));
         }
-        if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_PERIOD)) {
+        if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXPIRY_PERIOD)) {
             CommonValidator.validateNull(req.getValidityPeriod(), new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL));
             req.setVoucherExpiryTime(DateUtil.getLastSecond(System.currentTimeMillis()));
         }

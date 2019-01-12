@@ -269,7 +269,9 @@
                     width: 50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.used == 1 ? "已使用" : "未使用";
+                        var text = rowObject.used == 1 ? "已使用" : "未使用";
+                        var color = rowObject.used == 1 ?  "FF0000" : "00FF00";
+                        return generateSpan(text, color)
                     }
                 },
                 {

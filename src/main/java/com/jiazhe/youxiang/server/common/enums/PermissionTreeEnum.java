@@ -23,13 +23,13 @@ public enum PermissionTreeEnum {
     //绑定积分卡
     CUSTOMER_POINT_BINDING(105, 1, "绑定积分卡", PermissionConstant.CUSTOMER_POINT_BINDING),
     //直接充值积分卡
-    CUSTOMER_POINT_RECHARGE(106, 1, "直接充值积分卡", PermissionConstant.CUSTOMER_POINT_RECHARGE),
+    CUSTOMER_POINT_RECHARGE(106, 1, "直接充值积分卡", PermissionConstant.CUSTOMER_POINT_CHARGE),
     //查看充值卡
     CUSTOMER_RECHARGE_CARD_DETAIL(107, 1, "查看充值卡", PermissionConstant.CUSTOMER_RECHARGE_CARD_DETAIL),
     //绑定充值卡
     CUSTOMER_RECHARGE_CARD_BINDING(108, 1, "绑定充值卡", PermissionConstant.CUSTOMER_RECHARGE_CARD_BINDING),
     //直接充值充值卡
-    CUSTOMER_RECHARGE_CARD_RECHARGE(109, 1, "直接充值充值卡", PermissionConstant.CUSTOMER_RECHARGE_CARD_RECHARGE),
+    CUSTOMER_RECHARGE_CARD_RECHARGE(109, 1, "直接充值充值卡", PermissionConstant.CUSTOMER_RECHARGE_CARD_CHARGE),
     //查看代金券
     CUSTOMER_VOUCHER_DETAIL(110, 1, "查看代金券", PermissionConstant.CUSTOMER_VOUCHER_DETAIL),
     //绑定代金券

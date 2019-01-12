@@ -104,19 +104,25 @@ public class APIRCExchangeCodeBatchController extends BaseController {
            CommonValidator.validateNull(req.getFaceValue(),new RechargeCardException(RechargeCardCodeEnum.NOT_VIRTUAL_NEED_FACE_VALUE));
         }
         //批次过期时间不为空
-        if(req.getExpiryTime()==0){
+        if(req.getExpiryTime() == CommonConstant.NULL_TIME){
             throw new RechargeCardException(RechargeCardCodeEnum.BATCH_EXPIRY_TIME_IS_NULL);
         }
         req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
-        if(req.getRechargeCardEffectiveTime()==0){
+        //充值卡生效时间为空
+        if(req.getRechargeCardEffectiveTime()==CommonConstant.NULL_TIME){
             throw new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EFFECTIVE_TIME_IS_NULL);
         }
+        if(req.getRechargeCardEffectiveTime() > req.getExpiryTime()){
+            throw new RechargeCardException(RechargeCardCodeEnum.RC_EFFECTIVE_TIME_LATER_BATCH_EXPIRY_TIME);
+        }
         req.setRechargeCardEffectiveTime(DateUtil.getFirstSecond(req.getRechargeCardEffectiveTime()));
-        req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
         //充值卡过期时间为指定的时间
         if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
-            if(req.getRechargeCardExpiryTime()==0){
+            if(req.getRechargeCardExpiryTime()==CommonConstant.NULL_TIME){
                 throw new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRY_TIME_IS_NULL);
+            }
+            if(req.getRechargeCardEffectiveTime()> req.getRechargeCardExpiryTime()){
+                throw new RechargeCardException(RechargeCardCodeEnum.RC_EFFECTIVE_TIME_LATER_RC_EXPIRY_TIME);
             }
             req.setRechargeCardExpiryTime(DateUtil.getLastSecond(req.getRechargeCardExpiryTime()));
             req.setValidityPeriod(0);
