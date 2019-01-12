@@ -343,6 +343,7 @@
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
     var auditRecordStatus = ['待审核', '未通过', '已通过'];
+    var auditRecordColor = ['0000FF','FF0000','00FF00']
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -403,7 +404,7 @@
                     index: 'status',
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return auditRecordStatus[rowObject.status];
+                        return generateSpan(auditRecordStatus[rowObject.status],auditRecordColor[rowObject.status]);
                     }
                 },
                 {name: 'customerName', index: 'customerName', sortable: false},
