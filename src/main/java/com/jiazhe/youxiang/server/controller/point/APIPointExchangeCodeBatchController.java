@@ -117,11 +117,17 @@ public class APIPointExchangeCodeBatchController extends BaseController {
         if (req.getPointEffectiveTime() == CommonConstant.NULL_TIME) {
             throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_IS_NULL);
         }
+        if(req.getPointEffectiveTime() > req.getExpiryTime()){
+            throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_LATER_BATCH_EXPIRY_TIME);
+        }
         req.setPointEffectiveTime(DateUtil.getFirstSecond(req.getPointEffectiveTime()));
         //积分卡过期时间为指定的时间
         if (req.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
             if (req.getPointExpiryTime() == CommonConstant.NULL_TIME) {
                 throw new PointException(PointCodeEnum.POINT_EXPIRY_TIME_IS_NULL);
+            }
+            if(req.getPointEffectiveTime()> req.getPointExpiryTime()){
+                throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_LATER_POINT_EXPIRY_TIME);
             }
             req.setPointExpiryTime(DateUtil.getLastSecond(req.getPointExpiryTime()));
             req.setValidityPeriod(0);

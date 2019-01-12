@@ -118,7 +118,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
         CommonValidator.validateNull(req.getVoucherName(),new VoucherException(VoucherCodeEnum.VOUCHER_NAME_IS_NULL));
         CommonValidator.validateNull(req.getCityCodes(), new VoucherException(VoucherCodeEnum.CITY_IS_NULL));
         CommonValidator.validateNull(req.getProductIds(), new VoucherException(VoucherCodeEnum.PRODUCT_IS_NULL));
-        if(req.getExpiryTime()==0){
+        if(req.getExpiryTime()==CommonConstant.NULL_TIME){
             throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
         }
         req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
@@ -126,10 +126,16 @@ public class APIVoucherExchangeCodeController extends BaseController {
         if (req.getVoucherEffectiveTime() == CommonConstant.NULL_TIME) {
             throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_IS_NULL);
         }
+        if(req.getVoucherEffectiveTime() > req.getExpiryTime()){
+            throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_LATER_CODE_EXPIRY_TIME);
+        }
         req.setVoucherEffectiveTime(DateUtil.getFirstSecond(req.getVoucherEffectiveTime()));
         if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXPIRY_TIME)) {
             if(req.getVoucherExpiryTime()==CommonConstant.NULL_TIME){
                 throw new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL);
+            }
+            if(req.getVoucherEffectiveTime() > req.getVoucherExpiryTime()){
+                throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_LATER_VOUCHER_EXPIRY_TIME);
             }
             req.setVoucherExpiryTime(DateUtil.getLastSecond(req.getVoucherExpiryTime()));
         }

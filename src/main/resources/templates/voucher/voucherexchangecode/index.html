@@ -136,22 +136,6 @@
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveExpiryTime">兑换码过期时间：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-group">
-                                                            <input class="form-control date-picker" id="saveExpiryTime"
-                                                                  type="text" readonly />
-                                                            <span class="input-group-addon">
-                                                                        <i class="fa fa-calendar bigger-110"></i>
-                                                                    </span>
-                                                            <input type="hidden" value=0 name="expiryTime"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right"
                                                            for="saveVoucherEffectiveTime">代金券生效时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
@@ -161,6 +145,22 @@
                                                                             <i class="fa fa-calendar bigger-110"></i>
                                                                         </span>
                                                             <input type="hidden" value=0 name="voucherEffectiveTime"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveExpiryTime">兑换码过期时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker" id="saveExpiryTime"
+                                                                  type="text" readonly />
+                                                            <span class="input-group-addon">
+                                                                        <i class="fa fa-calendar bigger-110"></i>
+                                                                    </span>
+                                                            <input type="hidden" value=0 name="expiryTime"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -302,7 +302,9 @@
                     width: 30,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.used == 1 ? "已使用" : "未使用";
+                        var text = rowObject.used == 1 ? "已使用" : "未使用";
+                        var color = rowObject.used == 1 ?  "FF0000" : "00FF00";
+                        return generateSpan(text, color)
                     }
                 },
                 {name: 'customerResp.mobile', index: 'customerResp.mobile', width: 60, sortable: false},

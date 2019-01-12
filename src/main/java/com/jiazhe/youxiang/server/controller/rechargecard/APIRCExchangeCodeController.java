@@ -121,17 +121,23 @@ public class APIRCExchangeCodeController extends BaseController{
         CommonValidator.validateNull(req.getRechargeCardName(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));
         CommonValidator.validateNull(req.getCityCodes(), new RechargeCardException(RechargeCardCodeEnum.CITY_IS_NULL));
         CommonValidator.validateNull(req.getProductIds(), new RechargeCardException(RechargeCardCodeEnum.PRODUCT_IS_NULL));
-        if(req.getExpiryTime()==0){
+        if(req.getExpiryTime()==CommonConstant.NULL_TIME){
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
         }
         req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
-        if(req.getRechargeCardEffectiveTime()==0){
+        if(req.getRechargeCardEffectiveTime()==CommonConstant.NULL_TIME){
             throw new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EFFECTIVE_TIME_IS_NULL);
+        }
+        if(req.getRechargeCardEffectiveTime() > req.getExpiryTime()){
+            throw new RechargeCardException(RechargeCardCodeEnum.RC_EFFECTIVE_TIME_LATER_CODE_EXPIRY_TIME);
         }
         req.setRechargeCardEffectiveTime(DateUtil.getFirstSecond(req.getRechargeCardEffectiveTime()));
         if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
-            if(req.getRechargeCardExpiryTime()==0){
+            if(req.getRechargeCardExpiryTime()==CommonConstant.NULL_TIME){
                 throw new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRY_TIME_IS_NULL);
+            }
+            if(req.getRechargeCardEffectiveTime() > req.getRechargeCardExpiryTime()){
+                throw new RechargeCardException(RechargeCardCodeEnum.RC_EFFECTIVE_TIME_LATER_RC_EXPIRY_TIME);
             }
             req.setRechargeCardExpiryTime(DateUtil.getLastSecond(req.getRechargeCardExpiryTime()));
         }

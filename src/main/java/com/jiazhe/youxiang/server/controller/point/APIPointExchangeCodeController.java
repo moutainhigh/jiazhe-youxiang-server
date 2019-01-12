@@ -127,10 +127,16 @@ public class APIPointExchangeCodeController extends BaseController {
         if (req.getPointEffectiveTime() == CommonConstant.NULL_TIME) {
             throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_IS_NULL);
         }
+        if(req.getPointEffectiveTime() > req.getExpiryTime()){
+            throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_LATER_CODE_EXPIRY_TIME);
+        }
         req.setPointEffectiveTime(DateUtil.getFirstSecond(req.getPointEffectiveTime()));
         if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
             if (req.getPointExpiryTime() == CommonConstant.NULL_TIME) {
                 throw new PointException(PointCodeEnum.POINT_EXPIRY_TIME_IS_NULL);
+            }
+            if(req.getPointEffectiveTime() > req.getPointExpiryTime()){
+                throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_LATER_POINT_EXPIRY_TIME);
             }
             req.setPointExpiryTime(DateUtil.getLastSecond(req.getPointExpiryTime()));
         }

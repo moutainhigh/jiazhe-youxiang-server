@@ -305,7 +305,9 @@
                     width: 30,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.status == 1 ? "已兑换" : "未兑换";
+                        var text = rowObject.status == 1 ? "已兑换" : "未兑换";
+                        var color = rowObject.status == 1 ?  "FF0000" : "00FF00";
+                        return generateSpan(text, color)
                     }
                 },
                 {
