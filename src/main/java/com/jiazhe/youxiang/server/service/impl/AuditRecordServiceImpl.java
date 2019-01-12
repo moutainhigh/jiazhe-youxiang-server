@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl;
 
+import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.AuditRecordAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
@@ -121,6 +122,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
             throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
         if(auditRecordPO.getExchangePoint().compareTo(BigDecimal.ZERO) == 1){
+            CommonValidator.validateNull(exchangeBatchId,new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_BATCH_IS_NULL));
             PointExchangeCodeBatchEditDTO exchangeBatchEditDTO = pointExchangeCodeBatchService.getById(exchangeBatchId);
             PointPO pointPO = new PointPO();
             //直接指定过期时间
@@ -158,6 +160,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
             pointIds = pointIds + pointPO.getId() + ",";
         }
         if(auditRecordPO.getGivingPoint().compareTo(BigDecimal.ZERO)==1){
+            CommonValidator.validateNull(givingBatchId,new AuditRecordException(AuditRecordCodeEnum.GIVING_BATCH_IS_NULL));
             PointExchangeCodeBatchEditDTO givingBatchEditDTO = pointExchangeCodeBatchService.getById(givingBatchId);
             PointPO pointPO = new PointPO();
             //直接指定过期时间
@@ -166,9 +169,10 @@ public class AuditRecordServiceImpl implements AuditRecordService {
             } else {
                 pointPO.setExpiryTime(new Date(System.currentTimeMillis() + givingBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY));
             }
+            pointPO.setEffectiveTime(givingBatchEditDTO.getPointEffectiveTime());
             pointPO.setDescription(givingBatchEditDTO.getDescription());
-            pointPO.setFaceValue(auditRecordPO.getExchangePoint());
-            pointPO.setBalance(auditRecordPO.getExchangePoint());
+            pointPO.setFaceValue(auditRecordPO.getGivingPoint());
+            pointPO.setBalance(auditRecordPO.getGivingPoint());
             //暂时置为0，等生成了兑换记录再修改
             pointPO.setExchangeRecordId(0);
             pointPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());

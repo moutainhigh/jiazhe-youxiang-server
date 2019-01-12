@@ -493,7 +493,7 @@
         if (permission.indexOf("customerPointBindig") != -1) {
             str += getFunctionButton("btn-yellow", "openPointCharge(" + rowObject.id + ")", "绑定");
         }
-        if (permission.indexOf("customerPointRecharge") != -1) {
+        if (permission.indexOf("customerPointCharge") != -1) {
             str += getFunctionButton("btn-yellow", "openPointDirectCharge(" + rowObject.id + ")", "充值");
         }
         return str;
@@ -508,7 +508,7 @@
         if (permission.indexOf("customerRechargeCardBindig") != -1) {
             str += getFunctionButton("btn-yellow", "openCharge(" + rowObject.id + ")", "绑定");
         }
-        if (permission.indexOf("customerRechargeCardRecharge") != -1) {
+        if (permission.indexOf("customerRechargeCardCharge") != -1) {
             str += getFunctionButton("btn-yellow", "openDirectCharge(" + rowObject.id + ")", "充值");
         }
         return str;
