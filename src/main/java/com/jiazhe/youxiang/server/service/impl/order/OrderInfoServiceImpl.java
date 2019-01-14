@@ -289,8 +289,11 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if (!bean.getCustomerId().equals(orderInfoPO.getCustomerId())) {
                     throw new OrderException(OrderCodeEnum.VOUCHER_IS_NOT_YOURS);
                 }
-                if (bean.getStatus().equals(Byte.valueOf("0")) || bean.getUsed().equals(Byte.valueOf("1"))) {
-                    throw new OrderException(OrderCodeEnum.ORDER_VOUCHER_PAY_ERROR);
+                if (bean.getUsed().equals(Byte.valueOf("1"))) {
+                    throw new OrderException(OrderCodeEnum.VOUCHER_USED);
+                }
+                if(bean.getStatus().equals(Byte.valueOf("0"))){
+                    throw new OrderException(OrderCodeEnum.VOUCHER_STOP_USING);
                 }
                 if (bean.getExpiryTime().getTime() < System.currentTimeMillis()) {
                     throw new OrderException(OrderCodeEnum.VOUCHER_IS_EXPIRY);
@@ -336,7 +339,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                     throw new OrderException(OrderCodeEnum.POINT_IS_NOT_YOURS);
                 }
                 if (bean.getStatus().equals(Byte.valueOf("0"))) {
-                    throw new OrderException(OrderCodeEnum.ORDER_POINT_CARD_PAY_ERROR);
+                    throw new OrderException(OrderCodeEnum.POINT_STOP_USING);
                 }
                 if (!bean.getCityCodes().contains(orderInfoPO.getCustomerCityCode())) {
                     throw new OrderException(OrderCodeEnum.POINT_NOT_SUPPORT_CITY);
@@ -383,7 +386,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_NOT_YOURS);
                 }
                 if (bean.getStatus().equals(Byte.valueOf("0"))) {
-                    throw new OrderException(OrderCodeEnum.ORDER_RECHARGE_CARD_PAY_ERROR);
+                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_STOP_USING);
                 }
                 if (bean.getExpiryTime().getTime() < System.currentTimeMillis()) {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_EXPIRY);
@@ -500,8 +503,11 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if (!bean.getCustomerId().equals(customerDTO.getId())) {
                     throw new OrderException(OrderCodeEnum.VOUCHER_IS_NOT_YOURS);
                 }
-                if (bean.getStatus().equals(Byte.valueOf("0")) || bean.getUsed().equals(Byte.valueOf("1"))) {
-                    throw new OrderException(OrderCodeEnum.ORDER_VOUCHER_PAY_ERROR);
+                if (bean.getUsed().equals(Byte.valueOf("1"))) {
+                    throw new OrderException(OrderCodeEnum.VOUCHER_USED);
+                }
+                if(bean.getStatus().equals(Byte.valueOf("0"))){
+                    throw new OrderException(OrderCodeEnum.VOUCHER_STOP_USING);
                 }
                 if (bean.getExpiryTime().getTime() < System.currentTimeMillis()) {
                     throw new OrderException(OrderCodeEnum.VOUCHER_IS_EXPIRY);
@@ -546,7 +552,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                     throw new OrderException(OrderCodeEnum.POINT_IS_NOT_YOURS);
                 }
                 if (bean.getStatus().equals(Byte.valueOf("0"))) {
-                    throw new OrderException(OrderCodeEnum.ORDER_POINT_CARD_PAY_ERROR);
+                    throw new OrderException(OrderCodeEnum.POINT_STOP_USING);
                 }
                 if (!bean.getCityCodes().contains(dto.getCustomerCityCode())) {
                     throw new OrderException(OrderCodeEnum.POINT_NOT_SUPPORT_CITY);
@@ -592,7 +598,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_NOT_YOURS);
                 }
                 if (bean.getStatus().equals(Byte.valueOf("0"))) {
-                    throw new OrderException(OrderCodeEnum.ORDER_RECHARGE_CARD_PAY_ERROR);
+                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_STOP_USING);
                 }
                 if (bean.getExpiryTime().getTime() < System.currentTimeMillis()) {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_EXPIRY);
