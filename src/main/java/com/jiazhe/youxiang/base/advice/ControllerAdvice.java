@@ -9,6 +9,8 @@ import com.google.common.collect.Maps;
 import com.jiazhe.youxiang.base.util.IpAdrressUtil;
 import com.jiazhe.youxiang.server.biz.SysLogBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.exceptions.CommonException;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.vo.BaseVO;
@@ -27,10 +29,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
@@ -47,12 +51,6 @@ import java.util.Map;
 @Aspect
 public class ControllerAdvice {
     private static final Logger LOGGER = LoggerFactory.getLogger("Out_Request");
-
-    private static final String HTTP_API_REQ_COUNT = "http_api_req_count";
-    private static final String HTTP_API_REQ_DURATION = "http_api_req_duration";
-
-    private static final String CODE_SUCCEED = "0";
-    private static final String CODE_NOT_SUCCEED = "1";
 
     @Value("${log.level}")
     private Integer logLevel;
@@ -100,8 +98,11 @@ public class ControllerAdvice {
             retVal = joinPoint.proceed();
         } catch (Exception e) {
             isSuccess = false;
-            long expendTime = System.currentTimeMillis() - start;
-            Metrics.counter(HTTP_API_REQ_COUNT, "method", methodName.toString(), "code", CODE_NOT_SUCCEED).increment();
+            Metrics.counter(CommonConstant.HTTP_API_REQ_COUNT, "method", methodName.toString(), "code", CommonConstant.CODE_NOT_SUCCEED).increment();
+            if (!(e instanceof CommonException) && !(e instanceof ServletException) && !(e instanceof BindException)) {
+                //记录内部异常量
+                Metrics.counter(CommonConstant.HTTP_API_REQ_COUNT, "method", methodName.toString(), "code", CommonConstant.CODE_INTERNAL_ERROR).increment();
+            }
             LOGGER.info("Exception HTTP调用{}方法发生问题,入参:{}，message:{},stack:{}", methodName, argsSB.toString(), e.getMessage(), e.fillInStackTrace());
             throw e;
         } finally {
@@ -110,8 +111,8 @@ public class ControllerAdvice {
                 String retValInString = retVal != null ? customToString(retVal) : "null";
                 LOGGER.info("End HTTP调用{}方法成功,入参:{}，返回值:{},耗时:{}ms", methodName, argsSB.toString(), retValInString, expendTime);
                 insertLog(joinPoint, getDetail(simpleMethodName, argsSB.toString()));
-                Metrics.counter(HTTP_API_REQ_COUNT, "method", simpleMethodName.toString(), "code", CODE_SUCCEED).increment();
-                Metrics.counter(HTTP_API_REQ_DURATION, "method", simpleMethodName.toString(), "code", CODE_SUCCEED).increment(expendTime);
+                Metrics.counter(CommonConstant.HTTP_API_REQ_COUNT, "method", simpleMethodName.toString(), "code", CommonConstant.CODE_SUCCEED).increment();
+                Metrics.counter(CommonConstant.HTTP_API_REQ_DURATION, "method", simpleMethodName.toString(), "code", CommonConstant.CODE_SUCCEED).increment(expendTime);
             }
         }
         return retVal;

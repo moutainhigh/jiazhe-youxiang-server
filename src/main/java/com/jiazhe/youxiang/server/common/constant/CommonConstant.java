@@ -16,6 +16,28 @@ import java.math.BigDecimal;
 public class CommonConstant {
 
     /**
+     * 计数监控key
+     */
+    public static final String HTTP_API_REQ_COUNT = "http_api_req_count";/**
+     * 耗时监控key
+     */
+    public static final String HTTP_API_REQ_DURATION = "http_api_req_duration";
+    /**
+     * 请求成功code
+     */
+    public static final String CODE_SUCCEED = "0";
+    /**
+     * 请求失败code
+     */
+    public static final String CODE_NOT_SUCCEED = "1";
+    /**
+     * 请求内部异常code
+     */
+    public static final String CODE_INTERNAL_ERROR = "2";
+
+
+
+    /**
      * 业务失败异常类型，当用此类型返回异常时，当前请求会被标示成失败请求
      */
     public static final String BUSINESS_ERROR = "BUSINESS_ERROR";
