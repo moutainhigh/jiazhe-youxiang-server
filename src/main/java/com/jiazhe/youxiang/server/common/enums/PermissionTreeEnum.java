@@ -111,41 +111,53 @@ public enum PermissionTreeEnum {
     //信息查询
     INFO_SEARCH(6, 0, "信息查询", PermissionConstant.INFO_SEARCH),
     //积分卡兑换码查询
-    POINT_CODE_SEARCH(601, 6, "积分卡兑换码查询", PermissionConstant.POINT_CODE_SEARCH),
-    //积分卡兑换码修改
-    POINT_CODE_SEARCH_EDIT(60101, 601, "积分卡兑换码修改", PermissionConstant.POINT_CODE_SEARCH_EDIT),
-    //积分卡兑换码启、停用
-    POINT_CODE_SEARCH_STATUS_CHANGE(60102, 601, "积分卡兑换码启、停用", PermissionConstant.POINT_CODE_SEARCH_STATUS_CHANGE),
+    POINT_CODE_SEARCH_PAGE(601, 6, "积分卡兑换码查询", PermissionConstant.POINT_CODE_SEARCH),
+    //兑换码查询
+    POINT_CODE_SEARCH_SEARCH(60101, 601, "兑换码查询", PermissionConstant.POINT_CODE_SEARCH),
+    //兑换码修改
+    POINT_CODE_SEARCH_EDIT(60102, 601, "兑换码修改", PermissionConstant.POINT_CODE_SEARCH_EDIT),
+    //兑换码启、停用
+    POINT_CODE_SEARCH_STATUS_CHANGE(60103, 601, "兑换码启、停用", PermissionConstant.POINT_CODE_SEARCH_STATUS_CHANGE),
     //积分卡查询
-    POINT_SEARCH(602, 6, "积分卡查询", PermissionConstant.POINT_SEARCH),
+    POINT_SEARCH_PAGE(602, 6, "积分卡查询", PermissionConstant.POINT_SEARCH),
+    //积分卡查询
+    POINT_SEARCH(60201, 602, "积分卡查询", PermissionConstant.POINT_SEARCH),
     //积分卡修改
-    POINT_SEARCH_EDIT(60201, 602, "积分卡修改", PermissionConstant.POINT_SEARCH_EDIT),
+    POINT_SEARCH_EDIT(60202, 602, "积分卡修改", PermissionConstant.POINT_SEARCH_EDIT),
     //积分卡启、停用
-    POINT_SEARCH_STATUS_CHANGE(60202, 602, "积分卡启、停用", PermissionConstant.POINT_SEARCH_STATUS_CHANGE),
+    POINT_SEARCH_STATUS_CHANGE(60203, 602, "积分卡启、停用", PermissionConstant.POINT_SEARCH_STATUS_CHANGE),
     //充值卡兑换码查询
-    RECHARGE_CARD_CODE_SEARCH(603, 6, "充值卡兑换码查询", PermissionConstant.RECHARGE_CARD_CODE_SEARCH),
-    //充值卡兑换码修改
-    RECHARGE_CARD_CODE_SEARCH_EDIT(60301, 603, "充值卡兑换码修改", PermissionConstant.RECHARGE_CARD_CODE_SEARCH_EDIT),
-    //充值卡兑换码启、停用
-    RECHARGE_CARD_CODE_SEARCH_STATUS_CHANGE(60302, 603, "充值卡兑换码启、停用", PermissionConstant.RECHARGE_CARD_CODE_SEARCH_STATUS_CHANGE),
+    RECHARGE_CARD_CODE_SEARCH_PAGE(603, 6, "充值卡兑换码查询", PermissionConstant.RECHARGE_CARD_CODE_SEARCH),
+    //兑换码查询
+    RECHARGE_CARD_CODE_SEARCH(60301, 603, "兑换码查询", PermissionConstant.RECHARGE_CARD_CODE_SEARCH),
+    //兑换码修改
+    RECHARGE_CARD_CODE_SEARCH_EDIT(60302, 603, "兑换码修改", PermissionConstant.RECHARGE_CARD_CODE_SEARCH_EDIT),
+    //兑换码启、停用
+    RECHARGE_CARD_CODE_SEARCH_STATUS_CHANGE(60303, 603, "兑换码启、停用", PermissionConstant.RECHARGE_CARD_CODE_SEARCH_STATUS_CHANGE),
     //充值卡查询
-    RECHARGE_CARD_SEARCH(604, 6, "充值卡查询", PermissionConstant.RECHARGE_CARD_SEARCH),
+    RECHARGE_CARD_SEARCH_PAGE(604, 6, "充值卡查询", PermissionConstant.RECHARGE_CARD_SEARCH),
+    //充值卡查询
+    RECHARGE_CARD_SEARCH(60401, 604, "充值卡查询", PermissionConstant.RECHARGE_CARD_SEARCH),
     //充值卡修改
-    RECHARGE_CARD_SEARCH_EDIT(60401, 604, "充值卡修改", PermissionConstant.RECHARGE_CARD_SEARCH_EDIT),
+    RECHARGE_CARD_SEARCH_EDIT(60402, 604, "充值卡修改", PermissionConstant.RECHARGE_CARD_SEARCH_EDIT),
     //充值卡启、停用
-    RECHARGE_CARD_SEARCH_STATUS_CHANGE(60402, 604, "充值卡启、停用", PermissionConstant.RECHARGE_CARD_SEARCH_STATUS_CHANGE),
+    RECHARGE_CARD_SEARCH_STATUS_CHANGE(60403, 604, "充值卡启、停用", PermissionConstant.RECHARGE_CARD_SEARCH_STATUS_CHANGE),
     //代金券兑换码查询
-    VOUCHER_CODE_SEARCH(605, 6, "代金券兑换码查询", PermissionConstant.VOUCHER_CODE_SEARCH),
+    VOUCHER_CODE_SEARCH_PAGE(605, 6, "代金券兑换码查询", PermissionConstant.VOUCHER_CODE_SEARCH),
+    //兑换码查询
+    VOUCHER_CODE_SEARCH(60501, 605, "兑换码查询", PermissionConstant.VOUCHER_CODE_SEARCH),
     //代金券兑换码修改
-    VOUCHER_CODE_SEARCH_EDIT(60501, 605, "代金券兑换码修改", PermissionConstant.VOUCHER_CODE_SEARCH_EDIT),
+    VOUCHER_CODE_SEARCH_EDIT(60502, 605, "兑换码修改", PermissionConstant.VOUCHER_CODE_SEARCH_EDIT),
     //代金券兑换码启、停用
-    VOUCHER_CODE_SEARCH_STATUS_CHANGE(60502, 605, "代金券兑换码修改", PermissionConstant.VOUCHER_CODE_SEARCH_STATUS_CHANGE),
+    VOUCHER_CODE_SEARCH_STATUS_CHANGE(60503, 605, "兑换码启、停用", PermissionConstant.VOUCHER_CODE_SEARCH_STATUS_CHANGE),
     //代金券查询
-    VOUCHER_SEARCH(606, 6, "代金券查询", PermissionConstant.VOUCHER_SEARCH),
+    VOUCHER_SEARCH_PAGE(606, 6, "代金券查询", PermissionConstant.VOUCHER_SEARCH),
+    //代金券查询
+    VOUCHER_SEARCH(60601, 606, "代金券查询", PermissionConstant.VOUCHER_SEARCH),
     //代金券修改
-    VOUCHER_SEARCH_EDIT(60601, 606, "代金券修改", PermissionConstant.VOUCHER_SEARCH_EDIT),
+    VOUCHER_SEARCH_EDIT(60602, 606, "代金券修改", PermissionConstant.VOUCHER_SEARCH_EDIT),
     //代金券启、停用
-    VOUCHER_SEARCH_STATUS_CHANGE(60602, 606, "代金券启、停用", PermissionConstant.VOUCHER_SEARCH_STATUS_CHANGE),
+    VOUCHER_SEARCH_STATUS_CHANGE(60603, 606, "代金券启、停用", PermissionConstant.VOUCHER_SEARCH_STATUS_CHANGE),
 
 
     /***************************系统管理相关**************************************/

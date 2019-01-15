@@ -660,7 +660,7 @@
                 str += getFunctionButton("btn-danger", "changeOrderReservation(" + rowObject.id + ")", "修改订单");
             }
             if (permission.indexOf("orderComplete") != -1) {
-                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + ")", "完成订单");
+                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id+","+rowObject.cost + ")", "完成订单");
             }
             if (permission.indexOf("orderAppend") != -1) {
                 str += getFunctionButton("btn-primary", "showAppendOrder(" + rowObject.id + ")", "追加订单");
@@ -672,7 +672,7 @@
                 str += getFunctionButton("btn-danger", "orderCancelUnpass(" + rowObject.id + ")", "审核不通过");
             }
             if (permission.indexOf("orderComplete") != -1) {
-                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + ")", "完成订单");
+                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id+","+rowObject.cost + ")", "完成订单");
             }
         }
         if (rowObject.status == 6) {
@@ -680,7 +680,7 @@
                 str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
             }
             if (permission.indexOf("orderComplete") != -1) {
-                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + ")", "完成订单");
+                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id+","+rowObject.cost + ")", "完成订单");
             }
         }
         return str;
@@ -1110,9 +1110,9 @@
             }
         });
     }
-
-    function userCompleteOrder(id) {
-        confirm("确定要完成该订单吗？", function (result) {
+    "<span style='color:#"+color+"'>"+text+"</span>";
+    function userCompleteOrder(id,cost) {
+        confirm("确定要完成该订单吗？<span style='color:#FF0000'>该订单成本为"+cost+"元！</span>", function (result) {
             if (result) {
                 $.ajax({
                     url: "/api/orderinfo/usercompleteorder",
