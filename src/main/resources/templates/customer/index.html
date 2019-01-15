@@ -214,7 +214,6 @@
                                                         <select id="orderProductId" name="productId"
                                                                 onchange="productChanged()"
                                                                 class="selectpicker show-tick form-control">
-                                                            <option value=></option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -879,14 +878,22 @@
     }
 
     function openNewOrder(id) {
+        $("#orderForm input").val('');
+        $("#orderForm textarea").val('');
         $("#orderCustomerId").val(id);
         $("#order-modal").modal("show");
         $("#orderProductId option:first").prop("selected", 'selected');
+        $("#orderCount").ace_spinner('value', 1);
         if ($("#orderProductId").val() == '') {
             cityTree.destroy();
         } else {
             refreshCity();
         }
+        $("#orderRealServiceTime").next().next().val(0);
+        $("#orderCost").val(0);
+        $("#orderVoucherArea").empty();
+        $("#orderRechargeCardArea").empty();
+        $("#orderPointArea").empty();
     }
 
     function initProduct() {
@@ -1120,12 +1127,16 @@
     //下单
     function placeOrder() {
         $("#orderRealServiceTime").next().next().val($("#orderRealServiceTime").val() == '' ? 0 : new Date($("#orderRealServiceTime").val()).getTime());
-        if ($("#orderProductId").val() == '0') {
+        if ($("#orderProductId").val() == "") {
             bootboxalert("请选择商品");
             return false;
         }
         if ($("#orderCityCode").val() == "") {
             bootboxalert("请选择城市");
+            return false;
+        }
+        if(!isNumber($("#orderCost").val())){
+            bootboxalert("请正确填写订单成本");
             return false;
         }
         var needPay = calNeedPay();

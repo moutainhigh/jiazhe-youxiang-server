@@ -73,7 +73,7 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
         criteria.andIsVirtualEqualTo(CommonConstant.BATCH_IS_VIRTUAL);
         List<PointExchangeCodeBatchPO> poList = pointExchangeCodeBatchPOMapper.selectByExample(example);
         List<PointExchangeCodeBatchPO> validBatchList = Lists.newArrayList();
-        //筛选出转为充值卡不过期的批次
+        //筛选出转为积分卡不过期的批次
         poList.stream().forEach(bean -> {
             if (bean.getExpiryTime().getTime() > System.currentTimeMillis()) {
                 if (bean.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME) && bean.getPointExpiryTime().getTime() > System.currentTimeMillis()) {

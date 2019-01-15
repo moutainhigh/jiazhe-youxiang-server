@@ -266,11 +266,13 @@ public class PointServiceImpl implements PointService {
         //20180604,114656
         String date = stringArray[5];
         String time = stringArray[6];
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         Date tradeTime = DateUtil.yyyyMMddHHmmssStrToSeconds(date+time);
-        //TODO niexiao 设置生效时间
         Date effectiveTime = new Date(tradeTime.getTime() + CommonConstant.ONE_DAY);
-        pointPO.setEffectiveTime(effectiveTime);
+        if(effectiveTime.compareTo(batchPO.getPointEffectiveTime()) == 1){
+            pointPO.setEffectiveTime(effectiveTime);
+        }else{
+            pointPO.setEffectiveTime(batchPO.getPointEffectiveTime());
+        }
         pointService.insert(pointPO);
         //插入兑换记录
         PointExchangeRecordPO pointRecordPO = new PointExchangeRecordPO();
