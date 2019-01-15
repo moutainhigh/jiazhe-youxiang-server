@@ -77,6 +77,7 @@ public class PointExchangeCodeBatchAdapter {
         pointExchangeCodeBatchSaveDTO.setValidityPeriod(req.getValidityPeriod());
         pointExchangeCodeBatchSaveDTO.setExpiryType(req.getExpiryType());
         pointExchangeCodeBatchSaveDTO.setDescription(req.getDescription());
+        pointExchangeCodeBatchSaveDTO.setExtInfo(req.getExtInfo());
         return pointExchangeCodeBatchSaveDTO;
     }
 
