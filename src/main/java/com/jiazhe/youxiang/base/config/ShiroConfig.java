@@ -52,9 +52,11 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/system/logout", "anon");//退出系统匿名访问
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/templates/**", "anon");
-//        filterChainDefinitionMap.put("/api/**", "perms");//接口通过权限认证
         filterChainDefinitionMap.put("/api/signin/**", "anon");//登录、发送验证码等匿名访问
         filterChainDefinitionMap.put("/api/product/**", "anon");//放开商品验证
+        //微信回调url
+        filterChainDefinitionMap.put("/api/wechatpublic/checkSignature", "anon");//验证签名
+        filterChainDefinitionMap.put("/api/wxpay/notify", "anon");//微信支付成功回调
 
         //swagger相关连接可以直接访问
         filterChainDefinitionMap.put("/swagger-ui.html", "anon");
