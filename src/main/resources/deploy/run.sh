@@ -2,7 +2,7 @@
 
 ENV=$2
 
-APP_NAME=youxiang-server
+APP_NAME=youxiang-server-$ENV
 APP_DIR=/opt/jiazhe/webserver/$APP_NAME
 JAR_FILE=$APP_NAME.jar
 pid=0
