@@ -1,7 +1,12 @@
 package com.jiazhe.youxiang.base.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
-import com.jiazhe.youxiang.base.realm.*;
+import com.jiazhe.youxiang.base.realm.CredentialsMatcher;
+import com.jiazhe.youxiang.base.realm.CustomSessionDAO;
+import com.jiazhe.youxiang.base.realm.CustomerRealm;
+import com.jiazhe.youxiang.base.realm.ShiroLoginFilter;
+import com.jiazhe.youxiang.base.realm.UserModularRealmAuthenticator;
+import com.jiazhe.youxiang.base.realm.UserRealm;
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
