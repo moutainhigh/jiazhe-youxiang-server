@@ -4,6 +4,7 @@ import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.jiazhe.youxiang.base.realm.CredentialsMatcher;
 import com.jiazhe.youxiang.base.realm.CustomSessionDAO;
 import com.jiazhe.youxiang.base.realm.CustomerRealm;
+import com.jiazhe.youxiang.base.realm.ShiroLoginFilter;
 import com.jiazhe.youxiang.base.realm.UserModularRealmAuthenticator;
 import com.jiazhe.youxiang.base.realm.UserRealm;
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
@@ -21,9 +22,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.servlet.Filter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -39,18 +42,17 @@ public class ShiroConfig {
         // 未授权界面;
         bean.setUnauthorizedUrl("/system/index");
         //自定义拦截器
-//        Map<String, Filter> filters = bean.getFilters();
-//        filters.put("shiroLoginFilter", new ShiroLoginFilter());
-//        bean.setFilters(filters);
+        Map<String, Filter> filters = bean.getFilters();
+        filters.put("shiroLoginFilter", new ShiroLoginFilter());
+        bean.setFilters(filters);
         bean.setLoginUrl("/system/index");
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-        filterChainDefinitionMap.put("/api/preview/img/**", "anon"); //预览图片匿名访问
         filterChainDefinitionMap.put("/system/index", "anon"); //登录页url匿名访问
         filterChainDefinitionMap.put("/system/login", "anon");//登陆系统匿名访问
         filterChainDefinitionMap.put("/system/logout", "anon");//退出系统匿名访问
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/templates/**", "anon");
-        filterChainDefinitionMap.put("/api/**", "perms");//接口通过权限认证
+//        filterChainDefinitionMap.put("/api/**", "perms");//接口通过权限认证
         filterChainDefinitionMap.put("/api/signin/**", "anon");//登录、发送验证码等匿名访问
         filterChainDefinitionMap.put("/api/product/**", "anon");//放开商品验证
 
@@ -63,6 +65,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/actuator/**", "anon");
 
         filterChainDefinitionMap.put("/**", "authc");//表示所有url必须通过认证才能访问
+        filterChainDefinitionMap.put("/api/**", "perms");//接口通过权限认证
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
         return bean;
@@ -127,11 +130,11 @@ public class ShiroConfig {
         return new ShiroDialect();
     }
 
-//    @Bean(name = "shiroLoginFilter")
-//    public ShiroLoginFilter shiroLoginFilter() {
-//        ShiroLoginFilter shiroLoginFilter = new ShiroLoginFilter();
-//        return shiroLoginFilter;
-//    }
+    @Bean(name = "shiroLoginFilter")
+    public ShiroLoginFilter shiroLoginFilter() {
+        ShiroLoginFilter shiroLoginFilter = new ShiroLoginFilter();
+        return shiroLoginFilter;
+    }
 
     @Bean(name = "customSessionDAO")
     public CustomSessionDAO customSessionDao() {
