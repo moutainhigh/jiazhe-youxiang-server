@@ -39,17 +39,15 @@ public class ShiroConfig {
     public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") SecurityManager manager) {
         ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
         bean.setSecurityManager(manager);
-        // 未授权界面;
-        bean.setUnauthorizedUrl("/system/index");
         //自定义拦截器
         Map<String, Filter> filters = bean.getFilters();
         filters.put("shiroLoginFilter", new ShiroLoginFilter());
         bean.setFilters(filters);
-//        bean.setLoginUrl("/system/index");
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         filterChainDefinitionMap.put("/system/index", "anon"); //登录页url匿名访问
         filterChainDefinitionMap.put("/system/login", "anon");//登陆系统匿名访问
         filterChainDefinitionMap.put("/system/logout", "anon");//退出系统匿名访问
+        filterChainDefinitionMap.put("/system/403","anon");//无权限页面匿名访问
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/templates/**", "anon");
         filterChainDefinitionMap.put("/api/signin/**", "anon");//登录、发送验证码等匿名访问
@@ -83,7 +81,6 @@ public class ShiroConfig {
         userRealm.setCredentialsMatcher(credentialsMatcher());
         userRealm.setAuthorizationCacheName("shiro-authorizationCache");
         userRealm.setCacheManager(shiroEhCacheManager());
-       /* userRealm.setCredentialsMatcher(hashedCredentialsMatcher());*/
         return userRealm;
     }
 
