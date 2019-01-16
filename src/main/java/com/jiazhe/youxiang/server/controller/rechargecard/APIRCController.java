@@ -5,20 +5,25 @@ import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCAdapter;
-import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
-import com.jiazhe.youxiang.server.common.enums.*;
+import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
+import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
+import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCEditDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
-import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.*;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.DirectChargeReq;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.RCCustomerPageReq;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.RCEditReq;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.RCGoodsAttrPageReq;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.RCPageReq;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rc.RCResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.Logical;
@@ -56,7 +61,7 @@ public class APIRCController extends BaseController{
         return ResponseFactory.buildPaginationResponse(rcRespList, paging);
     }
 
-//    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
+    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
     @ApiOperation(value = "【APP端】客户查询所有充值卡（分页）", httpMethod = "GET", response = RCResp.class, responseContainer = "List",notes = "客户查询所有充值卡，分页")
     @RequestMapping(value = "/findbycustomeridpage", method = RequestMethod.GET)

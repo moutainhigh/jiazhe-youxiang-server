@@ -3,7 +3,9 @@ package com.jiazhe.youxiang.server.biz.point;
 import com.jiazhe.youxiang.base.util.RSAUtil;
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
+import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.PointCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.common.exceptions.PointException;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.point.PurchaseOrderDTO;
@@ -143,7 +145,7 @@ public class PointBiz {
         PurchaseOrderDTO purchaseOrderDTO = createPurchaseOrderDTO(purchaseOrderStr);
 
         if (SecurityUtils.getSubject().getPrincipal() == null || !(SecurityUtils.getSubject().getPrincipal() instanceof CustomerDTO)) {
-            throw new PointException(PointCodeEnum.CUSTOMER_IS_NOT_LOGIN);
+            throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
         CustomerDTO customerDTO = (CustomerDTO) SecurityUtils.getSubject().getPrincipal();
         Integer batchId = pointExchangeCodeBatchService.getBatchIdByMerchantNo(purchaseOrderDTO.getMerchantNo());
