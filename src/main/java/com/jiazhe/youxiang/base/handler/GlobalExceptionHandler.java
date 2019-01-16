@@ -5,16 +5,10 @@
  */
 package com.jiazhe.youxiang.base.handler;
 
-import com.jiazhe.youxiang.base.util.ProjectUtil;
-import com.jiazhe.youxiang.base.util.ResponseUtil;
-import com.jiazhe.youxiang.base.util.ResultPackage;
 import com.jiazhe.youxiang.server.common.enums.CommonCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.CommonException;
 import com.jiazhe.youxiang.server.vo.FailResponse;
 import com.jiazhe.youxiang.server.vo.ResponseMsg;
-import net.sf.json.JSONObject;
-import org.apache.shiro.authz.AuthorizationException;
-import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindException;

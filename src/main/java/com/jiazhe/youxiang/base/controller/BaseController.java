@@ -1,8 +1,7 @@
 package com.jiazhe.youxiang.base.controller;
 
 import com.jiazhe.youxiang.base.util.ProjectUtil;
-import com.jiazhe.youxiang.base.util.ResponseUtil;
-import com.jiazhe.youxiang.base.util.ResultPackage;
+import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import net.sf.json.JSONObject;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -28,10 +27,16 @@ public abstract class BaseController {
     @ExceptionHandler({UnauthorizedException.class, AuthorizationException.class})
     public String authorizationException(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (ProjectUtil.isAjax(request)) {
-            String code = "000002";
-            String msg = "无权限";
             LOGGER.info("BaseController：ajax请求，无权限");
-            ResponseUtil.responseUtils(response, ResultPackage.resultPackage(code, new JSONObject(), msg));
+            JSONObject obj = new JSONObject();
+            obj.put("code", LoginCodeEnum.LOGIN_NO_PERMISSION.getCode());
+            obj.put("type", LoginCodeEnum.LOGIN_NO_PERMISSION.getType());
+            obj.put("message", LoginCodeEnum.LOGIN_NO_PERMISSION.getMessage());
+            JSONObject result = new JSONObject();
+            result.put("error", obj);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("utf-8");
+            response.getWriter().write(result.toString());
             return null;
         } else {
             LOGGER.info("BaseController：页面跳转，无权限");
