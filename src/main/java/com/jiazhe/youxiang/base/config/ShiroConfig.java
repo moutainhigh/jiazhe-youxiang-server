@@ -41,7 +41,7 @@ public class ShiroConfig {
         bean.setSecurityManager(manager);
         //自定义拦截器
         Map<String, Filter> filters = bean.getFilters();
-        filters.put("shiroLoginFilter", new ShiroLoginFilter());
+        filters.put("authc", new ShiroLoginFilter());
         bean.setFilters(filters);
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         filterChainDefinitionMap.put("/system/index", "anon"); //登录页url匿名访问
