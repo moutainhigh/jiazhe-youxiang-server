@@ -274,11 +274,7 @@
             url: "/api/project/add",
             dataType: "json",
             async: false,
-            data: {
-                name: $("#inputName").val(),
-                description: $("#inputDescription").val(),
-                priority: $("#inputPriority").val()
-            },
+            data: transformToJson($('#projectSaveForm').serializeArray()),
             type: "POST",
             success: success,
             error: error
