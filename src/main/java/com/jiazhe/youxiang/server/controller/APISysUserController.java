@@ -4,7 +4,6 @@ import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.EncryptPasswordUtil;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
-import com.jiazhe.youxiang.base.util.ValidateUtils;
 import com.jiazhe.youxiang.server.adapter.SysUserAdapter;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
@@ -107,9 +106,7 @@ public class APISysUserController extends BaseController {
             CommonValidator.validateNull(req.getPassword(), new UserException(UserCodeEnum.USEER_PASSWORD_IS_NULL));
         }
         CommonValidator.validateNull(req.getRoleIds(), new UserException(UserCodeEnum.USER_ROLE_NOT_CHOOSE));
-        if (!ValidateUtils.phoneValidate(req.getMobile())) {
-            throw new UserException(UserCodeEnum.USEER_MOBILE_IS_ILLEGAL);
-        }
+        CommonValidator.validateMobile(req.getMobile(),new UserException(UserCodeEnum.USEER_MOBILE_IS_ILLEGAL));
         UserWithRoleDTO userWithRoleDTO = SysUserAdapter.userSaveReq2UserWithDTO(req);
         boolean userHasExisted = sysUserBiz.userHasExisted(userWithRoleDTO);
         if (userHasExisted) {

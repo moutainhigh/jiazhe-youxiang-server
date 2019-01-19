@@ -141,9 +141,7 @@ public class APISignInController extends BaseController {
         if (sysUserDTOList.size() != 1) {
             throw new LoginException(LoginCodeEnum.LOGIN_USER_ILLEGAL);
         }
-        if (!ValidateUtils.phoneValidate(sysUserDTOList.get(0).getMobile())) {
-            throw new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL);
-        }
+        CommonValidator.validateMobile(sysUserDTOList.get(0).getMobile(),new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL));
         SendSmsResponse res = AliUtils.sendMsg(sysUserDTOList.get(0).getMobile());
         SendMsgResp sendMsgResp = new SendMsgResp();
         sendMsgResp.setBizId(res.getBizId());
@@ -160,9 +158,7 @@ public class APISignInController extends BaseController {
         String bizId = req.getBizId();
         CommonValidator.validateNull(req.getMobile(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         CommonValidator.validateNull(req.getIdentifyingCode(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
-        if (!ValidateUtils.phoneValidate(req.getMobile())) {
-            throw new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL);
-        }
+        CommonValidator.validateMobile(req.getMobile(),new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL));
         //判断验证码是否正确
         if (!AliUtils.isVerified(req.getMobile(), identifyingCode, bizId)) {
             throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
@@ -212,9 +208,7 @@ public class APISignInController extends BaseController {
     @RequestMapping(value = "/customersendcode")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "根据电话号码，发送验证码", level = LogLevelEnum.LEVEL_2)
     public Object customerSendCode(@ModelAttribute SendMsgToCustomerReq req) throws ClientException {
-        if (!ValidateUtils.phoneValidate(req.getMobile())) {
-            throw new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL);
-        }
+        CommonValidator.validateMobile(req.getMobile(),new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL));
         SendSmsResponse res = AliUtils.sendMsg(req.getMobile());
         SendMsgResp sendMsgResp = new SendMsgResp();
         sendMsgResp.setBizId(res.getBizId());
