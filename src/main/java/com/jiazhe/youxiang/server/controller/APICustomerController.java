@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.server.controller;
 
+import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
@@ -61,7 +62,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("api/customer")
-public class APICustomerController {
+public class APICustomerController extends BaseController{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(APICustomerController.class);
 

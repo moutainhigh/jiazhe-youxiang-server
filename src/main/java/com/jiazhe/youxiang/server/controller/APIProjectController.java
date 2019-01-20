@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.server.controller;
 
+import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.ProjectAdapter;
@@ -48,7 +49,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("api/project")
-public class APIProjectController {
+public class APIProjectController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(APIProjectController.class);
 
@@ -97,7 +98,6 @@ public class APIProjectController {
      *
      * @return
      */
-    @RequiresPermissions(value = {PermissionConstant.PROJECT_MANAGEMENT, PermissionConstant.PROJECT_SEARCH}, logical = Logical.OR)
     @ApiOperation(value = "查询项目信息", httpMethod = "GET", response = ProjectResp.class, responseContainer = "List", notes = "查询项目信息")
     @RequestMapping(value = "getlist", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.PROJECT, operate = "查询项目信息", level = LogLevelEnum.LEVEL_1)

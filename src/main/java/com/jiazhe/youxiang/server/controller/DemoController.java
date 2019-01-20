@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.server.controller;
 
+import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.server.common.enums.DemoCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.DemoException;
 import com.jiazhe.youxiang.server.vo.req.DemoReq;
@@ -26,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("api/demo")
-public class DemoController {
+public class DemoController extends BaseController{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DemoController.class);
 
