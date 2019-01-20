@@ -14,6 +14,7 @@
     <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
     <result column="face_value" property="faceValue" jdbcType="DECIMAL" />
     <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
+    <result column="point_effective_time" property="pointEffectiveTime" jdbcType="TIMESTAMP" />
     <result column="point_expiry_time" property="pointExpiryTime" jdbcType="TIMESTAMP" />
     <result column="validity_period" property="validityPeriod" jdbcType="INTEGER" />
     <result column="expiry_type" property="expiryType" jdbcType="TINYINT" />
@@ -25,8 +26,9 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    id, name,point_name,is_virtual,is_made, description, amount,project_id,city_codes,product_ids,face_value,expiry_time,point_expiry_time,validity_period,expiry_type,status,
-    ext_info, is_deleted,add_time, mod_time
+    id, name, point_name, is_virtual, is_made, description, amount, project_id, city_codes,
+    product_ids, face_value, expiry_time, point_effective_time, point_expiry_time, validity_period,
+    expiry_type, status, ext_info, is_deleted, add_time, mod_time
   </sql>
 
   <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO">

@@ -8,7 +8,6 @@ import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeCodeService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 /**
@@ -30,11 +29,11 @@ public class VoucherExchangeCodeBiz {
         voucherExchangeCodeService.changeCodeStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
     }
 
-    public void customerSelfCharge(Integer id , String keyt) {
+    public void customerSelfCharge(Integer id , String keyt)  {
         voucherExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_CUSTOMER_CODE_EXCHANGE,id,keyt);
     }
 
-    public void backstageCodeCharge(Integer id , String keyt) {
+    public void backstageCodeCharge(Integer id , String keyt)  {
         voucherExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE,id,keyt);
     }
 

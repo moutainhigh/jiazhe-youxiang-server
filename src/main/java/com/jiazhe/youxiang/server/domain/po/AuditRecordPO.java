@@ -7,23 +7,37 @@ import java.util.Date;
 public class AuditRecordPO implements Serializable {
     private Integer id;
 
-    private Integer rechargeCardId;
+    private String pointIds;
 
     private String customerName;
 
     private String customerMobile;
 
-    private BigDecimal exchangeMoney;
+    private BigDecimal exchangePoint;
+
+    private String exchangeType;
+
+    private BigDecimal givingPoint;
+
+    private String givingType;
+
+    private String auditReason;
 
     private String remark;
 
     private String imgUrls;
 
+    private String posCode;
+
+    private Date tradeTime;
+
+    private String cardNo;
+
+    private String bankOutletsName;
+
     private Integer submitterId;
 
     private String submitterName;
-
-    private String submitterRemark;
 
     private Byte status;
 
@@ -53,12 +67,12 @@ public class AuditRecordPO implements Serializable {
         this.id = id;
     }
 
-    public Integer getRechargeCardId() {
-        return rechargeCardId;
+    public String getPointIds() {
+        return pointIds;
     }
 
-    public void setRechargeCardId(Integer rechargeCardId) {
-        this.rechargeCardId = rechargeCardId;
+    public void setPointIds(String pointIds) {
+        this.pointIds = pointIds == null ? null : pointIds.trim();
     }
 
     public String getCustomerName() {
@@ -77,12 +91,44 @@ public class AuditRecordPO implements Serializable {
         this.customerMobile = customerMobile == null ? null : customerMobile.trim();
     }
 
-    public BigDecimal getExchangeMoney() {
-        return exchangeMoney;
+    public BigDecimal getExchangePoint() {
+        return exchangePoint;
     }
 
-    public void setExchangeMoney(BigDecimal exchangeMoney) {
-        this.exchangeMoney = exchangeMoney;
+    public void setExchangePoint(BigDecimal exchangePoint) {
+        this.exchangePoint = exchangePoint;
+    }
+
+    public String getExchangeType() {
+        return exchangeType;
+    }
+
+    public void setExchangeType(String exchangeType) {
+        this.exchangeType = exchangeType == null ? null : exchangeType.trim();
+    }
+
+    public BigDecimal getGivingPoint() {
+        return givingPoint;
+    }
+
+    public void setGivingPoint(BigDecimal givingPoint) {
+        this.givingPoint = givingPoint;
+    }
+
+    public String getGivingType() {
+        return givingType;
+    }
+
+    public void setGivingType(String givingType) {
+        this.givingType = givingType == null ? null : givingType.trim();
+    }
+
+    public String getAuditReason() {
+        return auditReason;
+    }
+
+    public void setAuditReason(String auditReason) {
+        this.auditReason = auditReason == null ? null : auditReason.trim();
     }
 
     public String getRemark() {
@@ -101,6 +147,38 @@ public class AuditRecordPO implements Serializable {
         this.imgUrls = imgUrls == null ? null : imgUrls.trim();
     }
 
+    public String getPosCode() {
+        return posCode;
+    }
+
+    public void setPosCode(String posCode) {
+        this.posCode = posCode == null ? null : posCode.trim();
+    }
+
+    public Date getTradeTime() {
+        return tradeTime;
+    }
+
+    public void setTradeTime(Date tradeTime) {
+        this.tradeTime = tradeTime;
+    }
+
+    public String getCardNo() {
+        return cardNo;
+    }
+
+    public void setCardNo(String cardNo) {
+        this.cardNo = cardNo == null ? null : cardNo.trim();
+    }
+
+    public String getBankOutletsName() {
+        return bankOutletsName;
+    }
+
+    public void setBankOutletsName(String bankOutletsName) {
+        this.bankOutletsName = bankOutletsName == null ? null : bankOutletsName.trim();
+    }
+
     public Integer getSubmitterId() {
         return submitterId;
     }
@@ -115,14 +193,6 @@ public class AuditRecordPO implements Serializable {
 
     public void setSubmitterName(String submitterName) {
         this.submitterName = submitterName == null ? null : submitterName.trim();
-    }
-
-    public String getSubmitterRemark() {
-        return submitterRemark;
-    }
-
-    public void setSubmitterRemark(String submitterRemark) {
-        this.submitterRemark = submitterRemark == null ? null : submitterRemark.trim();
     }
 
     public Byte getStatus() {

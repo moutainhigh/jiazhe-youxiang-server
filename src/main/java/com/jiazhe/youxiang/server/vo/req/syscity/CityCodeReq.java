@@ -17,7 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class CityCodeReq extends BaseVO {
 
     private static final long serialVersionUID = 5057816621113871844L;
-    @ApiModelProperty("城市Code")
+    @ApiModelProperty("城市Code，all为全部")
     private String cityCode;
 
     public String getCityCode() {

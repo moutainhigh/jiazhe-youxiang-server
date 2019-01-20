@@ -20,6 +20,7 @@ import com.jiazhe.youxiang.server.domain.po.CustomerAddressPO;
 import com.jiazhe.youxiang.server.domain.po.CustomerAddressPOExample;
 import com.jiazhe.youxiang.server.domain.po.CustomerPO;
 import com.jiazhe.youxiang.server.domain.po.CustomerPOExample;
+import com.jiazhe.youxiang.server.domain.po.SysCityPO;
 import com.jiazhe.youxiang.server.dto.customer.AddressAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.AddressDTO;
 import com.jiazhe.youxiang.server.dto.customer.AddressUpdateDTO;
@@ -27,6 +28,7 @@ import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerUpdateDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
+import com.jiazhe.youxiang.server.service.SysCityService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -65,6 +67,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CustomerAddressPOManualMapper customerAddressPOManualMapper;
+
+    @Autowired
+    private SysCityService sysCityService;
 
 
     @Override
@@ -170,12 +175,14 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void addAddress(AddressAddDTO addressAddDTO) {
         CustomerAddressPO customerAddressPO = CustomerAdapter.addressAddDTO2PO(addressAddDTO);
+        //查询CityCode所对应城市
+        SysCityPO sysCityPO = sysCityService.getCityByCityCode(addressAddDTO.getCityCode());
+        customerAddressPO.setCityName(sysCityPO.getCityName());
         customerAddressPOManualMapper.insertSelectiveGetID(customerAddressPO);
         if (customerAddressPO != null && addressAddDTO.getIsDefault() != null) {
             setAddressDefault(customerAddressPO.getCustomerId(), customerAddressPO.getId(), addressAddDTO.getIsDefault());
         }
     }
-
 
     @Override
     public AddressDTO getAddressById(Integer id) {
@@ -269,6 +276,9 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void updateAddress(AddressUpdateDTO addressUpdateDTO) {
         CustomerAddressPO customerAddressPO = CustomerAdapter.addressUpdateDTO2PO(addressUpdateDTO);
+        //查询CityCode所对应城市
+        SysCityPO sysCityPO = sysCityService.getCityByCityCode(addressUpdateDTO.getCityCode());
+        customerAddressPO.setCityName(sysCityPO.getCityName());
         customerAddressPO.setModTime(new Date());
         customerAddressPOMapper.updateByPrimaryKeySelective(customerAddressPO);
         setAddressDefault(addressUpdateDTO.getId(), addressUpdateDTO.getIsDefault());

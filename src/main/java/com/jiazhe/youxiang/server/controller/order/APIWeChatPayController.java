@@ -7,6 +7,7 @@ import com.jiazhe.youxiang.base.util.WeChatPayUtils;
 import com.jiazhe.youxiang.server.biz.order.OrderInfoBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.WeChatPayConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
@@ -33,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -64,7 +66,7 @@ public class APIWeChatPayController {
         wxparam.put("mch_id", WeChatPayConstant.MCH_ID);
         String nonceStr = RandomUtil.generateVerifyCode(32);
         OrderInfoDTO orderInfoDTO = orderInfoBiz.getByOrderNo(req.getOutTradeNo());
-        if(null == orderInfoDTO){
+        if (null == orderInfoDTO) {
             throw new OrderException(OrderCodeEnum.ORDER_NOT_EXIST);
         }
         wxparam.put("nonce_str", nonceStr);
@@ -84,7 +86,7 @@ public class APIWeChatPayController {
             String returnCode = map.get("return_code");
             String resultCode = map.get("result_code");
             if (returnCode.contains("SUCCESS") && resultCode.contains("SUCCESS")) {
-                unifiedOrderResp.setPrepay_id(map.get("prepay_id"));
+                unifiedOrderResp.setPrepayId(map.get("prepay_id"));
 //                signParam.put("appid", WeChatPayConstant.APP_ID);
 //                signParam.put("partnerid", WeChatPayConstant.MCH_ID);
 //                signParam.put("timeStamp", String.valueOf(System.currentTimeMillis() / 1000));
@@ -97,11 +99,11 @@ public class APIWeChatPayController {
                 unifiedOrderResp.setSign(map.get("sign"));
                 return ResponseFactory.buildResponse(unifiedOrderResp);
             } else {
-                logger.info("发起预支付失败，原因："+map.get("return_msg"));
+                logger.info("发起预支付失败，原因：" + map.get("return_msg"));
                 throw new WeChatPayException(WeChatPayCodeEnum.PRE_PAY_ERROR);
             }
         } catch (Exception e) {
-            logger.info("发起预支付失败，异常信息："+e.getMessage());
+            logger.info("发起预支付失败，异常信息：" + e.getMessage());
             throw new WeChatPayException(WeChatPayCodeEnum.PRE_PAY_ERROR);
         }
     }
@@ -109,7 +111,20 @@ public class APIWeChatPayController {
     @ApiOperation(value = "接收微信付款结果通知", httpMethod = "POST", notes = "接收微信付款结果通知")
     @RequestMapping(value = "/notify", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "接收微信付款通知", level = LogLevelEnum.LEVEL_1)
-    public Object notify(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public Object notify(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String strXml = WeChatPayUtils.parseRequst(request);
+        Map<String, String> paynotifyMap = WeChatPayUtils.doXMLParse(strXml);
+        if (paynotifyMap.get("result_code").toString().equalsIgnoreCase("SUCCESS")) {
+            // 验签
+            if (WeChatPayUtils.isTenpaySign(paynotifyMap, WeChatPayConstant.API_KEY)) {
+                String orderNo = paynotifyMap.get("out_trade_no").toString();
+                String transaction_id = paynotifyMap.get("transaction_id").toString();
+                BigDecimal wxPay = new BigDecimal(paynotifyMap.get("total_fee").toString());
+                orderInfoBiz.wxNotify(orderNo,wxPay);
+            } else {
+                logger.info("微信支付回调验证失败");
+            }
+        }
         return null;
     }
 

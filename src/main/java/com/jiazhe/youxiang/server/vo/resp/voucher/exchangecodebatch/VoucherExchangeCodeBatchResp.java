@@ -1,9 +1,7 @@
 package com.jiazhe.youxiang.server.vo.resp.voucher.exchangecodebatch;
 
-import com.jiazhe.youxiang.server.vo.BaseObject;
 import com.jiazhe.youxiang.server.vo.BaseVO;
 
-import java.util.Date;
 
 /**
  * @author TU
@@ -21,6 +19,8 @@ public class VoucherExchangeCodeBatchResp extends BaseVO {
     private Integer amount;
 
     private Integer count;
+
+    private Long voucherEffectiveTime;
 
     private Long expiryTime;
 
@@ -90,5 +90,13 @@ public class VoucherExchangeCodeBatchResp extends BaseVO {
 
     public void setIsMade(Byte isMade) {
         this.isMade = isMade;
+    }
+
+    public Long getVoucherEffectiveTime() {
+        return voucherEffectiveTime;
+    }
+
+    public void setVoucherEffectiveTime(Long voucherEffectiveTime) {
+        this.voucherEffectiveTime = voucherEffectiveTime;
     }
 }

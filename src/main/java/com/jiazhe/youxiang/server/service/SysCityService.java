@@ -5,8 +5,10 @@
  */
 package com.jiazhe.youxiang.server.service;
 
+import com.jiazhe.youxiang.server.domain.po.SysCityPO;
 import com.jiazhe.youxiang.server.dto.syscity.SysCityDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 import java.util.Map;
@@ -32,4 +34,6 @@ public interface SysCityService {
     List<SysCityDTO> getProvinceList();
 
     List<SysCityDTO> getCityList(String cityCode);
+
+    SysCityPO getCityByCityCode(String cityCode);
 }

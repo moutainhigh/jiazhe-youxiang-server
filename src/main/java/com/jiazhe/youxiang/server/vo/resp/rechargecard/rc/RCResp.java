@@ -42,6 +42,9 @@ public class RCResp extends BaseVO{
     @ApiModelProperty("充值卡余额")
     private BigDecimal balance;
 
+    @ApiModelProperty("充值卡生效时间")
+    private Long effectiveTime;
+
     @ApiModelProperty("充值卡过期时间")
     private Long expiryTime;
 
@@ -165,5 +168,13 @@ public class RCResp extends BaseVO{
 
     public void setAddTime(Long addTime) {
         this.addTime = addTime;
+    }
+
+    public Long getEffectiveTime() {
+        return effectiveTime;
+    }
+
+    public void setEffectiveTime(Long effectiveTime) {
+        this.effectiveTime = effectiveTime;
     }
 }

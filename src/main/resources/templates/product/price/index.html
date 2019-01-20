@@ -344,21 +344,17 @@
     }
 
     function updatePriceStatus(id, status) {
-        confirm("确定要修改价格状态吗？", function (result) {
-            if (result) {
-                $.ajax({
-                    url: "/api/product/updatepricestatus",    //请求的url地址
-                    dataType: "json",
-                    async: false,
-                    data: {
-                        id: id,
-                        status: status
-                    },
-                    type: "POST",
-                    success: success,
-                    error: error
-                });
-            }
+        $.ajax({
+            url: "/api/product/updatepricestatus",    //请求的url地址
+            dataType: "json",
+            async: false,
+            data: {
+                id: id,
+                status: status
+            },
+            type: "POST",
+            success: success,
+            error: error
         });
     }
 

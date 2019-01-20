@@ -24,6 +24,8 @@ public class VoucherExchangeCodeBatchDTO extends BaseObject {
 
     private Integer count;
 
+    private Date voucherEffectiveTime;
+
     private Date expiryTime;
 
     private Byte status;
@@ -92,5 +94,13 @@ public class VoucherExchangeCodeBatchDTO extends BaseObject {
 
     public void setIsMade(Byte isMade) {
         this.isMade = isMade;
+    }
+
+    public Date getVoucherEffectiveTime() {
+        return voucherEffectiveTime;
+    }
+
+    public void setVoucherEffectiveTime(Date voucherEffectiveTime) {
+        this.voucherEffectiveTime = voucherEffectiveTime;
     }
 }

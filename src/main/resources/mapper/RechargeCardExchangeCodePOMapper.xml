@@ -14,6 +14,7 @@
     <result column="keyt" property="keyt" jdbcType="VARCHAR" />
     <result column="face_value" property="faceValue" jdbcType="DECIMAL" />
     <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
+    <result column="recharge_card_effective_time" property="rechargeCardEffectiveTime" jdbcType="TIMESTAMP" />
     <result column="recharge_card_expiry_time" property="rechargeCardExpiryTime" jdbcType="TIMESTAMP" />
     <result column="validity_period" property="validityPeriod" jdbcType="INTEGER" />
     <result column="expiry_type" property="expiryType" jdbcType="TINYINT" />
@@ -85,8 +86,9 @@
   </sql>
   <sql id="Base_Column_List" >
     id, batch_id, batch_name, recharge_card_name, batch_description, project_id, city_codes, 
-    product_ids, code, keyt, face_value, expiry_time, recharge_card_expiry_time, validity_period, 
-    expiry_type, status, used, customer_id, ext_info, is_deleted, add_time, mod_time
+    product_ids, code, keyt, face_value, expiry_time, recharge_card_effective_time, recharge_card_expiry_time, 
+    validity_period, expiry_type, status, used, customer_id, ext_info, is_deleted, add_time, 
+    mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePOExample" >
     select
@@ -123,18 +125,20 @@
       recharge_card_name, batch_description, project_id, 
       city_codes, product_ids, code, 
       keyt, face_value, expiry_time, 
-      recharge_card_expiry_time, validity_period, 
-      expiry_type, status, used, 
-      customer_id, ext_info, is_deleted, 
-      add_time, mod_time)
+      recharge_card_effective_time, recharge_card_expiry_time, 
+      validity_period, expiry_type, status, 
+      used, customer_id, ext_info, 
+      is_deleted, add_time, mod_time
+      )
     values (#{id,jdbcType=INTEGER}, #{batchId,jdbcType=INTEGER}, #{batchName,jdbcType=VARCHAR}, 
       #{rechargeCardName,jdbcType=VARCHAR}, #{batchDescription,jdbcType=VARCHAR}, #{projectId,jdbcType=INTEGER}, 
       #{cityCodes,jdbcType=VARCHAR}, #{productIds,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
       #{keyt,jdbcType=VARCHAR}, #{faceValue,jdbcType=DECIMAL}, #{expiryTime,jdbcType=TIMESTAMP}, 
-      #{rechargeCardExpiryTime,jdbcType=TIMESTAMP}, #{validityPeriod,jdbcType=INTEGER}, 
-      #{expiryType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{used,jdbcType=TINYINT}, 
-      #{customerId,jdbcType=INTEGER}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
-      #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
+      #{rechargeCardEffectiveTime,jdbcType=TIMESTAMP}, #{rechargeCardExpiryTime,jdbcType=TIMESTAMP}, 
+      #{validityPeriod,jdbcType=INTEGER}, #{expiryType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
+      #{used,jdbcType=TINYINT}, #{customerId,jdbcType=INTEGER}, #{extInfo,jdbcType=VARCHAR}, 
+      #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO" >
     insert into recharge_card_exchange_code
@@ -174,6 +178,9 @@
       </if>
       <if test="expiryTime != null" >
         expiry_time,
+      </if>
+      <if test="rechargeCardEffectiveTime != null" >
+        recharge_card_effective_time,
       </if>
       <if test="rechargeCardExpiryTime != null" >
         recharge_card_expiry_time,
@@ -242,6 +249,9 @@
       </if>
       <if test="expiryTime != null" >
         #{expiryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rechargeCardEffectiveTime != null" >
+        #{rechargeCardEffectiveTime,jdbcType=TIMESTAMP},
       </if>
       <if test="rechargeCardExpiryTime != null" >
         #{rechargeCardExpiryTime,jdbcType=TIMESTAMP},
@@ -320,6 +330,9 @@
       <if test="record.expiryTime != null" >
         expiry_time = #{record.expiryTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.rechargeCardEffectiveTime != null" >
+        recharge_card_effective_time = #{record.rechargeCardEffectiveTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.rechargeCardExpiryTime != null" >
         recharge_card_expiry_time = #{record.rechargeCardExpiryTime,jdbcType=TIMESTAMP},
       </if>
@@ -369,6 +382,7 @@
       keyt = #{record.keyt,jdbcType=VARCHAR},
       face_value = #{record.faceValue,jdbcType=DECIMAL},
       expiry_time = #{record.expiryTime,jdbcType=TIMESTAMP},
+      recharge_card_effective_time = #{record.rechargeCardEffectiveTime,jdbcType=TIMESTAMP},
       recharge_card_expiry_time = #{record.rechargeCardExpiryTime,jdbcType=TIMESTAMP},
       validity_period = #{record.validityPeriod,jdbcType=INTEGER},
       expiry_type = #{record.expiryType,jdbcType=TINYINT},
@@ -419,6 +433,9 @@
       <if test="expiryTime != null" >
         expiry_time = #{expiryTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="rechargeCardEffectiveTime != null" >
+        recharge_card_effective_time = #{rechargeCardEffectiveTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="rechargeCardExpiryTime != null" >
         recharge_card_expiry_time = #{rechargeCardExpiryTime,jdbcType=TIMESTAMP},
       </if>
@@ -465,6 +482,7 @@
       keyt = #{keyt,jdbcType=VARCHAR},
       face_value = #{faceValue,jdbcType=DECIMAL},
       expiry_time = #{expiryTime,jdbcType=TIMESTAMP},
+      recharge_card_effective_time = #{rechargeCardEffectiveTime,jdbcType=TIMESTAMP},
       recharge_card_expiry_time = #{rechargeCardExpiryTime,jdbcType=TIMESTAMP},
       validity_period = #{validityPeriod,jdbcType=INTEGER},
       expiry_type = #{expiryType,jdbcType=TINYINT},

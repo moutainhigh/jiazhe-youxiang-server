@@ -59,7 +59,7 @@
                                                 <option value=0>后台兑换</option>
                                                 <option value=1>前台兑换</option>
                                                 <option value=2>直接充值</option>
-                                                <option value=3>消费审核</option>
+                                                <!--<option value=3>消费审核</option>-->
                                             </select>
                                         </div>
                                     </div>
@@ -95,7 +95,7 @@
                         <div id="grid-pager"></div>
                     </div><!-- /.col -->
 
-                    <div id="modal-form" class="modal fade" tabindex="-1">
+                    <div id="modal-form" class="modal fade" tabindex="-1" style="overflow: scroll">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -137,7 +137,23 @@
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveExpiryTime">过期时间：</label>
+                                                           for="saveEffectiveTime">充值卡生效时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker" id="saveEffectiveTime"
+                                                                   type="text" readonly/>
+                                                            <span class="input-group-addon">
+                                                                            <i class="fa fa-calendar bigger-110"></i>
+                                                                        </span>
+                                                            <input type="hidden" value=0 name="effectiveTime"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveExpiryTime">充值卡过期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker" id="saveExpiryTime"
@@ -156,9 +172,9 @@
                                                            for="saveDescription">描述信息：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveDescription" name="description"
-                                                                   class="form-control"
-                                                                   type="text" style="height:30px"/>
+                                                             <textarea id="saveDescription" name="description"
+                                                                       class="form-control"
+                                                                       style="resize:none;height: 100px"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -223,7 +239,7 @@
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
     var orderStatus = ['待付款', '待派单', '待服务', '服务完成', '取消待审核', '取消未通过', '已取消'];
-    var exchangeType = ["后台兑换", "前台兑换", "直接充值", "消费审核"];
+    var exchangeType = ["后台兑换", "前台兑换", "直接充值"];
 
     $(function () {
         //重新修改表格宽度
@@ -236,7 +252,7 @@
         var tableOption = {
             url: "/api/rc/searchlistpage",
             postData: transformToJson($('#rcSearchForm').serializeArray()),
-            colNames: ['', '充值卡名称', '状态', '面额', '余额', '兑换时间', '客户手机号', '客户姓名', '过期时间', '兑换类型', '后台操作人', '操作'],
+            colNames: ['', '充值卡名称', '状态', '面额', '余额', '兑换时间', '客户手机号', '客户姓名', '充值卡生效时间', '充值卡过期时间', '兑换类型', '后台操作人', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 40, sortable: false},
@@ -281,12 +297,21 @@
                     }
                 },
                 {
+                    name: 'effectiveTime',
+                    index: 'effectiveTime',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return timeFormat(rowObject.effectiveTime);
+                    }
+                },
+                {
                     name: 'expiryTime',
                     index: 'expiryTime',
                     width: 40,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return dateFormat(rowObject.expiryTime)
+                        return timeFormat(rowObject.expiryTime)
                     }
                 },
                 {
@@ -413,7 +438,11 @@
                     $("#cardSaveForm #saveCityCodes").val(result.cityCodes);
                     $("#cardSaveForm #saveProductIds").val(result.productIds);
                     $("#cardSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
+                    $('#saveExpiryTime').datepicker('update');
                     $("#cardSaveForm #saveExpiryTime").next().next().val(result.expiryTime);
+                    $("#cardSaveForm #saveEffectiveTime").val(dateFormat(result.effectiveTime));
+                    $('#saveEffectiveTime').datepicker('update');
+                    $("#cardSaveForm #saveEffectiveTime").next().next().val(result.effectiveTime);
                     $("#cardSaveForm #saveDescription").val(result.description);
                     $("#modal-form").modal('show');
                 }

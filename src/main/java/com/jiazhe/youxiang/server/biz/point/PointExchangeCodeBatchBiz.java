@@ -38,15 +38,6 @@ public class PointExchangeCodeBatchBiz {
     }
 
     public void addSave(PointExchangeCodeBatchSaveDTO pointExchangeCodeBatchSaveDTO) {
-        if(pointExchangeCodeBatchSaveDTO.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)){
-            pointExchangeCodeBatchSaveDTO.setAmount(0);
-            pointExchangeCodeBatchSaveDTO.setFaceValue(new BigDecimal(0));
-        }
-        if(pointExchangeCodeBatchSaveDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)){
-            pointExchangeCodeBatchSaveDTO.setValidityPeriod(0);
-        }else{
-            pointExchangeCodeBatchSaveDTO.setPointExpiryTime(new Date());
-        }
         pointExchangeCodeBatchService.addSave(pointExchangeCodeBatchSaveDTO);
     }
 
@@ -69,5 +60,9 @@ public class PointExchangeCodeBatchBiz {
 
     public void stopUsing(Integer id) {
         pointExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
+    }
+
+    public boolean merchantNoIsRepeat(Integer batchId,String merchantNo) {
+        return pointExchangeCodeBatchService.merchantNoIsRepeat(batchId,merchantNo);
     }
 }

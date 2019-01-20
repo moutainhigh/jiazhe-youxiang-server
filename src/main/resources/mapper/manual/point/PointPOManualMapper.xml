@@ -2,27 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.point.PointPOManualMapper">
     <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.PointPO">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="name" property="name" jdbcType="VARCHAR"/>
-        <result column="description" property="description" jdbcType="VARCHAR"/>
-        <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
-        <result column="project_id" property="projectId" jdbcType="INTEGER"/>
-        <result column="city_codes" property="cityCodes" jdbcType="VARCHAR"/>
-        <result column="product_ids" property="productIds" jdbcType="VARCHAR"/>
-        <result column="face_value" property="faceValue" jdbcType="DECIMAL"/>
-        <result column="balance" property="balance" jdbcType="DECIMAL"/>
-        <result column="exchange_record_id" property="exchangeRecordId" jdbcType="INTEGER"/>
-        <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP"/>
-        <result column="status" property="status" jdbcType="TINYINT"/>
-        <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
-        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
-        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
-        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP"/>
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="description" property="description" jdbcType="VARCHAR" />
+        <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+        <result column="project_id" property="projectId" jdbcType="INTEGER" />
+        <result column="city_codes" property="cityCodes" jdbcType="VARCHAR" />
+        <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
+        <result column="face_value" property="faceValue" jdbcType="DECIMAL" />
+        <result column="balance" property="balance" jdbcType="DECIMAL" />
+        <result column="exchange_record_id" property="exchangeRecordId" jdbcType="INTEGER" />
+        <result column="effective_time" property="effectiveTime" jdbcType="TIMESTAMP" />
+        <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
+        <result column="status" property="status" jdbcType="TINYINT" />
+        <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, name,description,customer_id, project_id, city_codes,product_ids,face_value,balance,exchange_record_id,expiry_time,status,
-        ext_info, is_deleted,add_time, mod_time
+        id, name, description, customer_id, project_id, city_codes, product_ids, face_value,
+    balance, exchange_record_id, effective_time, expiry_time, status, ext_info, is_deleted,
+    add_time, mod_time
     </sql>
 
     <select id="findByIds" parameterType="java.util.List"
@@ -36,12 +38,29 @@
         </foreach>
     </select>
 
+    <select id="findByIdsInOrder" parameterType="java.util.List"
+            resultType="com.jiazhe.youxiang.server.domain.po.PointPO">
+        select
+        <include refid="Base_Column_List"/>
+        FROM point
+        where id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by field(
+        id,
+        <foreach collection="list" separator="," item="item">
+            #{item}
+        </foreach>
+        )
+    </select>
+
     <update id="batchUpdate" parameterType="java.util.List">
         <foreach collection="list" item="item" index="index" open="" close="" separator=";">
             update point
             <set>
-                name = #{item.name},description = #{item.description},project_id = #{item.projectId},city_codes =
-                #{item.cityCodes},product_ids = #{item.productIds},face_value = #{item.faceValue}, balance = #{item.balance},expiry_time = #{item.expiryTime},mod_time = NOW()
+                name = #{item.name},description = #{item.description},project_id = #{item.projectId},city_codes = #{item.cityCodes},effective_time = #{item.effectiveTime},
+                product_ids = #{item.productIds},face_value = #{item.faceValue}, balance = #{item.balance},expiry_time = #{item.expiryTime},mod_time = NOW()
             </set>
             where id = #{item.id}
         </foreach>
@@ -63,20 +82,20 @@
         insert into point (id, name, description,
         customer_id, project_id, city_codes,
         product_ids, face_value, balance,
-        exchange_record_id, expiry_time, status,
+        exchange_record_id,effective_time,expiry_time, status,
         ext_info, is_deleted, add_time,
         mod_time)
         values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
         #{customerId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR},
         #{productIds,jdbcType=VARCHAR}, #{faceValue,jdbcType=DECIMAL}, #{balance,jdbcType=DECIMAL},
-        #{exchangeRecordId,jdbcType=INTEGER}, #{expiryTime,jdbcType=TIMESTAMP}, 1,
+        #{exchangeRecordId,jdbcType=INTEGER}, #{effectiveTime,jdbcType=TIMESTAMP},#{expiryTime,jdbcType=TIMESTAMP}, 1,
         "", 0, NOW(),NOW())
     </insert>
 
     <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.PointPO">
         SELECT p.id, p.name,p.description,p.customer_id, p.project_id,
         p.city_codes,p.product_ids,p.face_value,p.balance,
-        p.exchange_record_id,p.expiry_time,p.status,p.ext_info, p.is_deleted,p.add_time, p.mod_time
+        p.exchange_record_id,p.effective_time,p.expiry_time,p.status,p.ext_info, p.is_deleted,p.add_time, p.mod_time
         FROM point p LEFT JOIN
         point_exchange_record pec ON p.id = pec.point_id
         LEFT JOIN customer c ON c.id = p.customer_id

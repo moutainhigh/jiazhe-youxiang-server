@@ -33,6 +33,9 @@ public class RCExchangeCodeBatchResp extends BaseVO{
     @ApiModelProperty("批次过期时间")
     private Long expiryTime;
 
+    @ApiModelProperty("充值卡生效时间")
+    private Long rechargeCardEffectiveTime;
+
     @ApiModelProperty("批次状态，0停用、1启用")
     private Byte status;
 
@@ -116,5 +119,13 @@ public class RCExchangeCodeBatchResp extends BaseVO{
 
     public void setRechargeCardName(String rechargeCardName) {
         this.rechargeCardName = rechargeCardName;
+    }
+
+    public Long getRechargeCardEffectiveTime() {
+        return rechargeCardEffectiveTime;
+    }
+
+    public void setRechargeCardEffectiveTime(Long rechargeCardEffectiveTime) {
+        this.rechargeCardEffectiveTime = rechargeCardEffectiveTime;
     }
 }

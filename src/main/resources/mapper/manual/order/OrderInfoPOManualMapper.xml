@@ -47,7 +47,7 @@
         values (#{id,jdbcType=INTEGER},  #{orderCode,jdbcType=VARCHAR},#{customerId,jdbcType=INTEGER},#{productId,jdbcType=INTEGER}, #{customerCityCode,jdbcType=VARCHAR}, #{customerCityName,jdbcType=VARCHAR},
          #{productPrice,jdbcType=DECIMAL},#{count,jdbcType=INTEGER}, #{customerAddress,jdbcType=VARCHAR},#{customerMobile,jdbcType=VARCHAR},#{customerName,jdbcType=VARCHAR},#{customerRemark,jdbcType=VARCHAR},
          #{workerName,jdbcType=VARCHAR},#{workerMobile,jdbcType=VARCHAR},NOW(),#{serviceTime,jdbcType=TIMESTAMP},#{realServiceTime,jdbcType=TIMESTAMP},#{payRechargeCard,jdbcType=DECIMAL},#{payPoint,jdbcType=DECIMAL},#{payVoucher,jdbcType=DECIMAL},
-         #{payCash,jdbcType=DECIMAL},#{totalAmount,jdbcType=DECIMAL},#{cost,jdbcType=DECIMAL},#{comments,jdbcType=VARCHAR},#{type,jdbcType=TINYINT},#{status,jdbcType=TINYINT},"","",0,NOW(),NOW())
+         #{payCash,jdbcType=DECIMAL},#{totalAmount,jdbcType=DECIMAL},#{cost,jdbcType=DECIMAL},#{comments,jdbcType=VARCHAR},#{type,jdbcType=TINYINT},#{status,jdbcType=TINYINT},"",#{extInfo,jdbcType=VARCHAR},0,NOW(),NOW())
     </insert>
 
     <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.OrderInfoPO">
@@ -58,8 +58,8 @@
         FROM order_info o
         LEFT JOIN customer c ON c.id = o.customer_id
         <where>
-            <if test="status != null and status != 0">
-                AND o.status = #{status}
+            <if test="status != null">
+                AND o.status in (${status})
             </if>
             <if test="orderCode != null and orderCode !=''">
                 AND o.order_code = #{orderCode}
@@ -88,8 +88,8 @@
         SELECT COUNT(*) FROM order_info o
         LEFT JOIN customer c ON c.id = o.customer_id
         <where>
-            <if test="status != null and status != 0">
-                AND o.status = #{status}
+            <if test="status != null">
+                AND o.status in (${status})
             </if>
             <if test="orderCode != null and orderCode !=''">
                 AND o.order_code = #{orderCode}

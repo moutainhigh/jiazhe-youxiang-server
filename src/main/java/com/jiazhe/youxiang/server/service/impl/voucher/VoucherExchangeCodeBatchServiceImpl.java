@@ -56,11 +56,7 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
         VoucherExchangeCodeBatchPO po = VoucherExchangeCodeBatchAdapter.DTOSave2PO(voucherExchangeCodeBatchSaveDTO);
         po.setIsMade(Byte.valueOf("0"));
         po.setStatus(Byte.valueOf("1"));
-        po.setIsDeleted(Byte.valueOf("0"));
-        po.setExtInfo("");
-        po.setAddTime(new Date());
-        po.setModTime(new Date());
-        voucherExchangeCodeBatchPOMapper.insert(po);
+        voucherExchangeCodeBatchPOMapper.insertSelective(po);
     }
 
     @Transactional(rollbackFor=Exception.class)
@@ -78,6 +74,7 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
         batchPO.setProductIds(batchSaveDTO.getProductIds());
         batchPO.setExpiryTime(batchSaveDTO.getExpiryTime());
         batchPO.setExpiryType(batchSaveDTO.getExpiryType());
+        batchPO.setVoucherEffectiveTime(batchSaveDTO.getVoucherEffectiveTime());
         batchPO.setVoucherExpiryTime(batchSaveDTO.getVoucherExpiryTime());
         batchPO.setValidityPeriod(batchSaveDTO.getValidityPeriod());
         batchPO.setDescription(batchSaveDTO.getDescription());
@@ -111,9 +108,13 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
         if(null == batchPO){
             throw new VoucherException(VoucherCodeEnum.BATCH_NOT_EXISTED);
         }
-        List<VoucherExchangeCodeDTO> rcExchangeCodeDTOList = voucherExchangeCodeService.getByBatchId(id);
+        if (batchPO.getIsMade().equals(CommonConstant.EXCHANGE_CODE_HAS_MADE)) {
+            throw new VoucherException(VoucherCodeEnum.CODE_GENERATED);
+        }
         //实际去查一下，批次下是否有兑换码
-        if (!rcExchangeCodeDTOList.isEmpty()) {
+        List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOList = voucherExchangeCodeService.getByBatchId(id);
+
+        if (!voucherExchangeCodeDTOList.isEmpty()) {
             throw new VoucherException(VoucherCodeEnum.CODE_GENERATED);
         }
         batchPO.setIsMade(CommonConstant.EXCHANGE_CODE_HAS_MADE);
@@ -134,6 +135,7 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
             voucherExchangeCodeSaveDTO.setKeyt(codeAndKeyts[1][i]);
             voucherExchangeCodeSaveDTO.setCount(batchPO.getCount());
             voucherExchangeCodeSaveDTO.setExpiryTime(batchPO.getExpiryTime());
+            voucherExchangeCodeSaveDTO.setVoucherEffectiveTime(batchPO.getVoucherEffectiveTime());
             voucherExchangeCodeSaveDTO.setVoucherExpiryTime(batchPO.getVoucherExpiryTime());
             voucherExchangeCodeSaveDTO.setValidityPeriod(batchPO.getValidityPeriod());
             voucherExchangeCodeSaveDTO.setExpiryType(batchPO.getExpiryType());

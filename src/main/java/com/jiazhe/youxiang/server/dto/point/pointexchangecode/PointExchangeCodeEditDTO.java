@@ -25,6 +25,8 @@ public class PointExchangeCodeEditDTO extends BaseObject {
 
     private Date expiryTime;
 
+    private Date pointEffectiveTime;
+
     private Date pointExpiryTime;
 
     private Integer validityPeriod;
@@ -101,5 +103,13 @@ public class PointExchangeCodeEditDTO extends BaseObject {
 
     public void setExpiryType(Byte expiryType) {
         this.expiryType = expiryType;
+    }
+
+    public Date getPointEffectiveTime() {
+        return pointEffectiveTime;
+    }
+
+    public void setPointEffectiveTime(Date pointEffectiveTime) {
+        this.pointEffectiveTime = pointEffectiveTime;
     }
 }

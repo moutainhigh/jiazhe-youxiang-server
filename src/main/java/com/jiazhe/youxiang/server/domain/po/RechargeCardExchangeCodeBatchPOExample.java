@@ -876,6 +876,66 @@ public class RechargeCardExchangeCodeBatchPOExample {
             return (Criteria) this;
         }
 
+        public Criteria andRechargeCardEffectiveTimeIsNull() {
+            addCriterion("recharge_card_effective_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardEffectiveTimeIsNotNull() {
+            addCriterion("recharge_card_effective_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardEffectiveTimeEqualTo(Date value) {
+            addCriterion("recharge_card_effective_time =", value, "rechargeCardEffectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardEffectiveTimeNotEqualTo(Date value) {
+            addCriterion("recharge_card_effective_time <>", value, "rechargeCardEffectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardEffectiveTimeGreaterThan(Date value) {
+            addCriterion("recharge_card_effective_time >", value, "rechargeCardEffectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardEffectiveTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("recharge_card_effective_time >=", value, "rechargeCardEffectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardEffectiveTimeLessThan(Date value) {
+            addCriterion("recharge_card_effective_time <", value, "rechargeCardEffectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardEffectiveTimeLessThanOrEqualTo(Date value) {
+            addCriterion("recharge_card_effective_time <=", value, "rechargeCardEffectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardEffectiveTimeIn(List<Date> values) {
+            addCriterion("recharge_card_effective_time in", values, "rechargeCardEffectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardEffectiveTimeNotIn(List<Date> values) {
+            addCriterion("recharge_card_effective_time not in", values, "rechargeCardEffectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardEffectiveTimeBetween(Date value1, Date value2) {
+            addCriterion("recharge_card_effective_time between", value1, value2, "rechargeCardEffectiveTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeCardEffectiveTimeNotBetween(Date value1, Date value2) {
+            addCriterion("recharge_card_effective_time not between", value1, value2, "rechargeCardEffectiveTime");
+            return (Criteria) this;
+        }
+
         public Criteria andRechargeCardExpiryTimeIsNull() {
             addCriterion("recharge_card_expiry_time is null");
             return (Criteria) this;

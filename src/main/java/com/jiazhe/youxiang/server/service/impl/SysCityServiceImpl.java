@@ -93,7 +93,9 @@ public class SysCityServiceImpl implements SysCityService {
         SysCityPOExample sysCityPOExample = new SysCityPOExample();
         SysCityPOExample.Criteria criteria = sysCityPOExample.createCriteria();
         criteria.andCityLevelEqualTo(SysCityBiz.CITY_LEVEL_2);
-        criteria.andParentCodeEqualTo(cityCode);
+        if(cityCode!=null){
+            criteria.andParentCodeEqualTo(cityCode);
+        }
         criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
         List<SysCityPO> sysCityPOList = sysCityPOMapper.selectByExample(sysCityPOExample);
         return sysCityPOList.stream().map(SysCityAdapter::sysCityPO2DTO).collect(Collectors.toList());
@@ -105,11 +107,11 @@ public class SysCityServiceImpl implements SysCityService {
     public void updateStatusByCityCode(String cityCode, Byte status) {
         sysCityPOManualMapper.updateStatusByCityCode(cityCode, status, true);
         //判断其同级城市状态，继而修改上级城市状态
-        SysCityPO cityPO = getPOListByCityCode(cityCode);
+        SysCityPO cityPO = getCityByCityCode(cityCode);
         if (cityPO == null) {
             throw new SysCityException(SysCityCodeEnum.CITY_ERROR);
         }
-        SysCityPO parentCityPO = getPOListByCityCode(cityPO.getParentCode());
+        SysCityPO parentCityPO = getCityByCityCode(cityPO.getParentCode());
         if (parentCityPO == null) {
             //说明是一级城市，无上级，直接返回
             return;
@@ -143,7 +145,9 @@ public class SysCityServiceImpl implements SysCityService {
      * @param cityCode
      * @return
      */
-    private SysCityPO getPOListByCityCode(String cityCode) {
+    @Cacheable(keyGenerator = "cacheKeyGenerator")
+    @Override
+    public SysCityPO getCityByCityCode(String cityCode) {
         SysCityPOExample sysCityPOExample = new SysCityPOExample();
         SysCityPOExample.Criteria criteria = sysCityPOExample.createCriteria();
         criteria.andCityCodeEqualTo(cityCode);

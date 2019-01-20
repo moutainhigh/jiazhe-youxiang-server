@@ -16,23 +16,35 @@ public class AuditRecordDTO extends BaseObject {
 
     private Integer id;
 
-    private Integer rechargeCardId;
+    private String pointIds;
 
     private String customerName;
 
     private String customerMobile;
 
-    private BigDecimal exchangeMoney;
+    private BigDecimal exchangePoint;
+
+    private String exchangeType;
+
+    private BigDecimal givingPoint;
+
+    private String givingType;
 
     private String remark;
 
+    private String auditReason;
+
     private String imgUrls;
+
+    private String posCode;
+
+    private String cardNo;
+
+    private Date tradeTime;
 
     private Integer submitterId;
 
     private String submitterName;
-
-    private String submitterRemark;
 
     private Byte status;
 
@@ -56,12 +68,12 @@ public class AuditRecordDTO extends BaseObject {
         this.id = id;
     }
 
-    public Integer getRechargeCardId() {
-        return rechargeCardId;
+    public String getPointIds() {
+        return pointIds;
     }
 
-    public void setRechargeCardId(Integer rechargeCardId) {
-        this.rechargeCardId = rechargeCardId;
+    public void setPointIds(String pointIds) {
+        this.pointIds = pointIds;
     }
 
     public String getCustomerName() {
@@ -80,12 +92,36 @@ public class AuditRecordDTO extends BaseObject {
         this.customerMobile = customerMobile;
     }
 
-    public BigDecimal getExchangeMoney() {
-        return exchangeMoney;
+    public BigDecimal getExchangePoint() {
+        return exchangePoint;
     }
 
-    public void setExchangeMoney(BigDecimal exchangeMoney) {
-        this.exchangeMoney = exchangeMoney;
+    public void setExchangePoint(BigDecimal exchangePoint) {
+        this.exchangePoint = exchangePoint;
+    }
+
+    public String getExchangeType() {
+        return exchangeType;
+    }
+
+    public void setExchangeType(String exchangeType) {
+        this.exchangeType = exchangeType;
+    }
+
+    public BigDecimal getGivingPoint() {
+        return givingPoint;
+    }
+
+    public void setGivingPoint(BigDecimal givingPoint) {
+        this.givingPoint = givingPoint;
+    }
+
+    public String getGivingType() {
+        return givingType;
+    }
+
+    public void setGivingType(String givingType) {
+        this.givingType = givingType;
     }
 
     public String getRemark() {
@@ -94,6 +130,14 @@ public class AuditRecordDTO extends BaseObject {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getAuditReason() {
+        return auditReason;
+    }
+
+    public void setAuditReason(String auditReason) {
+        this.auditReason = auditReason;
     }
 
     public String getImgUrls() {
@@ -118,14 +162,6 @@ public class AuditRecordDTO extends BaseObject {
 
     public void setSubmitterName(String submitterName) {
         this.submitterName = submitterName;
-    }
-
-    public String getSubmitterRemark() {
-        return submitterRemark;
-    }
-
-    public void setSubmitterRemark(String submitterRemark) {
-        this.submitterRemark = submitterRemark;
     }
 
     public Byte getStatus() {
@@ -168,6 +204,14 @@ public class AuditRecordDTO extends BaseObject {
         this.version = version;
     }
 
+    public Date getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
+    }
+
     public Date getModTime() {
         return modTime;
     }
@@ -176,11 +220,27 @@ public class AuditRecordDTO extends BaseObject {
         this.modTime = modTime;
     }
 
-    public Date getAddTime() {
-        return addTime;
+    public String getPosCode() {
+        return posCode;
     }
 
-    public void setAddTime(Date addTime) {
-        this.addTime = addTime;
+    public void setPosCode(String posCode) {
+        this.posCode = posCode;
+    }
+
+    public String getCardNo() {
+        return cardNo;
+    }
+
+    public void setCardNo(String cardNo) {
+        this.cardNo = cardNo;
+    }
+
+    public Date getTradeTime() {
+        return tradeTime;
+    }
+
+    public void setTradeTime(Date tradeTime) {
+        this.tradeTime = tradeTime;
     }
 }

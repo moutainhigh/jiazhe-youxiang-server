@@ -1,11 +1,7 @@
 package com.jiazhe.youxiang.base.util;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.Random;
 
 /**
  * Created by TU on 2018/9/13.
@@ -14,9 +10,9 @@ import java.util.Random;
 public class GenerateCode {
 
     /**
-     * 1为【0,1】，0代表充值卡兑换码，1代表代金券兑换码；2-3为时间戳的最后两位；4-5为月；6-7为年的后两位；8-9为日，10-16为随机数
      *
-     * @param type 充值卡兑换码或代金券兑换码
+     * @param type type为【0,1,2】，0代表充值卡兑换码，1代表代金券兑换码，2代表积分兑换码；
+     * 2-3为时间戳的最后两位；4-5为月；6-7为年的后两位；8-9为日，10-16为随机数
      * @param n    兑换码个数
      * @return
      */
@@ -68,13 +64,4 @@ public class GenerateCode {
             randomSet(min, max, n - setSize, set);
         }
     }
-
-    /**
-     * 生成21位订单号（XXXXyyyyMMDDhhmmssSSS ： 手机后四位+年月日时分秒毫秒）
-	 */
-    public static String generateOrderCode(String mobile) throws ParseException {
-        String result = mobile.substring(mobile.length() - 4, mobile.length()) + DateUtil.yyyyMMDDhhmmssSSS();
-        return result;
-    }
-
 }

@@ -7,6 +7,7 @@ import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.order.OrderInfoBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
@@ -17,7 +18,14 @@ import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.*;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.AppendOrderReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerOrderInfoPageReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerPayReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerPlaceOrderReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderCancelUnpassReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderInfoPageReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserPlaceOrderReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserReservationOrderReq;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.WaitingDealCountResp;
@@ -31,7 +39,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,14 +56,18 @@ public class APIOrderInfoController extends BaseController {
     @Autowired
     private OrderInfoBiz orderInfoBiz;
 
-    @RequiresPermissions(value = {PermissionConstant.ORDER_MANAGEMENT, PermissionConstant.ORDER_SEARCH,PermissionConstant.CUSTOMER_ORDER_DETAIL}, logical = Logical.OR)
+    @RequiresPermissions(value = {PermissionConstant.ORDER_MANAGEMENT, PermissionConstant.ORDER_SEARCH, PermissionConstant.CUSTOMER_ORDER_DETAIL}, logical = Logical.OR)
     @ApiOperation(value = "【后台】分页查询订单信息", httpMethod = "GET", response = OrderInfoResp.class, responseContainer = "List", notes = "【后台】分页查询订单信息")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "分页查询订单信息", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute OrderInfoPageReq req) {
+        //如果包含0，说明查全部订单，否则按需查询
+        if (Arrays.binarySearch(req.getStatus().split(","), "0") > -1) {
+            req.setStatus(null);
+        }
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        Date orderStartTime = req.getOrderStartTime() == 0 ? null : new Date(req.getOrderStartTime());
-        Date orderEndTime = req.getOrderEndTime() == 0 ? null : new Date(req.getOrderEndTime());
+        Date orderStartTime = req.getOrderStartTime() == CommonConstant.NULL_TIME ? null : new Date(req.getOrderStartTime());
+        Date orderEndTime = req.getOrderEndTime() == CommonConstant.NULL_TIME ? null : new Date(req.getOrderEndTime());
         List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getStatus(), req.getOrderCode(), req.getMobile(), req.getCustomerMobile(), orderStartTime, orderEndTime, req.getWorkerMobile(), paging);
         List<OrderInfoResp> orderInfoRespList = orderInfoDTOList.stream().map(OrderInfoAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(orderInfoRespList, paging);
@@ -67,6 +79,10 @@ public class APIOrderInfoController extends BaseController {
     @RequestMapping(value = "/customerlistpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "分页查询订单信息", level = LogLevelEnum.LEVEL_1)
     public Object customerListPage(@ModelAttribute CustomerOrderInfoPageReq req) {
+        //如果包含0，说明查全部订单，否则按需查询
+        if (Arrays.binarySearch(req.getStatus().split(","), String.valueOf(CommonConstant.ORDER_ALL)) > -1) {
+            req.setStatus(null);
+        }
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.customerGetList(req.getCustomerId(), req.getStatus(), paging);
         List<OrderInfoResp> orderInfoRespList = orderInfoDTOList.stream().map(OrderInfoAdapter::DTO2Resp).collect(Collectors.toList());
@@ -157,11 +173,11 @@ public class APIOrderInfoController extends BaseController {
     @ApiOperation(value = "【后端】下单", httpMethod = "POST", response = NeedPayResp.class, notes = "【后端】下单")
     @RequestMapping(value = "/userplaceorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "下单", level = LogLevelEnum.LEVEL_2)
-    public Object userPlaceOrder(@ModelAttribute UserPlaceOrderReq req) throws ParseException {
+    public Object userPlaceOrder(@ModelAttribute UserPlaceOrderReq req)  {
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqUserPlaceOrder2DTOPlaceOrder(req);
         placeOrderDTO.setType(Byte.valueOf("0"));
         placeOrderDTO.setServiceTime(new Date(req.getRealServiceTime()));
-        NeedPayResp needPayResp = orderInfoBiz.placeOrder(placeOrderDTO);
+        NeedPayResp needPayResp = orderInfoBiz.userPlaceOrder(placeOrderDTO);
         return ResponseFactory.buildResponse(needPayResp);
     }
 
@@ -170,11 +186,14 @@ public class APIOrderInfoController extends BaseController {
     @ApiOperation(value = "【APP端】下单", httpMethod = "POST", response = NeedPayResp.class, notes = "【APP端】下单")
     @RequestMapping(value = "/customerplaceorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "下单", level = LogLevelEnum.LEVEL_2)
-    public Object customerPlaceOrder(@ModelAttribute CustomerPlaceOrderReq req) throws ParseException {
+    public Object customerPlaceOrder(@ModelAttribute CustomerPlaceOrderReq req)  {
+        if((!req.getPointIds().isEmpty())&&(!req.getRechargeCardIds().isEmpty())){
+            throw new OrderException(OrderCodeEnum.POINT_RECHARGE_CARD_CONCURRENT_PAY);
+        }
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqCustomerPlaceOrder2DTOPlaceOrder(req);
         placeOrderDTO.setWorkerMobile("");
         placeOrderDTO.setWorkerName("");
-        placeOrderDTO.setCost(new BigDecimal(0));
+        placeOrderDTO.setCost(BigDecimal.ZERO);
         placeOrderDTO.setType(Byte.valueOf("1"));
         placeOrderDTO.setRealServiceTime(new Date(req.getServiceTime()));
         placeOrderDTO.setComments("");
@@ -187,7 +206,7 @@ public class APIOrderInfoController extends BaseController {
     @RequestMapping(value = "/userreservationorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "员工预约服务、派单", level = LogLevelEnum.LEVEL_2)
     public Object userReservationOrder(@ModelAttribute UserReservationOrderReq req) {
-        if (req.getRealServiceTime() == 0) {
+        if (req.getRealServiceTime() == CommonConstant.NULL_TIME) {
             throw new OrderException(OrderCodeEnum.REAL_SERVICE_TIME_IS_NULL);
         }
         CommonValidator.validateNull(req.getWorkerName(), new OrderException(OrderCodeEnum.WORKER_NAME_IS_NAME));
@@ -202,7 +221,7 @@ public class APIOrderInfoController extends BaseController {
     @RequestMapping(value = "/userchangereservationinfo", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "员工修改预约信息", level = LogLevelEnum.LEVEL_2)
     public Object userChangeReservationInfo(@ModelAttribute UserReservationOrderReq req) {
-        if (req.getRealServiceTime() == 0) {
+        if (req.getRealServiceTime() == CommonConstant.NULL_TIME) {
             throw new OrderException(OrderCodeEnum.REAL_SERVICE_TIME_IS_NULL);
         }
         CommonValidator.validateNull(req.getWorkerName(), new OrderException(OrderCodeEnum.WORKER_NAME_IS_NAME));

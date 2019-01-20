@@ -8,7 +8,6 @@ import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +30,7 @@ public interface OrderInfoService {
      * @param paging
      * @return
      */
-    List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Paging paging);
+    List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Paging paging);
 
     /**
      * 获取订单信息
@@ -83,10 +82,10 @@ public interface OrderInfoService {
     void userCompleteOrder(Integer id);
 
     /**
-     * 员工下单
+     * 下单
      * @param dto
      */
-    NeedPayResp placeOrder(PlaceOrderDTO dto) throws ParseException;
+    NeedPayResp placeOrder(PlaceOrderDTO dto) ;
 
     /**
      * 预约订单
@@ -120,15 +119,16 @@ public interface OrderInfoService {
     void prePaymentCheck(Integer id);
 
     /**
-     * 客户下单
-     * @param dto
-     */
-    NeedPayResp customerPlaceOrder(PlaceOrderDTO dto) throws ParseException;
-
-    /**
      * 通过订单号查找订单
      * @param orderNo
      * @return
      */
     OrderInfoDTO getByOrderNo(String orderNo);
+
+    /**
+     * 微信支付成功后，通知
+     * @param orderNo
+     * @param wxPay
+     */
+    void wxNotify(String orderNo, BigDecimal wxPay);
 }

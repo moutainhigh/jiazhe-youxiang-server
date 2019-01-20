@@ -22,6 +22,11 @@ public class AppendOrderDTO extends BaseObject {
     private BigDecimal cost;
 
     /**
+     * 使用的积分卡ids
+     */
+    private String pointIds;
+
+    /**
      * 使用的代金券ids
      */
     private String voucherIds;
@@ -31,10 +36,6 @@ public class AppendOrderDTO extends BaseObject {
      */
     private String rechargeCardIds;
 
-    /**
-     * 每张充值卡使用的金额
-     */
-    private String cardMoneys;
 
     public Integer getOrderId() {
         return orderId;
@@ -52,6 +53,14 @@ public class AppendOrderDTO extends BaseObject {
         this.count = count;
     }
 
+    public String getPointIds() {
+        return pointIds;
+    }
+
+    public void setPointIds(String pointIds) {
+        this.pointIds = pointIds;
+    }
+
     public String getVoucherIds() {
         return voucherIds;
     }
@@ -66,14 +75,6 @@ public class AppendOrderDTO extends BaseObject {
 
     public void setRechargeCardIds(String rechargeCardIds) {
         this.rechargeCardIds = rechargeCardIds;
-    }
-
-    public String getCardMoneys() {
-        return cardMoneys;
-    }
-
-    public void setCardMoneys(String cardMoneys) {
-        this.cardMoneys = cardMoneys;
     }
 
     public BigDecimal getCost() {

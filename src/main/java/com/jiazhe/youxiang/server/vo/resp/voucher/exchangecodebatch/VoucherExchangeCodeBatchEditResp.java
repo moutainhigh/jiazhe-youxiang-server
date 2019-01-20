@@ -34,6 +34,8 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
 
     private Long expiryTime;
 
+    private Long voucherEffectiveTime;
+
     private Long voucherExpiryTime;
 
     private Integer validityPeriod;
@@ -150,5 +152,13 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
 
     public void setVoucherExpiryTime(Long voucherExpiryTime) {
         this.voucherExpiryTime = voucherExpiryTime;
+    }
+
+    public Long getVoucherEffectiveTime() {
+        return voucherEffectiveTime;
+    }
+
+    public void setVoucherEffectiveTime(Long voucherEffectiveTime) {
+        this.voucherEffectiveTime = voucherEffectiveTime;
     }
 }

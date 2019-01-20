@@ -13,7 +13,7 @@ public class VoucherCustomerPageReq extends PageSizeNumReq {
     @ApiModelProperty("客户id")
     private Integer customerId;
 
-    @ApiModelProperty("0为所有，1为不可用【包括过期、停用和余额为0】，2为可用")
+    @ApiModelProperty("0为所有，1为不可用【包括未生效、过期、停用和已使用】，2为可用")
     private Byte status;
 
     public Integer getCustomerId() {

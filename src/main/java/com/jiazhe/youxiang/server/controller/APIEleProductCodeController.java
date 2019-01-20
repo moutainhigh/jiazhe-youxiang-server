@@ -7,6 +7,7 @@ import com.jiazhe.youxiang.base.util.UploadUtil;
 import com.jiazhe.youxiang.server.adapter.EleProductCodeAdapter;
 import com.jiazhe.youxiang.server.biz.EleProductCodeBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.EleProductCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
@@ -113,7 +114,7 @@ public class APIEleProductCodeController extends BaseController {
     public Object importCode(@ModelAttribute ImportCodeReq req) throws IOException {
         CommonValidator.validateNull(req.getProductId(), new EleProductCodeException(EleProductCodeEnum.PRODUCT_IS_NULL));
         CommonValidator.validateNull(req.getBatchName(), new EleProductCodeException(EleProductCodeEnum.BATCH_NAME_IS_NULL));
-        if (req.getExpiryTime() == 0) {
+        if (req.getExpiryTime() == CommonConstant.NULL_TIME) {
             throw new EleProductCodeException(EleProductCodeEnum.EXPIRY_TIME_IS_NULL);
         }
         CommonValidator.validateNull(req.getExcelUrl(), new EleProductCodeException(EleProductCodeEnum.FILE_NOT_EXIST));
@@ -126,7 +127,7 @@ public class APIEleProductCodeController extends BaseController {
     @RequestMapping(value = "/batchchangeexpirytime", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ELE_PRODUCT, operate = "批量修改电子码有效期", level = LogLevelEnum.LEVEL_2)
     public Object batchChangeExpiryTime(@ModelAttribute ExpiryTimeEditReq req) {
-        if (req.getExpiryTime() == 0) {
+        if (req.getExpiryTime() == CommonConstant.NULL_TIME) {
             throw new EleProductCodeException(EleProductCodeEnum.EXPIRY_TIME_IS_NULL);
         }
         eleProductCodeBiz.batchChangeExpiryTime(req.getBatchName(), new Date(req.getExpiryTime()));

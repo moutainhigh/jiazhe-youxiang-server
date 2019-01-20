@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.adapter.point;
 
 import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
+import com.jiazhe.youxiang.server.adapter.ProjectAdapter;
 import com.jiazhe.youxiang.server.domain.po.PointPO;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardPO;
 import com.jiazhe.youxiang.server.dto.point.point.PointDTO;
@@ -35,11 +36,14 @@ public class PointAdapter {
         pointResp.setProductIds(pointDTO.getProductIds());
         pointResp.setFaceValue(pointDTO.getFaceValue());
         pointResp.setBalance(pointDTO.getBalance());
+        pointResp.setEffectiveTime(pointDTO.getEffectiveTime().getTime());
         pointResp.setExpiryTime(pointDTO.getExpiryTime().getTime());
         pointResp.setStatus(pointDTO.getStatus());
         pointResp.setAddTime(pointDTO.getAddTime().getTime());
+        pointResp.setExtInfo(pointDTO.getExtInfo());
         pointResp.setCustomerResp(CustomerAdapter.customerDTO2VO(pointDTO.getCustomerDTO()));
         pointResp.setPointExchangeRecordResp(PointExchangeRecordAdapter.dto2Resp(pointDTO.getPointExchangeRecordDTO()));
+        pointResp.setProjectResp(ProjectAdapter.projectDTO2VO(pointDTO.getProjectDTO()));
         return pointResp;
     }
 
@@ -57,9 +61,11 @@ public class PointAdapter {
         pointDTO.setProductIds(pointPO.getProductIds());
         pointDTO.setFaceValue(pointPO.getFaceValue());
         pointDTO.setBalance(pointPO.getBalance());
+        pointDTO.setEffectiveTime(pointPO.getEffectiveTime());
         pointDTO.setExpiryTime(pointPO.getExpiryTime());
         pointDTO.setStatus(pointPO.getStatus());
         pointDTO.setAddTime(pointPO.getAddTime());
+        pointDTO.setExtInfo(pointPO.getExtInfo());
         return pointDTO;
     }
 
@@ -73,12 +79,15 @@ public class PointAdapter {
         pointResp.setDescription(pointDTO.getDescription());
         pointResp.setCustomerId(pointDTO.getCustomerId());
         pointResp.setProjectId(pointDTO.getProjectId());
+        pointResp.setProjectResp(ProjectAdapter.projectDTO2VO(pointDTO.getProjectDTO()));
         pointResp.setCityCodes(pointDTO.getCityCodes());
         pointResp.setProductIds(pointDTO.getProductIds());
         pointResp.setFaceValue(pointDTO.getFaceValue());
         pointResp.setBalance(pointDTO.getBalance());
+        pointResp.setEffectiveTime(pointDTO.getEffectiveTime().getTime());
         pointResp.setExpiryTime(pointDTO.getExpiryTime().getTime());
         pointResp.setStatus(pointDTO.getStatus());
+        pointResp.setExtInfo(pointDTO.getExtInfo());
         pointResp.setAddTime(pointDTO.getAddTime().getTime());
         pointResp.setCustomerResp(CustomerAdapter.customerDTO2VO(pointDTO.getCustomerDTO()));
         pointResp.setPointExchangeRecordResp(PointExchangeRecordAdapter.dto2Resp(pointDTO.getPointExchangeRecordDTO()));
@@ -95,6 +104,7 @@ public class PointAdapter {
         pointEditDTO.setProductIds(req.getProductIds());
         pointEditDTO.setName(req.getName());
         pointEditDTO.setDescription(req.getDescription());
+        pointEditDTO.setEffectiveTime(new Date(req.getEffectiveTime()));
         pointEditDTO.setExpiryTime(new Date(req.getExpiryTime()));
         return pointEditDTO;
     }
@@ -113,6 +123,7 @@ public class PointAdapter {
         pointPO.setProductIds(pointDTO.getProductIds());
         pointPO.setFaceValue(pointDTO.getFaceValue());
         pointPO.setBalance(pointDTO.getBalance());
+        pointPO.setEffectiveTime(pointDTO.getEffectiveTime());
         pointPO.setExpiryTime(pointDTO.getExpiryTime());
         pointPO.setStatus(pointDTO.getStatus());
         pointPO.setAddTime(pointDTO.getAddTime());

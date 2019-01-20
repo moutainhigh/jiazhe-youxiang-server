@@ -60,11 +60,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         RechargeCardExchangeCodeBatchPO rcExchangeCodeBatchPO = RCExchangeCodeBatchAdapter.DTOSave2PO(rcExchangeCodeBatchSaveDTO);
         rcExchangeCodeBatchPO.setIsMade(Byte.valueOf("0"));
         rcExchangeCodeBatchPO.setStatus(Byte.valueOf("1"));
-        rcExchangeCodeBatchPO.setIsDeleted(Byte.valueOf("0"));
-        rcExchangeCodeBatchPO.setExtInfo("");
-        rcExchangeCodeBatchPO.setAddTime(new Date());
-        rcExchangeCodeBatchPO.setModTime(new Date());
-        rechargeCardExchangeCodeBatchPOMapper.insert(rcExchangeCodeBatchPO);
+        rechargeCardExchangeCodeBatchPOMapper.insertSelective(rcExchangeCodeBatchPO);
     }
 
     @Override
@@ -92,6 +88,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         batchPO.setProductIds(batchSaveDTO.getProductIds());
         batchPO.setExpiryTime(batchSaveDTO.getExpiryTime());
         batchPO.setExpiryType(batchSaveDTO.getExpiryType());
+        batchPO.setRechargeCardEffectiveTime(batchSaveDTO.getRechargeCardEffectiveTime());
         batchPO.setRechargeCardExpiryTime(batchSaveDTO.getRechargeCardExpiryTime());
         batchPO.setValidityPeriod(batchSaveDTO.getValidityPeriod());
         batchPO.setDescription(batchSaveDTO.getDescription());
@@ -139,8 +136,14 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         if (null == batchPO) {
             throw new RechargeCardException(RechargeCardCodeEnum.BATCH_NOT_EXISTED);
         }
-        List<RCExchangeCodeDTO> rcExchangeCodeDTOList = rcExchangeCodeService.getByBatchId(id);
+        if (batchPO.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
+            throw new RechargeCardException(RechargeCardCodeEnum.VIRTUAL_BATCH_CANNOT_GENERATE);
+        }
+        if (batchPO.getIsMade().equals(CommonConstant.EXCHANGE_CODE_HAS_MADE)) {
+            throw new RechargeCardException(RechargeCardCodeEnum.CODE_GENERATED);
+        }
         //实际去查一下，批次下是否有兑换码
+        List<RCExchangeCodeDTO> rcExchangeCodeDTOList = rcExchangeCodeService.getByBatchId(id);
         if (!rcExchangeCodeDTOList.isEmpty()) {
             throw new RechargeCardException(RechargeCardCodeEnum.CODE_GENERATED);
         }
@@ -162,6 +165,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
             rcExchangeCodeSaveDTO.setKeyt(codeAndKeyts[1][i]);
             rcExchangeCodeSaveDTO.setFaceValue(batchPO.getFaceValue());
             rcExchangeCodeSaveDTO.setExpiryTime(batchPO.getExpiryTime());
+            rcExchangeCodeSaveDTO.setRechargeCardEffectiveTime(batchPO.getRechargeCardEffectiveTime());
             rcExchangeCodeSaveDTO.setRechargeCardExpiryTime(batchPO.getRechargeCardExpiryTime());
             rcExchangeCodeSaveDTO.setValidityPeriod(batchPO.getValidityPeriod());
             rcExchangeCodeSaveDTO.setExpiryType(batchPO.getExpiryType());
@@ -184,14 +188,14 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         List<RechargeCardExchangeCodeBatchPO> poList = rechargeCardExchangeCodeBatchPOMapper.selectByExample(example);
         List<RechargeCardExchangeCodeBatchPO> validBatchList = Lists.newArrayList();
         //筛选出转为充值卡不过期的批次
-        poList.stream().forEach(bean->{
-            if(bean.getExpiryTime().getTime() > System.currentTimeMillis()){
-                    if(bean.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)&& bean.getRechargeCardExpiryTime().getTime() > System.currentTimeMillis()){
-                        validBatchList.add(bean);
-                    }
-                    if(bean.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_PERIOD)&&bean.getValidityPeriod()>0){
-                        validBatchList.add(bean);
-                    }
+        poList.stream().forEach(bean -> {
+            if (bean.getExpiryTime().getTime() > System.currentTimeMillis()) {
+                if (bean.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME) && bean.getRechargeCardExpiryTime().getTime() > System.currentTimeMillis()) {
+                    validBatchList.add(bean);
+                }
+                if (bean.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_PERIOD) && bean.getValidityPeriod() > 0) {
+                    validBatchList.add(bean);
+                }
             }
         });
         return validBatchList.stream().map(RCExchangeCodeBatchAdapter::PO2DTO).collect(Collectors.toList());

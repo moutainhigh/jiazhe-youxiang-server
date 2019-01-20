@@ -39,9 +39,6 @@
                                                     type="text"
                                                     style="height:30px">
                                             </select>
-                                            <!--<select id="searchProjectId" name="projectId" class="select2 tag-input-style"
-                                                    data-placeholder="" style="height: 30px">
-                                            </select>-->
                                         </div>
                                     </div>
                                     <label class="col-sm-1 control-label no-padding-right">批次名称：</label>
@@ -77,7 +74,7 @@
 
                         <div id="grid-pager"></div>
                     </div><!-- /.col -->
-                    <div id="modal-form" class="modal fade" tabindex="-1">
+                    <div id="modal-form" class="modal fade" tabindex="-1" style="overflow: scroll">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -123,10 +120,6 @@
                                                         <select id="saveProjectId" name="projectId"
                                                                 class="selectpicker show-tick form-control">
                                                         </select>
-                                                        <!--<select id="saveProjectId" name="projectId"
-                                                                class="select2 tag-input-style" data-placeholder=""
-                                                                style="height: 30px">
-                                                        </select>-->
                                                     </div>
                                                 </div>
 
@@ -161,8 +154,20 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2 saveIsVirtual"></div>
-                                                <div class="form-group saveIsVirtual">
+                                                <div class="space-2 isVirtual" style="display:none;"></div>
+                                                <div class="form-group isVirtual" style="display:none;">
+                                                    <label class="col-sm-4 control-label no-padding-right">绑定商户号：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="saveExtInfo" name="extInfo"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 notVirtual"></div>
+                                                <div class="form-group notVirtual">
                                                     <label class="col-sm-4 control-label no-padding-right">积分：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
@@ -173,8 +178,8 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2 saveIsVirtual"></div>
-                                                <div class="form-group saveIsVirtual">
+                                                <div class="space-2 notVirtual"></div>
+                                                <div class="form-group notVirtual">
                                                     <label class="col-sm-4 control-label no-padding-right">数量：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
@@ -188,7 +193,23 @@
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveExpiryTime">过期时间：</label>
+                                                           for="savePointEffectiveTime">积分卡生效时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker" id="savePointEffectiveTime"
+                                                                   type="text" readonly/>
+                                                            <span class="input-group-addon">
+                                                                            <i class="fa fa-calendar bigger-110"></i>
+                                                                        </span>
+                                                            <input type="hidden" value=0 name="pointEffectiveTime"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveExpiryTime">批次过期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker" id="saveExpiryTime"
@@ -254,9 +275,9 @@
                                                            for="saveDescription">描述信息：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveDescription" name="description"
-                                                                   class="form-control"
-                                                                   type="text" style="height:30px"/>
+                                                            <textarea id="saveDescription" name="description"
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -329,10 +350,12 @@
 
         $("input[name=isVirtualRadio]").bind("change", function () {
             if ($("input[name=isVirtualRadio]:checked").val() == 1) {
-                $(".saveIsVirtual").css("display", "none");
+                $(".notVirtual").css("display", "none");
+                $(".isVirtual").css("display", "");
                 $("#saveIsVirtual").val(1);
             } else {
-                $(".saveIsVirtual").css("display", "");
+                $(".notVirtual").css("display", "");
+                $(".isVirtual").css("display", "none");
                 $("#saveIsVirtual").val(0);
             }
         });
@@ -352,7 +375,7 @@
         var tableOption = {
             url: "/api/pointexchangecodebatch/listpage",
             postData: transformToJson($('#batchSearchForm').serializeArray()),
-            colNames: ['', '批次名称', '积分卡名称', '是否是虚拟批次', '状态', '积分', '数量', '过期时间', '操作'],
+            colNames: ['', '批次名称', '积分卡名称', '是否是虚拟批次', '状态', '积分', '兑换比例', '数量', '批次过期时间','积分卡生效时间', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 100, sortable: false},
@@ -386,14 +409,37 @@
                         return rowObject.isVirtual == 1 ? "--" : rowObject.faceValue;
                     }
                 },
-                {name: 'amount', index: 'amount', width: 30, sortable: false},
+                {
+                    name: 'projectResp.pointConversionRate',
+                    index: 'projectResp.pointConversionRate',
+                    width: 30,
+                    sortable: false
+                },
+                {
+                    name: 'amount',
+                    index: 'amount',
+                    width: 30,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return rowObject.isVirtual == 1 ? "--" : rowObject.amount;
+                    }
+                },
                 {
                     name: 'expiryTime',
                     index: 'expiryTime',
                     width: 50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return dateFormat(rowObject.expiryTime);
+                        return timeFormat(rowObject.expiryTime);
+                    }
+                },
+                {
+                    name: 'pointEffectiveTime',
+                    index: 'pointEffectiveTime',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return timeFormat(rowObject.pointEffectiveTime);
                     }
                 },
                 {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
@@ -455,10 +501,15 @@
         $("#batchSaveForm #saveFaceValue").val("");
         $("#batchSaveForm #saveAmount").val("");
         $("#batchSaveForm #saveExpiryTime").val("");
+        $("#batchSaveForm #saveExpiryTime").next().next().val(0);
+        $("#batchSaveForm #savePointEffectiveTime").val("");
+        $("#batchSaveForm #savePointEffectiveTime").next().next().val(0);
         $("#batchSaveForm #saveDeadLineRadio").click();
         $("#batchSaveForm #savePointExpiryTime").val("");
+        $("#batchSaveForm #savePointExpiryTime").next().next().val(0);
         $("#batchSaveForm #saveValidityPeriod").val("");
         $("#batchSaveForm #saveDescription").val("");
+        $("#batchSaveForm #saveExtInfo").val("");
     }
 
     function openEdit(id) {
@@ -518,6 +569,7 @@
                     $("#batchSaveForm #saveCityCodes").val(result.cityCodes);
                     $("#batchSaveForm #saveProductIds").val(result.productIds);
                     if (result.isVirtual == 0) {
+                        $("#batchSaveForm #saveExtInfo").val("");
                         $("#batchSaveForm #saveNotVirtualRadio").click();
                         $("#batchSaveForm #saveFaceValue").val(result.faceValue);
                         $("#batchSaveForm #saveAmount").val(result.amount);
@@ -529,10 +581,15 @@
                             $("#batchSaveForm #saveAmount").removeAttr('readonly');
                         }
                     } else {
+                        $("#batchSaveForm #saveExtInfo").val(result.extInfo);
                         $("#batchSaveForm #saveIsVirtualRadio").click();
                     }
                     $("#batchSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
+                    $('#saveExpiryTime').datepicker('update');
                     $("#batchSaveForm #saveExpiryTime").next().next().val(result.expiryTime);
+                    $("#batchSaveForm #savePointEffectiveTime").val(dateFormat(result.pointEffectiveTime));
+                    $('#savePointEffectiveTime').datepicker('update');
+                    $("#batchSaveForm #savePointEffectiveTime").next().next().val(result.pointEffectiveTime);
                     if (result.expiryType == 0) {
                         $("#batchSaveForm #saveDeadLineRadio").click();
                     } else {
@@ -540,6 +597,7 @@
                     }
                     $("#batchSaveForm #saveValidityPeriod").val(result.validityPeriod);
                     $("#batchSaveForm #savePointExpiryTime").val(dateFormat(result.pointExpiryTime));
+                    $('#savePointExpiryTime').datepicker('update');
                     $("#batchSaveForm #savePointExpiryTime").next().next().val(result.pointExpiryTime);
                     $("#batchSaveForm #saveDescription").val(result.description);
                     $("input[name=isVirtualRadio]").attr('disabled', 'disabled');

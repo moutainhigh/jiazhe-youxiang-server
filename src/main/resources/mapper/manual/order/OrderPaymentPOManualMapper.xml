@@ -6,6 +6,7 @@
         <result column="order_code" property="orderCode" jdbcType="VARCHAR" />
         <result column="order_id" property="orderId" jdbcType="INTEGER" />
         <result column="pay_type" property="payType" jdbcType="TINYINT" />
+        <result column="point_id" property="pointId" jdbcType="INTEGER" />
         <result column="recharge_card_id" property="rechargeCardId" jdbcType="INTEGER" />
         <result column="voucher_id" property="voucherId" jdbcType="INTEGER" />
         <result column="pay_money" property="payMoney" jdbcType="DECIMAL" />
@@ -17,16 +18,16 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,order_code,order_id,pay_type,recharge_card_id,voucher_id,pay_money,serial_number,
+        id,order_code,order_id,pay_type,point_id,recharge_card_id,voucher_id,pay_money,serial_number,
         ext_info,is_deleted,add_time,mod_time
     </sql>
 
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
         INSERT into order_payment
-        (order_code,order_id,pay_type,recharge_card_id,voucher_id,pay_money,serial_number,
+        (order_code,order_id,pay_type,point_id,recharge_card_id,voucher_id,pay_money,serial_number,
         ext_info,is_deleted,add_time,mod_time) VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.orderCode},#{item.orderId},#{item.payType},#{item.rechargeCardId},#{item.voucherId},#{item.payMoney},#{item.serialNumber},"",0,NOW(),NOW())
+            (#{item.orderCode},#{item.orderId},#{item.payType},#{item.pointId},#{item.rechargeCardId},#{item.voucherId},#{item.payMoney},#{item.serialNumber},"",0,NOW(),NOW())
         </foreach>
     </insert>
 

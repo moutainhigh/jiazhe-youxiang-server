@@ -28,6 +28,9 @@ public class VoucherEditReq extends BaseVO{
     @ApiModelProperty("描述")
     private String description;
 
+    @ApiModelProperty("生效时间")
+    private Long effectiveTime;
+
     @ApiModelProperty("过期时间")
     private Long expiryTime;
 
@@ -77,5 +80,13 @@ public class VoucherEditReq extends BaseVO{
 
     public void setExpiryTime(Long expiryTime) {
         this.expiryTime = expiryTime;
+    }
+
+    public Long getEffectiveTime() {
+        return effectiveTime;
+    }
+
+    public void setEffectiveTime(Long effectiveTime) {
+        this.effectiveTime = effectiveTime;
     }
 }

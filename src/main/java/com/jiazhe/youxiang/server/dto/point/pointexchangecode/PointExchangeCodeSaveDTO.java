@@ -36,6 +36,8 @@ public class PointExchangeCodeSaveDTO extends BaseObject {
 
     private Date expiryTime;
 
+    private Date pointEffectiveTime;
+
     private Date pointExpiryTime;
 
     private Integer validityPeriod;
@@ -182,5 +184,13 @@ public class PointExchangeCodeSaveDTO extends BaseObject {
 
     public void setCustomerId(Integer customerId) {
         this.customerId = customerId;
+    }
+
+    public Date getPointEffectiveTime() {
+        return pointEffectiveTime;
+    }
+
+    public void setPointEffectiveTime(Date pointEffectiveTime) {
+        this.pointEffectiveTime = pointEffectiveTime;
     }
 }

@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.dto.voucher.exchangecode;
 
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.vo.BaseObject;
 
 import java.util.Date;
@@ -37,6 +38,8 @@ public class VoucherExchangeCodeDTO extends BaseObject {
 
     private Date expiryTime;
 
+    private Date voucherEffectiveTime;
+
     private Date voucherExpiryTime;
 
     private Integer validityPeriod;
@@ -48,6 +51,8 @@ public class VoucherExchangeCodeDTO extends BaseObject {
     private Byte used;
 
     private Integer customerId;
+
+    private CustomerDTO customerDTO;
 
     public Integer getId() {
         return id;
@@ -191,5 +196,21 @@ public class VoucherExchangeCodeDTO extends BaseObject {
 
     public void setCustomerId(Integer customerId) {
         this.customerId = customerId;
+    }
+
+    public CustomerDTO getCustomerDTO() {
+        return customerDTO;
+    }
+
+    public void setCustomerDTO(CustomerDTO customerDTO) {
+        this.customerDTO = customerDTO;
+    }
+
+    public Date getVoucherEffectiveTime() {
+        return voucherEffectiveTime;
+    }
+
+    public void setVoucherEffectiveTime(Date voucherEffectiveTime) {
+        this.voucherEffectiveTime = voucherEffectiveTime;
     }
 }

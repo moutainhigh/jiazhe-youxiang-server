@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.server.adapter.point;
 
+import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
+import com.jiazhe.youxiang.server.adapter.ProjectAdapter;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO;
@@ -43,11 +45,13 @@ public class PointExchangeCodeAdapter {
         pointExchangeCodeDTO.setKeyt(pointExchangeCodePO.getKeyt());
         pointExchangeCodeDTO.setFaceValue(pointExchangeCodePO.getFaceValue());
         pointExchangeCodeDTO.setExpiryTime(pointExchangeCodePO.getExpiryTime());
+        pointExchangeCodeDTO.setPointEffectiveTime(pointExchangeCodePO.getPointEffectiveTime());
         pointExchangeCodeDTO.setPointExpiryTime(pointExchangeCodePO.getPointExpiryTime());
         pointExchangeCodeDTO.setValidityPeriod(pointExchangeCodePO.getValidityPeriod());
         pointExchangeCodeDTO.setExpiryType(pointExchangeCodePO.getExpiryType());
         pointExchangeCodeDTO.setStatus(pointExchangeCodePO.getStatus());
         pointExchangeCodeDTO.setUsed(pointExchangeCodePO.getUsed());
+        pointExchangeCodeDTO.setCustomerId(pointExchangeCodePO.getCustomerId());
         return pointExchangeCodeDTO;
     }
 
@@ -68,9 +72,11 @@ public class PointExchangeCodeAdapter {
         pointExchangeCodeBatchEditDTO.setProductIds(pointExchangeCodeBatchPO.getProductIds());
         pointExchangeCodeBatchEditDTO.setFaceValue(pointExchangeCodeBatchPO.getFaceValue());
         pointExchangeCodeBatchEditDTO.setExpiryTime(pointExchangeCodeBatchPO.getExpiryTime());
+        pointExchangeCodeBatchEditDTO.setPointEffectiveTime(pointExchangeCodeBatchPO.getPointEffectiveTime());
         pointExchangeCodeBatchEditDTO.setPointExpiryTime(pointExchangeCodeBatchPO.getPointExpiryTime());
         pointExchangeCodeBatchEditDTO.setValidityPeriod(pointExchangeCodeBatchPO.getValidityPeriod());
         pointExchangeCodeBatchEditDTO.setExpiryType(pointExchangeCodeBatchPO.getExpiryType());
+        pointExchangeCodeBatchEditDTO.setExtInfo(pointExchangeCodeBatchPO.getExtInfo());
         return pointExchangeCodeBatchEditDTO;
     }
 
@@ -90,6 +96,7 @@ public class PointExchangeCodeAdapter {
         pointExchangeCodePO.setKeyt(pointExchangeCodeSaveDTO.getKeyt());
         pointExchangeCodePO.setFaceValue(pointExchangeCodeSaveDTO.getFaceValue());
         pointExchangeCodePO.setExpiryTime(pointExchangeCodeSaveDTO.getExpiryTime());
+        pointExchangeCodePO.setPointEffectiveTime(pointExchangeCodeSaveDTO.getPointEffectiveTime());
         pointExchangeCodePO.setPointExpiryTime(pointExchangeCodeSaveDTO.getPointExpiryTime());
         pointExchangeCodePO.setValidityPeriod(pointExchangeCodeSaveDTO.getValidityPeriod());
         pointExchangeCodePO.setExpiryType(pointExchangeCodeSaveDTO.getExpiryType());
@@ -117,8 +124,11 @@ public class PointExchangeCodeAdapter {
         pointExchangeCodeResp.setExpiryType(pointExchangeCodeDTO.getExpiryType());
         pointExchangeCodeResp.setFaceValue(pointExchangeCodeDTO.getFaceValue());
         pointExchangeCodeResp.setExpiryTime(pointExchangeCodeDTO.getExpiryTime().getTime());
+        pointExchangeCodeResp.setPointEffectiveTime(pointExchangeCodeDTO.getPointEffectiveTime().getTime());
         pointExchangeCodeResp.setStatus(pointExchangeCodeDTO.getStatus());
         pointExchangeCodeResp.setUsed(pointExchangeCodeDTO.getUsed());
+        pointExchangeCodeResp.setProjectResp(ProjectAdapter.projectDTO2VO(pointExchangeCodeDTO.getProjectDTO()));
+        pointExchangeCodeResp.setCustomerResp(CustomerAdapter.customerDTO2VO(pointExchangeCodeDTO.getCustomerDTO()));
         return pointExchangeCodeResp;
     }
 
@@ -133,6 +143,7 @@ public class PointExchangeCodeAdapter {
         pointExchangeCodeEditDTO.setCityCodes(req.getCityCodes());
         pointExchangeCodeEditDTO.setProductIds(req.getProductIds());
         pointExchangeCodeEditDTO.setExpiryTime(new Date(req.getExpiryTime()));
+        pointExchangeCodeEditDTO.setPointEffectiveTime(new Date(req.getPointEffectiveTime()));
         pointExchangeCodeEditDTO.setPointExpiryTime(new Date(req.getPointExpiryTime()));
         pointExchangeCodeEditDTO.setValidityPeriod(req.getValidityPeriod());
         pointExchangeCodeEditDTO.setExpiryType(req.getExpiryType());

@@ -33,6 +33,8 @@ public class VoucherExchangeCodeBatchSaveDTO extends BaseObject {
 
     private Date expiryTime;
 
+    private Date voucherEffectiveTime;
+
     private Date voucherExpiryTime;
 
     private Integer validityPeriod;
@@ -143,5 +145,13 @@ public class VoucherExchangeCodeBatchSaveDTO extends BaseObject {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getVoucherEffectiveTime() {
+        return voucherEffectiveTime;
+    }
+
+    public void setVoucherEffectiveTime(Date voucherEffectiveTime) {
+        this.voucherEffectiveTime = voucherEffectiveTime;
     }
 }

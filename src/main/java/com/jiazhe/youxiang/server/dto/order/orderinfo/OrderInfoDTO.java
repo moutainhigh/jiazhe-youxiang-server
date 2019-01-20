@@ -72,6 +72,8 @@ public class OrderInfoDTO extends BaseObject {
 
     private String auditReason;
 
+    private String extInfo;
+
     private ProductDTO productDTO;
 
     private CustomerDTO customerDTO;
@@ -314,5 +316,13 @@ public class OrderInfoDTO extends BaseObject {
 
     public void setCustomerCityName(String customerCityName) {
         this.customerCityName = customerCityName;
+    }
+
+    public String getExtInfo() {
+        return extInfo;
+    }
+
+    public void setExtInfo(String extInfo) {
+        this.extInfo = extInfo;
     }
 }

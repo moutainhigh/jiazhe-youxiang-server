@@ -37,6 +37,16 @@ public class EleProductCodeBiz {
     @Autowired
     private EleProductCodeService eleProductCodeService;
 
+    /**
+     * 电子商品兑换码已经兑换
+     */
+    public static final Byte CODE_ELEPRODUCT_CODE_EXCHANGED = Byte.valueOf("0");
+
+    /**
+     * 电子商品兑换码未兑换
+     */
+    public static final Byte CODE_ELEPRODUCT_CODE_NOT_EXCHANGED = Byte.valueOf("1");
+
     public void batchChangeExpiryTime(String batchName, Date expiryTime) {
         eleProductCodeService.batchChangeExpiryTime(batchName,expiryTime);
     }

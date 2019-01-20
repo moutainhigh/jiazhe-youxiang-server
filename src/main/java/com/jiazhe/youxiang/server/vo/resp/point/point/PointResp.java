@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.vo.resp.point.point;
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
 import com.jiazhe.youxiang.server.vo.resp.point.exchangerecord.PointExchangeRecordResp;
+import com.jiazhe.youxiang.server.vo.resp.project.ProjectResp;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
@@ -41,6 +42,9 @@ public class PointResp extends BaseVO{
     @ApiModelProperty("积分卡余额")
     private BigDecimal balance;
 
+    @ApiModelProperty("积分卡生效时间")
+    private Long effectiveTime;
+
     @ApiModelProperty("积分卡过期时间")
     private Long expiryTime;
 
@@ -49,6 +53,11 @@ public class PointResp extends BaseVO{
 
     @ApiModelProperty("充值时间")
     private Long addTime;
+
+    @ApiModelProperty("签购单信息")
+    private String extInfo;
+
+    private ProjectResp projectResp;
 
     private CustomerResp customerResp;
 
@@ -150,6 +159,14 @@ public class PointResp extends BaseVO{
         this.addTime = addTime;
     }
 
+    public ProjectResp getProjectResp() {
+        return projectResp;
+    }
+
+    public void setProjectResp(ProjectResp projectResp) {
+        this.projectResp = projectResp;
+    }
+
     public CustomerResp getCustomerResp() {
         return customerResp;
     }
@@ -164,5 +181,21 @@ public class PointResp extends BaseVO{
 
     public void setPointExchangeRecordResp(PointExchangeRecordResp pointExchangeRecordResp) {
         this.pointExchangeRecordResp = pointExchangeRecordResp;
+    }
+
+    public Long getEffectiveTime() {
+        return effectiveTime;
+    }
+
+    public void setEffectiveTime(Long effectiveTime) {
+        this.effectiveTime = effectiveTime;
+    }
+
+    public String getExtInfo() {
+        return extInfo;
+    }
+
+    public void setExtInfo(String extInfo) {
+        this.extInfo = extInfo;
     }
 }

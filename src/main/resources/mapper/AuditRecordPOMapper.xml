@@ -3,15 +3,22 @@
 <mapper namespace="com.jiazhe.youxiang.server.dao.mapper.AuditRecordPOMapper" >
   <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.AuditRecordPO" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="recharge_card_id" property="rechargeCardId" jdbcType="INTEGER" />
+    <result column="point_ids" property="pointIds" jdbcType="VARCHAR" />
     <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
     <result column="customer_mobile" property="customerMobile" jdbcType="VARCHAR" />
-    <result column="exchange_money" property="exchangeMoney" jdbcType="DECIMAL" />
+    <result column="exchange_point" property="exchangePoint" jdbcType="DECIMAL" />
+    <result column="exchange_type" property="exchangeType" jdbcType="VARCHAR" />
+    <result column="giving_point" property="givingPoint" jdbcType="DECIMAL" />
+    <result column="giving_type" property="givingType" jdbcType="VARCHAR" />
+    <result column="audit_reason" property="auditReason" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="img_urls" property="imgUrls" jdbcType="VARCHAR" />
+    <result column="pos_code" property="posCode" jdbcType="VARCHAR" />
+    <result column="trade_time" property="tradeTime" jdbcType="TIMESTAMP" />
+    <result column="card_no" property="cardNo" jdbcType="VARCHAR" />
+    <result column="bank_outlets_name" property="bankOutletsName" jdbcType="VARCHAR" />
     <result column="submitter_id" property="submitterId" jdbcType="INTEGER" />
     <result column="submitter_name" property="submitterName" jdbcType="VARCHAR" />
-    <result column="submitter_remark" property="submitterRemark" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
     <result column="auditor_id" property="auditorId" jdbcType="INTEGER" />
@@ -81,9 +88,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, recharge_card_id, customer_name, customer_mobile, exchange_money, remark, img_urls, 
-    submitter_id, submitter_name, submitter_remark, status, audit_time, auditor_id, auditor_name, 
-    version, ext_info, is_deleted, add_time, mod_time
+    id, point_ids, customer_name, customer_mobile, exchange_point, exchange_type, giving_point, 
+    giving_type, audit_reason, remark, img_urls, pos_code, trade_time, card_no, bank_outlets_name, 
+    submitter_id, submitter_name, status, audit_time, auditor_id, auditor_name, version, 
+    ext_info, is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.AuditRecordPOExample" >
     select
@@ -116,20 +124,24 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.AuditRecordPO" >
-    insert into audit_record (id, recharge_card_id, customer_name, 
-      customer_mobile, exchange_money, remark, 
-      img_urls, submitter_id, submitter_name, 
-      submitter_remark, status, audit_time, 
-      auditor_id, auditor_name, version, 
-      ext_info, is_deleted, add_time, 
-      mod_time)
-    values (#{id,jdbcType=INTEGER}, #{rechargeCardId,jdbcType=INTEGER}, #{customerName,jdbcType=VARCHAR}, 
-      #{customerMobile,jdbcType=VARCHAR}, #{exchangeMoney,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
-      #{imgUrls,jdbcType=VARCHAR}, #{submitterId,jdbcType=INTEGER}, #{submitterName,jdbcType=VARCHAR}, 
-      #{submitterRemark,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{auditTime,jdbcType=TIMESTAMP}, 
-      #{auditorId,jdbcType=INTEGER}, #{auditorName,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, 
-      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
-      #{modTime,jdbcType=TIMESTAMP})
+    insert into audit_record (id, point_ids, customer_name, 
+      customer_mobile, exchange_point, exchange_type, 
+      giving_point, giving_type, audit_reason, 
+      remark, img_urls, pos_code, 
+      trade_time, card_no, bank_outlets_name, 
+      submitter_id, submitter_name, status, 
+      audit_time, auditor_id, auditor_name, 
+      version, ext_info, is_deleted, 
+      add_time, mod_time)
+    values (#{id,jdbcType=INTEGER}, #{pointIds,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, 
+      #{customerMobile,jdbcType=VARCHAR}, #{exchangePoint,jdbcType=DECIMAL}, #{exchangeType,jdbcType=VARCHAR}, 
+      #{givingPoint,jdbcType=DECIMAL}, #{givingType,jdbcType=VARCHAR}, #{auditReason,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{imgUrls,jdbcType=VARCHAR}, #{posCode,jdbcType=VARCHAR}, 
+      #{tradeTime,jdbcType=TIMESTAMP}, #{cardNo,jdbcType=VARCHAR}, #{bankOutletsName,jdbcType=VARCHAR}, 
+      #{submitterId,jdbcType=INTEGER}, #{submitterName,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{auditTime,jdbcType=TIMESTAMP}, #{auditorId,jdbcType=INTEGER}, #{auditorName,jdbcType=VARCHAR}, 
+      #{version,jdbcType=INTEGER}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.AuditRecordPO" >
     insert into audit_record
@@ -137,8 +149,8 @@
       <if test="id != null" >
         id,
       </if>
-      <if test="rechargeCardId != null" >
-        recharge_card_id,
+      <if test="pointIds != null" >
+        point_ids,
       </if>
       <if test="customerName != null" >
         customer_name,
@@ -146,8 +158,20 @@
       <if test="customerMobile != null" >
         customer_mobile,
       </if>
-      <if test="exchangeMoney != null" >
-        exchange_money,
+      <if test="exchangePoint != null" >
+        exchange_point,
+      </if>
+      <if test="exchangeType != null" >
+        exchange_type,
+      </if>
+      <if test="givingPoint != null" >
+        giving_point,
+      </if>
+      <if test="givingType != null" >
+        giving_type,
+      </if>
+      <if test="auditReason != null" >
+        audit_reason,
       </if>
       <if test="remark != null" >
         remark,
@@ -155,14 +179,23 @@
       <if test="imgUrls != null" >
         img_urls,
       </if>
+      <if test="posCode != null" >
+        pos_code,
+      </if>
+      <if test="tradeTime != null" >
+        trade_time,
+      </if>
+      <if test="cardNo != null" >
+        card_no,
+      </if>
+      <if test="bankOutletsName != null" >
+        bank_outlets_name,
+      </if>
       <if test="submitterId != null" >
         submitter_id,
       </if>
       <if test="submitterName != null" >
         submitter_name,
-      </if>
-      <if test="submitterRemark != null" >
-        submitter_remark,
       </if>
       <if test="status != null" >
         status,
@@ -196,8 +229,8 @@
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="rechargeCardId != null" >
-        #{rechargeCardId,jdbcType=INTEGER},
+      <if test="pointIds != null" >
+        #{pointIds,jdbcType=VARCHAR},
       </if>
       <if test="customerName != null" >
         #{customerName,jdbcType=VARCHAR},
@@ -205,8 +238,20 @@
       <if test="customerMobile != null" >
         #{customerMobile,jdbcType=VARCHAR},
       </if>
-      <if test="exchangeMoney != null" >
-        #{exchangeMoney,jdbcType=DECIMAL},
+      <if test="exchangePoint != null" >
+        #{exchangePoint,jdbcType=DECIMAL},
+      </if>
+      <if test="exchangeType != null" >
+        #{exchangeType,jdbcType=VARCHAR},
+      </if>
+      <if test="givingPoint != null" >
+        #{givingPoint,jdbcType=DECIMAL},
+      </if>
+      <if test="givingType != null" >
+        #{givingType,jdbcType=VARCHAR},
+      </if>
+      <if test="auditReason != null" >
+        #{auditReason,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
@@ -214,14 +259,23 @@
       <if test="imgUrls != null" >
         #{imgUrls,jdbcType=VARCHAR},
       </if>
+      <if test="posCode != null" >
+        #{posCode,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeTime != null" >
+        #{tradeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cardNo != null" >
+        #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bankOutletsName != null" >
+        #{bankOutletsName,jdbcType=VARCHAR},
+      </if>
       <if test="submitterId != null" >
         #{submitterId,jdbcType=INTEGER},
       </if>
       <if test="submitterName != null" >
         #{submitterName,jdbcType=VARCHAR},
-      </if>
-      <if test="submitterRemark != null" >
-        #{submitterRemark,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         #{status,jdbcType=TINYINT},
@@ -264,8 +318,8 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.rechargeCardId != null" >
-        recharge_card_id = #{record.rechargeCardId,jdbcType=INTEGER},
+      <if test="record.pointIds != null" >
+        point_ids = #{record.pointIds,jdbcType=VARCHAR},
       </if>
       <if test="record.customerName != null" >
         customer_name = #{record.customerName,jdbcType=VARCHAR},
@@ -273,8 +327,20 @@
       <if test="record.customerMobile != null" >
         customer_mobile = #{record.customerMobile,jdbcType=VARCHAR},
       </if>
-      <if test="record.exchangeMoney != null" >
-        exchange_money = #{record.exchangeMoney,jdbcType=DECIMAL},
+      <if test="record.exchangePoint != null" >
+        exchange_point = #{record.exchangePoint,jdbcType=DECIMAL},
+      </if>
+      <if test="record.exchangeType != null" >
+        exchange_type = #{record.exchangeType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.givingPoint != null" >
+        giving_point = #{record.givingPoint,jdbcType=DECIMAL},
+      </if>
+      <if test="record.givingType != null" >
+        giving_type = #{record.givingType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.auditReason != null" >
+        audit_reason = #{record.auditReason,jdbcType=VARCHAR},
       </if>
       <if test="record.remark != null" >
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -282,14 +348,23 @@
       <if test="record.imgUrls != null" >
         img_urls = #{record.imgUrls,jdbcType=VARCHAR},
       </if>
+      <if test="record.posCode != null" >
+        pos_code = #{record.posCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tradeTime != null" >
+        trade_time = #{record.tradeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.cardNo != null" >
+        card_no = #{record.cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankOutletsName != null" >
+        bank_outlets_name = #{record.bankOutletsName,jdbcType=VARCHAR},
+      </if>
       <if test="record.submitterId != null" >
         submitter_id = #{record.submitterId,jdbcType=INTEGER},
       </if>
       <if test="record.submitterName != null" >
         submitter_name = #{record.submitterName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.submitterRemark != null" >
-        submitter_remark = #{record.submitterRemark,jdbcType=VARCHAR},
       </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=TINYINT},
@@ -326,15 +401,22 @@
   <update id="updateByExample" parameterType="map" >
     update audit_record
     set id = #{record.id,jdbcType=INTEGER},
-      recharge_card_id = #{record.rechargeCardId,jdbcType=INTEGER},
+      point_ids = #{record.pointIds,jdbcType=VARCHAR},
       customer_name = #{record.customerName,jdbcType=VARCHAR},
       customer_mobile = #{record.customerMobile,jdbcType=VARCHAR},
-      exchange_money = #{record.exchangeMoney,jdbcType=DECIMAL},
+      exchange_point = #{record.exchangePoint,jdbcType=DECIMAL},
+      exchange_type = #{record.exchangeType,jdbcType=VARCHAR},
+      giving_point = #{record.givingPoint,jdbcType=DECIMAL},
+      giving_type = #{record.givingType,jdbcType=VARCHAR},
+      audit_reason = #{record.auditReason,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       img_urls = #{record.imgUrls,jdbcType=VARCHAR},
+      pos_code = #{record.posCode,jdbcType=VARCHAR},
+      trade_time = #{record.tradeTime,jdbcType=TIMESTAMP},
+      card_no = #{record.cardNo,jdbcType=VARCHAR},
+      bank_outlets_name = #{record.bankOutletsName,jdbcType=VARCHAR},
       submitter_id = #{record.submitterId,jdbcType=INTEGER},
       submitter_name = #{record.submitterName,jdbcType=VARCHAR},
-      submitter_remark = #{record.submitterRemark,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=TINYINT},
       audit_time = #{record.auditTime,jdbcType=TIMESTAMP},
       auditor_id = #{record.auditorId,jdbcType=INTEGER},
@@ -351,8 +433,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jiazhe.youxiang.server.domain.po.AuditRecordPO" >
     update audit_record
     <set >
-      <if test="rechargeCardId != null" >
-        recharge_card_id = #{rechargeCardId,jdbcType=INTEGER},
+      <if test="pointIds != null" >
+        point_ids = #{pointIds,jdbcType=VARCHAR},
       </if>
       <if test="customerName != null" >
         customer_name = #{customerName,jdbcType=VARCHAR},
@@ -360,8 +442,20 @@
       <if test="customerMobile != null" >
         customer_mobile = #{customerMobile,jdbcType=VARCHAR},
       </if>
-      <if test="exchangeMoney != null" >
-        exchange_money = #{exchangeMoney,jdbcType=DECIMAL},
+      <if test="exchangePoint != null" >
+        exchange_point = #{exchangePoint,jdbcType=DECIMAL},
+      </if>
+      <if test="exchangeType != null" >
+        exchange_type = #{exchangeType,jdbcType=VARCHAR},
+      </if>
+      <if test="givingPoint != null" >
+        giving_point = #{givingPoint,jdbcType=DECIMAL},
+      </if>
+      <if test="givingType != null" >
+        giving_type = #{givingType,jdbcType=VARCHAR},
+      </if>
+      <if test="auditReason != null" >
+        audit_reason = #{auditReason,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
@@ -369,14 +463,23 @@
       <if test="imgUrls != null" >
         img_urls = #{imgUrls,jdbcType=VARCHAR},
       </if>
+      <if test="posCode != null" >
+        pos_code = #{posCode,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeTime != null" >
+        trade_time = #{tradeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cardNo != null" >
+        card_no = #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bankOutletsName != null" >
+        bank_outlets_name = #{bankOutletsName,jdbcType=VARCHAR},
+      </if>
       <if test="submitterId != null" >
         submitter_id = #{submitterId,jdbcType=INTEGER},
       </if>
       <if test="submitterName != null" >
         submitter_name = #{submitterName,jdbcType=VARCHAR},
-      </if>
-      <if test="submitterRemark != null" >
-        submitter_remark = #{submitterRemark,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
@@ -410,15 +513,22 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jiazhe.youxiang.server.domain.po.AuditRecordPO" >
     update audit_record
-    set recharge_card_id = #{rechargeCardId,jdbcType=INTEGER},
+    set point_ids = #{pointIds,jdbcType=VARCHAR},
       customer_name = #{customerName,jdbcType=VARCHAR},
       customer_mobile = #{customerMobile,jdbcType=VARCHAR},
-      exchange_money = #{exchangeMoney,jdbcType=DECIMAL},
+      exchange_point = #{exchangePoint,jdbcType=DECIMAL},
+      exchange_type = #{exchangeType,jdbcType=VARCHAR},
+      giving_point = #{givingPoint,jdbcType=DECIMAL},
+      giving_type = #{givingType,jdbcType=VARCHAR},
+      audit_reason = #{auditReason,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       img_urls = #{imgUrls,jdbcType=VARCHAR},
+      pos_code = #{posCode,jdbcType=VARCHAR},
+      trade_time = #{tradeTime,jdbcType=TIMESTAMP},
+      card_no = #{cardNo,jdbcType=VARCHAR},
+      bank_outlets_name = #{bankOutletsName,jdbcType=VARCHAR},
       submitter_id = #{submitterId,jdbcType=INTEGER},
       submitter_name = #{submitterName,jdbcType=VARCHAR},
-      submitter_remark = #{submitterRemark,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
       audit_time = #{auditTime,jdbcType=TIMESTAMP},
       auditor_id = #{auditorId,jdbcType=INTEGER},

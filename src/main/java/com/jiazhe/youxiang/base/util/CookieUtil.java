@@ -47,7 +47,10 @@ public class CookieUtil {
      * @return
      */
     public static String getUid(HttpServletRequest request, String cookieName) {
-        Cookie cookies[] = request.getCookies();
+        Cookie[] cookies = request.getCookies();
+        if(null == request.getCookies()){
+            return null;
+        }
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals(cookieName)) {
                 return cookie.getValue();

@@ -239,6 +239,23 @@ public class APIProductController {
     }
 
     /**
+     * 查询所有商品列表（包含大类信息）
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询所有商品列表（包含大类信息）", httpMethod = "GET", response = ProductResp.class, responseContainer = "List", notes = "查询所有商品列表（包含大类信息）")
+    @RequestMapping(value = "getalllist", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "查询所有商品列表（包含大类信息）", level = LogLevelEnum.LEVEL_1)
+    public Object getAllList(@ModelAttribute ProductListReq req) {
+        //调用BIZ方法
+        List<ProductDTO> productDTOList = productBiz.getAllList(req.getProductType(), req.getStatus());
+        //将DTO转成VO
+        List<ProductResp> result = productDTOList.stream().map(ProductAdapter::productDTO2VO).collect(Collectors.toList());
+        //用ResponseFactory将返回值包装
+        return ResponseFactory.buildResponse(result);
+    }
+
+    /**
      * 获得商品列表（前端客户专用）
      *
      * @return

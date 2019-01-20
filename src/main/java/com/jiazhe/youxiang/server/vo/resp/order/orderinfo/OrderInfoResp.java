@@ -101,6 +101,9 @@ public class OrderInfoResp extends BaseVO {
     @ApiModelProperty("审核不通过理由")
     private String auditReason;
 
+    @ApiModelProperty("电子码信息")
+    private String extInfo;
+
     private CustomerResp customerResp;
 
     private ProductResp productResp;
@@ -343,5 +346,13 @@ public class OrderInfoResp extends BaseVO {
 
     public void setCustomerCityName(String customerCityName) {
         this.customerCityName = customerCityName;
+    }
+
+    public String getExtInfo() {
+        return extInfo;
+    }
+
+    public void setExtInfo(String extInfo) {
+        this.extInfo = extInfo;
     }
 }

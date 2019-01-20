@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl.voucher;
 
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.dao.mapper.VoucherPOMapper;
@@ -44,21 +45,22 @@ public class VoucherServiceImpl implements VoucherService {
     private CustomerService customerService;
     @Override
     public void batchUpdate(List<Integer> ids, VoucherExchangeCodeBatchSaveDTO batchSaveDTO) {
-        List<VoucherPO> rcPOList = voucherPOManualMapper.findByIds(ids);
-        rcPOList.stream().forEach(bean -> {
+        List<VoucherPO> voucherPOList = voucherPOManualMapper.findByIds(ids);
+        voucherPOList.stream().forEach(bean -> {
             bean.setName(batchSaveDTO.getVoucherName());
             bean.setDescription(batchSaveDTO.getDescription());
             bean.setProjectId(batchSaveDTO.getProjectId());
             bean.setCityCodes(batchSaveDTO.getCityCodes());
             bean.setProductIds(batchSaveDTO.getProductIds());
+            bean.setEffectiveTime(batchSaveDTO.getVoucherEffectiveTime());
             //直接指定过期时间
             if(batchSaveDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)){
                 bean.setExpiryTime(batchSaveDTO.getVoucherExpiryTime());
             }else{
-                bean.setExpiryTime(new Date(bean.getAddTime().getTime()+batchSaveDTO.getValidityPeriod()* CommonConstant.ONE_DAY));
+                bean.setExpiryTime(new Date(DateUtil.getLastSecond(bean.getAddTime().getTime()+batchSaveDTO.getValidityPeriod()* CommonConstant.ONE_DAY)));
             }
         });
-        voucherPOManualMapper.batchUpdate(rcPOList);
+        voucherPOManualMapper.batchUpdate(voucherPOList);
     }
 
     @Override
@@ -71,17 +73,17 @@ public class VoucherServiceImpl implements VoucherService {
 
     @Override
     public List<VoucherDTO> getList(String mobile, Integer exchangeType, Byte status, Byte expiry, Paging paging) {
-        final CustomerDTO customerDTO = customerService.getByMobile(mobile);
+        final CustomerDTO defaultCustomerDTO = customerService.getByMobile(mobile);
         List<VoucherPO> rechargeCardPOList = voucherPOManualMapper.query(mobile,exchangeType,status,expiry,paging.getOffset(),paging.getLimit());
         List<VoucherDTO> rcDTOList = rechargeCardPOList.stream().map(VoucherAdapter::PO2DTO).collect(Collectors.toList());
         Integer count = voucherPOManualMapper.count(mobile,exchangeType,status,expiry);
         paging.setTotal(count);
         rcDTOList.stream().forEach(bean -> {
             if(Strings.isBlank(mobile)){
-                CustomerDTO customerDTO1 = customerService.getById(bean.getCustomerId());
-                bean.setCustomerDTO(customerDTO1);
-            }else{
+                CustomerDTO customerDTO = customerService.getById(bean.getCustomerId());
                 bean.setCustomerDTO(customerDTO);
+            }else{
+                bean.setCustomerDTO(defaultCustomerDTO);
             }
             VoucherExchangeRecordDTO voucherExchangeRecordDTO = voucherExchangeRecordService.findByVoucherId(bean.getId());
             bean.setVoucherExchangeRecordDTO(voucherExchangeRecordDTO);
@@ -109,6 +111,7 @@ public class VoucherServiceImpl implements VoucherService {
         po.setProductIds(dto.getProductIds());
         po.setCityCodes(dto.getCityCodes());
         po.setName(dto.getName());
+        po.setEffectiveTime(dto.getEffectiveTime());
         po.setExpiryTime(dto.getExpiryTime());
         po.setDescription(dto.getDescription());
         voucherPOMapper.updateByPrimaryKeySelective(po);
@@ -143,5 +146,11 @@ public class VoucherServiceImpl implements VoucherService {
     @Override
     public Integer totalValidVoucher(Integer customerId) {
         return voucherPOManualMapper.totalValidVoucher(customerId);
+    }
+
+    @Override
+    public List<VoucherDTO> findByIdsInOrder(List<Integer> voucherIds) {
+        List<VoucherPO> poList = voucherPOManualMapper.findByIdsInOrder(voucherIds);
+        return poList.stream().map(VoucherAdapter::PO2DTO).collect(Collectors.toList());
     }
 }

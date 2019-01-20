@@ -11,6 +11,7 @@
     <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
     <result column="count" property="count" jdbcType="INTEGER" />
     <result column="exchange_record_id" property="exchangeRecordId" jdbcType="INTEGER" />
+    <result column="effective_time" property="effectiveTime" jdbcType="TIMESTAMP" />
     <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
     <result column="used" property="used" jdbcType="TINYINT" />
     <result column="status" property="status" jdbcType="TINYINT" />
@@ -79,7 +80,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, name, description, customer_id, project_id, city_codes, product_ids, count, exchange_record_id, 
-    expiry_time, used, status, ext_info, is_deleted, add_time, mod_time
+    effective_time, expiry_time, used, status, ext_info, is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.VoucherPOExample" >
     select
@@ -115,15 +116,15 @@
     insert into voucher (id, name, description, 
       customer_id, project_id, city_codes, 
       product_ids, count, exchange_record_id, 
-      expiry_time, used, status, 
-      ext_info, is_deleted, add_time, 
-      mod_time)
+      effective_time, expiry_time, used, 
+      status, ext_info, is_deleted, 
+      add_time, mod_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
       #{customerId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR}, 
       #{productIds,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER}, #{exchangeRecordId,jdbcType=INTEGER}, 
-      #{expiryTime,jdbcType=TIMESTAMP}, #{used,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
-      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
-      #{modTime,jdbcType=TIMESTAMP})
+      #{effectiveTime,jdbcType=TIMESTAMP}, #{expiryTime,jdbcType=TIMESTAMP}, #{used,jdbcType=TINYINT}, 
+      #{status,jdbcType=TINYINT}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.VoucherPO" >
     insert into voucher
@@ -154,6 +155,9 @@
       </if>
       <if test="exchangeRecordId != null" >
         exchange_record_id,
+      </if>
+      <if test="effectiveTime != null" >
+        effective_time,
       </if>
       <if test="expiryTime != null" >
         expiry_time,
@@ -204,6 +208,9 @@
       </if>
       <if test="exchangeRecordId != null" >
         #{exchangeRecordId,jdbcType=INTEGER},
+      </if>
+      <if test="effectiveTime != null" >
+        #{effectiveTime,jdbcType=TIMESTAMP},
       </if>
       <if test="expiryTime != null" >
         #{expiryTime,jdbcType=TIMESTAMP},
@@ -264,6 +271,9 @@
       <if test="record.exchangeRecordId != null" >
         exchange_record_id = #{record.exchangeRecordId,jdbcType=INTEGER},
       </if>
+      <if test="record.effectiveTime != null" >
+        effective_time = #{record.effectiveTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.expiryTime != null" >
         expiry_time = #{record.expiryTime,jdbcType=TIMESTAMP},
       </if>
@@ -301,6 +311,7 @@
       product_ids = #{record.productIds,jdbcType=VARCHAR},
       count = #{record.count,jdbcType=INTEGER},
       exchange_record_id = #{record.exchangeRecordId,jdbcType=INTEGER},
+      effective_time = #{record.effectiveTime,jdbcType=TIMESTAMP},
       expiry_time = #{record.expiryTime,jdbcType=TIMESTAMP},
       used = #{record.used,jdbcType=TINYINT},
       status = #{record.status,jdbcType=TINYINT},
@@ -339,6 +350,9 @@
       <if test="exchangeRecordId != null" >
         exchange_record_id = #{exchangeRecordId,jdbcType=INTEGER},
       </if>
+      <if test="effectiveTime != null" >
+        effective_time = #{effectiveTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="expiryTime != null" >
         expiry_time = #{expiryTime,jdbcType=TIMESTAMP},
       </if>
@@ -373,6 +387,7 @@
       product_ids = #{productIds,jdbcType=VARCHAR},
       count = #{count,jdbcType=INTEGER},
       exchange_record_id = #{exchangeRecordId,jdbcType=INTEGER},
+      effective_time = #{effectiveTime,jdbcType=TIMESTAMP},
       expiry_time = #{expiryTime,jdbcType=TIMESTAMP},
       used = #{used,jdbcType=TINYINT},
       status = #{status,jdbcType=TINYINT},

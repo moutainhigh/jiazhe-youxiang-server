@@ -45,6 +45,9 @@ public class PointExchangeCodeBatchEditResp extends BaseVO {
     @ApiModelProperty("过期时间")
     private Long expiryTime;
 
+    @ApiModelProperty("积分卡生效时间")
+    private Long pointEffectiveTime;
+
     @ApiModelProperty("积分卡过期时间")
     private Long pointExpiryTime;
 
@@ -56,6 +59,9 @@ public class PointExchangeCodeBatchEditResp extends BaseVO {
 
     @ApiModelProperty("是否已经制作")
     private Byte isMade;
+
+    @ApiModelProperty("附加信息")
+    private String extInfo;
 
     public Integer getId() {
         return id;
@@ -175,5 +181,21 @@ public class PointExchangeCodeBatchEditResp extends BaseVO {
 
     public void setIsMade(Byte isMade) {
         this.isMade = isMade;
+    }
+
+    public Long getPointEffectiveTime() {
+        return pointEffectiveTime;
+    }
+
+    public void setPointEffectiveTime(Long pointEffectiveTime) {
+        this.pointEffectiveTime = pointEffectiveTime;
+    }
+
+    public String getExtInfo() {
+        return extInfo;
+    }
+
+    public void setExtInfo(String extInfo) {
+        this.extInfo = extInfo;
     }
 }

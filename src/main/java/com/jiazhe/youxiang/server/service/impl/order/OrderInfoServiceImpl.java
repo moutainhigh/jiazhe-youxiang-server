@@ -1,10 +1,7 @@
 package com.jiazhe.youxiang.server.service.impl.order;
 
 import com.google.common.collect.Lists;
-import com.jiazhe.youxiang.base.util.CommonValidator;
-import com.jiazhe.youxiang.base.util.ConstantFetchUtil;
 import com.jiazhe.youxiang.base.util.DateUtil;
-import com.jiazhe.youxiang.base.util.GenerateCode;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
@@ -39,6 +36,8 @@ import com.jiazhe.youxiang.server.service.rechargecard.RCService;
 import com.jiazhe.youxiang.server.service.voucher.VoucherService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,10 +46,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -90,7 +86,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     private EleProductCodeService eleProductCodeService;
 
     @Override
-    public List<OrderInfoDTO> getList(Byte status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Paging paging) {
+    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Paging paging) {
         Integer count = orderInfoPOManualMapper.count(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile);
         List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, paging.getOffset(), paging.getLimit());
         List<OrderInfoDTO> orderInfoDTOList = orderInfoPOList.stream().map(OrderInfoAdapter::PO2DTO).collect(Collectors.toList());
@@ -143,7 +139,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         BigDecimal needPayMoney = orderInfoPO.getProductPrice().multiply(new BigDecimal(needPayCount)).subtract(orderInfoPO.getPayVoucher());
         BigDecimal left = needPayMoney.subtract(orderInfoPO.getPayRechargeCard().add(orderInfoPO.getPayCash().add(payCash)));
         orderInfoPO.setPayCash(orderInfoPO.getPayCash().add(payCash));
-        if (payCash.compareTo(new BigDecimal(0)) == 1) {
+        if (payCash.compareTo(BigDecimal.ZERO) == 1) {
             OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
             orderPaymentPO.setOrderId(orderInfoPO.getId());
             orderPaymentPO.setOrderCode(orderInfoPO.getOrderCode());
@@ -157,16 +153,23 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderPaymentService.insert(orderPaymentPO);
         }
         //说明订单支付完成，判断商品，如果是服务类商品就置为待派单状态，如果是虚拟商品，就置为已完成状态，并发相关电子商品吗
-        if (left.compareTo(new BigDecimal(0)) == 0 || left.compareTo(new BigDecimal(0)) == -1) {
+        if (left.compareTo(BigDecimal.ZERO) == 0 || left.compareTo(BigDecimal.ZERO) == -1) {
             ProductDTO productDTO = productService.getById(orderInfoPO.getProductId());
             if (productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
             }
             if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
-                //此处应该有发放电子码逻辑！！！！！！！
-                eleProductCodeDTOList = sendEleProductCode(orderInfoPO);
+                eleProductCodeDTOList = sendEleProductCode(orderInfoPO.getProductId(), orderInfoPO.getCount());
                 eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderInfoPO.getOrderCode());
+                StringBuilder comments = new StringBuilder();
+                eleProductCodeDTOList.stream().forEach(bean -> {
+                    if (!Strings.isBlank(bean.getCode())) {
+                        comments.append("兑换码为：" + bean.getCode());
+                    }
+                    comments.append("，兑换密钥为：" + bean.getKeyt() + "；");
+                });
+                orderInfoPO.setComments(comments.toString());
             }
         }
         orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
@@ -225,165 +228,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public NeedPayResp placeOrder(PlaceOrderDTO dto) throws ParseException {
-        List<OrderPaymentPO> orderPaymentPOList = Lists.newArrayList();
-        List<EleProductCodeDTO> eleProductCodeDTOList = Lists.newArrayList();
-        CustomerDTO customerDTO = customerService.getById(dto.getCustomerId());
-        if (null == customerDTO) {
-            throw new OrderException(OrderCodeEnum.CUSTOMER_NOT_EXIST);
-        }
-        ProductDTO productDTO = productService.getById(dto.getProductId());
-        if (null == productDTO || productDTO.getStatus().equals(Byte.valueOf("0"))) {
-            throw new OrderException(OrderCodeEnum.PRODUCT_NOT_AVAILABLE);
-        }
-        if (productDTO.getLastNum() > dto.getCount()) {
-            throw new OrderException(OrderCodeEnum.ORDER_COUNT_LESS_THAN_LAST_NUM);
-        }
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        long delayDays = (df.parse(df.format(dto.getServiceTime())).getTime() - df.parse(df.format(new Date())).getTime()) / (24 * 60 * 60 * 1000);
-        if (productDTO.getDelayDays() > delayDays) {
-            throw new OrderException(OrderCodeEnum.SERVICE_TIME_ERROR);
-        }
-        String orderCode = generateOrderCode();
-        //代金券支付数量
-        Integer[] voucherPayCount = {0};
-        BigDecimal[] rechargeCardPayMoney = {new BigDecimal(0)};
-        ProductPriceDTO productPriceDTO = productPriceService.getPriceByCity(dto.getProductId(), dto.getCustomerCityCode());
-        if (null == productPriceDTO || productPriceDTO.getStatus().equals(Byte.valueOf("0"))) {
-            throw new OrderException(OrderCodeEnum.PRODUCT_NOT_AVAILABLE);
-        }
-        if (!Strings.isBlank(dto.getPointIds())) {
-            List<Integer> pointIds = Arrays.asList(dto.getPointIds().split(","))
-                    .stream().map(s -> Integer.parseInt(s.trim()))
-                    .collect(Collectors.toList());
-            List<PointDTO> pointDTOList = pointService.findByIds(pointIds);
-        }
-        if (!Strings.isBlank(dto.getVoucherIds())) {
-            List<Integer> voucherIds = Arrays.asList(dto.getVoucherIds().split(","))
-                    .stream().map(s -> Integer.parseInt(s.trim()))
-                    .collect(Collectors.toList());
-            List<VoucherDTO> voucherDTOList = voucherService.findByIds(voucherIds);
-            voucherDTOList.stream().forEach(bean -> {
-                if (!bean.getCustomerId().equals(customerDTO.getId())) {
-                    throw new OrderException(OrderCodeEnum.VOUCHER_IS_NOT_YOURS);
-                }
-                if (bean.getStatus().equals(Byte.valueOf("0")) || bean.getUsed().equals(Byte.valueOf("1"))) {
-                    throw new OrderException(OrderCodeEnum.ORDER_VOUCHER_PAY_ERROR);
-                }
-                if (!bean.getCityCodes().contains(dto.getCustomerCityCode())) {
-                    throw new OrderException(OrderCodeEnum.VOUCHER_NOT_SUPPORT_CITY);
-                }
-                List<Integer> productIds = Arrays.asList(bean.getProductIds().split(","))
-                        .stream().map(s -> Integer.parseInt(s.trim()))
-                        .collect(Collectors.toList());
-                if (!productIds.contains(dto.getProductId())) {
-                    throw new OrderException(OrderCodeEnum.VOUCHER_NOT_SUPPORT_PRODUCT);
-                }
-                bean.setUsed(Byte.valueOf("1"));
-                voucherPayCount[0] = voucherPayCount[0] + bean.getCount();
-                OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
-                orderPaymentPO.setOrderCode(orderCode);
-                orderPaymentPO.setPayType(CommonConstant.PAY_VOUCHER);
-                orderPaymentPO.setVoucherId(bean.getId());
-                orderPaymentPO.setPayMoney(new BigDecimal(0));
-                orderPaymentPO.setSerialNumber("");
-                orderPaymentPOList.add(orderPaymentPO);
-            });
-            voucherService.batchChangeUsed(voucherIds, Byte.valueOf("1"));
-        }
-        if (!Strings.isBlank(dto.getRechargeCardIds())) {
-            List<Integer> rechargeCardIds = Arrays.asList(dto.getRechargeCardIds().split(","))
-                    .stream().map(s -> Integer.parseInt(s.trim()))
-                    .collect(Collectors.toList());
-            List<BigDecimal> cardMoneys = Arrays.asList(dto.getCardMoneys().split(","))
-                    .stream().map(s -> new BigDecimal(s.trim()))
-                    .collect(Collectors.toList());
-            List<RCDTO> rcdtoList = rcService.findByIds(rechargeCardIds);
-            rcdtoList.stream().forEach(bean -> {
-                int index = rechargeCardIds.lastIndexOf(bean.getId());
-                if (!bean.getCustomerId().equals(customerDTO.getId())) {
-                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_NOT_YOURS);
-                }
-                if (!bean.getCityCodes().contains(dto.getCustomerCityCode())) {
-                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_NOT_SUPPORT_CITY);
-                }
-                List<Integer> productIds = Arrays.asList(bean.getProductIds().split(","))
-                        .stream().map(s -> Integer.parseInt(s.trim()))
-                        .collect(Collectors.toList());
-                if (!productIds.contains(dto.getProductId())) {
-                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_NOT_SUPPORT_PRODUCT);
-                }
-                if (bean.getBalance().compareTo(cardMoneys.get(index)) == -1) {
-                    throw new OrderException(OrderCodeEnum.ORDER_RECHARGE_CARD_PAY_ERROR);
-                }
-                bean.setBalance(bean.getBalance().subtract(cardMoneys.get(index)));
-                rechargeCardPayMoney[0] = rechargeCardPayMoney[0].add(cardMoneys.get(index));
-                OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
-                orderPaymentPO.setOrderCode(orderCode);
-                orderPaymentPO.setPayType(CommonConstant.PAY_RECHARGE_CARD);
-                orderPaymentPO.setRechargeCardId(bean.getId());
-                orderPaymentPO.setPayMoney(cardMoneys.get(index));
-                orderPaymentPO.setSerialNumber("");
-                orderPaymentPOList.add(orderPaymentPO);
-            });
-            rcService.batchUpdate(rcdtoList);
-        }
-        //计算订单下单完成后应该置为什么状态
-        Integer needPayCount = dto.getCount() - voucherPayCount[0];
-        BigDecimal needPay = productPriceDTO.getPrice().multiply(new BigDecimal(needPayCount));
-        boolean payOff = rechargeCardPayMoney[0].compareTo(needPay) == 0;
-        OrderInfoPO orderInfoPO = new OrderInfoPO();
-        orderInfoPO.setOrderCode(orderCode);
-        orderInfoPO.setCustomerId(dto.getCustomerId());
-        orderInfoPO.setProductId(dto.getProductId());
-        orderInfoPO.setCustomerCityCode(dto.getCustomerCityCode());
-        orderInfoPO.setCustomerCityName(productPriceDTO.getCityName());
-        orderInfoPO.setProductPrice(productPriceDTO.getPrice());
-        orderInfoPO.setCount(dto.getCount());
-        orderInfoPO.setCustomerAddress(dto.getCustomerAddress());
-        orderInfoPO.setCustomerMobile(dto.getCustomerMobile());
-        orderInfoPO.setCustomerName(dto.getCustomerName());
-        orderInfoPO.setCustomerRemark(dto.getCustomerRemark());
-        orderInfoPO.setWorkerName(dto.getWorkerName());
-        orderInfoPO.setWorkerMobile(dto.getWorkerMobile());
-        orderInfoPO.setOrderTime(new Date());
-        orderInfoPO.setServiceTime(dto.getServiceTime());
-        orderInfoPO.setRealServiceTime(dto.getServiceTime());
-        orderInfoPO.setPayRechargeCard(rechargeCardPayMoney[0]);
-        orderInfoPO.setPayVoucher(orderInfoPO.getProductPrice().multiply(new BigDecimal(voucherPayCount[0])));
-        orderInfoPO.setPayCash(new BigDecimal(0));
-        orderInfoPO.setTotalAmount(productPriceDTO.getPrice().multiply(new BigDecimal(dto.getCount())));
-        orderInfoPO.setCost(dto.getCost());
-        orderInfoPO.setComments(dto.getComments());
-        orderInfoPO.setType(dto.getType());
-        if (payOff) {
-            if (productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
-                orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
-            }
-            if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
-                orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
-            }
-        } else {
-            orderInfoPO.setStatus(CommonConstant.ORDER_UNPAID);
-        }
-        orderInfoPOManualMapper.insert(orderInfoPO);
-        orderPaymentPOList.stream().forEach(bean -> {
-            bean.setOrderId(orderInfoPO.getId());
-        });
-        if (payOff && productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
-            //此处发放电子码
-            eleProductCodeDTOList = sendEleProductCode(orderInfoPO);
-            eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderCode);
-        }
-        orderPaymentService.batchInsert(orderPaymentPOList);
-        NeedPayResp needPayResp = new NeedPayResp();
-        needPayResp.setOrderId(orderInfoPO.getId());
-        needPayResp.setPayCash(needPay.subtract(rechargeCardPayMoney[0]));
-        return needPayResp;
-    }
-
     @Override
     public void userReservationOrder(UserReservationOrderDTO dto) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(dto.getOrderId());
@@ -427,85 +271,168 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             throw new OrderException(OrderCodeEnum.ORDER_CAN_NOT_APPEND_ANOTHER);
         }
         List<OrderPaymentPO> orderPaymentPOList = Lists.newArrayList();
-        //代金券支付数量
-        Integer[] voucherPayCount = {0};
-        BigDecimal[] rechargeCardPayMoney = {new BigDecimal(0)};
+        //待支付金额
+        BigDecimal[] needPay = {orderInfoPO.getProductPrice().multiply(new BigDecimal(appendOrderDTO.getCount()))};
+        //代金券支付金额
+        BigDecimal[] voucherPay = {BigDecimal.ZERO};
+        //积分卡支付金额
+        BigDecimal[] pointPayMoney = {BigDecimal.ZERO};
+        //充值卡支付金额
+        BigDecimal[] rechargeCardPayMoney = {BigDecimal.ZERO};
+        /***************************代金券支付部分*****************************/
         if (!Strings.isBlank(appendOrderDTO.getVoucherIds())) {
             List<Integer> voucherIds = Arrays.asList(appendOrderDTO.getVoucherIds().split(","))
                     .stream().map(s -> Integer.parseInt(s.trim()))
                     .collect(Collectors.toList());
-            List<VoucherDTO> voucherDTOList = voucherService.findByIds(voucherIds);
+            List<VoucherDTO> voucherDTOList = voucherService.findByIdsInOrder(voucherIds);
             voucherDTOList.stream().forEach(bean -> {
                 if (!bean.getCustomerId().equals(orderInfoPO.getCustomerId())) {
                     throw new OrderException(OrderCodeEnum.VOUCHER_IS_NOT_YOURS);
                 }
-                if (bean.getStatus().equals(Byte.valueOf("0")) || bean.getUsed().equals(Byte.valueOf("1"))) {
-                    throw new OrderException(OrderCodeEnum.ORDER_VOUCHER_PAY_ERROR);
+                if (bean.getUsed().equals(Byte.valueOf("1"))) {
+                    throw new OrderException(OrderCodeEnum.VOUCHER_USED);
+                }
+                if(bean.getStatus().equals(Byte.valueOf("0"))){
+                    throw new OrderException(OrderCodeEnum.VOUCHER_STOP_USING);
+                }
+                if (bean.getExpiryTime().getTime() < System.currentTimeMillis()) {
+                    throw new OrderException(OrderCodeEnum.VOUCHER_IS_EXPIRY);
+                }
+                if (bean.getEffectiveTime().getTime() > System.currentTimeMillis()) {
+                    throw new OrderException(OrderCodeEnum.VOUCHER_IS_NOT_EFFECTIVE);
                 }
                 if (!bean.getCityCodes().contains(orderInfoPO.getCustomerCityCode())) {
                     throw new OrderException(OrderCodeEnum.VOUCHER_NOT_SUPPORT_CITY);
                 }
-                List<Integer> productIds = Arrays.asList(bean.getProductIds().split(","))
-                        .stream().map(s -> Integer.parseInt(s.trim()))
-                        .collect(Collectors.toList());
-                if (!productIds.contains(orderInfoPO.getProductId())) {
+                if (!idsContainsId(bean.getProductIds(), orderInfoPO.getProductId())) {
                     throw new OrderException(OrderCodeEnum.VOUCHER_NOT_SUPPORT_PRODUCT);
                 }
-                bean.setUsed(Byte.valueOf("1"));
-                voucherPayCount[0] = voucherPayCount[0] + bean.getCount();
-                OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
-                orderPaymentPO.setOrderId(appendOrderDTO.getOrderId());
-                orderPaymentPO.setOrderCode(orderInfoPO.getOrderCode());
-                orderPaymentPO.setPayType(CommonConstant.PAY_VOUCHER);
-                orderPaymentPO.setVoucherId(bean.getId());
-                orderPaymentPO.setPayMoney(new BigDecimal(0));
-                orderPaymentPO.setSerialNumber("");
-                orderPaymentPOList.add(orderPaymentPO);
+                if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
+                    bean.setUsed(Byte.valueOf("1"));
+                    OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
+                    orderPaymentPO.setOrderId(orderInfoPO.getId());
+                    orderPaymentPO.setOrderCode(orderInfoPO.getOrderCode());
+                    orderPaymentPO.setPayType(CommonConstant.PAY_VOUCHER);
+                    orderPaymentPO.setVoucherId(bean.getId());
+                    orderPaymentPO.setPayMoney(BigDecimal.ZERO);
+                    orderPaymentPO.setSerialNumber("");
+                    if (needPay[0].subtract(orderInfoPO.getProductPrice().multiply(new BigDecimal(bean.getCount()))).compareTo(BigDecimal.ZERO) >= 0) {
+                        needPay[0] = needPay[0].subtract(orderInfoPO.getProductPrice().multiply(new BigDecimal(bean.getCount())));
+                        voucherPay[0] = voucherPay[0].add(orderInfoPO.getProductPrice().multiply(new BigDecimal(bean.getCount())));
+                    }else{
+                        voucherPay[0] = voucherPay[0].add(needPay[0]);
+                        needPay[0] = BigDecimal.ZERO;
+                    }
+                    orderPaymentPOList.add(orderPaymentPO);
+                }
             });
             voucherService.batchChangeUsed(voucherIds, Byte.valueOf("1"));
         }
+        //*********************积分卡支付部分*************************/
+        if (!Strings.isBlank(appendOrderDTO.getPointIds())) {
+            List<Integer> pointIds = Arrays.asList(appendOrderDTO.getPointIds().split(","))
+                    .stream().map(s -> Integer.parseInt(s.trim()))
+                    .collect(Collectors.toList());
+            List<PointDTO> pointDtoList = pointService.findByIdsInOrder(pointIds);
+            pointDtoList.stream().forEach(bean -> {
+                if (!bean.getCustomerId().equals(orderInfoPO.getCustomerId())) {
+                    throw new OrderException(OrderCodeEnum.POINT_IS_NOT_YOURS);
+                }
+                if (bean.getStatus().equals(Byte.valueOf("0"))) {
+                    throw new OrderException(OrderCodeEnum.POINT_STOP_USING);
+                }
+                if (!bean.getCityCodes().contains(orderInfoPO.getCustomerCityCode())) {
+                    throw new OrderException(OrderCodeEnum.POINT_NOT_SUPPORT_CITY);
+                }
+                if (!idsContainsId(bean.getProductIds(), orderInfoPO.getProductId())) {
+                    throw new OrderException(OrderCodeEnum.POINT_NOT_SUPPORT_PRODUCT);
+                }
+                if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
+                    //支付积分数量
+                    BigDecimal thisPointPay;
+                    BigDecimal conversionRate = new BigDecimal(bean.getProjectDTO().getPointConversionRate());
+                    if (needPay[0].compareTo(bean.getBalance().multiply(conversionRate)) == 1) {
+                        thisPointPay = bean.getBalance();
+                    } else {
+                        //当【需支付的金额/兑换比例】不为整数时，则抛异常
+                        if (needPay[0].divide(conversionRate).setScale(0, RoundingMode.HALF_UP).compareTo(needPay[0].divide(conversionRate)) != 0) {
+                            throw new OrderException(OrderCodeEnum.POINT_PAY_DECIMAL_APPEAR);
+                        }
+                        thisPointPay = needPay[0].divide(conversionRate);
+                    }
+                    bean.setBalance(bean.getBalance().subtract(thisPointPay));
+                    pointPayMoney[0] = pointPayMoney[0].add(thisPointPay.multiply(conversionRate));
+                    OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
+                    orderPaymentPO.setOrderId(orderInfoPO.getId());
+                    orderPaymentPO.setOrderCode(orderInfoPO.getOrderCode());
+                    orderPaymentPO.setPayType(CommonConstant.PAY_POINT);
+                    orderPaymentPO.setPointId(bean.getId());
+                    orderPaymentPO.setPayMoney(thisPointPay);
+                    orderPaymentPO.setSerialNumber("");
+                    orderPaymentPOList.add(orderPaymentPO);
+                    needPay[0] = needPay[0].subtract(thisPointPay.multiply(conversionRate));
+                }
+            });
+            pointService.batchUpdate(pointDtoList);
+        }
+        //*********************充值卡支付部分*************************/
         if (!Strings.isBlank(appendOrderDTO.getRechargeCardIds())) {
             List<Integer> rechargeCardIds = Arrays.asList(appendOrderDTO.getRechargeCardIds().split(","))
                     .stream().map(s -> Integer.parseInt(s.trim()))
                     .collect(Collectors.toList());
-            List<BigDecimal> cardMoneys = Arrays.asList(appendOrderDTO.getCardMoneys().split(","))
-                    .stream().map(s -> new BigDecimal(s.trim()))
-                    .collect(Collectors.toList());
-            List<RCDTO> rcdtoList = rcService.findByIds(rechargeCardIds);
+            List<RCDTO> rcdtoList = rcService.findByIdsInOrder(rechargeCardIds);
             rcdtoList.stream().forEach(bean -> {
-                int index = rechargeCardIds.lastIndexOf(bean.getId());
                 if (!bean.getCustomerId().equals(orderInfoPO.getCustomerId())) {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_NOT_YOURS);
+                }
+                if (bean.getStatus().equals(Byte.valueOf("0"))) {
+                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_STOP_USING);
+                }
+                if (bean.getExpiryTime().getTime() < System.currentTimeMillis()) {
+                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_EXPIRY);
+                }
+                if (bean.getEffectiveTime().getTime() > System.currentTimeMillis()) {
+                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_NOT_EFFECTIVE);
                 }
                 if (!bean.getCityCodes().contains(orderInfoPO.getCustomerCityCode())) {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_NOT_SUPPORT_CITY);
                 }
-                List<Integer> productIds = Arrays.asList(bean.getProductIds().split(","))
-                        .stream().map(s -> Integer.parseInt(s.trim()))
-                        .collect(Collectors.toList());
-                if (!productIds.contains(orderInfoPO.getProductId())) {
+                if (!idsContainsId(bean.getProductIds(), orderInfoPO.getProductId())) {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_NOT_SUPPORT_PRODUCT);
                 }
-                if (bean.getBalance().compareTo(cardMoneys.get(index)) == -1) {
-                    throw new OrderException(OrderCodeEnum.ORDER_RECHARGE_CARD_PAY_ERROR);
+                if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
+                    BigDecimal thisCardPay;
+                    if (needPay[0].compareTo(bean.getBalance()) == 1) {
+                        thisCardPay = bean.getBalance();
+                    } else {
+                        thisCardPay = needPay[0];
+                    }
+                    bean.setBalance(bean.getBalance().subtract(thisCardPay));
+                    rechargeCardPayMoney[0] = rechargeCardPayMoney[0].add(thisCardPay);
+                    OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
+                    orderPaymentPO.setOrderId(orderInfoPO.getId());
+                    orderPaymentPO.setOrderCode(orderInfoPO.getOrderCode());
+                    orderPaymentPO.setPayType(CommonConstant.PAY_RECHARGE_CARD);
+                    orderPaymentPO.setRechargeCardId(bean.getId());
+                    orderPaymentPO.setPayMoney(thisCardPay);
+                    orderPaymentPO.setSerialNumber("");
+                    orderPaymentPOList.add(orderPaymentPO);
+                    needPay[0] = needPay[0].subtract(thisCardPay);
                 }
-                bean.setBalance(bean.getBalance().subtract(cardMoneys.get(index)));
-                rechargeCardPayMoney[0] = rechargeCardPayMoney[0].add(cardMoneys.get(index));
-                OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
-                orderPaymentPO.setOrderId(appendOrderDTO.getOrderId());
-                orderPaymentPO.setOrderCode(orderInfoPO.getOrderCode());
-                orderPaymentPO.setPayType(CommonConstant.PAY_RECHARGE_CARD);
-                orderPaymentPO.setRechargeCardId(bean.getId());
-                orderPaymentPO.setPayMoney(cardMoneys.get(index));
-                orderPaymentPO.setSerialNumber("");
-                orderPaymentPOList.add(orderPaymentPO);
             });
             rcService.batchUpdate(rcdtoList);
         }
+        if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
+            throw new OrderException(OrderCodeEnum.ORDER_PAYMENT_NOT_ENOUGH);
+        }
+        if (needPay[0].compareTo(BigDecimal.ZERO) == -1) {
+            throw new OrderException(OrderCodeEnum.ORDER_OVER_PAYMENT);
+        }
         orderPaymentService.batchInsert(orderPaymentPOList);
         orderInfoPO.setCount(orderInfoPO.getCount() + appendOrderDTO.getCount());
+        orderInfoPO.setPayPoint(orderInfoPO.getPayPoint().add(pointPayMoney[0]));
         orderInfoPO.setPayRechargeCard(orderInfoPO.getPayRechargeCard().add(rechargeCardPayMoney[0]));
-        orderInfoPO.setPayVoucher(orderInfoPO.getPayVoucher().add(orderInfoPO.getProductPrice().multiply(new BigDecimal(voucherPayCount[0]))));
+        orderInfoPO.setPayVoucher(orderInfoPO.getPayVoucher().add(voucherPay[0]));
         orderInfoPO.setCost(appendOrderDTO.getCost());
         orderInfoPO.setTotalAmount(orderInfoPO.getProductPrice().multiply(new BigDecimal(orderInfoPO.getCount())));
         orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
@@ -532,7 +459,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public NeedPayResp customerPlaceOrder(PlaceOrderDTO dto) throws ParseException {
+    public NeedPayResp placeOrder(PlaceOrderDTO dto)  {
         List<OrderPaymentPO> orderPaymentPOList = Lists.newArrayList();
         List<EleProductCodeDTO> eleProductCodeDTOList = Lists.newArrayList();
         CustomerDTO customerDTO = customerService.getById(dto.getCustomerId());
@@ -543,62 +470,124 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (null == productDTO || productDTO.getStatus().equals(Byte.valueOf("0"))) {
             throw new OrderException(OrderCodeEnum.PRODUCT_NOT_AVAILABLE);
         }
-        if (productDTO.getLastNum() > dto.getCount()) {
-            throw new OrderException(OrderCodeEnum.ORDER_COUNT_LESS_THAN_LAST_NUM);
-        }
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        long delayDays = (df.parse(df.format(dto.getServiceTime())).getTime() - df.parse(df.format(new Date())).getTime()) / (24 * 60 * 60 * 1000);
-        if (productDTO.getDelayDays() > delayDays) {
-            throw new OrderException(OrderCodeEnum.SERVICE_TIME_ERROR);
-        }
-        String orderCode = generateOrderCode();
-        //代金券支付数量
-        Integer[] voucherPayCount = {0};
-        //充值卡支付金额
-        BigDecimal[] rechargeCardPayMoney = {new BigDecimal(0)};
-        //积分卡支付金额
-        BigDecimal[] pointPayMoney = {new BigDecimal(0)};
         ProductPriceDTO productPriceDTO = productPriceService.getPriceByCity(dto.getProductId(), dto.getCustomerCityCode());
         if (null == productPriceDTO || productPriceDTO.getStatus().equals(Byte.valueOf("0"))) {
             throw new OrderException(OrderCodeEnum.PRODUCT_NOT_AVAILABLE);
         }
+        if (productDTO.getLastNum() > dto.getCount()) {
+            throw new OrderException(OrderCodeEnum.ORDER_COUNT_LESS_THAN_LAST_NUM);
+        }
+        //电子商品才检查预约时间
+        if(productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
+            long delayDays = dto.getServiceTime().getTime() / CommonConstant.ONE_DAY - System.currentTimeMillis() / CommonConstant.ONE_DAY;
+            if (productDTO.getDelayDays() > delayDays) {
+                throw new OrderException(OrderCodeEnum.SERVICE_TIME_ERROR);
+            }
+        }
+        String orderCode = generateOrderCode();
+        //待支付金额
         BigDecimal[] needPay = {productPriceDTO.getPrice().multiply(new BigDecimal(dto.getCount()))};
+        //代金券支付金额
+        BigDecimal[] voucherPay = {BigDecimal.ZERO};
+        //积分卡支付金额
+        BigDecimal[] pointPayMoney = {BigDecimal.ZERO};
+        //充值卡支付金额
+        BigDecimal[] rechargeCardPayMoney = {BigDecimal.ZERO};
+        //*********************代金券支付部分*************************/
         if (!Strings.isBlank(dto.getVoucherIds())) {
             List<Integer> voucherIds = Arrays.asList(dto.getVoucherIds().split(","))
                     .stream().map(s -> Integer.parseInt(s.trim()))
                     .collect(Collectors.toList());
-            List<VoucherDTO> voucherDTOList = voucherService.findByIds(voucherIds);
+            List<VoucherDTO> voucherDTOList = voucherService.findByIdsInOrder(voucherIds);
             voucherDTOList.stream().forEach(bean -> {
                 if (!bean.getCustomerId().equals(customerDTO.getId())) {
                     throw new OrderException(OrderCodeEnum.VOUCHER_IS_NOT_YOURS);
                 }
-                if (bean.getStatus().equals(Byte.valueOf("0")) || bean.getUsed().equals(Byte.valueOf("1"))) {
-                    throw new OrderException(OrderCodeEnum.ORDER_VOUCHER_PAY_ERROR);
+                if (bean.getUsed().equals(Byte.valueOf("1"))) {
+                    throw new OrderException(OrderCodeEnum.VOUCHER_USED);
+                }
+                if(bean.getStatus().equals(Byte.valueOf("0"))){
+                    throw new OrderException(OrderCodeEnum.VOUCHER_STOP_USING);
+                }
+                if (bean.getExpiryTime().getTime() < System.currentTimeMillis()) {
+                    throw new OrderException(OrderCodeEnum.VOUCHER_IS_EXPIRY);
+                }
+                if (bean.getEffectiveTime().getTime() > System.currentTimeMillis()) {
+                    throw new OrderException(OrderCodeEnum.VOUCHER_IS_NOT_EFFECTIVE);
                 }
                 if (!bean.getCityCodes().contains(dto.getCustomerCityCode())) {
                     throw new OrderException(OrderCodeEnum.VOUCHER_NOT_SUPPORT_CITY);
                 }
-                List<Integer> productIds = Arrays.asList(bean.getProductIds().split(","))
-                        .stream().map(s -> Integer.parseInt(s.trim()))
-                        .collect(Collectors.toList());
-                if (!productIds.contains(dto.getProductId())) {
+                if (!idsContainsId(bean.getProductIds(), dto.getProductId())) {
                     throw new OrderException(OrderCodeEnum.VOUCHER_NOT_SUPPORT_PRODUCT);
                 }
-                if (needPay[0].compareTo(new BigDecimal(0)) == 1) {
+                if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
                     bean.setUsed(Byte.valueOf("1"));
-                    voucherPayCount[0] = voucherPayCount[0] + bean.getCount();
                     OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
                     orderPaymentPO.setOrderCode(orderCode);
                     orderPaymentPO.setPayType(CommonConstant.PAY_VOUCHER);
                     orderPaymentPO.setVoucherId(bean.getId());
-                    orderPaymentPO.setPayMoney(new BigDecimal(0));
+                    orderPaymentPO.setPayMoney(BigDecimal.ZERO);
                     orderPaymentPO.setSerialNumber("");
+                    if (needPay[0].subtract(productPriceDTO.getPrice().multiply(new BigDecimal(bean.getCount()))).compareTo(BigDecimal.ZERO) >= 0) {
+                        needPay[0] = needPay[0].subtract(productPriceDTO.getPrice().multiply(new BigDecimal(bean.getCount())));
+                        voucherPay[0] = voucherPay[0].add(productPriceDTO.getPrice().multiply(new BigDecimal(bean.getCount())));
+                    }else{
+                        voucherPay[0] = voucherPay[0].add(needPay[0]);
+                        needPay[0] = BigDecimal.ZERO;
+                    }
                     orderPaymentPOList.add(orderPaymentPO);
-                    needPay[0] = needPay[0].subtract(productPriceDTO.getPrice().multiply(new BigDecimal(bean.getCount())));
                 }
             });
             voucherService.batchChangeUsed(voucherIds, Byte.valueOf("1"));
         }
+        //*********************积分卡支付部分*************************/
+        if (!Strings.isBlank(dto.getPointIds())) {
+            List<Integer> pointIds = Arrays.asList(dto.getPointIds().split(","))
+                    .stream().map(s -> Integer.parseInt(s.trim()))
+                    .collect(Collectors.toList());
+            List<PointDTO> pointDtoList = pointService.findByIdsInOrder(pointIds);
+            pointDtoList.stream().forEach(bean -> {
+                if (!bean.getCustomerId().equals(customerDTO.getId())) {
+                    throw new OrderException(OrderCodeEnum.POINT_IS_NOT_YOURS);
+                }
+                if (bean.getStatus().equals(Byte.valueOf("0"))) {
+                    throw new OrderException(OrderCodeEnum.POINT_STOP_USING);
+                }
+                if (!bean.getCityCodes().contains(dto.getCustomerCityCode())) {
+                    throw new OrderException(OrderCodeEnum.POINT_NOT_SUPPORT_CITY);
+                }
+                if (!idsContainsId(bean.getProductIds(), dto.getProductId())) {
+                    throw new OrderException(OrderCodeEnum.POINT_NOT_SUPPORT_PRODUCT);
+                }
+                if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
+                    //支付积分数量
+                    BigDecimal thisPointPay;
+                    BigDecimal conversionRate = new BigDecimal(bean.getProjectDTO().getPointConversionRate());
+                    if (needPay[0].compareTo(bean.getBalance().multiply(conversionRate)) == 1) {
+                        thisPointPay = bean.getBalance();
+                    } else {
+                        //当【需支付的金额/兑换比例】不为整数时，则抛异常
+                        if (needPay[0].divide(conversionRate).setScale(0, RoundingMode.HALF_UP).compareTo(needPay[0].divide(conversionRate)) != 0) {
+                            throw new OrderException(OrderCodeEnum.POINT_PAY_DECIMAL_APPEAR);
+                        }
+                        thisPointPay = needPay[0].divide(conversionRate);
+                    }
+                    bean.setBalance(bean.getBalance().subtract(thisPointPay));
+                    pointPayMoney[0] = pointPayMoney[0].add(thisPointPay.multiply(conversionRate));
+                    OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
+                    orderPaymentPO.setOrderCode(orderCode);
+                    orderPaymentPO.setPayType(CommonConstant.PAY_POINT);
+                    orderPaymentPO.setPointId(bean.getId());
+                    orderPaymentPO.setPayMoney(thisPointPay);
+                    orderPaymentPO.setSerialNumber("");
+                    orderPaymentPOList.add(orderPaymentPO);
+                    needPay[0] = needPay[0].subtract(thisPointPay.multiply(conversionRate));
+                }
+            });
+            pointService.batchUpdate(pointDtoList);
+        }
+        //*********************充值卡支付部分*************************/
         if (!Strings.isBlank(dto.getRechargeCardIds())) {
             List<Integer> rechargeCardIds = Arrays.asList(dto.getRechargeCardIds().split(","))
                     .stream().map(s -> Integer.parseInt(s.trim()))
@@ -608,17 +597,23 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if (!bean.getCustomerId().equals(customerDTO.getId())) {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_NOT_YOURS);
                 }
+                if (bean.getStatus().equals(Byte.valueOf("0"))) {
+                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_STOP_USING);
+                }
+                if (bean.getExpiryTime().getTime() < System.currentTimeMillis()) {
+                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_EXPIRY);
+                }
+                if (bean.getEffectiveTime().getTime() > System.currentTimeMillis()) {
+                    throw new OrderException(OrderCodeEnum.RECHARGE_CARD_IS_NOT_EFFECTIVE);
+                }
                 if (!bean.getCityCodes().contains(dto.getCustomerCityCode())) {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_NOT_SUPPORT_CITY);
                 }
-                List<Integer> productIds = Arrays.asList(bean.getProductIds().split(","))
-                        .stream().map(s -> Integer.parseInt(s.trim()))
-                        .collect(Collectors.toList());
-                if (!productIds.contains(dto.getProductId())) {
+                if (!idsContainsId(bean.getProductIds(), dto.getProductId())) {
                     throw new OrderException(OrderCodeEnum.RECHARGE_CARD_NOT_SUPPORT_PRODUCT);
                 }
-                if (needPay[0].compareTo(new BigDecimal(0)) == 1) {
-                    BigDecimal thisCardPay = new BigDecimal(0);
+                if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
+                    BigDecimal thisCardPay;
                     if (needPay[0].compareTo(bean.getBalance()) == 1) {
                         thisCardPay = bean.getBalance();
                     } else {
@@ -638,7 +633,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             });
             rcService.batchUpdate(rcdtoList);
         }
-        if (needPay[0].compareTo(new BigDecimal(0)) == -1) {//超额支付
+        if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
+            throw new OrderException(OrderCodeEnum.ORDER_PAYMENT_NOT_ENOUGH);
+        }
+        if (needPay[0].compareTo(BigDecimal.ZERO) == -1) {
             throw new OrderException(OrderCodeEnum.ORDER_OVER_PAYMENT);
         }
         //计算订单下单完成后应该置为什么状态
@@ -659,32 +657,41 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPO.setOrderTime(new Date());
         orderInfoPO.setServiceTime(dto.getServiceTime());
         orderInfoPO.setRealServiceTime(dto.getServiceTime());
+        orderInfoPO.setPayPoint(pointPayMoney[0]);
         orderInfoPO.setPayRechargeCard(rechargeCardPayMoney[0]);
-        orderInfoPO.setPayVoucher(productPriceDTO.getPrice().multiply(new BigDecimal(voucherPayCount[0])));
-        orderInfoPO.setPayCash(new BigDecimal(0));
+        orderInfoPO.setPayVoucher(voucherPay[0]);
+        orderInfoPO.setPayCash(BigDecimal.ZERO);
         orderInfoPO.setTotalAmount(productPriceDTO.getPrice().multiply(new BigDecimal(dto.getCount())));
         orderInfoPO.setCost(dto.getCost());
         orderInfoPO.setComments(dto.getComments());
         orderInfoPO.setType(dto.getType());
-        if (needPay[0].compareTo(new BigDecimal(0)) == 0) {//支付完成
+        if (needPay[0].compareTo(BigDecimal.ZERO) == 0) {//刚好可以支付
             if (productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
+                orderInfoPO.setExtInfo("");
             }
             if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
+                eleProductCodeDTOList = sendEleProductCode(dto.getProductId(), dto.getCount());
+                JSONArray jsonArray = new JSONArray();
+                eleProductCodeDTOList.stream().forEach(bean -> {
+                    JSONObject json = new JSONObject();
+                    json.put("code",bean.getCode());
+                    json.put("keyt",bean.getKeyt());
+                    jsonArray.add(json);
+                });
+                orderInfoPO.setExtInfo(jsonArray.toString());
             }
         } else { //需要在线支付
             orderInfoPO.setStatus(CommonConstant.ORDER_UNPAID);
         }
         orderInfoPOManualMapper.insert(orderInfoPO);
+        if(productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)){
+            eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderCode);
+        }
         orderPaymentPOList.stream().forEach(bean -> {
             bean.setOrderId(orderInfoPO.getId());
         });
-        if (needPay[0].compareTo(new BigDecimal(0)) == 0 && productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
-            //此处发放电子码
-            eleProductCodeDTOList = sendEleProductCode(orderInfoPO);
-            eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderCode);
-        }
         orderPaymentService.batchInsert(orderPaymentPOList);
         NeedPayResp needPayResp = new NeedPayResp();
         needPayResp.setOrderId(orderInfoPO.getId());
@@ -706,6 +713,41 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             throw new OrderException(OrderCodeEnum.ORDER_CODE_REPEAT);
         }
         return OrderInfoAdapter.PO2DTO(poList.get(0));
+    }
+
+    @Override
+    public void wxNotify(String orderNo, BigDecimal wxPay) {
+        OrderInfoDTO orderInfoDTO = getByOrderNo(orderNo);
+        OrderInfoPO orderInfoPO = new OrderInfoPO();
+        orderInfoPO.setId(orderInfoDTO.getId());
+        if (orderInfoDTO == null) {
+            throw new OrderException(OrderCodeEnum.ORDER_NOT_EXIST);
+        }
+        if (!orderInfoDTO.getStatus().equals(CommonConstant.ORDER_UNPAID)) {
+            throw new OrderException(OrderCodeEnum.ORDER_NOT_UNPAID);
+        }
+        if (orderInfoDTO.getPayment().compareTo(wxPay) != 0) {
+            throw new OrderException(OrderCodeEnum.WECHAT_PAY_FEE_ERROR);
+        }
+        if (orderInfoDTO.getType().equals(CommonConstant.SERVICE_PRODUCT)) {//服务型商品
+            orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
+        }
+        if (orderInfoDTO.getType().equals(CommonConstant.ELE_PRODUCT)) {//电子码商品
+            orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
+            //发放电子码
+            List<EleProductCodeDTO> eleProductCodeDTOList = Lists.newArrayList();
+            eleProductCodeDTOList = sendEleProductCode(orderInfoDTO.getProductId(), orderInfoDTO.getCount());
+            eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderInfoDTO.getOrderCode());
+            StringBuilder comments = new StringBuilder();
+            eleProductCodeDTOList.stream().forEach(bean -> {
+                if (!Strings.isBlank(bean.getCode())) {
+                    comments.append("兑换码为：" + bean.getCode());
+                }
+                comments.append("，兑换密钥为：" + bean.getKeyt() + "；");
+            });
+            orderInfoPO.setComments(comments.toString());
+        }
+        orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
     }
 
     private OrderRefundDTO paymentDto2RefundDto(OrderPaymentDTO paymentDTO) {
@@ -763,23 +805,17 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     /**
-     * 根据订单信息，设置定单comment字段内容，并且返回要兑换的电子码list
+     * 根据电子商品id，数量获取电子码
      *
-     * @param orderInfoPO
+     * @param productId
+     * @param count
      * @return
      */
-    private List<EleProductCodeDTO> sendEleProductCode(OrderInfoPO orderInfoPO) {
-        List<EleProductCodeDTO> eleProductCodeDTOList = eleProductCodeService.selectTopN(orderInfoPO.getProductId(), orderInfoPO.getCount());
-        if (eleProductCodeDTOList.size() != orderInfoPO.getCount()) {
+    private List<EleProductCodeDTO> sendEleProductCode(Integer productId, Integer count) {
+        List<EleProductCodeDTO> eleProductCodeDTOList = eleProductCodeService.selectTopN(productId, count);
+        if (eleProductCodeDTOList.size() != count) {
             throw new OrderException(OrderCodeEnum.ELE_PRODUCT_CODE_NOT_ENOUGH);
         }
-        StringBuilder comments = new StringBuilder();
-        eleProductCodeDTOList.stream().forEach(bean -> {
-            if (!Strings.isBlank(bean.getCode())) {
-                comments.append("兑换码为：" + bean.getCode() + "，兑换密钥为：" + bean.getKeyt() + "；");
-            }
-        });
-        orderInfoPO.setComments(comments.toString());
         return eleProductCodeDTOList;
     }
 
@@ -787,8 +823,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
      * 生成订单号 yyyyMMddHH+3位序列号
      */
     private String generateOrderCode() {
-        Long beginHour = (System.currentTimeMillis() / ConstantFetchUtil.hour_1) * ConstantFetchUtil.hour_1;
-        Long endHour = beginHour + ConstantFetchUtil.hour_1;
+        Long beginHour = (System.currentTimeMillis() / CommonConstant.ONE_HOUR) * CommonConstant.ONE_HOUR;
+        Long endHour = beginHour + CommonConstant.ONE_HOUR;
         Integer count = orderInfoPOManualMapper.getCountWithinThisHour(beginHour, endHour);
         if (count >= CommonConstant.ORDER_CEILING_PER_HOUR) {
             logger.error(OrderCodeEnum.ORDER_NO_GENERATE_ERROR.getMessage());
@@ -797,5 +833,21 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         String index = String.format("%03d", count + 1);
         String prefix = DateUtil.yyyyMMDDhh();
         return prefix + index;
+    }
+
+    /**
+     * 判断String类型的ids（英文逗号分隔）是否包含某个Integer类型的id
+     */
+    private boolean idsContainsId(String ids, Integer id) {
+        if (Strings.isEmpty(ids)) {
+            return false;
+        }
+        List<Integer> intIds = Arrays.asList(ids.split(","))
+                .stream().map(s -> Integer.parseInt(s.trim()))
+                .collect(Collectors.toList());
+        if (intIds.isEmpty()) {
+            return false;
+        }
+        return intIds.contains(id);
     }
 }

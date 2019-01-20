@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.controller.rechargecard;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCExchangeCodeBiz;
@@ -9,11 +10,9 @@ import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
-import com.jiazhe.youxiang.server.common.enums.CustomerCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
-import com.jiazhe.youxiang.server.common.exceptions.CustomerException;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeEditDTO;
@@ -115,17 +114,31 @@ public class APIRCExchangeCodeController extends BaseController{
     @ApiOperation(value = "修改兑换码信息", httpMethod = "POST",notes = "修改兑换码信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "修改兑换码信息", level = LogLevelEnum.LEVEL_2)
-    public Object editSave(@ModelAttribute RCExchangeCodeEditReq req) {
+    public Object editSave(@ModelAttribute RCExchangeCodeEditReq req)  {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getRechargeCardName(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));
-        if(req.getExpiryTime()==0){
+        CommonValidator.validateNull(req.getCityCodes(), new RechargeCardException(RechargeCardCodeEnum.CITY_IS_NULL));
+        CommonValidator.validateNull(req.getProductIds(), new RechargeCardException(RechargeCardCodeEnum.PRODUCT_IS_NULL));
+        if(req.getExpiryTime()==CommonConstant.NULL_TIME){
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
         }
+        req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
+        if(req.getRechargeCardEffectiveTime()==CommonConstant.NULL_TIME){
+            throw new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EFFECTIVE_TIME_IS_NULL);
+        }
+        if(req.getRechargeCardEffectiveTime() > req.getExpiryTime()){
+            throw new RechargeCardException(RechargeCardCodeEnum.RC_EFFECTIVE_TIME_LATER_CODE_EXPIRY_TIME);
+        }
+        req.setRechargeCardEffectiveTime(DateUtil.getFirstSecond(req.getRechargeCardEffectiveTime()));
         if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
-            if(req.getRechargeCardExpiryTime()==0){
+            if(req.getRechargeCardExpiryTime()==CommonConstant.NULL_TIME){
                 throw new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRY_TIME_IS_NULL);
             }
+            if(req.getRechargeCardEffectiveTime() > req.getRechargeCardExpiryTime()){
+                throw new RechargeCardException(RechargeCardCodeEnum.RC_EFFECTIVE_TIME_LATER_RC_EXPIRY_TIME);
+            }
+            req.setRechargeCardExpiryTime(DateUtil.getLastSecond(req.getRechargeCardExpiryTime()));
         }
         if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_PERIOD)) {
             CommonValidator.validateNull(req.getValidityPeriod(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRY_TIME_IS_NULL));
@@ -140,8 +153,9 @@ public class APIRCExchangeCodeController extends BaseController{
     @ApiOperation(value = "【APP端】客户用兑换码进行兑换", httpMethod = "POST",notes = "客户用充值卡兑换码兑换")
     @RequestMapping(value = "/customerselfcodecharge", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "客户用兑换码进行兑换", level = LogLevelEnum.LEVEL_2)
-    public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) {
+    public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req)  {
         CommonValidator.validateId(req.getId());
+        CommonValidator.validateNull(req.getKeyt(),new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
         rcExchangeCodeBiz.customerSelfCharge(req.getId(),req.getKeyt());
         return ResponseFactory.buildSuccess();
     }
@@ -150,8 +164,9 @@ public class APIRCExchangeCodeController extends BaseController{
     @ApiOperation(value = "【后台】后台用兑换码进行兑换", httpMethod = "POST",notes = "后台用兑换码进行兑换")
     @RequestMapping(value = "/backstagecodecharge", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "后台用兑换码进行兑换", level = LogLevelEnum.LEVEL_2)
-    public Object backstageCodeCharge(@ModelAttribute CodeChargeReq req) {
+    public Object backstageCodeCharge(@ModelAttribute CodeChargeReq req)  {
         CommonValidator.validateId(req.getId());
+        CommonValidator.validateNull(req.getKeyt(),new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
         rcExchangeCodeBiz.backstageCodeCharge(req.getId(),req.getKeyt());
         return ResponseFactory.buildSuccess();
     }

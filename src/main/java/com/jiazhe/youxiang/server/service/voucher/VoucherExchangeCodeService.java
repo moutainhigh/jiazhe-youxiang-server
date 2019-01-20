@@ -17,6 +17,7 @@ public interface VoucherExchangeCodeService {
 
     /**
      * 根据批次id获取批次下代金券兑换码
+     *
      * @param id
      * @return
      */
@@ -24,12 +25,14 @@ public interface VoucherExchangeCodeService {
 
     /**
      * 批量插入代金券兑换码
+     *
      * @param voucherExchangeCodePOList
      */
     void batchInsert(List<VoucherExchangeCodePO> voucherExchangeCodePOList);
 
     /**
      * 分页查询代金券兑换码信息
+     *
      * @param batchId
      * @param code
      * @param keyt
@@ -42,12 +45,14 @@ public interface VoucherExchangeCodeService {
 
     /**
      * 根据批次信息，修改批次下面兑换码信息
+     *
      * @param batchSaveDTO
      */
     void updateWithBatch(VoucherExchangeCodeBatchSaveDTO batchSaveDTO);
 
     /**
      * 根据批次id，修改批次下兑换码状态
+     *
      * @param batchId
      * @param status
      */
@@ -55,6 +60,7 @@ public interface VoucherExchangeCodeService {
 
     /**
      * 根据id查找
+     *
      * @param id
      * @return
      */
@@ -62,12 +68,14 @@ public interface VoucherExchangeCodeService {
 
     /**
      * 修改兑换码信息
+     *
      * @param dto
      */
     void editSave(VoucherExchangeCodeEditDTO dto);
 
     /**
      * 改变代金券兑换码的启用、停用状态
+     *
      * @param id
      * @param status
      */
@@ -75,16 +83,18 @@ public interface VoucherExchangeCodeService {
 
     /**
      * 兑换码换代金券
+     *
      * @param exchangeType
      * @param id
      * @param keyt
      */
-    void codeCharge(Integer exchangeType, Integer id, String keyt);
+    void codeCharge(Integer exchangeType, Integer id, String keyt) ;
 
     /**
      * 根据keyt查询代金券兑换码
+     *
      * @param keyt
      * @return
      */
-    VoucherExchangeCodePO  findByKeyt(String keyt);
+    VoucherExchangeCodePO findByKeyt(String keyt);
 }

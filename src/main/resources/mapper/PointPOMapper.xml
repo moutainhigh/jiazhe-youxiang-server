@@ -12,6 +12,7 @@
     <result column="face_value" property="faceValue" jdbcType="DECIMAL" />
     <result column="balance" property="balance" jdbcType="DECIMAL" />
     <result column="exchange_record_id" property="exchangeRecordId" jdbcType="INTEGER" />
+    <result column="effective_time" property="effectiveTime" jdbcType="TIMESTAMP" />
     <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
@@ -79,8 +80,8 @@
   </sql>
   <sql id="Base_Column_List" >
     id, name, description, customer_id, project_id, city_codes, product_ids, face_value, 
-    balance, exchange_record_id, expiry_time, status, ext_info, is_deleted, add_time, 
-    mod_time
+    balance, exchange_record_id, effective_time, expiry_time, status, ext_info, is_deleted, 
+    add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.PointPOExample" >
     select
@@ -116,15 +117,15 @@
     insert into point (id, name, description, 
       customer_id, project_id, city_codes, 
       product_ids, face_value, balance, 
-      exchange_record_id, expiry_time, status, 
-      ext_info, is_deleted, add_time, 
-      mod_time)
+      exchange_record_id, effective_time, expiry_time, 
+      status, ext_info, is_deleted, 
+      add_time, mod_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
       #{customerId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR}, 
       #{productIds,jdbcType=VARCHAR}, #{faceValue,jdbcType=DECIMAL}, #{balance,jdbcType=DECIMAL}, 
-      #{exchangeRecordId,jdbcType=INTEGER}, #{expiryTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, 
-      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
-      #{modTime,jdbcType=TIMESTAMP})
+      #{exchangeRecordId,jdbcType=INTEGER}, #{effectiveTime,jdbcType=TIMESTAMP}, #{expiryTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=TINYINT}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.PointPO" >
     insert into point
@@ -158,6 +159,9 @@
       </if>
       <if test="exchangeRecordId != null" >
         exchange_record_id,
+      </if>
+      <if test="effectiveTime != null" >
+        effective_time,
       </if>
       <if test="expiryTime != null" >
         expiry_time,
@@ -208,6 +212,9 @@
       </if>
       <if test="exchangeRecordId != null" >
         #{exchangeRecordId,jdbcType=INTEGER},
+      </if>
+      <if test="effectiveTime != null" >
+        #{effectiveTime,jdbcType=TIMESTAMP},
       </if>
       <if test="expiryTime != null" >
         #{expiryTime,jdbcType=TIMESTAMP},
@@ -268,6 +275,9 @@
       <if test="record.exchangeRecordId != null" >
         exchange_record_id = #{record.exchangeRecordId,jdbcType=INTEGER},
       </if>
+      <if test="record.effectiveTime != null" >
+        effective_time = #{record.effectiveTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.expiryTime != null" >
         expiry_time = #{record.expiryTime,jdbcType=TIMESTAMP},
       </if>
@@ -303,6 +313,7 @@
       face_value = #{record.faceValue,jdbcType=DECIMAL},
       balance = #{record.balance,jdbcType=DECIMAL},
       exchange_record_id = #{record.exchangeRecordId,jdbcType=INTEGER},
+      effective_time = #{record.effectiveTime,jdbcType=TIMESTAMP},
       expiry_time = #{record.expiryTime,jdbcType=TIMESTAMP},
       status = #{record.status,jdbcType=TINYINT},
       ext_info = #{record.extInfo,jdbcType=VARCHAR},
@@ -343,6 +354,9 @@
       <if test="exchangeRecordId != null" >
         exchange_record_id = #{exchangeRecordId,jdbcType=INTEGER},
       </if>
+      <if test="effectiveTime != null" >
+        effective_time = #{effectiveTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="expiryTime != null" >
         expiry_time = #{expiryTime,jdbcType=TIMESTAMP},
       </if>
@@ -375,6 +389,7 @@
       face_value = #{faceValue,jdbcType=DECIMAL},
       balance = #{balance,jdbcType=DECIMAL},
       exchange_record_id = #{exchangeRecordId,jdbcType=INTEGER},
+      effective_time = #{effectiveTime,jdbcType=TIMESTAMP},
       expiry_time = #{expiryTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=TINYINT},
       ext_info = #{extInfo,jdbcType=VARCHAR},

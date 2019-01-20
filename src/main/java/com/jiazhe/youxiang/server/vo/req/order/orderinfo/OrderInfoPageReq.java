@@ -17,7 +17,7 @@ public class OrderInfoPageReq extends PageSizeNumReq {
     private String orderCode;
 
     @ApiModelProperty("订单状态")
-    private Byte status ;
+    private String status ;
 
     @ApiModelProperty("下单客户手机号")
     private String mobile;
@@ -34,12 +34,11 @@ public class OrderInfoPageReq extends PageSizeNumReq {
     @ApiModelProperty("服务人员电话")
     private String workerMobile;
 
-
-    public Byte getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.resp.point.exchangecodebatch;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import com.jiazhe.youxiang.server.vo.resp.project.ProjectResp;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
@@ -32,6 +33,9 @@ public class PointExchangeCodeBatchResp extends BaseVO{
     @ApiModelProperty("批次过期时间")
     private Long expiryTime;
 
+    @ApiModelProperty("积分卡生效时间")
+    private Long pointEffectiveTime;
+
     @ApiModelProperty("批次状态，0停用、1启用")
     private Byte status;
 
@@ -40,6 +44,11 @@ public class PointExchangeCodeBatchResp extends BaseVO{
 
     @ApiModelProperty("批次下兑换码是否已经制作，0为未制作，1为已制作")
     private Byte isMade;
+
+    @ApiModelProperty("项目id")
+    private Integer projectId;
+
+    private ProjectResp projectResp;
 
     public Integer getId() {
         return id;
@@ -115,5 +124,29 @@ public class PointExchangeCodeBatchResp extends BaseVO{
 
     public void setPointName(String pointName) {
         this.pointName = pointName;
+    }
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
+    public ProjectResp getProjectResp() {
+        return projectResp;
+    }
+
+    public void setProjectResp(ProjectResp projectResp) {
+        this.projectResp = projectResp;
+    }
+
+    public Long getPointEffectiveTime() {
+        return pointEffectiveTime;
+    }
+
+    public void setPointEffectiveTime(Long pointEffectiveTime) {
+        this.pointEffectiveTime = pointEffectiveTime;
     }
 }

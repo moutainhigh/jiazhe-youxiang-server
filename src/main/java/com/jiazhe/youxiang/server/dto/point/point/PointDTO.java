@@ -37,11 +37,15 @@ public class PointDTO extends BaseObject {
 
     private BigDecimal balance;
 
+    private Date effectiveTime;
+
     private Date expiryTime;
 
     private Byte status;
 
     private Date addTime;
+
+    private String extInfo;
 
     private CustomerDTO customerDTO;
 
@@ -165,5 +169,21 @@ public class PointDTO extends BaseObject {
 
     public void setPointExchangeRecordDTO(PointExchangeRecordDTO pointExchangeRecordDTO) {
         this.pointExchangeRecordDTO = pointExchangeRecordDTO;
+    }
+
+    public Date getEffectiveTime() {
+        return effectiveTime;
+    }
+
+    public void setEffectiveTime(Date effectiveTime) {
+        this.effectiveTime = effectiveTime;
+    }
+
+    public String getExtInfo() {
+        return extInfo;
+    }
+
+    public void setExtInfo(String extInfo) {
+        this.extInfo = extInfo;
     }
 }

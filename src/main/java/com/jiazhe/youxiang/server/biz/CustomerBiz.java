@@ -5,7 +5,7 @@
  */
 package com.jiazhe.youxiang.server.biz;
 
-import com.jiazhe.youxiang.base.util.MathlUtil;
+import com.jiazhe.youxiang.base.util.MathUtil;
 import com.jiazhe.youxiang.server.biz.point.PointBiz;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCBiz;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherBiz;
@@ -14,7 +14,6 @@ import com.jiazhe.youxiang.server.dto.customer.AddressDTO;
 import com.jiazhe.youxiang.server.dto.customer.AddressUpdateDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
-import com.jiazhe.youxiang.server.dto.customer.CustomerRegisterDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerUpdateDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -82,9 +81,9 @@ public class CustomerBiz {
         if (CollectionUtils.isNotEmpty(result)) {
             result.stream().forEach(item -> {
                 //填充有效积分、充值卡余额和代金券张数
-                item.setPointBalance(MathlUtil.getValue(pointBiz.totalValidBalance(item.getId())));
-                item.setRechargeCardBalance(MathlUtil.getValue(rcBiz.totalValidBalance(item.getId())));
-                item.setVoucherCount(MathlUtil.getValue(voucherBiz.totalValidVoucher(item.getId())));
+                item.setPointBalance(MathUtil.getValue(pointBiz.totalValidBalance(item.getId())));
+                item.setRechargeCardBalance(MathUtil.getValue(rcBiz.totalValidBalance(item.getId())));
+                item.setVoucherCount(MathUtil.getValue(voucherBiz.totalValidVoucher(item.getId())));
             });
         }
         return result;
@@ -132,5 +131,4 @@ public class CustomerBiz {
         customerService.setAddressDefault(id, isDefault);
 
     }
-
 }

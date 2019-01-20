@@ -53,6 +53,12 @@ public class CustomerPlaceOrderReq  extends BaseVO {
     @ApiModelProperty("充值卡ids")
     private String rechargeCardIds;
 
+    /**
+     * 使用的积分卡id
+     */
+    @ApiModelProperty("积分卡ids")
+    private String pointIds;
+
     public Integer getCustomerId() {
         return customerId;
     }
@@ -141,4 +147,11 @@ public class CustomerPlaceOrderReq  extends BaseVO {
         this.rechargeCardIds = rechargeCardIds;
     }
 
+    public String getPointIds() {
+        return pointIds;
+    }
+
+    public void setPointIds(String pointIds) {
+        this.pointIds = pointIds;
+    }
 }

@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.adapter.voucher;
 
+import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
 import com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
@@ -32,11 +33,13 @@ public class VoucherExchangeCodeAdapter {
         voucherExchangeCodeResp.setCode(dto.getCode());
         voucherExchangeCodeResp.setKeyt(dto.getKeyt());
         voucherExchangeCodeResp.setExpiryTime(dto.getExpiryTime().getTime());
+        voucherExchangeCodeResp.setVoucherEffectiveTime(dto.getVoucherEffectiveTime().getTime());
         voucherExchangeCodeResp.setVoucherExpiryTime(dto.getVoucherExpiryTime().getTime());
         voucherExchangeCodeResp.setValidityPeriod(dto.getValidityPeriod());
         voucherExchangeCodeResp.setExpiryType(dto.getExpiryType());
         voucherExchangeCodeResp.setStatus(dto.getStatus());
         voucherExchangeCodeResp.setUsed(dto.getUsed());
+        voucherExchangeCodeResp.setCustomerResp(CustomerAdapter.customerDTO2VO(dto.getCustomerDTO()));
         return voucherExchangeCodeResp;
     }
 
@@ -56,6 +59,7 @@ public class VoucherExchangeCodeAdapter {
         voucherExchangeCodeBatchEditDTO.setProductIds(voucherExchangeCodeBatchPO.getProductIds());
         voucherExchangeCodeBatchEditDTO.setCount(voucherExchangeCodeBatchPO.getCount());
         voucherExchangeCodeBatchEditDTO.setExpiryTime(voucherExchangeCodeBatchPO.getExpiryTime());
+        voucherExchangeCodeBatchEditDTO.setVoucherEffectiveTime(voucherExchangeCodeBatchPO.getVoucherEffectiveTime());
         voucherExchangeCodeBatchEditDTO.setVoucherExpiryTime(voucherExchangeCodeBatchPO.getVoucherExpiryTime());
         voucherExchangeCodeBatchEditDTO.setValidityPeriod(voucherExchangeCodeBatchPO.getValidityPeriod());
         voucherExchangeCodeBatchEditDTO.setExpiryType(voucherExchangeCodeBatchPO.getExpiryType());
@@ -78,6 +82,7 @@ public class VoucherExchangeCodeAdapter {
         voucherExchangeCodePO.setCode(voucherExchangeCodeSaveDTO.getCode());
         voucherExchangeCodePO.setKeyt(voucherExchangeCodeSaveDTO.getKeyt());
         voucherExchangeCodePO.setExpiryTime(voucherExchangeCodeSaveDTO.getExpiryTime());
+        voucherExchangeCodePO.setVoucherEffectiveTime(voucherExchangeCodeSaveDTO.getVoucherEffectiveTime());
         voucherExchangeCodePO.setVoucherExpiryTime(voucherExchangeCodeSaveDTO.getVoucherExpiryTime());
         voucherExchangeCodePO.setValidityPeriod(voucherExchangeCodeSaveDTO.getValidityPeriod());
         voucherExchangeCodePO.setExpiryType(voucherExchangeCodeSaveDTO.getExpiryType());
@@ -104,6 +109,7 @@ public class VoucherExchangeCodeAdapter {
         voucherExchangeCodeDTO.setCode(voucherExchangeCodePO.getCode());
         voucherExchangeCodeDTO.setKeyt(voucherExchangeCodePO.getKeyt());
         voucherExchangeCodeDTO.setExpiryTime(voucherExchangeCodePO.getExpiryTime());
+        voucherExchangeCodeDTO.setVoucherEffectiveTime(voucherExchangeCodePO.getVoucherEffectiveTime());
         voucherExchangeCodeDTO.setVoucherExpiryTime(voucherExchangeCodePO.getVoucherExpiryTime());
         voucherExchangeCodeDTO.setValidityPeriod(voucherExchangeCodePO.getValidityPeriod());
         voucherExchangeCodeDTO.setExpiryType(voucherExchangeCodePO.getExpiryType());
@@ -124,6 +130,7 @@ public class VoucherExchangeCodeAdapter {
         voucherExchangeCodeEditDTO.setCityCodes(req.getCityCodes());
         voucherExchangeCodeEditDTO.setProductIds(req.getProductIds());
         voucherExchangeCodeEditDTO.setExpiryTime(new Date(req.getExpiryTime()));
+        voucherExchangeCodeEditDTO.setVoucherEffectiveTime(new Date(req.getVoucherEffectiveTime()));
         voucherExchangeCodeEditDTO.setVoucherExpiryTime(new Date(req.getVoucherExpiryTime()));
         voucherExchangeCodeEditDTO.setValidityPeriod(req.getValidityPeriod());
         voucherExchangeCodeEditDTO.setExpiryType(req.getExpiryType());

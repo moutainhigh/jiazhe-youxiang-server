@@ -26,13 +26,13 @@ public class PermissionConstant {
     //绑定积分卡
     public static final String CUSTOMER_POINT_BINDING = "customerPointBindig";
     //直接充值积分卡
-    public static final String CUSTOMER_POINT_RECHARGE = "customerPointRecharge";
+    public static final String CUSTOMER_POINT_CHARGE = "customerPointCharge";
     //查看充值卡
     public static final String CUSTOMER_RECHARGE_CARD_DETAIL = "customerRechargeCardDetail";
     //绑定充值卡
     public static final String CUSTOMER_RECHARGE_CARD_BINDING = "customerRechargeCardBindig";
     //直接充值充值卡
-    public static final String CUSTOMER_RECHARGE_CARD_RECHARGE = "customerRechargeCardRecharge";
+    public static final String CUSTOMER_RECHARGE_CARD_CHARGE = "customerRechargeCardCharge";
     //查看代金券
     public static final String CUSTOMER_VOUCHER_DETAIL = "customerVoucherDetail";
     //绑定代金券

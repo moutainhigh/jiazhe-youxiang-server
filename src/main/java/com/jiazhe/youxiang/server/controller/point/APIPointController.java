@@ -2,18 +2,18 @@ package com.jiazhe.youxiang.server.controller.point;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.point.PointAdapter;
 import com.jiazhe.youxiang.server.biz.point.PointBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.PointCodeEnum;
-import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.PointException;
-import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.dto.point.point.PointDTO;
 import com.jiazhe.youxiang.server.dto.point.point.PointEditDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -102,11 +102,11 @@ public class APIPointController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @RequiresPermissions(PermissionConstant.CUSTOMER_POINT_RECHARGE)
+    @RequiresPermissions(PermissionConstant.CUSTOMER_POINT_CHARGE)
     @ApiOperation(value = "【后台】直接给客户充值任意分数", httpMethod = "POST",notes = "直接给客户充值任意分数")
     @RequestMapping(value = "/directcharge", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "直接给客户充值任意分数", level = LogLevelEnum.LEVEL_3)
-    public Object directCharge(@ModelAttribute DirectChargeReq req) {
+    public Object directCharge(@ModelAttribute DirectChargeReq req)  {
         CommonValidator.validateId(req.getId());
         CommonValidator.validateId(req.getBatchId());
         CommonValidator.validateNull(req.getFaceValue());
@@ -128,15 +128,34 @@ public class APIPointController extends BaseController{
     @ApiOperation(value = "【后台】修改积分卡信息", httpMethod = "POST",notes = "修改积分卡信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "修改积分卡信息", level = LogLevelEnum.LEVEL_2)
-    public Object editSave(@ModelAttribute PointEditReq req) {
+    public Object editSave(@ModelAttribute PointEditReq req)  {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
-        CommonValidator.validateNull(req.getName(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));
-        if(req.getExpiryTime()==0){
+        CommonValidator.validateNull(req.getName(),new PointException(PointCodeEnum.POINT_NAME_IS_NULL));
+        if(req.getExpiryTime() == CommonConstant.NULL_TIME){
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
         }
+        if(req.getEffectiveTime() == CommonConstant.NULL_TIME){
+            throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_IS_NULL);
+        }
+        if(req.getEffectiveTime() > req.getExpiryTime()){
+            throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_LATER_POINT_EXPIRY_TIME);
+        }
+        req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
+        req.setEffectiveTime(DateUtil.getFirstSecond(req.getEffectiveTime()));
         PointEditDTO dto = PointAdapter.editReq2EditDTO(req);
         pointBiz.editSave(dto);
+        return ResponseFactory.buildSuccess();
+    }
+
+    @AppApi
+    @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
+    @ApiOperation(value = "通过二维码兑换积分卡", httpMethod = "POST",notes = "通过二维码兑换积分卡")
+    @RequestMapping(value = "/chargebyqrcode", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.POINT, operate = "通过二维码兑换积分卡", level = LogLevelEnum.LEVEL_2)
+    public Object chargeByQRCode(@ModelAttribute QRCodeReq req)  {
+        CommonValidator.validateNull(req);
+        pointBiz.chargeByQRCode(req.getQrCode());
         return ResponseFactory.buildSuccess();
     }
 }

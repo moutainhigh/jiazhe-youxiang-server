@@ -29,6 +29,8 @@ public class PointExchangeCodeBatchPO implements Serializable {
 
     private Date expiryTime;
 
+    private Date pointEffectiveTime;
+
     private Date pointExpiryTime;
 
     private Integer validityPeriod;
@@ -141,6 +143,14 @@ public class PointExchangeCodeBatchPO implements Serializable {
 
     public void setExpiryTime(Date expiryTime) {
         this.expiryTime = expiryTime;
+    }
+
+    public Date getPointEffectiveTime() {
+        return pointEffectiveTime;
+    }
+
+    public void setPointEffectiveTime(Date pointEffectiveTime) {
+        this.pointEffectiveTime = pointEffectiveTime;
     }
 
     public Date getPointExpiryTime() {

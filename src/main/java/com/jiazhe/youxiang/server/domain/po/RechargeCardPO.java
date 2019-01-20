@@ -25,6 +25,8 @@ public class RechargeCardPO implements Serializable {
 
     private Integer exchangeRecordId;
 
+    private Date effectiveTime;
+
     private Date expiryTime;
 
     private Byte status;
@@ -117,6 +119,14 @@ public class RechargeCardPO implements Serializable {
 
     public void setExchangeRecordId(Integer exchangeRecordId) {
         this.exchangeRecordId = exchangeRecordId;
+    }
+
+    public Date getEffectiveTime() {
+        return effectiveTime;
+    }
+
+    public void setEffectiveTime(Date effectiveTime) {
+        this.effectiveTime = effectiveTime;
     }
 
     public Date getExpiryTime() {

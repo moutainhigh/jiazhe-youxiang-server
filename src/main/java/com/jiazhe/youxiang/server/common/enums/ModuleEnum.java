@@ -29,6 +29,7 @@ public enum ModuleEnum {
     WECHAT_PAY(115, "微信支付相关"),
     POINT(116, "积分管理"),
     PARTNER_ORDER(117,"商家订单管理"),
+    WECHAT_PUBLIC(118,"微信公众号相关"),
     OTHER(999, "其他模块");
 
     private Integer id;

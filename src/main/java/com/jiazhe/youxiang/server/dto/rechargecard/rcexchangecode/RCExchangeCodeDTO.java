@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode;
 
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.vo.BaseObject;
 
 import java.math.BigDecimal;
@@ -34,6 +35,8 @@ public class RCExchangeCodeDTO extends BaseObject {
 
     private String keyt;
 
+    private Date rechargeCardEffectiveTime;
+
     private Date rechargeCardExpiryTime;
 
     private Integer validityPeriod;
@@ -47,6 +50,10 @@ public class RCExchangeCodeDTO extends BaseObject {
     private Byte status;
 
     private Byte used;
+
+    private Integer customerId;
+
+    private CustomerDTO customerDTO;
 
     public Integer getId() {
         return id;
@@ -182,5 +189,29 @@ public class RCExchangeCodeDTO extends BaseObject {
 
     public void setUsed(Byte used) {
         this.used = used;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
+
+    public CustomerDTO getCustomerDTO() {
+        return customerDTO;
+    }
+
+    public void setCustomerDTO(CustomerDTO customerDTO) {
+        this.customerDTO = customerDTO;
+    }
+
+    public Date getRechargeCardEffectiveTime() {
+        return rechargeCardEffectiveTime;
+    }
+
+    public void setRechargeCardEffectiveTime(Date rechargeCardEffectiveTime) {
+        this.rechargeCardEffectiveTime = rechargeCardEffectiveTime;
     }
 }

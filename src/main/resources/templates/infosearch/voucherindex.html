@@ -93,7 +93,7 @@
                         <div id="grid-pager"></div>
                     </div><!-- /.col -->
 
-                    <div id="modal-form" class="modal fade" tabindex="-1">
+                    <div id="modal-form" class="modal fade" tabindex="-1" style="overflow: scroll">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -135,7 +135,23 @@
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveExpiryTime">到期时间：</label>
+                                                           for="saveEffectiveTime">代金券生效时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker" id="saveEffectiveTime"
+                                                                   type="text" readonly/>
+                                                            <span class="input-group-addon">
+                                                                            <i class="fa fa-calendar bigger-110"></i>
+                                                                        </span>
+                                                            <input type="hidden" value=0 name="effectiveTime"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="saveExpiryTime">代金券过期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker" id="saveExpiryTime"
@@ -154,9 +170,9 @@
                                                            for="saveDescription">描述信息：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="saveDescription" name="description"
-                                                                   class="form-control"
-                                                                   type="text" style="height:30px"/>
+                                                            <textarea id="saveDescription" name="description"
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -232,7 +248,7 @@
         var tableOption = {
             url: "/api/voucher/searchlistpage",
             postData: transformToJson($('#rcSearchForm').serializeArray()),
-            colNames: ['', '代金券名称', '状态', '是否已经使用', '兑换时间', '客户手机号', '客户姓名', '过期时间', '兑换类型', '后台操作人', '操作'],
+            colNames: ['', '代金券名称', '状态', '是否已经使用', '兑换时间', '客户手机号', '客户姓名', '代金券生效时间','代金券过期时间', '兑换类型', '后台操作人', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 50, sortable: false},
@@ -253,7 +269,9 @@
                     width: 50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.used == 1 ? "已使用" : "未使用";
+                        var text = rowObject.used == 1 ? "已使用" : "未使用";
+                        var color = rowObject.used == 1 ?  "FF0000" : "00FF00";
+                        return generateSpan(text, color)
                     }
                 },
                 {
@@ -284,12 +302,21 @@
                     }
                 },
                 {
+                    name: 'effectiveTime',
+                    index: 'effectiveTime',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return timeFormat(rowObject.effectiveTime);
+                    }
+                },
+                {
                     name: 'expiryTime',
                     index: 'expiryTime',
                     width: 40,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return dateFormat(rowObject.expiryTime)
+                        return timeFormat(rowObject.expiryTime)
                     }
                 },
                 {
@@ -348,7 +375,7 @@
 
     //启用代金券
     function startUsing(id) {
-        confirm("确定启用该充值卡吗？", function (result) {
+        confirm("确定启用该代金券吗？", function (result) {
             if (result) {
                 $.ajax({
                     url: "/api/voucher/startusing",
@@ -367,7 +394,7 @@
 
     //停用代金券
     function stopUsing(id) {
-        confirm("确定停用该充值卡吗？", function (result) {
+        confirm("确定停用该代金券吗？", function (result) {
             if (result) {
                 $.ajax({
                     url: "/api/voucher/stopusing",
@@ -415,7 +442,12 @@
                     $("#cardSaveForm #saveCityCodes").val(result.cityCodes);
                     $("#cardSaveForm #saveProductIds").val(result.productIds);
                     $("#cardSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
+                    $('#saveExpiryTime').datepicker('update');
                     $("#cardSaveForm #saveExpiryTime").next().next().val(result.expiryTime);
+                    $("#cardSaveForm #saveEffectiveTime").val(dateFormat(result.effectiveTime));
+                    $('#saveEffectiveTime').datepicker('update');
+                    $("#cardSaveForm #saveEffectiveTime").next().next().val(result.effectiveTime);
+
                     $("#cardSaveForm #saveDescription").val(result.description);
                     $("#modal-form").modal('show');
                 }

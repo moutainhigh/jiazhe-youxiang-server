@@ -2,28 +2,28 @@ package com.jiazhe.youxiang.server.controller.rechargecard;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCAdapter;
-import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.rechargecard.RCBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
-import com.jiazhe.youxiang.server.common.enums.CustomerCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
-import com.jiazhe.youxiang.server.common.exceptions.CommonException;
-import com.jiazhe.youxiang.server.common.exceptions.CustomerException;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCEditDTO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeEditDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
-import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.*;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.DirectChargeReq;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.RCCustomerPageReq;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.RCEditReq;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.RCGoodsAttrPageReq;
+import com.jiazhe.youxiang.server.vo.req.rechargecard.rc.RCPageReq;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rc.RCResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.Logical;
@@ -106,11 +106,11 @@ public class APIRCController extends BaseController{
         return ResponseFactory.buildSuccess();
     }
 
-    @RequiresPermissions(PermissionConstant.CUSTOMER_RECHARGE_CARD_RECHARGE)
+    @RequiresPermissions(PermissionConstant.CUSTOMER_RECHARGE_CARD_CHARGE)
     @ApiOperation(value = "【后台】直接给客户充值任意分数", httpMethod = "POST",notes = "直接给客户充值任意分数")
     @RequestMapping(value = "/directcharge", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "直接给客户充值任意分数", level = LogLevelEnum.LEVEL_3)
-    public Object directCharge(@ModelAttribute DirectChargeReq req) {
+    public Object directCharge(@ModelAttribute DirectChargeReq req)  {
         CommonValidator.validateId(req.getId());
         CommonValidator.validateId(req.getBatchId());
         CommonValidator.validateNull(req.getFaceValue());
@@ -132,13 +132,21 @@ public class APIRCController extends BaseController{
     @ApiOperation(value = "【后台】修改充值卡信息", httpMethod = "POST",notes = "修改充值卡信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "修改充值卡信息", level = LogLevelEnum.LEVEL_2)
-    public Object editSave(@ModelAttribute RCEditReq req) {
+    public Object editSave(@ModelAttribute RCEditReq req)  {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getName(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));
-        if(req.getExpiryTime()==0){
+        if(req.getExpiryTime()==CommonConstant.NULL_TIME){
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
         }
+        if(req.getEffectiveTime()==CommonConstant.NULL_TIME){
+            throw new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EFFECTIVE_TIME_IS_NULL);
+        }
+        if(req.getEffectiveTime() > req.getExpiryTime()){
+            throw new RechargeCardException(RechargeCardCodeEnum.RC_EFFECTIVE_TIME_LATER_RC_EXPIRY_TIME);
+        }
+        req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
+        req.setEffectiveTime(DateUtil.getFirstSecond(req.getEffectiveTime()));
         RCEditDTO dto = RCAdapter.EditReq2EditDTO(req);
         rcBiz.editSave(dto);
         return ResponseFactory.buildSuccess();

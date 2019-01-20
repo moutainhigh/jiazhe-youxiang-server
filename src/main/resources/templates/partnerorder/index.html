@@ -291,9 +291,9 @@
                                 <label class="col-sm-4 control-label no-padding-right">备注：</label>
                                 <div class="col-sm-8">
                                     <div class="pos-rel">
-                                        <input id="saveAdvanceRemark" name="remark"
-                                               class="form-control" type="text"
-                                               style="height:30px"/>
+                                        <textarea id="saveAdvanceRemark" name="remark"
+                                                  class="form-control"
+                                                  style="resize:none;height: 100px"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -319,7 +319,7 @@
 </div>
 
 <!--商户订单modal-->
-<div id="modal-partnerOrder" class="modal fade" tabindex="-1">
+<div id="modal-partnerOrder" class="modal fade" tabindex="-1" style="overflow: scroll">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -369,8 +369,11 @@
                                 <label class="col-sm-4 control-label no-padding-right">兑换密钥：</label>
                                 <div class="col-sm-8">
                                     <div class="pos-rel">
-                                        <input id="saveKeyt" name="keyt" class="form-control"
-                                               type="text" style="height:30px"/>
+                                        <!--<input id="saveKeyt" name="keyt" class="form-control"-->
+                                               <!--type="text" style="height:30px"/>-->
+                                        <textarea id="saveKeyt" name="keyt"
+                                                  class="form-control"
+                                                  style="resize:none;height: 100px"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -412,8 +415,11 @@
                                 <label class="col-sm-4 control-label no-padding-right">预约地点：</label>
                                 <div class="col-sm-8">
                                     <div class="pos-rel">
-                                        <input id="saveCustomerAddress" name="customerAddress" class="form-control"
-                                               type="text" style="height:30px"/>
+                                        <!--<input id="saveCustomerAddress" name="customerAddress" class="form-control"-->
+                                               <!--type="text" style="height:30px"/>-->
+                                        <textarea id="saveCustomerAddress" name="customerAddress"
+                                                  class="form-control"
+                                                  style="resize:none;height: 100px"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -478,9 +484,9 @@
                                 <label class="col-sm-4 control-label no-padding-right">备注：</label>
                                 <div class="col-sm-8">
                                     <div class="pos-rel">
-                                        <input id="saveRemark" name="remark"
-                                               class="form-control" type="text"
-                                               style="height:30px"/>
+                                        <textarea id="saveRemark" name="remark"
+                                                  class="form-control"
+                                                  style="resize:none;height: 100px"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -551,11 +557,6 @@
     var pager_selector = "#grid-pager";
     var orderStatus = ['待服务', '已完成', '已取消'];
     $(function () {
-        $(document).on("hidden.bs.modal", ".bootbox", function () {
-            if ($(".modal-backdrop").length > 0) {
-                $("body").addClass("modal-open");
-            }
-        })
         //重新修改表格宽度
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
@@ -727,6 +728,7 @@
         $("#modal-partnerOrder").modal("show");
         $("#partnerOrderForm input").attr("disabled", "disabled");
         $("#partnerOrderForm select").attr("disabled", "disabled");
+        $("#partnerOrderForm textarea").attr("disabled", "disabled");
     }
 
     function openEdit(id) {
@@ -736,6 +738,7 @@
         $("#modal-partnerOrder").modal("show");
         $("#partnerOrderForm input").removeAttr("disabled");
         $("#partnerOrderForm select").removeAttr("disabled");
+        $("#partnerOrderForm textarea").removeAttr("disabled");
     }
 
     function openNew() {
@@ -753,10 +756,12 @@
         $("#modal-partnerOrder").modal("show");
         $("#partnerOrderForm input").removeAttr("disabled");
         $("#partnerOrderForm select").removeAttr("disabled");
+        $("#partnerOrderForm textarea").removeAttr("disabled");
     }
 
     function initForm() {
         $("#partnerOrderForm input").val('');
+        $("#partnerOrderForm textarea").val('');
         $("#saveCustomerCityCode option:first").prop("selected", 'selected');
         $("#saveOrderSource option:first").prop("selected", 'selected');
         $("#savePartner option:first").prop("selected", 'selected');

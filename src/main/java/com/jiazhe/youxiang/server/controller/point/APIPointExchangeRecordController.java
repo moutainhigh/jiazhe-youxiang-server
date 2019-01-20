@@ -8,6 +8,7 @@ import com.jiazhe.youxiang.server.adapter.point.PointExchangeRecordAdapter;
 import com.jiazhe.youxiang.server.biz.order.OrderInfoBiz;
 import com.jiazhe.youxiang.server.biz.point.PointExchangeRecordBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
@@ -50,8 +51,8 @@ public class APIPointExchangeRecordController extends BaseController {
         CommonValidator.validateNull(req);
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        Date beginDate = req.getBeginDate() == 0 ? null : new Date(req.getBeginDate());
-        Date endDate = req.getEndDate() == 0 ? null : new Date(req.getEndDate());
+        Date beginDate = req.getBeginDate() == CommonConstant.NULL_TIME ? null : new Date(req.getBeginDate());
+        Date endDate = req.getEndDate() == CommonConstant.NULL_TIME ? null : new Date(req.getEndDate());
         List<PointExchangeRecordDTO> pointExchangeCodeBatchDTOList = pointExchangeRecordBiz.getList(beginDate, endDate, req.getCode(), req.getKeyt(), paging);
         List<PointExchangeRecordResp> pointExchangeCodeBatchRespList = pointExchangeCodeBatchDTOList.stream().map(PointExchangeRecordAdapter::dto2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(pointExchangeCodeBatchRespList, paging);

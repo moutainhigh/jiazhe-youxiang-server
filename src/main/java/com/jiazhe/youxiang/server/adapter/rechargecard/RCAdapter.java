@@ -29,6 +29,7 @@ public class RCAdapter {
         rCDTO.setProductIds(rechargeCardPO.getProductIds());
         rCDTO.setFaceValue(rechargeCardPO.getFaceValue());
         rCDTO.setBalance(rechargeCardPO.getBalance());
+        rCDTO.setEffectiveTime(rechargeCardPO.getEffectiveTime());
         rCDTO.setExpiryTime(rechargeCardPO.getExpiryTime());
         rCDTO.setStatus(rechargeCardPO.getStatus());
         rCDTO.setAddTime(rechargeCardPO.getAddTime());
@@ -49,6 +50,7 @@ public class RCAdapter {
         rCResp.setProductIds(rcdto.getProductIds());
         rCResp.setFaceValue(rcdto.getFaceValue());
         rCResp.setBalance(rcdto.getBalance());
+        rCResp.setEffectiveTime(rcdto.getEffectiveTime().getTime());
         rCResp.setExpiryTime(rcdto.getExpiryTime().getTime());
         rCResp.setStatus(rcdto.getStatus());
         rCResp.setAddTime(rcdto.getAddTime().getTime());
@@ -67,6 +69,7 @@ public class RCAdapter {
         rCEditDTO.setProductIds(req.getProductIds());
         rCEditDTO.setName(req.getName());
         rCEditDTO.setDescription(req.getDescription());
+        rCEditDTO.setEffectiveTime(new Date(req.getEffectiveTime()));
         rCEditDTO.setExpiryTime(new Date(req.getExpiryTime()));
         return rCEditDTO;
     }
@@ -85,6 +88,7 @@ public class RCAdapter {
         rechargeCardPO.setProductIds(rcdto.getProductIds());
         rechargeCardPO.setFaceValue(rcdto.getFaceValue());
         rechargeCardPO.setBalance(rcdto.getBalance());
+        rechargeCardPO.setEffectiveTime(rcdto.getEffectiveTime());
         rechargeCardPO.setExpiryTime(rcdto.getExpiryTime());
         rechargeCardPO.setStatus(rcdto.getStatus());
         rechargeCardPO.setAddTime(rcdto.getAddTime());
