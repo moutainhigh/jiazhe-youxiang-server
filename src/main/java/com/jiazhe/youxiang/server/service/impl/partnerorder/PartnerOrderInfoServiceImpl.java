@@ -54,9 +54,7 @@ public class PartnerOrderInfoServiceImpl implements PartnerOrderInfoService {
             bean.setPartnerDTO(partnerDTO);
             bean.setServiceItemDTO(serviceItemDTO);
         });
-        if(null  != paging.getOffset() && null != paging.getLimit()){
-            paging.setTotal(count);
-        }
+        paging.setTotal(count);
         return dtoList;
     }
 
