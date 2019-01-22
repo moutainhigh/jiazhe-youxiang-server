@@ -21,4 +21,6 @@ public interface PartnerOrderInfoService {
     PartnerOrderInfoDTO getById(Integer id);
 
     void save(PartnerOrderInfoDTO dto);
+
+    List<PartnerOrderInfoDTO> getList(Byte status, String customerCityCode, Integer partnerId, Integer serviceItemId, Date serviceTimeStart, Date serviceTimeEnd, String customerMobile);
 }

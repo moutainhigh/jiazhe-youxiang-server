@@ -27,6 +27,11 @@ public class DateUtil {
         return null;
     }
 
+    public static String dateToStr(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return  sdf.format(date);
+    }
+
     /**
      * 将字符串转为date类型
      */
@@ -132,6 +137,4 @@ public class DateUtil {
         }
         return convert.getTime();
     }
-
-
 }

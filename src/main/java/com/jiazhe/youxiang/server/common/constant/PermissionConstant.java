@@ -1,11 +1,5 @@
 package com.jiazhe.youxiang.server.common.constant;
 
-import com.google.common.collect.Lists;
-import com.jiazhe.youxiang.server.common.enums.PermissionTreeEnum;
-import com.jiazhe.youxiang.server.vo.resp.sysrole.PermissionTreeResp;
-
-import java.util.List;
-
 /**
  * @author TU
  * @description 权限字符串
@@ -85,6 +79,8 @@ public class PermissionConstant {
     public static final String ADVANCE_PAY_MANAGEMENT = "advancePayManagement";
     //添加预支付记录
     public static final String ADVANCE_PAY_ADD = "advancePayAdd";
+    //商家订单导出
+    public static final String PARTNER_ORDER_EXPORT = "partnerOrderExport";
 
     //订单管理
     public static final String ORDER_MANAGEMENT = "orderManagement";
