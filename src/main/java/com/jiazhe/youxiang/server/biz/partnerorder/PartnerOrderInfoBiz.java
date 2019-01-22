@@ -36,4 +36,8 @@ public class PartnerOrderInfoBiz {
     public void save(PartnerOrderInfoDTO dto) {
         partnerOrderInfoService.save(dto);
     }
+
+    public List<PartnerOrderInfoDTO> getList(Byte status, String customerCityCode, Integer partnerId, Integer serviceItemId, Date serviceTimeStart, Date serviceTimeEnd, String customerMobile) {
+        return partnerOrderInfoService.getList(status,customerCityCode,partnerId,serviceItemId,serviceTimeStart,serviceTimeEnd,customerMobile);
+    }
 }

@@ -5,8 +5,6 @@
  */
 package com.jiazhe.youxiang.server.common.constant;
 
-import java.math.BigDecimal;
-
 /**
  * 在这里编写类的功能描述
  *
@@ -81,17 +79,17 @@ public class CommonConstant {
     /**
      * 时间相关的固定值
      */
-    public static final long ONE_DAY = 24 * 3600 * 1000;
-    public static final long NEVER = -1;
-    public static final long ONE_HOUR = 3600 * 1000;
-    public static final long EIGHT_HOUR = 8 * 3600 * 1000;
-    public static final long THREE_MONTH = 3 * 30 * 24 * 3600 * 1000;
-    public static final long ONE_YEAR = 365 * 24 * 3600 * 1000;
+    public static final long ONE_DAY = 24L * 3600 * 1000;
+    public static final long NEVER = -1L;
+    public static final long ONE_HOUR = 3600L * 1000;
+    public static final long EIGHT_HOUR = 8L * 3600 * 1000;
+    public static final long THREE_MONTH = 3L * 30 * 24 * 3600 * 1000;
+    public static final long ONE_YEAR = 365L * 24 * 3600 * 1000;
 
     /**
      * 短信有效时间5分钟
      */
-    public static final Integer FIVE_MINUTES = 5 * 60 * 1000;
+    public static final long FIVE_MINUTES = 5L * 60 * 1000;
 
     /**
      * 前台时间未选择，传过来的固定值为0
