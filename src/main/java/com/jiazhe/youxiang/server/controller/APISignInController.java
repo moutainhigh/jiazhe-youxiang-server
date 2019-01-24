@@ -5,7 +5,10 @@ import com.aliyuncs.exceptions.ClientException;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.realm.AuthToken;
 import com.jiazhe.youxiang.base.realm.UserRealm;
-import com.jiazhe.youxiang.base.util.*;
+import com.jiazhe.youxiang.base.util.AliUtils;
+import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.CookieUtil;
+import com.jiazhe.youxiang.base.util.IpAdrressUtil;
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
@@ -28,7 +31,6 @@ import com.jiazhe.youxiang.server.vo.resp.login.CustomerLoginResp;
 import com.jiazhe.youxiang.server.vo.resp.login.SendMsgResp;
 import com.jiazhe.youxiang.server.vo.resp.login.SessionResp;
 import io.swagger.annotations.ApiOperation;
-import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -48,7 +50,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.text.ParseException;
 import java.util.Collection;
 import java.util.List;
 
@@ -62,6 +63,15 @@ public class APISignInController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(APISignInController.class);
 
+    /**
+     * 员工cookie失效时间8小时【以秒计】
+     */
+    private static final int USER_COOKIE_EXPIRY = 8 * 60 * 60;
+    /**
+     * 客户cookie失效时间1年【以秒计】
+     */
+    private static final int CUSTOMER_COOKIE_EXPIRY = 365 * 24 * 60 * 60;
+
     @Autowired
     private SessionDAO sessionDAO;
     @Autowired
@@ -74,10 +84,11 @@ public class APISignInController extends BaseController {
     @ApiOperation(value = "员工登录", httpMethod = "GET", response = SessionResp.class, notes = "员工登录")
     @RequestMapping(value = "/usersignin")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "员工登录", level = LogLevelEnum.LEVEL_2)
-    public Object userSignin(@ModelAttribute UserLoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException {
+    public Object userSignIn(@ModelAttribute UserLoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException {
         String loginName = req.getLoginname();
         String password = req.getPassword();
         String identifyingCode = req.getIdentifyingCode();
+        boolean rememberMe = req.getRememberMe().equals("true");
         String bizId = req.getBizId();
         CommonValidator.validateNull(req.getLoginname(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         CommonValidator.validateNull(req.getPassword(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
@@ -126,8 +137,10 @@ public class APISignInController extends BaseController {
         sessionResp.setSessionId(subject.getSession().getId().toString());
         AuthorizationInfo info = userRealm.doGetAuthorizationInfo(subject.getPrincipals());
         String permission = StringUtils.join(info.getStringPermissions(), "#");
-        CookieUtil.addCookie(response, "permission", permission);
-        CookieUtil.addCookie(response, "displayName", URLEncoder.encode(sysUserDTO.getDisplayName(), "UTF-8"));
+        int userCookieExpiry = rememberMe ? USER_COOKIE_EXPIRY : -1;
+        CookieUtil.addCookie(response, "permission", permission, userCookieExpiry);
+        CookieUtil.addCookie(response, "displayName", URLEncoder.encode(sysUserDTO.getDisplayName(), "UTF-8"), userCookieExpiry);
+        CookieUtil.addCookie(response, "JSESSIONID", sessionResp.getSessionId(), userCookieExpiry);
         logger.info("登陆ip为：" + IpAdrressUtil.getIpAdrress(request));
         sysUserBiz.updateLastLoginInfo(sysUserDTO.getId(), IpAdrressUtil.getIpAdrress(request));
         return ResponseFactory.buildResponse(sessionResp);
@@ -141,7 +154,7 @@ public class APISignInController extends BaseController {
         if (sysUserDTOList.size() != 1) {
             throw new LoginException(LoginCodeEnum.LOGIN_USER_ILLEGAL);
         }
-        CommonValidator.validateMobile(sysUserDTOList.get(0).getMobile(),new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL));
+        CommonValidator.validateMobile(sysUserDTOList.get(0).getMobile(), new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL));
         SendSmsResponse res = AliUtils.sendMsg(sysUserDTOList.get(0).getMobile());
         SendMsgResp sendMsgResp = new SendMsgResp();
         sendMsgResp.setBizId(res.getBizId());
@@ -152,13 +165,13 @@ public class APISignInController extends BaseController {
     @ApiOperation(value = "客户登录", httpMethod = "GET", response = CustomerLoginResp.class, notes = "客户登录")
     @RequestMapping(value = "/customersignin")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "客户登录", level = LogLevelEnum.LEVEL_2)
-    public Object customerSignin(@ModelAttribute CustomerLoginReq req,HttpServletRequest request) throws IOException, ClientException {
+    public Object customerSignIn(@ModelAttribute CustomerLoginReq req, HttpServletResponse response) throws IOException, ClientException {
         String mobile = req.getMobile();
         String identifyingCode = req.getIdentifyingCode();
         String bizId = req.getBizId();
         CommonValidator.validateNull(req.getMobile(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         CommonValidator.validateNull(req.getIdentifyingCode(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
-        CommonValidator.validateMobile(req.getMobile(),new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL));
+        CommonValidator.validateMobile(req.getMobile(), new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL));
         //判断验证码是否正确
         if (!AliUtils.isVerified(req.getMobile(), identifyingCode, bizId)) {
             throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
@@ -196,6 +209,7 @@ public class APISignInController extends BaseController {
         }
         CustomerLoginResp customerLoginResp = new CustomerLoginResp();
         subject.getSession().setTimeout(CommonConstant.NEVER);
+        CookieUtil.addCookie(response, "JSESSIONID", subject.getSession().getId().toString(), CUSTOMER_COOKIE_EXPIRY);
         customerLoginResp.setSessionId(subject.getSession().getId().toString());
         customerLoginResp.setCustomerId(customerDTO.getId());
         customerLoginResp.setCustomerMobile(customerDTO.getMobile());
@@ -208,7 +222,7 @@ public class APISignInController extends BaseController {
     @RequestMapping(value = "/customersendcode")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "根据电话号码，发送验证码", level = LogLevelEnum.LEVEL_2)
     public Object customerSendCode(@ModelAttribute SendMsgToCustomerReq req) throws ClientException {
-        CommonValidator.validateMobile(req.getMobile(),new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL));
+        CommonValidator.validateMobile(req.getMobile(), new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL));
         SendSmsResponse res = AliUtils.sendMsg(req.getMobile());
         SendMsgResp sendMsgResp = new SendMsgResp();
         sendMsgResp.setBizId(res.getBizId());

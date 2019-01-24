@@ -1,7 +1,8 @@
 package com.jiazhe.youxiang.base.util;
 
 /**
- * Created by TU on 2018/9/1.
+ * @author tu
+ * @date 2018/9/1.
  * cookie工具类
  */
 import javax.servlet.http.Cookie;
@@ -20,10 +21,10 @@ public class CookieUtil {
      * @param value
      * maxAge = -1  关闭浏览器就失效
      */
-    public static void addCookie(HttpServletResponse response, String name, String value) {
+    public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
-        cookie.setMaxAge(-1);
+        cookie.setMaxAge(maxAge);
         response.addCookie(cookie);
     }
 
