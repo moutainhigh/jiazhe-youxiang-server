@@ -53,6 +53,9 @@ public enum OrderCodeEnum {
     VOUCHER_STOP_USING(108044, "VOUCHER_STOP_USING", "代金券被停用"),
     POINT_STOP_USING(108045, "POINT_STOP_USING", "积分卡被停用"),
     RECHARGE_CARD_STOP_USING(108046, "RECHARGE_CARD_STOP_USING", "充值卡被停用"),
+    CITY_INFO_ERROR(108047,"CITY_INFO_ERROR","城市信息有误"),
+    SERVICE_ADDRESS_IS_NULL(108048,"SERVICE_ADDRESS_IS_NULL","服务地址不能为空"),
+    SERVICE_MOBILE_IS_VALID(108048,"SERVICE_MOBILE_IS_VALID","服务电话非法")
     ;
 
     OrderCodeEnum(Integer code, String type, String message) {
