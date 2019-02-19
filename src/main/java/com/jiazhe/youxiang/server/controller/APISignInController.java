@@ -88,7 +88,7 @@ public class APISignInController extends BaseController {
         String loginName = req.getLoginname();
         String password = req.getPassword();
         String identifyingCode = req.getIdentifyingCode();
-        boolean rememberMe = req.getRememberMe().equals("true");
+        boolean rememberMe = "true".equals(req.getRememberMe());
         String bizId = req.getBizId();
         CommonValidator.validateNull(req.getLoginname(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         CommonValidator.validateNull(req.getPassword(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
