@@ -50,9 +50,10 @@
                                         <select id="searchStatus" name="status"
                                                 class="selectpicker show-tick form-control">
                                             <option value=0>所有</option>
-                                            <option value=1>待服务</option>
-                                            <option value=2>已完成</option>
-                                            <option value=3>已取消</option>
+                                            <option value=1>待派单</option>
+                                            <option value=2>待服务</option>
+                                            <option value=3>已完成</option>
+                                            <option value=4>已取消</option>
                                         </select>
                                     </div>
                                     <label class="col-sm-1 control-label no-padding-right">城市：</label>
@@ -526,9 +527,10 @@
                                 <div class="col-sm-8">
                                     <select id="saveStatus" name="status"
                                             class="selectpicker show-tick form-control">
-                                        <option value=1>待服务</option>
-                                        <option value=2>已完成</option>
-                                        <option value=3>已取消</option>
+                                        <option value=1>待派单</option>
+                                        <option value=2>待服务</option>
+                                        <option value=3>已完成</option>
+                                        <option value=4>已取消</option>
                                     </select>
                                 </div>
                             </div>
@@ -560,7 +562,7 @@
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
-    var orderStatus = ['待服务', '已完成', '已取消'];
+    var orderStatus = ['待派单','待服务', '已完成', '已取消'];
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {

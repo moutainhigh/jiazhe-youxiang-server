@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.service.impl.order;
 
 import com.google.common.collect.Lists;
+import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
@@ -470,6 +471,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (null == productDTO || productDTO.getStatus().equals(Byte.valueOf("0"))) {
             throw new OrderException(OrderCodeEnum.PRODUCT_NOT_AVAILABLE);
         }
+        CommonValidator.validateNull(dto.getCustomerCityCode(),new OrderException(OrderCodeEnum.CITY_INFO_ERROR));
         ProductPriceDTO productPriceDTO = productPriceService.getPriceByCity(dto.getProductId(), dto.getCustomerCityCode());
         if (null == productPriceDTO || productPriceDTO.getStatus().equals(Byte.valueOf("0"))) {
             throw new OrderException(OrderCodeEnum.PRODUCT_NOT_AVAILABLE);
@@ -477,12 +479,14 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (productDTO.getLastNum() > dto.getCount()) {
             throw new OrderException(OrderCodeEnum.ORDER_COUNT_LESS_THAN_LAST_NUM);
         }
-        //电子商品才检查预约时间
+        //服务类商品才检查预约时间、服务地址，服务联系电话等信息
         if(productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
             long delayDays = dto.getServiceTime().getTime() / CommonConstant.ONE_DAY - System.currentTimeMillis() / CommonConstant.ONE_DAY;
             if (productDTO.getDelayDays() > delayDays) {
                 throw new OrderException(OrderCodeEnum.SERVICE_TIME_ERROR);
             }
+            CommonValidator.validateNull(dto.getCustomerAddress(),new OrderException(OrderCodeEnum.SERVICE_ADDRESS_IS_NULL));
+            CommonValidator.validateNull(dto.getCustomerMobile(),new OrderException(OrderCodeEnum.SERVICE_MOBILE_IS_VALID));
         }
         String orderCode = generateOrderCode();
         //待支付金额
