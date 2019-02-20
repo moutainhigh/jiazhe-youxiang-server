@@ -567,7 +567,7 @@ CREATE TABLE `partner_order_info` (
     `append_pay` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '二次支付',
     `remark` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '备注',
     `partner_id` INT(10) UNSIGNED NOT NULL COMMENT '合作商id',
-    `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '订单状态 1待服务，2已完成，3已取消',
+    `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '订单状态 1待派单,2待服务,3已完成,4已取消',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
