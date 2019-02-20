@@ -4,10 +4,37 @@ import java.util.Calendar;
 import java.util.HashSet;
 
 /**
- * Created by TU on 2018/9/13.
- * 生成各种编码的工具类
+ * @author TU
+ * @description 生成各种兑换码
+ * @date 2018/9/13.
  */
 public class GenerateCode {
+
+    /**
+     *
+     * @param beginId 起始id
+     * @param type type为【0,1,2】，0代表充值卡兑换码，1代表代金券兑换码，2代表积分兑换码；
+     * @param n 兑换码个数
+     * @return
+     */
+    public static String[][] generateCode(Integer beginId, String type, Integer n) {
+        String result[][] = new String[2][n];
+        HashSet<Integer> setCode = new HashSet<Integer>();
+        HashSet<Integer> setKeyt = new HashSet<Integer>();
+        randomSet(0, 9999999, n, setCode);
+        randomSet(0, 9999999, n, setKeyt);
+        int i = 0;
+        int j = 0;
+        for (Integer tempCode : setCode) {
+            result[0][i] = String.format("%07d", tempCode);
+            i++;
+        }
+        for (Integer tempKeyt : setKeyt) {
+            result[1][j] = String.format("%07d", tempKeyt);
+            j++;
+        }
+        return result;
+    }
 
     /**
      *
