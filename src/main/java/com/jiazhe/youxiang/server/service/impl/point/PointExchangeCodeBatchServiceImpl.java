@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -163,8 +164,8 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
         pointExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
         List<PointExchangeCodeSaveDTO> pointExchangeCodeSaveDTOS = Lists.newArrayList();
         Integer amount = batchPO.getAmount();
-        Integer maxId = pointExchangeCodeService.getMaxId();
-        String[][] codeAndKeyts = GenerateCode.generateCode(maxId, CommonConstant.POINT_EXCHANGE_CODE_PREFIX, amount);
+//        Integer maxId = pointExchangeCodeService.getMaxId();
+//        String[][] codeAndKeyts = GenerateCode.generateCode(maxId, CommonConstant.POINT_EXCHANGE_CODE_PREFIX, amount);
         for (int i = 0; i < amount; i++) {
             PointExchangeCodeSaveDTO pointExchangeCodeSaveDTO = new PointExchangeCodeSaveDTO();
             pointExchangeCodeSaveDTO.setBatchId(batchPO.getId());
@@ -174,8 +175,8 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
             pointExchangeCodeSaveDTO.setProjectId(batchPO.getProjectId());
             pointExchangeCodeSaveDTO.setCityCodes(batchPO.getCityCodes());
             pointExchangeCodeSaveDTO.setProductIds(batchPO.getProductIds());
-            pointExchangeCodeSaveDTO.setCode(codeAndKeyts[0][i]);
-            pointExchangeCodeSaveDTO.setKeyt(codeAndKeyts[1][i]);
+            pointExchangeCodeSaveDTO.setCode("");
+            pointExchangeCodeSaveDTO.setKeyt("");
             pointExchangeCodeSaveDTO.setFaceValue(batchPO.getFaceValue());
             pointExchangeCodeSaveDTO.setExpiryTime(batchPO.getExpiryTime());
             pointExchangeCodeSaveDTO.setPointExpiryTime(batchPO.getPointExpiryTime());
@@ -188,6 +189,14 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
         }
         List<PointExchangeCodePO> pointExchangeCodePOList = pointExchangeCodeSaveDTOS.stream().map(PointExchangeCodeAdapter::DtoSave2Po).collect(Collectors.toList());
         pointExchangeCodeService.batchInsert(pointExchangeCodePOList);
+        List<PointExchangeCodeDTO> pointExchangeCodeDTOS = pointExchangeCodeService.getByBatchId(batchPO.getId());
+        pointExchangeCodeDTOS.stream().forEach(bean -> {
+            Map map = GenerateCode.generateOneCode(CommonConstant.POINT_EXCHANGE_CODE_PREFIX, bean.getId());
+            bean.setCode(map.get("code").toString());
+            bean.setKeyt(map.get("keyt").toString());
+        });
+        //此处更新code和keyt
+        //pointExchangeCodePOMapp.
     }
 
     @Transactional(rollbackFor = Exception.class)

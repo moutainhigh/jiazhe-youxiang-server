@@ -1,7 +1,9 @@
 package com.jiazhe.youxiang.base.util;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 /**
  * @author TU
@@ -11,26 +13,25 @@ import java.util.HashSet;
 public class GenerateCode {
 
     /**
-     * @param maxId 已经存在的最大id
-     * @param type  type为【0,1,2】，0代表充值卡兑换码，1代表代金券兑换码，2代表积分兑换码；
-     * @param n     兑换码个数
+     * 根据id，type生成兑换码的code和keyt
+     *
+     * @param type
+     * @param id
      * @return
      * @description 卡号8位：兑换码类型（1位）+兑换码id（6位，前置补零）+校验码（1位）
      * 密码12位：兑换码id（位数不定，x位）+随机数（11-x位）+校验码（1位）
      */
-    public static String[][] generateCode(Integer maxId, String type, Integer n) {
-        Integer id = maxId + 1;
-        String[][] result = new String[2][n];
-        for (int i = 0; i < n; i++) {
-            String idCodeStr = String.format("%06d", id);
-            result[0][i] = type + idCodeStr + CheckCodeAlgorithms.getValidateCode(type + idCodeStr);
-            String idKeytStr = String.valueOf(id);
-            Integer idLen = idKeytStr.length();
-            String randomNumStr = randomOneNum(11 - idLen);
-            result[1][i] = idKeytStr + randomNumStr + CheckCodeAlgorithms.getValidateCode(idKeytStr + randomNumStr);
-            id++;
-        }
-        return result;
+    public static Map generateOneCode(String type, Integer id) {
+        Map<String, String> map = new HashMap<>(2);
+        String idCodeStr = String.format("%06d", id);
+        String code = type + idCodeStr + CheckCodeAlgorithms.getValidateCode(type + idCodeStr);
+        String idKeytStr = String.valueOf(id);
+        Integer idLen = idKeytStr.length();
+        String randomNumStr = randomOneNum(11 - idLen);
+        String keyt = idKeytStr + randomNumStr + CheckCodeAlgorithms.getValidateCode(idKeytStr + randomNumStr);
+        map.put("code", code);
+        map.put("keyt", keyt);
+        return map;
     }
 
     /**
