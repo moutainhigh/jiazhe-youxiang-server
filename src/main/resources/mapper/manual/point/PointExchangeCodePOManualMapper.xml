@@ -121,4 +121,8 @@
         FROM point_exchange_code WHERE keyt = #{keyt} AND is_deleted = 0
     </select>
 
+    <select id="getMaxId" resultType="java.lang.Integer">
+        select max(id) from point_exchange_code
+    </select>
+
 </mapper>

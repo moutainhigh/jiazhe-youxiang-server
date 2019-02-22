@@ -34,4 +34,6 @@ public interface PointExchangeCodeService {
     void codeCharge(Integer type, Integer id, String keyt) ;
 
     PointExchangeCodePO findByKeyt(String keyt);
+
+    Integer getMaxId();
 }

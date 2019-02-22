@@ -163,7 +163,8 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
         pointExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
         List<PointExchangeCodeSaveDTO> pointExchangeCodeSaveDTOS = Lists.newArrayList();
         Integer amount = batchPO.getAmount();
-        String[][] codeAndKeyts = GenerateCode.generateCode(CommonConstant.POINT_EXCHANGE_CODE_PREFIX, amount);
+        Integer maxId = pointExchangeCodeService.getMaxId();
+        String[][] codeAndKeyts = GenerateCode.generateCode(maxId, CommonConstant.POINT_EXCHANGE_CODE_PREFIX, amount);
         for (int i = 0; i < amount; i++) {
             PointExchangeCodeSaveDTO pointExchangeCodeSaveDTO = new PointExchangeCodeSaveDTO();
             pointExchangeCodeSaveDTO.setBatchId(batchPO.getId());
@@ -255,13 +256,13 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
         List<PointExchangeCodeBatchPO> poList = pointExchangeCodeBatchPOMapper.selectByExample(example);
         if (poList.isEmpty()) {
             return false;
-        }else if(poList.size() == 1) {
+        } else if (poList.size() == 1) {
             if (poList.get(0).getId().equals(batchId)) {
                 return false;
             } else {
                 return true;
             }
-        }else if(poList.size() > 1) {
+        } else if (poList.size() > 1) {
             return true;
         }
         return false;

@@ -11,40 +11,48 @@ import java.util.HashSet;
 public class GenerateCode {
 
     /**
-     *
-     * @param beginId 起始id
-     * @param type type为【0,1,2】，0代表充值卡兑换码，1代表代金券兑换码，2代表积分兑换码；
-     * @param n 兑换码个数
+     * @param maxId 已经存在的最大id
+     * @param type  type为【0,1,2】，0代表充值卡兑换码，1代表代金券兑换码，2代表积分兑换码；
+     * @param n     兑换码个数
      * @return
+     * @description 卡号8位：兑换码类型（1位）+兑换码id（6位，前置补零）+校验码（1位）
+     * 密码12位：兑换码id（位数不定，x位）+随机数（11-x位）+校验码（1位）
      */
-    public static String[][] generateCode(Integer beginId, String type, Integer n) {
-        String result[][] = new String[2][n];
-        HashSet<Integer> setCode = new HashSet<Integer>();
-        HashSet<Integer> setKeyt = new HashSet<Integer>();
-        randomSet(0, 9999999, n, setCode);
-        randomSet(0, 9999999, n, setKeyt);
-        int i = 0;
-        int j = 0;
-        for (Integer tempCode : setCode) {
-            result[0][i] = String.format("%07d", tempCode);
-            i++;
-        }
-        for (Integer tempKeyt : setKeyt) {
-            result[1][j] = String.format("%07d", tempKeyt);
-            j++;
+    public static String[][] generateCode(Integer maxId, String type, Integer n) {
+        Integer id = maxId + 1;
+        String[][] result = new String[2][n];
+        for (int i = 0; i < n; i++) {
+            String idCodeStr = String.format("%06d", id);
+            result[0][i] = type + idCodeStr + CheckCodeAlgorithms.getValidateCode(type + idCodeStr);
+            String idKeytStr = String.valueOf(id);
+            Integer idLen = idKeytStr.length();
+            String randomNumStr = randomOneNum(11 - idLen);
+            result[1][i] = idKeytStr + randomNumStr + CheckCodeAlgorithms.getValidateCode(idKeytStr + randomNumStr);
+            id++;
         }
         return result;
     }
 
     /**
+     * 随机一个n位的随机数，不够前置补0
      *
+     * @param n
+     * @return
+     */
+    public static String randomOneNum(Integer n) {
+        Long max = (long) Math.pow(10, n) - 1;
+        Long num = (long) (Math.random() * max);
+        return String.format("%0" + n + "d", num);
+    }
+
+    /**
      * @param type type为【0,1,2】，0代表充值卡兑换码，1代表代金券兑换码，2代表积分兑换码；
-     * 2-3为时间戳的最后两位；4-5为月；6-7为年的后两位；8-9为日，10-16为随机数
+     *             2-3为时间戳的最后两位；4-5为月；6-7为年的后两位；8-9为日，10-16为随机数
      * @param n    兑换码个数
      * @return
      */
     public static String[][] generateCode(String type, Integer n) {
-        String result[][] = new String[2][n];
+        String[][] result = new String[2][n];
         Calendar now = Calendar.getInstance();
         String year = now.get(Calendar.YEAR) + "";
         String month = (now.get(Calendar.MONTH) + 1) < 10 ? "0" + (now.get(Calendar.MONTH) + 1) : "" + (now.get(Calendar.MONTH) + 1);

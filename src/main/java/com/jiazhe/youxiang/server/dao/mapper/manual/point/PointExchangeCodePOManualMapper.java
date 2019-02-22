@@ -1,7 +1,6 @@
 package com.jiazhe.youxiang.server.dao.mapper.manual.point;
 
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
-import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -24,4 +23,6 @@ public interface PointExchangeCodePOManualMapper {
     List<PointExchangeCodePO> query(@Param("batchId") Integer batchId, @Param("code") String code, @Param("keyt") String keyt, @Param("status") Byte status, @Param("used") Byte used, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
     PointExchangeCodePO findByKeyt(@Param("keyt") String keyt);
+
+    Integer getMaxId();
 }

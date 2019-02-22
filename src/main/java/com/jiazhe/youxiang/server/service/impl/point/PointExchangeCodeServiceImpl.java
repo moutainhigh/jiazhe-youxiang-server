@@ -245,4 +245,9 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         PointExchangeCodePO pointExchangeCodePO = pointExchangeCodePOManualMapper.findByKeyt(keyt);
         return pointExchangeCodePO;
     }
+
+    @Override
+    public Integer getMaxId() {
+        return pointExchangeCodePOManualMapper.getMaxId();
+    }
 }
