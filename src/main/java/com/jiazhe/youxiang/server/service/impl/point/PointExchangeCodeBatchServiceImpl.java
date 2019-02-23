@@ -196,7 +196,7 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
             bean.setKeyt(map.get("keyt").toString());
         });
         //此处更新code和keyt
-        //pointExchangeCodePOMapp.
+        pointExchangeCodeService.batchUpdateCodeAndKeyt(pointExchangeCodeDTOS);
     }
 
     @Transactional(rollbackFor = Exception.class)

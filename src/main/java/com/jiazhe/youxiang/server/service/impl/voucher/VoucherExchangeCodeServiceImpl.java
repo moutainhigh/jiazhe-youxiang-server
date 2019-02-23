@@ -247,4 +247,10 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
         VoucherExchangeCodePO voucherExchangeCodePO = voucherExchangeCodePOManualMapper.findByKeyt(keyt);
         return voucherExchangeCodePO;
     }
+
+    @Override
+    public void batchUpdateCodeAndKeyt(List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOS) {
+        List<VoucherExchangeCodePO> poList = voucherExchangeCodeDTOS.stream().map(VoucherExchangeCodeAdapter::dto2Po).collect(Collectors.toList());
+        voucherExchangeCodePOManualMapper.batchUpdateCodeAndKeyt(poList);
+    }
 }

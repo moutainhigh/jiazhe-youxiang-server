@@ -136,4 +136,31 @@ public class VoucherExchangeCodeAdapter {
         voucherExchangeCodeEditDTO.setExpiryType(req.getExpiryType());
         return voucherExchangeCodeEditDTO;
     }
+
+    public static VoucherExchangeCodePO dto2Po(VoucherExchangeCodeDTO voucherExchangeCodeDTO) {
+        if (voucherExchangeCodeDTO == null) {
+            return null;
+        }
+        VoucherExchangeCodePO voucherExchangeCodePO = new VoucherExchangeCodePO();
+        voucherExchangeCodePO.setId(voucherExchangeCodeDTO.getId());
+        voucherExchangeCodePO.setBatchId(voucherExchangeCodeDTO.getBatchId());
+        voucherExchangeCodePO.setBatchName(voucherExchangeCodeDTO.getBatchName());
+        voucherExchangeCodePO.setVoucherName(voucherExchangeCodeDTO.getVoucherName());
+        voucherExchangeCodePO.setBatchDescription(voucherExchangeCodeDTO.getBatchDescription());
+        voucherExchangeCodePO.setProjectId(voucherExchangeCodeDTO.getProjectId());
+        voucherExchangeCodePO.setCityCodes(voucherExchangeCodeDTO.getCityCodes());
+        voucherExchangeCodePO.setProductIds(voucherExchangeCodeDTO.getProductIds());
+        voucherExchangeCodePO.setCount(voucherExchangeCodeDTO.getCount());
+        voucherExchangeCodePO.setCode(voucherExchangeCodeDTO.getCode());
+        voucherExchangeCodePO.setKeyt(voucherExchangeCodeDTO.getKeyt());
+        voucherExchangeCodePO.setExpiryTime(voucherExchangeCodeDTO.getExpiryTime());
+        voucherExchangeCodePO.setVoucherEffectiveTime(voucherExchangeCodeDTO.getVoucherEffectiveTime());
+        voucherExchangeCodePO.setVoucherExpiryTime(voucherExchangeCodeDTO.getVoucherExpiryTime());
+        voucherExchangeCodePO.setValidityPeriod(voucherExchangeCodeDTO.getValidityPeriod());
+        voucherExchangeCodePO.setExpiryType(voucherExchangeCodeDTO.getExpiryType());
+        voucherExchangeCodePO.setStatus(voucherExchangeCodeDTO.getStatus());
+        voucherExchangeCodePO.setUsed(voucherExchangeCodeDTO.getUsed());
+        voucherExchangeCodePO.setCustomerId(voucherExchangeCodeDTO.getCustomerId());
+        return voucherExchangeCodePO;
+    }
 }

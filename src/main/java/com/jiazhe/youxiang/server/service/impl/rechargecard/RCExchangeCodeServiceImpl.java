@@ -248,6 +248,12 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
     }
 
     @Override
+    public void batchUpdateCodeAndKeyt(List<RCExchangeCodeDTO> rcExchangeCodeDTOS) {
+        List<RechargeCardExchangeCodePO> poList = rcExchangeCodeDTOS.stream().map(RCExchangeCodeAdapter::dto2Po).collect(Collectors.toList());
+        rcExchangeCodePOManualMapper.batchUpdateCodeAndKeyt(poList);
+    }
+
+    @Override
     public RechargeCardExchangeCodePO findByKeyt(String keyt) {
         RechargeCardExchangeCodePO rechargeCardExchangeCodePO = rcExchangeCodePOManualMapper.findByKeyt(keyt);
         return rechargeCardExchangeCodePO;

@@ -97,4 +97,10 @@ public interface VoucherExchangeCodeService {
      * @return
      */
     VoucherExchangeCodePO findByKeyt(String keyt);
+
+    /**
+     * 批量修改代金券卡号和密钥
+     * @param voucherExchangeCodeDTOS
+     */
+    void batchUpdateCodeAndKeyt(List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOS);
 }

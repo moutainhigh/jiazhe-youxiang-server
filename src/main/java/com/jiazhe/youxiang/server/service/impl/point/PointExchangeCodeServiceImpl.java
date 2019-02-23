@@ -250,4 +250,10 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     public Integer getMaxId() {
         return pointExchangeCodePOManualMapper.getMaxId();
     }
+
+    @Override
+    public void batchUpdateCodeAndKeyt(List<PointExchangeCodeDTO> pointExchangeCodeDTOS) {
+        List<PointExchangeCodePO> poList = pointExchangeCodeDTOS.stream().map(PointExchangeCodeAdapter::dto2Po).collect(Collectors.toList());
+        pointExchangeCodePOManualMapper.batchUpdateCodeAndKeyt(poList);
+    }
 }

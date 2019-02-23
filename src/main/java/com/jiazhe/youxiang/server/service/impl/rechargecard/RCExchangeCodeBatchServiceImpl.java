@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -151,7 +152,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         rechargeCardExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
         List<RCExchangeCodeSaveDTO> rcExchangeCodeSaveDTOS = Lists.newArrayList();
         Integer amount = batchPO.getAmount();
-        String[][] codeAndKeyts = GenerateCode.generateCode(CommonConstant.RC_EXCHANGE_CODE_PREFIX, amount);
+//        String[][] codeAndKeyts = GenerateCode.generateCode(CommonConstant.RC_EXCHANGE_CODE_PREFIX, amount);
         for (int i = 0; i < amount; i++) {
             RCExchangeCodeSaveDTO rcExchangeCodeSaveDTO = new RCExchangeCodeSaveDTO();
             rcExchangeCodeSaveDTO.setBatchId(batchPO.getId());
@@ -161,8 +162,8 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
             rcExchangeCodeSaveDTO.setProjectId(batchPO.getProjectId());
             rcExchangeCodeSaveDTO.setCityCodes(batchPO.getCityCodes());
             rcExchangeCodeSaveDTO.setProductIds(batchPO.getProductIds());
-            rcExchangeCodeSaveDTO.setCode(codeAndKeyts[0][i]);
-            rcExchangeCodeSaveDTO.setKeyt(codeAndKeyts[1][i]);
+            rcExchangeCodeSaveDTO.setCode("");
+            rcExchangeCodeSaveDTO.setKeyt("");
             rcExchangeCodeSaveDTO.setFaceValue(batchPO.getFaceValue());
             rcExchangeCodeSaveDTO.setExpiryTime(batchPO.getExpiryTime());
             rcExchangeCodeSaveDTO.setRechargeCardEffectiveTime(batchPO.getRechargeCardEffectiveTime());
@@ -175,6 +176,14 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         }
         List<RechargeCardExchangeCodePO> rechargeCardExchangeCodePOList = rcExchangeCodeSaveDTOS.stream().map(RCExchangeCodeAdapter::DTOSave2PO).collect(Collectors.toList());
         rcExchangeCodeService.batchInsert(rechargeCardExchangeCodePOList);
+        List<RCExchangeCodeDTO> rcExchangeCodeDTOS = rcExchangeCodeService.getByBatchId(batchPO.getId());
+        rcExchangeCodeDTOS.stream().forEach(bean -> {
+            Map map = GenerateCode.generateOneCode(CommonConstant.RC_EXCHANGE_CODE_PREFIX, bean.getId());
+            bean.setCode(map.get("code").toString());
+            bean.setKeyt(map.get("keyt").toString());
+        });
+        //此处更新code和keyt
+        rcExchangeCodeService.batchUpdateCodeAndKeyt(rcExchangeCodeDTOS);
     }
 
     @Override

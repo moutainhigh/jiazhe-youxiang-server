@@ -1,6 +1,5 @@
 package com.jiazhe.youxiang.server.dao.mapper.manual.voucher;
 
-import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO;
 import com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodePO;
 import org.apache.ibatis.annotations.Param;
 
@@ -57,5 +56,22 @@ public interface VoucherExchangeCodePOManualMapper {
     void batchChangeStatus(@Param("batchId") Integer batchId, @Param("status") Byte status);
 
 
+    /**
+     * 通过密钥查找代金券兑换码
+     * @param keyt
+     * @return
+     */
     VoucherExchangeCodePO findByKeyt(@Param("keyt") String keyt);
+
+    /**
+     * 获取已有的最大id
+     * @return
+     */
+    Integer getMaxId();
+
+    /**
+     * 批量更新code和keyt
+     * @param poList
+     */
+    void batchUpdateCodeAndKeyt(List<VoucherExchangeCodePO> poList);
 }

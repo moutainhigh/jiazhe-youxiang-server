@@ -149,4 +149,31 @@ public class PointExchangeCodeAdapter {
         pointExchangeCodeEditDTO.setExpiryType(req.getExpiryType());
         return pointExchangeCodeEditDTO;
     }
+
+    public static PointExchangeCodePO dto2Po(PointExchangeCodeDTO pointExchangeCodeDTO) {
+        if (pointExchangeCodeDTO == null) {
+            return null;
+        }
+        PointExchangeCodePO pointExchangeCodePO = new PointExchangeCodePO();
+        pointExchangeCodePO.setId(pointExchangeCodeDTO.getId());
+        pointExchangeCodePO.setBatchId(pointExchangeCodeDTO.getBatchId());
+        pointExchangeCodePO.setBatchName(pointExchangeCodeDTO.getBatchName());
+        pointExchangeCodePO.setPointName(pointExchangeCodeDTO.getPointName());
+        pointExchangeCodePO.setBatchDescription(pointExchangeCodeDTO.getBatchDescription());
+        pointExchangeCodePO.setProjectId(pointExchangeCodeDTO.getProjectId());
+        pointExchangeCodePO.setCityCodes(pointExchangeCodeDTO.getCityCodes());
+        pointExchangeCodePO.setProductIds(pointExchangeCodeDTO.getProductIds());
+        pointExchangeCodePO.setCode(pointExchangeCodeDTO.getCode());
+        pointExchangeCodePO.setKeyt(pointExchangeCodeDTO.getKeyt());
+        pointExchangeCodePO.setPointEffectiveTime(pointExchangeCodeDTO.getPointEffectiveTime());
+        pointExchangeCodePO.setPointExpiryTime(pointExchangeCodeDTO.getPointExpiryTime());
+        pointExchangeCodePO.setValidityPeriod(pointExchangeCodeDTO.getValidityPeriod());
+        pointExchangeCodePO.setExpiryType(pointExchangeCodeDTO.getExpiryType());
+        pointExchangeCodePO.setFaceValue(pointExchangeCodeDTO.getFaceValue());
+        pointExchangeCodePO.setExpiryTime(pointExchangeCodeDTO.getExpiryTime());
+        pointExchangeCodePO.setStatus(pointExchangeCodeDTO.getStatus());
+        pointExchangeCodePO.setUsed(pointExchangeCodeDTO.getUsed());
+        pointExchangeCodePO.setCustomerId(pointExchangeCodeDTO.getCustomerId());
+        return pointExchangeCodePO;
+    }
 }

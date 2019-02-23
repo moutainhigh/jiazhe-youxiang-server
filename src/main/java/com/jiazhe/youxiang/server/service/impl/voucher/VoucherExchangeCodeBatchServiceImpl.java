@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -121,7 +122,7 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
         voucherExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
         List<VoucherExchangeCodeSaveDTO> voucherExchangeCodeSaveDTOList = Lists.newArrayList();
         Integer amount = batchPO.getAmount();
-        String[][] codeAndKeyts = GenerateCode.generateCode(CommonConstant.VOUCHER_EXCHANGE_CODE_PREFIX, amount);
+//        String[][] codeAndKeyts = GenerateCode.generateCode(CommonConstant.VOUCHER_EXCHANGE_CODE_PREFIX, amount);
         for (int i = 0; i < amount; i++) {
             VoucherExchangeCodeSaveDTO voucherExchangeCodeSaveDTO = new VoucherExchangeCodeSaveDTO();
             voucherExchangeCodeSaveDTO.setBatchId(batchPO.getId());
@@ -131,8 +132,8 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
             voucherExchangeCodeSaveDTO.setProjectId(batchPO.getProjectId());
             voucherExchangeCodeSaveDTO.setCityCodes(batchPO.getCityCodes());
             voucherExchangeCodeSaveDTO.setProductIds(batchPO.getProductIds());
-            voucherExchangeCodeSaveDTO.setCode(codeAndKeyts[0][i]);
-            voucherExchangeCodeSaveDTO.setKeyt(codeAndKeyts[1][i]);
+            voucherExchangeCodeSaveDTO.setCode("");
+            voucherExchangeCodeSaveDTO.setKeyt("");
             voucherExchangeCodeSaveDTO.setCount(batchPO.getCount());
             voucherExchangeCodeSaveDTO.setExpiryTime(batchPO.getExpiryTime());
             voucherExchangeCodeSaveDTO.setVoucherEffectiveTime(batchPO.getVoucherEffectiveTime());
@@ -145,6 +146,14 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
         }
         List<VoucherExchangeCodePO> voucherExchangeCodePOList = voucherExchangeCodeSaveDTOList.stream().map(VoucherExchangeCodeAdapter::DTOSave2PO).collect(Collectors.toList());
         voucherExchangeCodeService.batchInsert(voucherExchangeCodePOList);
+        List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOS = voucherExchangeCodeService.getByBatchId(batchPO.getId());
+        voucherExchangeCodeDTOS.stream().forEach(bean -> {
+            Map map = GenerateCode.generateOneCode(CommonConstant.VOUCHER_EXCHANGE_CODE_PREFIX, bean.getId());
+            bean.setCode(map.get("code").toString());
+            bean.setKeyt(map.get("keyt").toString());
+        });
+        //此处更新code和keyt
+        voucherExchangeCodeService.batchUpdateCodeAndKeyt(voucherExchangeCodeDTOS);
     }
 
     @Transactional(rollbackFor=Exception.class)
