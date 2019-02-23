@@ -509,10 +509,16 @@
                     }
                     $('#fileThumbnail').ace_file_input('show_file_list', [getImageUrl(result.thumbnailUrl)]);
                     $('#imgThumbnail').attr('src', getImageUrl(result.thumbnailUrl));
+                    $('#inputThumbnailUrl').val(result.thumbnailUrl);
+
                     $('#fileHeader').ace_file_input('show_file_list', [getImageUrl(result.headerImgUrl)]);
                     $('#imgHeader').attr('src', getImageUrl(result.headerImgUrl));
+                    $('#inputHeaderImgUrl').val(result.headerImgUrl);
+
                     $('#fileDetail').ace_file_input('show_file_list', [getImageUrl(result.detailImgUrl)]);
                     $('#imgDetail').attr('src', getImageUrl(result.detailImgUrl));
+                    $('#inputDetailImgUrl').val(result.detailImgUrl);
+
                     $("#modal-form").modal('show');
                 }
             },
