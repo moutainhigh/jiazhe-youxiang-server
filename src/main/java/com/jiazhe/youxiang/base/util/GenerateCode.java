@@ -19,7 +19,7 @@ public class GenerateCode {
      * @param id
      * @return
      * @description 卡号8位：兑换码类型（1位）+兑换码id（6位，前置补零）+校验码（1位）
-     * 密码12位：兑换码id（位数不定，x位）+随机数（11-x位）+校验码（1位）
+     * 密码12位：兑换码类型（1位）+兑换码id（位数不定，x位）+随机数（10-x位）+校验码（1位）
      */
     public static Map generateOneCode(String type, Integer id) {
         Map<String, String> map = new HashMap<>(2);
@@ -27,8 +27,8 @@ public class GenerateCode {
         String code = type + idCodeStr + CheckCodeAlgorithms.getValidateCode(type + idCodeStr);
         String idKeytStr = String.valueOf(id);
         Integer idLen = idKeytStr.length();
-        String randomNumStr = randomOneNum(11 - idLen);
-        String keyt = idKeytStr + randomNumStr + CheckCodeAlgorithms.getValidateCode(idKeytStr + randomNumStr);
+        String randomNumStr = randomOneNum(10 - idLen);
+        String keyt = type + idKeytStr + randomNumStr + CheckCodeAlgorithms.getValidateCode(idKeytStr + randomNumStr);
         map.put("code", code);
         map.put("keyt", keyt);
         return map;
