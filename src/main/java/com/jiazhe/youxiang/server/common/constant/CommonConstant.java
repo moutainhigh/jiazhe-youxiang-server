@@ -79,17 +79,17 @@ public class CommonConstant {
     /**
      * 时间相关的固定值
      */
-    public static final long ONE_DAY = 24 * 3600 * 1000;
-    public static final long NEVER = -1;
-    public static final long ONE_HOUR = 3600 * 1000;
-    public static final long EIGHT_HOUR = 8 * 3600 * 1000;
-    public static final long THREE_MONTH = 3 * 30 * 24 * 3600 * 1000;
-    public static final long ONE_YEAR = 365 * 24 * 3600 * 1000;
+    public static final long ONE_DAY = 24L * 3600 * 1000;
+    public static final long NEVER = -1L;
+    public static final long ONE_HOUR = 3600L * 1000;
+    public static final long EIGHT_HOUR = 8L * 3600 * 1000;
+    public static final long THREE_MONTH = 3L * 30 * 24 * 3600 * 1000;
+    public static final long ONE_YEAR = 365L * 24 * 3600 * 1000;
 
     /**
      * 短信有效时间5分钟
      */
-    public static final Integer FIVE_MINUTES = 5 * 60 * 1000;
+    public static final long FIVE_MINUTES = 5L * 60 * 1000;
 
     /**
      * 前台时间未选择，传过来的固定值为0
@@ -109,11 +109,12 @@ public class CommonConstant {
     public static final Byte ORDER_CANCEL = 7;
 
     /**
-     * 商家订单状态【1待服务，2已完成，3已取消】
+     * 商家订单状态【1待派单 2待服务，3已完成，4已取消】
      */
-    public static final Byte PARTNER_ORDER_UNSERVICE = 1;
-    public static final Byte PARTNER_ORDER_COMPLETE = 2;
-    public static final Byte PARTNER_ORDER_CANCEL = 3;
+    public static final Byte PARTNER_ORDER_UNSENT = 1;
+    public static final Byte PARTNER_ORDER_UNSERVICE = 2;
+    public static final Byte PARTNER_ORDER_COMPLETE = 3;
+    public static final Byte PARTNER_ORDER_CANCEL = 4;
 
     public static final Byte BATCH_IS_VIRTUAL = Byte.valueOf("1");
 

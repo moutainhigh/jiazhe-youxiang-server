@@ -75,12 +75,10 @@
                                             <div class="space"></div>
 
                                             <div class="clearfix">
-
-                                               <!-- <label class="inline">
-                                                    <input id="rememberMe" type="checkbox" class="ace"/>
-                                                    <span class="lbl"> 记住我</span>
-                                                </label>-->
-
+                                                 <label class="inline">
+                                                     <input id="rememberMe" type="checkbox" class="ace"/>
+                                                     <span class="lbl"> 记住我</span>
+                                                 </label>
                                                 <button type="submit" class="width-35 pull-right btn btn-sm btn-primary"
                                                         id="login-btn">
                                                     <i class="ace-icon fa fa-key"></i>
@@ -96,7 +94,7 @@
                         </div><!-- /.login-box -->
 
                         <div class="center" style="padding-top:10px">
-                            <h6 class="blue">&copy; 2018  北京悠享互联信息技术有限公司  版权所有</h6>
+                            <h6 class="blue">&copy; 2018 北京悠享互联信息技术有限公司 版权所有</h6>
                             <h6 class="blue">Beijing UE-Link Information Technology Co., Ltd.</h6>
                         </div>
                     </div><!-- /.position-relative -->
@@ -109,8 +107,16 @@
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
     var countdown = 60;
+    $(function () {
+        if (!navigator.cookieEnabled) {
+            bootboxalert("浏览器cookie已经被禁用，请开启后重试。10秒钟后自动关闭");
+            setTimeout(function () {
+                closeBrowser();
+            }, 10000);
+        }
+    });
 
-    function settime(val) {
+    function setTime(val) {
         if (countdown == 0) {
             $("#identifyingCodeBadge").css("display", "none");
             $("#identifyingCodeButton").css("display", "");
@@ -119,7 +125,7 @@
             countdown--;
             $("#identifyingCodeBadge").find("span").text(countdown);
             setTimeout(function () {
-                settime(val)
+                setTime(val)
             }, 1000);
         }
     }
@@ -141,7 +147,7 @@
                     $("#bizId").val(data.data.bizId);
                     $("#identifyingCodeBadge").css("display", "");
                     $("#identifyingCodeButton").css("display", "none");
-                    settime(60);
+                    setTime(60);
                 }
             },
             error: function () {
@@ -149,10 +155,11 @@
             }
         });
     }
+
     function login() {
         var loginname = $("#loginname").val();
         var password = $("#password").val();
-        /*var rememberMe = $('#rememberMe').is(':checked')?1:0;*/
+        var rememberMe = $('#rememberMe').is(':checked')?"true":"false";
         var identifyingCode = $("#identifyingCode").val();
         var bizId = $("#bizId").val()
         if (loginname == "" || password == "") {
@@ -166,7 +173,7 @@
             data: {
                 loginname: loginname,
                 password: password,
-               /* rememberMe:rememberMe,*/
+                rememberMe:rememberMe,
                 identifyingCode: identifyingCode,
                 bizId: bizId
             },
@@ -179,7 +186,7 @@
                         bootboxalert(data.error.message);
                     }
                 } else {//登陆成功
-                    window.location.href = "../main/main";
+                    window.location.href = "/main/main";
                 }
             },
             error: function () {
@@ -189,6 +196,24 @@
         return false;
     }
 
+    function closeBrowser(){
+        if (navigator.userAgent.indexOf("MSIE") > 0) {
+            if (navigator.userAgent.indexOf("MSIE 6.0") > 0) {
+                window.opener = null;
+                window.close();
+            } else {
+                window.open('', '_top');
+                window.top.close();
+            }
+        }
+        else if (navigator.userAgent.indexOf("Firefox") > 0) {
+            window.location.href = 'about:blank ';
+        } else {
+            window.opener = null;
+            window.open('', '_self', '');
+            window.close();
+        }
+    }
 </script>
 </body>
 </html>

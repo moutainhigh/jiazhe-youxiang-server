@@ -50,9 +50,10 @@
                                         <select id="searchStatus" name="status"
                                                 class="selectpicker show-tick form-control">
                                             <option value=0>所有</option>
-                                            <option value=1>待服务</option>
-                                            <option value=2>已完成</option>
-                                            <option value=3>已取消</option>
+                                            <option value=1>待派单</option>
+                                            <option value=2>待服务</option>
+                                            <option value=3>已完成</option>
+                                            <option value=4>已取消</option>
                                         </select>
                                     </div>
                                     <label class="col-sm-1 control-label no-padding-right">城市：</label>
@@ -119,6 +120,11 @@
                                                 onclick="return search()">
                                             <i class="ace-icon fa fa-search red2"></i>
                                             查询
+                                        </button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <button class="btn btn-white btn-default btn-round btn-sm"
+                                                onclick="exportExcel();return false;">
+                                            <i class="ace-icon fa  fa-file-excel-o red2"></i>
+                                            导出
                                         </button>
                                     </div>
                                 </div>
@@ -521,9 +527,10 @@
                                 <div class="col-sm-8">
                                     <select id="saveStatus" name="status"
                                             class="selectpicker show-tick form-control">
-                                        <option value=1>待服务</option>
-                                        <option value=2>已完成</option>
-                                        <option value=3>已取消</option>
+                                        <option value=1>待派单</option>
+                                        <option value=2>待服务</option>
+                                        <option value=3>已完成</option>
+                                        <option value=4>已取消</option>
                                     </select>
                                 </div>
                             </div>
@@ -555,7 +562,7 @@
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
-    var orderStatus = ['待服务', '已完成', '已取消'];
+    var orderStatus = ['待派单','待服务', '已完成', '已取消'];
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -960,6 +967,17 @@
             },
             error: error
         });
+    }
+
+    //导出为excel
+    function exportExcel() {
+        var obj = transformToJson($('#partnerOrderInfoSearchForm').serializeArray());
+        var param = "";
+        for(var key in obj){
+            param = param + key + "=" + obj[key] + "&" ;
+        }
+        window.location.href = "/api/partnerorderinfo/export?" + param;
+        return false;
     }
 </script>
 </html>
