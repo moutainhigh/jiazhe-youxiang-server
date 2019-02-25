@@ -129,4 +129,30 @@ public class PointExchangeCodeBatchAdapter {
         pointExchangeCodeBatchEditResp.setExtInfo(pointExchangeCodeBatchEditDTO.getExtInfo());
         return pointExchangeCodeBatchEditResp;
     }
+
+    public static PointExchangeCodeBatchEditDTO po2DtoEdit(PointExchangeCodeBatchPO pointExchangeCodeBatchPO) {
+        if (pointExchangeCodeBatchPO == null) {
+            return null;
+        }
+        PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO = new PointExchangeCodeBatchEditDTO();
+        pointExchangeCodeBatchEditDTO.setId(pointExchangeCodeBatchPO.getId());
+        pointExchangeCodeBatchEditDTO.setName(pointExchangeCodeBatchPO.getName());
+        pointExchangeCodeBatchEditDTO.setPointName(pointExchangeCodeBatchPO.getPointName());
+        pointExchangeCodeBatchEditDTO.setIsVirtual(pointExchangeCodeBatchPO.getIsVirtual());
+        pointExchangeCodeBatchEditDTO.setIsMade(pointExchangeCodeBatchPO.getIsMade());
+        pointExchangeCodeBatchEditDTO.setStatus(pointExchangeCodeBatchPO.getStatus());
+        pointExchangeCodeBatchEditDTO.setDescription(pointExchangeCodeBatchPO.getDescription());
+        pointExchangeCodeBatchEditDTO.setAmount(pointExchangeCodeBatchPO.getAmount());
+        pointExchangeCodeBatchEditDTO.setProjectId(pointExchangeCodeBatchPO.getProjectId());
+        pointExchangeCodeBatchEditDTO.setCityCodes(pointExchangeCodeBatchPO.getCityCodes());
+        pointExchangeCodeBatchEditDTO.setProductIds(pointExchangeCodeBatchPO.getProductIds());
+        pointExchangeCodeBatchEditDTO.setFaceValue(pointExchangeCodeBatchPO.getFaceValue());
+        pointExchangeCodeBatchEditDTO.setExpiryTime(pointExchangeCodeBatchPO.getExpiryTime());
+        pointExchangeCodeBatchEditDTO.setPointEffectiveTime(pointExchangeCodeBatchPO.getPointEffectiveTime());
+        pointExchangeCodeBatchEditDTO.setPointExpiryTime(pointExchangeCodeBatchPO.getPointExpiryTime());
+        pointExchangeCodeBatchEditDTO.setValidityPeriod(pointExchangeCodeBatchPO.getValidityPeriod());
+        pointExchangeCodeBatchEditDTO.setExpiryType(pointExchangeCodeBatchPO.getExpiryType());
+        pointExchangeCodeBatchEditDTO.setExtInfo(pointExchangeCodeBatchPO.getExtInfo());
+        return pointExchangeCodeBatchEditDTO;
+    }
 }

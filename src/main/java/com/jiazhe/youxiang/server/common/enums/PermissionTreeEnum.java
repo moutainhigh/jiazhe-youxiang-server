@@ -182,7 +182,9 @@ public enum PermissionTreeEnum {
     //积分卡兑换码修改
     POINT_CODE_EDIT(70108, 701, "积分卡兑换码修改", PermissionConstant.POINT_CODE_EDIT),
     //积分卡兑换码启、停用
-    POINT_CODE_STATUS_CHANGE(70109, 701, "积分卡兑换码启、停用", PermissionConstant.POINT_CODE_STATUS_CHANGE),
+    POINT_CODE_STATUS_CHANGE(70109, 701, "单个积分卡兑换码启、停用", PermissionConstant.POINT_CODE_STATUS_CHANGE),
+    //积分卡兑换码启、停用
+    ALL_POINT_CODE_STATUS_CHANGE(70110, 701, "所有积分卡兑换码启、停用", PermissionConstant.ALL_POINT_CODE_STATUS_CHANGE),
     //充值卡兑换码批次管理
     RC_BATCH_MANAGEMENT(702, 7, "充值卡兑换码批次管理", PermissionConstant.RC_BATCH_MANAGEMENT),
     //充值卡兑换码批次查询
@@ -201,8 +203,10 @@ public enum PermissionTreeEnum {
     RC_CODE_MANAGEMENT(70207, 702, "充值卡兑换码管理", PermissionConstant.RC_CODE_MANAGEMENT),
     //充值卡兑换码修改
     RC_CODE_EDIT(70208, 702, "充值卡兑换码修改", PermissionConstant.RC_CODE_EDIT),
-    //积分卡兑换码启、停用
-    RC_CODE_STATUS_CHANGE(70209, 702, "充值卡兑换码启、停用", PermissionConstant.RC_CODE_STATUS_CHANGE),
+    //充值卡兑换码启、停用
+    RC_CODE_STATUS_CHANGE(70209, 702, "单个充值卡兑换码启、停用", PermissionConstant.RC_CODE_STATUS_CHANGE),
+    //充值卡兑换码启、停用
+    ALL_RC_CODE_STATUS_CHANGE(70210, 702, "所有充值卡兑换码启、停用", PermissionConstant.ALL_RC_CODE_STATUS_CHANGE),
     //代金券兑换码批次管理
     VOUCHER_BATCH_MANAGEMENT(703, 7, "代金券兑换码批次管理", PermissionConstant.VOUCHER_BATCH_MANAGEMENT),
     //代金券兑换码批次查询
@@ -223,6 +227,8 @@ public enum PermissionTreeEnum {
     VOUCHER_CODE_EDIT(70308, 703, "代金券兑换码修改", PermissionConstant.VOUCHER_CODE_EDIT),
     //代金券兑换码启、停用
     VOUCHER_CODE_STATUS_CHANGE(70309, 703, "代金券兑换码启、停用", PermissionConstant.VOUCHER_CODE_STATUS_CHANGE),
+    //充值卡兑换码启、停用
+    ALL_VOUCHER_CODE_STATUS_CHANGE(70310, 703, "所有充值卡兑换码启、停用", PermissionConstant.ALL_VOUCHER_CODE_STATUS_CHANGE),
     //电子商品码管理
     ELE_CODE_MANAGEMENT(704, 7, "电子码商品管理", PermissionConstant.ELE_CODE_MANAGEMENT),
     //电子商品码查询

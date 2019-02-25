@@ -1,6 +1,5 @@
 package com.jiazhe.youxiang.server.controller.rechargecard;
 
-import com.alibaba.druid.sql.PagerUtils;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
@@ -15,7 +14,6 @@ import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
-import com.jiazhe.youxiang.server.common.exceptions.CommonException;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
@@ -29,7 +27,6 @@ import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch.RCExch
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditResp;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchResp;
 import io.swagger.annotations.ApiOperation;
-import org.apache.logging.log4j.util.Strings;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -162,7 +159,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
     }
 
     @RequiresPermissions(PermissionConstant.RC_BATCH_STATUS_CHANGE)
-    @ApiOperation(value = "【后台】启用批次", httpMethod = "POST", notes = "启用批次，同时改变批次下兑换码和已经兑换成充值卡的状态")
+    @ApiOperation(value = "【后台】启用批次", httpMethod = "POST", notes = "启用批次")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "启用批次", level = LogLevelEnum.LEVEL_2)
     public Object startUsing(@ModelAttribute IdReq req) {
@@ -172,7 +169,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
     }
 
     @RequiresPermissions(PermissionConstant.RC_BATCH_STATUS_CHANGE)
-    @ApiOperation(value = "【后台】停用批次", httpMethod = "POST", notes = "停用批次，同时改变批次下兑换码和已经兑换成充值卡的状态")
+    @ApiOperation(value = "【后台】停用批次", httpMethod = "POST", notes = "停用批次")
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "停用批次", level = LogLevelEnum.LEVEL_2)
     public Object stopUsing(@ModelAttribute IdReq req) {

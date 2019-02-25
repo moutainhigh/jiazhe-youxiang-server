@@ -170,7 +170,7 @@ public class APIPointExchangeCodeBatchController extends BaseController {
     }
 
     @RequiresPermissions(PermissionConstant.POINT_BATCH_STATUS_CHANGE)
-    @ApiOperation(value = "【后台】启用批次", httpMethod = "POST", notes = "启用批次，同时改变批次下兑换码和已经兑换成积分卡的状态")
+    @ApiOperation(value = "【后台】启用批次", httpMethod = "POST", notes = "启用批次")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "启用批次", level = LogLevelEnum.LEVEL_2)
     public Object startUsing(@ModelAttribute IdReq req) {
@@ -180,7 +180,7 @@ public class APIPointExchangeCodeBatchController extends BaseController {
     }
 
     @RequiresPermissions(PermissionConstant.POINT_BATCH_STATUS_CHANGE)
-    @ApiOperation(value = "【后台】停用批次", httpMethod = "POST", notes = "停用批次，同时改变批次下兑换码和已经兑换成积分卡的状态")
+    @ApiOperation(value = "【后台】停用批次", httpMethod = "POST", notes = "停用批次")
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "停用批次", level = LogLevelEnum.LEVEL_2)
     public Object stopUsing(@ModelAttribute IdReq req) {

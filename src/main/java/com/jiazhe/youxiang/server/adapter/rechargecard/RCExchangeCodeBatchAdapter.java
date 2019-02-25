@@ -123,4 +123,29 @@ public class RCExchangeCodeBatchAdapter {
         return rCExchangeCodeBatchEditResp;
     }
 
+    public static RCExchangeCodeBatchEditDTO po2DtoEdit(RechargeCardExchangeCodeBatchPO rechargeCardExchangeCodeBatchPO) {
+        if (rechargeCardExchangeCodeBatchPO == null) {
+            return null;
+        }
+        RCExchangeCodeBatchEditDTO rCExchangeCodeBatchEditDTO = new RCExchangeCodeBatchEditDTO();
+        rCExchangeCodeBatchEditDTO.setId(rechargeCardExchangeCodeBatchPO.getId());
+        rCExchangeCodeBatchEditDTO.setName(rechargeCardExchangeCodeBatchPO.getName());
+        rCExchangeCodeBatchEditDTO.setRechargeCardName(rechargeCardExchangeCodeBatchPO.getRechargeCardName());
+        rCExchangeCodeBatchEditDTO.setIsVirtual(rechargeCardExchangeCodeBatchPO.getIsVirtual());
+        rCExchangeCodeBatchEditDTO.setIsMade(rechargeCardExchangeCodeBatchPO.getIsMade());
+        rCExchangeCodeBatchEditDTO.setStatus(rechargeCardExchangeCodeBatchPO.getStatus());
+        rCExchangeCodeBatchEditDTO.setDescription(rechargeCardExchangeCodeBatchPO.getDescription());
+        rCExchangeCodeBatchEditDTO.setAmount(rechargeCardExchangeCodeBatchPO.getAmount());
+        rCExchangeCodeBatchEditDTO.setProjectId(rechargeCardExchangeCodeBatchPO.getProjectId());
+        rCExchangeCodeBatchEditDTO.setCityCodes(rechargeCardExchangeCodeBatchPO.getCityCodes());
+        rCExchangeCodeBatchEditDTO.setProductIds(rechargeCardExchangeCodeBatchPO.getProductIds());
+        rCExchangeCodeBatchEditDTO.setFaceValue(rechargeCardExchangeCodeBatchPO.getFaceValue());
+        rCExchangeCodeBatchEditDTO.setExpiryTime(rechargeCardExchangeCodeBatchPO.getExpiryTime());
+        rCExchangeCodeBatchEditDTO.setRechargeCardEffectiveTime(rechargeCardExchangeCodeBatchPO.getRechargeCardEffectiveTime());
+        rCExchangeCodeBatchEditDTO.setRechargeCardExpiryTime(rechargeCardExchangeCodeBatchPO.getRechargeCardExpiryTime());
+        rCExchangeCodeBatchEditDTO.setValidityPeriod(rechargeCardExchangeCodeBatchPO.getValidityPeriod());
+        rCExchangeCodeBatchEditDTO.setExpiryType(rechargeCardExchangeCodeBatchPO.getExpiryType());
+        return rCExchangeCodeBatchEditDTO;
+    }
+
 }

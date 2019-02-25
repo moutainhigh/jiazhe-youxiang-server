@@ -78,6 +78,26 @@ public class APIVoucherExchangeCodeController extends BaseController {
         return ResponseFactory.buildPaginationResponse(rcExchangeCodeBatchRespList, paging);
     }
 
+    @RequiresPermissions(PermissionConstant.ALL_VOUCHER_CODE_STATUS_CHANGE)
+    @ApiOperation(value = "启用所有代金券兑换码", httpMethod = "POST",notes = "启用批次下所有代金券兑换码，同时修改已经兑换为的代金券")
+    @RequestMapping(value = "/allstartusing", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "启用所有代金券兑换码", level = LogLevelEnum.LEVEL_2)
+    public Object allStartUsing(@ModelAttribute IdReq req) {
+        CommonValidator.validateId(req);
+        voucherExchangeCodeBiz.allStartUsing(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
+    @RequiresPermissions(PermissionConstant.ALL_VOUCHER_CODE_STATUS_CHANGE)
+    @ApiOperation(value = "停用所有代金券兑换码", httpMethod = "POST",notes = "停用用批次下所有代金券兑换码，同时修改已经兑换为的代金券")
+    @RequestMapping(value = "/allstopusing", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "停用所有代金券兑换码", level = LogLevelEnum.LEVEL_2)
+    public Object allStopUsing(@ModelAttribute IdReq req) {
+        CommonValidator.validateId(req);
+        voucherExchangeCodeBiz.allStopUsing(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
     @RequiresPermissions(value = {PermissionConstant.VOUCHER_CODE_STATUS_CHANGE, PermissionConstant.VOUCHER_CODE_SEARCH_STATUS_CHANGE}, logical = Logical.OR)
     @ApiOperation(value = "启用代金券兑换码", httpMethod = "POST",notes = "启用代金券兑换码")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)

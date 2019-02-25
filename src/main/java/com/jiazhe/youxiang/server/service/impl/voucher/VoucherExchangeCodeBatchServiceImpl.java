@@ -11,7 +11,6 @@ import com.jiazhe.youxiang.server.dao.mapper.VoucherExchangeCodeBatchPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.voucher.VoucherExchangeCodeBatchPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodePO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeSaveDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeSaveDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchDTO;
@@ -55,8 +54,8 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
     @Override
     public void addSave(VoucherExchangeCodeBatchSaveDTO voucherExchangeCodeBatchSaveDTO) {
         VoucherExchangeCodeBatchPO po = VoucherExchangeCodeBatchAdapter.DTOSave2PO(voucherExchangeCodeBatchSaveDTO);
-        po.setIsMade(Byte.valueOf("0"));
-        po.setStatus(Byte.valueOf("1"));
+        po.setIsMade(CommonConstant.CODE_NOT_MADE);
+        po.setStatus(CommonConstant.CODE_STOP_USING);
         voucherExchangeCodeBatchPOMapper.insertSelective(po);
     }
 
@@ -98,7 +97,7 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
         if(null == voucherExchangeCodeBatchPO){
             throw new VoucherException(VoucherCodeEnum.BATCH_NOT_EXISTED);
         }
-        VoucherExchangeCodeBatchEditDTO voucherExchangeCodeBatchEditDTO = VoucherExchangeCodeAdapter.PO2DTOEdit(voucherExchangeCodeBatchPO);
+        VoucherExchangeCodeBatchEditDTO voucherExchangeCodeBatchEditDTO = VoucherExchangeCodeBatchAdapter.po2DtoEdit(voucherExchangeCodeBatchPO);
         return voucherExchangeCodeBatchEditDTO;
     }
 
@@ -141,7 +140,7 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
             voucherExchangeCodeSaveDTO.setValidityPeriod(batchPO.getValidityPeriod());
             voucherExchangeCodeSaveDTO.setExpiryType(batchPO.getExpiryType());
             voucherExchangeCodeSaveDTO.setStatus(batchPO.getStatus());
-            voucherExchangeCodeSaveDTO.setUsed(Byte.valueOf("0"));
+            voucherExchangeCodeSaveDTO.setUsed(CommonConstant.CODE_STOP_USING);
             voucherExchangeCodeSaveDTOList.add(voucherExchangeCodeSaveDTO);
         }
         List<VoucherExchangeCodePO> voucherExchangeCodePOList = voucherExchangeCodeSaveDTOList.stream().map(VoucherExchangeCodeAdapter::DTOSave2PO).collect(Collectors.toList());
@@ -166,11 +165,5 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
         batchPO.setStatus(status);
         batchPO.setModTime(new Date());
         voucherExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
-        List<VoucherExchangeCodeDTO> codeDTOList = voucherExchangeCodeService.getByBatchId(id);
-        boolean batchEmpty = codeDTOList.isEmpty();
-        //有码则修改对应的码信息
-        if (!batchEmpty) {
-            voucherExchangeCodeService.batchChangeStatus(id, status);
-        }
     }
 }

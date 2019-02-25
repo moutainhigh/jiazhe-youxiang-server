@@ -58,4 +58,12 @@ public class RCExchangeCodeBiz {
     public void editSave(RCExchangeCodeEditDTO dto) {
         rcExchangeCodeService.editSave(dto);
     }
+
+    public void allStartUsing(Integer id) {
+        rcExchangeCodeService.batchChangeStatus(id,CodeStatusEnum.START_USING.getId().byteValue());
+    }
+
+    public void allStopUsing(Integer id) {
+        rcExchangeCodeService.batchChangeStatus(id,CodeStatusEnum.STOP_USING.getId().byteValue());
+    }
 }

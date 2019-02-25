@@ -1,12 +1,10 @@
 package com.jiazhe.youxiang.server.adapter.voucher;
 
 import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
-import com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeEditDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeSaveDTO;
-import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.vo.req.voucher.exchangecode.VoucherExchangeCodeEditReq;
 import com.jiazhe.youxiang.server.vo.resp.voucher.exchangecode.VoucherExchangeCodeResp;
 
@@ -41,29 +39,6 @@ public class VoucherExchangeCodeAdapter {
         voucherExchangeCodeResp.setUsed(dto.getUsed());
         voucherExchangeCodeResp.setCustomerResp(CustomerAdapter.customerDTO2VO(dto.getCustomerDTO()));
         return voucherExchangeCodeResp;
-    }
-
-    public static VoucherExchangeCodeBatchEditDTO PO2DTOEdit(VoucherExchangeCodeBatchPO voucherExchangeCodeBatchPO) {
-        if (voucherExchangeCodeBatchPO == null) {
-            return null;
-        }
-        VoucherExchangeCodeBatchEditDTO voucherExchangeCodeBatchEditDTO = new VoucherExchangeCodeBatchEditDTO();
-        voucherExchangeCodeBatchEditDTO.setId(voucherExchangeCodeBatchPO.getId());
-        voucherExchangeCodeBatchEditDTO.setName(voucherExchangeCodeBatchPO.getName());
-        voucherExchangeCodeBatchEditDTO.setVoucherName(voucherExchangeCodeBatchPO.getVoucherName());
-        voucherExchangeCodeBatchEditDTO.setProjectId(voucherExchangeCodeBatchPO.getProjectId());
-        voucherExchangeCodeBatchEditDTO.setIsMade(voucherExchangeCodeBatchPO.getIsMade());
-        voucherExchangeCodeBatchEditDTO.setDescription(voucherExchangeCodeBatchPO.getDescription());
-        voucherExchangeCodeBatchEditDTO.setAmount(voucherExchangeCodeBatchPO.getAmount());
-        voucherExchangeCodeBatchEditDTO.setCityCodes(voucherExchangeCodeBatchPO.getCityCodes());
-        voucherExchangeCodeBatchEditDTO.setProductIds(voucherExchangeCodeBatchPO.getProductIds());
-        voucherExchangeCodeBatchEditDTO.setCount(voucherExchangeCodeBatchPO.getCount());
-        voucherExchangeCodeBatchEditDTO.setExpiryTime(voucherExchangeCodeBatchPO.getExpiryTime());
-        voucherExchangeCodeBatchEditDTO.setVoucherEffectiveTime(voucherExchangeCodeBatchPO.getVoucherEffectiveTime());
-        voucherExchangeCodeBatchEditDTO.setVoucherExpiryTime(voucherExchangeCodeBatchPO.getVoucherExpiryTime());
-        voucherExchangeCodeBatchEditDTO.setValidityPeriod(voucherExchangeCodeBatchPO.getValidityPeriod());
-        voucherExchangeCodeBatchEditDTO.setExpiryType(voucherExchangeCodeBatchPO.getExpiryType());
-        return voucherExchangeCodeBatchEditDTO;
     }
 
     public static VoucherExchangeCodePO DTOSave2PO(VoucherExchangeCodeSaveDTO voucherExchangeCodeSaveDTO) {

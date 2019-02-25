@@ -52,4 +52,12 @@ public class VoucherExchangeCodeBiz {
     public void editSave(VoucherExchangeCodeEditDTO dto) {
         voucherExchangeCodeService.editSave(dto);
     }
+
+    public void allStartUsing(Integer id) {
+        voucherExchangeCodeService.batchChangeStatus(id,CodeStatusEnum.START_USING.getId().byteValue());
+    }
+
+    public void allStopUsing(Integer id) {
+        voucherExchangeCodeService.batchChangeStatus(id,CodeStatusEnum.STOP_USING.getId().byteValue());
+    }
 }

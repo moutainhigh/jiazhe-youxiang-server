@@ -80,8 +80,30 @@ public class APIPointExchangeCodeController extends BaseController {
         return ResponseFactory.buildPaginationResponse(pointExchangeCodeBatchRespList, paging);
     }
 
+    @RequiresPermissions(PermissionConstant.ALL_POINT_CODE_STATUS_CHANGE)
+    @ApiOperation(value = "【后台】启用所有积分卡兑换码", httpMethod = "POST", notes = "启用所有积分卡兑换码和已经兑换成的积分卡")
+    @RequestMapping(value = "/allstartusing", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.POINT, operate = "启用所有积分卡兑换码", level = LogLevelEnum.LEVEL_2)
+    public Object allStartUsing(@ModelAttribute IdReq req) {
+        //id为批次id
+        CommonValidator.validateId(req);
+        pointExchangeCodeBiz.allStartUsing(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
+    @RequiresPermissions(PermissionConstant.ALL_POINT_CODE_STATUS_CHANGE)
+    @ApiOperation(value = "【后台】停用所有积分卡兑换码", httpMethod = "POST", notes = "停用所有积分卡兑换码和已经兑换成的积分卡")
+    @RequestMapping(value = "/allstopusing", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.POINT, operate = "停用所有积分卡兑换码", level = LogLevelEnum.LEVEL_2)
+    public Object allStopUsing(@ModelAttribute IdReq req) {
+        //id为批次id
+        CommonValidator.validateId(req);
+        pointExchangeCodeBiz.allStopUsing(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
     @RequiresPermissions(value = {PermissionConstant.POINT_CODE_STATUS_CHANGE, PermissionConstant.POINT_CODE_SEARCH_STATUS_CHANGE}, logical = Logical.OR)
-    @ApiOperation(value = "【后台】启用积分卡兑换码", httpMethod = "POST", notes = "启用积分卡兑换码，已经兑换的积分卡不能修改")
+    @ApiOperation(value = "【后台】启用积分卡兑换码", httpMethod = "POST", notes = "启用积分卡兑换码，已经兑换的积分卡不修改")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "启用积分卡兑换码", level = LogLevelEnum.LEVEL_2)
     public Object startUsing(@ModelAttribute IdReq req) {

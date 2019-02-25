@@ -91,8 +91,8 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
     @Override
     public void addSave(PointExchangeCodeBatchSaveDTO pointExchangeCodeBatchSaveDTO) {
         PointExchangeCodeBatchPO po = PointExchangeCodeBatchAdapter.dtoSave2Po(pointExchangeCodeBatchSaveDTO);
-        po.setIsMade(Byte.valueOf("0"));
-        po.setStatus(Byte.valueOf("1"));
+        po.setIsMade(CommonConstant.CODE_NOT_MADE);
+        po.setStatus(CommonConstant.CODE_STOP_USING);
         pointExchangeCodeBatchPOMapper.insertSelective(po);
     }
 
@@ -138,8 +138,8 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
         if (null == pointExchangeCodeBatchPO) {
             throw new PointException(PointCodeEnum.BATCH_NOT_EXISTED);
         }
-        PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO = PointExchangeCodeAdapter.po2DtoEdit(pointExchangeCodeBatchPO);
-        return pointExchangeCodeBatchEditDTO;
+        PointExchangeCodeBatchEditDTO pointExchangeCodeBatchDTO = PointExchangeCodeBatchAdapter.po2DtoEdit(pointExchangeCodeBatchPO);
+        return pointExchangeCodeBatchDTO;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -164,8 +164,6 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
         pointExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
         List<PointExchangeCodeSaveDTO> pointExchangeCodeSaveDTOS = Lists.newArrayList();
         Integer amount = batchPO.getAmount();
-//        Integer maxId = pointExchangeCodeService.getMaxId();
-//        String[][] codeAndKeyts = GenerateCode.generateCode(maxId, CommonConstant.POINT_EXCHANGE_CODE_PREFIX, amount);
         for (int i = 0; i < amount; i++) {
             PointExchangeCodeSaveDTO pointExchangeCodeSaveDTO = new PointExchangeCodeSaveDTO();
             pointExchangeCodeSaveDTO.setBatchId(batchPO.getId());
@@ -183,8 +181,8 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
             pointExchangeCodeSaveDTO.setValidityPeriod(batchPO.getValidityPeriod());
             pointExchangeCodeSaveDTO.setPointEffectiveTime(batchPO.getPointEffectiveTime());
             pointExchangeCodeSaveDTO.setExpiryType(batchPO.getExpiryType());
-            pointExchangeCodeSaveDTO.setStatus(batchPO.getStatus());
-            pointExchangeCodeSaveDTO.setUsed(Byte.valueOf("0"));
+            pointExchangeCodeSaveDTO.setStatus(CommonConstant.CODE_STOP_USING);
+            pointExchangeCodeSaveDTO.setUsed(CommonConstant.CODE_NOT_USED);
             pointExchangeCodeSaveDTOS.add(pointExchangeCodeSaveDTO);
         }
         List<PointExchangeCodePO> pointExchangeCodePOList = pointExchangeCodeSaveDTOS.stream().map(PointExchangeCodeAdapter::DtoSave2Po).collect(Collectors.toList());
@@ -209,15 +207,6 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
         batchPO.setStatus(status);
         batchPO.setModTime(new Date());
         pointExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
-        //修改改批次下的兑换码启用停用状态
-        if (!batchPO.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
-            List<PointExchangeCodeDTO> codeDTOList = pointExchangeCodeService.getByBatchId(id);
-            boolean batchEmpty = codeDTOList.isEmpty();
-            //有码则修改对应的码信息
-            if (!batchEmpty) {
-                pointExchangeCodeService.batchChangeStatus(id, status);
-            }
-        }
     }
 
     @Override

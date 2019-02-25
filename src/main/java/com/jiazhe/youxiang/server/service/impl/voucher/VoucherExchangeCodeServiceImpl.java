@@ -18,9 +18,11 @@ import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeEditDTO;
+import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangerecord.VoucherExchangeRecordDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
+import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeCodeService;
 import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeRecordService;
 import com.jiazhe.youxiang.server.service.voucher.VoucherService;
@@ -53,6 +55,8 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
     private CustomerService customerService;
     @Autowired
     private VoucherExchangeRecordService voucherExchangeRecordService;
+    @Autowired
+    private VoucherExchangeCodeBatchService voucherExchangeCodeBatchService;
 
     @Override
     public List<VoucherExchangeCodeDTO> getByBatchId(Integer id) {
@@ -179,8 +183,9 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
         if (voucherExchangeCodePO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
             throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_HAS_STOPED_USING);
         }
-        if (voucherExchangeCodePO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
-            throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_HAS_STOPED_USING);
+        VoucherExchangeCodeBatchEditDTO voucherExchangeCodeBatchEditDTO = voucherExchangeCodeBatchService.getById(voucherExchangeCodePO.getBatchId());
+        if(voucherExchangeCodeBatchEditDTO.getStatus().equals(CommonConstant.CODE_STOP_USING)){
+            throw new VoucherException(VoucherCodeEnum.BATCH_HAS_STOPPED_USING);
         }
         if (voucherExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
             throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_HAS_USED);

@@ -80,6 +80,26 @@ public class APIRCExchangeCodeController extends BaseController{
         return ResponseFactory.buildPaginationResponse(rcExchangeCodeBatchRespList, paging);
     }
 
+    @RequiresPermissions(PermissionConstant.ALL_RC_CODE_STATUS_CHANGE)
+    @ApiOperation(value = "【后台】启用充值卡兑换码", httpMethod = "POST",notes = "启用充值卡兑换码，并启用已经兑换的充值卡")
+    @RequestMapping(value = "/allstartusing", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "启用充值卡兑换码", level = LogLevelEnum.LEVEL_2)
+    public Object allStartUsing(@ModelAttribute IdReq req) {
+        CommonValidator.validateId(req);
+        rcExchangeCodeBiz.allStartUsing(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
+    @RequiresPermissions(PermissionConstant.ALL_RC_CODE_STATUS_CHANGE)
+    @ApiOperation(value = "【后台】停用充值卡兑换码", httpMethod = "POST",notes = "停用充值卡兑换码，并停用已经兑换的充值卡")
+    @RequestMapping(value = "/allstopusing", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "停用充值卡兑换码", level = LogLevelEnum.LEVEL_2)
+    public Object allStopUsing(@ModelAttribute IdReq req) {
+        CommonValidator.validateId(req);
+        rcExchangeCodeBiz.allStopUsing(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
     @RequiresPermissions(value = {PermissionConstant.RC_CODE_STATUS_CHANGE, PermissionConstant.RECHARGE_CARD_CODE_SEARCH_STATUS_CHANGE}, logical = Logical.OR)
     @ApiOperation(value = "【后台】启用充值卡兑换码", httpMethod = "POST",notes = "启用充值卡兑换码，已经兑换的充值卡不能修改")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
