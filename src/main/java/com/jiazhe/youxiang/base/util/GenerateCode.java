@@ -52,6 +52,7 @@ public class GenerateCode {
      * @param n    兑换码个数
      * @return
      */
+    @Deprecated
     public static String[][] generateCode(String type, Integer n) {
         String[][] result = new String[2][n];
         Calendar now = Calendar.getInstance();

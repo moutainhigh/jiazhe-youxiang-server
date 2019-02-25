@@ -139,8 +139,8 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
             voucherExchangeCodeSaveDTO.setVoucherExpiryTime(batchPO.getVoucherExpiryTime());
             voucherExchangeCodeSaveDTO.setValidityPeriod(batchPO.getValidityPeriod());
             voucherExchangeCodeSaveDTO.setExpiryType(batchPO.getExpiryType());
-            voucherExchangeCodeSaveDTO.setStatus(batchPO.getStatus());
-            voucherExchangeCodeSaveDTO.setUsed(CommonConstant.CODE_STOP_USING);
+            voucherExchangeCodeSaveDTO.setStatus(CommonConstant.CODE_STOP_USING);
+            voucherExchangeCodeSaveDTO.setUsed(CommonConstant.CODE_NOT_USED);
             voucherExchangeCodeSaveDTOList.add(voucherExchangeCodeSaveDTO);
         }
         List<VoucherExchangeCodePO> voucherExchangeCodePOList = voucherExchangeCodeSaveDTOList.stream().map(VoucherExchangeCodeAdapter::DTOSave2PO).collect(Collectors.toList());
