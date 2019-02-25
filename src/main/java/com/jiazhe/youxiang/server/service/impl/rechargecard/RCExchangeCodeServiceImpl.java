@@ -17,10 +17,12 @@ import com.jiazhe.youxiang.server.domain.po.RechargeCardPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeEditDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord.RCExchangeRecordDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
+import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeRecordService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCService;
@@ -50,6 +52,8 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
     private RCService rcService;
     @Autowired
     private RCExchangeRecordService rcExchangeRecordService;
+    @Autowired
+    private RCExchangeCodeBatchService rcExchangeCodeBatchService;
     @Autowired
     private CustomerService customerService;
 
@@ -83,6 +87,10 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         }
         if (rechargeCardExchangeCodePO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_HAS_STOPED_USING);
+        }
+        RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchService.getById(rechargeCardExchangeCodePO.getBatchId());
+        if(rcExchangeCodeBatchEditDTO.getStatus().equals(CommonConstant.CODE_STOP_USING)){
+            throw new RechargeCardException(RechargeCardCodeEnum.BATCH_HAS_STOPPED_USING);
         }
         if (rechargeCardExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_HAS_USED);
@@ -245,6 +253,12 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         po.setProductIds(dto.getProductIds());
         po.setAddTime(new Date());
         rechargeCardExchangeCodePOMapper.updateByPrimaryKeySelective(po);
+    }
+
+    @Override
+    public void batchUpdateCodeAndKeyt(List<RCExchangeCodeDTO> rcExchangeCodeDTOS) {
+        List<RechargeCardExchangeCodePO> poList = rcExchangeCodeDTOS.stream().map(RCExchangeCodeAdapter::dto2Po).collect(Collectors.toList());
+        rcExchangeCodePOManualMapper.batchUpdateCodeAndKeyt(poList);
     }
 
     @Override

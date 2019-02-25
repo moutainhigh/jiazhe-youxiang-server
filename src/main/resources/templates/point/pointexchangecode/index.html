@@ -81,7 +81,14 @@
 
                     <div class="col-xs-12" style="text-align: right" id="buttonDiv">
                         <p style="margin:1px;height: 31px">
-
+                            <shiro:hasPermission name="allPointCodeStatusChange">
+                                <a class="btn btn-success btn-round btn-sm" title="并启用已经兑换成的积分卡" role="button" onclick="allStartUsing()">
+                                    启用所有码
+                                </a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a class="btn btn-success btn-round btn-sm" title="并停用已经兑换成的积分卡" role="button" onclick="allStopUsing()">
+                                    停用所有码
+                                </a>
+                            </shiro:hasPermission>
                         </p>
                     </div><!-- /.col -->
 
@@ -138,7 +145,8 @@
                                                            for="savePointEffectiveTime">积分卡生效时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
-                                                            <input class="form-control date-picker" id="savePointEffectiveTime"
+                                                            <input class="form-control date-picker"
+                                                                   id="savePointEffectiveTime"
                                                                    type="text" readonly/>
                                                             <span class="input-group-addon">
                                                                         <i class="fa fa-calendar bigger-110"></i>
@@ -290,7 +298,7 @@
         var tableOption = {
             url: "/api/pointexchangecode/listpage",
             postData: transformToJson($('#pointExchangeCodeSearchForm').serializeArray()),
-            colNames: ['', '批次名称', '积分卡名称', '兑换码', '密钥', '启用状态', '使用状态','客户电话', '面额','兑换比例', '兑换码过期时间','充值卡生效时间', '操作'],
+            colNames: ['', '批次名称', '积分卡名称', '兑换码', '密钥', '启用状态', '使用状态', '客户电话', '面额', '兑换比例', '兑换码过期时间', '充值卡生效时间', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'batchName', index: 'batchName', width: 100, sortable: false},
@@ -315,13 +323,18 @@
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         var text = rowObject.used == 1 ? "已使用" : "未使用";
-                        var color = rowObject.used == 1 ?  "FF0000" : "00FF00";
+                        var color = rowObject.used == 1 ? "FF0000" : "00FF00";
                         return generateSpan(text, color)
                     }
                 },
                 {name: 'customerResp.mobile', index: 'customerResp.mobile', width: 60, sortable: false},
                 {name: 'faceValue', index: 'faceValue', width: 30, sortable: false},
-                {name: 'projectResp.pointConversionRate', index: 'projectResp.pointConversionRate', width: 30, sortable: false},
+                {
+                    name: 'projectResp.pointConversionRate',
+                    index: 'projectResp.pointConversionRate',
+                    width: 30,
+                    sortable: false
+                },
                 {
                     name: 'expiryTime',
                     index: 'expiryTime',
@@ -465,6 +478,40 @@
                     $("#modal-form").modal('show');
                 }
             },
+            error: error
+        });
+    }
+
+    function allStartUsing() {
+        var id = $("#searchBatchId").val();
+        var url = "/api/pointexchangecode/allstartusing";
+        confirm("确定要启用所有兑换码？", function (result) {
+            if (result) {
+                allChangeStatus(id, url);
+            }
+        })
+    }
+
+    function allStopUsing() {
+        var id = $("#searchBatchId").val();
+        var url = "/api/pointexchangecode/allstopusing";
+        confirm("确定要停用所有兑换码？", function (result) {
+            if (result) {
+                allChangeStatus(id, url);
+            }
+        })
+    }
+
+    function allChangeStatus(id, url) {
+        $.ajax({
+            url: url,
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "POST",
+            success: success,
             error: error
         });
     }

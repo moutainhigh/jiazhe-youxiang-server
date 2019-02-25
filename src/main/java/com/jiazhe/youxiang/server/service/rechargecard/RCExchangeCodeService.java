@@ -96,4 +96,6 @@ public interface RCExchangeCodeService {
     RCExchangeCodeDTO getById(Integer id);
 
     void editSave(RCExchangeCodeEditDTO dto);
+
+    void batchUpdateCodeAndKeyt(List<RCExchangeCodeDTO> rcExchangeCodeDTOS);
 }

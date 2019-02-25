@@ -49,4 +49,17 @@ public interface RCExchangeCodePOManualMapper {
      * @return
      */
     List<RechargeCardExchangeCodePO> query(@Param("batchId") Integer batchId, @Param("code") String code, @Param("keyt") String keyt, @Param("status") Byte status, @Param("used") Byte used, @Param("offset") Integer offset, @Param("limit") Integer limit);
+
+    /**
+     * 获取已有的最大id
+     * @return
+     */
+    Integer getMaxId();
+
+    /**
+     * 批量更新code和keyt
+     * @param poList
+     */
+    void batchUpdateCodeAndKeyt(List<RechargeCardExchangeCodePO> poList);
+
 }

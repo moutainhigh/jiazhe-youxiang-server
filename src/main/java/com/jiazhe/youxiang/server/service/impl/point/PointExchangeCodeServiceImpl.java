@@ -10,16 +10,21 @@ import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.common.exceptions.PointException;
 import com.jiazhe.youxiang.server.dao.mapper.PointExchangeCodePOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.point.PointExchangeCodePOManualMapper;
-import com.jiazhe.youxiang.server.domain.po.*;
+import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
+import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePOExample;
+import com.jiazhe.youxiang.server.domain.po.PointExchangeRecordPO;
+import com.jiazhe.youxiang.server.domain.po.PointPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeEditDTO;
+import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangerecord.PointExchangeRecordDTO;
 import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.ProjectService;
+import com.jiazhe.youxiang.server.service.point.PointExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeRecordService;
 import com.jiazhe.youxiang.server.service.point.PointService;
@@ -47,6 +52,8 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     private PointExchangeCodePOManualMapper pointExchangeCodePOManualMapper;
     @Autowired
     private PointExchangeRecordService pointExchangeRecordService;
+    @Autowired
+    private PointExchangeCodeBatchService pointExchangeCodeBatchService;
     @Autowired
     private PointService pointService;
     @Autowired
@@ -180,6 +187,10 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         if (pointExchangeCodePO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_STOPED_USING);
         }
+        PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO = pointExchangeCodeBatchService.getById(pointExchangeCodePO.getBatchId());
+        if(pointExchangeCodeBatchEditDTO.getStatus().equals(CommonConstant.CODE_STOP_USING)){
+            throw new PointException(PointCodeEnum.BATCH_HAS_STOPPED_USING);
+        }
         if (pointExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_USED);
         }
@@ -244,5 +255,16 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     public PointExchangeCodePO findByKeyt(String keyt) {
         PointExchangeCodePO pointExchangeCodePO = pointExchangeCodePOManualMapper.findByKeyt(keyt);
         return pointExchangeCodePO;
+    }
+
+    @Override
+    public Integer getMaxId() {
+        return pointExchangeCodePOManualMapper.getMaxId();
+    }
+
+    @Override
+    public void batchUpdateCodeAndKeyt(List<PointExchangeCodeDTO> pointExchangeCodeDTOS) {
+        List<PointExchangeCodePO> poList = pointExchangeCodeDTOS.stream().map(PointExchangeCodeAdapter::dto2Po).collect(Collectors.toList());
+        pointExchangeCodePOManualMapper.batchUpdateCodeAndKeyt(poList);
     }
 }

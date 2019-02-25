@@ -139,7 +139,7 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
     }
 
     @RequiresPermissions(PermissionConstant.VOUCHER_BATCH_STATUS_CHANGE)
-    @ApiOperation(value = "启用批次【同时改变批次下兑换码状态】", httpMethod = "POST", notes = "启用批次【同时改变批次下兑换码状态】")
+    @ApiOperation(value = "启用批次", httpMethod = "POST", notes = "启用批次【不改变批次下兑换码状态】")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "启用批次", level = LogLevelEnum.LEVEL_2)
     public Object startUsing(@ModelAttribute IdReq req) {
@@ -149,7 +149,7 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
     }
 
     @RequiresPermissions(PermissionConstant.VOUCHER_BATCH_STATUS_CHANGE)
-    @ApiOperation(value = "停用批次【同时改变批次下兑换码状态】", httpMethod = "POST", notes = "停用批次【同时改变批次下兑换码状态】")
+    @ApiOperation(value = "停用批次", httpMethod = "POST", notes = "停用批次【不改变批次下兑换码状态】")
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "停用批次", level = LogLevelEnum.LEVEL_2)
     public Object stopUsing(@ModelAttribute IdReq req) {

@@ -116,4 +116,28 @@ public class VoucherExchangeCodeBatchAdapter {
         voucherExchangeCodeBatchPO.setDescription(voucherExchangeCodeBatchSaveDTO.getDescription());
         return voucherExchangeCodeBatchPO;
     }
+
+    public static VoucherExchangeCodeBatchEditDTO po2DtoEdit(VoucherExchangeCodeBatchPO voucherExchangeCodeBatchPO) {
+        if (voucherExchangeCodeBatchPO == null) {
+            return null;
+        }
+        VoucherExchangeCodeBatchEditDTO voucherExchangeCodeBatchEditDTO = new VoucherExchangeCodeBatchEditDTO();
+        voucherExchangeCodeBatchEditDTO.setId(voucherExchangeCodeBatchPO.getId());
+        voucherExchangeCodeBatchEditDTO.setName(voucherExchangeCodeBatchPO.getName());
+        voucherExchangeCodeBatchEditDTO.setVoucherName(voucherExchangeCodeBatchPO.getVoucherName());
+        voucherExchangeCodeBatchEditDTO.setProjectId(voucherExchangeCodeBatchPO.getProjectId());
+        voucherExchangeCodeBatchEditDTO.setIsMade(voucherExchangeCodeBatchPO.getIsMade());
+        voucherExchangeCodeBatchEditDTO.setStatus(voucherExchangeCodeBatchPO.getStatus());
+        voucherExchangeCodeBatchEditDTO.setDescription(voucherExchangeCodeBatchPO.getDescription());
+        voucherExchangeCodeBatchEditDTO.setAmount(voucherExchangeCodeBatchPO.getAmount());
+        voucherExchangeCodeBatchEditDTO.setCityCodes(voucherExchangeCodeBatchPO.getCityCodes());
+        voucherExchangeCodeBatchEditDTO.setProductIds(voucherExchangeCodeBatchPO.getProductIds());
+        voucherExchangeCodeBatchEditDTO.setCount(voucherExchangeCodeBatchPO.getCount());
+        voucherExchangeCodeBatchEditDTO.setExpiryTime(voucherExchangeCodeBatchPO.getExpiryTime());
+        voucherExchangeCodeBatchEditDTO.setVoucherEffectiveTime(voucherExchangeCodeBatchPO.getVoucherEffectiveTime());
+        voucherExchangeCodeBatchEditDTO.setVoucherExpiryTime(voucherExchangeCodeBatchPO.getVoucherExpiryTime());
+        voucherExchangeCodeBatchEditDTO.setValidityPeriod(voucherExchangeCodeBatchPO.getValidityPeriod());
+        voucherExchangeCodeBatchEditDTO.setExpiryType(voucherExchangeCodeBatchPO.getExpiryType());
+        return voucherExchangeCodeBatchEditDTO;
+    }
 }

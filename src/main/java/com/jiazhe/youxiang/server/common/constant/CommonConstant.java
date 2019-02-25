@@ -131,7 +131,7 @@ public class CommonConstant {
     public static final Byte RECHARGE_CARD_EXPIRY_PERIOD = Byte.valueOf("1");
 
     /**
-     * 优惠券过期时间来源,0为直接指定过期时间，1为指定兑换之日起有效期天数
+     * 代金券过期时间来源,0为直接指定过期时间，1为指定兑换之日起有效期天数
      */
     public static final Byte VOUCHER_EXPIRY_TIME = Byte.valueOf("0");
     public static final Byte VOUCHER_EXPIRY_PERIOD = Byte.valueOf("1");
@@ -141,6 +141,12 @@ public class CommonConstant {
      */
     public static final Byte CODE_START_USING = Byte.valueOf("1");
     public static final Byte CODE_STOP_USING = Byte.valueOf("0");
+
+    /**
+     * 兑换码是否生成
+     */
+    public static final Byte CODE_HAS_MADE = Byte.valueOf("1");
+    public static final Byte CODE_NOT_MADE = Byte.valueOf("0");
 
     /**
      * 兑换方式【0-后台兑换码兑换，1-客户自行兑换码兑换，2-直接充值，3-审核系统来的,4-二维码兑换】
