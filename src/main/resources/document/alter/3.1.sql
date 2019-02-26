@@ -29,10 +29,6 @@ update audit_record set exchange_type = 1 where temp_col = '服务';
 update audit_record set exchange_type = 3 where temp_col = '电子卡';
 alter table audit_record drop column temp_col;
 
-
-
-
-drop table if exists `charge_receipt`;
 CREATE TABLE `charge_receipt` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `audit_record_id` INT(10) UNSIGNED NOT NULL COMMENT '兑换审核信息表主键',
