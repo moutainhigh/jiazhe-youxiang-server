@@ -474,7 +474,6 @@ CREATE TABLE `audit_record` (
     `exchange_type` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '兑换类型 1是直接充值，2是兑换积分卡，3是兑换购物卡',
     `exchange_point` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '总兑换积分',
     `img_urls` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '图片地址，以逗号隔开',
-    `submitter_remark` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '提交人备注信息',
     `submitter_id` INT(10) UNSIGNED NOT NULL COMMENT '提交人id',
     `submitter_name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '提交人姓名',
     `customer_name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '客户姓名',
