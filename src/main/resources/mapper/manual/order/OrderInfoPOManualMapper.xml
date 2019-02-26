@@ -68,7 +68,7 @@
                 AND c.mobile = #{mobile}
             </if>
             <if test="customerMobile != null and customerMobile !=''">
-                AND o.customer_mobile = #{mobile}
+                AND o.customer_mobile = #{mobile}11
             </if>
             <if test="orderStartTime != null">
                 AND o.order_time &gt;= #{orderStartTime}
