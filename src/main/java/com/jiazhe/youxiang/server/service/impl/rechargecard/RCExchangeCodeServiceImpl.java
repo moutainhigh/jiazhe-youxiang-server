@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.service.impl.rechargecard;
 
 import com.jiazhe.youxiang.base.util.DateUtil;
+import com.jiazhe.youxiang.base.util.ExchangeCodeCheckUtil;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
@@ -80,7 +81,10 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void codeCharge(Integer type, Integer id, String keyt)  {
+    public void codeCharge(Integer type, Integer id, String keyt) {
+        if (!ExchangeCodeCheckUtil.keytCheck(CommonConstant.RC_EXCHANGE_CODE_PREFIX, keyt)) {
+            throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
+        }
         RechargeCardExchangeCodePO rechargeCardExchangeCodePO = findByKeyt(keyt);
         if (null == rechargeCardExchangeCodePO) {
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
@@ -89,7 +93,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_HAS_STOPED_USING);
         }
         RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchService.getById(rechargeCardExchangeCodePO.getBatchId());
-        if(rcExchangeCodeBatchEditDTO.getStatus().equals(CommonConstant.CODE_STOP_USING)){
+        if (rcExchangeCodeBatchEditDTO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
             throw new RechargeCardException(RechargeCardCodeEnum.BATCH_HAS_STOPPED_USING);
         }
         if (rechargeCardExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_USED)) {

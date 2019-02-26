@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.service.impl.point;
 
 import com.jiazhe.youxiang.base.util.DateUtil;
+import com.jiazhe.youxiang.base.util.ExchangeCodeCheckUtil;
 import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
@@ -129,7 +130,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         dtoList.stream().forEach(bean -> {
             ProjectDTO projectDTO = projectService.getById(bean.getProjectId());
             bean.setProjectDTO(projectDTO);
-            if(null != bean.getCustomerId()){
+            if (null != bean.getCustomerId()) {
                 CustomerDTO customerDTO = customerService.getById(bean.getCustomerId());
                 bean.setCustomerDTO(customerDTO);
             }
@@ -179,7 +180,10 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     }
 
     @Override
-    public void codeCharge(Integer type, Integer id, String keyt)  {
+    public void codeCharge(Integer type, Integer id, String keyt) {
+        if (!ExchangeCodeCheckUtil.keytCheck(CommonConstant.POINT_EXCHANGE_CODE_PREFIX, keyt)) {
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
+        }
         PointExchangeCodePO pointExchangeCodePO = findByKeyt(keyt);
         if (null == pointExchangeCodePO) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
@@ -188,7 +192,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_STOPED_USING);
         }
         PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO = pointExchangeCodeBatchService.getById(pointExchangeCodePO.getBatchId());
-        if(pointExchangeCodeBatchEditDTO.getStatus().equals(CommonConstant.CODE_STOP_USING)){
+        if (pointExchangeCodeBatchEditDTO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
             throw new PointException(PointCodeEnum.BATCH_HAS_STOPPED_USING);
         }
         if (pointExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_USED)) {

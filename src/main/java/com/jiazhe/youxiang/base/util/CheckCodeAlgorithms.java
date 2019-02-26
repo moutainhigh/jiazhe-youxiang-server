@@ -37,6 +37,6 @@ public class CheckCodeAlgorithms {
     }
 
     public static void main(String[] args) {
-        System.out.println(getValidateCode("111111111111114"));
+        System.out.println(getValidateCode("2000284"));
     }
 }

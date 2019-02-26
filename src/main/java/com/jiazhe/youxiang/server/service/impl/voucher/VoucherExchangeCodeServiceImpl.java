@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.service.impl.voucher;
 
 import com.jiazhe.youxiang.base.util.DateUtil;
+import com.jiazhe.youxiang.base.util.ExchangeCodeCheckUtil;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
@@ -175,7 +176,10 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void codeCharge(Integer exchangeType, Integer id, String keyt)  {
+    public void codeCharge(Integer exchangeType, Integer id, String keyt) {
+        if (!ExchangeCodeCheckUtil.keytCheck(CommonConstant.VOUCHER_EXCHANGE_CODE_PREFIX, keyt)) {
+            throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
+        }
         VoucherExchangeCodePO voucherExchangeCodePO = findByKeyt(keyt);
         if (null == voucherExchangeCodePO) {
             throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
@@ -184,7 +188,7 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
             throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_HAS_STOPED_USING);
         }
         VoucherExchangeCodeBatchEditDTO voucherExchangeCodeBatchEditDTO = voucherExchangeCodeBatchService.getById(voucherExchangeCodePO.getBatchId());
-        if(voucherExchangeCodeBatchEditDTO.getStatus().equals(CommonConstant.CODE_STOP_USING)){
+        if (voucherExchangeCodeBatchEditDTO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
             throw new VoucherException(VoucherCodeEnum.BATCH_HAS_STOPPED_USING);
         }
         if (voucherExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
