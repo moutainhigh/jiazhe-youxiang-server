@@ -7,7 +7,6 @@
     <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
     <result column="customer_mobile" property="customerMobile" jdbcType="VARCHAR" />
     <result column="exchange_point" property="exchangePoint" jdbcType="DECIMAL" />
-    <result column="exchange_type" property="exchangeType" jdbcType="VARCHAR" />
     <result column="giving_point" property="givingPoint" jdbcType="DECIMAL" />
     <result column="giving_type" property="givingType" jdbcType="VARCHAR" />
     <result column="audit_reason" property="auditReason" jdbcType="VARCHAR" />
@@ -28,6 +27,10 @@
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
     <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
     <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
+    <result column="charge_receipt_status" property="chargeReceiptStatus" jdbcType="TINYINT" />
+    <result column="point_codes" property="pointCodes" jdbcType="VARCHAR" />
+    <result column="product_value" property="productValue" jdbcType="DECIMAL" />
+    <result column="exchange_type" property="exchangeType" jdbcType="TINYINT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -88,10 +91,11 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, point_ids, customer_name, customer_mobile, exchange_point, exchange_type, giving_point, 
-    giving_type, audit_reason, remark, img_urls, pos_code, trade_time, card_no, bank_outlets_name, 
+    id, point_ids, customer_name, customer_mobile, exchange_point, giving_point, giving_type, 
+    audit_reason, remark, img_urls, pos_code, trade_time, card_no, bank_outlets_name, 
     submitter_id, submitter_name, status, audit_time, auditor_id, auditor_name, version, 
-    ext_info, is_deleted, add_time, mod_time
+    ext_info, is_deleted, add_time, mod_time, charge_receipt_status, point_codes, product_value, 
+    exchange_type
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.AuditRecordPOExample" >
     select
@@ -125,23 +129,25 @@
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.AuditRecordPO" >
     insert into audit_record (id, point_ids, customer_name, 
-      customer_mobile, exchange_point, exchange_type, 
-      giving_point, giving_type, audit_reason, 
-      remark, img_urls, pos_code, 
-      trade_time, card_no, bank_outlets_name, 
-      submitter_id, submitter_name, status, 
-      audit_time, auditor_id, auditor_name, 
-      version, ext_info, is_deleted, 
-      add_time, mod_time)
+      customer_mobile, exchange_point, giving_point, 
+      giving_type, audit_reason, remark, 
+      img_urls, pos_code, trade_time, 
+      card_no, bank_outlets_name, submitter_id, 
+      submitter_name, status, audit_time, 
+      auditor_id, auditor_name, version, 
+      ext_info, is_deleted, add_time, 
+      mod_time, charge_receipt_status, point_codes, 
+      product_value, exchange_type)
     values (#{id,jdbcType=INTEGER}, #{pointIds,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, 
-      #{customerMobile,jdbcType=VARCHAR}, #{exchangePoint,jdbcType=DECIMAL}, #{exchangeType,jdbcType=VARCHAR}, 
-      #{givingPoint,jdbcType=DECIMAL}, #{givingType,jdbcType=VARCHAR}, #{auditReason,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{imgUrls,jdbcType=VARCHAR}, #{posCode,jdbcType=VARCHAR}, 
-      #{tradeTime,jdbcType=TIMESTAMP}, #{cardNo,jdbcType=VARCHAR}, #{bankOutletsName,jdbcType=VARCHAR}, 
-      #{submitterId,jdbcType=INTEGER}, #{submitterName,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
-      #{auditTime,jdbcType=TIMESTAMP}, #{auditorId,jdbcType=INTEGER}, #{auditorName,jdbcType=VARCHAR}, 
-      #{version,jdbcType=INTEGER}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
-      #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
+      #{customerMobile,jdbcType=VARCHAR}, #{exchangePoint,jdbcType=DECIMAL}, #{givingPoint,jdbcType=DECIMAL}, 
+      #{givingType,jdbcType=VARCHAR}, #{auditReason,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{imgUrls,jdbcType=VARCHAR}, #{posCode,jdbcType=VARCHAR}, #{tradeTime,jdbcType=TIMESTAMP}, 
+      #{cardNo,jdbcType=VARCHAR}, #{bankOutletsName,jdbcType=VARCHAR}, #{submitterId,jdbcType=INTEGER}, 
+      #{submitterName,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{auditTime,jdbcType=TIMESTAMP}, 
+      #{auditorId,jdbcType=INTEGER}, #{auditorName,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, 
+      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{modTime,jdbcType=TIMESTAMP}, #{chargeReceiptStatus,jdbcType=TINYINT}, #{pointCodes,jdbcType=VARCHAR}, 
+      #{productValue,jdbcType=DECIMAL}, #{exchangeType,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.AuditRecordPO" >
     insert into audit_record
@@ -160,9 +166,6 @@
       </if>
       <if test="exchangePoint != null" >
         exchange_point,
-      </if>
-      <if test="exchangeType != null" >
-        exchange_type,
       </if>
       <if test="givingPoint != null" >
         giving_point,
@@ -224,6 +227,18 @@
       <if test="modTime != null" >
         mod_time,
       </if>
+      <if test="chargeReceiptStatus != null" >
+        charge_receipt_status,
+      </if>
+      <if test="pointCodes != null" >
+        point_codes,
+      </if>
+      <if test="productValue != null" >
+        product_value,
+      </if>
+      <if test="exchangeType != null" >
+        exchange_type,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -240,9 +255,6 @@
       </if>
       <if test="exchangePoint != null" >
         #{exchangePoint,jdbcType=DECIMAL},
-      </if>
-      <if test="exchangeType != null" >
-        #{exchangeType,jdbcType=VARCHAR},
       </if>
       <if test="givingPoint != null" >
         #{givingPoint,jdbcType=DECIMAL},
@@ -304,6 +316,18 @@
       <if test="modTime != null" >
         #{modTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="chargeReceiptStatus != null" >
+        #{chargeReceiptStatus,jdbcType=TINYINT},
+      </if>
+      <if test="pointCodes != null" >
+        #{pointCodes,jdbcType=VARCHAR},
+      </if>
+      <if test="productValue != null" >
+        #{productValue,jdbcType=DECIMAL},
+      </if>
+      <if test="exchangeType != null" >
+        #{exchangeType,jdbcType=TINYINT},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jiazhe.youxiang.server.domain.po.AuditRecordPOExample" resultType="java.lang.Integer" >
@@ -329,9 +353,6 @@
       </if>
       <if test="record.exchangePoint != null" >
         exchange_point = #{record.exchangePoint,jdbcType=DECIMAL},
-      </if>
-      <if test="record.exchangeType != null" >
-        exchange_type = #{record.exchangeType,jdbcType=VARCHAR},
       </if>
       <if test="record.givingPoint != null" >
         giving_point = #{record.givingPoint,jdbcType=DECIMAL},
@@ -393,6 +414,18 @@
       <if test="record.modTime != null" >
         mod_time = #{record.modTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.chargeReceiptStatus != null" >
+        charge_receipt_status = #{record.chargeReceiptStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.pointCodes != null" >
+        point_codes = #{record.pointCodes,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productValue != null" >
+        product_value = #{record.productValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.exchangeType != null" >
+        exchange_type = #{record.exchangeType,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -405,7 +438,6 @@
       customer_name = #{record.customerName,jdbcType=VARCHAR},
       customer_mobile = #{record.customerMobile,jdbcType=VARCHAR},
       exchange_point = #{record.exchangePoint,jdbcType=DECIMAL},
-      exchange_type = #{record.exchangeType,jdbcType=VARCHAR},
       giving_point = #{record.givingPoint,jdbcType=DECIMAL},
       giving_type = #{record.givingType,jdbcType=VARCHAR},
       audit_reason = #{record.auditReason,jdbcType=VARCHAR},
@@ -425,7 +457,11 @@
       ext_info = #{record.extInfo,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=TINYINT},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
-      mod_time = #{record.modTime,jdbcType=TIMESTAMP}
+      mod_time = #{record.modTime,jdbcType=TIMESTAMP},
+      charge_receipt_status = #{record.chargeReceiptStatus,jdbcType=TINYINT},
+      point_codes = #{record.pointCodes,jdbcType=VARCHAR},
+      product_value = #{record.productValue,jdbcType=DECIMAL},
+      exchange_type = #{record.exchangeType,jdbcType=TINYINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -444,9 +480,6 @@
       </if>
       <if test="exchangePoint != null" >
         exchange_point = #{exchangePoint,jdbcType=DECIMAL},
-      </if>
-      <if test="exchangeType != null" >
-        exchange_type = #{exchangeType,jdbcType=VARCHAR},
       </if>
       <if test="givingPoint != null" >
         giving_point = #{givingPoint,jdbcType=DECIMAL},
@@ -508,6 +541,18 @@
       <if test="modTime != null" >
         mod_time = #{modTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="chargeReceiptStatus != null" >
+        charge_receipt_status = #{chargeReceiptStatus,jdbcType=TINYINT},
+      </if>
+      <if test="pointCodes != null" >
+        point_codes = #{pointCodes,jdbcType=VARCHAR},
+      </if>
+      <if test="productValue != null" >
+        product_value = #{productValue,jdbcType=DECIMAL},
+      </if>
+      <if test="exchangeType != null" >
+        exchange_type = #{exchangeType,jdbcType=TINYINT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -517,7 +562,6 @@
       customer_name = #{customerName,jdbcType=VARCHAR},
       customer_mobile = #{customerMobile,jdbcType=VARCHAR},
       exchange_point = #{exchangePoint,jdbcType=DECIMAL},
-      exchange_type = #{exchangeType,jdbcType=VARCHAR},
       giving_point = #{givingPoint,jdbcType=DECIMAL},
       giving_type = #{givingType,jdbcType=VARCHAR},
       audit_reason = #{auditReason,jdbcType=VARCHAR},
@@ -537,7 +581,11 @@
       ext_info = #{extInfo,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=TINYINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},
-      mod_time = #{modTime,jdbcType=TIMESTAMP}
+      mod_time = #{modTime,jdbcType=TIMESTAMP},
+      charge_receipt_status = #{chargeReceiptStatus,jdbcType=TINYINT},
+      point_codes = #{pointCodes,jdbcType=VARCHAR},
+      product_value = #{productValue,jdbcType=DECIMAL},
+      exchange_type = #{exchangeType,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

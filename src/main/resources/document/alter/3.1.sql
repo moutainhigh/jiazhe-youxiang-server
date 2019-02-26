@@ -16,7 +16,7 @@ alter table audit_record add column product_value DECIMAL(8 , 2 ) NOT NULL DEFAU
 alter table audit_record modify column point_ids VARCHAR(1023) COMMENT '当兑换类型为1时，记录积分卡id集合';
 alter table audit_record modify column audit_reason VARCHAR(100) COMMENT '驳回理由';
 alter table audit_record modify column remark VARCHAR(1023) COMMENT '提交人填写备注信息';
-alter table audit_record modify column exchange_point DECIMAL COMMENT '总兑换积分';
+alter table audit_record modify column exchange_point DECIMAL(8 , 2 ) COMMENT '总兑换积分';
 
 alter table audit_record modify column status  TINYINT COMMENT '审核状态 1-已保存，2-已提交，3-已驳回，4-已通过';
 update audit_record set status=status+2;
