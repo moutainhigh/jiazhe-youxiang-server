@@ -209,6 +209,12 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"> 【积分卡有效期】</label>
+                                                    <div class="col-sm-8"></div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">
                                                         <input id="saveDeadLineRadio" type="radio"
                                                                name="expiryTypeRadio"
@@ -516,11 +522,14 @@
         $("#batchSaveForm #saveFaceValue").val("");
         $("#batchSaveForm #saveAmount").val("");
         $("#batchSaveForm #saveExpiryTime").val("");
+        $("#batchSaveForm #saveExpiryTime").datepicker('update');
         $("#batchSaveForm #saveExpiryTime").next().next().val(0);
-        $("#batchSaveForm #savePointEffectiveTime").val("");
-        $("#batchSaveForm #savePointEffectiveTime").next().next().val(0);
         $("#batchSaveForm #saveDeadLineRadio").click();
+        $("#batchSaveForm #savePointEffectiveTime").val("");
+        $("#batchSaveForm #savePointEffectiveTime").datepicker('update');
+        $("#batchSaveForm #savePointEffectiveTime").next().next().val(0);
         $("#batchSaveForm #savePointExpiryTime").val("");
+        $("#batchSaveForm #savePointExpiryTime").datepicker('update');
         $("#batchSaveForm #savePointExpiryTime").next().next().val(0);
         $("#batchSaveForm #saveValidityPeriod").val("");
         $("#batchSaveForm #saveDescription").val("");

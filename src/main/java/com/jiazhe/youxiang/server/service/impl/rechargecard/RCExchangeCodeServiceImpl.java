@@ -67,7 +67,6 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
     public void changeCodeStatus(Integer id, Byte status) {
         RechargeCardExchangeCodePO rechargeCardExchangeCodePO = rechargeCardExchangeCodePOMapper.selectByPrimaryKey(id);
         rechargeCardExchangeCodePO.setStatus(status);
-        rechargeCardExchangeCodePO.setModTime(new Date());
         rechargeCardExchangeCodePOMapper.updateByPrimaryKeySelective(rechargeCardExchangeCodePO);
     }
 
@@ -110,8 +109,12 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         //直接指定过期时间
         if (rechargeCardExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
             rechargeCardPO.setExpiryTime(rechargeCardExchangeCodePO.getRechargeCardExpiryTime());
-        } else {
+        }
+        if (rechargeCardExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXCHANGE_PERIOD)) {
             rechargeCardPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + rechargeCardExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY)));
+        }
+        if (rechargeCardExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_ACTIVE_PERIOD)) {
+            rechargeCardPO.setExpiryTime(new Date(DateUtil.getLastSecond(rechargeCardExchangeCodePO.getModTime().getTime() + rechargeCardExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY)));
         }
         rechargeCardPO.setEffectiveTime(rechargeCardExchangeCodePO.getRechargeCardEffectiveTime());
         rechargeCardPO.setEffectiveTime(rechargeCardExchangeCodePO.getRechargeCardEffectiveTime());
