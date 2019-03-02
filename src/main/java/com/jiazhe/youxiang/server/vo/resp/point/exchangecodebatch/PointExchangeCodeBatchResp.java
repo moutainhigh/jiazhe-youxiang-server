@@ -33,8 +33,17 @@ public class PointExchangeCodeBatchResp extends BaseVO{
     @ApiModelProperty("批次过期时间")
     private Long expiryTime;
 
+    @ApiModelProperty("积分卡过期类型")
+    private Byte expiryType;
+
     @ApiModelProperty("积分卡生效时间")
     private Long pointEffectiveTime;
+
+    @ApiModelProperty("积分卡过期时间")
+    private Long pointExpiryTime;
+
+    @ApiModelProperty("积分卡有效天数")
+    private Integer validityPeriod;
 
     @ApiModelProperty("批次状态，0停用、1启用")
     private Byte status;
@@ -148,5 +157,29 @@ public class PointExchangeCodeBatchResp extends BaseVO{
 
     public void setPointEffectiveTime(Long pointEffectiveTime) {
         this.pointEffectiveTime = pointEffectiveTime;
+    }
+
+    public Byte getExpiryType() {
+        return expiryType;
+    }
+
+    public void setExpiryType(Byte expiryType) {
+        this.expiryType = expiryType;
+    }
+
+    public Long getPointExpiryTime() {
+        return pointExpiryTime;
+    }
+
+    public void setPointExpiryTime(Long pointExpiryTime) {
+        this.pointExpiryTime = pointExpiryTime;
+    }
+
+    public Integer getValidityPeriod() {
+        return validityPeriod;
+    }
+
+    public void setValidityPeriod(Integer validityPeriod) {
+        this.validityPeriod = validityPeriod;
     }
 }

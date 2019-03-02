@@ -89,10 +89,9 @@
                                                 <input type="hidden" name="id" id="batchId">
                                                 <input type="hidden" name="productIds" id="saveProductIds">
                                                 <input type="hidden" name="cityCodes" id="saveCityCodes">
-                                                <input type="hidden" name="expiryType" id="saveExpiryType" value=0>
-                                                <input type="hidden" name="isVirtual" id="saveIsVirtual" value=0>
-                                                <input type="hidden" name="validityPeriod" id="saveValidityPeriod"
-                                                       value=0>
+                                                <input type="hidden" name="expiryType" value=0 id="saveExpiryType">
+                                                <input type="hidden" name="isVirtual" value=0 id="saveIsVirtual">
+                                                <input type="hidden" name="validityPeriod" value=0 id="saveValidityPeriod">
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">批次名称：</label>
                                                     <div class="col-sm-8">
@@ -383,7 +382,7 @@
         var tableOption = {
             url: "/api/pointexchangecodebatch/listpage",
             postData: transformToJson($('#batchSearchForm').serializeArray()),
-            colNames: ['', '批次名称', '积分卡名称', '是否是虚拟批次', '状态', '积分', '兑换比例', '数量', '批次过期时间', '积分卡生效时间', '操作'],
+            colNames: ['', '批次名称', '积分卡名称', '批次类型', '状态', '积分', '兑换比例', '数量', '批次过期时间', '积分卡有效期', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 100, sortable: false},
@@ -391,10 +390,10 @@
                 {
                     name: 'isVirtual',
                     index: 'isVirtual',
-                    width: 50,
+                    width: 40,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.isVirtual == 1 ? "是" : "否";
+                        return rowObject.isVirtual == 1 ? "虚拟批次" : "普通批次";
                     }
                 },
                 {
@@ -442,12 +441,20 @@
                     }
                 },
                 {
-                    name: 'pointEffectiveTime',
-                    index: 'pointEffectiveTime',
+                    name: 'expiryType',
+                    index: 'expiryType',
                     width: 50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return timeFormat(rowObject.pointEffectiveTime);
+                        if(rowObject.expiryType == 0){
+                            return timeFormat(rowObject.pointEffectiveTime)+"至"+timeFormat(rowObject.pointExpiryTime);
+                        }
+                        if(rowObject.expiryType == 1){
+                            return "自兑换之日起，"+rowObject.validityPeriod+"日有效";
+                        }
+                        if(rowObject.expiryType == 2){
+                            return "自激活之日起，"+rowObject.validityPeriod+"日有效";
+                        }
                     }
                 },
                 {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}

@@ -93,7 +93,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
             bean.setValidityPeriod(batchSaveDTO.getValidityPeriod());
         });
         pointExchangeCodePOManualMapper.batchUpdate(poList);
-        List<Integer> usedIds = poList.stream().filter(bean -> bean.getUsed().equals(Byte.valueOf("1"))).map(PointExchangeCodePO::getId).collect(Collectors.toList());
+        List<Integer> usedIds = poList.stream().filter(bean -> bean.getUsed().equals(CommonConstant.CODE_HAS_USED)).map(PointExchangeCodePO::getId).collect(Collectors.toList());
         if (!usedIds.isEmpty()) {
             List<PointExchangeRecordDTO> recordDTOList = pointExchangeRecordService.findByCodeIds(usedIds);
             List<Integer> cardIds = recordDTOList.stream().map(PointExchangeRecordDTO::getPointId).collect(Collectors.toList());
@@ -143,7 +143,6 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     public void changeCodeStatus(Integer id, Byte status) {
         PointExchangeCodePO pointExchangeCodePO = pointExchangeCodePOMapper.selectByPrimaryKey(id);
         pointExchangeCodePO.setStatus(status);
-        pointExchangeCodePO.setModTime(new Date());
         pointExchangeCodePOMapper.updateByPrimaryKeySelective(pointExchangeCodePO);
     }
 
@@ -206,13 +205,19 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
             throw new PointException(PointCodeEnum.CUSTOMER_NOT_EXIST);
         }
         PointPO pointPO = new PointPO();
+        pointPO.setEffectiveTime(pointExchangeCodePO.getPointEffectiveTime());
         //直接指定过期时间
         if (pointExchangeCodePO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
             pointPO.setExpiryTime(pointExchangeCodePO.getPointExpiryTime());
-        } else {
+        }
+        //自兑换时间起，有效期天数
+        if (pointExchangeCodePO.getExpiryType().equals(CommonConstant.POINT_EXCHANGE_PERIOD)) {
             pointPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + pointExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY)));
         }
-        pointPO.setEffectiveTime(pointExchangeCodePO.getPointEffectiveTime());
+        //自激活时间起，有效期天数
+        if (pointExchangeCodePO.getExpiryType().equals(CommonConstant.POINT_ACTIVE_PERIOD)) {
+            pointPO.setExpiryTime(new Date(DateUtil.getLastSecond(pointExchangeCodePO.getModTime().getTime() + pointExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY)));
+        }
         pointPO.setDescription(pointExchangeCodePO.getBatchDescription());
         pointPO.setFaceValue(pointExchangeCodePO.getFaceValue());
         pointPO.setBalance(pointExchangeCodePO.getFaceValue());

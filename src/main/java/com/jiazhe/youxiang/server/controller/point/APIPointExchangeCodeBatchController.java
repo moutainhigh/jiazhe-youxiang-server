@@ -113,13 +113,12 @@ public class APIPointExchangeCodeBatchController extends BaseController {
             throw new PointException(PointCodeEnum.BATCH_EXPIRY_TIME_IS_NULL);
         }
         req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
-//        //积分卡生效时间不为空
-//        if (req.getPointEffectiveTime() == CommonConstant.NULL_TIME) {
-//            throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_IS_NULL);
-//        }
         //积分卡过期时间为指定的时间
         if (req.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
-            if (req.getPointEffectiveTime() == CommonConstant.NULL_TIME || req.getPointExpiryTime() == CommonConstant.NULL_TIME) {
+            if (req.getPointEffectiveTime() == CommonConstant.NULL_TIME) {
+                throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_IS_NULL);
+            }
+            if (req.getPointExpiryTime() == CommonConstant.NULL_TIME) {
                 throw new PointException(PointCodeEnum.POINT_EXPIRY_TIME_IS_NULL);
             }
             if (req.getPointEffectiveTime() > req.getPointExpiryTime()) {
@@ -133,7 +132,7 @@ public class APIPointExchangeCodeBatchController extends BaseController {
             req.setValidityPeriod(0);
         }
         //自兑换之日起有效天数 或 自激活之日起有效天数
-        if (req.getExpiryType().equals(CommonConstant.POINT_EXCHANGE_PERIOD)) {
+        if (req.getExpiryType().equals(CommonConstant.POINT_EXCHANGE_PERIOD)||req.getExpiryType().equals(CommonConstant.POINT_ACTIVE_PERIOD)) {
             CommonValidator.validateNull(req.getValidityPeriod(), new PointException(PointCodeEnum.POINT_EXPIRY_TIME_IS_NULL));
             if (req.getValidityPeriod() == 0) {
                 throw new PointException(PointCodeEnum.POINT_EXPIRY_TIME_IS_NULL);
