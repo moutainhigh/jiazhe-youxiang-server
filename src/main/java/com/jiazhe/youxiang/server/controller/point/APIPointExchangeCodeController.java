@@ -162,7 +162,7 @@ public class APIPointExchangeCodeController extends BaseController {
             }
             req.setPointExpiryTime(DateUtil.getLastSecond(req.getPointExpiryTime()));
         }
-        if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_PERIOD)) {
+        if (req.getExpiryType().equals(CommonConstant.POINT_EXCHANGE_PERIOD)) {
             CommonValidator.validateNull(req.getValidityPeriod(), new PointException(PointCodeEnum.POINT_EXPIRY_TIME_IS_NULL));
         }
         PointExchangeCodeEditDTO dto = PointExchangeCodeAdapter.editReq2EditDto(req);

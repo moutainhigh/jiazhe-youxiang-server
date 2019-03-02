@@ -80,7 +80,7 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
                 if (bean.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME) && bean.getPointExpiryTime().getTime() > System.currentTimeMillis()) {
                     validBatchList.add(bean);
                 }
-                if (bean.getExpiryType().equals(CommonConstant.POINT_EXPIRY_PERIOD) && bean.getValidityPeriod() > 0) {
+                if (bean.getExpiryType().equals(CommonConstant.POINT_EXCHANGE_PERIOD) && bean.getValidityPeriod() > 0) {
                     validBatchList.add(bean);
                 }
             }

@@ -160,7 +160,7 @@ public class APIRCExchangeCodeController extends BaseController{
             }
             req.setRechargeCardExpiryTime(DateUtil.getLastSecond(req.getRechargeCardExpiryTime()));
         }
-        if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_PERIOD)) {
+        if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXCHANGE_PERIOD)) {
             CommonValidator.validateNull(req.getValidityPeriod(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRY_TIME_IS_NULL));
         }
         RCExchangeCodeEditDTO dto = RCExchangeCodeAdapter.EditReq2EditDTO(req);

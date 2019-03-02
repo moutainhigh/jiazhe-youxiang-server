@@ -125,7 +125,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
             req.setValidityPeriod(0);
         }
         //积分卡时间为兑换后间隔的天数
-        if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_PERIOD)) {
+        if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXCHANGE_PERIOD)) {
             CommonValidator.validateNull(req.getValidityPeriod(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRY_TIME_IS_NULL));
             req.setRechargeCardExpiryTime(DateUtil.getLastSecond(System.currentTimeMillis()));
         }

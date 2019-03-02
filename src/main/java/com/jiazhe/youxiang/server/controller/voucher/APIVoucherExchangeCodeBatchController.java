@@ -105,7 +105,7 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
             req.setValidityPeriod(0);
             req.setVoucherExpiryTime(DateUtil.getLastSecond(req.getVoucherExpiryTime()));
         }
-        if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXPIRY_PERIOD)) {
+        if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXCHANGE_PERIOD)) {
             CommonValidator.validateNull(req.getValidityPeriod(), new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL));
             req.setVoucherExpiryTime(DateUtil.getLastSecond(System.currentTimeMillis()));
         }

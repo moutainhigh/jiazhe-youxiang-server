@@ -159,7 +159,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
             }
             req.setVoucherExpiryTime(DateUtil.getLastSecond(req.getVoucherExpiryTime()));
         }
-        if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXPIRY_PERIOD)) {
+        if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXCHANGE_PERIOD)) {
             CommonValidator.validateNull(req.getValidityPeriod(),new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL));
         }
         VoucherExchangeCodeEditDTO dto = VoucherExchangeCodeAdapter.EditReq2EditDTO(req);
