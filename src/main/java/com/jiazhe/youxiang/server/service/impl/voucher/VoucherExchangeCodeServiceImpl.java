@@ -170,7 +170,6 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
     public void changeCodeStatus(Integer id, Byte status) {
         VoucherExchangeCodePO voucherExchangeCodePO = voucherExchangeCodePOMapper.selectByPrimaryKey(id);
         voucherExchangeCodePO.setStatus(status);
-        voucherExchangeCodePO.setModTime(new Date());
         voucherExchangeCodePOMapper.updateByPrimaryKeySelective(voucherExchangeCodePO);
     }
 
@@ -203,11 +202,17 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
         }
         VoucherPO voucherPO = new VoucherPO();
         //直接指定过期时间
-        voucherPO.setEffectiveTime(voucherExchangeCodePO.getVoucherEffectiveTime());
         if (voucherExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
+            voucherPO.setEffectiveTime(voucherExchangeCodePO.getVoucherEffectiveTime());
             voucherPO.setExpiryTime(voucherExchangeCodePO.getVoucherExpiryTime());
-        } else {
+        }
+        if (voucherExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXCHANGE_PERIOD)) {
+            voucherPO.setEffectiveTime(new Date());
             voucherPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + voucherExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY)));
+        }
+        if (voucherExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_ACTIVE_PERIOD)) {
+            voucherPO.setEffectiveTime(new Date());
+            voucherPO.setExpiryTime(new Date(DateUtil.getLastSecond(voucherExchangeCodePO.getModTime().getTime() + voucherExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY)));
         }
         voucherPO.setEffectiveTime(voucherExchangeCodePO.getVoucherEffectiveTime());
         voucherPO.setDescription(voucherExchangeCodePO.getBatchDescription());

@@ -108,16 +108,17 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         RechargeCardPO rechargeCardPO = new RechargeCardPO();
         //直接指定过期时间
         if (rechargeCardExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
+            rechargeCardPO.setEffectiveTime(rechargeCardExchangeCodePO.getRechargeCardEffectiveTime());
             rechargeCardPO.setExpiryTime(rechargeCardExchangeCodePO.getRechargeCardExpiryTime());
         }
         if (rechargeCardExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXCHANGE_PERIOD)) {
+            rechargeCardPO.setEffectiveTime(new Date());
             rechargeCardPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + rechargeCardExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY)));
         }
         if (rechargeCardExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_ACTIVE_PERIOD)) {
+            rechargeCardPO.setEffectiveTime(new Date());
             rechargeCardPO.setExpiryTime(new Date(DateUtil.getLastSecond(rechargeCardExchangeCodePO.getModTime().getTime() + rechargeCardExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY)));
         }
-        rechargeCardPO.setEffectiveTime(rechargeCardExchangeCodePO.getRechargeCardEffectiveTime());
-        rechargeCardPO.setEffectiveTime(rechargeCardExchangeCodePO.getRechargeCardEffectiveTime());
         rechargeCardPO.setDescription(rechargeCardExchangeCodePO.getBatchDescription());
         rechargeCardPO.setFaceValue(rechargeCardExchangeCodePO.getFaceValue());
         rechargeCardPO.setBalance(rechargeCardExchangeCodePO.getFaceValue());

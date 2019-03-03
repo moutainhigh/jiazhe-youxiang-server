@@ -51,35 +51,35 @@ public class APIVoucherExchangeCodeController extends BaseController {
     private VoucherExchangeCodeBiz voucherExchangeCodeBiz;
 
     @RequiresPermissions(PermissionConstant.VOUCHER_CODE_MANAGEMENT)
-    @ApiOperation(value = "分页查询代金券兑换码（根据批次id和兑换码的码和密钥查询）", httpMethod = "GET", response = VoucherExchangeCodeResp.class, responseContainer = "List",notes = "分页查询代金券兑换码（根据批次id和兑换码的码和密钥查询）")
+    @ApiOperation(value = "分页查询代金券兑换码（根据批次id和兑换码的码和密钥查询）", httpMethod = "GET", response = VoucherExchangeCodeResp.class, responseContainer = "List", notes = "分页查询代金券兑换码（根据批次id和兑换码的码和密钥查询）")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "分页查询代金券兑换码", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute VoucherExchangeCodePageReq req) {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOList = voucherExchangeCodeBiz.getList(req.getBatchId(),req.getCode(),req.getKeyt(),req.getStatus(),req.getUsed(),paging);
+        List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOList = voucherExchangeCodeBiz.getList(req.getBatchId(), req.getCode(), req.getKeyt(), req.getStatus(), req.getUsed(), paging);
         List<VoucherExchangeCodeResp> voucherExchangeCodeRespList = voucherExchangeCodeDTOList.stream().map(VoucherExchangeCodeAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(voucherExchangeCodeRespList, paging);
     }
 
     @RequiresPermissions(PermissionConstant.VOUCHER_CODE_SEARCH)
-    @ApiOperation(value = "信息查询页查询代金券兑换码", httpMethod = "GET", response = VoucherExchangeCodeResp.class, responseContainer = "List",notes = "信息查询页查询代金券兑换码")
+    @ApiOperation(value = "信息查询页查询代金券兑换码", httpMethod = "GET", response = VoucherExchangeCodeResp.class, responseContainer = "List", notes = "信息查询页查询代金券兑换码")
     @RequestMapping(value = "/searchlistpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "信息查询页查询代金券兑换码", level = LogLevelEnum.LEVEL_1)
     public Object searchListPage(@ModelAttribute VoucherExchangeCodePageReq req) {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        if(Strings.isBlank(req.getCode())&& Strings.isBlank(req.getKeyt())){
+        if (Strings.isBlank(req.getCode()) && Strings.isBlank(req.getKeyt())) {
             req.setCode("xxxxxxxxxxxxxxxx");
             req.setKeyt("xxxxxxxxxxxxxxxx");
         }
-        List<VoucherExchangeCodeDTO> rcExchangeCodeDTOList = voucherExchangeCodeBiz.getList(req.getBatchId(),req.getCode(),req.getKeyt(),req.getStatus(),req.getUsed(),paging);
+        List<VoucherExchangeCodeDTO> rcExchangeCodeDTOList = voucherExchangeCodeBiz.getList(req.getBatchId(), req.getCode(), req.getKeyt(), req.getStatus(), req.getUsed(), paging);
         List<VoucherExchangeCodeResp> rcExchangeCodeBatchRespList = rcExchangeCodeDTOList.stream().map(VoucherExchangeCodeAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(rcExchangeCodeBatchRespList, paging);
     }
 
     @RequiresPermissions(PermissionConstant.ALL_VOUCHER_CODE_STATUS_CHANGE)
-    @ApiOperation(value = "启用所有代金券兑换码", httpMethod = "POST",notes = "启用批次下所有代金券兑换码，同时修改已经兑换为的代金券")
+    @ApiOperation(value = "启用所有代金券兑换码", httpMethod = "POST", notes = "启用批次下所有代金券兑换码，同时修改已经兑换为的代金券")
     @RequestMapping(value = "/allstartusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "启用所有代金券兑换码", level = LogLevelEnum.LEVEL_2)
     public Object allStartUsing(@ModelAttribute IdReq req) {
@@ -89,7 +89,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
     }
 
     @RequiresPermissions(PermissionConstant.ALL_VOUCHER_CODE_STATUS_CHANGE)
-    @ApiOperation(value = "停用所有代金券兑换码", httpMethod = "POST",notes = "停用用批次下所有代金券兑换码，同时修改已经兑换为的代金券")
+    @ApiOperation(value = "停用所有代金券兑换码", httpMethod = "POST", notes = "停用用批次下所有代金券兑换码，同时修改已经兑换为的代金券")
     @RequestMapping(value = "/allstopusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "停用所有代金券兑换码", level = LogLevelEnum.LEVEL_2)
     public Object allStopUsing(@ModelAttribute IdReq req) {
@@ -99,7 +99,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
     }
 
     @RequiresPermissions(value = {PermissionConstant.VOUCHER_CODE_STATUS_CHANGE, PermissionConstant.VOUCHER_CODE_SEARCH_STATUS_CHANGE}, logical = Logical.OR)
-    @ApiOperation(value = "启用代金券兑换码", httpMethod = "POST",notes = "启用代金券兑换码")
+    @ApiOperation(value = "启用代金券兑换码", httpMethod = "POST", notes = "启用代金券兑换码")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "启用代金券兑换码", level = LogLevelEnum.LEVEL_2)
     public Object startUsing(@ModelAttribute IdReq req) {
@@ -109,7 +109,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
     }
 
     @RequiresPermissions(value = {PermissionConstant.VOUCHER_CODE_STATUS_CHANGE, PermissionConstant.VOUCHER_CODE_SEARCH_STATUS_CHANGE}, logical = Logical.OR)
-    @ApiOperation(value = "停用代金券兑换码", httpMethod = "POST",notes = "停用代金券兑换码")
+    @ApiOperation(value = "停用代金券兑换码", httpMethod = "POST", notes = "停用代金券兑换码")
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "停用代金券兑换码", level = LogLevelEnum.LEVEL_2)
     public Object stopUsing(@ModelAttribute IdReq req) {
@@ -118,7 +118,7 @@ public class APIVoucherExchangeCodeController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "获取兑换码信息", httpMethod = "GET",response = VoucherExchangeCodeResp.class,notes = "获取兑换码信息")
+    @ApiOperation(value = "获取兑换码信息", httpMethod = "GET", response = VoucherExchangeCodeResp.class, notes = "获取兑换码信息")
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "获取兑换码信息", level = LogLevelEnum.LEVEL_1)
     public Object getById(@ModelAttribute IdReq req) {
@@ -129,38 +129,42 @@ public class APIVoucherExchangeCodeController extends BaseController {
     }
 
     @RequiresPermissions(value = {PermissionConstant.VOUCHER_CODE_EDIT, PermissionConstant.VOUCHER_CODE_SEARCH_EDIT}, logical = Logical.OR)
-    @ApiOperation(value = "修改兑换码信息", httpMethod = "POST",notes = "修改兑换码信息")
+    @ApiOperation(value = "修改兑换码信息", httpMethod = "POST", notes = "修改兑换码信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "修改兑换码信息", level = LogLevelEnum.LEVEL_2)
-    public Object editSave(@ModelAttribute VoucherExchangeCodeEditReq req)  {
+    public Object editSave(@ModelAttribute VoucherExchangeCodeEditReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
-        CommonValidator.validateNull(req.getVoucherName(),new VoucherException(VoucherCodeEnum.VOUCHER_NAME_IS_NULL));
+        CommonValidator.validateNull(req.getVoucherName(), new VoucherException(VoucherCodeEnum.VOUCHER_NAME_IS_NULL));
         CommonValidator.validateNull(req.getCityCodes(), new VoucherException(VoucherCodeEnum.CITY_IS_NULL));
         CommonValidator.validateNull(req.getProductIds(), new VoucherException(VoucherCodeEnum.PRODUCT_IS_NULL));
-        if(req.getExpiryTime()==CommonConstant.NULL_TIME){
+        if (req.getExpiryTime() == CommonConstant.NULL_TIME) {
             throw new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
         }
         req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
-        //代金券生效时间为空
-        if (req.getVoucherEffectiveTime() == CommonConstant.NULL_TIME) {
-            throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_IS_NULL);
-        }
-        if(req.getVoucherEffectiveTime() > req.getExpiryTime()){
-            throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_LATER_CODE_EXPIRY_TIME);
-        }
-        req.setVoucherEffectiveTime(DateUtil.getFirstSecond(req.getVoucherEffectiveTime()));
+        //代金券过期时间为指定的时间
         if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXPIRY_TIME)) {
-            if(req.getVoucherExpiryTime()==CommonConstant.NULL_TIME){
+            if (req.getVoucherEffectiveTime() == CommonConstant.NULL_TIME) {
+                throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_IS_NULL);
+            }
+            if (req.getVoucherEffectiveTime() > req.getExpiryTime()) {
+                throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_LATER_CODE_EXPIRY_TIME);
+            }
+            if (req.getVoucherExpiryTime() == CommonConstant.NULL_TIME) {
                 throw new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL);
             }
-            if(req.getVoucherEffectiveTime() > req.getVoucherExpiryTime()){
+            if (req.getVoucherEffectiveTime() > req.getVoucherExpiryTime()) {
                 throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_LATER_VOUCHER_EXPIRY_TIME);
             }
+            req.setVoucherEffectiveTime(DateUtil.getFirstSecond(req.getVoucherEffectiveTime()));
             req.setVoucherExpiryTime(DateUtil.getLastSecond(req.getVoucherExpiryTime()));
+            req.setValidityPeriod(0);
         }
-        if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXCHANGE_PERIOD)) {
-            CommonValidator.validateNull(req.getValidityPeriod(),new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL));
+        //自兑换之日起有效天数 或 自激活之日起有效天数
+        if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXCHANGE_PERIOD) || req.getExpiryType().equals(CommonConstant.VOUCHER_ACTIVE_PERIOD)) {
+            CommonValidator.validateNull(req.getValidityPeriod(), new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL));
+            req.setVoucherEffectiveTime(DateUtil.getFirstSecond(System.currentTimeMillis()));
+            req.setVoucherExpiryTime(DateUtil.getLastSecond(System.currentTimeMillis()));
         }
         VoucherExchangeCodeEditDTO dto = VoucherExchangeCodeAdapter.EditReq2EditDTO(req);
         voucherExchangeCodeBiz.editSave(dto);
@@ -169,24 +173,24 @@ public class APIVoucherExchangeCodeController extends BaseController {
 
     @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
-    @ApiOperation(value = "【APP端】客户用代金券兑换码兑换", httpMethod = "POST",notes = "【APP端】客户用代金券兑换码兑换")
+    @ApiOperation(value = "【APP端】客户用代金券兑换码兑换", httpMethod = "POST", notes = "【APP端】客户用代金券兑换码兑换")
     @RequestMapping(value = "/customerselfcodecharge", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "客户用代金券兑换码兑换", level = LogLevelEnum.LEVEL_2)
-    public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req)  {
+    public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) {
         CommonValidator.validateId(req.getId());
-        CommonValidator.validateNull(req.getKeyt(),new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
-        voucherExchangeCodeBiz.customerSelfCharge(req.getId(),req.getKeyt());
+        CommonValidator.validateNull(req.getKeyt(), new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
+        voucherExchangeCodeBiz.customerSelfCharge(req.getId(), req.getKeyt());
         return ResponseFactory.buildSuccess();
     }
 
     @RequiresPermissions(PermissionConstant.CUSTOMER_VOUCHER_BINDING)
-    @ApiOperation(value = "后台用兑换码进行绑定", httpMethod = "POST",notes = "后台用兑换码进行充值")
+    @ApiOperation(value = "后台用兑换码进行绑定", httpMethod = "POST", notes = "后台用兑换码进行充值")
     @RequestMapping(value = "/backstagecodecharge", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "后台用兑换码进行充值", level = LogLevelEnum.LEVEL_3)
-    public Object backstageCodeCharge(@ModelAttribute CodeChargeReq req)  {
+    public Object backstageCodeCharge(@ModelAttribute CodeChargeReq req) {
         CommonValidator.validateId(req.getId());
-        CommonValidator.validateNull(req.getKeyt(),new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
-        voucherExchangeCodeBiz.backstageCodeCharge(req.getId(),req.getKeyt());
+        CommonValidator.validateNull(req.getKeyt(), new VoucherException(VoucherCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
+        voucherExchangeCodeBiz.backstageCodeCharge(req.getId(), req.getKeyt());
         return ResponseFactory.buildSuccess();
     }
 }

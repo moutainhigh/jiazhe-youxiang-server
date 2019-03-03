@@ -20,9 +20,15 @@ public class VoucherExchangeCodeBatchResp extends BaseVO {
 
     private Integer count;
 
+    private Long expiryTime;
+
+    private Byte expiryType;
+
     private Long voucherEffectiveTime;
 
-    private Long expiryTime;
+    private Long voucherExpiryTime;
+
+    private Integer validityPeriod;
 
     private Byte status;
 
@@ -98,5 +104,29 @@ public class VoucherExchangeCodeBatchResp extends BaseVO {
 
     public void setVoucherEffectiveTime(Long voucherEffectiveTime) {
         this.voucherEffectiveTime = voucherEffectiveTime;
+    }
+
+    public Byte getExpiryType() {
+        return expiryType;
+    }
+
+    public void setExpiryType(Byte expiryType) {
+        this.expiryType = expiryType;
+    }
+
+    public Long getVoucherExpiryTime() {
+        return voucherExpiryTime;
+    }
+
+    public void setVoucherExpiryTime(Long voucherExpiryTime) {
+        this.voucherExpiryTime = voucherExpiryTime;
+    }
+
+    public Integer getValidityPeriod() {
+        return validityPeriod;
+    }
+
+    public void setValidityPeriod(Integer validityPeriod) {
+        this.validityPeriod = validityPeriod;
     }
 }

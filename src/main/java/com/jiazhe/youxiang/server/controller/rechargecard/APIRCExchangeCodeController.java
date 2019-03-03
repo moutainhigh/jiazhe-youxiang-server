@@ -150,7 +150,7 @@ public class APIRCExchangeCodeController extends BaseController{
                 throw new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EFFECTIVE_TIME_IS_NULL);
             }
             if(req.getRechargeCardEffectiveTime() > req.getExpiryTime()){
-                throw new RechargeCardException(RechargeCardCodeEnum.RC_EFFECTIVE_TIME_LATER_BATCH_EXPIRY_TIME);
+                throw new RechargeCardException(RechargeCardCodeEnum.RC_EFFECTIVE_TIME_LATER_CODE_EXPIRY_TIME);
             }
             if(req.getRechargeCardExpiryTime()==CommonConstant.NULL_TIME){
                 throw new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRY_TIME_IS_NULL);

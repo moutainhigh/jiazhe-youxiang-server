@@ -35,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -205,17 +206,19 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
             throw new PointException(PointCodeEnum.CUSTOMER_NOT_EXIST);
         }
         PointPO pointPO = new PointPO();
-        pointPO.setEffectiveTime(pointExchangeCodePO.getPointEffectiveTime());
         //直接指定过期时间
         if (pointExchangeCodePO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
+            pointPO.setEffectiveTime(pointExchangeCodePO.getPointEffectiveTime());
             pointPO.setExpiryTime(pointExchangeCodePO.getPointExpiryTime());
         }
         //自兑换时间起，有效期天数
         if (pointExchangeCodePO.getExpiryType().equals(CommonConstant.POINT_EXCHANGE_PERIOD)) {
+            pointPO.setEffectiveTime(new Date());
             pointPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + pointExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY)));
         }
         //自激活时间起，有效期天数
         if (pointExchangeCodePO.getExpiryType().equals(CommonConstant.POINT_ACTIVE_PERIOD)) {
+            pointPO.setEffectiveTime(new Date());
             pointPO.setExpiryTime(new Date(DateUtil.getLastSecond(pointExchangeCodePO.getModTime().getTime() + pointExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY)));
         }
         pointPO.setDescription(pointExchangeCodePO.getBatchDescription());

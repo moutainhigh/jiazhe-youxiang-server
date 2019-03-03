@@ -158,7 +158,7 @@ public class APIPointExchangeCodeController extends BaseController {
                 throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_LATER_POINT_EXPIRY_TIME);
             }
             if (req.getPointEffectiveTime() > req.getExpiryTime()) {
-                throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_LATER_BATCH_EXPIRY_TIME);
+                throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_LATER_CODE_EXPIRY_TIME);
             }
             req.setPointEffectiveTime(DateUtil.getFirstSecond(req.getPointEffectiveTime()));
             req.setPointExpiryTime(DateUtil.getLastSecond(req.getPointExpiryTime()));
