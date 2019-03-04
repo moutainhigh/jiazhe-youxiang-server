@@ -216,7 +216,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         auditRecordPO.setCustomerName(customerName);
         auditRecordPO.setCustomerMobile(customerMobile);
         auditRecordPO.setExchangePoint(exchangePoint);
-        auditRecordPO.setExchangeType(exchangeType);
+//        auditRecordPO.setExchangeType(exchangeType);
         auditRecordPO.setGivingPoint(givingPoint);
         auditRecordPO.setGivingType(givingType);
         auditRecordPO.setRemark(remark);
@@ -249,7 +249,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         auditRecordPO.setCustomerName(customerName);
         auditRecordPO.setCustomerMobile(customerMobile);
         auditRecordPO.setExchangePoint(exchangePoint);
-        auditRecordPO.setExchangeType(exchangeType);
+//        auditRecordPO.setExchangeType(exchangeType);
         auditRecordPO.setGivingPoint(givingPoint);
         auditRecordPO.setGivingType(givingType);
         auditRecordPO.setRemark(remark);

@@ -83,10 +83,12 @@
                     <div class="col-xs-12" style="text-align: right" id="buttonDiv">
                         <p style="margin:1px;height: 31px">
                             <shiro:hasPermission name="allVoucherCodeStatusChange">
-                                <a class="btn btn-success btn-round btn-sm" title="并启用已经兑换成的代金券" role="button" onclick="allStartUsing()">
+                                <a class="btn btn-success btn-round btn-sm" title="并启用已经兑换成的代金券" role="button"
+                                   onclick="allStartUsing()">
                                     启用所有码
                                 </a>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <a class="btn btn-success btn-round btn-sm" title="并停用已经兑换成的代金券" role="button" onclick="allStopUsing()">
+                                <a class="btn btn-success btn-round btn-sm" title="并停用已经兑换成的代金券" role="button"
+                                   onclick="allStopUsing()">
                                     停用所有码
                                 </a>
                             </shiro:hasPermission>
@@ -114,8 +116,8 @@
                                                 <input type="hidden" name="id" id="saveCodeId">
                                                 <input type="hidden" name="productIds" id="saveProductIds">
                                                 <input type="hidden" name="cityCodes" id="saveCityCodes">
-                                                <input type="hidden" name="expiryType" id="saveExpiryType" value=0>
-
+                                                <input type="hidden" name="expiryType" value=0 id="saveExpiryType">
+                                                <input type="hidden" name="validityPeriod" value=0 id="saveValidityPeriod">
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">代金券名称：</label>
@@ -143,30 +145,14 @@
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveVoucherEffectiveTime">代金券生效时间：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-group">
-                                                            <input class="form-control date-picker" id="saveVoucherEffectiveTime"
-                                                                   type="text" readonly/>
-                                                            <span class="input-group-addon">
-                                                                            <i class="fa fa-calendar bigger-110"></i>
-                                                                        </span>
-                                                            <input type="hidden" value=0 name="voucherEffectiveTime"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right"
                                                            for="saveExpiryTime">兑换码过期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker" id="saveExpiryTime"
-                                                                  type="text" readonly />
+                                                                   type="text" readonly/>
                                                             <span class="input-group-addon">
-                                                                        <i class="fa fa-calendar bigger-110"></i>
-                                                                    </span>
+                                                                            <i class="fa fa-calendar bigger-110"></i>
+                                                                        </span>
                                                             <input type="hidden" value=0 name="expiryTime"/>
                                                         </div>
                                                     </div>
@@ -174,46 +160,65 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">代金券过期类型：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <label class="radio-inline ">
-                                                                <input id="saveDeadLineRadio" type="radio"
-                                                                       name="expiryTypeRadio"
-                                                                       value="0" checked="checked"/>指定截止日期
-                                                            </label>
-                                                            <label class="radio-inline">
-                                                                <input id="saveValidityPeriodRadio" type="radio"
-                                                                       name="expiryTypeRadio"
-                                                                       value="1"/>兑换之日起算
-                                                            </label>
-                                                        </div>
-                                                    </div>
+                                                    <label class="col-sm-4 control-label no-padding-right"> 【代金券有效期】</label>
+                                                    <div class="col-sm-8"></div>
                                                 </div>
 
-                                                <div class="space-2 saveDeadLine"></div>
-                                                <div class="form-group saveDeadLine">
-                                                    <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveVoucherExpiryTime">代金券过期时间：</label>
-                                                    <div class="col-sm-8">
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">
+                                                        <input id="saveDeadLineRadio" type="radio"
+                                                               name="expiryTypeRadio"
+                                                               value="0" checked="checked"/>&nbsp;&nbsp;指定有效时间：
+                                                    </label>
+                                                    <div class="col-sm-4 saveDeadLine">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker"
-                                                                   id="saveVoucherExpiryTime" type="text" readonly />
+                                                                   id="saveVoucherEffectiveTime"
+                                                                   type="text" readonly/>
                                                             <span class="input-group-addon">
-                                                                        <i class="fa fa-calendar bigger-110"></i>
-                                                                    </span>
+                                                                            <i class="fa fa-calendar bigger-110"></i>
+                                                                        </span>
+                                                            <input type="hidden" value=0 name="voucherEffectiveTime"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4 saveDeadLine">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker"
+                                                                   id="saveVoucherExpiryTime" type="text" readonly/>
+                                                            <span class="input-group-addon">
+                                                                            <i class="fa fa-calendar bigger-110"></i>
+                                                                        </span>
                                                             <input type="hidden" value=0 name="voucherExpiryTime"/>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2 saveValidityPeriod" style="display:none;"></div>
-                                                <div class="form-group saveValidityPeriod" style="display:none;">
-                                                    <label class="col-sm-4 control-label no-padding-right">兑换之日有效天数：</label>
-                                                    <div class="col-sm-8">
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">
+                                                        <input id="saveExchangePeriodRadio" type="radio"
+                                                               name="expiryTypeRadio"
+                                                               value="1"/>&nbsp;&nbsp;自兑换之日起：
+                                                    </label>
+                                                    <div class="col-sm-8 saveExchangePeriod" style="display:none;">
                                                         <div class="pos-rel">
-                                                            <input id="saveValidityPeriod" name="validityPeriod"
-                                                                   class="form-control"
+                                                            <input id="saveExchangePeriod" class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">
+                                                        <input id="saveActivePeriodRadio" type="radio"
+                                                               name="expiryTypeRadio"
+                                                               value="2"/>&nbsp;&nbsp;自激活之日起：
+                                                    </label>
+                                                    <div class="col-sm-8 saveActivePeriod" style="display:none;">
+                                                        <div class="pos-rel">
+                                                            <input id="saveActivePeriod" class="form-control"
                                                                    type="text" style="height:30px"/>
                                                         </div>
                                                     </div>
@@ -273,19 +278,28 @@
         $("input[name=expiryTypeRadio]").bind("change", function () {
             if ($("input[name=expiryTypeRadio]:checked").val() == 0) {
                 $(".saveDeadLine").css("display", "");
-                $(".saveValidityPeriod").css("display", "none");
+                $(".saveExchangePeriod").css("display", "none");
+                $(".saveActivePeriod").css("display", "none");
                 $("#saveExpiryType").val(0);
-            } else {
+            }
+            if ($("input[name=expiryTypeRadio]:checked").val() == 1) {
                 $(".saveDeadLine").css("display", "none");
-                $(".saveValidityPeriod").css("display", "");
+                $(".saveExchangePeriod").css("display", "");
+                $(".saveActivePeriod").css("display", "none");
                 $("#saveExpiryType").val(1);
+            }
+            if ($("input[name=expiryTypeRadio]:checked").val() == 2) {
+                $(".saveDeadLine").css("display", "none");
+                $(".saveExchangePeriod").css("display", "none");
+                $(".saveActivePeriod").css("display", "");
+                $("#saveExpiryType").val(2);
             }
         });
 
         var tableOption = {
             url: "/api/voucherexchangecode/listpage",
             postData: transformToJson($('#rcExchangeCodeSearchForm').serializeArray()),
-            colNames: ['', '批次名称', '代金券名称', '兑换码', '密钥', '停用状态', '使用状态', '客户电话','兑换商品数量', '兑换码过期时间', '代金券生效时间', '操作'],
+            colNames: ['', '批次名称', '代金券名称', '兑换码', '密钥', '停用状态', '使用状态', '客户电话', '兑换商品数量', '兑换码过期时间', '代金券有效期', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'batchName', index: 'batchName', width: 100, sortable: false},
@@ -310,7 +324,7 @@
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         var text = rowObject.used == 1 ? "已使用" : "未使用";
-                        var color = rowObject.used == 1 ?  "FF0000" : "00FF00";
+                        var color = rowObject.used == 1 ? "FF0000" : "00FF00";
                         return generateSpan(text, color)
                     }
                 },
@@ -326,12 +340,20 @@
                     }
                 },
                 {
-                    name: 'voucherEffectiveTime',
-                    index: 'voucherEffectiveTime',
+                    name: 'expiryType',
+                    index: 'expiryType',
                     width: 50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return timeFormat(rowObject.voucherEffectiveTime);
+                        if(rowObject.expiryType == 0){
+                            return timeFormat(rowObject.voucherEffectiveTime)+"至"+timeFormat(rowObject.voucherExpiryTime);
+                        }
+                        if(rowObject.expiryType == 1){
+                            return "自兑换之日起，"+rowObject.validityPeriod+"日有效";
+                        }
+                        if(rowObject.expiryType == 2){
+                            return "自激活之日起，"+rowObject.validityPeriod+"日有效";
+                        }
                     }
                 },
                 {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
@@ -353,10 +375,10 @@
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
         if (rowObject.used == 0) {
-            if(permission.indexOf("voucherCodeEdit")!= -1){
+            if (permission.indexOf("voucherCodeEdit") != -1) {
                 str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
             }
-            if(permission.indexOf("voucherCodeStatusChange")!= -1) {
+            if (permission.indexOf("voucherCodeStatusChange") != -1) {
                 if (rowObject.status == 0) {
                     str += getFunctionButton("btn-success", "startUsing(" + rowObject.id + ")", "启用");
                 } else {
@@ -369,8 +391,8 @@
 
     //启用兑换码
     function startUsing(id) {
-        confirm("确定要启用该兑换码吗？",function (result) {
-            if(result){
+        confirm("确定要启用该兑换码吗？", function (result) {
+            if (result) {
                 $.ajax({
                     url: "/api/voucherexchangecode/startusing",
                     dataType: "json",
@@ -379,7 +401,7 @@
                         id: id
                     },
                     type: "POST",
-                    success:success,
+                    success: success,
                     error: error
                 });
             }
@@ -388,7 +410,7 @@
 
     //停用兑换码
     function stopUsing(id) {
-        confirm("确定要启用该兑换码吗？",function (result) {
+        confirm("确定要启用该兑换码吗？", function (result) {
             if (result) {
                 $.ajax({
                     url: "/api/voucherexchangecode/stopusing",
@@ -398,7 +420,7 @@
                         id: id
                     },
                     type: "POST",
-                    success:success,
+                    success: success,
                     error: error
                 });
             }
@@ -406,9 +428,13 @@
     }
 
     function save() {
-        if($("input[name=expiryTypeRadio]:checked").val() == 1){
-            if(!isNumber($("#saveValidityPeriod").val())){
-                bootboxalert("兑换之日有效天数非法");
+        var saveExpiryType = $("#saveExpiryType").val();
+        if (saveExpiryType == 1 || saveExpiryType == 2) {
+            var validPeriod = saveExpiryType == 1 ? $("#saveExchangePeriod").val() : $("#saveActivePeriod").val();
+            $("#saveValidityPeriod").val(validPeriod);
+            if (!isNumber($("#saveValidityPeriod").val())) {
+                var error = saveExpiryType == 1 ? "自兑换之日有效天数非法" : "自激活之日有效天数非法";
+                bootboxalert(error);
                 return false;
             }
         }
@@ -419,11 +445,19 @@
             data: transformToJson($('#codeSaveForm').serializeArray()),
             type: "POST",
             success: success,
-            error:error
+            error: error
         });
     }
 
     function openEdit(id) {
+        $("#codeSaveForm #saveVoucherEffectiveTime").val("");
+        $('#saveVoucherEffectiveTime').datepicker('update');
+        $("#codeSaveForm #saveVoucherEffectiveTime").next().next().val(0);
+        $("#codeSaveForm #saveVoucherExpiryTime").val("");
+        $('#saveVoucherExpiryTime').datepicker('update');
+        $("#codeSaveForm #saveVoucherExpiryTime").next().next().val(0);
+        $("#saveExchangePeriod").val("");
+        $("#saveActivePeriod").val("");
         $.ajax({
             url: "/api/voucherexchangecode/getbyid",
             dataType: "json",
@@ -444,23 +478,27 @@
                     $("#codeSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
                     $('#saveExpiryTime').datepicker('update');
                     $("#codeSaveForm #saveExpiryTime").next().next().val(result.expiryTime);
-                    $("#codeSaveForm #saveVoucherEffectiveTime").val(dateFormat(result.voucherEffectiveTime));
-                    $('#saveVoucherEffectiveTime').datepicker('update');
-                    $("#codeSaveForm #saveVoucherEffectiveTime").next().next().val(result.voucherEffectiveTime);
                     if (result.expiryType == 0) {
+                        $("#codeSaveForm #saveVoucherEffectiveTime").val(dateFormat(result.voucherEffectiveTime));
+                        $('#saveVoucherEffectiveTime').datepicker('update');
+                        $("#codeSaveForm #saveVoucherEffectiveTime").next().next().val(result.voucherEffectiveTime);
+                        $("#codeSaveForm #saveVoucherExpiryTime").val(dateFormat(result.voucherExpiryTime));
+                        $('#saveVoucherExpiryTime').datepicker('update');
+                        $("#codeSaveForm #saveVoucherExpiryTime").next().next().val(result.voucherExpiryTime);
                         $("#codeSaveForm #saveDeadLineRadio").click();
-                    } else {
-                        $("#codeSaveForm #saveValidityPeriodRadio").click();
+                    }if (result.expiryType == 1) {
+                        $("#saveExchangePeriod").val(result.validityPeriod);
+                        $("#codeSaveForm #saveExchangePeriodRadio").click();
                     }
-                    $("#codeSaveForm #saveValidityPeriod").val(result.validityPeriod);
-                    $("#codeSaveForm #saveVoucherExpiryTime").val(dateFormat(result.voucherExpiryTime));
-                    $('#saveVoucherExpiryTime').datepicker('update');
-                    $("#codeSaveForm #saveVoucherExpiryTime").next().next().val(result.voucherExpiryTime);
+                    if (result.expiryType == 2) {
+                        $("#saveActivePeriod").val(result.validityPeriod);
+                        $("#codeSaveForm #saveActivePeriodRadio").click();
+                    }
                     $("#codeSaveForm #saveDescription").val(result.batchDescription);
                     $("#modal-form").modal('show');
                 }
             },
-            error:error
+            error: error
         });
     }
 

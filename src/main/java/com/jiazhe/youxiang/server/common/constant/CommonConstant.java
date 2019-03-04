@@ -119,22 +119,25 @@ public class CommonConstant {
     public static final Byte BATCH_IS_VIRTUAL = Byte.valueOf("1");
 
     /**
-     * 积分卡过期时间来源,0为直接指定过期时间，1为指定兑换之日起有效期天数
+     * 积分卡过期时间来源,0为指定时间，1为自兑换之日起，2为自激活之日起
      */
     public static final Byte POINT_EXPIRY_TIME = Byte.valueOf("0");
-    public static final Byte POINT_EXPIRY_PERIOD = Byte.valueOf("1");
+    public static final Byte POINT_EXCHANGE_PERIOD = Byte.valueOf("1");
+    public static final Byte POINT_ACTIVE_PERIOD = Byte.valueOf("2");
 
     /**
-     * 充值卡过期时间来源,0为直接指定过期时间，1为指定兑换之日起有效期天数
+     * 充值卡过期时间来源,0为指定时间，1为自兑换之日起，2为自激活之日起
      */
     public static final Byte RECHARGE_CARD_EXPIRY_TIME = Byte.valueOf("0");
-    public static final Byte RECHARGE_CARD_EXPIRY_PERIOD = Byte.valueOf("1");
+    public static final Byte RECHARGE_CARD_EXCHANGE_PERIOD = Byte.valueOf("1");
+    public static final Byte RECHARGE_CARD_ACTIVE_PERIOD = Byte.valueOf("2");
 
     /**
-     * 代金券过期时间来源,0为直接指定过期时间，1为指定兑换之日起有效期天数
+     * 代金券过期时间来源,0为指定时间，1为自兑换之日起，2为自激活之日起
      */
     public static final Byte VOUCHER_EXPIRY_TIME = Byte.valueOf("0");
-    public static final Byte VOUCHER_EXPIRY_PERIOD = Byte.valueOf("1");
+    public static final Byte VOUCHER_EXCHANGE_PERIOD = Byte.valueOf("1");
+    public static final Byte VOUCHER_ACTIVE_PERIOD = Byte.valueOf("2");
 
     /**
      * 启用停用状态

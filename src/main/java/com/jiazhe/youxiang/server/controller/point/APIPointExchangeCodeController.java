@@ -136,34 +136,42 @@ public class APIPointExchangeCodeController extends BaseController {
     @ApiOperation(value = "修改兑换码信息", httpMethod = "POST", notes = "修改兑换码信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "修改兑换码信息", level = LogLevelEnum.LEVEL_2)
-    public Object editSave(@ModelAttribute PointExchangeCodeEditReq req)  {
+    public Object editSave(@ModelAttribute PointExchangeCodeEditReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
         CommonValidator.validateNull(req.getPointName(), new PointException(PointCodeEnum.POINT_NAME_IS_NULL));
-        CommonValidator.validateNull(req.getCityCodes(),new PointException(PointCodeEnum.CITY_IS_NULL));
-        CommonValidator.validateNull(req.getProductIds(),new PointException(PointCodeEnum.PRODUCT_IS_NULL));
+        CommonValidator.validateNull(req.getCityCodes(), new PointException(PointCodeEnum.CITY_IS_NULL));
+        CommonValidator.validateNull(req.getProductIds(), new PointException(PointCodeEnum.PRODUCT_IS_NULL));
         if (req.getExpiryTime() == CommonConstant.NULL_TIME) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
         }
         req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
-        if (req.getPointEffectiveTime() == CommonConstant.NULL_TIME) {
-            throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_IS_NULL);
-        }
-        if(req.getPointEffectiveTime() > req.getExpiryTime()){
-            throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_LATER_CODE_EXPIRY_TIME);
-        }
-        req.setPointEffectiveTime(DateUtil.getFirstSecond(req.getPointEffectiveTime()));
-        if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
+        //积分卡过期时间为指定的时间
+        if (req.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
+            if (req.getPointEffectiveTime() == CommonConstant.NULL_TIME) {
+                throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_IS_NULL);
+            }
             if (req.getPointExpiryTime() == CommonConstant.NULL_TIME) {
                 throw new PointException(PointCodeEnum.POINT_EXPIRY_TIME_IS_NULL);
             }
-            if(req.getPointEffectiveTime() > req.getPointExpiryTime()){
+            if (req.getPointEffectiveTime() > req.getPointExpiryTime()) {
                 throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_LATER_POINT_EXPIRY_TIME);
             }
+            if (req.getPointEffectiveTime() > req.getExpiryTime()) {
+                throw new PointException(PointCodeEnum.POINT_EFFECTIVE_TIME_LATER_CODE_EXPIRY_TIME);
+            }
+            req.setPointEffectiveTime(DateUtil.getFirstSecond(req.getPointEffectiveTime()));
             req.setPointExpiryTime(DateUtil.getLastSecond(req.getPointExpiryTime()));
+            req.setValidityPeriod(0);
         }
-        if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_PERIOD)) {
+        //自兑换之日起有效天数 或 自激活之日起有效天数
+        if (req.getExpiryType().equals(CommonConstant.POINT_EXCHANGE_PERIOD) || req.getExpiryType().equals(CommonConstant.POINT_ACTIVE_PERIOD)) {
             CommonValidator.validateNull(req.getValidityPeriod(), new PointException(PointCodeEnum.POINT_EXPIRY_TIME_IS_NULL));
+            if (req.getValidityPeriod() == 0) {
+                throw new PointException(PointCodeEnum.POINT_EXPIRY_TIME_IS_NULL);
+            }
+            req.setPointEffectiveTime(DateUtil.getFirstSecond(System.currentTimeMillis()));
+            req.setPointExpiryTime(DateUtil.getLastSecond(System.currentTimeMillis()));
         }
         PointExchangeCodeEditDTO dto = PointExchangeCodeAdapter.editReq2EditDto(req);
         pointExchangeCodeBiz.editSave(dto);
@@ -175,9 +183,9 @@ public class APIPointExchangeCodeController extends BaseController {
     @ApiOperation(value = "【APP端】客户用兑换码进行兑换", httpMethod = "POST", notes = "客户用积分卡兑换码兑换")
     @RequestMapping(value = "/customerselfcodecharge", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "客户用兑换码进行兑换", level = LogLevelEnum.LEVEL_2)
-    public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req)  {
+    public Object customerSelfCodeCharge(@ModelAttribute CodeChargeReq req) {
         CommonValidator.validateId(req.getId());
-        CommonValidator.validateNull(req.getKeyt(),new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
+        CommonValidator.validateNull(req.getKeyt(), new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
         pointExchangeCodeBiz.customerSelfCharge(req.getId(), req.getKeyt());
         return ResponseFactory.buildSuccess();
     }
@@ -186,9 +194,9 @@ public class APIPointExchangeCodeController extends BaseController {
     @ApiOperation(value = "【后台】后台用兑换码进行兑换", httpMethod = "POST", notes = "后台用兑换码进行兑换")
     @RequestMapping(value = "/backstagecodecharge", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "后台用兑换码进行兑换", level = LogLevelEnum.LEVEL_2)
-    public Object backstageCodeCharge(@ModelAttribute CodeChargeReq req)  {
+    public Object backstageCodeCharge(@ModelAttribute CodeChargeReq req) {
         CommonValidator.validateId(req.getId());
-        CommonValidator.validateNull(req.getKeyt(),new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
+        CommonValidator.validateNull(req.getKeyt(), new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
         pointExchangeCodeBiz.backstageCodeCharge(req.getId(), req.getKeyt());
         return ResponseFactory.buildSuccess();
     }

@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.ChargeReceiptPOMapper" >
+  <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.ChargeReceiptPO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="audit_record_id" property="auditRecordId" jdbcType="INTEGER" />
+    <result column="exchange_point" property="exchangePoint" jdbcType="DECIMAL" />
+    <result column="pos_code" property="posCode" jdbcType="VARCHAR" />
+    <result column="trade_time" property="tradeTime" jdbcType="TIMESTAMP" />
+    <result column="card_no" property="cardNo" jdbcType="VARCHAR" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="inputer_id" property="inputerId" jdbcType="INTEGER" />
+    <result column="inputer_name" property="inputerName" jdbcType="VARCHAR" />
+    <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, audit_record_id, exchange_point, pos_code, trade_time, card_no, customer_name, 
+    inputer_id, inputer_name, ext_info, is_deleted, add_time, mod_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.ChargeReceiptPOExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from charge_receipt
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from charge_receipt
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from charge_receipt
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jiazhe.youxiang.server.domain.po.ChargeReceiptPOExample" >
+    delete from charge_receipt
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.ChargeReceiptPO" >
+    insert into charge_receipt (id, audit_record_id, exchange_point, 
+      pos_code, trade_time, card_no, 
+      customer_name, inputer_id, inputer_name, 
+      ext_info, is_deleted, add_time, 
+      mod_time)
+    values (#{id,jdbcType=INTEGER}, #{auditRecordId,jdbcType=INTEGER}, #{exchangePoint,jdbcType=DECIMAL}, 
+      #{posCode,jdbcType=VARCHAR}, #{tradeTime,jdbcType=TIMESTAMP}, #{cardNo,jdbcType=VARCHAR}, 
+      #{customerName,jdbcType=VARCHAR}, #{inputerId,jdbcType=INTEGER}, #{inputerName,jdbcType=VARCHAR}, 
+      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{modTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.ChargeReceiptPO" >
+    insert into charge_receipt
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="auditRecordId != null" >
+        audit_record_id,
+      </if>
+      <if test="exchangePoint != null" >
+        exchange_point,
+      </if>
+      <if test="posCode != null" >
+        pos_code,
+      </if>
+      <if test="tradeTime != null" >
+        trade_time,
+      </if>
+      <if test="cardNo != null" >
+        card_no,
+      </if>
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="inputerId != null" >
+        inputer_id,
+      </if>
+      <if test="inputerName != null" >
+        inputer_name,
+      </if>
+      <if test="extInfo != null" >
+        ext_info,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="modTime != null" >
+        mod_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="auditRecordId != null" >
+        #{auditRecordId,jdbcType=INTEGER},
+      </if>
+      <if test="exchangePoint != null" >
+        #{exchangePoint,jdbcType=DECIMAL},
+      </if>
+      <if test="posCode != null" >
+        #{posCode,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeTime != null" >
+        #{tradeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cardNo != null" >
+        #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="inputerId != null" >
+        #{inputerId,jdbcType=INTEGER},
+      </if>
+      <if test="inputerName != null" >
+        #{inputerName,jdbcType=VARCHAR},
+      </if>
+      <if test="extInfo != null" >
+        #{extInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modTime != null" >
+        #{modTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jiazhe.youxiang.server.domain.po.ChargeReceiptPOExample" resultType="java.lang.Integer" >
+    select count(*) from charge_receipt
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update charge_receipt
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.auditRecordId != null" >
+        audit_record_id = #{record.auditRecordId,jdbcType=INTEGER},
+      </if>
+      <if test="record.exchangePoint != null" >
+        exchange_point = #{record.exchangePoint,jdbcType=DECIMAL},
+      </if>
+      <if test="record.posCode != null" >
+        pos_code = #{record.posCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tradeTime != null" >
+        trade_time = #{record.tradeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.cardNo != null" >
+        card_no = #{record.cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerName != null" >
+        customer_name = #{record.customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inputerId != null" >
+        inputer_id = #{record.inputerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.inputerName != null" >
+        inputer_name = #{record.inputerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extInfo != null" >
+        ext_info = #{record.extInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDeleted != null" >
+        is_deleted = #{record.isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="record.addTime != null" >
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modTime != null" >
+        mod_time = #{record.modTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update charge_receipt
+    set id = #{record.id,jdbcType=INTEGER},
+      audit_record_id = #{record.auditRecordId,jdbcType=INTEGER},
+      exchange_point = #{record.exchangePoint,jdbcType=DECIMAL},
+      pos_code = #{record.posCode,jdbcType=VARCHAR},
+      trade_time = #{record.tradeTime,jdbcType=TIMESTAMP},
+      card_no = #{record.cardNo,jdbcType=VARCHAR},
+      customer_name = #{record.customerName,jdbcType=VARCHAR},
+      inputer_id = #{record.inputerId,jdbcType=INTEGER},
+      inputer_name = #{record.inputerName,jdbcType=VARCHAR},
+      ext_info = #{record.extInfo,jdbcType=VARCHAR},
+      is_deleted = #{record.isDeleted,jdbcType=TINYINT},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      mod_time = #{record.modTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jiazhe.youxiang.server.domain.po.ChargeReceiptPO" >
+    update charge_receipt
+    <set >
+      <if test="auditRecordId != null" >
+        audit_record_id = #{auditRecordId,jdbcType=INTEGER},
+      </if>
+      <if test="exchangePoint != null" >
+        exchange_point = #{exchangePoint,jdbcType=DECIMAL},
+      </if>
+      <if test="posCode != null" >
+        pos_code = #{posCode,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeTime != null" >
+        trade_time = #{tradeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cardNo != null" >
+        card_no = #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null" >
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="inputerId != null" >
+        inputer_id = #{inputerId,jdbcType=INTEGER},
+      </if>
+      <if test="inputerName != null" >
+        inputer_name = #{inputerName,jdbcType=VARCHAR},
+      </if>
+      <if test="extInfo != null" >
+        ext_info = #{extInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modTime != null" >
+        mod_time = #{modTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jiazhe.youxiang.server.domain.po.ChargeReceiptPO" >
+    update charge_receipt
+    set audit_record_id = #{auditRecordId,jdbcType=INTEGER},
+      exchange_point = #{exchangePoint,jdbcType=DECIMAL},
+      pos_code = #{posCode,jdbcType=VARCHAR},
+      trade_time = #{tradeTime,jdbcType=TIMESTAMP},
+      card_no = #{cardNo,jdbcType=VARCHAR},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      inputer_id = #{inputerId,jdbcType=INTEGER},
+      inputer_name = #{inputerName,jdbcType=VARCHAR},
+      ext_info = #{extInfo,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      mod_time = #{modTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

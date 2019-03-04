@@ -28,7 +28,7 @@ public class GenerateCode {
         String idKeytStr = String.valueOf(id);
         Integer idLen = idKeytStr.length();
         String randomNumStr = randomOneNum(10 - idLen);
-        String keyt = type + idKeytStr + randomNumStr + CheckCodeAlgorithms.getValidateCode(idKeytStr + randomNumStr);
+        String keyt = type + idKeytStr + randomNumStr + CheckCodeAlgorithms.getValidateCode(type + idKeytStr + randomNumStr);
         map.put("code", code);
         map.put("keyt", keyt);
         return map;

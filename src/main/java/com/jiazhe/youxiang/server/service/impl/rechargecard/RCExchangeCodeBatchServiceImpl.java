@@ -192,7 +192,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
                 if (bean.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME) && bean.getRechargeCardExpiryTime().getTime() > System.currentTimeMillis()) {
                     validBatchList.add(bean);
                 }
-                if (bean.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_PERIOD) && bean.getValidityPeriod() > 0) {
+                if (bean.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXCHANGE_PERIOD) && bean.getValidityPeriod() > 0) {
                     validBatchList.add(bean);
                 }
             }

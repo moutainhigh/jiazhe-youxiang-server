@@ -15,8 +15,6 @@ public class AuditRecordPO implements Serializable {
 
     private BigDecimal exchangePoint;
 
-    private String exchangeType;
-
     private BigDecimal givingPoint;
 
     private String givingType;
@@ -56,6 +54,14 @@ public class AuditRecordPO implements Serializable {
     private Date addTime;
 
     private Date modTime;
+
+    private Byte chargeReceiptStatus;
+
+    private String pointCodes;
+
+    private BigDecimal productValue;
+
+    private Byte exchangeType;
 
     private static final long serialVersionUID = 1L;
 
@@ -97,14 +103,6 @@ public class AuditRecordPO implements Serializable {
 
     public void setExchangePoint(BigDecimal exchangePoint) {
         this.exchangePoint = exchangePoint;
-    }
-
-    public String getExchangeType() {
-        return exchangeType;
-    }
-
-    public void setExchangeType(String exchangeType) {
-        this.exchangeType = exchangeType == null ? null : exchangeType.trim();
     }
 
     public BigDecimal getGivingPoint() {
@@ -265,5 +263,37 @@ public class AuditRecordPO implements Serializable {
 
     public void setModTime(Date modTime) {
         this.modTime = modTime;
+    }
+
+    public Byte getChargeReceiptStatus() {
+        return chargeReceiptStatus;
+    }
+
+    public void setChargeReceiptStatus(Byte chargeReceiptStatus) {
+        this.chargeReceiptStatus = chargeReceiptStatus;
+    }
+
+    public String getPointCodes() {
+        return pointCodes;
+    }
+
+    public void setPointCodes(String pointCodes) {
+        this.pointCodes = pointCodes == null ? null : pointCodes.trim();
+    }
+
+    public BigDecimal getProductValue() {
+        return productValue;
+    }
+
+    public void setProductValue(BigDecimal productValue) {
+        this.productValue = productValue;
+    }
+
+    public Byte getExchangeType() {
+        return exchangeType;
+    }
+
+    public void setExchangeType(Byte exchangeType) {
+        this.exchangeType = exchangeType;
     }
 }

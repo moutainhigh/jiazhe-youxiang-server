@@ -27,8 +27,11 @@ public class RCExchangeCodeBatchAdapter {
         rCExchangeCodeBatchResp.setRechargeCardName(dto.getRechargeCardName());
         rCExchangeCodeBatchResp.setAmount(dto.getAmount());
         rCExchangeCodeBatchResp.setFaceValue(dto.getFaceValue());
-        rCExchangeCodeBatchResp.setRechargeCardEffectiveTime(dto.getRechargeCardEffectiveTime().getTime());
         rCExchangeCodeBatchResp.setExpiryTime(dto.getExpiryTime().getTime());
+        rCExchangeCodeBatchResp.setExpiryType(dto.getExpiryType());
+        rCExchangeCodeBatchResp.setRechargeCardEffectiveTime(dto.getRechargeCardEffectiveTime().getTime());
+        rCExchangeCodeBatchResp.setRechargeCardExpiryTime(dto.getRechargeCardExpiryTime().getTime());
+        rCExchangeCodeBatchResp.setValidityPeriod(dto.getValidityPeriod());
         rCExchangeCodeBatchResp.setStatus(dto.getStatus());
         rCExchangeCodeBatchResp.setIsVirtual(dto.getIsVirtual());
         rCExchangeCodeBatchResp.setIsMade(dto.getIsMade());
@@ -47,8 +50,11 @@ public class RCExchangeCodeBatchAdapter {
         rCExchangeCodeBatchDTO.setIsMade(rechargeCardExchangeCodeBatchPO.getIsMade());
         rCExchangeCodeBatchDTO.setAmount(rechargeCardExchangeCodeBatchPO.getAmount());
         rCExchangeCodeBatchDTO.setFaceValue(rechargeCardExchangeCodeBatchPO.getFaceValue());
-        rCExchangeCodeBatchDTO.setRechargeCardEffectiveTime(rechargeCardExchangeCodeBatchPO.getRechargeCardEffectiveTime());
         rCExchangeCodeBatchDTO.setExpiryTime(rechargeCardExchangeCodeBatchPO.getExpiryTime());
+        rCExchangeCodeBatchDTO.setExpiryType(rechargeCardExchangeCodeBatchPO.getExpiryType());
+        rCExchangeCodeBatchDTO.setRechargeCardEffectiveTime(rechargeCardExchangeCodeBatchPO.getRechargeCardEffectiveTime());
+        rCExchangeCodeBatchDTO.setRechargeCardExpiryTime(rechargeCardExchangeCodeBatchPO.getRechargeCardExpiryTime());
+        rCExchangeCodeBatchDTO.setValidityPeriod(rechargeCardExchangeCodeBatchPO.getValidityPeriod());
         rCExchangeCodeBatchDTO.setStatus(rechargeCardExchangeCodeBatchPO.getStatus());
         return rCExchangeCodeBatchDTO;
     }

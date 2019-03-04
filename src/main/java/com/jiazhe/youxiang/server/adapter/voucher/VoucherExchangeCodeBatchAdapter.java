@@ -26,8 +26,11 @@ public class VoucherExchangeCodeBatchAdapter {
         voucherExchangeCodeBatchResp.setVoucherName(dto.getVoucherName());
         voucherExchangeCodeBatchResp.setAmount(dto.getAmount());
         voucherExchangeCodeBatchResp.setCount(dto.getCount());
-        voucherExchangeCodeBatchResp.setVoucherEffectiveTime(dto.getVoucherEffectiveTime().getTime());
         voucherExchangeCodeBatchResp.setExpiryTime(dto.getExpiryTime().getTime());
+        voucherExchangeCodeBatchResp.setExpiryType(dto.getExpiryType());
+        voucherExchangeCodeBatchResp.setVoucherEffectiveTime(dto.getVoucherEffectiveTime().getTime());
+        voucherExchangeCodeBatchResp.setVoucherExpiryTime(dto.getVoucherExpiryTime().getTime());
+        voucherExchangeCodeBatchResp.setValidityPeriod(dto.getValidityPeriod());
         voucherExchangeCodeBatchResp.setStatus(dto.getStatus());
         voucherExchangeCodeBatchResp.setIsMade(dto.getIsMade());
         return voucherExchangeCodeBatchResp;
@@ -89,8 +92,11 @@ public class VoucherExchangeCodeBatchAdapter {
         voucherExchangeCodeBatchDTO.setIsMade(voucherExchangeCodeBatchPO.getIsMade());
         voucherExchangeCodeBatchDTO.setAmount(voucherExchangeCodeBatchPO.getAmount());
         voucherExchangeCodeBatchDTO.setCount(voucherExchangeCodeBatchPO.getCount());
-        voucherExchangeCodeBatchDTO.setVoucherEffectiveTime(voucherExchangeCodeBatchPO.getVoucherEffectiveTime());
         voucherExchangeCodeBatchDTO.setExpiryTime(voucherExchangeCodeBatchPO.getExpiryTime());
+        voucherExchangeCodeBatchDTO.setExpiryType(voucherExchangeCodeBatchPO.getExpiryType());
+        voucherExchangeCodeBatchDTO.setVoucherEffectiveTime(voucherExchangeCodeBatchPO.getVoucherEffectiveTime());
+        voucherExchangeCodeBatchDTO.setVoucherExpiryTime(voucherExchangeCodeBatchPO.getVoucherExpiryTime());
+        voucherExchangeCodeBatchDTO.setValidityPeriod(voucherExchangeCodeBatchPO.getValidityPeriod());
         voucherExchangeCodeBatchDTO.setStatus(voucherExchangeCodeBatchPO.getStatus());
         return voucherExchangeCodeBatchDTO;
     }

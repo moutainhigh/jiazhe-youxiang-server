@@ -60,7 +60,8 @@
                                     <label class="col-sm-1 control-label no-padding-right">订单号：</label>
                                     <div class="col-sm-2">
                                         <div class="pos-rel">
-                                            <input id="searchOrderCode" name="orderCode" class="form-control" type="text"
+                                            <input id="searchOrderCode" name="orderCode" class="form-control"
+                                                   type="text"
                                                    style="height:30px"/>
                                         </div>
                                     </div>
@@ -240,8 +241,11 @@
                                                     <label class="col-sm-4 control-label no-padding-right">服务地址：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="re_customerAddress" class="form-control"
-                                                                   type="text" style="height:30px" readonly/>
+                                                            <textarea id="re_customerAddress"
+                                                                      class="form-control" disabled="disabled"
+                                                                      style="resize:none;height: 100px;"></textarea>
+                                                            <!--<input id="re_customerAddress" class="form-control"-->
+                                                                   <!--type="text" style="height:30px" readonly/>-->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -251,8 +255,11 @@
                                                     <label class="col-sm-4 control-label no-padding-right">客户留言：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="re_customerRemark" class="form-control"
-                                                                   type="text" style="height:30px" readonly/>
+                                                            <!--<input id="re_customerRemark" class="form-control"-->
+                                                                   <!--type="text" style="height:30px" readonly/>-->
+                                                            <textarea id="re_customerRemark"
+                                                                      class="form-control" disabled="disabled"
+                                                                      style="resize:none;height: 100px;"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -439,8 +446,11 @@
                                                     <label class="col-sm-3 control-label no-padding-right">服务地址：</label>
                                                     <div class="col-sm-9">
                                                         <div class="pos-rel">
-                                                            <input id="app_customerAddress" class="form-control"
-                                                                   type="text" style="height:30px" readonly/>
+                                                            <!--<input id="app_customerAddress" class="form-control"-->
+                                                                   <!--type="text" style="height:30px" readonly/>-->
+                                                            <textarea id="app_customerAddress"
+                                                                      class="form-control" disabled="disabled"
+                                                                      style="resize:none;height: 100px;"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -660,7 +670,7 @@
                 str += getFunctionButton("btn-danger", "changeOrderReservation(" + rowObject.id + ")", "修改订单");
             }
             if (permission.indexOf("orderComplete") != -1) {
-                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id+","+rowObject.cost + ")", "完成订单");
+                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + "," + rowObject.cost + ")", "完成订单");
             }
             if (permission.indexOf("orderAppend") != -1) {
                 str += getFunctionButton("btn-primary", "showAppendOrder(" + rowObject.id + ")", "追加订单");
@@ -672,7 +682,7 @@
                 str += getFunctionButton("btn-danger", "orderCancelUnpass(" + rowObject.id + ")", "审核不通过");
             }
             if (permission.indexOf("orderComplete") != -1) {
-                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id+","+rowObject.cost + ")", "完成订单");
+                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + "," + rowObject.cost + ")", "完成订单");
             }
         }
         if (rowObject.status == 6) {
@@ -680,7 +690,7 @@
                 str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
             }
             if (permission.indexOf("orderComplete") != -1) {
-                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id+","+rowObject.cost + ")", "完成订单");
+                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + "," + rowObject.cost + ")", "完成订单");
             }
         }
         return str;
@@ -1110,9 +1120,9 @@
             }
         });
     }
-    "<span style='color:#"+color+"'>"+text+"</span>";
-    function userCompleteOrder(id,cost) {
-        confirm("确定要完成该订单吗？<span style='color:#FF0000'>该订单成本为"+cost+"元！</span>", function (result) {
+    "<span style='color:#" + color + "'>" + text + "</span>";
+    function userCompleteOrder(id, cost) {
+        confirm("确定要完成该订单吗？<span style='color:#FF0000'>该订单成本为" + cost + "元！</span>", function (result) {
             if (result) {
                 $.ajax({
                     url: "/api/orderinfo/usercompleteorder",

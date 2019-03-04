@@ -24,9 +24,15 @@ public class RCExchangeCodeBatchDTO extends BaseObject {
 
     private BigDecimal faceValue;
 
+    private Date expiryTime;
+
+    private Byte expiryType;
+
     private Date rechargeCardEffectiveTime;
 
-    private Date expiryTime;
+    private Date rechargeCardExpiryTime;
+
+    private Integer validityPeriod;
 
     private Byte status;
 
@@ -112,5 +118,29 @@ public class RCExchangeCodeBatchDTO extends BaseObject {
 
     public void setRechargeCardEffectiveTime(Date rechargeCardEffectiveTime) {
         this.rechargeCardEffectiveTime = rechargeCardEffectiveTime;
+    }
+
+    public Byte getExpiryType() {
+        return expiryType;
+    }
+
+    public void setExpiryType(Byte expiryType) {
+        this.expiryType = expiryType;
+    }
+
+    public Date getRechargeCardExpiryTime() {
+        return rechargeCardExpiryTime;
+    }
+
+    public void setRechargeCardExpiryTime(Date rechargeCardExpiryTime) {
+        this.rechargeCardExpiryTime = rechargeCardExpiryTime;
+    }
+
+    public Integer getValidityPeriod() {
+        return validityPeriod;
+    }
+
+    public void setValidityPeriod(Integer validityPeriod) {
+        this.validityPeriod = validityPeriod;
     }
 }
