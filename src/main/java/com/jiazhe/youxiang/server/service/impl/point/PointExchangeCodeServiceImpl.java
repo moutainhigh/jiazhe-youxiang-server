@@ -127,6 +127,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
                 bean.setExpiryTime(new Timestamp(System.currentTimeMillis()));
                 bean.setPointEffectiveTime(new Timestamp(System.currentTimeMillis()));
             }
+            bean.setStatus(status);
         });
         pointExchangeCodePOManualMapper.batchUpdate(poList);
     }
