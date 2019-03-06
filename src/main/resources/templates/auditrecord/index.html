@@ -60,9 +60,10 @@
                                 <div class="col-sm-2">
                                     <select id="searchStatus" name="status" class="selectpicker show-tick form-control">
                                         <option value=>所有</option>
-                                        <option value=0 th:selected="${status} == 0">待审核</option>
-                                        <option value=1 th:selected="${status} == 1">未通过</option>
-                                        <option value=2 th:selected="${status} == 2">已通过</option>
+                                        <option value=1 th:selected="${status} == 1">未提交</option>
+                                        <option value=2 th:selected="${status} == 2">已提交</option>
+                                        <option value=3 th:selected="${status} == 3">已驳回</option>
+                                        <option value=4 th:selected="${status} == 4">已通过</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-3">
@@ -342,8 +343,8 @@
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
-    var auditRecordStatus = ['待审核', '未通过', '已通过'];
-    var auditRecordColor = ['0000FF','FF0000','00FF00']
+    var auditRecordStatus = ['未提交','已提交', '已驳回', '已通过'];
+    var auditRecordColor = ['000000','0000FF','FF0000','00FF00']
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -404,7 +405,7 @@
                     index: 'status',
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return generateSpan(auditRecordStatus[rowObject.status],auditRecordColor[rowObject.status]);
+                        return generateSpan(auditRecordStatus[rowObject.status-1],auditRecordColor[rowObject.status-1]);
                     }
                 },
                 {name: 'customerName', index: 'customerName', sortable: false},
@@ -421,7 +422,7 @@
                     index: 'auditorName',
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.status == 0 ? "" : rowObject.auditorName;
+                        return rowObject.status > 2 ? "" : rowObject.auditorName;
                     }
                 },
                 {
@@ -429,7 +430,7 @@
                     index: 'auditTime',
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.status == 0 ? "" : timeFormat(rowObject.auditTime);
+                        return rowObject.status > 2 ? "" : timeFormat(rowObject.auditTime);
                     }
                 },
             ],

@@ -41,8 +41,8 @@ public class AuditRecordBiz {
         return auditRecordService.getList(null, status, paging);
     }
 
-    public List<AuditRecordDTO> getSubmitterList(Integer submitterId, Paging paging) {
-        return auditRecordService.getList(submitterId, null, paging);
+    public List<AuditRecordDTO> getSubmitterList(Byte status,Integer submitterId, Paging paging) {
+        return auditRecordService.getList(submitterId, status, paging);
     }
 
 

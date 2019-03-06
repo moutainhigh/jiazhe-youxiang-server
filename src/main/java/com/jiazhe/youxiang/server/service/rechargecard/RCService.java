@@ -72,7 +72,7 @@ public interface RCService {
     void batchUpdate(List<Integer> ids, RCExchangeCodeBatchSaveDTO batchSaveDTO);
 
     /**
-     * 已经充值卡ids，批量停用启用
+     * 根据充值卡ids，批量停用启用
      * @param ids
      * @param status
      * @return

@@ -9,7 +9,6 @@ import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.dao.mapper.PointExchangeCodeBatchPOMapper;
-import com.jiazhe.youxiang.server.dao.mapper.PointExchangeRecordPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.PointPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.point.PointPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO;
@@ -18,7 +17,6 @@ import com.jiazhe.youxiang.server.domain.po.PointPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.point.point.PointDTO;
 import com.jiazhe.youxiang.server.dto.point.point.PointEditDTO;
-import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangerecord.PointExchangeRecordDTO;
@@ -38,7 +36,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -78,24 +75,9 @@ public class PointServiceImpl implements PointService {
         List<PointPO> pointPOList = pointPOManualMapper.findByIds(ids);
         pointPOList.stream().forEach(bean -> {
             bean.setName(batchSaveDTO.getPointName());
-            bean.setDescription(batchSaveDTO.getDescription());
             bean.setProjectId(batchSaveDTO.getProjectId());
             bean.setCityCodes(batchSaveDTO.getCityCodes());
             bean.setProductIds(batchSaveDTO.getProductIds());
-            bean.setEffectiveTime(batchSaveDTO.getPointEffectiveTime());
-            //直接指定过期时间
-            if (batchSaveDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
-                bean.setExpiryTime(batchSaveDTO.getPointExpiryTime());
-            }
-            //自兑换之日起多少天有效
-            if(batchSaveDTO.getExpiryType().equals(CommonConstant.POINT_EXCHANGE_PERIOD)){
-                bean.setExpiryTime(new Date(DateUtil.getLastSecond(bean.getAddTime().getTime() + batchSaveDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
-            }
-            //自激活之日起多少天有效
-            if(batchSaveDTO.getExpiryType().equals(CommonConstant.POINT_ACTIVE_PERIOD)){
-                //TODO
-            }
-
         });
         pointPOManualMapper.batchUpdate(pointPOList);
     }

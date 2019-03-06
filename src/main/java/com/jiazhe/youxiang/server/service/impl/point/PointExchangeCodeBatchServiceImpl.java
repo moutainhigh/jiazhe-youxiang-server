@@ -19,10 +19,13 @@ import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeS
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchSaveDTO;
+import com.jiazhe.youxiang.server.dto.point.pointexchangerecord.PointExchangeRecordDTO;
 import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
 import com.jiazhe.youxiang.server.service.ProjectService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
+import com.jiazhe.youxiang.server.service.point.PointExchangeRecordService;
+import com.jiazhe.youxiang.server.service.point.PointService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +51,10 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
     private PointExchangeCodeBatchPOMapper pointExchangeCodeBatchPOMapper;
     @Autowired
     private PointExchangeCodeService pointExchangeCodeService;
+    @Autowired
+    private PointExchangeRecordService pointExchangeRecordService;
+    @Autowired
+    private PointService pointService;
     @Autowired
     private ProjectService projectService;
 
@@ -207,6 +214,16 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
         batchPO.setStatus(status);
         batchPO.setModTime(new Date());
         pointExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
+        //非虚拟批次，需要修改批次下的积分卡启、停用状态
+        if (!batchPO.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
+            List<PointExchangeCodeDTO> codeDTOList = pointExchangeCodeService.getByBatchId(id);
+            List<Integer> usedIds = codeDTOList.stream().filter(bean -> bean.getUsed().equals(CommonConstant.CODE_HAS_USED)).map(PointExchangeCodeDTO::getId).collect(Collectors.toList());
+            if (!usedIds.isEmpty()) {
+                List<PointExchangeRecordDTO> recordDTOList = pointExchangeRecordService.findByCodeIds(usedIds);
+                List<Integer> pointIds = recordDTOList.stream().map(PointExchangeRecordDTO::getPointId).collect(Collectors.toList());
+                pointService.batchChangeStatus(pointIds, status);
+            }
+        }
     }
 
     @Override

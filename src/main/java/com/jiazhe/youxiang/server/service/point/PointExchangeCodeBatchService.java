@@ -20,15 +20,28 @@ public interface PointExchangeCodeBatchService {
 
     List<PointExchangeCodeBatchDTO> getVirtualByProjectId(Integer id);
 
+    /**
+     * 添加批次信息
+     * @param pointExchangeCodeBatchSaveDTO
+     */
     void addSave(PointExchangeCodeBatchSaveDTO pointExchangeCodeBatchSaveDTO);
 
+    /**
+     * 修改批次信息
+     * @param pointExchangeCodeBatchSaveDTO
+     */
     void editSave(PointExchangeCodeBatchSaveDTO pointExchangeCodeBatchSaveDTO);
 
     PointExchangeCodeBatchEditDTO getById(Integer id);
 
     void generateCode(Integer id);
 
-    void changeBatchStatus(Integer id, Byte b);
+    /**
+     * 改变批次状态，业务重点：非虚拟批次需要改变批次下兑换码兑换的积分卡状态
+     * @param id
+     * @param status 【0停用 1启用】
+     */
+    void changeBatchStatus(Integer id, Byte status);
 
     /**
      * 根据商户号码找到虚拟批次id

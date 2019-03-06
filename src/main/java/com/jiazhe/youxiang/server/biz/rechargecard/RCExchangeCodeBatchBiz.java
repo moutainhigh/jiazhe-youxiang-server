@@ -1,10 +1,6 @@
 package com.jiazhe.youxiang.server.biz.rechargecard;
 
-import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
-import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
-import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
@@ -13,9 +9,6 @@ import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,12 +41,18 @@ public class RCExchangeCodeBatchBiz {
         return rcExchangeCodeBatchEditDTO;
     }
 
-
-
+    /**
+     * 根据id启用充值卡兑换码批次
+     * @param id
+     */
     public void startUsing(Integer id) {
         rcExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
     }
 
+    /**
+     * 根据id停用充值卡兑换码批次
+     * @param id
+     */
     public void stopUsing(Integer id) {
          rcExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
     }
