@@ -8,6 +8,7 @@ import com.jiazhe.youxiang.base.realm.UserRealm;
 import com.jiazhe.youxiang.base.util.AliUtils;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.CookieUtil;
+import com.jiazhe.youxiang.base.util.EncryptPasswordUtil;
 import com.jiazhe.youxiang.base.util.IpAdrressUtil;
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
@@ -97,7 +98,11 @@ public class APISignInController extends BaseController {
             throw new LoginException(LoginCodeEnum.LOGIN_USER_ILLEGAL);
         }
         SysUserDTO sysUserDTO = sysUserDTOList.get(0);
-        //判断最后一次登陆ip是否一致，一致则直接登陆
+        //前置判断一下密码是否正确，以免发了验证码再告诉密码错误，不符合思维逻辑
+        if (!sysUserDTO.getPassword().equals(EncryptPasswordUtil.encrypt(sysUserDTO.getSalt(),req.getPassword()))){
+            throw new LoginException(LoginCodeEnum.LOGIN_PASSWRLD_WRONG);
+        }
+        // 判断最后一次登陆ip是否一致，一致则直接登陆
         if (!sysUserDTO.getLastLoginIp().equals(IpAdrressUtil.getIpAdrress(request))) {
             //判断有没有短信bizId传过来
             CommonValidator.validateNull(bizId, new LoginException(LoginCodeEnum.LOGIN_DIFFERENT_CLIENT));
