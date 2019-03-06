@@ -29,13 +29,17 @@ public class AliUtils {
     /**
      * 发送验证短信
      */
-    public static SendSmsResponse sendMsg(String phone) throws ServerException, ClientException {
+    public static SendSmsResponse sendMsg(String phone) {
         //设置超时时间-可自行调整
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
         System.setProperty("sun.net.client.defaultReadTimeout", "10000");
         //初始化ascClient,暂时不支持多region（请勿修改）
         IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", PropertyUtils.getProperty("accessKeyId"), PropertyUtils.getProperty("accessKeySecret"));
-        DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", "Dysmsapi", "dysmsapi.aliyuncs.com");
+        try {
+            DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", "Dysmsapi", "dysmsapi.aliyuncs.com");
+        } catch (ClientException e) {
+            throw new LoginException(LoginCodeEnum.LOGIN_SENDCODE_ERROR);
+        }
         IAcsClient acsClient = new DefaultAcsClient(profile);
         //组装请求对象
         SendSmsRequest request = new SendSmsRequest();
@@ -55,7 +59,12 @@ public class AliUtils {
         //可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
         request.setOutId("yourOutId");
         //请求失败这里会抛ClientException异常
-        SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
+        SendSmsResponse sendSmsResponse = null;
+        try {
+            sendSmsResponse = acsClient.getAcsResponse(request);
+        } catch (ClientException e) {
+            throw new LoginException(LoginCodeEnum.LOGIN_SENDCODE_ERROR);
+        }
         if (sendSmsResponse.getCode() == null && !sendSmsResponse.getCode().equals("OK")) {
             //请求失败
             throw new LoginException(LoginCodeEnum.LOGIN_SENDCODE_ERROR);
@@ -63,13 +72,17 @@ public class AliUtils {
         return sendSmsResponse;
     }
 
-    public static QuerySendDetailsResponse querySendDetails(String phone, String bizId) throws ClientException {
+    public static QuerySendDetailsResponse querySendDetails(String phone, String bizId) {
         //可自助调整超时时间  
         System.setProperty("sun.net.client.defaultConnectTimeout", "60000");
         System.setProperty("sun.net.client.defaultReadTimeout", "60000");
         //初始化acsClient,暂不支持region化  
         IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", PropertyUtils.getProperty("accessKeyId"), PropertyUtils.getProperty("accessKeySecret"));
-        DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", "Dysmsapi", "dysmsapi.aliyuncs.com");
+        try {
+            DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", "Dysmsapi", "dysmsapi.aliyuncs.com");
+        } catch (ClientException e) {
+            throw new LoginException(LoginCodeEnum.ALI_MESSAGE_SERVICE_EXCEPTION);
+        }
         IAcsClient acsClient = new DefaultAcsClient(profile);
         //组装请求对象  
         QuerySendDetailsRequest request = new QuerySendDetailsRequest();
@@ -85,14 +98,19 @@ public class AliUtils {
         //必填-当前页码从1开始计数  
         request.setCurrentPage(1L);
         //hint 此处可能会抛出异常，注意catch  
-        QuerySendDetailsResponse querySendDetailsResponse = acsClient.getAcsResponse(request);
+        QuerySendDetailsResponse querySendDetailsResponse = null;
+        try {
+            querySendDetailsResponse = acsClient.getAcsResponse(request);
+        } catch (ClientException e) {
+            throw new LoginException(LoginCodeEnum.ALI_MESSAGE_SERVICE_EXCEPTION);
+        }
         return querySendDetailsResponse;
     }
 
     /**
      * 验证码验证
      */
-    public static boolean isVerified(String phone, String code, String bizId) throws ClientException {
+    public static boolean isVerified(String phone, String code, String bizId) {
         QuerySendDetailsResponse querySendDetailsResponse = querySendDetails(phone, bizId);
         List<QuerySendDetailsResponse.SmsSendDetailDTO> smsSendDetailDTOList = querySendDetailsResponse.getSmsSendDetailDTOs();
         if (smsSendDetailDTOList.size() == 0) {
