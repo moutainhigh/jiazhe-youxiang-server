@@ -50,7 +50,7 @@
             update point_exchange_code
             <set>
                 batch_name = #{item.batchName},point_name = #{item.pointName},batch_description =
-                #{item.batchDescription},project_id = #{item.projectId},
+                #{item.batchDescription},project_id = #{item.projectId},status = #{item.status},
                 city_codes = #{item.cityCodes},product_ids = #{item.productIds},expiry_time =
                 #{item.expiryTime},point_effective_time = #{item.pointEffectiveTime},expiry_type = #{item.expiryType},
                 point_expiry_time = #{item.pointExpiryTime},validity_period =
