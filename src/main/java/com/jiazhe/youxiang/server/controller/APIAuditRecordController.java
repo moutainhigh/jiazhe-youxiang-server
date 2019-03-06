@@ -5,7 +5,6 @@ import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.AuditRecordAdapter;
 import com.jiazhe.youxiang.server.biz.AuditRecordBiz;
-import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
@@ -20,8 +19,10 @@ import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
-import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
-import com.jiazhe.youxiang.server.vo.req.auditrecord.*;
+import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordAddReq;
+import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordCheckReq;
+import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordEditReq;
+import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordPageReq;
 import com.jiazhe.youxiang.server.vo.resp.auditrecord.AuditRecordResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.WaitingDealCountResp;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +31,10 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -111,13 +115,13 @@ public class APIAuditRecordController extends BaseController {
     @ApiOperation(value = "【审核小程序】根据提交人id查询", httpMethod = "GET", response = AuditRecordResp.class, responseContainer = "List", notes = "【前台】根据提交人id查询")
     @RequestMapping(value = "/submitterlistpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "根据提交人id查询", level = LogLevelEnum.LEVEL_1)
-    public Object submitterListPage(@ModelAttribute PageSizeNumReq req) {
+    public Object submitterListPage(@ModelAttribute AuditRecordPageReq req) {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
         if (null == sysUserDTO) {
             throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
-        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getSubmitterList(sysUserDTO.getId(), paging);
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getSubmitterList(req.getStatus(),sysUserDTO.getId(), paging);
         List<AuditRecordResp> auditRecordRespList = auditRecordDTOList.stream().map(AuditRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(auditRecordRespList, paging);
     }

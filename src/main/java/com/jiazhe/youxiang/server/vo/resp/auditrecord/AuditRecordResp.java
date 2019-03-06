@@ -4,7 +4,6 @@ import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @author TU
@@ -29,13 +28,16 @@ public class AuditRecordResp extends BaseVO {
     private BigDecimal exchangePoint;
 
     @ApiModelProperty("兑换类型")
-    private String exchangeType;
+    private Byte exchangeType;
 
-    @ApiModelProperty("赠送积分")
-    private BigDecimal givingPoint;
+    @ApiModelProperty("凭证完成状态，0未完成 1已完成")
+    private Byte chargeReceiptStatus;
 
-    @ApiModelProperty("赠送类型")
-    private String givingType;
+    @ApiModelProperty("兑换码code集合")
+    private String pointCodes;
+
+    @ApiModelProperty("实物价值")
+    private BigDecimal productValue;
 
     @ApiModelProperty("备注")
     private String remark;
@@ -52,6 +54,9 @@ public class AuditRecordResp extends BaseVO {
     @ApiModelProperty("银行卡后四位")
     private String cardNo;
 
+    @ApiModelProperty("银行网点")
+    private String bankOutletsName;
+
     @ApiModelProperty("交易时间")
     private Long tradeTime;
 
@@ -61,7 +66,7 @@ public class AuditRecordResp extends BaseVO {
     @ApiModelProperty("提交人姓名")
     private String submitterName;
 
-    @ApiModelProperty("状态 0待审核 1未通过 2通过")
+    @ApiModelProperty("状态 1未提交 2已提交 3已驳回 4已通过")
     private Byte status;
 
     @ApiModelProperty("审核时间")
@@ -122,28 +127,36 @@ public class AuditRecordResp extends BaseVO {
         this.exchangePoint = exchangePoint;
     }
 
-    public String getExchangeType() {
+    public Byte getExchangeType() {
         return exchangeType;
     }
 
-    public void setExchangeType(String exchangeType) {
+    public void setExchangeType(Byte exchangeType) {
         this.exchangeType = exchangeType;
     }
 
-    public BigDecimal getGivingPoint() {
-        return givingPoint;
+    public Byte getChargeReceiptStatus() {
+        return chargeReceiptStatus;
     }
 
-    public void setGivingPoint(BigDecimal givingPoint) {
-        this.givingPoint = givingPoint;
+    public void setChargeReceiptStatus(Byte chargeReceiptStatus) {
+        this.chargeReceiptStatus = chargeReceiptStatus;
     }
 
-    public String getGivingType() {
-        return givingType;
+    public String getPointCodes() {
+        return pointCodes;
     }
 
-    public void setGivingType(String givingType) {
-        this.givingType = givingType;
+    public void setPointCodes(String pointCodes) {
+        this.pointCodes = pointCodes;
+    }
+
+    public BigDecimal getProductValue() {
+        return productValue;
+    }
+
+    public void setProductValue(BigDecimal productValue) {
+        this.productValue = productValue;
     }
 
     public String getRemark() {
@@ -256,6 +269,14 @@ public class AuditRecordResp extends BaseVO {
 
     public void setCardNo(String cardNo) {
         this.cardNo = cardNo;
+    }
+
+    public String getBankOutletsName() {
+        return bankOutletsName;
+    }
+
+    public void setBankOutletsName(String bankOutletsName) {
+        this.bankOutletsName = bankOutletsName;
     }
 
     public Long getTradeTime() {

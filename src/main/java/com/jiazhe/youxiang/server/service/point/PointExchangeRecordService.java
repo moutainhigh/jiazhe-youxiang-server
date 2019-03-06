@@ -1,11 +1,8 @@
 package com.jiazhe.youxiang.server.service.point;
 
 import com.jiazhe.youxiang.server.domain.po.PointExchangeRecordPO;
-import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeRecordPO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangerecord.PointExchangeRecordDTO;
-import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord.RCExchangeRecordDTO;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,7 +12,12 @@ import java.util.List;
  */
 public interface PointExchangeRecordService {
 
-    List<PointExchangeRecordDTO> findByCodeIds(List<Integer> usedIds);
+    /**
+     * 根据兑换码的ids 查找兑换记录
+     * @param ids
+     * @return
+     */
+    List<PointExchangeRecordDTO> findByCodeIds(List<Integer> ids);
 
     void insert(PointExchangeRecordPO pointRecordPO);
 

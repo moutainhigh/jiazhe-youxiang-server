@@ -100,10 +100,18 @@ public class PointBiz {
         return result.contains(productId.toString());
     }
 
+    /**
+     * 启用积分卡
+     * @param id
+     */
     public void startUsing(Integer id) {
         pointService.changeStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
     }
 
+    /**
+     * 停用积分卡
+     * @param id
+     */
     public void stopUsing(Integer id) {
         pointService.changeStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
     }

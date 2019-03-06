@@ -16,8 +16,11 @@ import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeSa
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchSaveDTO;
+import com.jiazhe.youxiang.server.dto.voucher.exchangerecord.VoucherExchangeRecordDTO;
 import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeCodeService;
+import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeRecordService;
+import com.jiazhe.youxiang.server.service.voucher.VoucherService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +45,10 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
     private VoucherExchangeCodeBatchPOManualMapper voucherExchangeCodeBatchPOManualMapper;
     @Autowired
     private VoucherExchangeCodeService voucherExchangeCodeService;
+    @Autowired
+    private VoucherExchangeRecordService voucherExchangeRecordService;
+    @Autowired
+    private VoucherService voucherService;
 
     @Override
     public List<VoucherExchangeCodeBatchDTO> getList(Integer projectId, String name, Paging paging) {
@@ -165,5 +172,12 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
         batchPO.setStatus(status);
         batchPO.setModTime(new Date());
         voucherExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
+        List<VoucherExchangeCodeDTO> codeDTOList = voucherExchangeCodeService.getByBatchId(id);
+        List<Integer> usedIds = codeDTOList.stream().filter(bean -> bean.getUsed().equals(CommonConstant.CODE_HAS_USED)).map(VoucherExchangeCodeDTO::getId).collect(Collectors.toList());
+        if (!usedIds.isEmpty()) {
+            List<VoucherExchangeRecordDTO> recordDTOList = voucherExchangeRecordService.findByCodeIds(usedIds);
+            List<Integer> voucherIds = recordDTOList.stream().map(VoucherExchangeRecordDTO::getVoucherId).collect(Collectors.toList());
+            voucherService.batchChangeStatus(voucherIds, status);
+        }
     }
 }

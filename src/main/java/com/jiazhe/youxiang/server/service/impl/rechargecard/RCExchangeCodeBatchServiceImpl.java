@@ -17,9 +17,11 @@ import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCode
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord.RCExchangeRecordDTO;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeRecordService;
+import com.jiazhe.youxiang.server.service.rechargecard.RCService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +48,8 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
     private RCExchangeCodeService rcExchangeCodeService;
     @Autowired
     private RCExchangeRecordService rcExchangeRecordService;
+    @Autowired
+    private RCService rcService;
 
     @Override
     public List<RCExchangeCodeBatchDTO> getList(Integer projectId, String name, Paging paging) {
@@ -118,6 +122,16 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         batchPO.setStatus(status);
         batchPO.setModTime(new Date());
         rechargeCardExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
+        //非虚拟批次，需要修改批次下的充值卡启、停用状态
+        if (!batchPO.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
+            List<RCExchangeCodeDTO> codeDTOList = rcExchangeCodeService.getByBatchId(id);
+            List<Integer> usedIds = codeDTOList.stream().filter(bean -> bean.getUsed().equals(CommonConstant.CODE_HAS_USED)).map(RCExchangeCodeDTO::getId).collect(Collectors.toList());
+            if (!usedIds.isEmpty()) {
+                List<RCExchangeRecordDTO> recordDTOList = rcExchangeRecordService.findByCodeIds(usedIds);
+                List<Integer> cardIds = recordDTOList.stream().map(RCExchangeRecordDTO::getRechargeCardId).collect(Collectors.toList());
+                rcService.batchChangeStatus(cardIds, status);
+            }
+        }
     }
 
     @Transactional(rollbackFor = Exception.class)

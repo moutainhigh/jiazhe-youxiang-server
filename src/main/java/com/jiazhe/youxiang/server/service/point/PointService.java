@@ -17,9 +17,19 @@ import java.util.List;
  */
 public interface PointService {
 
-    void batchUpdate(List<Integer> cardIds, PointExchangeCodeBatchSaveDTO batchSaveDTO);
+    /**
+     * 根据批次信息修改充值卡ids的信息
+     * @param ids
+     * @param batchSaveDTO
+     */
+    void batchUpdate(List<Integer> ids, PointExchangeCodeBatchSaveDTO batchSaveDTO);
 
-    void batchChangeStatus(List<Integer> cardIds, Byte status);
+    /**
+     * 根据积分卡的ids，批量修改积分卡的启停用状态
+     * @param ids
+     * @param status
+     */
+    void batchChangeStatus(List<Integer> ids, Byte status);
 
     void insert(PointPO pointPO);
 
@@ -27,12 +37,21 @@ public interface PointService {
 
     List<PointDTO> getList(String mobile, Integer exchangeType, Byte status, Byte expiry, Paging paging);
 
+    /**
+     * 修改积分卡状态
+     * @param id
+     * @param status
+     */
     void changeStatus(Integer id, Byte status);
 
     void directCharge(Integer id, Integer batchId, BigDecimal faceValue) ;
 
     PointDTO getById(Integer id);
 
+    /**
+     * 修改积分卡信息
+     * @param dto
+     */
     void editSave(PointEditDTO dto);
 
     BigDecimal totalValidBalance(Integer customerId);

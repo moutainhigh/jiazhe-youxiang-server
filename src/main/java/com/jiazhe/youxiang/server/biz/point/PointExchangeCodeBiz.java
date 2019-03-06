@@ -30,10 +30,18 @@ public class PointExchangeCodeBiz {
         return pointExchangeCodeService.getList(batchId, code, keyt, status, used, paging);
     }
 
+    /**
+     * 根据兑换码id，单个停用、失效积分卡兑换码
+     * @param id
+     */
     public void stopUsing(Integer id) {
         pointExchangeCodeService.changeCodeStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
     }
 
+    /**
+     * 根据兑换码id，单个启用、激活积分卡兑换码
+     * @param id
+     */
     public void startUsing(Integer id) {
         pointExchangeCodeService.changeCodeStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
     }
@@ -54,10 +62,18 @@ public class PointExchangeCodeBiz {
         pointExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE, id, keyt);
     }
 
+    /**
+     * 根据批次id，启用批次下所有兑换码
+     * @param id
+     */
     public void allStartUsing(Integer id) {
         pointExchangeCodeService.batchChangeStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
     }
 
+    /**
+     * 根据批次id，启用批次下所有兑换码
+     * @param id
+     */
     public void allStopUsing(Integer id) {
         pointExchangeCodeService.batchChangeStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
     }
