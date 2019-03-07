@@ -99,11 +99,11 @@ public class APISignInController extends BaseController {
         }
         SysUserDTO sysUserDTO = sysUserDTOList.get(0);
         //前置判断一下密码是否正确，以免发了验证码再告诉密码错误，不符合思维逻辑
-        if (!sysUserDTO.getPassword().equals(EncryptPasswordUtil.encrypt(sysUserDTO.getSalt(),req.getPassword()))){
+        if (!sysUserDTO.getPassword().equals(EncryptPasswordUtil.encrypt(sysUserDTO.getSalt(), req.getPassword()))) {
             throw new LoginException(LoginCodeEnum.LOGIN_PASSWRLD_WRONG);
         }
-        // 判断最后一次登陆ip是否一致，一致则直接登陆
-        if (!sysUserDTO.getLastLoginIp().equals(IpAdrressUtil.getIpAdrress(request))) {
+        // 判断白名单里是否有该ip，没有发验证码
+        if (!IpAdrressUtil.ipIsWhite(IpAdrressUtil.getIpAdrress(request), sysUserDTO.getLastLoginIp())) {
             //判断有没有短信bizId传过来
             CommonValidator.validateNull(bizId, new LoginException(LoginCodeEnum.LOGIN_DIFFERENT_CLIENT));
             CommonValidator.validateNull(identifyingCode, new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_EMPTY));
@@ -111,6 +111,8 @@ public class APISignInController extends BaseController {
             if (!AliUtils.isVerified(sysUserDTO.getMobile(), identifyingCode, bizId)) {
                 throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
             }
+            logger.info("登陆ip为：" + IpAdrressUtil.getIpAdrress(request));
+            sysUserBiz.updateLastLoginInfo(sysUserDTO.getId(), IpAdrressUtil.getIpAdrress(request));
         }
         Subject subject = SecurityUtils.getSubject();
         Collection<Session> sessions = sessionDAO.getActiveSessions();
@@ -146,8 +148,6 @@ public class APISignInController extends BaseController {
         CookieUtil.addCookie(response, "permission", permission, userCookieExpiry);
         CookieUtil.addCookie(response, "displayName", URLEncoder.encode(sysUserDTO.getDisplayName(), "UTF-8"), userCookieExpiry);
         CookieUtil.addCookie(response, "JSESSIONID", sessionResp.getSessionId(), userCookieExpiry);
-        logger.info("登陆ip为：" + IpAdrressUtil.getIpAdrress(request));
-        sysUserBiz.updateLastLoginInfo(sysUserDTO.getId(), IpAdrressUtil.getIpAdrress(request));
         return ResponseFactory.buildResponse(sessionResp);
     }
 

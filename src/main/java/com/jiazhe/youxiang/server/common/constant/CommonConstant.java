@@ -191,4 +191,9 @@ public class CommonConstant {
      */
     public static final Integer ORDER_CEILING_PER_HOUR = 999;
 
+    /**
+     * 每个账户允许的ip白名单上限
+     */
+    public static final Integer IP_WHITE_LIST_UPPER_LIMIT = 5;
+
 }
