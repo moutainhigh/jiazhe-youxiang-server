@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.base.util;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.util.Strings;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,6 +17,26 @@ import javax.servlet.http.HttpServletRequest;
  * @created 2018/10/18
  */
 public class IpAdrressUtil {
+
+    /**
+     * 判断登陆登陆ip是否在白名单内
+     *
+     * @param whiteIps
+     * @param loginIp
+     * @return
+     */
+    public static boolean ipIsWhite(String loginIp, String whiteIps) {
+        if (Strings.isEmpty(whiteIps) || Strings.isEmpty(loginIp)) {
+            return false;
+        }
+        String[] whiteIpsArr = whiteIps.split(";");
+        for (String ip : whiteIpsArr) {
+            if (ip.equals(loginIp)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * 获取Ip地址
