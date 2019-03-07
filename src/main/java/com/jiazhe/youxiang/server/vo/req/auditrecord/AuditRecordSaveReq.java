@@ -11,7 +11,7 @@ import java.util.Date;
  * @description
  * @date 2018/10/25.
  */
-public class AuditRecordAddReq extends BaseVO {
+public class AuditRecordSaveReq extends BaseVO {
 
     private static final long serialVersionUID = 7162909158722201511L;
 
