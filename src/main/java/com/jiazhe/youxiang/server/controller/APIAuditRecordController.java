@@ -19,10 +19,9 @@ import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
-import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordAddReq;
 import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordCheckReq;
-import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordEditReq;
 import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordPageReq;
+import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordSaveReq;
 import com.jiazhe.youxiang.server.vo.resp.auditrecord.AuditRecordResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.WaitingDealCountResp;
 import io.swagger.annotations.ApiOperation;
@@ -36,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,14 +50,6 @@ public class APIAuditRecordController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(APIAuditRecordController.class);
 
-    /**
-     * 审核消费记录 【1未提交，2已提交，3已驳回，4已通过】
-     */
-    private static Byte AUDIT_RECORD_NOT_SUBMITTED = Byte.valueOf("1");
-    private static Byte AUDIT_RECORD_HAS_SUBMITTED = Byte.valueOf("2");
-    private static Byte AUDIT_RECORD_REJECT = Byte.valueOf("3");
-    private static Byte AUDIT_RECORD_PASS = Byte.valueOf("4");
-
     @Autowired
     private AuditRecordBiz auditRecordBiz;
 
@@ -66,18 +58,18 @@ public class APIAuditRecordController extends BaseController {
     @ApiOperation(value = "【后台】审核", httpMethod = "POST", notes = "审核")
     @RequestMapping(value = "/auditrecordcheck", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "审核", level = LogLevelEnum.LEVEL_2)
-    public Object auditRecordPass(@ModelAttribute AuditRecordCheckReq req)  {
-        if (req.getStatus().equals(AUDIT_RECORD_REJECT)) {
+    public Object auditRecordPass(@ModelAttribute AuditRecordCheckReq req) {
+        if (req.getStatus().equals(CommonConstant.AUDIT_RECORD_REJECT)) {
             CommonValidator.validateNull(req.getAuditReason(), new AuditRecordException(AuditRecordCodeEnum.AUDIT_REASON_IS_NULL));
             auditRecordBiz.auditRecordUnpass(req.getId(), req.getVersion(), req.getAuditReason());
         }
-        if (req.getStatus().equals(AUDIT_RECORD_PASS)) {
+        if (req.getStatus().equals(CommonConstant.AUDIT_RECORD_PASS)) {
             CommonValidator.validateNull(req.getPosCode(), new AuditRecordException(AuditRecordCodeEnum.POS_CODE_IS_NULL));
             CommonValidator.validateNull(req.getCardNo(), new AuditRecordException(AuditRecordCodeEnum.CARD_NO_IS_NULL));
-            if(req.getTradeTime() == CommonConstant.NULL_TIME){
+            if (req.getTradeTime() == CommonConstant.NULL_TIME) {
                 throw new AuditRecordException(AuditRecordCodeEnum.TRADE_TIME_IS_NULL);
             }
-            auditRecordBiz.auditRecordPass(req.getId(), req.getVersion(), req.getExchangeBatchId(),req.getGivingBatchId(),req.getPosCode(),req.getCardNo(),req.getTradeTime());
+            auditRecordBiz.auditRecordPass(req.getId(), req.getVersion(), req.getExchangeBatchId(), req.getGivingBatchId(), req.getPosCode(), req.getCardNo(), req.getTradeTime());
         }
         return ResponseFactory.buildSuccess();
     }
@@ -123,36 +115,53 @@ public class APIAuditRecordController extends BaseController {
         if (null == sysUserDTO) {
             throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
-        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getSubmitterList(req.getStatus(),sysUserDTO.getId(), paging);
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getSubmitterList(req.getStatus(), sysUserDTO.getId(), paging);
         List<AuditRecordResp> auditRecordRespList = auditRecordDTOList.stream().map(AuditRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(auditRecordRespList, paging);
     }
 
-    @ApiOperation(value = "【审核小程序】提交消费记录信息", httpMethod = "POST", notes = "提交消费记录信息")
-    @RequestMapping(value = "/addsave", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "提交消费记录信息", level = LogLevelEnum.LEVEL_2)
-    public Object addSave(@ModelAttribute AuditRecordAddReq req) {
-        CommonValidator.validateNull(req.getCustomerName(), new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_NAME_IS_NULL));
-        CommonValidator.validateNull(req.getCustomerMobile(), new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_MOBILE_IS_NULL));
+    @ApiOperation(value = "【审核小程序】保存消费记录信息", httpMethod = "POST", notes = "保存消费记录信息")
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "保存消费记录信息", level = LogLevelEnum.LEVEL_2)
+    public Object save(@ModelAttribute AuditRecordSaveReq req) {
+        CommonValidator.validateNull(req.getBankOutletsName(), new AuditRecordException(AuditRecordCodeEnum.BANK_NAME_IS_NULL));
         CommonValidator.validateNull(req.getExchangePoint(), new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_POINT_IS_NULL));
-        CommonValidator.validateNull(req.getGivingPoint(), new AuditRecordException(AuditRecordCodeEnum.GIVING_POINT_IS_NULL));
-        CommonValidator.validateMobile(req.getCustomerMobile(), new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_MOBILE_IS_ILLEGAL));
-        auditRecordBiz.addSave(req.getCustomerName(), req.getCustomerMobile(), req.getExchangePoint(), req.getExchangeType(), req.getGivingPoint(), req.getGivingType(), req.getRemark(), req.getImgUrls());
+        CommonValidator.validateNull(req.getImgUrls(), new AuditRecordException(AuditRecordCodeEnum.IMAGE_IS_NULL));
+        //根据兑换类型，约束各种字段的填写条件
+        if (req.getExchangeType().equals(CommonConstant.DIRECT_CHARGE)) {
+            CommonValidator.validateNull(req.getCustomerName(), new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_NAME_IS_NULL));
+            CommonValidator.validateNull(req.getCustomerMobile(), new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_MOBILE_IS_NULL));
+            CommonValidator.validateMobile(req.getCustomerMobile(), new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_MOBILE_IS_ILLEGAL));
+        }
+        if (req.getExchangeType().equals(CommonConstant.SELF_CHARGE)) {
+            CommonValidator.validateNull(req.getPointCodes(), new AuditRecordException(AuditRecordCodeEnum.POINT_CODES_IS_NULL));
+        }
+        if (req.getExchangeType().equals(CommonConstant.EXCHANGE_ENTITY)) {
+            CommonValidator.validateNull(req.getProductValue(), new AuditRecordException(AuditRecordCodeEnum.PRODUCT_VALUE_IS_NULL));
+        }
+        //判断是新建还是修改
+        AuditRecordDTO auditRecordDTO = null;
+        if (req.getId().equals(0)) {
+            auditRecordDTO = new AuditRecordDTO();
+            auditRecordDTO.setVersion(0);
+        } else {
+            auditRecordDTO = auditRecordBiz.getById(req.getId());
+            if (!auditRecordDTO.getVersion().equals(req.getVersion())) {
+                throw new AuditRecordException(AuditRecordCodeEnum.VERSION_IS_CHANGED);
+            }
+            auditRecordDTO.setVersion(auditRecordDTO.getVersion() + 1);
+            auditRecordDTO.setModTime(new Date(System.currentTimeMillis()));
+        }
+        auditRecordDTO.setBankOutletsName(req.getBankOutletsName());
+        auditRecordDTO.setExchangeType(req.getExchangeType());
+        auditRecordDTO.setCustomerMobile(req.getCustomerMobile());
+        auditRecordDTO.setCustomerName(req.getCustomerName());
+        auditRecordDTO.setExchangePoint(req.getExchangePoint());
+        auditRecordDTO.setPointCodes(req.getPointCodes());
+        auditRecordDTO.setProductValue(req.getProductValue());
+        auditRecordDTO.setImgUrls(req.getImgUrls());
+        auditRecordDTO.setRemark(req.getRemark());
+        auditRecordBiz.save(auditRecordDTO);
         return ResponseFactory.buildSuccess();
     }
-
-    @ApiOperation(value = "【审核小程序】修改消费记录信息", httpMethod = "POST", notes = "修改消费记录信息")
-    @RequestMapping(value = "/editsave", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "修改消费记录信息", level = LogLevelEnum.LEVEL_2)
-    public Object editSave(@ModelAttribute AuditRecordEditReq req) {
-        CommonValidator.validateNull(req.getCustomerName(), new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_NAME_IS_NULL));
-        CommonValidator.validateNull(req.getCustomerMobile(), new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_MOBILE_IS_NULL));
-        CommonValidator.validateNull(req.getExchangePoint(), new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_POINT_IS_NULL));
-        CommonValidator.validateNull(req.getGivingPoint(), new AuditRecordException(AuditRecordCodeEnum.GIVING_POINT_IS_NULL));
-        CommonValidator.validateMobile(req.getCustomerMobile(), new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_MOBILE_IS_ILLEGAL));
-        auditRecordBiz.editSave(req.getId(), req.getVersion(), req.getCustomerName(), req.getCustomerMobile(), req.getExchangePoint(), req.getExchangeType(), req.getGivingPoint(), req.getGivingType(), req.getRemark(), req.getImgUrls());
-        return ResponseFactory.buildSuccess();
-    }
-
-
 }

@@ -6,7 +6,6 @@ import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -45,12 +44,7 @@ public class AuditRecordBiz {
         return auditRecordService.getList(submitterId, status, paging);
     }
 
-
-    public void editSave(Integer id, Integer version, String customerName, String customerMobile, BigDecimal exchangePoint, String exchangeType, BigDecimal givingPoint, String givingType, String remark, String imgUrls) {
-        auditRecordService.editSave(id, version, customerName, customerMobile, exchangePoint,exchangeType,givingPoint,givingType,remark, imgUrls);
-    }
-
-    public void addSave(String customerName, String customerMobile, BigDecimal exchangePoint, String exchangeType, BigDecimal givingPoint, String givingType, String remark, String imgUrls) {
-        auditRecordService.addSave(customerName, customerMobile, exchangePoint, exchangeType, givingPoint, givingType, remark, imgUrls);
+    public void save(AuditRecordDTO auditRecordDTO) {
+        auditRecordService.save(auditRecordDTO);
     }
 }

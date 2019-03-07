@@ -75,4 +75,37 @@ public class AuditRecordAdapter {
         auditRecordDTO.setModTime(auditRecordPO.getModTime());
         return auditRecordDTO;
     }
+
+    public static AuditRecordPO dto2Po(AuditRecordDTO auditRecordDTO) {
+        if (auditRecordDTO == null) {
+            return null;
+        }
+        AuditRecordPO auditRecordPO = new AuditRecordPO();
+        auditRecordPO.setId(auditRecordDTO.getId());
+        auditRecordPO.setPointIds(auditRecordDTO.getPointIds());
+        auditRecordPO.setCustomerName(auditRecordDTO.getCustomerName());
+        auditRecordPO.setCustomerMobile(auditRecordDTO.getCustomerMobile());
+        auditRecordPO.setExchangePoint(auditRecordDTO.getExchangePoint());
+        auditRecordPO.setExchangeType(auditRecordDTO.getExchangeType());
+        auditRecordPO.setChargeReceiptStatus(auditRecordDTO.getChargeReceiptStatus());
+        auditRecordPO.setPointCodes(auditRecordDTO.getPointCodes());
+        auditRecordPO.setProductValue(auditRecordDTO.getProductValue());
+        auditRecordPO.setRemark(auditRecordDTO.getRemark());
+        auditRecordPO.setAuditReason(auditRecordDTO.getAuditReason());
+        auditRecordPO.setImgUrls(auditRecordDTO.getImgUrls());
+        auditRecordPO.setPosCode(auditRecordDTO.getPosCode());
+        auditRecordPO.setCardNo(auditRecordDTO.getCardNo());
+        auditRecordPO.setBankOutletsName(auditRecordDTO.getBankOutletsName());
+        auditRecordPO.setTradeTime(auditRecordDTO.getTradeTime());
+        auditRecordPO.setSubmitterId(auditRecordDTO.getSubmitterId());
+        auditRecordPO.setSubmitterName(auditRecordDTO.getSubmitterName());
+        auditRecordPO.setStatus(auditRecordDTO.getStatus());
+        auditRecordPO.setAuditTime(auditRecordDTO.getAuditTime());
+        auditRecordPO.setAuditorId(auditRecordDTO.getAuditorId());
+        auditRecordPO.setAuditorName(auditRecordDTO.getAuditorName());
+        auditRecordPO.setVersion(auditRecordDTO.getVersion());
+        auditRecordPO.setAddTime(auditRecordDTO.getAddTime());
+        auditRecordPO.setModTime(auditRecordDTO.getModTime());
+        return auditRecordPO;
+    }
 }

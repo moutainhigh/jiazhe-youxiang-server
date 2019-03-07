@@ -196,4 +196,19 @@ public class CommonConstant {
      */
     public static final Integer IP_WHITE_LIST_UPPER_LIMIT = 5;
 
+    /**
+     * 审核消费记录状态 【1未提交，2已提交，3已驳回，4已通过】
+     */
+    public static final Byte AUDIT_RECORD_NOT_SUBMITTED = Byte.valueOf("1");
+    public static final Byte AUDIT_RECORD_HAS_SUBMITTED = Byte.valueOf("2");
+    public static final Byte AUDIT_RECORD_REJECT = Byte.valueOf("3");
+    public static final Byte AUDIT_RECORD_PASS = Byte.valueOf("4");
+
+    /**
+     * 小程序提交记录状态【1直接充积分，2拿积分卡自行充值，3兑换实物】
+     */
+    public static final Byte DIRECT_CHARGE = Byte.valueOf("1");
+    public static final Byte SELF_CHARGE = Byte.valueOf("2");
+    public static final Byte EXCHANGE_ENTITY = Byte.valueOf("3");
+
 }

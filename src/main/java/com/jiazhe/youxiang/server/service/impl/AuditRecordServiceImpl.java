@@ -97,7 +97,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId,Integer givingBatchId,String posCode,String cardNo,Date tradeTime)  {
+    public void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId, Integer givingBatchId, String posCode, String cardNo, Date tradeTime) {
         String pointIds = "";
         AuditRecordPO auditRecordPO = auditRecordPOMapper.selectByPrimaryKey(auditRecordId);
         if (!auditRecordPO.getVersion().equals(version)) {
@@ -121,8 +121,8 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         if (null == sysUserDTO) {
             throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
-        if(auditRecordPO.getExchangePoint().compareTo(BigDecimal.ZERO) == 1){
-            CommonValidator.validateNull(exchangeBatchId,new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_BATCH_IS_NULL));
+        if (auditRecordPO.getExchangePoint().compareTo(BigDecimal.ZERO) == 1) {
+            CommonValidator.validateNull(exchangeBatchId, new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_BATCH_IS_NULL));
             PointExchangeCodeBatchEditDTO exchangeBatchEditDTO = pointExchangeCodeBatchService.getById(exchangeBatchId);
             PointPO pointPO = new PointPO();
             //直接指定过期时间
@@ -159,8 +159,8 @@ public class AuditRecordServiceImpl implements AuditRecordService {
             pointService.update(pointPO);
             pointIds = pointIds + pointPO.getId() + ",";
         }
-        if(auditRecordPO.getGivingPoint().compareTo(BigDecimal.ZERO)==1){
-            CommonValidator.validateNull(givingBatchId,new AuditRecordException(AuditRecordCodeEnum.GIVING_BATCH_IS_NULL));
+        if (auditRecordPO.getGivingPoint().compareTo(BigDecimal.ZERO) == 1) {
+            CommonValidator.validateNull(givingBatchId, new AuditRecordException(AuditRecordCodeEnum.GIVING_BATCH_IS_NULL));
             PointExchangeCodeBatchEditDTO givingBatchEditDTO = pointExchangeCodeBatchService.getById(givingBatchId);
             PointPO pointPO = new PointPO();
             //直接指定过期时间
@@ -210,51 +210,19 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     }
 
     @Override
-    public void addSave(String customerName, String customerMobile, BigDecimal exchangePoint, String exchangeType, BigDecimal givingPoint, String givingType, String remark, String imgUrls) {
-        AuditRecordPO auditRecordPO = new AuditRecordPO();
-        auditRecordPO.setPointIds("");
-        auditRecordPO.setCustomerName(customerName);
-        auditRecordPO.setCustomerMobile(customerMobile);
-        auditRecordPO.setExchangePoint(exchangePoint);
-//        auditRecordPO.setExchangeType(exchangeType);
-        auditRecordPO.setGivingPoint(givingPoint);
-        auditRecordPO.setGivingType(givingType);
-        auditRecordPO.setRemark(remark);
-        auditRecordPO.setImgUrls(imgUrls);
-        auditRecordPO.setStatus(Byte.valueOf("0"));
-        auditRecordPO.setVersion(0);
-        auditRecordPO.setAuditorId(0);
-        auditRecordPO.setAuditorName("");
-        auditRecordPO.setAuditTime(new Date());
+    public void save(AuditRecordDTO auditRecordDTO) {
+        AuditRecordPO auditRecordPO = AuditRecordAdapter.dto2Po(auditRecordDTO);
         SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
         if (null == sysUserDTO) {
             throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
         auditRecordPO.setSubmitterId(sysUserDTO.getId());
         auditRecordPO.setSubmitterName(sysUserDTO.getDisplayName());
-        auditRecordPOMapper.insertSelective(auditRecordPO);
-    }
+        if (auditRecordDTO.getId().equals(0)) {
+            auditRecordPOMapper.insertSelective(auditRecordPO);
+        } else {
+            auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
+        }
 
-    @Override
-    public void editSave(Integer id, Integer version, String customerName, String customerMobile, BigDecimal exchangePoint, String exchangeType, BigDecimal givingPoint, String givingType, String remark, String imgUrls) {
-        AuditRecordPO auditRecordPO = auditRecordPOMapper.selectByPrimaryKey(id);
-        if (auditRecordPO.getStatus().equals(Byte.valueOf("2"))) {
-            throw new AuditRecordException(AuditRecordCodeEnum.RECORD_HASS_PASSED);
-        }
-        if (!auditRecordPO.getVersion().equals(version)) {
-            throw new AuditRecordException(AuditRecordCodeEnum.VERSION_IS_CHANGED);
-        }
-        auditRecordPO.setVersion(version + 1);
-        auditRecordPO.setStatus(Byte.valueOf(("0")));
-        auditRecordPO.setCustomerName(customerName);
-        auditRecordPO.setCustomerMobile(customerMobile);
-        auditRecordPO.setExchangePoint(exchangePoint);
-//        auditRecordPO.setExchangeType(exchangeType);
-        auditRecordPO.setGivingPoint(givingPoint);
-        auditRecordPO.setGivingType(givingType);
-        auditRecordPO.setRemark(remark);
-        auditRecordPO.setImgUrls(imgUrls);
-        auditRecordPO.setModTime(new Date());
-        auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
     }
 }
