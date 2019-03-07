@@ -143,6 +143,7 @@ public class APIAuditRecordController extends BaseController {
         AuditRecordDTO auditRecordDTO = null;
         if (req.getId().equals(0)) {
             auditRecordDTO = new AuditRecordDTO();
+            auditRecordDTO.setId(0);
             auditRecordDTO.setVersion(0);
         } else {
             auditRecordDTO = auditRecordBiz.getById(req.getId());

@@ -219,6 +219,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         auditRecordPO.setSubmitterId(sysUserDTO.getId());
         auditRecordPO.setSubmitterName(sysUserDTO.getDisplayName());
         if (auditRecordDTO.getId().equals(0)) {
+            auditRecordPO.setAuditorId(0);
             auditRecordPOMapper.insertSelective(auditRecordPO);
         } else {
             auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
