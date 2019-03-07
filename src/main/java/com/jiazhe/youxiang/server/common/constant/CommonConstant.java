@@ -194,6 +194,6 @@ public class CommonConstant {
     /**
      * 每个账户允许的ip白名单上限
      */
-    public static final Integer IP_WHITE_LIST_UPPER_LIMIT = 3;
+    public static final Integer IP_WHITE_LIST_UPPER_LIMIT = 5;
 
 }

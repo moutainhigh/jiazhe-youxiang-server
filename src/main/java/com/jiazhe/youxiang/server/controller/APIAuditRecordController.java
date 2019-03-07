@@ -51,10 +51,12 @@ public class APIAuditRecordController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(APIAuditRecordController.class);
 
     /**
-     * 审核消费记录 【0未审核，1未通过，2已通过】
+     * 审核消费记录 【1未提交，2已提交，3已驳回，4已通过】
      */
-    private static Byte AUDIT_UNPASS = Byte.valueOf("1");
-    private static Byte AUDIT_PASS = Byte.valueOf("2");
+    private static Byte AUDIT_RECORD_NOT_SUBMITTED = Byte.valueOf("1");
+    private static Byte AUDIT_RECORD_HAS_SUBMITTED = Byte.valueOf("2");
+    private static Byte AUDIT_RECORD_REJECT = Byte.valueOf("3");
+    private static Byte AUDIT_RECORD_PASS = Byte.valueOf("4");
 
     @Autowired
     private AuditRecordBiz auditRecordBiz;
@@ -65,11 +67,11 @@ public class APIAuditRecordController extends BaseController {
     @RequestMapping(value = "/auditrecordcheck", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "审核", level = LogLevelEnum.LEVEL_2)
     public Object auditRecordPass(@ModelAttribute AuditRecordCheckReq req)  {
-        if (req.getStatus().equals(AUDIT_UNPASS)) {
+        if (req.getStatus().equals(AUDIT_RECORD_REJECT)) {
             CommonValidator.validateNull(req.getAuditReason(), new AuditRecordException(AuditRecordCodeEnum.AUDIT_REASON_IS_NULL));
             auditRecordBiz.auditRecordUnpass(req.getId(), req.getVersion(), req.getAuditReason());
         }
-        if (req.getStatus().equals(AUDIT_PASS)) {
+        if (req.getStatus().equals(AUDIT_RECORD_PASS)) {
             CommonValidator.validateNull(req.getPosCode(), new AuditRecordException(AuditRecordCodeEnum.POS_CODE_IS_NULL));
             CommonValidator.validateNull(req.getCardNo(), new AuditRecordException(AuditRecordCodeEnum.CARD_NO_IS_NULL));
             if(req.getTradeTime() == CommonConstant.NULL_TIME){
