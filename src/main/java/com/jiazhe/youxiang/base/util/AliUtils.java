@@ -1,10 +1,5 @@
 package com.jiazhe.youxiang.base.util;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsRequest;
@@ -12,13 +7,18 @@ import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsResponse;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author TU
@@ -26,6 +26,8 @@ import com.jiazhe.youxiang.server.common.exceptions.LoginException;
  * @description 用于阿里短信服务
  */
 public class AliUtils {
+
+    private static final Logger logger = LoggerFactory.getLogger(AliUtils.class);
     /**
      * 发送验证短信
      */
@@ -38,6 +40,7 @@ public class AliUtils {
         try {
             DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", "Dysmsapi", "dysmsapi.aliyuncs.com");
         } catch (ClientException e) {
+            logger.error("阿里云短信服务异常，错误堆栈信息为：",e);
             throw new LoginException(LoginCodeEnum.LOGIN_SENDCODE_ERROR);
         }
         IAcsClient acsClient = new DefaultAcsClient(profile);
@@ -63,6 +66,7 @@ public class AliUtils {
         try {
             sendSmsResponse = acsClient.getAcsResponse(request);
         } catch (ClientException e) {
+            logger.error("阿里云短信服务异常，错误堆栈信息为：",e);
             throw new LoginException(LoginCodeEnum.LOGIN_SENDCODE_ERROR);
         }
         if (sendSmsResponse.getCode() == null && !sendSmsResponse.getCode().equals("OK")) {
@@ -81,6 +85,7 @@ public class AliUtils {
         try {
             DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", "Dysmsapi", "dysmsapi.aliyuncs.com");
         } catch (ClientException e) {
+            logger.error("阿里云短信服务异常，错误堆栈信息为：",e);
             throw new LoginException(LoginCodeEnum.ALI_MESSAGE_SERVICE_EXCEPTION);
         }
         IAcsClient acsClient = new DefaultAcsClient(profile);
@@ -102,6 +107,7 @@ public class AliUtils {
         try {
             querySendDetailsResponse = acsClient.getAcsResponse(request);
         } catch (ClientException e) {
+            logger.error("阿里云短信服务异常，错误堆栈信息为：",e);
             throw new LoginException(LoginCodeEnum.ALI_MESSAGE_SERVICE_EXCEPTION);
         }
         return querySendDetailsResponse;
