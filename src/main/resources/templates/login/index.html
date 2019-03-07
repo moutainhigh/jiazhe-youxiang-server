@@ -179,12 +179,11 @@
             },
             type: "GET",
             success: function (data) {
-                if ('error' in data) {//异客户端登陆了
-                    if (data.error.code == 112004) {//发送了验证码
+                if ('error' in data) {
+                    if (data.error.code == 112004) {//异客户端登陆了，需要发送验证码
                         $('#identifyingCodeLabel').css("display", "block");
-                    } else {
-                        bootboxalert(data.error.message);
                     }
+                    bootboxalert(data.error.message);
                 } else {//登陆成功
                     window.location.href = "/main/main";
                 }
