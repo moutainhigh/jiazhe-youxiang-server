@@ -300,4 +300,14 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         List<PointExchangeCodePO> poList = pointExchangeCodeDTOS.stream().map(PointExchangeCodeAdapter::dto2Po).collect(Collectors.toList());
         pointExchangeCodePOManualMapper.batchUpdateCodeAndKeyt(poList);
     }
+
+    @Override
+    public List<PointExchangeCodeDTO> findByCodes(List<String> pointCodes) {
+        return null;
+    }
+
+    @Override
+    public void batchUpdate(List<PointExchangeCodeDTO> pointExchangeCodeDtoList) {
+        
+    }
 }

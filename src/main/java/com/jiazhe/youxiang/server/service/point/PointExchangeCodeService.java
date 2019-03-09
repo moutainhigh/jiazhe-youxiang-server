@@ -62,4 +62,8 @@ public interface PointExchangeCodeService {
     Integer getMaxId();
 
     void batchUpdateCodeAndKeyt(List<PointExchangeCodeDTO> pointExchangeCodeDTOS);
+
+    List<PointExchangeCodeDTO> findByCodes(List<String> pointCodes);
+
+    void batchUpdate(List<PointExchangeCodeDTO> pointExchangeCodeDtoList);
 }

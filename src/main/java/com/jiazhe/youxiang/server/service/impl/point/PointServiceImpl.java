@@ -141,11 +141,19 @@ public class PointServiceImpl implements PointService {
         PointPO pointPO = new PointPO();
         //直接指定过期时间
         if (pointExchangeCodeBatchEditDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
+            pointPO.setEffectiveTime(pointExchangeCodeBatchEditDTO.getPointEffectiveTime());
             pointPO.setExpiryTime(pointExchangeCodeBatchEditDTO.getPointExpiryTime());
-        } else {
+        }
+        //自兑换时间起，有效期天数
+        if (pointExchangeCodeBatchEditDTO.getExpiryType().equals(CommonConstant.POINT_EXCHANGE_PERIOD)) {
+            pointPO.setEffectiveTime(new Date(DateUtil.getFirstSecond(System.currentTimeMillis())));
             pointPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + pointExchangeCodeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
         }
-        pointPO.setEffectiveTime(pointExchangeCodeBatchEditDTO.getPointEffectiveTime());
+        //自激活时间起，有效期天数
+        if (pointExchangeCodeBatchEditDTO.getExpiryType().equals(CommonConstant.POINT_ACTIVE_PERIOD)) {
+            pointPO.setEffectiveTime(new Date(DateUtil.getFirstSecond(pointExchangeCodeBatchEditDTO.getPointEffectiveTime().getTime())));
+            pointPO.setExpiryTime(new Date(DateUtil.getLastSecond(pointExchangeCodeBatchEditDTO.getPointEffectiveTime().getTime() + pointExchangeCodeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
+        }
         pointPO.setDescription(pointExchangeCodeBatchEditDTO.getDescription());
         pointPO.setFaceValue(faceValue);
         pointPO.setBalance(faceValue);

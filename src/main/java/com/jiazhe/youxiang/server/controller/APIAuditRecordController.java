@@ -64,12 +64,7 @@ public class APIAuditRecordController extends BaseController {
             auditRecordBiz.auditRecordUnpass(req.getId(), req.getVersion(), req.getAuditReason());
         }
         if (req.getStatus().equals(CommonConstant.AUDIT_RECORD_PASS)) {
-            CommonValidator.validateNull(req.getPosCode(), new AuditRecordException(AuditRecordCodeEnum.POS_CODE_IS_NULL));
-            CommonValidator.validateNull(req.getCardNo(), new AuditRecordException(AuditRecordCodeEnum.CARD_NO_IS_NULL));
-            if (req.getTradeTime() == CommonConstant.NULL_TIME) {
-                throw new AuditRecordException(AuditRecordCodeEnum.TRADE_TIME_IS_NULL);
-            }
-            auditRecordBiz.auditRecordPass(req.getId(), req.getVersion(), req.getExchangeBatchId(), req.getGivingBatchId(), req.getPosCode(), req.getCardNo(), req.getTradeTime());
+            auditRecordBiz.auditRecordPass(req.getId(), req.getVersion(), req.getExchangeBatchId());
         }
         return ResponseFactory.buildSuccess();
     }
