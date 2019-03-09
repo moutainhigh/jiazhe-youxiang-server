@@ -21,7 +21,12 @@ public enum AuditRecordCodeEnum {
     NO_BATCH_INFO(111012, "NO_BATCH_INFO", "没有指定批次"),
     TRADE_TIME_IS_NULL(111013, "TRADE_TIME_IS_NULL", "请选择交易时间"),
     POS_CODE_IS_NULL(111014, "POS_CODE_IS_NULL", "请填写POS机编号"),
-    CARD_NO_IS_NULL(111015, "CARD_NO_IS_NULL", "请填写银行卡后四位");
+    CARD_NO_IS_NULL(111015, "CARD_NO_IS_NULL", "请填写银行卡后四位"),
+    BANK_NAME_IS_NULL(111016, "BANK_NAME_IS_NULL", "银行信息不能为空"),
+    POINT_CODES_IS_NULL(111017, "POINT_CODES_IS_NULL", "发放的兑换码卡号不能为空"),
+    PRODUCT_VALUE_IS_NULL(111018, "PRODUCT_VALUE_IS_NULL", "兑换的实物价值不能为空"),
+    IMAGE_IS_NULL(111019, "IMAGE_IS_NULL", "请提供交易凭证"),
+    AUDIT_RECORD_IS_NOT_EXIST(111020, "AUDIT_RECORD_IS_NOT_EXIST", "该条记录不存在"),;
 
     AuditRecordCodeEnum(Integer code, String type, String message) {
         this.code = code;
