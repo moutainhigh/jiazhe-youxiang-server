@@ -58,9 +58,9 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     private PointService pointService;
 
     @Override
-    public List<AuditRecordDTO> getList(Integer submitterId, Byte status, Paging paging) {
-        Integer count = auditRecordPOManualMapper.count(submitterId, status);
-        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(submitterId, status, paging.getOffset(), paging.getLimit());
+    public List<AuditRecordDTO> getList(String customerMobile, Integer submitterId, Byte status, Paging paging) {
+        Integer count = auditRecordPOManualMapper.count(customerMobile, submitterId, status);
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(customerMobile, submitterId, status, paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
         return auditRecordPOList.stream().map(AuditRecordAdapter::PO2DTO).collect(Collectors.toList());
     }
@@ -73,7 +73,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
 
     @Override
     public Integer getCountByStatus(Byte status) {
-        return auditRecordPOManualMapper.count(null, status);
+        return auditRecordPOManualMapper.count(null, null, status);
     }
 
     @Override

@@ -22,6 +22,8 @@ public class ProductUpdateReq extends IdReq {
     private String description;
     @ApiModelProperty("商品延迟购买天数")
     private Integer delayDays;
+    @ApiModelProperty("商品有效期天数")
+    private Integer effectiveDays;
     @ApiModelProperty("商品缩略图url")
     private String thumbnailUrl;
     @ApiModelProperty("商品头部图url")
@@ -59,6 +61,14 @@ public class ProductUpdateReq extends IdReq {
 
     public void setDelayDays(Integer delayDays) {
         this.delayDays = delayDays;
+    }
+
+    public Integer getEffectiveDays() {
+        return effectiveDays;
+    }
+
+    public void setEffectiveDays(Integer effectiveDays) {
+        this.effectiveDays = effectiveDays;
     }
 
     public String getThumbnailUrl() {

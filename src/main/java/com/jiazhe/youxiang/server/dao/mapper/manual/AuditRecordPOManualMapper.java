@@ -13,17 +13,22 @@ import java.util.List;
 public interface AuditRecordPOManualMapper {
     /**
      * 计数
+     *
+     * @param customerMobile
+     * @param submitterId
      * @param status
      * @return
      */
-    Integer count(@Param("submitterId") Integer submitterId,@Param("status") Byte status);
+    Integer count(@Param("customerMobile") String customerMobile, @Param("submitterId") Integer submitterId, @Param("status") Byte status);
 
     /**
      * 分页查询
+     *
+     * @param customerMobile
      * @param status
      * @param offset
      * @param limit
      * @return
      */
-    List<AuditRecordPO> query(@Param("submitterId") Integer submitterId,@Param("status")Byte status, @Param("offset")Integer offset, @Param("limit")Integer limit);
+    List<AuditRecordPO> query(@Param("customerMobile") String customerMobile, @Param("submitterId") Integer submitterId, @Param("status") Byte status, @Param("offset") Integer offset, @Param("limit") Integer limit);
 }

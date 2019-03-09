@@ -101,7 +101,7 @@ public class APIAuditRecordController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "消费记录列表", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute AuditRecordPageReq req) {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getStatus(), paging);
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getCustomerMobile(),req.getStatus(), paging);
         List<AuditRecordResp> auditRecordRespList = auditRecordDTOList.stream().map(AuditRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(auditRecordRespList, paging);
     }
