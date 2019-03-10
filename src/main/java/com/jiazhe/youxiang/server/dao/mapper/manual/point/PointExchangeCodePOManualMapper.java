@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.dao.mapper.manual.point;
 
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
+import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -73,4 +74,17 @@ public interface PointExchangeCodePOManualMapper {
      * @param poList
      */
     void batchUpdateCodeAndKeyt(List<PointExchangeCodePO> poList);
+
+    /**
+     * 根据卡号codes查询所有兑换码
+     * @param codes
+     * @return
+     */
+    List<PointExchangeCodePO> findByCodes(List<String> codes);
+
+    /**
+     * 批量激活兑换码，更新兑换码的过期时间
+     * @param pointExchangeCodeDtoList
+     */
+    void batchActive(List<PointExchangeCodeDTO> pointExchangeCodeDtoList);
 }

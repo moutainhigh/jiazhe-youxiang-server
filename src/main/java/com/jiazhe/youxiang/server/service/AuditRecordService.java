@@ -50,7 +50,7 @@ public interface AuditRecordService {
     void auditRecordUnpass(Integer auditRecordId, Integer version, String reason);
 
     /**
-     * 充值通过
+     * 充值通过审核
      *
      * @param auditRecordId
      * @param version
