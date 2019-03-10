@@ -630,6 +630,10 @@
                 {name: 'payCash', index: 'payCash', width: 100,sortable: false}
             ],
             loadComplete: function (data) {
+                if("error" in data){
+                    bootboxalert(data.error.message);
+                    return false;
+                }
                 var table = this;
                 setTimeout(function () {
                     $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
@@ -1121,7 +1125,7 @@
             }
         });
     }
-    "<span style='color:#" + color + "'>" + text + "</span>";
+
     function userCompleteOrder(id, cost) {
         confirm("确定要完成该订单吗？<span style='color:#FF0000'>该订单成本为" + cost + "元！</span>", function (result) {
             if (result) {

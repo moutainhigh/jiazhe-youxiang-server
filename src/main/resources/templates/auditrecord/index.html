@@ -415,18 +415,6 @@
                     }
                 },
             ],
-            loadComplete: function (data) {
-                var table = this;
-                setTimeout(function () {
-                    $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
-                    updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
-                }, 0);
-                if (data.data.length == 0) {//解决没有数据时，不出现横向滚动条的问题
-                    $('head').append('<style> .ui-jqgrid .ui-jqgrid-hdiv{overflow:auto}</style>');
-                } else {
-                    $('head').append('<style> .ui-jqgrid .ui-jqgrid-hdiv{overflow:hidden}</style>');
-                }
-            },
             caption: "充值记录列表"
         };
         initTable(grid_selector, pager_selector, tableOption);

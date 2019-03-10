@@ -680,6 +680,10 @@
                 {name: 'appendPay', index: 'appendPay', width: 50,sortable: false}
             ],
             loadComplete: function (data) {
+                if("error" in data){
+                    bootboxalert(data.error.message);
+                    return false;
+                }
                 var table = this;
                 setTimeout(function () {
                     $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
