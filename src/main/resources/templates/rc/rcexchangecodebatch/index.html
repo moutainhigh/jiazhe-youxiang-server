@@ -382,7 +382,7 @@
             colNames: ['', '批次名称', '充值卡名称', '批次类型', '状态', '面额', '数量', '批次过期时间','充值卡有效期', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
-                {name: 'name', index: 'name', width: 100, sortable: false},
+                {name: 'name', index: 'name', width: 80, sortable: false},
                 {name: 'rechargeCardName', index: 'rechargeCardName', width: 50, sortable: false},
                 {
                     name: 'isVirtual',
@@ -425,7 +425,7 @@
                 {
                     name: 'expiryTime',
                     index: 'expiryTime',
-                    width: 50,
+                    width: 60,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return timeFormat(rowObject.expiryTime);

@@ -358,20 +358,21 @@
         var tableOption = {
             url: "/api/auditrecord/listpage",
             postData: transformToJson($('#auditRecordSearchForm').serializeArray()),
-            shrinkToFit: false,
-            autoScroll: true,
+//            shrinkToFit: false,
+//            autoScroll: true,
 //            multiselect: true,
-            colNames: ['', '操作', '提交人姓名', '客户电话', '兑换积分', '兑换类型', '状态', '客户姓名', '提交时间', '审核人姓名', '审核时间'],
+            colNames: ['', '操作', '提交人', '客户电话', '兑换积分', '兑换类型', '状态', '客户姓名', '提交时间', '审核人', '审核时间'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
-                {name: '_action', index: '_action', sortable: false, formatter: customFormatter},
-                {name: 'submitterName', index: 'submitterName', sortable: false},
-                {name: 'customerMobile', index: 'customerMobile', sortable: false},
-                {name: 'exchangePoint', index: 'exchangePoint', sortable: false},
+                {name: '_action', index: '_action', width:100,sortable: false, formatter: customFormatter},
+                {name: 'submitterName', index: 'submitterName', width:50,sortable: false},
+                {name: 'customerMobile', index: 'customerMobile',width:100, sortable: false},
+                {name: 'exchangePoint', index: 'exchangePoint',width:50, sortable: false},
                 {
                     name: 'exchangeType',
                     index: 'exchangeType',
                     sortable: false,
+                    width:80,
                     formatter: function (cellvalue, options, rowObject) {
                         return exchangeTypes[rowObject.exchangeType - 1];
                     }
@@ -379,15 +380,17 @@
                 {
                     name: 'status',
                     index: 'status',
+                    width:50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return generateSpan(auditRecordStatus[rowObject.status - 1], auditRecordColor[rowObject.status - 1]);
                     }
                 },
-                {name: 'customerName', index: 'customerName', sortable: false},
+                {name: 'customerName', index: 'customerName',  width:80,sortable: false},
                 {
                     name: 'modTime',
                     index: 'modTime',
+                    width:120,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return timeFormat(rowObject.modTime)
@@ -396,6 +399,7 @@
                 {
                     name: 'auditorName',
                     index: 'auditorName',
+                    width:50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return rowObject.status > 2 ? rowObject.auditorName : "";
@@ -404,6 +408,7 @@
                 {
                     name: 'auditTime',
                     index: 'auditTime',
+                    width:120,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return rowObject.status > 2 ? timeFormat(rowObject.auditTime) : "";
