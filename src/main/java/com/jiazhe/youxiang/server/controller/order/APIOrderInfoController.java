@@ -175,7 +175,7 @@ public class APIOrderInfoController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "下单", level = LogLevelEnum.LEVEL_2)
     public Object userPlaceOrder(@ModelAttribute UserPlaceOrderReq req)  {
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqUserPlaceOrder2DTOPlaceOrder(req);
-        placeOrderDTO.setType(Byte.valueOf("0"));
+        placeOrderDTO.setType(CommonConstant.USER_PLACE_ORDER);
         placeOrderDTO.setServiceTime(new Date(req.getRealServiceTime()));
         NeedPayResp needPayResp = orderInfoBiz.userPlaceOrder(placeOrderDTO);
         return ResponseFactory.buildResponse(needPayResp);
@@ -194,7 +194,7 @@ public class APIOrderInfoController extends BaseController {
         placeOrderDTO.setWorkerMobile("");
         placeOrderDTO.setWorkerName("");
         placeOrderDTO.setCost(BigDecimal.ZERO);
-        placeOrderDTO.setType(Byte.valueOf("1"));
+        placeOrderDTO.setType(CommonConstant.CUSTOMER_PLACE_ORDER);
         placeOrderDTO.setRealServiceTime(new Date(req.getServiceTime()));
         placeOrderDTO.setComments("");
         NeedPayResp needPayResp = orderInfoBiz.customerPlaceOrder(placeOrderDTO);
