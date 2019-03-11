@@ -211,4 +211,10 @@ public class CommonConstant {
     public static final Byte SELF_CHARGE = Byte.valueOf("2");
     public static final Byte EXCHANGE_ENTITY = Byte.valueOf("3");
 
+    /**
+     * 下单方式【0后台员工下单  1客户自己下单】
+     */
+    public static final Byte USER_PLACE_ORDER = Byte.valueOf("0");
+    public static final Byte CUSTOMER_PLACE_ORDER = Byte.valueOf("1");
+
 }
