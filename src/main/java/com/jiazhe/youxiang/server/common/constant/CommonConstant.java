@@ -5,8 +5,6 @@
  */
 package com.jiazhe.youxiang.server.common.constant;
 
-import java.math.BigDecimal;
-
 /**
  * 在这里编写类的功能描述
  *
@@ -182,5 +180,11 @@ public class CommonConstant {
      * 一个小时内的订单上限，生成订单号的时候用到
      */
     public static final Integer ORDER_CEILING_PER_HOUR = 999;
+
+    /**
+     * 下单方式【0后台员工下单  1客户自己下单】
+     */
+    public static final Byte USER_PLACE_ORDER = Byte.valueOf("0");
+    public static final Byte CUSTOMER_PLACE_ORDER = Byte.valueOf("1");
 
 }
