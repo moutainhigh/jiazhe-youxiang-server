@@ -5,19 +5,23 @@ import com.jiazhe.youxiang.base.util.GenerateCode;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeBatchAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.enums.PointCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.PointException;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.dao.mapper.RechargeCardExchangeCodeBatchPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCExchangeCodeBatchPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPOExample;
 import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodePO;
+import com.jiazhe.youxiang.server.dto.project.ProjectDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeSaveDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord.RCExchangeRecordDTO;
+import com.jiazhe.youxiang.server.service.ProjectService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeRecordService;
@@ -50,6 +54,8 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
     private RCExchangeRecordService rcExchangeRecordService;
     @Autowired
     private RCService rcService;
+    @Autowired
+    private ProjectService projectService;
 
     @Override
     public List<RCExchangeCodeBatchDTO> getList(Integer projectId, String name, Paging paging) {
@@ -61,6 +67,10 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
 
     @Override
     public void addSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {
+        ProjectDTO projectDTO = projectService.getById(rcExchangeCodeBatchSaveDTO.getProjectId());
+        if(null == projectDTO){
+            throw new PointException(PointCodeEnum.PROJECT_IS_NOT_EXIST);
+        }
         RechargeCardExchangeCodeBatchPO rcExchangeCodeBatchPO = RCExchangeCodeBatchAdapter.DTOSave2PO(rcExchangeCodeBatchSaveDTO);
         rcExchangeCodeBatchPO.setIsMade(CommonConstant.CODE_NOT_MADE);
         rcExchangeCodeBatchPO.setStatus(CommonConstant.CODE_STOP_USING);
@@ -80,6 +90,10 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void editSave(RCExchangeCodeBatchSaveDTO batchSaveDTO) {
+        ProjectDTO projectDTO = projectService.getById(batchSaveDTO.getProjectId());
+        if(null == projectDTO){
+            throw new PointException(PointCodeEnum.PROJECT_IS_NOT_EXIST);
+        }
         RechargeCardExchangeCodeBatchPO batchPO = rechargeCardExchangeCodeBatchPOMapper.selectByPrimaryKey(batchSaveDTO.getId());
         if (null == batchPO) {
             throw new RechargeCardException(RechargeCardCodeEnum.BATCH_NOT_EXISTED);
@@ -100,9 +114,8 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         if (!batchPO.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
             //批次下面是否有码，有则为true
             List<RCExchangeCodeDTO> codeDTOList = rcExchangeCodeService.getByBatchId(batchSaveDTO.getId());
-            boolean batchEmpty = codeDTOList.isEmpty();
             //没有码则可以修改面额和数量
-            if (batchEmpty) {
+            if (codeDTOList.isEmpty()) {
                 batchPO.setAmount(batchSaveDTO.getAmount());
                 batchPO.setFaceValue(batchSaveDTO.getFaceValue());
             } else {
@@ -122,7 +135,7 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         batchPO.setStatus(status);
         batchPO.setModTime(new Date());
         rechargeCardExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
-        //非虚拟批次，需要修改批次下的充值卡启、停用状态
+        //非虚拟批次，需要修改批次下的积分卡启、停用状态
         if (!batchPO.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
             List<RCExchangeCodeDTO> codeDTOList = rcExchangeCodeService.getByBatchId(id);
             List<Integer> usedIds = codeDTOList.stream().filter(bean -> bean.getUsed().equals(CommonConstant.CODE_HAS_USED)).map(RCExchangeCodeDTO::getId).collect(Collectors.toList());
@@ -156,13 +169,11 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
         rechargeCardExchangeCodeBatchPOMapper.updateByPrimaryKeySelective(batchPO);
         List<RCExchangeCodeSaveDTO> rcExchangeCodeSaveDTOS = Lists.newArrayList();
         Integer amount = batchPO.getAmount();
-//        String[][] codeAndKeyts = GenerateCode.generateCode(CommonConstant.RC_EXCHANGE_CODE_PREFIX, amount);
         for (int i = 0; i < amount; i++) {
             RCExchangeCodeSaveDTO rcExchangeCodeSaveDTO = new RCExchangeCodeSaveDTO();
             rcExchangeCodeSaveDTO.setBatchId(batchPO.getId());
             rcExchangeCodeSaveDTO.setBatchName(batchPO.getName());
             rcExchangeCodeSaveDTO.setRechargeCardName(batchPO.getRechargeCardName());
-            rcExchangeCodeSaveDTO.setBatchDescription(batchPO.getDescription());
             rcExchangeCodeSaveDTO.setProjectId(batchPO.getProjectId());
             rcExchangeCodeSaveDTO.setCityCodes(batchPO.getCityCodes());
             rcExchangeCodeSaveDTO.setProductIds(batchPO.getProductIds());
@@ -170,10 +181,11 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
             rcExchangeCodeSaveDTO.setKeyt("");
             rcExchangeCodeSaveDTO.setFaceValue(batchPO.getFaceValue());
             rcExchangeCodeSaveDTO.setExpiryTime(batchPO.getExpiryTime());
+            rcExchangeCodeSaveDTO.setExpiryType(batchPO.getExpiryType());
             rcExchangeCodeSaveDTO.setRechargeCardEffectiveTime(batchPO.getRechargeCardEffectiveTime());
             rcExchangeCodeSaveDTO.setRechargeCardExpiryTime(batchPO.getRechargeCardExpiryTime());
             rcExchangeCodeSaveDTO.setValidityPeriod(batchPO.getValidityPeriod());
-            rcExchangeCodeSaveDTO.setExpiryType(batchPO.getExpiryType());
+            rcExchangeCodeSaveDTO.setBatchDescription(batchPO.getDescription());
             rcExchangeCodeSaveDTO.setStatus(CommonConstant.CODE_STOP_USING);
             rcExchangeCodeSaveDTO.setUsed(CommonConstant.CODE_NOT_USED);
             rcExchangeCodeSaveDTOS.add(rcExchangeCodeSaveDTO);
@@ -186,7 +198,6 @@ public class RCExchangeCodeBatchServiceImpl implements RCExchangeCodeBatchServic
             bean.setCode(map.get("code").toString());
             bean.setKeyt(map.get("keyt").toString());
         });
-        //此处更新code和keyt
         rcExchangeCodeService.batchUpdateCodeAndKeyt(rcExchangeCodeDTOS);
     }
 

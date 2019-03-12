@@ -8,9 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <!-- CSS -->
     <link rel="stylesheet" th:href="@{/static/init.css}"/>
+    <link rel="stylesheet" th:href="@{/static/editable-select/css/jquery-editable-select.min.css}"/>
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
-    <script th:src="@{/static/ace-master/js/bootstrap-tag.min.js}"></script>
+    <script th:src="@{/static/editable-select/js/jquery-editable-select.min.js}"></script>
 
     <style>
         .ui-jqgrid .ui-jqgrid-bdiv {
@@ -33,22 +34,6 @@
             border-right: 3px solid #fff;
             border-top: 3px solid #fff;
         }
-
-        /*特殊标签宽度*/
-        .tags {
-            width: 272px;
-        }
-
-        /*隐藏×*/
-        span button {
-            display: none;
-        }
-
-        /*隐藏*/
-        #pointCodes + input {
-            display: none;
-        }
-
     </style>
 </head>
 
@@ -62,7 +47,7 @@
                         <i class="ace-icon fa fa-home home-icon"></i>
                         <a th:href="@{/main/main_center}">主页</a>
                     </li>
-                    <li class="active">充值管理</li>
+                    <li class="active">充值审核</li>
                 </ul><!-- /.breadcrumb -->
             </div>
 
@@ -151,8 +136,8 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2 exchangeType1"></div>
-                                                <div class="form-group exchangeType1">
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">客户姓名：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
@@ -163,8 +148,8 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2 exchangeType1"></div>
-                                                <div class="form-group exchangeType1">
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">客户电话：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
@@ -177,7 +162,7 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">兑换积分数量：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">兑换积分：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
                                                             <input id="exchangePoint" name="exchangePoint"
@@ -187,8 +172,8 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2 exchangeType1"></div>
-                                                <div class="form-group exchangeType1">
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">兑换积分所属项目：</label>
                                                     <div class="col-sm-8">
                                                         <select id="exchangeProjectId"
@@ -198,8 +183,8 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2 exchangeType1"></div>
-                                                <div class="form-group exchangeType1">
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">兑换积分所属批次：</label>
                                                     <div class="col-sm-8">
                                                         <select id="exchangeBatchId" name="exchangeBatchId"
@@ -229,44 +214,73 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2 exchangeType2"></div>
-                                                <div class="form-group exchangeType2">
-                                                    <label class="col-sm-4 control-label no-padding-right"
-                                                           for="pointCodes">积分兑换码卡号：</label>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right" for="pointCodes">积分兑换码：</label>
                                                     <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input type="text" name="pointCodes" id="pointCodes"
-                                                                   readonly/>
+                                                        <div class="inline">
+                                                            <input type="text" name="pointCodes" id="pointCodes" value="123,46,789" placeholder="请输入" />
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2 exchangeType3"></div>
-                                                <div class="form-group exchangeType3">
-                                                    <label class="col-sm-4 control-label no-padding-right"
-                                                           for="productValue">实物价值：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="productValue" name="productValue"
-                                                                   class="form-control"
-                                                                   type="text" style="height:30px" readonly/>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <!--<div class="space-2"></div>-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="col-sm-4 control-label no-padding-right">POS机编号：</label>-->
+                                                    <!--<div class="col-sm-8">-->
+                                                        <!--<div class="pos-rel">-->
+                                                            <!--<select id="posCode" name="posCode" class="form-control">-->
+                                                                <!--<option>财富私行尊享积分pos一</option>-->
+                                                                <!--<option>财富私行尊享积分pos十二</option>-->
+                                                                <!--<option>财富私行尊享积分pos十六</option>-->
+                                                                <!--<option>财富私行尊享积分pos中国银行津南支行尊享活动</option>-->
+                                                                <!--<option>江苏</option>-->
+                                                                <!--<option>青岛</option>-->
+                                                                <!--<option>温州</option>-->
+                                                            <!--</select>-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
 
-                                                <div class="space-2 auditReason"></div>
-                                                <div class="form-group auditReason">
-                                                    <label class="col-sm-4 control-label no-padding-right"
-                                                           for="auditReason">驳回理由：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <textarea id="auditReason" name="auditReason"
-                                                                      class="form-control"
-                                                                      style="resize:none;height: 100px"
-                                                                      readonly></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <!--<div class="space-2"></div>-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="col-sm-4 control-label no-padding-right">银行卡后四位：</label>-->
+                                                    <!--<div class="col-sm-8">-->
+                                                        <!--<div class="pos-rel">-->
+                                                            <!--<input id="cardNo" name="cardNo"-->
+                                                                   <!--class="form-control"-->
+                                                                   <!--type="text" style="height:30px"/>-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+
+                                                <!--<div class="space-2"></div>-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="col-sm-4 control-label no-padding-right"-->
+                                                           <!--for="saveTradeTime">交易时间：</label>-->
+                                                    <!--<div class="col-sm-8">-->
+                                                        <!--<div class="input-group">-->
+                                                            <!--<input class="form-control date-picker"-->
+                                                                   <!--id="saveTradeTime" type="text" readonly/>-->
+                                                            <!--<span class="input-group-addon">-->
+                                                                            <!--<i class="fa fa-calendar bigger-110"></i>-->
+                                                                        <!--</span>-->
+                                                            <!--<input type="hidden" value=0 name="tradeTime"/>-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+
+                                                <!--<div class="space-2 auditReason"></div>-->
+                                                <!--<div class="form-group auditReason">-->
+                                                    <!--<label class="col-sm-4 control-label no-padding-right">不通过理由：</label>-->
+                                                    <!--<div class="col-sm-8">-->
+                                                        <!--<div class="pos-rel">-->
+                                                            <!--<textarea id="auditReason" name="auditReason"-->
+                                                                      <!--class="form-control"-->
+                                                                      <!--style="resize:none;height: 100px"></textarea>-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
                                             </form>
                                         </div>
                                     </div>
@@ -314,7 +328,7 @@
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
-    var exchangeTypes = ['直接充积分', '兑换积分卡', '兑换实物'];
+    var exchangeTypes = ['直接冲积分', '兑换积分卡', '兑换实物'];
     var auditRecordStatus = ['未提交', '已提交', '已驳回', '已通过'];
     var auditRecordColor = ['000000', '0000FF', 'FF0000', '00FF00']
     $(function () {
@@ -322,6 +336,29 @@
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
+
+        //初始化积分码显示框
+        var tag_input = $('#pointCodes');
+        try{
+            tag_input.tag(
+                {
+                    placeholder:tag_input.attr('placeholder'),
+                    source: ace.vars['US_STATES'],//defined in ace.js >> ace.enable_search_ahead
+                }
+            )
+            var $tag_obj = $('#pointCodes').data('tag');
+            $tag_obj.add('Programmatically Added');
+            var index = $tag_obj.inValues('some tag');
+            $tag_obj.remove(index);
+        }
+        catch(e) {
+            tag_input.after('<textarea id="'+tag_input.attr('id')+'" name="'+tag_input.attr('name')+'" rows="3">'+tag_input.val()+'</textarea>').remove();
+        }
+
+//        $('#posCode').editableSelect({
+//            effects: 'slide',
+//            filter: false
+//        });
 
         //将项目列表填入到projectId中
         $.ajax({
@@ -351,28 +388,25 @@
             error: error
         });
 
-        $("#pointCodes").tag({});
-
         initDatePicker();
 
         var tableOption = {
             url: "/api/auditrecord/listpage",
             postData: transformToJson($('#auditRecordSearchForm').serializeArray()),
-//            shrinkToFit: false,
-//            autoScroll: true,
+            shrinkToFit: false,
+            autoScroll: true,
 //            multiselect: true,
-            colNames: ['', '操作', '提交人', '客户电话', '兑换积分', '兑换类型', '状态', '客户姓名', '提交时间', '审核人', '审核时间'],
+            colNames: ['', '操作', '提交人姓名', '客户电话', '兑换积分', '兑换类型', '状态', '客户姓名', '提交时间', '审核人姓名', '审核时间'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
-                {name: '_action', index: '_action', width:100,sortable: false, formatter: customFormatter},
-                {name: 'submitterName', index: 'submitterName', width:50,sortable: false},
-                {name: 'customerMobile', index: 'customerMobile',width:100, sortable: false},
-                {name: 'exchangePoint', index: 'exchangePoint',width:50, sortable: false},
+                {name: '_action', index: '_action', sortable: false, formatter: customFormatter},
+                {name: 'submitterName', index: 'submitterName', sortable: false},
+                {name: 'customerMobile', index: 'customerMobile', sortable: false},
+                {name: 'exchangePoint', index: 'exchangePoint', sortable: false},
                 {
                     name: 'exchangeType',
                     index: 'exchangeType',
                     sortable: false,
-                    width:80,
                     formatter: function (cellvalue, options, rowObject) {
                         return exchangeTypes[rowObject.exchangeType - 1];
                     }
@@ -380,17 +414,15 @@
                 {
                     name: 'status',
                     index: 'status',
-                    width:50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return generateSpan(auditRecordStatus[rowObject.status - 1], auditRecordColor[rowObject.status - 1]);
                     }
                 },
-                {name: 'customerName', index: 'customerName',  width:80,sortable: false},
+                {name: 'customerName', index: 'customerName', sortable: false},
                 {
                     name: 'modTime',
                     index: 'modTime',
-                    width:120,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return timeFormat(rowObject.modTime)
@@ -399,7 +431,6 @@
                 {
                     name: 'auditorName',
                     index: 'auditorName',
-                    width:50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return rowObject.status > 2 ? rowObject.auditorName : "";
@@ -408,13 +439,24 @@
                 {
                     name: 'auditTime',
                     index: 'auditTime',
-                    width:120,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return rowObject.status > 2 ? timeFormat(rowObject.auditTime) : "";
                     }
                 },
             ],
+            loadComplete: function (data) {
+                var table = this;
+                setTimeout(function () {
+                    $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
+                    updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
+                }, 0);
+                if (data.data.length == 0) {//解决没有数据时，不出现横向滚动条的问题
+                    $('head').append('<style> .ui-jqgrid .ui-jqgrid-hdiv{overflow:auto}</style>');
+                } else {
+                    $('head').append('<style> .ui-jqgrid .ui-jqgrid-hdiv{overflow:hidden}</style>');
+                }
+            },
             caption: "充值记录列表"
         };
         initTable(grid_selector, pager_selector, tableOption);
@@ -488,26 +530,30 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    showByExchangeType(result);
                     $("#auditRecordId").val(result.id);
                     $("#version").val(result.version);
-                    $("#bankOutletsName").val(result.bankOutletsName);
-                    $("#exchangeType").val(exchangeTypes[result.exchangeType - 1]);
+                    $("#customerName").val(result.customerName);
+                    $("#customerMobile").val(result.customerMobile);
                     $("#exchangePoint").val(result.exchangePoint);
+                    $("#exchangeType").val(result.exchangeType);
+                    $("#givingPoint").val(result.givingPoint);
+                    $("#givingType").val(result.givingType);
                     $("#auditReason").val(result.auditReason);
+                    $("#posCode").val(result.posCode);
+                    $("#cardNo").val(result.cardNo);
+                    if (result.status == 2) {
+                        $("#saveTradeTime").val(dateFormat(result.tradeTime));
+                        $("#saveTradeTime").next().next().val(result.tradeTime);
+                    } else {
+                        $("#saveTradeTime").val('');
+                        $("#saveTradeTime").next().next().val(0);
+                    }
                     $("#remark").val(result.remark);
                     $("#remark").attr('readonly', 'readonly');
-                    if (result.status == 3) { //审核不通过时显示不通过理由
+                    if (result.status == 1) {
                         $(".auditReason").css("display", "");
                     } else {
                         $(".auditReason").css("display", "none");
-                    }
-                    if (result.status == 2) { //待提交时显示审核按钮
-                        $("#passBtn").css("display", "");
-                        $("#unpassBtn").css("display", "");
-                    } else {
-                        $("#passBtn").css("display", "none");
-                        $("#unpassBtn").css("display", "none");
                     }
                     var imgUrls = result.imgUrls.split(",");
                     for (var i = 0; i < imgUrls.length; i++) {
@@ -519,43 +565,8 @@
         });
     }
 
-    function showByExchangeType(result) {
-        switch (result.exchangeType) {
-            case 1:
-                $(".exchangeType1").css("display", "");
-                $(".exchangeType2").css("display", "none");
-                $(".exchangeType3").css("display", "none");
-                $("#customerName").val(result.customerName);
-                $("#customerMobile").val(result.customerMobile);
-                break;
-            case 2:
-                $(".exchangeType1").css("display", "none");
-                $(".exchangeType2").css("display", "");
-                $(".exchangeType3").css("display", "none");
-                var $tag_obj = $('#pointCodes').data('tag');
-                var count = $tag_obj.values.length;;
-                var pointCodes = result.pointCodes.split(',');
-                for (var i = 0; i < count; i++) {
-                    $tag_obj.remove(0);
-                }
-                for (var i = 0; i < pointCodes.length; i++) {
-                    $tag_obj.add(pointCodes[i]);
-                }
-                break;
-            case 3:
-                $(".exchangeType1").css("display", "none");
-                $(".exchangeType2").css("display", "none");
-                $(".exchangeType3").css("display", "");
-                $("#productValue").val(result.productValue);
-                break;
-            default:
-                bootboxalert('兑换类型超过现有类型');
-                break;
-        }
-    }
-
     function pass() {
-        $("#saveStatus").val(4);
+        $("#saveStatus").val(2);
         confirm("确定通过该条充值记录的审核？", function (result) {
             if (result) {
                 save();
@@ -564,7 +575,7 @@
     }
 
     function unpass() {
-        $("#saveStatus").val(3);
+        $("#saveStatus").val(1);
         bootbox.prompt({
             title: "请填写审核不通过理由！",
             callback: function (result) {
@@ -628,7 +639,7 @@
     }
 
     function showimage(source) {//图片单击放大显示
-        $("#ShowImage_Form").find("#img_show").html("<image src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' style='zoom:70%;'/>");
+        $("#ShowImage_Form").find("#img_show").html("<image src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' />");
         $("#ShowImage_Form").modal({backdrop: 'static', keyboard: true});
     }
 

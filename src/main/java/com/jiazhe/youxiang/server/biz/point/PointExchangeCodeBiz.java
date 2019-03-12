@@ -32,18 +32,20 @@ public class PointExchangeCodeBiz {
 
     /**
      * 根据兑换码id，单个停用、失效积分卡兑换码
+     *
      * @param id
      */
     public void stopUsing(Integer id) {
-        pointExchangeCodeService.changeCodeStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
+        pointExchangeCodeService.changeCodeStatus(id, CommonConstant.CODE_STOP_USING);
     }
 
     /**
      * 根据兑换码id，单个启用、激活积分卡兑换码
+     *
      * @param id
      */
     public void startUsing(Integer id) {
-        pointExchangeCodeService.changeCodeStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
+        pointExchangeCodeService.changeCodeStatus(id, CommonConstant.CODE_START_USING);
     }
 
     public PointExchangeCodeDTO getById(Integer id) {
@@ -54,27 +56,29 @@ public class PointExchangeCodeBiz {
         pointExchangeCodeService.editSave(dto);
     }
 
-    public void customerSelfCharge(Integer id, String keyt) {
-        pointExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_CUSTOMER_CODE_EXCHANGE, id, keyt);
+    public void customerSelfCharge(Integer customerId, String keyt) {
+        pointExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_CUSTOMER_CODE_EXCHANGE, customerId, keyt);
     }
 
-    public void backstageCodeCharge(Integer id, String keyt) {
-        pointExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE, id, keyt);
-    }
-
-    /**
-     * 根据批次id，启用批次下所有兑换码
-     * @param id
-     */
-    public void allStartUsing(Integer id) {
-        pointExchangeCodeService.batchChangeStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
+    public void backstageCodeCharge(Integer customerId, String keyt) {
+        pointExchangeCodeService.codeCharge(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE, customerId, keyt);
     }
 
     /**
      * 根据批次id，启用批次下所有兑换码
-     * @param id
+     *
+     * @param batchId
      */
-    public void allStopUsing(Integer id) {
-        pointExchangeCodeService.batchChangeStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
+    public void allStartUsing(Integer batchId) {
+        pointExchangeCodeService.batchChangeStatus(batchId, CodeStatusEnum.START_USING.getId().byteValue());
+    }
+
+    /**
+     * 根据批次id，启用批次下所有兑换码
+     *
+     * @param batchId
+     */
+    public void allStopUsing(Integer batchId) {
+        pointExchangeCodeService.batchChangeStatus(batchId, CodeStatusEnum.STOP_USING.getId().byteValue());
     }
 }

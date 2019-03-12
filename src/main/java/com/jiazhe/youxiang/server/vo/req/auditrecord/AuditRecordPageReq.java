@@ -10,6 +10,9 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class AuditRecordPageReq extends PageSizeNumReq {
 
+    @ApiModelProperty("客户电话")
+    private String customerMobile;
+
     @ApiModelProperty("消费记录状态")
     private Byte status;
 
@@ -19,5 +22,13 @@ public class AuditRecordPageReq extends PageSizeNumReq {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getCustomerMobile() {
+        return customerMobile;
+    }
+
+    public void setCustomerMobile(String customerMobile) {
+        this.customerMobile = customerMobile;
     }
 }

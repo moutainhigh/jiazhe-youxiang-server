@@ -2,10 +2,6 @@ package com.jiazhe.youxiang.server.vo.req.voucher.exchangecodebatch;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @author tu
@@ -14,7 +10,7 @@ import java.util.Date;
  */
 public class VoucherExchangeCodeBatchSaveReq  extends BaseVO{
 
-    @ApiModelProperty("批次id，0为添加")
+    @ApiModelProperty("批次id，0为添加 其他为修改")
     private Integer id;
 
     @ApiModelProperty("批次名称")

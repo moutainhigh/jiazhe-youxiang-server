@@ -3,16 +3,15 @@ package com.jiazhe.youxiang.server.service.impl.rechargecard;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
-import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
-import com.jiazhe.youxiang.server.common.enums.UserCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
-import com.jiazhe.youxiang.server.common.exceptions.UserException;
 import com.jiazhe.youxiang.server.dao.mapper.RechargeCardPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.rechargecard.RCPOManualMapper;
-import com.jiazhe.youxiang.server.domain.po.*;
+import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeRecordPO;
+import com.jiazhe.youxiang.server.domain.po.RechargeCardPO;
+import com.jiazhe.youxiang.server.domain.po.RechargeCardPOExample;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCEditDTO;
@@ -98,27 +97,30 @@ public class RCServiceImpl implements RCService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue) {
-        CustomerDTO customerDTO = customerService.getById(id);
+    public void directCharge(Integer customerId, Integer batchId, BigDecimal faceValue) {
+        CustomerDTO customerDTO = customerService.getById(customerId);
         if (null == customerDTO) {
             throw new RechargeCardException(RechargeCardCodeEnum.CUSTOMER_NOT_EXIST);
         }
         RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchService.getById(batchId);
+        if(null == rcExchangeCodeBatchEditDTO){
+            throw new RechargeCardException(RechargeCardCodeEnum.BATCH_NOT_EXISTED);
+        }
         RechargeCardPO rechargeCardPO = new RechargeCardPO();
         //直接指定过期时间
-        rechargeCardPO.setEffectiveTime(rcExchangeCodeBatchEditDTO.getRechargeCardEffectiveTime());
         if (rcExchangeCodeBatchEditDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
+            rechargeCardPO.setEffectiveTime(rcExchangeCodeBatchEditDTO.getRechargeCardEffectiveTime());
             rechargeCardPO.setExpiryTime(rcExchangeCodeBatchEditDTO.getRechargeCardExpiryTime());
         } else {
+            rechargeCardPO.setEffectiveTime(new Date(DateUtil.getFirstSecond(System.currentTimeMillis())));
             rechargeCardPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + rcExchangeCodeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
         }
-        rechargeCardPO.setEffectiveTime(rcExchangeCodeBatchEditDTO.getRechargeCardEffectiveTime());
         rechargeCardPO.setDescription(rcExchangeCodeBatchEditDTO.getDescription());
         rechargeCardPO.setFaceValue(faceValue);
         rechargeCardPO.setBalance(faceValue);
         //暂时置为0，等生成了兑换记录再修改
         rechargeCardPO.setExchangeRecordId(0);
-        rechargeCardPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
+        rechargeCardPO.setStatus(CommonConstant.CODE_START_USING);
         rechargeCardPO.setProjectId(rcExchangeCodeBatchEditDTO.getProjectId());
         rechargeCardPO.setName(rcExchangeCodeBatchEditDTO.getRechargeCardName());
         rechargeCardPO.setCustomerId(customerDTO.getId());
@@ -136,7 +138,7 @@ public class RCServiceImpl implements RCService {
         rechargeCardRecordPO.setExchangeType(CommonConstant.EXCHANGETYPE_USER_DIRECTCHARGE);
         rechargeCardRecordPO.setRechargeCardId(rechargeCardPO.getId());
         rechargeCardRecordPO.setExtInfo("");
-        rechargeCardRecordPO.setIsDeleted(Byte.valueOf("0"));
+        rechargeCardRecordPO.setIsDeleted(CommonConstant.CODE_NOT_DELETED);
         rechargeCardRecordPO.setAddTime(new Date());
         rechargeCardRecordPO.setModTime(new Date());
         rcExchangeRecordService.insert(rechargeCardRecordPO);
@@ -146,21 +148,13 @@ public class RCServiceImpl implements RCService {
     }
 
     @Override
-    public void batchUpdate(List<Integer> ids, RCExchangeCodeBatchSaveDTO batchSaveDTO) {
+    public void updateWithBatch(List<Integer> ids, RCExchangeCodeBatchSaveDTO batchSaveDTO) {
         List<RechargeCardPO> rcPOList = rcPOManualMapper.findByIds(ids);
         rcPOList.stream().forEach(bean -> {
             bean.setName(batchSaveDTO.getRechargeCardName());
-            bean.setDescription(batchSaveDTO.getDescription());
             bean.setProjectId(batchSaveDTO.getProjectId());
             bean.setCityCodes(batchSaveDTO.getCityCodes());
             bean.setProductIds(batchSaveDTO.getProductIds());
-            bean.setEffectiveTime(batchSaveDTO.getRechargeCardEffectiveTime());
-            //直接指定过期时间
-            if (batchSaveDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
-                bean.setExpiryTime(batchSaveDTO.getRechargeCardExpiryTime());
-            } else {
-                bean.setExpiryTime(new Date(DateUtil.getLastSecond(bean.getAddTime().getTime() + batchSaveDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
-            }
         });
         rcPOManualMapper.batchUpdate(rcPOList);
     }

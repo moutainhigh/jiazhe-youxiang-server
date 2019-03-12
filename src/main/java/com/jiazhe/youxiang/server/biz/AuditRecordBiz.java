@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.biz;
 
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
 import com.jiazhe.youxiang.server.service.AuditRecordService;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -20,8 +21,8 @@ public class AuditRecordBiz {
     @Autowired
     private AuditRecordService auditRecordService;
 
-    public void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId,Integer givingBatchId,String posCode,String cardNo,Long tradeTime)  {
-        auditRecordService.auditRecordPass(auditRecordId, version, exchangeBatchId,givingBatchId,posCode,cardNo,new Date(tradeTime));
+    public void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId) {
+        auditRecordService.auditRecordPass(auditRecordId, version, exchangeBatchId);
     }
 
     public void auditRecordUnpass(Integer auditRecordId, Integer version, String reason) {
@@ -29,19 +30,19 @@ public class AuditRecordBiz {
     }
 
     public Integer getWaitCheckCount() {
-        return auditRecordService.getCountByStatus(Byte.valueOf("0"));
+        return auditRecordService.getCountByStatus(CommonConstant.AUDIT_RECORD_HAS_SUBMITTED);
     }
 
     public AuditRecordDTO getById(Integer id) {
         return auditRecordService.getById(id);
     }
 
-    public List<AuditRecordDTO> getList(Byte status, Paging paging) {
-        return auditRecordService.getList(null, status, paging);
+    public List<AuditRecordDTO> getList(String customerMobile, Byte status, Paging paging) {
+        return auditRecordService.getList(customerMobile, null, status, paging);
     }
 
-    public List<AuditRecordDTO> getSubmitterList(Byte status,Integer submitterId, Paging paging) {
-        return auditRecordService.getList(submitterId, status, paging);
+    public List<AuditRecordDTO> getSubmitterList(Byte status, Integer submitterId, Paging paging) {
+        return auditRecordService.getList(null, submitterId, status, paging);
     }
 
     public void save(AuditRecordDTO auditRecordDTO) {

@@ -83,11 +83,11 @@
                     <div class="col-xs-12" style="text-align: right" id="buttonDiv">
                         <p style="margin:1px;height: 31px">
                             <shiro:hasPermission name="allVoucherCodeStatusChange">
-                                <a class="btn btn-success btn-round btn-sm" title="并启用已经兑换成的代金券" role="button"
+                                <a class="btn btn-success btn-round btn-sm" title="启用所有未使用码" role="button"
                                    onclick="allStartUsing()">
                                     启用所有码
                                 </a>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <a class="btn btn-success btn-round btn-sm" title="并停用已经兑换成的代金券" role="button"
+                                <a class="btn btn-success btn-round btn-sm" title="停用所有未使用码" role="button"
                                    onclick="allStopUsing()">
                                     停用所有码
                                 </a>
@@ -309,8 +309,8 @@
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
 //                {name: 'batchName', index: 'batchName', width: 100, sortable: false},
-                {name: 'voucherName', index: 'voucherName', width: 50, sortable: false},
-                {name: 'code', index: 'code', width: 80, sortable: false},
+                {name: 'voucherName', index: 'voucherName', width: 80, sortable: false},
+                {name: 'code', index: 'code', width: 50, sortable: false},
                 {name: 'keyt', index: 'keyt', width: 80, sortable: false},
                 {
                     name: 'status',
@@ -334,12 +334,12 @@
                         return generateSpan(text, color)
                     }
                 },
-                {name: 'customerResp.mobile', index: 'customerResp.mobile', width: 60, sortable: false},
-                {name: 'count', index: 'count', width: 50, sortable: false},
+                {name: 'customerResp.mobile', index: 'customerResp.mobile', width: 50, sortable: false},
+                {name: 'count', index: 'count', width: 30, sortable: false},
                 {
                     name: 'expiryTime',
                     index: 'expiryTime',
-                    width: 50,
+                    width: 60,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return timeFormat(rowObject.expiryTime);
@@ -348,7 +348,7 @@
                 {
                     name: 'expiryType',
                     index: 'expiryType',
-                    width: 50,
+                    width: 100,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         if(rowObject.expiryType == 0){
@@ -362,7 +362,7 @@
                         }
                     }
                 },
-                {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
+                {name: '_action', index: '_action', width: 50, sortable: false, formatter: customFormatter}
             ],
             caption: "代金券兑换码列表"
         };

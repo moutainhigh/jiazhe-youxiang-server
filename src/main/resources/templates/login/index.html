@@ -106,6 +106,7 @@
 
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
+    var codeInputShow = false;
     var countdown = 60;
     $(function () {
         if (!navigator.cookieEnabled) {
@@ -181,9 +182,15 @@
             success: function (data) {
                 if ('error' in data) {
                     if (data.error.code == 112004) {//异客户端登陆了，需要发送验证码
-                        $('#identifyingCodeLabel').css("display", "block");
+                        if(codeInputShow){
+                            bootboxalert(data.error.message);
+                        }else {
+                            codeInputShow = true;
+                            $('#identifyingCodeLabel').css("display", "block");
+                        }
+                    }else{
+                        bootboxalert(data.error.message);
                     }
-                    bootboxalert(data.error.message);
                 } else {//登陆成功
                     window.location.href = "/main/main";
                 }

@@ -85,10 +85,10 @@ public interface VoucherExchangeCodeService {
      * 兑换码换代金券
      *
      * @param exchangeType
-     * @param id
+     * @param customerId
      * @param keyt
      */
-    void codeCharge(Integer exchangeType, Integer id, String keyt) ;
+    void codeCharge(Integer exchangeType, Integer customerId, String keyt) ;
 
     /**
      * 根据keyt查询代金券兑换码

@@ -2,7 +2,7 @@ package com.jiazhe.youxiang.server.biz.point;
 
 import com.jiazhe.youxiang.base.util.RSAUtil;
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
-import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.PointCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
@@ -102,22 +102,31 @@ public class PointBiz {
 
     /**
      * 启用积分卡
+     *
      * @param id
      */
     public void startUsing(Integer id) {
-        pointService.changeStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
+        pointService.changeStatus(id, CommonConstant.CODE_START_USING);
     }
 
     /**
      * 停用积分卡
+     *
      * @param id
      */
     public void stopUsing(Integer id) {
-        pointService.changeStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
+        pointService.changeStatus(id, CommonConstant.CODE_STOP_USING);
     }
 
-    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue)  {
-        pointService.directCharge(id, batchId, faceValue);
+    /**
+     * 选定批次直接充值
+     *
+     * @param customerId
+     * @param batchId
+     * @param faceValue
+     */
+    public void directCharge(Integer customerId, Integer batchId, BigDecimal faceValue) {
+        pointService.directCharge(customerId, batchId, faceValue);
     }
 
     public PointDTO getById(Integer id) {
@@ -137,7 +146,7 @@ public class PointBiz {
      *
      * @param qrCode
      */
-    public void chargeByQRCode(String qrCode)  {
+    public void chargeByQRCode(String qrCode) {
         //将二维码利用公钥解密
         String purchaseOrderStr = "";
         try {
@@ -159,7 +168,7 @@ public class PointBiz {
         Integer batchId = pointExchangeCodeBatchService.getBatchIdByMerchantNo(purchaseOrderDTO.getMerchantNo());
         BigDecimal faceValue = new BigDecimal(purchaseOrderDTO.getBonus());
         //获得当前用户，给当前用户充值
-        pointService.chargeByQRCode(purchaseOrderStr,customerDTO, batchId, faceValue);
+        pointService.chargeByQRCode(purchaseOrderStr, customerDTO, batchId, faceValue);
     }
 
     /**

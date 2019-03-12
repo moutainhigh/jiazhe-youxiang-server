@@ -569,11 +569,6 @@
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
 
-//        $('#saveProductType').editableSelect({
-//            effects: 'slide',
-//            filter: false
-//        });
-
         initDatePicker();
 
         //初始化二级城市
@@ -646,7 +641,7 @@
             colNames: ['', '操作', '状态', '客户姓名', '客户手机号', '城市', '兑换码密钥', '兑换时间', '预约时间', '订单来源', '服务人员姓名', '服务项目', '预付', '再支付'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
-                {name: '_action', index: '_action', width: 200, sortable: false, formatter: customFormatter},
+                {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter},
                 {
                     name: 'status',
                     index: 'status',
@@ -678,13 +673,17 @@
                         return dateFormat(rowObject.serviceTime);
                     }
                 },
-                {name: 'orderSource', index: 'orderSource', sortable: false},
-                {name: 'workerName', index: 'workerName', sortable: false},
-                {name: 'serviceItemResp.name', index: 'serviceItem', sortable: false},
-                {name: 'prePay', index: 'prePay', sortable: false},
-                {name: 'appendPay', index: 'appendPay', sortable: false}
+                {name: 'orderSource', index: 'orderSource', width: 100,sortable: false},
+                {name: 'workerName', index: 'workerName', width: 100,sortable: false},
+                {name: 'serviceItemResp.name', index: 'serviceItem', width: 100,sortable: false},
+                {name: 'prePay', index: 'prePay',width: 50, sortable: false},
+                {name: 'appendPay', index: 'appendPay', width: 50,sortable: false}
             ],
             loadComplete: function (data) {
+                if("error" in data){
+                    bootboxalert(data.error.message);
+                    return false;
+                }
                 var table = this;
                 setTimeout(function () {
                     $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名

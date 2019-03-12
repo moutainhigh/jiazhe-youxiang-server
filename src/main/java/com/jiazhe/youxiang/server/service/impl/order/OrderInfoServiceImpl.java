@@ -480,10 +480,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             throw new OrderException(OrderCodeEnum.ORDER_COUNT_LESS_THAN_LAST_NUM);
         }
         //服务类商品才检查预约时间、服务地址，服务联系电话等信息
-        if(productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
-            long delayDays = dto.getServiceTime().getTime() / CommonConstant.ONE_DAY - System.currentTimeMillis() / CommonConstant.ONE_DAY;
-            if (productDTO.getDelayDays() > delayDays) {
-                throw new OrderException(OrderCodeEnum.SERVICE_TIME_ERROR);
+        if(dto.getType().equals(CommonConstant.CUSTOMER_PLACE_ORDER)) {
+            if (productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
+                long delayDays = dto.getServiceTime().getTime() / CommonConstant.ONE_DAY - System.currentTimeMillis() / CommonConstant.ONE_DAY;
+                if (productDTO.getDelayDays() > delayDays) {
+                    throw new OrderException(OrderCodeEnum.SERVICE_TIME_ERROR);
+                }
             }
             CommonValidator.validateNull(dto.getCustomerAddress(),new OrderException(OrderCodeEnum.SERVICE_ADDRESS_IS_NULL));
             CommonValidator.validateNull(dto.getCustomerMobile(),new OrderException(OrderCodeEnum.SERVICE_MOBILE_IS_VALID));

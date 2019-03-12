@@ -64,12 +64,7 @@ public class APIAuditRecordController extends BaseController {
             auditRecordBiz.auditRecordUnpass(req.getId(), req.getVersion(), req.getAuditReason());
         }
         if (req.getStatus().equals(CommonConstant.AUDIT_RECORD_PASS)) {
-            CommonValidator.validateNull(req.getPosCode(), new AuditRecordException(AuditRecordCodeEnum.POS_CODE_IS_NULL));
-            CommonValidator.validateNull(req.getCardNo(), new AuditRecordException(AuditRecordCodeEnum.CARD_NO_IS_NULL));
-            if (req.getTradeTime() == CommonConstant.NULL_TIME) {
-                throw new AuditRecordException(AuditRecordCodeEnum.TRADE_TIME_IS_NULL);
-            }
-            auditRecordBiz.auditRecordPass(req.getId(), req.getVersion(), req.getExchangeBatchId(), req.getGivingBatchId(), req.getPosCode(), req.getCardNo(), req.getTradeTime());
+            auditRecordBiz.auditRecordPass(req.getId(), req.getVersion(), req.getExchangeBatchId());
         }
         return ResponseFactory.buildSuccess();
     }
@@ -101,7 +96,7 @@ public class APIAuditRecordController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "消费记录列表", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute AuditRecordPageReq req) {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getStatus(), paging);
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getCustomerMobile(),req.getStatus(), paging);
         List<AuditRecordResp> auditRecordRespList = auditRecordDTOList.stream().map(AuditRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(auditRecordRespList, paging);
     }

@@ -1,7 +1,10 @@
 package com.jiazhe.youxiang.server.controller.voucher;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
-import com.jiazhe.youxiang.base.util.*;
+import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.DateUtil;
+import com.jiazhe.youxiang.base.util.ExportExcelUtils;
+import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherExchangeCodeBatchAdapter;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherExchangeCodeBatchBiz;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherExchangeCodeBiz;
@@ -73,7 +76,7 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "保存代金券兑换码批次信息", level = LogLevelEnum.LEVEL_2)
     public Object save(@ModelAttribute VoucherExchangeCodeBatchSaveReq req) {
         CommonValidator.validateNull(req);
-        CommonValidator.validateNull(req.getId());
+        CommonValidator.validateId(req.getId());
         CommonValidator.validateNull(req.getName(), new VoucherException(VoucherCodeEnum.BATCH_NAME_IS_NULL));
         CommonValidator.validateNull(req.getVoucherName(), new VoucherException(VoucherCodeEnum.VOUCHER_NAME_IS_NULL));
         CommonValidator.validateNull(req.getAmount(), new VoucherException(VoucherCodeEnum.AMOUNT_IS_NULL));
@@ -91,11 +94,11 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
             if (req.getVoucherEffectiveTime() == CommonConstant.NULL_TIME) {
                 throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_IS_NULL);
             }
-            if (req.getVoucherEffectiveTime() > req.getExpiryTime()) {
-                throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_LATER_BATCH_EXPIRY_TIME);
-            }
             if (req.getVoucherExpiryTime() == CommonConstant.NULL_TIME) {
                 throw new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL);
+            }
+            if (req.getVoucherEffectiveTime() > req.getExpiryTime()) {
+                throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_LATER_BATCH_EXPIRY_TIME);
             }
             if (req.getVoucherEffectiveTime() > req.getVoucherExpiryTime()) {
                 throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_LATER_VOUCHER_EXPIRY_TIME);
@@ -107,6 +110,9 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
         //自兑换之日起有效天数 或 自激活之日起有效天数
         if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXCHANGE_PERIOD) || req.getExpiryType().equals(CommonConstant.VOUCHER_ACTIVE_PERIOD)) {
             CommonValidator.validateNull(req.getValidityPeriod(), new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL));
+            if (req.getValidityPeriod() == 0) {
+                throw new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL);
+            }
             req.setVoucherEffectiveTime(DateUtil.getFirstSecond(System.currentTimeMillis()));
             req.setVoucherExpiryTime(DateUtil.getLastSecond(System.currentTimeMillis()));
         }

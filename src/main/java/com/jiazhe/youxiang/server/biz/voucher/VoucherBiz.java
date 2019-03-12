@@ -1,7 +1,7 @@
 package com.jiazhe.youxiang.server.biz.voucher;
 
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
-import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.voucher.voucher.VoucherDTO;
 import com.jiazhe.youxiang.server.dto.voucher.voucher.VoucherEditDTO;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,16 +27,16 @@ public class VoucherBiz {
     @Autowired
     private CustomerBiz customerBiz;
 
-    public Integer totalValidVoucher(Integer customerId){
+    public Integer totalValidVoucher(Integer customerId) {
         return voucherService.totalValidVoucher(customerId);
     }
 
     public void startUsing(Integer id) {
-        voucherService.changeStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
+        voucherService.changeStatus(id, CommonConstant.CODE_START_USING);
     }
 
     public void stopUsing(Integer id) {
-        voucherService.changeStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
+        voucherService.changeStatus(id, CommonConstant.CODE_STOP_USING);
     }
 
     public List<VoucherDTO> getList(String mobile, Integer exchangeType, Byte status, Byte expiry, Paging paging) {

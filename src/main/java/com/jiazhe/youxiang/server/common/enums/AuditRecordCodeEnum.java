@@ -26,7 +26,8 @@ public enum AuditRecordCodeEnum {
     POINT_CODES_IS_NULL(111017, "POINT_CODES_IS_NULL", "发放的兑换码卡号不能为空"),
     PRODUCT_VALUE_IS_NULL(111018, "PRODUCT_VALUE_IS_NULL", "兑换的实物价值不能为空"),
     IMAGE_IS_NULL(111019, "IMAGE_IS_NULL", "请提供交易凭证"),
-    AUDIT_RECORD_IS_NOT_EXIST(111020, "AUDIT_RECORD_IS_NOT_EXIST", "该条记录不存在"),;
+    AUDIT_RECORD_IS_NOT_EXIST(111020, "AUDIT_RECORD_IS_NOT_EXIST", "该条记录不存在"),
+    POINT_CODES_ERROR(111021, "POINT_CODES_ERROR", "兑换码卡号有误"),;
 
     AuditRecordCodeEnum(Integer code, String type, String message) {
         this.code = code;

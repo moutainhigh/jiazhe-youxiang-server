@@ -13,16 +13,56 @@ import java.util.List;
  */
 public interface AuditRecordService {
 
-    List<AuditRecordDTO> getList(Integer submitterId,Byte status, Paging paging);
+    /**
+     * 根据条件查询列表
+     *
+     * @param customerMobile
+     * @param submitterId
+     * @param status
+     * @param paging
+     * @return
+     */
+    List<AuditRecordDTO> getList(String customerMobile, Integer submitterId, Byte status, Paging paging);
 
+    /**
+     * 根据id获取详细记录
+     *
+     * @param id
+     * @return
+     */
     AuditRecordDTO getById(Integer id);
 
+    /**
+     * 获取已提交（也就是待审核）记录条数
+     *
+     * @param status
+     * @return
+     */
     Integer getCountByStatus(Byte status);
 
+    /**
+     * 充值驳回
+     *
+     * @param auditRecordId
+     * @param version
+     * @param reason
+     */
     void auditRecordUnpass(Integer auditRecordId, Integer version, String reason);
 
-    void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId,Integer givingBatchId,String posCode,String cardNo,Date tradeTime) ;
+    /**
+     * 充值通过审核
+     *
+     * @param auditRecordId
+     * @param version
+     * @param exchangeBatchId
+     */
+    void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId);
 
+    /**
+     * 保存充值记录
+     *
+     * @param auditRecordDTO
+     */
     void save(AuditRecordDTO auditRecordDTO);
 
 }

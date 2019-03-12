@@ -19,6 +19,10 @@ public interface PointExchangeRecordService {
      */
     List<PointExchangeRecordDTO> findByCodeIds(List<Integer> ids);
 
+    /**
+     * 插入兑换记录信息
+     * @param pointRecordPO
+     */
     void insert(PointExchangeRecordPO pointRecordPO);
 
     PointExchangeRecordDTO findByPointId(Integer id);

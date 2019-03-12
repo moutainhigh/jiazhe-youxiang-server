@@ -1,7 +1,6 @@
 package com.jiazhe.youxiang.server.controller.point;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
-
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.ExportExcelUtils;
@@ -27,7 +26,6 @@ import com.jiazhe.youxiang.server.vo.req.point.exchangecodebatch.PointExchangeCo
 import com.jiazhe.youxiang.server.vo.req.point.exchangecodebatch.PointExchangeCodeBatchSaveReq;
 import com.jiazhe.youxiang.server.vo.resp.point.exchangecodebatch.PointExchangeCodeBatchEditResp;
 import com.jiazhe.youxiang.server.vo.resp.point.exchangecodebatch.PointExchangeCodeBatchResp;
-import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -73,7 +71,7 @@ public class APIPointExchangeCodeBatchController extends BaseController {
         return ResponseFactory.buildPaginationResponse(respList, paging);
     }
 
-    @ApiOperation(value = "【后台】根据项目id查询积分卡兑换码可用虚拟批次", httpMethod = "GET", response = RCExchangeCodeBatchResp.class, responseContainer = "List", notes = "根据项目id查询积分卡兑换码可用虚拟批次")
+    @ApiOperation(value = "【后台】根据项目id查询积分卡兑换码可用虚拟批次", httpMethod = "GET", response = PointExchangeCodeBatchResp.class, responseContainer = "List", notes = "根据项目id查询积分卡兑换码可用虚拟批次")
     @RequestMapping(value = "/findvirtualbyprojectid", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "根据项目id查询积分卡兑换码可用虚拟批次", level = LogLevelEnum.LEVEL_1)
     public Object findVirtualByProjectId(@ModelAttribute IdReq req) {
@@ -85,13 +83,13 @@ public class APIPointExchangeCodeBatchController extends BaseController {
     @RequiresPermissions(value = {PermissionConstant.POINT_BATCH_ADD, PermissionConstant.POINT_BATCH_EDIT}, logical = Logical.OR)
     @ApiOperation(value = "【后台】保存积分卡兑换码批次信息", httpMethod = "POST", notes = "【新建、修改】保存积分卡兑换码批次信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "保存积分卡兑换码批次信息", level = LogLevelEnum.LEVEL_2)
+    @CustomLog(moduleName = ModuleEnum.POINT, operate = "保存积分卡兑换码批次信息", level = LogLevelEnum.LEVEL_2)
     public Object save(@ModelAttribute PointExchangeCodeBatchSaveReq req) {
         CommonValidator.validateNull(req);
-        CommonValidator.validateNull(req.getId());
+        CommonValidator.validateId(req.getId());
         CommonValidator.validateNull(req.getName(), new PointException(PointCodeEnum.BATCH_NAME_IS_NULL));
         CommonValidator.validateNull(req.getPointName(), new PointException(PointCodeEnum.POINT_NAME_IS_NULL));
-        CommonValidator.validateNull(req.getProjectId(), new PointException(PointCodeEnum.PROJECT_IS_NULL));
+        CommonValidator.validateId(req.getProjectId(), new PointException(PointCodeEnum.PROJECT_IS_NULL));
         CommonValidator.validateNull(req.getCityCodes(), new PointException(PointCodeEnum.CITY_IS_NULL));
         CommonValidator.validateNull(req.getProductIds(), new PointException(PointCodeEnum.PRODUCT_IS_NULL));
         //是否为虚拟批次（是）
