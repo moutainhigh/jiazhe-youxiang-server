@@ -1,6 +1,6 @@
 package com.jiazhe.youxiang.server.biz.voucher;
 
-import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchSaveDTO;
@@ -23,23 +23,25 @@ public class VoucherExchangeCodeBatchBiz {
     private VoucherExchangeCodeBatchService voucherExchangeCodeBatchService;
 
     public List<VoucherExchangeCodeBatchDTO> getList(Integer projectId, String name, Paging paging) {
-        return voucherExchangeCodeBatchService.getList(projectId,name,paging) ;
+        return voucherExchangeCodeBatchService.getList(projectId, name, paging);
     }
 
     /**
      * 根据id启用代金券兑换码批次
+     *
      * @param id
      */
     public void startUsing(Integer id) {
-        voucherExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
+        voucherExchangeCodeBatchService.changeBatchStatus(id, CommonConstant.CODE_START_USING);
     }
 
     /**
      * 根据id停用代金券兑换码批次
+     *
      * @param id
      */
     public void stopUsing(Integer id) {
-        voucherExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
+        voucherExchangeCodeBatchService.changeBatchStatus(id, CommonConstant.CODE_STOP_USING);
     }
 
     public VoucherExchangeCodeBatchEditDTO getById(Integer id) {

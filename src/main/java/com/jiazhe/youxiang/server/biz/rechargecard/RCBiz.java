@@ -1,7 +1,7 @@
 package com.jiazhe.youxiang.server.biz.rechargecard;
 
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
-import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCEditDTO;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,24 +29,19 @@ public class RCBiz {
     private CustomerBiz customerBiz;
 
     public void startUsing(Integer id) {
-        rcService.changeStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
+        rcService.changeStatus(id, CommonConstant.CODE_START_USING);
     }
 
     public void stopUsing(Integer id) {
-        rcService.changeStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
+        rcService.changeStatus(id, CommonConstant.CODE_STOP_USING);
     }
 
     public BigDecimal totalValidBalance(Integer customerId){
         return rcService.totalValidBalance(customerId);
     }
 
-    public void changeExpiryTime(Integer id, Date expiryTime) {
-        rcService.changeExpiryTime(id, expiryTime);
-    }
-
-
-    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue)  {
-        rcService.directCharge(id, batchId, faceValue);
+    public void directCharge(Integer customerId, Integer batchId, BigDecimal faceValue)  {
+        rcService.directCharge(customerId, batchId, faceValue);
     }
 
     public List<RCDTO> getList(String mobile, Integer exchangeType, Byte status, Byte expiry, Paging paging) {

@@ -40,7 +40,7 @@
         validity_period,expiry_type,status,used,ext_info,is_deleted,add_time,mod_time) VALUES
         <foreach collection="list" item="item" separator=",">
             (#{item.batchId},#{item.batchName},#{item.pointName},#{item.batchDescription},#{item.projectId},#{item.cityCodes},#{item.productIds},
-            #{item.code},#{item.keyt},#{item.faceValue},#{item.expiryTime},#{item.pointEffectiveTime},#{item.pointExpiryTime},#{item.validityPeriod},#{item.expiryType},#{item.status},0,
+            #{item.code},#{item.keyt},#{item.faceValue},#{item.expiryTime},#{item.pointEffectiveTime},#{item.pointExpiryTime},#{item.validityPeriod},#{item.expiryType},#{item.status},#{item.used},
             "",0,NOW(),NOW())
         </foreach>
     </insert>

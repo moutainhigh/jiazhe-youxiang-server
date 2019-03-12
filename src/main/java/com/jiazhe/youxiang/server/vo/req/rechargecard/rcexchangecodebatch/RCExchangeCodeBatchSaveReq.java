@@ -2,10 +2,8 @@ package com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @author tu
@@ -16,7 +14,7 @@ public class RCExchangeCodeBatchSaveReq extends BaseVO {
 
     private static final long serialVersionUID = 4463662904507337273L;
 
-    @ApiModelProperty("批次id，0为添加")
+    @ApiModelProperty("批次id，0为添加 其他为修改")
     private Integer id;
 
     @ApiModelProperty("批次名称")

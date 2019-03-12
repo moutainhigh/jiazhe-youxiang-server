@@ -1,6 +1,6 @@
 package com.jiazhe.youxiang.server.biz.rechargecard;
 
-import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
@@ -25,11 +25,11 @@ public class RCExchangeCodeBatchBiz {
     private RCExchangeCodeBiz rcExchangeCodeBiz;
 
     public List<RCExchangeCodeBatchDTO> getList(Integer projectId, String name, Paging paging) {
-        return rcExchangeCodeBatchService.getList(projectId,name,paging);
+        return rcExchangeCodeBatchService.getList(projectId, name, paging);
     }
 
     public void addSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {
-       rcExchangeCodeBatchService.addSave(rcExchangeCodeBatchSaveDTO);
+        rcExchangeCodeBatchService.addSave(rcExchangeCodeBatchSaveDTO);
     }
 
     public void editSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO) {
@@ -43,26 +43,20 @@ public class RCExchangeCodeBatchBiz {
 
     /**
      * 根据id启用充值卡兑换码批次
+     *
      * @param id
      */
     public void startUsing(Integer id) {
-        rcExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.START_USING.getId().byteValue());
+        rcExchangeCodeBatchService.changeBatchStatus(id, CommonConstant.CODE_STOP_USING);
     }
 
     /**
      * 根据id停用充值卡兑换码批次
+     *
      * @param id
      */
     public void stopUsing(Integer id) {
-         rcExchangeCodeBatchService.changeBatchStatus(id, CodeStatusEnum.STOP_USING.getId().byteValue());
-    }
-
-    public List<RCExchangeCodeBatchDTO> getList(Integer projectId, String name) {
-        return null;
-    }
-
-    public void delete(Integer id) {
-
+        rcExchangeCodeBatchService.changeBatchStatus(id, CommonConstant.CODE_STOP_USING);
     }
 
     public List<RCExchangeCodeBatchDTO> getVirtualByProjectId(Integer projectId) {

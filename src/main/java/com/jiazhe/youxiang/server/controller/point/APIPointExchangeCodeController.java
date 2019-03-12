@@ -85,7 +85,6 @@ public class APIPointExchangeCodeController extends BaseController {
     @RequestMapping(value = "/allstartusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "启用所有积分卡兑换码", level = LogLevelEnum.LEVEL_2)
     public Object allStartUsing(@ModelAttribute IdReq req) {
-        //id为批次id
         CommonValidator.validateId(req);
         pointExchangeCodeBiz.allStartUsing(req.getId());
         return ResponseFactory.buildSuccess();
@@ -96,7 +95,6 @@ public class APIPointExchangeCodeController extends BaseController {
     @RequestMapping(value = "/allstopusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "停用所有积分卡兑换码", level = LogLevelEnum.LEVEL_2)
     public Object allStopUsing(@ModelAttribute IdReq req) {
-        //id为批次id
         CommonValidator.validateId(req);
         pointExchangeCodeBiz.allStopUsing(req.getId());
         return ResponseFactory.buildSuccess();
@@ -138,7 +136,7 @@ public class APIPointExchangeCodeController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "修改兑换码信息", level = LogLevelEnum.LEVEL_2)
     public Object editSave(@ModelAttribute PointExchangeCodeEditReq req) {
         CommonValidator.validateNull(req);
-        CommonValidator.validateNull(req.getId());
+        CommonValidator.validateId(req.getId());
         CommonValidator.validateNull(req.getPointName(), new PointException(PointCodeEnum.POINT_NAME_IS_NULL));
         CommonValidator.validateNull(req.getCityCodes(), new PointException(PointCodeEnum.CITY_IS_NULL));
         CommonValidator.validateNull(req.getProductIds(), new PointException(PointCodeEnum.PRODUCT_IS_NULL));

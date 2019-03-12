@@ -46,7 +46,7 @@ public interface RCExchangeCodeBatchService {
     void editSave(RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO);
 
     /**
-     * 改变批次状态，业务重点：非虚拟批次需要改变批次下兑换码兑换的充值卡状态
+     * 改变批次状态，业务重点：非虚拟批次需要改变批次下充值卡状态
      * @param id
      * @param status 【0停用 1启用】
      */

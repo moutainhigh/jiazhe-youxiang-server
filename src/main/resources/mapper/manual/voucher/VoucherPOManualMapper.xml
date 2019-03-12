@@ -37,7 +37,7 @@
         values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
         #{customerId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR},
         #{productIds,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER},
-        #{exchangeRecordId,jdbcType=INTEGER}, #{effectiveTime,jdbcType=TIMESTAMP}, #{expiryTime,jdbcType=TIMESTAMP}, 0,1,
+        #{exchangeRecordId,jdbcType=INTEGER}, #{effectiveTime,jdbcType=TIMESTAMP}, #{expiryTime,jdbcType=TIMESTAMP},#{used,jdbcType=TINYINT},#{status,jdbcType=TINYINT},
         "", 0, NOW(),NOW())
     </insert>
 

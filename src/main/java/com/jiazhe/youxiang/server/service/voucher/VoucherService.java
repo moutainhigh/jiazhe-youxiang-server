@@ -19,7 +19,7 @@ public interface VoucherService {
      * @param ids
      * @param batchSaveDTO
      */
-    void batchUpdate(List<Integer> ids, VoucherExchangeCodeBatchSaveDTO batchSaveDTO);
+    void updateWithBatch(List<Integer> ids, VoucherExchangeCodeBatchSaveDTO batchSaveDTO);
 
     /**
      * 根据代金券ids，批量启用停用
@@ -53,6 +53,10 @@ public interface VoucherService {
      */
     VoucherDTO getById(Integer id);
 
+    /**
+     * 修改代金券信息
+     * @param dto
+     */
     void editSave(VoucherEditDTO dto);
 
     void insert(VoucherPO voucherPO);

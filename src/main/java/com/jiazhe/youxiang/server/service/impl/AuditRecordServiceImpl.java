@@ -5,16 +5,16 @@ import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.AuditRecordAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.AuditRecordCodeEnum;
-import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.PointCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.AuditRecordException;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.common.exceptions.PointException;
 import com.jiazhe.youxiang.server.dao.mapper.AuditRecordPOMapper;
-import com.jiazhe.youxiang.server.dao.mapper.CustomerPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.AuditRecordPOManualMapper;
-import com.jiazhe.youxiang.server.domain.po.*;
+import com.jiazhe.youxiang.server.domain.po.AuditRecordPO;
+import com.jiazhe.youxiang.server.domain.po.PointExchangeRecordPO;
+import com.jiazhe.youxiang.server.domain.po.PointPO;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
@@ -117,7 +117,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         //判断兑换类型
         if (auditRecordPO.getExchangeType().equals(CommonConstant.DIRECT_CHARGE)) {
             String pointIds = "";
-            Integer customerId = 0;
+            Integer customerId;
             CustomerDTO customerDTO = customerService.getByMobile(auditRecordPO.getCustomerMobile());
             if (null == customerDTO) {
                 CustomerAddDTO customerAddDTO = new CustomerAddDTO();
@@ -137,23 +137,16 @@ public class AuditRecordServiceImpl implements AuditRecordService {
                 if (exchangeBatchEditDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
                     pointPO.setEffectiveTime(exchangeBatchEditDTO.getPointEffectiveTime());
                     pointPO.setExpiryTime(exchangeBatchEditDTO.getPointExpiryTime());
-                }
-                //自兑换时间起，有效期天数
-                if (exchangeBatchEditDTO.getExpiryType().equals(CommonConstant.POINT_EXCHANGE_PERIOD)) {
+                } else {
                     pointPO.setEffectiveTime(new Date(DateUtil.getFirstSecond(System.currentTimeMillis())));
                     pointPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + exchangeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
-                }
-                //自激活时间起，有效期天数
-                if (exchangeBatchEditDTO.getExpiryType().equals(CommonConstant.POINT_ACTIVE_PERIOD)) {
-                    pointPO.setEffectiveTime(new Date(DateUtil.getFirstSecond(exchangeBatchEditDTO.getPointEffectiveTime().getTime())));
-                    pointPO.setExpiryTime(new Date(DateUtil.getLastSecond(exchangeBatchEditDTO.getPointEffectiveTime().getTime() + exchangeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
                 }
                 pointPO.setDescription(exchangeBatchEditDTO.getDescription());
                 pointPO.setFaceValue(auditRecordPO.getExchangePoint());
                 pointPO.setBalance(auditRecordPO.getExchangePoint());
                 //暂时置为0，等生成了兑换记录再修改
                 pointPO.setExchangeRecordId(0);
-                pointPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
+                pointPO.setStatus(CommonConstant.CODE_START_USING);
                 pointPO.setProjectId(exchangeBatchEditDTO.getProjectId());
                 pointPO.setName(exchangeBatchEditDTO.getPointName());
                 pointPO.setCustomerId(customerId);
@@ -166,7 +159,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
                 pointRecordPO.setExchangeType(CommonConstant.EXCHANGETYPE_AUDITRECORD_PASS);
                 pointRecordPO.setPointId(pointPO.getId());
                 pointRecordPO.setExtInfo("");
-                pointRecordPO.setIsDeleted(Byte.valueOf("0"));
+                pointRecordPO.setIsDeleted(CommonConstant.CODE_NOT_DELETED);
                 pointRecordPO.setAddTime(new Date());
                 pointRecordPO.setModTime(new Date());
                 pointExchangeRecordService.insert(pointRecordPO);
@@ -181,9 +174,9 @@ public class AuditRecordServiceImpl implements AuditRecordService {
             if (Strings.isEmpty(auditRecordPO.getPointCodes())) {
                 throw new AuditRecordException(AuditRecordCodeEnum.POINT_CODES_IS_NULL);
             }
-            List<String> pointCodes= Arrays.asList(auditRecordPO.getPointCodes().split(","));
+            List<String> pointCodes = Arrays.asList(auditRecordPO.getPointCodes().split(","));
             List<PointExchangeCodeDTO> pointExchangeCodeDtoList = pointExchangeCodeService.findByCodes(pointCodes);
-            if(pointExchangeCodeDtoList.size() != pointCodes.size()){
+            if (pointExchangeCodeDtoList.size() != pointCodes.size()) {
                 throw new AuditRecordException(AuditRecordCodeEnum.POINT_CODES_ERROR);
             }
             pointExchangeCodeDtoList.stream().forEach(bean -> {
@@ -193,14 +186,15 @@ public class AuditRecordServiceImpl implements AuditRecordService {
                 }
                 //激活操作，判断兑换码过期类型，若为【激活之日XX天有效】修改相应的字段
                 if (bean.getExpiryType().equals(CommonConstant.POINT_ACTIVE_PERIOD)) {
-                    bean.setExpiryTime(new Timestamp(DateUtil.getLastSecond(System.currentTimeMillis()+bean.getValidityPeriod()*CommonConstant.ONE_DAY)));
+                    bean.setExpiryTime(new Timestamp(DateUtil.getLastSecond(System.currentTimeMillis() + bean.getValidityPeriod() * CommonConstant.ONE_DAY)));
                     bean.setPointEffectiveTime(new Timestamp(DateUtil.getFirstSecond(System.currentTimeMillis())));
+                    bean.setPointExpiryTime(new Timestamp(DateUtil.getLastSecond(System.currentTimeMillis() + bean.getValidityPeriod() * CommonConstant.ONE_DAY)));
                 }
                 bean.setStatus(CommonConstant.CODE_START_USING);
             });
             pointExchangeCodeService.batchActive(pointExchangeCodeDtoList);
         }
-        if (auditRecordPO.getExchangeType().equals(CommonConstant.EXCHANGE_ENTITY)) {//兑换实物
+        if (auditRecordPO.getExchangeType().equals(CommonConstant.EXCHANGE_ENTITY)) {
             //啥也不干
         }
         auditRecordPO.setVersion(version + 1);

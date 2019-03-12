@@ -23,19 +23,33 @@ public interface PointExchangeCodeService {
      */
     void updateWithBatch(PointExchangeCodeBatchSaveDTO batchSaveDTO);
 
+    /**
+     * 批量插入兑换码记录，此时卡号和密码为空
+     * @param pointExchangeCodePOList
+     */
     void batchInsert(List<PointExchangeCodePO> pointExchangeCodePOList);
 
     /**
      * 修改该批次下【未使用】的积分兑换码状态
-     * @param id 批次id
+     * @param batchId 批次id
      * @param status 启停用状态
      */
-    void batchChangeStatus(Integer id, Byte status);
+    void batchChangeStatus(Integer batchId, Byte status);
 
+    /**
+     * 根据条件查询积分卡兑换码
+     * @param batchId
+     * @param code
+     * @param keyt
+     * @param status
+     * @param used
+     * @param paging
+     * @return
+     */
     List<PointExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Byte status, Byte used, Paging paging);
 
     /**
-     * 根据id，单个修改兑换码状态
+     * 根据id，单个修改兑换码启停用状态
      * @param id
      * @param status
      */
@@ -57,10 +71,10 @@ public interface PointExchangeCodeService {
     /**
      * 充值（由码到卡的过程）
      * @param type
-     * @param id
+     * @param customerId
      * @param keyt
      */
-    void codeCharge(Integer type, Integer id, String keyt) ;
+    void codeCharge(Integer type, Integer customerId, String keyt) ;
 
     /**
      * 根据密码查询兑换码

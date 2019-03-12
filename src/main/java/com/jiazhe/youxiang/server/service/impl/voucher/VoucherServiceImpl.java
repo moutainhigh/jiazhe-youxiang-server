@@ -1,11 +1,10 @@
 package com.jiazhe.youxiang.server.service.impl.voucher;
 
-import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherAdapter;
-import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.enums.VoucherCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.VoucherException;
 import com.jiazhe.youxiang.server.dao.mapper.VoucherPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.voucher.VoucherPOManualMapper;
-import com.jiazhe.youxiang.server.domain.po.VoucherExchangeRecordPO;
 import com.jiazhe.youxiang.server.domain.po.VoucherPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch.VoucherExchangeCodeBatchSaveDTO;
@@ -19,7 +18,6 @@ import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -44,21 +42,13 @@ public class VoucherServiceImpl implements VoucherService {
     @Autowired
     private CustomerService customerService;
     @Override
-    public void batchUpdate(List<Integer> ids, VoucherExchangeCodeBatchSaveDTO batchSaveDTO) {
+    public void updateWithBatch(List<Integer> ids, VoucherExchangeCodeBatchSaveDTO batchSaveDTO) {
         List<VoucherPO> voucherPOList = voucherPOManualMapper.findByIds(ids);
         voucherPOList.stream().forEach(bean -> {
             bean.setName(batchSaveDTO.getVoucherName());
-            bean.setDescription(batchSaveDTO.getDescription());
             bean.setProjectId(batchSaveDTO.getProjectId());
             bean.setCityCodes(batchSaveDTO.getCityCodes());
             bean.setProductIds(batchSaveDTO.getProductIds());
-            bean.setEffectiveTime(batchSaveDTO.getVoucherEffectiveTime());
-            //直接指定过期时间
-            if(batchSaveDTO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)){
-                bean.setExpiryTime(batchSaveDTO.getVoucherExpiryTime());
-            }else{
-                bean.setExpiryTime(new Date(DateUtil.getLastSecond(bean.getAddTime().getTime()+batchSaveDTO.getValidityPeriod()* CommonConstant.ONE_DAY)));
-            }
         });
         voucherPOManualMapper.batchUpdate(voucherPOList);
     }
@@ -108,6 +98,9 @@ public class VoucherServiceImpl implements VoucherService {
     @Override
     public void editSave(VoucherEditDTO dto) {
         VoucherPO po = voucherPOMapper.selectByPrimaryKey(dto.getId());
+        if (null == po) {
+            throw new VoucherException(VoucherCodeEnum.VOUCHER_NOT_EXIST);
+        }
         po.setProductIds(dto.getProductIds());
         po.setCityCodes(dto.getCityCodes());
         po.setName(dto.getName());

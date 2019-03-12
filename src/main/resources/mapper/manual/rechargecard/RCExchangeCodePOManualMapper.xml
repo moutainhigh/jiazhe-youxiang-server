@@ -40,7 +40,7 @@
         <foreach collection="list" item="item" separator=",">
             (#{item.batchId},#{item.batchName},#{item.rechargeCardName},#{item.batchDescription},#{item.projectId},#{item.cityCodes},#{item.productIds},
             #{item.code},#{item.keyt},#{item.faceValue},#{item.expiryTime},#{item.rechargeCardEffectiveTime},#{item.rechargeCardExpiryTime},#{item.validityPeriod},
-            #{item.expiryType},#{item.status},0,"",0,NOW(),NOW())
+            #{item.expiryType},#{item.status},#{item.used},"",0,NOW(),NOW())
         </foreach>
     </insert>
 

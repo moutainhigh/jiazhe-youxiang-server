@@ -20,7 +20,7 @@ public interface PointExchangeCodePOManualMapper {
     void batchUpdate(List<PointExchangeCodePO> poList);
 
     /**
-     * 批量插入
+     * 批量插入积分卡兑换码，此时卡号和密码为空
      * @param pointExchangeCodePOList
      */
     void batchInsert(List<PointExchangeCodePO> pointExchangeCodePOList);

@@ -34,6 +34,10 @@ public interface PointExchangeCodeBatchService {
 
     PointExchangeCodeBatchEditDTO getById(Integer id);
 
+    /**
+     * 生成积分卡兑换码
+     * @param id
+     */
     void generateCode(Integer id);
 
     /**

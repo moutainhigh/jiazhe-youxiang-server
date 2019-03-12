@@ -47,6 +47,10 @@ public class PointExchangeCodeBatchBiz {
         return pointExchangeCodeBatchEditDTO;
     }
 
+    /**
+     * 生成积分卡兑换码
+     * @param id 批次id
+     */
     public void generateCode(Integer id) {
         pointExchangeCodeBatchService.generateCode(id);
     }
