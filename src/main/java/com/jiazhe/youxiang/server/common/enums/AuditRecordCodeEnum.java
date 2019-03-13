@@ -28,7 +28,7 @@ public enum AuditRecordCodeEnum {
     IMAGE_IS_NULL(111019, "IMAGE_IS_NULL", "请提供交易凭证"),
     AUDIT_RECORD_IS_NOT_EXIST(111020, "AUDIT_RECORD_IS_NOT_EXIST", "该条记录不存在"),
     POINT_CODES_ERROR(111021, "POINT_CODES_ERROR", "兑换码卡号有误"),
-    AUDIT_RECORD_CAN_DELETE(111022,"AUDIT_RECORD_CAN_DELETE","该状态下的记录不能被删除"),;
+    AUDIT_RECORD_CANNOT_DELETE(111022,"AUDIT_RECORD_CANNOT_DELETE","该状态下的记录不能被删除"),;
 
     AuditRecordCodeEnum(Integer code, String type, String message) {
         this.code = code;

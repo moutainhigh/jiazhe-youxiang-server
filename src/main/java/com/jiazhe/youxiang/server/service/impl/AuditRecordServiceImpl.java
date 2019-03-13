@@ -230,7 +230,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
             throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_IS_NOT_EXIST);
         }
         if(!po.getStatus().equals(CommonConstant.AUDIT_RECORD_NOT_SUBMITTED)){
-            throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_CAN_DELETE);
+            throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_CANNOT_DELETE);
         }
         po.setIsDeleted(CommonConstant.CODE_DELETED);
         auditRecordPOMapper.updateByPrimaryKeySelective(po);
