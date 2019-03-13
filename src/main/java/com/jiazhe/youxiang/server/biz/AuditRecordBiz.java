@@ -7,7 +7,6 @@ import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,5 +46,9 @@ public class AuditRecordBiz {
 
     public void save(AuditRecordDTO auditRecordDTO) {
         auditRecordService.save(auditRecordDTO);
+    }
+
+    public void deleteById(Integer id) {
+        auditRecordService.deleteById(id);
     }
 }

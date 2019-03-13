@@ -3,7 +3,6 @@ package com.jiazhe.youxiang.server.service;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -65,4 +64,9 @@ public interface AuditRecordService {
      */
     void save(AuditRecordDTO auditRecordDTO);
 
+    /**
+     * 通过id软删除记录
+     * @param id
+     */
+    void deleteById(Integer id);
 }
