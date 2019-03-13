@@ -222,4 +222,17 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         }
 
     }
+
+    @Override
+    public void deleteById(Integer id) {
+        AuditRecordPO po = auditRecordPOMapper.selectByPrimaryKey(id);
+        if(null == po){
+            throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_IS_NOT_EXIST);
+        }
+        if(!po.getStatus().equals(CommonConstant.AUDIT_RECORD_NOT_SUBMITTED)){
+            throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_CANNOT_DELETE);
+        }
+        po.setIsDeleted(CommonConstant.CODE_DELETED);
+        auditRecordPOMapper.updateByPrimaryKeySelective(po);
+    }
 }

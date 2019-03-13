@@ -164,4 +164,12 @@ public class APIAuditRecordController extends BaseController {
         auditRecordBiz.save(auditRecordDTO);
         return ResponseFactory.buildSuccess();
     }
+    @ApiOperation(value = "【审核小程序】删除消费记录信息", httpMethod = "POST", notes = "删除消费记录信息")
+    @RequestMapping(value = "/deletebyid", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "删除消费记录信息", level = LogLevelEnum.LEVEL_3)
+    public Object deleteById(@ModelAttribute IdReq req) {
+        CommonValidator.validateId(req.getId());
+        auditRecordBiz.deleteById(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
 }
