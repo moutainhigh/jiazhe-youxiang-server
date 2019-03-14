@@ -29,8 +29,11 @@ public class AuditRecordSaveReq extends BaseVO {
     @ApiModelProperty("兑换类型")
     private Byte exchangeType;
 
-    @ApiModelProperty("兑换积分数量")
+    @ApiModelProperty("小票积分数量")
     private BigDecimal exchangePoint;
+
+    @ApiModelProperty("后台充值积分数量")
+    private BigDecimal givingPoint;
 
     @ApiModelProperty("客户电话")
     private String customerMobile;
@@ -144,5 +147,13 @@ public class AuditRecordSaveReq extends BaseVO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public BigDecimal getGivingPoint() {
+        return givingPoint;
+    }
+
+    public void setGivingPoint(BigDecimal givingPoint) {
+        this.givingPoint = givingPoint;
     }
 }

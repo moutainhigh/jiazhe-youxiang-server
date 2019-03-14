@@ -314,7 +314,6 @@
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
-    var exchangeTypes = ['直接充积分', '兑换积分卡', '兑换实物'];
     var auditRecordStatus = ['未提交', '已提交', '已驳回', '已通过'];
     var auditRecordColor = ['000000', '0000FF', 'FF0000', '00FF00']
     $(function () {
@@ -358,39 +357,73 @@
         var tableOption = {
             url: "/api/auditrecord/listpage",
             postData: transformToJson($('#auditRecordSearchForm').serializeArray()),
-//            shrinkToFit: false,
-//            autoScroll: true,
-//            multiselect: true,
-            colNames: ['', '操作', '提交人', '客户电话', '兑换积分', '兑换类型', '状态', '客户姓名', '提交时间', '审核人', '审核时间'],
+            colNames: ['', '操作', '提交人', '状态', '兑换总积分', '兑换类型', '客户姓名', '客户手机号', '后台充值积分', '兑换码卡号', '商品价值', '提交时间', '审核人', '审核时间'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
-                {name: '_action', index: '_action', width:100,sortable: false, formatter: customFormatter},
-                {name: 'submitterName', index: 'submitterName', width:50,sortable: false},
-                {name: 'customerMobile', index: 'customerMobile',width:100, sortable: false},
-                {name: 'exchangePoint', index: 'exchangePoint',width:50, sortable: false},
-                {
-                    name: 'exchangeType',
-                    index: 'exchangeType',
-                    sortable: false,
-                    width:80,
-                    formatter: function (cellvalue, options, rowObject) {
-                        return exchangeTypes[rowObject.exchangeType - 1];
-                    }
-                },
+                {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter},
+                {name: 'submitterName', index: 'submitterName', width: 50, sortable: false},
                 {
                     name: 'status',
                     index: 'status',
-                    width:50,
+                    width: 50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return generateSpan(auditRecordStatus[rowObject.status - 1], auditRecordColor[rowObject.status - 1]);
                     }
                 },
-                {name: 'customerName', index: 'customerName',  width:80,sortable: false},
+                {name: 'exchangePoint', index: 'exchangePoint', width: 50, sortable: false},
+                {
+                    name: 'exchangeType',
+                    index: 'exchangeType',
+                    sortable: false,
+                    width: 80,
+                    formatter: exchangeTypeFormatter
+                },
+                {
+                    name: 'customerName',
+                    index: 'customerName',
+                    width: 100,
+                    sortable: false
+                },
+                {
+                    name: 'customerMobile',
+                    index: 'customerMobile',
+                    width: 100, sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return hasExchangeType(rowObject.exchangeType, '1') ? rowObject.customerMobile : "--";
+                    }
+                },
+                {
+                    name: 'givingPoint',
+                    index: 'givingPoint',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return hasExchangeType(rowObject.exchangeType, '1') ? rowObject.givingPoint : "--";
+                    }
+                },
+                {
+                    name: 'pointCodes',
+                    index: 'pointCodes',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return hasExchangeType(rowObject.exchangeType, '2') ? rowObject.pointCodes : "--";
+                    }
+                },
+                {
+                    name: 'productValue',
+                    index: 'productValue',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return hasExchangeType(rowObject.exchangeType, '3') ? rowObject.productValue : "--";
+                    }
+                },
                 {
                     name: 'modTime',
                     index: 'modTime',
-                    width:120,
+                    width: 120,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return timeFormat(rowObject.modTime)
@@ -399,7 +432,7 @@
                 {
                     name: 'auditorName',
                     index: 'auditorName',
-                    width:50,
+                    width: 50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return rowObject.status > 2 ? rowObject.auditorName : "";
@@ -408,7 +441,7 @@
                 {
                     name: 'auditTime',
                     index: 'auditTime',
-                    width:120,
+                    width: 120,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return rowObject.status > 2 ? timeFormat(rowObject.auditTime) : "";
@@ -426,6 +459,30 @@
             postData: transformToJson($('#auditRecordSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
+    }
+
+    function exchangeTypeFormatter(cellvalue, options, rowObject) {
+        return getExchangeTypeText(rowObject.exchangeType);
+    }
+
+    function getExchangeTypeText(type) {
+        var exchangeType = type.toString().split('');
+        var exchangeTypeText = "";
+        if (exchangeType.indexOf('1')) {
+            exchangeTypeText = exchangeTypeText + '充积分 ';
+        }
+        if (exchangeType.indexOf('2')) {
+            exchangeTypeText = exchangeTypeText + '积分卡 ';
+        }
+        if (exchangeType.indexOf('3')) {
+            exchangeTypeText = exchangeTypeText + '换商品 ';
+        }
+        return exchangeTypeText;
+    }
+
+    function hasExchangeType(type, value) {
+        var exchangeType = type.toString().split('');
+        return exchangeType.indexOf(value) > -1;
     }
 
     function customFormatter(cellvalue, options, rowObject) {
@@ -492,7 +549,7 @@
                     $("#auditRecordId").val(result.id);
                     $("#version").val(result.version);
                     $("#bankOutletsName").val(result.bankOutletsName);
-                    $("#exchangeType").val(exchangeTypes[result.exchangeType - 1]);
+                    $("#exchangeType").val(getExchangeTypeText(result.exchangeType));
                     $("#exchangePoint").val(result.exchangePoint);
                     $("#auditReason").val(result.auditReason);
                     $("#remark").val(result.remark);
@@ -520,37 +577,33 @@
     }
 
     function showByExchangeType(result) {
-        switch (result.exchangeType) {
-            case 1:
-                $(".exchangeType1").css("display", "");
-                $(".exchangeType2").css("display", "none");
-                $(".exchangeType3").css("display", "none");
-                $("#customerName").val(result.customerName);
-                $("#customerMobile").val(result.customerMobile);
-                break;
-            case 2:
-                $(".exchangeType1").css("display", "none");
-                $(".exchangeType2").css("display", "");
-                $(".exchangeType3").css("display", "none");
-                var $tag_obj = $('#pointCodes').data('tag');
-                var count = $tag_obj.values.length;;
-                var pointCodes = result.pointCodes.split(',');
-                for (var i = 0; i < count; i++) {
-                    $tag_obj.remove(0);
-                }
-                for (var i = 0; i < pointCodes.length; i++) {
-                    $tag_obj.add(pointCodes[i]);
-                }
-                break;
-            case 3:
-                $(".exchangeType1").css("display", "none");
-                $(".exchangeType2").css("display", "none");
-                $(".exchangeType3").css("display", "");
-                $("#productValue").val(result.productValue);
-                break;
-            default:
-                bootboxalert('兑换类型超过现有类型');
-                break;
+        if (hasExchangeType(result.exchangeType, '1')) {
+            $(".exchangeType1").css("display", "");
+            $("#customerName").val(result.customerName);
+            $("#customerMobile").val(result.customerMobile);
+        } else {
+            $(".exchangeType1").css("display", "none");
+        }
+        if (hasExchangeType(result.exchangeType, '2')) {
+            $(".exchangeType2").css("display", "");
+            var $tag_obj = $('#pointCodes').data('tag');
+            var count = $tag_obj.values.length;
+            ;
+            var pointCodes = result.pointCodes.split(',');
+            for (var i = 0; i < count; i++) {
+                $tag_obj.remove(0);
+            }
+            for (var i = 0; i < pointCodes.length; i++) {
+                $tag_obj.add(pointCodes[i]);
+            }
+        } else {
+            $(".exchangeType2").css("display", "none");
+        }
+        if (hasExchangeType(result.exchangeType, '3')) {
+            $(".exchangeType3").css("display", "");
+            $("#productValue").val(result.productValue);
+        } else {
+            $(".exchangeType3").css("display", "none");
         }
     }
 

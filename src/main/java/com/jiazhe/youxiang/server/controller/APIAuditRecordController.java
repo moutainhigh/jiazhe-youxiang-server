@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -96,7 +97,7 @@ public class APIAuditRecordController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "消费记录列表", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute AuditRecordPageReq req) {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getCustomerMobile(),req.getStatus(), paging);
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getCustomerMobile(), req.getStatus(), paging);
         List<AuditRecordResp> auditRecordRespList = auditRecordDTOList.stream().map(AuditRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(auditRecordRespList, paging);
     }
@@ -120,20 +121,28 @@ public class APIAuditRecordController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "保存消费记录信息", level = LogLevelEnum.LEVEL_2)
     public Object save(@ModelAttribute AuditRecordSaveReq req) {
         CommonValidator.validateNull(req.getBankOutletsName(), new AuditRecordException(AuditRecordCodeEnum.BANK_NAME_IS_NULL));
+        CommonValidator.validateNull(req.getExchangeType(), new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_TYPE_IS_NULL));
         CommonValidator.validateNull(req.getExchangePoint(), new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_POINT_IS_NULL));
-        CommonValidator.validateNull(req.getImgUrls(), new AuditRecordException(AuditRecordCodeEnum.IMAGE_IS_NULL));
         //根据兑换类型，约束各种字段的填写条件
-        if (req.getExchangeType().equals(CommonConstant.DIRECT_CHARGE)) {
-            CommonValidator.validateNull(req.getCustomerName(), new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_NAME_IS_NULL));
+        if (req.getExchangeType().toString().contains(CommonConstant.DIRECT_CHARGE.toString())) {
             CommonValidator.validateNull(req.getCustomerMobile(), new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_MOBILE_IS_NULL));
             CommonValidator.validateMobile(req.getCustomerMobile(), new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_MOBILE_IS_ILLEGAL));
+            CommonValidator.validateNull(req.getGivingPoint(), new AuditRecordException(AuditRecordCodeEnum.GIVING_POINT_IS_NULL));
+        } else {
+            req.setCustomerMobile("");
+            req.setGivingPoint(BigDecimal.ZERO);
         }
-        if (req.getExchangeType().equals(CommonConstant.SELF_CHARGE)) {
+        if (req.getExchangeType().toString().contains(CommonConstant.SELF_CHARGE.toString())) {
             CommonValidator.validateNull(req.getPointCodes(), new AuditRecordException(AuditRecordCodeEnum.POINT_CODES_IS_NULL));
+        } else {
+            req.setPointCodes("");
         }
-        if (req.getExchangeType().equals(CommonConstant.EXCHANGE_ENTITY)) {
+        if (req.getExchangeType().toString().contains(CommonConstant.EXCHANGE_ENTITY.toString())) {
             CommonValidator.validateNull(req.getProductValue(), new AuditRecordException(AuditRecordCodeEnum.PRODUCT_VALUE_IS_NULL));
+        } else {
+            req.setProductValue(BigDecimal.ZERO);
         }
+        CommonValidator.validateNull(req.getImgUrls(), new AuditRecordException(AuditRecordCodeEnum.IMAGE_IS_NULL));
         //判断是新建还是修改
         AuditRecordDTO auditRecordDTO = null;
         if (req.getId().equals(0)) {
@@ -142,10 +151,10 @@ public class APIAuditRecordController extends BaseController {
             auditRecordDTO.setVersion(0);
         } else {
             auditRecordDTO = auditRecordBiz.getById(req.getId());
-            if(auditRecordDTO.getIsDeleted().equals(CommonConstant.CODE_DELETED)){
+            if (auditRecordDTO.getIsDeleted().equals(CommonConstant.CODE_DELETED)) {
                 throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_IS_NOT_EXIST);
             }
-            if(auditRecordDTO.getStatus().equals(CommonConstant.AUDIT_RECORD_PASS)){
+            if (auditRecordDTO.getStatus().equals(CommonConstant.AUDIT_RECORD_PASS)) {
                 throw new AuditRecordException(AuditRecordCodeEnum.RECORD_HASS_PASSED);
             }
             if (!auditRecordDTO.getVersion().equals(req.getVersion())) {
@@ -160,6 +169,7 @@ public class APIAuditRecordController extends BaseController {
         auditRecordDTO.setCustomerMobile(req.getCustomerMobile());
         auditRecordDTO.setCustomerName(req.getCustomerName());
         auditRecordDTO.setExchangePoint(req.getExchangePoint());
+        auditRecordDTO.setGivingPoint(req.getGivingPoint());
         auditRecordDTO.setPointCodes(req.getPointCodes());
         auditRecordDTO.setProductValue(req.getProductValue());
         auditRecordDTO.setImgUrls(req.getImgUrls());
@@ -167,6 +177,7 @@ public class APIAuditRecordController extends BaseController {
         auditRecordBiz.save(auditRecordDTO);
         return ResponseFactory.buildSuccess();
     }
+
     @ApiOperation(value = "【审核小程序】删除消费记录信息", httpMethod = "POST", notes = "删除消费记录信息")
     @RequestMapping(value = "/deletebyid", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "删除消费记录信息", level = LogLevelEnum.LEVEL_3)
