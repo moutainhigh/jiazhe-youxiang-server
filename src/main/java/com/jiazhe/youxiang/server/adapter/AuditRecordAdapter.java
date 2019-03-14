@@ -73,6 +73,7 @@ public class AuditRecordAdapter {
         auditRecordDTO.setVersion(auditRecordPO.getVersion());
         auditRecordDTO.setAddTime(auditRecordPO.getAddTime());
         auditRecordDTO.setModTime(auditRecordPO.getModTime());
+        auditRecordDTO.setIsDeleted(auditRecordPO.getIsDeleted());
         return auditRecordDTO;
     }
 

@@ -64,6 +64,8 @@ public class AuditRecordDTO extends BaseObject {
 
     private Date modTime;
 
+    private Byte isDeleted;
+
     public Integer getId() {
         return id;
     }
@@ -262,5 +264,13 @@ public class AuditRecordDTO extends BaseObject {
 
     public void setTradeTime(Date tradeTime) {
         this.tradeTime = tradeTime;
+    }
+
+    public Byte getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Byte isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }

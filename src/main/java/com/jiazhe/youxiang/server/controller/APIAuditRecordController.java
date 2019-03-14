@@ -142,6 +142,9 @@ public class APIAuditRecordController extends BaseController {
             auditRecordDTO.setVersion(0);
         } else {
             auditRecordDTO = auditRecordBiz.getById(req.getId());
+            if(auditRecordDTO.getIsDeleted().equals(CommonConstant.CODE_DELETED)){
+                throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_IS_NOT_EXIST);
+            }
             if(auditRecordDTO.getStatus().equals(CommonConstant.AUDIT_RECORD_PASS)){
                 throw new AuditRecordException(AuditRecordCodeEnum.RECORD_HASS_PASSED);
             }
