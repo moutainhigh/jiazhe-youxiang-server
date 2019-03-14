@@ -151,8 +151,20 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2 exchangeType1"></div>
-                                                <div class="form-group exchangeType1">
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">兑换总积分：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="exchangePoint" name="exchangePoint"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">客户姓名：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
@@ -175,12 +187,12 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">兑换积分数量：</label>
+                                                <div class="space-2 exchangeType1"></div>
+                                                <div class="form-group exchangeType1">
+                                                    <label class="col-sm-4 control-label no-padding-right">后台充值积分：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="exchangePoint" name="exchangePoint"
+                                                            <input id="givingPoint" name="givingPoint"
                                                                    class="form-control"
                                                                    type="text" style="height:30px" readonly/>
                                                         </div>
@@ -200,11 +212,36 @@
 
                                                 <div class="space-2 exchangeType1"></div>
                                                 <div class="form-group exchangeType1">
-                                                    <label class="col-sm-4 control-label no-padding-right">兑换积分所属批次：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">充值积分所属批次：</label>
                                                     <div class="col-sm-8">
                                                         <select id="exchangeBatchId" name="exchangeBatchId"
                                                                 class="selectpicker show-tick form-control">
                                                         </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 exchangeType2"></div>
+                                                <div class="form-group exchangeType2">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="pointCodes">积分兑换码卡号：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input type="text" name="pointCodes" id="pointCodes"
+                                                                   readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 exchangeType3"></div>
+                                                <div class="form-group exchangeType3">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="productValue">商品价值：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="productValue" name="productValue"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -229,30 +266,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2 exchangeType2"></div>
-                                                <div class="form-group exchangeType2">
-                                                    <label class="col-sm-4 control-label no-padding-right"
-                                                           for="pointCodes">积分兑换码卡号：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input type="text" name="pointCodes" id="pointCodes"
-                                                                   readonly/>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
-                                                <div class="space-2 exchangeType3"></div>
-                                                <div class="form-group exchangeType3">
-                                                    <label class="col-sm-4 control-label no-padding-right"
-                                                           for="productValue">实物价值：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="productValue" name="productValue"
-                                                                   class="form-control"
-                                                                   type="text" style="height:30px" readonly/>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
                                                 <div class="space-2 auditReason"></div>
                                                 <div class="form-group auditReason">
@@ -338,11 +352,11 @@
                 } else {
                     var result = data.data;
                     $("#exchangeProjectId").append("<option value='0'>&nbsp;</option>");
-                    $("#givingProjectId").append("<option value='0'>&nbsp;</option>");
+//                    $("#givingProjectId").append("<option value='0'>&nbsp;</option>");
                     for (var i = 0; i < result.length; i++) {
                         if (result[i].status == 1) {//进行中的项目
                             $("#exchangeProjectId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
-                            $("#givingProjectId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+//                            $("#givingProjectId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
                         }
                     }
                 }
@@ -371,24 +385,24 @@
                         return generateSpan(auditRecordStatus[rowObject.status - 1], auditRecordColor[rowObject.status - 1]);
                     }
                 },
-                {name: 'exchangePoint', index: 'exchangePoint', width: 50, sortable: false},
+                {name: 'exchangePoint', index: 'exchangePoint', width: 70, sortable: false},
                 {
                     name: 'exchangeType',
                     index: 'exchangeType',
                     sortable: false,
-                    width: 80,
+                    width: 100,
                     formatter: exchangeTypeFormatter
                 },
                 {
                     name: 'customerName',
                     index: 'customerName',
-                    width: 100,
+                    width: 50,
                     sortable: false
                 },
                 {
                     name: 'customerMobile',
                     index: 'customerMobile',
-                    width: 100, sortable: false,
+                    width: 80, sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return hasExchangeType(rowObject.exchangeType, '1') ? rowObject.customerMobile : "--";
                     }
@@ -405,7 +419,7 @@
                 {
                     name: 'pointCodes',
                     index: 'pointCodes',
-                    width: 50,
+                    width: 60,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return hasExchangeType(rowObject.exchangeType, '2') ? rowObject.pointCodes : "--";
@@ -414,7 +428,7 @@
                 {
                     name: 'productValue',
                     index: 'productValue',
-                    width: 50,
+                    width: 60,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return hasExchangeType(rowObject.exchangeType, '3') ? rowObject.productValue : "--";
@@ -468,13 +482,13 @@
     function getExchangeTypeText(type) {
         var exchangeType = type.toString().split('');
         var exchangeTypeText = "";
-        if (exchangeType.indexOf('1')) {
+        if (exchangeType.indexOf('1') > -1) {
             exchangeTypeText = exchangeTypeText + '充积分 ';
         }
-        if (exchangeType.indexOf('2')) {
+        if (exchangeType.indexOf('2') > -1) {
             exchangeTypeText = exchangeTypeText + '积分卡 ';
         }
-        if (exchangeType.indexOf('3')) {
+        if (exchangeType.indexOf('3') > -1) {
             exchangeTypeText = exchangeTypeText + '换商品 ';
         }
         return exchangeTypeText;
@@ -508,8 +522,8 @@
         $("#saveTradeTime").attr('disabled', 'disabled');
         $("#exchangeProjectId").attr('disabled', "disabled");
         $("#exchangeBatchId").attr('disabled', "disabled");
-        $("#givingProjectId").attr('disabled', "disabled");
-        $("#givingBatchId").attr('disabled', "disabled");
+//        $("#givingProjectId").attr('disabled', "disabled");
+//        $("#givingBatchId").attr('disabled', "disabled");
         $("#modal-title").html("查看");
 
     }
@@ -524,8 +538,8 @@
         $("#saveTradeTime").removeAttr('disabled');
         $("#exchangeProjectId").removeAttr('disabled');
         $("#exchangeBatchId").removeAttr('disabled');
-        $("#givingProjectId").removeAttr('disabled');
-        $("#givingBatchId").removeAttr('disabled');
+//        $("#givingProjectId").removeAttr('disabled');
+//        $("#givingBatchId").removeAttr('disabled');
         $("#modal-title").html("审核");
     }
 
@@ -551,6 +565,7 @@
                     $("#bankOutletsName").val(result.bankOutletsName);
                     $("#exchangeType").val(getExchangeTypeText(result.exchangeType));
                     $("#exchangePoint").val(result.exchangePoint);
+                    $("#givingPoint").val(result.givingPoint);
                     $("#auditReason").val(result.auditReason);
                     $("#remark").val(result.remark);
                     $("#remark").attr('readonly', 'readonly');
