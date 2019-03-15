@@ -46,12 +46,12 @@ CREATE TABLE `charge_receipt` (
   PRIMARY KEY (`id`)
 )  ENGINE=INNODB COMMENT='充值凭证表';
 
-alter table point_exchange_code_batch modify column validity_period TINYINT(10) NOT NULL DEFAULT '0' COMMENT '自兑换、激活之日起多少天有效';
-alter table point_exchange_code modify column validity_period TINYINT(10) NOT NULL DEFAULT '0' COMMENT '自兑换、激活之日起多少天有效';
-alter table recharge_card_exchange_code_batch modify column validity_period TINYINT(10) NOT NULL DEFAULT '0' COMMENT '自兑换、激活之日起多少天有效';
-alter table recharge_card_exchange_code modify column validity_period TINYINT(10) NOT NULL DEFAULT '0' COMMENT '自兑换、激活之日起多少天有效';
-alter table voucher_exchange_code_batch modify column validity_period TINYINT(10) NOT NULL DEFAULT '0' COMMENT '自兑换、激活之日起多少天有效';
-alter table voucher_exchange_code modify column validity_period TINYINT(10) NOT NULL DEFAULT '0' COMMENT '自兑换、激活之日起多少天有效';
+alter table point_exchange_code_batch modify column validity_period INT(10) NOT NULL DEFAULT '0' COMMENT '自兑换、激活之日起多少天有效';
+alter table point_exchange_code modify column validity_period INT(10) NOT NULL DEFAULT '0' COMMENT '自兑换、激活之日起多少天有效';
+alter table recharge_card_exchange_code_batch modify column validity_period INT(10) NOT NULL DEFAULT '0' COMMENT '自兑换、激活之日起多少天有效';
+alter table recharge_card_exchange_code modify column validity_period INT(10) NOT NULL DEFAULT '0' COMMENT '自兑换、激活之日起多少天有效';
+alter table voucher_exchange_code_batch modify column validity_period INT(10) NOT NULL DEFAULT '0' COMMENT '自兑换、激活之日起多少天有效';
+alter table voucher_exchange_code modify column validity_period INT(10) NOT NULL DEFAULT '0' COMMENT '自兑换、激活之日起多少天有效';
 alter table point_exchange_code_batch modify column expiry_type TINYINT(4) NOT NULL DEFAULT '0' COMMENT '过期时间类型 0-积分过期时间，1-兑换之日起多少天有效，2-激活之日起多少天有效';
 alter table point_exchange_code modify column expiry_type TINYINT(4) NOT NULL DEFAULT '0' COMMENT '过期时间类型 0-积分过期时间，1-兑换之日起多少天有效，2-激活之日起多少天有效';
 alter table recharge_card_exchange_code_batch modify column expiry_type TINYINT(4) NOT NULL DEFAULT '0' COMMENT '过期时间类型 0-充值卡过期时间，1-兑换之日起多少天有效，2-激活之日起多少天有效';
