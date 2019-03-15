@@ -190,16 +190,18 @@
     //标识选中状态
     function checkNodes() {
         var cityCodes = $("#saveCityCodes").val();
+        var cityCodesArr = cityCodes.split(',');
         var productIds = $("#saveProductIds").val();
+        var productIdsArr = productIds.split(',');
         var cityNodes = cityTree.getCheckedNodes(false);
         var productNodes = productTree.getCheckedNodes(false);
         for (var i = 0; i < cityNodes.length; i++) {
-            if (cityCodes.indexOf(cityNodes[i].id) != -1) {
+            if (cityCodesArr.indexOf(cityNodes[i].id + '') > -1) {
                 cityTree.checkNode(cityNodes[i], true, false);
             }
         }
         for (var i = 0; i < productNodes.length; i++) {
-            if (productIds.indexOf(productNodes[i].id) != -1) {
+            if (productIdsArr.indexOf(productNodes[i].id + '') > -1) {
                 productTree.checkNode(productNodes[i], true, false);
             }
         }
