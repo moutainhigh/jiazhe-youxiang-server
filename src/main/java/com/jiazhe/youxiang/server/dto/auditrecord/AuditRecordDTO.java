@@ -24,6 +24,8 @@ public class AuditRecordDTO extends BaseObject {
 
     private BigDecimal exchangePoint;
 
+    private BigDecimal givingPoint;
+
     private Byte exchangeType;
 
     private Byte chargeReceiptStatus;
@@ -272,5 +274,13 @@ public class AuditRecordDTO extends BaseObject {
 
     public void setIsDeleted(Byte isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public BigDecimal getGivingPoint() {
+        return givingPoint;
+    }
+
+    public void setGivingPoint(BigDecimal givingPoint) {
+        this.givingPoint = givingPoint;
     }
 }

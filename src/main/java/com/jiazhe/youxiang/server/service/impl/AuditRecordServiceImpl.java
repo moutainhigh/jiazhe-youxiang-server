@@ -115,7 +115,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
             throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
         //判断兑换类型
-        if (auditRecordPO.getExchangeType().equals(CommonConstant.DIRECT_CHARGE)) {
+        if (auditRecordPO.getExchangeType().toString().contains(CommonConstant.DIRECT_CHARGE.toString())) {
             String pointIds = "";
             Integer customerId;
             CustomerDTO customerDTO = customerService.getByMobile(auditRecordPO.getCustomerMobile());
@@ -129,7 +129,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
             } else {
                 customerId = customerDTO.getId();
             }
-            if (auditRecordPO.getExchangePoint().compareTo(BigDecimal.ZERO) == 1) {
+            if (auditRecordPO.getGivingPoint().compareTo(BigDecimal.ZERO) == 1) {
                 CommonValidator.validateNull(exchangeBatchId, new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_BATCH_IS_NULL));
                 PointExchangeCodeBatchEditDTO exchangeBatchEditDTO = pointExchangeCodeBatchService.getById(exchangeBatchId);
                 PointPO pointPO = new PointPO();
@@ -142,8 +142,8 @@ public class AuditRecordServiceImpl implements AuditRecordService {
                     pointPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + exchangeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
                 }
                 pointPO.setDescription(exchangeBatchEditDTO.getDescription());
-                pointPO.setFaceValue(auditRecordPO.getExchangePoint());
-                pointPO.setBalance(auditRecordPO.getExchangePoint());
+                pointPO.setFaceValue(auditRecordPO.getGivingPoint());
+                pointPO.setBalance(auditRecordPO.getGivingPoint());
                 //暂时置为0，等生成了兑换记录再修改
                 pointPO.setExchangeRecordId(0);
                 pointPO.setStatus(CommonConstant.CODE_START_USING);
@@ -170,7 +170,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
                 auditRecordPO.setPointIds(pointIds);
             }
         }
-        if (auditRecordPO.getExchangeType().equals(CommonConstant.SELF_CHARGE)) {
+        if (auditRecordPO.getExchangeType().toString().contains(CommonConstant.SELF_CHARGE.toString())) {
             if (Strings.isEmpty(auditRecordPO.getPointCodes())) {
                 throw new AuditRecordException(AuditRecordCodeEnum.POINT_CODES_IS_NULL);
             }
@@ -194,7 +194,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
             });
             pointExchangeCodeService.batchActive(pointExchangeCodeDtoList);
         }
-        if (auditRecordPO.getExchangeType().equals(CommonConstant.EXCHANGE_ENTITY)) {
+        if (auditRecordPO.getExchangeType().toString().contains(CommonConstant.EXCHANGE_ENTITY.toString())) {
             //啥也不干
         }
         auditRecordPO.setVersion(version + 1);

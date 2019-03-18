@@ -24,8 +24,11 @@ public class AuditRecordResp extends BaseVO {
     @ApiModelProperty("客户电话")
     private String customerMobile;
 
-    @ApiModelProperty("兑换积分")
+    @ApiModelProperty("小票总积分")
     private BigDecimal exchangePoint;
+
+    @ApiModelProperty("后台充值总积分")
+    private BigDecimal givingPoint;
 
     @ApiModelProperty("兑换类型")
     private Byte exchangeType;
@@ -285,5 +288,13 @@ public class AuditRecordResp extends BaseVO {
 
     public void setTradeTime(Long tradeTime) {
         this.tradeTime = tradeTime;
+    }
+
+    public BigDecimal getGivingPoint() {
+        return givingPoint;
+    }
+
+    public void setGivingPoint(BigDecimal givingPoint) {
+        this.givingPoint = givingPoint;
     }
 }
