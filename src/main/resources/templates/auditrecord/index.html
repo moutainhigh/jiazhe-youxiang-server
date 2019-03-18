@@ -499,13 +499,15 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str += getRedirectButton("btn-default", "../chargereceipt/index?auditRecordId=" + rowObject.id, "凭证管理");
         if (rowObject.status == 2) {
             if (permission.indexOf("auditRecordCheck") != -1) {
                 str += getFunctionButton("btn-primary", "check(" + rowObject.id + ")", "审核");
             }
         } else {
             str += getFunctionButton("btn-success", "show(" + rowObject.id + ")", "查看");
+        }
+        if(rowObject.status == 4){//审核通过的才有凭证管理
+            str += getRedirectButton("btn-default", "../chargereceipt/index?auditRecordId=" + rowObject.id, "凭证管理");
         }
         return str;
     }

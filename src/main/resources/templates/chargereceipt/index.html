@@ -67,7 +67,7 @@
                     </div><!-- /.col -->
 
                     <div class="col-xs-12">
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="profile-user-info profile-user-info-striped">
                                 <input type="hidden" id="auditRecordId" th:value="${auditRecordId}"/>
                                 <div class="profile-info-row">
@@ -126,7 +126,7 @@
                                     </div>
                                 </div>
 
-                                <div class="profile-info-row exchangeType2">
+                                <div class="profile-info-row exchangeType3">
                                     <div class="profile-info-name"> 商品价值</div>
                                     <div class="profile-info-value">
                                         <span id="productValue"></span>
@@ -141,7 +141,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-8">
+                        <div class="col-sm-9">
                             <table id="grid-table"></table>
 
                             <div id="grid-pager"></div>
@@ -242,7 +242,7 @@
                                     </button>
 
                                     <button id="passBtn" class="btn btn-sm btn-primary modal-footer-btn"
-                                            onclick="pass()">
+                                            onclick="save()">
                                         <i class="ace-icon fa fa-thumbs-o-up"></i>
                                         保存
                                     </button>
@@ -289,97 +289,35 @@
         showAuditRecord();
 
         var tableOption = {
-            url: "/api/auditrecord/listpage",
-            postData: ("#auditRecord").val(),
-            shrinkToFit: false,
-            autoScroll: true,
-//            multiselect: true,
-            colNames: ['', '操作', '提交人姓名', '客户电话', '兑换积分', '兑换类型', '状态', '客户姓名', '提交时间', '审核人姓名', '审核时间'],
+            url: "/api/chargereceipt/listpage",
+            postData: $("#auditRecordId").val(),
+            colNames: ['', '小票积分', '客户姓名', 'POS机编号', '银行卡后四位', '交易时间','录入人', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
-                {name: '_action', index: '_action', sortable: false, formatter: customFormatter},
-                {name: 'submitterName', index: 'submitterName', sortable: false},
-                {name: 'customerMobile', index: 'customerMobile', sortable: false},
                 {name: 'exchangePoint', index: 'exchangePoint', sortable: false},
+                {name: 'customerName', index: 'submitterName', sortable: false},
+                {name: 'posCode', index: 'posCode', sortable: false},
+                {name: 'cardNo', index: 'cardNo', sortable: false},
                 {
-                    name: 'exchangeType',
-                    index: 'exchangeType',
+                    name: 'tradeTime',
+                    index: 'tradeTime',
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return exchangeTypes[rowObject.exchangeType - 1];
+                        return dateFormat(rowObject.tradeTime);
                     }
                 },
-                {
-                    name: 'status',
-                    index: 'status',
-                    sortable: false,
-                    formatter: function (cellvalue, options, rowObject) {
-                        return generateSpan(auditRecordStatus[rowObject.status - 1], auditRecordColor[rowObject.status - 1]);
-                    }
-                },
-                {name: 'customerName', index: 'customerName', sortable: false},
-                {
-                    name: 'modTime',
-                    index: 'modTime',
-                    sortable: false,
-                    formatter: function (cellvalue, options, rowObject) {
-                        return timeFormat(rowObject.modTime)
-                    }
-                },
-                {
-                    name: 'auditorName',
-                    index: 'auditorName',
-                    sortable: false,
-                    formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.status > 2 ? rowObject.auditorName : "";
-                    }
-                },
-                {
-                    name: 'auditTime',
-                    index: 'auditTime',
-                    sortable: false,
-                    formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.status > 2 ? timeFormat(rowObject.auditTime) : "";
-                    }
-                },
+                {name: 'inputerName', index: 'inputerName', sortable: false},
+                {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
             ],
-            loadComplete: function (data) {
-                var table = this;
-                setTimeout(function () {
-                    $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
-                    updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
-                }, 0);
-                if (data.data.length == 0) {//解决没有数据时，不出现横向滚动条的问题
-                    $('head').append('<style> .ui-jqgrid .ui-jqgrid-hdiv{overflow:auto}</style>');
-                } else {
-                    $('head').append('<style> .ui-jqgrid .ui-jqgrid-hdiv{overflow:hidden}</style>');
-                }
-            },
-            caption: "消费凭证列表"
+            caption: "凭证列表"
         };
         initTable(grid_selector, pager_selector, tableOption);
     });
 
-    function search() {
-        jQuery(grid_selector).setGridParam({
-            url: "/api/auditrecord/listpage",
-            postData: transformToJson($('#auditRecordSearchForm').serializeArray()),
-        }).trigger("reloadGrid", [{page: 1}]);
-        return false;
-    }
-
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        if (rowObject.status == 2) {//已提交的才能审核，其他只能查看
-            if (permission.indexOf("auditRecordCheck") != -1) {
-                str += getFunctionButton("btn-primary", "check(" + rowObject.id + ")", "审核");
-            }
-        } else {//
-            str += getFunctionButton("btn-success", "show(" + rowObject.id + ")", "查看");
-        }
-        if(rowObject.status == 4){//审核通过的才有凭证管理
-            str += getRedirectButton("btn-default", "../chargereceipt/index?auditRecordId=" + rowObject.id, "凭证管理");
-        }
+        str += getFunctionButton("btn-primary", "check(" + rowObject.id + ")", "修改");
+        str += getFunctionButton("btn-warn", "delete(" + rowObject.id + ")", "删除");
         return str;
     }
 
