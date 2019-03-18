@@ -266,8 +266,6 @@
                                                     </div>
                                                 </div>
 
-
-
                                                 <div class="space-2 auditReason"></div>
                                                 <div class="form-group auditReason">
                                                     <label class="col-sm-4 control-label no-padding-right"
@@ -565,7 +563,7 @@
                     $("#bankOutletsName").val(result.bankOutletsName);
                     $("#exchangeType").val(getExchangeTypeText(result.exchangeType));
                     $("#exchangePoint").val(result.exchangePoint);
-                    $("#givingPoint").val(result.givingPoint);
+                    $("#customerName").val(result.customerName);
                     $("#auditReason").val(result.auditReason);
                     $("#remark").val(result.remark);
                     $("#remark").attr('readonly', 'readonly');
@@ -594,8 +592,9 @@
     function showByExchangeType(result) {
         if (hasExchangeType(result.exchangeType, '1')) {
             $(".exchangeType1").css("display", "");
-            $("#customerName").val(result.customerName);
             $("#customerMobile").val(result.customerMobile);
+            $("#givingPoint").val(result.givingPoint);
+
         } else {
             $(".exchangeType1").css("display", "none");
         }
@@ -603,7 +602,6 @@
             $(".exchangeType2").css("display", "");
             var $tag_obj = $('#pointCodes').data('tag');
             var count = $tag_obj.values.length;
-            ;
             var pointCodes = result.pointCodes.split(',');
             for (var i = 0; i < count; i++) {
                 $tag_obj.remove(0);
