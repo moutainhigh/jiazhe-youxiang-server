@@ -56,13 +56,13 @@
 
             <div class="page-content">
                 <div class="row">
-                    <div class="col-xs-12" style="padding-top:40px">
-
-                    </div><!-- /.col -->
 
                     <div class="col-xs-12" style="text-align: right" id="buttonDiv">
                         <p style="margin:1px;height: 31px">
-
+                            <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
+                               data-toggle="modal" onclick="openNew()">
+                                <i class="ace-icon fa fa-plus"></i>新建
+                            </a>
                         </p>
                     </div><!-- /.col -->
 
@@ -148,19 +148,122 @@
                         </div>
                     </div><!-- /.col -->
 
-                    <div id="modal-form" class="modal fade" tabindex="-1" style="overflow: scroll">
+                    <!--<div id="modal-form" class="modal fade" tabindex="-1" style="overflow: scroll">-->
+                        <!--<div class="modal-dialog">-->
+                            <!--<div class="modal-content">-->
+                                <!--<div class="modal-header">-->
+                                    <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+                                    <!--<h4 class="blue bigger" id="modal-title">小票凭证详情</h4>-->
+                                <!--</div>-->
+                                <!--<div class="modal-body">-->
+                                    <!--<div class="row">-->
+                                        <!--<div class="col-xs-12 col-sm-1"></div>-->
+                                        <!--<div class="col-xs-12 col-sm-9">-->
+                                            <!--<form id="auditForm" class="form-horizontal" role="form">-->
+
+                                                <!--<div class="space-2"></div>-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="col-sm-4 control-label no-padding-right">小票积分数量：</label>-->
+                                                    <!--<div class="col-sm-8">-->
+                                                        <!--<div class="pos-rel">-->
+                                                            <!--<input id="saveExchangePoint" name="exchangePoint"-->
+                                                                   <!--class="form-control"-->
+                                                                   <!--type="text" style="height:30px"/>-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+
+                                                <!--<div class="space-2"></div>-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="col-sm-4 control-label no-padding-right">客户姓名：</label>-->
+                                                    <!--<div class="col-sm-8">-->
+                                                        <!--<div class="pos-rel">-->
+                                                            <!--<input id="saveCustomerName" name="customerName"-->
+                                                                   <!--class="form-control"-->
+                                                                   <!--type="text" style="height:30px"/>-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+
+                                                <!--<div class="space-2"></div>-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="col-sm-4 control-label no-padding-right">POS机编号：</label>-->
+                                                    <!--<div class="col-sm-8">-->
+                                                        <!--<div class="pos-rel">-->
+                                                            <!--<select id="posCode" name="posCode" class="form-control">-->
+                                                                <!--<option>财富私行尊享积分pos一</option>-->
+                                                                <!--<option>财富私行尊享积分pos十二</option>-->
+                                                                <!--<option>财富私行尊享积分pos十六</option>-->
+                                                                <!--<option>财富私行尊享积分pos中国银行津南支行尊享活动</option>-->
+                                                                <!--<option>江苏</option>-->
+                                                                <!--<option>青岛</option>-->
+                                                                <!--<option>温州</option>-->
+                                                            <!--</select>-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+
+                                                <!--<div class="space-2"></div>-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="col-sm-4 control-label no-padding-right">银行卡后四位：</label>-->
+                                                    <!--<div class="col-sm-8">-->
+                                                        <!--<div class="pos-rel">-->
+                                                            <!--<input id="cardNo" name="cardNo"-->
+                                                                   <!--class="form-control"-->
+                                                                   <!--type="text" style="height:30px"/>-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+
+                                                <!--<div class="space-2"></div>-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label class="col-sm-4 control-label no-padding-right"-->
+                                                           <!--for="saveTradeTime">交易时间：</label>-->
+                                                    <!--<div class="col-sm-8">-->
+                                                        <!--<div class="input-group">-->
+                                                            <!--<input class="form-control date-picker"-->
+                                                                   <!--id="saveTradeTime" type="text" readonly/>-->
+                                                            <!--<span class="input-group-addon">-->
+                                                                            <!--<i class="fa fa-calendar bigger-110"></i>-->
+                                                                        <!--</span>-->
+                                                            <!--<input type="hidden" value=0 name="tradeTime"/>-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</form>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+
+                                <!--<div class="modal-footer">-->
+                                    <!--<button class="btn btn-sm modal-footer-btn" data-dismiss="modal">-->
+                                        <!--<i class="ace-icon fa fa-times"></i>-->
+                                        <!--取消-->
+                                    <!--</button>-->
+
+                                    <!--<button id="passBtn" class="btn btn-sm btn-primary modal-footer-btn"-->
+                                            <!--onclick="save()">-->
+                                        <!--<i class="ace-icon fa fa-thumbs-o-up"></i>-->
+                                        <!--保存-->
+                                    <!--</button>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--放大图片模态框-->
+                    <div id="ShowImage_Form" class="modal fade" tabindex="-1" style="overflow: scroll">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="blue bigger" id="modal-title"></h4>
+                                    <h4 class="blue bigger" id="modal-title">小票凭证详情</h4>
                                 </div>
-                                <div class="modal-body">
+                                <div class="modal-body" style="text-align: center">
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-1"></div>
                                         <div class="col-xs-12 col-sm-9">
-                                            <form id="auditForm" class="form-horizontal" role="form">
-
+                                            <form id="chargeReceiptForm" class="form-horizontal" role="form">
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">小票积分数量：</label>
@@ -224,8 +327,8 @@
                                                             <input class="form-control date-picker"
                                                                    id="saveTradeTime" type="text" readonly/>
                                                             <span class="input-group-addon">
-                                                                            <i class="fa fa-calendar bigger-110"></i>
-                                                                        </span>
+                                                                                    <i class="fa fa-calendar bigger-110"></i>
+                                                                                </span>
                                                             <input type="hidden" value=0 name="tradeTime"/>
                                                         </div>
                                                     </div>
@@ -233,32 +336,23 @@
                                             </form>
                                         </div>
                                     </div>
+                                    <div class="row" id="img_show">
+                                        <!--<div id="img_show" style="height:500px">-->
+                                        <!--</div>-->
+                                    </div>
                                 </div>
-
                                 <div class="modal-footer">
                                     <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
                                         <i class="ace-icon fa fa-times"></i>
                                         取消
                                     </button>
 
-                                    <button id="passBtn" class="btn btn-sm btn-primary modal-footer-btn"
+                                    <button class="btn btn-sm btn-primary modal-footer-btn"
                                             onclick="save()">
                                         <i class="ace-icon fa fa-thumbs-o-up"></i>
                                         保存
                                     </button>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!--放大图片模态框-->
-                    <div id="ShowImage_Form" class="modal fade" tabindex="-1" role="dialog"
-                         aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-header" style="border-bottom: 0px">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        </div>
-                        <div class="modal-body" style="text-align: center">
-                            <div id="img_show" style="height:500px">
                             </div>
                         </div>
                     </div>

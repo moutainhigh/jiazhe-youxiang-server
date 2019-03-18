@@ -283,7 +283,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="modal-footer">
                                     <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
                                         <i class="ace-icon fa fa-times"></i>
@@ -499,6 +498,7 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
+        str += getRedirectButton("btn-default", "../chargereceipt/index?auditRecordId=" + rowObject.id, "凭证管理");
         if (rowObject.status == 2) {
             if (permission.indexOf("auditRecordCheck") != -1) {
                 str += getFunctionButton("btn-primary", "check(" + rowObject.id + ")", "审核");
