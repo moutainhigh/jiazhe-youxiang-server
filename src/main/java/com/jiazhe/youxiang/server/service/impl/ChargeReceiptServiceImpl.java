@@ -86,4 +86,13 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
             chargeReceiptPOMapper.updateByPrimaryKeySelective(po);
         }
     }
+
+    @Override
+    public ChargeReceiptDTO getById(Integer id) {
+        ChargeReceiptPO po = chargeReceiptPOMapper.selectByPrimaryKey(id);
+        if(null == po){
+            throw new ChargeReceiptException(ChargeReceiptCodeEnum.CHARGE_RECEIPT_IS_NOT_EXIST);
+        }
+        return ChargeReceiptAdapter.po2Dto(po);
+    }
 }

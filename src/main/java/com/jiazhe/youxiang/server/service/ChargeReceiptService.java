@@ -31,4 +31,11 @@ public interface ChargeReceiptService {
      * @param dto
      */
     void save(ChargeReceiptSaveDTO dto);
+
+    /**
+     * 获取详情
+     * @param id
+     * @return
+     */
+    ChargeReceiptDTO getById(Integer id);
 }

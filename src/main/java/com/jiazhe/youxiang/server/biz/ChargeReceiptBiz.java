@@ -31,4 +31,8 @@ public class ChargeReceiptBiz {
     public void save(ChargeReceiptSaveDTO dto) {
         chargeReceiptService.save(dto);
     }
+
+    public ChargeReceiptDTO getById(Integer id) {
+        return chargeReceiptService.getById(id);
+    }
 }

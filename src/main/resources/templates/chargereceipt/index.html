@@ -155,7 +155,7 @@
                                         <div class="col-xs-12 col-sm-9">
                                             <form id="chargeReceiptForm" class="form-horizontal" role="form">
                                                 <input type="hidden" name="auditRecordId" id="auditRecordId" th:value="${auditRecordId}"/>
-                                                <input type="hidden" name="id" th:value="0"/>
+                                                <input type="hidden" name="id" id="id" th:value="0"/>
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">充值凭证：</label>
@@ -427,6 +427,17 @@
         });
     }
 
+    function openNew(){
+        $("#id").val(0);
+        $("#saveExchangePoint").val('');
+        $("#saveCustomerName").val('');
+        $("#posCode").val('');
+        $("#cardNo").val('');
+        $("#saveTradeTime").val('');
+        $('#saveTradeTime').datepicker('update');
+        $("#saveTradeTime").next().next().val(0);
+    }
+
     function save() {
         if(!isNumber($("#saveExchangePoint").val())){
             bootboxalert("小票积分数量不合法");
@@ -444,6 +455,35 @@
                 } else {
                     jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                     $("#modal-form").modal('hide');
+                }
+            },
+            error: error
+        });
+    }
+
+    function edit(id) {
+        $.ajax({
+            url: "/api/chargereceipt/getbyid",
+            dataType: "json",
+            async: false,
+            data:{
+                id:id
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#id").val(result.id);
+                    $("#saveExchangePoint").val(result.exchangePoint);
+                    $("#saveCustomerName").val(result.customerName);
+                    $("#posCode").val(result.posCode);
+                    $("#cardNo").val(result.cardNo);
+                    $("#saveTradeTime").val(dateFormat(result.tradeTime));
+                    $('#saveTradeTime').datepicker('update');
+                    $("#saveTradeTime").next().next().val(result.tradeTime);
+                    $("#modal-form").modal('show');
                 }
             },
             error: error

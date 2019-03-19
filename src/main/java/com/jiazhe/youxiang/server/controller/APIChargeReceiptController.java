@@ -75,4 +75,14 @@ public class APIChargeReceiptController extends BaseController {
         chargeReceiptBiz.save(dto);
         return ResponseFactory.buildSuccess();
     }
+
+    @ApiOperation(value = "【后台】获取消费凭证详情", httpMethod = "GET", response = ChargeReceiptResp.class, notes = "获取消费凭证详情")
+    @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.CHARGE_RECEIPT, operate = "获取消费凭证详情", level = LogLevelEnum.LEVEL_1)
+    public Object getById(@ModelAttribute IdReq req) {
+        CommonValidator.validateId(req.getId());
+        ChargeReceiptDTO chargeReceiptDTO = chargeReceiptBiz.getById(req.getId());
+        ChargeReceiptResp chargeReceiptResp = ChargeReceiptAdapter.dto2Resp(chargeReceiptDTO);
+        return ResponseFactory.buildResponse(chargeReceiptResp);
+    }
 }
