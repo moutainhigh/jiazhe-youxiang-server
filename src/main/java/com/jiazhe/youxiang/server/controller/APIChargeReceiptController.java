@@ -1,17 +1,23 @@
 package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.ChargeReceiptAdapter;
 import com.jiazhe.youxiang.server.biz.ChargeReceiptBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.enums.ChargeReceiptCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
+import com.jiazhe.youxiang.server.common.exceptions.ChargeReceiptException;
 import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptDTO;
+import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptSaveDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.chargereceipt.ChargeReceiptPageReq;
+import com.jiazhe.youxiang.server.vo.req.chargereceipt.ChargeReceiptSaveReq;
 import com.jiazhe.youxiang.server.vo.resp.chargereceipt.ChargeReceiptResp;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +54,25 @@ public class APIChargeReceiptController extends BaseController {
 
     @ApiOperation(value = "【后台】删除消费凭证", httpMethod = "POST", notes = "【后台】删除消费凭证")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.CHARGE_RECEIPT, operate = "消费凭证列表表", level = LogLevelEnum.LEVEL_3)
+    @CustomLog(moduleName = ModuleEnum.CHARGE_RECEIPT, operate = "删除消费凭证", level = LogLevelEnum.LEVEL_3)
     public Object delete(@ModelAttribute IdReq req) {
         chargeReceiptBiz.delete(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
+    @ApiOperation(value = "【后台】保存消费凭证", httpMethod = "POST", notes = "【后台】保存消费凭证")
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.CHARGE_RECEIPT, operate = "保存消费凭证", level = LogLevelEnum.LEVEL_3)
+    public Object save(@ModelAttribute ChargeReceiptSaveReq req) {
+        CommonValidator.validateNull(req.getExchangePoint(),new ChargeReceiptException(ChargeReceiptCodeEnum.EXCHANGE_POINT_IS_NULL));
+        CommonValidator.validateNull(req.getCustomerName(),new ChargeReceiptException(ChargeReceiptCodeEnum.CUSTOMER_NAME_IS_NULL));
+        CommonValidator.validateNull(req.getPosCode(),new ChargeReceiptException(ChargeReceiptCodeEnum.POS_CODE_IS_NULL));
+        CommonValidator.validateNull(req.getCardNo(),new ChargeReceiptException(ChargeReceiptCodeEnum.CARD_NO_IS_NULL));
+        if(req.getTradeTime().equals(CommonConstant.NULL_TIME)){
+            throw new ChargeReceiptException(ChargeReceiptCodeEnum.TRADE_TIME_IS_NULL);
+        }
+        ChargeReceiptSaveDTO dto = ChargeReceiptAdapter.saveReq2SaveDto(req);
+        chargeReceiptBiz.save(dto);
         return ResponseFactory.buildSuccess();
     }
 }

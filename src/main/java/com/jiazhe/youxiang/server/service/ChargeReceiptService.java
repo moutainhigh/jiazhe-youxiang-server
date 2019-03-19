@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.service;
 
 import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptDTO;
+import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptSaveDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
 import java.util.List;
@@ -24,4 +25,10 @@ public interface ChargeReceiptService {
      * @param id
      */
     void delete(Integer id);
+
+    /**
+     * 保存消费凭证
+     * @param dto
+     */
+    void save(ChargeReceiptSaveDTO dto);
 }

@@ -2,7 +2,11 @@ package com.jiazhe.youxiang.server.adapter;
 
 import com.jiazhe.youxiang.server.domain.po.ChargeReceiptPO;
 import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptDTO;
+import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptSaveDTO;
+import com.jiazhe.youxiang.server.vo.req.chargereceipt.ChargeReceiptSaveReq;
 import com.jiazhe.youxiang.server.vo.resp.chargereceipt.ChargeReceiptResp;
+
+import java.util.Date;
 
 /**
  * @author TU
@@ -50,5 +54,20 @@ public class ChargeReceiptAdapter {
         chargeReceiptResp.setAddTime(chargeReceiptDTO.getAddTime().getTime());
         chargeReceiptResp.setModTime(chargeReceiptDTO.getModTime().getTime());
         return chargeReceiptResp;
+    }
+
+    public static ChargeReceiptSaveDTO saveReq2SaveDto(ChargeReceiptSaveReq req) {
+        if (req == null) {
+            return null;
+        }
+        ChargeReceiptSaveDTO chargeReceiptSaveDTO = new ChargeReceiptSaveDTO();
+        chargeReceiptSaveDTO.setId(req.getId());
+        chargeReceiptSaveDTO.setAuditRecordId(req.getAuditRecordId());
+        chargeReceiptSaveDTO.setExchangePoint(req.getExchangePoint());
+        chargeReceiptSaveDTO.setCustomerName(req.getCustomerName());
+        chargeReceiptSaveDTO.setPosCode(req.getPosCode());
+        chargeReceiptSaveDTO.setCardNo(req.getCardNo());
+        chargeReceiptSaveDTO.setTradeTime(new Date(req.getTradeTime()));
+        return chargeReceiptSaveDTO;
     }
 }

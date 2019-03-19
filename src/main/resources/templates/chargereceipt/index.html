@@ -427,6 +427,28 @@
         });
     }
 
+    function save() {
+        if(!isNumber($("#saveExchangePoint").val())){
+            bootboxalert("小票积分数量不合法");
+            return false;
+        }
+        $.ajax({
+            url: "/api/chargereceipt/save",
+            dataType: "json",
+            async: false,
+            data:transformToJson($('#chargeReceiptForm').serializeArray()),
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                    $("#modal-form").modal('hide');
+                }
+            },
+            error: error
+        });
+    }
 
 </script>
 </html>
