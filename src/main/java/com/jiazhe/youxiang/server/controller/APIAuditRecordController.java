@@ -2,9 +2,11 @@ package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.ExportExcelUtils;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.AuditRecordAdapter;
 import com.jiazhe.youxiang.server.biz.AuditRecordBiz;
+import com.jiazhe.youxiang.server.biz.ChargeReceiptBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
@@ -15,6 +17,7 @@ import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.exceptions.AuditRecordException;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
+import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
@@ -35,6 +38,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -53,7 +58,8 @@ public class APIAuditRecordController extends BaseController {
 
     @Autowired
     private AuditRecordBiz auditRecordBiz;
-
+    @Autowired
+    private ChargeReceiptBiz chargeReceiptBiz;
 
     @RequiresPermissions(PermissionConstant.AUDIT_RECORD_CHECK)
     @ApiOperation(value = "【后台】审核", httpMethod = "POST", notes = "审核")
@@ -185,5 +191,21 @@ public class APIAuditRecordController extends BaseController {
         CommonValidator.validateId(req.getId());
         auditRecordBiz.deleteById(req.getId());
         return ResponseFactory.buildSuccess();
+    }
+
+    @ApiOperation(value = "完成凭证录入", httpMethod = "POST", notes = "完成凭证录入")
+    @RequestMapping(value = "/completechargereceipt", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "完成凭证录入", level = LogLevelEnum.LEVEL_2)
+    public Object completeChargeReceipt(@ModelAttribute IdReq req) {
+        auditRecordBiz.completeChargeReceipt(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
+    @ApiOperation(value = "【后台】导出消费凭证", httpMethod = "GET", notes = "导出消费凭证")
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "导出消费凭证", level = LogLevelEnum.LEVEL_3)
+    public void export(@ModelAttribute AuditRecordPageReq req, HttpServletResponse response) throws IOException {
+        List<ChargeReceiptDTO> dtoList = chargeReceiptBiz.getList(req.getCustomerMobile(),req.getStatus());
+        ExportExcelUtils.exportChargeReceipt(response, dtoList);
     }
 }

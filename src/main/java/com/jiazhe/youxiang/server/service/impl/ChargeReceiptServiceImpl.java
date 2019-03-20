@@ -9,9 +9,11 @@ import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.dao.mapper.ChargeReceiptPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.ChargeReceiptPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.ChargeReceiptPO;
+import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
 import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptDTO;
 import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptSaveDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
+import com.jiazhe.youxiang.server.service.AuditRecordService;
 import com.jiazhe.youxiang.server.service.ChargeReceiptService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.shiro.SecurityUtils;
@@ -34,6 +36,8 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
     private ChargeReceiptPOManualMapper chargeReceiptPOManualMapper;
     @Autowired
     private ChargeReceiptPOMapper chargeReceiptPOMapper;
+    @Autowired
+    private AuditRecordService auditRecordService;
 
     @Override
     public List<ChargeReceiptDTO> getList(Integer auditRecordId, Paging paging) {
@@ -94,5 +98,13 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
             throw new ChargeReceiptException(ChargeReceiptCodeEnum.CHARGE_RECEIPT_IS_NOT_EXIST);
         }
         return ChargeReceiptAdapter.po2Dto(po);
+    }
+
+    @Override
+    public List<ChargeReceiptDTO> getList(String customerMobile, Byte status) {
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordService.getList(customerMobile,status);
+        List<Integer> auditRecordIds = auditRecordDTOList.stream().map(AuditRecordDTO::getId).collect(Collectors.toList());
+        List<ChargeReceiptPO> poList = chargeReceiptPOManualMapper.finByAuditRecordIds(auditRecordIds);
+        return poList.stream().map(ChargeReceiptAdapter::po2Dto).collect(Collectors.toList());
     }
 }

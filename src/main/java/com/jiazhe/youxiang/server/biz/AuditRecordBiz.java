@@ -51,4 +51,8 @@ public class AuditRecordBiz {
     public void deleteById(Integer id) {
         auditRecordService.deleteById(id);
     }
+
+    public void completeChargeReceipt(Integer id) {
+        auditRecordService.completeChargeReceipt(id);
+    }
 }

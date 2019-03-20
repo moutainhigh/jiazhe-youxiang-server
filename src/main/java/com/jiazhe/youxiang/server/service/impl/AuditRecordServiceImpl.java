@@ -235,4 +235,24 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         po.setIsDeleted(CommonConstant.CODE_DELETED);
         auditRecordPOMapper.updateByPrimaryKeySelective(po);
     }
+
+    @Override
+    public void completeChargeReceipt(Integer id) {
+        AuditRecordPO po = auditRecordPOMapper.selectByPrimaryKey(id);
+        if(null == po){
+            throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_IS_NOT_EXIST);
+        }
+        if(!po.getStatus().equals(CommonConstant.AUDIT_RECORD_PASS)){
+            throw new AuditRecordException(AuditRecordCodeEnum.CANNOT_COMPLETE_CHARGE_RECEIPT);
+        }
+        po.setChargeReceiptStatus(CommonConstant.CHARGE_RECEIPT_COMPLETE);
+        po.setModTime(new Date());
+        auditRecordPOMapper.updateByPrimaryKeySelective(po);
+    }
+
+    @Override
+    public List<AuditRecordDTO> getList(String customerMobile, Byte status) {
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(customerMobile, null, status, null,null);
+        return auditRecordPOList.stream().map(AuditRecordAdapter::PO2DTO).collect(Collectors.toList());
+    }
 }

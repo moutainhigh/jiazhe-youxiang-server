@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.base.util;
 
+import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptDTO;
 import com.jiazhe.youxiang.server.dto.partnerorder.PartnerOrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
@@ -157,4 +158,34 @@ public class ExportExcelUtils {
     }
 
 
+    public static void exportChargeReceipt(HttpServletResponse response, List<ChargeReceiptDTO> dtoList) throws IOException{
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("Sheet1");
+        String fileName = System.currentTimeMillis()+".xlsx";
+        //新增数据行，并且设置单元格数据
+        int rowNum = 1;
+        String[] headers = {"客户姓名","小票积分", "pos机编号", "银行卡后四位", "交易时间"};
+        //headers表示excel表中第一行的表头
+        XSSFRow row = sheet.createRow(0);
+        //在excel表中添加表头
+        for (int i = 0; i < headers.length; i++) {
+            XSSFCell cell = row.createCell(i);
+            XSSFRichTextString text = new XSSFRichTextString(headers[i]);
+            cell.setCellValue(text);
+        }
+        //在表中存放查询到的数据放入对应的列
+        for (ChargeReceiptDTO dto : dtoList) {
+            XSSFRow row1 = sheet.createRow(rowNum);
+            row1.createCell(0).setCellValue(dto.getCustomerName());
+            row1.createCell(1).setCellValue(dto.getExchangePoint().toString());
+            row1.createCell(2).setCellValue(dto.getPosCode());
+            row1.createCell(3).setCellValue(dto.getCardNo());
+            row1.createCell(4).setCellValue(DateUtil.dateToStr(dto.getTradeTime()));
+            rowNum++;
+        }
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName);
+        response.flushBuffer();
+        workbook.write(response.getOutputStream());
+    }
 }

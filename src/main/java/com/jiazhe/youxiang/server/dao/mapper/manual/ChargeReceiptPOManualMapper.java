@@ -25,4 +25,11 @@ public interface ChargeReceiptPOManualMapper {
      * @return
      */
     List<ChargeReceiptPO> query(@Param("auditRecordId") Integer auditRecordId, @Param("offset") Integer offset, @Param("limit") Integer limit);
+
+    /**
+     * 根据消费记录ids查询消费凭证
+     * @param auditRecordIds
+     * @return
+     */
+    List<ChargeReceiptPO> finByAuditRecordIds(List<Integer> auditRecordIds);
 }

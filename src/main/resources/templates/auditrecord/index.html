@@ -94,6 +94,11 @@
                                             onclick="return search()">
                                         <i class="ace-icon fa fa-search red2"></i>
                                         查询
+                                    </button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button class="btn btn-white btn-default btn-round btn-sm"
+                                            onclick="exportExcel();return false;">
+                                        <i class="ace-icon fa  fa-file-excel-o red2"></i>
+                                        导出
                                     </button>
                                 </div>
                             </div>
@@ -506,9 +511,6 @@
         } else {
             str += getFunctionButton("btn-success", "show(" + rowObject.id + ")", "查看");
         }
-        if(rowObject.status == 4){//审核通过的才有凭证管理
-            str += getRedirectButton("btn-default", "../chargereceipt/index?auditRecordId=" + rowObject.id, "凭证管理");
-        }
         return str;
     }
 
@@ -705,6 +707,16 @@
         zoom += event.wheelDelta / 12;
         if (zoom > 0)
             obj.style.zoom = zoom + '%';
+        return false;
+    }
+
+    function exportExcel() {
+        var obj = transformToJson($('#auditRecordSearchForm').serializeArray());
+        var param = "";
+        for(var key in obj){
+            param = param + key + "=" + obj[key] + "&" ;
+        }
+        window.location.href = "/api/auditrecord/export?" + param;
         return false;
     }
 

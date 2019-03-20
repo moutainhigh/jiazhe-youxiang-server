@@ -35,4 +35,8 @@ public class ChargeReceiptBiz {
     public ChargeReceiptDTO getById(Integer id) {
         return chargeReceiptService.getById(id);
     }
+
+    public List<ChargeReceiptDTO> getList(String customerMobile, Byte status) {
+        return chargeReceiptService.getList(customerMobile,status);
+    }
 }

@@ -57,7 +57,9 @@
             </if>
             AND is_deleted = 0 ORDER BY mod_time DESC
         </where>
-        limit #{offset},#{limit}
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
     </select>
 
     <select id="count" resultType="java.lang.Integer">

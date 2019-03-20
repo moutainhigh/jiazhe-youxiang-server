@@ -32,7 +32,9 @@
             </if>
             AND is_deleted = 0 ORDER BY mod_time DESC
         </where>
-        limit #{offset},#{limit}
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
     </select>
 
     <select id="count" resultType="java.lang.Integer">
@@ -43,6 +45,16 @@
             </if>
             AND is_deleted = 0
         </where>
+    </select>
+
+    <select id="finByAuditRecordIds" parameterType="java.util.List" resultType="com.jiazhe.youxiang.server.domain.po.ChargeReceiptPO">
+        select
+        <include refid="Base_Column_List"/>
+        FROM charge_receipt
+        where audit_record_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
     </select>
 
 </mapper>

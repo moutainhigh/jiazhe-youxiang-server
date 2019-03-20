@@ -69,4 +69,18 @@ public interface AuditRecordService {
      * @param id
      */
     void deleteById(Integer id);
+
+    /**
+     * 完成消费凭证的录入
+     * @param id
+     */
+    void completeChargeReceipt(Integer id);
+
+    /**
+     * 根据条件查询 不分页
+     * @param customerMobile
+     * @param status
+     * @return
+     */
+    List<AuditRecordDTO> getList(String customerMobile, Byte status);
 }

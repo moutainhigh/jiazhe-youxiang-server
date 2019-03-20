@@ -128,7 +128,7 @@ public class APIPartnerOrderInfoController extends BaseController {
     @RequiresPermissions(PermissionConstant.PARTNER_ORDER_EXPORT)
     @ApiOperation(value = "【后台】导出商家订单", httpMethod = "GET", notes = "导出商家订单")
     @RequestMapping(value = "/export", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER, operate = "导出批次下兑换码", level = LogLevelEnum.LEVEL_3)
+    @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER, operate = "导出商家订单", level = LogLevelEnum.LEVEL_3)
     public void export(@ModelAttribute PartnerOrderInfoPageReq req, HttpServletResponse response) throws IOException {
         Date serviceTimeStart = req.getServiceTimeStart() == CommonConstant.NULL_TIME ? null : new Date(req.getServiceTimeStart());
         Date serviceTimeEnd = req.getServiceTimeEnd() == CommonConstant.NULL_TIME ? null : new Date(req.getServiceTimeEnd());

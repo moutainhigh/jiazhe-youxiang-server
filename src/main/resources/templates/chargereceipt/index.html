@@ -70,6 +70,13 @@
                         <div class="col-sm-3">
                             <div class="profile-user-info profile-user-info-striped">
                                 <div class="profile-info-row">
+                                    <div class="profile-info-name"> 凭证完成情况</div>
+                                    <div class="profile-info-value">
+                                        <span id="chargeReceiptStatus"></span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
                                     <div class="profile-info-name"> 银行信息</div>
                                     <div class="profile-info-value">
                                         <span id="bankOutletsName"></span>
@@ -312,8 +319,10 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str += getFunctionButton("btn-primary", "edit(" + rowObject.id + ")", "修改");
-        str += getFunctionButton("btn-danger", "deleteById(" + rowObject.id + ")", "删除");
+        if(rowObject.chargeReceiptStatus == 0){
+            str += getFunctionButton("btn-primary", "edit(" + rowObject.id + ")", "修改");
+            str += getFunctionButton("btn-danger", "deleteById(" + rowObject.id + ")", "删除");
+        }
         return str;
     }
 
@@ -346,6 +355,7 @@
                 } else {
                     var result = data.data;
                     showByExchangeType(result);
+                    fillChargeReceiptStatus(result.id,result.chargeReceiptStatus);
                     $("#bankOutletsName").html(result.bankOutletsName);
                     $("#exchangeType").html(getExchangeTypeText(result.exchangeType));
                     $("#status").html(auditRecordStatus[result.status - 1]);
@@ -487,6 +497,43 @@
                 }
             },
             error: error
+        });
+    }
+
+    function fillChargeReceiptStatus(id,status){
+        if(status == 0){
+            var html = '未完成';
+            html = html + "<a href='javascript:completeChargeReceipt("+id+")' data-action='reload'>"+
+                "<i class='ace-icon'>&nbsp;&nbsp;&nbsp;&nbsp;点击完成</i></a>";
+            $("#chargeReceiptStatus").html(html);
+            $("#buttonDiv").find("a").css("display","");
+        }else{
+            $("#chargeReceiptStatus").html('已完成');
+            $("#buttonDiv").find("a").css("display","none");
+        }
+    }
+
+    function completeChargeReceipt(id){
+        confirm("确定完成凭证录入吗？",function (result) {
+            if(result){
+                $.ajax({
+                    url: "/api/auditrecord/completechargereceipt",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    success: function (data) {
+                        if ('error' in data) {
+                            bootboxalert(data.error.message);
+                        } else {
+                            fillChargeReceiptStatus(id,1);
+                        }
+                    },
+                    error: error
+                });
+            }
         });
     }
 

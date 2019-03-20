@@ -38,4 +38,12 @@ public interface ChargeReceiptService {
      * @return
      */
     ChargeReceiptDTO getById(Integer id);
+
+    /**
+     * 根据条件查询列表 不分页
+     * @param customerMobile
+     * @param status
+     * @return
+     */
+    List<ChargeReceiptDTO> getList(String customerMobile, Byte status);
 }
