@@ -237,7 +237,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     }
 
     @Override
-    public void completeChargeReceipt(Integer id) {
+    public void changeChargeReceiptStatus(Integer id,Byte status) {
         AuditRecordPO po = auditRecordPOMapper.selectByPrimaryKey(id);
         if(null == po){
             throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_IS_NOT_EXIST);
@@ -245,7 +245,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         if(!po.getStatus().equals(CommonConstant.AUDIT_RECORD_PASS)){
             throw new AuditRecordException(AuditRecordCodeEnum.CANNOT_COMPLETE_CHARGE_RECEIPT);
         }
-        po.setChargeReceiptStatus(CommonConstant.CHARGE_RECEIPT_COMPLETE);
+        po.setChargeReceiptStatus(status);
         po.setModTime(new Date());
         auditRecordPOMapper.updateByPrimaryKeySelective(po);
     }

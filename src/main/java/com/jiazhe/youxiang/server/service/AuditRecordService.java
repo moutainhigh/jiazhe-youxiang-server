@@ -73,8 +73,9 @@ public interface AuditRecordService {
     /**
      * 完成消费凭证的录入
      * @param id
+     * @param status
      */
-    void completeChargeReceipt(Integer id);
+    void changeChargeReceiptStatus(Integer id,Byte status);
 
     /**
      * 根据条件查询 不分页

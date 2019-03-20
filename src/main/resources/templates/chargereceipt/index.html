@@ -509,21 +509,40 @@
     function fillChargeReceiptStatus(id,status){
         if(status == 0){
             var html = '未完成';
-            html = html + "<a href='javascript:completeChargeReceipt("+id+")' data-action='reload'>"+
-                "<i class='ace-icon'>&nbsp;&nbsp;&nbsp;&nbsp;点击完成</i></a>";
+            if(permission.indexOf("completeChargeReceipt") != -1) {
+                html = html + "&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:completeChargeReceipt(" + id + ")' data-action='reload'>" +
+                    "<i class='ace-icon'>点击完成</i></a>";
+            }
             $("#chargeReceiptStatus").html(html);
             $("#buttonDiv").find("a").css("display","");
         }else{
-            $("#chargeReceiptStatus").html('已完成');
+            var html = '已完成';
+            if(permission.indexOf("uncompleteChargeReceipt") != -1) {
+                html = html + "&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:uncompleteChargeReceipt("+id+")' data-action='reload'>"+
+                    "<i class='ace-icon'>重置未完成</i></a>";
+            }
+            $("#chargeReceiptStatus").html(html);
             $("#buttonDiv").find("a").css("display","none");
         }
     }
 
+    function uncompleteChargeReceipt(id){
+        var text = "确定重置凭证录入未完成吗？";
+        var url = "/api/auditrecord/uncompletechargereceipt";
+        changeChargeReceiptStatus(url,id,text,0);
+    }
+
     function completeChargeReceipt(id){
-        confirm("确定完成凭证录入吗？",function (result) {
+        var text = "确定完成凭证录入吗？";
+        var url = "/api/auditrecord/completechargereceipt"
+        changeChargeReceiptStatus(url,id,text,1);
+    }
+
+    function changeChargeReceiptStatus(url,id,text,status){
+        confirm(text,function (result) {
             if(result){
                 $.ajax({
-                    url: "/api/auditrecord/completechargereceipt",
+                    url:url ,
                     dataType: "json",
                     async: false,
                     data: {
@@ -534,7 +553,8 @@
                         if ('error' in data) {
                             bootboxalert(data.error.message);
                         } else {
-                            fillChargeReceiptStatus(id,1);
+                            fillChargeReceiptStatus(id,status);
+                            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                         }
                     },
                     error: error

@@ -193,11 +193,21 @@ public class APIAuditRecordController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.COMPLETE_CHARGE_RECEIPT)
     @ApiOperation(value = "完成凭证录入", httpMethod = "POST", notes = "完成凭证录入")
     @RequestMapping(value = "/completechargereceipt", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "完成凭证录入", level = LogLevelEnum.LEVEL_2)
     public Object completeChargeReceipt(@ModelAttribute IdReq req) {
         auditRecordBiz.completeChargeReceipt(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
+    @RequiresPermissions(PermissionConstant.UNCOMPLETE_CHARGE_RECEIPT)
+    @ApiOperation(value = "未完成凭证录入", httpMethod = "POST", notes = "未完成凭证录入")
+    @RequestMapping(value = "/uncompletechargereceipt", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "未完成凭证录入", level = LogLevelEnum.LEVEL_2)
+    public Object uncompleteChargeReceipt(@ModelAttribute IdReq req) {
+        auditRecordBiz.uncompleteChargeReceipt(req.getId());
         return ResponseFactory.buildSuccess();
     }
 

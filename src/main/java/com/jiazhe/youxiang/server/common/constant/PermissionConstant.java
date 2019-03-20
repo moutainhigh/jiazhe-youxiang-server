@@ -127,6 +127,10 @@ public class PermissionConstant {
     public static final String CHARGE_RECEIPT_DELETE = "chargeReceiptDelete";
     //凭证修改
     public static final String CHARGE_RECEIPT_EDIT = "chargeReceiptEdit";
+    //完成凭证录入
+    public static final String COMPLETE_CHARGE_RECEIPT = "completeChargeReceipt";
+    //重置凭证录入未完成
+    public static final String UNCOMPLETE_CHARGE_RECEIPT = "uncompleteChargeReceipt";
 
     //信息查询
     public static final String INFO_SEARCH = "infoSearch";

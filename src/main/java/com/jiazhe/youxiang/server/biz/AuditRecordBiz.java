@@ -53,6 +53,10 @@ public class AuditRecordBiz {
     }
 
     public void completeChargeReceipt(Integer id) {
-        auditRecordService.completeChargeReceipt(id);
+        auditRecordService.changeChargeReceiptStatus(id, CommonConstant.CHARGE_RECEIPT_COMPLETE);
+    }
+
+    public void uncompleteChargeReceipt(Integer id) {
+        auditRecordService.changeChargeReceiptStatus(id, CommonConstant.CHARGE_RECEIPT_UNCOMPLETE);
     }
 }

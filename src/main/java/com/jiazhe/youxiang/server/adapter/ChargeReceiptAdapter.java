@@ -53,6 +53,7 @@ public class ChargeReceiptAdapter {
         chargeReceiptResp.setIsDeleted(chargeReceiptDTO.getIsDeleted());
         chargeReceiptResp.setAddTime(chargeReceiptDTO.getAddTime().getTime());
         chargeReceiptResp.setModTime(chargeReceiptDTO.getModTime().getTime());
+        chargeReceiptResp.setChargeReceiptStatus(chargeReceiptDTO.getChargeReceiptStatus());
         return chargeReceiptResp;
     }
 

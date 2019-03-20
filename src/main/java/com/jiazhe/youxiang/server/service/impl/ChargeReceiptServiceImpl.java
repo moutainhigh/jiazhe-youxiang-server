@@ -41,10 +41,15 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
 
     @Override
     public List<ChargeReceiptDTO> getList(Integer auditRecordId, Paging paging) {
+        AuditRecordDTO auditRecordDTO = auditRecordService.getById(auditRecordId);
         Integer count = chargeReceiptPOManualMapper.count(auditRecordId);
         List<ChargeReceiptPO> chargeReceiptPOList = chargeReceiptPOManualMapper.query(auditRecordId, paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
-        return chargeReceiptPOList.stream().map(ChargeReceiptAdapter::po2Dto).collect(Collectors.toList());
+        List<ChargeReceiptDTO> chargeReceiptDTOList = chargeReceiptPOList.stream().map(ChargeReceiptAdapter::po2Dto).collect(Collectors.toList());
+        chargeReceiptDTOList.stream().forEach(bean->{
+            bean.setChargeReceiptStatus(auditRecordDTO.getChargeReceiptStatus());
+        });
+        return chargeReceiptDTOList;
     }
 
     @Override

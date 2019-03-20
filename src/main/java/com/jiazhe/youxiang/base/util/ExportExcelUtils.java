@@ -5,11 +5,9 @@ import com.jiazhe.youxiang.server.dto.partnerorder.PartnerOrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRichTextString;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.xssf.usermodel.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -164,7 +162,7 @@ public class ExportExcelUtils {
         String fileName = System.currentTimeMillis()+".xlsx";
         //新增数据行，并且设置单元格数据
         int rowNum = 1;
-        String[] headers = {"客户姓名","小票积分", "pos机编号", "银行卡后四位", "交易时间"};
+        String[] headers = {"序号","商户名称","POS名称","客户姓名", "交易日期","卡号后4位","分值","金额","是否已经兑换服务","是否已经对账","备注"};
         //headers表示excel表中第一行的表头
         XSSFRow row = sheet.createRow(0);
         //在excel表中添加表头
@@ -176,11 +174,19 @@ public class ExportExcelUtils {
         //在表中存放查询到的数据放入对应的列
         for (ChargeReceiptDTO dto : dtoList) {
             XSSFRow row1 = sheet.createRow(rowNum);
-            row1.createCell(0).setCellValue(dto.getCustomerName());
-            row1.createCell(1).setCellValue(dto.getExchangePoint().toString());
+            row1.createCell(0).setCellValue(rowNum);
+            row1.createCell(1).setCellValue("北京悠享互联信息技术有限公司");
             row1.createCell(2).setCellValue(dto.getPosCode());
-            row1.createCell(3).setCellValue(dto.getCardNo());
-            row1.createCell(4).setCellValue(DateUtil.dateToStr(dto.getTradeTime()));
+            row1.createCell(3).setCellValue(dto.getCustomerName());
+            row1.createCell(4).setCellValue(DateUtil.yyyyMMDD(dto.getTradeTime()));
+            row1.createCell(5).setCellValue(dto.getCardNo());
+            XSSFCell cell6 = row1.createCell(6);
+            cell6.setCellType(CellType.NUMERIC);
+            cell6.setCellValue(dto.getExchangePoint().doubleValue());
+            row1.createCell(7).setCellValue("");
+            row1.createCell(8).setCellValue("是");
+            row1.createCell(9).setCellValue("是");
+            row1.createCell(10).setCellValue("");
             rowNum++;
         }
         response.setContentType("application/octet-stream");
