@@ -157,10 +157,10 @@ public class APIAuditRecordController extends BaseController {
             auditRecordDTO.setVersion(0);
         } else {
             auditRecordDTO = auditRecordBiz.getById(req.getId());
-            if (auditRecordDTO.getIsDeleted().equals(CommonConstant.CODE_DELETED)) {
+            if (CommonConstant.CODE_DELETED.equals(auditRecordDTO.getIsDeleted())) {
                 throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_IS_NOT_EXIST);
             }
-            if (auditRecordDTO.getStatus().equals(CommonConstant.AUDIT_RECORD_PASS)) {
+            if (CommonConstant.AUDIT_RECORD_PASS.equals(auditRecordDTO.getStatus())) {
                 throw new AuditRecordException(AuditRecordCodeEnum.RECORD_HASS_PASSED);
             }
             if (!auditRecordDTO.getVersion().equals(req.getVersion())) {
@@ -201,6 +201,7 @@ public class APIAuditRecordController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.CHARGE_RECEIPT_EXPORT)
     @ApiOperation(value = "【后台】导出消费凭证", httpMethod = "GET", notes = "导出消费凭证")
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "导出消费凭证", level = LogLevelEnum.LEVEL_3)

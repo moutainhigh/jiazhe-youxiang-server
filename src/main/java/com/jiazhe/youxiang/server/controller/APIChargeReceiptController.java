@@ -7,6 +7,7 @@ import com.jiazhe.youxiang.server.adapter.ChargeReceiptAdapter;
 import com.jiazhe.youxiang.server.biz.ChargeReceiptBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.ChargeReceiptCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
@@ -20,6 +21,8 @@ import com.jiazhe.youxiang.server.vo.req.chargereceipt.ChargeReceiptPageReq;
 import com.jiazhe.youxiang.server.vo.req.chargereceipt.ChargeReceiptSaveReq;
 import com.jiazhe.youxiang.server.vo.resp.chargereceipt.ChargeReceiptResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,7 +44,7 @@ public class APIChargeReceiptController extends BaseController {
     @Autowired
     private ChargeReceiptBiz chargeReceiptBiz;
 
-//    @RequiresPermissions(PermissionConstant.AUDIT_RECORD_MANAGEMENT)
+    @RequiresPermissions(PermissionConstant.CHARGE_RECEIPT_MANAGEMENT)
     @ApiOperation(value = "【后台】消费凭证列表", httpMethod = "GET", response = ChargeReceiptResp.class, responseContainer = "List", notes = "【后台】消费凭证列表")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.CHARGE_RECEIPT, operate = "消费凭证列表表", level = LogLevelEnum.LEVEL_1)
@@ -52,6 +55,7 @@ public class APIChargeReceiptController extends BaseController {
         return ResponseFactory.buildPaginationResponse(chargeReceiptRespList, paging);
     }
 
+    @RequiresPermissions(PermissionConstant.CHARGE_RECEIPT_DELETE)
     @ApiOperation(value = "【后台】删除消费凭证", httpMethod = "POST", notes = "【后台】删除消费凭证")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.CHARGE_RECEIPT, operate = "删除消费凭证", level = LogLevelEnum.LEVEL_3)
@@ -60,6 +64,7 @@ public class APIChargeReceiptController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(value={PermissionConstant.CHARGE_RECEIPT_ADD,PermissionConstant.CHARGE_RECEIPT_EDIT},logical= Logical.OR)
     @ApiOperation(value = "【后台】保存消费凭证", httpMethod = "POST", notes = "【后台】保存消费凭证")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.CHARGE_RECEIPT, operate = "保存消费凭证", level = LogLevelEnum.LEVEL_3)

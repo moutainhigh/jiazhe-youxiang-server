@@ -133,12 +133,14 @@
                     </div><!-- /.col -->
 
                     <div class="col-xs-12" style="text-align: right" id="buttonDiv">
-                        <shiro:hasPermission name="partnerOrderAdd">
-                            <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
-                               data-toggle="modal" onclick="openNew()">
-                                <i class="ace-icon fa fa-plus"></i>新建
-                            </a>
-                        </shiro:hasPermission>
+                        <p style="margin:1px;height: 31px">
+                            <shiro:hasPermission name="partnerOrderAdd">
+                                <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
+                                   data-toggle="modal" onclick="openNew()">
+                                    <i class="ace-icon fa fa-plus"></i>新建
+                                </a>
+                            </shiro:hasPermission>
+                        </p>
                     </div><!-- /.col -->
 
                     <div class="col-xs-12">
