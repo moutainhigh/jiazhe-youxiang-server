@@ -217,4 +217,9 @@ public class CommonConstant {
     public static final Byte USER_PLACE_ORDER = Byte.valueOf("0");
     public static final Byte CUSTOMER_PLACE_ORDER = Byte.valueOf("1");
 
+    /**
+     * 消费凭证录入状态【0未完成  1已完成】
+     */
+    public static final Byte CHARGE_RECEIPT_UNCOMPLETE = Byte.valueOf("0");
+    public static final Byte CHARGE_RECEIPT_COMPLETE = Byte.valueOf("1");
 }

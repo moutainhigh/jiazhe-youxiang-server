@@ -20,6 +20,7 @@ public class AuditRecordAdapter {
         auditRecordResp.setCustomerName(auditRecordDTO.getCustomerName());
         auditRecordResp.setCustomerMobile(auditRecordDTO.getCustomerMobile());
         auditRecordResp.setExchangePoint(auditRecordDTO.getExchangePoint());
+        auditRecordResp.setGivingPoint(auditRecordDTO.getGivingPoint());
         auditRecordResp.setExchangeType(auditRecordDTO.getExchangeType());
         auditRecordResp.setChargeReceiptStatus(auditRecordDTO.getChargeReceiptStatus());
         auditRecordResp.setPointCodes(auditRecordDTO.getPointCodes());
@@ -53,6 +54,7 @@ public class AuditRecordAdapter {
         auditRecordDTO.setCustomerName(auditRecordPO.getCustomerName());
         auditRecordDTO.setCustomerMobile(auditRecordPO.getCustomerMobile());
         auditRecordDTO.setExchangePoint(auditRecordPO.getExchangePoint());
+        auditRecordDTO.setGivingPoint(auditRecordPO.getGivingPoint());
         auditRecordDTO.setExchangeType(auditRecordPO.getExchangeType());
         auditRecordDTO.setChargeReceiptStatus(auditRecordPO.getChargeReceiptStatus());
         auditRecordDTO.setPointCodes(auditRecordPO.getPointCodes());
@@ -73,6 +75,7 @@ public class AuditRecordAdapter {
         auditRecordDTO.setVersion(auditRecordPO.getVersion());
         auditRecordDTO.setAddTime(auditRecordPO.getAddTime());
         auditRecordDTO.setModTime(auditRecordPO.getModTime());
+        auditRecordDTO.setIsDeleted(auditRecordPO.getIsDeleted());
         return auditRecordDTO;
     }
 
@@ -86,6 +89,7 @@ public class AuditRecordAdapter {
         auditRecordPO.setCustomerName(auditRecordDTO.getCustomerName());
         auditRecordPO.setCustomerMobile(auditRecordDTO.getCustomerMobile());
         auditRecordPO.setExchangePoint(auditRecordDTO.getExchangePoint());
+        auditRecordPO.setGivingPoint(auditRecordDTO.getGivingPoint());
         auditRecordPO.setExchangeType(auditRecordDTO.getExchangeType());
         auditRecordPO.setChargeReceiptStatus(auditRecordDTO.getChargeReceiptStatus());
         auditRecordPO.setPointCodes(auditRecordDTO.getPointCodes());

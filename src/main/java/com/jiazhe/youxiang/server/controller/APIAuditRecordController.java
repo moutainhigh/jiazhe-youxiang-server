@@ -2,9 +2,11 @@ package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.ExportExcelUtils;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.AuditRecordAdapter;
 import com.jiazhe.youxiang.server.biz.AuditRecordBiz;
+import com.jiazhe.youxiang.server.biz.ChargeReceiptBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
@@ -15,6 +17,7 @@ import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.exceptions.AuditRecordException;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
+import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
@@ -35,6 +38,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,7 +58,8 @@ public class APIAuditRecordController extends BaseController {
 
     @Autowired
     private AuditRecordBiz auditRecordBiz;
-
+    @Autowired
+    private ChargeReceiptBiz chargeReceiptBiz;
 
     @RequiresPermissions(PermissionConstant.AUDIT_RECORD_CHECK)
     @ApiOperation(value = "【后台】审核", httpMethod = "POST", notes = "审核")
@@ -96,7 +103,7 @@ public class APIAuditRecordController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "消费记录列表", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute AuditRecordPageReq req) {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getCustomerMobile(),req.getStatus(), paging);
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getCustomerMobile(), req.getStatus(), paging);
         List<AuditRecordResp> auditRecordRespList = auditRecordDTOList.stream().map(AuditRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(auditRecordRespList, paging);
     }
@@ -120,20 +127,28 @@ public class APIAuditRecordController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "保存消费记录信息", level = LogLevelEnum.LEVEL_2)
     public Object save(@ModelAttribute AuditRecordSaveReq req) {
         CommonValidator.validateNull(req.getBankOutletsName(), new AuditRecordException(AuditRecordCodeEnum.BANK_NAME_IS_NULL));
+        CommonValidator.validateNull(req.getExchangeType(), new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_TYPE_IS_NULL));
         CommonValidator.validateNull(req.getExchangePoint(), new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_POINT_IS_NULL));
-        CommonValidator.validateNull(req.getImgUrls(), new AuditRecordException(AuditRecordCodeEnum.IMAGE_IS_NULL));
         //根据兑换类型，约束各种字段的填写条件
-        if (req.getExchangeType().equals(CommonConstant.DIRECT_CHARGE)) {
-            CommonValidator.validateNull(req.getCustomerName(), new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_NAME_IS_NULL));
+        if (req.getExchangeType().toString().contains(CommonConstant.DIRECT_CHARGE.toString())) {
             CommonValidator.validateNull(req.getCustomerMobile(), new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_MOBILE_IS_NULL));
             CommonValidator.validateMobile(req.getCustomerMobile(), new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_MOBILE_IS_ILLEGAL));
+            CommonValidator.validateNull(req.getGivingPoint(), new AuditRecordException(AuditRecordCodeEnum.GIVING_POINT_IS_NULL));
+        } else {
+            req.setCustomerMobile("");
+            req.setGivingPoint(BigDecimal.ZERO);
         }
-        if (req.getExchangeType().equals(CommonConstant.SELF_CHARGE)) {
+        if (req.getExchangeType().toString().contains(CommonConstant.SELF_CHARGE.toString())) {
             CommonValidator.validateNull(req.getPointCodes(), new AuditRecordException(AuditRecordCodeEnum.POINT_CODES_IS_NULL));
+        } else {
+            req.setPointCodes("");
         }
-        if (req.getExchangeType().equals(CommonConstant.EXCHANGE_ENTITY)) {
+        if (req.getExchangeType().toString().contains(CommonConstant.EXCHANGE_ENTITY.toString())) {
             CommonValidator.validateNull(req.getProductValue(), new AuditRecordException(AuditRecordCodeEnum.PRODUCT_VALUE_IS_NULL));
+        } else {
+            req.setProductValue(BigDecimal.ZERO);
         }
+        CommonValidator.validateNull(req.getImgUrls(), new AuditRecordException(AuditRecordCodeEnum.IMAGE_IS_NULL));
         //判断是新建还是修改
         AuditRecordDTO auditRecordDTO = null;
         if (req.getId().equals(0)) {
@@ -142,7 +157,10 @@ public class APIAuditRecordController extends BaseController {
             auditRecordDTO.setVersion(0);
         } else {
             auditRecordDTO = auditRecordBiz.getById(req.getId());
-            if(auditRecordDTO.getStatus().equals(CommonConstant.AUDIT_RECORD_PASS)){
+            if (CommonConstant.CODE_DELETED.equals(auditRecordDTO.getIsDeleted())) {
+                throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_IS_NOT_EXIST);
+            }
+            if (CommonConstant.AUDIT_RECORD_PASS.equals(auditRecordDTO.getStatus())) {
                 throw new AuditRecordException(AuditRecordCodeEnum.RECORD_HASS_PASSED);
             }
             if (!auditRecordDTO.getVersion().equals(req.getVersion())) {
@@ -157,6 +175,7 @@ public class APIAuditRecordController extends BaseController {
         auditRecordDTO.setCustomerMobile(req.getCustomerMobile());
         auditRecordDTO.setCustomerName(req.getCustomerName());
         auditRecordDTO.setExchangePoint(req.getExchangePoint());
+        auditRecordDTO.setGivingPoint(req.getGivingPoint());
         auditRecordDTO.setPointCodes(req.getPointCodes());
         auditRecordDTO.setProductValue(req.getProductValue());
         auditRecordDTO.setImgUrls(req.getImgUrls());
@@ -164,6 +183,7 @@ public class APIAuditRecordController extends BaseController {
         auditRecordBiz.save(auditRecordDTO);
         return ResponseFactory.buildSuccess();
     }
+
     @ApiOperation(value = "【审核小程序】删除消费记录信息", httpMethod = "POST", notes = "删除消费记录信息")
     @RequestMapping(value = "/deletebyid", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "删除消费记录信息", level = LogLevelEnum.LEVEL_3)
@@ -171,5 +191,22 @@ public class APIAuditRecordController extends BaseController {
         CommonValidator.validateId(req.getId());
         auditRecordBiz.deleteById(req.getId());
         return ResponseFactory.buildSuccess();
+    }
+
+    @ApiOperation(value = "完成凭证录入", httpMethod = "POST", notes = "完成凭证录入")
+    @RequestMapping(value = "/completechargereceipt", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "完成凭证录入", level = LogLevelEnum.LEVEL_2)
+    public Object completeChargeReceipt(@ModelAttribute IdReq req) {
+        auditRecordBiz.completeChargeReceipt(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
+    @RequiresPermissions(PermissionConstant.CHARGE_RECEIPT_EXPORT)
+    @ApiOperation(value = "【后台】导出消费凭证", httpMethod = "GET", notes = "导出消费凭证")
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "导出消费凭证", level = LogLevelEnum.LEVEL_3)
+    public void export(@ModelAttribute AuditRecordPageReq req, HttpServletResponse response) throws IOException {
+        List<ChargeReceiptDTO> dtoList = chargeReceiptBiz.getList(req.getCustomerMobile(),req.getStatus());
+        ExportExcelUtils.exportChargeReceipt(response, dtoList);
     }
 }

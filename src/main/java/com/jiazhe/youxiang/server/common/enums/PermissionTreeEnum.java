@@ -106,6 +106,16 @@ public enum PermissionTreeEnum {
     AUDIT_RECORD_MANAGEMENT(5, 0, "消费记录管理", PermissionConstant.AUDIT_RECORD_MANAGEMENT),
     //消费记录审核
     AUDIT_RECORD_CHECK(501, 5, "消费记录审核", PermissionConstant.AUDIT_RECORD_CHECK),
+    //凭证管理
+    CHARGE_RECEIPT_MANAGEMENT(502, 5, "凭证管理", PermissionConstant.CHARGE_RECEIPT_MANAGEMENT),
+    //凭证导出
+    CHARGE_RECEIPT_EXPORT(503, 5, "凭证导出", PermissionConstant.CHARGE_RECEIPT_EXPORT),
+    //凭证添加
+    CHARGE_RECEIPT_ADD(504, 5, "凭证添加", PermissionConstant.CHARGE_RECEIPT_ADD),
+    //凭证删除
+    CHARGE_RECEIPT_DELETE(505, 5, "凭证删除", PermissionConstant.CHARGE_RECEIPT_DELETE),
+    //凭证修改
+    CHARGE_RECEIPT_EDIT(506, 5, "凭证修改", PermissionConstant.CHARGE_RECEIPT_EDIT),
 
     /***************************查询模块相关**************************************/
     //信息查询

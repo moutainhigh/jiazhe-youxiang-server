@@ -69,7 +69,7 @@ public class AliUtils {
             logger.error("阿里云短信服务异常，错误堆栈信息为：",e);
             throw new LoginException(LoginCodeEnum.LOGIN_SENDCODE_ERROR);
         }
-        if (sendSmsResponse.getCode() == null && !sendSmsResponse.getCode().equals("OK")) {
+        if (sendSmsResponse.getCode() == null || !("OK".equals(sendSmsResponse.getCode()))) {
             //请求失败
             throw new LoginException(LoginCodeEnum.LOGIN_SENDCODE_ERROR);
         }

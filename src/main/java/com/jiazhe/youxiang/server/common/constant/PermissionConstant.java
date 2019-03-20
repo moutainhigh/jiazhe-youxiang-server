@@ -117,7 +117,16 @@ public class PermissionConstant {
     public static final String AUDIT_RECORD_MANAGEMENT = "auditRecordManagement";
     //消费记录审核
     public static final String AUDIT_RECORD_CHECK = "auditRecordCheck";
-
+    //凭证管理
+    public static final String CHARGE_RECEIPT_MANAGEMENT = "chargeReceiptManagement";
+    //凭证导出
+    public static final String CHARGE_RECEIPT_EXPORT = "chargeReceiptExport";
+    //凭证添加
+    public static final String CHARGE_RECEIPT_ADD = "chargeReceiptAdd";
+    //凭证删除
+    public static final String CHARGE_RECEIPT_DELETE = "chargeReceiptDelete";
+    //凭证修改
+    public static final String CHARGE_RECEIPT_EDIT = "chargeReceiptEdit";
 
     //信息查询
     public static final String INFO_SEARCH = "infoSearch";
