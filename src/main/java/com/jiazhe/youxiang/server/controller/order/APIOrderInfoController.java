@@ -226,6 +226,7 @@ public class APIOrderInfoController extends BaseController {
         }
         CommonValidator.validateNull(req.getWorkerName(), new OrderException(OrderCodeEnum.WORKER_NAME_IS_NAME));
         CommonValidator.validateNull(req.getWorkerMobile(), new OrderException(OrderCodeEnum.WORKER_MOBILE_IS_NAME));
+        CommonValidator.validateNull(req.getCost(), new OrderException(OrderCodeEnum.ORDER_COST_IS_NULL));
         orderInfoBiz.userChangeReservationInfo(OrderInfoAdapter.ReqUserReservationOrder2DTOUserReservationOrder(req));
         return ResponseFactory.buildSuccess();
     }
