@@ -38,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -169,7 +168,7 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
     @ApiOperation(value = "导出批次下兑换码", httpMethod = "GET", notes = "导出批次下兑换码")
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "导出批次下兑换码", level = LogLevelEnum.LEVEL_3)
-    public void export(@ModelAttribute IdReq req, HttpServletResponse response) throws IOException {
+    public void export(@ModelAttribute IdReq req, HttpServletResponse response){
         List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOList = voucherExchangeCodeBiz.getByBatchId(req.getId());
         ExportExcelUtils.exportVoucherCode(response, voucherExchangeCodeDTOList);
     }

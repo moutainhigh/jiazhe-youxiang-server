@@ -12,6 +12,8 @@ import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -25,7 +27,9 @@ import java.util.List;
  */
 public class ExportExcelUtils {
 
-    public static void exportRechargeCardCode(HttpServletResponse response, List<RCExchangeCodeDTO> rcExchangeCodeDTOList) throws IOException {
+    private static final Logger logger = LoggerFactory.getLogger(ExportExcelUtils.class);
+
+    public static void exportRechargeCardCode(HttpServletResponse response, List<RCExchangeCodeDTO> rcExchangeCodeDTOList) {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Sheet1");
         String fileName = System.currentTimeMillis() + ".xlsx";
@@ -46,18 +50,18 @@ public class ExportExcelUtils {
             row1.createCell(0).setCellValue(dto.getBatchName());
             row1.createCell(1).setCellValue(dto.getCode());
             row1.createCell(2).setCellValue(dto.getKeyt());
-            row1.createCell(3).setCellValue(dto.getFaceValue().toString());
+            XSSFCell cell_3 = row1.createCell(3);
+            cell_3.setCellType(CellType.NUMERIC);
+            cell_3.setCellValue(dto.getFaceValue().doubleValue());
             row1.createCell(4).setCellValue(dto.getStatus().equals(Byte.valueOf("1")) ? "启用" : "停用");
             row1.createCell(5).setCellValue(dto.getUsed().equals(Byte.valueOf("1")) ? "已使用" : "未使用");
             rowNum++;
         }
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-disposition", "attachment;filename=" + fileName);
-        response.flushBuffer();
-        workbook.write(response.getOutputStream());
+        resetColumnWidth(sheet,headers.length,true);
+        export(response,fileName,workbook);
     }
 
-    public static void exportVoucherCode(HttpServletResponse response, List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOList) throws IOException {
+    public static void exportVoucherCode(HttpServletResponse response, List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOList) {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Sheet1");
         String fileName = System.currentTimeMillis() + ".xlsx";
@@ -78,18 +82,18 @@ public class ExportExcelUtils {
             row1.createCell(0).setCellValue(dto.getBatchName());
             row1.createCell(1).setCellValue(dto.getCode());
             row1.createCell(2).setCellValue(dto.getKeyt());
-            row1.createCell(3).setCellValue(dto.getCount().toString());
+            XSSFCell cell_3 = row1.createCell(3);
+            cell_3.setCellType(CellType.NUMERIC);
+            cell_3.setCellValue(dto.getCount());
             row1.createCell(4).setCellValue(dto.getStatus().equals(Byte.valueOf("1")) ? "启用" : "停用");
             row1.createCell(5).setCellValue(dto.getUsed().equals(Byte.valueOf("1")) ? "已使用" : "未使用");
             rowNum++;
         }
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-disposition", "attachment;filename=" + fileName);
-        response.flushBuffer();
-        workbook.write(response.getOutputStream());
+        resetColumnWidth(sheet,headers.length,true);
+        export(response,fileName,workbook);;
     }
 
-    public static void exportPointCode(HttpServletResponse response, List<PointExchangeCodeDTO> pointExchangeCodeDTOList) throws IOException {
+    public static void exportPointCode(HttpServletResponse response, List<PointExchangeCodeDTO> pointExchangeCodeDTOList) {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Sheet1");
         String fileName = System.currentTimeMillis() + ".xlsx";
@@ -110,18 +114,18 @@ public class ExportExcelUtils {
             row1.createCell(0).setCellValue(dto.getBatchName());
             row1.createCell(1).setCellValue(dto.getCode());
             row1.createCell(2).setCellValue(dto.getKeyt());
-            row1.createCell(3).setCellValue(dto.getFaceValue().toString());
+            XSSFCell cell_3 = row1.createCell(3);
+            cell_3.setCellType(CellType.NUMERIC);
+            cell_3.setCellValue(dto.getFaceValue().doubleValue());
             row1.createCell(4).setCellValue(dto.getStatus().equals(Byte.valueOf("1")) ? "启用" : "停用");
             row1.createCell(5).setCellValue(dto.getUsed().equals(Byte.valueOf("1")) ? "已使用" : "未使用");
             rowNum++;
         }
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-disposition", "attachment;filename=" + fileName);
-        response.flushBuffer();
-        workbook.write(response.getOutputStream());
+        resetColumnWidth(sheet,headers.length,true);
+        export(response,fileName,workbook);
     }
 
-    public static void exportPartnerOrder(HttpServletResponse response, List<PartnerOrderInfoDTO> partnerOrderInfoDTOList) throws IOException {
+    public static void exportPartnerOrder(HttpServletResponse response, List<PartnerOrderInfoDTO> partnerOrderInfoDTOList){
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Sheet1");
         String fileName = System.currentTimeMillis() + ".xlsx";
@@ -150,18 +154,20 @@ public class ExportExcelUtils {
             row1.createCell(8).setCellValue(dto.getWorkerMobile());
             row1.createCell(9).setCellValue(dto.getServiceItemDTO().getName());
             row1.createCell(10).setCellValue(dto.getPartnerDTO().getName());
-            row1.createCell(11).setCellValue(dto.getPrePay().toString());
-            row1.createCell(12).setCellValue(dto.getAppendPay().toString());
+            XSSFCell cell_11 = row1.createCell(11);
+            cell_11.setCellType(CellType.NUMERIC);
+            cell_11.setCellValue(dto.getPrePay().doubleValue());
+            XSSFCell cell_12 = row1.createCell(12);
+            cell_12.setCellType(CellType.NUMERIC);
+            cell_12.setCellValue(dto.getAppendPay().doubleValue());
             rowNum++;
         }
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-disposition", "attachment;filename=" + fileName);
-        response.flushBuffer();
-        workbook.write(response.getOutputStream());
+        resetColumnWidth(sheet,headers.length,false);
+        export(response,fileName,workbook);
     }
 
 
-    public static void exportChargeReceipt(HttpServletResponse response, List<ChargeReceiptDTO> dtoList) throws IOException {
+    public static void exportChargeReceipt(HttpServletResponse response, List<ChargeReceiptDTO> dtoList) {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Sheet1");
         String fileName = System.currentTimeMillis() + ".xlsx";
@@ -185,51 +191,72 @@ public class ExportExcelUtils {
             row1.createCell(3).setCellValue(dto.getCustomerName());
             row1.createCell(4).setCellValue(DateUtil.yyyyMMDD(dto.getTradeTime()));
             row1.createCell(5).setCellValue(dto.getCardNo());
-            XSSFCell cell6 = row1.createCell(6);
-            cell6.setCellType(CellType.NUMERIC);
-            cell6.setCellValue(dto.getExchangePoint().doubleValue());
+            XSSFCell cell_6 = row1.createCell(6);
+            cell_6.setCellType(CellType.NUMERIC);
+            cell_6.setCellValue(dto.getExchangePoint().doubleValue());
             row1.createCell(7).setCellValue("");
             row1.createCell(8).setCellValue("是");
             row1.createCell(9).setCellValue("是");
             row1.createCell(10).setCellValue("");
             rowNum++;
         }
-        resetColumnWidth(sheet,headers.length);
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-disposition", "attachment;filename=" + fileName);
-        response.flushBuffer();
-        workbook.write(response.getOutputStream());
+        resetColumnWidth(sheet,headers.length,false);
+        export(response,fileName,workbook);
     }
 
     /**
      *  重新调整单元格的列宽
-     * @param sheet
-     * @param maxColumn
+     * @param sheet 表格
+     * @param maxColumn 最大列数
+     * @param sameLength 除表头外，数据长度是否一致，一致只需要遍历2行，否则遍历所有
      * @throws UnsupportedEncodingException
      */
-    public static void resetColumnWidth(XSSFSheet sheet, int maxColumn) throws UnsupportedEncodingException {
+    public static void resetColumnWidth(XSSFSheet sheet, int maxColumn,boolean sameLength) {
         for (int i = 0; i <= maxColumn; i++) {
             sheet.autoSizeColumn(i);
         }
+        int maxRow = sheet.getLastRowNum();
+        if(sameLength){
+            maxRow = 1;
+        }
         for (int columnNum = 0; columnNum <= maxColumn; columnNum++) {
             int columnWidth = sheet.getColumnWidth(columnNum) / 256;
-            for (int rowNum = 0; rowNum <= sheet.getLastRowNum(); rowNum++) {
+            for (int rowNum = 0; rowNum <= maxRow; rowNum++) {
                 XSSFRow currentRow;
                 if (sheet.getRow(rowNum) == null) {
                     currentRow = sheet.createRow(rowNum);
                 } else {
                     currentRow = sheet.getRow(rowNum);
                 }
-
                 if (currentRow.getCell(columnNum) != null) {
                     Cell currentCell = currentRow.getCell(columnNum);
-                    int length = currentCell.toString().getBytes("UTF-8").length;
-                    if (columnWidth < length) {
-                        columnWidth = length;
+                    int length = 0;
+                    try {
+                        length = currentCell.toString().getBytes("GBK").length;
+                    } catch (UnsupportedEncodingException e) {
+                        logger.error("导出excel时获取列宽出现不支持的编码格式，错误信息："+e.getMessage());
+                    }
+                    if (columnWidth < length + 1) {
+                        columnWidth = length + 1;
                     }
                 }
             }
             sheet.setColumnWidth(columnNum, columnWidth * 256);
+        }
+    }
+
+    public static void export(HttpServletResponse response,String fileName,XSSFWorkbook workbook){
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName);
+        try {
+            response.flushBuffer();
+        } catch (IOException e) {
+            logger.error("导出excel时出现IO异常，错误信息："+e.getMessage());
+        }
+        try {
+            workbook.write(response.getOutputStream());
+        } catch (IOException e) {
+            logger.error("导出excel时出现IO异常，错误信息："+e.getMessage());
         }
     }
 }

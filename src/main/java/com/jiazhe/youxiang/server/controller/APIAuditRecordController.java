@@ -39,7 +39,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -215,7 +214,7 @@ public class APIAuditRecordController extends BaseController {
     @ApiOperation(value = "【后台】导出消费凭证", httpMethod = "GET", notes = "导出消费凭证")
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "导出消费凭证", level = LogLevelEnum.LEVEL_3)
-    public void export(@ModelAttribute AuditRecordPageReq req, HttpServletResponse response) throws IOException {
+    public void export(@ModelAttribute AuditRecordPageReq req, HttpServletResponse response){
         List<ChargeReceiptDTO> dtoList = chargeReceiptBiz.getList(req.getCustomerMobile(),req.getStatus());
         ExportExcelUtils.exportChargeReceipt(response, dtoList);
     }
