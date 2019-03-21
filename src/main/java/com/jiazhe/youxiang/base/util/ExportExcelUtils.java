@@ -29,6 +29,8 @@ public class ExportExcelUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(ExportExcelUtils.class);
 
+    private static final int maxColumnWidth = 30 ;
+
     public static void exportRechargeCardCode(HttpServletResponse response, List<RCExchangeCodeDTO> rcExchangeCodeDTOList) {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Sheet1");
@@ -237,7 +239,7 @@ public class ExportExcelUtils {
                         logger.error("导出excel时获取列宽出现不支持的编码格式，错误信息："+e.getMessage());
                     }
                     if (columnWidth < length + 1) {
-                        columnWidth = length + 1;
+                        columnWidth = length > maxColumnWidth ? maxColumnWidth : length + 1;
                     }
                 }
             }
