@@ -257,6 +257,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPO.setWorkerMobile(dto.getWorkerMobile());
         orderInfoPO.setWorkerName(dto.getWorkerName());
         orderInfoPO.setRealServiceTime(dto.getRealServiceTime());
+        orderInfoPO.setCost(dto.getCost());
         orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
     }
 
