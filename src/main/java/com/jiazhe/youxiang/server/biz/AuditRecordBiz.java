@@ -36,12 +36,12 @@ public class AuditRecordBiz {
         return auditRecordService.getById(id);
     }
 
-    public List<AuditRecordDTO> getList(String customerMobile, Byte status, Paging paging) {
-        return auditRecordService.getList(customerMobile, null, status, paging);
+    public List<AuditRecordDTO> getList(String customerMobile, Byte status,Byte chargeReceiptStatus, Paging paging) {
+        return auditRecordService.getList(customerMobile, null, status,chargeReceiptStatus, paging);
     }
 
     public List<AuditRecordDTO> getSubmitterList(Byte status, Integer submitterId, Paging paging) {
-        return auditRecordService.getList(null, submitterId, status, paging);
+        return auditRecordService.getList(null, submitterId, status,null, paging);
     }
 
     public void save(AuditRecordDTO auditRecordDTO) {
@@ -53,6 +53,10 @@ public class AuditRecordBiz {
     }
 
     public void completeChargeReceipt(Integer id) {
-        auditRecordService.completeChargeReceipt(id);
+        auditRecordService.changeChargeReceiptStatus(id, CommonConstant.CHARGE_RECEIPT_COMPLETE);
+    }
+
+    public void uncompleteChargeReceipt(Integer id) {
+        auditRecordService.changeChargeReceiptStatus(id, CommonConstant.CHARGE_RECEIPT_UNCOMPLETE);
     }
 }

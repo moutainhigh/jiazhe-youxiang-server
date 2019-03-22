@@ -116,6 +116,10 @@ public enum PermissionTreeEnum {
     CHARGE_RECEIPT_DELETE(505, 5, "凭证删除", PermissionConstant.CHARGE_RECEIPT_DELETE),
     //凭证修改
     CHARGE_RECEIPT_EDIT(506, 5, "凭证修改", PermissionConstant.CHARGE_RECEIPT_EDIT),
+    //完成凭证录入
+    COMPLETE_CHARGE_RECEIPT(507, 5, "完成凭证录入", PermissionConstant.COMPLETE_CHARGE_RECEIPT),
+    //重置凭证录入未完成
+    UNCOMPLETE_CHARGE_RECEIPT(508, 5, "重置凭证录入未完成", PermissionConstant.UNCOMPLETE_CHARGE_RECEIPT),
 
     /***************************查询模块相关**************************************/
     //信息查询

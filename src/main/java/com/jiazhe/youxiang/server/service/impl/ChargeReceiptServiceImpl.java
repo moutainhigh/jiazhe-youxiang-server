@@ -41,10 +41,15 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
 
     @Override
     public List<ChargeReceiptDTO> getList(Integer auditRecordId, Paging paging) {
+        AuditRecordDTO auditRecordDTO = auditRecordService.getById(auditRecordId);
         Integer count = chargeReceiptPOManualMapper.count(auditRecordId);
         List<ChargeReceiptPO> chargeReceiptPOList = chargeReceiptPOManualMapper.query(auditRecordId, paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
-        return chargeReceiptPOList.stream().map(ChargeReceiptAdapter::po2Dto).collect(Collectors.toList());
+        List<ChargeReceiptDTO> chargeReceiptDTOList = chargeReceiptPOList.stream().map(ChargeReceiptAdapter::po2Dto).collect(Collectors.toList());
+        chargeReceiptDTOList.stream().forEach(bean->{
+            bean.setChargeReceiptStatus(auditRecordDTO.getChargeReceiptStatus());
+        });
+        return chargeReceiptDTOList;
     }
 
     @Override
@@ -101,8 +106,8 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
     }
 
     @Override
-    public List<ChargeReceiptDTO> getList(String customerMobile, Byte status) {
-        List<AuditRecordDTO> auditRecordDTOList = auditRecordService.getList(customerMobile,status);
+    public List<ChargeReceiptDTO> getList(String customerMobile, Byte status,Byte chargeReceiptStatus) {
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordService.getList(customerMobile,status,chargeReceiptStatus);
         List<Integer> auditRecordIds = auditRecordDTOList.stream().map(AuditRecordDTO::getId).collect(Collectors.toList());
         List<ChargeReceiptPO> poList = chargeReceiptPOManualMapper.finByAuditRecordIds(auditRecordIds);
         return poList.stream().map(ChargeReceiptAdapter::po2Dto).collect(Collectors.toList());

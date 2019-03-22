@@ -39,7 +39,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -103,7 +102,7 @@ public class APIAuditRecordController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "消费记录列表", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute AuditRecordPageReq req) {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getCustomerMobile(), req.getStatus(), paging);
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getCustomerMobile(), req.getStatus(),req.getChargeReceiptStatus(), paging);
         List<AuditRecordResp> auditRecordRespList = auditRecordDTOList.stream().map(AuditRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(auditRecordRespList, paging);
     }
@@ -193,6 +192,7 @@ public class APIAuditRecordController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.COMPLETE_CHARGE_RECEIPT)
     @ApiOperation(value = "完成凭证录入", httpMethod = "POST", notes = "完成凭证录入")
     @RequestMapping(value = "/completechargereceipt", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "完成凭证录入", level = LogLevelEnum.LEVEL_2)
@@ -201,12 +201,21 @@ public class APIAuditRecordController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.UNCOMPLETE_CHARGE_RECEIPT)
+    @ApiOperation(value = "未完成凭证录入", httpMethod = "POST", notes = "未完成凭证录入")
+    @RequestMapping(value = "/uncompletechargereceipt", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "未完成凭证录入", level = LogLevelEnum.LEVEL_2)
+    public Object uncompleteChargeReceipt(@ModelAttribute IdReq req) {
+        auditRecordBiz.uncompleteChargeReceipt(req.getId());
+        return ResponseFactory.buildSuccess();
+    }
+
     @RequiresPermissions(PermissionConstant.CHARGE_RECEIPT_EXPORT)
     @ApiOperation(value = "【后台】导出消费凭证", httpMethod = "GET", notes = "导出消费凭证")
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "导出消费凭证", level = LogLevelEnum.LEVEL_3)
-    public void export(@ModelAttribute AuditRecordPageReq req, HttpServletResponse response) throws IOException {
-        List<ChargeReceiptDTO> dtoList = chargeReceiptBiz.getList(req.getCustomerMobile(),req.getStatus());
+    public void export(@ModelAttribute AuditRecordPageReq req, HttpServletResponse response){
+        List<ChargeReceiptDTO> dtoList = chargeReceiptBiz.getList(req.getCustomerMobile(),req.getStatus(),req.getChargeReceiptStatus());
         ExportExcelUtils.exportChargeReceipt(response, dtoList);
     }
 }

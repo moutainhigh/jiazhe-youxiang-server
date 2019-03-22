@@ -18,10 +18,11 @@ public interface AuditRecordService {
      * @param customerMobile
      * @param submitterId
      * @param status
+     * @param chargeReceiptStatus
      * @param paging
      * @return
      */
-    List<AuditRecordDTO> getList(String customerMobile, Integer submitterId, Byte status, Paging paging);
+    List<AuditRecordDTO> getList(String customerMobile, Integer submitterId, Byte status,Byte chargeReceiptStatus, Paging paging);
 
     /**
      * 根据id获取详细记录
@@ -73,14 +74,16 @@ public interface AuditRecordService {
     /**
      * 完成消费凭证的录入
      * @param id
+     * @param status
      */
-    void completeChargeReceipt(Integer id);
+    void changeChargeReceiptStatus(Integer id,Byte status);
 
     /**
      * 根据条件查询 不分页
      * @param customerMobile
      * @param status
+     * @param chargeReceiptStatus
      * @return
      */
-    List<AuditRecordDTO> getList(String customerMobile, Byte status);
+   List<AuditRecordDTO> getList(String customerMobile, Byte status,Byte chargeReceiptStatus);
 }

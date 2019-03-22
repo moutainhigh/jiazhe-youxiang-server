@@ -37,6 +37,8 @@ public class ChargeReceiptResp extends BaseVO {
 
     private Long modTime;
 
+    private Byte chargeReceiptStatus;
+
     public Integer getId() {
         return id;
     }
@@ -139,5 +141,13 @@ public class ChargeReceiptResp extends BaseVO {
 
     public void setModTime(Long modTime) {
         this.modTime = modTime;
+    }
+
+    public Byte getChargeReceiptStatus() {
+        return chargeReceiptStatus;
+    }
+
+    public void setChargeReceiptStatus(Byte chargeReceiptStatus) {
+        this.chargeReceiptStatus = chargeReceiptStatus;
     }
 }

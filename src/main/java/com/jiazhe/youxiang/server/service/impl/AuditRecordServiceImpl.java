@@ -65,9 +65,9 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     private PointService pointService;
 
     @Override
-    public List<AuditRecordDTO> getList(String customerMobile, Integer submitterId, Byte status, Paging paging) {
-        Integer count = auditRecordPOManualMapper.count(customerMobile, submitterId, status);
-        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(customerMobile, submitterId, status, paging.getOffset(), paging.getLimit());
+    public List<AuditRecordDTO> getList(String customerMobile, Integer submitterId, Byte status,Byte chargeReceiptStatus, Paging paging) {
+        Integer count = auditRecordPOManualMapper.count(customerMobile, submitterId, status,chargeReceiptStatus);
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(customerMobile, submitterId, status, chargeReceiptStatus,paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
         return auditRecordPOList.stream().map(AuditRecordAdapter::PO2DTO).collect(Collectors.toList());
     }
@@ -80,7 +80,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
 
     @Override
     public Integer getCountByStatus(Byte status) {
-        return auditRecordPOManualMapper.count(null, null, status);
+        return auditRecordPOManualMapper.count(null, null, status,null);
     }
 
     @Override
@@ -237,7 +237,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     }
 
     @Override
-    public void completeChargeReceipt(Integer id) {
+    public void changeChargeReceiptStatus(Integer id,Byte status) {
         AuditRecordPO po = auditRecordPOMapper.selectByPrimaryKey(id);
         if(null == po){
             throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_IS_NOT_EXIST);
@@ -245,14 +245,14 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         if(!po.getStatus().equals(CommonConstant.AUDIT_RECORD_PASS)){
             throw new AuditRecordException(AuditRecordCodeEnum.CANNOT_COMPLETE_CHARGE_RECEIPT);
         }
-        po.setChargeReceiptStatus(CommonConstant.CHARGE_RECEIPT_COMPLETE);
+        po.setChargeReceiptStatus(status);
         po.setModTime(new Date());
         auditRecordPOMapper.updateByPrimaryKeySelective(po);
     }
 
     @Override
-    public List<AuditRecordDTO> getList(String customerMobile, Byte status) {
-        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(customerMobile, null, status, null,null);
+    public List<AuditRecordDTO> getList(String customerMobile, Byte status,Byte chargeReceiptStatus) {
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(customerMobile, null, status, null,null,null);
         return auditRecordPOList.stream().map(AuditRecordAdapter::PO2DTO).collect(Collectors.toList());
     }
 }

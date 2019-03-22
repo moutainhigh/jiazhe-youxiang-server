@@ -43,7 +43,8 @@ public interface ChargeReceiptService {
      * 根据条件查询列表 不分页
      * @param customerMobile
      * @param status
+     * @param chargeReceiptStatus
      * @return
      */
-    List<ChargeReceiptDTO> getList(String customerMobile, Byte status);
+    List<ChargeReceiptDTO> getList(String customerMobile, Byte status,Byte chargeReceiptStatus);
 }

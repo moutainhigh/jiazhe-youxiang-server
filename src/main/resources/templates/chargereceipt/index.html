@@ -18,9 +18,9 @@
             overflow-x: auto;
         }
 
-        ::-webkit-scrollbar {
-            width: 4px;
-            height: 10px;
+        #img_show::-webkit-scrollbar {
+            width: 15px;
+            height: 15px;
         }
 
         .float {
@@ -33,6 +33,15 @@
             width: 31%;
             border-right: 3px solid #fff;
             border-top: 3px solid #fff;
+        }
+
+        .pic_div{
+            position: relative;
+            background-color: white;
+            width: auto;
+            height: auto;
+            overflow: scroll;
+            max-height: 550px;
         }
     </style>
 </head>
@@ -150,9 +159,9 @@
                         </div>
                     </div><!-- /.col -->
 
-                    <!--放大图片模态框-->
-                    <div id="modal-form" class="modal fade" tabindex="-1" style="overflow: scroll">
-                        <div class="modal-dialog">
+                    <!--提交信息模态框-->
+                    <div id="modal-form" class="modal fade" tabindex="-1" style="overflow: scroll;">
+                        <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -160,94 +169,96 @@
                                 </div>
                                 <div class="modal-body" style="text-align: center">
                                     <div class="row">
-                                        <div class="col-xs-12 col-sm-1"></div>
-                                        <div class="col-xs-12 col-sm-9">
-                                            <form id="chargeReceiptForm" class="form-horizontal" role="form">
-                                                <input type="hidden" name="auditRecordId" id="auditRecordId" th:value="${auditRecordId}"/>
-                                                <input type="hidden" name="id" id="id" th:value="0"/>
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">充值凭证：</label>
-                                                    <div class="col-sm-8 float" id="pics">
+                                        <div class = "col-xs-12 col-sm-6">
+                                            <div class="pic_div" id="img_show">
 
-                                                    </div>
-                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class = "col-xs-12 col-sm-6">
+                                            <div class="col-xs-12 col-sm-12">
+                                                <form id="chargeReceiptForm" class="form-horizontal" role="form">
+                                                    <input type="hidden" name="auditRecordId" id="auditRecordId" th:value="${auditRecordId}"/>
+                                                    <input type="hidden" name="id" id="id" th:value="0"/>
+                                                    <div class="space-2"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label no-padding-right">充值凭证：</label>
+                                                        <div class="col-sm-8 float" id="pics">
 
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">小票积分数量：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="saveExchangePoint" name="exchangePoint"
-                                                                   class="form-control"
-                                                                   type="text" style="height:30px"/>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">客户姓名：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="saveCustomerName" name="customerName"
-                                                                   class="form-control"
-                                                                   type="text" style="height:30px"/>
+                                                    <div class="space-2"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label no-padding-right">小票积分数量：</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="pos-rel">
+                                                                <input id="saveExchangePoint" name="exchangePoint"
+                                                                       class="form-control"
+                                                                       type="text" style="height:30px"/>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">POS机编号：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <select id="posCode" name="posCode" class="form-control">
-                                                                <option>财富私行尊享积分pos一</option>
-                                                                <option>财富私行尊享积分pos十二</option>
-                                                                <option>财富私行尊享积分pos十六</option>
-                                                                <option>财富私行尊享积分pos中国银行津南支行尊享活动</option>
-                                                                <option>江苏</option>
-                                                                <option>青岛</option>
-                                                                <option>温州</option>
-                                                            </select>
+                                                    <div class="space-2"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label no-padding-right">客户姓名：</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="pos-rel">
+                                                                <input id="saveCustomerName" name="customerName"
+                                                                       class="form-control"
+                                                                       type="text" style="height:30px"/>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">银行卡后四位：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="cardNo" name="cardNo"
-                                                                   class="form-control"
-                                                                   type="text" style="height:30px"/>
+                                                    <div class="space-2"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label no-padding-right">POS机编号：</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="pos-rel">
+                                                                <select id="posCode" name="posCode" class="form-control">
+                                                                    <option>财富私行尊享积分pos一</option>
+                                                                    <option>财富私行尊享积分pos十二</option>
+                                                                    <option>财富私行尊享积分pos十六</option>
+                                                                    <option>财富私行尊享积分pos中国银行津南支行尊享活动</option>
+                                                                    <option>江苏</option>
+                                                                    <option>青岛</option>
+                                                                    <option>温州</option>
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right"
-                                                           for="saveTradeTime">交易时间：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-group">
-                                                            <input class="form-control date-picker"
-                                                                   id="saveTradeTime" type="text" readonly/>
-                                                            <span class="input-group-addon">
+                                                    <div class="space-2"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label no-padding-right">银行卡后四位：</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="pos-rel">
+                                                                <input id="cardNo" name="cardNo"
+                                                                       class="form-control"
+                                                                       type="text" style="height:30px"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="space-2"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label no-padding-right"
+                                                               for="saveTradeTime">交易时间：</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="input-group">
+                                                                <input class="form-control date-picker"
+                                                                       id="saveTradeTime" type="text" readonly/>
+                                                                <span class="input-group-addon">
                                                                                     <i class="fa fa-calendar bigger-110"></i>
                                                                                 </span>
-                                                            <input type="hidden" value=0 name="tradeTime"/>
+                                                                <input type="hidden" value=0 name="tradeTime"/>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </form>
+                                                </form>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row" id="img_show">
-                                        <!--<div id="img_show" style="height:500px">-->
-                                        <!--</div>-->
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -334,7 +345,6 @@
 
     function showimage(source) {//图片单击放大显示
         $("#modal-form").find("#img_show").html("<image src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' />");
-        $("#modal-form").modal({backdrop: 'static', keyboard: true});
     }
 
     function bigimg(obj) {
@@ -371,10 +381,20 @@
                     for (var i = 0; i < imgUrls.length; i++) {
                         $("#pics").append("<img class='item' onmouseover=\"this.style.cursor='pointer';this.style.cursor='hand'\"  onmouseout=\"this.style.cursor='default'\" onclick=\"javascript:showimage('/static/" + imgUrls[i] + "');\" src='/static/" + imgUrls[i] + "'>")
                     }
+                    showimage("/static/" + imgUrls[0]);
                 }
             },
             error: error
         });
+    }
+
+    function formatterPointCodes(pointCodes){
+        var codes = pointCodes.split(',');
+        var html = '';
+        for(var i=0;i<codes.length;i++){
+            html += codes[i] + "</br>";
+        }
+        return html;
     }
 
     function getExchangeTypeText(type) {
@@ -402,7 +422,7 @@
         }
         if (hasExchangeType(result.exchangeType, '2')) {
             $(".exchangeType2").css("display", "");
-            $("#pointCodes").html(result.pointCodes);
+            $("#pointCodes").html(formatterPointCodes(result.pointCodes));
         } else {
             $(".exchangeType2").css("display", "none");
         }
@@ -509,21 +529,40 @@
     function fillChargeReceiptStatus(id,status){
         if(status == 0){
             var html = '未完成';
-            html = html + "<a href='javascript:completeChargeReceipt("+id+")' data-action='reload'>"+
-                "<i class='ace-icon'>&nbsp;&nbsp;&nbsp;&nbsp;点击完成</i></a>";
+            if(permission.indexOf("completeChargeReceipt") != -1) {
+                html = html + "&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:completeChargeReceipt(" + id + ")' data-action='reload'>" +
+                    "<i class='ace-icon'>点击完成</i></a>";
+            }
             $("#chargeReceiptStatus").html(html);
             $("#buttonDiv").find("a").css("display","");
         }else{
-            $("#chargeReceiptStatus").html('已完成');
+            var html = '已完成';
+            if(permission.indexOf("uncompleteChargeReceipt") != -1) {
+                html = html + "&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:uncompleteChargeReceipt("+id+")' data-action='reload'>"+
+                    "<i class='ace-icon'>重置未完成</i></a>";
+            }
+            $("#chargeReceiptStatus").html(html);
             $("#buttonDiv").find("a").css("display","none");
         }
     }
 
+    function uncompleteChargeReceipt(id){
+        var text = "确定重置凭证录入未完成吗？";
+        var url = "/api/auditrecord/uncompletechargereceipt";
+        changeChargeReceiptStatus(url,id,text,0);
+    }
+
     function completeChargeReceipt(id){
-        confirm("确定完成凭证录入吗？",function (result) {
+        var text = "确定完成凭证录入吗？";
+        var url = "/api/auditrecord/completechargereceipt"
+        changeChargeReceiptStatus(url,id,text,1);
+    }
+
+    function changeChargeReceiptStatus(url,id,text,status){
+        confirm(text,function (result) {
             if(result){
                 $.ajax({
-                    url: "/api/auditrecord/completechargereceipt",
+                    url:url ,
                     dataType: "json",
                     async: false,
                     data: {
@@ -534,7 +573,8 @@
                         if ('error' in data) {
                             bootboxalert(data.error.message);
                         } else {
-                            fillChargeReceiptStatus(id,1);
+                            fillChargeReceiptStatus(id,status);
+                            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                         }
                     },
                     error: error

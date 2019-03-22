@@ -68,6 +68,16 @@
 
             <div class="page-content">
                 <div class="row">
+                    <div class="col-xs-12">
+                        <div class="alert alert-block alert-success" style="margin-bottom:0px;">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <i class="ace-icon fa fa-times"></i>
+                            </button>
+                            充值记录列表中，<a class='btn btn-minier btn-danger' disabled="disabled">凭证管理</a>&nbsp;表示凭证明细未完成录入，
+                            <a class='btn btn-minier btn-default' disabled="disabled">凭证管理</a>&nbsp;表示凭证明细完成录入。
+                        </div>
+                    </div>
+
                     <div class="col-xs-12" style="padding-top:40px">
                         <form id="auditRecordSearchForm" class="form-horizontal" role="form">
                             <div class="form-group">
@@ -89,6 +99,14 @@
                                         <option value=4 th:selected="${status} == 4">已通过</option>
                                     </select>
                                 </div>
+                                <label class="col-sm-1 control-label no-padding-right">凭证状态：</label>
+                                <div class="col-sm-2">
+                                    <select id="searchChargeReceiptStatus" name="chargeReceiptStatus" class="selectpicker show-tick form-control">
+                                        <option value=>所有</option>
+                                        <option value=0>未完成</option>
+                                        <option value=1>已完成</option>
+                                    </select>
+                                </div>
                                 <div class="col-sm-3">
                                     <button class="btn btn-white btn-default btn-round btn-sm"
                                             onclick="return search()">
@@ -98,7 +116,7 @@
                                     <button class="btn btn-white btn-default btn-round btn-sm"
                                             onclick="exportExcel();return false;">
                                         <i class="ace-icon fa  fa-file-excel-o red2"></i>
-                                        导出
+                                        导出对账单
                                     </button>
                                 </div>
                             </div>
@@ -354,11 +372,9 @@
                 } else {
                     var result = data.data;
                     $("#exchangeProjectId").append("<option value='0'>&nbsp;</option>");
-//                    $("#givingProjectId").append("<option value='0'>&nbsp;</option>");
                     for (var i = 0; i < result.length; i++) {
                         if (result[i].status == 1) {//进行中的项目
                             $("#exchangeProjectId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
-//                            $("#givingProjectId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
                         }
                     }
                 }
@@ -373,7 +389,7 @@
         var tableOption = {
             url: "/api/auditrecord/listpage",
             postData: transformToJson($('#auditRecordSearchForm').serializeArray()),
-            colNames: ['', '操作', '提交人', '状态', '兑换总积分', '兑换类型', '客户姓名', '客户手机号', '后台充值积分', '兑换码卡号', '商品价值', '提交时间', '审核人', '审核时间'],
+            colNames: ['', '操作', '提交人', '状态', '兑换总积分', '客户姓名', '客户手机号', '后台充值', '兑换码卡号', '商品价值', '提交时间', '审核人', '审核时间'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter},
@@ -388,13 +404,13 @@
                     }
                 },
                 {name: 'exchangePoint', index: 'exchangePoint', width: 70, sortable: false},
-                {
-                    name: 'exchangeType',
-                    index: 'exchangeType',
-                    sortable: false,
-                    width: 100,
-                    formatter: exchangeTypeFormatter
-                },
+//                {
+//                    name: 'exchangeType',
+//                    index: 'exchangeType',
+//                    sortable: false,
+//                    width: 100,
+//                    formatter: exchangeTypeFormatter
+//                },
                 {
                     name: 'customerName',
                     index: 'customerName',
@@ -477,9 +493,9 @@
         return false;
     }
 
-    function exchangeTypeFormatter(cellvalue, options, rowObject) {
-        return getExchangeTypeText(rowObject.exchangeType);
-    }
+//    function exchangeTypeFormatter(cellvalue, options, rowObject) {
+//        return getExchangeTypeText(rowObject.exchangeType);
+//    }
 
     function getExchangeTypeText(type) {
         var exchangeType = type.toString().split('');
@@ -503,8 +519,12 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
+        var btnStyle = "btn-danger";
         if(permission.indexOf("chargeReceiptManagement") != -1) {
-            str += getRedirectButton("btn-default", "../chargereceipt/index?auditRecordId=" + rowObject.id, "凭证管理");
+            if(rowObject.chargeReceiptStatus == 1){
+                btnStyle = "btn-default";
+            }
+            str += getRedirectButton(btnStyle, "../chargereceipt/index?auditRecordId=" + rowObject.id, "凭证管理");
         }
         if (rowObject.status == 2) {
             if (permission.indexOf("auditRecordCheck") != -1) {
@@ -526,8 +546,6 @@
         $("#saveTradeTime").attr('disabled', 'disabled');
         $("#exchangeProjectId").attr('disabled', "disabled");
         $("#exchangeBatchId").attr('disabled', "disabled");
-//        $("#givingProjectId").attr('disabled', "disabled");
-//        $("#givingBatchId").attr('disabled', "disabled");
         $("#modal-title").html("查看");
 
     }
@@ -542,8 +560,6 @@
         $("#saveTradeTime").removeAttr('disabled');
         $("#exchangeProjectId").removeAttr('disabled');
         $("#exchangeBatchId").removeAttr('disabled');
-//        $("#givingProjectId").removeAttr('disabled');
-//        $("#givingBatchId").removeAttr('disabled');
         $("#modal-title").html("审核");
     }
 

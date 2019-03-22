@@ -38,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -191,7 +190,7 @@ public class APIPointExchangeCodeBatchController extends BaseController {
     @ApiOperation(value = "【后台】导出批次下兑换码", httpMethod = "GET", notes = "导出批次下兑换码")
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "导出批次下兑换码", level = LogLevelEnum.LEVEL_3)
-    public void export(@ModelAttribute IdReq req, HttpServletResponse response) throws IOException {
+    public void export(@ModelAttribute IdReq req, HttpServletResponse response){
         List<PointExchangeCodeDTO> pointExchangeCodeDTOList = pointExchangeCodeBiz.getByBatchId(req.getId());
         ExportExcelUtils.exportPointCode(response, pointExchangeCodeDTOList);
     }

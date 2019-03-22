@@ -105,6 +105,15 @@ public class DateUtil {
     }
 
     /**
+     * 返回yyyyMMDDhh
+     */
+    public static String yyyyMMDD(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String str = sdf.format(date);
+        return str;
+    }
+
+    /**
      * 将XXXX-XX-XX XX:XX:XX的Long型转为XXXX-XX-XX 00:00:00的Long型
      */
     public static Long getFirstSecond(Long time) {
