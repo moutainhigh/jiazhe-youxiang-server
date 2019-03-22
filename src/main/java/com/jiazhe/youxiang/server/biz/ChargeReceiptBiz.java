@@ -36,7 +36,7 @@ public class ChargeReceiptBiz {
         return chargeReceiptService.getById(id);
     }
 
-    public List<ChargeReceiptDTO> getList(String customerMobile, Byte status) {
-        return chargeReceiptService.getList(customerMobile,status);
+    public List<ChargeReceiptDTO> getList(String customerMobile, Byte status,Byte chargeReceiptStatus) {
+        return chargeReceiptService.getList(customerMobile,status,chargeReceiptStatus);
     }
 }

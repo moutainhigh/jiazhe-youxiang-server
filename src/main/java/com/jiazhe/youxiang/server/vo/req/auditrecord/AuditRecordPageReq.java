@@ -16,6 +16,9 @@ public class AuditRecordPageReq extends PageSizeNumReq {
     @ApiModelProperty("消费记录状态")
     private Byte status;
 
+    @ApiModelProperty("凭证完成状态")
+    private Byte chargeReceiptStatus;
+
     public Byte getStatus() {
         return status;
     }
@@ -30,5 +33,13 @@ public class AuditRecordPageReq extends PageSizeNumReq {
 
     public void setCustomerMobile(String customerMobile) {
         this.customerMobile = customerMobile;
+    }
+
+    public Byte getChargeReceiptStatus() {
+        return chargeReceiptStatus;
+    }
+
+    public void setChargeReceiptStatus(Byte chargeReceiptStatus) {
+        this.chargeReceiptStatus = chargeReceiptStatus;
     }
 }
