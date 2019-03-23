@@ -143,4 +143,8 @@ public class ProductBiz {
     public void updatePrice(Integer id, BigDecimal price) {
         productPriceService.updatePrice(id, price, null);
     }
+
+    public void batchUpdatePriceStatus(Integer productId, Integer status) {
+        productPriceService.batchUpdatePriceStatus(productId,status);
+    }
 }
