@@ -39,9 +39,8 @@
             position: relative;
             background-color: white;
             width: auto;
-            height: auto;
             overflow: scroll;
-            max-height: 550px;
+            height: 500px;
         }
     </style>
 </head>
@@ -344,7 +343,7 @@
     }
 
     function showimage(source) {//图片单击放大显示
-        $("#modal-form").find("#img_show").html("<image src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' />");
+        $("#modal-form").find("#img_show").html("<image width='400px' src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' />");
     }
 
     function bigimg(obj) {
@@ -585,4 +584,3 @@
 
 </script>
 </html>
-
