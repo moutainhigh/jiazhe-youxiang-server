@@ -459,6 +459,20 @@ public class APIProductController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    /**
+     * 批量更新价格状态
+     *
+     * @return
+     */
+    @RequiresPermissions(PermissionConstant.PRODUCT_PRICE_EFFECT)
+    @ApiOperation(value = "批量更新价格状态", httpMethod = "POST", notes = "批量更新价格状态")
+    @RequestMapping(value = "batchupdatepricestatus", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.PRODUCT, operate = "批量更新价格状态", level = LogLevelEnum.LEVEL_2)
+    public Object batchUpdatePriceStatus(@ModelAttribute StatusReq req) {
+        validateStatus(req);
+        productBiz.batchUpdatePriceStatus(req.getId(), req.getStatus());
+        return ResponseFactory.buildSuccess();
+    }
 
     /*************通用方法******************/
 

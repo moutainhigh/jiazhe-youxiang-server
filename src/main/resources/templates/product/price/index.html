@@ -83,6 +83,14 @@
                                 <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
                                    data-toggle="modal" onclick="openNew()">
                                     <i class="ace-icon fa fa-plus"></i>批量修改
+                                </a>&nbsp;&nbsp;
+                            </shiro:hasPermission>
+                            <shiro:hasPermission name="productPriceEffect">
+                                <a class="btn btn-primary btn-round btn-sm" role="button"
+                                   data-toggle="modal" onclick="activeAll()">全部生效
+                                </a>&nbsp;&nbsp;
+                                <a class="btn btn-danger btn-round btn-sm" role="button"
+                                   data-toggle="modal" onclick="invalidAll()">全部失效
                                 </a>
                             </shiro:hasPermission>
                         </p>
@@ -393,13 +401,51 @@
                         zNode.name = result[i].cityName;
                         zCityNodes.push(zNode);
                     }
-
                 }
                 console.log(zNode);
             },
             error: error
         });
         treeCity = $.fn.zTree.init($("#treeCity"), setting, zCityNodes);
+    }
+
+    function activeAll(){
+        confirm("批量生效该商品的价格吗？",function(result){
+            if(result){
+                var productId = $("#inputProductId").val();
+                batchUpdatePriceStatus(productId,1);
+            }
+        })
+    }
+
+    function invalidAll(){
+        confirm("批量失效该商品的价格吗？",function(result){
+            if(result){
+                var productId = $("#inputProductId").val();
+                batchUpdatePriceStatus(productId,0);
+            }
+        })
+    }
+
+    function batchUpdatePriceStatus(productId,status){
+        $.ajax({
+            url: "/api/product/batchupdatepricestatus",
+            dataType: "json",
+            async: false,
+            type: "POST",
+            data:{
+              id:productId,
+              status:status
+            },
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: error
+        });
     }
 
 </script>
