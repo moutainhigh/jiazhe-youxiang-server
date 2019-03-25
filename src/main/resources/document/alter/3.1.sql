@@ -17,7 +17,7 @@ alter table audit_record modify column point_ids VARCHAR(1023) NOT NULL DEFAULT 
 alter table audit_record modify column audit_reason VARCHAR(100) COMMENT '驳回理由';
 alter table audit_record modify column remark VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '提交人填写备注信息';
 alter table audit_record modify column exchange_point DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '总兑换积分';
-
+alter table audit_record modify column giving_point DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '后台充值积分';
 alter table audit_record modify column status  TINYINT(4) NOT NULL DEFAULT '1' COMMENT '审核状态 1-已保存，2-已提交，3-已驳回，4-已通过';
 update audit_record set status=status+2;
 
@@ -28,6 +28,9 @@ alter table audit_record add column exchange_type TINYINT(4) NOT NULL DEFAULT '1
 update audit_record set exchange_type = 1 where temp_col = '服务';
 update audit_record set exchange_type = 3 where temp_col = '电子卡';
 alter table audit_record drop column temp_col;
+
+update audit_record set exchange_point =  exchange_point + giving_point ;
+update audit_record set giving_point = exchange_point;
 
 CREATE TABLE `charge_receipt` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
