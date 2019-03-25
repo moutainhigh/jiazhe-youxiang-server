@@ -331,11 +331,17 @@
                     <!--放大图片模态框-->
                     <div id="ShowImage_Form" class="modal fade" tabindex="-1" role="dialog"
                          aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-header" style="border-bottom: 0px">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        </div>
-                        <div class="modal-body" style="text-align: center">
-                            <div id="img_show" style="height:500px">
+                        <div class="modal-dialog" style="width:100%;height:100%;background-color: rgba(64,64,64,1);margin:0px;padding:0px;">
+                            <div class="modal-content" style="width:100%;height:100%;background-color: rgba(64,64,64,1);margin:0px;padding:0px;">
+                                <div class="modal-header" style="border-bottom: 0px;background-color: rgba(64,64,64,1)">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">关闭</button>
+                                    <button id="nextBtn" onclick="nextPicture()" style="display:none" type="button" class="close" aria-hidden="true">下一张</button>
+                                    <button id="previousBtn" onclick="previousPicture()" style="display:none" type="button" class="close" aria-hidden="true">上一张</button>
+                                </div>
+                                <div class="modal-body" style="padding:0px 20px 0px 20px;text-align: center;background-color: rgba(64,64,64,0.5)">
+                                    <div id="img_show" style="background-color: rgba(64,64,64,1);">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -349,7 +355,9 @@
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
     var auditRecordStatus = ['未提交', '已提交', '已驳回', '已通过'];
-    var auditRecordColor = ['000000', '0000FF', 'FF0000', '00FF00']
+    var auditRecordColor = ['000000', '0000FF', 'FF0000', '00FF00'];
+    var imgUrls ;
+    var picIndex = 0;
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -601,14 +609,45 @@
                         $("#passBtn").css("display", "none");
                         $("#unpassBtn").css("display", "none");
                     }
-                    var imgUrls = result.imgUrls.split(",");
+                    imgUrls = result.imgUrls.split(",");
                     for (var i = 0; i < imgUrls.length; i++) {
-                        $("#pics").append("<img class='item' onmouseover=\"this.style.cursor='pointer';this.style.cursor='hand'\"  onmouseout=\"this.style.cursor='default'\" onclick=\"javascript:showimage('/static/" + imgUrls[i] + "');\" src='/static/" + imgUrls[i] + "'>")
+                        $("#pics").append("<img class='item' onmouseover=\"this.style.cursor='pointer';this.style.cursor='hand'\"  onmouseout=\"this.style.cursor='default'\" onclick=\"javascript:clickImg("+i+",true);\" src='/static/" + imgUrls[i] + "'>")
                     }
                 }
             },
             error: error
         });
+    }
+
+    function clickImg(i,first){
+        picIndex = i;
+        showimage("/static/"+imgUrls[picIndex],first);
+        picButtonDisplay();
+    }
+
+    function previousPicture(){
+        picIndex--;
+        showimage("/static/"+imgUrls[picIndex],false);
+        picButtonDisplay();
+    }
+
+    function nextPicture(){
+        picIndex++;
+        showimage("/static/"+imgUrls[picIndex],false);
+        picButtonDisplay();
+    }
+
+    function picButtonDisplay(){
+        if(picIndex == 0){
+            $("#previousBtn").css("display","none");
+        }else{
+            $("#previousBtn").css("display","");
+        }
+        if(picIndex + 1 == imgUrls.length){
+            $("#nextBtn").css("display","none");
+        }else{
+            $("#nextBtn").css("display","");
+        }
     }
 
     function showByExchangeType(result) {
@@ -715,9 +754,12 @@
         });
     }
 
-    function showimage(source) {//图片单击放大显示
+    function showimage(source,first) {
+        if(first){
+            $("#ShowImage_Form").modal('show');
+        }
         $("#ShowImage_Form").find("#img_show").html("<image src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' style='zoom:70%;'/>");
-        $("#ShowImage_Form").modal({backdrop: 'static', keyboard: true});
+
     }
 
     function bigimg(obj) {

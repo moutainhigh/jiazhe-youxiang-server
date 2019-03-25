@@ -46,6 +46,18 @@
         </where>
     </update>
 
+    <update id="batchUpdatePriceStatus">
+        update product_price
+        <set>
+            status = #{status},
+            mod_time = NOW()
+        </set>
+        <where>
+            product_id = #{productId}
+            AND is_deleted = 0
+        </where>
+    </update>
+
     <select id="getProductIdsByCityIds" resultType="java.lang.Integer">
         select
         DISTINCT (product_id)

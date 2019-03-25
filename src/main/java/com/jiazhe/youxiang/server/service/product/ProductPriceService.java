@@ -39,4 +39,6 @@ public interface ProductPriceService {
     void updatePriceStatus(Integer id, Integer status);
 
     void updatePrice(Integer id, BigDecimal price, Integer status);
+
+    void batchUpdatePriceStatus(Integer productId, Integer status);
 }
