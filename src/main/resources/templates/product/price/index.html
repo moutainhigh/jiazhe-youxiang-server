@@ -109,6 +109,12 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
+                                        <div class="col-xs-12 col-sm-5"></div>
+                                        <div class="col-xs-12 col-sm-7">
+                                            <input type="checkbox" id="checkAllCity" onchange="checkAllCity(this)"/>全选城市
+                                        </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-xs-12 col-sm-1"></div>
                                         <div class="col-xs-12 col-sm-9">
                                             <form class="form-horizontal" role="form">
@@ -323,8 +329,17 @@
         $("#inputCityCodes").val(strCityCodes);
     }
 
+    function checkAllCity(doc){
+        if(doc.checked){
+            treeCity.checkAllNodes(true);
+        }else{
+            treeCity.checkAllNodes(false);
+        }
+    }
 
     function openNew() {
+        $("#checkAllCity").prop('checked',false);
+        treeCity.checkAllNodes(false);
         $("#modal-title").html("商品价格-批量修改");
     }
 
