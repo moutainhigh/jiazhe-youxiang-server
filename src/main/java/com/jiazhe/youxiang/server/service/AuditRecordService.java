@@ -3,8 +3,6 @@ package com.jiazhe.youxiang.server.service;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,17 +12,78 @@ import java.util.List;
  */
 public interface AuditRecordService {
 
-    List<AuditRecordDTO> getList(Integer submitterId,Byte status, Paging paging);
+    /**
+     * 根据条件查询列表
+     *
+     * @param customerMobile
+     * @param submitterId
+     * @param status
+     * @param chargeReceiptStatus
+     * @param paging
+     * @return
+     */
+    List<AuditRecordDTO> getList(String customerMobile, Integer submitterId, Byte status,Byte chargeReceiptStatus, Paging paging);
 
+    /**
+     * 根据id获取详细记录
+     *
+     * @param id
+     * @return
+     */
     AuditRecordDTO getById(Integer id);
 
+    /**
+     * 获取已提交（也就是待审核）记录条数
+     *
+     * @param status
+     * @return
+     */
     Integer getCountByStatus(Byte status);
 
+    /**
+     * 充值驳回
+     *
+     * @param auditRecordId
+     * @param version
+     * @param reason
+     */
     void auditRecordUnpass(Integer auditRecordId, Integer version, String reason);
 
-    void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId,Integer givingBatchId,String posCode,String cardNo,Date tradeTime) ;
+    /**
+     * 充值通过审核
+     *
+     * @param auditRecordId
+     * @param version
+     * @param exchangeBatchId
+     */
+    void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId);
 
-    void addSave(String customerName, String customerMobile, BigDecimal exchangePoint, String exchangeType, BigDecimal givingPoint, String givingType, String remark, String imgUrls);
+    /**
+     * 保存充值记录
+     *
+     * @param auditRecordDTO
+     */
+    void save(AuditRecordDTO auditRecordDTO);
 
-    void editSave(Integer id, Integer version, String customerName, String customerMobile, BigDecimal exchangePoint, String exchangeType, BigDecimal givingPoint, String givingType, String remark, String imgUrls);
+    /**
+     * 通过id软删除记录
+     * @param id
+     */
+    void deleteById(Integer id);
+
+    /**
+     * 完成消费凭证的录入
+     * @param id
+     * @param status
+     */
+    void changeChargeReceiptStatus(Integer id,Byte status);
+
+    /**
+     * 根据条件查询 不分页
+     * @param customerMobile
+     * @param status
+     * @param chargeReceiptStatus
+     * @return
+     */
+   List<AuditRecordDTO> getList(String customerMobile, Byte status,Byte chargeReceiptStatus);
 }

@@ -436,76 +436,6 @@ public class AuditRecordPOExample {
             return (Criteria) this;
         }
 
-        public Criteria andExchangeTypeIsNull() {
-            addCriterion("exchange_type is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andExchangeTypeIsNotNull() {
-            addCriterion("exchange_type is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andExchangeTypeEqualTo(String value) {
-            addCriterion("exchange_type =", value, "exchangeType");
-            return (Criteria) this;
-        }
-
-        public Criteria andExchangeTypeNotEqualTo(String value) {
-            addCriterion("exchange_type <>", value, "exchangeType");
-            return (Criteria) this;
-        }
-
-        public Criteria andExchangeTypeGreaterThan(String value) {
-            addCriterion("exchange_type >", value, "exchangeType");
-            return (Criteria) this;
-        }
-
-        public Criteria andExchangeTypeGreaterThanOrEqualTo(String value) {
-            addCriterion("exchange_type >=", value, "exchangeType");
-            return (Criteria) this;
-        }
-
-        public Criteria andExchangeTypeLessThan(String value) {
-            addCriterion("exchange_type <", value, "exchangeType");
-            return (Criteria) this;
-        }
-
-        public Criteria andExchangeTypeLessThanOrEqualTo(String value) {
-            addCriterion("exchange_type <=", value, "exchangeType");
-            return (Criteria) this;
-        }
-
-        public Criteria andExchangeTypeLike(String value) {
-            addCriterion("exchange_type like", value, "exchangeType");
-            return (Criteria) this;
-        }
-
-        public Criteria andExchangeTypeNotLike(String value) {
-            addCriterion("exchange_type not like", value, "exchangeType");
-            return (Criteria) this;
-        }
-
-        public Criteria andExchangeTypeIn(List<String> values) {
-            addCriterion("exchange_type in", values, "exchangeType");
-            return (Criteria) this;
-        }
-
-        public Criteria andExchangeTypeNotIn(List<String> values) {
-            addCriterion("exchange_type not in", values, "exchangeType");
-            return (Criteria) this;
-        }
-
-        public Criteria andExchangeTypeBetween(String value1, String value2) {
-            addCriterion("exchange_type between", value1, value2, "exchangeType");
-            return (Criteria) this;
-        }
-
-        public Criteria andExchangeTypeNotBetween(String value1, String value2) {
-            addCriterion("exchange_type not between", value1, value2, "exchangeType");
-            return (Criteria) this;
-        }
-
         public Criteria andGivingPointIsNull() {
             addCriterion("giving_point is null");
             return (Criteria) this;
@@ -1803,6 +1733,256 @@ public class AuditRecordPOExample {
 
         public Criteria andModTimeNotBetween(Date value1, Date value2) {
             addCriterion("mod_time not between", value1, value2, "modTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeReceiptStatusIsNull() {
+            addCriterion("charge_receipt_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeReceiptStatusIsNotNull() {
+            addCriterion("charge_receipt_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeReceiptStatusEqualTo(Byte value) {
+            addCriterion("charge_receipt_status =", value, "chargeReceiptStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeReceiptStatusNotEqualTo(Byte value) {
+            addCriterion("charge_receipt_status <>", value, "chargeReceiptStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeReceiptStatusGreaterThan(Byte value) {
+            addCriterion("charge_receipt_status >", value, "chargeReceiptStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeReceiptStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("charge_receipt_status >=", value, "chargeReceiptStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeReceiptStatusLessThan(Byte value) {
+            addCriterion("charge_receipt_status <", value, "chargeReceiptStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeReceiptStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("charge_receipt_status <=", value, "chargeReceiptStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeReceiptStatusIn(List<Byte> values) {
+            addCriterion("charge_receipt_status in", values, "chargeReceiptStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeReceiptStatusNotIn(List<Byte> values) {
+            addCriterion("charge_receipt_status not in", values, "chargeReceiptStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeReceiptStatusBetween(Byte value1, Byte value2) {
+            addCriterion("charge_receipt_status between", value1, value2, "chargeReceiptStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeReceiptStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("charge_receipt_status not between", value1, value2, "chargeReceiptStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointCodesIsNull() {
+            addCriterion("point_codes is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointCodesIsNotNull() {
+            addCriterion("point_codes is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointCodesEqualTo(String value) {
+            addCriterion("point_codes =", value, "pointCodes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointCodesNotEqualTo(String value) {
+            addCriterion("point_codes <>", value, "pointCodes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointCodesGreaterThan(String value) {
+            addCriterion("point_codes >", value, "pointCodes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointCodesGreaterThanOrEqualTo(String value) {
+            addCriterion("point_codes >=", value, "pointCodes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointCodesLessThan(String value) {
+            addCriterion("point_codes <", value, "pointCodes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointCodesLessThanOrEqualTo(String value) {
+            addCriterion("point_codes <=", value, "pointCodes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointCodesLike(String value) {
+            addCriterion("point_codes like", value, "pointCodes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointCodesNotLike(String value) {
+            addCriterion("point_codes not like", value, "pointCodes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointCodesIn(List<String> values) {
+            addCriterion("point_codes in", values, "pointCodes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointCodesNotIn(List<String> values) {
+            addCriterion("point_codes not in", values, "pointCodes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointCodesBetween(String value1, String value2) {
+            addCriterion("point_codes between", value1, value2, "pointCodes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointCodesNotBetween(String value1, String value2) {
+            addCriterion("point_codes not between", value1, value2, "pointCodes");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueIsNull() {
+            addCriterion("product_value is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueIsNotNull() {
+            addCriterion("product_value is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueEqualTo(BigDecimal value) {
+            addCriterion("product_value =", value, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueNotEqualTo(BigDecimal value) {
+            addCriterion("product_value <>", value, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueGreaterThan(BigDecimal value) {
+            addCriterion("product_value >", value, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("product_value >=", value, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueLessThan(BigDecimal value) {
+            addCriterion("product_value <", value, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("product_value <=", value, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueIn(List<BigDecimal> values) {
+            addCriterion("product_value in", values, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueNotIn(List<BigDecimal> values) {
+            addCriterion("product_value not in", values, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("product_value between", value1, value2, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductValueNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("product_value not between", value1, value2, "productValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andExchangeTypeIsNull() {
+            addCriterion("exchange_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExchangeTypeIsNotNull() {
+            addCriterion("exchange_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExchangeTypeEqualTo(Byte value) {
+            addCriterion("exchange_type =", value, "exchangeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andExchangeTypeNotEqualTo(Byte value) {
+            addCriterion("exchange_type <>", value, "exchangeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andExchangeTypeGreaterThan(Byte value) {
+            addCriterion("exchange_type >", value, "exchangeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andExchangeTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("exchange_type >=", value, "exchangeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andExchangeTypeLessThan(Byte value) {
+            addCriterion("exchange_type <", value, "exchangeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andExchangeTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("exchange_type <=", value, "exchangeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andExchangeTypeIn(List<Byte> values) {
+            addCriterion("exchange_type in", values, "exchangeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andExchangeTypeNotIn(List<Byte> values) {
+            addCriterion("exchange_type not in", values, "exchangeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andExchangeTypeBetween(Byte value1, Byte value2) {
+            addCriterion("exchange_type between", value1, value2, "exchangeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andExchangeTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("exchange_type not between", value1, value2, "exchangeType");
             return (Criteria) this;
         }
     }

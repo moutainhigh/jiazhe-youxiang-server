@@ -2,29 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.point.PointExchangeCodePOManualMapper">
     <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO">
-        <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="batch_id" property="batchId" jdbcType="INTEGER" />
-        <result column="batch_name" property="batchName" jdbcType="VARCHAR" />
-        <result column="point_name" property="pointName" jdbcType="VARCHAR" />
-        <result column="batch_description" property="batchDescription" jdbcType="VARCHAR" />
-        <result column="project_id" property="projectId" jdbcType="INTEGER" />
-        <result column="city_codes" property="cityCodes" jdbcType="VARCHAR" />
-        <result column="product_ids" property="productIds" jdbcType="VARCHAR" />
-        <result column="code" property="code" jdbcType="VARCHAR" />
-        <result column="keyt" property="keyt" jdbcType="VARCHAR" />
-        <result column="face_value" property="faceValue" jdbcType="DECIMAL" />
-        <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
-        <result column="point_effective_time" property="pointEffectiveTime" jdbcType="TIMESTAMP" />
-        <result column="point_expiry_time" property="pointExpiryTime" jdbcType="TIMESTAMP" />
-        <result column="validity_period" property="validityPeriod" jdbcType="INTEGER" />
-        <result column="expiry_type" property="expiryType" jdbcType="TINYINT" />
-        <result column="status" property="status" jdbcType="TINYINT" />
-        <result column="used" property="used" jdbcType="TINYINT" />
-        <result column="customer_id" property="customerId" jdbcType="INTEGER" />
-        <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
-        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
-        <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
-        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="batch_id" property="batchId" jdbcType="INTEGER"/>
+        <result column="batch_name" property="batchName" jdbcType="VARCHAR"/>
+        <result column="point_name" property="pointName" jdbcType="VARCHAR"/>
+        <result column="batch_description" property="batchDescription" jdbcType="VARCHAR"/>
+        <result column="project_id" property="projectId" jdbcType="INTEGER"/>
+        <result column="city_codes" property="cityCodes" jdbcType="VARCHAR"/>
+        <result column="product_ids" property="productIds" jdbcType="VARCHAR"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="keyt" property="keyt" jdbcType="VARCHAR"/>
+        <result column="face_value" property="faceValue" jdbcType="DECIMAL"/>
+        <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP"/>
+        <result column="point_effective_time" property="pointEffectiveTime" jdbcType="TIMESTAMP"/>
+        <result column="point_expiry_time" property="pointExpiryTime" jdbcType="TIMESTAMP"/>
+        <result column="validity_period" property="validityPeriod" jdbcType="INTEGER"/>
+        <result column="expiry_type" property="expiryType" jdbcType="TINYINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="used" property="used" jdbcType="TINYINT"/>
+        <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
+        <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -40,7 +40,7 @@
         validity_period,expiry_type,status,used,ext_info,is_deleted,add_time,mod_time) VALUES
         <foreach collection="list" item="item" separator=",">
             (#{item.batchId},#{item.batchName},#{item.pointName},#{item.batchDescription},#{item.projectId},#{item.cityCodes},#{item.productIds},
-            #{item.code},#{item.keyt},#{item.faceValue},#{item.expiryTime},#{item.pointEffectiveTime},#{item.pointExpiryTime},#{item.validityPeriod},#{item.expiryType},#{item.status},0,
+            #{item.code},#{item.keyt},#{item.faceValue},#{item.expiryTime},#{item.pointEffectiveTime},#{item.pointExpiryTime},#{item.validityPeriod},#{item.expiryType},#{item.status},#{item.used},
             "",0,NOW(),NOW())
         </foreach>
     </insert>
@@ -50,7 +50,7 @@
             update point_exchange_code
             <set>
                 batch_name = #{item.batchName},point_name = #{item.pointName},batch_description =
-                #{item.batchDescription},project_id = #{item.projectId},
+                #{item.batchDescription},project_id = #{item.projectId},status = #{item.status},
                 city_codes = #{item.cityCodes},product_ids = #{item.productIds},expiry_time =
                 #{item.expiryTime},point_effective_time = #{item.pointEffectiveTime},expiry_type = #{item.expiryType},
                 point_expiry_time = #{item.pointExpiryTime},validity_period =
@@ -120,5 +120,40 @@
         <include refid="Base_Column_List"/>
         FROM point_exchange_code WHERE keyt = #{keyt} AND is_deleted = 0
     </select>
+
+    <select id="getMaxId" resultType="java.lang.Integer">
+        select max(id) from point_exchange_code
+    </select>
+
+    <update id="batchUpdateCodeAndKeyt" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update point_exchange_code
+            <set>
+                keyt = #{item.keyt},code = #{item.code}
+            </set>
+            where id = #{item.id}
+        </foreach>
+    </update>
+
+    <select id="findByCodes" parameterType="java.util.List"
+            resultType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO">
+        select
+        <include refid="Base_Column_List"/>
+        FROM point_exchange_code
+        where is_deleted = 0 AND code in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <update id="batchActive" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update point_exchange_code
+            <set>
+                point_expiry_time = #{item.pointExpiryTime},expiry_time = #{item.expiryTime},status=1,mod_time=NOW()
+            </set>
+            where id = #{item.id}
+        </foreach>
+    </update>
 
 </mapper>

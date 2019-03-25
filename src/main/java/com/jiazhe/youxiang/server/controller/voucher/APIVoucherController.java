@@ -120,7 +120,7 @@ public class APIVoucherController extends BaseController{
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "修改代金券信息", level = LogLevelEnum.LEVEL_2)
     public Object editSave(@ModelAttribute VoucherEditReq req)  {
         CommonValidator.validateNull(req);
-        CommonValidator.validateNull(req.getId());
+        CommonValidator.validateId(req.getId());
         CommonValidator.validateNull(req.getName(),new VoucherException(VoucherCodeEnum.VOUCHER_NAME_IS_NULL));
         if(req.getEffectiveTime()==0){
             throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_IS_NULL);

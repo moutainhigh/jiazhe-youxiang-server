@@ -1,7 +1,5 @@
 package com.jiazhe.youxiang.server.service;
 
-import com.jiazhe.youxiang.server.domain.po.SysUserPO;
-import com.jiazhe.youxiang.server.domain.po.SysUserPOExample;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserRoleDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.UserWithRoleDTO;
@@ -56,6 +54,11 @@ public interface SysUserService {
      */
     List<SysUserDTO> findByLoginName(String loginName);
 
+    /**
+     * 更新最后登录ip和登录时间
+     * @param userId
+     * @param ipAdrress
+     */
     void updateLastLoginInfo(Integer userId, String ipAdrress);
 
     /**

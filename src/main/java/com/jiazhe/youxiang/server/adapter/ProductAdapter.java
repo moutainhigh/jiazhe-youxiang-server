@@ -130,6 +130,7 @@ public class ProductAdapter {
         productUpdateDTO.setName(req.getName());
         productUpdateDTO.setDescription(req.getDescription());
         productUpdateDTO.setDelayDays(req.getDelayDays());
+        productUpdateDTO.setEffectiveDays(req.getEffectiveDays());
         productUpdateDTO.setThumbnailUrl(req.getThumbnailUrl());
         productUpdateDTO.setHeaderImgUrl(req.getHeaderImgUrl());
         productUpdateDTO.setDetailImgUrl(req.getDetailImgUrl());
@@ -242,6 +243,7 @@ public class ProductAdapter {
         productPO.setName(productUpdateDTO.getName());
         productPO.setDescription(productUpdateDTO.getDescription());
         productPO.setDelayDays(productUpdateDTO.getDelayDays());
+        productPO.setEffectiveDays(productUpdateDTO.getEffectiveDays());
         productPO.setThumbnailUrl(productUpdateDTO.getThumbnailUrl());
         productPO.setHeaderImgUrl(productUpdateDTO.getHeaderImgUrl());
         productPO.setDetailImgUrl(productUpdateDTO.getDetailImgUrl());

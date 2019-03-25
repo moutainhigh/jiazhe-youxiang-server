@@ -24,11 +24,15 @@ public class AuditRecordDTO extends BaseObject {
 
     private BigDecimal exchangePoint;
 
-    private String exchangeType;
-
     private BigDecimal givingPoint;
 
-    private String givingType;
+    private Byte exchangeType;
+
+    private Byte chargeReceiptStatus;
+
+    private String pointCodes;
+
+    private BigDecimal productValue;
 
     private String remark;
 
@@ -39,6 +43,8 @@ public class AuditRecordDTO extends BaseObject {
     private String posCode;
 
     private String cardNo;
+
+    private String bankOutletsName;
 
     private Date tradeTime;
 
@@ -59,6 +65,8 @@ public class AuditRecordDTO extends BaseObject {
     private Date addTime;
 
     private Date modTime;
+
+    private Byte isDeleted;
 
     public Integer getId() {
         return id;
@@ -100,28 +108,36 @@ public class AuditRecordDTO extends BaseObject {
         this.exchangePoint = exchangePoint;
     }
 
-    public String getExchangeType() {
+    public Byte getExchangeType() {
         return exchangeType;
     }
 
-    public void setExchangeType(String exchangeType) {
+    public void setExchangeType(Byte exchangeType) {
         this.exchangeType = exchangeType;
     }
 
-    public BigDecimal getGivingPoint() {
-        return givingPoint;
+    public Byte getChargeReceiptStatus() {
+        return chargeReceiptStatus;
     }
 
-    public void setGivingPoint(BigDecimal givingPoint) {
-        this.givingPoint = givingPoint;
+    public void setChargeReceiptStatus(Byte chargeReceiptStatus) {
+        this.chargeReceiptStatus = chargeReceiptStatus;
     }
 
-    public String getGivingType() {
-        return givingType;
+    public String getPointCodes() {
+        return pointCodes;
     }
 
-    public void setGivingType(String givingType) {
-        this.givingType = givingType;
+    public void setPointCodes(String pointCodes) {
+        this.pointCodes = pointCodes;
+    }
+
+    public BigDecimal getProductValue() {
+        return productValue;
+    }
+
+    public void setProductValue(BigDecimal productValue) {
+        this.productValue = productValue;
     }
 
     public String getRemark() {
@@ -236,11 +252,35 @@ public class AuditRecordDTO extends BaseObject {
         this.cardNo = cardNo;
     }
 
+    public String getBankOutletsName() {
+        return bankOutletsName;
+    }
+
+    public void setBankOutletsName(String bankOutletsName) {
+        this.bankOutletsName = bankOutletsName;
+    }
+
     public Date getTradeTime() {
         return tradeTime;
     }
 
     public void setTradeTime(Date tradeTime) {
         this.tradeTime = tradeTime;
+    }
+
+    public Byte getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Byte isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public BigDecimal getGivingPoint() {
+        return givingPoint;
+    }
+
+    public void setGivingPoint(BigDecimal givingPoint) {
+        this.givingPoint = givingPoint;
     }
 }

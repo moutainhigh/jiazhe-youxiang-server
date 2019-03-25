@@ -1,11 +1,5 @@
 package com.jiazhe.youxiang.server.common.constant;
 
-import com.google.common.collect.Lists;
-import com.jiazhe.youxiang.server.common.enums.PermissionTreeEnum;
-import com.jiazhe.youxiang.server.vo.resp.sysrole.PermissionTreeResp;
-
-import java.util.List;
-
 /**
  * @author TU
  * @description 权限字符串
@@ -85,6 +79,8 @@ public class PermissionConstant {
     public static final String ADVANCE_PAY_MANAGEMENT = "advancePayManagement";
     //添加预支付记录
     public static final String ADVANCE_PAY_ADD = "advancePayAdd";
+    //商家订单导出
+    public static final String PARTNER_ORDER_EXPORT = "partnerOrderExport";
 
     //订单管理
     public static final String ORDER_MANAGEMENT = "orderManagement";
@@ -121,7 +117,20 @@ public class PermissionConstant {
     public static final String AUDIT_RECORD_MANAGEMENT = "auditRecordManagement";
     //消费记录审核
     public static final String AUDIT_RECORD_CHECK = "auditRecordCheck";
-
+    //凭证管理
+    public static final String CHARGE_RECEIPT_MANAGEMENT = "chargeReceiptManagement";
+    //凭证导出
+    public static final String CHARGE_RECEIPT_EXPORT = "chargeReceiptExport";
+    //凭证添加
+    public static final String CHARGE_RECEIPT_ADD = "chargeReceiptAdd";
+    //凭证删除
+    public static final String CHARGE_RECEIPT_DELETE = "chargeReceiptDelete";
+    //凭证修改
+    public static final String CHARGE_RECEIPT_EDIT = "chargeReceiptEdit";
+    //完成凭证录入
+    public static final String COMPLETE_CHARGE_RECEIPT = "completeChargeReceipt";
+    //重置凭证录入未完成
+    public static final String UNCOMPLETE_CHARGE_RECEIPT = "uncompleteChargeReceipt";
 
     //信息查询
     public static final String INFO_SEARCH = "infoSearch";
@@ -184,6 +193,8 @@ public class PermissionConstant {
     public static final String POINT_CODE_EDIT = "pointCodeEdit";
     //积分卡兑换码启、停用
     public static final String POINT_CODE_STATUS_CHANGE = "pointCodeStatusChange";
+    //启、停用所有积分卡兑换码（包括已经兑换为的积分卡）
+    public static final String ALL_POINT_CODE_STATUS_CHANGE = "allPointCodeStatusChange";
     //充值卡兑换码批次管理
     public static final String RC_BATCH_MANAGEMENT = "rcBatchManagement";
     //充值卡兑换码批次查询
@@ -204,6 +215,8 @@ public class PermissionConstant {
     public static final String RC_CODE_EDIT = "rcCodeEdit";
     //充值卡兑换码启、停用
     public static final String RC_CODE_STATUS_CHANGE = "rcCodeStatusChange";
+    //启、停用所有充值卡兑换码（包括已经兑换为的充值卡）
+    public static final String ALL_RC_CODE_STATUS_CHANGE = "allRCCodeStatusChange";
     //代金券兑换码批次管理
     public static final String VOUCHER_BATCH_MANAGEMENT = "voucherBatchManagement";
     //代金券兑换码批次查询
@@ -224,6 +237,8 @@ public class PermissionConstant {
     public static final String VOUCHER_CODE_EDIT = "voucherCodeEdit";
     //代金券兑换码启、停用
     public static final String VOUCHER_CODE_STATUS_CHANGE = "voucherCodeStatusChange";
+    //启、停用所有代金券兑换码（包括已经兑换为的代金券）
+    public static final String ALL_VOUCHER_CODE_STATUS_CHANGE = "allVoucherCodeStatusChange";
     //电子商品码管理
     public static final String ELE_CODE_MANAGEMENT = "eleCodeManagement";
     //电子商品码查询

@@ -14,7 +14,7 @@ public class PointExchangeCodeBatchSaveReq extends BaseVO{
 
     private static final long serialVersionUID = -2217871613469615457L;
 
-    @ApiModelProperty("批次id，0为添加")
+    @ApiModelProperty("批次id，0为添加，其他为修改")
     private Integer id;
 
     @ApiModelProperty("批次名称")

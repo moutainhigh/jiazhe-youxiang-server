@@ -60,7 +60,8 @@
                                     <label class="col-sm-1 control-label no-padding-right">订单号：</label>
                                     <div class="col-sm-2">
                                         <div class="pos-rel">
-                                            <input id="searchOrderCode" name="orderCode" class="form-control" type="text"
+                                            <input id="searchOrderCode" name="orderCode" class="form-control"
+                                                   type="text"
                                                    style="height:30px"/>
                                         </div>
                                     </div>
@@ -240,8 +241,11 @@
                                                     <label class="col-sm-4 control-label no-padding-right">服务地址：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="re_customerAddress" class="form-control"
-                                                                   type="text" style="height:30px" readonly/>
+                                                            <textarea id="re_customerAddress"
+                                                                      class="form-control" disabled="disabled"
+                                                                      style="resize:none;height: 100px;"></textarea>
+                                                            <!--<input id="re_customerAddress" class="form-control"-->
+                                                                   <!--type="text" style="height:30px" readonly/>-->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -251,8 +255,11 @@
                                                     <label class="col-sm-4 control-label no-padding-right">客户留言：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="re_customerRemark" class="form-control"
-                                                                   type="text" style="height:30px" readonly/>
+                                                            <!--<input id="re_customerRemark" class="form-control"-->
+                                                                   <!--type="text" style="height:30px" readonly/>-->
+                                                            <textarea id="re_customerRemark"
+                                                                      class="form-control" disabled="disabled"
+                                                                      style="resize:none;height: 100px;"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -439,8 +446,11 @@
                                                     <label class="col-sm-3 control-label no-padding-right">服务地址：</label>
                                                     <div class="col-sm-9">
                                                         <div class="pos-rel">
-                                                            <input id="app_customerAddress" class="form-control"
-                                                                   type="text" style="height:30px" readonly/>
+                                                            <!--<input id="app_customerAddress" class="form-control"-->
+                                                                   <!--type="text" style="height:30px" readonly/>-->
+                                                            <textarea id="app_customerAddress"
+                                                                      class="form-control" disabled="disabled"
+                                                                      style="resize:none;height: 100px;"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -596,29 +606,34 @@
             colNames: ['', '操作', '订单号', '状态', '待支付金额', '商品名称', '单价', '数量', '下单账号', '服务对象电话', '服务对象姓名', '代金券抵扣金额', '充值卡支付金额', '积分支付金额', '在线支付金额'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
-                {name: '_action', index: '_action', width: 260, sortable: false, formatter: customFormatter},
-                {name: 'orderCode', index: 'orderCode', width: 175, sortable: false},
+                {name: '_action', index: '_action', width: 200, sortable: false, formatter: customFormatter},
+                {name: 'orderCode', index: 'orderCode', width: 130, sortable: false},
                 {
                     name: 'status',
                     index: 'status',
+                    width: 80,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return orderStatus[rowObject.status - 1];
                     }
                 },
-                {name: 'payment', index: 'payment', sortable: false},
-                {name: 'productResp.name', index: 'productResp.name', sortable: false},
-                {name: 'productPrice', index: 'productPrice', sortable: false},
-                {name: 'count', index: 'count', sortable: false},
-                {name: 'customerResp.mobile', index: 'customerResp.mobile', sortable: false},
-                {name: 'customerMobile', index: 'customerMobile', sortable: false},
-                {name: 'customerName', index: 'customerName', sortable: false},
-                {name: 'payVoucher', index: 'payVoucher', sortable: false},
-                {name: 'payRechargeCard', index: 'payRechargeCard', sortable: false},
-                {name: 'payPoint', index: 'payPoint', sortable: false},
-                {name: 'payCash', index: 'payCash', sortable: false}
+                {name: 'payment', index: 'payment', width: 100,sortable: false},
+                {name: 'productResp.name', index: 'productResp.name', width: 150,sortable: false},
+                {name: 'productPrice', index: 'productPrice', width: 50,sortable: false},
+                {name: 'count', index: 'count', width: 50,sortable: false},
+                {name: 'customerResp.mobile', index: 'customerResp.mobile', width: 100,sortable: false},
+                {name: 'customerMobile', index: 'customerMobile', width: 100,sortable: false},
+                {name: 'customerName', index: 'customerName', width: 100,sortable: false},
+                {name: 'payVoucher', index: 'payVoucher', width: 100,sortable: false},
+                {name: 'payRechargeCard', index: 'payRechargeCard', width: 100,sortable: false},
+                {name: 'payPoint', index: 'payPoint', width: 100,sortable: false},
+                {name: 'payCash', index: 'payCash', width: 100,sortable: false}
             ],
             loadComplete: function (data) {
+                if("error" in data){
+                    bootboxalert(data.error.message);
+                    return false;
+                }
                 var table = this;
                 setTimeout(function () {
                     $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
@@ -660,7 +675,7 @@
                 str += getFunctionButton("btn-danger", "changeOrderReservation(" + rowObject.id + ")", "修改订单");
             }
             if (permission.indexOf("orderComplete") != -1) {
-                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id+","+rowObject.cost + ")", "完成订单");
+                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + "," + rowObject.cost + ")", "完成订单");
             }
             if (permission.indexOf("orderAppend") != -1) {
                 str += getFunctionButton("btn-primary", "showAppendOrder(" + rowObject.id + ")", "追加订单");
@@ -672,7 +687,7 @@
                 str += getFunctionButton("btn-danger", "orderCancelUnpass(" + rowObject.id + ")", "审核不通过");
             }
             if (permission.indexOf("orderComplete") != -1) {
-                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id+","+rowObject.cost + ")", "完成订单");
+                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + "," + rowObject.cost + ")", "完成订单");
             }
         }
         if (rowObject.status == 6) {
@@ -680,7 +695,7 @@
                 str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
             }
             if (permission.indexOf("orderComplete") != -1) {
-                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id+","+rowObject.cost + ")", "完成订单");
+                str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + "," + rowObject.cost + ")", "完成订单");
             }
         }
         return str;
@@ -1110,9 +1125,9 @@
             }
         });
     }
-    "<span style='color:#"+color+"'>"+text+"</span>";
-    function userCompleteOrder(id,cost) {
-        confirm("确定要完成该订单吗？<span style='color:#FF0000'>该订单成本为"+cost+"元！</span>", function (result) {
+
+    function userCompleteOrder(id, cost) {
+        confirm("确定要完成该订单吗？<span style='color:#FF0000'>该订单成本为" + cost + "元！</span>", function (result) {
             if (result) {
                 $.ajax({
                     url: "/api/orderinfo/usercompleteorder",

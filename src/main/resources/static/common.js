@@ -1,7 +1,7 @@
 /**
  * 权限字符串的cookie
  */
-var permission = getCookie("permission");
+var permission = getCookie("permission").split("#");
 
 function transformToJson(formData) {
     var obj = {}
@@ -225,6 +225,10 @@ function initTable(grid_selector, pager_selector, options) {
     var multiselect = options.hasOwnProperty("multiselect") ? options.multiselect : false;
     var emptyrecords = options.hasOwnProperty("emptyrecords") ? options.emptyrecords : "0条数据";
     var loadComplete = options.hasOwnProperty("loadComplete") ? options.loadComplete : function (data) {
+        if("error" in data){
+            bootboxalert(data.error.message);
+            return false;
+        }
         var table = this;
         setTimeout(function () {
             $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名

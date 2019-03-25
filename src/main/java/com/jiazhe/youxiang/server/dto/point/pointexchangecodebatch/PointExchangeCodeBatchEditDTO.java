@@ -24,6 +24,8 @@ public class PointExchangeCodeBatchEditDTO extends BaseObject {
 
     private Byte isMade;
 
+    private Byte status;
+
     private String description;
 
     private Integer projectId;
@@ -182,5 +184,13 @@ public class PointExchangeCodeBatchEditDTO extends BaseObject {
 
     public void setExtInfo(String extInfo) {
         this.extInfo = extInfo;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 }

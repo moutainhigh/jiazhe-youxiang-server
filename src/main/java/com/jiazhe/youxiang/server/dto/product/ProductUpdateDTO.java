@@ -33,6 +33,10 @@ public class ProductUpdateDTO extends BaseObject{
      */
     private Integer delayDays;
     /**
+     * 商品有效期天数
+     */
+    private Integer effectiveDays;
+    /**
      * 商品缩略图url
      */
     private String thumbnailUrl;
@@ -92,6 +96,14 @@ public class ProductUpdateDTO extends BaseObject{
 
     public void setDelayDays(Integer delayDays) {
         this.delayDays = delayDays;
+    }
+
+    public Integer getEffectiveDays() {
+        return effectiveDays;
+    }
+
+    public void setEffectiveDays(Integer effectiveDays) {
+        this.effectiveDays = effectiveDays;
     }
 
     public String getThumbnailUrl() {

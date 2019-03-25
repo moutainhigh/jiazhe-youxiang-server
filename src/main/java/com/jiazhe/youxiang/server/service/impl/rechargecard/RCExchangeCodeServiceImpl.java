@@ -1,9 +1,9 @@
 package com.jiazhe.youxiang.server.service.impl.rechargecard;
 
 import com.jiazhe.youxiang.base.util.DateUtil;
+import com.jiazhe.youxiang.base.util.ExchangeCodeCheckUtil;
 import com.jiazhe.youxiang.server.adapter.rechargecard.RCExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
-import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
@@ -17,10 +17,12 @@ import com.jiazhe.youxiang.server.domain.po.RechargeCardPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeEditDTO;
+import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangerecord.RCExchangeRecordDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
+import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeCodeService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCExchangeRecordService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCService;
@@ -30,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,6 +54,8 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
     @Autowired
     private RCExchangeRecordService rcExchangeRecordService;
     @Autowired
+    private RCExchangeCodeBatchService rcExchangeCodeBatchService;
+    @Autowired
     private CustomerService customerService;
 
     @Override
@@ -61,8 +66,23 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
     @Override
     public void changeCodeStatus(Integer id, Byte status) {
         RechargeCardExchangeCodePO rechargeCardExchangeCodePO = rechargeCardExchangeCodePOMapper.selectByPrimaryKey(id);
+        if (null == rechargeCardExchangeCodePO) {
+            throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
+        }
         rechargeCardExchangeCodePO.setStatus(status);
-        rechargeCardExchangeCodePO.setModTime(new Date());
+        rechargeCardExchangeCodePO.setModTime(new Timestamp(System.currentTimeMillis()));
+        //激活操作，判断兑换码过期类型，若为【激活之日XX天有效】修改相应的字段
+        if (status.equals(CommonConstant.CODE_START_USING)) {
+            RCExchangeCodeBatchEditDTO dto = rcExchangeCodeBatchService.getById(rechargeCardExchangeCodePO.getBatchId());
+            if (dto.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
+                throw new RechargeCardException(RechargeCardCodeEnum.BATCH_HAS_STOPPED_USING);
+            }
+            if (rechargeCardExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_ACTIVE_PERIOD)) {
+                rechargeCardExchangeCodePO.setExpiryTime(new Timestamp(DateUtil.getLastSecond(System.currentTimeMillis() + rechargeCardExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY)));
+                rechargeCardExchangeCodePO.setRechargeCardExpiryTime(new Timestamp(DateUtil.getLastSecond(System.currentTimeMillis() + rechargeCardExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY)));
+                rechargeCardExchangeCodePO.setRechargeCardEffectiveTime(new Timestamp(DateUtil.getFirstSecond(System.currentTimeMillis())));
+            }
+        }
         rechargeCardExchangeCodePOMapper.updateByPrimaryKeySelective(rechargeCardExchangeCodePO);
     }
 
@@ -76,7 +96,10 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void codeCharge(Integer type, Integer id, String keyt)  {
+    public void codeCharge(Integer type, Integer customerId, String keyt) {
+        if (!ExchangeCodeCheckUtil.keytCheck(CommonConstant.RC_EXCHANGE_CODE_PREFIX, keyt)) {
+            throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
+        }
         RechargeCardExchangeCodePO rechargeCardExchangeCodePO = findByKeyt(keyt);
         if (null == rechargeCardExchangeCodePO) {
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
@@ -84,34 +107,43 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         if (rechargeCardExchangeCodePO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_HAS_STOPED_USING);
         }
+        RCExchangeCodeBatchEditDTO rcExchangeCodeBatchEditDTO = rcExchangeCodeBatchService.getById(rechargeCardExchangeCodePO.getBatchId());
+        if (rcExchangeCodeBatchEditDTO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
+            throw new RechargeCardException(RechargeCardCodeEnum.BATCH_HAS_STOPPED_USING);
+        }
         if (rechargeCardExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_HAS_USED);
         }
         if (rechargeCardExchangeCodePO.getExpiryTime().getTime() < System.currentTimeMillis()) {
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_HAS_EXPIRIED);
         }
-        CustomerDTO customerDTO = customerService.getById(id);
+        CustomerDTO customerDTO = customerService.getById(customerId);
         if (null == customerDTO) {
             throw new RechargeCardException(RechargeCardCodeEnum.CUSTOMER_NOT_EXIST);
         }
         RechargeCardPO rechargeCardPO = new RechargeCardPO();
         //直接指定过期时间
         if (rechargeCardExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
+            rechargeCardPO.setEffectiveTime(rechargeCardExchangeCodePO.getRechargeCardEffectiveTime());
             rechargeCardPO.setExpiryTime(rechargeCardExchangeCodePO.getRechargeCardExpiryTime());
-        } else {
+        }
+        if (rechargeCardExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXCHANGE_PERIOD)) {
+            rechargeCardPO.setEffectiveTime(new Date(DateUtil.getFirstSecond(System.currentTimeMillis())));
             rechargeCardPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + rechargeCardExchangeCodePO.getValidityPeriod() * CommonConstant.ONE_DAY)));
         }
-        rechargeCardPO.setEffectiveTime(rechargeCardExchangeCodePO.getRechargeCardEffectiveTime());
-        rechargeCardPO.setEffectiveTime(rechargeCardExchangeCodePO.getRechargeCardEffectiveTime());
+        if (rechargeCardExchangeCodePO.getExpiryType().equals(CommonConstant.RECHARGE_CARD_ACTIVE_PERIOD)) {
+            rechargeCardPO.setEffectiveTime(new Date(DateUtil.getFirstSecond(rechargeCardExchangeCodePO.getRechargeCardEffectiveTime().getTime())));
+            rechargeCardPO.setExpiryTime(new Date(DateUtil.getLastSecond(rechargeCardExchangeCodePO.getExpiryTime().getTime())));
+        }
         rechargeCardPO.setDescription(rechargeCardExchangeCodePO.getBatchDescription());
         rechargeCardPO.setFaceValue(rechargeCardExchangeCodePO.getFaceValue());
         rechargeCardPO.setBalance(rechargeCardExchangeCodePO.getFaceValue());
         //暂时置为0，等生成了兑换记录再修改
         rechargeCardPO.setExchangeRecordId(0);
-        rechargeCardPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
-        rechargeCardPO.setProjectId(rechargeCardExchangeCodePO.getProjectId());
+        rechargeCardPO.setStatus(CommonConstant.CODE_START_USING);
         rechargeCardPO.setName(rechargeCardExchangeCodePO.getRechargeCardName());
-        rechargeCardPO.setCustomerId(customerDTO.getId());
+        rechargeCardPO.setProjectId(rechargeCardExchangeCodePO.getProjectId());
+        rechargeCardPO.setCustomerId(customerId);
         rechargeCardPO.setCityCodes(rechargeCardExchangeCodePO.getCityCodes());
         rechargeCardPO.setProductIds(rechargeCardExchangeCodePO.getProductIds());
         rcService.insert(rechargeCardPO);
@@ -132,7 +164,7 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         }
         rechargeCardRecordPO.setRechargeCardId(rechargeCardPO.getId());
         rechargeCardRecordPO.setExtInfo("");
-        rechargeCardRecordPO.setIsDeleted(Byte.valueOf("0"));
+        rechargeCardRecordPO.setIsDeleted(CommonConstant.CODE_NOT_DELETED);
         rechargeCardRecordPO.setAddTime(new Date());
         rechargeCardRecordPO.setModTime(new Date());
         rcExchangeRecordService.insert(rechargeCardRecordPO);
@@ -140,8 +172,8 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         rechargeCardPO.setExchangeRecordId(rechargeCardRecordPO.getId());
         rcService.update(rechargeCardPO);
         //修改充值卡兑换码的使用状态
-        rechargeCardExchangeCodePO.setUsed(Byte.valueOf("1"));
-        rechargeCardExchangeCodePO.setCustomerId(id);
+        rechargeCardExchangeCodePO.setUsed(CommonConstant.CODE_HAS_USED);
+        rechargeCardExchangeCodePO.setCustomerId(customerId);
         rechargeCardExchangeCodePOMapper.updateByPrimaryKeySelective(rechargeCardExchangeCodePO);
     }
 
@@ -161,11 +193,11 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         RechargeCardExchangeCodePOExample example = new RechargeCardExchangeCodePOExample();
         RechargeCardExchangeCodePOExample.Criteria criteria = example.createCriteria();
         criteria.andBatchIdEqualTo(batchSaveDTO.getId());
+        criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
         List<RechargeCardExchangeCodePO> poList = rechargeCardExchangeCodePOMapper.selectByExample(example);
         poList.stream().forEach(bean -> {
             bean.setBatchName(batchSaveDTO.getName());
             bean.setRechargeCardName(batchSaveDTO.getRechargeCardName());
-            bean.setBatchDescription(batchSaveDTO.getDescription());
             bean.setProjectId(batchSaveDTO.getProjectId());
             bean.setCityCodes(batchSaveDTO.getCityCodes());
             bean.setProductIds(batchSaveDTO.getProductIds());
@@ -180,24 +212,36 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         if (!usedIds.isEmpty()) {
             List<RCExchangeRecordDTO> recordDTOList = rcExchangeRecordService.findByCodeIds(usedIds);
             List<Integer> cardIds = recordDTOList.stream().map(RCExchangeRecordDTO::getRechargeCardId).collect(Collectors.toList());
-            rcService.batchUpdate(cardIds, batchSaveDTO);
+            rcService.updateWithBatch(cardIds, batchSaveDTO);
         }
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void batchChangeStatus(Integer batchId, Byte status) {
-        rcExchangeCodePOManualMapper.batchChangeStatus(batchId, status);
+        RCExchangeCodeBatchEditDTO dto = rcExchangeCodeBatchService.getById(batchId);
+        if (null == dto) {
+            throw new RechargeCardException(RechargeCardCodeEnum.BATCH_NOT_EXISTED);
+        }
+        //启用操作需要批次也是启用状态
+        if (status.equals(CommonConstant.CODE_START_USING) && dto.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
+            throw new RechargeCardException(RechargeCardCodeEnum.BATCH_HAS_STOPPED_USING);
+        }
         RechargeCardExchangeCodePOExample example = new RechargeCardExchangeCodePOExample();
         RechargeCardExchangeCodePOExample.Criteria criteria = example.createCriteria();
         criteria.andBatchIdEqualTo(batchId);
+        criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+        criteria.andUsedEqualTo(CommonConstant.CODE_NOT_USED);
         List<RechargeCardExchangeCodePO> poList = rechargeCardExchangeCodePOMapper.selectByExample(example);
-        List<Integer> usedIds = poList.stream().filter(bean -> bean.getUsed().equals(Byte.valueOf("1"))).map(RechargeCardExchangeCodePO::getId).collect(Collectors.toList());
-        if (!usedIds.isEmpty()) {
-            List<RCExchangeRecordDTO> recordDTOList = rcExchangeRecordService.findByCodeIds(usedIds);
-            List<Integer> cardIds = recordDTOList.stream().map(RCExchangeRecordDTO::getRechargeCardId).collect(Collectors.toList());
-            rcService.batchChangeStatus(cardIds, status);
-        }
+        poList.stream().forEach(bean -> {
+            if (bean.getExpiryType().equals(CommonConstant.RECHARGE_CARD_ACTIVE_PERIOD)) {
+                bean.setExpiryTime(new Timestamp(DateUtil.getLastSecond(System.currentTimeMillis() + bean.getValidityPeriod() * CommonConstant.ONE_DAY)));
+                bean.setRechargeCardEffectiveTime(new Timestamp(DateUtil.getFirstSecond(System.currentTimeMillis())));
+                bean.setRechargeCardExpiryTime(new Timestamp(DateUtil.getLastSecond(System.currentTimeMillis() + bean.getValidityPeriod() * CommonConstant.ONE_DAY)));
+            }
+            bean.setStatus(status);
+        });
+        rcExchangeCodePOManualMapper.batchUpdate(poList);
     }
 
     @Override
@@ -233,18 +277,24 @@ public class RCExchangeCodeServiceImpl implements RCExchangeCodeService {
         }
         po.setRechargeCardName(dto.getRechargeCardName());
         po.setExpiryTime(dto.getExpiryTime());
-        po.setRechargeCardEffectiveTime(dto.getRechargeCardEffectiveTime());
         po.setExpiryType(dto.getExpiryType());
         if (dto.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
+            po.setRechargeCardEffectiveTime(dto.getRechargeCardEffectiveTime());
             po.setRechargeCardExpiryTime(dto.getRechargeCardExpiryTime());
         } else {
             po.setValidityPeriod(dto.getValidityPeriod());
         }
-        po.setBatchDescription(dto.getBatchDescription());
         po.setCityCodes(dto.getCityCodes());
         po.setProductIds(dto.getProductIds());
-        po.setAddTime(new Date());
+        po.setBatchDescription(dto.getBatchDescription());
+        po.setModTime(new Date());
         rechargeCardExchangeCodePOMapper.updateByPrimaryKeySelective(po);
+    }
+
+    @Override
+    public void batchUpdateCodeAndKeyt(List<RCExchangeCodeDTO> rcExchangeCodeDTOS) {
+        List<RechargeCardExchangeCodePO> poList = rcExchangeCodeDTOS.stream().map(RCExchangeCodeAdapter::dto2Po).collect(Collectors.toList());
+        rcExchangeCodePOManualMapper.batchUpdateCodeAndKeyt(poList);
     }
 
     @Override

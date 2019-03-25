@@ -83,14 +83,14 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
-                                        <div class="col-xs-12 col-sm-1"></div>
-                                        <div class="col-xs-12 col-sm-9">
+                                        <div class="col-xs-12 col-sm-11">
                                             <form id="batchSaveForm" class="form-horizontal" role="form">
                                                 <input type="hidden" name="id" id="batchId">
                                                 <input type="hidden" name="productIds" id="saveProductIds">
                                                 <input type="hidden" name="cityCodes" id="saveCityCodes">
-                                                <input type="hidden" name="expiryType" id="saveExpiryType" value=0>
-                                                <input type="hidden" name="isVirtual" id="saveIsVirtual" value=0>
+                                                <input type="hidden" name="expiryType" value=0 id="saveExpiryType">
+                                                <input type="hidden" name="isVirtual" value=0 id="saveIsVirtual">
+                                                <input type="hidden" name="validityPeriod" value=0 id="saveValidityPeriod">
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">批次名称：</label>
                                                     <div class="col-sm-8">
@@ -137,18 +137,18 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">虚拟批次：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">批次类型：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
                                                             <label class="radio-inline ">
                                                                 <input id="saveNotVirtualRadio" type="radio"
                                                                        name="isVirtualRadio"
-                                                                       value="0" checked="checked"/>否
+                                                                       value="0" checked="checked"/>普通批次
                                                             </label>
                                                             <label class="radio-inline">
                                                                 <input id="saveIsVirtualRadio" type="radio"
                                                                        name="isVirtualRadio"
-                                                                       value="1"/>是
+                                                                       value="1"/>虚拟批次
                                                             </label>
                                                         </div>
                                                     </div>
@@ -193,22 +193,6 @@
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right"
-                                                           for="savePointEffectiveTime">积分卡生效时间：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-group">
-                                                            <input class="form-control date-picker" id="savePointEffectiveTime"
-                                                                   type="text" readonly/>
-                                                            <span class="input-group-addon">
-                                                                            <i class="fa fa-calendar bigger-110"></i>
-                                                                        </span>
-                                                            <input type="hidden" value=0 name="pointEffectiveTime"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="space-2"></div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right"
                                                            for="saveExpiryTime">批次过期时间：</label>
                                                     <div class="col-sm-8">
                                                         <div class="input-group">
@@ -224,28 +208,29 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">积分卡过期类型：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <label class="radio-inline ">
-                                                                <input id="saveDeadLineRadio" type="radio"
-                                                                       name="expiryTypeRadio"
-                                                                       value="0" checked="checked"/>指定截止日期
-                                                            </label>
-                                                            <label class="radio-inline">
-                                                                <input id="saveValidityPeriodRadio" type="radio"
-                                                                       name="expiryTypeRadio"
-                                                                       value="1"/>兑换之日起算
-                                                            </label>
-                                                        </div>
-                                                    </div>
+                                                    <label class="col-sm-4 control-label no-padding-right"> 【积分卡有效期】</label>
+                                                    <div class="col-sm-8"></div>
                                                 </div>
 
-                                                <div class="space-2 saveDeadLine"></div>
-                                                <div class="form-group saveDeadLine">
-                                                    <label class="col-sm-4 control-label no-padding-right"
-                                                           for="savePointExpiryTime">积分卡过期时间：</label>
-                                                    <div class="col-sm-8">
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">
+                                                        <input id="saveDeadLineRadio" type="radio"
+                                                               name="expiryTypeRadio"
+                                                               value="0" checked="checked"/>&nbsp;&nbsp;指定有效时间：
+                                                    </label>
+                                                    <div class="col-sm-4 saveDeadLine">
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker"
+                                                                   id="savePointEffectiveTime"
+                                                                   type="text" readonly/>
+                                                            <span class="input-group-addon">
+                                                                            <i class="fa fa-calendar bigger-110"></i>
+                                                                        </span>
+                                                            <input type="hidden" value=0 name="pointEffectiveTime"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4 saveDeadLine">
                                                         <div class="input-group">
                                                             <input class="form-control date-picker"
                                                                    id="savePointExpiryTime" type="text" readonly/>
@@ -257,14 +242,39 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="space-2 saveValidityPeriod" style="display:none;"></div>
-                                                <div class="form-group saveValidityPeriod" style="display:none;">
-                                                    <label class="col-sm-4 control-label no-padding-right">兑换之日有效天数：</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="saveValidityPeriod" name="validityPeriod"
-                                                                   class="form-control"
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">
+                                                        <input id="saveExchangePeriodRadio" type="radio"
+                                                               name="expiryTypeRadio"
+                                                               value="1"/>&nbsp;&nbsp;自兑换之日起：
+                                                    </label>
+                                                    <div class="col-sm-8 saveExchangePeriod" style="display:none;">
+                                                        <div class="pos-rel col-sm-11">
+                                                            <input id="saveExchangePeriod" class="form-control"
                                                                    type="text" style="height:30px"/>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            天
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">
+                                                        <input id="saveActivePeriodRadio" type="radio"
+                                                               name="expiryTypeRadio"
+                                                               value="2"/>&nbsp;&nbsp;自激活之日起：
+                                                    </label>
+                                                    <div class="col-sm-8 saveActivePeriod" style="display:none;">
+                                                        <div class="pos-rel col-sm-11">
+                                                            <input id="saveActivePeriod" class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            天
                                                         </div>
                                                     </div>
                                                 </div>
@@ -310,7 +320,7 @@
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
-    var permission = getCookie("permission");
+
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -363,30 +373,39 @@
         $("input[name=expiryTypeRadio]").bind("change", function () {
             if ($("input[name=expiryTypeRadio]:checked").val() == 0) {
                 $(".saveDeadLine").css("display", "");
-                $(".saveValidityPeriod").css("display", "none");
+                $(".saveExchangePeriod").css("display", "none");
+                $(".saveActivePeriod").css("display", "none");
                 $("#saveExpiryType").val(0);
-            } else {
+            }
+            if ($("input[name=expiryTypeRadio]:checked").val() == 1) {
                 $(".saveDeadLine").css("display", "none");
-                $(".saveValidityPeriod").css("display", "");
+                $(".saveExchangePeriod").css("display", "");
+                $(".saveActivePeriod").css("display", "none");
                 $("#saveExpiryType").val(1);
+            }
+            if ($("input[name=expiryTypeRadio]:checked").val() == 2) {
+                $(".saveDeadLine").css("display", "none");
+                $(".saveExchangePeriod").css("display", "none");
+                $(".saveActivePeriod").css("display", "");
+                $("#saveExpiryType").val(2);
             }
         });
 
         var tableOption = {
             url: "/api/pointexchangecodebatch/listpage",
             postData: transformToJson($('#batchSearchForm').serializeArray()),
-            colNames: ['', '批次名称', '积分卡名称', '是否是虚拟批次', '状态', '积分', '兑换比例', '数量', '批次过期时间','积分卡生效时间', '操作'],
+            colNames: ['', '批次名称', '积分卡名称', '批次类型', '状态', '积分', '兑换比例', '数量', '批次过期时间', '积分卡有效期', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
-                {name: 'name', index: 'name', width: 100, sortable: false},
+                {name: 'name', index: 'name', width: 80, sortable: false},
                 {name: 'pointName', index: 'pointName', width: 50, sortable: false},
                 {
                     name: 'isVirtual',
                     index: 'isVirtual',
-                    width: 50,
+                    width: 40,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.isVirtual == 1 ? "是" : "否";
+                        return rowObject.isVirtual == 1 ? "虚拟批次" : "普通批次";
                     }
                 },
                 {
@@ -427,24 +446,32 @@
                 {
                     name: 'expiryTime',
                     index: 'expiryTime',
-                    width: 50,
+                    width: 60,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return timeFormat(rowObject.expiryTime);
                     }
                 },
                 {
-                    name: 'pointEffectiveTime',
-                    index: 'pointEffectiveTime',
+                    name: 'expiryType',
+                    index: 'expiryType',
                     width: 50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return timeFormat(rowObject.pointEffectiveTime);
+                        if(rowObject.expiryType == 0){
+                            return timeFormat(rowObject.pointEffectiveTime)+"至"+timeFormat(rowObject.pointExpiryTime);
+                        }
+                        if(rowObject.expiryType == 1){
+                            return "自兑换之日起，"+rowObject.validityPeriod+"日有效";
+                        }
+                        if(rowObject.expiryType == 2){
+                            return "自激活之日起，"+rowObject.validityPeriod+"日有效";
+                        }
                     }
                 },
                 {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
             ],
-            caption: "批次列表"
+            caption: "积分卡兑换码批次列表"
         };
         initTable(grid_selector, pager_selector, tableOption);
     });
@@ -501,11 +528,14 @@
         $("#batchSaveForm #saveFaceValue").val("");
         $("#batchSaveForm #saveAmount").val("");
         $("#batchSaveForm #saveExpiryTime").val("");
+        $("#batchSaveForm #saveExpiryTime").datepicker('update');
         $("#batchSaveForm #saveExpiryTime").next().next().val(0);
-        $("#batchSaveForm #savePointEffectiveTime").val("");
-        $("#batchSaveForm #savePointEffectiveTime").next().next().val(0);
         $("#batchSaveForm #saveDeadLineRadio").click();
+        $("#batchSaveForm #savePointEffectiveTime").val("");
+        $("#batchSaveForm #savePointEffectiveTime").datepicker('update');
+        $("#batchSaveForm #savePointEffectiveTime").next().next().val(0);
         $("#batchSaveForm #savePointExpiryTime").val("");
+        $("#batchSaveForm #savePointExpiryTime").datepicker('update');
         $("#batchSaveForm #savePointExpiryTime").next().next().val(0);
         $("#batchSaveForm #saveValidityPeriod").val("");
         $("#batchSaveForm #saveDescription").val("");
@@ -517,10 +547,19 @@
         $("input[name=isVirtualRadio]").removeAttr('disabled');
         $("#batchSaveForm #saveFaceValue").removeAttr('readonly');
         $("#batchSaveForm #saveAmount").removeAttr('readonly');
+        $("#batchSaveForm #savePointEffectiveTime").val("");
+        $('#savePointEffectiveTime').datepicker('update');
+        $("#batchSaveForm #savePointEffectiveTime").next().next().val(0);
+        $("#batchSaveForm #savePointExpiryTime").val("");
+        $('#savePointExpiryTime').datepicker('update');
+        $("#batchSaveForm #savePointExpiryTime").next().next().val(0);
+        $("#saveExchangePeriod").val("");
+        $("#saveActivePeriod").val("");
         huixian(id);
     }
 
     function save() {
+        var saveExpiryType = $("#saveExpiryType").val();
         if ($("input[name=isVirtualRadio]:checked").val() == 0) {
             if (!isNumber($("#saveFaceValue").val())) {
                 bootboxalert("积分非法");
@@ -531,9 +570,12 @@
                 return false;
             }
         }
-        if ($("input[name=expiryTypeRadio]:checked").val() == 1) {
+        if (saveExpiryType == 1 || saveExpiryType == 2) {
+            var validPeriod = saveExpiryType == 1 ? $("#saveExchangePeriod").val() : $("#saveActivePeriod").val();
+            $("#saveValidityPeriod").val(validPeriod);
             if (!isNumber($("#saveValidityPeriod").val())) {
-                bootboxalert("兑换之日有效天数非法");
+                var error = saveExpiryType == 1 ? "自兑换之日有效天数非法" : "自激活之日有效天数非法";
+                bootboxalert(error);
                 return false;
             }
         }
@@ -587,18 +629,23 @@
                     $("#batchSaveForm #saveExpiryTime").val(dateFormat(result.expiryTime));
                     $('#saveExpiryTime').datepicker('update');
                     $("#batchSaveForm #saveExpiryTime").next().next().val(result.expiryTime);
-                    $("#batchSaveForm #savePointEffectiveTime").val(dateFormat(result.pointEffectiveTime));
-                    $('#savePointEffectiveTime').datepicker('update');
-                    $("#batchSaveForm #savePointEffectiveTime").next().next().val(result.pointEffectiveTime);
                     if (result.expiryType == 0) {
+                        $("#batchSaveForm #savePointEffectiveTime").val(dateFormat(result.pointEffectiveTime));
+                        $('#savePointEffectiveTime').datepicker('update');
+                        $("#batchSaveForm #savePointEffectiveTime").next().next().val(result.pointEffectiveTime);
+                        $("#batchSaveForm #savePointExpiryTime").val(dateFormat(result.pointExpiryTime));
+                        $('#savePointExpiryTime').datepicker('update');
+                        $("#batchSaveForm #savePointExpiryTime").next().next().val(result.pointExpiryTime);
                         $("#batchSaveForm #saveDeadLineRadio").click();
-                    } else {
-                        $("#batchSaveForm #saveValidityPeriodRadio").click();
                     }
-                    $("#batchSaveForm #saveValidityPeriod").val(result.validityPeriod);
-                    $("#batchSaveForm #savePointExpiryTime").val(dateFormat(result.pointExpiryTime));
-                    $('#savePointExpiryTime').datepicker('update');
-                    $("#batchSaveForm #savePointExpiryTime").next().next().val(result.pointExpiryTime);
+                    if (result.expiryType == 1) {
+                        $("#saveExchangePeriod").val(result.validityPeriod);
+                        $("#batchSaveForm #saveExchangePeriodRadio").click();
+                    }
+                    if (result.expiryType == 2) {
+                        $("#saveActivePeriod").val(result.validityPeriod);
+                        $("#batchSaveForm #saveActivePeriodRadio").click();
+                    }
                     $("#batchSaveForm #saveDescription").val(result.description);
                     $("input[name=isVirtualRadio]").attr('disabled', 'disabled');
                     $("#modal-form").modal('show');

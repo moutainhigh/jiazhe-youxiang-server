@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title></title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/static/init.css}"/>
+    <link rel="stylesheet" th:href="@{/static/editable-select/css/jquery-editable-select.min.css}"/>
+    <!-- Javascript -->
+    <script th:src="@{/static/init.js}"></script>
+    <script th:src="@{/static/editable-select/js/jquery-editable-select.min.js}"></script>
+
+    <style>
+        .ui-jqgrid .ui-jqgrid-bdiv {
+            overflow-x: auto;
+        }
+
+        #img_show::-webkit-scrollbar {
+            width: 15px;
+            height: 15px;
+        }
+
+        .float {
+            overflow: hidden;
+        }
+
+        .item {
+            float: left;
+            height: 100px;
+            width: 31%;
+            border-right: 3px solid #fff;
+            border-top: 3px solid #fff;
+        }
+
+        .pic_div{
+            position: relative;
+            background-color: white;
+            width: auto;
+            overflow: scroll;
+            height: 500px;
+        }
+    </style>
+</head>
+
+<body class="no-skin">
+<div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a th:href="@{/main/main_center}">主页</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/auditrecord/index}">充值管理</a>
+                    </li>
+                    <li class="active" th:text="凭证管理"></li>
+                </ul><!-- /.breadcrumb -->
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+
+                    <div class="col-xs-12" style="text-align: right" id="buttonDiv">
+                        <p style="margin:1px;height: 31px">
+                            <shiro:hasPermission name="chargeReceiptAdd">
+                                <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
+                                   data-toggle="modal" onclick="openNew()">
+                                    <i class="ace-icon fa fa-plus"></i>新建
+                                </a>
+                            </shiro:hasPermission>
+                        </p>
+                    </div><!-- /.col -->
+
+                    <div class="col-xs-12">
+                        <div class="col-sm-3">
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 凭证完成情况</div>
+                                    <div class="profile-info-value">
+                                        <span id="chargeReceiptStatus"></span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 银行信息</div>
+                                    <div class="profile-info-value">
+                                        <span id="bankOutletsName"></span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 兑换类型</div>
+                                    <div class="profile-info-value">
+                                        <span id="exchangeType"></span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 审核状态</div>
+                                    <div class="profile-info-value">
+                                        <span id="status"></span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 兑换总积分</div>
+                                    <div class="profile-info-value">
+                                        <span id="totalExchangePoint"></span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 客户姓名</div>
+                                    <div class="profile-info-value">
+                                        <span id="customerName"></span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row exchangeType1">
+                                    <div class="profile-info-name"> 客户电话</div>
+                                    <div class="profile-info-value">
+                                        <span id="customerMobile"></span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row exchangeType1">
+                                    <div class="profile-info-name"> 后台充值积分</div>
+                                    <div class="profile-info-value">
+                                        <span id="givingPoint"></span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row exchangeType2">
+                                    <div class="profile-info-name"> 兑换码卡号</div>
+                                    <div class="profile-info-value">
+                                        <span id="pointCodes"></span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row exchangeType3">
+                                    <div class="profile-info-name"> 商品价值</div>
+                                    <div class="profile-info-value">
+                                        <span id="productValue"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-9">
+                            <table id="grid-table"></table>
+
+                            <div id="grid-pager"></div>
+                        </div>
+                    </div><!-- /.col -->
+
+                    <!--提交信息模态框-->
+                    <div id="modal-form" class="modal fade" tabindex="-1" style="overflow: scroll;">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger" id="modal-title">小票凭证详情</h4>
+                                </div>
+                                <div class="modal-body" style="text-align: center">
+                                    <div class="row">
+                                        <div class = "col-xs-12 col-sm-6">
+                                            <div class="pic_div" id="img_show">
+
+                                            </div>
+                                        </div>
+                                        <div class = "col-xs-12 col-sm-6">
+                                            <div class="col-xs-12 col-sm-12">
+                                                <form id="chargeReceiptForm" class="form-horizontal" role="form">
+                                                    <input type="hidden" name="auditRecordId" id="auditRecordId" th:value="${auditRecordId}"/>
+                                                    <input type="hidden" name="id" id="id" th:value="0"/>
+                                                    <div class="space-2"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label no-padding-right">充值凭证：</label>
+                                                        <div class="col-sm-8 float" id="pics">
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="space-2"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label no-padding-right">小票积分数量：</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="pos-rel">
+                                                                <input id="saveExchangePoint" name="exchangePoint"
+                                                                       class="form-control"
+                                                                       type="text" style="height:30px"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="space-2"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label no-padding-right">客户姓名：</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="pos-rel">
+                                                                <input id="saveCustomerName" name="customerName"
+                                                                       class="form-control"
+                                                                       type="text" style="height:30px"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="space-2"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label no-padding-right">POS机编号：</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="pos-rel">
+                                                                <select id="posCode" name="posCode" class="form-control">
+                                                                    <option>财富私行尊享积分pos一</option>
+                                                                    <option>财富私行尊享积分pos十二</option>
+                                                                    <option>财富私行尊享积分pos十六</option>
+                                                                    <option>财富私行尊享积分pos中国银行津南支行尊享活动</option>
+                                                                    <option>江苏</option>
+                                                                    <option>青岛</option>
+                                                                    <option>温州</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="space-2"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label no-padding-right">银行卡后四位：</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="pos-rel">
+                                                                <input id="cardNo" name="cardNo"
+                                                                       class="form-control"
+                                                                       type="text" style="height:30px"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="space-2"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-4 control-label no-padding-right"
+                                                               for="saveTradeTime">交易时间：</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="input-group">
+                                                                <input class="form-control date-picker"
+                                                                       id="saveTradeTime" type="text" readonly/>
+                                                                <span class="input-group-addon">
+                                                                                    <i class="fa fa-calendar bigger-110"></i>
+                                                                                </span>
+                                                                <input type="hidden" value=0 name="tradeTime"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn"
+                                            onclick="save()">
+                                        <i class="ace-icon fa fa-thumbs-o-up"></i>
+                                        保存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+</div><!-- /.main-container -->
+</body>
+<script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+    var auditRecordStatus = ['未提交', '已提交', '已驳回', '已通过'];
+    $(function () {
+        //重新修改表格宽度
+        $(window).resize(function () {
+            $("#grid-table").setGridWidth($(window).width() * 0.96);
+        });
+
+        $('#posCode').editableSelect({
+            effects: 'slide',
+            filter: false
+        });
+
+        initDatePicker();
+
+        //显示消费信息
+        showAuditRecord();
+
+        var tableOption = {
+            url: "/api/chargereceipt/listpage",
+            postData: {
+                auditRecordId: $("#auditRecordId").val()
+            },
+            colNames: ['', '小票积分', '客户姓名', 'POS机编号', '银行卡后四位', '交易时间', '录入人', '操作'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'exchangePoint', index: 'exchangePoint', sortable: false},
+                {name: 'customerName', index: 'submitterName', sortable: false},
+                {name: 'posCode', index: 'posCode', sortable: false},
+                {name: 'cardNo', index: 'cardNo', sortable: false},
+                {
+                    name: 'tradeTime',
+                    index: 'tradeTime',
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return dateFormat(rowObject.tradeTime);
+                    }
+                },
+                {name: 'inputerName', index: 'inputerName', sortable: false},
+                {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
+            ],
+            caption: "凭证列表"
+        };
+        initTable(grid_selector, pager_selector, tableOption);
+    });
+
+    function customFormatter(cellvalue, options, rowObject) {
+        var str = "";
+        if(rowObject.chargeReceiptStatus == 0){
+            if(permission.indexOf("chargeReceiptEdit") != -1) {
+                str += getFunctionButton("btn-primary", "edit(" + rowObject.id + ")", "修改");
+            }
+            if(permission.indexOf("chargeReceiptDelete") != -1) {
+                str += getFunctionButton("btn-danger", "deleteById(" + rowObject.id + ")", "删除");
+            }
+        }
+        return str;
+    }
+
+    function showimage(source) {//图片单击放大显示
+        $("#modal-form").find("#img_show").html("<image width='400px' src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' />");
+    }
+
+    function bigimg(obj) {
+        var zoom = parseInt(obj.style.zoom, 10) || 100;
+        zoom += event.wheelDelta / 12;
+        if (zoom > 0)
+            obj.style.zoom = zoom + '%';
+        return false;
+    }
+
+    function showAuditRecord() {
+        $("#pics").empty();
+        $.ajax({
+            url: "/api/auditrecord/getbyid",
+            dataType: "json",
+            async: false,
+            data: {
+                id: $("#auditRecordId").val()
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    showByExchangeType(result);
+                    fillChargeReceiptStatus(result.id,result.chargeReceiptStatus);
+                    $("#bankOutletsName").html(result.bankOutletsName);
+                    $("#exchangeType").html(getExchangeTypeText(result.exchangeType));
+                    $("#status").html(auditRecordStatus[result.status - 1]);
+                    $("#totalExchangePoint").html(result.exchangePoint);
+                    $("#customerName").html(result.customerName);
+                    var imgUrls = result.imgUrls.split(",");
+                    for (var i = 0; i < imgUrls.length; i++) {
+                        $("#pics").append("<img class='item' onmouseover=\"this.style.cursor='pointer';this.style.cursor='hand'\"  onmouseout=\"this.style.cursor='default'\" onclick=\"javascript:showimage('/static/" + imgUrls[i] + "');\" src='/static/" + imgUrls[i] + "'>")
+                    }
+                    showimage("/static/" + imgUrls[0]);
+                }
+            },
+            error: error
+        });
+    }
+
+    function formatterPointCodes(pointCodes){
+        var codes = pointCodes.split(',');
+        var html = '';
+        for(var i=0;i<codes.length;i++){
+            html += codes[i] + "</br>";
+        }
+        return html;
+    }
+
+    function getExchangeTypeText(type) {
+        var exchangeType = type.toString().split('');
+        var exchangeTypeText = "";
+        if (exchangeType.indexOf('1') > -1) {
+            exchangeTypeText = exchangeTypeText + '充积分 ';
+        }
+        if (exchangeType.indexOf('2') > -1) {
+            exchangeTypeText = exchangeTypeText + '积分卡 ';
+        }
+        if (exchangeType.indexOf('3') > -1) {
+            exchangeTypeText = exchangeTypeText + '换商品 ';
+        }
+        return exchangeTypeText;
+    }
+
+    function showByExchangeType(result) {
+        if (hasExchangeType(result.exchangeType, '1')) {
+            $(".exchangeType1").css("display", "");
+            $("#customerMobile").html(result.customerMobile);
+            $("#givingPoint").html(result.givingPoint);
+        } else {
+            $(".exchangeType1").css("display", "none");
+        }
+        if (hasExchangeType(result.exchangeType, '2')) {
+            $(".exchangeType2").css("display", "");
+            $("#pointCodes").html(formatterPointCodes(result.pointCodes));
+        } else {
+            $(".exchangeType2").css("display", "none");
+        }
+        if (hasExchangeType(result.exchangeType, '3')) {
+            $(".exchangeType3").css("display", "");
+            $("#productValue").html(result.productValue);
+        } else {
+            $(".exchangeType3").css("display", "none");
+        }
+    }
+
+    function hasExchangeType(type, value) {
+        var exchangeType = type.toString().split('');
+        return exchangeType.indexOf(value) > -1;
+    }
+
+    function deleteById(id) {
+        confirm("确定删除吗？",function (result) {
+            if(result){
+                $.ajax({
+                    url: "/api/chargereceipt/delete",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    success: function (data) {
+                        if ('error' in data) {
+                            bootboxalert(data.error.message);
+                        } else {
+                            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                        }
+                    },
+                    error: error
+                });
+            }
+        });
+    }
+
+    function openNew(){
+        $("#id").val(0);
+        $("#saveExchangePoint").val('');
+        $("#saveCustomerName").val('');
+        $("#posCode").val('');
+        $("#cardNo").val('');
+        $("#saveTradeTime").val('');
+        $('#saveTradeTime').datepicker('update');
+        $("#saveTradeTime").next().next().val(0);
+    }
+
+    function save() {
+        if(!isNumber($("#saveExchangePoint").val())){
+            bootboxalert("小票积分数量不合法");
+            return false;
+        }
+        $.ajax({
+            url: "/api/chargereceipt/save",
+            dataType: "json",
+            async: false,
+            data:transformToJson($('#chargeReceiptForm').serializeArray()),
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                    $("#modal-form").modal('hide');
+                }
+            },
+            error: error
+        });
+    }
+
+    function edit(id) {
+        $.ajax({
+            url: "/api/chargereceipt/getbyid",
+            dataType: "json",
+            async: false,
+            data:{
+                id:id
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#id").val(result.id);
+                    $("#saveExchangePoint").val(result.exchangePoint);
+                    $("#saveCustomerName").val(result.customerName);
+                    $("#posCode").val(result.posCode);
+                    $("#cardNo").val(result.cardNo);
+                    $("#saveTradeTime").val(dateFormat(result.tradeTime));
+                    $('#saveTradeTime').datepicker('update');
+                    $("#saveTradeTime").next().next().val(result.tradeTime);
+                    $("#modal-form").modal('show');
+                }
+            },
+            error: error
+        });
+    }
+
+    function fillChargeReceiptStatus(id,status){
+        if(status == 0){
+            var html = '未完成';
+            if(permission.indexOf("completeChargeReceipt") != -1) {
+                html = html + "&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:completeChargeReceipt(" + id + ")' data-action='reload'>" +
+                    "<i class='ace-icon'>点击完成</i></a>";
+            }
+            $("#chargeReceiptStatus").html(html);
+            $("#buttonDiv").find("a").css("display","");
+        }else{
+            var html = '已完成';
+            if(permission.indexOf("uncompleteChargeReceipt") != -1) {
+                html = html + "&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:uncompleteChargeReceipt("+id+")' data-action='reload'>"+
+                    "<i class='ace-icon'>重置未完成</i></a>";
+            }
+            $("#chargeReceiptStatus").html(html);
+            $("#buttonDiv").find("a").css("display","none");
+        }
+    }
+
+    function uncompleteChargeReceipt(id){
+        var text = "确定重置凭证录入未完成吗？";
+        var url = "/api/auditrecord/uncompletechargereceipt";
+        changeChargeReceiptStatus(url,id,text,0);
+    }
+
+    function completeChargeReceipt(id){
+        var text = "确定完成凭证录入吗？";
+        var url = "/api/auditrecord/completechargereceipt"
+        changeChargeReceiptStatus(url,id,text,1);
+    }
+
+    function changeChargeReceiptStatus(url,id,text,status){
+        confirm(text,function (result) {
+            if(result){
+                $.ajax({
+                    url:url ,
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    success: function (data) {
+                        if ('error' in data) {
+                            bootboxalert(data.error.message);
+                        } else {
+                            fillChargeReceiptStatus(id,status);
+                            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                        }
+                    },
+                    error: error
+                });
+            }
+        });
+    }
+
+</script>
+</html>

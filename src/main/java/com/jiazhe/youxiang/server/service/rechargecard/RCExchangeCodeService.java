@@ -47,12 +47,12 @@ public interface RCExchangeCodeService {
     RechargeCardExchangeCodePO findByKeyt(String keyt);
 
     /**
-     * 用兑换码进行充值【type=0表示后台兑换码充值的，1表示客户自行兑换码充值的】
-     * @param id
+     * 兑换（由码到卡的过程）
+     * @param type
+     * @param customerId
      * @param keyt
-     * @return
      */
-    void codeCharge(Integer type, Integer id, String keyt) ;
+    void codeCharge(Integer type, Integer customerId, String keyt) ;
 
     /**
      * 根据批次id，获取批次下码的数量
@@ -95,5 +95,15 @@ public interface RCExchangeCodeService {
      */
     RCExchangeCodeDTO getById(Integer id);
 
+    /**
+     * 修改兑换码信息
+     * @param dto
+     */
     void editSave(RCExchangeCodeEditDTO dto);
+
+    /**
+     * 生成兑换码的时候，先生成卡号和密码为空的兑换码，回头来根据兑换码的id，生成卡号和密码，更新兑换码
+     * @param rcExchangeCodeDTOS
+     */
+    void batchUpdateCodeAndKeyt(List<RCExchangeCodeDTO> rcExchangeCodeDTOS);
 }

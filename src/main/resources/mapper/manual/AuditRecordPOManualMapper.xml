@@ -2,39 +2,43 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.AuditRecordPOManualMapper">
     <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.AuditRecordPO">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="point_ids" property="pointIds" jdbcType="VARCHAR"/>
-        <result column="customer_name" property="customerName" jdbcType="VARCHAR"/>
-        <result column="customer_mobile" property="customerMobile" jdbcType="VARCHAR"/>
-        <result column="exchange_point" property="exchangePoint" jdbcType="DECIMAL"/>
-        <result column="exchange_type" property="exchangeType" jdbcType="VARCHAR"/>
-        <result column="giving_point" property="givingPoint" jdbcType="DECIMAL"/>
-        <result column="giving_type" property="givingType" jdbcType="VARCHAR"/>
-        <result column="audit_reason" property="auditReason" jdbcType="VARCHAR"/>
-        <result column="remark" property="remark" jdbcType="VARCHAR"/>
-        <result column="img_urls" property="imgUrls" jdbcType="VARCHAR"/>
-        <result column="pos_code" property="posCode" jdbcType="VARCHAR"/>
-        <result column="trade_time" property="tradeTime" jdbcType="TIMESTAMP"/>
-        <result column="card_no" property="cardNo" jdbcType="VARCHAR"/>
-        <result column="bank_outlets_name" property="bankOutletsName" jdbcType="VARCHAR"/>
-        <result column="submitter_id" property="submitterId" jdbcType="INTEGER"/>
-        <result column="submitter_name" property="submitterName" jdbcType="VARCHAR"/>
-        <result column="status" property="status" jdbcType="TINYINT"/>
-        <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP"/>
-        <result column="auditor_id" property="auditorId" jdbcType="INTEGER"/>
-        <result column="auditor_name" property="auditorName" jdbcType="VARCHAR"/>
-        <result column="version" property="version" jdbcType="INTEGER"/>
-        <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
-        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
-        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
-        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP"/>
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="point_ids" property="pointIds" jdbcType="VARCHAR" />
+        <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+        <result column="customer_mobile" property="customerMobile" jdbcType="VARCHAR" />
+        <result column="exchange_point" property="exchangePoint" jdbcType="DECIMAL" />
+        <result column="giving_point" property="givingPoint" jdbcType="DECIMAL" />
+        <result column="giving_type" property="givingType" jdbcType="VARCHAR" />
+        <result column="audit_reason" property="auditReason" jdbcType="VARCHAR" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="img_urls" property="imgUrls" jdbcType="VARCHAR" />
+        <result column="pos_code" property="posCode" jdbcType="VARCHAR" />
+        <result column="trade_time" property="tradeTime" jdbcType="TIMESTAMP" />
+        <result column="card_no" property="cardNo" jdbcType="VARCHAR" />
+        <result column="bank_outlets_name" property="bankOutletsName" jdbcType="VARCHAR" />
+        <result column="submitter_id" property="submitterId" jdbcType="INTEGER" />
+        <result column="submitter_name" property="submitterName" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="TINYINT" />
+        <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+        <result column="auditor_id" property="auditorId" jdbcType="INTEGER" />
+        <result column="auditor_name" property="auditorName" jdbcType="VARCHAR" />
+        <result column="version" property="version" jdbcType="INTEGER" />
+        <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
+        <result column="charge_receipt_status" property="chargeReceiptStatus" jdbcType="TINYINT" />
+        <result column="point_codes" property="pointCodes" jdbcType="VARCHAR" />
+        <result column="product_value" property="productValue" jdbcType="DECIMAL" />
+        <result column="exchange_type" property="exchangeType" jdbcType="TINYINT" />
     </resultMap>
 
     <sql id="Base_Column_List">
-    id, point_ids, customer_name, customer_mobile, exchange_point, exchange_type, giving_point,
-    giving_type, audit_reason, remark, img_urls, pos_code, trade_time, card_no, bank_outlets_name,
+    id, point_ids, customer_name, customer_mobile, exchange_point, giving_point, giving_type,
+    audit_reason, remark, img_urls, pos_code, trade_time, card_no, bank_outlets_name,
     submitter_id, submitter_name, status, audit_time, auditor_id, auditor_name, version,
-    ext_info, is_deleted, add_time, mod_time
+    ext_info, is_deleted, add_time, mod_time, charge_receipt_status, point_codes, product_value,
+    exchange_type
   </sql>
 
     <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.AuditRecordPO">
@@ -42,22 +46,36 @@
         <include refid="Base_Column_List"/>
         FROM audit_record
         <where>
+            <if test="customerMobile != null and customerMobile!=''">
+                AND customer_mobile = #{customerMobile}
+            </if>
             <if test="status != null">
                 AND status = #{status}
+            </if>
+            <if test="chargeReceiptStatus != null">
+                AND charge_receipt_status = #{chargeReceiptStatus}
             </if>
             <if test="submitterId != null">
                 AND submitter_id = #{submitterId}
             </if>
             AND is_deleted = 0 ORDER BY mod_time DESC
         </where>
-        limit #{offset},#{limit}
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
     </select>
 
     <select id="count" resultType="java.lang.Integer">
         select count(*) from audit_record
         <where>
+            <if test="customerMobile != null and customerMobile!=''">
+                AND customer_mobile = #{customerMobile}
+            </if>
             <if test="status != null">
                 AND status = #{status}
+            </if>
+            <if test="chargeReceiptStatus != null">
+                AND charge_receipt_status = #{chargeReceiptStatus}
             </if>
             <if test="submitterId != null">
                 AND submitter_id = #{submitterId}

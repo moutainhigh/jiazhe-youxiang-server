@@ -50,9 +50,10 @@
                                         <select id="searchStatus" name="status"
                                                 class="selectpicker show-tick form-control">
                                             <option value=0>所有</option>
-                                            <option value=1>待服务</option>
-                                            <option value=2>已完成</option>
-                                            <option value=3>已取消</option>
+                                            <option value=1>待派单</option>
+                                            <option value=2>待服务</option>
+                                            <option value=3>已完成</option>
+                                            <option value=4>已取消</option>
                                         </select>
                                     </div>
                                     <label class="col-sm-1 control-label no-padding-right">城市：</label>
@@ -119,6 +120,11 @@
                                                 onclick="return search()">
                                             <i class="ace-icon fa fa-search red2"></i>
                                             查询
+                                        </button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <button class="btn btn-white btn-default btn-round btn-sm"
+                                                onclick="exportExcel();return false;">
+                                            <i class="ace-icon fa  fa-file-excel-o red2"></i>
+                                            导出
                                         </button>
                                     </div>
                                 </div>
@@ -127,12 +133,14 @@
                     </div><!-- /.col -->
 
                     <div class="col-xs-12" style="text-align: right" id="buttonDiv">
-                        <shiro:hasPermission name="partnerOrderAdd">
-                            <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
-                               data-toggle="modal" onclick="openNew()">
-                                <i class="ace-icon fa fa-plus"></i>新建
-                            </a>
-                        </shiro:hasPermission>
+                        <p style="margin:1px;height: 31px">
+                            <shiro:hasPermission name="partnerOrderAdd">
+                                <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
+                                   data-toggle="modal" onclick="openNew()">
+                                    <i class="ace-icon fa fa-plus"></i>新建
+                                </a>
+                            </shiro:hasPermission>
+                        </p>
                     </div><!-- /.col -->
 
                     <div class="col-xs-12">
@@ -521,9 +529,10 @@
                                 <div class="col-sm-8">
                                     <select id="saveStatus" name="status"
                                             class="selectpicker show-tick form-control">
-                                        <option value=1>待服务</option>
-                                        <option value=2>已完成</option>
-                                        <option value=3>已取消</option>
+                                        <option value=1>待派单</option>
+                                        <option value=2>待服务</option>
+                                        <option value=3>已完成</option>
+                                        <option value=4>已取消</option>
                                     </select>
                                 </div>
                             </div>
@@ -555,17 +564,12 @@
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
-    var orderStatus = ['待服务', '已完成', '已取消'];
+    var orderStatus = ['待派单','待服务', '已完成', '已取消'];
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
-
-//        $('#saveProductType').editableSelect({
-//            effects: 'slide',
-//            filter: false
-//        });
 
         initDatePicker();
 
@@ -639,7 +643,7 @@
             colNames: ['', '操作', '状态', '客户姓名', '客户手机号', '城市', '兑换码密钥', '兑换时间', '预约时间', '订单来源', '服务人员姓名', '服务项目', '预付', '再支付'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
-                {name: '_action', index: '_action', width: 200, sortable: false, formatter: customFormatter},
+                {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter},
                 {
                     name: 'status',
                     index: 'status',
@@ -671,13 +675,17 @@
                         return dateFormat(rowObject.serviceTime);
                     }
                 },
-                {name: 'orderSource', index: 'orderSource', sortable: false},
-                {name: 'workerName', index: 'workerName', sortable: false},
-                {name: 'serviceItemResp.name', index: 'serviceItem', sortable: false},
-                {name: 'prePay', index: 'prePay', sortable: false},
-                {name: 'appendPay', index: 'appendPay', sortable: false}
+                {name: 'orderSource', index: 'orderSource', width: 100,sortable: false},
+                {name: 'workerName', index: 'workerName', width: 100,sortable: false},
+                {name: 'serviceItemResp.name', index: 'serviceItem', width: 100,sortable: false},
+                {name: 'prePay', index: 'prePay',width: 50, sortable: false},
+                {name: 'appendPay', index: 'appendPay', width: 50,sortable: false}
             ],
             loadComplete: function (data) {
+                if("error" in data){
+                    bootboxalert(data.error.message);
+                    return false;
+                }
                 var table = this;
                 setTimeout(function () {
                     $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
@@ -960,6 +968,17 @@
             },
             error: error
         });
+    }
+
+    //导出为excel
+    function exportExcel() {
+        var obj = transformToJson($('#partnerOrderInfoSearchForm').serializeArray());
+        var param = "";
+        for(var key in obj){
+            param = param + key + "=" + obj[key] + "&" ;
+        }
+        window.location.href = "/api/partnerorderinfo/export?" + param;
+        return false;
     }
 </script>
 </html>

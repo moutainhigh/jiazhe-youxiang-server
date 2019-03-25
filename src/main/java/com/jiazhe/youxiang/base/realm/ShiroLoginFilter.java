@@ -31,20 +31,7 @@ public class ShiroLoginFilter extends FormAuthenticationFilter {
      */
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws IOException {
-//        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-//        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        if (ProjectUtil.isAjax(request)) {
-            logger.info("ShiroLoginFilter：ajax请求，未登录");
-            JSONObject obj = new JSONObject();
-            obj.put("code", LoginCodeEnum.LOGIN_NOT_SIGNIN_IN.getCode());
-            obj.put("type", LoginCodeEnum.LOGIN_NOT_SIGNIN_IN.getType());
-            obj.put("message", LoginCodeEnum.LOGIN_NOT_SIGNIN_IN.getMessage());
-            JSONObject result = new JSONObject();
-            result.put("error", obj);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("utf-8");
-            response.getWriter().write(result.toString());
-        } else {
+        if (ProjectUtil.isPageJump(request)) {
             /**
              * @Mark 非ajax请求重定向为登录页面
              * 由于是iframe里的请求，所以需要通过js来跳转到父层页面，用_parent来指定
@@ -56,6 +43,17 @@ public class ShiroLoginFilter extends FormAuthenticationFilter {
             out.println("window.open('" + "/system/index','_parent')");
             out.println("</script>");
             out.println("</html>");
+        } else {
+            logger.info("ShiroLoginFilter：ajax请求，未登录");
+            JSONObject obj = new JSONObject();
+            obj.put("code", LoginCodeEnum.LOGIN_NOT_SIGNIN_IN.getCode());
+            obj.put("type", LoginCodeEnum.LOGIN_NOT_SIGNIN_IN.getType());
+            obj.put("message", LoginCodeEnum.LOGIN_NOT_SIGNIN_IN.getMessage());
+            JSONObject result = new JSONObject();
+            result.put("error", obj);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("utf-8");
+            response.getWriter().write(result.toString());
         }
         return false;
     }

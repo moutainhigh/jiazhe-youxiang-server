@@ -3,7 +3,8 @@ package com.jiazhe.youxiang.server.service.impl.partnerorder;
 import com.jiazhe.youxiang.server.adapter.partnerorder.PartnerOrderInfoAdapter;
 import com.jiazhe.youxiang.server.dao.mapper.PartnerOrderInfoPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.partnerorder.PartnerOrderInfoPOManualMapper;
-import com.jiazhe.youxiang.server.domain.po.*;
+import com.jiazhe.youxiang.server.domain.po.PartnerOrderInfoPO;
+import com.jiazhe.youxiang.server.domain.po.PartnerOrderInfoPOExample;
 import com.jiazhe.youxiang.server.dto.advancepay.AdvancePayDTO;
 import com.jiazhe.youxiang.server.dto.partner.PartnerDTO;
 import com.jiazhe.youxiang.server.dto.partnerorder.PartnerOrderInfoDTO;
@@ -16,7 +17,6 @@ import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.resp.partnerorder.OverviewMoneyResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -111,6 +111,19 @@ public class PartnerOrderInfoServiceImpl implements PartnerOrderInfoService {
             poIn.setIsDeleted(po.getIsDeleted());
             partnerOrderInfoPOMapper.updateByPrimaryKeySelective(poIn);
         }
+    }
+
+    @Override
+    public List<PartnerOrderInfoDTO> getList(Byte status, String customerCityCode, Integer partnerId, Integer serviceItemId, Date serviceTimeStart, Date serviceTimeEnd, String customerMobile) {
+        List<PartnerOrderInfoPO> poList = partnerOrderInfoPOManualMapper.query(status, customerCityCode, partnerId, serviceItemId, serviceTimeStart, serviceTimeEnd, customerMobile, null, null);
+        List<PartnerOrderInfoDTO> dtoList = poList.stream().map(PartnerOrderInfoAdapter::PO2DTO).collect(Collectors.toList());
+        dtoList.forEach(bean -> {
+            PartnerDTO partnerDTO = partnerService.getById(bean.getPartnerId());
+            ServiceItemDTO serviceItemDTO = serviceItemService.getById(bean.getServiceItemId());
+            bean.setPartnerDTO(partnerDTO);
+            bean.setServiceItemDTO(serviceItemDTO);
+        });
+        return dtoList;
     }
 
     private boolean isInInterval(Date date, Date beginDate, Date endDate) {

@@ -33,8 +33,17 @@ public class RCExchangeCodeBatchResp extends BaseVO{
     @ApiModelProperty("批次过期时间")
     private Long expiryTime;
 
+    @ApiModelProperty("充值卡过期类型")
+    private Byte expiryType;
+
     @ApiModelProperty("充值卡生效时间")
     private Long rechargeCardEffectiveTime;
+
+    @ApiModelProperty("充值卡过期时间")
+    private Long rechargeCardExpiryTime;
+
+    @ApiModelProperty("过期间隔时间")
+    private Integer validityPeriod;
 
     @ApiModelProperty("批次状态，0停用、1启用")
     private Byte status;
@@ -127,5 +136,29 @@ public class RCExchangeCodeBatchResp extends BaseVO{
 
     public void setRechargeCardEffectiveTime(Long rechargeCardEffectiveTime) {
         this.rechargeCardEffectiveTime = rechargeCardEffectiveTime;
+    }
+
+    public Byte getExpiryType() {
+        return expiryType;
+    }
+
+    public void setExpiryType(Byte expiryType) {
+        this.expiryType = expiryType;
+    }
+
+    public Long getRechargeCardExpiryTime() {
+        return rechargeCardExpiryTime;
+    }
+
+    public void setRechargeCardExpiryTime(Long rechargeCardExpiryTime) {
+        this.rechargeCardExpiryTime = rechargeCardExpiryTime;
+    }
+
+    public Integer getValidityPeriod() {
+        return validityPeriod;
+    }
+
+    public void setValidityPeriod(Integer validityPeriod) {
+        this.validityPeriod = validityPeriod;
     }
 }

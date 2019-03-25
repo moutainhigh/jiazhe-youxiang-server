@@ -210,53 +210,6 @@
         initImgControl("#fileThumbnail", "#imgThumbnail", "#inputThumbnailUrl", "#buttonSave");
     });
 
-
-    jQuery(grid_selector).jqGrid({
-        url: "/api/product/getcategorylist",// 获取数据的地址
-        postData: transformToJson($('#searchForm').serializeArray()),
-        rownumbers: true,
-        datatype: "json",
-        mtype: "GET",
-        hidegrid: false,//收缩列表按钮
-        prmNames: {
-            page: "pageNum",
-            rows: "pageSize"
-        },// 重新定义分页信息
-        width: "100%",
-        autowidth: true,
-        height: 350,
-        colNames: ['', '大类名称', '大类描述', '缩略图', '状态', '排序', '操作'],
-        colModel: [
-            {name: 'id', index: 'id', sortable: false, hidden: true},
-            {name: 'name', index: 'name', width: 50, sortable: false},
-            {name: 'description', index: 'description', sortable: false},
-            {name: 'thumbnailUrl', index: 'thumbnailUrl', width: 50, sortable: false, formatter: imageFormatter},
-            {name: 'status', index: 'status', width: 50, sortable: false, formatter: statusFormatter},
-            {name: 'priority', index: 'priority', width: 20, sortable: false},
-            {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
-        ],
-        rowNum: 10,
-        rowList: [10, 20, 30],
-        pager: pager_selector,
-        altRows: true,
-        viewrecords: true,
-        emptyrecords: "0条数据",
-        loadComplete: function (data) {
-            var table = this;
-            setTimeout(function () {
-                $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
-                updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
-            }, 0);
-        },
-        jsonReader: { // jsonReader来跟服务器端返回的数据做对应
-            root: "data", // 包含实际数据的数组
-            page: "paging.currPage", // 当前页
-            total: "paging.totalPage",// 总页数
-            records: "paging.total", // 查询出的记录数
-            repeatitems: false
-        },
-        caption: "商品大类列表"
-    });
     $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
 
     function search() {

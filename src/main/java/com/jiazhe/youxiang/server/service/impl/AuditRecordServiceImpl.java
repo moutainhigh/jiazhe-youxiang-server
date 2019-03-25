@@ -5,31 +5,38 @@ import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.AuditRecordAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.AuditRecordCodeEnum;
-import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.PointCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.AuditRecordException;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
+import com.jiazhe.youxiang.server.common.exceptions.PointException;
 import com.jiazhe.youxiang.server.dao.mapper.AuditRecordPOMapper;
-import com.jiazhe.youxiang.server.dao.mapper.CustomerPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.AuditRecordPOManualMapper;
-import com.jiazhe.youxiang.server.domain.po.*;
+import com.jiazhe.youxiang.server.domain.po.AuditRecordPO;
+import com.jiazhe.youxiang.server.domain.po.PointExchangeRecordPO;
+import com.jiazhe.youxiang.server.domain.po.PointPO;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.AuditRecordService;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeBatchService;
+import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeRecordService;
 import com.jiazhe.youxiang.server.service.point.PointService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import org.apache.logging.log4j.util.Strings;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,16 +58,16 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     @Autowired
     private CustomerService customerService;
     @Autowired
-    private CustomerPOMapper customerPOMapper;
+    private PointExchangeCodeService pointExchangeCodeService;
     @Autowired
     private PointExchangeRecordService pointExchangeRecordService;
     @Autowired
     private PointService pointService;
 
     @Override
-    public List<AuditRecordDTO> getList(Integer submitterId, Byte status, Paging paging) {
-        Integer count = auditRecordPOManualMapper.count(submitterId, status);
-        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(submitterId, status, paging.getOffset(), paging.getLimit());
+    public List<AuditRecordDTO> getList(String customerMobile, Integer submitterId, Byte status,Byte chargeReceiptStatus, Paging paging) {
+        Integer count = auditRecordPOManualMapper.count(customerMobile, submitterId, status,chargeReceiptStatus);
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(customerMobile, submitterId, status, chargeReceiptStatus,paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
         return auditRecordPOList.stream().map(AuditRecordAdapter::PO2DTO).collect(Collectors.toList());
     }
@@ -73,7 +80,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
 
     @Override
     public Integer getCountByStatus(Byte status) {
-        return auditRecordPOManualMapper.count(null, status);
+        return auditRecordPOManualMapper.count(null, null, status,null);
     }
 
     @Override
@@ -90,171 +97,162 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         auditRecordPO.setAuditorId(sysUserDTO.getId());
         auditRecordPO.setAuditorName(sysUserDTO.getDisplayName());
         auditRecordPO.setAuditTime(new Date());
-        auditRecordPO.setStatus(Byte.valueOf("1"));
+        auditRecordPO.setStatus(CommonConstant.AUDIT_RECORD_REJECT);
         auditRecordPO.setAuditReason(reason);
         auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId,Integer givingBatchId,String posCode,String cardNo,Date tradeTime)  {
-        String pointIds = "";
+    public void auditRecordPass(Integer auditRecordId, Integer version, Integer exchangeBatchId) {
         AuditRecordPO auditRecordPO = auditRecordPOMapper.selectByPrimaryKey(auditRecordId);
         if (!auditRecordPO.getVersion().equals(version)) {
             throw new AuditRecordException(AuditRecordCodeEnum.VERSION_IS_CHANGED);
-        }
-        Integer customerId = 0;
-        CustomerDTO customerDTO = customerService.getByMobile(auditRecordPO.getCustomerMobile());
-        if (null == customerDTO) {
-            //throw new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_NOT_EXIST);
-            CustomerAddDTO customerAddDTO = new CustomerAddDTO();
-            customerAddDTO.setMobile(auditRecordPO.getCustomerMobile());
-            customerAddDTO.setName(auditRecordPO.getCustomerName());
-            customerService.add(customerAddDTO);
-            customerDTO = customerService.getByMobile(auditRecordPO.getCustomerMobile());
-            customerId = customerDTO.getId();
-        } else {
-            customerId = customerDTO.getId();
         }
         //插入兑换记录信息
         SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
         if (null == sysUserDTO) {
             throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
-        if(auditRecordPO.getExchangePoint().compareTo(BigDecimal.ZERO) == 1){
-            CommonValidator.validateNull(exchangeBatchId,new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_BATCH_IS_NULL));
-            PointExchangeCodeBatchEditDTO exchangeBatchEditDTO = pointExchangeCodeBatchService.getById(exchangeBatchId);
-            PointPO pointPO = new PointPO();
-            //直接指定过期时间
-            if (exchangeBatchEditDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
-                pointPO.setExpiryTime(exchangeBatchEditDTO.getPointExpiryTime());
+        //判断兑换类型
+        if (auditRecordPO.getExchangeType().toString().contains(CommonConstant.DIRECT_CHARGE.toString())) {
+            String pointIds = "";
+            Integer customerId;
+            CustomerDTO customerDTO = customerService.getByMobile(auditRecordPO.getCustomerMobile());
+            if (null == customerDTO) {
+                CustomerAddDTO customerAddDTO = new CustomerAddDTO();
+                customerAddDTO.setMobile(auditRecordPO.getCustomerMobile());
+                customerAddDTO.setName(auditRecordPO.getCustomerName());
+                customerService.add(customerAddDTO);
+                customerDTO = customerService.getByMobile(auditRecordPO.getCustomerMobile());
+                customerId = customerDTO.getId();
             } else {
-                pointPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + exchangeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
+                customerId = customerDTO.getId();
             }
-            pointPO.setEffectiveTime(exchangeBatchEditDTO.getPointEffectiveTime());
-            pointPO.setDescription(exchangeBatchEditDTO.getDescription());
-            pointPO.setFaceValue(auditRecordPO.getExchangePoint());
-            pointPO.setBalance(auditRecordPO.getExchangePoint());
-            //暂时置为0，等生成了兑换记录再修改
-            pointPO.setExchangeRecordId(0);
-            pointPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
-            pointPO.setProjectId(exchangeBatchEditDTO.getProjectId());
-            pointPO.setName(exchangeBatchEditDTO.getPointName());
-            pointPO.setCustomerId(customerId);
-            pointPO.setCityCodes(exchangeBatchEditDTO.getCityCodes());
-            pointPO.setProductIds(exchangeBatchEditDTO.getProductIds());
-            pointService.insert(pointPO);
-            PointExchangeRecordPO pointRecordPO = new PointExchangeRecordPO();
-            pointRecordPO.setOperatorId(sysUserDTO.getId());
-            pointRecordPO.setOperatorName(sysUserDTO.getLoginName());
-            pointRecordPO.setExchangeType(CommonConstant.EXCHANGETYPE_AUDITRECORD_PASS);
-            pointRecordPO.setPointId(pointPO.getId());
-            pointRecordPO.setExtInfo("");
-            pointRecordPO.setIsDeleted(Byte.valueOf("0"));
-            pointRecordPO.setAddTime(new Date());
-            pointRecordPO.setModTime(new Date());
-            pointExchangeRecordService.insert(pointRecordPO);
-            //修改充值卡对应的兑换记录id
-            pointPO.setExchangeRecordId(pointRecordPO.getId());
-            pointService.update(pointPO);
-            pointIds = pointIds + pointPO.getId() + ",";
+            if (auditRecordPO.getGivingPoint().compareTo(BigDecimal.ZERO) == 1) {
+                CommonValidator.validateNull(exchangeBatchId, new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_BATCH_IS_NULL));
+                PointExchangeCodeBatchEditDTO exchangeBatchEditDTO = pointExchangeCodeBatchService.getById(exchangeBatchId);
+                PointPO pointPO = new PointPO();
+                //直接指定过期时间
+                if (exchangeBatchEditDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
+                    pointPO.setEffectiveTime(exchangeBatchEditDTO.getPointEffectiveTime());
+                    pointPO.setExpiryTime(exchangeBatchEditDTO.getPointExpiryTime());
+                } else {
+                    pointPO.setEffectiveTime(new Date(DateUtil.getFirstSecond(System.currentTimeMillis())));
+                    pointPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + exchangeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
+                }
+                pointPO.setDescription(exchangeBatchEditDTO.getDescription());
+                pointPO.setFaceValue(auditRecordPO.getGivingPoint());
+                pointPO.setBalance(auditRecordPO.getGivingPoint());
+                //暂时置为0，等生成了兑换记录再修改
+                pointPO.setExchangeRecordId(0);
+                pointPO.setStatus(CommonConstant.CODE_START_USING);
+                pointPO.setProjectId(exchangeBatchEditDTO.getProjectId());
+                pointPO.setName(exchangeBatchEditDTO.getPointName());
+                pointPO.setCustomerId(customerId);
+                pointPO.setCityCodes(exchangeBatchEditDTO.getCityCodes());
+                pointPO.setProductIds(exchangeBatchEditDTO.getProductIds());
+                pointService.insert(pointPO);
+                PointExchangeRecordPO pointRecordPO = new PointExchangeRecordPO();
+                pointRecordPO.setOperatorId(sysUserDTO.getId());
+                pointRecordPO.setOperatorName(sysUserDTO.getLoginName());
+                pointRecordPO.setExchangeType(CommonConstant.EXCHANGETYPE_AUDITRECORD_PASS);
+                pointRecordPO.setPointId(pointPO.getId());
+                pointRecordPO.setExtInfo("");
+                pointRecordPO.setIsDeleted(CommonConstant.CODE_NOT_DELETED);
+                pointRecordPO.setAddTime(new Date());
+                pointRecordPO.setModTime(new Date());
+                pointExchangeRecordService.insert(pointRecordPO);
+                //修改充值卡对应的兑换记录id
+                pointPO.setExchangeRecordId(pointRecordPO.getId());
+                pointService.update(pointPO);
+                pointIds = pointIds + pointPO.getId() + ",";
+                auditRecordPO.setPointIds(pointIds);
+            }
         }
-        if(auditRecordPO.getGivingPoint().compareTo(BigDecimal.ZERO)==1){
-            CommonValidator.validateNull(givingBatchId,new AuditRecordException(AuditRecordCodeEnum.GIVING_BATCH_IS_NULL));
-            PointExchangeCodeBatchEditDTO givingBatchEditDTO = pointExchangeCodeBatchService.getById(givingBatchId);
-            PointPO pointPO = new PointPO();
-            //直接指定过期时间
-            if (givingBatchEditDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
-                pointPO.setExpiryTime(givingBatchEditDTO.getPointExpiryTime());
-            } else {
-                pointPO.setExpiryTime(new Date(System.currentTimeMillis() + givingBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY));
+        if (auditRecordPO.getExchangeType().toString().contains(CommonConstant.SELF_CHARGE.toString())) {
+            if (Strings.isEmpty(auditRecordPO.getPointCodes())) {
+                throw new AuditRecordException(AuditRecordCodeEnum.POINT_CODES_IS_NULL);
             }
-            pointPO.setEffectiveTime(givingBatchEditDTO.getPointEffectiveTime());
-            pointPO.setDescription(givingBatchEditDTO.getDescription());
-            pointPO.setFaceValue(auditRecordPO.getGivingPoint());
-            pointPO.setBalance(auditRecordPO.getGivingPoint());
-            //暂时置为0，等生成了兑换记录再修改
-            pointPO.setExchangeRecordId(0);
-            pointPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
-            pointPO.setProjectId(givingBatchEditDTO.getProjectId());
-            pointPO.setName(givingBatchEditDTO.getPointName());
-            pointPO.setCustomerId(customerId);
-            pointPO.setCityCodes(givingBatchEditDTO.getCityCodes());
-            pointPO.setProductIds(givingBatchEditDTO.getProductIds());
-            pointService.insert(pointPO);
-            PointExchangeRecordPO pointRecordPO = new PointExchangeRecordPO();
-            pointRecordPO.setOperatorId(sysUserDTO.getId());
-            pointRecordPO.setOperatorName(sysUserDTO.getLoginName());
-            pointRecordPO.setExchangeType(CommonConstant.EXCHANGETYPE_AUDITRECORD_PASS);
-            pointRecordPO.setPointId(pointPO.getId());
-            pointRecordPO.setExtInfo("");
-            pointRecordPO.setIsDeleted(Byte.valueOf("0"));
-            pointRecordPO.setAddTime(new Date());
-            pointRecordPO.setModTime(new Date());
-            pointExchangeRecordService.insert(pointRecordPO);
-            //修改充值卡对应的兑换记录id
-            pointPO.setExchangeRecordId(pointRecordPO.getId());
-            pointService.update(pointPO);
-            pointIds = pointIds + pointPO.getId();
+            List<String> pointCodes = Arrays.asList(auditRecordPO.getPointCodes().split(","));
+            List<PointExchangeCodeDTO> pointExchangeCodeDtoList = pointExchangeCodeService.findByCodes(pointCodes);
+            if (pointExchangeCodeDtoList.size() != pointCodes.size()) {
+                throw new AuditRecordException(AuditRecordCodeEnum.POINT_CODES_ERROR);
+            }
+            pointExchangeCodeDtoList.stream().forEach(bean -> {
+                PointExchangeCodeBatchEditDTO dto = pointExchangeCodeBatchService.getById(bean.getBatchId());
+                if (dto.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
+                    throw new PointException(PointCodeEnum.BATCH_HAS_STOPPED_USING);
+                }
+                //激活操作，判断兑换码过期类型，若为【激活之日XX天有效】修改相应的字段
+                if (bean.getExpiryType().equals(CommonConstant.POINT_ACTIVE_PERIOD)) {
+                    bean.setExpiryTime(new Timestamp(DateUtil.getLastSecond(System.currentTimeMillis() + bean.getValidityPeriod() * CommonConstant.ONE_DAY)));
+                    bean.setPointEffectiveTime(new Timestamp(DateUtil.getFirstSecond(System.currentTimeMillis())));
+                    bean.setPointExpiryTime(new Timestamp(DateUtil.getLastSecond(System.currentTimeMillis() + bean.getValidityPeriod() * CommonConstant.ONE_DAY)));
+                }
+                bean.setStatus(CommonConstant.CODE_START_USING);
+            });
+            pointExchangeCodeService.batchActive(pointExchangeCodeDtoList);
+        }
+        if (auditRecordPO.getExchangeType().toString().contains(CommonConstant.EXCHANGE_ENTITY.toString())) {
+            //啥也不干
         }
         auditRecordPO.setVersion(version + 1);
         auditRecordPO.setAuditorId(sysUserDTO.getId());
         auditRecordPO.setAuditorName(sysUserDTO.getDisplayName());
         auditRecordPO.setAuditTime(new Date());
-        auditRecordPO.setPointIds(pointIds);
-        auditRecordPO.setStatus(Byte.valueOf("2"));
-        auditRecordPO.setPosCode(posCode);
-        auditRecordPO.setCardNo(cardNo);
-        auditRecordPO.setTradeTime(tradeTime);
+        auditRecordPO.setStatus(CommonConstant.AUDIT_RECORD_PASS);
         auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
     }
 
     @Override
-    public void addSave(String customerName, String customerMobile, BigDecimal exchangePoint, String exchangeType, BigDecimal givingPoint, String givingType, String remark, String imgUrls) {
-        AuditRecordPO auditRecordPO = new AuditRecordPO();
-        auditRecordPO.setPointIds("");
-        auditRecordPO.setCustomerName(customerName);
-        auditRecordPO.setCustomerMobile(customerMobile);
-        auditRecordPO.setExchangePoint(exchangePoint);
-        auditRecordPO.setExchangeType(exchangeType);
-        auditRecordPO.setGivingPoint(givingPoint);
-        auditRecordPO.setGivingType(givingType);
-        auditRecordPO.setRemark(remark);
-        auditRecordPO.setImgUrls(imgUrls);
-        auditRecordPO.setStatus(Byte.valueOf("0"));
-        auditRecordPO.setVersion(0);
-        auditRecordPO.setAuditorId(0);
-        auditRecordPO.setAuditorName("");
-        auditRecordPO.setAuditTime(new Date());
+    public void save(AuditRecordDTO auditRecordDTO) {
+        AuditRecordPO auditRecordPO = AuditRecordAdapter.dto2Po(auditRecordDTO);
         SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
         if (null == sysUserDTO) {
             throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
         auditRecordPO.setSubmitterId(sysUserDTO.getId());
         auditRecordPO.setSubmitterName(sysUserDTO.getDisplayName());
-        auditRecordPOMapper.insertSelective(auditRecordPO);
+        if (auditRecordDTO.getId().equals(0)) {
+            auditRecordPO.setAuditorId(0);
+            auditRecordPOMapper.insertSelective(auditRecordPO);
+        } else {
+            auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
+        }
+
     }
 
     @Override
-    public void editSave(Integer id, Integer version, String customerName, String customerMobile, BigDecimal exchangePoint, String exchangeType, BigDecimal givingPoint, String givingType, String remark, String imgUrls) {
-        AuditRecordPO auditRecordPO = auditRecordPOMapper.selectByPrimaryKey(id);
-        if (auditRecordPO.getStatus().equals(Byte.valueOf("2"))) {
-            throw new AuditRecordException(AuditRecordCodeEnum.RECORD_HASS_PASSED);
+    public void deleteById(Integer id) {
+        AuditRecordPO po = auditRecordPOMapper.selectByPrimaryKey(id);
+        if(null == po){
+            throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_IS_NOT_EXIST);
         }
-        if (!auditRecordPO.getVersion().equals(version)) {
-            throw new AuditRecordException(AuditRecordCodeEnum.VERSION_IS_CHANGED);
+        if(!po.getStatus().equals(CommonConstant.AUDIT_RECORD_NOT_SUBMITTED)){
+            throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_CANNOT_DELETE);
         }
-        auditRecordPO.setVersion(version + 1);
-        auditRecordPO.setStatus(Byte.valueOf(("0")));
-        auditRecordPO.setCustomerName(customerName);
-        auditRecordPO.setCustomerMobile(customerMobile);
-        auditRecordPO.setExchangePoint(exchangePoint);
-        auditRecordPO.setExchangeType(exchangeType);
-        auditRecordPO.setGivingPoint(givingPoint);
-        auditRecordPO.setGivingType(givingType);
-        auditRecordPO.setRemark(remark);
-        auditRecordPO.setImgUrls(imgUrls);
-        auditRecordPO.setModTime(new Date());
-        auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
+        po.setIsDeleted(CommonConstant.CODE_DELETED);
+        auditRecordPOMapper.updateByPrimaryKeySelective(po);
+    }
+
+    @Override
+    public void changeChargeReceiptStatus(Integer id,Byte status) {
+        AuditRecordPO po = auditRecordPOMapper.selectByPrimaryKey(id);
+        if(null == po){
+            throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_IS_NOT_EXIST);
+        }
+        if(!po.getStatus().equals(CommonConstant.AUDIT_RECORD_PASS)){
+            throw new AuditRecordException(AuditRecordCodeEnum.CANNOT_COMPLETE_CHARGE_RECEIPT);
+        }
+        po.setChargeReceiptStatus(status);
+        po.setModTime(new Date());
+        auditRecordPOMapper.updateByPrimaryKeySelective(po);
+    }
+
+    @Override
+    public List<AuditRecordDTO> getList(String customerMobile, Byte status,Byte chargeReceiptStatus) {
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(customerMobile, null, status, null,null,null);
+        return auditRecordPOList.stream().map(AuditRecordAdapter::PO2DTO).collect(Collectors.toList());
     }
 }

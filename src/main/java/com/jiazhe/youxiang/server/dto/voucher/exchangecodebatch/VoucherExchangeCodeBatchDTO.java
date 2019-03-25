@@ -24,9 +24,15 @@ public class VoucherExchangeCodeBatchDTO extends BaseObject {
 
     private Integer count;
 
+    private Date expiryTime;
+
+    private Byte expiryType;
+
     private Date voucherEffectiveTime;
 
-    private Date expiryTime;
+    private Date voucherExpiryTime;
+
+    private Integer validityPeriod;
 
     private Byte status;
 
@@ -102,5 +108,29 @@ public class VoucherExchangeCodeBatchDTO extends BaseObject {
 
     public void setVoucherEffectiveTime(Date voucherEffectiveTime) {
         this.voucherEffectiveTime = voucherEffectiveTime;
+    }
+
+    public Byte getExpiryType() {
+        return expiryType;
+    }
+
+    public void setExpiryType(Byte expiryType) {
+        this.expiryType = expiryType;
+    }
+
+    public Date getVoucherExpiryTime() {
+        return voucherExpiryTime;
+    }
+
+    public void setVoucherExpiryTime(Date voucherExpiryTime) {
+        this.voucherExpiryTime = voucherExpiryTime;
+    }
+
+    public Integer getValidityPeriod() {
+        return validityPeriod;
+    }
+
+    public void setValidityPeriod(Integer validityPeriod) {
+        this.validityPeriod = validityPeriod;
     }
 }
