@@ -106,6 +106,20 @@ public enum PermissionTreeEnum {
     AUDIT_RECORD_MANAGEMENT(5, 0, "消费记录管理", PermissionConstant.AUDIT_RECORD_MANAGEMENT),
     //消费记录审核
     AUDIT_RECORD_CHECK(501, 5, "消费记录审核", PermissionConstant.AUDIT_RECORD_CHECK),
+    //凭证管理
+    CHARGE_RECEIPT_MANAGEMENT(502, 5, "凭证管理", PermissionConstant.CHARGE_RECEIPT_MANAGEMENT),
+    //凭证导出
+    CHARGE_RECEIPT_EXPORT(503, 5, "凭证导出", PermissionConstant.CHARGE_RECEIPT_EXPORT),
+    //凭证添加
+    CHARGE_RECEIPT_ADD(504, 5, "凭证添加", PermissionConstant.CHARGE_RECEIPT_ADD),
+    //凭证删除
+    CHARGE_RECEIPT_DELETE(505, 5, "凭证删除", PermissionConstant.CHARGE_RECEIPT_DELETE),
+    //凭证修改
+    CHARGE_RECEIPT_EDIT(506, 5, "凭证修改", PermissionConstant.CHARGE_RECEIPT_EDIT),
+    //完成凭证录入
+    COMPLETE_CHARGE_RECEIPT(507, 5, "完成凭证录入", PermissionConstant.COMPLETE_CHARGE_RECEIPT),
+    //重置凭证录入未完成
+    UNCOMPLETE_CHARGE_RECEIPT(508, 5, "重置凭证录入未完成", PermissionConstant.UNCOMPLETE_CHARGE_RECEIPT),
 
     /***************************查询模块相关**************************************/
     //信息查询
@@ -182,7 +196,9 @@ public enum PermissionTreeEnum {
     //积分卡兑换码修改
     POINT_CODE_EDIT(70108, 701, "积分卡兑换码修改", PermissionConstant.POINT_CODE_EDIT),
     //积分卡兑换码启、停用
-    POINT_CODE_STATUS_CHANGE(70109, 701, "积分卡兑换码启、停用", PermissionConstant.POINT_CODE_STATUS_CHANGE),
+    POINT_CODE_STATUS_CHANGE(70109, 701, "单个积分卡兑换码启、停用", PermissionConstant.POINT_CODE_STATUS_CHANGE),
+    //积分卡兑换码启、停用
+    ALL_POINT_CODE_STATUS_CHANGE(70110, 701, "所有积分卡兑换码启、停用", PermissionConstant.ALL_POINT_CODE_STATUS_CHANGE),
     //充值卡兑换码批次管理
     RC_BATCH_MANAGEMENT(702, 7, "充值卡兑换码批次管理", PermissionConstant.RC_BATCH_MANAGEMENT),
     //充值卡兑换码批次查询
@@ -201,8 +217,10 @@ public enum PermissionTreeEnum {
     RC_CODE_MANAGEMENT(70207, 702, "充值卡兑换码管理", PermissionConstant.RC_CODE_MANAGEMENT),
     //充值卡兑换码修改
     RC_CODE_EDIT(70208, 702, "充值卡兑换码修改", PermissionConstant.RC_CODE_EDIT),
-    //积分卡兑换码启、停用
-    RC_CODE_STATUS_CHANGE(70209, 702, "充值卡兑换码启、停用", PermissionConstant.RC_CODE_STATUS_CHANGE),
+    //充值卡兑换码启、停用
+    RC_CODE_STATUS_CHANGE(70209, 702, "单个充值卡兑换码启、停用", PermissionConstant.RC_CODE_STATUS_CHANGE),
+    //充值卡兑换码启、停用
+    ALL_RC_CODE_STATUS_CHANGE(70210, 702, "所有充值卡兑换码启、停用", PermissionConstant.ALL_RC_CODE_STATUS_CHANGE),
     //代金券兑换码批次管理
     VOUCHER_BATCH_MANAGEMENT(703, 7, "代金券兑换码批次管理", PermissionConstant.VOUCHER_BATCH_MANAGEMENT),
     //代金券兑换码批次查询
@@ -223,6 +241,8 @@ public enum PermissionTreeEnum {
     VOUCHER_CODE_EDIT(70308, 703, "代金券兑换码修改", PermissionConstant.VOUCHER_CODE_EDIT),
     //代金券兑换码启、停用
     VOUCHER_CODE_STATUS_CHANGE(70309, 703, "代金券兑换码启、停用", PermissionConstant.VOUCHER_CODE_STATUS_CHANGE),
+    //充值卡兑换码启、停用
+    ALL_VOUCHER_CODE_STATUS_CHANGE(70310, 703, "所有充值卡兑换码启、停用", PermissionConstant.ALL_VOUCHER_CODE_STATUS_CHANGE),
     //电子商品码管理
     ELE_CODE_MANAGEMENT(704, 7, "电子码商品管理", PermissionConstant.ELE_CODE_MANAGEMENT),
     //电子商品码查询
@@ -261,16 +281,19 @@ public enum PermissionTreeEnum {
     PARTNER_ORDER_MANAGEMENT(8, 0, "商家订单管理", PermissionConstant.PARTNER_ORDER_MANAGEMENT),
     //商家订单查询
     PARTNER_ORDER_SEARCH(801, 8, "商家订单查询", PermissionConstant.PARTNER_ORDER_SEARCH),
+    //商家订单导出
+    PARTNER_ORDER_EXPORT(802,8,"商家订单导出",PermissionConstant.PARTNER_ORDER_EXPORT),
     //商家订单添加
-    PARTNER_ORDER_ADD(802, 8, "商家订单添加", PermissionConstant.PARTNER_ORDER_ADD),
+    PARTNER_ORDER_ADD(803, 8, "商家订单添加", PermissionConstant.PARTNER_ORDER_ADD),
     //商家订单修改
-    PARTNER_ORDER_EDIT(803, 8, "商家订单修改", PermissionConstant.PARTNER_ORDER_EDIT),
+    PARTNER_ORDER_EDIT(804, 8, "商家订单修改", PermissionConstant.PARTNER_ORDER_EDIT),
     //商家订单高级修改
-    PARTNER_ORDER_HIGHER_EDIT(804, 8, "商家订单高级修改", PermissionConstant.PARTNER_ORDER_HIGHER_EDIT),
+    PARTNER_ORDER_HIGHER_EDIT(805, 8, "商家订单高级修改", PermissionConstant.PARTNER_ORDER_HIGHER_EDIT),
     //预支付记录查看
-    ADVANCE_PAY_MANAGEMENT(805, 8, "预支付记录查看", PermissionConstant.ADVANCE_PAY_MANAGEMENT),
+    ADVANCE_PAY_MANAGEMENT(806, 8, "预支付记录查看", PermissionConstant.ADVANCE_PAY_MANAGEMENT),
     //预支付记录添加
-    ADVANCE_PAY_ADD(806, 8, "预支付记录添加", PermissionConstant.ADVANCE_PAY_ADD),
+    ADVANCE_PAY_ADD(807, 8, "预支付记录添加", PermissionConstant.ADVANCE_PAY_ADD),
+
     ;
 
     PermissionTreeEnum(Integer id, Integer pId, String name, String perm) {

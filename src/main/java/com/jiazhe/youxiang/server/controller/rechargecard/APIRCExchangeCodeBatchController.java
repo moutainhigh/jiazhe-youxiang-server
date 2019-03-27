@@ -1,6 +1,5 @@
 package com.jiazhe.youxiang.server.controller.rechargecard;
 
-import com.alibaba.druid.sql.PagerUtils;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
@@ -15,7 +14,6 @@ import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
-import com.jiazhe.youxiang.server.common.exceptions.CommonException;
 import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchDTO;
@@ -29,7 +27,6 @@ import com.jiazhe.youxiang.server.vo.req.rechargecard.rcexchangecodebatch.RCExch
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchEditResp;
 import com.jiazhe.youxiang.server.vo.resp.rechargecard.rcexchangecodebatch.RCExchangeCodeBatchResp;
 import io.swagger.annotations.ApiOperation;
-import org.apache.logging.log4j.util.Strings;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -41,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,7 +58,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
     @Autowired
     private RCExchangeCodeBiz rcExchangeCodeBiz;
 
-    @RequiresPermissions(value = {PermissionConstant.RC_BATCH_MANAGEMENT,PermissionConstant.RC_BATCH_SEARCH},logical = Logical.OR)
+    @RequiresPermissions(value = {PermissionConstant.RC_BATCH_MANAGEMENT, PermissionConstant.RC_BATCH_SEARCH}, logical = Logical.OR)
     @ApiOperation(value = "【后台】充值卡兑换码批次信息列表（分页）", httpMethod = "GET", response = RCExchangeCodeBatchResp.class, responseContainer = "List", notes = "查询充值卡兑换码批次信息（根据项目id和批次名称查询）")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "充值卡兑换码批次信息列表", level = LogLevelEnum.LEVEL_1)
@@ -83,53 +79,56 @@ public class APIRCExchangeCodeBatchController extends BaseController {
         return ResponseFactory.buildResponse(respList);
     }
 
-    @RequiresPermissions(value = {PermissionConstant.RC_BATCH_ADD,PermissionConstant.RC_BATCH_EDIT},logical = Logical.OR)
+    @RequiresPermissions(value = {PermissionConstant.RC_BATCH_ADD, PermissionConstant.RC_BATCH_EDIT}, logical = Logical.OR)
     @ApiOperation(value = "【后台】保存充值卡兑换码批次信息", httpMethod = "POST", notes = "【新建、修改】保存充值卡兑换码批次信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "保存充值卡兑换码批次信息", level = LogLevelEnum.LEVEL_2)
-    public Object save(@ModelAttribute RCExchangeCodeBatchSaveReq req)  {
+    public Object save(@ModelAttribute RCExchangeCodeBatchSaveReq req) {
         CommonValidator.validateNull(req);
-        CommonValidator.validateNull(req.getId());
-        CommonValidator.validateNull(req.getName(),new RechargeCardException(RechargeCardCodeEnum.BATCH_NAME_IS_NULL));
-        CommonValidator.validateNull(req.getRechargeCardName(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));
+        CommonValidator.validateId(req.getId());
+        CommonValidator.validateNull(req.getName(), new RechargeCardException(RechargeCardCodeEnum.BATCH_NAME_IS_NULL));
+        CommonValidator.validateNull(req.getRechargeCardName(), new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));
         CommonValidator.validateNull(req.getProjectId(), new RechargeCardException(RechargeCardCodeEnum.PROJECT_IS_NULL));
         CommonValidator.validateNull(req.getCityCodes(), new RechargeCardException(RechargeCardCodeEnum.CITY_IS_NULL));
         CommonValidator.validateNull(req.getProductIds(), new RechargeCardException(RechargeCardCodeEnum.PRODUCT_IS_NULL));
         //虚拟批次
-        if(req.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)){
+        if (req.getIsVirtual().equals(CommonConstant.BATCH_IS_VIRTUAL)) {
             req.setAmount(0);
             req.setFaceValue(BigDecimal.ZERO);
-        }else{
-           CommonValidator.validateNull(req.getAmount(),new RechargeCardException(RechargeCardCodeEnum.NOT_VIRTUAL_NEED_AMOUNT));
-           CommonValidator.validateNull(req.getFaceValue(),new RechargeCardException(RechargeCardCodeEnum.NOT_VIRTUAL_NEED_FACE_VALUE));
+        } else {
+            CommonValidator.validateNull(req.getAmount(), new RechargeCardException(RechargeCardCodeEnum.NOT_VIRTUAL_NEED_AMOUNT));
+            CommonValidator.validateNull(req.getFaceValue(), new RechargeCardException(RechargeCardCodeEnum.NOT_VIRTUAL_NEED_FACE_VALUE));
         }
         //批次过期时间不为空
-        if(req.getExpiryTime() == CommonConstant.NULL_TIME){
+        if (req.getExpiryTime() == CommonConstant.NULL_TIME) {
             throw new RechargeCardException(RechargeCardCodeEnum.BATCH_EXPIRY_TIME_IS_NULL);
         }
         req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
-        //充值卡生效时间为空
-        if(req.getRechargeCardEffectiveTime()==CommonConstant.NULL_TIME){
-            throw new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EFFECTIVE_TIME_IS_NULL);
-        }
-        if(req.getRechargeCardEffectiveTime() > req.getExpiryTime()){
-            throw new RechargeCardException(RechargeCardCodeEnum.RC_EFFECTIVE_TIME_LATER_BATCH_EXPIRY_TIME);
-        }
-        req.setRechargeCardEffectiveTime(DateUtil.getFirstSecond(req.getRechargeCardEffectiveTime()));
         //充值卡过期时间为指定的时间
         if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_TIME)) {
-            if(req.getRechargeCardExpiryTime()==CommonConstant.NULL_TIME){
+            if (req.getRechargeCardEffectiveTime() == CommonConstant.NULL_TIME) {
+                throw new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EFFECTIVE_TIME_IS_NULL);
+            }
+            if (req.getRechargeCardExpiryTime() == CommonConstant.NULL_TIME) {
                 throw new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRY_TIME_IS_NULL);
             }
-            if(req.getRechargeCardEffectiveTime()> req.getRechargeCardExpiryTime()){
+            if (req.getRechargeCardEffectiveTime() > req.getExpiryTime()) {
+                throw new RechargeCardException(RechargeCardCodeEnum.RC_EFFECTIVE_TIME_LATER_BATCH_EXPIRY_TIME);
+            }
+            if (req.getRechargeCardEffectiveTime() > req.getRechargeCardExpiryTime()) {
                 throw new RechargeCardException(RechargeCardCodeEnum.RC_EFFECTIVE_TIME_LATER_RC_EXPIRY_TIME);
             }
+            req.setRechargeCardEffectiveTime(DateUtil.getFirstSecond(req.getRechargeCardEffectiveTime()));
             req.setRechargeCardExpiryTime(DateUtil.getLastSecond(req.getRechargeCardExpiryTime()));
             req.setValidityPeriod(0);
         }
-        //积分卡时间为兑换后间隔的天数
-        if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXPIRY_PERIOD)) {
-            CommonValidator.validateNull(req.getValidityPeriod(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRY_TIME_IS_NULL));
+        //自兑换之日起有效天数 或 自激活之日起有效天数
+        if (req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_EXCHANGE_PERIOD) || req.getExpiryType().equals(CommonConstant.RECHARGE_CARD_ACTIVE_PERIOD)) {
+            CommonValidator.validateNull(req.getValidityPeriod(), new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRY_TIME_IS_NULL));
+            if (req.getValidityPeriod() == 0) {
+                throw new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EXPIRY_TIME_IS_NULL);
+            }
+            req.setRechargeCardEffectiveTime(DateUtil.getFirstSecond(System.currentTimeMillis()));
             req.setRechargeCardExpiryTime(DateUtil.getLastSecond(System.currentTimeMillis()));
         }
         RCExchangeCodeBatchSaveDTO rcExchangeCodeBatchSaveDTO = RCExchangeCodeBatchAdapter.ReqSave2DTOSave(req);
@@ -162,7 +161,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
     }
 
     @RequiresPermissions(PermissionConstant.RC_BATCH_STATUS_CHANGE)
-    @ApiOperation(value = "【后台】启用批次", httpMethod = "POST", notes = "启用批次，同时改变批次下兑换码和已经兑换成充值卡的状态")
+    @ApiOperation(value = "【后台】启用批次", httpMethod = "POST", notes = "启用批次")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "启用批次", level = LogLevelEnum.LEVEL_2)
     public Object startUsing(@ModelAttribute IdReq req) {
@@ -172,7 +171,7 @@ public class APIRCExchangeCodeBatchController extends BaseController {
     }
 
     @RequiresPermissions(PermissionConstant.RC_BATCH_STATUS_CHANGE)
-    @ApiOperation(value = "【后台】停用批次", httpMethod = "POST", notes = "停用批次，同时改变批次下兑换码和已经兑换成充值卡的状态")
+    @ApiOperation(value = "【后台】停用批次", httpMethod = "POST", notes = "停用批次")
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "停用批次", level = LogLevelEnum.LEVEL_2)
     public Object stopUsing(@ModelAttribute IdReq req) {
@@ -185,19 +184,19 @@ public class APIRCExchangeCodeBatchController extends BaseController {
     @ApiOperation(value = "【后台】导出批次下兑换码", httpMethod = "GET", notes = "导出批次下兑换码")
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "导出批次下兑换码", level = LogLevelEnum.LEVEL_3)
-    public void export(@ModelAttribute IdReq req, HttpServletResponse response) throws IOException {
-        List<RCExchangeCodeDTO> rcExchangeCodeDTOList= rcExchangeCodeBiz.getByBatchId(req.getId());
-        ExportExcelUtils.exportRechargeCardCode(response,rcExchangeCodeDTOList);
+    public void export(@ModelAttribute IdReq req, HttpServletResponse response){
+        List<RCExchangeCodeDTO> rcExchangeCodeDTOList = rcExchangeCodeBiz.getByBatchId(req.getId());
+        ExportExcelUtils.exportRechargeCardCode(response, rcExchangeCodeDTOList);
     }
 
     @RequiresPermissions(PermissionConstant.RC_CODE_EXPORT)
     @ApiOperation(value = "【后台】导出前检查", httpMethod = "GET", notes = "导出前检查，看批次下是否有兑换码")
     @RequestMapping(value = "/exportcheck", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "导出前检查", level = LogLevelEnum.LEVEL_1)
-    public Object exportCheck(@ModelAttribute IdReq req){
+    public Object exportCheck(@ModelAttribute IdReq req) {
         CommonValidator.validateId(req);
-        List<RCExchangeCodeDTO> rcExchangeCodeDTOList= rcExchangeCodeBiz.getByBatchId(req.getId());
-        if(rcExchangeCodeDTOList.isEmpty()){
+        List<RCExchangeCodeDTO> rcExchangeCodeDTOList = rcExchangeCodeBiz.getByBatchId(req.getId());
+        if (rcExchangeCodeDTOList.isEmpty()) {
             throw new RechargeCardException(RechargeCardCodeEnum.NO_CODE_TO_EXPORT);
         }
         return ResponseFactory.buildSuccess();

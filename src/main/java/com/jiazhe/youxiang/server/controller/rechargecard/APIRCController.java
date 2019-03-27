@@ -44,50 +44,50 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("api/rc")
-public class APIRCController extends BaseController{
+public class APIRCController extends BaseController {
 
     @Autowired
     private RCBiz rcBiz;
 
-    @RequiresPermissions(value = {PermissionConstant.CUSTOMER_RECHARGE_CARD_DETAIL,PermissionConstant.RECHARGE_CARD_SEARCH},logical = Logical.OR)
-    @ApiOperation(value = "【后台】充值卡列表（用于信息查询页面）", httpMethod = "GET", response = RCResp.class, responseContainer = "List",notes = "信息查询页查询充值卡")
+    @RequiresPermissions(value = {PermissionConstant.CUSTOMER_RECHARGE_CARD_DETAIL, PermissionConstant.RECHARGE_CARD_SEARCH}, logical = Logical.OR)
+    @ApiOperation(value = "【后台】充值卡列表（用于信息查询页面）", httpMethod = "GET", response = RCResp.class, responseContainer = "List", notes = "信息查询页查询充值卡")
     @RequestMapping(value = "/searchlistpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "充值卡列表", level = LogLevelEnum.LEVEL_1)
     public Object searchListPage(@ModelAttribute RCPageReq req) {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        List<RCDTO> rcDTOList = rcBiz.getList(req.getMobile(),req.getExchangeType(),req.getStatus(),req.getExpiry(),paging);
+        List<RCDTO> rcDTOList = rcBiz.getList(req.getMobile(), req.getExchangeType(), req.getStatus(), req.getExpiry(), paging);
         List<RCResp> rcRespList = rcDTOList.stream().map(RCAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(rcRespList, paging);
     }
 
     @RequiresPermissions(PermissionConstant.CUSTOMER_PERMISSION)
     @AppApi
-    @ApiOperation(value = "【APP端】客户查询所有充值卡（分页）", httpMethod = "GET", response = RCResp.class, responseContainer = "List",notes = "客户查询所有充值卡，分页")
+    @ApiOperation(value = "【APP端】客户查询所有充值卡（分页）", httpMethod = "GET", response = RCResp.class, responseContainer = "List", notes = "客户查询所有充值卡，分页")
     @RequestMapping(value = "/findbycustomeridpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "客户查询所有充值卡", level = LogLevelEnum.LEVEL_1)
     public Object findByCustomerIdPage(@ModelAttribute RCCustomerPageReq req) {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        List<RCDTO> rcDTOList = rcBiz.getListByCustomerId(req.getCustomerId(),req.getStatus(),paging);
+        List<RCDTO> rcDTOList = rcBiz.getListByCustomerId(req.getCustomerId(), req.getStatus(), paging);
         List<RCResp> rcRespList = rcDTOList.stream().map(RCAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(rcRespList, paging);
     }
 
     @AppApi
-    @ApiOperation(value = "【后台、APP端】根据购买物属性（商品和城市），查询客户可使用的充值卡，分页", httpMethod = "GET", response = RCResp.class, responseContainer = "List",notes = "根据购买物属性（商品和城市），查询客户可使用的充值卡，分页")
+    @ApiOperation(value = "【后台、APP端】根据购买物属性（商品和城市），查询客户可使用的充值卡，分页", httpMethod = "GET", response = RCResp.class, responseContainer = "List", notes = "根据购买物属性（商品和城市），查询客户可使用的充值卡，分页")
     @RequestMapping(value = "/findbygoodsattrpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "根据购买物属性（商品和城市），查询客户可使用的充值卡，分页", level = LogLevelEnum.LEVEL_1)
     public Object findByGoodsAttrPage(@ModelAttribute RCGoodsAttrPageReq req) {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        List<RCDTO> rcDTOList = rcBiz.getListByGoodsAttr(req.getCustomerId(),req.getProductId(),req.getCityCode(),paging);
+        List<RCDTO> rcDTOList = rcBiz.getListByGoodsAttr(req.getCustomerId(), req.getProductId(), req.getCityCode(), paging);
         List<RCResp> rcRespList = rcDTOList.stream().map(RCAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(rcRespList, paging);
     }
 
     @RequiresPermissions(PermissionConstant.RECHARGE_CARD_SEARCH_STATUS_CHANGE)
-    @ApiOperation(value = "【后台】启用充值卡", httpMethod = "POST",notes = "启用充值卡")
+    @ApiOperation(value = "【后台】启用充值卡", httpMethod = "POST", notes = "启用充值卡")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "启用充值卡", level = LogLevelEnum.LEVEL_2)
     public Object startUsing(@ModelAttribute IdReq req) {
@@ -97,7 +97,7 @@ public class APIRCController extends BaseController{
     }
 
     @RequiresPermissions(PermissionConstant.RECHARGE_CARD_SEARCH_STATUS_CHANGE)
-    @ApiOperation(value = "【后台】停用充值卡", httpMethod = "POST",notes = "停用充值卡")
+    @ApiOperation(value = "【后台】停用充值卡", httpMethod = "POST", notes = "停用充值卡")
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "停用充值卡", level = LogLevelEnum.LEVEL_2)
     public Object stopUsing(@ModelAttribute IdReq req) {
@@ -107,18 +107,18 @@ public class APIRCController extends BaseController{
     }
 
     @RequiresPermissions(PermissionConstant.CUSTOMER_RECHARGE_CARD_CHARGE)
-    @ApiOperation(value = "【后台】直接给客户充值任意分数", httpMethod = "POST",notes = "直接给客户充值任意分数")
+    @ApiOperation(value = "【后台】直接给客户充值任意分数", httpMethod = "POST", notes = "直接给客户充值任意分数")
     @RequestMapping(value = "/directcharge", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "直接给客户充值任意分数", level = LogLevelEnum.LEVEL_3)
-    public Object directCharge(@ModelAttribute DirectChargeReq req)  {
+    public Object directCharge(@ModelAttribute DirectChargeReq req) {
         CommonValidator.validateId(req.getId());
         CommonValidator.validateId(req.getBatchId());
         CommonValidator.validateNull(req.getFaceValue());
-        rcBiz.directCharge(req.getId(),req.getBatchId(),req.getFaceValue());
+        rcBiz.directCharge(req.getId(), req.getBatchId(), req.getFaceValue());
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "【后台】回显充值卡信息", httpMethod = "GET",response = RCResp.class,notes = "回显充值卡信息")
+    @ApiOperation(value = "【后台】回显充值卡信息", httpMethod = "GET", response = RCResp.class, notes = "回显充值卡信息")
     @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "回显充值卡信息", level = LogLevelEnum.LEVEL_1)
     public Object getById(@ModelAttribute IdReq req) {
@@ -129,20 +129,20 @@ public class APIRCController extends BaseController{
     }
 
     @RequiresPermissions(PermissionConstant.RECHARGE_CARD_SEARCH_EDIT)
-    @ApiOperation(value = "【后台】修改充值卡信息", httpMethod = "POST",notes = "修改充值卡信息")
+    @ApiOperation(value = "【后台】修改充值卡信息", httpMethod = "POST", notes = "修改充值卡信息")
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.RECHARGE, operate = "修改充值卡信息", level = LogLevelEnum.LEVEL_2)
-    public Object editSave(@ModelAttribute RCEditReq req)  {
+    public Object editSave(@ModelAttribute RCEditReq req) {
         CommonValidator.validateNull(req);
         CommonValidator.validateNull(req.getId());
-        CommonValidator.validateNull(req.getName(),new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));
-        if(req.getExpiryTime()==CommonConstant.NULL_TIME){
+        CommonValidator.validateNull(req.getName(), new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_NAME_IS_NULL));
+        if (req.getExpiryTime() == CommonConstant.NULL_TIME) {
             throw new RechargeCardException(RechargeCardCodeEnum.EXCHANGE_CODE_EXPIRY_TIME_IS_NULL);
         }
-        if(req.getEffectiveTime()==CommonConstant.NULL_TIME){
+        if (req.getEffectiveTime() == CommonConstant.NULL_TIME) {
             throw new RechargeCardException(RechargeCardCodeEnum.RECHARGE_CARD_EFFECTIVE_TIME_IS_NULL);
         }
-        if(req.getEffectiveTime() > req.getExpiryTime()){
+        if (req.getEffectiveTime() > req.getExpiryTime()) {
             throw new RechargeCardException(RechargeCardCodeEnum.RC_EFFECTIVE_TIME_LATER_RC_EXPIRY_TIME);
         }
         req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));

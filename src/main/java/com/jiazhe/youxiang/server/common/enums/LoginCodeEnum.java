@@ -17,7 +17,9 @@ public enum LoginCodeEnum {
     LOGIN_IDENTIFYING_CODE_EXPIRY(112009, "LOGIN_IDENTIFYING_CODE_EXPIRY", "验证码失效"),
     LOGIN_NOT_SIGNIN_IN(112010, "LOGIN_NOT_SIGNIN_IN", "未登录"),
     LOGIN_CUSTOMER_NOT_EXISTED(112011, "LOGIN_CUSTOMER_NOT_EXISTED", "不存在该用户，请先注册"),
-    LOGIN_NO_PERMISSION(112012,"LOGIN_NO_PERMISSION","无权限");
+    LOGIN_NO_PERMISSION(112012,"LOGIN_NO_PERMISSION","无权限"),
+    ALI_MESSAGE_SERVICE_EXCEPTION(112013,"ALI_MESSAGE_SERVICE_ERROR","阿里云短信服务异常，请稍后重试"),
+    ;
 
     LoginCodeEnum(Integer code, String type, String message) {
         this.code = code;

@@ -85,10 +85,10 @@ public interface VoucherExchangeCodeService {
      * 兑换码换代金券
      *
      * @param exchangeType
-     * @param id
+     * @param customerId
      * @param keyt
      */
-    void codeCharge(Integer exchangeType, Integer id, String keyt) ;
+    void codeCharge(Integer exchangeType, Integer customerId, String keyt) ;
 
     /**
      * 根据keyt查询代金券兑换码
@@ -97,4 +97,10 @@ public interface VoucherExchangeCodeService {
      * @return
      */
     VoucherExchangeCodePO findByKeyt(String keyt);
+
+    /**
+     * 批量修改代金券卡号和密钥
+     * @param voucherExchangeCodeDTOS
+     */
+    void batchUpdateCodeAndKeyt(List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOS);
 }

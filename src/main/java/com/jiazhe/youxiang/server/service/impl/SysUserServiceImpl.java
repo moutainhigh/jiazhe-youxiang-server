@@ -161,7 +161,17 @@ public class SysUserServiceImpl implements SysUserService {
         if (null == sysUserPO) {
             throw new UserException(UserCodeEnum.USER_NOT_EXISTED);
         }
-        sysUserPO.setLastLoginIp(ipAdrress);
+        String newIpAddress = new String(ipAdrress + ";" + sysUserPO.getLastLoginIp());
+        String[] newIpAddressAttr = newIpAddress.toString().split(";");
+        if (newIpAddressAttr.length > CommonConstant.IP_WHITE_LIST_UPPER_LIMIT) {
+            StringBuilder ip = new StringBuilder("");
+            for (int i = 0; i < CommonConstant.IP_WHITE_LIST_UPPER_LIMIT; i++) {
+                ip.append(newIpAddressAttr[i] + ";");
+            }
+            sysUserPO.setLastLoginIp(ip.toString());
+        } else {
+            sysUserPO.setLastLoginIp(newIpAddress);
+        }
         sysUserPO.setLastLoginTime(new Date());
         sysUserPOMapper.updateByPrimaryKeySelective(sysUserPO);
     }

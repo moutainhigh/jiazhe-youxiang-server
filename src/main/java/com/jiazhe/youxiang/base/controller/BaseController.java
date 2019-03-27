@@ -26,7 +26,10 @@ public abstract class BaseController {
      */
     @ExceptionHandler({UnauthorizedException.class, AuthorizationException.class})
     public String authorizationException(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (ProjectUtil.isAjax(request)) {
+        if (ProjectUtil.isPageJump(request)) {
+            LOGGER.info("BaseController：页面跳转，无权限");
+            return "redirect:/system/403";
+        } else {
             LOGGER.info("BaseController：ajax请求，无权限");
             JSONObject obj = new JSONObject();
             obj.put("code", LoginCodeEnum.LOGIN_NO_PERMISSION.getCode());
@@ -38,9 +41,6 @@ public abstract class BaseController {
             response.setCharacterEncoding("utf-8");
             response.getWriter().write(result.toString());
             return null;
-        } else {
-            LOGGER.info("BaseController：页面跳转，无权限");
-            return "redirect:/system/403";
         }
     }
 }

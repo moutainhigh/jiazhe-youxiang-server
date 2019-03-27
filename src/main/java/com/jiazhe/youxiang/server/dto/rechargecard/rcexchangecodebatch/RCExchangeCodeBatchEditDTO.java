@@ -24,6 +24,8 @@ public class RCExchangeCodeBatchEditDTO extends BaseObject {
 
     private Byte isMade;
 
+    private Byte status;
+
     private String description;
 
     private Integer projectId;
@@ -172,5 +174,13 @@ public class RCExchangeCodeBatchEditDTO extends BaseObject {
 
     public void setRechargeCardEffectiveTime(Date rechargeCardEffectiveTime) {
         this.rechargeCardEffectiveTime = rechargeCardEffectiveTime;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 }

@@ -20,14 +20,17 @@ public class AuditRecordAdapter {
         auditRecordResp.setCustomerName(auditRecordDTO.getCustomerName());
         auditRecordResp.setCustomerMobile(auditRecordDTO.getCustomerMobile());
         auditRecordResp.setExchangePoint(auditRecordDTO.getExchangePoint());
-        auditRecordResp.setExchangeType(auditRecordDTO.getExchangeType());
         auditRecordResp.setGivingPoint(auditRecordDTO.getGivingPoint());
-        auditRecordResp.setGivingType(auditRecordDTO.getGivingType());
+        auditRecordResp.setExchangeType(auditRecordDTO.getExchangeType());
+        auditRecordResp.setChargeReceiptStatus(auditRecordDTO.getChargeReceiptStatus());
+        auditRecordResp.setPointCodes(auditRecordDTO.getPointCodes());
+        auditRecordResp.setProductValue(auditRecordDTO.getProductValue());
         auditRecordResp.setAuditReason(auditRecordDTO.getAuditReason());
         auditRecordResp.setRemark(auditRecordDTO.getRemark());
         auditRecordResp.setImgUrls(auditRecordDTO.getImgUrls());
         auditRecordResp.setPosCode(auditRecordDTO.getPosCode());
         auditRecordResp.setCardNo(auditRecordDTO.getCardNo());
+        auditRecordResp.setBankOutletsName(auditRecordDTO.getBankOutletsName());
         auditRecordResp.setTradeTime(auditRecordDTO.getTradeTime().getTime());
         auditRecordResp.setSubmitterId(auditRecordDTO.getSubmitterId());
         auditRecordResp.setSubmitterName(auditRecordDTO.getSubmitterName());
@@ -51,13 +54,16 @@ public class AuditRecordAdapter {
         auditRecordDTO.setCustomerName(auditRecordPO.getCustomerName());
         auditRecordDTO.setCustomerMobile(auditRecordPO.getCustomerMobile());
         auditRecordDTO.setExchangePoint(auditRecordPO.getExchangePoint());
-        auditRecordDTO.setExchangeType(auditRecordPO.getExchangeType());
         auditRecordDTO.setGivingPoint(auditRecordPO.getGivingPoint());
-        auditRecordDTO.setGivingType(auditRecordPO.getGivingType());
+        auditRecordDTO.setExchangeType(auditRecordPO.getExchangeType());
+        auditRecordDTO.setChargeReceiptStatus(auditRecordPO.getChargeReceiptStatus());
+        auditRecordDTO.setPointCodes(auditRecordPO.getPointCodes());
+        auditRecordDTO.setProductValue(auditRecordPO.getProductValue());
         auditRecordDTO.setAuditReason(auditRecordPO.getAuditReason());
         auditRecordDTO.setRemark(auditRecordPO.getRemark());
         auditRecordDTO.setPosCode(auditRecordPO.getPosCode());
         auditRecordDTO.setCardNo(auditRecordPO.getCardNo());
+        auditRecordDTO.setBankOutletsName(auditRecordPO.getBankOutletsName());
         auditRecordDTO.setTradeTime(auditRecordPO.getTradeTime());
         auditRecordDTO.setImgUrls(auditRecordPO.getImgUrls());
         auditRecordDTO.setSubmitterId(auditRecordPO.getSubmitterId());
@@ -69,6 +75,41 @@ public class AuditRecordAdapter {
         auditRecordDTO.setVersion(auditRecordPO.getVersion());
         auditRecordDTO.setAddTime(auditRecordPO.getAddTime());
         auditRecordDTO.setModTime(auditRecordPO.getModTime());
+        auditRecordDTO.setIsDeleted(auditRecordPO.getIsDeleted());
         return auditRecordDTO;
+    }
+
+    public static AuditRecordPO dto2Po(AuditRecordDTO auditRecordDTO) {
+        if (auditRecordDTO == null) {
+            return null;
+        }
+        AuditRecordPO auditRecordPO = new AuditRecordPO();
+        auditRecordPO.setId(auditRecordDTO.getId());
+        auditRecordPO.setPointIds(auditRecordDTO.getPointIds());
+        auditRecordPO.setCustomerName(auditRecordDTO.getCustomerName());
+        auditRecordPO.setCustomerMobile(auditRecordDTO.getCustomerMobile());
+        auditRecordPO.setExchangePoint(auditRecordDTO.getExchangePoint());
+        auditRecordPO.setGivingPoint(auditRecordDTO.getGivingPoint());
+        auditRecordPO.setExchangeType(auditRecordDTO.getExchangeType());
+        auditRecordPO.setChargeReceiptStatus(auditRecordDTO.getChargeReceiptStatus());
+        auditRecordPO.setPointCodes(auditRecordDTO.getPointCodes());
+        auditRecordPO.setProductValue(auditRecordDTO.getProductValue());
+        auditRecordPO.setRemark(auditRecordDTO.getRemark());
+        auditRecordPO.setAuditReason(auditRecordDTO.getAuditReason());
+        auditRecordPO.setImgUrls(auditRecordDTO.getImgUrls());
+        auditRecordPO.setPosCode(auditRecordDTO.getPosCode());
+        auditRecordPO.setCardNo(auditRecordDTO.getCardNo());
+        auditRecordPO.setBankOutletsName(auditRecordDTO.getBankOutletsName());
+        auditRecordPO.setTradeTime(auditRecordDTO.getTradeTime());
+        auditRecordPO.setSubmitterId(auditRecordDTO.getSubmitterId());
+        auditRecordPO.setSubmitterName(auditRecordDTO.getSubmitterName());
+        auditRecordPO.setStatus(auditRecordDTO.getStatus());
+        auditRecordPO.setAuditTime(auditRecordDTO.getAuditTime());
+        auditRecordPO.setAuditorId(auditRecordDTO.getAuditorId());
+        auditRecordPO.setAuditorName(auditRecordDTO.getAuditorName());
+        auditRecordPO.setVersion(auditRecordDTO.getVersion());
+        auditRecordPO.setAddTime(auditRecordDTO.getAddTime());
+        auditRecordPO.setModTime(auditRecordDTO.getModTime());
+        return auditRecordPO;
     }
 }

@@ -39,4 +39,6 @@ public interface ProductPricePOManualMapper {
                                @Param("offset") Integer offset,
                                @Param("limit") Integer limit);
 
+    void batchUpdatePriceStatus(@Param("productId") Integer productId,
+                                @Param("status") Integer status);
 }

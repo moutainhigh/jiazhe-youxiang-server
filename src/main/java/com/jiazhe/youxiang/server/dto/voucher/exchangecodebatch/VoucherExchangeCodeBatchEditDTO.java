@@ -2,7 +2,6 @@ package com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch;
 
 import com.jiazhe.youxiang.server.vo.BaseObject;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -21,6 +20,8 @@ public class VoucherExchangeCodeBatchEditDTO extends BaseObject {
     private String voucherName;
 
     private Byte isMade;
+
+    private Byte status;
 
     private String description;
 
@@ -162,5 +163,13 @@ public class VoucherExchangeCodeBatchEditDTO extends BaseObject {
 
     public void setVoucherEffectiveTime(Date voucherEffectiveTime) {
         this.voucherEffectiveTime = voucherEffectiveTime;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 }

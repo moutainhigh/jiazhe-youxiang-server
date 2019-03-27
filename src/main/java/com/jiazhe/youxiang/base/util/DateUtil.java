@@ -27,6 +27,11 @@ public class DateUtil {
         return null;
     }
 
+    public static String dateToStr(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return  sdf.format(date);
+    }
+
     /**
      * 将字符串转为date类型
      */
@@ -100,6 +105,15 @@ public class DateUtil {
     }
 
     /**
+     * 返回yyyyMMDDhh
+     */
+    public static String yyyyMMDD(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String str = sdf.format(date);
+        return str;
+    }
+
+    /**
      * 将XXXX-XX-XX XX:XX:XX的Long型转为XXXX-XX-XX 00:00:00的Long型
      */
     public static Long getFirstSecond(Long time) {
@@ -132,6 +146,4 @@ public class DateUtil {
         }
         return convert.getTime();
     }
-
-
 }

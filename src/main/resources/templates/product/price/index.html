@@ -83,6 +83,14 @@
                                 <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-form"
                                    data-toggle="modal" onclick="openNew()">
                                     <i class="ace-icon fa fa-plus"></i>批量修改
+                                </a>&nbsp;&nbsp;
+                            </shiro:hasPermission>
+                            <shiro:hasPermission name="productPriceEffect">
+                                <a class="btn btn-primary btn-round btn-sm" role="button"
+                                   data-toggle="modal" onclick="activeAll()">全部生效
+                                </a>&nbsp;&nbsp;
+                                <a class="btn btn-danger btn-round btn-sm" role="button"
+                                   data-toggle="modal" onclick="invalidAll()">全部失效
                                 </a>
                             </shiro:hasPermission>
                         </p>
@@ -100,6 +108,12 @@
                                     <h4 class="blue bigger" id="modal-title"></h4>
                                 </div>
                                 <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-5"></div>
+                                        <div class="col-xs-12 col-sm-7">
+                                            <input type="checkbox" id="checkAllCity" onchange="checkAllCity(this)"/>全选城市
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-1"></div>
                                         <div class="col-xs-12 col-sm-9">
@@ -315,8 +329,17 @@
         $("#inputCityCodes").val(strCityCodes);
     }
 
+    function checkAllCity(doc){
+        if(doc.checked){
+            treeCity.checkAllNodes(true);
+        }else{
+            treeCity.checkAllNodes(false);
+        }
+    }
 
     function openNew() {
+        $("#checkAllCity").prop('checked',false);
+        treeCity.checkAllNodes(false);
         $("#modal-title").html("商品价格-批量修改");
     }
 
@@ -393,13 +416,51 @@
                         zNode.name = result[i].cityName;
                         zCityNodes.push(zNode);
                     }
-
                 }
                 console.log(zNode);
             },
             error: error
         });
         treeCity = $.fn.zTree.init($("#treeCity"), setting, zCityNodes);
+    }
+
+    function activeAll(){
+        confirm("批量生效该商品的价格吗？",function(result){
+            if(result){
+                var productId = $("#inputProductId").val();
+                batchUpdatePriceStatus(productId,1);
+            }
+        })
+    }
+
+    function invalidAll(){
+        confirm("批量失效该商品的价格吗？",function(result){
+            if(result){
+                var productId = $("#inputProductId").val();
+                batchUpdatePriceStatus(productId,0);
+            }
+        })
+    }
+
+    function batchUpdatePriceStatus(productId,status){
+        $.ajax({
+            url: "/api/product/batchupdatepricestatus",
+            dataType: "json",
+            async: false,
+            type: "POST",
+            data:{
+              id:productId,
+              status:status
+            },
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: error
+        });
     }
 
 </script>

@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.controller.partnerorder;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.ExportExcelUtils;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.partnerorder.PartnerOrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.partnerorder.PartnerOrderInfoBiz;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -120,5 +122,16 @@ public class APIPartnerOrderInfoController extends BaseController {
         Date timeEnd = req.getServiceTimeEnd() == CommonConstant.NULL_TIME ? null : new Date(req.getServiceTimeEnd());
         OverviewMoneyResp resp = partnerOrderInfoBiz.calOverviewMoney(timeStart, timeEnd);
         return ResponseFactory.buildResponse(resp);
+    }
+
+    @RequiresPermissions(PermissionConstant.PARTNER_ORDER_EXPORT)
+    @ApiOperation(value = "【后台】导出商家订单", httpMethod = "GET", notes = "导出商家订单")
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER, operate = "导出商家订单", level = LogLevelEnum.LEVEL_3)
+    public void export(@ModelAttribute PartnerOrderInfoPageReq req, HttpServletResponse response){
+        Date serviceTimeStart = req.getServiceTimeStart() == CommonConstant.NULL_TIME ? null : new Date(req.getServiceTimeStart());
+        Date serviceTimeEnd = req.getServiceTimeEnd() == CommonConstant.NULL_TIME ? null : new Date(req.getServiceTimeEnd());
+        List<PartnerOrderInfoDTO> dtoList = partnerOrderInfoBiz.getList(req.getStatus(), req.getCustomerCityCode(), req.getPartnerId(), req.getServiceItemId(), serviceTimeStart, serviceTimeEnd, req.getCustomerMobile());
+        ExportExcelUtils.exportPartnerOrder(response, dtoList);
     }
 }

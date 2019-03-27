@@ -1,7 +1,7 @@
 /**
  * 权限字符串的cookie
  */
-var permission = getCookie("permission");
+var permission = getCookie("permission").split("#");
 
 function transformToJson(formData) {
     var obj = {}
@@ -176,7 +176,23 @@ function getFunctionButton(style, func, name) {
  * @returns {string}
  */
 function getRedirectButton(style, url, name) {
-    return "<a class='btn btn-minier " + style + "' href='" + url + "'>" + name + "</a>&nbsp;";
+    return "<a class='btn btn-minier " + style + "' href='" + encodeUrl(url) + "'>" + name + "</a>&nbsp;";
+}
+
+/**
+ * 将url中参数转为转义格式进行传输
+ * @param url
+ * @returns {*}
+ */
+function encodeUrl(url){
+    var native = ['+'];
+    var transfer = ['%2B'];
+    for(var i=0;i<native.length;i++){
+        while(url.indexOf(native[i]) != -1){
+            url = url.replace(native[i],transfer[i]);
+        }
+    }
+    return url;
 }
 
 function success(data) {
@@ -225,6 +241,10 @@ function initTable(grid_selector, pager_selector, options) {
     var multiselect = options.hasOwnProperty("multiselect") ? options.multiselect : false;
     var emptyrecords = options.hasOwnProperty("emptyrecords") ? options.emptyrecords : "0条数据";
     var loadComplete = options.hasOwnProperty("loadComplete") ? options.loadComplete : function (data) {
+        if("error" in data){
+            bootboxalert(data.error.message);
+            return false;
+        }
         var table = this;
         setTimeout(function () {
             $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名

@@ -3,13 +3,11 @@ package com.jiazhe.youxiang.server.service.impl.point;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.point.PointAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
-import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
-import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.PointCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
-import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
+import com.jiazhe.youxiang.server.common.exceptions.PointException;
 import com.jiazhe.youxiang.server.dao.mapper.PointExchangeCodeBatchPOMapper;
-import com.jiazhe.youxiang.server.dao.mapper.PointExchangeRecordPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.PointPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.point.PointPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO;
@@ -26,6 +24,7 @@ import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.ProjectService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeBatchService;
+import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeRecordService;
 import com.jiazhe.youxiang.server.service.point.PointService;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -36,7 +35,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +57,7 @@ public class PointServiceImpl implements PointService {
     private PointExchangeCodeBatchPOMapper pointExchangeCodeBatchPOMapper;
 
     @Autowired
-    private PointExchangeRecordPOMapper pointExchangeRecordPOMapper;
+    private PointExchangeCodeService pointExchangeCodeService;
     @Autowired
     private CustomerService customerService;
     @Autowired
@@ -72,21 +70,13 @@ public class PointServiceImpl implements PointService {
     private ProjectService projectService;
 
     @Override
-    public void batchUpdate(List<Integer> ids, PointExchangeCodeBatchSaveDTO batchSaveDTO) {
+    public void updateWithBatch(List<Integer> ids, PointExchangeCodeBatchSaveDTO batchSaveDTO) {
         List<PointPO> pointPOList = pointPOManualMapper.findByIds(ids);
         pointPOList.stream().forEach(bean -> {
             bean.setName(batchSaveDTO.getPointName());
-            bean.setDescription(batchSaveDTO.getDescription());
             bean.setProjectId(batchSaveDTO.getProjectId());
             bean.setCityCodes(batchSaveDTO.getCityCodes());
             bean.setProductIds(batchSaveDTO.getProductIds());
-            //直接指定过期时间
-            if (batchSaveDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
-                bean.setExpiryTime(batchSaveDTO.getPointExpiryTime());
-            } else {
-                bean.setExpiryTime(new Date(DateUtil.getLastSecond(bean.getAddTime().getTime() + batchSaveDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
-            }
-            bean.setEffectiveTime(batchSaveDTO.getPointEffectiveTime());
         });
         pointPOManualMapper.batchUpdate(pointPOList);
     }
@@ -141,26 +131,30 @@ public class PointServiceImpl implements PointService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void directCharge(Integer id, Integer batchId, BigDecimal faceValue)  {
-        CustomerDTO customerDTO = customerService.getById(id);
+    public void directCharge(Integer customerId, Integer batchId, BigDecimal faceValue) {
+        CustomerDTO customerDTO = customerService.getById(customerId);
         if (null == customerDTO) {
-            throw new RechargeCardException(RechargeCardCodeEnum.CUSTOMER_NOT_EXIST);
+            throw new PointException(PointCodeEnum.CUSTOMER_NOT_EXIST);
         }
         PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO = pointExchangeCodeBatchService.getById(batchId);
+        if (null == pointExchangeCodeBatchEditDTO) {
+            throw new PointException(PointCodeEnum.BATCH_NOT_EXISTED);
+        }
         PointPO pointPO = new PointPO();
         //直接指定过期时间
         if (pointExchangeCodeBatchEditDTO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
+            pointPO.setEffectiveTime(pointExchangeCodeBatchEditDTO.getPointEffectiveTime());
             pointPO.setExpiryTime(pointExchangeCodeBatchEditDTO.getPointExpiryTime());
-        } else {
+        } else {  //自兑换、激活之日起，有效期天数
+            pointPO.setEffectiveTime(new Date(DateUtil.getFirstSecond(System.currentTimeMillis())));
             pointPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + pointExchangeCodeBatchEditDTO.getValidityPeriod() * CommonConstant.ONE_DAY)));
         }
-        pointPO.setEffectiveTime(pointExchangeCodeBatchEditDTO.getPointEffectiveTime());
         pointPO.setDescription(pointExchangeCodeBatchEditDTO.getDescription());
         pointPO.setFaceValue(faceValue);
         pointPO.setBalance(faceValue);
         //暂时置为0，等生成了兑换记录再修改
         pointPO.setExchangeRecordId(0);
-        pointPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
+        pointPO.setStatus(CommonConstant.CODE_START_USING);
         pointPO.setProjectId(pointExchangeCodeBatchEditDTO.getProjectId());
         pointPO.setName(pointExchangeCodeBatchEditDTO.getPointName());
         pointPO.setCustomerId(customerDTO.getId());
@@ -178,7 +172,7 @@ public class PointServiceImpl implements PointService {
         pointRecordPO.setExchangeType(CommonConstant.EXCHANGETYPE_USER_DIRECTCHARGE);
         pointRecordPO.setPointId(pointPO.getId());
         pointRecordPO.setExtInfo("");
-        pointRecordPO.setIsDeleted(Byte.valueOf("0"));
+        pointRecordPO.setIsDeleted(CommonConstant.CODE_NOT_DELETED);
         pointRecordPO.setAddTime(new Date());
         pointRecordPO.setModTime(new Date());
         pointExchangeRecordService.insert(pointRecordPO);
@@ -196,6 +190,9 @@ public class PointServiceImpl implements PointService {
     @Override
     public void editSave(PointEditDTO dto) {
         PointPO po = pointPOMapper.selectByPrimaryKey(dto.getId());
+        if (null == po) {
+            throw new PointException(PointCodeEnum.POINT_NOT_EXIST);
+        }
         po.setProductIds(dto.getProductIds());
         po.setCityCodes(dto.getCityCodes());
         po.setName(dto.getName());
@@ -240,22 +237,21 @@ public class PointServiceImpl implements PointService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void chargeByQRCode(String purchaseOrderStr, CustomerDTO customerDTO, Integer batchId, BigDecimal faceValue)  {
+    public void chargeByQRCode(String purchaseOrderStr, CustomerDTO customerDTO, Integer batchId, BigDecimal faceValue) {
         PointExchangeCodeBatchPO batchPO = pointExchangeCodeBatchPOMapper.selectByPrimaryKey(batchId);
         PointPO pointPO = new PointPO();
         //直接指定过期时间
         if (batchPO.getExpiryType().equals(CommonConstant.POINT_EXPIRY_TIME)) {
             pointPO.setExpiryTime(batchPO.getPointExpiryTime());
-        } else {
+        } else { //自兑换、激活之日起
             pointPO.setExpiryTime(new Date(DateUtil.getLastSecond(System.currentTimeMillis() + batchPO.getValidityPeriod() * CommonConstant.ONE_DAY)));
         }
-        pointPO.setEffectiveTime(batchPO.getPointEffectiveTime());
         pointPO.setDescription(batchPO.getDescription());
         pointPO.setFaceValue(faceValue);
         pointPO.setBalance(faceValue);
         //暂时置为0，等生成了兑换记录再修改
         pointPO.setExchangeRecordId(0);
-        pointPO.setStatus(CodeStatusEnum.START_USING.getId().byteValue());
+        pointPO.setStatus(CommonConstant.CODE_START_USING);
         pointPO.setProjectId(batchPO.getProjectId());
         pointPO.setName(batchPO.getPointName());
         pointPO.setCustomerId(customerDTO.getId());
@@ -266,11 +262,11 @@ public class PointServiceImpl implements PointService {
         //20180604,114656
         String date = stringArray[5];
         String time = stringArray[6];
-        Date tradeTime = DateUtil.yyyyMMddHHmmssStrToSeconds(date+time);
+        Date tradeTime = DateUtil.yyyyMMddHHmmssStrToSeconds(date + time);
         Date effectiveTime = new Date(tradeTime.getTime() + CommonConstant.ONE_DAY);
-        if(effectiveTime.compareTo(batchPO.getPointEffectiveTime()) == 1){
+        if (effectiveTime.compareTo(batchPO.getPointEffectiveTime()) == 1) {
             pointPO.setEffectiveTime(effectiveTime);
-        }else{
+        } else {
             pointPO.setEffectiveTime(batchPO.getPointEffectiveTime());
         }
         pointService.insert(pointPO);
@@ -282,7 +278,7 @@ public class PointServiceImpl implements PointService {
         pointRecordPO.setPointId(pointPO.getId());
         //在兑换记录中记录签购单信息
         pointRecordPO.setExtInfo(purchaseOrderStr);
-        pointRecordPO.setIsDeleted(Byte.valueOf("0"));
+        pointRecordPO.setIsDeleted(CommonConstant.CODE_NOT_DELETED);
         pointRecordPO.setAddTime(new Date());
         pointRecordPO.setModTime(new Date());
         pointExchangeRecordService.insert(pointRecordPO);

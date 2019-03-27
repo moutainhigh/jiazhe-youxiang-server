@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.ChargeReceiptPOManualMapper">
+    <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.ChargeReceiptPO">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="audit_record_id" property="auditRecordId" jdbcType="INTEGER" />
+        <result column="exchange_point" property="exchangePoint" jdbcType="DECIMAL" />
+        <result column="pos_code" property="posCode" jdbcType="VARCHAR" />
+        <result column="trade_time" property="tradeTime" jdbcType="TIMESTAMP" />
+        <result column="card_no" property="cardNo" jdbcType="VARCHAR" />
+        <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+        <result column="inputer_id" property="inputerId" jdbcType="INTEGER" />
+        <result column="inputer_name" property="inputerName" jdbcType="VARCHAR" />
+        <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, audit_record_id, exchange_point, pos_code, trade_time, card_no, customer_name,
+        inputer_id, inputer_name, ext_info, is_deleted, add_time, mod_time
+    </sql>
+
+    <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.ChargeReceiptPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM charge_receipt
+        <where>
+            <if test="auditRecordId != null and auditRecordId != 0">
+                AND audit_record_id = #{auditRecordId}
+            </if>
+            AND is_deleted = 0 ORDER BY mod_time DESC
+        </where>
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from charge_receipt
+        <where>
+            <if test="auditRecordId != null and auditRecordId != 0">
+                AND audit_record_id = #{auditRecordId}
+            </if>
+            AND is_deleted = 0
+        </where>
+    </select>
+
+    <select id="finByAuditRecordIds" parameterType="java.util.List" resultType="com.jiazhe.youxiang.server.domain.po.ChargeReceiptPO">
+        select
+        <include refid="Base_Column_List"/>
+        FROM charge_receipt
+        where audit_record_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>

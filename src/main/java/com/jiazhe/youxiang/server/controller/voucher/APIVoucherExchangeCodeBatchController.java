@@ -1,7 +1,10 @@
 package com.jiazhe.youxiang.server.controller.voucher;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
-import com.jiazhe.youxiang.base.util.*;
+import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.DateUtil;
+import com.jiazhe.youxiang.base.util.ExportExcelUtils;
+import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.voucher.VoucherExchangeCodeBatchAdapter;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherExchangeCodeBatchBiz;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherExchangeCodeBiz;
@@ -35,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,9 +73,9 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
     @ApiOperation(value = "【新建、修改】保存代金券兑换码批次信息", httpMethod = "POST", notes = "【新建、修改】保存代金券兑换码批次信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "保存代金券兑换码批次信息", level = LogLevelEnum.LEVEL_2)
-    public Object save(@ModelAttribute VoucherExchangeCodeBatchSaveReq req)  {
+    public Object save(@ModelAttribute VoucherExchangeCodeBatchSaveReq req) {
         CommonValidator.validateNull(req);
-        CommonValidator.validateNull(req.getId());
+        CommonValidator.validateId(req.getId());
         CommonValidator.validateNull(req.getName(), new VoucherException(VoucherCodeEnum.BATCH_NAME_IS_NULL));
         CommonValidator.validateNull(req.getVoucherName(), new VoucherException(VoucherCodeEnum.VOUCHER_NAME_IS_NULL));
         CommonValidator.validateNull(req.getAmount(), new VoucherException(VoucherCodeEnum.AMOUNT_IS_NULL));
@@ -86,27 +88,31 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
             throw new VoucherException(VoucherCodeEnum.BATCH_EXPIRY_TIME_IS_NULL);
         }
         req.setExpiryTime(DateUtil.getLastSecond(req.getExpiryTime()));
-        //代金券生效时间为空
-        if (req.getVoucherEffectiveTime() == CommonConstant.NULL_TIME) {
-            throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_IS_NULL);
-        }
-        if(req.getVoucherEffectiveTime() > req.getExpiryTime()){
-            throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_LATER_BATCH_EXPIRY_TIME);
-        }
-        req.setVoucherEffectiveTime(DateUtil.getFirstSecond(req.getVoucherEffectiveTime()));
         //代金券过期时间为指定的时间
         if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXPIRY_TIME)) {
+            if (req.getVoucherEffectiveTime() == CommonConstant.NULL_TIME) {
+                throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_IS_NULL);
+            }
             if (req.getVoucherExpiryTime() == CommonConstant.NULL_TIME) {
                 throw new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL);
             }
-            if(req.getVoucherEffectiveTime()> req.getVoucherExpiryTime()){
+            if (req.getVoucherEffectiveTime() > req.getExpiryTime()) {
+                throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_LATER_BATCH_EXPIRY_TIME);
+            }
+            if (req.getVoucherEffectiveTime() > req.getVoucherExpiryTime()) {
                 throw new VoucherException(VoucherCodeEnum.VOUCHER_EFFECTIVE_TIME_LATER_VOUCHER_EXPIRY_TIME);
             }
-            req.setValidityPeriod(0);
+            req.setVoucherEffectiveTime(DateUtil.getFirstSecond(req.getVoucherEffectiveTime()));
             req.setVoucherExpiryTime(DateUtil.getLastSecond(req.getVoucherExpiryTime()));
+            req.setValidityPeriod(0);
         }
-        if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXPIRY_PERIOD)) {
+        //自兑换之日起有效天数 或 自激活之日起有效天数
+        if (req.getExpiryType().equals(CommonConstant.VOUCHER_EXCHANGE_PERIOD) || req.getExpiryType().equals(CommonConstant.VOUCHER_ACTIVE_PERIOD)) {
             CommonValidator.validateNull(req.getValidityPeriod(), new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL));
+            if (req.getValidityPeriod() == 0) {
+                throw new VoucherException(VoucherCodeEnum.VOUCHER_EXPIRY_TIME_IS_NULL);
+            }
+            req.setVoucherEffectiveTime(DateUtil.getFirstSecond(System.currentTimeMillis()));
             req.setVoucherExpiryTime(DateUtil.getLastSecond(System.currentTimeMillis()));
         }
         VoucherExchangeCodeBatchSaveDTO voucherExchangeCodeBatchSaveDTO = VoucherExchangeCodeBatchAdapter.ReqSave2DTOSave(req);
@@ -139,7 +145,7 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
     }
 
     @RequiresPermissions(PermissionConstant.VOUCHER_BATCH_STATUS_CHANGE)
-    @ApiOperation(value = "启用批次【同时改变批次下兑换码状态】", httpMethod = "POST", notes = "启用批次【同时改变批次下兑换码状态】")
+    @ApiOperation(value = "启用批次", httpMethod = "POST", notes = "启用批次【不改变批次下兑换码状态】")
     @RequestMapping(value = "/startusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "启用批次", level = LogLevelEnum.LEVEL_2)
     public Object startUsing(@ModelAttribute IdReq req) {
@@ -149,7 +155,7 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
     }
 
     @RequiresPermissions(PermissionConstant.VOUCHER_BATCH_STATUS_CHANGE)
-    @ApiOperation(value = "停用批次【同时改变批次下兑换码状态】", httpMethod = "POST", notes = "停用批次【同时改变批次下兑换码状态】")
+    @ApiOperation(value = "停用批次", httpMethod = "POST", notes = "停用批次【不改变批次下兑换码状态】")
     @RequestMapping(value = "/stopusing", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "停用批次", level = LogLevelEnum.LEVEL_2)
     public Object stopUsing(@ModelAttribute IdReq req) {
@@ -162,7 +168,7 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
     @ApiOperation(value = "导出批次下兑换码", httpMethod = "GET", notes = "导出批次下兑换码")
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.VOUCHER, operate = "导出批次下兑换码", level = LogLevelEnum.LEVEL_3)
-    public void export(@ModelAttribute IdReq req, HttpServletResponse response) throws IOException {
+    public void export(@ModelAttribute IdReq req, HttpServletResponse response){
         List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOList = voucherExchangeCodeBiz.getByBatchId(req.getId());
         ExportExcelUtils.exportVoucherCode(response, voucherExchangeCodeDTOList);
     }

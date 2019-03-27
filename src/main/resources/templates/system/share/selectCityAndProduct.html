@@ -9,6 +9,16 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12">
+                        <div class="col-sm-6">
+                            <input type="checkbox" id="checkAllCity" onchange="checkAllCity(this)"/>全选城市
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="checkbox" id="checkAllProduct" onchange="checkAllProduct(this)"/>全选商品
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12">
                         <div class="form-group">
                             <div class="col-sm-6">
                                 <div id="cityContent" style="border:1px solid rgb(170,170,170);z-index:10;">
@@ -116,7 +126,6 @@
         dataType: "json",
         async: false,
         data: {
-            status: 1,
             pageSize: 10000,
             pageNum: 1
         },
@@ -145,6 +154,8 @@
     productTree = $.fn.zTree.init($("#productTree"), setting, zProductNodes);
 
     function showChooseModal() {
+        $("#checkAllCity").prop('checked',false);
+        $("#checkAllProduct").prop('checked',false);
         cityTree.checkAllNodes(false);
         productTree.checkAllNodes(false);
         checkNodes();
@@ -201,5 +212,26 @@
         $("#selectCityAndProductModal").modal('hide');
     }
 
+    //选择所有城市的checkbox
+    function checkAllCity(doc){
+        if(doc.checked){
+            cityTree.checkAllNodes(true);
+            console.log('全选')
+        }else{
+            cityTree.checkAllNodes(false);
+            console.log('全不选')
+        }
+    }
+
+    function checkAllProduct(doc){
+        if(doc.checked){
+            productTree.checkAllNodes(true);
+            console.log('全选')
+        }else{
+            productTree.checkAllNodes(false);
+            console.log('全不选')
+        }
+        cityTree
+    }
 
 </script>

@@ -197,4 +197,11 @@ public class ProductPriceServiceImpl implements ProductPriceService {
         }
         productPricePOMapper.updateByPrimaryKeySelective(productPricePO);
     }
+
+    @Override
+    public void batchUpdatePriceStatus(Integer productId, Integer status) {
+        productPricePOManualMapper.batchUpdatePriceStatus(productId,status);
+    }
+
+
 }

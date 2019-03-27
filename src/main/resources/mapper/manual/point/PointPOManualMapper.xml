@@ -88,7 +88,7 @@
         values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
         #{customerId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR},
         #{productIds,jdbcType=VARCHAR}, #{faceValue,jdbcType=DECIMAL}, #{balance,jdbcType=DECIMAL},
-        #{exchangeRecordId,jdbcType=INTEGER}, #{effectiveTime,jdbcType=TIMESTAMP},#{expiryTime,jdbcType=TIMESTAMP}, 1,
+        #{exchangeRecordId,jdbcType=INTEGER}, #{effectiveTime,jdbcType=TIMESTAMP},#{expiryTime,jdbcType=TIMESTAMP},#{status,jdbcType=TINYINT},
         "", 0, NOW(),NOW())
     </insert>
 

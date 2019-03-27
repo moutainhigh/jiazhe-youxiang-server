@@ -40,7 +40,7 @@
         <foreach collection="list" item="item" separator=",">
             (#{item.batchId},#{item.batchName},#{item.rechargeCardName},#{item.batchDescription},#{item.projectId},#{item.cityCodes},#{item.productIds},
             #{item.code},#{item.keyt},#{item.faceValue},#{item.expiryTime},#{item.rechargeCardEffectiveTime},#{item.rechargeCardExpiryTime},#{item.validityPeriod},
-            #{item.expiryType},#{item.status},0,"",0,NOW(),NOW())
+            #{item.expiryType},#{item.status},#{item.used},"",0,NOW(),NOW())
         </foreach>
     </insert>
 
@@ -119,4 +119,18 @@
         <include refid="Base_Column_List"/>
         FROM recharge_card_exchange_code WHERE keyt = #{keyt} AND is_deleted = 0
     </select>
+
+    <select id="getMaxId" resultType="java.lang.Integer">
+        select max(id) from recharge_card_exchange_code
+    </select>
+
+    <update id="batchUpdateCodeAndKeyt" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update recharge_card_exchange_code
+            <set>
+                keyt = #{item.keyt},code = #{item.code}
+            </set>
+            where id = #{item.id}
+        </foreach>
+    </update>
 </mapper>

@@ -56,12 +56,12 @@ public interface RCService {
 
     /**
      * 后台直接充值任意面额
-     * @param id  客户id
+     * @param customerId  客户id
      * @param batchId  批次信息
      * @param faceValue  面额
      * @return
      */
-    void directCharge(Integer id ,Integer batchId, BigDecimal faceValue) ;
+    void directCharge(Integer customerId ,Integer batchId, BigDecimal faceValue) ;
 
     /**
      * 根据充值卡ids，将充值卡信息修改为批次相关的信息
@@ -69,10 +69,10 @@ public interface RCService {
      * @param batchSaveDTO
      * @return
      */
-    void batchUpdate(List<Integer> ids, RCExchangeCodeBatchSaveDTO batchSaveDTO);
+    void updateWithBatch(List<Integer> ids, RCExchangeCodeBatchSaveDTO batchSaveDTO);
 
     /**
-     * 已经充值卡ids，批量停用启用
+     * 根据充值卡ids，批量停用启用
      * @param ids
      * @param status
      * @return
