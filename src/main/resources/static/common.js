@@ -176,7 +176,23 @@ function getFunctionButton(style, func, name) {
  * @returns {string}
  */
 function getRedirectButton(style, url, name) {
-    return "<a class='btn btn-minier " + style + "' href='" + url + "'>" + name + "</a>&nbsp;";
+    return "<a class='btn btn-minier " + style + "' href='" + encodeUrl(url) + "'>" + name + "</a>&nbsp;";
+}
+
+/**
+ * 将url中参数转为转义格式进行传输
+ * @param url
+ * @returns {*}
+ */
+function encodeUrl(url){
+    var native = ['+'];
+    var transfer = ['%2B'];
+    for(var i=0;i<native.length;i++){
+        while(url.indexOf(native[i]) != -1){
+            url = url.replace(native[i],transfer[i]);
+        }
+    }
+    return url;
 }
 
 function success(data) {
