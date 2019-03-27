@@ -84,7 +84,7 @@
                                 </div>
                                 <div class="space-2"></div>
                                 <div class="form-group">
-                                    <label class="col-sm-1 control-label no-padding-right">订单时间起：</label>
+                                    <label class="col-sm-1 control-label no-padding-right">下单时间起：</label>
                                     <div class="col-sm-2">
                                         <div class="pos-rel">
                                             <div class="input-group">
@@ -98,7 +98,7 @@
                                         </div>
                                     </div>
 
-                                    <label class="col-sm-1 control-label no-padding-right">订单时间止：</label>
+                                    <label class="col-sm-1 control-label no-padding-right">下单时间止：</label>
                                     <div class="col-sm-2">
                                         <div class="pos-rel">
                                             <div class="input-group">
@@ -603,11 +603,11 @@
             postData: transformToJson($('#orderInfoSearchForm').serializeArray()),
             shrinkToFit: false,
             autoScroll: true,
-            colNames: ['', '操作', '订单号', '状态', '待支付金额', '商品名称', '单价', '数量', '下单账号', '服务对象电话', '服务对象姓名', '代金券抵扣金额', '充值卡支付金额', '积分支付金额', '在线支付金额'],
+            colNames: ['', '操作', '订单号', '状态', '待支付', '商品名称', '单价', '数量', '下单账号',  '预约时间', '服务对象电话', '服务对象姓名', '代金券抵扣金额', '充值卡支付金额', '积分支付金额', '在线支付金额'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
-                {name: '_action', index: '_action', width: 200, sortable: false, formatter: customFormatter},
-                {name: 'orderCode', index: 'orderCode', width: 130, sortable: false},
+                {name: '_action', index: '_action', width: 180, sortable: false, formatter: customFormatter},
+                {name: 'orderCode', index: 'orderCode', width: 120, sortable: false},
                 {
                     name: 'status',
                     index: 'status',
@@ -617,11 +617,12 @@
                         return orderStatus[rowObject.status - 1];
                     }
                 },
-                {name: 'payment', index: 'payment', width: 100,sortable: false},
+                {name: 'payment', index: 'payment', width: 60,sortable: false},
                 {name: 'productResp.name', index: 'productResp.name', width: 150,sortable: false},
                 {name: 'productPrice', index: 'productPrice', width: 50,sortable: false},
                 {name: 'count', index: 'count', width: 50,sortable: false},
                 {name: 'customerResp.mobile', index: 'customerResp.mobile', width: 100,sortable: false},
+                {name: 'serviceTime', index: 'serviceTime', width: 130,sortable: false,formatter:timeFormat},
                 {name: 'customerMobile', index: 'customerMobile', width: 100,sortable: false},
                 {name: 'customerName', index: 'customerName', width: 100,sortable: false},
                 {name: 'payVoucher', index: 'payVoucher', width: 100,sortable: false},
