@@ -169,6 +169,9 @@
                                 <div class="modal-body" style="text-align: center">
                                     <div class="row">
                                         <div class = "col-xs-12 col-sm-6">
+                                            <a href="javascript:rotatePicture()" title="顺时针旋转90度">
+                                                <i class="ace-icon fa fa-repeat"></i>
+                                            </a>
                                             <div class="pic_div" id="img_show">
 
                                             </div>
@@ -285,6 +288,7 @@
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
     var auditRecordStatus = ['未提交', '已提交', '已驳回', '已通过'];
+    var rotate = 0;//旋转角度
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -343,7 +347,8 @@
     }
 
     function showimage(source) {//图片单击放大显示
-        $("#modal-form").find("#img_show").html("<image width='400px' src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' />");
+        rotate = 0;
+        $("#modal-form").find("#img_show").html("<image id='zoomPic' width='400px' src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' />");
     }
 
     function bigimg(obj) {
@@ -386,6 +391,12 @@
             error: error
         });
     }
+    function rotatePicture() {
+        var zoomPicDoc = document.getElementById('zoomPic');
+        rotate = (rotate + 90) % 360;
+        zoomPicDoc.style.transform = 'rotate(' + rotate + 'deg)';
+    }
+
 
     function formatterPointCodes(pointCodes){
         var codes = pointCodes.split(',');

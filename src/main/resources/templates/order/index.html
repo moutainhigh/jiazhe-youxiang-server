@@ -143,6 +143,7 @@
                         <div id="grid-pager"></div>
                     </div><!-- /.col -->
 
+                    <!--预约、修改预约信息模态框-->
                     <div id="orderReservationModal" class="modal fade" tabindex="-1" style="overflow: scroll">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -315,6 +316,18 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">订单备注：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <textarea id="re_comments" name="comments"
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
@@ -342,6 +355,7 @@
                         </div>
                     </div>
 
+                    <!--追加订单模态框-->
                     <div id="appendOrderModal" class="modal fade" tabindex="-1" style="overflow: scroll">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -547,6 +561,18 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label no-padding-right">订单备注：</label>
+                                                    <div class="col-sm-9">
+                                                        <div class="pos-rel">
+                                                            <textarea id="app_comments" name="comments"
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
@@ -739,6 +765,7 @@
                     $("#app_workerMobile").val(result.workerMobile);
                     $("#app_workerName").val(result.workerName);
                     $("#app_cost").val(result.cost);
+                    $("#app_comments").val(result.comments);
                     $("#appendOrderModal").modal("show");
                 }
             },
@@ -1020,6 +1047,7 @@
                     $("#re_workerMobile").val(result.workerMobile);
                     $("#re_workerName").val(result.workerName);
                     $("#re_cost").val(result.cost);
+                    $("#re_comments").val(result.comments);
                     $("#orderReservationModal").modal("show");
                 }
             },
@@ -1036,6 +1064,7 @@
         $("#re_workerMobile").attr("readonly", "readonly");
         $("#re_workerName").attr("readonly", "readonly");
         $("#re_cost").attr("readonly", "readonly");
+        $("#re_comments").attr("disabled", "disabled");
     }
 
     function userReservationOrder(id) {
@@ -1047,6 +1076,7 @@
         $("#re_workerMobile").removeAttr("readonly");
         $("#re_workerName").removeAttr("readonly");
         $("#re_cost").removeAttr("readonly");
+        $("#re_comments").removeAttr("disabled");
     }
 
     function changeOrderReservation(id) {
@@ -1058,6 +1088,7 @@
         $("#re_workerMobile").removeAttr("readonly");
         $("#re_workerName").removeAttr("readonly");
         $("#re_cost").removeAttr("readonly");
+        $("#re_comments").removeAttr("disabled");
     }
 
     function saveReservationInfo() {
