@@ -1,7 +1,6 @@
 package com.jiazhe.youxiang.server.dto.order.orderinfo;
 
 import com.jiazhe.youxiang.server.vo.BaseObject;
-import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -24,6 +23,8 @@ public class UserReservationOrderDTO extends BaseObject {
     private Date realServiceTime;
 
     private BigDecimal cost;
+
+    private String comments;
 
     public String getWorkerName() {
         return workerName;
@@ -63,5 +64,13 @@ public class UserReservationOrderDTO extends BaseObject {
 
     public void setOrderId(Integer orderId) {
         this.orderId = orderId;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 }
