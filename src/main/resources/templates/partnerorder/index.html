@@ -717,7 +717,7 @@
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
         str += getFunctionButton("btn-success", "openShow(" + rowObject.id + ")", "查看");
-        if (rowObject.status == 1) {
+        if (rowObject.status == 1 || rowObject.status == 2) {
             if (permission.indexOf("partnerOrderEdit") != -1) {
                 str += getFunctionButton("btn-primary", "openEdit(" + rowObject.id + ")", "修改");
             }
