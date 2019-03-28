@@ -1,8 +1,6 @@
 package com.jiazhe.youxiang.server.dto.order.orderinfo;
 
 import com.jiazhe.youxiang.server.vo.BaseObject;
-import com.jiazhe.youxiang.server.vo.BaseVO;
-import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 
@@ -35,6 +33,8 @@ public class AppendOrderDTO extends BaseObject {
      * 使用的充值卡ids
      */
     private String rechargeCardIds;
+
+    private String comments;
 
 
     public Integer getOrderId() {
@@ -83,5 +83,13 @@ public class AppendOrderDTO extends BaseObject {
 
     public void setCost(BigDecimal cost) {
         this.cost = cost;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 }

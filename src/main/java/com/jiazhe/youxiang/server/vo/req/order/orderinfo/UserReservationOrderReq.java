@@ -1,12 +1,8 @@
 package com.jiazhe.youxiang.server.vo.req.order.orderinfo;
 
-import com.jiazhe.youxiang.server.vo.BaseVO;
-import com.jiazhe.youxiang.server.vo.req.IdReq;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @author tu
@@ -29,6 +25,9 @@ public class UserReservationOrderReq {
 
     @ApiModelProperty("订单成本")
     private BigDecimal cost;
+
+    @ApiModelProperty("订单备注")
+    private String comments;
 
     public String getWorkerName() {
         return workerName;
@@ -68,5 +67,13 @@ public class UserReservationOrderReq {
 
     public void setOrderId(Integer orderId) {
         this.orderId = orderId;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 }

@@ -243,6 +243,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPO.setWorkerName(dto.getWorkerName());
         orderInfoPO.setRealServiceTime(dto.getRealServiceTime());
         orderInfoPO.setCost(dto.getCost());
+        orderInfoPO.setComments(dto.getComments());
         orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
     }
 
@@ -259,6 +260,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPO.setWorkerName(dto.getWorkerName());
         orderInfoPO.setRealServiceTime(dto.getRealServiceTime());
         orderInfoPO.setCost(dto.getCost());
+        orderInfoPO.setComments(dto.getComments());
         orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
     }
 
@@ -436,6 +438,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPO.setPayRechargeCard(orderInfoPO.getPayRechargeCard().add(rechargeCardPayMoney[0]));
         orderInfoPO.setPayVoucher(orderInfoPO.getPayVoucher().add(voucherPay[0]));
         orderInfoPO.setCost(appendOrderDTO.getCost());
+        orderInfoPO.setComments(appendOrderDTO.getComments());
         orderInfoPO.setTotalAmount(orderInfoPO.getProductPrice().multiply(new BigDecimal(orderInfoPO.getCount())));
         orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
         orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
