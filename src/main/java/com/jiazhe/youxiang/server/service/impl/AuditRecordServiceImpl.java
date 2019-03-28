@@ -246,7 +246,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
             throw new AuditRecordException(AuditRecordCodeEnum.CANNOT_COMPLETE_CHARGE_RECEIPT);
         }
         po.setChargeReceiptStatus(status);
-        po.setModTime(new Date());
+//        po.setModTime(new Date());
         auditRecordPOMapper.updateByPrimaryKeySelective(po);
     }
 

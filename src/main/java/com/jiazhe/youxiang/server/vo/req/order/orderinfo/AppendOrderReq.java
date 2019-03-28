@@ -1,10 +1,7 @@
 package com.jiazhe.youxiang.server.vo.req.order.orderinfo;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
-import com.jiazhe.youxiang.server.vo.req.IdReq;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 
 import java.math.BigDecimal;
 
@@ -41,6 +38,14 @@ public class AppendOrderReq extends BaseVO{
      */
     @ApiModelProperty("充值卡ids")
     private String rechargeCardIds;
+
+    /**
+     * 订单备注
+     */
+    @ApiModelProperty("订单备注")
+    private String comments;
+
+
 
     public Integer getOrderId() {
         return orderId;
@@ -88,5 +93,13 @@ public class AppendOrderReq extends BaseVO{
 
     public void setPointIds(String pointIds) {
         this.pointIds = pointIds;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 }

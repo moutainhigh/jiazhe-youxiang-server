@@ -147,6 +147,7 @@ public class OrderInfoAdapter {
         userReservationOrderDTO.setWorkerMobile(req.getWorkerMobile());
         userReservationOrderDTO.setRealServiceTime(new Date(req.getRealServiceTime()));
         userReservationOrderDTO.setCost(req.getCost());
+        userReservationOrderDTO.setComments(req.getComments());
         return userReservationOrderDTO;
     }
 
@@ -161,6 +162,7 @@ public class OrderInfoAdapter {
         appendOrderDTO.setPointIds(req.getPointIds());
         appendOrderDTO.setVoucherIds(req.getVoucherIds());
         appendOrderDTO.setRechargeCardIds(req.getRechargeCardIds());
+        appendOrderDTO.setComments(req.getComments());
         return appendOrderDTO;
     }
 }
