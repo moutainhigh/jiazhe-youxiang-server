@@ -14,6 +14,13 @@ import com.jiazhe.youxiang.server.common.enums.UploadCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.UploadException;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.resp.UploadImageResp;
+import com.qcloud.cos.COSClient;
+import com.qcloud.cos.ClientConfig;
+import com.qcloud.cos.auth.BasicCOSCredentials;
+import com.qcloud.cos.auth.COSCredentials;
+import com.qcloud.cos.model.ObjectMetadata;
+import com.qcloud.cos.model.PutObjectRequest;
+import com.qcloud.cos.model.PutObjectResult;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +31,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.swing.plaf.synth.Region;
+
+import static com.jiazhe.youxiang.base.util.UploadUtil.FILE_TYPE_IMAGE;
 
 /**
  * 文件上传Controller
@@ -52,7 +63,8 @@ public class APIUploadController {
         validateEmpty(file);
         validateFileType(file);
         //处理图片 获取路径 存入指定路径
-        String url = UploadUtil.uploadImage(file, imagePath);
+        String url = UploadUtil.uploadFile2COS(file,FILE_TYPE_IMAGE);
+//        String url = UploadUtil.uploadImage(file, imagePath);
         UploadImageResp result = new UploadImageResp();
         result.setUrl(url);
         //用ResponseFactory将返回值包装
@@ -72,6 +84,8 @@ public class APIUploadController {
             throw new UploadException(UploadCodeEnum.IMG_IS_NOT_NULL);
         }
     }
+
+
 
 
 }
