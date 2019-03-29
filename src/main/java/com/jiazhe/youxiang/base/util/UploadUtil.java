@@ -131,7 +131,6 @@ public class UploadUtil {
             case FILE_TYPE_EXCEL:
                 return COS_ACCESS_PATH_EXCEL;
         }
-
     }
 
 
