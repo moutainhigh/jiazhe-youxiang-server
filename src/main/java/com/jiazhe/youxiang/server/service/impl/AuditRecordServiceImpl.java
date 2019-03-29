@@ -256,7 +256,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
             dto.stream().forEach(bean ->{
                 exchangePoint[0] = exchangePoint[0].subtract(bean.getExchangePoint());
             });
-            if(!exchangePoint.equals(BigDecimal.ZERO)){
+            if(exchangePoint[0].compareTo(BigDecimal.ZERO) != 0){
                 throw new AuditRecordException(AuditRecordCodeEnum.CHARGE_RECEIPT_EXCHANGE_POINT_ERROR);
             }
         }
@@ -266,7 +266,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
 
     @Override
     public List<AuditRecordDTO> getList(String customerMobile, Byte status,Byte chargeReceiptStatus) {
-        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(customerMobile, null, status, null,null,null);
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(customerMobile, null, status, chargeReceiptStatus,null,null);
         return auditRecordPOList.stream().map(AuditRecordAdapter::PO2DTO).collect(Collectors.toList());
     }
 }

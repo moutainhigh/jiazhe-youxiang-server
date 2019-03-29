@@ -60,7 +60,7 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
             throw new ChargeReceiptException(ChargeReceiptCodeEnum.CHARGE_RECEIPT_IS_NOT_EXIST);
         }
         AuditRecordDTO dto = auditRecordService.getById(po.getAuditRecordId());
-        if(CommonConstant.AUDIT_RECORD_PASS.equals(dto.getChargeReceiptStatus())){
+        if(CommonConstant.CHARGE_RECEIPT_COMPLETE.equals(dto.getChargeReceiptStatus())){
             throw new ChargeReceiptException(ChargeReceiptCodeEnum.CHARGE_RECEIPT_HAS_FINISHED);
         }
         po.setIsDeleted(CommonConstant.CODE_DELETED);
@@ -70,6 +70,10 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
 
     @Override
     public void save(ChargeReceiptSaveDTO dto) {
+        AuditRecordDTO auditRecordDTO = auditRecordService.getById(dto.getAuditRecordId());
+        if(CommonConstant.CHARGE_RECEIPT_COMPLETE.equals(auditRecordDTO.getChargeReceiptStatus())){
+            throw new ChargeReceiptException(ChargeReceiptCodeEnum.CHARGE_RECEIPT_HAS_FINISHED);
+        }
         ChargeReceiptPO po = null ;
         Integer id = dto.getId();
         if(0 == id){
@@ -78,10 +82,6 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
             po = chargeReceiptPOMapper.selectByPrimaryKey(id);
             if(null == po){
                 throw new ChargeReceiptException(ChargeReceiptCodeEnum.CHARGE_RECEIPT_IS_NOT_EXIST);
-            }
-            AuditRecordDTO auditRecordDTO = auditRecordService.getById(po.getAuditRecordId());
-            if(CommonConstant.AUDIT_RECORD_PASS.equals(auditRecordDTO.getChargeReceiptStatus())){
-                throw new ChargeReceiptException(ChargeReceiptCodeEnum.CHARGE_RECEIPT_HAS_FINISHED);
             }
         }
         SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
