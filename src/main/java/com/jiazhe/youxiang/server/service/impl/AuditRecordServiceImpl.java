@@ -16,12 +16,14 @@ import com.jiazhe.youxiang.server.domain.po.AuditRecordPO;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeRecordPO;
 import com.jiazhe.youxiang.server.domain.po.PointPO;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
+import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.AuditRecordService;
+import com.jiazhe.youxiang.server.service.ChargeReceiptService;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
@@ -63,6 +65,8 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     private PointExchangeRecordService pointExchangeRecordService;
     @Autowired
     private PointService pointService;
+    @Autowired
+    private ChargeReceiptService chargeReceiptService;
 
     @Override
     public List<AuditRecordDTO> getList(String customerMobile, Integer submitterId, Byte status,Byte chargeReceiptStatus, Paging paging) {
@@ -242,17 +246,27 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         if(null == po){
             throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_IS_NOT_EXIST);
         }
-        if(!po.getStatus().equals(CommonConstant.AUDIT_RECORD_PASS)){
-            throw new AuditRecordException(AuditRecordCodeEnum.CANNOT_COMPLETE_CHARGE_RECEIPT);
+        //如果是置为完成状态，需要校验①是否审核通过，②小票积分总和是否等于总提交积分
+        if(CommonConstant.CHARGE_RECEIPT_COMPLETE.equals(status)){
+            if(!po.getStatus().equals(CommonConstant.AUDIT_RECORD_PASS)){
+                throw new AuditRecordException(AuditRecordCodeEnum.CANNOT_COMPLETE_CHARGE_RECEIPT);
+            }
+            BigDecimal[] exchangePoint = {po.getExchangePoint()};
+            List<ChargeReceiptDTO> dto = chargeReceiptService.getByAuditRecordId(id);
+            dto.stream().forEach(bean ->{
+                exchangePoint[0] = exchangePoint[0].subtract(bean.getExchangePoint());
+            });
+            if(exchangePoint[0].compareTo(BigDecimal.ZERO) != 0){
+                throw new AuditRecordException(AuditRecordCodeEnum.CHARGE_RECEIPT_EXCHANGE_POINT_ERROR);
+            }
         }
         po.setChargeReceiptStatus(status);
-//        po.setModTime(new Date());
         auditRecordPOMapper.updateByPrimaryKeySelective(po);
     }
 
     @Override
     public List<AuditRecordDTO> getList(String customerMobile, Byte status,Byte chargeReceiptStatus) {
-        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(customerMobile, null, status, null,null,null);
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(customerMobile, null, status, chargeReceiptStatus,null,null);
         return auditRecordPOList.stream().map(AuditRecordAdapter::PO2DTO).collect(Collectors.toList());
     }
 }

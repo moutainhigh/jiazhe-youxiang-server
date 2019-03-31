@@ -9,6 +9,7 @@ import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.dao.mapper.ChargeReceiptPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.ChargeReceiptPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.ChargeReceiptPO;
+import com.jiazhe.youxiang.server.domain.po.ChargeReceiptPOExample;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
 import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptDTO;
 import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptSaveDTO;
@@ -58,6 +59,10 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
         if(po == null){
             throw new ChargeReceiptException(ChargeReceiptCodeEnum.CHARGE_RECEIPT_IS_NOT_EXIST);
         }
+        AuditRecordDTO dto = auditRecordService.getById(po.getAuditRecordId());
+        if(CommonConstant.CHARGE_RECEIPT_COMPLETE.equals(dto.getChargeReceiptStatus())){
+            throw new ChargeReceiptException(ChargeReceiptCodeEnum.CHARGE_RECEIPT_HAS_FINISHED);
+        }
         po.setIsDeleted(CommonConstant.CODE_DELETED);
         po.setModTime(new Date(System.currentTimeMillis()));
         chargeReceiptPOMapper.updateByPrimaryKeySelective(po);
@@ -65,11 +70,14 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
 
     @Override
     public void save(ChargeReceiptSaveDTO dto) {
+        AuditRecordDTO auditRecordDTO = auditRecordService.getById(dto.getAuditRecordId());
+        if(CommonConstant.CHARGE_RECEIPT_COMPLETE.equals(auditRecordDTO.getChargeReceiptStatus())){
+            throw new ChargeReceiptException(ChargeReceiptCodeEnum.CHARGE_RECEIPT_HAS_FINISHED);
+        }
         ChargeReceiptPO po = null ;
         Integer id = dto.getId();
         if(0 == id){
             po = new ChargeReceiptPO();
-
         }else{
             po = chargeReceiptPOMapper.selectByPrimaryKey(id);
             if(null == po){
@@ -110,6 +118,16 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
         List<AuditRecordDTO> auditRecordDTOList = auditRecordService.getList(customerMobile,status,chargeReceiptStatus);
         List<Integer> auditRecordIds = auditRecordDTOList.stream().map(AuditRecordDTO::getId).collect(Collectors.toList());
         List<ChargeReceiptPO> poList = chargeReceiptPOManualMapper.finByAuditRecordIds(auditRecordIds);
+        return poList.stream().map(ChargeReceiptAdapter::po2Dto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ChargeReceiptDTO> getByAuditRecordId(Integer auditRecordId) {
+        ChargeReceiptPOExample example = new ChargeReceiptPOExample();
+        ChargeReceiptPOExample.Criteria criteria = example.createCriteria();
+        criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+        criteria.andAuditRecordIdEqualTo(auditRecordId);
+        List<ChargeReceiptPO> poList = chargeReceiptPOMapper.selectByExample(example);
         return poList.stream().map(ChargeReceiptAdapter::po2Dto).collect(Collectors.toList());
     }
 }
