@@ -13,6 +13,7 @@ import com.aliyuncs.profile.IClientProfile;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -118,8 +119,11 @@ public class AliUtils {
      */
     public static boolean isVerified(String phone, String code, String bizId) {
         QuerySendDetailsResponse querySendDetailsResponse = querySendDetails(phone, bizId);
+        if(null == querySendDetailsResponse){
+            throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
+        }
         List<QuerySendDetailsResponse.SmsSendDetailDTO> smsSendDetailDTOList = querySendDetailsResponse.getSmsSendDetailDTOs();
-        if (smsSendDetailDTOList.size() == 0) {
+        if (CollectionUtils.isEmpty(smsSendDetailDTOList)) {
             throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
         }
         String content = smsSendDetailDTOList.get(smsSendDetailDTOList.size() - 1).getContent();
