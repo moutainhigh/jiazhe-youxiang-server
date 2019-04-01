@@ -101,7 +101,7 @@ public class PointServiceImpl implements PointService {
 
     @Override
     public List<PointDTO> getList(String mobile, Integer exchangeType, Byte status, Byte expiry, Paging paging) {
-        final CustomerDTO defaultCustomerDTO = customerService.getByMobile(mobile);
+        CustomerDTO defaultCustomerDTO = customerService.getByMobile(mobile);
         List<PointPO> pointPOList = pointPOManualMapper.query(mobile, exchangeType, status, expiry, paging.getOffset(), paging.getLimit());
         List<PointDTO> pointDTOList = pointPOList.stream().map(PointAdapter::po2Dto).collect(Collectors.toList());
         Integer count = pointPOManualMapper.count(mobile, exchangeType, status, expiry);

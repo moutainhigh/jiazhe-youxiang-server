@@ -44,7 +44,7 @@ public class IpAdrressUtil {
      * @param request
      * @return
      */
-    public static String getIpAdrress(HttpServletRequest request) {
+    public static String getIpAddress(HttpServletRequest request) {
         String Xip = request.getHeader("X-Real-IP");
         String XFor = request.getHeader("X-Forwarded-For");
         if (StringUtils.isNotEmpty(XFor) && !"unKnown".equalsIgnoreCase(XFor)) {

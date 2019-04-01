@@ -103,7 +103,7 @@ public class APISignInController extends BaseController {
             throw new LoginException(LoginCodeEnum.LOGIN_PASSWRLD_WRONG);
         }
         // 判断白名单里是否有该ip，没有发验证码
-        if (!IpAdrressUtil.ipIsWhite(IpAdrressUtil.getIpAdrress(request), sysUserDTO.getLastLoginIp())) {
+        if (!IpAdrressUtil.ipIsWhite(IpAdrressUtil.getIpAddress(request), sysUserDTO.getLastLoginIp())) {
             //判断有没有短信bizId传过来
             CommonValidator.validateNull(bizId, new LoginException(LoginCodeEnum.LOGIN_DIFFERENT_CLIENT));
             CommonValidator.validateNull(identifyingCode, new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_EMPTY));
@@ -111,8 +111,8 @@ public class APISignInController extends BaseController {
             if (!AliUtils.isVerified(sysUserDTO.getMobile(), identifyingCode, bizId)) {
                 throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
             }
-            logger.info("登陆ip为：" + IpAdrressUtil.getIpAdrress(request));
-            sysUserBiz.updateLastLoginInfo(sysUserDTO.getId(), IpAdrressUtil.getIpAdrress(request));
+            logger.info("登陆ip为：" + IpAdrressUtil.getIpAddress(request));
+            sysUserBiz.updateLastLoginInfo(sysUserDTO.getId(), IpAdrressUtil.getIpAddress(request));
         }
         Subject subject = SecurityUtils.getSubject();
         Collection<Session> sessions = sessionDAO.getActiveSessions();

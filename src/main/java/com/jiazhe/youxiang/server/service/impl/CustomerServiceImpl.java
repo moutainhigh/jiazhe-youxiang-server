@@ -85,6 +85,9 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDTO getById(Integer id) {
         CustomerPO customerPO = customerPOMapper.selectByPrimaryKey(id);
+        if(null == customerPO){
+            return null;
+        }
         CustomerDTO customerDTO = CustomerAdapter.customerPO2DTO(customerPO);
         if (!CustomerBiz.CODE_CUSTOMER_NO_DEFAULT_ADDRESS.equals(customerPO.getDefaultAddressId())) {
             CustomerAddressPO customerAddressPO = customerAddressPOMapper.selectByPrimaryKey(customerPO.getDefaultAddressId());

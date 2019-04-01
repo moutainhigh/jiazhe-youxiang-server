@@ -64,6 +64,7 @@ public class APIPointController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "客户查询所有积分卡", level = LogLevelEnum.LEVEL_1)
     public Object findByCustomerIdPage(@ModelAttribute PointCustomerPageReq req) {
         CommonValidator.validatePaging(req);
+        CommonValidator.validateId(req.getCustomerId());
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         List<PointDTO> pointDTOList = pointBiz.getListByCustomerId(req.getCustomerId(), req.getStatus(), paging);
         List<PointResp> pointRespList = pointDTOList.stream().map(PointAdapter::Dto2Resp).collect(Collectors.toList());
