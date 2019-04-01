@@ -154,7 +154,8 @@ function generateSpan(text,color){
  * @returns {string}
  */
 function getImageUrl(url) {
-    return '/static/' + url
+    // return '/static/' + url
+    return 'https://youxiang-server-1256354707.cos.ap-beijing.myqcloud.com/image/' + url
 }
 
 /**

@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import static com.jiazhe.youxiang.base.util.UploadUtil.FILE_TYPE_IMAGE;
+
 /**
  * 文件上传Controller
  *
@@ -52,7 +54,8 @@ public class APIUploadController {
         validateEmpty(file);
         validateFileType(file);
         //处理图片 获取路径 存入指定路径
-        String url = UploadUtil.uploadImage(file, imagePath);
+        String url = UploadUtil.uploadFile2COS(file, FILE_TYPE_IMAGE);
+//        String url = UploadUtil.uploadImage(file, imagePath);
         UploadImageResp result = new UploadImageResp();
         result.setUrl(url);
         //用ResponseFactory将返回值包装
