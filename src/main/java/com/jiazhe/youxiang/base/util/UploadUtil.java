@@ -147,8 +147,6 @@ public class UploadUtil {
             //抛出自定义异常
             LOGGER.error("uploadFile2COS发生未知异常,message:{}", e.getMessage());
             throw new UploadException(UploadCodeEnum.OTHER_ERROR);
-        } finally {
-            getTransferManager().shutdownNow();
         }
         return fileName;
     }
