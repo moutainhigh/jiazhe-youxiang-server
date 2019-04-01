@@ -85,7 +85,7 @@ public class APISignInController extends BaseController {
     @ApiOperation(value = "员工登录", httpMethod = "GET", response = SessionResp.class, notes = "员工登录")
     @RequestMapping(value = "/usersignin")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "员工登录", level = LogLevelEnum.LEVEL_2)
-    public Object userSignIn(@ModelAttribute UserLoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException {
+    public Object userSignIn(@ModelAttribute UserLoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String loginName = req.getLoginname();
         String password = req.getPassword();
         String identifyingCode = req.getIdentifyingCode();
@@ -170,7 +170,7 @@ public class APISignInController extends BaseController {
     @ApiOperation(value = "客户登录", httpMethod = "GET", response = CustomerLoginResp.class, notes = "客户登录")
     @RequestMapping(value = "/customersignin")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "客户登录", level = LogLevelEnum.LEVEL_2)
-    public Object customerSignIn(@ModelAttribute CustomerLoginReq req, HttpServletResponse response) throws IOException, ClientException {
+    public Object customerSignIn(@ModelAttribute CustomerLoginReq req, HttpServletResponse response) throws IOException {
         String mobile = req.getMobile();
         String identifyingCode = req.getIdentifyingCode();
         String bizId = req.getBizId();
