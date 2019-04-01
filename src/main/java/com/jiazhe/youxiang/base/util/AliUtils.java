@@ -14,12 +14,15 @@ import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author TU
@@ -118,8 +121,10 @@ public class AliUtils {
      * 验证码验证
      */
     public static boolean isVerified(String phone, String code, String bizId) {
+        String VERIFIED_CODE_REG = "\\d{4}";
         QuerySendDetailsResponse querySendDetailsResponse = querySendDetails(phone, bizId);
         if(null == querySendDetailsResponse){
+            logger.error("通过phone和bizId，查出的querySendDetailsResponse为空");
             throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
         }
         List<QuerySendDetailsResponse.SmsSendDetailDTO> smsSendDetailDTOList = querySendDetailsResponse.getSmsSendDetailDTOs();
@@ -127,7 +132,13 @@ public class AliUtils {
             throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
         }
         String content = smsSendDetailDTOList.get(smsSendDetailDTOList.size() - 1).getContent();
-        if (!content.contains(code)){
+        String content_code = "";
+        Pattern pattern = Pattern.compile(VERIFIED_CODE_REG);
+        Matcher matcher = pattern.matcher(content);
+        if (matcher.find()) {
+            content_code = matcher.group();
+        }
+        if (!content_code.equals(code)){
             throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
         }
         long receiveTime = DateUtil.strToMinutes(smsSendDetailDTOList.get(smsSendDetailDTOList.size() - 1).getReceiveDate()).getTime();
