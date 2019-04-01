@@ -18,4 +18,8 @@ public class UploadException extends CommonException {
     public UploadException(UploadCodeEnum uploadCodeEnum) {
         super(uploadCodeEnum.getCode(), uploadCodeEnum.getType(), uploadCodeEnum.getMessage());
     }
+
+    public UploadException(UploadCodeEnum uploadCodeEnum, String message) {
+        super(uploadCodeEnum.getCode(), uploadCodeEnum.getType(), message);
+    }
 }

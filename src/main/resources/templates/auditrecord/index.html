@@ -629,7 +629,7 @@
                     }
                     imgUrls = result.imgUrls.split(",");
                     for (var i = 0; i < imgUrls.length; i++) {
-                        $("#pics").append("<img width='500px' class='item' onmouseover=\"this.style.cursor='pointer';this.style.cursor='hand'\"  onmouseout=\"this.style.cursor='default'\" onclick=\"javascript:clickImg(" + i + ",true);\" src='/static/" + imgUrls[i] + "'>")
+                        $("#pics").append("<img width='500px' class='item' onmouseover=\"this.style.cursor='pointer';this.style.cursor='hand'\"  onmouseout=\"this.style.cursor='default'\" onclick=\"javascript:clickImg(" + i + ",true);\" src='" + getImageUrl(imgUrls[i]) + "'>")
                     }
                 }
             },
@@ -639,19 +639,19 @@
 
     function clickImg(i, first) {
         picIndex = i;
-        showimage("/static/" + imgUrls[picIndex], first);
+        showimage(getImageUrl(imgUrls[picIndex]), first);
         picButtonDisplay();
     }
 
     function previousPicture() {
         picIndex--;
-        showimage("/static/" + imgUrls[picIndex], false);
+        showimage(getImageUrl(imgUrls[picIndex]), false);
         picButtonDisplay();
     }
 
     function nextPicture() {
         picIndex++;
-        showimage("/static/" + imgUrls[picIndex], false);
+        showimage(getImageUrl(imgUrls[picIndex]), false);
         picButtonDisplay();
     }
 

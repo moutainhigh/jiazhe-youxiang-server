@@ -15,8 +15,9 @@ public enum UploadCodeEnum {
     IMG_IS_NOT_NULL(114001, "IMG_IS_NOT_NULL", "上传图片不能为空"),
     IMG_TYPE_ERROR(114002, "IMG_TYPE_ERROR", "上传图片类型不符"),
 
-    OTHER_ERROR(114999, "OTHER_ERROR", "上传过程中发生未知异常"),
-    ;
+    COS_SERVICE_ERROR(114901, "COS_SERVICE_ERROR", "COS服务端异常"),
+    COS_CLIENT_ERROR(114902, "COS_CLIENT_ERROR", "COS客户端异常"),
+    OTHER_ERROR(114999, "OTHER_ERROR", "上传过程中发生未知异常"),;
 
     UploadCodeEnum(Integer code, String type, String message) {
         this.code = code;
