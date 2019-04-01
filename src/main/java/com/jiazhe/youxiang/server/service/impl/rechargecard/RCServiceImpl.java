@@ -169,7 +169,7 @@ public class RCServiceImpl implements RCService {
 
     @Override
     public List<RCDTO> getList(String mobile, Integer exchangeType, Byte status, Byte expiry, Paging paging) {
-        final CustomerDTO defaultCustomerDTO = customerService.getByMobile(mobile);
+        CustomerDTO defaultCustomerDTO = customerService.getByMobile(mobile);
         List<RechargeCardPO> rechargeCardPOList = rcPOManualMapper.query(mobile, exchangeType, status, expiry, paging.getOffset(), paging.getLimit());
         List<RCDTO> rcDTOList = rechargeCardPOList.stream().map(RCAdapter::PO2DTO).collect(Collectors.toList());
         Integer count = rcPOManualMapper.count(mobile, exchangeType, status, expiry);

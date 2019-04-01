@@ -19,6 +19,7 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -56,6 +57,12 @@ public class PointBiz {
 
     public List<PointDTO> getListByCustomerId(Integer customerId, Byte status, Paging paging) {
         CustomerDTO customerDTO = customerBiz.getById(customerId);
+        if(null == customerDTO){
+            throw new PointException(PointCodeEnum.CUSTOMER_NOT_EXIST);
+        }
+        if(null == customerDTO){
+            throw new PointException(PointCodeEnum.CUSTOMER_NOT_EXIST);
+        }
         if (status.equals(Byte.valueOf("0"))) {
             List<PointDTO> pointdtoListAll = pointService.getList(customerDTO.getMobile(), null, null, null, paging);
             return pointdtoListAll;
@@ -84,6 +91,9 @@ public class PointBiz {
 
     public List<PointDTO> getListByGoodsAttr(Integer customerId, Integer productId, String cityCode, Paging paging) {
         CustomerDTO customerDTO = customerBiz.getById(customerId);
+        if(null == customerDTO){
+            throw new PointException(PointCodeEnum.CUSTOMER_NOT_EXIST);
+        }
         List<PointDTO> temp = pointService.getList(customerDTO.getMobile(), null, Byte.valueOf("1"), Byte.valueOf("0"), paging);
         List<PointDTO> pointDtoListUsable = temp.stream()
                 .filter(bean ->

@@ -105,6 +105,9 @@ public class OrderInfoBiz {
 
     public List<OrderInfoDTO> customerGetList(Integer customerId, String status, Paging paging) {
         CustomerDTO customerDTO = customerService.getById(customerId);
+        if(null == customerDTO){
+            throw new OrderException(OrderCodeEnum.CUSTOMER_NOT_EXIST);
+        }
         return getList(status, null, customerDTO.getMobile(), null, null, null, null, paging);
     }
 

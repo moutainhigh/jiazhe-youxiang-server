@@ -2,6 +2,8 @@ package com.jiazhe.youxiang.server.biz.rechargecard;
 
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.enums.RechargeCardCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.RechargeCardException;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCEditDTO;
@@ -72,6 +74,9 @@ public class RCBiz {
      */
     public List<RCDTO> getListByCustomerId(Integer customerId, Byte status, Paging paging) {
         CustomerDTO customerDTO = customerBiz.getById(customerId);
+        if(null == customerDTO){
+            throw new RechargeCardException(RechargeCardCodeEnum.CUSTOMER_NOT_EXIST);
+        }
         if (status.equals(Byte.valueOf("0"))) {
             List<RCDTO> rcdtoListAll = rcService.getList(customerDTO.getMobile(), null, null, null, paging);
             return rcdtoListAll;
@@ -100,6 +105,9 @@ public class RCBiz {
 
     public List<RCDTO> getListByGoodsAttr(Integer customerId, Integer productId, String cityCode, Paging paging) {
         CustomerDTO customerDTO = customerBiz.getById(customerId);
+        if(null == customerDTO){
+            throw new RechargeCardException(RechargeCardCodeEnum.CUSTOMER_NOT_EXIST);
+        }
         List<RCDTO> temp = rcService.getList(customerDTO.getMobile(), null, Byte.valueOf("1"), Byte.valueOf("0"), paging);
         List<RCDTO> rcdtoListUsable = temp.stream()
                 .filter(bean ->

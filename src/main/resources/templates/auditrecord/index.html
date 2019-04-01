@@ -783,8 +783,7 @@
         if (first) {
             $("#ShowImage_Form").modal('show');
         }
-        $("#ShowImage_Form").find("#img_show").html("<image id='zoomPic' src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' style='zoom:70%;'/>");
-
+        $("#ShowImage_Form").find("#img_show").html("<image id='zoomPic' width='500px' src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' style='zoom:70%;'/>");
     }
 
     function bigimg(obj) {
