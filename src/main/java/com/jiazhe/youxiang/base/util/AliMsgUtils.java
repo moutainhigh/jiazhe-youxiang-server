@@ -14,7 +14,6 @@ import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,9 +28,9 @@ import java.util.regex.Pattern;
  * @date 2018/10/29
  * @description 用于阿里短信服务
  */
-public class AliUtils {
+public class AliMsgUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(AliUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(AliMsgUtils.class);
     /**
      * 发送验证短信
      */
@@ -40,7 +39,7 @@ public class AliUtils {
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
         System.setProperty("sun.net.client.defaultReadTimeout", "10000");
         //初始化ascClient,暂时不支持多region（请勿修改）
-        IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", PropertyUtils.getProperty("accessKeyId"), PropertyUtils.getProperty("accessKeySecret"));
+        IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", PropertyUtils.getProperty("aliAccessKeyId"), PropertyUtils.getProperty("aliAccessKeySecret"));
         try {
             DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", "Dysmsapi", "dysmsapi.aliyuncs.com");
         } catch (ClientException e) {
@@ -85,7 +84,7 @@ public class AliUtils {
         System.setProperty("sun.net.client.defaultConnectTimeout", "60000");
         System.setProperty("sun.net.client.defaultReadTimeout", "60000");
         //初始化acsClient,暂不支持region化  
-        IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", PropertyUtils.getProperty("accessKeyId"), PropertyUtils.getProperty("accessKeySecret"));
+        IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", PropertyUtils.getProperty("aliAccessKeyId"), PropertyUtils.getProperty("aliAccessKeySecret"));
         try {
             DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", "Dysmsapi", "dysmsapi.aliyuncs.com");
         } catch (ClientException e) {

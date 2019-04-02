@@ -21,10 +21,10 @@ public class PropertyUtils {
         props = new Properties();
         InputStream in = null;
         try {
-            in = PropertyUtils.class.getClassLoader().getResourceAsStream("ali.properties");
+            in = PropertyUtils.class.getClassLoader().getResourceAsStream("message.properties");
             props.load(in);
         } catch (FileNotFoundException e) {
-            logger.error("ali.properties文件未找到");
+            logger.error("message.properties文件未找到");
         } catch (IOException e) {
             logger.error("出现IOException");
         } finally {
@@ -33,7 +33,7 @@ public class PropertyUtils {
                     in.close();
                 }
             } catch (IOException e) {
-                logger.error("ali.properties文件流关闭出现异常");
+                logger.error("message.properties文件流关闭出现异常");
             }
         }
         logger.info("加载完成，properties文件内容：" + props);

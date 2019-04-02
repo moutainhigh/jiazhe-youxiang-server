@@ -10,6 +10,9 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class SendMsgResp extends BaseVO {
 
+    @ApiModelProperty("短信服务商")
+    private String serverProvider;
+
     @ApiModelProperty("短信返回bizId")
     private String bizId;
 
@@ -19,5 +22,13 @@ public class SendMsgResp extends BaseVO {
 
     public void setBizId(String bizId) {
         this.bizId = bizId;
+    }
+
+    public String getServerProvider() {
+        return serverProvider;
+    }
+
+    public void setServerProvider(String serverProvider) {
+        this.serverProvider = serverProvider;
     }
 }
