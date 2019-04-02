@@ -85,7 +85,7 @@ public class APISignInController extends BaseController {
     @ApiOperation(value = "员工登录", httpMethod = "GET", response = SessionResp.class, notes = "员工登录")
     @RequestMapping(value = "/usersignin")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "员工登录", level = LogLevelEnum.LEVEL_2)
-    public Object userSignIn(@ModelAttribute UserLoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException {
+    public Object userSignIn(@ModelAttribute UserLoginReq req, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String loginName = req.getLoginname();
         String password = req.getPassword();
         String identifyingCode = req.getIdentifyingCode();
@@ -103,7 +103,7 @@ public class APISignInController extends BaseController {
             throw new LoginException(LoginCodeEnum.LOGIN_PASSWRLD_WRONG);
         }
         // 判断白名单里是否有该ip，没有发验证码
-        if (!IpAdrressUtil.ipIsWhite(IpAdrressUtil.getIpAdrress(request), sysUserDTO.getLastLoginIp())) {
+        if (!IpAdrressUtil.ipIsWhite(IpAdrressUtil.getIpAddress(request), sysUserDTO.getLastLoginIp())) {
             //判断有没有短信bizId传过来
             CommonValidator.validateNull(bizId, new LoginException(LoginCodeEnum.LOGIN_DIFFERENT_CLIENT));
             CommonValidator.validateNull(identifyingCode, new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_EMPTY));
@@ -111,8 +111,8 @@ public class APISignInController extends BaseController {
             if (!AliUtils.isVerified(sysUserDTO.getMobile(), identifyingCode, bizId)) {
                 throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
             }
-            logger.info("登陆ip为：" + IpAdrressUtil.getIpAdrress(request));
-            sysUserBiz.updateLastLoginInfo(sysUserDTO.getId(), IpAdrressUtil.getIpAdrress(request));
+            logger.info("登陆ip为：" + IpAdrressUtil.getIpAddress(request));
+            sysUserBiz.updateLastLoginInfo(sysUserDTO.getId(), IpAdrressUtil.getIpAddress(request));
         }
         Subject subject = SecurityUtils.getSubject();
         Collection<Session> sessions = sessionDAO.getActiveSessions();
@@ -170,7 +170,7 @@ public class APISignInController extends BaseController {
     @ApiOperation(value = "客户登录", httpMethod = "GET", response = CustomerLoginResp.class, notes = "客户登录")
     @RequestMapping(value = "/customersignin")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "客户登录", level = LogLevelEnum.LEVEL_2)
-    public Object customerSignIn(@ModelAttribute CustomerLoginReq req, HttpServletResponse response) throws IOException, ClientException {
+    public Object customerSignIn(@ModelAttribute CustomerLoginReq req, HttpServletResponse response) throws IOException {
         String mobile = req.getMobile();
         String identifyingCode = req.getIdentifyingCode();
         String bizId = req.getBizId();

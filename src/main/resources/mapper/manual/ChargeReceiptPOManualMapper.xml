@@ -51,10 +51,11 @@
         select
         <include refid="Base_Column_List"/>
         FROM charge_receipt
-        where audit_record_id in
+        where is_deleted = 0 and audit_record_id in
         <foreach collection="list" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
+        ORDER BY trade_time ASC
     </select>
 
 </mapper>

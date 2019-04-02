@@ -2,6 +2,8 @@ package com.jiazhe.youxiang.server.biz.voucher;
 
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.enums.VoucherCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.VoucherException;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.voucher.voucher.VoucherDTO;
 import com.jiazhe.youxiang.server.dto.voucher.voucher.VoucherEditDTO;
@@ -61,6 +63,9 @@ public class VoucherBiz {
      */
     public List<VoucherDTO> getListByCustomerId(Integer customerId, Byte status, Paging paging) {
         CustomerDTO customerDTO = customerBiz.getById(customerId);
+        if(null == customerDTO){
+            throw new VoucherException(VoucherCodeEnum.CUSTOMER_NOT_EXIST);
+        }
         if (status.equals(Byte.valueOf("0"))) {
             List<VoucherDTO> voucherDTOListAll = voucherService.getList(customerDTO.getMobile(), null, null, null, paging);
             return voucherDTOListAll;
@@ -89,6 +94,9 @@ public class VoucherBiz {
 
     public List<VoucherDTO> getListByGoodsAttr(Integer customerId, Integer productId, String cityCode, Paging paging) {
         CustomerDTO customerDTO = customerBiz.getById(customerId);
+        if(null == customerDTO){
+            throw new VoucherException(VoucherCodeEnum.CUSTOMER_NOT_EXIST);
+        }
         List<VoucherDTO> temp = voucherService.getList(customerDTO.getMobile(), null, Byte.valueOf("1"), Byte.valueOf("0"), paging);
         List<VoucherDTO> voucherDTOListUsable = temp.stream()
                 .filter(bean ->

@@ -113,12 +113,15 @@
                                             onclick="return search()">
                                         <i class="ace-icon fa fa-search red2"></i>
                                         查询
-                                    </button>&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <button class="btn btn-white btn-default btn-round btn-sm"
-                                            onclick="exportExcel();return false;">
-                                        <i class="ace-icon fa  fa-file-excel-o red2"></i>
-                                        导出对账单
                                     </button>
+                                    <shiro:hasPermission name="chargeReceiptExport">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <button class="btn btn-white btn-default btn-round btn-sm"
+                                                onclick="exportExcel();return false;">
+                                            <i class="ace-icon fa  fa-file-excel-o red2"></i>
+                                            导出对账单
+                                        </button>
+                                    </shiro:hasPermission>
                                 </div>
                             </div>
                         </form>
@@ -348,6 +351,7 @@
                                     <button id="rotateBtn" onclick="rotatePicture()" type="button" class="close"
                                             aria-hidden="true" title="顺时针旋转90度">旋转
                                     </button>
+                                    <span id="customerMobileShow" style="color:white;font-size:28px;position:fixed"></span>
                                 </div>
                                 <div class="modal-body"
                                      style="padding:0px 20px 0px 20px;text-align: center;background-color: rgba(64,64,64,0.5)">
@@ -601,6 +605,7 @@
                 } else {
                     var result = data.data;
                     showByExchangeType(result);
+                    $("#customerMobileShow").html(result.customerMobile);
                     $("#auditRecordId").val(result.id);
                     $("#version").val(result.version);
                     $("#bankOutletsName").val(result.bankOutletsName);
@@ -624,7 +629,7 @@
                     }
                     imgUrls = result.imgUrls.split(",");
                     for (var i = 0; i < imgUrls.length; i++) {
-                        $("#pics").append("<img class='item' onmouseover=\"this.style.cursor='pointer';this.style.cursor='hand'\"  onmouseout=\"this.style.cursor='default'\" onclick=\"javascript:clickImg(" + i + ",true);\" src='/static/" + imgUrls[i] + "'>")
+                        $("#pics").append("<img class='item' onmouseover=\"this.style.cursor='pointer';this.style.cursor='hand'\"  onmouseout=\"this.style.cursor='default'\" onclick=\"javascript:clickImg(" + i + ",true);\" src='" + getImageUrl(imgUrls[i]) + "'>")
                     }
                 }
             },
@@ -634,19 +639,19 @@
 
     function clickImg(i, first) {
         picIndex = i;
-        showimage("/static/" + imgUrls[picIndex], first);
+        showimage(getImageUrl(imgUrls[picIndex]), first);
         picButtonDisplay();
     }
 
     function previousPicture() {
         picIndex--;
-        showimage("/static/" + imgUrls[picIndex], false);
+        showimage(getImageUrl(imgUrls[picIndex]), false);
         picButtonDisplay();
     }
 
     function nextPicture() {
         picIndex++;
-        showimage("/static/" + imgUrls[picIndex], false);
+        showimage(getImageUrl(imgUrls[picIndex]), false);
         picButtonDisplay();
     }
 
@@ -778,8 +783,7 @@
         if (first) {
             $("#ShowImage_Form").modal('show');
         }
-        $("#ShowImage_Form").find("#img_show").html("<image id='zoomPic' src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' style='zoom:70%;'/>");
-
+        $("#ShowImage_Form").find("#img_show").html("<image id='zoomPic' width='500px' src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' style='zoom:70%;'/>");
     }
 
     function bigimg(obj) {

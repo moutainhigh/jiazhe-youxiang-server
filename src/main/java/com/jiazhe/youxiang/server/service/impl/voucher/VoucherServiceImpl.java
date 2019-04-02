@@ -63,7 +63,7 @@ public class VoucherServiceImpl implements VoucherService {
 
     @Override
     public List<VoucherDTO> getList(String mobile, Integer exchangeType, Byte status, Byte expiry, Paging paging) {
-        final CustomerDTO defaultCustomerDTO = customerService.getByMobile(mobile);
+        CustomerDTO defaultCustomerDTO = customerService.getByMobile(mobile);
         List<VoucherPO> rechargeCardPOList = voucherPOManualMapper.query(mobile,exchangeType,status,expiry,paging.getOffset(),paging.getLimit());
         List<VoucherDTO> rcDTOList = rechargeCardPOList.stream().map(VoucherAdapter::PO2DTO).collect(Collectors.toList());
         Integer count = voucherPOManualMapper.count(mobile,exchangeType,status,expiry);

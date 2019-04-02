@@ -73,7 +73,7 @@ public class APIWeChatPayController {
         wxparam.put("body", req.getBody());
         wxparam.put("out_trade_no", req.getOutTradeNo());
         wxparam.put("total_fee", req.getTotalFee());
-        wxparam.put("spbill_create_ip", IpAdrressUtil.getIpAdrress(request));
+        wxparam.put("spbill_create_ip", IpAdrressUtil.getIpAddress(request));
         wxparam.put("notify_url", WeChatPayConstant.NOTIFY_URL);
         wxparam.put("trade_type", WeChatPayConstant.TRADE_TYPE);
         String sign = WeChatPayUtils.createSign("UTF-8", wxparam, WeChatPayConstant.API_KEY);

@@ -47,4 +47,11 @@ public interface ChargeReceiptService {
      * @return
      */
     List<ChargeReceiptDTO> getList(String customerMobile, Byte status,Byte chargeReceiptStatus);
+
+    /**
+     * 通过消费记录id，查找小票集合
+     * @param auditRecordId
+     * @return
+     */
+    List<ChargeReceiptDTO> getByAuditRecordId(Integer auditRecordId);
 }

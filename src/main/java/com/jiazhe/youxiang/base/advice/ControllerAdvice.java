@@ -154,7 +154,7 @@ public class ControllerAdvice {
                 }
 
                 //异步插入数据库日志记录
-                SysLogBiz.insert(customLog.moduleName().getName(), customLog.operate(), customLog.level().getId(), operatorId, operatorName, IpAdrressUtil.getIpAdrress(request), detail);
+                SysLogBiz.insert(customLog.moduleName().getName(), customLog.operate(), customLog.level().getId(), operatorId, operatorName, IpAdrressUtil.getIpAddress(request), detail);
             }
         }
     }
