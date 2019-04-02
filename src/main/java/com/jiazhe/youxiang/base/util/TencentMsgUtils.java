@@ -65,12 +65,12 @@ public class TencentMsgUtils {
      */
     public static SmsStatusPullCallbackResult querySendDetails(String phone) {
         try {
-            int beginTime = 1511125600;  // 开始时间(UNIX timestamp)
-            int endTime = 1511841600;    // 结束时间(UNIX timestamp)
+            long beginTime = System.currentTimeMillis()-CommonConstant.ONE_HOUR;
+            long endTime = System.currentTimeMillis();
             SmsMobileStatusPuller msPuller = new SmsMobileStatusPuller(appId, appKey);
             // 拉取短信回执
             SmsStatusPullCallbackResult callbackResult = msPuller.pullCallback("86",
-                    phone, beginTime, endTime, 1);
+                    phone, beginTime/1000, endTime/1000, 1);
             return callbackResult;
         } catch (HTTPException e) {
             // HTTP响应码错误
