@@ -173,13 +173,13 @@ public class APISignInController extends BaseController {
         SendMsgResp sendMsgResp = new SendMsgResp();
         SmsSingleSenderResult smsSingleSenderResult = TencentMsgUtils.sendMsg(sysUserDTOList.get(0).getMobile());
         if(null != smsSingleSenderResult && smsSingleSenderResult.result == 0){
-            sendMsgResp.setServerProvider("tencent");
+            sendMsgResp.setServiceProvider("tencent");
             sendMsgResp.setBizId("************");
             return ResponseFactory.buildResponse(sendMsgResp);
         }
         SendSmsResponse res = AliMsgUtils.sendMsg(sysUserDTOList.get(0).getMobile());
         sendMsgResp.setBizId(res.getBizId());
-        sendMsgResp.setServerProvider("ali");
+        sendMsgResp.setServiceProvider("ali");
         return ResponseFactory.buildResponse(sendMsgResp);
 
     }
