@@ -124,6 +124,9 @@ public class APICustomerController extends BaseController{
         CommonValidator.validateId(req);
         //调用BIZ方法
         CustomerDTO customerDTO = customerBiz.getById(req.getId());
+        if(null == customerDTO){
+            throw new CustomerException(CustomerCodeEnum.CUSTOMER_INEXISTENCE);
+        }
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildResponse(CustomerAdapter.customerDTO2VO(customerDTO));
     }
