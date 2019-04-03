@@ -8,13 +8,13 @@ import io.swagger.annotations.ApiModelProperty;
  * @description  用于发送短信成功，返回的短信凭证bizId
  * @date 2018/10/29.
  */
-public class SendMsgResp extends BaseVO {
-
-    @ApiModelProperty("短信服务商")
-    private String serviceProvider;
+public class SendVerificationCodeResp extends BaseVO {
 
     @ApiModelProperty("短信返回bizId")
     private String bizId;
+
+    @ApiModelProperty("成功1 失败0")
+    private Integer success;
 
     public String getBizId() {
         return bizId;
@@ -24,11 +24,11 @@ public class SendMsgResp extends BaseVO {
         this.bizId = bizId;
     }
 
-    public String getServiceProvider() {
-        return serviceProvider;
+    public Integer getSuccess() {
+        return success;
     }
 
-    public void setServiceProvider(String serviceProvider) {
-        this.serviceProvider = serviceProvider;
+    public void setSuccess(Integer success) {
+        this.success = success;
     }
 }

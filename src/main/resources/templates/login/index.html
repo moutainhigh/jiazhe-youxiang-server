@@ -42,7 +42,6 @@
 
                                     <form id="loginForm" onsubmit="return login()">
                                         <input type="hidden" id="bizId" name="bizId">
-                                        <input type="hidden" id="serviceProvider" name="serviceProvider">
                                         <fieldset>
                                             <label class="block clearfix">
                                                 <span class="block input-icon input-icon-right">
@@ -147,7 +146,6 @@
                     bootboxalert(data.error.message);
                 } else {//发送验证码成功
                     $("#bizId").val(data.data.bizId);
-                    $("#serviceProvider").val(data.data.serviceProvider);
                     $("#identifyingCodeBadge").css("display", "");
                     $("#identifyingCodeButton").css("display", "none");
                     setTime(60);
@@ -165,7 +163,6 @@
         var rememberMe = $('#rememberMe').is(':checked')?"true":"false";
         var identifyingCode = $("#identifyingCode").val();
         var bizId = $("#bizId").val();
-        var serviceProvider = $("#serviceProvider").val();
         if (loginname == "" || password == "") {
             bootboxalert("请将信息填写完整后再登录");
             return false;
@@ -180,7 +177,6 @@
                 rememberMe:rememberMe,
                 identifyingCode: identifyingCode,
                 bizId: bizId,
-                serviceProvider:serviceProvider
             },
             type: "GET",
             success: function (data) {

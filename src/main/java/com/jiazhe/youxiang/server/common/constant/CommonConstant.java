@@ -222,4 +222,10 @@ public class CommonConstant {
      */
     public static final Byte CHARGE_RECEIPT_UNCOMPLETE = Byte.valueOf("0");
     public static final Byte CHARGE_RECEIPT_COMPLETE = Byte.valueOf("1");
+
+    /**
+     * redis中key的前缀
+     */
+    public static final String REDIS_VER_CODE = "REDIS_VER_CODE";
+
 }

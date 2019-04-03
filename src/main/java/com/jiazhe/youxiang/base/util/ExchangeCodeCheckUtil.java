@@ -1,5 +1,10 @@
 package com.jiazhe.youxiang.base.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+
+import java.io.Serializable;
+
 /**
  * @author TU
  * @description 兑换码的卡号密钥检查
@@ -71,8 +76,12 @@ public class ExchangeCodeCheckUtil {
         return true;
     }
 
+    @Autowired
+    public static RedisTemplate<Serializable, Object> redisTemplate;
+
     public static void main(String[] args) {
         System.out.println(codeCheck("2", "20002826") && keytCheck("2", "228284484533"));
+        redisTemplate.opsForValue().set("name","123");
     }
 
 }
