@@ -3,11 +3,11 @@ package com.jiazhe.youxiang.base.util;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.github.qcloudsms.SmsSingleSenderResult;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.vo.resp.login.SendVerificationCodeResp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
  * @author TU
@@ -17,9 +17,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 public class MsgUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(MsgUtils.class);
-
-    @Autowired
-    public static StringRedisTemplate redisTemplate;
 
     /**
      * 短信验证码位数
@@ -43,15 +40,14 @@ public class MsgUtils {
         //先尝试用腾讯云发送
         SmsSingleSenderResult smsSingleSenderResult = TencentMsgUtils.sendVerificationCodeMsg(phone, code);
         if (null != smsSingleSenderResult && smsSingleSenderResult.result == 0) {
-            redisTemplate.opsForValue().set(CommonConstant.REDIS_VER_CODE + phone, code);
-            sendMsgResp.setSuccess(1);
-            sendMsgResp.setBizId("*************");
+            sendMsgResp.setBizId("***********");
+            RedisUtils.set(CommonConstant.REDIS_VER_CODE + phone, code, CommonConstant.FIVE_MINUTES);
             return sendMsgResp;
         } else {
             SendSmsResponse sendSmsResponse = AliMsgUtils.sendVerificationCodeMsg(phone, code);
             if (sendSmsResponse.getCode() != null && VER_CODE_SEND_SUCCESS.equals(sendSmsResponse.getCode())) {
-                sendMsgResp.setSuccess(1);
                 sendMsgResp.setBizId(sendSmsResponse.getBizId());
+                RedisUtils.set(CommonConstant.REDIS_VER_CODE + phone, code, CommonConstant.FIVE_MINUTES);
             }
             return sendMsgResp;
         }
@@ -64,8 +60,10 @@ public class MsgUtils {
      * @param code
      * @return
      */
-    public static boolean isVerified(String phone, String code) {
-        String redis_code = redisTemplate.opsForValue().get(CommonConstant.REDIS_VER_CODE + phone);
-        return code.equals(redis_code);
+    public static void isVerified(String phone, String code) {
+        Object redis_code = RedisUtils.get(CommonConstant.REDIS_VER_CODE + phone);
+        if (null == redis_code || !code.equals(redis_code)) {
+            throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
+        }
     }
 }

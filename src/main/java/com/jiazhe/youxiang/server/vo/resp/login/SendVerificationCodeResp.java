@@ -13,9 +13,6 @@ public class SendVerificationCodeResp extends BaseVO {
     @ApiModelProperty("短信返回bizId")
     private String bizId;
 
-    @ApiModelProperty("成功1 失败0")
-    private Integer success;
-
     public String getBizId() {
         return bizId;
     }
@@ -24,11 +21,4 @@ public class SendVerificationCodeResp extends BaseVO {
         this.bizId = bizId;
     }
 
-    public Integer getSuccess() {
-        return success;
-    }
-
-    public void setSuccess(Integer success) {
-        this.success = success;
-    }
 }

@@ -22,9 +22,6 @@ public class UserLoginReq extends BaseVO {
     @ApiModelProperty("短信bizId")
     private String bizId ;
 
-    @ApiModelProperty("短信服务商")
-    private String serviceProvider ;
-
     @ApiModelProperty("是否记住我")
     private String rememberMe;
 
@@ -68,11 +65,4 @@ public class UserLoginReq extends BaseVO {
         this.rememberMe = rememberMe;
     }
 
-    public String getServiceProvider() {
-        return serviceProvider;
-    }
-
-    public void setServiceProvider(String serviceProvider) {
-        this.serviceProvider = serviceProvider;
-    }
 }

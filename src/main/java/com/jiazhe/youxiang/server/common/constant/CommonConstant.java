@@ -224,8 +224,17 @@ public class CommonConstant {
     public static final Byte CHARGE_RECEIPT_COMPLETE = Byte.valueOf("1");
 
     /**
-     * redis中key的前缀
+     * 生成redis key的连接符号
      */
-    public static final String REDIS_VER_CODE = "REDIS_VER_CODE";
+    public static final String REDIS_KEY_CONNECT = ":";
+
+    /**
+     * redis中key的前缀
+     *    REDIS_VER_CODE 短信验证码
+     *    REDIS_PERM_URL 权限字符串
+     */
+    public static final String REDIS_VER_CODE = "redis_ver_code" + REDIS_KEY_CONNECT;
+    public static final String REDIS_PERM_URL = "redis_perm_url" + REDIS_KEY_CONNECT;
+
 
 }

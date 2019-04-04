@@ -9,6 +9,7 @@ import com.jiazhe.youxiang.base.util.CookieUtil;
 import com.jiazhe.youxiang.base.util.EncryptPasswordUtil;
 import com.jiazhe.youxiang.base.util.IpAdrressUtil;
 import com.jiazhe.youxiang.base.util.MsgUtils;
+import com.jiazhe.youxiang.base.util.RedisUtils;
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
@@ -88,9 +89,8 @@ public class APISignInController extends BaseController {
         String loginName = req.getLoginname();
         String password = req.getPassword();
         String identifyingCode = req.getIdentifyingCode();
-        String serviceProvider = req.getServiceProvider();
-        boolean rememberMe = "true".equals(req.getRememberMe());
         String bizId = req.getBizId();
+        boolean rememberMe = "true".equals(req.getRememberMe());
         CommonValidator.validateNull(req.getLoginname(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         CommonValidator.validateNull(req.getPassword(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(loginName);
@@ -108,9 +108,7 @@ public class APISignInController extends BaseController {
             CommonValidator.validateNull(bizId, new LoginException(LoginCodeEnum.LOGIN_DIFFERENT_CLIENT));
             CommonValidator.validateNull(identifyingCode, new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_EMPTY));
             //判断验证码是否正确
-            if (!MsgUtils.isVerified(sysUserDTO.getMobile(), identifyingCode)) {
-                throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
-            }
+            MsgUtils.isVerified(sysUserDTO.getMobile(), identifyingCode);
             logger.info("登陆ip为：" + IpAdrressUtil.getIpAddress(request));
             sysUserBiz.updateLastLoginInfo(sysUserDTO.getId(), IpAdrressUtil.getIpAddress(request));
         }
@@ -142,8 +140,15 @@ public class APISignInController extends BaseController {
         SessionResp sessionResp = new SessionResp();
         subject.getSession().setTimeout(CommonConstant.EIGHT_HOUR);
         sessionResp.setSessionId(subject.getSession().getId().toString());
-        AuthorizationInfo info = userRealm.doGetAuthorizationInfo(subject.getPrincipals());
-        String permission = StringUtils.join(info.getStringPermissions(), "#");
+        String permission;
+        Object permObject = RedisUtils.get(CommonConstant.REDIS_PERM_URL + loginName);
+        if (null != permObject) {
+            permission = permObject.toString();
+            logger.info("redis中获取的permission");
+        } else {
+            AuthorizationInfo info = userRealm.doGetAuthorizationInfo(subject.getPrincipals());
+            permission = StringUtils.join(info.getStringPermissions(), "#");
+        }
         int userCookieExpiry = rememberMe ? USER_COOKIE_EXPIRY : -1;
         CookieUtil.addCookie(response, "permission", permission, userCookieExpiry);
         CookieUtil.addCookie(response, "displayName", URLEncoder.encode(sysUserDTO.getDisplayName(), "UTF-8"), userCookieExpiry);
@@ -172,14 +177,10 @@ public class APISignInController extends BaseController {
     public Object customerSignIn(@ModelAttribute CustomerLoginReq req, HttpServletResponse response) throws IOException {
         String mobile = req.getMobile();
         String identifyingCode = req.getIdentifyingCode();
-        String bizId = req.getBizId();
         CommonValidator.validateNull(req.getMobile(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         CommonValidator.validateNull(req.getIdentifyingCode(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         CommonValidator.validateMobile(req.getMobile(), new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL));
-        //判断验证码是否正确
-        if (!MsgUtils.isVerified(req.getMobile(), identifyingCode)) {
-            throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
-        }
+        MsgUtils.isVerified(req.getMobile(), identifyingCode);
         CustomerDTO customerDTO = customerBiz.getByMobile(mobile);
         if (null == customerDTO) {
             CustomerAddDTO customerAddDTO = new CustomerAddDTO();
@@ -222,7 +223,7 @@ public class APISignInController extends BaseController {
     }
 
     @AppApi
-    @ApiOperation(value = "根据电话号码，发送验证码", httpMethod = "GET", response = SendVerificationCodeResp.class, notes = "根据电话号码，发送验证码")
+    @ApiOperation(value = "根据电话号码，发送验证码", httpMethod = "GET", notes = "根据电话号码，发送验证码")
     @RequestMapping(value = "/customersendcode")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "根据电话号码，发送验证码", level = LogLevelEnum.LEVEL_2)
     public Object customerSendCode(@ModelAttribute SendMsgToCustomerReq req) throws ClientException {
