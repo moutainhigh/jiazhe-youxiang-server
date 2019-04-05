@@ -140,15 +140,8 @@ public class APISignInController extends BaseController {
         SessionResp sessionResp = new SessionResp();
         subject.getSession().setTimeout(CommonConstant.EIGHT_HOUR);
         sessionResp.setSessionId(subject.getSession().getId().toString());
-        String permission;
-        Object permObject = RedisUtils.get(CommonConstant.REDIS_PERM_URL + loginName);
-        if (null != permObject) {
-            permission = permObject.toString();
-            logger.info("redis中获取的permission");
-        } else {
-            AuthorizationInfo info = userRealm.doGetAuthorizationInfo(subject.getPrincipals());
-            permission = StringUtils.join(info.getStringPermissions(), "#");
-        }
+        AuthorizationInfo info = userRealm.doGetAuthorizationInfo(subject.getPrincipals());
+        String permission = StringUtils.join(info.getStringPermissions(), "#");
         int userCookieExpiry = rememberMe ? USER_COOKIE_EXPIRY : -1;
         CookieUtil.addCookie(response, "permission", permission, userCookieExpiry);
         CookieUtil.addCookie(response, "displayName", URLEncoder.encode(sysUserDTO.getDisplayName(), "UTF-8"), userCookieExpiry);

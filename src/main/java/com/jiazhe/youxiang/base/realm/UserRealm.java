@@ -119,7 +119,7 @@ public class UserRealm extends AuthorizingRealm {
             }
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
             info.addStringPermissions(permissionList);
-            RedisUtils.set(CommonConstant.REDIS_PERM_URL + sysUserDTO.getLoginName(), StringUtils.join(permissionList, "#"));
+//            RedisUtils.set(CommonConstant.REDIS_PERM_URL + sysUserDTO.getLoginName(), StringUtils.join(permissionList, "#"));
             return info;
         }
         return null;
