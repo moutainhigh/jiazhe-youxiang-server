@@ -153,18 +153,94 @@
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-10">
-                                            <form id="projectSaveForm" class="form-horizontal" role="form">
+                                            <form id="messageSingleSaveForm" class="form-horizontal" role="form">
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">手机号码：</label>
                                                     <div class="col-sm-7">
                                                         <div class="pos-rel">
-                                                            <input id="inputMobile" name="mobile"
+                                                            <input id="singleMobile" name="mobile"
                                                                    class="form-control"
                                                                    type="text" style="height:30px"/>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">短信类型：</label>
+                                                    <div class="col-sm-7">
+                                                        <div class="pos-rel">
+                                                            <select id="singleType" name="type"
+                                                                    class="selectpicker show-tick form-control">
+                                                                <option value="2">验证码类</option>
+                                                                <option value="3">业务类</option>
+                                                                <option value="4">营销类</option>
+                                                                <option value="1">其他</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">短信主题：</label>
+                                                    <div class="col-sm-7">
+                                                        <div class="pos-rel">
+                                                            <input id="singleTopic"
+                                                                   name="topic"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">短信内容：</label>
+                                                    <div class="col-sm-7">
+                                                        <div class="pos-rel">
+                                                            <textarea id="singleContent" name="content"
+                                                                      class="form-control" onkeyup="countWords(this);"
+                                                                      style="resize:none;height: 100px"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div id="wordsCountDiv" class="col-sm-1" style="padding-top: 80px;">
+                                                        0(0)
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="send()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        发送
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="sendAndContinue()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        发送并继续
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="modal-batch" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger">批量发送</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-10">
+                                            <form id="messageBatchSaveForm" class="form-horizontal" role="form">
+                                                <input type="hidden" name="excelUrl" id="excelUrl">
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">短信类型：</label>
                                                     <div class="col-sm-7">
@@ -193,16 +269,26 @@
                                                 </div>
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">短信内容：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">短信模板：</label>
                                                     <div class="col-sm-7">
                                                         <div class="pos-rel">
-                                                            <textarea id="inputContent" name="content"
-                                                                      class="form-control" onkeyup="countWords(this);"
+                                                            <textarea id="batchTemplate" name="template"
+                                                                      class="form-control"
                                                                       style="resize:none;height: 100px"></textarea>
                                                         </div>
                                                     </div>
-                                                    <div id="wordsCountDiv" class="col-sm-1" style="padding-top: 80px;">
-                                                        0(0)
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">短信excel：</label>
+                                                    <div class="col-sm-7">
+                                                        <div class="widget-main">
+                                                            <div class="form-group">
+                                                                <div class="col-xs-12">
+                                                                    <input type="file" id="messageFile"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -216,9 +302,9 @@
                                         取消
                                     </button>
 
-                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="addOrUpdate()">
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="send()">
                                         <i class="ace-icon fa fa-check"></i>
-                                        保存
+                                        发送
                                     </button>
                                 </div>
                             </div>
@@ -263,6 +349,43 @@
         initTable(grid_selector, pager_selector, tableOption);
     });
 
+    $('#messageFile').ace_file_input({
+        style: 'well',
+        btn_choose: '请选择短信excel',
+        btn_change: null,
+        no_icon: 'ace-icon fa fa-cloud-upload',
+        droppable: true,
+        thumbnail: 'large',
+        allowExt: ['xlsx'],
+//        allowMime: ['application/vnd.ms-excel'],
+    }).on('change', function () {
+        var image = $('#messageFile')[0].files[0]
+        if (!image) {
+            return;
+        }
+        var formData = new FormData();
+        formData.append('file', image);
+        $.ajax({
+            url: "/api/message/uploadexcel",
+            dataType: "json",
+            type: 'POST',
+            async: true,
+            processData: false, // 告诉jQuery不要去处理发送的数据
+            contentType: false,// 告诉jQuery不要去设置Content-Type请求头
+            data: formData,
+            cache: false,
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $('#excelUrl').val(data.data.url);
+                    bootboxalert(data.data.count + "短信格式合格");
+                }
+            },
+            error: error
+        });
+    });
+
     $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
 
     function search() {
@@ -305,11 +428,30 @@
     }
 
     function openSingle() {
-        $("#inputMobile").val("");
-        $("#inputType option:first").prop("selected", 'selected');
-        $("#inputTopic").val("");
-        $("#inputContent").val("");
+        $("#singleMobile").val("");
+        $("#singleType option:first").prop("selected", 'selected');
+        $("#singleTopic").val("");
+        $("#singleContent").val("");
         document.getElementById('wordsCountDiv').innerText = "0(0)"
+    }
+
+    function openBatch(){
+        $("#batchTopic").val("");
+        $("#batchContent").val("");
+        $("#batchTemplate").val("");
+        $('#messageFile').ace_file_input('reset_input');
+    }
+
+    function send(){
+        sendMessage();
+    }
+
+    function sendAndContinue(){
+        sendMessage();
+    }
+
+    function sendMessage() {
+
     }
 
     /**
