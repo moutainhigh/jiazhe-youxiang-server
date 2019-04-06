@@ -61,9 +61,9 @@
                                     <select id="searchType" name="type"
                                             class="selectpicker show-tick form-control">
                                         <option value="">所有</option>
-                                        <option value="2">验证码类</option>
-                                        <option value="3">业务类</option>
-                                        <option value="4">营销类</option>
+                                        <option value="2">业务类</option>
+                                        <option value="3">营销类</option>
+                                        <option value="4">验证码类</option>
                                         <option value="1">其他</option>
                                     </select>
                                 </div>
@@ -127,13 +127,13 @@
                             <!--<shiro:hasPermission name="projectAdd">-->
                             <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-single"
                                data-toggle="modal" onclick="openSingle()">
-                                <i class="ace-icon fa fa-plus"></i>单条发送
+                                <i class="ace-icon"></i>单条发送
                             </a>
                             <!--</shiro:hasPermission>-->
                             <!--<shiro:hasPermission name="projectAdd">-->
                             <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-batch"
                                data-toggle="modal" onclick="openBatch()">
-                                <i class="ace-icon fa fa-plus"></i>批量发送
+                                <i class="ace-icon"></i>批量发送
                             </a>
                             <!--</shiro:hasPermission>-->
                         </p>
@@ -171,9 +171,9 @@
                                                         <div class="pos-rel">
                                                             <select id="singleType" name="type"
                                                                     class="selectpicker show-tick form-control">
-                                                                <option value="2">验证码类</option>
-                                                                <option value="3">业务类</option>
-                                                                <option value="4">营销类</option>
+                                                                <option value="2">业务类</option>
+                                                                <option value="3">营销类</option>
+                                                                <option value="4">验证码类</option>
                                                                 <option value="1">其他</option>
                                                             </select>
                                                         </div>
@@ -247,9 +247,9 @@
                                                         <div class="pos-rel">
                                                             <select id="inputType" name="type"
                                                                     class="selectpicker show-tick form-control">
-                                                                <option value="2">验证码类</option>
-                                                                <option value="3">业务类</option>
-                                                                <option value="4">营销类</option>
+                                                                <option value="2">业务类</option>
+                                                                <option value="3">营销类</option>
+                                                                <option value="4">验证码类</option>
                                                                 <option value="1">其他</option>
                                                             </select>
                                                         </div>
@@ -336,12 +336,12 @@
             colNames: ['', '手机号码', '发送时间', '类型', '操作人', '发送结果', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
-                {name: 'mobile', index: 'mobile', width: 50, sortable: false},
+                {name: 'mobile', index: 'mobile', sortable: false},
                 {name: 'sendTime', index: 'sendTime', sortable: false},
-                {name: 'type', width: 30, index: 'type', sortable: false},
-                {name: 'operateName', index: 'operateName', width: 50, sortable: false},
-                {name: 'status', index: 'status', width: 20, sortable: false},
-                {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
+                {name: 'type', index: 'type', sortable: false},
+                {name: 'operateName', index: 'operateName', sortable: false},
+                {name: 'status', index: 'status', sortable: false},
+                {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
             ],
             caption: "短信列表"
         }
