@@ -48,6 +48,11 @@ public class ChargeReceiptSaveDTO extends BaseObject{
      */
     private Date tradeTime ;
 
+    /**
+     * 小票图片
+     */
+    private String extInfo ;
+
     public Integer getId() {
         return id;
     }
@@ -102,5 +107,13 @@ public class ChargeReceiptSaveDTO extends BaseObject{
 
     public void setTradeTime(Date tradeTime) {
         this.tradeTime = tradeTime;
+    }
+
+    public String getExtInfo() {
+        return extInfo;
+    }
+
+    public void setExtInfo(String extInfo) {
+        this.extInfo = extInfo;
     }
 }
