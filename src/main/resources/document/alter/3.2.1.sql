@@ -1,12 +1,13 @@
 /**
 短信记录表
  */
+
 drop table if exists message;
 CREATE TABLE `message` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
     `mobile` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '手机号',
     `content` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '短信内容',
-    `type` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '短信类型 1其他 2验证码类 3业务类 4营销类 ',
+    `type` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '短信类型 1其他 2业务类 3营销类 4验证码类 ',
     `topic` VARCHAR(100) COMMENT '发送主题',
     `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '发送状态 1成功 0失败',
     `count` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '此条短信记录，对应发送的条数',

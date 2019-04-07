@@ -216,12 +216,12 @@
                                         取消
                                     </button>
 
-                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="send()">
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="sendSingle('1')">
                                         <i class="ace-icon fa fa-check"></i>
                                         发送
                                     </button>
 
-                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="sendAndContinue()">
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="sendSingle('2')">
                                         <i class="ace-icon fa fa-check"></i>
                                         发送并继续
                                     </button>
@@ -442,15 +442,11 @@
         $('#messageFile').ace_file_input('reset_input');
     }
 
-    function send(){
-        sendMessage();
-    }
-
-    function sendAndContinue(){
-        sendMessage();
-    }
-
-    function sendMessage() {
+    /**
+     * 单条发送短信
+     *type 1发送  2发送并继续
+     * */
+    function sendSingle(type){
 
     }
 
