@@ -707,6 +707,9 @@
             if (permission.indexOf("orderAppend") != -1) {
                 str += getFunctionButton("btn-primary", "showAppendOrder(" + rowObject.id + ")", "追加订单");
             }
+            if (permission.indexOf("orderCancel") != -1) {
+                str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
+            }
         }
         if (rowObject.status == 5) {
             if (permission.indexOf("orderCheck") != -1) {

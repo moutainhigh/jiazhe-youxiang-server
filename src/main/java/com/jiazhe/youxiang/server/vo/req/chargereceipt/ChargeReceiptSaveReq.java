@@ -33,6 +33,9 @@ public class ChargeReceiptSaveReq extends BaseVO {
     @ApiModelProperty("交易时间")
     private Long tradeTime ;
 
+    @ApiModelProperty("小票图片")
+    private String extInfo ;
+
     public Integer getId() {
         return id;
     }
@@ -87,5 +90,13 @@ public class ChargeReceiptSaveReq extends BaseVO {
 
     public void setTradeTime(Long tradeTime) {
         this.tradeTime = tradeTime;
+    }
+
+    public String getExtInfo() {
+        return extInfo;
+    }
+
+    public void setExtInfo(String extInfo) {
+        this.extInfo = extInfo;
     }
 }
