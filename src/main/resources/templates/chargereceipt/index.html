@@ -191,6 +191,18 @@
 
                                                     <div class="space-2"></div>
                                                     <div class="form-group">
+                                                        <label class="col-sm-4 control-label no-padding-right">小票图片：</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="pos-rel">
+                                                                <input id="saveExtInfo" name="extInfo"
+                                                                       class="form-control" readonly
+                                                                       type="text" style="height:30px"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="space-2"></div>
+                                                    <div class="form-group">
                                                         <label class="col-sm-4 control-label no-padding-right">小票积分数量：</label>
                                                         <div class="col-sm-8">
                                                             <div class="pos-rel">
@@ -270,9 +282,15 @@
                                     </button>
 
                                     <button class="btn btn-sm btn-primary modal-footer-btn"
-                                            onclick="save()">
+                                            onclick="save('1')">
                                         <i class="ace-icon fa fa-thumbs-o-up"></i>
                                         保存
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn"
+                                            onclick="save('2')">
+                                        <i class="ace-icon fa fa-thumbs-o-up"></i>
+                                        保存并继续
                                     </button>
                                 </div>
                             </div>
@@ -348,7 +366,8 @@
 
     function showimage(source) {//图片单击放大显示
         rotate = 0;
-        $("#modal-form").find("#img_show").html("<image id='zoomPic' width='400px' src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' />");
+        $("#saveExtInfo").val(source);
+        $("#modal-form").find("#img_show").html("<image id='zoomPic' width='400px' src='" + getImageUrl(source) + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' />");
     }
 
     function bigimg(obj) {
@@ -383,9 +402,10 @@
                     $("#customerName").html(result.customerName);
                     var imgUrls = result.imgUrls.split(",");
                     for (var i = 0; i < imgUrls.length; i++) {
-                        $("#pics").append("<img class='item' onmouseover=\"this.style.cursor='pointer';this.style.cursor='hand'\"  onmouseout=\"this.style.cursor='default'\" onclick=\"javascript:showimage('" + getImageUrl(imgUrls[i]) + "');\" src='" + getImageUrl(imgUrls[i]) + "'>")
+                        $("#pics").append("<img class='item' onmouseover=\"this.style.cursor='pointer';this.style.cursor='hand'\"  onmouseout=\"this.style.cursor='default'\" onclick=\"javascript:showimage('" + imgUrls[i] + "');\" src='" + getImageUrl(imgUrls[i]) + "'>")
                     }
-                    showimage(getImageUrl(imgUrls[0]));
+                    $("#saveExtInfo").val(imgUrls[0]);
+                    showimage(imgUrls[0]);
                 }
             },
             error: error
@@ -484,7 +504,10 @@
         $("#saveTradeTime").next().next().val(0);
     }
 
-    function save() {
+    /**
+     * type  1保存 2保存并继续
+     * */
+    function save(type) {
         if(!isNumber($("#saveExchangePoint").val())){
             bootboxalert("小票积分数量不合法");
             return false;
@@ -499,8 +522,12 @@
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
+                    if(type == '1'){
+                        $("#modal-form").modal('hide');
+                    }else{
+                        openNew();
+                    }
                     jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                    $("#modal-form").modal('hide');
                 }
             },
             error: error
@@ -522,6 +549,8 @@
                 } else {
                     var result = data.data;
                     $("#id").val(result.id);
+                    $("#saveExtInfo").val(result.extInfo);
+                    showimage(result.extInfo);
                     $("#saveExchangePoint").val(result.exchangePoint);
                     $("#saveCustomerName").val(result.customerName);
                     $("#posCode").val(result.posCode);
