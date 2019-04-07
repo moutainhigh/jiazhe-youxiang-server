@@ -16,7 +16,8 @@ public class CommonConstant {
     /**
      * 计数监控key
      */
-    public static final String HTTP_API_REQ_COUNT = "http_api_req_count";/**
+    public static final String HTTP_API_REQ_COUNT = "http_api_req_count";
+    /**
      * 耗时监控key
      */
     public static final String HTTP_API_REQ_DURATION = "http_api_req_duration";
@@ -32,7 +33,6 @@ public class CommonConstant {
      * 请求内部异常code
      */
     public static final String CODE_INTERNAL_ERROR = "2";
-
 
 
     /**
@@ -230,11 +230,26 @@ public class CommonConstant {
 
     /**
      * redis中key的前缀
-     *    REDIS_VER_CODE 短信验证码
-     *    REDIS_PERM_URL 权限字符串
+     * REDIS_VER_CODE 短信验证码
+     * REDIS_PERM_URL 权限字符串
      */
     public static final String REDIS_VER_CODE = "redis_ver_code" + REDIS_KEY_CONNECT;
     public static final String REDIS_PERM_URL = "redis_perm_url" + REDIS_KEY_CONNECT;
 
+    /**
+     * 短信服务商 1腾讯 2阿里
+     */
+    public static final Byte MSG_SERVICE_PROVIDER_TENCENT = Byte.valueOf("1");
+    public static final Byte MSG_SERVICE_PROVIDER_ALI = Byte.valueOf("2");
+
+    /**
+     * 短信类型 1其他 2业务 3营销 4验证码
+     */
+    public static final Byte MSG_TYPE_OTHERS = Byte.valueOf("1");
+    public static final Byte MSG_TYPE_BUSINESS = Byte.valueOf("2");
+    public static final Byte MSG_TYPE_MARKETING = Byte.valueOf("3");
+    public static final Byte MSG_TYPE_VER_CODE = Byte.valueOf("4");
+
+    public static final int VER_CODE_LENGTH = 4;
 
 }

@@ -16,11 +16,12 @@ public class TencentMsgUtils {
 
     public static String appKey = PropertyUtils.getProperty("tencentAppKey");
 
-    public static int templateId = 306838;
-
+    public static int ver_code_templateId = 306838;
+    public static int business_templateId = 309066;
     public static String smsSign = "wuli豆豆";
 
-//    public static int templateId = 307385;
+//    public static int ver_code_templateId = 307385;
+//    public static int business_templateId = ;
 //    public static String smsSign = "悠享互联";
 
     private static final Logger logger = LoggerFactory.getLogger(TencentMsgUtils.class);
@@ -32,7 +33,22 @@ public class TencentMsgUtils {
         try {
             String[] params = {code, "5"};
             SmsSingleSender smsSingleSender = new SmsSingleSender(appId, appKey);
-            SmsSingleSenderResult result = smsSingleSender.sendWithParam("86", phone, templateId, params, smsSign, "", "");
+            SmsSingleSenderResult result = smsSingleSender.sendWithParam("86", phone, ver_code_templateId, params, smsSign, "", "");
+            return result;
+        } catch (Exception e) {
+            logger.error("腾讯云短信发送异常，异常信息:" + e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * 发送验证短信
+     */
+    public static SmsSingleSenderResult sendBusinessMsg(String phone, String content) {
+        try {
+            String[] params = {content};
+            SmsSingleSender smsSingleSender = new SmsSingleSender(appId, appKey);
+            SmsSingleSenderResult result = smsSingleSender.sendWithParam("86", phone, business_templateId, params, smsSign, "", "");
             return result;
         } catch (Exception e) {
             logger.error("腾讯云短信发送异常，异常信息:" + e.getMessage());

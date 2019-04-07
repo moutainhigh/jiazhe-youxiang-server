@@ -4,14 +4,10 @@ import com.aliyuncs.exceptions.ClientException;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.realm.AuthToken;
 import com.jiazhe.youxiang.base.realm.UserRealm;
-import com.jiazhe.youxiang.base.util.CommonValidator;
-import com.jiazhe.youxiang.base.util.CookieUtil;
-import com.jiazhe.youxiang.base.util.EncryptPasswordUtil;
-import com.jiazhe.youxiang.base.util.IpAdrressUtil;
-import com.jiazhe.youxiang.base.util.MsgUtils;
-import com.jiazhe.youxiang.base.util.RedisUtils;
+import com.jiazhe.youxiang.base.util.*;
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
+import com.jiazhe.youxiang.server.biz.message.MessageBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
@@ -33,6 +29,7 @@ import com.jiazhe.youxiang.server.vo.resp.login.SendVerificationCodeResp;
 import com.jiazhe.youxiang.server.vo.resp.login.SessionResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -105,7 +102,9 @@ public class APISignInController extends BaseController {
         // 判断白名单里是否有该ip，没有发验证码
         if (!IpAdrressUtil.ipIsWhite(IpAdrressUtil.getIpAddress(request), sysUserDTO.getLastLoginIp())) {
             //判断有没有短信bizId传过来
-            CommonValidator.validateNull(bizId, new LoginException(LoginCodeEnum.LOGIN_DIFFERENT_CLIENT));
+            if(Strings.isEmpty(req.getIdentifyingCode())){
+                CommonValidator.validateNull(bizId, new LoginException(LoginCodeEnum.LOGIN_DIFFERENT_CLIENT));
+            }
             CommonValidator.validateNull(identifyingCode, new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_EMPTY));
             //判断验证码是否正确
             MsgUtils.isVerified(sysUserDTO.getMobile(), identifyingCode);
@@ -158,7 +157,8 @@ public class APISignInController extends BaseController {
             throw new LoginException(LoginCodeEnum.LOGIN_USER_ILLEGAL);
         }
         CommonValidator.validateMobile(sysUserDTOList.get(0).getMobile(), new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL));
-        SendVerificationCodeResp sendMsgResp = MsgUtils.sendVerificationCodeMsg(sysUserDTOList.get(0).getMobile());
+        String code = RandomUtil.generateVerifyCode(CommonConstant.VER_CODE_LENGTH);
+        SendVerificationCodeResp sendMsgResp = MsgUtils.sendVerificationCodeMsg(sysUserDTOList.get(0).getMobile(), code);
         return ResponseFactory.buildResponse(sendMsgResp);
 
     }
@@ -221,7 +221,8 @@ public class APISignInController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "根据电话号码，发送验证码", level = LogLevelEnum.LEVEL_2)
     public Object customerSendCode(@ModelAttribute SendMsgToCustomerReq req) throws ClientException {
         CommonValidator.validateMobile(req.getMobile(), new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL));
-        SendVerificationCodeResp sendMsgResp = MsgUtils.sendVerificationCodeMsg(req.getMobile());
+        String code = RandomUtil.generateVerifyCode(CommonConstant.VER_CODE_LENGTH);
+        SendVerificationCodeResp sendMsgResp = MsgUtils.sendVerificationCodeMsg(req.getMobile(), code);
         return ResponseFactory.buildResponse(sendMsgResp);
     }
 }

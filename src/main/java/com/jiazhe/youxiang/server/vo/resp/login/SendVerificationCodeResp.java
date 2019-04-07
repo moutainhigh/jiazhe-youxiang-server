@@ -13,6 +13,9 @@ public class SendVerificationCodeResp extends BaseVO {
     @ApiModelProperty("短信返回bizId")
     private String bizId;
 
+    @ApiModelProperty("服务商")
+    private Byte serviceProvider;
+
     public String getBizId() {
         return bizId;
     }
@@ -21,4 +24,11 @@ public class SendVerificationCodeResp extends BaseVO {
         this.bizId = bizId;
     }
 
+    public Byte getServiceProvider() {
+        return serviceProvider;
+    }
+
+    public void setServiceProvider(Byte serviceProvider) {
+        this.serviceProvider = serviceProvider;
+    }
 }

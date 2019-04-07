@@ -47,7 +47,7 @@
                         <!--<shiro:hasPermission name="messageSearch">-->
                         <form id="searchForm" class="form-horizontal" role="form">
                             <div class="form-group">
-                                <label class="col-sm-1 control-label no-padding-right">状态：</label>
+                                <label class="col-sm-1 control-label no-padding-right">发送状态：</label>
                                 <div class="col-sm-2">
                                     <select id="searchStatus" name="status"
                                             class="selectpicker show-tick form-control">
@@ -56,7 +56,7 @@
                                         <option value="0">发送失败</option>
                                     </select>
                                 </div>
-                                <label class="col-sm-1 control-label no-padding-right">状态：</label>
+                                <label class="col-sm-1 control-label no-padding-right">类型：</label>
                                 <div class="col-sm-2">
                                     <select id="searchType" name="type"
                                             class="selectpicker show-tick form-control">
@@ -321,7 +321,8 @@
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
-
+    var type = ['其他', '业务类', '营销类', '验证码类'];
+    var serviceProvider = ['腾讯云', '阿里云'];
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -331,16 +332,41 @@
         initDatePicker();
 
         var tableOption = {
-            url: "/api/message/getlist",// 获取数据的地址
+            url: "/api/message/listpage",// 获取数据的地址
             postData: transformToJson($('#searchForm').serializeArray()),
-            colNames: ['', '手机号码', '发送时间', '类型', '操作人', '发送结果', '操作'],
+            colNames: ['', '主题', '短信服务商', '手机号码', '发送时间', '类型', '操作人', '发送结果', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'topic', index: 'topic', sortable: false},
+                {
+                    name: 'serviceProvider',
+                    index: 'serviceProvider',
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return serviceProvider[rowObject.serviceProvider - 1];
+                    }
+                },
                 {name: 'mobile', index: 'mobile', sortable: false},
-                {name: 'sendTime', index: 'sendTime', sortable: false},
-                {name: 'type', index: 'type', sortable: false},
-                {name: 'operateName', index: 'operateName', sortable: false},
-                {name: 'status', index: 'status', sortable: false},
+                {name: 'sendTime', index: 'sendTime', sortable: false, formatter: timeFormat},
+                {
+                    name: 'type',
+                    index: 'type',
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return type[rowObject.type - 1];
+                    }
+                },
+                {name: 'operatorName', index: 'operatorName', sortable: false},
+                {
+                    name: 'status',
+                    index: 'status',
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        var text = rowObject.status == 1 ? "发送成功" : "发送失败";
+                        var color = rowObject.status == 1 ? "00FF00" : "FF0000";
+                        return generateSpan(text, color);
+                    }
+                },
                 {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
             ],
             caption: "短信列表"
@@ -390,41 +416,52 @@
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "/api/message/getlist",// 获取数据的地址
+            url: "/api/message/listpage",// 获取数据的地址
             postData: transformToJson($('#searchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
     }
 
-    function statusFormatter(cellvalue, options, cell) {
-        switch (cell.status) {
-            case 0:
-            default:
-                return "未启动";
-            case 1:
-                return "进行中";
-            case 2:
-                return "已结束";
-        }
-    }
-
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        if (permission.indexOf("projectEdit") != -1) {
-            str += getFunctionButton("btn-info", "openEdit(" + rowObject.id + ")", "修改");
+        str += getFunctionButton("btn-info", "showMsgContent(" + rowObject.content + ")", "查看");
+        if (rowObject.status == 1) {
+            str += getFunctionButton("btn-info", "resend(" + rowObject.id + ")", "再次发送");
         }
-        if (permission.indexOf("projectDelete") != -1) {
-            str += getFunctionButton("btn-danger", "deleteOne(" + rowObject.id + ")", "删除");
-        }
-        if (permission.indexOf("projectStatusChange") != -1) {
-            if (rowObject.status == 0) {
-                str += getFunctionButton("btn-success", "begin(" + rowObject.id + ")", "启动");
-            }
-            if (rowObject.status == 1) {
-                str += getFunctionButton("btn-danger", "end(" + rowObject.id + ")", "停止");
-            }
+        if (rowObject.status == 0) {
+            str += getFunctionButton("btn-info", "resend(" + rowObject.id + ")", "重试");
         }
         return str;
+    }
+
+    /**
+     * 重新发送
+     * */
+    function resend(id) {
+        $.ajax({
+            url: "/api/message/resend",
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: error
+        });
+    }
+
+    /**
+     * 显示短信内容
+     * */
+    function showMsgContent(content) {
+        bootboxalert("短信内容为：" + content);
     }
 
     function openSingle() {
@@ -435,7 +472,7 @@
         document.getElementById('wordsCountDiv').innerText = "0(0)"
     }
 
-    function openBatch(){
+    function openBatch() {
         $("#batchTopic").val("");
         $("#batchContent").val("");
         $("#batchTemplate").val("");
@@ -446,7 +483,7 @@
      * 单条发送短信
      *type 1发送  2发送并继续
      * */
-    function sendSingle(type){
+    function sendSingle(type) {
 
     }
 
