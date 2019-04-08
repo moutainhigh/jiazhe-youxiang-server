@@ -208,7 +208,8 @@
                                                     <label class="col-sm-4 control-label no-padding-right">短信内容：</label>
                                                     <div class="col-sm-7">
                                                         <div class="pos-rel">
-                                                            <textarea id="singleContent" name="content" placeholder="短信内容，按照模板用英文分号间隔，必须对应工整"
+                                                            <textarea id="singleContent" name="content"
+                                                                      placeholder="短信内容，按照模板用英文分号间隔，必须对应工整"
                                                                       class="form-control" onkeyup="countWords(this);"
                                                                       style="resize:none;height: 100px"></textarea>
                                                         </div>
@@ -342,6 +343,9 @@
         });
 
         initDatePicker();
+
+        //初始化短信模板select框
+        getMsgTemplate();
 
         var tableOption = {
             url: "/api/message/listpage",// 获取数据的地址
@@ -496,7 +500,29 @@
      *type 1发送  2发送并继续
      * */
     function sendSingle(type) {
-
+        $.ajax({
+            url: "/api/message/sendsingle",
+            dataType: "json",
+            async: false,
+            data: transformToJson($('#messageSingleSaveForm').serializeArray()),
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    if (type == 1) {
+                        $("#modal-single").modal("hide");
+                        jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                    }else{
+                        $("#singleMobile").val("");
+                        $("#singleContent").val("");
+                        document.getElementById('wordsCountDiv').innerText = "0(0)"
+                        jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                    }
+                }
+            },
+            error: error
+        });
     }
 
     /**
@@ -510,6 +536,29 @@
             value = value.replace(/\n|\r/gi, "");
             content.innerText = value.length + "(" + Math.ceil(value.length / 70) + ")";
         }
+    }
+
+    function getMsgTemplate() {
+        $.ajax({
+            url: "/api/msgtemplate/getall",
+            dataType: "json",
+            async: false,
+            data: {
+                status: 1
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#singleMsgTemplateId").append("<option title='" + result[i].aliTemplateContent + "' value=" + result[i].id + ">" + result[i].name + "</option>");
+                    }
+                }
+            },
+            error: error
+        });
     }
 
 </script>

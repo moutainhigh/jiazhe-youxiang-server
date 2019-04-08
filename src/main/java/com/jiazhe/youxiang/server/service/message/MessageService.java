@@ -2,7 +2,6 @@ package com.jiazhe.youxiang.server.service.message;
 
 import com.jiazhe.youxiang.server.dto.message.MessageDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
-import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
@@ -41,4 +40,14 @@ public interface MessageService {
      * @param id
      */
     void resend(Integer id);
+
+    /**
+     * 单条发送短信
+     * @param mobile
+     * @param type
+     * @param topic
+     * @param messageTemplateId
+     * @param content
+     */
+    void sendSingle(String mobile, Byte type, String topic, int messageTemplateId, String content);
 }

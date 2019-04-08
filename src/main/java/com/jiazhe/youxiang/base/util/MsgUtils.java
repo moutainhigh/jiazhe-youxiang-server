@@ -7,14 +7,13 @@ import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.vo.resp.login.SendVerificationCodeResp;
+import com.jiazhe.youxiang.server.vo.resp.message.SendSingleMsgResp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import sun.plugin2.message.Message;
 
 import javax.annotation.PostConstruct;
-import java.util.Date;
 
 /**
  * @author TU
@@ -47,7 +46,7 @@ public class MsgUtils {
      * @param phone
      * @return
      */
-    public static SendVerificationCodeResp sendVerificationCodeMsg(String phone,String code) {
+    public static SendVerificationCodeResp sendVerificationCodeMsg(String phone, String code) {
         SendVerificationCodeResp sendMsgResp = new SendVerificationCodeResp();
         //先尝试用腾讯云发送
         SmsSingleSenderResult smsSingleSenderResult = TencentMsgUtils.sendVerificationCodeMsg(phone, code);
@@ -63,21 +62,25 @@ public class MsgUtils {
                 RedisUtils.set(CommonConstant.REDIS_VER_CODE + phone, code, CommonConstant.FIVE_MINUTES);
             }
         }
-        msgUtils.messageBiz.insertVerCodeMsg(sendMsgResp.getServiceProvider(),phone, code, CommonConstant.MSG_TYPE_VER_CODE);
+        msgUtils.messageBiz.insertVerCodeMsg(sendMsgResp.getServiceProvider(), phone, code, CommonConstant.MSG_TYPE_VER_CODE);
         return sendMsgResp;
     }
 
-    public static boolean sendBusinessMsg(String phone, String content){
-        SmsSingleSenderResult smsSingleSenderResult = TencentMsgUtils.sendBusinessMsg(phone, content);
+    public static SendSingleMsgResp sendBusinessMsg(String mobile, Integer tencentTemplateId, String tencentTemplateContent, String aliTemplateCode, String aliTemplateContent, String[] params) {
+        SendSingleMsgResp resp = new SendSingleMsgResp();
+        resp.setSuccess(false);
+        SmsSingleSenderResult smsSingleSenderResult = TencentMsgUtils.sendBusinessMsg(mobile, tencentTemplateId, params);
         if (null != smsSingleSenderResult && smsSingleSenderResult.result == 0) {
-            return true;
+            resp.setSuccess(true);
+            resp.setServiceProvider(CommonConstant.MSG_SERVICE_PROVIDER_TENCENT);
         } else {
-            SendSmsResponse sendSmsResponse = AliMsgUtils.sendVerificationCodeMsg(phone, content);
+            SendSmsResponse sendSmsResponse = AliMsgUtils.sendBusinessMsg(mobile, aliTemplateCode, aliTemplateContent, params);
             if (sendSmsResponse.getCode() != null && VER_CODE_SEND_SUCCESS.equals(sendSmsResponse.getCode())) {
-                return true;
+                resp.setSuccess(true);
+                resp.setServiceProvider(CommonConstant.MSG_SERVICE_PROVIDER_ALI);
             }
         }
-        return false;
+        return resp;
     }
 
     /**

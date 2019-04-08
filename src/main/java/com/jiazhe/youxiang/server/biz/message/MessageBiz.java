@@ -31,4 +31,8 @@ public class MessageBiz {
     public void resend(Integer id) {
         messageService.resend(id);
     }
+
+    public void sendSingle(String mobile, Byte type, String topic, int messageTemplateId, String content) {
+        messageService.sendSingle(mobile, type, topic, messageTemplateId, content);
+    }
 }
