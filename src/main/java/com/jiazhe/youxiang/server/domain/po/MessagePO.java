@@ -22,6 +22,8 @@ public class MessagePO implements Serializable {
 
     private Date sendTime;
 
+    private Integer messageTemplateId;
+
     private Integer operatorId;
 
     private String operatorName;
@@ -106,6 +108,14 @@ public class MessagePO implements Serializable {
 
     public void setSendTime(Date sendTime) {
         this.sendTime = sendTime;
+    }
+
+    public Integer getMessageTemplateId() {
+        return messageTemplateId;
+    }
+
+    public void setMessageTemplateId(Integer messageTemplateId) {
+        this.messageTemplateId = messageTemplateId;
     }
 
     public Integer getOperatorId() {

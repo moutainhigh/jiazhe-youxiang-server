@@ -11,6 +11,7 @@
         <result column="count" property="count" jdbcType="TINYINT"/>
         <result column="service_provider" property="serviceProvider" jdbcType="TINYINT"/>
         <result column="send_time" property="sendTime" jdbcType="TIMESTAMP"/>
+        <result column="message_template_id" property="messageTemplateId" jdbcType="INTEGER" />
         <result column="operator_id" property="operatorId" jdbcType="INTEGER"/>
         <result column="operator_name" property="operatorName" jdbcType="VARCHAR"/>
         <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
@@ -20,7 +21,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-    id, mobile, content, type, topic, status, count, service_provider, send_time, operator_id,
+    id, mobile, content, type, topic, status, count, service_provider, send_time, message_template_id, operator_id,
     operator_name, ext_info, is_deleted, add_time, mod_time
     </sql>
 

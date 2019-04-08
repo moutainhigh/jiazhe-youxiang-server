@@ -11,6 +11,7 @@
     <result column="count" property="count" jdbcType="TINYINT" />
     <result column="service_provider" property="serviceProvider" jdbcType="TINYINT" />
     <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+    <result column="message_template_id" property="messageTemplateId" jdbcType="INTEGER" />
     <result column="operator_id" property="operatorId" jdbcType="INTEGER" />
     <result column="operator_name" property="operatorName" jdbcType="VARCHAR" />
     <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
@@ -77,8 +78,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, mobile, content, type, topic, status, count, service_provider, send_time, operator_id, 
-    operator_name, ext_info, is_deleted, add_time, mod_time
+    id, mobile, content, type, topic, status, count, service_provider, send_time, message_template_id, 
+    operator_id, operator_name, ext_info, is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.MessagePOExample" >
     select
@@ -114,15 +115,15 @@
     insert into message (id, mobile, content, 
       type, topic, status, 
       count, service_provider, send_time, 
-      operator_id, operator_name, ext_info, 
-      is_deleted, add_time, mod_time
-      )
+      message_template_id, operator_id, operator_name, 
+      ext_info, is_deleted, add_time, 
+      mod_time)
     values (#{id,jdbcType=INTEGER}, #{mobile,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
       #{type,jdbcType=TINYINT}, #{topic,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
       #{count,jdbcType=TINYINT}, #{serviceProvider,jdbcType=TINYINT}, #{sendTime,jdbcType=TIMESTAMP}, 
-      #{operatorId,jdbcType=INTEGER}, #{operatorName,jdbcType=VARCHAR}, #{extInfo,jdbcType=VARCHAR}, 
-      #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}
-      )
+      #{messageTemplateId,jdbcType=INTEGER}, #{operatorId,jdbcType=INTEGER}, #{operatorName,jdbcType=VARCHAR}, 
+      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.MessagePO" >
     insert into message
@@ -153,6 +154,9 @@
       </if>
       <if test="sendTime != null" >
         send_time,
+      </if>
+      <if test="messageTemplateId != null" >
+        message_template_id,
       </if>
       <if test="operatorId != null" >
         operator_id,
@@ -200,6 +204,9 @@
       </if>
       <if test="sendTime != null" >
         #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="messageTemplateId != null" >
+        #{messageTemplateId,jdbcType=INTEGER},
       </if>
       <if test="operatorId != null" >
         #{operatorId,jdbcType=INTEGER},
@@ -257,6 +264,9 @@
       <if test="record.sendTime != null" >
         send_time = #{record.sendTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.messageTemplateId != null" >
+        message_template_id = #{record.messageTemplateId,jdbcType=INTEGER},
+      </if>
       <if test="record.operatorId != null" >
         operator_id = #{record.operatorId,jdbcType=INTEGER},
       </if>
@@ -291,6 +301,7 @@
       count = #{record.count,jdbcType=TINYINT},
       service_provider = #{record.serviceProvider,jdbcType=TINYINT},
       send_time = #{record.sendTime,jdbcType=TIMESTAMP},
+      message_template_id = #{record.messageTemplateId,jdbcType=INTEGER},
       operator_id = #{record.operatorId,jdbcType=INTEGER},
       operator_name = #{record.operatorName,jdbcType=VARCHAR},
       ext_info = #{record.extInfo,jdbcType=VARCHAR},
@@ -328,6 +339,9 @@
       <if test="sendTime != null" >
         send_time = #{sendTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="messageTemplateId != null" >
+        message_template_id = #{messageTemplateId,jdbcType=INTEGER},
+      </if>
       <if test="operatorId != null" >
         operator_id = #{operatorId,jdbcType=INTEGER},
       </if>
@@ -359,6 +373,7 @@
       count = #{count,jdbcType=TINYINT},
       service_provider = #{serviceProvider,jdbcType=TINYINT},
       send_time = #{sendTime,jdbcType=TIMESTAMP},
+      message_template_id = #{messageTemplateId,jdbcType=INTEGER},
       operator_id = #{operatorId,jdbcType=INTEGER},
       operator_name = #{operatorName,jdbcType=VARCHAR},
       ext_info = #{extInfo,jdbcType=VARCHAR},
