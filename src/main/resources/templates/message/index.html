@@ -513,7 +513,7 @@
                     if (type == 1) {
                         $("#modal-single").modal("hide");
                         jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                    }else{
+                    } else {
                         $("#singleMobile").val("");
                         $("#singleContent").val("");
                         document.getElementById('wordsCountDiv').innerText = "0(0)"
@@ -553,12 +553,21 @@
                 } else {
                     var result = data.data;
                     for (var i = 0; i < result.length; i++) {
-                        $("#singleMsgTemplateId").append("<option title='" + result[i].aliTemplateContent + "' value=" + result[i].id + ">" + result[i].name + "</option>");
+                        $("#singleMsgTemplateId").append("<option data-count=" + result[i].paramCount + " title='" + result[i].aliTemplateContent + "' value=" + result[i].id + ">" + result[i].name + "</option>");
                     }
+                    $("#singleContent").mask(generateMask(result[0].paramCount));
                 }
             },
             error: error
         });
+    }
+
+    function generateMask(count) {
+        var mask = '';
+        for (var i = 0; i < count; i++) {
+            mask += 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh;'
+        }
+        return mask;
     }
 
 </script>

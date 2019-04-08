@@ -288,10 +288,4 @@ function initTable(grid_selector, pager_selector, options) {
     });
 }
 
-
-
-
-
-
-
-
+$.mask.definitions['h']='[a-zA-Z0-9\u4e00-\u9fa5]+';
