@@ -69,6 +69,7 @@ public class ChargeReceiptAdapter {
         chargeReceiptSaveDTO.setPosCode(req.getPosCode());
         chargeReceiptSaveDTO.setCardNo(req.getCardNo());
         chargeReceiptSaveDTO.setTradeTime(new Date(req.getTradeTime()));
+        chargeReceiptSaveDTO.setExtInfo(req.getExtInfo());
         return chargeReceiptSaveDTO;
     }
 }
