@@ -98,6 +98,8 @@ public class MessageServiceImpl implements MessageService {
         if (msgTemplateDTO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
             throw new MessageException(MessageCodeEnum.TEMPLATE_IS_STOP_USING);
         }
+        //验证模板和系统数据库存储的模板是否一致，并且是否可用
+        MsgUtils.validateTemplate(msgTemplateDTO.getTencentTemplateId(), msgTemplateDTO.getTencentTemplateContent(), msgTemplateDTO.getAliTemplateCode(), msgTemplateDTO.getAliTemplateContent());
         String[] params = content.split(";");
         if (params.length != msgTemplateDTO.getParamCount()) {
             throw new MessageException(MessageCodeEnum.CONTENT_TEMPLATE_MISMATCH);

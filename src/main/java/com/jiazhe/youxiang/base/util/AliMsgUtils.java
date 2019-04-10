@@ -154,4 +154,8 @@ public class AliMsgUtils {
         String[] params = {"123", "4555", "345", "234"};
         System.out.println(packageTemplateParam(templateContent, params));
     }
+
+    public static void validateTemplate(String aliTemplateCode, String aliTemplateContent) {
+
+    }
 }

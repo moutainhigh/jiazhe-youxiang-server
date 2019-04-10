@@ -41,9 +41,10 @@ public class MsgUtils {
     public static String VER_CODE_SEND_SUCCESS = "OK";
 
     /**
-     * 通过手机号，发送验证码
+     * 通过手机号，发送【验证码】短信
      *
      * @param phone
+     * @param code
      * @return
      */
     public static SendVerificationCodeResp sendVerificationCodeMsg(String phone, String code) {
@@ -66,10 +67,24 @@ public class MsgUtils {
         return sendMsgResp;
     }
 
+    /**
+     * 通过下面参数，首选腾讯云发送，再选择阿里云发送【业务】短信
+     *
+     * @param mobile
+     * @param tencentTemplateId
+     * @param tencentTemplateContent
+     * @param aliTemplateCode
+     * @param aliTemplateContent
+     * @param params
+     * @return
+     */
     public static SendSingleMsgResp sendBusinessMsg(String mobile, Integer tencentTemplateId, String tencentTemplateContent, String aliTemplateCode, String aliTemplateContent, String[] params) {
         SendSingleMsgResp resp = new SendSingleMsgResp();
         resp.setSuccess(false);
-        SmsSingleSenderResult smsSingleSenderResult = TencentMsgUtils.sendBusinessMsg(mobile, tencentTemplateId, params);
+        SmsSingleSenderResult smsSingleSenderResult = null;
+        if (tencentTemplateId != 0 && !("").equals(tencentTemplateContent)) {
+            smsSingleSenderResult = TencentMsgUtils.sendBusinessMsg(mobile, tencentTemplateId, params);
+        }
         if (null != smsSingleSenderResult && smsSingleSenderResult.result == 0) {
             resp.setSuccess(true);
             resp.setServiceProvider(CommonConstant.MSG_SERVICE_PROVIDER_TENCENT);
@@ -83,6 +98,7 @@ public class MsgUtils {
         return resp;
     }
 
+
     /**
      * 通过phone和code进行验证
      *
@@ -94,6 +110,15 @@ public class MsgUtils {
         Object redis_code = RedisUtils.get(CommonConstant.REDIS_VER_CODE + phone);
         if (null == redis_code || !code.equals(redis_code)) {
             throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
+        }
+    }
+
+    public static void validateTemplate(Integer tencentTemplateId, String tencentTemplateContent, String aliTemplateCode, String aliTemplateContent) {
+        if(tencentTemplateId != 0 && !("").equals(tencentTemplateContent)){
+            TencentMsgUtils.validateTemplate(tencentTemplateId,tencentTemplateContent);
+        }
+        if(!("").equals(aliTemplateCode)&& !("").equals(aliTemplateContent)){
+            AliMsgUtils.validateTemplate(aliTemplateCode,aliTemplateContent);
         }
     }
 }

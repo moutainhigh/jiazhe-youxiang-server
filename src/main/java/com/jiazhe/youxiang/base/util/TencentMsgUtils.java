@@ -2,12 +2,12 @@ package com.jiazhe.youxiang.base.util;
 
 import com.github.qcloudsms.SmsSingleSender;
 import com.github.qcloudsms.SmsSingleSenderResult;
+import com.jiazhe.youxiang.server.common.enums.MessageCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.MessageException;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author TU
@@ -57,25 +57,50 @@ public class TencentMsgUtils {
         return null;
     }
 
+    /**
+     * 通过腾讯云模板id获取模板信息
+     *
+     * @param templateId
+     * @return
+     */
     public static JSONObject getTemplateById(int templateId) {
-        String random = String.valueOf(Math.random());
+        String random = RandomUtil.generateVerifyCode(10);
         String requestUrl = "https://yun.tim.qq.com/v5/tlssmssvr/get_template?sdkappid=" + appId + "&random=" + random;
-        Map params = new HashMap();
-        String time = String.valueOf(System.currentTimeMillis() / 1000);
-        Integer[] tpl_id = new Integer[]{templateId};
+        JSONObject params = new JSONObject();
+        long time = System.currentTimeMillis() / 1000;
         String sig = ShaUtils.getSha256("appkey=" + appKey + "&random=" + random + "&time=" + time);
         params.put("time", time);
-        params.put("tpl_id", tpl_id);
+        params.put("tpl_id", "[" + templateId + "]");
         params.put("sig", sig);
-        //调用httpRequest方法，这个方法主要用于请求地址，并加上请求参数
-//        String string = HttpUtil.httpRequest(requestUrl, params);
-//        //处理返回的JSON数据并返回
-//        JSONObject pageBean = JSONObject.fromObject(string);
-//        return pageBean;
-        return null;
+        String string = HttpUtil.httpPost(requestUrl, params);
+        JSONObject jb = JSONObject.fromObject(string);
+        return jb;
     }
 
-    public static void main(String[] args) {
-        System.out.println(getTemplateById(309066));
+    /**
+     * 验证系统数据库中保存的模板信息是否和腾讯云中的一致，并且腾讯端是否审核通过
+     *
+     * @param templateId
+     * @param templateText
+     * @return
+     */
+    public static void validateTemplate(int templateId, String templateText) {
+        JSONObject jb = getTemplateById(templateId);
+        if (jb.getInt("result") != 0) {
+            throw new MessageException(MessageCodeEnum.GET_TENCENT_TEMPLATE_ERROR);
+        }
+        JSONArray data = jb.getJSONArray("data");
+        if (data.size() != 1) {
+            throw new MessageException(MessageCodeEnum.GET_TENCENT_TEMPLATE_ERROR);
+        }
+        JSONObject templateJb = data.getJSONObject(0);
+        if (templateJb.getInt("status") != 0) {
+            throw new MessageException(MessageCodeEnum.TENCENT_TEMPLATE_AUDIT_FAILED);
+        }
+        String remoteTemplateText = templateJb.getString("text");
+        if (!templateText.equals(remoteTemplateText)) {
+            throw new MessageException(MessageCodeEnum.TENCENT_TEMPLATE_DIFFERENT);
+        }
+
     }
 }

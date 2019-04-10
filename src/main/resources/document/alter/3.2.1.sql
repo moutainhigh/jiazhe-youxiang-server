@@ -34,7 +34,7 @@ CREATE TABLE `message_template` (
     `param_count` INT(10) NOT NULL COMMENT '参数个数',
     `ali_template_code` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '阿里云的短信模板code',
     `ali_template_content` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '阿里云的短信模板内容',
-    `tencent_template_id` INT(10) NOT NULL COMMENT '腾讯云的短信模板id',
+    `tencent_template_id` INT(10) NOT NULL DEFAULT '0' COMMENT '腾讯云的短信模板id',
     `tencent_template_content` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '腾讯云的短信模板内容',
     `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '发送状态 1可用 0不可用',
     `excel_template` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '批量发送时，对应excel模板',
