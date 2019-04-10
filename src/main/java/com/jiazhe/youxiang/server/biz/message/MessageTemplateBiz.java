@@ -21,4 +21,8 @@ public class MessageTemplateBiz {
     public List<MessageTemplateDTO> getAll(Byte status) {
         return msgTemplateService.getAll(status);
     }
+
+    public MessageTemplateDTO getById(Integer id) {
+        return msgTemplateService.getById(id);
+    }
 }

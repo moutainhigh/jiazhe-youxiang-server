@@ -596,7 +596,7 @@
                         $("#singleMsgTemplateId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
                     }
                     $("#singleParamCount").val(result[0].paramCount)
-                    $("#singleMsgText").html(result[0].tencentTemplateContent);
+                    $("#singleMsgText").val(result[0].tencentTemplateContent);
                     $("#singleTemplateText").val(result[0].tencentTemplateContent);
                 }
             },
@@ -608,7 +608,28 @@
      * 单条发送短信的内容
      */
     function singleTemplateChange() {
-
+        $.ajax({
+            url: "/api/msgtemplate/getbyid",
+            dataType: "json",
+            async: false,
+            data: {
+                id: $('#singleMsgTemplateId option:selected').val()
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#singleParamCount").val(result.paramCount)
+                    $("#singleMsgText").val(result.tencentTemplateContent);
+                    $("#singleTemplateText").val(result.tencentTemplateContent);
+                    $("#singleContent").val("");
+                    document.getElementById('wordsCountDiv').innerText = "0(0)"
+                }
+            },
+            error: error
+        });
     }
 
 </script>

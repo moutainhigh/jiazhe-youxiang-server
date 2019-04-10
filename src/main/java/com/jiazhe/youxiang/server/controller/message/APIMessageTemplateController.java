@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.controller.message;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.server.adapter.message.MessageTemplateAdapter;
 import com.jiazhe.youxiang.server.biz.message.MessageTemplateBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
@@ -8,6 +9,7 @@ import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.dto.message.MessageTemplateDTO;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
+import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.message.TemplateStatus;
 import com.jiazhe.youxiang.server.vo.resp.message.MessageTemplateResp;
 import io.swagger.annotations.ApiOperation;
@@ -38,6 +40,16 @@ public class APIMessageTemplateController extends BaseController {
         List<MessageTemplateDTO> msgTemplateDTOList = msgTemplateBiz.getAll(req.getStatus());
         List<MessageTemplateResp> msgTemplateRespList = msgTemplateDTOList.stream().map(MessageTemplateAdapter::dto2Resp).collect(Collectors.toList());
         return ResponseFactory.buildResponse(msgTemplateRespList);
+    }
+
+    @ApiOperation(value = "获取模板", httpMethod = "GET", response = MessageTemplateResp.class, notes = "获取模板")
+    @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.MESSAGE, operate = "获取模板", level = LogLevelEnum.LEVEL_1)
+    public Object getById(IdReq req) {
+        CommonValidator.validateId(req.getId());
+        MessageTemplateDTO msgTemplateDTO = msgTemplateBiz.getById(req.getId());
+        MessageTemplateResp msgTemplateResp = MessageTemplateAdapter.dto2Resp(msgTemplateDTO);
+        return ResponseFactory.buildResponse(msgTemplateResp);
     }
 
 }
