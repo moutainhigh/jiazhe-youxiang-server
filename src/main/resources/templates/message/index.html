@@ -154,6 +154,8 @@
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-10">
                                             <form id="messageSingleSaveForm" class="form-horizontal" role="form">
+                                                <input type="hidden" id="singleParamCount">
+                                                <input type="hidden" id="singleTemplateText">
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">手机号码：</label>
                                                     <div class="col-sm-7">
@@ -197,6 +199,7 @@
                                                     <div class="col-sm-7">
                                                         <div class="pos-rel">
                                                             <select id="singleMsgTemplateId" name="messageTemplateId"
+                                                                    onchange="singleTemplateChange()"
                                                                     class="selectpicker show-tick form-control">
 
                                                             </select>
@@ -205,16 +208,30 @@
                                                 </div>
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">短信内容：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">输入内容：</label>
                                                     <div class="col-sm-7">
                                                         <div class="pos-rel">
                                                             <textarea id="singleContent" name="content"
                                                                       placeholder="短信内容，按照模板用英文分号间隔，必须对应工整"
-                                                                      class="form-control" onkeyup="countWords(this);"
+                                                                      class="form-control" onkeyup="inputChange(this);"
                                                                       style="resize:none;height: 100px"></textarea>
                                                         </div>
                                                     </div>
-                                                    <div id="wordsCountDiv" class="col-sm-1" style="padding-top: 80px;">
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">短信内容：</label>
+                                                    <div class="col-sm-7">
+                                                        <div class="pos-rel">
+                                                            <textarea id="singleMsgText" readonly
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px">
+
+                                                            </textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div id="wordsCountDiv" class="col-sm-1"
+                                                         style="padding-top: 80px;">
                                                         0(0)
                                                     </div>
                                                 </div>
@@ -345,7 +362,7 @@
         initDatePicker();
 
         //初始化短信模板select框
-        getMsgTemplate();
+        getAllMsgTemplate();
 
         var tableOption = {
             url: "/api/message/listpage",// 获取数据的地址
@@ -526,19 +543,42 @@
     }
 
     /**
-     * 短信内容计数
+     * 短信内容变化函数
      * @param input
      */
-    function countWords(input) {
+    function inputChange() {
+        //第一步 生成短信内容
+        var count = $("#singleParamCount").val();//模板参数个数
+        var templateText = $("#singleTemplateText").val();//模板内容
+        var paramsStr = $("#singleContent").val();//参数输入框
+        var params = paramsStr.split(";");//参数数组
+        console.log(params);
+        if (params.length > 0 && params[0] != '') {
+            if (count < params.length) {
+                bootboxalert("输入有误，请按照格式输入");
+                $("#singleContent").val(paramsStr.substr(0, paramsStr.length - 1));
+                return false;
+            }
+        } else {
+            $("#singleMsgText").val(templateText);
+            return false;
+        }
+        for (var i = 0; i < params.length; i++) {
+            if (params[i] != '') {
+                templateText = templateText.replace(/\{(.+?)\}/, params[i]);
+            }
+        }
+        $("#singleMsgText").val(templateText);
+        //第二步 短信字数统计
         var content = document.getElementById('wordsCountDiv');
-        if (content && input) {
-            var value = input.value;
-            value = value.replace(/\n|\r/gi, "");
+        if (content) {
+            var value = $("#singleMsgText").val();
+            value = value.replace(/\n|\r/gi, "").replace(/\{(.+?)\}/g, "");
             content.innerText = value.length + "(" + Math.ceil(value.length / 70) + ")";
         }
     }
 
-    function getMsgTemplate() {
+    function getAllMsgTemplate() {
         $.ajax({
             url: "/api/msgtemplate/getall",
             dataType: "json",
@@ -553,21 +593,22 @@
                 } else {
                     var result = data.data;
                     for (var i = 0; i < result.length; i++) {
-                        $("#singleMsgTemplateId").append("<option data-count=" + result[i].paramCount + " title='" + result[i].aliTemplateContent + "' value=" + result[i].id + ">" + result[i].name + "</option>");
+                        $("#singleMsgTemplateId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
                     }
-                    $("#singleContent").mask(generateMask(result[0].paramCount));
+                    $("#singleParamCount").val(result[0].paramCount)
+                    $("#singleMsgText").html(result[0].tencentTemplateContent);
+                    $("#singleTemplateText").val(result[0].tencentTemplateContent);
                 }
             },
             error: error
         });
     }
 
-    function generateMask(count) {
-        var mask = '';
-        for (var i = 0; i < count; i++) {
-            mask += 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh;'
-        }
-        return mask;
+    /**
+     * 单条发送短信的内容
+     */
+    function singleTemplateChange() {
+
     }
 
 </script>

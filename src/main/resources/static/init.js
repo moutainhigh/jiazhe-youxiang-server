@@ -22,7 +22,7 @@ document.write("<script language='javascript' src='/static/ace-master/js/grid.lo
 document.write("<script language='javascript' src='/static/ace-master/js/tree.min.js'></script>");
 document.write("<script language='javascript' src='/static/ace-master/js/select2.min.js'></script>");
 document.write("<script language='javascript' src='/static/zTree/js/jquery.ztree.all.min.js'></script>");
-document.write("<script language='javascript' src='/static/ace-master/js/jquery.maskedinput.min.js'></script>");
+// document.write("<script language='javascript' src='/static/ace-master/js/jquery.maskedinput.min.js'></script>");
 document.write("<script language='javascript' src='/static/common.js'></script>");
 
 
