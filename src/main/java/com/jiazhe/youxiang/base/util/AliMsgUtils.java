@@ -25,13 +25,15 @@ public class AliMsgUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(AliMsgUtils.class);
 
-    public static String aliAccessKeyId = PropertyUtils.getProperty("aliAccessKeyId");
+    public static String aliAccessKeyId = "LTAIOAhuwWw5pdlZ";
+    public static String aliAccessKeySecret = "hjhwNmIurazb7NMsjZo5sMsPr9bBif";
+    public static String SignName = "悠享";
 
-    public static String aliAccessKeySecret = PropertyUtils.getProperty("aliAccessKeySecret");
-
+    /**
+     * 验证码模板为固定的
+     */
     public static String ver_code_TemplateCode = "SMS_147418355";
 
-    public static String SignName = "悠享";
 
     /**
      * 发送验证短信

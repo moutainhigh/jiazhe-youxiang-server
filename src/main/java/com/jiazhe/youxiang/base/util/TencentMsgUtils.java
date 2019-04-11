@@ -16,15 +16,14 @@ import org.slf4j.LoggerFactory;
  */
 public class TencentMsgUtils {
 
-    public static int appId = Integer.valueOf(PropertyUtils.getProperty("tencentAppId"));
+    public static int appId = 1400180968;
+    public static String appKey = "ddc28d0a55956ac118dab975e67241da";
+    public static String smsSign = "悠享互联";
 
-    public static String appKey = PropertyUtils.getProperty("tencentAppKey");
-
-    public static int ver_code_templateId = 306838;
-    public static String smsSign = "wuli豆豆";
-
-//    public static int ver_code_templateId = 307385;
-//    public static String smsSign = "悠享互联";
+    /**
+     * 验证码模板为固定的，不修改
+     */
+    public static int ver_code_templateId = 307385;
 
     private static final Logger logger = LoggerFactory.getLogger(TencentMsgUtils.class);
 
@@ -44,7 +43,7 @@ public class TencentMsgUtils {
     }
 
     /**
-     * 发送验证短信
+     * 发送业务短信
      */
     public static SmsSingleSenderResult sendBusinessMsg(String phone, int templateId, String[] params) {
         try {

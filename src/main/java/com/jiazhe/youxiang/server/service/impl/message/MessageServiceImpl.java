@@ -83,6 +83,7 @@ public class MessageServiceImpl implements MessageService {
                 SendSingleMsgResp resp = MsgUtils.sendBusinessMsg(po.getMobile(), msgTemplateDTO.getTencentTemplateId(), msgTemplateDTO.getTencentTemplateContent(), msgTemplateDTO.getAliTemplateCode(), msgTemplateDTO.getAliTemplateContent(), po.getContent().split(";"));
                 if (resp.isSuccess()) {
                     po.setServiceProvider(resp.getServiceProvider());
+                    po.setId(null);
                     messagePOMapper.insertSelective(po);
                 } else {
                     throw new MessageException(MessageCodeEnum.MSG_SEND_ERROR.getCode(), MessageCodeEnum.MSG_SEND_ERROR.getType(), resp.getErrorMsg());
