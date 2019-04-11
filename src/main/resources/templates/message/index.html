@@ -457,7 +457,7 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str += getFunctionButton("btn-info", "showMsgContent(" + rowObject.content + ")", "查看");
+//        str += getFunctionButton("btn-info", "showMsgContent(" + rowObject.content + ")", "查看");
         if (rowObject.status == 1) {
             str += getFunctionButton("btn-info", "resend(" + rowObject.id + ")", "再次发送");
         }

@@ -67,21 +67,28 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public void resend(Integer id) {
+        SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+        if (null == sysUserDTO) {
+            throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
+        }
         MessagePO po = messagePOMapper.selectByPrimaryKey(id);
+        po.setOperatorId(sysUserDTO.getId());
+        po.setOperatorName(sysUserDTO.getDisplayName());
         MessageTemplateDTO msgTemplateDTO = msgTemplateService.getById(po.getMessageTemplateId());
-        if (po.getStatus().equals(Byte.valueOf("1"))) {//重新发送
+        //status为1，短信已经成功，重新发送增加记录。status为0，短信发送未成功，重发短信仅仅修改历史发送失败的记录
+        if (po.getStatus().equals(Byte.valueOf("1"))) {
             if (po.getType().equals(CommonConstant.MSG_TYPE_VER_CODE)) {
                 MsgUtils.sendVerificationCodeMsg(po.getMobile(), po.getContent());
             } else {
                 SendSingleMsgResp resp = MsgUtils.sendBusinessMsg(po.getMobile(), msgTemplateDTO.getTencentTemplateId(), msgTemplateDTO.getTencentTemplateContent(), msgTemplateDTO.getAliTemplateCode(), msgTemplateDTO.getAliTemplateContent(), po.getContent().split(";"));
                 if (resp.isSuccess()) {
                     po.setServiceProvider(resp.getServiceProvider());
-                    messagePOMapper.updateByPrimaryKey(po);
+                    messagePOMapper.insertSelective(po);
                 } else {
-                    throw new MessageException(MessageCodeEnum.MSG_SEND_ERROR.getCode(),MessageCodeEnum.MSG_SEND_ERROR.getType(),resp.getErrorMsg());
+                    throw new MessageException(MessageCodeEnum.MSG_SEND_ERROR.getCode(), MessageCodeEnum.MSG_SEND_ERROR.getType(), resp.getErrorMsg());
                 }
             }
-        } else {//重试
+        } else {
             if (po.getType().equals(CommonConstant.MSG_TYPE_VER_CODE)) {
                 MsgUtils.sendVerificationCodeMsg(po.getMobile(), po.getContent());
             } else {
@@ -91,7 +98,7 @@ public class MessageServiceImpl implements MessageService {
                     po.setStatus(Byte.valueOf("1"));
                     messagePOMapper.updateByPrimaryKey(po);
                 } else {
-                    throw new MessageException(MessageCodeEnum.MSG_SEND_ERROR.getCode(),MessageCodeEnum.MSG_SEND_ERROR.getType(),resp.getErrorMsg());
+                    throw new MessageException(MessageCodeEnum.MSG_SEND_ERROR.getCode(), MessageCodeEnum.MSG_SEND_ERROR.getType(), resp.getErrorMsg());
                 }
             }
         }
@@ -128,8 +135,8 @@ public class MessageServiceImpl implements MessageService {
         messagePO.setOperatorId(sysUserDTO.getId());
         messagePO.setOperatorName(sysUserDTO.getDisplayName());
         messagePOMapper.insertSelective(messagePO);
-        if(!resp.isSuccess()){
-            throw new MessageException(MessageCodeEnum.MSG_SEND_ERROR.getCode(),MessageCodeEnum.MSG_SEND_ERROR.getType(),resp.getErrorMsg());
+        if (!resp.isSuccess()) {
+            throw new MessageException(MessageCodeEnum.MSG_SEND_ERROR.getCode(), MessageCodeEnum.MSG_SEND_ERROR.getType(), resp.getErrorMsg());
         }
     }
 }

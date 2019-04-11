@@ -101,6 +101,5 @@ public class TencentMsgUtils {
         if (!templateText.equals(remoteTemplateText)) {
             throw new MessageException(MessageCodeEnum.TENCENT_TEMPLATE_DIFFERENT);
         }
-
     }
 }
