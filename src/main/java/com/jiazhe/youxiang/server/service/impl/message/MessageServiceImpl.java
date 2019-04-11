@@ -3,17 +3,21 @@ package com.jiazhe.youxiang.server.service.impl.message;
 import com.jiazhe.youxiang.base.util.MsgUtils;
 import com.jiazhe.youxiang.server.adapter.message.MessageAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.MessageCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.common.exceptions.MessageException;
 import com.jiazhe.youxiang.server.dao.mapper.MessagePOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.message.MessagePOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.MessagePO;
 import com.jiazhe.youxiang.server.dto.message.MessageDTO;
 import com.jiazhe.youxiang.server.dto.message.MessageTemplateDTO;
+import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.message.MessageService;
 import com.jiazhe.youxiang.server.service.message.MessageTemplateService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.resp.message.SendSingleMsgResp;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,6 +77,8 @@ public class MessageServiceImpl implements MessageService {
                 if (resp.isSuccess()) {
                     po.setServiceProvider(resp.getServiceProvider());
                     messagePOMapper.updateByPrimaryKey(po);
+                } else {
+                    throw new MessageException(MessageCodeEnum.MSG_SEND_ERROR.getCode(),MessageCodeEnum.MSG_SEND_ERROR.getType(),resp.getErrorMsg());
                 }
             }
         } else {//重试
@@ -84,6 +90,8 @@ public class MessageServiceImpl implements MessageService {
                     po.setServiceProvider(resp.getServiceProvider());
                     po.setStatus(Byte.valueOf("1"));
                     messagePOMapper.updateByPrimaryKey(po);
+                } else {
+                    throw new MessageException(MessageCodeEnum.MSG_SEND_ERROR.getCode(),MessageCodeEnum.MSG_SEND_ERROR.getType(),resp.getErrorMsg());
                 }
             }
         }
@@ -91,6 +99,10 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public void sendSingle(String mobile, Byte type, String topic, int messageTemplateId, String content) {
+        SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+        if (null == sysUserDTO) {
+            throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
+        }
         MessageTemplateDTO msgTemplateDTO = msgTemplateService.getById(messageTemplateId);
         if (null == msgTemplateDTO || msgTemplateDTO.getIsDeleted().equals(CommonConstant.CODE_DELETED)) {
             throw new MessageException(MessageCodeEnum.TEMPLATE_IS_NOT_EXIST);
@@ -112,6 +124,12 @@ public class MessageServiceImpl implements MessageService {
         messagePO.setType(type);
         messagePO.setContent(content);
         messagePO.setServiceProvider(resp.getServiceProvider());
+        messagePO.setStatus(resp.isSuccess() ? Byte.valueOf("1") : Byte.valueOf("0"));
+        messagePO.setOperatorId(sysUserDTO.getId());
+        messagePO.setOperatorName(sysUserDTO.getDisplayName());
         messagePOMapper.insertSelective(messagePO);
+        if(!resp.isSuccess()){
+            throw new MessageException(MessageCodeEnum.MSG_SEND_ERROR.getCode(),MessageCodeEnum.MSG_SEND_ERROR.getType(),resp.getErrorMsg());
+        }
     }
 }

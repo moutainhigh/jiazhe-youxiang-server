@@ -79,6 +79,7 @@ public class MsgUtils {
      * @return
      */
     public static SendSingleMsgResp sendBusinessMsg(String mobile, Integer tencentTemplateId, String tencentTemplateContent, String aliTemplateCode, String aliTemplateContent, String[] params) {
+        String errMsg = "";
         SendSingleMsgResp resp = new SendSingleMsgResp();
         resp.setSuccess(false);
         SmsSingleSenderResult smsSingleSenderResult = null;
@@ -89,12 +90,16 @@ public class MsgUtils {
             resp.setSuccess(true);
             resp.setServiceProvider(CommonConstant.MSG_SERVICE_PROVIDER_TENCENT);
         } else {
+            errMsg = errMsg + "【腾讯云】:" + smsSingleSenderResult.errMsg + "。";
             SendSmsResponse sendSmsResponse = AliMsgUtils.sendBusinessMsg(mobile, aliTemplateCode, aliTemplateContent, params);
             if (sendSmsResponse.getCode() != null && VER_CODE_SEND_SUCCESS.equals(sendSmsResponse.getCode())) {
                 resp.setSuccess(true);
                 resp.setServiceProvider(CommonConstant.MSG_SERVICE_PROVIDER_ALI);
+            } else {
+                errMsg = errMsg + "【阿里云】:" + sendSmsResponse.getMessage() + "。";
             }
         }
+        resp.setErrorMsg(errMsg);
         return resp;
     }
 
@@ -114,11 +119,11 @@ public class MsgUtils {
     }
 
     public static void validateTemplate(Integer tencentTemplateId, String tencentTemplateContent, String aliTemplateCode, String aliTemplateContent) {
-        if(tencentTemplateId != 0 && !("").equals(tencentTemplateContent)){
-            TencentMsgUtils.validateTemplate(tencentTemplateId,tencentTemplateContent);
+        if (tencentTemplateId != 0 && !("").equals(tencentTemplateContent)) {
+            TencentMsgUtils.validateTemplate(tencentTemplateId, tencentTemplateContent);
         }
-        if(!("").equals(aliTemplateCode)&& !("").equals(aliTemplateContent)){
-            AliMsgUtils.validateTemplate(aliTemplateCode,aliTemplateContent);
+        if (!("").equals(aliTemplateCode) && !("").equals(aliTemplateContent)) {
+            AliMsgUtils.validateTemplate(aliTemplateCode, aliTemplateContent);
         }
     }
 }

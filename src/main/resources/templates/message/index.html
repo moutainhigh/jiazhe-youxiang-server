@@ -482,9 +482,8 @@
             success: function (data) {
                 if ('error' in data) {
                     bootboxalert(data.error.message);
-                } else {
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                 }
+                jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
             },
             error: error
         });
@@ -529,14 +528,13 @@
                 } else {
                     if (type == 1) {
                         $("#modal-single").modal("hide");
-                        jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                     } else {
                         $("#singleMobile").val("");
                         $("#singleContent").val("");
                         document.getElementById('wordsCountDiv').innerText = "0(0)"
-                        jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                     }
                 }
+                jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
             },
             error: error
         });

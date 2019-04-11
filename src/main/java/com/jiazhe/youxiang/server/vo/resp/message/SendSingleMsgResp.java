@@ -16,6 +16,9 @@ public class SendSingleMsgResp extends BaseVO {
     @ApiModelProperty("短信服务商，1腾讯 2阿里")
     private Byte serviceProvider;
 
+    @ApiModelProperty("发送失败原因")
+    private String errorMsg;
+
     public boolean isSuccess() {
         return success;
     }
@@ -30,5 +33,13 @@ public class SendSingleMsgResp extends BaseVO {
 
     public void setServiceProvider(Byte serviceProvider) {
         this.serviceProvider = serviceProvider;
+    }
+
+    public String getErrorMsg() {
+        return errorMsg;
+    }
+
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
     }
 }
