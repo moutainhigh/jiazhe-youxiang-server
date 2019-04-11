@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
  */
 public class TencentMsgUtils {
 
-    public static int appId = 1400180968;
-    public static String appKey = "ddc28d0a55956ac118dab975e67241da";
+    public static int appId = Integer.valueOf(PropertyUtils.getProperty("tencentAppId"));
+    public static String appKey = PropertyUtils.getProperty("tencentAppKey");
     public static String smsSign = "悠享互联";
 
     /**
@@ -30,25 +30,18 @@ public class TencentMsgUtils {
     /**
      * 发送验证短信
      */
-    public static SmsSingleSenderResult sendVerificationCodeMsg(String phone, String code) {
-        try {
-            String[] params = {code, "5"};
-            SmsSingleSender smsSingleSender = new SmsSingleSender(appId, appKey);
-            SmsSingleSenderResult result = smsSingleSender.sendWithParam("86", phone, ver_code_templateId, params, smsSign, "", "");
-            return result;
-        } catch (Exception e) {
-            logger.error("腾讯云短信发送异常，异常信息:" + e.getMessage());
-        }
-        return null;
+    public static SmsSingleSenderResult sendVerificationCodeMsg(String mobile, String code) {
+        String[] params = {code, "5"};
+        return sendMsg(mobile, ver_code_templateId, params);
     }
 
     /**
      * 发送业务短信
      */
-    public static SmsSingleSenderResult sendBusinessMsg(String phone, int templateId, String[] params) {
+    public static SmsSingleSenderResult sendMsg(String mobile, int templateId, String[] params) {
         try {
             SmsSingleSender smsSingleSender = new SmsSingleSender(appId, appKey);
-            SmsSingleSenderResult result = smsSingleSender.sendWithParam("86", phone, templateId, params, smsSign, "", "");
+            SmsSingleSenderResult result = smsSingleSender.sendWithParam("86", mobile, templateId, params, smsSign, "", "");
             return result;
         } catch (Exception e) {
             logger.error("腾讯云短信发送异常，异常信息:" + e.getMessage());

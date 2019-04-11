@@ -87,7 +87,7 @@ public class MsgUtils {
         if (tencentTemplateId == 0 || ("").equals(tencentTemplateContent)) {
             errMsg = errMsg + "【腾讯云】：无对应模板。";
         } else {
-            smsSingleSenderResult = TencentMsgUtils.sendBusinessMsg(mobile, tencentTemplateId, params);
+            smsSingleSenderResult = TencentMsgUtils.sendMsg(mobile, tencentTemplateId, params);
             if (null != smsSingleSenderResult && smsSingleSenderResult.result == 0) {
                 resp.setSuccess(true);
                 resp.setServiceProvider(CommonConstant.MSG_SERVICE_PROVIDER_TENCENT);
@@ -99,7 +99,7 @@ public class MsgUtils {
             if (("").equals(aliTemplateCode) || ("").equals(aliTemplateContent)) {
                 errMsg = errMsg + "【阿里云】：无对应模板。";
             } else {
-                SendSmsResponse sendSmsResponse = AliMsgUtils.sendBusinessMsg(mobile, aliTemplateCode, aliTemplateContent, params);
+                SendSmsResponse sendSmsResponse = AliMsgUtils.sendMsg(mobile, aliTemplateCode, aliTemplateContent, params);
                 if (sendSmsResponse.getCode() != null && VER_CODE_SEND_SUCCESS.equals(sendSmsResponse.getCode())) {
                     resp.setSuccess(true);
                     resp.setServiceProvider(CommonConstant.MSG_SERVICE_PROVIDER_ALI);
