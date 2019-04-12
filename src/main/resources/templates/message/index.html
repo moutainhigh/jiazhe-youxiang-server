@@ -469,8 +469,13 @@
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
-                    $('#excelUrl').val(data.data.url);
-                    bootboxalert(data.data.count + "短信格式合格");
+                    var result = data.data;
+                    if(result.success == '0'){
+                        bootboxalert(result.errMsg);
+                    }else{
+                        $('#excelUrl').val(data.data.url);
+                        bootboxalert(data.data.count + "条短信检查合格");
+                    }
                 }
             },
             error: error

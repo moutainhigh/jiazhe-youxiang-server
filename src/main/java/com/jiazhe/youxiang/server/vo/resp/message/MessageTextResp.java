@@ -16,6 +16,12 @@ public class MessageTextResp extends BaseVO {
     @ApiModelProperty("短信内容")
     private String content;
 
+    @ApiModelProperty("短信检查情况 0不合格 1合格")
+    private Byte valid;
+
+    @ApiModelProperty("不合格理由")
+    private String errMsg;
+
     public String getMobile() {
         return mobile;
     }
@@ -30,5 +36,21 @@ public class MessageTextResp extends BaseVO {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Byte getValid() {
+        return valid;
+    }
+
+    public void setValid(Byte valid) {
+        this.valid = valid;
+    }
+
+    public String getErrMsg() {
+        return errMsg;
+    }
+
+    public void setErrMsg(String errMsg) {
+        this.errMsg = errMsg;
     }
 }

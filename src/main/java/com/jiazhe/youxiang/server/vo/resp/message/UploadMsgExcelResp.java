@@ -17,14 +17,14 @@ public class UploadMsgExcelResp extends BaseVO {
     @ApiModelProperty("excel路径")
     private String url;
 
-    @ApiModelProperty("短信数量")
+    @ApiModelProperty("短信总数量")
     private Integer count;
 
-    @ApiModelProperty("检查状态")
-    private Byte success;
+    @ApiModelProperty("短信合法数量")
+    private Integer validCount;
 
-    @ApiModelProperty("错误信息")
-    private String errMsg;
+    @ApiModelProperty("检查状态，只要有一条信息不合格就为0")
+    private Byte success;
 
     @ApiModelProperty("短息内容")
     private List<MessageTextResp> msgTxtRespList;
@@ -53,19 +53,19 @@ public class UploadMsgExcelResp extends BaseVO {
         this.success = success;
     }
 
-    public String getErrMsg() {
-        return errMsg;
-    }
-
-    public void setErrMsg(String errMsg) {
-        this.errMsg = errMsg;
-    }
-
     public List<MessageTextResp> getMsgTxtRespList() {
         return msgTxtRespList;
     }
 
     public void setMsgTxtRespList(List<MessageTextResp> msgTxtRespList) {
         this.msgTxtRespList = msgTxtRespList;
+    }
+
+    public Integer getValidCount() {
+        return validCount;
+    }
+
+    public void setValidCount(Integer validCount) {
+        this.validCount = validCount;
     }
 }

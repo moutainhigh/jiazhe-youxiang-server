@@ -8,8 +8,8 @@ import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.resp.message.MessageTextResp;
 import com.jiazhe.youxiang.server.vo.resp.message.UploadMsgExcelResp;
 import org.apache.logging.log4j.util.Strings;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,35 +55,37 @@ public class MessageBiz {
         UploadMsgExcelResp resp = new UploadMsgExcelResp();
         MessageTemplateDTO msgTemplateDTO = msgTemplateBiz.getById(templateId);
         Sheet sheet = ExcelUtils.excel2Sheet(excelPath);
-        //错误信息
-        StringBuilder errMsg = new StringBuilder();
         //短信总数量
         Integer count = 0;
-        //模板参数个数
-        Integer paramCount = msgTemplateDTO.getParamCount();
+        //短信合格数量
+        Integer validCount = 0;
         //第一行不读取
         boolean isFirstRow = true;
         try {
             for (Row row : sheet) {
-                MessageTextResp msgTextResp = null;
-
+                MessageTextResp msgTextResp = new MessageTextResp();
+                String errMsg = "";
                 if (isFirstRow) {
                     isFirstRow = false;
                 } else {
-                    //第一列为电话
-                    String mobile = row.getCell(0).getStringCellValue();
+                    String mobile = ExcelUtils.getStringValue(row.getCell(0));
+                    msgTextResp.setMobile(mobile);
                     if (!p.matcher(mobile).matches()) {
-                        errMsg.append("第" + count + "行电话号码不符合要求");
+                        errMsg = errMsg + "短信中电话号码不符合要求。";
+                        msgTextResp.setValid(Byte.valueOf("0"));
                         resp.setSuccess(Byte.valueOf("0"));
                     } else {
-                        msgTextResp.setContent(formatterMsg(row, Strings.isEmpty(msgTemplateDTO.getTencentTemplateContent()) ? msgTemplateDTO.getAliTemplateContent() : msgTemplateDTO.getTencentTemplateContent()));
-                        msgTextRespList.add(msgTextResp);
+                        msgTextResp.setValid(Byte.valueOf("1"));
+                        validCount++;
                     }
                     count++;
+                    msgTextResp.setContent(formatterMsg(row, Strings.isEmpty(msgTemplateDTO.getTencentTemplateContent()) ? msgTemplateDTO.getAliTemplateContent() : msgTemplateDTO.getTencentTemplateContent()));
+                    msgTextResp.setErrMsg(errMsg);
+                    msgTextRespList.add(msgTextResp);
                 }
             }
-            resp.setErrMsg(errMsg.toString());
             resp.setCount(count);
+            resp.setValidCount(validCount);
             resp.setMsgTxtRespList(msgTextRespList);
         } catch (Exception e) {
 
@@ -98,11 +100,9 @@ public class MessageBiz {
         int i = 1;
         while (matcher.find()) {
             String temp = matcher.group();
-            templateContent.replace(temp, row.getCell(i).toString());
+            templateContent = templateContent.replace(temp, ExcelUtils.getStringValue(row.getCell(i)));
             i++;
         }
         return templateContent;
     }
-
-
 }
