@@ -351,14 +351,28 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                <div id="msgShowDiv" class="modal-body no-padding"
+                                     style="displa:none;height:250px;overflow-y:scroll;">
+                                    <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                                        <thead>
+                                        <tr>
+                                            <th>电话号码</th>
+                                            <th>是否合格</th>
+                                            <th>短信内容</th>
+                                            <th>不合格原因</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="modelTbody">
+                                        <!--此处放短信记录-->
+                                        </tbody>
+                                    </table>
+                                </div>
                                 <div class="modal-footer">
                                     <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
                                         <i class="ace-icon fa fa-times"></i>
                                         取消
                                     </button>
-
-                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="send()">
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="sendBatch()">
                                         <i class="ace-icon fa fa-check"></i>
                                         发送
                                     </button>
@@ -451,6 +465,8 @@
         }
         var image = $('#messageFile')[0].files[0]
         if (!image) {
+            $("#modelTbody").empty();
+            $("#msgShowDiv").css("display", "");
             return;
         }
         var formData = new FormData();
@@ -469,13 +485,14 @@
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
+                    $("#modelTbody").empty();
                     var result = data.data;
-                    if(result.success == '0'){
-                        bootboxalert(result.errMsg);
-                    }else{
-                        $('#excelUrl').val(data.data.url);
-                        bootboxalert(data.data.count + "条短信检查合格");
+                    $('#excelUrl').val(result.url);
+                    var msgs = result.msgTxtRespList;
+                    for (var i = 0; i < msgs.length; i++) {
+                        $("#modelTbody").append(getTr(msgs[i]));
                     }
+                    $("#msgShowDiv").css("display", "");
                 }
             },
             error: error
@@ -501,6 +518,26 @@
         if (rowObject.status == 0) {
             str += getFunctionButton("btn-info", "resend(" + rowObject.id + ")", "重试");
         }
+        return str;
+    }
+
+    /**
+     * 根据短信list填充table，有误的带背景颜色
+     * */
+    function getTr(msg) {
+        var str = "";
+        var valid = "";
+        if (msg.valid == '0') {
+            str = str + "<tr style='background-color: red'>";
+            valid = "否";
+        } else {
+            str = str + "<tr>";
+            valid = "是";
+        }
+        str = str + "<td>" + msg.mobile + "</td>" +
+            "<td>" + valid + "</td>" +
+            "<td>" + msg.content + "</td>" +
+            "<td>" + msg.errMsg + "</td></tr>";
         return str;
     }
 
@@ -546,6 +583,7 @@
         $("#batchContent").val("");
         $("#batchTemplate").val("");
         $('#messageFile').ace_file_input('reset_input');
+        $("#msgShowDiv").css("display", "none");
     }
 
     /**
@@ -680,7 +718,7 @@
     }
 
     /**
-     * 批量发送短信的内容
+     * 批量发送短信的模板变化
      */
     function batchTemplateChange() {
         $.ajax({
@@ -709,6 +747,7 @@
                     $("#batchMsgText").val(templateContent);
                     $("#excelUrl").val("");
                     $('#messageFile').ace_file_input('reset_input');
+                    $("#msgShowDiv").css("display", "none");
                 }
             },
             error: error
