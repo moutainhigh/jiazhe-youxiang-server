@@ -1,26 +1,18 @@
 package com.jiazhe.youxiang.server.biz;
 
 import com.google.common.collect.Lists;
+import com.jiazhe.youxiang.base.util.ExcelUtils;
 import com.jiazhe.youxiang.server.adapter.EleProductCodeAdapter;
-import com.jiazhe.youxiang.server.common.enums.EleProductCodeEnum;
-import com.jiazhe.youxiang.server.common.exceptions.EleProductCodeException;
 import com.jiazhe.youxiang.server.domain.po.ElectronicProductExchangeCodePO;
-import com.jiazhe.youxiang.server.dto.eleproductexcode.BatchNameDTO;
 import com.jiazhe.youxiang.server.dto.eleproductexcode.EleProductCodeDTO;
 import com.jiazhe.youxiang.server.service.EleProductCodeService;
 import com.jiazhe.youxiang.server.vo.Paging;
-import com.jiazhe.youxiang.server.vo.resp.eleproductcode.ExcelLegalityResp;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,9 +43,9 @@ public class EleProductCodeBiz {
         eleProductCodeService.batchChangeExpiryTime(batchName,expiryTime);
     }
 
-    public void importCode(String excelUrl, Integer productId , String batchName, Date expiryTime) throws IOException {
+    public void importCode(String excelUrl, Integer productId , String batchName, Date expiryTime){
         List<EleProductCodeDTO> eleProductCodeDTOList = Lists.newArrayList();
-        Sheet sheet = excel2Sheet(excelUrl);
+        Sheet sheet = ExcelUtils.excel2Sheet(excelUrl);
         for(Row row:sheet){
             EleProductCodeDTO dto = new EleProductCodeDTO();
             dto.setProductId(productId);
@@ -68,24 +60,6 @@ public class EleProductCodeBiz {
         List<ElectronicProductExchangeCodePO> poList = eleProductCodeDTOList.stream().map(EleProductCodeAdapter::DTO2PO).collect(Collectors.toList());
         eleProductCodeService.batchInsert(poList);
     }
-
-    public Sheet excel2Sheet(String url) throws IOException {
-        File excelFile = new File(url);
-        FileInputStream in = new FileInputStream(excelFile);
-        if(!excelFile.exists()){
-            throw new EleProductCodeException(EleProductCodeEnum.FILE_NOT_EXIST);
-        }
-        Workbook workbook = null;
-        if(excelFile.getName().endsWith("xlsx")){
-            workbook = new XSSFWorkbook(in);
-        }
-        /*if(excelFile.getName().endsWith("xls")){
-            workbook = new HSSFWorkbook(in);
-        }*/
-        Sheet sheet = workbook.getSheetAt(0);
-        return sheet;
-    }
-
 
     public List<EleProductCodeDTO> getList(Integer productId, String batchName, Byte status, String code, String keyt, Paging paging) {
         return eleProductCodeService.getList(productId,batchName,status,code,keyt,paging);

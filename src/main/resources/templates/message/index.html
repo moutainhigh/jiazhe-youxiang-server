@@ -444,12 +444,18 @@
         allowExt: ['xlsx'],
 //        allowMime: ['application/vnd.ms-excel'],
     }).on('change', function () {
+        var templateId = $("#batchMsgTemplateId").val();
+        if (templateId == '') {
+            bootboxalert("请先选择模板再上传短信内容");
+            return;
+        }
         var image = $('#messageFile')[0].files[0]
         if (!image) {
             return;
         }
         var formData = new FormData();
         formData.append('file', image);
+        formData.append('templateId', templateId);
         $.ajax({
             url: "/api/message/uploadexcel",
             dataType: "json",

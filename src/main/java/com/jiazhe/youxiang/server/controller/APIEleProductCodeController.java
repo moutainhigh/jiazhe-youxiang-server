@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.ExcelUtils;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.base.util.UploadUtil;
 import com.jiazhe.youxiang.server.adapter.EleProductCodeAdapter;
@@ -85,11 +86,11 @@ public class APIEleProductCodeController extends BaseController {
     @ApiOperation(value = "【后台】上传电子码excel并校验", httpMethod = "POST", response = UploadExcelResp.class, notes = "上传电子码excel并校验")
     @RequestMapping(value = "uploadexcel", method = RequestMethod.POST, headers = ("content-type=multipart/*"), consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @CustomLog(moduleName = ModuleEnum.ELE_PRODUCT, operate = "上传电子码excel并校验", level = LogLevelEnum.LEVEL_2)
-    public Object uploadExcel(@RequestParam("file") MultipartFile file) throws IOException {
+    public Object uploadExcel(@RequestParam("file") MultipartFile file) {
         String url = UploadUtil.uploadImage(file, excelpath);
         UploadExcelResp result = new UploadExcelResp();
         result.setUrl(url);
-        Sheet sheet = eleProductCodeBiz.excel2Sheet(excelpath + "/" + url);
+        Sheet sheet = ExcelUtils.excel2Sheet(excelpath + "/" + url);
         Integer count = 0;
         try {
             for (Row row : sheet) {

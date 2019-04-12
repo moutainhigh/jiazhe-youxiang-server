@@ -4,6 +4,7 @@ import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
+import com.jiazhe.youxiang.base.util.UploadUtil;
 import com.jiazhe.youxiang.server.adapter.message.MessageAdapter;
 import com.jiazhe.youxiang.server.biz.message.MessageBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
@@ -19,12 +20,17 @@ import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.message.MessagePageReq;
 import com.jiazhe.youxiang.server.vo.req.message.SingleMsgSendReq;
 import com.jiazhe.youxiang.server.vo.resp.message.MessageResp;
+import com.jiazhe.youxiang.server.vo.resp.message.UploadMsgExcelResp;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
@@ -41,6 +47,9 @@ public class APIMessageController extends BaseController {
 
     @Autowired
     private MessageBiz messageBiz;
+
+    @Value("${web.upload.ele-product-code-excel-path}")
+    private String excelpath;
 
     @ApiOperation(value = "短信记录列表", httpMethod = "GET", response = MessageResp.class, responseContainer = "List", notes = "短信记录列表")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
@@ -70,5 +79,15 @@ public class APIMessageController extends BaseController {
     public Object resend(@ModelAttribute IdReq req) {
         messageBiz.resend(req.getId());
         return ResponseFactory.buildSuccess();
+    }
+
+    @ApiOperation(value = "上传短信excel并校验", httpMethod = "POST", response = UploadMsgExcelResp.class, notes = "上传短信excel并校验")
+    @RequestMapping(value = "uploadexcel", method = RequestMethod.POST, headers = ("content-type=multipart/*"), consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @CustomLog(moduleName = ModuleEnum.ELE_PRODUCT, operate = "上传短信excel并校验", level = LogLevelEnum.LEVEL_2)
+    public Object uploadExcel(@RequestParam("file") MultipartFile file, Integer templateId) {
+        String url = UploadUtil.uploadImage(file, excelpath);
+        UploadMsgExcelResp result = messageBiz.checkExcel(excelpath + "/" + url, templateId);
+        result.setUrl(url);
+        return ResponseFactory.buildResponse(result);
     }
 }
