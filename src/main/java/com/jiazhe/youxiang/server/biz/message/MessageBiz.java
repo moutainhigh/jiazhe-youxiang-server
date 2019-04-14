@@ -7,11 +7,13 @@ import com.jiazhe.youxiang.server.service.message.MessageService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.resp.message.MessageTextResp;
 import com.jiazhe.youxiang.server.vo.resp.message.UploadMsgExcelResp;
+import net.sf.json.JSONObject;
 import org.apache.logging.log4j.util.Strings;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import springfox.documentation.spring.web.json.Json;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,6 +55,7 @@ public class MessageBiz {
         Pattern p = Pattern.compile(PHONE_NUMBER_REG);
         List<MessageTextResp> msgTextRespList = new ArrayList<>();
         UploadMsgExcelResp resp = new UploadMsgExcelResp();
+        resp.setSuccess(Byte.valueOf("1"));
         MessageTemplateDTO msgTemplateDTO = msgTemplateBiz.getById(templateId);
         Sheet sheet = ExcelUtils.excel2Sheet(excelPath);
         //短信总数量
@@ -71,15 +74,20 @@ public class MessageBiz {
                     String mobile = ExcelUtils.getStringValue(row.getCell(0));
                     msgTextResp.setMobile(mobile);
                     if (!p.matcher(mobile).matches()) {
-                        errMsg = errMsg + "短信中电话号码不符合要求。";
+                        errMsg = errMsg + "电话号码不符合要求。";
                         msgTextResp.setValid(Byte.valueOf("0"));
                         resp.setSuccess(Byte.valueOf("0"));
-                    } else {
-                        msgTextResp.setValid(Byte.valueOf("1"));
-                        validCount++;
                     }
                     count++;
-                    msgTextResp.setContent(formatterMsg(row, Strings.isEmpty(msgTemplateDTO.getTencentTemplateContent()) ? msgTemplateDTO.getAliTemplateContent() : msgTemplateDTO.getTencentTemplateContent()));
+                    JSONObject jsonObject = formatterMsg(row, Strings.isEmpty(msgTemplateDTO.getTencentTemplateContent()) ? msgTemplateDTO.getAliTemplateContent() : msgTemplateDTO.getTencentTemplateContent());
+                    msgTextResp.setContent(jsonObject.getString("content"));
+                    if (jsonObject.getBoolean("legal")) {
+                        msgTextResp.setValid(Byte.valueOf("1"));
+                        validCount++;
+                    } else {
+                        msgTextResp.setValid(Byte.valueOf("0"));
+                        errMsg = errMsg + "excel中有空值单元格。";
+                    }
                     msgTextResp.setErrMsg(errMsg);
                     msgTextRespList.add(msgTextResp);
                 }
@@ -93,16 +101,24 @@ public class MessageBiz {
         return resp;
     }
 
-    private String formatterMsg(Row row, String templateContent) {
+    private JSONObject formatterMsg(Row row, String templateContent) {
+        JSONObject jsonObject = new JSONObject();
         String PARAM_REG = "\\$?\\{[0-9a-zA-Z]+}";
         Pattern p = Pattern.compile(PARAM_REG);
         Matcher matcher = p.matcher(templateContent);
         int i = 1;
+        boolean legal = true;
         while (matcher.find()) {
             String temp = matcher.group();
-            templateContent = templateContent.replace(temp, ExcelUtils.getStringValue(row.getCell(i)));
+            String cellStr = ExcelUtils.getStringValue(row.getCell(i));
+            templateContent = templateContent.replace(temp, cellStr);
             i++;
+            if (Strings.isEmpty(cellStr)) {
+                legal = false;
+            }
         }
-        return templateContent;
+        jsonObject.put("content", templateContent);
+        jsonObject.put("legal", legal);
+        return jsonObject;
     }
 }
