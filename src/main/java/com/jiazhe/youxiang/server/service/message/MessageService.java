@@ -50,4 +50,13 @@ public interface MessageService {
      * @param content
      */
     void sendSingle(String mobile, Byte type, String topic, int messageTemplateId, String content);
+
+    /**
+     * 批量发送短信
+     * @param type
+     * @param topic
+     * @param messageTemplateId
+     * @param excelUrl
+     */
+    void sendBatch(Byte type, String topic, int messageTemplateId, String excelUrl);
 }

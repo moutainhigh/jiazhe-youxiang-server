@@ -17,6 +17,7 @@ import com.jiazhe.youxiang.server.dto.message.MessageDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
+import com.jiazhe.youxiang.server.vo.req.message.BatchMsgSendReq;
 import com.jiazhe.youxiang.server.vo.req.message.MessagePageReq;
 import com.jiazhe.youxiang.server.vo.req.message.SingleMsgSendReq;
 import com.jiazhe.youxiang.server.vo.resp.message.MessageResp;
@@ -68,6 +69,7 @@ public class APIMessageController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.MESSAGE, operate = "单条发送短信", level = LogLevelEnum.LEVEL_3)
     public Object sendSingle(@ModelAttribute SingleMsgSendReq req) {
         CommonValidator.validateMobile(req.getMobile(), new MessageException(MessageCodeEnum.MOBILE_ILLEGAL));
+        CommonValidator.validateNull(req.getMessageTemplateId(),new MessageException(MessageCodeEnum.TEMPLATE_IS_NOT_EXIST));
         CommonValidator.validateNull(req.getContent(), new MessageException(MessageCodeEnum.CONTENT_IS_NULL));
         messageBiz.sendSingle(req.getMobile(), req.getType(), req.getTopic(), req.getMessageTemplateId(), req.getContent());
         return ResponseFactory.buildSuccess();
@@ -83,11 +85,21 @@ public class APIMessageController extends BaseController {
 
     @ApiOperation(value = "上传短信excel并校验", httpMethod = "POST", response = UploadMsgExcelResp.class, notes = "上传短信excel并校验")
     @RequestMapping(value = "uploadexcel", method = RequestMethod.POST, headers = ("content-type=multipart/*"), consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @CustomLog(moduleName = ModuleEnum.ELE_PRODUCT, operate = "上传短信excel并校验", level = LogLevelEnum.LEVEL_2)
+    @CustomLog(moduleName = ModuleEnum.MESSAGE, operate = "上传短信excel并校验", level = LogLevelEnum.LEVEL_2)
     public Object uploadExcel(@RequestParam("file") MultipartFile file, Integer templateId) {
         String url = UploadUtil.uploadImage(file, excelpath);
         UploadMsgExcelResp result = messageBiz.checkExcel(excelpath + "/" + url, templateId);
         result.setUrl(url);
         return ResponseFactory.buildResponse(result);
+    }
+
+    @ApiOperation(value = "批量发送短信", httpMethod = "POST", notes = "批量发送短信")
+    @RequestMapping(value = "/sendbatch", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.MESSAGE, operate = "批量发送短信", level = LogLevelEnum.LEVEL_3)
+    public Object sendBatch(@ModelAttribute BatchMsgSendReq req) {
+        CommonValidator.validateNull(req.getMessageTemplateId(),new MessageException(MessageCodeEnum.TEMPLATE_IS_NOT_EXIST));
+        CommonValidator.validateNull(req.getExcelUrl(),new MessageException(MessageCodeEnum.EXCEL_ERROR));
+        messageBiz.sendBatch(req.getType(), req.getTopic(), req.getMessageTemplateId(), req.getExcelUrl());
+        return ResponseFactory.buildSuccess();
     }
 }

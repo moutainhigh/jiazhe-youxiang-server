@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.biz.message;
 
 import com.jiazhe.youxiang.base.util.ExcelUtils;
+import com.jiazhe.youxiang.base.util.MsgUtils;
 import com.jiazhe.youxiang.server.dto.message.MessageDTO;
 import com.jiazhe.youxiang.server.dto.message.MessageTemplateDTO;
 import com.jiazhe.youxiang.server.service.message.MessageService;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -78,7 +78,7 @@ public class MessageBiz {
                         resp.setSuccess(Byte.valueOf("0"));
                     }
                     count++;
-                    JSONObject jsonObject = formatterMsg(row, Strings.isEmpty(msgTemplateDTO.getTencentTemplateContent()) ? msgTemplateDTO.getAliTemplateContent() : msgTemplateDTO.getTencentTemplateContent());
+                    JSONObject jsonObject = MsgUtils.formatterMsg(row, Strings.isEmpty(msgTemplateDTO.getTencentTemplateContent()) ? msgTemplateDTO.getAliTemplateContent() : msgTemplateDTO.getTencentTemplateContent());
                     msgTextResp.setContent(jsonObject.getString("content"));
                     if (p.matcher(mobile).matches() && jsonObject.getBoolean("legal")) {
                         msgTextResp.setValid(Byte.valueOf("1"));
@@ -100,39 +100,9 @@ public class MessageBiz {
         return resp;
     }
 
-    private JSONObject formatterMsg(Row row, String templateContent) {
-        StringBuilder errMsg = new StringBuilder();
-        JSONObject jsonObject = new JSONObject();
-        String PARAM_REG = "\\$?\\{[0-9a-zA-Z]+}";
-        Pattern p = Pattern.compile(PARAM_REG);
-        Matcher matcher = p.matcher(templateContent);
-        int i = 1;
-        boolean legal = true;
-        boolean hasNull = false;
-        boolean hasSemicolon = false;
-        while (matcher.find()) {
-            String temp = matcher.group();
-            String cellStr = ExcelUtils.getStringValue(row.getCell(i));
-            templateContent = templateContent.replace(temp, cellStr);
-            i++;
-            if (Strings.isEmpty(cellStr)) {
-                hasNull = true;
-                legal = false;
-            }
-            if (cellStr.contains(";")) {
-                hasSemicolon = true;
-                legal = false;
-            }
-        }
-        if (hasNull) {
-            errMsg.append("excel中不能有空值单元格。");
-        }
-        if (hasSemicolon) {
-            errMsg.append("excel中不能有英文分号。");
-        }
-        jsonObject.put("content", templateContent);
-        jsonObject.put("legal", legal);
-        jsonObject.put("errMsg", errMsg.toString());
-        return jsonObject;
+
+
+    public void sendBatch(Byte type, String topic, int messageTemplateId, String excelUrl) {
+        messageService.sendBatch(type,topic,messageTemplateId,excelUrl);
     }
 }

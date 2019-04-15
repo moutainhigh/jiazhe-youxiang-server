@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl.message;
 
+import com.jiazhe.youxiang.base.util.ExcelUtils;
 import com.jiazhe.youxiang.base.util.MsgUtils;
 import com.jiazhe.youxiang.server.adapter.message.MessageAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
@@ -17,6 +18,10 @@ import com.jiazhe.youxiang.server.service.message.MessageService;
 import com.jiazhe.youxiang.server.service.message.MessageTemplateService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.resp.message.SendSingleMsgResp;
+import net.sf.json.JSONObject;
+import org.apache.logging.log4j.util.Strings;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -138,6 +143,39 @@ public class MessageServiceImpl implements MessageService {
         messagePOMapper.insertSelective(messagePO);
         if (!resp.isSuccess()) {
             throw new MessageException(MessageCodeEnum.MSG_SEND_ERROR.getCode(), MessageCodeEnum.MSG_SEND_ERROR.getType(), resp.getErrorMsg());
+        }
+    }
+
+    @Override
+    public void sendBatch(Byte type, String topic, int messageTemplateId, String excelUrl) {
+        SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+        if (null == sysUserDTO) {
+            throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
+        }
+        MessageTemplateDTO msgTemplateDTO = msgTemplateService.getById(messageTemplateId);
+        if (null == msgTemplateDTO || msgTemplateDTO.getIsDeleted().equals(CommonConstant.CODE_DELETED)) {
+            throw new MessageException(MessageCodeEnum.TEMPLATE_IS_NOT_EXIST);
+        }
+        if (msgTemplateDTO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
+            throw new MessageException(MessageCodeEnum.TEMPLATE_IS_STOP_USING);
+        }
+        //验证模板和系统数据库存储的模板是否一致，并且是否可用
+        MsgUtils.validateTemplate(msgTemplateDTO.getTencentTemplateId(), msgTemplateDTO.getTencentTemplateContent(), msgTemplateDTO.getAliTemplateCode(), msgTemplateDTO.getAliTemplateContent());
+        Sheet sheet = ExcelUtils.excel2Sheet(excelUrl);
+        for (Row row : sheet) {
+            JSONObject jsonObject = MsgUtils.row2Params(row, Strings.isEmpty(msgTemplateDTO.getTencentTemplateContent()) ? msgTemplateDTO.getAliTemplateContent() : msgTemplateDTO.getTencentTemplateContent());
+            SendSingleMsgResp resp = MsgUtils.sendBusinessMsg(jsonObject.getString("mobile"), msgTemplateDTO.getTencentTemplateId(), msgTemplateDTO.getTencentTemplateContent(), msgTemplateDTO.getAliTemplateCode(), msgTemplateDTO.getAliTemplateContent(), jsonObject.getString("content").split(";"));
+            MessagePO messagePO = new MessagePO();
+            messagePO.setMobile(jsonObject.getString("mobile"));
+            messagePO.setMessageTemplateId(messageTemplateId);
+            messagePO.setTopic(topic);
+            messagePO.setType(type);
+            messagePO.setContent(jsonObject.getString("content"));
+            messagePO.setServiceProvider(resp.getServiceProvider());
+            messagePO.setStatus(resp.isSuccess() ? Byte.valueOf("1") : Byte.valueOf("0"));
+            messagePO.setOperatorId(sysUserDTO.getId());
+            messagePO.setOperatorName(sysUserDTO.getDisplayName());
+            messagePOMapper.insertSelective(messagePO);
         }
     }
 }

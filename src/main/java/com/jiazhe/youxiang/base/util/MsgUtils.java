@@ -8,12 +8,17 @@ import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.vo.resp.login.SendVerificationCodeResp;
 import com.jiazhe.youxiang.server.vo.resp.message.SendSingleMsgResp;
+import net.sf.json.JSONObject;
+import org.apache.logging.log4j.util.Strings;
+import org.apache.poi.ss.usermodel.Row;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author TU
@@ -134,5 +139,70 @@ public class MsgUtils {
         if (!("").equals(aliTemplateCode) && !("").equals(aliTemplateContent)) {
             AliMsgUtils.validateTemplate(aliTemplateCode, aliTemplateContent);
         }
+    }
+
+    /**
+     * 将excel中的一行和模板，组装成一条短信（带有验证信息和错误信息）
+     *
+     * @param row             excel中的一行
+     * @param templateContent 模板内容
+     * @return
+     */
+    public static JSONObject formatterMsg(Row row, String templateContent) {
+        StringBuilder errMsg = new StringBuilder();
+        JSONObject jsonObject = new JSONObject();
+        String PARAM_REG = "\\$?\\{[0-9a-zA-Z]+}";
+        Pattern p = Pattern.compile(PARAM_REG);
+        Matcher matcher = p.matcher(templateContent);
+        int i = 1;
+        boolean legal = true;
+        boolean hasNull = false;
+        boolean hasSemicolon = false;
+        while (matcher.find()) {
+            String temp = matcher.group();
+            String cellStr = ExcelUtils.getStringValue(row.getCell(i));
+            templateContent = templateContent.replace(temp, cellStr);
+            i++;
+            if (Strings.isEmpty(cellStr)) {
+                hasNull = true;
+                legal = false;
+            }
+            if (cellStr.contains(";")) {
+                hasSemicolon = true;
+                legal = false;
+            }
+        }
+        if (hasNull) {
+            errMsg.append("excel中不能有空值单元格。");
+        }
+        if (hasSemicolon) {
+            errMsg.append("excel中不能有英文分号。");
+        }
+        jsonObject.put("content", templateContent);
+        jsonObject.put("legal", legal);
+        jsonObject.put("errMsg", errMsg.toString());
+        return jsonObject;
+    }
+
+    /**
+     * 将excel中的一行和模板，组装成一条短信（带有验证信息和错误信息）
+     *
+     * @param row             excel中的一行
+     * @param templateContent 模板内容
+     * @return
+     */
+    public static JSONObject row2Params(Row row, String templateContent) {
+        StringBuilder content = new StringBuilder();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("mobile",ExcelUtils.getStringValue(row.getCell(0)));
+        String PARAM_REG = "\\$?\\{[0-9a-zA-Z]+}";
+        Pattern p = Pattern.compile(PARAM_REG);
+        Matcher matcher = p.matcher(templateContent);
+        int i = 1;
+        while (matcher.find()) {
+            content.append(ExcelUtils.getStringValue(row.getCell(i)) + ";");
+        }
+        jsonObject.put("content",content.toString());
+        return jsonObject;
     }
 }
