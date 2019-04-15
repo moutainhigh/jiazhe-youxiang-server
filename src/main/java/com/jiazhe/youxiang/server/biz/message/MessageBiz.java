@@ -101,8 +101,11 @@ public class MessageBiz {
     }
 
 
-
     public void sendBatch(Byte type, String topic, int messageTemplateId, String excelUrl) {
-        messageService.sendBatch(type,topic,messageTemplateId,excelUrl);
+        messageService.sendBatch(type, topic, messageTemplateId, excelUrl);
+    }
+
+    public String show(Integer id) {
+        return messageService.show(id);
     }
 }

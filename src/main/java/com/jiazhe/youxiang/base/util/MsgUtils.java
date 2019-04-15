@@ -206,4 +206,24 @@ public class MsgUtils {
         jsonObject.put("content",content.toString());
         return jsonObject;
     }
+
+    /**
+     * 由带分号的参数和短信模板，组装短信完整内容
+     * @param param
+     * @param templateContent
+     * @return
+     */
+    public static String param2Content(String param, String templateContent) {
+        String[] params = param.split(";");
+        String PARAM_REG = "\\$?\\{[0-9a-zA-Z]+}";
+        Pattern p = Pattern.compile(PARAM_REG);
+        Matcher matcher = p.matcher(templateContent);
+        int i = 0;
+        while (matcher.find()) {
+            String temp = matcher.group();
+            templateContent = templateContent.replace(temp, params[i]);
+            i++;
+        }
+        return templateContent;
+    }
 }

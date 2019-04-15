@@ -59,4 +59,11 @@ public interface MessageService {
      * @param excelUrl
      */
     void sendBatch(Byte type, String topic, int messageTemplateId, String excelUrl);
+
+    /**
+     * 查看短信内容，由模板和参数拼接成完整短信内容
+     * @param id
+     * @return 短信完整内容
+     */
+    String show(Integer id);
 }

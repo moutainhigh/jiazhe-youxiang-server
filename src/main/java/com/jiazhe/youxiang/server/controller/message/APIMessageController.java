@@ -82,10 +82,19 @@ public class APIMessageController extends BaseController {
     @RequiresPermissions(PermissionConstant.MESSAGE_RESEND)
     @ApiOperation(value = "重新发送", httpMethod = "POST", notes = "重新发送")
     @RequestMapping(value = "/resend", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.MESSAGE, operate = "重新发送", level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.MESSAGE, operate = "重新发送", level = LogLevelEnum.LEVEL_3)
     public Object resend(@ModelAttribute IdReq req) {
         messageBiz.resend(req.getId());
         return ResponseFactory.buildSuccess();
+    }
+
+    @RequiresPermissions(PermissionConstant.MESSAGE_SHOW)
+    @ApiOperation(value = "查看短信", httpMethod = "GET", notes = "查看短信")
+    @RequestMapping(value = "/show", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.MESSAGE, operate = "查看短信", level = LogLevelEnum.LEVEL_1)
+    public Object show(@ModelAttribute IdReq req) {
+        String content = messageBiz.show(req.getId());
+        return ResponseFactory.buildSuccess(content);
     }
 
     @RequiresPermissions(PermissionConstant.MESSAGE_BATCH_SEND)
