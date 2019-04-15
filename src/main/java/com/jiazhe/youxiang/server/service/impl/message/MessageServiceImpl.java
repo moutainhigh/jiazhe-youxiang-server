@@ -26,6 +26,7 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -161,8 +162,14 @@ public class MessageServiceImpl implements MessageService {
         }
         //验证模板和系统数据库存储的模板是否一致，并且是否可用
         MsgUtils.validateTemplate(msgTemplateDTO.getTencentTemplateId(), msgTemplateDTO.getTencentTemplateContent(), msgTemplateDTO.getAliTemplateCode(), msgTemplateDTO.getAliTemplateContent());
+        List<MessagePO> poList = new ArrayList<>();
         Sheet sheet = ExcelUtils.excel2Sheet(excelUrl);
+        boolean isFirstRow = true;
         for (Row row : sheet) {
+            if (isFirstRow) {
+                isFirstRow = false;
+                continue;
+            }
             JSONObject jsonObject = MsgUtils.row2Params(row, Strings.isEmpty(msgTemplateDTO.getTencentTemplateContent()) ? msgTemplateDTO.getAliTemplateContent() : msgTemplateDTO.getTencentTemplateContent());
             SendSingleMsgResp resp = MsgUtils.sendBusinessMsg(jsonObject.getString("mobile"), msgTemplateDTO.getTencentTemplateId(), msgTemplateDTO.getTencentTemplateContent(), msgTemplateDTO.getAliTemplateCode(), msgTemplateDTO.getAliTemplateContent(), jsonObject.getString("content").split(";"));
             MessagePO messagePO = new MessagePO();
@@ -175,7 +182,8 @@ public class MessageServiceImpl implements MessageService {
             messagePO.setStatus(resp.isSuccess() ? Byte.valueOf("1") : Byte.valueOf("0"));
             messagePO.setOperatorId(sysUserDTO.getId());
             messagePO.setOperatorName(sysUserDTO.getDisplayName());
-            messagePOMapper.insertSelective(messagePO);
+            poList.add(messagePO);
         }
+        messagePOManualMapper.batchInsert(poList);
     }
 }

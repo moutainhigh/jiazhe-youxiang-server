@@ -80,4 +80,15 @@
         </where>
     </select>
 
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT into message
+        (mobile, content, type, topic, status, service_provider, message_template_id, operator_id,
+        operator_name)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.mobile},#{item.content},#{item.type},#{item.topic},#{item.status},#{item.serviceProvider},#{item.messageTemplateId},#{item.operatorId},
+            #{item.operatorName})
+        </foreach>
+    </insert>
+
 </mapper>

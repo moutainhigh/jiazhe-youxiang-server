@@ -95,10 +95,10 @@ public class MsgUtils {
             smsSingleSenderResult = TencentMsgUtils.sendMsg(mobile, tencentTemplateId, params);
             if (null != smsSingleSenderResult && smsSingleSenderResult.result == 0) {
                 resp.setSuccess(true);
-                resp.setServiceProvider(CommonConstant.MSG_SERVICE_PROVIDER_TENCENT);
             } else {
                 errMsg = errMsg + "【腾讯云】：" + smsSingleSenderResult.errMsg + "。";
             }
+            resp.setServiceProvider(CommonConstant.MSG_SERVICE_PROVIDER_TENCENT);
         }
         if (!resp.isSuccess()) {
             if (("").equals(aliTemplateCode) || ("").equals(aliTemplateContent)) {
@@ -107,10 +107,10 @@ public class MsgUtils {
                 SendSmsResponse sendSmsResponse = AliMsgUtils.sendMsg(mobile, aliTemplateCode, aliTemplateContent, params);
                 if (sendSmsResponse.getCode() != null && VER_CODE_SEND_SUCCESS.equals(sendSmsResponse.getCode())) {
                     resp.setSuccess(true);
-                    resp.setServiceProvider(CommonConstant.MSG_SERVICE_PROVIDER_ALI);
                 } else {
                     errMsg = errMsg + "【阿里云】：" + sendSmsResponse.getMessage() + "。";
                 }
+                resp.setServiceProvider(CommonConstant.MSG_SERVICE_PROVIDER_ALI);
             }
         }
         resp.setErrorMsg(errMsg);
@@ -201,6 +201,7 @@ public class MsgUtils {
         int i = 1;
         while (matcher.find()) {
             content.append(ExcelUtils.getStringValue(row.getCell(i)) + ";");
+            i++;
         }
         jsonObject.put("content",content.toString());
         return jsonObject;

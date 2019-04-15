@@ -9,6 +9,7 @@ import com.jiazhe.youxiang.server.adapter.message.MessageAdapter;
 import com.jiazhe.youxiang.server.biz.message.MessageBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.MessageCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
@@ -23,6 +24,7 @@ import com.jiazhe.youxiang.server.vo.req.message.SingleMsgSendReq;
 import com.jiazhe.youxiang.server.vo.resp.message.MessageResp;
 import com.jiazhe.youxiang.server.vo.resp.message.UploadMsgExcelResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -52,6 +54,7 @@ public class APIMessageController extends BaseController {
     @Value("${web.upload.ele-product-code-excel-path}")
     private String excelpath;
 
+    @RequiresPermissions(PermissionConstant.MESSAGE_MANAGEMENT)
     @ApiOperation(value = "短信记录列表", httpMethod = "GET", response = MessageResp.class, responseContainer = "List", notes = "短信记录列表")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.MESSAGE, operate = "短信记录列表", level = LogLevelEnum.LEVEL_1)
@@ -64,17 +67,19 @@ public class APIMessageController extends BaseController {
         return ResponseFactory.buildPaginationResponse(messageRespList, paging);
     }
 
+    @RequiresPermissions(PermissionConstant.MESSAGE_SINGLE_SEND)
     @ApiOperation(value = "单条发送短信", httpMethod = "POST", notes = "单条发送短信")
     @RequestMapping(value = "/sendsingle", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.MESSAGE, operate = "单条发送短信", level = LogLevelEnum.LEVEL_3)
     public Object sendSingle(@ModelAttribute SingleMsgSendReq req) {
         CommonValidator.validateMobile(req.getMobile(), new MessageException(MessageCodeEnum.MOBILE_ILLEGAL));
-        CommonValidator.validateNull(req.getMessageTemplateId(),new MessageException(MessageCodeEnum.TEMPLATE_IS_NOT_EXIST));
+        CommonValidator.validateNull(req.getMessageTemplateId(), new MessageException(MessageCodeEnum.TEMPLATE_IS_NOT_EXIST));
         CommonValidator.validateNull(req.getContent(), new MessageException(MessageCodeEnum.CONTENT_IS_NULL));
         messageBiz.sendSingle(req.getMobile(), req.getType(), req.getTopic(), req.getMessageTemplateId(), req.getContent());
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.MESSAGE_RESEND)
     @ApiOperation(value = "重新发送", httpMethod = "POST", notes = "重新发送")
     @RequestMapping(value = "/resend", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.MESSAGE, operate = "重新发送", level = LogLevelEnum.LEVEL_1)
@@ -83,6 +88,7 @@ public class APIMessageController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @RequiresPermissions(PermissionConstant.MESSAGE_BATCH_SEND)
     @ApiOperation(value = "上传短信excel并校验", httpMethod = "POST", response = UploadMsgExcelResp.class, notes = "上传短信excel并校验")
     @RequestMapping(value = "uploadexcel", method = RequestMethod.POST, headers = ("content-type=multipart/*"), consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @CustomLog(moduleName = ModuleEnum.MESSAGE, operate = "上传短信excel并校验", level = LogLevelEnum.LEVEL_2)
@@ -93,13 +99,14 @@ public class APIMessageController extends BaseController {
         return ResponseFactory.buildResponse(result);
     }
 
+    @RequiresPermissions(PermissionConstant.MESSAGE_BATCH_SEND)
     @ApiOperation(value = "批量发送短信", httpMethod = "POST", notes = "批量发送短信")
     @RequestMapping(value = "/sendbatch", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.MESSAGE, operate = "批量发送短信", level = LogLevelEnum.LEVEL_3)
     public Object sendBatch(@ModelAttribute BatchMsgSendReq req) {
-        CommonValidator.validateNull(req.getMessageTemplateId(),new MessageException(MessageCodeEnum.TEMPLATE_IS_NOT_EXIST));
-        CommonValidator.validateNull(req.getExcelUrl(),new MessageException(MessageCodeEnum.EXCEL_ERROR));
-        messageBiz.sendBatch(req.getType(), req.getTopic(), req.getMessageTemplateId(), req.getExcelUrl());
+        CommonValidator.validateNull(req.getMessageTemplateId(), new MessageException(MessageCodeEnum.TEMPLATE_IS_NOT_EXIST));
+        CommonValidator.validateNull(req.getExcelUrl(), new MessageException(MessageCodeEnum.EXCEL_ERROR));
+        messageBiz.sendBatch(req.getType(), req.getTopic(), req.getMessageTemplateId(), excelpath + "/" + req.getExcelUrl());
         return ResponseFactory.buildSuccess();
     }
 }

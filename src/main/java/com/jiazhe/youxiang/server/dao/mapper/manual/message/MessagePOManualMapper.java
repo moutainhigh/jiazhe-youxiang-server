@@ -30,4 +30,10 @@ public interface MessagePOManualMapper {
             @Param("sendEndTime") Date sendEndTime,
             @Param("offset") Integer offset,
             @Param("limit") Integer limit);
+
+    /**
+     * 批量插入
+     * @param poList
+     */
+    void batchInsert(List<MessagePO> poList);
 }

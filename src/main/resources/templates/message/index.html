@@ -124,18 +124,18 @@
                     </div><!-- /.col -->
                     <div class="col-xs-12" style="text-align: right" id="buttonDiv">
                         <p style="margin:1px;">
-                            <!--<shiro:hasPermission name="projectAdd">-->
-                            <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-single"
-                               data-toggle="modal" onclick="openSingle()">
-                                <i class="ace-icon"></i>单条发送
-                            </a>
-                            <!--</shiro:hasPermission>-->
-                            <!--<shiro:hasPermission name="projectAdd">-->
-                            <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-batch"
-                               data-toggle="modal" onclick="openBatch()">
-                                <i class="ace-icon"></i>批量发送
-                            </a>
-                            <!--</shiro:hasPermission>-->
+                            <shiro:hasPermission name="messageSingleSend">
+                                <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-single"
+                                   data-toggle="modal" onclick="openSingle()">
+                                    <i class="ace-icon"></i>单条发送
+                                </a>
+                            </shiro:hasPermission>
+                            <shiro:hasPermission name="messageBatchSend">
+                                <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-batch"
+                                   data-toggle="modal" onclick="openBatch()">
+                                    <i class="ace-icon"></i>批量发送
+                                </a>
+                            </shiro:hasPermission>
                         </p>
                     </div><!-- /.col -->
                     <div class="col-xs-12">
@@ -448,7 +448,6 @@
             ],
             caption: "短信列表"
         }
-
         initTable(grid_selector, pager_selector, tableOption);
     });
 
@@ -518,12 +517,16 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-//        str += getFunctionButton("btn-info", "showMsgContent(" + rowObject.content + ")", "查看");
-        if (rowObject.status == 1) {
-            str += getFunctionButton("btn-info", "resend(" + rowObject.id + ")", "再次发送");
+        if (permission.indexOf("messageShow") != -1) {
+            str += getFunctionButton("btn-info", "showMsgContent(" + rowObject.content + ")", "查看");
         }
-        if (rowObject.status == 0) {
-            str += getFunctionButton("btn-info", "resend(" + rowObject.id + ")", "重试");
+        if (permission.indexOf(messageResend) != -1) {
+            if (rowObject.status == 1) {
+                str += getFunctionButton("btn-info", "resend(" + rowObject.id + ")", "再次发送");
+            }
+            if (rowObject.status == 0) {
+                str += getFunctionButton("btn-info", "resend(" + rowObject.id + ")", "重试");
+            }
         }
         return str;
     }
@@ -765,7 +768,24 @@
         var excelUrl = $("#excelUrl").val();
         if (excelUrl == '') {
             bootboxalert("请上传符合条件的excel，请参照excel模板");
+            return false;
         }
+        $.ajax({
+            url: "/api/message/sendbatch",
+            dataType: "json",
+            async: false,
+            data: $("#messageBatchSaveForm").serializeArray(),
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $("#modal-batch").modal("hide");
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: error
+        });
     }
 
 </script>

@@ -18,7 +18,8 @@ public class TencentMsgUtils {
 
     public static int appId = Integer.valueOf(PropertyUtils.getProperty("tencentAppId"));
     public static String appKey = PropertyUtils.getProperty("tencentAppKey");
-    public static String smsSign = "悠享互联";
+    //    public static String smsSign = "悠享互联";
+    public static String smsSign = "wuli豆豆";
 
     /**
      * 验证码模板为固定的，不修改
