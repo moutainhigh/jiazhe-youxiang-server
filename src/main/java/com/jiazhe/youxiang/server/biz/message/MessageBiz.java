@@ -9,11 +9,10 @@ import com.jiazhe.youxiang.server.vo.resp.message.MessageTextResp;
 import com.jiazhe.youxiang.server.vo.resp.message.UploadMsgExcelResp;
 import net.sf.json.JSONObject;
 import org.apache.logging.log4j.util.Strings;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import springfox.documentation.spring.web.json.Json;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -81,12 +80,12 @@ public class MessageBiz {
                     count++;
                     JSONObject jsonObject = formatterMsg(row, Strings.isEmpty(msgTemplateDTO.getTencentTemplateContent()) ? msgTemplateDTO.getAliTemplateContent() : msgTemplateDTO.getTencentTemplateContent());
                     msgTextResp.setContent(jsonObject.getString("content"));
-                    if (jsonObject.getBoolean("legal")) {
+                    if (p.matcher(mobile).matches() && jsonObject.getBoolean("legal")) {
                         msgTextResp.setValid(Byte.valueOf("1"));
                         validCount++;
                     } else {
                         msgTextResp.setValid(Byte.valueOf("0"));
-                        errMsg = errMsg + "excel中有空值单元格。";
+                        errMsg = errMsg + jsonObject.getString("errMsg");
                     }
                     msgTextResp.setErrMsg(errMsg);
                     msgTextRespList.add(msgTextResp);
@@ -102,23 +101,38 @@ public class MessageBiz {
     }
 
     private JSONObject formatterMsg(Row row, String templateContent) {
+        StringBuilder errMsg = new StringBuilder();
         JSONObject jsonObject = new JSONObject();
         String PARAM_REG = "\\$?\\{[0-9a-zA-Z]+}";
         Pattern p = Pattern.compile(PARAM_REG);
         Matcher matcher = p.matcher(templateContent);
         int i = 1;
         boolean legal = true;
+        boolean hasNull = false;
+        boolean hasSemicolon = false;
         while (matcher.find()) {
             String temp = matcher.group();
             String cellStr = ExcelUtils.getStringValue(row.getCell(i));
             templateContent = templateContent.replace(temp, cellStr);
             i++;
             if (Strings.isEmpty(cellStr)) {
+                hasNull = true;
+                legal = false;
+            }
+            if (cellStr.contains(";")) {
+                hasSemicolon = true;
                 legal = false;
             }
         }
+        if (hasNull) {
+            errMsg.append("excel中不能有空值单元格。");
+        }
+        if (hasSemicolon) {
+            errMsg.append("excel中不能有英文分号。");
+        }
         jsonObject.put("content", templateContent);
         jsonObject.put("legal", legal);
+        jsonObject.put("errMsg", errMsg.toString());
         return jsonObject;
     }
 }
