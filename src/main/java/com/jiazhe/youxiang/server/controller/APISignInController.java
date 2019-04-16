@@ -1,17 +1,13 @@
 package com.jiazhe.youxiang.server.controller;
 
-import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.realm.AuthToken;
 import com.jiazhe.youxiang.base.realm.UserRealm;
-import com.jiazhe.youxiang.base.util.AliUtils;
-import com.jiazhe.youxiang.base.util.CommonValidator;
-import com.jiazhe.youxiang.base.util.CookieUtil;
-import com.jiazhe.youxiang.base.util.EncryptPasswordUtil;
-import com.jiazhe.youxiang.base.util.IpAdrressUtil;
+import com.jiazhe.youxiang.base.util.*;
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
+import com.jiazhe.youxiang.server.biz.message.MessageBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
@@ -29,10 +25,11 @@ import com.jiazhe.youxiang.server.vo.req.login.SendMsgToCustomerReq;
 import com.jiazhe.youxiang.server.vo.req.login.SendMsgToUserReq;
 import com.jiazhe.youxiang.server.vo.req.login.UserLoginReq;
 import com.jiazhe.youxiang.server.vo.resp.login.CustomerLoginResp;
-import com.jiazhe.youxiang.server.vo.resp.login.SendMsgResp;
+import com.jiazhe.youxiang.server.vo.resp.login.SendVerificationCodeResp;
 import com.jiazhe.youxiang.server.vo.resp.login.SessionResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -89,8 +86,8 @@ public class APISignInController extends BaseController {
         String loginName = req.getLoginname();
         String password = req.getPassword();
         String identifyingCode = req.getIdentifyingCode();
-        boolean rememberMe = "true".equals(req.getRememberMe());
         String bizId = req.getBizId();
+        boolean rememberMe = "true".equals(req.getRememberMe());
         CommonValidator.validateNull(req.getLoginname(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         CommonValidator.validateNull(req.getPassword(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(loginName);
@@ -105,12 +102,12 @@ public class APISignInController extends BaseController {
         // 判断白名单里是否有该ip，没有发验证码
         if (!IpAdrressUtil.ipIsWhite(IpAdrressUtil.getIpAddress(request), sysUserDTO.getLastLoginIp())) {
             //判断有没有短信bizId传过来
-            CommonValidator.validateNull(bizId, new LoginException(LoginCodeEnum.LOGIN_DIFFERENT_CLIENT));
+            if(Strings.isEmpty(req.getIdentifyingCode())){
+                CommonValidator.validateNull(bizId, new LoginException(LoginCodeEnum.LOGIN_DIFFERENT_CLIENT));
+            }
             CommonValidator.validateNull(identifyingCode, new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_EMPTY));
             //判断验证码是否正确
-            if (!AliUtils.isVerified(sysUserDTO.getMobile(), identifyingCode, bizId)) {
-                throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
-            }
+            MsgUtils.isVerified(sysUserDTO.getMobile(), identifyingCode);
             logger.info("登陆ip为：" + IpAdrressUtil.getIpAddress(request));
             sysUserBiz.updateLastLoginInfo(sysUserDTO.getId(), IpAdrressUtil.getIpAddress(request));
         }
@@ -151,7 +148,7 @@ public class APISignInController extends BaseController {
         return ResponseFactory.buildResponse(sessionResp);
     }
 
-    @ApiOperation(value = "根据登陆名，发送验证码", httpMethod = "GET", response = SendMsgResp.class, notes = "根据登陆名，发送验证码")
+    @ApiOperation(value = "根据登陆名，发送验证码", httpMethod = "GET", response = SendVerificationCodeResp.class, notes = "根据登陆名，发送验证码")
     @RequestMapping(value = "/usersendcode")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "根据登陆名，发送验证码", level = LogLevelEnum.LEVEL_2)
     public Object userSendCode(@ModelAttribute SendMsgToUserReq req) throws ClientException {
@@ -160,10 +157,10 @@ public class APISignInController extends BaseController {
             throw new LoginException(LoginCodeEnum.LOGIN_USER_ILLEGAL);
         }
         CommonValidator.validateMobile(sysUserDTOList.get(0).getMobile(), new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL));
-        SendSmsResponse res = AliUtils.sendMsg(sysUserDTOList.get(0).getMobile());
-        SendMsgResp sendMsgResp = new SendMsgResp();
-        sendMsgResp.setBizId(res.getBizId());
+        String code = RandomUtil.generateVerifyCode(CommonConstant.VER_CODE_LENGTH);
+        SendVerificationCodeResp sendMsgResp = MsgUtils.sendVerificationCodeMsg(sysUserDTOList.get(0).getMobile(), code);
         return ResponseFactory.buildResponse(sendMsgResp);
+
     }
 
     @AppApi
@@ -173,14 +170,10 @@ public class APISignInController extends BaseController {
     public Object customerSignIn(@ModelAttribute CustomerLoginReq req, HttpServletResponse response) throws IOException {
         String mobile = req.getMobile();
         String identifyingCode = req.getIdentifyingCode();
-        String bizId = req.getBizId();
         CommonValidator.validateNull(req.getMobile(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         CommonValidator.validateNull(req.getIdentifyingCode(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
         CommonValidator.validateMobile(req.getMobile(), new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL));
-        //判断验证码是否正确
-        if (!AliUtils.isVerified(req.getMobile(), identifyingCode, bizId)) {
-            throw new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_ERROR);
-        }
+        MsgUtils.isVerified(req.getMobile(), identifyingCode);
         CustomerDTO customerDTO = customerBiz.getByMobile(mobile);
         if (null == customerDTO) {
             CustomerAddDTO customerAddDTO = new CustomerAddDTO();
@@ -223,14 +216,13 @@ public class APISignInController extends BaseController {
     }
 
     @AppApi
-    @ApiOperation(value = "根据电话号码，发送验证码", httpMethod = "GET", response = SendMsgResp.class, notes = "根据电话号码，发送验证码")
+    @ApiOperation(value = "根据电话号码，发送验证码", httpMethod = "GET", notes = "根据电话号码，发送验证码")
     @RequestMapping(value = "/customersendcode")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "根据电话号码，发送验证码", level = LogLevelEnum.LEVEL_2)
     public Object customerSendCode(@ModelAttribute SendMsgToCustomerReq req) throws ClientException {
         CommonValidator.validateMobile(req.getMobile(), new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL));
-        SendSmsResponse res = AliUtils.sendMsg(req.getMobile());
-        SendMsgResp sendMsgResp = new SendMsgResp();
-        sendMsgResp.setBizId(res.getBizId());
+        String code = RandomUtil.generateVerifyCode(CommonConstant.VER_CODE_LENGTH);
+        SendVerificationCodeResp sendMsgResp = MsgUtils.sendVerificationCodeMsg(req.getMobile(), code);
         return ResponseFactory.buildResponse(sendMsgResp);
     }
 }

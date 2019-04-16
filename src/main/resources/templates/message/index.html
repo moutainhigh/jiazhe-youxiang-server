@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/static/init.css}"/>
+
+    <!-- Javascript -->
+    <script th:src="@{/static/init.js}"></script>
+
+
+    <style>
+        .form-group {
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+
+<body class="no-skin">
+
+<div class="main-container ace-save-state" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.loadState('main-container')
+        } catch (e) {
+        }
+    </script>
+
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a th:href="@{/main/main_center}">主页</a>
+                    </li>
+                    <li class="active">短信管理</li>
+                </ul><!-- /.breadcrumb -->
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xs-12" style="padding-top:40px">
+                        <!--<shiro:hasPermission name="messageSearch">-->
+                        <form id="searchForm" class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">发送状态：</label>
+                                <div class="col-sm-2">
+                                    <select id="searchStatus" name="status"
+                                            class="selectpicker show-tick form-control">
+                                        <option value="">所有</option>
+                                        <option value="1">发送成功</option>
+                                        <option value="0">发送失败</option>
+                                    </select>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">类型：</label>
+                                <div class="col-sm-2">
+                                    <select id="searchType" name="type"
+                                            class="selectpicker show-tick form-control">
+                                        <option value="">所有</option>
+                                        <option value="2">业务类</option>
+                                        <option value="3">营销类</option>
+                                        <option value="4">验证码类</option>
+                                        <option value="1">其他</option>
+                                    </select>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">手机号码：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="searchMobile" name="mobile" class="form-control" type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">主题：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="searchTopic" name="topic" class="form-control" type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">发送时间起：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <div class="input-group">
+                                            <input class="form-control date-picker" id="searchSendStartTime"
+                                                   type="text" readonly/>
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-calendar bigger-110"></i>
+                                            </span>
+                                            <input type="hidden" value=0 name="sendStartTime"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <label class="col-sm-1 control-label no-padding-right">发送时间止：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <div class="input-group">
+                                            <input class="form-control date-picker" id="searchSendEndTime"
+                                                   type="text" readonly/>
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-calendar bigger-110"></i>
+                                            </span>
+                                            <input type="hidden" value=0 name="sendEndTime"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <button class="btn btn-white btn-default btn-round btn-sm"
+                                            onclick="return search()">
+                                        <i class="ace-icon fa fa-search red2"></i>
+                                        查询
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <!--</shiro:hasPermission>-->
+                    </div><!-- /.col -->
+                    <div class="col-xs-12" style="text-align: right" id="buttonDiv">
+                        <p style="margin:1px;">
+                            <shiro:hasPermission name="messageSingleSend">
+                                <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-single"
+                                   data-toggle="modal" onclick="openSingle()">
+                                    <i class="ace-icon"></i>单条发送
+                                </a>
+                            </shiro:hasPermission>
+                            <shiro:hasPermission name="messageBatchSend">
+                                <a class="btn btn-success btn-round btn-sm" role="button" href="#modal-batch"
+                                   data-toggle="modal" onclick="openBatch()">
+                                    <i class="ace-icon"></i>批量发送
+                                </a>
+                            </shiro:hasPermission>
+                        </p>
+                    </div><!-- /.col -->
+                    <div class="col-xs-12">
+                        <table id="grid-table"></table>
+
+                        <div id="grid-pager"></div>
+                    </div><!-- /.col -->
+                    <div id="modal-single" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger">单条发送</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-10">
+                                            <form id="messageSingleSaveForm" class="form-horizontal" role="form">
+                                                <input type="hidden" id="singleParamCount">
+                                                <input type="hidden" id="singleTemplateText">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">手机号码：</label>
+                                                    <div class="col-sm-7">
+                                                        <div class="pos-rel">
+                                                            <input id="singleMobile" name="mobile"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">短信类型：</label>
+                                                    <div class="col-sm-7">
+                                                        <div class="pos-rel">
+                                                            <select id="singleType" name="type"
+                                                                    class="selectpicker show-tick form-control">
+                                                                <option value="2">业务类</option>
+                                                                <option value="3">营销类</option>
+                                                                <!--<option value="4">验证码类</option>-->
+                                                                <option value="1">其他</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">短信主题：</label>
+                                                    <div class="col-sm-7">
+                                                        <div class="pos-rel">
+                                                            <input id="singleTopic"
+                                                                   name="topic"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">短信模板：</label>
+                                                    <div class="col-sm-7">
+                                                        <div class="pos-rel">
+                                                            <select id="singleMsgTemplateId" name="messageTemplateId"
+                                                                    onchange="singleTemplateChange()"
+                                                                    class="selectpicker show-tick form-control">
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">输入内容：</label>
+                                                    <div class="col-sm-7">
+                                                        <div class="pos-rel">
+                                                            <textarea id="singleContent" name="content"
+                                                                      placeholder="短信内容，按照模板用英文分号间隔，必须对应工整"
+                                                                      class="form-control" onkeyup="inputChange(this);"
+                                                                      style="resize:none;height: 100px"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">短信内容：</label>
+                                                    <div class="col-sm-7">
+                                                        <div class="pos-rel">
+                                                            <textarea id="singleMsgText" readonly
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px">
+
+                                                            </textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div id="wordsCountDiv" class="col-sm-1"
+                                                         style="padding-top: 80px;">
+                                                        0(0)
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="sendSingle('1')">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        发送
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="sendSingle('2')">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        发送并继续
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="modal-batch" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger">批量发送</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-10">
+                                            <form id="messageBatchSaveForm" class="form-horizontal" role="form">
+                                                <input type="hidden" name="excelUrl" id="excelUrl">
+                                                <input type="hidden" id="batchParamCount">
+                                                <input type="hidden" id="batchTemplateText">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">短信类型：</label>
+                                                    <div class="col-sm-7">
+                                                        <div class="pos-rel">
+                                                            <select id="inputType" name="type"
+                                                                    class="selectpicker show-tick form-control">
+                                                                <option value="2">业务类</option>
+                                                                <option value="3">营销类</option>
+                                                                <!--<option value="4">验证码类</option>-->
+                                                                <option value="1">其他</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">短信主题：</label>
+                                                    <div class="col-sm-7">
+                                                        <div class="pos-rel">
+                                                            <input id="inputTopic"
+                                                                   name="topic"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">短信模板：</label>
+                                                    <div class="col-sm-7">
+                                                        <div class="pos-rel">
+                                                            <select id="batchMsgTemplateId" name="messageTemplateId"
+                                                                    onchange="batchTemplateChange()"
+                                                                    class="selectpicker show-tick form-control">
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"></label>
+                                                    <div class="col-sm-7">
+                                                        <div class="pos-rel">
+                                                            <textarea id="batchMsgText"
+                                                                      class="form-control" readonly
+                                                                      style="resize:none;height: 100px"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">excel模板：</label>
+                                                    <div class="col-sm-7">
+                                                        <div class="pos-rel" style="padding-top:9px;">
+                                                            <a id="batchExcelTemplate" href="">
+
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">短信excel：</label>
+                                                    <div class="col-sm-7">
+                                                        <div class="widget-main">
+                                                            <div class="form-group">
+                                                                <div class="col-xs-12">
+                                                                    <input type="file" id="messageFile"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<div class="modal-header msgShowDiv" style="display:none">-->
+                                <!--<h4 class="blue bigger">短信确认</h4>-->
+                                <!--</div>-->
+                                <div class="modal-body msgShowDiv"
+                                     style="display:none;height:250px;overflow-y:scroll;padding:5px">
+                                    <div id="msgCountShow"></div>
+                                    <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                                        <thead>
+                                        <tr>
+                                            <th style="width:20%">电话号码</th>
+                                            <th style="width:10%">状态</th>
+                                            <th style="width:40%">短信内容</th>
+                                            <th>不合格原因</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="modelTbody">
+                                        <!--此处放短信记录-->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="sendBatch()">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        发送
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+
+</div><!-- /.main-container -->
+</div>
+</body>
+<script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+    var type = ['其他', '业务类', '营销类', '验证码类'];
+    var serviceProvider = ['腾讯云', '阿里云'];
+    $(function () {
+        //重新修改表格宽度
+        $(window).resize(function () {
+            $("#grid-table").setGridWidth($(window).width() * 0.96);
+        });
+
+        initDatePicker();
+
+        //初始化短信模板select框
+        getAllMsgTemplate();
+
+        var tableOption = {
+            url: "/api/message/listpage",// 获取数据的地址
+            postData: transformToJson($('#searchForm').serializeArray()),
+            colNames: ['', '主题', '短信服务商', '手机号码', '发送时间', '类型', '操作人', '发送结果', '操作'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'topic', index: 'topic', sortable: false},
+                {
+                    name: 'serviceProvider',
+                    index: 'serviceProvider',
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return serviceProvider[rowObject.serviceProvider - 1];
+                    }
+                },
+                {name: 'mobile', index: 'mobile', sortable: false},
+                {name: 'sendTime', index: 'sendTime', sortable: false, formatter: timeFormat},
+                {
+                    name: 'type',
+                    index: 'type',
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return type[rowObject.type - 1];
+                    }
+                },
+                {name: 'operatorName', index: 'operatorName', sortable: false},
+                {
+                    name: 'status',
+                    index: 'status',
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        var text = rowObject.status == 1 ? "发送成功" : "发送失败";
+                        var color = rowObject.status == 1 ? "00FF00" : "FF0000";
+                        return generateSpan(text, color);
+                    }
+                },
+                {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
+            ],
+            caption: "短信列表"
+        }
+        initTable(grid_selector, pager_selector, tableOption);
+    });
+
+    $('#messageFile').ace_file_input({
+        style: 'well',
+        btn_choose: '请选择短信excel',
+        btn_change: null,
+        no_icon: 'ace-icon fa fa-cloud-upload',
+        droppable: true,
+        thumbnail: 'large',
+        allowExt: ['xlsx'],
+//        allowMime: ['application/vnd.ms-excel'],
+    }).on('change', function () {
+        var templateId = $("#batchMsgTemplateId").val();
+        if (templateId == '') {
+            bootboxalert("请先选择模板再上传短信内容");
+            return;
+        }
+        var image = $('#messageFile')[0].files[0]
+        if (!image) {
+            $("#modelTbody").empty();
+            $(".msgShowDiv").css("display", "");
+            return;
+        }
+        var formData = new FormData();
+        formData.append('file', image);
+        formData.append('templateId', templateId);
+        $.ajax({
+            url: "/api/message/uploadexcel",
+            dataType: "json",
+            type: 'POST',
+            async: true,
+            processData: false, // 告诉jQuery不要去处理发送的数据
+            contentType: false,// 告诉jQuery不要去设置Content-Type请求头
+            data: formData,
+            cache: false,
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $("#modelTbody").empty();
+                    var result = data.data;
+                    if (result.success == '1') {
+                        $('#excelUrl').val(result.url);
+                    }
+                    var msgs = result.msgTxtRespList;
+                    for (var i = 0; i < msgs.length; i++) {
+                        $("#modelTbody").append(getTr(msgs[i]));
+                    }
+                    $("#msgCountShow").html("合计：" + result.count + "条，合格：" + result.validCount + "条");
+                    $(".msgShowDiv").css("display", "");
+                }
+            },
+            error: error
+        });
+    });
+
+    $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
+
+    function search() {
+        jQuery(grid_selector).setGridParam({
+            url: "/api/message/listpage",// 获取数据的地址
+            postData: transformToJson($('#searchForm').serializeArray()),
+        }).trigger("reloadGrid", [{page: 1}]);
+        return false;
+    }
+
+    function customFormatter(cellvalue, options, rowObject) {
+        var str = "";
+        if (permission.indexOf("messageShow") != -1) {
+            str += getFunctionButton("btn-success", "showMsgContent(" + rowObject.id + ")", "查看");
+        }
+        if (permission.indexOf("messageResend") != -1) {
+            if (rowObject.status == 1) {
+                str += getFunctionButton("btn-info", "resend(" + rowObject.id + ")", "再次发送");
+            }
+            if (rowObject.status == 0) {
+                str += getFunctionButton("btn-info", "resend(" + rowObject.id + ")", "重试");
+            }
+        }
+        return str;
+    }
+
+    /**
+     * 根据短信list填充table，有误的带背景颜色
+     * */
+    function getTr(msg) {
+        var str = "";
+        var valid = "";
+        if (msg.valid == '0') {
+            str = str + "<tr style='background-color: red'>";
+            valid = "不合格";
+        } else {
+            str = str + "<tr>";
+            valid = "合格";
+        }
+        str = str + "<td>" + msg.mobile + "</td>" +
+            "<td>" + valid + "</td>" +
+            "<td>" + msg.content + "</td>" +
+            "<td>" + msg.errMsg + "</td></tr>";
+        return str;
+    }
+
+    /**
+     * 重新发送
+     * */
+    function resend(id) {
+        $.ajax({
+            url: "/api/message/resend",
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                }
+                jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+            },
+            error: error
+        });
+    }
+
+    /**
+     * 显示短信内容
+     * */
+    function showMsgContent(id) {
+        $.ajax({
+            url: "/api/message/show",
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    bootboxalert("短信内容为：" + data.data.message);
+                }
+            },
+            error: error
+        });
+    }
+
+    function openSingle() {
+        $("#singleMobile").val("");
+        $("#singleType option:first").prop("selected", 'selected');
+        $("#singleTopic").val("");
+        $("#singleContent").val("");
+        document.getElementById('wordsCountDiv').innerText = "0(0)"
+    }
+
+    function openBatch() {
+        $("#batchTopic").val("");
+        $("#batchContent").val("");
+        $("#batchTemplate").val("");
+        $('#messageFile').ace_file_input('reset_input');
+        $(".msgShowDiv").css("display", "none");
+    }
+
+    /**
+     * 单条发送短信
+     *type 1发送  2发送并继续
+     * */
+    function sendSingle(type) {
+        $.ajax({
+            url: "/api/message/sendsingle",
+            dataType: "json",
+            async: false,
+            data: transformToJson($('#messageSingleSaveForm').serializeArray()),
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    if (type == 1) {
+                        $("#modal-single").modal("hide");
+                    } else {
+                        $("#singleMobile").val("");
+                        $("#singleContent").val("");
+                        document.getElementById('wordsCountDiv').innerText = "0(0)"
+                    }
+                }
+                jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+            },
+            error: error
+        });
+    }
+
+    /**
+     * 短信内容变化函数
+     * @param input
+     */
+    function inputChange() {
+        //第一步 生成短信内容
+        var count = $("#singleParamCount").val();//模板参数个数
+        var templateText = $("#singleTemplateText").val();//模板内容
+        var paramsStr = $("#singleContent").val();//参数输入框
+        var params = paramsStr.split(";");//参数数组
+        if (params.length > 0 && params[0] != '') {
+            if (count < params.length) {
+                bootboxalert("输入有误，请按照格式输入");
+                $("#singleContent").val(paramsStr.substr(0, paramsStr.length - 1));
+                return false;
+            }
+        } else {
+            $("#singleMsgText").val(templateText);
+            return false;
+        }
+        for (var i = 0; i < params.length; i++) {
+            if (params[i] != '') {
+                templateText = templateText.replace(/\$?\{(.+?)\}/, params[i]);
+            }
+        }
+        $("#singleMsgText").val(templateText);
+        //第二步 短信字数统计
+        var content = document.getElementById('wordsCountDiv');
+        if (content) {
+            var value = $("#singleMsgText").val();
+            value = value.replace(/\n|\r/gi, "").replace(/\$?\{(.+?)\}/g, "");
+            content.innerText = value.length + "(" + Math.ceil(value.length / 70) + ")";
+        }
+    }
+
+    function getAllMsgTemplate() {
+        $.ajax({
+            url: "/api/msgtemplate/getall",
+            dataType: "json",
+            async: false,
+            data: {
+                status: 1
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#singleMsgTemplateId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                        $("#batchMsgTemplateId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                    }
+                    var templateContent = result[0].tencentTemplateContent == '' ? result[0].aliTemplateContent : result[0].tencentTemplateContent
+                    $("#singleParamCount").val(result[0].paramCount);
+                    $("#singleTemplateText").val(templateContent);
+                    $("#singleMsgText").val(templateContent);
+                    if (result[0].excelTemplate != '') {
+                        $("#batchExcelTemplate").attr('href', result[0].excelTemplate);
+                        $("#batchExcelTemplate").text("点击下载");
+                    } else {
+                        $("#batchExcelTemplate").attr('href', "#");
+                        $("#batchExcelTemplate").text("无excel模板");
+                    }
+                    $("#batchParamCount").val(result[0].paramCount);
+                    $("#batchTemplateText").val(templateContent);
+                    $("#batchMsgText").val(templateContent);
+                }
+            },
+            error: error
+        });
+    }
+
+    /**
+     * 单条发送短信的内容
+     */
+    function singleTemplateChange() {
+        $.ajax({
+            url: "/api/msgtemplate/getbyid",
+            dataType: "json",
+            async: false,
+            data: {
+                id: $('#singleMsgTemplateId option:selected').val()
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#singleParamCount").val(result.paramCount);
+                    var templateContent = result.tencentTemplateContent == '' ? result.aliTemplateContent : result.tencentTemplateContent
+                    $("#singleMsgText").val(templateContent);
+                    $("#singleTemplateText").val(templateContent);
+                    $("#singleContent").val("");
+                    document.getElementById('wordsCountDiv').innerText = "0(0)"
+                }
+            },
+            error: error
+        });
+    }
+
+    /**
+     * 批量发送短信的模板变化
+     */
+    function batchTemplateChange() {
+        $.ajax({
+            url: "/api/msgtemplate/getbyid",
+            dataType: "json",
+            async: false,
+            data: {
+                id: $('#batchMsgTemplateId option:selected').val()
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    if (result.excelTemplate != '') {
+                        $("#batchExcelTemplate").attr('href', result.excelTemplate);
+                        $("#batchExcelTemplate").text("点击下载");
+                    } else {
+                        $("#batchExcelTemplate").attr('href', "#");
+                        $("#batchExcelTemplate").text("无excel模板");
+                    }
+                    $("#batchParamCount").val(result.paramCount);
+                    var templateContent = result.tencentTemplateContent == '' ? result.aliTemplateContent : result.tencentTemplateContent
+                    $("#batchTemplateText").val(templateContent);
+                    $("#batchMsgText").val(templateContent);
+                    $("#excelUrl").val("");
+                    $('#messageFile').ace_file_input('reset_input');
+                    $(".msgShowDiv").css("display", "none");
+                }
+            },
+            error: error
+        });
+    }
+
+    function sendBatch() {
+        var excelUrl = $("#excelUrl").val();
+        if (excelUrl == '') {
+            bootboxalert("请上传符合条件的excel，请参照excel模板");
+            return false;
+        }
+        $.ajax({
+            url: "/api/message/sendbatch",
+            dataType: "json",
+            async: false,
+            data: $("#messageBatchSaveForm").serializeArray(),
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $("#modal-batch").modal("hide");
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: error
+        });
+    }
+
+</script>
+</html>
+

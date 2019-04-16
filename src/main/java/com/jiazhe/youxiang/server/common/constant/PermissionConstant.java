@@ -171,6 +171,17 @@ public class PermissionConstant {
     //代金券兑换码启、停用
     public static final String VOUCHER_CODE_SEARCH_STATUS_CHANGE = "voucherCodeSearchStatusChange";
 
+    //短信管理
+    public static final String MESSAGE_MANAGEMENT = "messageManagement";
+    //单条发送
+    public static final String MESSAGE_SINGLE_SEND = "messageSingleSend";
+    //多条发送
+    public static final String MESSAGE_BATCH_SEND = "messageBatchSend";
+    //短信重发
+    public static final String MESSAGE_RESEND = "messageResend";
+    //短信查看
+    public static final String MESSAGE_SHOW = "messageShow";
+
     //系统管理
     public static final String SYSTEM_MANAGEMENT = "systemManagement";
     //积分卡兑换码批次管理

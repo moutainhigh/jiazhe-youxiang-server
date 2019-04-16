@@ -70,9 +70,4 @@ public class ExchangeCodeCheckUtil {
         }
         return true;
     }
-
-    public static void main(String[] args) {
-        System.out.println(codeCheck("2", "20002826") && keytCheck("2", "228284484533"));
-    }
-
 }
