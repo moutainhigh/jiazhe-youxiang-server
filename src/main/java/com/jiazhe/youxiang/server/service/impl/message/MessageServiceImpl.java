@@ -184,7 +184,9 @@ public class MessageServiceImpl implements MessageService {
             messagePO.setOperatorName(sysUserDTO.getDisplayName());
             poList.add(messagePO);
         }
-        messagePOManualMapper.batchInsert(poList);
+        if(!poList.isEmpty()){
+            messagePOManualMapper.batchInsert(poList);
+        }
     }
 
     @Override
