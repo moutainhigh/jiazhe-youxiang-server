@@ -465,16 +465,23 @@
             $(".msgShowDiv").css("display", "none");
             $("#excelUrl").val("");
             $('#messageFile').ace_file_input('reset_input');
+        },
+        before_change: function () {
+            var templateId = $("#batchMsgTemplateId").val();
+            if (templateId == '' || templateId == null) {
+                bootboxalert("请先选择模板再上传短信内容");
+                return false;
+            }
+            return true;
         }
+    }).on('file.error.ace', function (event, info) {//不匹配上面的文件格式就会跳出弹框提示
+        bootboxalert("请选择后缀为xlsx的excel文件！");
+        return false;
     }).on('change', function () {
         var templateId = $("#batchMsgTemplateId").val();
-        if (templateId == '' || templateId == null) {
-            bootboxalert("请先选择模板再上传短信内容");
-            $('#messageFile').ace_file_input('reset_input');
-            return false;
-        }
         var image = $('#messageFile')[0].files[0]
         if (!image) {
+            console.log(123)
             return false;
         }
         var formData = new FormData();
