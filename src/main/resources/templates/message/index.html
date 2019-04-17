@@ -460,7 +460,7 @@
         thumbnail: 'large',
         allowExt: ['xlsx'],
 //        allowMime: ['application/vnd.ms-excel'],
-        before_remove:function(){
+        before_remove: function () {
             $("#modelTbody").empty();
             $(".msgShowDiv").css("display", "none");
             $("#excelUrl").val("");
@@ -468,13 +468,14 @@
         }
     }).on('change', function () {
         var templateId = $("#batchMsgTemplateId").val();
-        if (templateId == '') {
+        if (templateId == '' || templateId == null) {
             bootboxalert("请先选择模板再上传短信内容");
-            return;
+            $('#messageFile').ace_file_input('reset_input');
+            return false;
         }
         var image = $('#messageFile')[0].files[0]
         if (!image) {
-            return;
+            return false;
         }
         var formData = new FormData();
         formData.append('file', image);
@@ -699,20 +700,22 @@
                         $("#singleMsgTemplateId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
                         $("#batchMsgTemplateId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
                     }
-                    var templateContent = result[0].tencentTemplateContent == '' ? result[0].aliTemplateContent : result[0].tencentTemplateContent
-                    $("#singleParamCount").val(result[0].paramCount);
-                    $("#singleTemplateText").val(templateContent);
-                    $("#singleMsgText").val(templateContent);
-                    if (result[0].excelTemplate != '') {
-                        $("#batchExcelTemplate").attr('href', result[0].excelTemplate);
-                        $("#batchExcelTemplate").text("点击下载");
-                    } else {
-                        $("#batchExcelTemplate").attr('href', "#");
-                        $("#batchExcelTemplate").text("无excel模板");
+                    if (result.length > 0) {
+                        var templateContent = result[0].tencentTemplateContent == '' ? result[0].aliTemplateContent : result[0].tencentTemplateContent
+                        $("#singleParamCount").val(result[0].paramCount);
+                        $("#singleTemplateText").val(templateContent);
+                        $("#singleMsgText").val(templateContent);
+                        if (result[0].excelTemplate != '') {
+                            $("#batchExcelTemplate").attr('href', result[0].excelTemplate);
+                            $("#batchExcelTemplate").text("点击下载");
+                        } else {
+                            $("#batchExcelTemplate").attr('href', "#");
+                            $("#batchExcelTemplate").text("无excel模板");
+                        }
+                        $("#batchParamCount").val(result[0].paramCount);
+                        $("#batchTemplateText").val(templateContent);
+                        $("#batchMsgText").val(templateContent);
                     }
-                    $("#batchParamCount").val(result[0].paramCount);
-                    $("#batchTemplateText").val(templateContent);
-                    $("#batchMsgText").val(templateContent);
                 }
             },
             error: error
