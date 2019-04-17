@@ -31,6 +31,7 @@ public enum ModuleEnum {
     PARTNER_ORDER(117,"商家订单管理"),
     WECHAT_PUBLIC(118,"微信公众号相关"),
     CHARGE_RECEIPT(119,"消费凭证管理"),
+    MESSAGE(120,"短信管理"),
     OTHER(999, "其他模块");
 
     private Integer id;

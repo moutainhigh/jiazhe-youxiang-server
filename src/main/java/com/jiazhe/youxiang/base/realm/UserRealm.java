@@ -1,10 +1,12 @@
 package com.jiazhe.youxiang.base.realm;
 
 import com.google.common.collect.Lists;
+import com.jiazhe.youxiang.base.util.RedisUtils;
 import com.jiazhe.youxiang.server.biz.SysRoleBiz;
 import com.jiazhe.youxiang.server.biz.SysRolePermissionBiz;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
 import com.jiazhe.youxiang.server.biz.SysUserRoleBiz;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.PermissionInit;
 import com.jiazhe.youxiang.server.common.enums.LoginType;
 import com.jiazhe.youxiang.server.dto.sysrole.SysRoleDTO;
@@ -12,6 +14,7 @@ import com.jiazhe.youxiang.server.dto.sysrole.SysRolePermissionDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserRoleDTO;
 import com.jiazhe.youxiang.server.vo.resp.sysrole.PermissionTreeResp;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -26,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -117,6 +119,7 @@ public class UserRealm extends AuthorizingRealm {
             }
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
             info.addStringPermissions(permissionList);
+//            RedisUtils.set(CommonConstant.REDIS_PERM_URL + sysUserDTO.getLoginName(), StringUtils.join(permissionList, "#"));
             return info;
         }
         return null;

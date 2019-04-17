@@ -12,6 +12,7 @@ public enum CommonCodeEnum {
     INTERNAL_ERROR(100001, "COMMON_INTERNAL_ERROR", "内部异常"),
     PARAMS_ILLEGAL_ERROR(100002, "COMMON_PARAMS_ILLEGAL", "参数错误"),
     HTTP_ERROR(100003, "COMMON_HTTP_ERROR", "HTTP调用异常"),
+    FILE_NOT_EXIST(100004, "FILE_NOT_EXIST", "文件不存在"),
     ;
 
     CommonCodeEnum(Integer code, String type, String message) {

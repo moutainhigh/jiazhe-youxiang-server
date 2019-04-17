@@ -16,9 +16,6 @@ public class CustomerLoginReq extends BaseVO {
     @ApiModelProperty("验证码")
     private String identifyingCode ;
 
-    @ApiModelProperty("短信bizId")
-    private String bizId ;
-
     public String getMobile() {
         return mobile;
     }
@@ -35,11 +32,4 @@ public class CustomerLoginReq extends BaseVO {
         this.identifyingCode = identifyingCode;
     }
 
-    public String getBizId() {
-        return bizId;
-    }
-
-    public void setBizId(String bizId) {
-        this.bizId = bizId;
-    }
 }

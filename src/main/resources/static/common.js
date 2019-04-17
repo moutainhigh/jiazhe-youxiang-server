@@ -287,11 +287,3 @@ function initTable(grid_selector, pager_selector, options) {
         caption: caption
     });
 }
-
-
-
-
-
-
-
-
