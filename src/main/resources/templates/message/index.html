@@ -143,7 +143,7 @@
 
                         <div id="grid-pager"></div>
                     </div><!-- /.col -->
-                    <div id="modal-single" class="modal fade" tabindex="-1">
+                    <div id="modal-single" class="modal fade" tabindex="-1" style="overflow: scroll">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -259,7 +259,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="modal-batch" class="modal fade" tabindex="-1">
+                    <div id="modal-batch" class="modal fade" tabindex="-1" style="overflow: scroll">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -460,6 +460,12 @@
         thumbnail: 'large',
         allowExt: ['xlsx'],
 //        allowMime: ['application/vnd.ms-excel'],
+        before_remove:function(){
+            $("#modelTbody").empty();
+            $(".msgShowDiv").css("display", "none");
+            $("#excelUrl").val("");
+            $('#messageFile').ace_file_input('reset_input');
+        }
     }).on('change', function () {
         var templateId = $("#batchMsgTemplateId").val();
         if (templateId == '') {
@@ -468,8 +474,6 @@
         }
         var image = $('#messageFile')[0].files[0]
         if (!image) {
-            $("#modelTbody").empty();
-            $(".msgShowDiv").css("display", "");
             return;
         }
         var formData = new FormData();
@@ -608,6 +612,7 @@
         $("#batchTopic").val("");
         $("#batchContent").val("");
         $("#batchTemplate").val("");
+        $("#excelUrl").val("");
         $('#messageFile').ace_file_input('reset_input');
         $(".msgShowDiv").css("display", "none");
     }
