@@ -15,6 +15,7 @@
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
     <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
     <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -76,7 +77,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, audit_record_id, exchange_point, pos_code, trade_time, card_no, customer_name, 
-    inputer_id, inputer_name, ext_info, is_deleted, add_time, mod_time
+    inputer_id, inputer_name, ext_info, is_deleted, add_time, mod_time, img_url
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.ChargeReceiptPOExample" >
     select
@@ -113,12 +114,12 @@
       pos_code, trade_time, card_no, 
       customer_name, inputer_id, inputer_name, 
       ext_info, is_deleted, add_time, 
-      mod_time)
+      mod_time, img_url)
     values (#{id,jdbcType=INTEGER}, #{auditRecordId,jdbcType=INTEGER}, #{exchangePoint,jdbcType=DECIMAL}, 
       #{posCode,jdbcType=VARCHAR}, #{tradeTime,jdbcType=TIMESTAMP}, #{cardNo,jdbcType=VARCHAR}, 
       #{customerName,jdbcType=VARCHAR}, #{inputerId,jdbcType=INTEGER}, #{inputerName,jdbcType=VARCHAR}, 
       #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
-      #{modTime,jdbcType=TIMESTAMP})
+      #{modTime,jdbcType=TIMESTAMP}, #{imgUrl,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.ChargeReceiptPO" >
     insert into charge_receipt
@@ -162,6 +163,9 @@
       <if test="modTime != null" >
         mod_time,
       </if>
+      <if test="imgUrl != null" >
+        img_url,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -202,6 +206,9 @@
       </if>
       <if test="modTime != null" >
         #{modTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="imgUrl != null" >
+        #{imgUrl,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -253,6 +260,9 @@
       <if test="record.modTime != null" >
         mod_time = #{record.modTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.imgUrl != null" >
+        img_url = #{record.imgUrl,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -272,7 +282,8 @@
       ext_info = #{record.extInfo,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=TINYINT},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
-      mod_time = #{record.modTime,jdbcType=TIMESTAMP}
+      mod_time = #{record.modTime,jdbcType=TIMESTAMP},
+      img_url = #{record.imgUrl,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -316,6 +327,9 @@
       <if test="modTime != null" >
         mod_time = #{modTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="imgUrl != null" >
+        img_url = #{imgUrl,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -332,7 +346,8 @@
       ext_info = #{extInfo,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=TINYINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},
-      mod_time = #{modTime,jdbcType=TIMESTAMP}
+      mod_time = #{modTime,jdbcType=TIMESTAMP},
+      img_url = #{imgUrl,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
