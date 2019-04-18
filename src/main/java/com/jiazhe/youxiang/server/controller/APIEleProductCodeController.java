@@ -86,7 +86,7 @@ public class APIEleProductCodeController extends BaseController {
     @RequestMapping(value = "uploadexcel", method = RequestMethod.POST, headers = ("content-type=multipart/*"), consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @CustomLog(moduleName = ModuleEnum.ELE_PRODUCT, operate = "上传电子码excel并校验", level = LogLevelEnum.LEVEL_2)
     public Object uploadExcel(@RequestParam("file") MultipartFile file) throws IOException {
-        String url = UploadUtil.uploadImage(file, excelpath);
+        String url = UploadUtil.uploadFile2Server(file, excelpath);
         UploadExcelResp result = new UploadExcelResp();
         result.setUrl(url);
         Sheet sheet = eleProductCodeBiz.excel2Sheet(excelpath + "/" + url);
