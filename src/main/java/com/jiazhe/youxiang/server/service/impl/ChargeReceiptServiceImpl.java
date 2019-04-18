@@ -47,7 +47,7 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
         List<ChargeReceiptPO> chargeReceiptPOList = chargeReceiptPOManualMapper.query(auditRecordId, paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
         List<ChargeReceiptDTO> chargeReceiptDTOList = chargeReceiptPOList.stream().map(ChargeReceiptAdapter::po2Dto).collect(Collectors.toList());
-        chargeReceiptDTOList.stream().forEach(bean->{
+        chargeReceiptDTOList.stream().forEach(bean -> {
             bean.setChargeReceiptStatus(auditRecordDTO.getChargeReceiptStatus());
         });
         return chargeReceiptDTOList;
@@ -56,11 +56,11 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
     @Override
     public void delete(Integer id) {
         ChargeReceiptPO po = chargeReceiptPOMapper.selectByPrimaryKey(id);
-        if(po == null){
+        if (po == null) {
             throw new ChargeReceiptException(ChargeReceiptCodeEnum.CHARGE_RECEIPT_IS_NOT_EXIST);
         }
         AuditRecordDTO dto = auditRecordService.getById(po.getAuditRecordId());
-        if(CommonConstant.CHARGE_RECEIPT_COMPLETE.equals(dto.getChargeReceiptStatus())){
+        if (CommonConstant.CHARGE_RECEIPT_COMPLETE.equals(dto.getChargeReceiptStatus())) {
             throw new ChargeReceiptException(ChargeReceiptCodeEnum.CHARGE_RECEIPT_HAS_FINISHED);
         }
         po.setIsDeleted(CommonConstant.CODE_DELETED);
@@ -71,16 +71,16 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
     @Override
     public void save(ChargeReceiptSaveDTO dto) {
         AuditRecordDTO auditRecordDTO = auditRecordService.getById(dto.getAuditRecordId());
-        if(CommonConstant.CHARGE_RECEIPT_COMPLETE.equals(auditRecordDTO.getChargeReceiptStatus())){
+        if (CommonConstant.CHARGE_RECEIPT_COMPLETE.equals(auditRecordDTO.getChargeReceiptStatus())) {
             throw new ChargeReceiptException(ChargeReceiptCodeEnum.CHARGE_RECEIPT_HAS_FINISHED);
         }
-        ChargeReceiptPO po = null ;
+        ChargeReceiptPO po = null;
         Integer id = dto.getId();
-        if(0 == id){
+        if (0 == id) {
             po = new ChargeReceiptPO();
-        }else{
+        } else {
             po = chargeReceiptPOMapper.selectByPrimaryKey(id);
-            if(null == po){
+            if (null == po) {
                 throw new ChargeReceiptException(ChargeReceiptCodeEnum.CHARGE_RECEIPT_IS_NOT_EXIST);
             }
         }
@@ -98,9 +98,9 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
         po.setExtInfo(dto.getExtInfo());
         po.setTradeTime(dto.getTradeTime());
         po.setModTime(new Date());
-        if(0 == id){
+        if (0 == id) {
             chargeReceiptPOMapper.insertSelective(po);
-        }else{
+        } else {
             chargeReceiptPOMapper.updateByPrimaryKeySelective(po);
         }
     }
@@ -108,15 +108,15 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
     @Override
     public ChargeReceiptDTO getById(Integer id) {
         ChargeReceiptPO po = chargeReceiptPOMapper.selectByPrimaryKey(id);
-        if(null == po){
+        if (null == po) {
             throw new ChargeReceiptException(ChargeReceiptCodeEnum.CHARGE_RECEIPT_IS_NOT_EXIST);
         }
         return ChargeReceiptAdapter.po2Dto(po);
     }
 
     @Override
-    public List<ChargeReceiptDTO> getList(String customerMobile, Byte status,Byte chargeReceiptStatus) {
-        List<AuditRecordDTO> auditRecordDTOList = auditRecordService.getList(customerMobile,status,chargeReceiptStatus);
+    public List<ChargeReceiptDTO> getList(String customerMobile, String customerName, Byte status, Byte chargeReceiptStatus, String submitterName, Date submitStartTime, Date submitEndTime) {
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordService.getList(customerMobile, customerName, status, chargeReceiptStatus, submitterName, submitStartTime, submitEndTime);
         List<Integer> auditRecordIds = auditRecordDTOList.stream().map(AuditRecordDTO::getId).collect(Collectors.toList());
         List<ChargeReceiptPO> poList = chargeReceiptPOManualMapper.finByAuditRecordIds(auditRecordIds);
         return poList.stream().map(ChargeReceiptAdapter::po2Dto).collect(Collectors.toList());

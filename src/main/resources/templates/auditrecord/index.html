@@ -89,6 +89,14 @@
                                                style="height:30px"/>
                                     </div>
                                 </div>
+                                <label class="col-sm-1 control-label no-padding-right">客户姓名：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="searchCustomerName" name="customerName" class="form-control"
+                                               type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
                                 <label class="col-sm-1 control-label no-padding-right">状态：</label>
                                 <div class="col-sm-2">
                                     <select id="searchStatus" name="status" class="selectpicker show-tick form-control">
@@ -107,6 +115,43 @@
                                         <option value=0>未完成</option>
                                         <option value=1>已完成</option>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">提交人：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="searchSubmitterName" name="submitterName" class="form-control"
+                                               type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">提交时间起：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <div class="input-group">
+                                            <input class="form-control date-picker" id="searchSubmitStartTime"
+                                                   type="text" readonly/>
+                                            <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                            <input type="hidden" value=0 name="submitStartTime"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">提交时间止：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <div class="input-group">
+                                            <input class="form-control date-picker" id="searchSubmitEndTime"
+                                                   type="text" readonly/>
+                                            <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                            <input type="hidden" value=0 name="submitEndTime"/>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <button class="btn btn-white btn-default btn-round btn-sm"

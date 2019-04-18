@@ -4,6 +4,7 @@ import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptDTO;
 import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptSaveDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,11 +43,15 @@ public interface ChargeReceiptService {
     /**
      * 根据条件查询列表 不分页
      * @param customerMobile
+     * @param customerName
      * @param status
      * @param chargeReceiptStatus
+     * @param submitterName
+     * @param submitStartTime
+     * @param submitEndTime
      * @return
      */
-    List<ChargeReceiptDTO> getList(String customerMobile, Byte status,Byte chargeReceiptStatus);
+    List<ChargeReceiptDTO> getList(String customerMobile,String customerName, Byte status,Byte chargeReceiptStatus,String submitterName,Date submitStartTime,Date submitEndTime);
 
     /**
      * 通过消费记录id，查找小票集合

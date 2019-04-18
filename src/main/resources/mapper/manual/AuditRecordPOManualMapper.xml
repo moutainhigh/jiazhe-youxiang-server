@@ -16,6 +16,7 @@
         <result column="trade_time" property="tradeTime" jdbcType="TIMESTAMP" />
         <result column="card_no" property="cardNo" jdbcType="VARCHAR" />
         <result column="bank_outlets_name" property="bankOutletsName" jdbcType="VARCHAR" />
+        <result column="submit_time" property="submitTime" jdbcType="TIMESTAMP" />
         <result column="submitter_id" property="submitterId" jdbcType="INTEGER" />
         <result column="submitter_name" property="submitterName" jdbcType="VARCHAR" />
         <result column="status" property="status" jdbcType="TINYINT" />
@@ -35,7 +36,7 @@
 
     <sql id="Base_Column_List">
     id, point_ids, customer_name, customer_mobile, exchange_point, giving_point, giving_type,
-    audit_reason, remark, img_urls, pos_code, trade_time, card_no, bank_outlets_name,
+    audit_reason, remark, img_urls, pos_code, trade_time, card_no, bank_outlets_name,submit_time,
     submitter_id, submitter_name, status, audit_time, auditor_id, auditor_name, version,
     ext_info, is_deleted, add_time, mod_time, charge_receipt_status, point_codes, product_value,
     exchange_type
@@ -46,8 +47,14 @@
         <include refid="Base_Column_List"/>
         FROM audit_record
         <where>
+            <if test="submitterId != null">
+                AND submitter_id = #{submitterId}
+            </if>
             <if test="customerMobile != null and customerMobile!=''">
                 AND customer_mobile = #{customerMobile}
+            </if>
+            <if test="customerName != null and customerName!=''">
+                AND customer_name = #{customerName}
             </if>
             <if test="status != null">
                 AND status = #{status}
@@ -55,8 +62,14 @@
             <if test="chargeReceiptStatus != null">
                 AND charge_receipt_status = #{chargeReceiptStatus}
             </if>
-            <if test="submitterId != null">
-                AND submitter_id = #{submitterId}
+            <if test="submitterName != null and submitterName!=''">
+                AND submitter_name = #{submitterName}
+            </if>
+            <if test="submitStartTime != null">
+                AND submit_time &gt;= #{submitStartTime}
+            </if>
+            <if test="submitEndTime != null">
+                AND submit_time &lt;= #{submitEndTime}
             </if>
             AND is_deleted = 0 ORDER BY mod_time DESC
         </where>
@@ -68,8 +81,14 @@
     <select id="count" resultType="java.lang.Integer">
         select count(*) from audit_record
         <where>
+            <if test="submitterId != null">
+                AND submitter_id = #{submitterId}
+            </if>
             <if test="customerMobile != null and customerMobile!=''">
                 AND customer_mobile = #{customerMobile}
+            </if>
+            <if test="customerName != null and customerName!=''">
+                AND customer_name = #{customerName}
             </if>
             <if test="status != null">
                 AND status = #{status}
@@ -77,8 +96,14 @@
             <if test="chargeReceiptStatus != null">
                 AND charge_receipt_status = #{chargeReceiptStatus}
             </if>
-            <if test="submitterId != null">
-                AND submitter_id = #{submitterId}
+            <if test="submitterName != null and submitterName!=''">
+                AND submitter_name = #{submitterName}
+            </if>
+            <if test="submitStartTime != null">
+                AND submit_time &gt;= #{submitStartTime}
+            </if>
+            <if test="submitEndTime != null">
+                AND submit_time &lt;= #{submitEndTime}
             </if>
             AND is_deleted = 0
         </where>
