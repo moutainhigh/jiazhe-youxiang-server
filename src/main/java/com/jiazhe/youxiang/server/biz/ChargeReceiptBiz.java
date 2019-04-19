@@ -37,7 +37,7 @@ public class ChargeReceiptBiz {
         return chargeReceiptService.getById(id);
     }
 
-    public List<ChargeReceiptDTO> getList(String customerMobile, String customerName, Byte status, Byte chargeReceiptStatus, String submitterName, String pointCodes, Date submitStartTime, Date submitEndTime) {
-        return chargeReceiptService.getList(customerMobile, customerName, status, chargeReceiptStatus, submitterName, pointCodes, submitStartTime, submitEndTime);
+    public List<ChargeReceiptDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, Date submitStartTime, Date submitEndTime) {
+        return chargeReceiptService.getList(customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, submitStartTime, submitEndTime);
     }
 }

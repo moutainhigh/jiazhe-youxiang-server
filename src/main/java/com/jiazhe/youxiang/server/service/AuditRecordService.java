@@ -15,19 +15,19 @@ public interface AuditRecordService {
 
     /**
      * 根据条件查询 分页
+     *
      * @param submitterId
-     * @param customerMobile
-     * @param customerName
+     * @param customerInfo
+     * @param submitterName
      * @param status
      * @param chargeReceiptStatus
-     * @param submitterName
      * @param pointCodes
      * @param submitStartTime
      * @param submitEndTime
      * @param paging
      * @return
      */
-    List<AuditRecordDTO> getList(Integer submitterId, String customerMobile, String customerName, Byte status, Byte chargeReceiptStatus, String submitterName, String pointCodes,Date submitStartTime, Date submitEndTime, Paging paging);
+    List<AuditRecordDTO> getList(Integer submitterId, String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, Date submitStartTime, Date submitEndTime, Paging paging);
 
     /**
      * 根据id获取详细记录
@@ -87,8 +87,9 @@ public interface AuditRecordService {
 
     /**
      * 根据条件查询 不分页
-     * @param customerMobile
-     * @param customerName
+     *
+     * @param customerInfo
+     * @param submitterName
      * @param status
      * @param chargeReceiptStatus
      * @param submitterName
@@ -97,5 +98,5 @@ public interface AuditRecordService {
      * @param submitEndTime
      * @return
      */
-    List<AuditRecordDTO> getList(String customerMobile, String customerName, Byte status, Byte chargeReceiptStatus, String submitterName, String pointCodes,Date submitStartTime, Date submitEndTime);
+    List<AuditRecordDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, Date submitStartTime, Date submitEndTime);
 }

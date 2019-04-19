@@ -15,8 +15,8 @@ public interface AuditRecordPOManualMapper {
     /**
      *
      * @param submitterId
-     * @param customerMobile
-     * @param customerName
+     * @param customerInfo
+     * @param submitterName
      * @param status
      * @param chargeReceiptStatus
      * @param submitterName
@@ -27,11 +27,10 @@ public interface AuditRecordPOManualMapper {
      */
     Integer count(
             @Param("submitterId") Integer submitterId,
-            @Param("customerMobile") String customerMobile,
-            @Param("customerName") String customerName,
+            @Param("customerInfo") String customerInfo,
+            @Param("submitterName") String submitterName,
             @Param("status") Byte status,
             @Param("chargeReceiptStatus") Byte chargeReceiptStatus,
-            @Param("submitterName") String submitterName,
             @Param("pointCodes") String pointCodes,
             @Param("submitStartTime") Date submitStartTime,
             @Param("submitEndTime") Date submitEndTime
@@ -40,11 +39,10 @@ public interface AuditRecordPOManualMapper {
     /**
      *
      * @param submitterId
-     * @param customerMobile
-     * @param customerName
+     * @param customerInfo
+     * @param submitterName
      * @param status
      * @param chargeReceiptStatus
-     * @param submitterName
      * @param pointCodes
      * @param submitStartTime
      * @param submitEndTime
@@ -54,11 +52,10 @@ public interface AuditRecordPOManualMapper {
      */
     List<AuditRecordPO> query(
             @Param("submitterId") Integer submitterId,
-            @Param("customerMobile") String customerMobile,
-            @Param("customerName") String customerName,
+            @Param("customerInfo") String customerInfo,
+            @Param("submitterName") String submitterName,
             @Param("status") Byte status,
             @Param("chargeReceiptStatus") Byte chargeReceiptStatus,
-            @Param("submitterName") String submitterName,
             @Param("pointCodes") String pointCodes,
             @Param("submitStartTime") Date submitStartTime,
             @Param("submitEndTime") Date submitEndTime,

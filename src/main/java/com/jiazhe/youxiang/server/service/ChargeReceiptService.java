@@ -47,8 +47,8 @@ public interface ChargeReceiptService {
     /**
      * 根据条件查询列表 不分页
      *
-     * @param customerMobile
-     * @param customerName
+     * @param customerInfo
+     * @param submitterName
      * @param status
      * @param chargeReceiptStatus
      * @param submitterName
@@ -56,7 +56,7 @@ public interface ChargeReceiptService {
      * @param submitEndTime
      * @return
      */
-    List<ChargeReceiptDTO> getList(String customerMobile, String customerName, Byte status, Byte chargeReceiptStatus, String submitterName, String pointCodes, Date submitStartTime, Date submitEndTime);
+    List<ChargeReceiptDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, Date submitStartTime, Date submitEndTime);
 
     /**
      * 通过消费记录id，查找小票集合
