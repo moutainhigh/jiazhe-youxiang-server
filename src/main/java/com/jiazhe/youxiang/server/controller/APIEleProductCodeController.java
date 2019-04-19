@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.ExcelUtils;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.base.util.UploadUtil;
 import com.jiazhe.youxiang.server.adapter.EleProductCodeAdapter;
@@ -89,7 +90,7 @@ public class APIEleProductCodeController extends BaseController {
         String url = UploadUtil.uploadFile2Server(file, excelpath);
         UploadExcelResp result = new UploadExcelResp();
         result.setUrl(url);
-        Sheet sheet = eleProductCodeBiz.excel2Sheet(excelpath + "/" + url);
+        Sheet sheet = ExcelUtils.excel2Sheet(excelpath + "/" + url);
         Integer count = 0;
         try {
             for (Row row : sheet) {

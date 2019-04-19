@@ -64,4 +64,5 @@ public class UserLoginReq extends BaseVO {
     public void setRememberMe(String rememberMe) {
         this.rememberMe = rememberMe;
     }
+
 }

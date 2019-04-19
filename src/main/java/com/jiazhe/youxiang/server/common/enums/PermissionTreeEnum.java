@@ -277,7 +277,8 @@ public enum PermissionTreeEnum {
     CITY_MANAGEMENT(707, 7, "城市管理", PermissionConstant.CITY_MANAGEMENT),
     //日志管理
     LOG_MANAGEMENT(708, 7, "日志管理", PermissionConstant.LOG_MANAGEMENT),
-    //商家订单管理
+
+    /***************商家订单管理**************************/
     PARTNER_ORDER_MANAGEMENT(8, 0, "商家订单管理", PermissionConstant.PARTNER_ORDER_MANAGEMENT),
     //商家订单查询
     PARTNER_ORDER_SEARCH(801, 8, "商家订单查询", PermissionConstant.PARTNER_ORDER_SEARCH),
@@ -293,6 +294,17 @@ public enum PermissionTreeEnum {
     ADVANCE_PAY_MANAGEMENT(806, 8, "预支付记录查看", PermissionConstant.ADVANCE_PAY_MANAGEMENT),
     //预支付记录添加
     ADVANCE_PAY_ADD(807, 8, "预支付记录添加", PermissionConstant.ADVANCE_PAY_ADD),
+
+    /****************短信管理********************/
+    MESSAGE_MANAGEMENT(9, 0, "短信管理", PermissionConstant.MESSAGE_MANAGEMENT),
+    //短信单条发送
+    MESSAGE_SINGLE_SEND(901,9, "单条发送", PermissionConstant.MESSAGE_SINGLE_SEND),
+    //短信多条发送
+    MESSAGE_BATCH_SEND(902,9,"批量发送",PermissionConstant.MESSAGE_BATCH_SEND),
+    //短信重新发送（包括重试和重新发送）
+    MESSAGE_RESEND(903, 9, "短信重新发送", PermissionConstant.MESSAGE_RESEND),
+    //短信展示
+    MESSAGE_SHOW(904,9,"查看短信",PermissionConstant.MESSAGE_SHOW),
 
     ;
 
