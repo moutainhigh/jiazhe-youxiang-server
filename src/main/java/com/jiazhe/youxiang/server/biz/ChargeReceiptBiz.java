@@ -7,6 +7,7 @@ import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,7 +37,7 @@ public class ChargeReceiptBiz {
         return chargeReceiptService.getById(id);
     }
 
-    public List<ChargeReceiptDTO> getList(String customerMobile, Byte status,Byte chargeReceiptStatus) {
-        return chargeReceiptService.getList(customerMobile,status,chargeReceiptStatus);
+    public List<ChargeReceiptDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, Date submitStartTime, Date submitEndTime) {
+        return chargeReceiptService.getList(customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, submitStartTime, submitEndTime);
     }
 }

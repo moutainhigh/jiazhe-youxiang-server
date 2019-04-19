@@ -81,10 +81,18 @@
                     <div class="col-xs-12" style="padding-top:40px">
                         <form id="auditRecordSearchForm" class="form-horizontal" role="form">
                             <div class="form-group">
-                                <label class="col-sm-1 control-label no-padding-right">客户电话：</label>
+                                <label class="col-sm-1 control-label no-padding-right">客户信息：</label>
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
-                                        <input id="searchCustomerMobile" name="customerMobile" class="form-control"
+                                        <input id="searchCustomerInfo" name="customerInfo" class="form-control"
+                                               type="text" placeholder="客户姓名或电话，模糊查询"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">提交人姓名：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="searchSubmitterName" name="submitterName" class="form-control"
                                                type="text"
                                                style="height:30px"/>
                                     </div>
@@ -107,6 +115,43 @@
                                         <option value=0>未完成</option>
                                         <option value=1>已完成</option>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">卡号：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="searchPointCodes" name="pointCodes" class="form-control"
+                                               type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">提交时间起：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <div class="input-group">
+                                            <input class="form-control date-picker" id="searchSubmitStartTime"
+                                                   type="text" readonly/>
+                                            <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                            <input type="hidden" value=0 name="submitStartTime"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">提交时间止：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <div class="input-group">
+                                            <input class="form-control date-picker" id="searchSubmitEndTime"
+                                                   type="text" readonly/>
+                                            <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                            <input type="hidden" value=0 name="submitEndTime"/>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <button class="btn btn-white btn-default btn-round btn-sm"
@@ -351,7 +396,8 @@
                                     <button id="rotateBtn" onclick="rotatePicture()" type="button" class="close"
                                             aria-hidden="true" title="顺时针旋转90度">旋转
                                     </button>
-                                    <span id="customerMobileShow" style="color:white;font-size:28px;position:fixed"></span>
+                                    <span id="customerMobileShow"
+                                          style="color:white;font-size:28px;position:fixed"></span>
                                 </div>
                                 <div class="modal-body"
                                      style="padding:0px 20px 0px 20px;text-align: center;background-color: rgba(64,64,64,0.5)">
@@ -447,7 +493,7 @@
                     index: 'customerMobile',
                     width: 80, sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return hasExchangeType(rowObject.exchangeType, '1') ? rowObject.customerMobile : "--";
+                        return rowObject.customerMobile;
                     }
                 },
                 {
@@ -474,7 +520,7 @@
                     width: 60,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return hasExchangeType(rowObject.exchangeType, '3') ? rowObject.productValue : "--";
+                        return hasExchangeType(rowObject.exchangeType, '3') ? generateProductValue(rowObject.productValue, rowObject.exchangePoint) : "--";
                     }
                 },
                 {
@@ -521,6 +567,26 @@
     //    function exchangeTypeFormatter(cellvalue, options, rowObject) {
     //        return getExchangeTypeText(rowObject.exchangeType);
     //    }
+
+    /**
+     * 计算商品价值和积分的比值
+     * @param productValue
+     * @param exchangePoint
+     * @returns {string}
+     */
+    function generateProductValue(productValue, exchangePoint) {
+        if (exchangePoint > 0) {
+            var rate = productValue / exchangePoint;
+            if (rate > 2.5) {
+                return generateSpan(productValue + '(' + rate.toFixed(2) + ')', 'FF0000');
+            } else {
+                return productValue + '(' + rate.toFixed(2) + ')';
+            }
+        } else {
+            return generateSpan(productValue + '(错误)', 'FF0000');
+        }
+
+    }
 
     function getExchangeTypeText(type) {
         var exchangeType = type.toString().split('');

@@ -66,6 +66,7 @@ public class AuditRecordAdapter {
         auditRecordDTO.setBankOutletsName(auditRecordPO.getBankOutletsName());
         auditRecordDTO.setTradeTime(auditRecordPO.getTradeTime());
         auditRecordDTO.setImgUrls(auditRecordPO.getImgUrls());
+        auditRecordDTO.setSubmitTime(auditRecordPO.getSubmitTime());
         auditRecordDTO.setSubmitterId(auditRecordPO.getSubmitterId());
         auditRecordDTO.setSubmitterName(auditRecordPO.getSubmitterName());
         auditRecordDTO.setStatus(auditRecordPO.getStatus());
@@ -101,6 +102,7 @@ public class AuditRecordAdapter {
         auditRecordPO.setCardNo(auditRecordDTO.getCardNo());
         auditRecordPO.setBankOutletsName(auditRecordDTO.getBankOutletsName());
         auditRecordPO.setTradeTime(auditRecordDTO.getTradeTime());
+        auditRecordPO.setSubmitTime(auditRecordDTO.getSubmitTime());
         auditRecordPO.setSubmitterId(auditRecordDTO.getSubmitterId());
         auditRecordPO.setSubmitterName(auditRecordDTO.getSubmitterName());
         auditRecordPO.setStatus(auditRecordDTO.getStatus());

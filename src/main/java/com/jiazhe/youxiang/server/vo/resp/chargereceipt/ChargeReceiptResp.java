@@ -29,6 +29,8 @@ public class ChargeReceiptResp extends BaseVO {
 
     private String inputerName;
 
+    private String imgUrl;
+
     private String extInfo;
 
     private Byte isDeleted;
@@ -149,5 +151,13 @@ public class ChargeReceiptResp extends BaseVO {
 
     public void setChargeReceiptStatus(Byte chargeReceiptStatus) {
         this.chargeReceiptStatus = chargeReceiptStatus;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }

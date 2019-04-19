@@ -25,7 +25,7 @@ public class OrderInfoPageReq extends PageSizeNumReq {
     @ApiModelProperty("收货手机号")
     private String customerMobile;
 
-    @ApiModelProperty("下单期间起")
+    @ApiModelProperty("下单时间起")
     private Long orderStartTime;
 
     @ApiModelProperty("下单时间止")

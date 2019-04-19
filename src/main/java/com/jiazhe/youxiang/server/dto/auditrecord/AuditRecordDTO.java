@@ -56,6 +56,8 @@ public class AuditRecordDTO extends BaseObject {
 
     private Date auditTime;
 
+    private Date submitTime;
+
     private Integer auditorId;
 
     private String auditorName;
@@ -282,5 +284,13 @@ public class AuditRecordDTO extends BaseObject {
 
     public void setGivingPoint(BigDecimal givingPoint) {
         this.givingPoint = givingPoint;
+    }
+
+    public Date getSubmitTime() {
+        return submitTime;
+    }
+
+    public void setSubmitTime(Date submitTime) {
+        this.submitTime = submitTime;
     }
 }

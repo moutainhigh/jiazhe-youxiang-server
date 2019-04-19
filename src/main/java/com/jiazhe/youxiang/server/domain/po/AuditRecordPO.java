@@ -63,6 +63,8 @@ public class AuditRecordPO implements Serializable {
 
     private Byte exchangeType;
 
+    private Date submitTime;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -295,5 +297,13 @@ public class AuditRecordPO implements Serializable {
 
     public void setExchangeType(Byte exchangeType) {
         this.exchangeType = exchangeType;
+    }
+
+    public Date getSubmitTime() {
+        return submitTime;
+    }
+
+    public void setSubmitTime(Date submitTime) {
+        this.submitTime = submitTime;
     }
 }
