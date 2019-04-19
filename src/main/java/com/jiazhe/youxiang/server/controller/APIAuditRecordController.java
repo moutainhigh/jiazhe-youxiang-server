@@ -162,8 +162,8 @@ public class APIAuditRecordController extends BaseController {
             if (CommonConstant.CODE_DELETED.equals(auditRecordDTO.getIsDeleted())) {
                 throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_IS_NOT_EXIST);
             }
-            if (CommonConstant.AUDIT_RECORD_PASS.equals(auditRecordDTO.getStatus())) {
-                throw new AuditRecordException(AuditRecordCodeEnum.RECORD_HASS_PASSED);
+            if (CommonConstant.AUDIT_RECORD_PASS.equals(auditRecordDTO.getStatus()) || CommonConstant.AUDIT_RECORD_HAS_SUBMITTED.equals(auditRecordDTO.getStatus())) {
+                throw new AuditRecordException(AuditRecordCodeEnum.RECORD_CNANOT_CHANGE);
             }
             if (!auditRecordDTO.getVersion().equals(req.getVersion())) {
                 throw new AuditRecordException(AuditRecordCodeEnum.VERSION_IS_CHANGED);
