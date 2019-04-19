@@ -1,13 +1,16 @@
 package com.jiazhe.youxiang.server.controller;
 
-import com.aliyuncs.exceptions.ClientException;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.realm.AuthToken;
 import com.jiazhe.youxiang.base.realm.UserRealm;
-import com.jiazhe.youxiang.base.util.*;
+import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.CookieUtil;
+import com.jiazhe.youxiang.base.util.EncryptPasswordUtil;
+import com.jiazhe.youxiang.base.util.IpAdrressUtil;
+import com.jiazhe.youxiang.base.util.MsgUtils;
+import com.jiazhe.youxiang.base.util.RandomUtil;
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.biz.SysUserBiz;
-import com.jiazhe.youxiang.server.biz.message.MessageBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
@@ -151,7 +154,7 @@ public class APISignInController extends BaseController {
     @ApiOperation(value = "根据登陆名，发送验证码", httpMethod = "GET", response = SendVerificationCodeResp.class, notes = "根据登陆名，发送验证码")
     @RequestMapping(value = "/usersendcode")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "根据登陆名，发送验证码", level = LogLevelEnum.LEVEL_2)
-    public Object userSendCode(@ModelAttribute SendMsgToUserReq req) throws ClientException {
+    public Object userSendCode(@ModelAttribute SendMsgToUserReq req) {
         List<SysUserDTO> sysUserDTOList = sysUserBiz.findByLoginName(req.getLoginname());
         if (sysUserDTOList.size() != 1) {
             throw new LoginException(LoginCodeEnum.LOGIN_USER_ILLEGAL);
@@ -167,7 +170,7 @@ public class APISignInController extends BaseController {
     @ApiOperation(value = "客户登录", httpMethod = "GET", response = CustomerLoginResp.class, notes = "客户登录")
     @RequestMapping(value = "/customersignin")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "客户登录", level = LogLevelEnum.LEVEL_2)
-    public Object customerSignIn(@ModelAttribute CustomerLoginReq req, HttpServletResponse response) throws IOException {
+    public Object customerSignIn(@ModelAttribute CustomerLoginReq req, HttpServletResponse response) {
         String mobile = req.getMobile();
         String identifyingCode = req.getIdentifyingCode();
         CommonValidator.validateNull(req.getMobile(), new LoginException(LoginCodeEnum.LOGIN_LOGININFO_INCOMPLETE));
@@ -219,7 +222,7 @@ public class APISignInController extends BaseController {
     @ApiOperation(value = "根据电话号码，发送验证码", httpMethod = "GET", notes = "根据电话号码，发送验证码")
     @RequestMapping(value = "/customersendcode")
     @CustomLog(moduleName = ModuleEnum.REGISTER, operate = "根据电话号码，发送验证码", level = LogLevelEnum.LEVEL_2)
-    public Object customerSendCode(@ModelAttribute SendMsgToCustomerReq req) throws ClientException {
+    public Object customerSendCode(@ModelAttribute SendMsgToCustomerReq req) {
         CommonValidator.validateMobile(req.getMobile(), new LoginException(LoginCodeEnum.LOGIN_MOBILE_ILLEGAL));
         String code = RandomUtil.generateVerifyCode(CommonConstant.VER_CODE_LENGTH);
         SendVerificationCodeResp sendMsgResp = MsgUtils.sendVerificationCodeMsg(req.getMobile(), code);

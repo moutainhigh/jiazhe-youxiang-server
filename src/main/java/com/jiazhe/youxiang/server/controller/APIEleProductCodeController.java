@@ -40,7 +40,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -86,7 +85,7 @@ public class APIEleProductCodeController extends BaseController {
     @ApiOperation(value = "【后台】上传电子码excel并校验", httpMethod = "POST", response = UploadExcelResp.class, notes = "上传电子码excel并校验")
     @RequestMapping(value = "uploadexcel", method = RequestMethod.POST, headers = ("content-type=multipart/*"), consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @CustomLog(moduleName = ModuleEnum.ELE_PRODUCT, operate = "上传电子码excel并校验", level = LogLevelEnum.LEVEL_2)
-    public Object uploadExcel(@RequestParam("file") MultipartFile file) throws IOException {
+    public Object uploadExcel(@RequestParam("file") MultipartFile file) {
         String url = UploadUtil.uploadFile2Server(file, excelpath);
         UploadExcelResp result = new UploadExcelResp();
         result.setUrl(url);
@@ -110,7 +109,7 @@ public class APIEleProductCodeController extends BaseController {
     @ApiOperation(value = "【后台】导入电子码", httpMethod = "POST", notes = "导入电子码")
     @RequestMapping(value = "/importcode", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ELE_PRODUCT, operate = "导入电子码", level = LogLevelEnum.LEVEL_2)
-    public Object importCode(@ModelAttribute ImportCodeReq req) throws IOException {
+    public Object importCode(@ModelAttribute ImportCodeReq req){
         CommonValidator.validateNull(req.getProductId(), new EleProductCodeException(EleProductCodeEnum.PRODUCT_IS_NULL));
         CommonValidator.validateNull(req.getBatchName(), new EleProductCodeException(EleProductCodeEnum.BATCH_NAME_IS_NULL));
         if (req.getExpiryTime() == CommonConstant.NULL_TIME) {
