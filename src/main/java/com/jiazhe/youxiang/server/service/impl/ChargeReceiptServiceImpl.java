@@ -115,8 +115,8 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
     }
 
     @Override
-    public List<ChargeReceiptDTO> getList(String customerMobile, String customerName, Byte status, Byte chargeReceiptStatus, String submitterName, Date submitStartTime, Date submitEndTime) {
-        List<AuditRecordDTO> auditRecordDTOList = auditRecordService.getList(customerMobile, customerName, status, chargeReceiptStatus, submitterName, submitStartTime, submitEndTime);
+    public List<ChargeReceiptDTO> getList(String customerMobile, String customerName, Byte status, Byte chargeReceiptStatus, String submitterName, String pointCodes, Date submitStartTime, Date submitEndTime) {
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordService.getList(customerMobile, customerName, status, chargeReceiptStatus, submitterName, pointCodes, submitStartTime, submitEndTime);
         List<Integer> auditRecordIds = auditRecordDTOList.stream().map(AuditRecordDTO::getId).collect(Collectors.toList());
         List<ChargeReceiptPO> poList = chargeReceiptPOManualMapper.finByAuditRecordIds(auditRecordIds);
         return poList.stream().map(ChargeReceiptAdapter::po2Dto).collect(Collectors.toList());

@@ -102,6 +102,7 @@ public class AuditRecordAdapter {
         auditRecordPO.setCardNo(auditRecordDTO.getCardNo());
         auditRecordPO.setBankOutletsName(auditRecordDTO.getBankOutletsName());
         auditRecordPO.setTradeTime(auditRecordDTO.getTradeTime());
+        auditRecordPO.setSubmitTime(auditRecordDTO.getSubmitTime());
         auditRecordPO.setSubmitterId(auditRecordDTO.getSubmitterId());
         auditRecordPO.setSubmitterName(auditRecordDTO.getSubmitterName());
         auditRecordPO.setStatus(auditRecordDTO.getStatus());

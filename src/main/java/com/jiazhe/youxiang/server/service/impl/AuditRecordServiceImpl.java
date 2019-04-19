@@ -69,9 +69,9 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     private ChargeReceiptService chargeReceiptService;
 
     @Override
-    public List<AuditRecordDTO> getList(Integer submitterId, String customerMobile, String customerName, Byte status, Byte chargeReceiptStatus, String submitterName, Date submitStartTime, Date submitEndTime, Paging paging) {
-        Integer count = auditRecordPOManualMapper.count(submitterId, customerMobile, customerName, status, chargeReceiptStatus, submitterName, submitStartTime, submitEndTime);
-        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(submitterId, customerMobile, customerName, status, chargeReceiptStatus, submitterName, submitStartTime, submitEndTime, paging.getOffset(), paging.getLimit());
+    public List<AuditRecordDTO> getList(Integer submitterId, String customerMobile, String customerName, Byte status, Byte chargeReceiptStatus, String submitterName, String pointCodes, Date submitStartTime, Date submitEndTime, Paging paging) {
+        Integer count = auditRecordPOManualMapper.count(submitterId, customerMobile, customerName, status, chargeReceiptStatus, submitterName, pointCodes, submitStartTime, submitEndTime);
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(submitterId, customerMobile, customerName, status, chargeReceiptStatus, submitterName, pointCodes, submitStartTime, submitEndTime, paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
         return auditRecordPOList.stream().map(AuditRecordAdapter::PO2DTO).collect(Collectors.toList());
     }
@@ -84,7 +84,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
 
     @Override
     public Integer getCountByStatus(Byte status) {
-        return auditRecordPOManualMapper.count(null, null, null, status, null, null, null, null);
+        return auditRecordPOManualMapper.count(null, null, null, status, null, null, null, null, null);
     }
 
     @Override
@@ -103,6 +103,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         auditRecordPO.setAuditTime(new Date());
         auditRecordPO.setStatus(CommonConstant.AUDIT_RECORD_REJECT);
         auditRecordPO.setAuditReason(reason);
+        auditRecordPO.setModTime(new Date());
         auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
     }
 
@@ -206,6 +207,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         auditRecordPO.setAuditorName(sysUserDTO.getDisplayName());
         auditRecordPO.setAuditTime(new Date());
         auditRecordPO.setStatus(CommonConstant.AUDIT_RECORD_PASS);
+        auditRecordPO.setModTime(new Date());
         auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
     }
 
@@ -218,13 +220,13 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         }
         auditRecordPO.setSubmitterId(sysUserDTO.getId());
         auditRecordPO.setSubmitterName(sysUserDTO.getDisplayName());
+        auditRecordPO.setModTime(new Date());
         if (auditRecordDTO.getId().equals(0)) {
             auditRecordPO.setAuditorId(0);
             auditRecordPOMapper.insertSelective(auditRecordPO);
         } else {
             auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
         }
-
     }
 
     @Override
@@ -237,6 +239,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
             throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_CANNOT_DELETE);
         }
         po.setIsDeleted(CommonConstant.CODE_DELETED);
+        po.setModTime(new Date());
         auditRecordPOMapper.updateByPrimaryKeySelective(po);
     }
 
@@ -261,12 +264,13 @@ public class AuditRecordServiceImpl implements AuditRecordService {
             }
         }
         po.setChargeReceiptStatus(status);
+        po.setModTime(new Date());
         auditRecordPOMapper.updateByPrimaryKeySelective(po);
     }
 
     @Override
-    public List<AuditRecordDTO> getList(String customerMobile, String customerName, Byte status, Byte chargeReceiptStatus, String submitterName, Date submitStartTime, Date submitEndTime) {
-        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(null, customerMobile, customerName, status, chargeReceiptStatus, submitterName, submitStartTime, submitEndTime, null, null);
+    public List<AuditRecordDTO> getList(String customerMobile, String customerName, Byte status, Byte chargeReceiptStatus, String submitterName, String pointCodes, Date submitStartTime, Date submitEndTime) {
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(null, customerMobile, customerName, status, chargeReceiptStatus, submitterName, pointCodes, submitStartTime, submitEndTime, null, null);
         return auditRecordPOList.stream().map(AuditRecordAdapter::PO2DTO).collect(Collectors.toList());
     }
 }

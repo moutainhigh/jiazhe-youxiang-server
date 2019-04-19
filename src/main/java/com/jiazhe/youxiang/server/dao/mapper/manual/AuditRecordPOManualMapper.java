@@ -13,11 +13,16 @@ import java.util.List;
  */
 public interface AuditRecordPOManualMapper {
     /**
-     * 计数
      *
-     * @param customerMobile
      * @param submitterId
+     * @param customerMobile
+     * @param customerName
      * @param status
+     * @param chargeReceiptStatus
+     * @param submitterName
+     * @param pointCodes
+     * @param submitStartTime
+     * @param submitEndTime
      * @return
      */
     Integer count(
@@ -27,15 +32,22 @@ public interface AuditRecordPOManualMapper {
             @Param("status") Byte status,
             @Param("chargeReceiptStatus") Byte chargeReceiptStatus,
             @Param("submitterName") String submitterName,
+            @Param("pointCodes") String pointCodes,
             @Param("submitStartTime") Date submitStartTime,
             @Param("submitEndTime") Date submitEndTime
     );
 
     /**
-     * 分页查询
      *
+     * @param submitterId
      * @param customerMobile
+     * @param customerName
      * @param status
+     * @param chargeReceiptStatus
+     * @param submitterName
+     * @param pointCodes
+     * @param submitStartTime
+     * @param submitEndTime
      * @param offset
      * @param limit
      * @return
@@ -47,6 +59,7 @@ public interface AuditRecordPOManualMapper {
             @Param("status") Byte status,
             @Param("chargeReceiptStatus") Byte chargeReceiptStatus,
             @Param("submitterName") String submitterName,
+            @Param("pointCodes") String pointCodes,
             @Param("submitStartTime") Date submitStartTime,
             @Param("submitEndTime") Date submitEndTime,
             @Param("offset") Integer offset,

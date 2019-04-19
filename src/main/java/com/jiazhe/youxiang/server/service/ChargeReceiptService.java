@@ -15,6 +15,7 @@ import java.util.List;
 public interface ChargeReceiptService {
     /**
      * 根据充值记录id，获取充值凭证列表
+     *
      * @param auditRecordId
      * @param paging
      * @return
@@ -23,18 +24,21 @@ public interface ChargeReceiptService {
 
     /**
      * 删除消费凭证
+     *
      * @param id
      */
     void delete(Integer id);
 
     /**
      * 保存消费凭证
+     *
      * @param dto
      */
     void save(ChargeReceiptSaveDTO dto);
 
     /**
      * 获取详情
+     *
      * @param id
      * @return
      */
@@ -42,6 +46,7 @@ public interface ChargeReceiptService {
 
     /**
      * 根据条件查询列表 不分页
+     *
      * @param customerMobile
      * @param customerName
      * @param status
@@ -51,10 +56,11 @@ public interface ChargeReceiptService {
      * @param submitEndTime
      * @return
      */
-    List<ChargeReceiptDTO> getList(String customerMobile,String customerName, Byte status,Byte chargeReceiptStatus,String submitterName,Date submitStartTime,Date submitEndTime);
+    List<ChargeReceiptDTO> getList(String customerMobile, String customerName, Byte status, Byte chargeReceiptStatus, String submitterName, String pointCodes, Date submitStartTime, Date submitEndTime);
 
     /**
      * 通过消费记录id，查找小票集合
+     *
      * @param auditRecordId
      * @return
      */

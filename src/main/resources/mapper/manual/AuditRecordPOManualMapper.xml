@@ -51,10 +51,10 @@
                 AND submitter_id = #{submitterId}
             </if>
             <if test="customerMobile != null and customerMobile!=''">
-                AND customer_mobile = #{customerMobile}
+                AND customer_mobile LIKE CONCAT('%',#{customerMobile},'%')
             </if>
             <if test="customerName != null and customerName!=''">
-                AND customer_name = #{customerName}
+                AND customer_name LIKE CONCAT('%',#{customerName},'%')
             </if>
             <if test="status != null">
                 AND status = #{status}
@@ -63,7 +63,10 @@
                 AND charge_receipt_status = #{chargeReceiptStatus}
             </if>
             <if test="submitterName != null and submitterName!=''">
-                AND submitter_name = #{submitterName}
+                AND submitter_name LIKE CONCAT('%',#{submitterName},'%')
+            </if>
+            <if test="pointCodes != null and pointCodes!=''">
+                AND point_codes LIKE CONCAT('%',#{pointCodes},'%')
             </if>
             <if test="submitStartTime != null">
                 AND submit_time &gt;= #{submitStartTime}
@@ -85,10 +88,10 @@
                 AND submitter_id = #{submitterId}
             </if>
             <if test="customerMobile != null and customerMobile!=''">
-                AND customer_mobile = #{customerMobile}
+                AND customer_mobile LIKE CONCAT('%',#{customerMobile},'%')
             </if>
             <if test="customerName != null and customerName!=''">
-                AND customer_name = #{customerName}
+                AND customer_name LIKE CONCAT('%',#{customerName},'%')
             </if>
             <if test="status != null">
                 AND status = #{status}
@@ -97,7 +100,10 @@
                 AND charge_receipt_status = #{chargeReceiptStatus}
             </if>
             <if test="submitterName != null and submitterName!=''">
-                AND submitter_name = #{submitterName}
+                AND submitter_name LIKE CONCAT('%',#{submitterName},'%')
+            </if>
+            <if test="pointCodes != null and pointCodes!=''">
+                AND point_codes LIKE CONCAT('%',#{pointCodes},'%')
             </if>
             <if test="submitStartTime != null">
                 AND submit_time &gt;= #{submitStartTime}

@@ -105,7 +105,7 @@ public class APIAuditRecordController extends BaseController {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
         Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
-        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getCustomerMobile(), req.getCustomerName(), req.getStatus(), req.getChargeReceiptStatus(), req.getSubmitterName(), submitStartTime, submitEndTime, paging);
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getCustomerMobile(), req.getCustomerName(), req.getStatus(), req.getChargeReceiptStatus(), req.getSubmitterName(), req.getPointCodes(), submitStartTime, submitEndTime, paging);
         List<AuditRecordResp> auditRecordRespList = auditRecordDTOList.stream().map(AuditRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(auditRecordRespList, paging);
     }
@@ -171,6 +171,7 @@ public class APIAuditRecordController extends BaseController {
             auditRecordDTO.setVersion(auditRecordDTO.getVersion() + 1);
             auditRecordDTO.setModTime(new Date(System.currentTimeMillis()));
         }
+        auditRecordDTO.setSubmitTime(new Date());
         auditRecordDTO.setStatus(req.getStatus());
         auditRecordDTO.setBankOutletsName(req.getBankOutletsName());
         auditRecordDTO.setExchangeType(req.getExchangeType());
@@ -220,7 +221,7 @@ public class APIAuditRecordController extends BaseController {
     public void export(@ModelAttribute AuditRecordPageReq req, HttpServletResponse response) {
         Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
         Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
-        List<ChargeReceiptDTO> dtoList = chargeReceiptBiz.getList(req.getCustomerMobile(), req.getCustomerName(), req.getStatus(), req.getChargeReceiptStatus(), req.getSubmitterName(), submitStartTime, submitEndTime);
+        List<ChargeReceiptDTO> dtoList = chargeReceiptBiz.getList(req.getCustomerMobile(), req.getCustomerName(), req.getStatus(), req.getChargeReceiptStatus(), req.getSubmitterName(), req.getPointCodes(), submitStartTime, submitEndTime);
         ExportExcelUtils.exportChargeReceipt(response, dtoList);
     }
 }

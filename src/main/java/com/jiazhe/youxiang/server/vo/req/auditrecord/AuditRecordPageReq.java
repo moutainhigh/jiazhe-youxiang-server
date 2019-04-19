@@ -25,6 +25,9 @@ public class AuditRecordPageReq extends PageSizeNumReq {
     @ApiModelProperty("提交人")
     private String submitterName;
 
+    @ApiModelProperty("卡号")
+    private String pointCodes;
+
     @ApiModelProperty("提交时间起")
     private Long submitStartTime;
 
@@ -85,5 +88,13 @@ public class AuditRecordPageReq extends PageSizeNumReq {
 
     public void setSubmitEndTime(Long submitEndTime) {
         this.submitEndTime = submitEndTime;
+    }
+
+    public String getPointCodes() {
+        return pointCodes;
+    }
+
+    public void setPointCodes(String pointCodes) {
+        this.pointCodes = pointCodes;
     }
 }
