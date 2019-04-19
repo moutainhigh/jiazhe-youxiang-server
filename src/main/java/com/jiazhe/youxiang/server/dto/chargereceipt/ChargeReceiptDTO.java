@@ -40,6 +40,8 @@ public class ChargeReceiptDTO extends BaseObject {
 
     private Byte chargeReceiptStatus;
 
+    private String imgUrl;
+
     public Integer getId() {
         return id;
     }
@@ -150,5 +152,13 @@ public class ChargeReceiptDTO extends BaseObject {
 
     public void setChargeReceiptStatus(Byte chargeReceiptStatus) {
         this.chargeReceiptStatus = chargeReceiptStatus;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }

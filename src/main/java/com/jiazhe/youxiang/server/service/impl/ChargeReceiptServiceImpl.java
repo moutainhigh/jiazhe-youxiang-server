@@ -95,7 +95,7 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
         po.setCustomerName(dto.getCustomerName());
         po.setPosCode(dto.getPosCode());
         po.setCardNo(dto.getCardNo());
-        po.setExtInfo(dto.getExtInfo());
+        po.setImgUrl(dto.getImgUrl());
         po.setTradeTime(dto.getTradeTime());
         po.setModTime(new Date());
         if (0 == id) {
