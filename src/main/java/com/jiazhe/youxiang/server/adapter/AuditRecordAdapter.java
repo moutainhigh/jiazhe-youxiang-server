@@ -20,6 +20,7 @@ public class AuditRecordAdapter {
         auditRecordResp.setCustomerName(auditRecordDTO.getCustomerName());
         auditRecordResp.setCustomerMobile(auditRecordDTO.getCustomerMobile());
         auditRecordResp.setExchangePoint(auditRecordDTO.getExchangePoint());
+        auditRecordResp.setChargeReceiptPoint(auditRecordDTO.getChargeReceiptPoint());
         auditRecordResp.setGivingPoint(auditRecordDTO.getGivingPoint());
         auditRecordResp.setExchangeType(auditRecordDTO.getExchangeType());
         auditRecordResp.setChargeReceiptStatus(auditRecordDTO.getChargeReceiptStatus());

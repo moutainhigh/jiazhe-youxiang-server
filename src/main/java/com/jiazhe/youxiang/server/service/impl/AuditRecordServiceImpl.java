@@ -79,7 +79,10 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     @Override
     public AuditRecordDTO getById(Integer id) {
         AuditRecordPO po = auditRecordPOMapper.selectByPrimaryKey(id);
-        return AuditRecordAdapter.PO2DTO(po);
+        AuditRecordDTO dto = AuditRecordAdapter.PO2DTO(po);
+        List<ChargeReceiptDTO> chargeReceiptDTOList = chargeReceiptService.getByAuditRecordId(po.getId());
+        dto.setChargeReceiptPoint(chargeReceiptDTOList.stream().map(ChargeReceiptDTO::getExchangePoint).reduce(BigDecimal.ZERO, BigDecimal::add));
+        return dto;
     }
 
     @Override

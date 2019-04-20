@@ -24,8 +24,11 @@ public class AuditRecordResp extends BaseVO {
     @ApiModelProperty("客户电话")
     private String customerMobile;
 
-    @ApiModelProperty("小票总积分")
+    @ApiModelProperty("兑换总积分")
     private BigDecimal exchangePoint;
+
+    @ApiModelProperty("小票总积分")
+    private BigDecimal chargeReceiptPoint;
 
     @ApiModelProperty("后台充值总积分")
     private BigDecimal givingPoint;
@@ -128,6 +131,14 @@ public class AuditRecordResp extends BaseVO {
 
     public void setExchangePoint(BigDecimal exchangePoint) {
         this.exchangePoint = exchangePoint;
+    }
+
+    public BigDecimal getChargeReceiptPoint() {
+        return chargeReceiptPoint;
+    }
+
+    public void setChargeReceiptPoint(BigDecimal chargeReceiptPoint) {
+        this.chargeReceiptPoint = chargeReceiptPoint;
     }
 
     public Byte getExchangeType() {

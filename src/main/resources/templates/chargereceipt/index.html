@@ -115,6 +115,13 @@
                                 </div>
 
                                 <div class="profile-info-row">
+                                    <div class="profile-info-name"> 小票总积分</div>
+                                    <div class="profile-info-value">
+                                        <span id="totalChargeReceiptPoint"></span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
                                     <div class="profile-info-name"> 客户姓名</div>
                                     <div class="profile-info-value">
                                         <span id="customerName"></span>
@@ -403,6 +410,7 @@
                     $("#exchangeType").html(getExchangeTypeText(result.exchangeType));
                     $("#status").html(auditRecordStatus[result.status - 1]);
                     $("#totalExchangePoint").html(result.exchangePoint);
+                    $("#totalChargeReceiptPoint").html(generateSpan(result.chargeReceiptPoint,result.chargeReceiptPoint==result.exchangePoint?"00FF00":"FF0000"));
                     $("#customerName").html(result.customerName);
                     var imgUrls = result.imgUrls.split(",");
                     for (var i = 0; i < imgUrls.length; i++) {
