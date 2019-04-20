@@ -193,6 +193,9 @@ public class AuditRecordServiceImpl implements AuditRecordService {
                 throw new AuditRecordException(AuditRecordCodeEnum.POINT_CODES_ERROR);
             }
             pointExchangeCodeDtoList.stream().forEach(bean -> {
+                if(CommonConstant.CODE_START_USING.equals(bean.getStatus())){
+                    throw new PointException(PointCodeEnum.CODE_HAS_START_USING);
+                }
                 PointExchangeCodeBatchEditDTO dto = pointExchangeCodeBatchService.getById(bean.getBatchId());
                 if (dto.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
                     throw new PointException(PointCodeEnum.BATCH_HAS_STOPPED_USING);

@@ -311,9 +311,9 @@
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
                                                             <div id="pointsInfo"
-                                                                      class="form-control"
-                                                                      style="resize:none;height: 100px"
-                                                                      readonly></div>
+                                                                 class="form-control"
+                                                                 style="resize:none;height: 100px"
+                                                                 readonly></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -713,11 +713,14 @@
                     }
                     var pointsInfo = result.pointExchangeCodeRespList;
                     var pointsInfoHtml = '';
+                    var totalValue = 0;
                     for (var i = 0; i < pointsInfo.length; i++) {
-                        var status = pointsInfo[i] == 0 ? "未启用" : "已启用";
-                        var color = pointsInfo[i] == 0 ? "#00FF00" : "FF0000";
+                        var status = pointsInfo[i].status == 0 ? "未启用" : "已启用";
+                        var color = pointsInfo[i].status == 0 ? "00FF00" : "FF0000";
                         pointsInfoHtml += "[" + pointsInfo[i].code + "][" + pointsInfo[i].batchName + "][" + pointsInfo[i].faceValue + "积分][" + generateSpan(status, color) + "]\n";
+                        totalValue += pointsInfo[i].faceValue;
                     }
+                    pointsInfoHtml += "合计：" + totalValue + "积分";
                     $("#pointsInfo").empty().append(pointsInfoHtml);
                 }
             },
