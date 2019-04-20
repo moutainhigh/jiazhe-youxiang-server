@@ -36,6 +36,9 @@ public class ChargeReceiptSaveReq extends BaseVO {
     @ApiModelProperty("小票图片")
     private String imgUrl ;
 
+    @ApiModelProperty("是否检查记录重复")
+    private Byte check ;
+
     public Integer getId() {
         return id;
     }
@@ -98,5 +101,13 @@ public class ChargeReceiptSaveReq extends BaseVO {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public Byte getCheck() {
+        return check;
+    }
+
+    public void setCheck(Byte check) {
+        this.check = check;
     }
 }

@@ -131,4 +131,15 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
         List<ChargeReceiptPO> poList = chargeReceiptPOMapper.selectByExample(example);
         return poList.stream().map(ChargeReceiptAdapter::po2Dto).collect(Collectors.toList());
     }
+
+    @Override
+    public boolean hasExisted(ChargeReceiptSaveDTO dto) {
+        ChargeReceiptPOExample example = new ChargeReceiptPOExample();
+        ChargeReceiptPOExample.Criteria criteria = example.createCriteria();
+        criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+        criteria.andPosCodeEqualTo(dto.getPosCode());
+        criteria.andExchangePointEqualTo(dto.getExchangePoint());
+        List<ChargeReceiptPO> poList = chargeReceiptPOMapper.selectByExample(example);
+        return  (poList.size() > 1) || (poList.size() == 1 && !poList.get(0).getId().equals(dto.getId()));
+    }
 }

@@ -40,4 +40,8 @@ public class ChargeReceiptBiz {
     public List<ChargeReceiptDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, Date submitStartTime, Date submitEndTime) {
         return chargeReceiptService.getList(customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, submitStartTime, submitEndTime);
     }
+
+    public boolean hasExisted(ChargeReceiptSaveDTO dto) {
+        return chargeReceiptService.hasExisted(dto);
+    }
 }
