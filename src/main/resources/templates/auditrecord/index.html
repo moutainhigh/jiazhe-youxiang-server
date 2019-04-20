@@ -304,6 +304,20 @@
                                                     </div>
                                                 </div>
 
+                                                <div class="space-2 exchangeType2"></div>
+                                                <div class="form-group exchangeType2">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="pointCodes">积分兑换码信息：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <div id="pointsInfo"
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px"
+                                                                      readonly></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                                 <div class="space-2 exchangeType3"></div>
                                                 <div class="form-group exchangeType3">
                                                     <label class="col-sm-4 control-label no-padding-right"
@@ -697,6 +711,14 @@
                     for (var i = 0; i < imgUrls.length; i++) {
                         $("#pics").append("<img class='item' onmouseover=\"this.style.cursor='pointer';this.style.cursor='hand'\"  onmouseout=\"this.style.cursor='default'\" onclick=\"javascript:clickImg(" + i + ",true);\" src='" + getImageUrl(imgUrls[i]) + "'>")
                     }
+                    var pointsInfo = result.pointExchangeCodeRespList;
+                    var pointsInfoHtml = '';
+                    for (var i = 0; i < pointsInfo.length; i++) {
+                        var status = pointsInfo[i] == 0 ? "未启用" : "已启用";
+                        var color = pointsInfo[i] == 0 ? "#00FF00" : "FF0000";
+                        pointsInfoHtml += "[" + pointsInfo[i].code + "][" + pointsInfo[i].batchName + "][" + pointsInfo[i].faceValue + "积分][" + generateSpan(status, color) + "]\n";
+                    }
+                    $("#pointsInfo").empty().append(pointsInfoHtml);
                 }
             },
             error: error

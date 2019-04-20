@@ -82,6 +82,11 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         AuditRecordDTO dto = AuditRecordAdapter.PO2DTO(po);
         List<ChargeReceiptDTO> chargeReceiptDTOList = chargeReceiptService.getByAuditRecordId(po.getId());
         dto.setChargeReceiptPoint(chargeReceiptDTOList.stream().map(ChargeReceiptDTO::getExchangePoint).reduce(BigDecimal.ZERO, BigDecimal::add));
+        if(!Strings.isEmpty(po.getPointCodes())){
+            List<String> pointCodes = Arrays.asList(po.getPointCodes().split(","));
+            List<PointExchangeCodeDTO> pointExchangeCodeDTOList = pointExchangeCodeService.findByCodes(pointCodes);
+            dto.setPointExchangeCodeDTOList(pointExchangeCodeDTOList);
+        }
         return dto;
     }
 

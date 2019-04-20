@@ -1,9 +1,11 @@
 package com.jiazhe.youxiang.server.dto.auditrecord;
 
+import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.vo.BaseObject;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author TU
@@ -71,6 +73,8 @@ public class AuditRecordDTO extends BaseObject {
     private Date modTime;
 
     private Byte isDeleted;
+
+    private List<PointExchangeCodeDTO> pointExchangeCodeDTOList;
 
     public Integer getId() {
         return id;
@@ -302,5 +306,13 @@ public class AuditRecordDTO extends BaseObject {
 
     public void setSubmitTime(Date submitTime) {
         this.submitTime = submitTime;
+    }
+
+    public List<PointExchangeCodeDTO> getPointExchangeCodeDTOList() {
+        return pointExchangeCodeDTOList;
+    }
+
+    public void setPointExchangeCodeDTOList(List<PointExchangeCodeDTO> pointExchangeCodeDTOList) {
+        this.pointExchangeCodeDTOList = pointExchangeCodeDTOList;
     }
 }

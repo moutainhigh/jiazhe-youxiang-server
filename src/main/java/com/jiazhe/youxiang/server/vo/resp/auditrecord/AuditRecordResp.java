@@ -1,9 +1,11 @@
 package com.jiazhe.youxiang.server.vo.resp.auditrecord;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import com.jiazhe.youxiang.server.vo.resp.point.exchangecode.PointExchangeCodeResp;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author TU
@@ -41,6 +43,9 @@ public class AuditRecordResp extends BaseVO {
 
     @ApiModelProperty("兑换码code集合")
     private String pointCodes;
+
+    @ApiModelProperty("兑换码集合")
+    private List<PointExchangeCodeResp> pointExchangeCodeRespList;
 
     @ApiModelProperty("实物价值")
     private BigDecimal productValue;
@@ -163,6 +168,14 @@ public class AuditRecordResp extends BaseVO {
 
     public void setPointCodes(String pointCodes) {
         this.pointCodes = pointCodes;
+    }
+
+    public List<PointExchangeCodeResp> getPointExchangeCodeRespList() {
+        return pointExchangeCodeRespList;
+    }
+
+    public void setPointExchangeCodeRespList(List<PointExchangeCodeResp> pointExchangeCodeRespList) {
+        this.pointExchangeCodeRespList = pointExchangeCodeRespList;
     }
 
     public BigDecimal getProductValue() {
