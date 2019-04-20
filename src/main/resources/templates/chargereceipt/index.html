@@ -423,6 +423,29 @@
             error: error
         });
     }
+
+    //刷新录入的小票积分
+    function refreshChargeReceiptPoint(){
+        $.ajax({
+            url: "/api/auditrecord/getbyid",
+            dataType: "json",
+            async: false,
+            data: {
+                id: $("#auditRecordId").val()
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#totalChargeReceiptPoint").html(generateSpan(result.chargeReceiptPoint,result.chargeReceiptPoint==result.exchangePoint?"00FF00":"FF0000"));
+                }
+            },
+            error: error
+        });
+    }
+
     function rotatePicture() {
         var zoomPicDoc = document.getElementById('zoomPic');
         rotate = (rotate + 90) % 360;
@@ -497,6 +520,7 @@
                             bootboxalert(data.error.message);
                         } else {
                             jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                            refreshChargeReceiptPoint();
                         }
                     },
                     error: error
@@ -540,6 +564,7 @@
                         openNew();
                     }
                     jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                    refreshChargeReceiptPoint();
                 }
             },
             error: error
