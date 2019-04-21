@@ -299,6 +299,12 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     }
 
     @Override
+    public PointExchangeCodePO findByCode(String code) {
+        PointExchangeCodePO pointExchangeCodePO = pointExchangeCodePOManualMapper.findByCode(code);
+        return pointExchangeCodePO;
+    }
+
+    @Override
     public Integer getMaxId() {
         return pointExchangeCodePOManualMapper.getMaxId();
     }
@@ -319,4 +325,26 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     public void batchActive(List<PointExchangeCodeDTO> pointExchangeCodeDtoList) {
         pointExchangeCodePOManualMapper.batchActive(pointExchangeCodeDtoList);
     }
+
+    @Override
+    public void checkByCode(String code) {
+        if (!ExchangeCodeCheckUtil.codeCheck(CommonConstant.POINT_EXCHANGE_CODE_PREFIX, code)) {
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
+        }
+        PointExchangeCodePO pointExchangeCodePO = findByCode(code);
+        if(null == pointExchangeCodePO){
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
+        }
+        if(CommonConstant.CODE_START_USING.equals(pointExchangeCodePO.getStatus())){
+            throw new PointException(PointCodeEnum.CODE_HAS_START_USING);
+        }
+        if(CommonConstant.CODE_HAS_USED.equals(pointExchangeCodePO.getUsed())){
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_USED);
+        }
+        PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO = pointExchangeCodeBatchService.getById(pointExchangeCodePO.getBatchId());
+        if (pointExchangeCodeBatchEditDTO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
+            throw new PointException(PointCodeEnum.BATCH_HAS_STOPPED_USING);
+        }
+    }
+
 }
