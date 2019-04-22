@@ -1,8 +1,11 @@
 package com.jiazhe.youxiang.server.adapter;
 
+import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.domain.po.AuditRecordPO;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
 import com.jiazhe.youxiang.server.vo.resp.auditrecord.AuditRecordResp;
+
+import java.util.stream.Collectors;
 
 /**
  * @author TU
@@ -20,10 +23,12 @@ public class AuditRecordAdapter {
         auditRecordResp.setCustomerName(auditRecordDTO.getCustomerName());
         auditRecordResp.setCustomerMobile(auditRecordDTO.getCustomerMobile());
         auditRecordResp.setExchangePoint(auditRecordDTO.getExchangePoint());
+        auditRecordResp.setChargeReceiptPoint(auditRecordDTO.getChargeReceiptPoint());
         auditRecordResp.setGivingPoint(auditRecordDTO.getGivingPoint());
         auditRecordResp.setExchangeType(auditRecordDTO.getExchangeType());
         auditRecordResp.setChargeReceiptStatus(auditRecordDTO.getChargeReceiptStatus());
         auditRecordResp.setPointCodes(auditRecordDTO.getPointCodes());
+        auditRecordResp.setPointExchangeCodeRespList(null == auditRecordDTO.getPointExchangeCodeDTOList() ? null : auditRecordDTO.getPointExchangeCodeDTOList().stream().map(PointExchangeCodeAdapter::dto2Resp).collect(Collectors.toList()));
         auditRecordResp.setProductValue(auditRecordDTO.getProductValue());
         auditRecordResp.setAuditReason(auditRecordDTO.getAuditReason());
         auditRecordResp.setRemark(auditRecordDTO.getRemark());

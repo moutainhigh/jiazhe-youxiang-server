@@ -13,6 +13,7 @@ public enum ChargeReceiptCodeEnum {
     CARD_NO_IS_NULL(119005, "CARD_NO_IS_NULL", "银行卡号不能为空"),
     TRADE_TIME_IS_NULL(119006, "TRADE_TIME_IS_NULL", "交易时间不能为空"),
     CHARGE_RECEIPT_HAS_FINISHED(119007, "CHARGE_RECEIPT_HAS_FINISHED", "消费凭证已完成，不能新增、修改、删除"),
+    CHARGE_RECEIPT_REPEAT(119008, "CHARGE_RECEIPT_REPEAT", "已经有类似的消费凭证存在，前台用到119008进行判断"),
     ;
 
     ChargeReceiptCodeEnum(Integer code, String type, String message) {

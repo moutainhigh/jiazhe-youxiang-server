@@ -7,6 +7,7 @@ package com.jiazhe.youxiang.server.service.impl;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
 import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
@@ -74,6 +75,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void add(CustomerAddDTO customerAddDTO) {
+        CommonValidator.validateMobile(customerAddDTO.getMobile(),new CustomerException(CustomerCodeEnum.CUSTOMER_MOBILE_ERROR));
         Integer count = customerPOManualMapper.count(customerAddDTO.getMobile(), null);
         if (count > 0) {
             throw new CustomerException(CustomerCodeEnum.CUSTOMER_MOBILE_REPEAT);

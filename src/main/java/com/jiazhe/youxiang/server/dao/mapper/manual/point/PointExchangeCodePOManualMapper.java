@@ -87,4 +87,12 @@ public interface PointExchangeCodePOManualMapper {
      * @param pointExchangeCodeDtoList
      */
     void batchActive(List<PointExchangeCodeDTO> pointExchangeCodeDtoList);
+
+
+    /**
+     * 通过code查找积分兑换码
+     * @param code
+     * @return
+     */
+    PointExchangeCodePO findByCode(@Param("code") String code);
 }

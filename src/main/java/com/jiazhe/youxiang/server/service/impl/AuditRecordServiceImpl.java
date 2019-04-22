@@ -79,7 +79,15 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     @Override
     public AuditRecordDTO getById(Integer id) {
         AuditRecordPO po = auditRecordPOMapper.selectByPrimaryKey(id);
-        return AuditRecordAdapter.PO2DTO(po);
+        AuditRecordDTO dto = AuditRecordAdapter.PO2DTO(po);
+        List<ChargeReceiptDTO> chargeReceiptDTOList = chargeReceiptService.getByAuditRecordId(po.getId());
+        dto.setChargeReceiptPoint(chargeReceiptDTOList.stream().map(ChargeReceiptDTO::getExchangePoint).reduce(BigDecimal.ZERO, BigDecimal::add));
+        if(!Strings.isEmpty(po.getPointCodes())){
+            List<String> pointCodes = Arrays.asList(po.getPointCodes().split(","));
+            List<PointExchangeCodeDTO> pointExchangeCodeDTOList = pointExchangeCodeService.findByCodes(pointCodes);
+            dto.setPointExchangeCodeDTOList(pointExchangeCodeDTOList);
+        }
+        return dto;
     }
 
     @Override
@@ -185,6 +193,9 @@ public class AuditRecordServiceImpl implements AuditRecordService {
                 throw new AuditRecordException(AuditRecordCodeEnum.POINT_CODES_ERROR);
             }
             pointExchangeCodeDtoList.stream().forEach(bean -> {
+                if(CommonConstant.CODE_START_USING.equals(bean.getStatus())){
+                    throw new PointException(PointCodeEnum.CODE_HAS_START_USING);
+                }
                 PointExchangeCodeBatchEditDTO dto = pointExchangeCodeBatchService.getById(bean.getBatchId());
                 if (dto.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
                     throw new PointException(PointCodeEnum.BATCH_HAS_STOPPED_USING);

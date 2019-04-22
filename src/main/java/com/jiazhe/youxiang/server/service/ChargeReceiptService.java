@@ -65,4 +65,11 @@ public interface ChargeReceiptService {
      * @return
      */
     List<ChargeReceiptDTO> getByAuditRecordId(Integer auditRecordId);
+
+    /**
+     * 判断此小票凭证是否已经存在
+     * @param dto
+     * @return
+     */
+    boolean hasExisted(ChargeReceiptSaveDTO dto);
 }

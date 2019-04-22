@@ -81,4 +81,8 @@ public class PointExchangeCodeBiz {
     public void allStopUsing(Integer batchId) {
         pointExchangeCodeService.batchChangeStatus(batchId, CodeStatusEnum.STOP_USING.getId().byteValue());
     }
+
+    public void checkByCode(String code) {
+        pointExchangeCodeService.checkByCode(code);
+    }
 }
