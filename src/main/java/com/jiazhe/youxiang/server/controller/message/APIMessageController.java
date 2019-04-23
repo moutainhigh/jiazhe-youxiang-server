@@ -102,7 +102,7 @@ public class APIMessageController extends BaseController {
     @RequestMapping(value = "uploadexcel", method = RequestMethod.POST, headers = ("content-type=multipart/*"), consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @CustomLog(moduleName = ModuleEnum.MESSAGE, operate = "上传短信excel并校验", level = LogLevelEnum.LEVEL_2)
     public Object uploadExcel(@RequestParam("file") MultipartFile file, Integer templateId) {
-        String url = UploadUtil.uploadImage(file, excelpath);
+        String url = UploadUtil.uploadFile2Server(file, excelpath);
         UploadMsgExcelResp result = messageBiz.checkExcel(excelpath + "/" + url, templateId);
         result.setUrl(url);
         return ResponseFactory.buildResponse(result);

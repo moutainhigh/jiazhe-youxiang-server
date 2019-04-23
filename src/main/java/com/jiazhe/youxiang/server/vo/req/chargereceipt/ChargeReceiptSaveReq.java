@@ -34,7 +34,10 @@ public class ChargeReceiptSaveReq extends BaseVO {
     private Long tradeTime ;
 
     @ApiModelProperty("小票图片")
-    private String extInfo ;
+    private String imgUrl ;
+
+    @ApiModelProperty("是否检查记录重复")
+    private Byte check ;
 
     public Integer getId() {
         return id;
@@ -92,11 +95,19 @@ public class ChargeReceiptSaveReq extends BaseVO {
         this.tradeTime = tradeTime;
     }
 
-    public String getExtInfo() {
-        return extInfo;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setExtInfo(String extInfo) {
-        this.extInfo = extInfo;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public Byte getCheck() {
+        return check;
+    }
+
+    public void setCheck(Byte check) {
+        this.check = check;
     }
 }

@@ -69,9 +69,9 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     private ChargeReceiptService chargeReceiptService;
 
     @Override
-    public List<AuditRecordDTO> getList(String customerMobile, Integer submitterId, Byte status,Byte chargeReceiptStatus, Paging paging) {
-        Integer count = auditRecordPOManualMapper.count(customerMobile, submitterId, status,chargeReceiptStatus);
-        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(customerMobile, submitterId, status, chargeReceiptStatus,paging.getOffset(), paging.getLimit());
+    public List<AuditRecordDTO> getList(Integer submitterId, String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, Date submitStartTime, Date submitEndTime, Paging paging) {
+        Integer count = auditRecordPOManualMapper.count(submitterId, customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, submitStartTime, submitEndTime);
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(submitterId, customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, submitStartTime, submitEndTime, paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
         return auditRecordPOList.stream().map(AuditRecordAdapter::PO2DTO).collect(Collectors.toList());
     }
@@ -79,12 +79,20 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     @Override
     public AuditRecordDTO getById(Integer id) {
         AuditRecordPO po = auditRecordPOMapper.selectByPrimaryKey(id);
-        return AuditRecordAdapter.PO2DTO(po);
+        AuditRecordDTO dto = AuditRecordAdapter.PO2DTO(po);
+        List<ChargeReceiptDTO> chargeReceiptDTOList = chargeReceiptService.getByAuditRecordId(po.getId());
+        dto.setChargeReceiptPoint(chargeReceiptDTOList.stream().map(ChargeReceiptDTO::getExchangePoint).reduce(BigDecimal.ZERO, BigDecimal::add));
+        if(!Strings.isEmpty(po.getPointCodes())){
+            List<String> pointCodes = Arrays.asList(po.getPointCodes().split(","));
+            List<PointExchangeCodeDTO> pointExchangeCodeDTOList = pointExchangeCodeService.findByCodes(pointCodes);
+            dto.setPointExchangeCodeDTOList(pointExchangeCodeDTOList);
+        }
+        return dto;
     }
 
     @Override
     public Integer getCountByStatus(Byte status) {
-        return auditRecordPOManualMapper.count(null, null, status,null);
+        return auditRecordPOManualMapper.count(null, null, null, status, null, null, null, null);
     }
 
     @Override
@@ -103,6 +111,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         auditRecordPO.setAuditTime(new Date());
         auditRecordPO.setStatus(CommonConstant.AUDIT_RECORD_REJECT);
         auditRecordPO.setAuditReason(reason);
+        auditRecordPO.setModTime(new Date());
         auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
     }
 
@@ -184,6 +193,9 @@ public class AuditRecordServiceImpl implements AuditRecordService {
                 throw new AuditRecordException(AuditRecordCodeEnum.POINT_CODES_ERROR);
             }
             pointExchangeCodeDtoList.stream().forEach(bean -> {
+                if(CommonConstant.CODE_START_USING.equals(bean.getStatus())){
+                    throw new PointException(PointCodeEnum.CODE_HAS_START_USING);
+                }
                 PointExchangeCodeBatchEditDTO dto = pointExchangeCodeBatchService.getById(bean.getBatchId());
                 if (dto.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
                     throw new PointException(PointCodeEnum.BATCH_HAS_STOPPED_USING);
@@ -206,6 +218,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         auditRecordPO.setAuditorName(sysUserDTO.getDisplayName());
         auditRecordPO.setAuditTime(new Date());
         auditRecordPO.setStatus(CommonConstant.AUDIT_RECORD_PASS);
+        auditRecordPO.setModTime(new Date());
         auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
     }
 
@@ -218,55 +231,57 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         }
         auditRecordPO.setSubmitterId(sysUserDTO.getId());
         auditRecordPO.setSubmitterName(sysUserDTO.getDisplayName());
+        auditRecordPO.setModTime(new Date());
         if (auditRecordDTO.getId().equals(0)) {
             auditRecordPO.setAuditorId(0);
             auditRecordPOMapper.insertSelective(auditRecordPO);
         } else {
             auditRecordPOMapper.updateByPrimaryKeySelective(auditRecordPO);
         }
-
     }
 
     @Override
     public void deleteById(Integer id) {
         AuditRecordPO po = auditRecordPOMapper.selectByPrimaryKey(id);
-        if(null == po){
+        if (null == po) {
             throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_IS_NOT_EXIST);
         }
-        if(!po.getStatus().equals(CommonConstant.AUDIT_RECORD_NOT_SUBMITTED)){
+        if (!po.getStatus().equals(CommonConstant.AUDIT_RECORD_NOT_SUBMITTED)) {
             throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_CANNOT_DELETE);
         }
         po.setIsDeleted(CommonConstant.CODE_DELETED);
+        po.setModTime(new Date());
         auditRecordPOMapper.updateByPrimaryKeySelective(po);
     }
 
     @Override
-    public void changeChargeReceiptStatus(Integer id,Byte status) {
+    public void changeChargeReceiptStatus(Integer id, Byte status) {
         AuditRecordPO po = auditRecordPOMapper.selectByPrimaryKey(id);
-        if(null == po){
+        if (null == po) {
             throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_IS_NOT_EXIST);
         }
         //如果是置为完成状态，需要校验①是否审核通过，②小票积分总和是否等于总提交积分
-        if(CommonConstant.CHARGE_RECEIPT_COMPLETE.equals(status)){
-            if(!po.getStatus().equals(CommonConstant.AUDIT_RECORD_PASS)){
+        if (CommonConstant.CHARGE_RECEIPT_COMPLETE.equals(status)) {
+            if (!po.getStatus().equals(CommonConstant.AUDIT_RECORD_PASS)) {
                 throw new AuditRecordException(AuditRecordCodeEnum.CANNOT_COMPLETE_CHARGE_RECEIPT);
             }
             BigDecimal[] exchangePoint = {po.getExchangePoint()};
             List<ChargeReceiptDTO> dto = chargeReceiptService.getByAuditRecordId(id);
-            dto.stream().forEach(bean ->{
+            dto.stream().forEach(bean -> {
                 exchangePoint[0] = exchangePoint[0].subtract(bean.getExchangePoint());
             });
-            if(exchangePoint[0].compareTo(BigDecimal.ZERO) != 0){
+            if (exchangePoint[0].compareTo(BigDecimal.ZERO) != 0) {
                 throw new AuditRecordException(AuditRecordCodeEnum.CHARGE_RECEIPT_EXCHANGE_POINT_ERROR);
             }
         }
         po.setChargeReceiptStatus(status);
+        po.setModTime(new Date());
         auditRecordPOMapper.updateByPrimaryKeySelective(po);
     }
 
     @Override
-    public List<AuditRecordDTO> getList(String customerMobile, Byte status,Byte chargeReceiptStatus) {
-        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(customerMobile, null, status, chargeReceiptStatus,null,null);
+    public List<AuditRecordDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, Date submitStartTime, Date submitEndTime) {
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(null, customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, submitStartTime, submitEndTime, null, null);
         return auditRecordPOList.stream().map(AuditRecordAdapter::PO2DTO).collect(Collectors.toList());
     }
 }

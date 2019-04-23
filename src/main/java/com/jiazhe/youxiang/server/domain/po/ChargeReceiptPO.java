@@ -31,6 +31,8 @@ public class ChargeReceiptPO implements Serializable {
 
     private Date modTime;
 
+    private String imgUrl;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -135,5 +137,13 @@ public class ChargeReceiptPO implements Serializable {
 
     public void setModTime(Date modTime) {
         this.modTime = modTime;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl == null ? null : imgUrl.trim();
     }
 }

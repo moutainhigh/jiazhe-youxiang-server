@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.service;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,16 +14,20 @@ import java.util.List;
 public interface AuditRecordService {
 
     /**
-     * 根据条件查询列表
+     * 根据条件查询 分页
      *
-     * @param customerMobile
      * @param submitterId
+     * @param customerInfo
+     * @param submitterName
      * @param status
      * @param chargeReceiptStatus
+     * @param pointCodes
+     * @param submitStartTime
+     * @param submitEndTime
      * @param paging
      * @return
      */
-    List<AuditRecordDTO> getList(String customerMobile, Integer submitterId, Byte status,Byte chargeReceiptStatus, Paging paging);
+    List<AuditRecordDTO> getList(Integer submitterId, String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, Date submitStartTime, Date submitEndTime, Paging paging);
 
     /**
      * 根据id获取详细记录
@@ -67,23 +72,31 @@ public interface AuditRecordService {
 
     /**
      * 通过id软删除记录
+     *
      * @param id
      */
     void deleteById(Integer id);
 
     /**
      * 完成消费凭证的录入
+     *
      * @param id
      * @param status
      */
-    void changeChargeReceiptStatus(Integer id,Byte status);
+    void changeChargeReceiptStatus(Integer id, Byte status);
 
     /**
      * 根据条件查询 不分页
-     * @param customerMobile
+     *
+     * @param customerInfo
+     * @param submitterName
      * @param status
      * @param chargeReceiptStatus
+     * @param submitterName
+     * @param pointCodes
+     * @param submitStartTime
+     * @param submitEndTime
      * @return
      */
-   List<AuditRecordDTO> getList(String customerMobile, Byte status,Byte chargeReceiptStatus);
+    List<AuditRecordDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, Date submitStartTime, Date submitEndTime);
 }

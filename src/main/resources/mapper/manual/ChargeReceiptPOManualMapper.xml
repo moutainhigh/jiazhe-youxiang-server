@@ -11,6 +11,7 @@
         <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
         <result column="inputer_id" property="inputerId" jdbcType="INTEGER" />
         <result column="inputer_name" property="inputerName" jdbcType="VARCHAR" />
+        <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
         <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
         <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
         <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
@@ -19,7 +20,7 @@
 
     <sql id="Base_Column_List">
         id, audit_record_id, exchange_point, pos_code, trade_time, card_no, customer_name,
-        inputer_id, inputer_name, ext_info, is_deleted, add_time, mod_time
+        inputer_id, inputer_name,img_url, ext_info, is_deleted, add_time, mod_time
     </sql>
 
     <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.ChargeReceiptPO">

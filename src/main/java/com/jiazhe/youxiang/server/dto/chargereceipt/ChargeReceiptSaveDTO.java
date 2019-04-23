@@ -1,7 +1,6 @@
 package com.jiazhe.youxiang.server.dto.chargereceipt;
 
 import com.jiazhe.youxiang.server.vo.BaseObject;
-import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -51,7 +50,7 @@ public class ChargeReceiptSaveDTO extends BaseObject{
     /**
      * 小票图片
      */
-    private String extInfo ;
+    private String imgUrl ;
 
     public Integer getId() {
         return id;
@@ -109,11 +108,11 @@ public class ChargeReceiptSaveDTO extends BaseObject{
         this.tradeTime = tradeTime;
     }
 
-    public String getExtInfo() {
-        return extInfo;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setExtInfo(String extInfo) {
-        this.extInfo = extInfo;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }

@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.controller.order;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.order.OrderInfoBiz;
@@ -62,12 +63,12 @@ public class APIOrderInfoController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "分页查询订单信息", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute OrderInfoPageReq req) {
         //如果包含0，说明查全部订单，否则按需查询
-        if (Arrays.binarySearch(req.getStatus().split(","), "0") > -1) {
+        if (Arrays.asList(req.getStatus().split(",")).contains(String.valueOf(CommonConstant.ORDER_ALL))) {
             req.setStatus(null);
         }
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        Date orderStartTime = req.getOrderStartTime() == CommonConstant.NULL_TIME ? null : new Date(req.getOrderStartTime());
-        Date orderEndTime = req.getOrderEndTime() == CommonConstant.NULL_TIME ? null : new Date(req.getOrderEndTime());
+        Date orderStartTime = req.getOrderStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getOrderStartTime()));
+        Date orderEndTime = req.getOrderEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getOrderEndTime()));
         List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getStatus(), req.getOrderCode(), req.getMobile(), req.getCustomerMobile(), orderStartTime, orderEndTime, req.getWorkerMobile(), paging);
         List<OrderInfoResp> orderInfoRespList = orderInfoDTOList.stream().map(OrderInfoAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(orderInfoRespList, paging);
@@ -80,7 +81,7 @@ public class APIOrderInfoController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "分页查询订单信息", level = LogLevelEnum.LEVEL_1)
     public Object customerListPage(@ModelAttribute CustomerOrderInfoPageReq req) {
         //如果包含0，说明查全部订单，否则按需查询
-        if (Arrays.binarySearch(req.getStatus().split(","), String.valueOf(CommonConstant.ORDER_ALL)) > -1) {
+        if (Arrays.asList(req.getStatus().split(",")).contains(String.valueOf(CommonConstant.ORDER_ALL))) {
             req.setStatus(null);
         }
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
@@ -173,7 +174,7 @@ public class APIOrderInfoController extends BaseController {
     @ApiOperation(value = "【后端】下单", httpMethod = "POST", response = NeedPayResp.class, notes = "【后端】下单")
     @RequestMapping(value = "/userplaceorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "下单", level = LogLevelEnum.LEVEL_2)
-    public Object userPlaceOrder(@ModelAttribute UserPlaceOrderReq req)  {
+    public Object userPlaceOrder(@ModelAttribute UserPlaceOrderReq req) {
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqUserPlaceOrder2DTOPlaceOrder(req);
         placeOrderDTO.setType(CommonConstant.USER_PLACE_ORDER);
         placeOrderDTO.setServiceTime(new Date(req.getRealServiceTime()));
@@ -186,8 +187,8 @@ public class APIOrderInfoController extends BaseController {
     @ApiOperation(value = "【APP端】下单", httpMethod = "POST", response = NeedPayResp.class, notes = "【APP端】下单")
     @RequestMapping(value = "/customerplaceorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "下单", level = LogLevelEnum.LEVEL_2)
-    public Object customerPlaceOrder(@ModelAttribute CustomerPlaceOrderReq req)  {
-        if((!req.getPointIds().isEmpty())&&(!req.getRechargeCardIds().isEmpty())){
+    public Object customerPlaceOrder(@ModelAttribute CustomerPlaceOrderReq req) {
+        if ((!req.getPointIds().isEmpty()) && (!req.getRechargeCardIds().isEmpty())) {
             throw new OrderException(OrderCodeEnum.POINT_RECHARGE_CARD_CONCURRENT_PAY);
         }
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqCustomerPlaceOrder2DTOPlaceOrder(req);

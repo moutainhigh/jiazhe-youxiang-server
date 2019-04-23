@@ -83,6 +83,18 @@ public interface PointExchangeCodeService {
      */
     PointExchangeCodePO findByKeyt(String keyt);
 
+    /**
+     * 根据卡号查询兑换码
+     *
+     * @param code
+     * @return
+     */
+    PointExchangeCodePO findByCode(String code);
+
+    /**
+     * 获取已有记录的最大id值
+     * @return
+     */
     Integer getMaxId();
 
     /**
@@ -103,4 +115,10 @@ public interface PointExchangeCodeService {
      * @param pointExchangeCodeDtoList
      */
     void batchActive(List<PointExchangeCodeDTO> pointExchangeCodeDtoList);
+
+    /**
+     * 通过code，检查兑换码是否存在，兑换码是否已经启用
+     * @param code
+     */
+    void checkByCode(String code);
 }

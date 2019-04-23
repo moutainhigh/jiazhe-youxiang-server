@@ -77,6 +77,13 @@ public class APIChargeReceiptController extends BaseController {
             throw new ChargeReceiptException(ChargeReceiptCodeEnum.TRADE_TIME_IS_NULL);
         }
         ChargeReceiptSaveDTO dto = ChargeReceiptAdapter.saveReq2SaveDto(req);
+        //检查记录是否重复
+        if(Byte.valueOf("1").equals(req.getCheck())){
+            boolean hasExisted = chargeReceiptBiz.hasExisted(dto);
+            if(hasExisted){
+                throw new ChargeReceiptException(ChargeReceiptCodeEnum.CHARGE_RECEIPT_REPEAT);
+            }
+        }
         chargeReceiptBiz.save(dto);
         return ResponseFactory.buildSuccess();
     }
