@@ -53,11 +53,11 @@ public class AuditRecordBiz {
         auditRecordService.deleteById(id);
     }
 
-    public void completeChargeReceipt(Integer id) {
-        auditRecordService.changeChargeReceiptStatus(id, CommonConstant.CHARGE_RECEIPT_COMPLETE);
+    public void completeChargeReceipt(Integer id,Byte check) {
+        auditRecordService.changeChargeReceiptStatus(id, CommonConstant.CHARGE_RECEIPT_COMPLETE,check);
     }
 
     public void uncompleteChargeReceipt(Integer id) {
-        auditRecordService.changeChargeReceiptStatus(id, CommonConstant.CHARGE_RECEIPT_UNCOMPLETE);
+        auditRecordService.changeChargeReceiptStatus(id, CommonConstant.CHARGE_RECEIPT_UNCOMPLETE,null);
     }
 }

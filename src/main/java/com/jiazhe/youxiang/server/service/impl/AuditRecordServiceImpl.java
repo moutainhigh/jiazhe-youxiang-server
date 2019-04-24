@@ -255,7 +255,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     }
 
     @Override
-    public void changeChargeReceiptStatus(Integer id, Byte status) {
+    public void changeChargeReceiptStatus(Integer id, Byte status,Byte check) {
         AuditRecordPO po = auditRecordPOMapper.selectByPrimaryKey(id);
         if (null == po) {
             throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_IS_NOT_EXIST);
@@ -265,13 +265,15 @@ public class AuditRecordServiceImpl implements AuditRecordService {
             if (!po.getStatus().equals(CommonConstant.AUDIT_RECORD_PASS)) {
                 throw new AuditRecordException(AuditRecordCodeEnum.CANNOT_COMPLETE_CHARGE_RECEIPT);
             }
-            BigDecimal[] exchangePoint = {po.getExchangePoint()};
-            List<ChargeReceiptDTO> dto = chargeReceiptService.getByAuditRecordId(id);
-            dto.stream().forEach(bean -> {
-                exchangePoint[0] = exchangePoint[0].subtract(bean.getExchangePoint());
-            });
-            if (exchangePoint[0].compareTo(BigDecimal.ZERO) != 0) {
-                throw new AuditRecordException(AuditRecordCodeEnum.CHARGE_RECEIPT_EXCHANGE_POINT_ERROR);
+            if(check.equals(Byte.valueOf("1"))){
+                BigDecimal[] exchangePoint = {po.getExchangePoint()};
+                List<ChargeReceiptDTO> dto = chargeReceiptService.getByAuditRecordId(id);
+                dto.stream().forEach(bean -> {
+                    exchangePoint[0] = exchangePoint[0].subtract(bean.getExchangePoint());
+                });
+                if (exchangePoint[0].compareTo(BigDecimal.ZERO) != 0) {
+                    throw new AuditRecordException(AuditRecordCodeEnum.CHARGE_RECEIPT_EXCHANGE_POINT_ERROR);
+                }
             }
         }
         po.setChargeReceiptStatus(status);
