@@ -82,8 +82,9 @@ public interface AuditRecordService {
      *
      * @param id
      * @param status
+     * @param check  检查分数之和是否等于总提交积分
      */
-    void changeChargeReceiptStatus(Integer id, Byte status);
+    void changeChargeReceiptStatus(Integer id, Byte status,Byte check);
 
     /**
      * 根据条件查询 不分页
