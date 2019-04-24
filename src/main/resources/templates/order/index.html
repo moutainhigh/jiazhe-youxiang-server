@@ -111,6 +111,7 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <label class="col-sm-1 control-label no-padding-right">服务人员电话：</label>
                                     <div class="col-sm-2">
                                         <div class="pos-rel">
@@ -119,6 +120,45 @@
                                                    style="height:30px"/>
                                         </div>
                                     </div>
+
+                                    <label class="col-sm-1 control-label no-padding-right">商品：</label>
+                                    <div class="col-sm-2">
+                                        <select id="" name=""
+                                                class="selectpicker show-tick form-control">
+                                            <option value="0">所有</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="space-2"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-1 control-label no-padding-right">服务时间起：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <div class="input-group">
+                                                <input class="form-control date-picker" id="searchRealServiceTimeStart"
+                                                       type="text" readonly/>
+                                                <span class="input-group-addon">
+                                                <i class="fa fa-calendar bigger-110"></i>
+                                            </span>
+                                                <input type="hidden" value=0 name="realServiceTimeStart"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <label class="col-sm-1 control-label no-padding-right">服务时间止：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <div class="input-group">
+                                                <input class="form-control date-picker" id="searchRealServiceTimeEnd"
+                                                       type="text" readonly/>
+                                                <span class="input-group-addon">
+                                                <i class="fa fa-calendar bigger-110"></i>
+                                            </span>
+                                                <input type="hidden" value=0 name="realServiceTimeEnd"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="col-sm-3">
                                         <button class="btn btn-white btn-default btn-round btn-sm"
                                                 onclick="return search()">
@@ -629,11 +669,11 @@
             postData: transformToJson($('#orderInfoSearchForm').serializeArray()),
             shrinkToFit: false,
             autoScroll: true,
-            colNames: ['', '操作', '订单号', '状态', '待支付', '商品名称', '单价', '数量', '下单账号',  '预约时间', '服务对象电话', '服务对象姓名', '代金券抵扣金额', '充值卡支付金额', '积分支付金额', '在线支付金额'],
+            colNames: ['', '操作', '状态', '商品名称', '单价', '数量', '下单时间','服务时间','下单账号', '服务对象电话', '服务对象姓名','成本',  '积分支付金额','代金券抵扣金额', '充值卡支付金额', '在线支付金额','订单号','待支付'],
+//            colNames: ['', '操作', '状态', '商品名称', '单价', '数量', '下单时间','预约时间','服务时间','下单账号', '服务对象电话', '服务对象姓名','成本',  '积分支付金额','代金券抵扣金额', '充值卡支付金额', '在线支付金额','订单号','待支付'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: '_action', index: '_action', width: 180, sortable: false, formatter: customFormatter},
-                {name: 'orderCode', index: 'orderCode', width: 120, sortable: false},
                 {
                     name: 'status',
                     index: 'status',
@@ -643,18 +683,22 @@
                         return orderStatus[rowObject.status - 1];
                     }
                 },
-                {name: 'payment', index: 'payment', width: 60,sortable: false},
                 {name: 'productResp.name', index: 'productResp.name', width: 150,sortable: false},
                 {name: 'productPrice', index: 'productPrice', width: 50,sortable: false},
                 {name: 'count', index: 'count', width: 50,sortable: false},
+                {name: 'orderTime', index: 'orderTime', width: 130,sortable: false,formatter:timeFormat},
+//                {name: 'serviceTime', index: 'serviceTime', width: 130,sortable: false,formatter:timeFormat},
+                {name: 'realServiceTime', index: 'realServiceTime', width: 130,sortable: false,formatter:timeFormat},
                 {name: 'customerResp.mobile', index: 'customerResp.mobile', width: 100,sortable: false},
-                {name: 'serviceTime', index: 'serviceTime', width: 130,sortable: false,formatter:timeFormat},
                 {name: 'customerMobile', index: 'customerMobile', width: 100,sortable: false},
                 {name: 'customerName', index: 'customerName', width: 100,sortable: false},
+                {name: 'cost', index: 'cost', width: 50,sortable: false},
+                {name: 'payPoint', index: 'payPoint', width: 100,sortable: false},
                 {name: 'payVoucher', index: 'payVoucher', width: 100,sortable: false},
                 {name: 'payRechargeCard', index: 'payRechargeCard', width: 100,sortable: false},
-                {name: 'payPoint', index: 'payPoint', width: 100,sortable: false},
-                {name: 'payCash', index: 'payCash', width: 100,sortable: false}
+                {name: 'payCash', index: 'payCash', width: 100,sortable: false},
+                {name: 'orderCode', index: 'orderCode', width: 120, sortable: false},
+                {name: 'payment', index: 'payment', width: 60,sortable: false}
             ],
             loadComplete: function (data) {
                 if("error" in data){
