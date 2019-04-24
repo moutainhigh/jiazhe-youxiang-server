@@ -37,6 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -200,8 +201,8 @@ public class APIAuditRecordController extends BaseController {
     @ApiOperation(value = "完成凭证录入", httpMethod = "POST", notes = "完成凭证录入")
     @RequestMapping(value = "/completechargereceipt", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "完成凭证录入", level = LogLevelEnum.LEVEL_2)
-    public Object completeChargeReceipt(@ModelAttribute IdReq req) {
-        auditRecordBiz.completeChargeReceipt(req.getId());
+    public Object completeChargeReceipt(@ModelAttribute IdReq req,@RequestParam Byte check) {
+        auditRecordBiz.completeChargeReceipt(req.getId(),check);
         return ResponseFactory.buildSuccess();
     }
 

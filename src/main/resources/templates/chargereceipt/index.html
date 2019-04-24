@@ -83,6 +83,7 @@
                                     <div class="profile-info-name"> 凭证完成情况</div>
                                     <div class="profile-info-value">
                                         <span id="chargeReceiptStatus"></span>
+                                        <input type="hidden" name="check" id="totalPointCheck" th:value="1"/>
                                     </div>
                                 </div>
 
@@ -620,6 +621,7 @@
      * @param status 记录审核状况
      */
     function fillChargeReceiptStatus(id, chargeReceiptStatus, status) {
+        $("#totalPointCheck").val(1);
         if (chargeReceiptStatus == 0) {
             var html = '未完成';
             if (status == 4 && permission.indexOf("completeChargeReceipt") != -1) {
@@ -639,39 +641,51 @@
     }
 
     function uncompleteChargeReceipt(id, status) {
-        var text = "确定重置凭证录入未完成吗？";
         var url = "/api/auditrecord/uncompletechargereceipt";
-        changeChargeReceiptStatus(url, id, text, 0, status);
+        confirm("确定重置凭证录入未完成吗？", function (result) {
+            if (result) {
+                changeChargeReceiptStatus(url, id, 0, status);
+            }
+        });
     }
 
     function completeChargeReceipt(id, status) {
-        var text = "确定完成凭证录入吗？";
-        var url = "/api/auditrecord/completechargereceipt"
-        changeChargeReceiptStatus(url, id, text, 1, status);
+        var url = "/api/auditrecord/completechargereceipt";
+        confirm("确定完成凭证录入吗？", function (result) {
+            if (result) {
+                changeChargeReceiptStatus(url, id, 1, status);
+            }
+        });
     }
 
-    function changeChargeReceiptStatus(url, id, text, chargeReceiptStatus, status) {
-        confirm(text, function (result) {
-            if (result) {
-                $.ajax({
-                    url: url,
-                    dataType: "json",
-                    async: false,
-                    data: {
-                        id: id
-                    },
-                    type: "POST",
-                    success: function (data) {
-                        if ('error' in data) {
-                            bootboxalert(data.error.message);
-                        } else {
-                            fillChargeReceiptStatus(id, chargeReceiptStatus, status);
-                            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                        }
-                    },
-                    error: error
-                });
-            }
+    function changeChargeReceiptStatus(url, id, chargeReceiptStatus, status) {
+        $.ajax({
+            url: url,
+            dataType: "json",
+            async: false,
+            data: {
+                id: id,
+                check:$("#totalPointCheck").val()
+            },
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    if(data.error.code == 111025){
+                        confirm(data.error.message+",还需要继续完成吗？", function (result) {
+                            if (result) {
+                                $("#totalPointCheck").val(0);
+                                changeChargeReceiptStatus(url, id, chargeReceiptStatus, status);
+                            }
+                        });
+                    }else{
+                        bootboxalert(data.error.message);
+                    }
+                } else {
+                    fillChargeReceiptStatus(id, chargeReceiptStatus, status);
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: error
         });
     }
 
