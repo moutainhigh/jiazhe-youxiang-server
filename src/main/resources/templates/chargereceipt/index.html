@@ -23,6 +23,11 @@
             height: 15px;
         }
 
+        #ShowImage_Form::-webkit-scrollbar {
+            width: 15px;
+            height: 15px;
+        }
+
         .float {
             overflow: hidden;
         }
@@ -310,9 +315,9 @@
 
                     <!--放大图片模态框-->
                     <div id="ShowImage_Form" class="modal fade" tabindex="-1" role="dialog"
-                         aria-labelledby="myModalLabel" aria-hidden="true">
+                         aria-labelledby="myModalLabel" aria-hidden="true" style="overflow: scroll">
                         <div class="modal-dialog"
-                             style="width:100%;min-height:100%;background-color: rgba(64,64,64,1);margin:0px;padding:0px;">
+                             style="width:100%;height:100%;background-color: rgba(64,64,64,1);margin:0px;padding:0px;">
                             <div class="modal-content"
                                  style="width:100%;height:100%;background-color: rgba(64,64,64,1);margin:0px;padding:0px;">
                                 <div class="modal-header" style="border-bottom: 0px;background-color: rgba(64,64,64,1)">
@@ -323,7 +328,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body"
-                                     style="padding:0px 20px 0px 20px;text-align: center;background-color: rgba(64,64,64,0.5)">
+                                     style="padding:0px;text-align: center;background-color: rgba(64,64,64,0.5)">
                                     <div id="imgShowFull" style="background-color: rgba(64,64,64,1);">
                                     </div>
                                 </div>
