@@ -123,8 +123,8 @@
 
                                     <label class="col-sm-1 control-label no-padding-right">商品：</label>
                                     <div class="col-sm-2">
-                                        <select id="" name=""
-                                                class="selectpicker show-tick form-control">
+                                        <select id="product" name="productId"
+                                                class="chosen-select form-control">
                                             <option value="0">所有</option>
                                         </select>
                                     </div>
@@ -657,6 +657,9 @@
             });
 
         initDatePicker();
+
+        //商品下拉框
+        initProduct();
 
         $('#re_realServiceTime').datetimepicker({
             format: "YYYY-MM-DD HH:mm"
@@ -1279,6 +1282,50 @@
                 });
             }
         })
+    }
+
+    function initProduct(){
+        $.ajax({
+            url: "/api/product/getalllist",
+            dataType: "json",
+            async: true,
+            data: {
+                pageSize: 10000,
+                pageNum: 1
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#product").append("<option value="+result[i].id+">"+result[i].name+"</option>");
+                    }
+                }
+                if(!ace.vars['touch']) {
+                    $('.chosen-select').chosen({allow_single_deselect:true});
+                    $(window)
+                        .off('resize.chosen')
+                        .on('resize.chosen', function() {
+                            $('.chosen-select').each(function() {
+                                var $this = $(this);
+                                $this.next().css({'width': $this.parent().width()});
+                            })
+                        }).trigger('resize.chosen');
+                    $(document).on('settings.ace.chosen', function(e, event_name, event_val) {
+                        if(event_name != 'sidebar_collapsed') return;
+                        $('.chosen-select').each(function() {
+                            var $this = $(this);
+                            $this.next().css({'width': $this.parent().width()});
+                        })
+                    });
+                }
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
     }
 
 </script>

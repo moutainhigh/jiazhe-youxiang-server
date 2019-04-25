@@ -22,9 +22,23 @@ public interface OrderInfoPOManualMapper {
      * @param orderStartTime
      * @param orderEndTime
      * @param workerMobile
+     * @param productId
+     * @param realServiceStartTime
+     * @param realServiceEndTime
      * @return
      */
-    Integer count(@Param("status") String status, @Param("orderCode")String orderCode, @Param("mobile")String mobile,@Param("customerMobile")String customerMobile, @Param("orderStartTime")Date orderStartTime, @Param("orderEndTime")Date orderEndTime,@Param("workerMobile")String workerMobile);
+    Integer count(
+            @Param("status") String status,
+            @Param("orderCode")String orderCode,
+            @Param("mobile")String mobile,
+            @Param("customerMobile")String customerMobile,
+            @Param("orderStartTime")Date orderStartTime,
+            @Param("orderEndTime")Date orderEndTime,
+            @Param("workerMobile")String workerMobile,
+            @Param("productId")Integer productId,
+            @Param("realServiceStartTime")Date realServiceStartTime,
+            @Param("realServiceEndTime")Date realServiceEndTime
+    );
 
     /**
      * 后台分页查询订单
@@ -35,11 +49,26 @@ public interface OrderInfoPOManualMapper {
      * @param orderStartTime
      * @param orderEndTime
      * @param workerMobile
+     * @param productId
+     * @param realServiceStartTime
+     * @param realServiceEndTime
      * @param offset
      * @param limit
      * @return
      */
-    List<OrderInfoPO> query(@Param("status") String status, @Param("orderCode")String orderCode, @Param("mobile")String mobile,@Param("customerMobile")String customerMobile, @Param("orderStartTime")Date orderStartTime, @Param("orderEndTime")Date orderEndTime,@Param("workerMobile")String workerMobile, @Param("offset")Integer offset,  @Param("limit")Integer limit);
+    List<OrderInfoPO> query(
+            @Param("status") String status,
+            @Param("orderCode")String orderCode,
+            @Param("mobile")String mobile,
+            @Param("customerMobile")String customerMobile,
+            @Param("orderStartTime")Date orderStartTime,
+            @Param("orderEndTime")Date orderEndTime,
+            @Param("workerMobile")String workerMobile,
+            @Param("productId")Integer productId,
+            @Param("realServiceStartTime")Date realServiceStartTime,
+            @Param("realServiceEndTime")Date realServiceEndTime,
+            @Param("offset")Integer offset,
+            @Param("limit")Integer limit);
 
     /**
      * 插入订单信息，并将id返回至实体中
