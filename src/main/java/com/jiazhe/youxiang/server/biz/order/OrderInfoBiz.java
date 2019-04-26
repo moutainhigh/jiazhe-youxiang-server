@@ -11,7 +11,6 @@ import com.jiazhe.youxiang.server.dto.order.orderinfo.UserReservationOrderDTO;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.order.OrderInfoService;
 import com.jiazhe.youxiang.server.vo.Paging;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserReservationOrderReq;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,8 +32,8 @@ public class OrderInfoBiz {
     @Autowired
     private CustomerService customerService;
 
-    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String worekerMobile, Paging paging) {
-        List<OrderInfoDTO> orderInfoDTOList = orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, worekerMobile, paging);
+    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime, Paging paging) {
+        List<OrderInfoDTO> orderInfoDTOList = orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, realServiceStartTime, realServiceEndTime, paging);
         orderInfoDTOList.stream().forEach(bean -> {
             //计算待支付金额放入订单信息中
             bean.setPayment(calculateOrderNeedPay(bean));
@@ -105,10 +104,10 @@ public class OrderInfoBiz {
 
     public List<OrderInfoDTO> customerGetList(Integer customerId, String status, Paging paging) {
         CustomerDTO customerDTO = customerService.getById(customerId);
-        if(null == customerDTO){
+        if (null == customerDTO) {
             throw new OrderException(OrderCodeEnum.CUSTOMER_NOT_EXIST);
         }
-        return getList(status, null, customerDTO.getMobile(), null, null, null, null, paging);
+        return getList(status, null, customerDTO.getMobile(), null, null, null, null,null,null,null, paging);
     }
 
     /**
@@ -125,7 +124,7 @@ public class OrderInfoBiz {
         return left;
     }
 
-    public NeedPayResp userPlaceOrder(PlaceOrderDTO placeOrderDTO)  {
+    public NeedPayResp userPlaceOrder(PlaceOrderDTO placeOrderDTO) {
         return orderInfoService.placeOrder(placeOrderDTO);
     }
 
@@ -141,7 +140,7 @@ public class OrderInfoBiz {
         orderInfoService.userChangeReservationInfo(userReservationOrderDTO);
     }
 
-    public NeedPayResp customerPlaceOrder(PlaceOrderDTO placeOrderDTO)  {
+    public NeedPayResp customerPlaceOrder(PlaceOrderDTO placeOrderDTO) {
         return orderInfoService.placeOrder(placeOrderDTO);
     }
 
@@ -155,10 +154,11 @@ public class OrderInfoBiz {
 
     /**
      * 微信付款成功通知
+     *
      * @param orderNo
      * @param wxPay
      */
     public void wxNotify(String orderNo, BigDecimal wxPay) {
-        orderInfoService.wxNotify(orderNo,wxPay);
+        orderInfoService.wxNotify(orderNo, wxPay);
     }
 }
