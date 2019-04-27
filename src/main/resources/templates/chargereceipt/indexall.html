@@ -226,7 +226,7 @@
 
     function search() {
         jQuery(grid_selector).setGridParam({
-            url: "/api/chargereceipt/listpage_temp",
+            url: "/api/chargereceipt/listpageall",
             postData: transformToJson($('#chargeReceiptSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
