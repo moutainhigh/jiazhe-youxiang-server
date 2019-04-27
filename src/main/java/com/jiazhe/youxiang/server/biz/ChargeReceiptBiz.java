@@ -21,8 +21,8 @@ public class ChargeReceiptBiz {
     @Autowired
     private ChargeReceiptService chargeReceiptService;
 
-    public List<ChargeReceiptDTO> getList(Integer auditRecordId, Paging paging) {
-        return chargeReceiptService.getList(auditRecordId, paging);
+    public List<ChargeReceiptDTO> getList(Integer auditRecordId,String customerName,String cardNo,String posCode,Date tradeStartTime,Date tradeEndTime, Paging paging) {
+        return chargeReceiptService.getList(auditRecordId,customerName,cardNo,posCode,tradeStartTime,tradeEndTime, paging);
     }
 
     public void delete(Integer id) {
@@ -44,4 +44,5 @@ public class ChargeReceiptBiz {
     public boolean hasExisted(ChargeReceiptSaveDTO dto) {
         return chargeReceiptService.hasExisted(dto);
     }
+
 }

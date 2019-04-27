@@ -14,13 +14,17 @@ import java.util.List;
  */
 public interface ChargeReceiptService {
     /**
-     * 根据充值记录id，获取充值凭证列表
-     *
+     * 根据条件，获取充值凭证列表
      * @param auditRecordId
+     * @param customerName
+     * @param cardNo
+     * @param posCode
+     * @param tradeStartTime
+     * @param tradeEndTime
      * @param paging
      * @return
      */
-    List<ChargeReceiptDTO> getList(Integer auditRecordId, Paging paging);
+    List<ChargeReceiptDTO> getList(Integer auditRecordId,String customerName,String cardNo,String posCode,Date tradeStartTime,Date tradeEndTime, Paging paging);
 
     /**
      * 删除消费凭证

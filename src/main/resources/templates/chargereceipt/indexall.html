@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title></title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/static/init.css}"/>
+    <link rel="stylesheet" th:href="@{/static/editable-select/css/jquery-editable-select.min.css}"/>
+    <!-- Javascript -->
+    <script th:src="@{/static/init.js}"></script>
+    <script th:src="@{/static/editable-select/js/jquery-editable-select.min.js}"></script>
+
+    <style>
+        .ui-jqgrid .ui-jqgrid-bdiv {
+            overflow-x: auto;
+        }
+
+        #img_show::-webkit-scrollbar {
+            width: 15px;
+            height: 15px;
+        }
+
+        #ShowImage_Form::-webkit-scrollbar {
+            width: 15px;
+            height: 15px;
+        }
+
+        .float {
+            overflow: hidden;
+        }
+
+        .item {
+            float: left;
+            height: 100px;
+            width: 31%;
+            border-right: 3px solid #fff;
+            border-top: 3px solid #fff;
+        }
+
+        .pic_div {
+            position: relative;
+            background-color: white;
+            width: auto;
+            overflow: scroll;
+            height: 500px;
+        }
+    </style>
+</head>
+
+<body class="no-skin">
+<div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a th:href="@{/main/main_center}">主页</a>
+                    </li>
+                    <li class="active" th:text="凭证管理"></li>
+                </ul><!-- /.breadcrumb -->
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+
+                    <div class="col-xs-12" style="padding-top:40px">
+                        <form id="chargeReceiptSearchForm" class="form-horizontal" role="form">
+                            <input type="hidden" name="auditRecordId" th:value="0">
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">客户姓名：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="searchCustomerInfo" name="customerName" class="form-control"
+                                               type="text" style="height:30px"/>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">银行卡后四位：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="searchCardNo" name="cardNo" class="form-control"
+                                               type="text" style="height:30px"/>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">POS机编号：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <select id="searchPosCode" name="posCode"
+                                                class="form-control">
+                                            <option>财富私行尊享积分pos一</option>
+                                            <option>财富私行尊享积分pos十二</option>
+                                            <option>财富私行尊享积分pos十六</option>
+                                            <option>财富私行尊享积分pos中国银行津南支行尊享活动</option>
+                                            <option>江苏</option>
+                                            <option>青岛</option>
+                                            <option>温州</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">交易时间起：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <div class="input-group">
+                                            <input class="form-control date-picker" id="searchTradeStartTime"
+                                                   type="text" readonly/>
+                                            <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                            <input type="hidden" value=0 name="tradeStartTime"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">交易时间止：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <div class="input-group">
+                                            <input class="form-control date-picker" id="searchTradeEndTime"
+                                                   type="text" readonly/>
+                                            <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                            <input type="hidden" value=0 name="tradeEndTime"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <button class="btn btn-white btn-default btn-round btn-sm"
+                                            onclick="return search()">
+                                        <i class="ace-icon fa fa-search red2"></i>
+                                        查询
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!-- /.col -->
+
+                    <div class="col-xs-12" style="text-align: right" id="buttonDiv">
+                        <p style="margin:1px;height: 31px">
+
+                        </p>
+                    </div><!-- /.col -->
+
+                    <div class="col-xs-12">
+                        <table id="grid-table"></table>
+
+                        <div id="grid-pager"></div>
+                    </div><!-- /.col -->
+
+                    <!--放大图片模态框-->
+                    <div id="ShowImage_Form" class="modal fade" tabindex="-1" role="dialog"
+                         aria-labelledby="myModalLabel" aria-hidden="true" style="overflow: scroll">
+                        <div class="modal-dialog"
+                             style="width:100%;height:100%;background-color: rgba(64,64,64,1);margin:0px;padding:0px;">
+                            <div class="modal-content"
+                                 style="width:100%;height:100%;background-color: rgba(64,64,64,1);margin:0px;padding:0px;">
+                                <div class="modal-header" style="border-bottom: 0px;background-color: rgba(64,64,64,1)">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">关闭
+                                    </button>
+                                    <button id="rotateBtn" onclick="rotatePictureFull()" type="button" class="close"
+                                            aria-hidden="true" title="顺时针旋转90度">旋转
+                                    </button>
+                                </div>
+                                <div class="modal-body"
+                                     style="padding:0px;text-align: center;background-color: rgba(64,64,64,0.5)">
+                                    <div id="imgShowFull" style="background-color: rgba(64,64,64,1);">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+</div><!-- /.main-container -->
+</body>
+<script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+    var rotateFull = 0;
+    $(function () {
+        //重新修改表格宽度
+        $(window).resize(function () {
+            $("#grid-table").setGridWidth($(window).width() * 0.96);
+        });
+
+        initDatePicker();
+
+        $('#searchPosCode').editableSelect({
+            effects: 'slide',
+            filter: false
+        });
+
+        var tableOption = {
+            url: "/api/chargereceipt/listpageall",
+            postData: transformToJson($('#chargeReceiptSearchForm').serializeArray()),
+            colNames: ['', '小票积分', '客户姓名', 'POS机编号', '银行卡后四位', '交易时间', '录入人', '操作'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'exchangePoint', index: 'exchangePoint', width: 40, sortable: false},
+                {name: 'customerName', index: 'submitterName', width: 40, sortable: false},
+                {name: 'posCode', index: 'posCode', width: 100, sortable: false},
+                {name: 'cardNo', index: 'cardNo', width: 40, sortable: false},
+                {
+                    name: 'tradeTime',
+                    index: 'tradeTime',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return dateFormat(rowObject.tradeTime);
+                    }
+                },
+                {name: 'inputerName', index: 'inputerName', sortable: false, width: 40},
+                {name: '_action', index: '_action', sortable: false, width: 100, formatter: customFormatter}
+            ],
+            caption: "凭证列表"
+        };
+        initTable(grid_selector, pager_selector, tableOption);
+    });
+
+    function search() {
+        jQuery(grid_selector).setGridParam({
+            url: "/api/chargereceipt/listpage_temp",
+            postData: transformToJson($('#chargeReceiptSearchForm').serializeArray()),
+        }).trigger("reloadGrid", [{page: 1}]);
+        return false;
+    }
+
+    function customFormatter(cellvalue, options, rowObject) {
+        var str = "";
+        str += "<a class='btn btn-minier btn-success' href='javascript:clickImg(\"" + encodeUrl(getImageUrl(rowObject.imgUrl)) + "\")'>查看小票</a>&nbsp;";
+        return str;
+    }
+
+    //全屏查看小票
+    function clickImg(source) {
+        $("#ShowImage_Form").modal('show');
+        $("#ShowImage_Form").find("#imgShowFull").html("<image id='zoomPicFull' width='500px' src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' style='zoom:70%;'/>");
+    }
+
+    function bigimg(obj) {
+        var zoom = parseInt(obj.style.zoom, 10) || 100;
+        zoom += event.wheelDelta / 12;
+        if (zoom > 0)
+            obj.style.zoom = zoom + '%';
+        return false;
+    }
+
+    function rotatePictureFull() {
+        var zoomPicDoc = document.getElementById('zoomPicFull');
+        rotateFull = (rotateFull + 90) % 360;
+        zoomPicDoc.style.transform = 'rotate(' + rotateFull + 'deg)';
+    }
+
+</script>
+</html>
