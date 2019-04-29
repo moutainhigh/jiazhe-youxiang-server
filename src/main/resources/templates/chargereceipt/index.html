@@ -347,6 +347,7 @@
     var auditRecordStatus = ['未提交', '已提交', '已驳回', '已通过'];
     var rotate = 0;//旋转角度
     var rotateFull = 0;
+    var page_chargeReceiptStatus = 0;//凭证未完成
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -395,7 +396,7 @@
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
         str += "<a class='btn btn-minier btn-success' href='javascript:clickImg(\"" + encodeUrl(getImageUrl(rowObject.imgUrl)) + "\")'>查看小票</a>&nbsp;";
-        if (rowObject.chargeReceiptStatus == 0) {
+        if (page_chargeReceiptStatus == 0) {
             if (permission.indexOf("chargeReceiptEdit") != -1) {
                 str += getFunctionButton("btn-primary", "edit(" + rowObject.id + ")", "修改");
             }
@@ -445,6 +446,7 @@
                     var result = data.data;
                     showByExchangeType(result);
                     fillChargeReceiptStatus(result.id, result.chargeReceiptStatus, result.status);
+                    page_chargeReceiptStatus = result.chargeReceiptStatus;
                     $("#bankOutletsName").html(result.bankOutletsName);
                     $("#exchangeType").html(getExchangeTypeText(result.exchangeType));
                     $("#status").html(auditRecordStatus[result.status - 1]);
@@ -724,6 +726,7 @@
                         bootboxalert(data.error.message);
                     }
                 } else {
+                    page_chargeReceiptStatus = chargeReceiptStatus;
                     fillChargeReceiptStatus(id, chargeReceiptStatus, status);
                     jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                 }

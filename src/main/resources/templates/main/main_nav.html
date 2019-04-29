@@ -64,6 +64,14 @@
                 </li>
             </shiro:hasPermission>
 
+            <li class="">
+                <a th:href="@{/chargereceipt/indexall}" target="iframeCenter">
+                    <i class="menu-icon fa fa-newspaper-o"></i>
+                    <span class="menu-text"> 凭证管理 </span>
+                </a>
+                <b class="arrow"></b>
+            </li>
+
             <shiro:hasPermission name="productCategoryManagement">
                 <li class="">
                     <a th:href="@{/product/productcategory/index}" target="iframeCenter">
