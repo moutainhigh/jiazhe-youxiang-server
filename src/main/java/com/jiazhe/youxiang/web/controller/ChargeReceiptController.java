@@ -1,6 +1,8 @@
 package com.jiazhe.youxiang.web.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,11 +16,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/chargereceipt")
 public class ChargeReceiptController extends BaseController {
 
-    //@RequiresPermissions(PermissionConstant.POINT_CODE_MANAGEMENT)
+    @RequiresPermissions(PermissionConstant.CHARGE_RECEIPT_MANAGEMENT)
     @RequestMapping(value = "/index")
-    public String exchangeCodeIndex(String auditRecordId, Model model) {
+    public String index(String auditRecordId, Model model) {
         model.addAttribute("auditRecordId", auditRecordId);
         return "chargereceipt/index";
+    }
+
+    /**
+     *
+     * @return
+     */
+    @RequestMapping(value = "/indexall")
+    public String indexAll() {
+        return "chargereceipt/indexall";
     }
 
 }

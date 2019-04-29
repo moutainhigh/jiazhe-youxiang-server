@@ -31,6 +31,21 @@
             <if test="auditRecordId != null and auditRecordId != 0">
                 AND audit_record_id = #{auditRecordId}
             </if>
+            <if test="customerName != null and customerName!=''">
+                AND customer_name LIKE CONCAT('%',#{customerName},'%')
+            </if>
+            <if test="cardNo != null and cardNo!=''">
+                AND card_no = #{cardNo}
+            </if>
+            <if test="posCode != null and posCode!=''">
+                AND pos_code = #{posCode}
+            </if>
+            <if test="tradeStartTime != null">
+                AND trade_time &gt;= #{tradeStartTime}
+            </if>
+            <if test="tradeEndTime != null">
+                AND trade_time &lt;= #{tradeEndTime}
+            </if>
             AND is_deleted = 0 ORDER BY mod_time DESC
         </where>
         <if test="offset != null and limit != null">
@@ -43,6 +58,21 @@
         <where>
             <if test="auditRecordId != null and auditRecordId != 0">
                 AND audit_record_id = #{auditRecordId}
+            </if>
+            <if test="customerName != null and customerName!=''">
+                AND customer_name LIKE CONCAT('%',#{customerName},'%')
+            </if>
+            <if test="cardNo != null and cardNo!=''">
+                AND card_no = #{cardNo}
+            </if>
+            <if test="posCode != null and posCode!=''">
+                AND pos_code = #{posCode}
+            </if>
+            <if test="tradeStartTime != null">
+                AND trade_time &gt;= #{tradeStartTime}
+            </if>
+            <if test="tradeEndTime != null">
+                AND trade_time &lt;= #{tradeEndTime}
             </if>
             AND is_deleted = 0
         </where>

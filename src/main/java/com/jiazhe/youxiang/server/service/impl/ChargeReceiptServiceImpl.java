@@ -41,15 +41,11 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
     private AuditRecordService auditRecordService;
 
     @Override
-    public List<ChargeReceiptDTO> getList(Integer auditRecordId, Paging paging) {
-        AuditRecordDTO auditRecordDTO = auditRecordService.getById(auditRecordId);
-        Integer count = chargeReceiptPOManualMapper.count(auditRecordId);
-        List<ChargeReceiptPO> chargeReceiptPOList = chargeReceiptPOManualMapper.query(auditRecordId, paging.getOffset(), paging.getLimit());
+    public List<ChargeReceiptDTO> getList(Integer auditRecordId, String customerName, String cardNo, String posCode, Date tradeStartTime, Date tradeEndTime, Paging paging) {
+        Integer count = chargeReceiptPOManualMapper.count(auditRecordId,customerName,cardNo,posCode,tradeStartTime,tradeEndTime);
+        List<ChargeReceiptPO> chargeReceiptPOList = chargeReceiptPOManualMapper.query(auditRecordId,customerName,cardNo,posCode,tradeStartTime,tradeEndTime, paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
         List<ChargeReceiptDTO> chargeReceiptDTOList = chargeReceiptPOList.stream().map(ChargeReceiptAdapter::po2Dto).collect(Collectors.toList());
-        chargeReceiptDTOList.stream().forEach(bean -> {
-            bean.setChargeReceiptStatus(auditRecordDTO.getChargeReceiptStatus());
-        });
         return chargeReceiptDTOList;
     }
 
@@ -139,7 +135,8 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
         criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
         criteria.andPosCodeEqualTo(dto.getPosCode());
         criteria.andExchangePointEqualTo(dto.getExchangePoint());
+        criteria.andTradeTimeEqualTo(dto.getTradeTime());
         List<ChargeReceiptPO> poList = chargeReceiptPOMapper.selectByExample(example);
-        return  (poList.size() > 1) || (poList.size() == 1 && !poList.get(0).getId().equals(dto.getId()));
+        return (poList.size() > 1) || (poList.size() == 1 && !poList.get(0).getId().equals(dto.getId()));
     }
 }
