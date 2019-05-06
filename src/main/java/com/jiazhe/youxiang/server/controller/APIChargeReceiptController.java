@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.ChargeReceiptAdapter;
 import com.jiazhe.youxiang.server.biz.ChargeReceiptBiz;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,10 +49,10 @@ public class APIChargeReceiptController extends BaseController {
     @RequiresPermissions(PermissionConstant.CHARGE_RECEIPT_MANAGEMENT)
     @ApiOperation(value = "【后台】消费凭证列表", httpMethod = "GET", response = ChargeReceiptResp.class, responseContainer = "List", notes = "【后台】消费凭证列表")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.CHARGE_RECEIPT, operate = "消费凭证列表表", level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.CHARGE_RECEIPT, operate = "消费凭证列表", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute ChargeReceiptPageReq req) {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        List<ChargeReceiptDTO> chargeReceiptDTOList = chargeReceiptBiz.getList(req.getAuditRecordId(), paging);
+        List<ChargeReceiptDTO> chargeReceiptDTOList = chargeReceiptBiz.getList(req.getAuditRecordId(),null,null,null,null,null, paging);
         List<ChargeReceiptResp> chargeReceiptRespList = chargeReceiptDTOList.stream().map(ChargeReceiptAdapter::dto2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(chargeReceiptRespList, paging);
     }
@@ -77,6 +79,13 @@ public class APIChargeReceiptController extends BaseController {
             throw new ChargeReceiptException(ChargeReceiptCodeEnum.TRADE_TIME_IS_NULL);
         }
         ChargeReceiptSaveDTO dto = ChargeReceiptAdapter.saveReq2SaveDto(req);
+        //检查记录是否重复
+        if(Byte.valueOf("1").equals(req.getCheck())){
+            boolean hasExisted = chargeReceiptBiz.hasExisted(dto);
+            if(hasExisted){
+                throw new ChargeReceiptException(ChargeReceiptCodeEnum.CHARGE_RECEIPT_REPEAT);
+            }
+        }
         chargeReceiptBiz.save(dto);
         return ResponseFactory.buildSuccess();
     }
@@ -89,5 +98,17 @@ public class APIChargeReceiptController extends BaseController {
         ChargeReceiptDTO chargeReceiptDTO = chargeReceiptBiz.getById(req.getId());
         ChargeReceiptResp chargeReceiptResp = ChargeReceiptAdapter.dto2Resp(chargeReceiptDTO);
         return ResponseFactory.buildResponse(chargeReceiptResp);
+    }
+
+    @ApiOperation(value = "【后台】消费凭证列表", httpMethod = "GET", response = ChargeReceiptResp.class, responseContainer = "List", notes = "【后台】消费凭证列表")
+    @RequestMapping(value = "/listpageall", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.CHARGE_RECEIPT, operate = "消费凭证列表", level = LogLevelEnum.LEVEL_1)
+    public Object listPageAll(@ModelAttribute ChargeReceiptPageReq req) {
+        Paging paging = PagingParamUtil.pagingParamSwitch(req);
+        Date tradeStartTime = req.getTradeStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getTradeStartTime()));
+        Date tradeEndTime = req.getTradeEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getTradeEndTime()));
+        List<ChargeReceiptDTO> chargeReceiptDTOList = chargeReceiptBiz.getList(req.getAuditRecordId(),req.getCustomerName(),req.getCardNo(),req.getPosCode(),tradeStartTime,tradeEndTime, paging);
+        List<ChargeReceiptResp> chargeReceiptRespList = chargeReceiptDTOList.stream().map(ChargeReceiptAdapter::dto2Resp).collect(Collectors.toList());
+        return ResponseFactory.buildPaginationResponse(chargeReceiptRespList, paging);
     }
 }

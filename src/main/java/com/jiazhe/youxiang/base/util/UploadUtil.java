@@ -91,8 +91,8 @@ public class UploadUtil {
      * @return 返回文件名
      * @throws IOException
      */
-    @Deprecated
-    public static String uploadImage(MultipartFile multipartFile, String path) {
+
+    public static String uploadFile2Server(MultipartFile multipartFile, String path) {
         File file = new File(path);
         if (!file.exists()) {
             file.mkdirs();

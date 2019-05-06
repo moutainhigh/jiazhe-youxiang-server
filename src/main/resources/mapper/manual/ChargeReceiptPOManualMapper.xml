@@ -11,6 +11,7 @@
         <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
         <result column="inputer_id" property="inputerId" jdbcType="INTEGER" />
         <result column="inputer_name" property="inputerName" jdbcType="VARCHAR" />
+        <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
         <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
         <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
         <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
@@ -19,7 +20,7 @@
 
     <sql id="Base_Column_List">
         id, audit_record_id, exchange_point, pos_code, trade_time, card_no, customer_name,
-        inputer_id, inputer_name, ext_info, is_deleted, add_time, mod_time
+        inputer_id, inputer_name,img_url, ext_info, is_deleted, add_time, mod_time
     </sql>
 
     <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.ChargeReceiptPO">
@@ -29,6 +30,21 @@
         <where>
             <if test="auditRecordId != null and auditRecordId != 0">
                 AND audit_record_id = #{auditRecordId}
+            </if>
+            <if test="customerName != null and customerName!=''">
+                AND customer_name LIKE CONCAT('%',#{customerName},'%')
+            </if>
+            <if test="cardNo != null and cardNo!=''">
+                AND card_no = #{cardNo}
+            </if>
+            <if test="posCode != null and posCode!=''">
+                AND pos_code = #{posCode}
+            </if>
+            <if test="tradeStartTime != null">
+                AND trade_time &gt;= #{tradeStartTime}
+            </if>
+            <if test="tradeEndTime != null">
+                AND trade_time &lt;= #{tradeEndTime}
             </if>
             AND is_deleted = 0 ORDER BY mod_time DESC
         </where>
@@ -42,6 +58,21 @@
         <where>
             <if test="auditRecordId != null and auditRecordId != 0">
                 AND audit_record_id = #{auditRecordId}
+            </if>
+            <if test="customerName != null and customerName!=''">
+                AND customer_name LIKE CONCAT('%',#{customerName},'%')
+            </if>
+            <if test="cardNo != null and cardNo!=''">
+                AND card_no = #{cardNo}
+            </if>
+            <if test="posCode != null and posCode!=''">
+                AND pos_code = #{posCode}
+            </if>
+            <if test="tradeStartTime != null">
+                AND trade_time &gt;= #{tradeStartTime}
+            </if>
+            <if test="tradeEndTime != null">
+                AND trade_time &lt;= #{tradeEndTime}
             </if>
             AND is_deleted = 0
         </where>

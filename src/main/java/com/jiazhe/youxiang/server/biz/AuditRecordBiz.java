@@ -7,6 +7,7 @@ import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,12 +37,12 @@ public class AuditRecordBiz {
         return auditRecordService.getById(id);
     }
 
-    public List<AuditRecordDTO> getList(String customerMobile, Byte status,Byte chargeReceiptStatus, Paging paging) {
-        return auditRecordService.getList(customerMobile, null, status,chargeReceiptStatus, paging);
+    public List<AuditRecordDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, Date submitStartTime, Date submitEndTime, Paging paging) {
+        return auditRecordService.getList(null, customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, submitStartTime, submitEndTime, paging);
     }
 
-    public List<AuditRecordDTO> getSubmitterList(Byte status, Integer submitterId, Paging paging) {
-        return auditRecordService.getList(null, submitterId, status,null, paging);
+    public List<AuditRecordDTO> getSubmitterList(Integer submitterId, String customerInfo, Byte status, Paging paging) {
+        return auditRecordService.getList(submitterId, customerInfo, null, status, null, null, null, null, paging);
     }
 
     public void save(AuditRecordDTO auditRecordDTO) {
@@ -52,11 +53,11 @@ public class AuditRecordBiz {
         auditRecordService.deleteById(id);
     }
 
-    public void completeChargeReceipt(Integer id) {
-        auditRecordService.changeChargeReceiptStatus(id, CommonConstant.CHARGE_RECEIPT_COMPLETE);
+    public void completeChargeReceipt(Integer id,Byte check) {
+        auditRecordService.changeChargeReceiptStatus(id, CommonConstant.CHARGE_RECEIPT_COMPLETE,check);
     }
 
     public void uncompleteChargeReceipt(Integer id) {
-        auditRecordService.changeChargeReceiptStatus(id, CommonConstant.CHARGE_RECEIPT_UNCOMPLETE);
+        auditRecordService.changeChargeReceiptStatus(id, CommonConstant.CHARGE_RECEIPT_UNCOMPLETE,null);
     }
 }

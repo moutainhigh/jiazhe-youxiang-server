@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.dao.mapper.manual;
 import com.jiazhe.youxiang.server.domain.po.AuditRecordPO;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,23 +13,53 @@ import java.util.List;
  */
 public interface AuditRecordPOManualMapper {
     /**
-     * 计数
      *
-     * @param customerMobile
      * @param submitterId
+     * @param customerInfo
+     * @param submitterName
      * @param status
+     * @param chargeReceiptStatus
+     * @param submitterName
+     * @param pointCodes
+     * @param submitStartTime
+     * @param submitEndTime
      * @return
      */
-    Integer count(@Param("customerMobile") String customerMobile, @Param("submitterId") Integer submitterId, @Param("status") Byte status, @Param("chargeReceiptStatus") Byte chargeReceiptStatus);
+    Integer count(
+            @Param("submitterId") Integer submitterId,
+            @Param("customerInfo") String customerInfo,
+            @Param("submitterName") String submitterName,
+            @Param("status") Byte status,
+            @Param("chargeReceiptStatus") Byte chargeReceiptStatus,
+            @Param("pointCodes") String pointCodes,
+            @Param("submitStartTime") Date submitStartTime,
+            @Param("submitEndTime") Date submitEndTime
+    );
 
     /**
-     * 分页查询
      *
-     * @param customerMobile
+     * @param submitterId
+     * @param customerInfo
+     * @param submitterName
      * @param status
+     * @param chargeReceiptStatus
+     * @param pointCodes
+     * @param submitStartTime
+     * @param submitEndTime
      * @param offset
      * @param limit
      * @return
      */
-    List<AuditRecordPO> query(@Param("customerMobile") String customerMobile, @Param("submitterId") Integer submitterId, @Param("status") Byte status, @Param("chargeReceiptStatus") Byte chargeReceiptStatus, @Param("offset") Integer offset, @Param("limit") Integer limit);
+    List<AuditRecordPO> query(
+            @Param("submitterId") Integer submitterId,
+            @Param("customerInfo") String customerInfo,
+            @Param("submitterName") String submitterName,
+            @Param("status") Byte status,
+            @Param("chargeReceiptStatus") Byte chargeReceiptStatus,
+            @Param("pointCodes") String pointCodes,
+            @Param("submitStartTime") Date submitStartTime,
+            @Param("submitEndTime") Date submitEndTime,
+            @Param("offset") Integer offset,
+            @Param("limit") Integer limit
+    );
 }

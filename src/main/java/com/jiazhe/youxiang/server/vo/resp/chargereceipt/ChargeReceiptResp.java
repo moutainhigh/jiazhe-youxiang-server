@@ -29,6 +29,8 @@ public class ChargeReceiptResp extends BaseVO {
 
     private String inputerName;
 
+    private String imgUrl;
+
     private String extInfo;
 
     private Byte isDeleted;
@@ -36,8 +38,6 @@ public class ChargeReceiptResp extends BaseVO {
     private Long addTime;
 
     private Long modTime;
-
-    private Byte chargeReceiptStatus;
 
     public Integer getId() {
         return id;
@@ -143,11 +143,11 @@ public class ChargeReceiptResp extends BaseVO {
         this.modTime = modTime;
     }
 
-    public Byte getChargeReceiptStatus() {
-        return chargeReceiptStatus;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setChargeReceiptStatus(Byte chargeReceiptStatus) {
-        this.chargeReceiptStatus = chargeReceiptStatus;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }

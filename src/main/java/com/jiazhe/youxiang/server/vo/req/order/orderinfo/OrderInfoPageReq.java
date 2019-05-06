@@ -2,9 +2,6 @@ package com.jiazhe.youxiang.server.vo.req.order.orderinfo;
 
 import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.util.Date;
 
 /**
  * @author tu
@@ -25,7 +22,7 @@ public class OrderInfoPageReq extends PageSizeNumReq {
     @ApiModelProperty("收货手机号")
     private String customerMobile;
 
-    @ApiModelProperty("下单期间起")
+    @ApiModelProperty("下单时间起")
     private Long orderStartTime;
 
     @ApiModelProperty("下单时间止")
@@ -33,6 +30,15 @@ public class OrderInfoPageReq extends PageSizeNumReq {
 
     @ApiModelProperty("服务人员电话")
     private String workerMobile;
+
+    @ApiModelProperty("商品id")
+    private Integer productId;
+
+    @ApiModelProperty("服务时间起")
+    private Long realServiceTimeStart;
+
+    @ApiModelProperty("服务时间止")
+    private Long realServiceTimeEnd;
 
     public String getStatus() {
         return status;
@@ -88,5 +94,29 @@ public class OrderInfoPageReq extends PageSizeNumReq {
 
     public void setWorkerMobile(String workerMobile) {
         this.workerMobile = workerMobile;
+    }
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+
+    public Long getRealServiceTimeStart() {
+        return realServiceTimeStart;
+    }
+
+    public void setRealServiceTimeStart(Long realServiceTimeStart) {
+        this.realServiceTimeStart = realServiceTimeStart;
+    }
+
+    public Long getRealServiceTimeEnd() {
+        return realServiceTimeEnd;
+    }
+
+    public void setRealServiceTimeEnd(Long realServiceTimeEnd) {
+        this.realServiceTimeEnd = realServiceTimeEnd;
     }
 }

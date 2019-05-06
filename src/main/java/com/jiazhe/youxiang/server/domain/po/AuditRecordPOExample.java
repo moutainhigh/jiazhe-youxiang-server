@@ -1985,6 +1985,66 @@ public class AuditRecordPOExample {
             addCriterion("exchange_type not between", value1, value2, "exchangeType");
             return (Criteria) this;
         }
+
+        public Criteria andSubmitTimeIsNull() {
+            addCriterion("submit_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubmitTimeIsNotNull() {
+            addCriterion("submit_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubmitTimeEqualTo(Date value) {
+            addCriterion("submit_time =", value, "submitTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubmitTimeNotEqualTo(Date value) {
+            addCriterion("submit_time <>", value, "submitTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubmitTimeGreaterThan(Date value) {
+            addCriterion("submit_time >", value, "submitTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubmitTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("submit_time >=", value, "submitTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubmitTimeLessThan(Date value) {
+            addCriterion("submit_time <", value, "submitTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubmitTimeLessThanOrEqualTo(Date value) {
+            addCriterion("submit_time <=", value, "submitTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubmitTimeIn(List<Date> values) {
+            addCriterion("submit_time in", values, "submitTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubmitTimeNotIn(List<Date> values) {
+            addCriterion("submit_time not in", values, "submitTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubmitTimeBetween(Date value1, Date value2) {
+            addCriterion("submit_time between", value1, value2, "submitTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubmitTimeNotBetween(Date value1, Date value2) {
+            addCriterion("submit_time not between", value1, value2, "submitTime");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

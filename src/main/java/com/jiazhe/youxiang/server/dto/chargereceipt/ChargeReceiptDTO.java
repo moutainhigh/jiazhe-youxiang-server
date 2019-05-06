@@ -38,7 +38,7 @@ public class ChargeReceiptDTO extends BaseObject {
 
     private Date modTime;
 
-    private Byte chargeReceiptStatus;
+    private String imgUrl;
 
     public Integer getId() {
         return id;
@@ -144,11 +144,11 @@ public class ChargeReceiptDTO extends BaseObject {
         this.modTime = modTime;
     }
 
-    public Byte getChargeReceiptStatus() {
-        return chargeReceiptStatus;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setChargeReceiptStatus(Byte chargeReceiptStatus) {
-        this.chargeReceiptStatus = chargeReceiptStatus;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }

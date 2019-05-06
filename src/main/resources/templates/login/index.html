@@ -162,7 +162,7 @@
         var password = $("#password").val();
         var rememberMe = $('#rememberMe').is(':checked')?"true":"false";
         var identifyingCode = $("#identifyingCode").val();
-        var bizId = $("#bizId").val()
+        var bizId = $("#bizId").val();
         if (loginname == "" || password == "") {
             bootboxalert("请将信息填写完整后再登录");
             return false;
@@ -176,7 +176,7 @@
                 password: password,
                 rememberMe:rememberMe,
                 identifyingCode: identifyingCode,
-                bizId: bizId
+                bizId: bizId,
             },
             type: "GET",
             success: function (data) {

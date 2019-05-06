@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.ExportExcelUtils;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.AuditRecordAdapter;
@@ -36,6 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -102,7 +104,9 @@ public class APIAuditRecordController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "消费记录列表", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute AuditRecordPageReq req) {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getCustomerMobile(), req.getStatus(),req.getChargeReceiptStatus(), paging);
+        Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
+        Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getCustomerInfo(), req.getSubmitterName(), req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(), submitStartTime, submitEndTime, paging);
         List<AuditRecordResp> auditRecordRespList = auditRecordDTOList.stream().map(AuditRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(auditRecordRespList, paging);
     }
@@ -116,7 +120,7 @@ public class APIAuditRecordController extends BaseController {
         if (null == sysUserDTO) {
             throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
-        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getSubmitterList(req.getStatus(), sysUserDTO.getId(), paging);
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getSubmitterList(sysUserDTO.getId(), req.getCustomerInfo(), req.getStatus(), paging);
         List<AuditRecordResp> auditRecordRespList = auditRecordDTOList.stream().map(AuditRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(auditRecordRespList, paging);
     }
@@ -159,8 +163,8 @@ public class APIAuditRecordController extends BaseController {
             if (CommonConstant.CODE_DELETED.equals(auditRecordDTO.getIsDeleted())) {
                 throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_IS_NOT_EXIST);
             }
-            if (CommonConstant.AUDIT_RECORD_PASS.equals(auditRecordDTO.getStatus())) {
-                throw new AuditRecordException(AuditRecordCodeEnum.RECORD_HASS_PASSED);
+            if (CommonConstant.AUDIT_RECORD_PASS.equals(auditRecordDTO.getStatus()) || CommonConstant.AUDIT_RECORD_HAS_SUBMITTED.equals(auditRecordDTO.getStatus())) {
+                throw new AuditRecordException(AuditRecordCodeEnum.RECORD_CNANOT_CHANGE);
             }
             if (!auditRecordDTO.getVersion().equals(req.getVersion())) {
                 throw new AuditRecordException(AuditRecordCodeEnum.VERSION_IS_CHANGED);
@@ -168,6 +172,7 @@ public class APIAuditRecordController extends BaseController {
             auditRecordDTO.setVersion(auditRecordDTO.getVersion() + 1);
             auditRecordDTO.setModTime(new Date(System.currentTimeMillis()));
         }
+        auditRecordDTO.setSubmitTime(new Date());
         auditRecordDTO.setStatus(req.getStatus());
         auditRecordDTO.setBankOutletsName(req.getBankOutletsName());
         auditRecordDTO.setExchangeType(req.getExchangeType());
@@ -196,8 +201,8 @@ public class APIAuditRecordController extends BaseController {
     @ApiOperation(value = "完成凭证录入", httpMethod = "POST", notes = "完成凭证录入")
     @RequestMapping(value = "/completechargereceipt", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "完成凭证录入", level = LogLevelEnum.LEVEL_2)
-    public Object completeChargeReceipt(@ModelAttribute IdReq req) {
-        auditRecordBiz.completeChargeReceipt(req.getId());
+    public Object completeChargeReceipt(@ModelAttribute IdReq req,@RequestParam Byte check) {
+        auditRecordBiz.completeChargeReceipt(req.getId(),check);
         return ResponseFactory.buildSuccess();
     }
 
@@ -214,8 +219,10 @@ public class APIAuditRecordController extends BaseController {
     @ApiOperation(value = "【后台】导出消费凭证", httpMethod = "GET", notes = "导出消费凭证")
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "导出消费凭证", level = LogLevelEnum.LEVEL_3)
-    public void export(@ModelAttribute AuditRecordPageReq req, HttpServletResponse response){
-        List<ChargeReceiptDTO> dtoList = chargeReceiptBiz.getList(req.getCustomerMobile(),req.getStatus(),req.getChargeReceiptStatus());
+    public void export(@ModelAttribute AuditRecordPageReq req, HttpServletResponse response) {
+        Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
+        Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
+        List<ChargeReceiptDTO> dtoList = chargeReceiptBiz.getList(req.getCustomerInfo(), req.getSubmitterName(),req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(), submitStartTime, submitEndTime);
         ExportExcelUtils.exportChargeReceipt(response, dtoList);
     }
 }

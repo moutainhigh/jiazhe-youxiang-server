@@ -23,6 +23,11 @@
             height: 15px;
         }
 
+        #ShowImage_Form::-webkit-scrollbar {
+            width: 15px;
+            height: 15px;
+        }
+
         .float {
             overflow: hidden;
         }
@@ -35,7 +40,7 @@
             border-top: 3px solid #fff;
         }
 
-        .pic_div{
+        .pic_div {
             position: relative;
             background-color: white;
             width: auto;
@@ -56,7 +61,7 @@
                         <a th:href="@{/main/main_center}">主页</a>
                     </li>
                     <li>
-                        <a th:href="@{/auditrecord/index}">充值管理</a>
+                        <a th:href="@{/auditrecord/index}">充值审核</a>
                     </li>
                     <li class="active" th:text="凭证管理"></li>
                 </ul><!-- /.breadcrumb -->
@@ -83,6 +88,7 @@
                                     <div class="profile-info-name"> 凭证完成情况</div>
                                     <div class="profile-info-value">
                                         <span id="chargeReceiptStatus"></span>
+                                        <input type="hidden" name="check" id="totalPointCheck" th:value="1"/>
                                     </div>
                                 </div>
 
@@ -111,6 +117,13 @@
                                     <div class="profile-info-name"> 兑换总积分</div>
                                     <div class="profile-info-value">
                                         <span id="totalExchangePoint"></span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 小票总积分</div>
+                                    <div class="profile-info-value">
+                                        <span id="totalChargeReceiptPoint"></span>
                                     </div>
                                 </div>
 
@@ -168,7 +181,7 @@
                                 </div>
                                 <div class="modal-body" style="text-align: center">
                                     <div class="row">
-                                        <div class = "col-xs-12 col-sm-6">
+                                        <div class="col-xs-12 col-sm-6">
                                             <a href="javascript:rotatePicture()" title="顺时针旋转90度">
                                                 <i class="ace-icon fa fa-repeat"></i>
                                             </a>
@@ -176,11 +189,13 @@
 
                                             </div>
                                         </div>
-                                        <div class = "col-xs-12 col-sm-6">
+                                        <div class="col-xs-12 col-sm-6">
                                             <div class="col-xs-12 col-sm-12">
                                                 <form id="chargeReceiptForm" class="form-horizontal" role="form">
-                                                    <input type="hidden" name="auditRecordId" id="auditRecordId" th:value="${auditRecordId}"/>
+                                                    <input type="hidden" name="auditRecordId" id="auditRecordId"
+                                                           th:value="${auditRecordId}"/>
                                                     <input type="hidden" name="id" id="id" th:value="0"/>
+                                                    <input type="hidden" name="check" id="check" th:value="1"/>
                                                     <div class="space-2"></div>
                                                     <div class="form-group">
                                                         <label class="col-sm-4 control-label no-padding-right">充值凭证：</label>
@@ -194,7 +209,7 @@
                                                         <label class="col-sm-4 control-label no-padding-right">小票图片：</label>
                                                         <div class="col-sm-8">
                                                             <div class="pos-rel">
-                                                                <input id="saveExtInfo" name="extInfo"
+                                                                <input id="saveImgUrl" name="imgUrl"
                                                                        class="form-control" readonly
                                                                        type="text" style="height:30px"/>
                                                             </div>
@@ -230,7 +245,8 @@
                                                         <label class="col-sm-4 control-label no-padding-right">POS机编号：</label>
                                                         <div class="col-sm-8">
                                                             <div class="pos-rel">
-                                                                <select id="posCode" name="posCode" class="form-control">
+                                                                <select id="posCode" name="posCode"
+                                                                        class="form-control">
                                                                     <option>财富私行尊享积分pos一</option>
                                                                     <option>财富私行尊享积分pos十二</option>
                                                                     <option>财富私行尊享积分pos十六</option>
@@ -296,6 +312,29 @@
                             </div>
                         </div>
                     </div>
+
+                    <!--放大图片模态框-->
+                    <div id="ShowImage_Form" class="modal fade" tabindex="-1" role="dialog"
+                         aria-labelledby="myModalLabel" aria-hidden="true" style="overflow: scroll">
+                        <div class="modal-dialog"
+                             style="width:100%;height:100%;background-color: rgba(64,64,64,1);margin:0px;padding:0px;">
+                            <div class="modal-content"
+                                 style="width:100%;height:100%;background-color: rgba(64,64,64,1);margin:0px;padding:0px;">
+                                <div class="modal-header" style="border-bottom: 0px;background-color: rgba(64,64,64,1)">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">关闭
+                                    </button>
+                                    <button id="rotateBtn" onclick="rotatePictureFull()" type="button" class="close"
+                                            aria-hidden="true" title="顺时针旋转90度">旋转
+                                    </button>
+                                </div>
+                                <div class="modal-body"
+                                     style="padding:0px;text-align: center;background-color: rgba(64,64,64,0.5)">
+                                    <div id="imgShowFull" style="background-color: rgba(64,64,64,1);">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div><!-- /.row -->
             </div><!-- /.page-content -->
         </div>
@@ -307,6 +346,8 @@
     var pager_selector = "#grid-pager";
     var auditRecordStatus = ['未提交', '已提交', '已驳回', '已通过'];
     var rotate = 0;//旋转角度
+    var rotateFull = 0;
+    var page_chargeReceiptStatus = 0;//凭证未完成
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -331,20 +372,21 @@
             colNames: ['', '小票积分', '客户姓名', 'POS机编号', '银行卡后四位', '交易时间', '录入人', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
-                {name: 'exchangePoint', index: 'exchangePoint', sortable: false},
-                {name: 'customerName', index: 'submitterName', sortable: false},
-                {name: 'posCode', index: 'posCode', sortable: false},
-                {name: 'cardNo', index: 'cardNo', sortable: false},
+                {name: 'exchangePoint', index: 'exchangePoint', width: 40, sortable: false},
+                {name: 'customerName', index: 'submitterName', width: 40, sortable: false},
+                {name: 'posCode', index: 'posCode', width: 100, sortable: false},
+                {name: 'cardNo', index: 'cardNo', width: 40, sortable: false},
                 {
                     name: 'tradeTime',
                     index: 'tradeTime',
+                    width: 50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return dateFormat(rowObject.tradeTime);
                     }
                 },
-                {name: 'inputerName', index: 'inputerName', sortable: false},
-                {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
+                {name: 'inputerName', index: 'inputerName', sortable: false, width: 40},
+                {name: '_action', index: '_action', sortable: false, width: 100, formatter: customFormatter}
             ],
             caption: "凭证列表"
         };
@@ -353,22 +395,31 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        if(rowObject.chargeReceiptStatus == 0){
-            if(permission.indexOf("chargeReceiptEdit") != -1) {
+        str += "<a class='btn btn-minier btn-success' href='javascript:clickImg(\"" + encodeUrl(getImageUrl(rowObject.imgUrl)) + "\")'>查看小票</a>&nbsp;";
+        if (page_chargeReceiptStatus == 0) {
+            if (permission.indexOf("chargeReceiptEdit") != -1) {
                 str += getFunctionButton("btn-primary", "edit(" + rowObject.id + ")", "修改");
             }
-            if(permission.indexOf("chargeReceiptDelete") != -1) {
+            if (permission.indexOf("chargeReceiptDelete") != -1) {
                 str += getFunctionButton("btn-danger", "deleteById(" + rowObject.id + ")", "删除");
             }
         }
         return str;
     }
 
-    function showimage(source) {//图片单击放大显示
+    //图片单击放大显示
+    function showimage(source) {
         rotate = 0;
-        $("#saveExtInfo").val(source);
+        $("#saveImgUrl").val(source);
         $("#modal-form").find("#img_show").html("<image id='zoomPic' width='400px' src='" + getImageUrl(source) + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' />");
     }
+
+    //全屏查看小票
+    function clickImg(source) {
+        $("#ShowImage_Form").modal('show');
+        $("#ShowImage_Form").find("#imgShowFull").html("<image id='zoomPicFull' width='500px' src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' style='zoom:70%;'/>");
+    }
+
 
     function bigimg(obj) {
         var zoom = parseInt(obj.style.zoom, 10) || 100;
@@ -394,34 +445,65 @@
                 } else {
                     var result = data.data;
                     showByExchangeType(result);
-                    fillChargeReceiptStatus(result.id,result.chargeReceiptStatus,result.status);
+                    fillChargeReceiptStatus(result.id, result.chargeReceiptStatus, result.status);
+                    page_chargeReceiptStatus = result.chargeReceiptStatus;
                     $("#bankOutletsName").html(result.bankOutletsName);
                     $("#exchangeType").html(getExchangeTypeText(result.exchangeType));
                     $("#status").html(auditRecordStatus[result.status - 1]);
                     $("#totalExchangePoint").html(result.exchangePoint);
+                    $("#totalChargeReceiptPoint").html(generateSpan(result.chargeReceiptPoint,result.chargeReceiptPoint==result.exchangePoint?"00FF00":"FF0000"));
                     $("#customerName").html(result.customerName);
                     var imgUrls = result.imgUrls.split(",");
                     for (var i = 0; i < imgUrls.length; i++) {
                         $("#pics").append("<img class='item' onmouseover=\"this.style.cursor='pointer';this.style.cursor='hand'\"  onmouseout=\"this.style.cursor='default'\" onclick=\"javascript:showimage('" + imgUrls[i] + "');\" src='" + getImageUrl(imgUrls[i]) + "'>")
                     }
-                    $("#saveExtInfo").val(imgUrls[0]);
+                    $("#saveImgUrl").val(imgUrls[0]);
                     showimage(imgUrls[0]);
                 }
             },
             error: error
         });
     }
+
+    //刷新录入的小票积分
+    function refreshChargeReceiptPoint(){
+        $.ajax({
+            url: "/api/auditrecord/getbyid",
+            dataType: "json",
+            async: false,
+            data: {
+                id: $("#auditRecordId").val()
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#totalChargeReceiptPoint").html(generateSpan(result.chargeReceiptPoint,result.chargeReceiptPoint==result.exchangePoint?"00FF00":"FF0000"));
+                }
+            },
+            error: error
+        });
+    }
+
     function rotatePicture() {
         var zoomPicDoc = document.getElementById('zoomPic');
         rotate = (rotate + 90) % 360;
         zoomPicDoc.style.transform = 'rotate(' + rotate + 'deg)';
     }
 
+    function rotatePictureFull() {
+        var zoomPicDoc = document.getElementById('zoomPicFull');
+        rotateFull = (rotateFull + 90) % 360;
+        zoomPicDoc.style.transform = 'rotate(' + rotateFull + 'deg)';
+    }
 
-    function formatterPointCodes(pointCodes){
+
+    function formatterPointCodes(pointCodes) {
         var codes = pointCodes.split(',');
         var html = '';
-        for(var i=0;i<codes.length;i++){
+        for (var i = 0; i < codes.length; i++) {
             html += codes[i] + "</br>";
         }
         return html;
@@ -470,8 +552,8 @@
     }
 
     function deleteById(id) {
-        confirm("确定删除吗？",function (result) {
-            if(result){
+        confirm("确定删除吗？", function (result) {
+            if (result) {
                 $.ajax({
                     url: "/api/chargereceipt/delete",
                     dataType: "json",
@@ -485,6 +567,7 @@
                             bootboxalert(data.error.message);
                         } else {
                             jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                            refreshChargeReceiptPoint();
                         }
                     },
                     error: error
@@ -493,8 +576,9 @@
         });
     }
 
-    function openNew(){
+    function openNew() {
         $("#id").val(0);
+        $("#check").val(1);
         $("#saveExchangePoint").val('');
         $("#saveCustomerName").val('');
         $("#posCode").val('');
@@ -508,7 +592,7 @@
      * type  1保存 2保存并继续
      * */
     function save(type) {
-        if(!isNumber($("#saveExchangePoint").val())){
+        if (!isNumber($("#saveExchangePoint").val())) {
             bootboxalert("小票积分数量不合法");
             return false;
         }
@@ -516,18 +600,28 @@
             url: "/api/chargereceipt/save",
             dataType: "json",
             async: false,
-            data:transformToJson($('#chargeReceiptForm').serializeArray()),
+            data: transformToJson($('#chargeReceiptForm').serializeArray()),
             type: "POST",
             success: function (data) {
                 if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    if(type == '1'){
-                        $("#modal-form").modal('hide');
+                    if(data.error.code == 119008){
+                        confirm('有类似的小票记录，还需要继续保存吗？',function(result){
+                            if(result){
+                                $("#check").val(0);
+                                save(type);
+                            }
+                        });
                     }else{
+                        bootboxalert(data.error.message);
+                    }
+                } else {
+                    if (type == '1') {
+                        $("#modal-form").modal('hide');
+                    } else {
                         openNew();
                     }
                     jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                    refreshChargeReceiptPoint();
                 }
             },
             error: error
@@ -539,8 +633,8 @@
             url: "/api/chargereceipt/getbyid",
             dataType: "json",
             async: false,
-            data:{
-                id:id
+            data: {
+                id: id
             },
             type: "GET",
             success: function (data) {
@@ -549,8 +643,8 @@
                 } else {
                     var result = data.data;
                     $("#id").val(result.id);
-                    $("#saveExtInfo").val(result.extInfo);
-                    showimage(result.extInfo);
+                    $("#saveImgUrl").val(result.imgUrl);
+                    showimage(result.imgUrl);
                     $("#saveExchangePoint").val(result.exchangePoint);
                     $("#saveCustomerName").val(result.customerName);
                     $("#posCode").val(result.posCode);
@@ -571,59 +665,73 @@
      * @param chargeReceiptStatus 小票完成情况
      * @param status 记录审核状况
      */
-    function fillChargeReceiptStatus(id,chargeReceiptStatus,status){
-        if(chargeReceiptStatus == 0){
+    function fillChargeReceiptStatus(id, chargeReceiptStatus, status) {
+        $("#totalPointCheck").val(1);
+        if (chargeReceiptStatus == 0) {
             var html = '未完成';
-            if(status == 4 && permission.indexOf("completeChargeReceipt") != -1) {
-                html = html + "&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:completeChargeReceipt(" + id +","+status+ ")' data-action='reload'>" +
+            if (status == 4 && permission.indexOf("completeChargeReceipt") != -1) {
+                html = html + "&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:completeChargeReceipt(" + id + "," + status + ")' data-action='reload'>" +
                     "<i class='ace-icon'>点击完成</i></a>";
             }
-            $("#buttonDiv").find("a").css("display","");
-        }else{
+            $("#buttonDiv").find("a").css("display", "");
+        } else {
             var html = '已完成';
-            if(permission.indexOf("uncompleteChargeReceipt") != -1) {
-                html = html + "&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:uncompleteChargeReceipt("+id +","+status+ ")' data-action='reload'>"+
+            if (permission.indexOf("uncompleteChargeReceipt") != -1) {
+                html = html + "&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:uncompleteChargeReceipt(" + id + "," + status + ")' data-action='reload'>" +
                     "<i class='ace-icon'>重置未完成</i></a>";
             }
-            $("#buttonDiv").find("a").css("display","none");
+            $("#buttonDiv").find("a").css("display", "none");
         }
         $("#chargeReceiptStatus").html(html);
     }
 
-    function uncompleteChargeReceipt(id,status){
-        var text = "确定重置凭证录入未完成吗？";
+    function uncompleteChargeReceipt(id, status) {
         var url = "/api/auditrecord/uncompletechargereceipt";
-        changeChargeReceiptStatus(url,id,text,0,status);
-    }
-
-    function completeChargeReceipt(id,status){
-        var text = "确定完成凭证录入吗？";
-        var url = "/api/auditrecord/completechargereceipt"
-        changeChargeReceiptStatus(url,id,text,1,status);
-    }
-
-    function changeChargeReceiptStatus(url,id,text,chargeReceiptStatus,status){
-        confirm(text,function (result) {
-            if(result){
-                $.ajax({
-                    url:url ,
-                    dataType: "json",
-                    async: false,
-                    data: {
-                        id: id
-                    },
-                    type: "POST",
-                    success: function (data) {
-                        if ('error' in data) {
-                            bootboxalert(data.error.message);
-                        } else {
-                            fillChargeReceiptStatus(id,chargeReceiptStatus,status);
-                            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                        }
-                    },
-                    error: error
-                });
+        confirm("确定重置凭证录入未完成吗？", function (result) {
+            if (result) {
+                changeChargeReceiptStatus(url, id, 0, status);
             }
+        });
+    }
+
+    function completeChargeReceipt(id, status) {
+        var url = "/api/auditrecord/completechargereceipt";
+        confirm("确定完成凭证录入吗？", function (result) {
+            if (result) {
+                changeChargeReceiptStatus(url, id, 1, status);
+            }
+        });
+    }
+
+    function changeChargeReceiptStatus(url, id, chargeReceiptStatus, status) {
+        $.ajax({
+            url: url,
+            dataType: "json",
+            async: false,
+            data: {
+                id: id,
+                check:$("#totalPointCheck").val()
+            },
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    if(data.error.code == 111025){
+                        confirm(data.error.message+",还需要继续完成吗？", function (result) {
+                            if (result) {
+                                $("#totalPointCheck").val(0);
+                                changeChargeReceiptStatus(url, id, chargeReceiptStatus, status);
+                            }
+                        });
+                    }else{
+                        bootboxalert(data.error.message);
+                    }
+                } else {
+                    page_chargeReceiptStatus = chargeReceiptStatus;
+                    fillChargeReceiptStatus(id, chargeReceiptStatus, status);
+                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                }
+            },
+            error: error
         });
     }
 

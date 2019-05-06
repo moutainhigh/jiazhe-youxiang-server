@@ -79,6 +79,15 @@
             <if test="workerMobile != null and workerMobile !=''">
                 AND o.worker_mobile = #{workerMobile}
             </if>
+            <if test="productId != null and productId != 0">
+                AND o.product_id = #{productId}
+            </if>
+            <if test="realServiceStartTime != null">
+                AND o.real_service_time &gt;= #{realServiceStartTime}
+            </if>
+            <if test="realServiceEndTime != null">
+                AND o.real_service_time &lt;= #{realServiceEndTime}
+            </if>
             AND o.is_deleted = 0 ORDER BY o.add_time desc
         </where>
         limit #{offset},#{limit}
@@ -108,6 +117,15 @@
             </if>
             <if test="workerMobile != null and workerMobile !=''">
                 AND o.worker_mobile = #{workerMobile}
+            </if>
+            <if test="productId != null and productId != 0">
+                AND o.product_id = #{productId}
+            </if>
+            <if test="realServiceStartTime != null">
+                AND o.real_service_time &gt;= #{realServiceStartTime}
+            </if>
+            <if test="realServiceEndTime != null">
+                AND o.real_service_time &lt;= #{realServiceEndTime}
             </if>
             AND o.is_deleted = 0
         </where>

@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -196,6 +197,14 @@ public class APIPointExchangeCodeController extends BaseController {
         CommonValidator.validateId(req.getId());
         CommonValidator.validateNull(req.getKeyt(), new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED));
         pointExchangeCodeBiz.backstageCodeCharge(req.getId(), req.getKeyt());
+        return ResponseFactory.buildSuccess();
+    }
+
+    @ApiOperation(value = "【小程序】通过code检查", httpMethod = "GET", notes = "【小程序】通过code检查")
+    @RequestMapping(value = "/checkbycode", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.POINT, operate = "【小程序】通过code检查", level = LogLevelEnum.LEVEL_1)
+    public Object checkByCode(@RequestParam String code) {
+        pointExchangeCodeBiz.checkByCode(code);
         return ResponseFactory.buildSuccess();
     }
 
