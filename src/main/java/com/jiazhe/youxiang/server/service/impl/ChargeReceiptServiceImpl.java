@@ -136,6 +136,7 @@ public class ChargeReceiptServiceImpl implements ChargeReceiptService {
         criteria.andPosCodeEqualTo(dto.getPosCode());
         criteria.andExchangePointEqualTo(dto.getExchangePoint());
         criteria.andTradeTimeEqualTo(dto.getTradeTime());
+        criteria.andCardNoEqualTo(dto.getCardNo());
         List<ChargeReceiptPO> poList = chargeReceiptPOMapper.selectByExample(example);
         return (poList.size() > 1) || (poList.size() == 1 && !poList.get(0).getId().equals(dto.getId()));
     }

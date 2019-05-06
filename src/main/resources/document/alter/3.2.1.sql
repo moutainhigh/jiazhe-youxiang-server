@@ -45,3 +45,6 @@ CREATE TABLE `message_template` (
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
     PRIMARY KEY (`id`)
 )  ENGINE=INNODB COMMENT='短信模板';
+
+INSERT INTO `message_template` VALUES (1, '北京中行兑换码下发', 3, 'SMS_164680236', '尊敬的贵宾客户，感谢您参与中国银行北京分行“尊享积分换好礼”活动。您获得的${product}服务，服务兑换码为${code}，服务码有效期至${time}。使用方式：拨打400电话进行预约使用。咨询电话：400-085-2818', 324983, '尊敬的贵宾客户，感谢您参与中国银行北京分行“尊享积分换好礼”活动。您获得的{1}服务，服务兑换码为{2}，服务码有效期至{3}。使用方式：拨打400电话进行预约使用。咨询电话：400-085-2818', 1, 'https://youxiang-server-1256354707.cos.ap-beijing.myqcloud.com/excel/boc_bj.xlsx', '', '', 0, '2019-05-06 10:13:07', '2019-05-06 10:13:07');
+
