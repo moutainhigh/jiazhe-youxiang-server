@@ -184,7 +184,7 @@
                         <div id="grid-pager"></div>
                     </div><!-- /.col -->
 
-                    <div id="modal-form" class="modal fade" tabindex="-1" style="overflow: scroll">
+                    <div id="modal-form" class="modal fade" tabindex="-1" style="overflow-y: scroll">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -310,9 +310,8 @@
                                                            for="pointCodes">积分兑换码信息：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <div id="pointsInfo"
-                                                                 class="form-control"
-                                                                 style="resize:none;height: 100px"
+                                                            <div id="pointsInfo" class="form-control"
+                                                                 style="resize:none;height: 100px;overflow-y: scroll"
                                                                  readonly></div>
                                                         </div>
                                                     </div>
@@ -538,12 +537,12 @@
                     }
                 },
                 {
-                    name: 'modTime',
-                    index: 'modTime',
+                    name: 'submitTime',
+                    index: 'submitTime',
                     width: 120,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return timeFormat(rowObject.modTime)
+                        return timeFormat(rowObject.submitTime)
                     }
                 },
                 {
@@ -781,7 +780,7 @@
             for (var i = 0; i < pointsInfo.length; i++) {
                 var status = pointsInfo[i].status == 0 ? "未启用" : "已启用";
                 var color = pointsInfo[i].status == 0 ? "00FF00" : "FF0000";
-                pointsInfoHtml += "[" + pointsInfo[i].code + "][" + pointsInfo[i].batchName + "][" + pointsInfo[i].faceValue + "积分][" + generateSpan(status, color) + "]\n";
+                pointsInfoHtml += "[" + pointsInfo[i].code + "][" + pointsInfo[i].batchName + "][" + pointsInfo[i].faceValue + "积分][" + generateSpan(status, color) + "]</br>";
                 totalValue += pointsInfo[i].faceValue;
             }
             pointsInfoHtml += "合计：" + totalValue + "积分";
