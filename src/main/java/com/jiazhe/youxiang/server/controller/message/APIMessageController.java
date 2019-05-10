@@ -73,6 +73,7 @@ public class APIMessageController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.MESSAGE, operate = "单条发送短信", level = LogLevelEnum.LEVEL_3)
     public Object sendSingle(@ModelAttribute SingleMsgSendReq req) {
         CommonValidator.validateMobile(req.getMobile(), new MessageException(MessageCodeEnum.MOBILE_ILLEGAL));
+        CommonValidator.validateNull(req.getTopic(), new MessageException(MessageCodeEnum.TOPIC_IS_NULL));
         CommonValidator.validateNull(req.getMessageTemplateId(), new MessageException(MessageCodeEnum.TEMPLATE_IS_NOT_EXIST));
         CommonValidator.validateNull(req.getContent(), new MessageException(MessageCodeEnum.CONTENT_IS_NULL));
         messageBiz.sendSingle(req.getMobile(), req.getType(), req.getTopic(), req.getMessageTemplateId(), req.getContent());
@@ -113,6 +114,7 @@ public class APIMessageController extends BaseController {
     @RequestMapping(value = "/sendbatch", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.MESSAGE, operate = "批量发送短信", level = LogLevelEnum.LEVEL_3)
     public Object sendBatch(@ModelAttribute BatchMsgSendReq req) {
+        CommonValidator.validateNull(req.getTopic(), new MessageException(MessageCodeEnum.TOPIC_IS_NULL));
         CommonValidator.validateNull(req.getMessageTemplateId(), new MessageException(MessageCodeEnum.TEMPLATE_IS_NOT_EXIST));
         CommonValidator.validateNull(req.getExcelUrl(), new MessageException(MessageCodeEnum.EXCEL_ERROR));
         messageBiz.sendBatch(req.getType(), req.getTopic(), req.getMessageTemplateId(), excelpath + "/" + req.getExcelUrl());
