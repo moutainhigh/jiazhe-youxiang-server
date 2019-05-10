@@ -39,6 +39,7 @@ public class AuditRecordAdapter {
         auditRecordResp.setTradeTime(auditRecordDTO.getTradeTime().getTime());
         auditRecordResp.setSubmitterId(auditRecordDTO.getSubmitterId());
         auditRecordResp.setSubmitterName(auditRecordDTO.getSubmitterName());
+        auditRecordResp.setSubmitTime(auditRecordDTO.getSubmitTime().getTime());
         auditRecordResp.setStatus(auditRecordDTO.getStatus());
         auditRecordResp.setAuditTime(auditRecordDTO.getAuditTime().getTime());
         auditRecordResp.setAuditorId(auditRecordDTO.getAuditorId());
