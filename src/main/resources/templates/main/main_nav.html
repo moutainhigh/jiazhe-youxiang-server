@@ -64,6 +64,14 @@
                 </li>
             </shiro:hasPermission>
 
+            <li class="">
+                <a th:href="@{/customer/unregistered}" target="iframeCenter">
+                    <i class="menu-icon fa fa-user-times"></i>
+                    <span class="menu-text"> 客户管理（未注册） </span>
+                </a>
+                <b class="arrow"></b>
+            </li>
+
             <shiro:hasPermission name="productCategoryManagement">
                 <li class="">
                     <a th:href="@{/product/productcategory/index}" target="iframeCenter">
