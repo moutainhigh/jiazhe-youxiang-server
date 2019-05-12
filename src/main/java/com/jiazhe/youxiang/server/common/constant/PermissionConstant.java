@@ -182,6 +182,9 @@ public class PermissionConstant {
     //短信查看
     public static final String MESSAGE_SHOW = "messageShow";
 
+    //物料管理
+    public static final String MATERIAL_MANAGEMENT = "materialManagement";
+
     //系统管理
     public static final String SYSTEM_MANAGEMENT = "systemManagement";
     //积分卡兑换码批次管理

@@ -306,6 +306,9 @@ public enum PermissionTreeEnum {
     //短信展示
     MESSAGE_SHOW(904,9,"查看短信",PermissionConstant.MESSAGE_SHOW),
 
+    /****************物料管理********************/
+    MATERIAL_MANAGEMENT(10, 0, "物料管理", PermissionConstant.MATERIAL_MANAGEMENT),
+
     ;
 
     PermissionTreeEnum(Integer id, Integer pId, String name, String perm) {

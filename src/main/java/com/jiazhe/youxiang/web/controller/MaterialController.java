@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * @author tu
- * @description：
+ * @description：物料管理页面跳转
  * @date 2019-05-12
  */
 @Controller

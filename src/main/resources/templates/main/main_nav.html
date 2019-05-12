@@ -215,6 +215,16 @@
                 </li>
             </shiro:hasPermission>
 
+            <shiro:hasPermission name="materialManagement">
+                <li class="">
+                    <a th:href="@{/material/index}" target="iframeCenter">
+                        <i class="menu-icon fa fa-inbox"></i>
+                        <span class="menu-text"> 物料管理 </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </shiro:hasPermission>
+
             <shiro:hasPermission name="systemManagement">
                 <li class="">
                     <a href="#" class="dropdown-toggle">
