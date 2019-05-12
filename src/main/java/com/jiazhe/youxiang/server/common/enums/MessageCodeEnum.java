@@ -19,6 +19,7 @@ public enum MessageCodeEnum {
     ALI_TEMPLATE_DIFFERENT(120011,"ALI_TEMPLATE_DIFFERENT","模板与阿里短信模板不一致"),
     MSG_SEND_ERROR(120012,"MSG_SEND_ERROR","失败原因"),
     EXCEL_ERROR(120013,"EXCEL_ERROR","短信excel文件错误"),
+    TOPIC_IS_NULL(120014,"TOPIC_IS_NULL","短信主题为空"),
     ;
 
 

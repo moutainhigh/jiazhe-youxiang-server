@@ -71,6 +71,9 @@ public class AuditRecordResp extends BaseVO {
     @ApiModelProperty("交易时间")
     private Long tradeTime;
 
+    @ApiModelProperty("提交时间")
+    private Long submitTime;
+
     @ApiModelProperty("提交人id")
     private Integer submitterId;
 
@@ -320,5 +323,13 @@ public class AuditRecordResp extends BaseVO {
 
     public void setGivingPoint(BigDecimal givingPoint) {
         this.givingPoint = givingPoint;
+    }
+
+    public Long getSubmitTime() {
+        return submitTime;
+    }
+
+    public void setSubmitTime(Long submitTime) {
+        this.submitTime = submitTime;
     }
 }
