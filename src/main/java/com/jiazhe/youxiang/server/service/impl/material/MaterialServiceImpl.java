@@ -32,7 +32,7 @@ public class MaterialServiceImpl implements MaterialService {
         if(!Strings.isEmpty(payeeIds)){
             payeeIds = "(" + payeeIds +")";
         }
-        Integer count = sysUserService.getCountByIds(payeeIds);
+        Integer count = materialInfoPOManualMapper.getSummaryCount(payerIds,payeeIds);
         paging.setTotal(count);
         List<MaterialSummaryDto> dtoList = materialInfoPOManualMapper.getSummaryList(payerIds,payeeIds,paging.getOffset(),paging.getLimit());
         return dtoList;

@@ -89,4 +89,5 @@ public interface SysUserService {
      * @return
      */
     Integer getCountByIds(String ids);
+
 }

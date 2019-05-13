@@ -62,4 +62,38 @@
         GROUP BY temp.payee_id  limit #{offset},#{limit}
     </select>
 
+    <select id="getSummaryCount" resultType="java.lang.Integer">
+        select count(DISTINCT(payee_id)) FROM
+        (
+        SELECT
+        material.payee_id AS payee_id,
+        material.transfer_amount AS receive,
+        material.material_value AS productValue,
+        0 AS usedProductValue
+        FROM material_info material
+        <where>
+            <if test="payerIds != null and payerIds != ''">
+                AND material.payer_id in ${payerIds}
+            </if>
+            <if test="payeeIds != null and payeeIds != ''">
+                AND material.payee_id in ${payeeIds}
+            </if>
+            AND material.is_deleted = 0
+        </where>
+        UNION ALL
+        SELECT
+        record.submitter_id as payee_id,
+        0 as receive,
+        0 as productValue,
+        record.product_value as usedProductValue
+        FROM audit_record record
+        <where>
+            <if test="payeeIds != null and payeeIds != ''">
+                AND record.submitter_id in ${payeeIds}
+            </if>
+            AND record.is_deleted = 0
+        </where>
+        ) as temp
+    </select>
+
 </mapper>

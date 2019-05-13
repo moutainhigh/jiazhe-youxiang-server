@@ -25,4 +25,14 @@ public interface MaterialInfoPOManualMapper {
             @Param("payeeIds")String payeeIds,
             @Param("offset")Integer offset,
             @Param("limit")Integer limit);
+
+    /**
+     * 获取汇总的条数
+     * @param payerIds
+     * @param payeeIds
+     * @return
+     */
+    Integer getSummaryCount(
+            @Param("payerIds")String payerIds,
+            @Param("payeeIds")String payeeIds);
 }
