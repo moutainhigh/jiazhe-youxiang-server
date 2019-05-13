@@ -196,4 +196,17 @@ public class SysUserServiceImpl implements SysUserService {
         }
         return SysUserAdapter.po2Dto(sysUserPO);
     }
+
+    @Override
+    public List<SysUserDTO> findByIds(String ids, Paging paging) {
+        List<SysUserPO> sysUserPOList = sysUserPOManualMapper.findByIds(ids,paging.getOffset(),paging.getLimit());
+        return sysUserPOList.stream().map(SysUserAdapter::po2Dto).collect(Collectors.toList());
+    }
+
+    @Override
+    public Integer getCountByIds(String ids) {
+        return sysUserPOManualMapper.getCountByIds(ids);
+    }
+
+
 }

@@ -33,4 +33,12 @@ public interface SysUserPOManualMapper {
     void delete(Integer id);
 
     void insert(SysUserPO sysUserPO);
+
+    List<SysUserPO> findByIds(
+            @Param("payeeIds") String payeeIds,
+            @Param("offset") Integer offset,
+            @Param("limit") Integer limit);
+
+    Integer getCountByIds(
+            @Param("payeeIds") String payeeIds);
 }

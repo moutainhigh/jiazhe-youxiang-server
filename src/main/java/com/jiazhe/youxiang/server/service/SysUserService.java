@@ -74,4 +74,19 @@ public interface SysUserService {
      * @return
      */
     SysUserDTO getById(Integer id);
+
+    /**
+     * 根据id查找
+     * @param ids  参数形如   (1,2,3) 的字符串
+     * @param paging
+     * @return
+     */
+    List<SysUserDTO> findByIds(String ids, Paging paging);
+
+    /**
+     * 根据id计数
+     * @param ids 参数形如   (1,2,3) 的字符串
+     * @return
+     */
+    Integer getCountByIds(String ids);
 }
