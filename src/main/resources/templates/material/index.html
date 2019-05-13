@@ -276,7 +276,7 @@
         });
 
         var tableOption = {
-            url: "/api/material/listpage",
+            url: "/api/material/listsummarypage",
             postData: transformToJson($('#materialInfoSearchForm').serializeArray()),
             colNames: ['', '收款人', '收款总额', '采购实物价值', '消耗实物价值', '剩余实物价值','操作'],
             colModel: [
@@ -317,7 +317,7 @@
     function search() {
         refreshSummary();
         jQuery(grid_selector).setGridParam({
-            url: "/api/material/listpage",
+            url: "/api/material/listsummarypage",
             postData: transformToJson($('#materialInfoSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;

@@ -5,10 +5,10 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author TU
- * @description
+ * @description  物料汇总信息列表请求参数
  * @date 2019-05-13.
  */
-public class MaterialPageReq extends PageSizeNumReq {
+public class MaterialSummaryPageReq extends PageSizeNumReq {
 
     @ApiModelProperty("付款人ids")
     private String payerIds;

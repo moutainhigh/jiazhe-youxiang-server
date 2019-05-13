@@ -14,9 +14,8 @@ import com.jiazhe.youxiang.server.common.exceptions.MaterialException;
 import com.jiazhe.youxiang.server.dto.material.MaterialSummaryDto;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
-import com.jiazhe.youxiang.server.vo.req.AdvancePaySaveReq;
-import com.jiazhe.youxiang.server.vo.req.material.MaterialPageReq;
 import com.jiazhe.youxiang.server.vo.req.material.MaterialSaveReq;
+import com.jiazhe.youxiang.server.vo.req.material.MaterialSummaryPageReq;
 import com.jiazhe.youxiang.server.vo.resp.material.MaterialSummaryResp;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,19 +41,19 @@ public class APIMaterialController extends BaseController {
     private MaterialBiz materialBiz;
 
     @ApiOperation(value = "物料汇总列表", httpMethod = "GET", response = MaterialSummaryResp.class, responseContainer = "List", notes = "物料汇总列表")
-    @RequestMapping(value = "/listpage", method = RequestMethod.GET)
+    @RequestMapping(value = "/listsummarypage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.MATERIAL, operate = "物料汇总列表", level = LogLevelEnum.LEVEL_1)
-    public Object listPage(@ModelAttribute MaterialPageReq req) {
+    public Object listSummaryPage(@ModelAttribute MaterialSummaryPageReq req) {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         List<MaterialSummaryDto> dtoList = materialBiz.getSummaryList(req.getPayerIds(), req.getPayeeIds(), paging);
         List<MaterialSummaryResp> respList = dtoList.stream().map(MaterialAdapter::summaryDto2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(respList, paging);
     }
 
-    @ApiOperation(value = "物料汇总列表", httpMethod = "GET", response = MaterialSummaryResp.class, responseContainer = "List", notes = "物料汇总列表")
+    @ApiOperation(value = "物料汇总", httpMethod = "GET", response = MaterialSummaryResp.class, responseContainer = "List", notes = "物料汇总")
     @RequestMapping(value = "/calculatesummary", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.MATERIAL, operate = "物料汇总列表", level = LogLevelEnum.LEVEL_1)
-    public Object calculateSummary(@ModelAttribute MaterialPageReq req) {
+    @CustomLog(moduleName = ModuleEnum.MATERIAL, operate = "物料汇总", level = LogLevelEnum.LEVEL_1)
+    public Object calculateSummary(@ModelAttribute MaterialSummaryPageReq req) {
         MaterialSummaryDto dto = materialBiz.calculateSummary(req.getPayerIds(), req.getPayeeIds());
         MaterialSummaryResp resp = MaterialAdapter.summaryDto2Resp(dto);
         return ResponseFactory.buildResponse(resp);
