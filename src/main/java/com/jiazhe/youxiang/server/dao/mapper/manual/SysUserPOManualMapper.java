@@ -35,10 +35,10 @@ public interface SysUserPOManualMapper {
     void insert(SysUserPO sysUserPO);
 
     List<SysUserPO> findByIds(
-            @Param("payeeIds") String payeeIds,
+            @Param("ids") String ids,
             @Param("offset") Integer offset,
             @Param("limit") Integer limit);
 
     Integer getCountByIds(
-            @Param("payeeIds") String payeeIds);
+            @Param("ids") String ids);
 }

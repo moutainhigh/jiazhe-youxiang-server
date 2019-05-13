@@ -53,8 +53,8 @@
     <select id="getCountByIds" resultType="java.lang.Integer">
         select count(*) from sys_user
         <where>
-            <if test="payeeIds != null and payeeIds != ''">
-                AND id in ${payeeIds}
+            <if test="ids != null and ids != ''">
+                AND id in ${ids}
             </if>
             AND is_deleted = 0
         </where>
@@ -65,8 +65,8 @@
         <include refid="Base_Column_List"/>
         FROM sys_user
         <where>
-            <if test="payeeIds != null and payeeIds != ''">
-                AND id in ${payeeIds}
+            <if test="ids != null and ids != ''">
+                AND id in ${ids}
             </if>
             AND is_deleted = 0 ORDER BY displayName ASC
         </where>
