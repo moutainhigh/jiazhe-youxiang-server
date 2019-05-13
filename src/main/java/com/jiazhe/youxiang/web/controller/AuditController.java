@@ -21,7 +21,8 @@ public class AuditController extends BaseController {
 
     @RequiresPermissions(PermissionConstant.AUDIT_RECORD_MANAGEMENT)
     @RequestMapping(value = "/index")
-    public String index(Integer status, Model model) {
+    public String index(String submitterName , Integer status, Model model) {
+        model.addAttribute("submitterName",submitterName);
         model.addAttribute("status", status);
         return "auditrecord/index";
     }

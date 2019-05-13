@@ -1,14 +1,24 @@
 package com.jiazhe.youxiang.server.service.impl.material;
 
+import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.MaterialCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.LoginException;
+import com.jiazhe.youxiang.server.common.exceptions.MaterialException;
+import com.jiazhe.youxiang.server.dao.mapper.MaterialInfoPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.material.MaterialInfoPOManualMapper;
+import com.jiazhe.youxiang.server.domain.po.MaterialInfoPO;
 import com.jiazhe.youxiang.server.dto.material.MaterialSummaryDto;
+import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.SysUserService;
 import com.jiazhe.youxiang.server.service.material.MaterialService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.logging.log4j.util.Strings;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,6 +31,8 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Autowired
     private MaterialInfoPOManualMapper materialInfoPOManualMapper;
+    @Autowired
+    private MaterialInfoPOMapper materialInfoPOMapper;
     @Autowired
     private SysUserService sysUserService;
 
@@ -36,5 +48,39 @@ public class MaterialServiceImpl implements MaterialService {
         paging.setTotal(count);
         List<MaterialSummaryDto> dtoList = materialInfoPOManualMapper.getSummaryList(payerIds,payeeIds,paging.getOffset(),paging.getLimit());
         return dtoList;
+    }
+
+    @Override
+    public MaterialSummaryDto calculateSummary(String payerIds, String payeeIds) {
+        if(!Strings.isEmpty(payerIds)){
+            payerIds = "(" + payerIds +")";
+        }
+        if(!Strings.isEmpty(payeeIds)){
+            payeeIds = "(" + payeeIds +")";
+        }
+        MaterialSummaryDto dto = materialInfoPOManualMapper.calculateSummary(payerIds,payeeIds);
+        return dto;
+    }
+
+    @Override
+    public void save(Integer payeeId, BigDecimal transferAmount, BigDecimal materialValue, Date transferTime, String remark) {
+        MaterialInfoPO po = new MaterialInfoPO();
+        SysUserDTO payerDto = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+        if (null == payerDto) {
+            throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
+        }
+        SysUserDTO payeeDto = sysUserService.findById(payeeId);
+        if(null == payeeDto){
+            throw new MaterialException(MaterialCodeEnum.PAYEE_NOT_EXIST);
+        }
+        po.setPayerId(payerDto.getId());
+        po.setPayerName(payerDto.getDisplayName());
+        po.setPayeeId(payeeDto.getId());
+        po.setPayeeName(payeeDto.getDisplayName());
+        po.setTransferAmount(transferAmount);
+        po.setMaterialValue(materialValue);
+        po.setTransferTime(transferTime);
+        po.setRemark(remark);
+        materialInfoPOMapper.insertSelective(po);
     }
 }

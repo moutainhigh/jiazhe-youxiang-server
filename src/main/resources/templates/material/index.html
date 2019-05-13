@@ -80,7 +80,7 @@
                                 <div class="profile-info-row">
                                     <div class="profile-info-name"> 汇总</div>
                                     <div class="profile-info-value">
-                                        <a href="javascript:refreshOverview()" data-action="reload">
+                                        <a href="javascript:refreshSummary()" data-action="reload">
                                             <i class="ace-icon fa fa-refresh"></i>
                                         </a>
                                     </div>
@@ -149,8 +149,9 @@
                                 <label class="col-sm-4 control-label no-padding-right">付款人：</label>
                                 <div class="col-sm-8">
                                     <div class="pos-rel">
-                                        <select id="payerSave" onchange="getSelectedValues(this)"
-                                                class="selectpicker show-tick form-control"></select>
+                                        <input id="payerNameSave"
+                                               class="form-control" readonly
+                                               type="text" style="height:30px"/>
                                     </div>
                                 </div>
                             </div>
@@ -160,8 +161,10 @@
                                 <label class="col-sm-4 control-label no-padding-right">收款人：</label>
                                 <div class="col-sm-8">
                                     <div class="pos-rel">
-                                        <select id="payeeSave" onchange="getSelectedValues(this)"
-                                                class="selectpicker show-tick form-control"></select>
+                                        <input type="hidden" id="payeeIdSave" name="payeeId"/>
+                                        <input id="payeeNameSave"
+                                               class="form-control" readonly
+                                               type="text" style="height:30px"/>
                                     </div>
                                 </div>
                             </div>
@@ -193,15 +196,15 @@
 
                             <div class="form-group">
                                 <label class="col-sm-4 control-label no-padding-right"
-                                       for="transferTimeSave">转账日期：</label>
+                                       for="transferTimeSaveStr">转账日期：</label>
                                 <div class="col-sm-8">
                                     <div class="input-group">
-                                        <input class="form-control date-picker" id="transferTimeSave"
+                                        <input class="form-control date-picker" id="transferTimeSaveStr"
                                                type="text" readonly/>
                                         <span class="input-group-addon">
                                             <i class="fa fa-calendar bigger-110"></i>
                                         </span>
-                                        <input type="hidden" value=0 name="transferTime"/>
+                                        <input type="hidden" value=0 name="transferTime" id="transferTimeSave"/>
                                     </div>
                                 </div>
                             </div>
@@ -210,7 +213,7 @@
                                 <label class="col-sm-4 control-label no-padding-right">备注：</label>
                                 <div class="col-sm-8">
                                     <div class="pos-rel">
-                                        <textarea id="saveAdvanceRemark" name="remark"
+                                        <textarea id="saveRemark" name="remark"
                                                   class="form-control"
                                                   style="resize:none;height: 100px"></textarea>
                                     </div>
@@ -228,7 +231,7 @@
                 </button>
 
                 <button class="btn btn-sm btn-primary modal-footer-btn modal-footer-btn-save"
-                        onclick="saveAdvancePay()">
+                        onclick="saveTransferMoney()">
                     <i class="ace-icon fa fa-check"></i>
                     保存
                 </button>
@@ -263,8 +266,8 @@
                     for (var i = 0; i < result.length; i++) {
                         $("#payerSearch").append("<option value=" + result[i].id + ">" + result[i].displayName + "</option>");
                         $("#payeeSearch").append("<option value=" + result[i].id + ">" + result[i].displayName + "</option>");
-                        $("#payerSave").append("<option value=" + result[i].id + ">" + result[i].displayName + "</option>");
-                        $("#payeeSave").append("<option value=" + result[i].id + ">" + result[i].displayName + "</option>");
+//                        $("#payerSave").append("<option value=" + result[i].id + ">" + result[i].displayName + "</option>");
+//                        $("#payeeSave").append("<option value=" + result[i].id + ">" + result[i].displayName + "</option>");
                     }
                     initMultiSelect();
                 }
@@ -292,7 +295,7 @@
 
         initTable(grid_selector, pager_selector, tableOption);
 
-//        refreshOverview();
+        refreshSummary();
     });
 
     /**
@@ -312,54 +315,43 @@
     }
 
     function search() {
-        getPostData();
+        refreshSummary();
         jQuery(grid_selector).setGridParam({
             url: "/api/material/listpage",
             postData: transformToJson($('#materialInfoSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
-//        refreshOverview();
         return false;
     }
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str += getFunctionButton("btn-success", "openShow(" + rowObject.id + ")", "查看");
-        if (rowObject.status == 1 || rowObject.status == 2) {
-            if (permission.indexOf("partnerOrderEdit") != -1) {
-                str += getFunctionButton("btn-primary", "openEdit(" + rowObject.id + ")", "修改");
-            }
-        } else {
-            if (permission.indexOf("partnerOrderHigherEdit") != -1) {
-                str += getFunctionButton("btn-primary", "openEdit(" + rowObject.id + ")", "修改");
-            }
-        }
+        str += getFunctionButton("btn-success", "openNew(" + rowObject.id + ",\""+rowObject.payeeName+"\")", "转账");
+        str += getRedirectButton("btn-primary", "../material/list?batchId=" + rowObject.id + "&&batchName=" + rowObject.name, "转账明细");
+        str += getRedirectButton("btn-primary", "../auditrecord/index?submitterName=" + rowObject.payeeName + "&status=4", "消耗明细");
         return str;
     }
 
-    function refreshOverview() {
-        $("#total").html("加载中...");
-        $("#spend").html("加载中...");
-        $("#left").html("加载中...");
-        $("#intervalTotal").html("加载中...");
-        $("#intervalSpend").html("加载中...");
-        $("#intervalLeft").html("加载中...");
+    function refreshSummary() {
+        getPostData();
+        $("#receiveTotal").html("加载中...");
+        $("#productValueTotal").html("加载中...");
+        $("#usedProductValueTotal").html("加载中...");
+        $("#leftProductValueTotal").html("加载中...");
         $.ajax({
-            url: "/api/partnerorderinfo/caloverviewmoney",
+            url: "/api/material/calculatesummary",
             dataType: "json",
             async: false,
-            data: transformToJson($('#partnerOrderInfoSearchForm').serializeArray()),
+            data: transformToJson($('#materialInfoSearchForm').serializeArray()),
             type: "GET",
             success: function (data) {
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    $("#total").html(result.total);
-                    $("#spend").html(result.spend);
-                    $("#left").html(result.left);
-                    $("#intervalTotal").html(result.intervalTotal);
-                    $("#intervalSpend").html(result.intervalSpend);
-                    $("#intervalLeft").html(result.intervalLeft);
+                    $("#receiveTotal").html(result.receiveTotal);
+                    $("#productValueTotal").html(result.productValueTotal);
+                    $("#usedProductValueTotal").html(result.usedProductValueTotal);
+                    $("#leftProductValueTotal").html(result.productValueTotal - result.usedProductValueTotal);
                     showAlertInfo();
                 }
             },
@@ -378,49 +370,49 @@
         }, 2000);
     }
 
-    function openAdvancePayModal() {
-        $("#saveAdvancePay").val(0);
+    function openNew(id,payeeName) {
+        $("#payerNameSave").val(decodeURI(getCookie("displayName")));
+        $("#payeeNameSave").val(payeeName);
+        $("#payeeIdSave").val(id);
+        $("#transferAmountSave").val('');
+        $("#materialValueSave").val('');
         $("#saveRemark").val('');
         var time = new Date().getTime();
-        $("#saveAdvanceTime").val(dateFormat(time));
-        $('#saveAdvanceTime').datepicker('update');
-        $("#saveAdvanceTime").next().next().val(time);
-        $("#modal-advancePay").modal('show');
+        $("#transferTimeSaveStr").val(dateFormat(time));
+        $('#transferTimeSaveStr').datepicker('update');
+        $("#transferTimeSaveStr").next().next().val(time);
+        $("#modal-transferMoney").modal('show');
     }
 
-    function saveAdvancePay() {
-        if (isNumber($("#saveAdvancePay")) || $("#saveAdvancePay").val() == 0) {
-            bootboxalert("充值金额非法");
+    function saveTransferMoney() {
+        if (isNumber($("#transferAmountSave")) || $("#transferAmountSave").val() == 0) {
+            bootboxalert("转账金额非法");
             return false;
         }
-        if ($("#saveAdvanceTimeStr").val() == '' || $("#saveAdvanceTime").val() == 0) {
-            bootboxalert("充值时间不能为空");
+        if (isNumber($("#materialValueSave")) || $("#materialValueSave").val() == 0) {
+            bootboxalert("采购实物价值非法");
+            return false;
+        }
+        if ($("#transferTimeSaveStr").val() == '' || $("#transferTimeSave").val() == 0) {
+            bootboxalert("转账日期不能为空");
             return false;
         }
         $.ajax({
-            url: "/api/advancepay/save",
+            url: "/api/material/save",
             dataType: "json",
             async: false,
-            data: transformToJson($('#advancePayForm').serializeArray()),
+            data: transformToJson($('#transferMoneyForm').serializeArray()),
             type: "POST",
             success: function (data) {
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
-                    refreshOverview();
-                    $("#modal-advancePay").modal('hide');
+                    $("#modal-transferMoney").modal('hide');
+                    search();
                 }
             },
             error: error
         });
-    }
-
-    function getSelectedValues(dom){
-        console.log("进入");
-        var values = $(dom).multiselect("getChecked").map(function(){
-            return this.value;
-        }).get();
-        $(this).next().find("input").val(values);
     }
 
 </script>

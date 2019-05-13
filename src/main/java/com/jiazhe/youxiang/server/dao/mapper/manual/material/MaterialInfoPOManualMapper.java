@@ -35,4 +35,14 @@ public interface MaterialInfoPOManualMapper {
     Integer getSummaryCount(
             @Param("payerIds")String payerIds,
             @Param("payeeIds")String payeeIds);
+
+    /**
+     * 计算汇总信息
+     * @param payerIds
+     * @param payeeIds
+     * @return
+     */
+    MaterialSummaryDto calculateSummary(
+            @Param("payerIds")String payerIds,
+            @Param("payeeIds")String payeeIds);
 }

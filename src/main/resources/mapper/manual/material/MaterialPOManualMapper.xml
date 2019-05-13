@@ -24,7 +24,7 @@
 
     <select id="getSummaryList" resultType="com.jiazhe.youxiang.server.dto.material.MaterialSummaryDto">
         select
-        temp.payee_id as payee_id,
+        temp.payee_id as id,
         user.displayName as payeeName,
         sum(temp.receive) as receiveTotal ,
         sum(temp.productValue) as productValueTotal,
@@ -56,7 +56,7 @@
             <if test="payeeIds != null and payeeIds != ''">
                 AND record.submitter_id in ${payeeIds}
             </if>
-            AND record.is_deleted = 0
+            AND record.is_deleted = 0 AND record.status = 4
         </where>
           ) as temp left join sys_user user on user.id = temp.payee_id
         GROUP BY temp.payee_id  limit #{offset},#{limit}
@@ -65,6 +65,37 @@
     <select id="getSummaryCount" resultType="java.lang.Integer">
         select count(DISTINCT(payee_id)) FROM
         (
+        SELECT
+        material.payee_id AS payee_id
+        FROM material_info material
+        <where>
+            <if test="payerIds != null and payerIds != ''">
+                AND material.payer_id in ${payerIds}
+            </if>
+            <if test="payeeIds != null and payeeIds != ''">
+                AND material.payee_id in ${payeeIds}
+            </if>
+            AND material.is_deleted = 0
+        </where>
+        UNION ALL
+        SELECT
+        record.submitter_id as payee_id
+        FROM audit_record record
+        <where>
+            <if test="payeeIds != null and payeeIds != ''">
+                AND record.submitter_id in ${payeeIds}
+            </if>
+            AND record.is_deleted = 0
+        </where>
+        ) as temp
+    </select>
+
+    <select id="calculateSummary" resultType="com.jiazhe.youxiang.server.dto.material.MaterialSummaryDto">
+        select
+        sum(temp.receive) as receiveTotal ,
+        sum(temp.productValue) as productValueTotal,
+        sum(temp.usedProductValue) as usedProductValueTotal
+        from (
         SELECT
         material.payee_id AS payee_id,
         material.transfer_amount AS receive,
@@ -91,7 +122,7 @@
             <if test="payeeIds != null and payeeIds != ''">
                 AND record.submitter_id in ${payeeIds}
             </if>
-            AND record.is_deleted = 0
+            AND record.is_deleted = 0 AND record.status = 4
         </where>
         ) as temp
     </select>

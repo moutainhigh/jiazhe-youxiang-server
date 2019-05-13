@@ -6,6 +6,8 @@ import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,5 +23,13 @@ public class MaterialBiz {
 
     public List<MaterialSummaryDto> getSummaryList(String payerIds, String payeeIds, Paging paging) {
         return materialService.getSummaryList(payerIds,payeeIds,paging);
+    }
+
+    public MaterialSummaryDto calculateSummary(String payerIds, String payeeIds) {
+        return materialService.calculateSummary(payerIds,payeeIds);
+    }
+
+    public void save(Integer payeeId, BigDecimal transferAmount, BigDecimal materialValue, Date transferTime, String remark) {
+        materialService.save(payeeId,transferAmount,materialValue,transferTime,remark);
     }
 }

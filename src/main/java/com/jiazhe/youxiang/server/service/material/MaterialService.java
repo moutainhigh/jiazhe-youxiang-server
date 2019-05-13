@@ -3,6 +3,8 @@ package com.jiazhe.youxiang.server.service.material;
 import com.jiazhe.youxiang.server.dto.material.MaterialSummaryDto;
 import com.jiazhe.youxiang.server.vo.Paging;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,4 +21,22 @@ public interface MaterialService {
      * @return
      */
     List<MaterialSummaryDto> getSummaryList(String payerIds, String payeeIds, Paging paging);
+
+    /**
+     * 计算汇总
+     * @param payerIds
+     * @param payeeIds
+     * @return
+     */
+    MaterialSummaryDto calculateSummary(String payerIds, String payeeIds);
+
+    /**
+     * 保存转账信息
+     * @param payeeId
+     * @param transferAmount
+     * @param materialValue
+     * @param transferTime
+     * @param remark
+     */
+    void save(Integer payeeId, BigDecimal transferAmount, BigDecimal materialValue, Date transferTime, String remark);
 }
