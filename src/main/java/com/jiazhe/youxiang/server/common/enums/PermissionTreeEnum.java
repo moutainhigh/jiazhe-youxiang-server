@@ -306,6 +306,18 @@ public enum PermissionTreeEnum {
     //短信展示
     MESSAGE_SHOW(904,9,"查看短信",PermissionConstant.MESSAGE_SHOW),
 
+    /****************物料管理********************/
+    MATERIAL_MANAGEMENT(10, 0, "物料管理", PermissionConstant.MATERIAL_MANAGEMENT),
+    //转账明细
+    MATERIAL_TRANSFER_MONEY_DETAIL(1001, 10, "转账明细", PermissionConstant.MATERIAL_TRANSFER_MONEY_DETAIL),
+    //消耗明细
+    MATERIAL_USED_DETAIL(1002, 10, "消耗明细", PermissionConstant.MATERIAL_USED_DETAIL),
+    //增加转账
+    MATERIAL_TRANSFER_MONEY_ADD(1003, 10, "增加转账", PermissionConstant.MATERIAL_TRANSFER_MONEY_ADD),
+    //修改转账
+    MATERIAL_TRANSFER_MONEY_EDIT(1004, 10, "修改转账", PermissionConstant.MATERIAL_TRANSFER_MONEY_EDIT),
+    //删除转账
+    MATERIAL_TRANSFER_MONEY_DELETE(1005, 10, "删除转账", PermissionConstant.MATERIAL_TRANSFER_MONEY_DELETE),
     ;
 
     PermissionTreeEnum(Integer id, Integer pId, String name, String perm) {

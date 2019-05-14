@@ -182,6 +182,19 @@ public class PermissionConstant {
     //短信查看
     public static final String MESSAGE_SHOW = "messageShow";
 
+    //物料管理
+    public static final String MATERIAL_MANAGEMENT = "materialManagement";
+    //转账明细
+    public static final String MATERIAL_TRANSFER_MONEY_DETAIL = "materialTransferMoneyDetail";
+    //消耗明细
+    public static final String MATERIAL_USED_DETAIL = "materialUsedDetail";
+    //添加转账
+    public static final String MATERIAL_TRANSFER_MONEY_ADD = "materialTransferMoneyAdd";
+    //修改转账
+    public static final String MATERIAL_TRANSFER_MONEY_EDIT = "materialTransferMoneyEdit";
+    //删除转账
+    public static final String MATERIAL_TRANSFER_MONEY_DELETE = "materialTransferMoneyDelete";
+
     //系统管理
     public static final String SYSTEM_MANAGEMENT = "systemManagement";
     //积分卡兑换码批次管理

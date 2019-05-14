@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.material.MaterialInfoPOManualMapper">
+    <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.MaterialInfoPO">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="transfer_time" property="transferTime" jdbcType="TIMESTAMP" />
+        <result column="transfer_amount" property="transferAmount" jdbcType="DECIMAL" />
+        <result column="material_value" property="materialValue" jdbcType="DECIMAL" />
+        <result column="payer_id" property="payerId" jdbcType="INTEGER" />
+        <result column="payer_name" property="payerName" jdbcType="VARCHAR" />
+        <result column="payee_id" property="payeeId" jdbcType="INTEGER" />
+        <result column="payee_name" property="payeeName" jdbcType="VARCHAR" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, transfer_time, transfer_amount, material_value, payer_id, payer_name, payee_id,
+    payee_name, remark, ext_info, is_deleted, add_time, mod_time
+    </sql>
+
+    <select id="getSummaryList" resultType="com.jiazhe.youxiang.server.dto.material.MaterialSummaryDto">
+        select
+        temp.payee_id as id,
+        user.displayName as payeeName,
+        sum(temp.receive) as receiveTotal ,
+        sum(temp.productValue) as productValueTotal,
+        sum(temp.usedProductValue) as usedProductValueTotal
+        from (
+            SELECT
+              material.payee_id AS payee_id,
+              material.transfer_amount AS receive,
+              material.material_value AS productValue,
+              0 AS usedProductValue
+            FROM material_info material
+            <where>
+                <if test="payerIds != null and payerIds != ''">
+                    AND material.payer_id in ${payerIds}
+                </if>
+                <if test="payeeIds != null and payeeIds != ''">
+                    AND material.payee_id in ${payeeIds}
+                </if>
+                AND material.is_deleted = 0
+            </where>
+            UNION ALL
+            SELECT
+              record.submitter_id as payee_id,
+              0 as receive,
+              0 as productValue,
+              record.product_value as usedProductValue
+            FROM audit_record record
+        <where>
+            <if test="payeeIds != null and payeeIds != ''">
+                AND record.submitter_id in ${payeeIds}
+            </if>
+            AND record.is_deleted = 0 AND record.status = 4
+        </where>
+          ) as temp left join sys_user user on user.id = temp.payee_id
+        GROUP BY temp.payee_id  limit #{offset},#{limit}
+    </select>
+
+    <select id="getSummaryCount" resultType="java.lang.Integer">
+        select count(DISTINCT(payee_id)) FROM
+        (
+        SELECT
+        material.payee_id AS payee_id
+        FROM material_info material
+        <where>
+            <if test="payerIds != null and payerIds != ''">
+                AND material.payer_id in ${payerIds}
+            </if>
+            <if test="payeeIds != null and payeeIds != ''">
+                AND material.payee_id in ${payeeIds}
+            </if>
+            AND material.is_deleted = 0
+        </where>
+        UNION ALL
+        SELECT
+        record.submitter_id as payee_id
+        FROM audit_record record
+        <where>
+            <if test="payeeIds != null and payeeIds != ''">
+                AND record.submitter_id in ${payeeIds}
+            </if>
+            AND record.is_deleted = 0
+        </where>
+        ) as temp
+    </select>
+
+    <select id="calculateSummary" resultType="com.jiazhe.youxiang.server.dto.material.MaterialSummaryDto">
+        select
+        sum(temp.receive) as receiveTotal ,
+        sum(temp.productValue) as productValueTotal,
+        sum(temp.usedProductValue) as usedProductValueTotal
+        from (
+        SELECT
+        material.payee_id AS payee_id,
+        material.transfer_amount AS receive,
+        material.material_value AS productValue,
+        0 AS usedProductValue
+        FROM material_info material
+        <where>
+            <if test="payerIds != null and payerIds != ''">
+                AND material.payer_id in ${payerIds}
+            </if>
+            <if test="payeeIds != null and payeeIds != ''">
+                AND material.payee_id in ${payeeIds}
+            </if>
+            AND material.is_deleted = 0
+        </where>
+        UNION ALL
+        SELECT
+        record.submitter_id as payee_id,
+        0 as receive,
+        0 as productValue,
+        record.product_value as usedProductValue
+        FROM audit_record record
+        <where>
+            <if test="payeeIds != null and payeeIds != ''">
+                AND record.submitter_id in ${payeeIds}
+            </if>
+            AND record.is_deleted = 0 AND record.status = 4
+        </where>
+        ) as temp
+    </select>
+
+    <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.MaterialInfoPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM material_info
+        <where>
+            <if test="payerIds != null and payerIds != ''">
+                AND payer_id in ${payerIds}
+            </if>
+            <if test="payeeIds != null and payeeIds != ''">
+                AND payee_id in ${payeeIds}
+            </if>
+            <if test="transferTimeBegin != null">
+                AND transfer_time &gt;= #{transferTimeBegin}
+            </if>
+            <if test="transferTimeEnd != null">
+                AND transfer_time &lt;= #{transferTimeEnd}
+            </if>
+            AND is_deleted = 0 ORDER BY mod_time DESC
+        </where>
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from material_info
+            <where>
+                <if test="payerIds != null and payerIds != ''">
+                    AND payer_id in ${payerIds}
+                </if>
+                <if test="payeeIds != null and payeeIds != ''">
+                    AND payee_id in ${payeeIds}
+                </if>
+                <if test="transferTimeBegin != null">
+                    AND transfer_time &gt;= #{transferTimeBegin}
+                </if>
+                <if test="transferTimeEnd != null">
+                    AND transfer_time &lt;= #{transferTimeEnd}
+                </if>
+                AND is_deleted = 0
+            </where>
+    </select>
+</mapper>

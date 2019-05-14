@@ -23,4 +23,9 @@ public class CustomerController extends BaseController {
     public String index() {
         return "customer/index";
     }
+
+    @RequestMapping(value = "/unregistered")
+    public String unregistered() {
+        return "customer/unregistered";
+    }
 }
