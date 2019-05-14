@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.web.controller;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -13,8 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/material")
 public class MaterialController extends BaseController {
 
+    @RequestMapping(value = "/summaryindex")
+    public String summaryIndex() {
+        return "material/summaryindex";
+    }
+
     @RequestMapping(value = "/index")
-    public String index() {
+    public String index(String payerIds,String payeeId,Model model) {
+        model.addAttribute("payerIds",payerIds);
+        model.addAttribute("payeeId",payeeId);
         return "material/index";
     }
 }
