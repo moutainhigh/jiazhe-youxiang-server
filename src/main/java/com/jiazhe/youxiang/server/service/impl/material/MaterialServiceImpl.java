@@ -38,27 +38,33 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     public List<MaterialSummaryDto> getSummaryList(String payerIds, String payeeIds, Paging paging) {
-        if(!Strings.isEmpty(payerIds)){
-            payerIds = "(" + payerIds +")";
+        if (!Strings.isEmpty(payerIds)) {
+            payerIds = "(" + payerIds + ")";
         }
-        if(!Strings.isEmpty(payeeIds)){
-            payeeIds = "(" + payeeIds +")";
+        if (!Strings.isEmpty(payeeIds)) {
+            payeeIds = "(" + payeeIds + ")";
         }
-        Integer count = materialInfoPOManualMapper.getSummaryCount(payerIds,payeeIds);
+        Integer count = materialInfoPOManualMapper.getSummaryCount(payerIds, payeeIds);
         paging.setTotal(count);
-        List<MaterialSummaryDto> dtoList = materialInfoPOManualMapper.getSummaryList(payerIds,payeeIds,paging.getOffset(),paging.getLimit());
+        List<MaterialSummaryDto> dtoList = materialInfoPOManualMapper.getSummaryList(payerIds, payeeIds, paging.getOffset(), paging.getLimit());
         return dtoList;
     }
 
     @Override
     public MaterialSummaryDto calculateSummary(String payerIds, String payeeIds) {
-        if(!Strings.isEmpty(payerIds)){
-            payerIds = "(" + payerIds +")";
+        if (!Strings.isEmpty(payerIds)) {
+            payerIds = "(" + payerIds + ")";
         }
-        if(!Strings.isEmpty(payeeIds)){
-            payeeIds = "(" + payeeIds +")";
+        if (!Strings.isEmpty(payeeIds)) {
+            payeeIds = "(" + payeeIds + ")";
         }
-        MaterialSummaryDto dto = materialInfoPOManualMapper.calculateSummary(payerIds,payeeIds);
+        MaterialSummaryDto dto = materialInfoPOManualMapper.calculateSummary(payerIds, payeeIds);
+        if (null == dto) {
+            dto = new MaterialSummaryDto();
+            dto.setReceiveTotal(BigDecimal.ZERO);
+            dto.setProductValueTotal(BigDecimal.ZERO);
+            dto.setUsedProductValueTotal(BigDecimal.ZERO);
+        }
         return dto;
     }
 
@@ -70,7 +76,7 @@ public class MaterialServiceImpl implements MaterialService {
             throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
         SysUserDTO payeeDto = sysUserService.findById(payeeId);
-        if(null == payeeDto){
+        if (null == payeeDto) {
             throw new MaterialException(MaterialCodeEnum.PAYEE_NOT_EXIST);
         }
         po.setPayerId(payerDto.getId());
