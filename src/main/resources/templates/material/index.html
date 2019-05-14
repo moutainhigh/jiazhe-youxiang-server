@@ -133,6 +133,7 @@
                     <div class="col-xs-12 col-sm-1"></div>
                     <div class="col-xs-12 col-sm-9">
                         <form id="transferMoneyForm" class="form-horizontal" role="form">
+                            <input value=0 type="hidden" name="id" id="materialInfoId"/>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label no-padding-right">付款人：</label>
                                 <div class="col-sm-8">
@@ -183,15 +184,15 @@
 
                             <div class="form-group">
                                 <label class="col-sm-4 control-label no-padding-right"
-                                       for="transferTimeSaveStr">转账日期：</label>
+                                       for="transferTimeSave">转账日期：</label>
                                 <div class="col-sm-8">
                                     <div class="input-group">
-                                        <input class="form-control date-picker" id="transferTimeSaveStr"
+                                        <input class="form-control date-picker" id="transferTimeSave"
                                                type="text" readonly/>
                                         <span class="input-group-addon">
                                             <i class="fa fa-calendar bigger-110"></i>
                                         </span>
-                                        <input type="hidden" value=0 name="transferTime" id="transferTimeSave"/>
+                                        <input type="hidden" value=0 name="transferTime"/>
                                     </div>
                                 </div>
                             </div>
@@ -327,6 +328,7 @@
     }
 
     function openNew() {
+        $("#materialInfoId").val(0);
         $("#payerNameSave").val(decodeURI(getCookie("displayName")));
         $("#transferAmountSave").val('');
         $("#materialValueSave").val('');
@@ -336,6 +338,36 @@
         $('#transferTimeSaveStr').datepicker('update');
         $("#transferTimeSaveStr").next().next().val(time);
         $("#modal-transferMoney").modal('show');
+    }
+
+    function openEdit(id){
+        $.ajax({
+            url: "/api/material/getbyid",
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#materialInfoId").val(result.id);
+                    $("#payerNameSave").val(result.payerName);
+                    $("#payeeSave").val(result.payeeId);
+                    $("#transferAmountSave").val(result.transferAmount);
+                    $("#materialValueSave").val(result.materialValue);
+                    $("#transferTimeSave").val(dateFormat(result.transferTime));
+                    $('#transferTimeSave').datepicker('update');
+                    $("#transferTimeSave").next().next().val(result.transferTime);
+                    $("#saveRemark").val(result.remark);
+                    $("#modal-transferMoney").modal('show');
+                }
+            },
+            error: error
+        });
     }
 
     function saveTransferMoney() {

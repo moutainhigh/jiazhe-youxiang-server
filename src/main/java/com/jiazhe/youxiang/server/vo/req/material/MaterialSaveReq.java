@@ -12,6 +12,9 @@ import java.math.BigDecimal;
  */
 public class MaterialSaveReq extends BaseVO{
 
+    @ApiModelProperty("id")
+    private Integer id;
+
     @ApiModelProperty("收款人id")
     private Integer payeeId;
 
@@ -26,6 +29,14 @@ public class MaterialSaveReq extends BaseVO{
 
     @ApiModelProperty("备注")
     private String remark;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getPayeeId() {
         return payeeId;

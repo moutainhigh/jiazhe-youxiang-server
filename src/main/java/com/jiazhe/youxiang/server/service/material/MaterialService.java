@@ -33,13 +33,14 @@ public interface MaterialService {
 
     /**
      * 保存转账信息
+     * @param id
      * @param payeeId
      * @param transferAmount
      * @param materialValue
      * @param transferTime
      * @param remark
      */
-    void save(Integer payeeId, BigDecimal transferAmount, BigDecimal materialValue, Date transferTime, String remark);
+    void save(Integer id,Integer payeeId, BigDecimal transferAmount, BigDecimal materialValue, Date transferTime, String remark);
 
     /**
      * 根据条件查询转账明细信息
@@ -57,4 +58,11 @@ public interface MaterialService {
      * @param id
      */
     void delete(Integer id);
+
+    /**
+     * 获取详情
+     * @param id
+     * @return
+     */
+    MaterialDto getById(Integer id);
 }

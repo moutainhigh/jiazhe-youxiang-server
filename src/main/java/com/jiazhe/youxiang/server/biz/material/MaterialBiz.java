@@ -30,8 +30,8 @@ public class MaterialBiz {
         return materialService.calculateSummary(payerIds,payeeIds);
     }
 
-    public void save(Integer payeeId, BigDecimal transferAmount, BigDecimal materialValue, Date transferTime, String remark) {
-        materialService.save(payeeId,transferAmount,materialValue,transferTime,remark);
+    public void save(Integer id,Integer payeeId, BigDecimal transferAmount, BigDecimal materialValue, Date transferTime, String remark) {
+        materialService.save(id,payeeId,transferAmount,materialValue,transferTime,remark);
     }
 
     public List<MaterialDto> getList(String payerIds, String payeeIds, Date transferTimeBegin, Date transferTimeEnd, Paging paging) {
@@ -40,5 +40,9 @@ public class MaterialBiz {
 
     public void delete(Integer id) {
         materialService.delete(id);
+    }
+
+    public MaterialDto getById(Integer id) {
+        return materialService.getById(id);
     }
 }

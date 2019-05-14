@@ -75,6 +75,16 @@ public class APIMaterialController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @ApiOperation(value = "获取转账记录详情", httpMethod = "GET", response = MaterialResp.class, notes = "获取转账记录详情")
+    @RequestMapping(value = "/getbyid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.MATERIAL, operate = "获取转账记录详情", level = LogLevelEnum.LEVEL_1)
+    public Object getById(@ModelAttribute IdReq req) {
+        CommonValidator.validateId(req.getId());
+        MaterialDto dto = materialBiz.getById(req.getId());
+        MaterialResp resp = MaterialAdapter.dto2Resp(dto);
+        return ResponseFactory.buildResponse(resp);
+    }
+
     @ApiOperation(value = "物料汇总", httpMethod = "GET", response = MaterialSummaryResp.class, responseContainer = "List", notes = "物料汇总")
     @RequestMapping(value = "/calculatesummary", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.MATERIAL, operate = "物料汇总", level = LogLevelEnum.LEVEL_1)
@@ -94,7 +104,7 @@ public class APIMaterialController extends BaseController {
         if (CommonConstant.NULL_TIME == req.getTransferTime()) {
             throw new MaterialException(MaterialCodeEnum.TRANSFER_TIME_IS_NULL);
         }
-        materialBiz.save(req.getPayeeId(), req.getTransferAmount(), req.getMaterialValue(), new Date(req.getTransferTime()), req.getRemark());
+        materialBiz.save(req.getId(), req.getPayeeId(), req.getTransferAmount(), req.getMaterialValue(), new Date(req.getTransferTime()), req.getRemark());
         return ResponseFactory.buildSuccess();
     }
 

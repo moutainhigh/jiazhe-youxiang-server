@@ -73,25 +73,38 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public void save(Integer payeeId, BigDecimal transferAmount, BigDecimal materialValue, Date transferTime, String remark) {
-        MaterialInfoPO po = new MaterialInfoPO();
+    public void save(Integer id ,Integer payeeId, BigDecimal transferAmount, BigDecimal materialValue, Date transferTime, String remark) {
         SysUserDTO payerDto = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
         if (null == payerDto) {
             throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
+        }
+        MaterialInfoPO po ;
+        if(id == 0){
+            po = new MaterialInfoPO();
+            po.setPayerId(payerDto.getId());
+            po.setPayerName(payerDto.getDisplayName());
+        }else{
+            po = materialInfoPOMapper.selectByPrimaryKey(id);
+            if(!po.getPayerId().equals(payerDto.getId())){
+                throw new MaterialException(MaterialCodeEnum.CANNOT_CHANGE_OTHERS_PAY);
+            }
         }
         SysUserDTO payeeDto = sysUserService.findById(payeeId);
         if (null == payeeDto) {
             throw new MaterialException(MaterialCodeEnum.PAYEE_NOT_EXIST);
         }
-        po.setPayerId(payerDto.getId());
-        po.setPayerName(payerDto.getDisplayName());
         po.setPayeeId(payeeDto.getId());
         po.setPayeeName(payeeDto.getDisplayName());
         po.setTransferAmount(transferAmount);
         po.setMaterialValue(materialValue);
         po.setTransferTime(transferTime);
         po.setRemark(remark);
-        materialInfoPOMapper.insertSelective(po);
+        if(id == 0){
+            materialInfoPOMapper.insertSelective(po);
+        }else{
+            materialInfoPOMapper.updateByPrimaryKeySelective(po);
+        }
+
     }
 
     @Override
@@ -117,5 +130,11 @@ public class MaterialServiceImpl implements MaterialService {
         po.setIsDeleted(CommonConstant.CODE_DELETED);
         po.setModTime(new Date(System.currentTimeMillis()));
         materialInfoPOMapper.updateByPrimaryKeySelective(po);
+    }
+
+    @Override
+    public MaterialDto getById(Integer id) {
+        MaterialInfoPO po = materialInfoPOMapper.selectByPrimaryKey(id);
+        return MaterialAdapter.po2Dto(po);
     }
 }
