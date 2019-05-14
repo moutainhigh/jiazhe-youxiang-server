@@ -10,22 +10,49 @@ import java.util.Date;
  */
 public class MaterialDto {
 
+    /**
+     * 转账记录id
+     */
     private Integer id;
 
+    /**
+     * 转账时间
+     */
     private Date transferTime;
 
+    /**
+     * 转账金额
+     */
     private BigDecimal transferAmount;
 
+    /**
+     * 物料价值
+     */
     private BigDecimal materialValue;
 
+    /**
+     * 付款人id
+     */
     private Integer payerId;
 
+    /**
+     * 付款人姓名
+     */
     private String payerName;
 
+    /**
+     * 收款人id
+     */
     private Integer payeeId;
 
+    /**
+     * 收款人姓名
+     */
     private String payeeName;
 
+    /**
+     * 备注
+     */
     private String remark;
 
     public Integer getId() {

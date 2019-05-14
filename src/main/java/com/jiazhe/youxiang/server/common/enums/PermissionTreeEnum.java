@@ -317,7 +317,7 @@ public enum PermissionTreeEnum {
     //修改转账
     MATERIAL_TRANSFER_MONEY_EDIT(1004, 10, "修改转账", PermissionConstant.MATERIAL_TRANSFER_MONEY_EDIT),
     //删除转账
-    MATERIAL_TRANSFER_MONEY_DELETE(1003, 10, "删除转账", PermissionConstant.MATERIAL_TRANSFER_MONEY_DELETE),
+    MATERIAL_TRANSFER_MONEY_DELETE(1005, 10, "删除转账", PermissionConstant.MATERIAL_TRANSFER_MONEY_DELETE),
     ;
 
     PermissionTreeEnum(Integer id, Integer pId, String name, String perm) {

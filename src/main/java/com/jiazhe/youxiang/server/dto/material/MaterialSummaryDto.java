@@ -9,14 +9,29 @@ import java.math.BigDecimal;
  */
 public class MaterialSummaryDto {
 
+    /**
+     * 员工id（收款人id）
+     */
     private Integer id ;
 
+    /**
+     * 收款人姓名
+     */
     private String payeeName;
 
+    /**
+     * 总收款金额
+     */
     private BigDecimal receiveTotal;
 
+    /**
+     * 总购买物料价值
+     */
     private BigDecimal productValueTotal ;
 
+    /**
+     * 总消耗物料价值
+     */
     private BigDecimal usedProductValueTotal ;
 
     public Integer getId() {

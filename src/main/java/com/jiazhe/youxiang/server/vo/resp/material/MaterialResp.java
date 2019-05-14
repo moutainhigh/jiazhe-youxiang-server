@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.vo.resp.material;
 
 import com.jiazhe.youxiang.server.vo.BaseVO;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 
@@ -11,22 +12,31 @@ import java.math.BigDecimal;
  */
 public class MaterialResp extends BaseVO{
 
+    @ApiModelProperty("转账记录id")
     private Integer id;
 
+    @ApiModelProperty("转账时间")
     private Long transferTime;
 
+    @ApiModelProperty("转账金额")
     private BigDecimal transferAmount;
 
+    @ApiModelProperty("物料价值")
     private BigDecimal materialValue;
 
+    @ApiModelProperty("付款人id")
     private Integer payerId;
 
+    @ApiModelProperty("付款人姓名")
     private String payerName;
 
+    @ApiModelProperty("收款人id")
     private Integer payeeId;
 
+    @ApiModelProperty("收款人姓名")
     private String payeeName;
 
+    @ApiModelProperty("备注")
     private String remark;
 
     public Integer getId() {
