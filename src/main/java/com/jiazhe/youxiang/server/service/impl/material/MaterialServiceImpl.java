@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.server.service.impl.material;
 
+import com.jiazhe.youxiang.server.adapter.material.MaterialAdapter;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.MaterialCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
@@ -7,6 +9,7 @@ import com.jiazhe.youxiang.server.common.exceptions.MaterialException;
 import com.jiazhe.youxiang.server.dao.mapper.MaterialInfoPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.material.MaterialInfoPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.MaterialInfoPO;
+import com.jiazhe.youxiang.server.dto.material.MaterialDto;
 import com.jiazhe.youxiang.server.dto.material.MaterialSummaryDto;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.SysUserService;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author TU
@@ -88,5 +92,30 @@ public class MaterialServiceImpl implements MaterialService {
         po.setTransferTime(transferTime);
         po.setRemark(remark);
         materialInfoPOMapper.insertSelective(po);
+    }
+
+    @Override
+    public List<MaterialDto> getList(String payerIds, String payeeIds, Date transferTimeBegin, Date transferTimeEnd, Paging paging) {
+        if (!Strings.isEmpty(payerIds)) {
+            payerIds = "(" + payerIds + ")";
+        }
+        if (!Strings.isEmpty(payeeIds)) {
+            payeeIds = "(" + payeeIds + ")";
+        }
+        Integer count = materialInfoPOManualMapper.count(payerIds, payeeIds, transferTimeBegin, transferTimeEnd);
+        paging.setTotal(count);
+        List<MaterialInfoPO> poList = materialInfoPOManualMapper.query(payerIds, payeeIds, transferTimeBegin, transferTimeEnd, paging.getOffset(), paging.getLimit());
+        return poList.stream().map(MaterialAdapter::po2Dto).collect(Collectors.toList());
+    }
+
+    @Override
+    public void delete(Integer id) {
+        MaterialInfoPO po = materialInfoPOMapper.selectByPrimaryKey(id);
+        if (po == null) {
+            throw new MaterialException(MaterialCodeEnum.MATERIAL_INFO_IS_NOT_EXIST);
+        }
+        po.setIsDeleted(CommonConstant.CODE_DELETED);
+        po.setModTime(new Date(System.currentTimeMillis()));
+        materialInfoPOMapper.updateByPrimaryKeySelective(po);
     }
 }

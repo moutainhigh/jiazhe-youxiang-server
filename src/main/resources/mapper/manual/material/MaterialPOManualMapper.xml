@@ -127,4 +127,46 @@
         ) as temp
     </select>
 
+    <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.MaterialInfoPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM material_info
+        <where>
+            <if test="payerIds != null and payerIds != ''">
+                AND payer_id in ${payerIds}
+            </if>
+            <if test="payeeIds != null and payeeIds != ''">
+                AND payee_id in ${payeeIds}
+            </if>
+            <if test="transferTimeBegin != null">
+                AND transfer_time &gt;= #{transferTimeBegin}
+            </if>
+            <if test="transferTimeEnd != null">
+                AND transfer_time &lt;= #{transferTimeEnd}
+            </if>
+            AND is_deleted = 0 ORDER BY mod_time DESC
+        </where>
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from material_info
+            <where>
+                <if test="payerIds != null and payerIds != ''">
+                    AND payer_id in ${payerIds}
+                </if>
+                <if test="payeeIds != null and payeeIds != ''">
+                    AND payee_id in ${payeeIds}
+                </if>
+                <if test="transferTimeBegin != null">
+                    AND transfer_time &gt;= #{transferTimeBegin}
+                </if>
+                <if test="transferTimeEnd != null">
+                    AND transfer_time &lt;= #{transferTimeEnd}
+                </if>
+                AND is_deleted = 0
+            </where>
+    </select>
 </mapper>

@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.biz.material;
 
+import com.jiazhe.youxiang.server.dto.material.MaterialDto;
 import com.jiazhe.youxiang.server.dto.material.MaterialSummaryDto;
 import com.jiazhe.youxiang.server.service.material.MaterialService;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -31,5 +32,13 @@ public class MaterialBiz {
 
     public void save(Integer payeeId, BigDecimal transferAmount, BigDecimal materialValue, Date transferTime, String remark) {
         materialService.save(payeeId,transferAmount,materialValue,transferTime,remark);
+    }
+
+    public List<MaterialDto> getList(String payerIds, String payeeIds, Date transferTimeBegin, Date transferTimeEnd, Paging paging) {
+        return materialService.getList(payerIds,payeeIds,transferTimeBegin,transferTimeEnd,paging);
+    }
+
+    public void delete(Integer id) {
+        materialService.delete(id);
     }
 }

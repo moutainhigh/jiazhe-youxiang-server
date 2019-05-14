@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.material;
 
+import com.jiazhe.youxiang.server.dto.material.MaterialDto;
 import com.jiazhe.youxiang.server.dto.material.MaterialSummaryDto;
 import com.jiazhe.youxiang.server.vo.Paging;
 
@@ -39,4 +40,21 @@ public interface MaterialService {
      * @param remark
      */
     void save(Integer payeeId, BigDecimal transferAmount, BigDecimal materialValue, Date transferTime, String remark);
+
+    /**
+     * 根据条件查询转账明细信息
+     * @param payerIds
+     * @param payeeIds
+     * @param transferTimeBegin
+     * @param transferTimeEnd
+     * @param paging
+     * @return
+     */
+    List<MaterialDto> getList(String payerIds, String payeeIds, Date transferTimeBegin, Date transferTimeEnd, Paging paging);
+
+    /**
+     * 删除转账记录
+     * @param id
+     */
+    void delete(Integer id);
 }

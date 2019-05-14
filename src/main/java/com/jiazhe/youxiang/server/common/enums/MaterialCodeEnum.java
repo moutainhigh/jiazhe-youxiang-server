@@ -11,6 +11,8 @@ public enum MaterialCodeEnum {
     TRANSFER_AMOUNT_ILLEGAL(121002,"TRANSFER_AMOUNT_ILLEGAL","转账金额非法"),
     MATERIAL_VALUE_ILLEGAL(121003,"MATERIAL_VALUE_ILLEGAL","采购实物价值非法"),
     TRANSFER_TIME_IS_NULL(121004,"TRANSFER_TIME_IS_NULL","转账时间为空"),
+    MATERIAL_INFO_IS_NOT_EXIST(121005,"MATERIAL_INFO_IS_NOT_EXIST","转账记录不存在"),
+
     ;
 
     MaterialCodeEnum(Integer code, String type, String message) {

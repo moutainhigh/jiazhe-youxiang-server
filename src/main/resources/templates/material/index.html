@@ -49,12 +49,12 @@
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
                                         <div class="input-group">
-                                            <input class="form-control date-picker" id="searchTradeStartTime"
+                                            <input class="form-control date-picker"
                                                    type="text" readonly/>
                                             <span class="input-group-addon">
                                             <i class="fa fa-calendar bigger-110"></i>
                                         </span>
-                                            <input type="hidden" value=0 name="tradeStartTime"/>
+                                            <input type="hidden" value=0 name="transferTimeBegin"/>
                                         </div>
                                     </div>
                                 </div>
@@ -62,12 +62,12 @@
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
                                         <div class="input-group">
-                                            <input class="form-control date-picker" id="searchTradeEndTime"
+                                            <input class="form-control date-picker"
                                                    type="text" readonly/>
                                             <span class="input-group-addon">
                                             <i class="fa fa-calendar bigger-110"></i>
                                         </span>
-                                            <input type="hidden" value=0 name="tradeEndTime"/>
+                                            <input type="hidden" value=0 name="transferTimeEnd"/>
                                         </div>
                                     </div>
                                 </div>
@@ -263,7 +263,7 @@
         });
 
         var tableOption = {
-            url: "/api/material/listsummarypage",
+            url: "/api/material/listpage",
             postData: transformToJson($('#materialInfoSearchForm').serializeArray()),
             colNames: ['', '付款人','收款人', '转账金额', '采购实物价值', '转账日期','操作'],
             colModel: [
@@ -271,7 +271,7 @@
                 {name: 'payerName', index: 'payerName', width: 70, sortable: false},
                 {name: 'payeeName', index: 'payeeName', width: 70, sortable: false},
                 {name: 'transferAmount', index: 'transferAmount', width: 50, sortable: false},
-                {name: 'productValue', index: 'productValue', width: 50, sortable: false},
+                {name: 'materialValue', index: 'materialValue', width: 50, sortable: false},
                 {name: 'transferTime', index: 'transferTime', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
                     return dateFormat(rowObject.transferTime);
                 }},
@@ -311,6 +311,7 @@
     }
 
     function search() {
+        getPostData();
         jQuery(grid_selector).setGridParam({
             url: "/api/material/listpage",
             postData: transformToJson($('#materialInfoSearchForm').serializeArray()),
@@ -320,8 +321,8 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str += getFunctionButton("btn-success", "openNew(" + rowObject.id + ",\""+rowObject.payeeName+"\")", "编辑");
-        str += getFunctionButton("btn-danger", "delete(" + rowObject.id +")", "删除");
+        str += getFunctionButton("btn-success", "openEdit(" + rowObject.id +")", "编辑");
+        str += getFunctionButton("btn-danger", "deleteById(" + rowObject.id +")", "删除");
         return str;
     }
 
@@ -365,6 +366,30 @@
                 }
             },
             error: error
+        });
+    }
+
+    function deleteById(id) {
+        confirm("确定删除吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "/api/material/delete",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    success: function (data) {
+                        if ('error' in data) {
+                            bootboxalert(data.error.message);
+                        } else {
+                            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                        }
+                    },
+                    error: error
+                });
+            }
         });
     }
 
