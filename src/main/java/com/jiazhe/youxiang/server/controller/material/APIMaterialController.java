@@ -8,6 +8,7 @@ import com.jiazhe.youxiang.server.adapter.material.MaterialAdapter;
 import com.jiazhe.youxiang.server.biz.material.MaterialBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.MaterialCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
@@ -23,6 +24,8 @@ import com.jiazhe.youxiang.server.vo.req.material.MaterialSummaryPageReq;
 import com.jiazhe.youxiang.server.vo.resp.material.MaterialResp;
 import com.jiazhe.youxiang.server.vo.resp.material.MaterialSummaryResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +48,7 @@ public class APIMaterialController extends BaseController {
     @Autowired
     private MaterialBiz materialBiz;
 
+    @RequiresPermissions(PermissionConstant.MATERIAL_MANAGEMENT)
     @ApiOperation(value = "物料汇总列表", httpMethod = "GET", response = MaterialSummaryResp.class, responseContainer = "List", notes = "物料汇总列表")
     @RequestMapping(value = "/listsummarypage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.MATERIAL, operate = "物料汇总列表", level = LogLevelEnum.LEVEL_1)
@@ -55,6 +59,7 @@ public class APIMaterialController extends BaseController {
         return ResponseFactory.buildPaginationResponse(respList, paging);
     }
 
+    @RequiresPermissions(PermissionConstant.MATERIAL_TRANSFER_MONEY_DETAIL)
     @ApiOperation(value = "转账明细列表", httpMethod = "GET", response = MaterialResp.class, responseContainer = "List", notes = "转账明细列表")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.MATERIAL, operate = "转账明细列表", level = LogLevelEnum.LEVEL_1)
@@ -67,6 +72,7 @@ public class APIMaterialController extends BaseController {
         return ResponseFactory.buildPaginationResponse(respList, paging);
     }
 
+    @RequiresPermissions(PermissionConstant.MATERIAL_TRANSFER_MONEY_DELETE)
     @ApiOperation(value = "删除转账记录", httpMethod = "POST", notes = "删除转账记录")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.MATERIAL, operate = "删除转账记录", level = LogLevelEnum.LEVEL_3)
@@ -85,6 +91,7 @@ public class APIMaterialController extends BaseController {
         return ResponseFactory.buildResponse(resp);
     }
 
+    @RequiresPermissions(PermissionConstant.MATERIAL_MANAGEMENT)
     @ApiOperation(value = "物料汇总", httpMethod = "GET", response = MaterialSummaryResp.class, responseContainer = "List", notes = "物料汇总")
     @RequestMapping(value = "/calculatesummary", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.MATERIAL, operate = "物料汇总", level = LogLevelEnum.LEVEL_1)
@@ -94,6 +101,7 @@ public class APIMaterialController extends BaseController {
         return ResponseFactory.buildResponse(resp);
     }
 
+    @RequiresPermissions(value={PermissionConstant.MATERIAL_TRANSFER_MONEY_ADD,PermissionConstant.MATERIAL_TRANSFER_MONEY_EDIT},logical = Logical.OR)
     @ApiOperation(value = "保存转账信息", httpMethod = "POST", notes = "保存转账信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.MATERIAL, operate = "保存转账信息", level = LogLevelEnum.LEVEL_2)
@@ -107,6 +115,5 @@ public class APIMaterialController extends BaseController {
         materialBiz.save(req.getId(), req.getPayeeId(), req.getTransferAmount(), req.getMaterialValue(), new Date(req.getTransferTime()), req.getRemark());
         return ResponseFactory.buildSuccess();
     }
-
 
 }

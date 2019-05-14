@@ -104,7 +104,6 @@ public class MaterialServiceImpl implements MaterialService {
         }else{
             materialInfoPOMapper.updateByPrimaryKeySelective(po);
         }
-
     }
 
     @Override

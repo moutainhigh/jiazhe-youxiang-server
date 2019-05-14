@@ -324,9 +324,15 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-        str += getFunctionButton("btn-success", "openNew(" + rowObject.id + ",\""+rowObject.payeeName+"\")", "转账");
-        str += getRedirectButton("btn-primary", "../material/index?payeeId=" + rowObject.id + "&&payerIds=" + $("#payerIdsHidden").val(), "转账明细");
-        str += getRedirectButton("btn-primary", "../auditrecord/index?submitterName=" + rowObject.payeeName + "&status=4", "消耗明细");
+        if(permission.indexOf("materialTransferMoneyAdd") != -1) {
+            str += getFunctionButton("btn-success", "openNew(" + rowObject.id + ",\"" + rowObject.payeeName + "\")", "转账");
+        }
+        if (permission.indexOf("materialTransferMoneyDetail") != -1) {
+            str += getRedirectButton("btn-primary", "../material/index?payeeId=" + rowObject.id + "&&payerIds=" + $("#payerIdsHidden").val(), "转账明细");
+        }
+        if (permission.indexOf("materialUsedDetail") != -1) {
+            str += getRedirectButton("btn-primary", "../auditrecord/index?submitterName=" + rowObject.payeeName + "&status=4", "消耗明细");
+        }
         return str;
     }
 
