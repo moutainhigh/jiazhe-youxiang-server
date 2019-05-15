@@ -78,33 +78,33 @@
                                                type="text" style="height:30px"/>
                                     </div>
                                 </div>
-                                <label class="col-sm-1 control-label no-padding-right">银行卡后四位：</label>
+                                <label class="col-sm-1 control-label no-padding-right">卡号后四位：</label>
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
                                         <input id="searchCardNo" name="cardNo" class="form-control"
                                                type="text" style="height:30px"/>
                                     </div>
                                 </div>
-                                <label class="col-sm-1 control-label no-padding-right">POS机编号：</label>
-                                <div class="col-sm-2">
-                                    <div class="pos-rel">
-                                        <select id="searchPosCode" name="posCode"
-                                                class="form-control">
-                                            <option>财富私行尊享积分pos一</option>
-                                            <option>财富私行尊享积分pos十二</option>
-                                            <option>财富私行尊享积分pos十六</option>
-                                            <option>财富私行尊享积分pos中国银行津南支行尊享活动</option>
-                                            <option>北京悠享互联信息技术天津</option>
-                                            <option>江苏</option>
-                                            <option>青岛</option>
-                                            <option>温州</option>
-                                        </select>
-                                    </div>
-                                </div>
+                                <!--<label class="col-sm-1 control-label no-padding-right">POS机编号：</label>-->
+                                <!--<div class="col-sm-2">-->
+                                    <!--<div class="pos-rel">-->
+                                        <!--<select id="searchPosCode" name="posCode"-->
+                                                <!--class="form-control">-->
+                                            <!--<option>财富私行尊享积分pos一</option>-->
+                                            <!--<option>财富私行尊享积分pos十二</option>-->
+                                            <!--<option>财富私行尊享积分pos十六</option>-->
+                                            <!--<option>财富私行尊享积分pos中国银行津南支行尊享活动</option>-->
+                                            <!--<option>北京悠享互联信息技术天津</option>-->
+                                            <!--<option>江苏</option>-->
+                                            <!--<option>青岛</option>-->
+                                            <!--<option>温州</option>-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+                                <!--</div>-->
                             </div>
                             <div class="space-2"></div>
                             <div class="form-group">
-                                <label class="col-sm-1 control-label no-padding-right">交易时间起：</label>
+                                <label class="col-sm-1 control-label no-padding-right">交易日期起：</label>
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
                                         <div class="input-group">
@@ -117,7 +117,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <label class="col-sm-1 control-label no-padding-right">交易时间止：</label>
+                                <label class="col-sm-1 control-label no-padding-right">交易日期止：</label>
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
                                         <div class="input-group">
@@ -201,7 +201,8 @@
         var tableOption = {
             url: "/api/chargereceipt/listpageall",
             postData: transformToJson($('#chargeReceiptSearchForm').serializeArray()),
-            colNames: ['', '客户姓名','银行卡后四位', '交易日期', '消费积分', 'POS机编号',  '录入人', '操作'],
+//            colNames: ['', '客户姓名','卡号后四位', '交易日期', '消费积分', 'POS机编号',  '录入人', '操作'],
+            colNames: ['', '客户姓名','卡号后四位', '交易日期', '消费积分', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'customerName', index: 'submitterName', width: 40, sortable: false},
@@ -216,8 +217,8 @@
                     }
                 },
                 {name: 'exchangePoint', index: 'exchangePoint', width: 40, sortable: false},
-                {name: 'posCode', index: 'posCode', width: 100, sortable: false},
-                {name: 'inputerName', index: 'inputerName', sortable: false, width: 40},
+//                {name: 'posCode', index: 'posCode', width: 100, sortable: false},
+//                {name: 'inputerName', index: 'inputerName', sortable: false, width: 40},
                 {name: '_action', index: '_action', sortable: false, width: 100, formatter: customFormatter}
             ],
             caption: "未注册客户信息"
