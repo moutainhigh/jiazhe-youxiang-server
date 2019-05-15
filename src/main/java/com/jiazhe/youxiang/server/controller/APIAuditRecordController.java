@@ -98,7 +98,7 @@ public class APIAuditRecordController extends BaseController {
         return ResponseFactory.buildResponse(auditRecordResp);
     }
 
-    @RequiresPermissions(PermissionConstant.AUDIT_RECORD_MANAGEMENT)
+//    @RequiresPermissions(PermissionConstant.AUDIT_RECORD_MANAGEMENT)
     @ApiOperation(value = "【后台】消费记录列表", httpMethod = "GET", response = AuditRecordResp.class, responseContainer = "List", notes = "【后台】消费记录列表")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "消费记录列表", level = LogLevelEnum.LEVEL_1)

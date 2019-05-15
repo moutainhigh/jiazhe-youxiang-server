@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title></title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/static/init.css}"/>
+    <!-- Javascript -->
+    <script th:src="@{/static/init.js}"></script>
+
+    <style>
+        .ui-jqgrid .ui-jqgrid-bdiv {
+            overflow-x: auto;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 10px;
+        }
+    </style>
+</head>
+
+<body class="no-skin">
+<div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a th:href="@{/main/main_center}">主页</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/material/summaryindex}">物料管理</a>
+                    </li>
+                    <li class="active">转账明细</li>
+                </ul><!-- /.breadcrumb -->
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xs-12" style="padding-top:40px">
+                        <form id="materialInfoSearchForm" class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">转账时间起：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <div class="input-group">
+                                            <input class="form-control date-picker"
+                                                   type="text" readonly/>
+                                            <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                            <input type="hidden" value=0 name="transferTimeBegin"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">转账时间止：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <div class="input-group">
+                                            <input class="form-control date-picker"
+                                                   type="text" readonly/>
+                                            <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                            <input type="hidden" value=0 name="transferTimeEnd"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">付款人：</label>
+                                <div class="col-sm-2">
+                                    <input type="hidden" name="payerIds" id="payerIdsHidden" th:value="${payerIds}"/>
+                                    <select id="payerSearch" class="multiselect" multiple="">
+                                        <!--<option value="0">所有</option>-->
+                                    </select>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">收款人：</label>
+                                <div class="col-sm-2">
+                                    <input type="hidden" name="payeeIds" id="payeeIdsHidden" th:value="${payeeId}"/>
+                                    <select id="payeeSearch" class="multiselect" multiple="">
+                                        <!--<option value="0">所有</option>-->
+                                    </select>
+
+                                </div>
+                                <div class="col-sm-3">
+                                    <button class="btn btn-white btn-default btn-round btn-sm"
+                                            onclick="return search()">
+                                        <i class="ace-icon fa fa-search red2"></i>
+                                        查询
+                                    </button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                </div>
+                            </div>
+                        </form>
+                    </div><!-- /.col -->
+
+                    <div class="col-xs-12" style="text-align: right" id="buttonDiv">
+                        <p style="margin:1px;height: 31px">
+                            <shiro:hasPermission name="materialTransferMoneyAdd">
+                                <a class="btn btn-success btn-round btn-sm" role="button"
+                                   data-toggle="modal" onclick="openNew()">
+                                    <i class="ace-icon fa fa-plus"></i>添加转账
+                                </a>
+                            </shiro:hasPermission>
+                        </p>
+                    </div><!-- /.col -->
+
+                    <div class="col-xs-12">
+                        <table id="grid-table"></table>
+                        <div id="grid-pager"></div>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+</div><!-- /.main-container -->
+
+<!--转账modal-->
+<div id="modal-transferMoney" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="blue bigger" id="modal-transferMoney-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-1"></div>
+                    <div class="col-xs-12 col-sm-9">
+                        <form id="transferMoneyForm" class="form-horizontal" role="form">
+                            <input value=0 type="hidden" name="id" id="materialInfoId"/>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">付款人：</label>
+                                <div class="col-sm-8">
+                                    <div class="pos-rel">
+                                        <input id="payerNameSave"
+                                               class="form-control" readonly
+                                               type="text" style="height:30px"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">收款人：</label>
+                                <div class="col-sm-8">
+                                    <div class="pos-rel">
+                                        <select id="payeeSave" name="payeeId"
+                                                class="selectpicker show-tick form-control">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">转账金额：</label>
+                                <div class="col-sm-8">
+                                    <div class="pos-rel">
+                                        <input id="transferAmountSave" name="transferAmount"
+                                               class="form-control"
+                                               type="text" style="height:30px"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">采购实物价值：</label>
+                                <div class="col-sm-8">
+                                    <div class="pos-rel">
+                                        <input id="materialValueSave" name="materialValue"
+                                               class="form-control"
+                                               type="text" style="height:30px"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right"
+                                       for="transferTimeSaveStr">转账日期：</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <input class="form-control date-picker" id="transferTimeSaveStr"
+                                               type="text" readonly/>
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                        <input type="hidden" value=0 name="transferTime" id="transferTimeSave"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label no-padding-right">备注：</label>
+                                <div class="col-sm-8">
+                                    <div class="pos-rel">
+                                        <textarea id="saveRemark" name="remark"
+                                                  class="form-control"
+                                                  style="resize:none;height: 100px"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    取消
+                </button>
+
+                <button class="btn btn-sm btn-primary modal-footer-btn modal-footer-btn-save"
+                        onclick="saveTransferMoney()">
+                    <i class="ace-icon fa fa-check"></i>
+                    保存
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+    $(function () {
+        //重新修改表格宽度
+        $(window).resize(function () {
+            $("#grid-table").setGridWidth($(window).width() * 0.96);
+        });
+
+        initDatePicker();
+
+        //初始人员信息
+        $.ajax({
+            url: "/api/sysuser/listall",
+            dataType: "json",
+            async: false,
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#payerSearch").append("<option value=" + result[i].id + ">" + result[i].displayName + "</option>");
+                        $("#payeeSearch").append("<option value=" + result[i].id + ">" + result[i].displayName + "</option>");
+                        $("#payeeSave").append("<option value=" + result[i].id + ">" + result[i].displayName + "</option>");
+                    }
+                    initMultiSelect();
+                    backMultiSelect();
+                }
+            },
+            error: error
+        });
+
+        var tableOption = {
+            url: "/api/material/listpage",
+            postData: transformToJson($('#materialInfoSearchForm').serializeArray()),
+            colNames: ['', '付款人','收款人', '转账金额', '采购实物价值', '转账日期','操作'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: 'payerName', index: 'payerName', width: 70, sortable: false},
+                {name: 'payeeName', index: 'payeeName', width: 70, sortable: false},
+                {name: 'transferAmount', index: 'transferAmount', width: 50, sortable: false},
+                {name: 'materialValue', index: 'materialValue', width: 50, sortable: false},
+                {name: 'transferTime', index: 'transferTime', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return dateFormat(rowObject.transferTime);
+                }},
+                {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
+            ],
+            caption: "转账明细"
+        };
+
+        initTable(grid_selector, pager_selector, tableOption);
+    });
+
+    /**
+     * 多选框参数填充至input
+     */
+    function getPostData(){
+        var payerIds = [];
+        var payeeIds = [];
+        $("#payerSearch option:selected").each(function () {
+            payerIds.push($(this).val());
+        });
+        $("#payeeSearch option:selected").each(function () {
+            payeeIds.push($(this).val());
+        });
+        $("#payerIdsHidden").val(payerIds.join(","));
+        $("#payeeIdsHidden").val(payeeIds.join(","));
+    }
+
+    /**
+     * 将input中内容，回填到多选框中
+     */
+    function backMultiSelect(){
+        var payerIds = $("#payerIdsHidden").val();
+        var payeeIds = $("#payeeIdsHidden").val();
+        $('#payerSearch').multiselect('select', payerIds.split(","), true);
+        $('#payeeSearch').multiselect('select', payeeIds.split(","), true);
+    }
+
+    function search() {
+        getPostData();
+        jQuery(grid_selector).setGridParam({
+            url: "/api/material/listpage",
+            postData: transformToJson($('#materialInfoSearchForm').serializeArray()),
+        }).trigger("reloadGrid", [{page: 1}]);
+        return false;
+    }
+
+    function customFormatter(cellvalue, options, rowObject) {
+        var str = "";
+        if(permission.indexOf("materialTransferMoneyEdit") != -1) {
+            str += getFunctionButton("btn-success", "openEdit(" + rowObject.id + ")", "编辑");
+        }
+        if(permission.indexOf("materialTransferMoneyDelete") != -1) {
+            str += getFunctionButton("btn-danger", "deleteById(" + rowObject.id + ")", "删除");
+        }
+        return str;
+    }
+
+    function openNew() {
+        $("#modal-transferMoney-title").html("添加转账记录");
+        $("#materialInfoId").val(0);
+        $("#payerNameSave").val(decodeURI(getCookie("displayName")));
+        $("#transferAmountSave").val('');
+        $("#materialValueSave").val('');
+        $("#saveRemark").val('');
+        var time = new Date().getTime();
+        $("#transferTimeSaveStr").val(dateFormat(time));
+        $('#transferTimeSaveStr').datepicker('update');
+        $("#transferTimeSaveStr").next().next().val(time);
+        $("#modal-transferMoney").modal('show');
+    }
+
+    function openEdit(id){
+        $("#modal-transferMoney-title").html("修改转账记录");
+        $.ajax({
+            url: "/api/material/getbyid",
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    $("#materialInfoId").val(result.id);
+                    $("#payerNameSave").val(result.payerName);
+                    $("#payeeSave").val(result.payeeId);
+                    $("#transferAmountSave").val(result.transferAmount);
+                    $("#materialValueSave").val(result.materialValue);
+                    $("#transferTimeSaveStr").val(dateFormat(result.transferTime));
+                    $('#transferTimeSaveStr').datepicker('update');
+                    $("#transferTimeSaveStr").next().next().val(result.transferTime);
+                    $("#saveRemark").val(result.remark);
+                    $("#modal-transferMoney").modal('show');
+                }
+            },
+            error: error
+        });
+    }
+
+    function saveTransferMoney() {
+        if (!isNumber($("#transferAmountSave").val()) || $("#transferAmountSave").val() <= 0) {
+            bootboxalert("转账金额非法");
+            return false;
+        }
+        if (!isNumber($("#materialValueSave").val()) || $("#materialValueSave").val() <= 0) {
+            bootboxalert("采购实物价值非法");
+            return false;
+        }
+        if ($("#transferTimeSaveStr").val() == '' || $("#transferTimeSave").val() == 0) {
+            bootboxalert("转账日期不能为空");
+            return false;
+        }
+        $.ajax({
+            url: "/api/material/save",
+            dataType: "json",
+            async: false,
+            data: transformToJson($('#transferMoneyForm').serializeArray()),
+            type: "POST",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    $("#modal-transferMoney").modal('hide');
+                    search();
+                }
+            },
+            error: error
+        });
+    }
+
+    function deleteById(id) {
+        confirm("确定删除吗？", function (result) {
+            if (result) {
+                $.ajax({
+                    url: "/api/material/delete",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        id: id
+                    },
+                    type: "POST",
+                    success: function (data) {
+                        if ('error' in data) {
+                            bootboxalert(data.error.message);
+                        } else {
+                            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                        }
+                    },
+                    error: error
+                });
+            }
+        });
+    }
+
+</script>
+</html>
+

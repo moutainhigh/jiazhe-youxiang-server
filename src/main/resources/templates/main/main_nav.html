@@ -64,6 +64,14 @@
                 </li>
             </shiro:hasPermission>
 
+            <li class="">
+                <a th:href="@{/customer/unregistered}" target="iframeCenter">
+                    <i class="menu-icon fa fa-user-times"></i>
+                    <span class="menu-text"> 客户管理（未注册） </span>
+                </a>
+                <b class="arrow"></b>
+            </li>
+
             <shiro:hasPermission name="productCategoryManagement">
                 <li class="">
                     <a th:href="@{/product/productcategory/index}" target="iframeCenter">
@@ -204,6 +212,35 @@
                         <span class="menu-text"> 短信管理 </span>
                     </a>
                     <b class="arrow"></b>
+                </li>
+            </shiro:hasPermission>
+
+            <shiro:hasPermission name="materialManagement">
+                <li class="">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-inbox"></i>
+                        <span class="menu-text"> 物料管理 </span>
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+
+                    <b class="arrow"></b>
+
+                    <ul class="submenu">
+                        <li class="">
+                            <a th:href="@{/material/summaryindex}" target="iframeCenter">
+                                <span class="menu-text"> 物料汇总 </span>
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <shiro:hasPermission name="materialTransferMoneyDetail">
+                            <li class="">
+                                <a th:href="@{/material/index}" target="iframeCenter">
+                                    <span class="menu-text"> 转账明细 </span>
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </shiro:hasPermission>
+                    </ul>
                 </li>
             </shiro:hasPermission>
 
