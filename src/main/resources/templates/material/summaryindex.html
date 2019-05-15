@@ -285,7 +285,9 @@
                 {name: 'productValueTotal', index: 'productValueTotal', width: 50, sortable: false},
                 {name: 'usedProductValueTotal', index: 'usedProductValueTotal', width: 50, sortable: false},
                 {name: 'leftProductValueTotal', index: 'leftProductValueTotal', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
-                    return (rowObject.productValueTotal - rowObject.usedProductValueTotal).toFixed(2);
+                    var result = rowObject.productValueTotal - rowObject.usedProductValueTotal;
+                    var color = result < 0 ? "FF0000" : "000000"
+                    return generateSpan(result.toFixed(2),color);
                 }},
                 {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
             ],
@@ -390,11 +392,11 @@
     }
 
     function saveTransferMoney() {
-        if (isNumber($("#transferAmountSave")) || $("#transferAmountSave").val() == 0) {
+        if (!isNumber($("#transferAmountSave").val()) || $("#transferAmountSave").val() <= 0) {
             bootboxalert("转账金额非法");
             return false;
         }
-        if (isNumber($("#materialValueSave")) || $("#materialValueSave").val() == 0) {
+        if (!isNumber($("#materialValueSave").val()) || $("#materialValueSave").val() <= 0) {
             bootboxalert("采购实物价值非法");
             return false;
         }
