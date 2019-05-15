@@ -205,21 +205,20 @@
             colNames: ['', '客户姓名','卡号后四位', '交易日期', '消费积分', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
-                {name: 'customerName', index: 'submitterName', width: 40, sortable: false},
-                {name: 'cardNo', index: 'cardNo', width: 40, sortable: false},
+                {name: 'customerName', index: 'submitterName', sortable: false},
+                {name: 'cardNo', index: 'cardNo',  sortable: false},
                 {
                     name: 'tradeTime',
                     index: 'tradeTime',
-                    width: 50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return dateFormat(rowObject.tradeTime);
                     }
                 },
-                {name: 'exchangePoint', index: 'exchangePoint', width: 40, sortable: false},
+                {name: 'exchangePoint', index: 'exchangePoint', sortable: false},
 //                {name: 'posCode', index: 'posCode', width: 100, sortable: false},
 //                {name: 'inputerName', index: 'inputerName', sortable: false, width: 40},
-                {name: '_action', index: '_action', sortable: false, width: 100, formatter: customFormatter}
+                {name: '_action', index: '_action', sortable: false, formatter: customFormatter}
             ],
             caption: "未注册客户信息"
         };
