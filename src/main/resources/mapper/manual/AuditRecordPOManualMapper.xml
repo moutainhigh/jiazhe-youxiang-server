@@ -75,15 +75,15 @@
                 AND submit_time &lt;= #{submitEndTime}
             </if>
             <if test="exchangeType != null and exchangeType!=''">
-                AND ( 1=1 
+                AND ( 1=0
                 <if test="exchangeType.contains('1'.toString())">
-                    OR exchange_type = 1
+                    OR exchange_type in (1,12,13,123)
                 </if>
                 <if test="exchangeType.contains('2'.toString())">
-                    OR exchange_type = 2
+                    OR exchange_type in (2,12,23,123)
                 </if>
                 <if test="exchangeType.contains('3'.toString())">
-                    OR exchange_type = 3
+                    OR exchange_type in(3,13,23,123)
                 </if>
                 )
             </if>
@@ -125,15 +125,15 @@
                 AND submit_time &lt;= #{submitEndTime}
             </if>
             <if test="exchangeType != null and exchangeType!=''">
-                AND ( 1=1
+                AND ( 1=0
                 <if test="exchangeType.contains('1'.toString())">
-                    OR exchange_type = 1
+                    OR exchange_type in (1,12,13,123)
                 </if>
                 <if test="exchangeType.contains('2'.toString())">
-                    OR exchange_type = 2
+                    OR exchange_type in (2,12,23,123)
                 </if>
                 <if test="exchangeType.contains('3'.toString())">
-                    OR exchange_type = 3
+                    OR exchange_type in(3,13,23,123)
                 </if>
                 )
             </if>
