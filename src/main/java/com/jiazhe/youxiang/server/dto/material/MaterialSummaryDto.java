@@ -34,6 +34,13 @@ public class MaterialSummaryDto {
      */
     private BigDecimal usedProductValueTotal ;
 
+    /**
+     * 剩余物料价值
+     */
+    private BigDecimal leftProductValueTotal;
+
+
+
     public Integer getId() {
         return id;
     }
@@ -74,4 +81,11 @@ public class MaterialSummaryDto {
         this.usedProductValueTotal = usedProductValueTotal;
     }
 
+    public BigDecimal getLeftProductValueTotal() {
+        return leftProductValueTotal;
+    }
+
+    public void setLeftProductValueTotal(BigDecimal leftProductValueTotal) {
+        this.leftProductValueTotal = leftProductValueTotal;
+    }
 }

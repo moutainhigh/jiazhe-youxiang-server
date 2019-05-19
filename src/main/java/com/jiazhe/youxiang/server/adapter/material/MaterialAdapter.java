@@ -24,6 +24,7 @@ public class MaterialAdapter {
         materialSummaryResp.setReceiveTotal(materialSummaryDto.getReceiveTotal());
         materialSummaryResp.setProductValueTotal(materialSummaryDto.getProductValueTotal());
         materialSummaryResp.setUsedProductValueTotal(materialSummaryDto.getUsedProductValueTotal());
+        materialSummaryResp.setLeftProductValueTotal(materialSummaryDto.getLeftProductValueTotal());
         return materialSummaryResp;
     }
 

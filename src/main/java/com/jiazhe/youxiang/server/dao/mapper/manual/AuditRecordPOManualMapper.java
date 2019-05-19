@@ -21,8 +21,10 @@ public interface AuditRecordPOManualMapper {
      * @param chargeReceiptStatus
      * @param submitterName
      * @param pointCodes
+     * @param exchangePoint
      * @param submitStartTime
      * @param submitEndTime
+     * @param exchangeType
      * @return
      */
     Integer count(
@@ -32,8 +34,10 @@ public interface AuditRecordPOManualMapper {
             @Param("status") Byte status,
             @Param("chargeReceiptStatus") Byte chargeReceiptStatus,
             @Param("pointCodes") String pointCodes,
+            @Param("exchangePoint") String exchangePoint,
             @Param("submitStartTime") Date submitStartTime,
-            @Param("submitEndTime") Date submitEndTime
+            @Param("submitEndTime") Date submitEndTime,
+            @Param("exchangeType") String exchangeType
     );
 
     /**
@@ -44,8 +48,10 @@ public interface AuditRecordPOManualMapper {
      * @param status
      * @param chargeReceiptStatus
      * @param pointCodes
+     * @param exchangePoint
      * @param submitStartTime
      * @param submitEndTime
+     * @param exchangeType
      * @param offset
      * @param limit
      * @return
@@ -57,8 +63,10 @@ public interface AuditRecordPOManualMapper {
             @Param("status") Byte status,
             @Param("chargeReceiptStatus") Byte chargeReceiptStatus,
             @Param("pointCodes") String pointCodes,
+            @Param("exchangePoint") String exchangePoint,
             @Param("submitStartTime") Date submitStartTime,
             @Param("submitEndTime") Date submitEndTime,
+            @Param("exchangeType") String exchangeType,
             @Param("offset") Integer offset,
             @Param("limit") Integer limit
     );

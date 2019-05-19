@@ -51,6 +51,9 @@ public class MaterialServiceImpl implements MaterialService {
         Integer count = materialInfoPOManualMapper.getSummaryCount(payerIds, payeeIds);
         paging.setTotal(count);
         List<MaterialSummaryDto> dtoList = materialInfoPOManualMapper.getSummaryList(payerIds, payeeIds, paging.getOffset(), paging.getLimit());
+        dtoList.stream().forEach(bean -> {
+            bean.setLeftProductValueTotal(bean.getProductValueTotal().subtract(bean.getUsedProductValueTotal()));
+        });
         return dtoList;
     }
 
@@ -68,6 +71,9 @@ public class MaterialServiceImpl implements MaterialService {
             dto.setReceiveTotal(BigDecimal.ZERO);
             dto.setProductValueTotal(BigDecimal.ZERO);
             dto.setUsedProductValueTotal(BigDecimal.ZERO);
+            dto.setLeftProductValueTotal(BigDecimal.ZERO);
+        }else{
+            dto.setLeftProductValueTotal(dto.getProductValueTotal().subtract(dto.getUsedProductValueTotal()));
         }
         return dto;
     }
