@@ -19,9 +19,10 @@ public class AuditController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuditController.class);
 
-    @RequiresPermissions(PermissionConstant.AUDIT_RECORD_MANAGEMENT)
+//    @RequiresPermissions(PermissionConstant.AUDIT_RECORD_MANAGEMENT)
     @RequestMapping(value = "/index")
-    public String index(String submitterName , Integer status, Model model) {
+    public String index(String submitterName , Integer status, String exchangeType,Model model) {
+        model.addAttribute("exchangeType",exchangeType);
         model.addAttribute("submitterName",submitterName);
         model.addAttribute("status", status);
         return "auditrecord/index";

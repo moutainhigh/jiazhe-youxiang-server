@@ -285,9 +285,8 @@
                 {name: 'productValueTotal', index: 'productValueTotal', width: 50, sortable: false},
                 {name: 'usedProductValueTotal', index: 'usedProductValueTotal', width: 50, sortable: false},
                 {name: 'leftProductValueTotal', index: 'leftProductValueTotal', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
-                    var result = rowObject.productValueTotal - rowObject.usedProductValueTotal;
-                    var color = result < 0 ? "FF0000" : "000000"
-                    return generateSpan(result.toFixed(2),color);
+                    var color = rowObject.leftProductValueTotal < 0 ? "FF0000" : "000000"
+                    return generateSpan(rowObject.leftProductValueTotal,color);
                 }},
                 {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
             ],
@@ -333,7 +332,7 @@
             str += getRedirectButton("btn-primary", "../material/index?payeeId=" + rowObject.id + "&&payerIds=" + $("#payerIdsHidden").val(), "转账明细");
         }
         if (permission.indexOf("materialUsedDetail") != -1) {
-            str += getRedirectButton("btn-primary", "../auditrecord/index?submitterName=" + rowObject.payeeName + "&status=4", "消耗明细");
+            str += getRedirectButton("btn-primary", "../auditrecord/index?submitterName=" + rowObject.payeeName + "&&status=4&&exchangeType=3", "消耗明细");
         }
         return str;
     }
@@ -358,7 +357,7 @@
                     $("#receiveTotal").html(result.receiveTotal);
                     $("#productValueTotal").html(result.productValueTotal);
                     $("#usedProductValueTotal").html(result.usedProductValueTotal);
-                    $("#leftProductValueTotal").html(result.productValueTotal - result.usedProductValueTotal);
+                    $("#leftProductValueTotal").html(result.leftProductValueTotal);
                     showAlertInfo();
                 }
             },

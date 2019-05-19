@@ -27,6 +27,9 @@ public class MaterialSummaryResp extends BaseVO {
     @ApiModelProperty("消费实物价值")
     private BigDecimal usedProductValueTotal ;
 
+    @ApiModelProperty("剩余实物价值")
+    private BigDecimal leftProductValueTotal ;
+
     public Integer getId() {
         return id;
     }
@@ -65,5 +68,13 @@ public class MaterialSummaryResp extends BaseVO {
 
     public void setUsedProductValueTotal(BigDecimal usedProductValueTotal) {
         this.usedProductValueTotal = usedProductValueTotal;
+    }
+
+    public BigDecimal getLeftProductValueTotal() {
+        return leftProductValueTotal;
+    }
+
+    public void setLeftProductValueTotal(BigDecimal leftProductValueTotal) {
+        this.leftProductValueTotal = leftProductValueTotal;
     }
 }

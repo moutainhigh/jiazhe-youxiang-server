@@ -22,14 +22,20 @@ public class AuditRecordPageReq extends PageSizeNumReq {
     @ApiModelProperty("提交人")
     private String submitterName;
 
-    @ApiModelProperty("卡号")
+    @ApiModelProperty("积分卡卡号")
     private String pointCodes;
+
+    @ApiModelProperty("兑换积分")
+    private String exchangePoint;
 
     @ApiModelProperty("提交时间起")
     private Long submitStartTime;
 
     @ApiModelProperty("提交时间止")
     private Long submitEndTime;
+
+    @ApiModelProperty("兑换类型")
+    private String exchangeType;
 
     public Byte getStatus() {
         return status;
@@ -85,5 +91,21 @@ public class AuditRecordPageReq extends PageSizeNumReq {
 
     public void setPointCodes(String pointCodes) {
         this.pointCodes = pointCodes;
+    }
+
+    public String getExchangePoint() {
+        return exchangePoint;
+    }
+
+    public void setExchangePoint(String exchangePoint) {
+        this.exchangePoint = exchangePoint;
+    }
+
+    public String getExchangeType() {
+        return exchangeType;
+    }
+
+    public void setExchangeType(String exchangeType) {
+        this.exchangeType = exchangeType;
     }
 }
