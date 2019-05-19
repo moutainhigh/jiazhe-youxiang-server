@@ -65,11 +65,27 @@
             <if test="pointCodes != null and pointCodes!=''">
                 AND point_codes LIKE CONCAT('%',#{pointCodes},'%')
             </if>
+            <if test="exchangePoint != null and exchangePoint!=''">
+                AND exchange_point = #{exchangePoint}
+            </if>
             <if test="submitStartTime != null">
                 AND submit_time &gt;= #{submitStartTime}
             </if>
             <if test="submitEndTime != null">
                 AND submit_time &lt;= #{submitEndTime}
+            </if>
+            <if test="exchangeType != null and exchangeType!=''">
+                AND ( 1=1 
+                <if test="exchangeType.contains('1'.toString())">
+                    OR exchange_type = 1
+                </if>
+                <if test="exchangeType.contains('2'.toString())">
+                    OR exchange_type = 2
+                </if>
+                <if test="exchangeType.contains('3'.toString())">
+                    OR exchange_type = 3
+                </if>
+                )
             </if>
             AND is_deleted = 0 ORDER BY mod_time DESC
         </where>
@@ -99,11 +115,27 @@
             <if test="pointCodes != null and pointCodes!=''">
                 AND point_codes LIKE CONCAT('%',#{pointCodes},'%')
             </if>
+            <if test="exchangePoint != null and exchangePoint!=''">
+                AND exchange_point = #{exchangePoint}
+            </if>
             <if test="submitStartTime != null">
                 AND submit_time &gt;= #{submitStartTime}
             </if>
             <if test="submitEndTime != null">
                 AND submit_time &lt;= #{submitEndTime}
+            </if>
+            <if test="exchangeType != null and exchangeType!=''">
+                AND ( 1=1
+                <if test="exchangeType.contains('1'.toString())">
+                    OR exchange_type = 1
+                </if>
+                <if test="exchangeType.contains('2'.toString())">
+                    OR exchange_type = 2
+                </if>
+                <if test="exchangeType.contains('3'.toString())">
+                    OR exchange_type = 3
+                </if>
+                )
             </if>
             AND is_deleted = 0
         </where>
