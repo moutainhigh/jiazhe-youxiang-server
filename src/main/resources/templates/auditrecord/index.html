@@ -93,7 +93,7 @@
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
                                         <input id="searchSubmitterName" name="submitterName" class="form-control"
-                                               type="text"
+                                               type="text" th:value="${submitterName}"
                                                style="height:30px"/>
                                     </div>
                                 </div>
@@ -119,10 +119,18 @@
                             </div>
                             <div class="space-2"></div>
                             <div class="form-group">
-                                <label class="col-sm-1 control-label no-padding-right">卡号：</label>
+                                <label class="col-sm-1 control-label no-padding-right">兑换码卡号：</label>
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
                                         <input id="searchPointCodes" name="pointCodes" class="form-control"
+                                               type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">总兑换积分：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="searchExchangePoint" name="exchangePoint" class="form-control"
                                                type="text"
                                                style="height:30px"/>
                                     </div>
@@ -152,6 +160,19 @@
                                             <input type="hidden" value=0 name="submitEndTime"/>
                                         </div>
                                     </div>
+                                </div>
+
+                            </div>
+                            <div class="space-2"></div>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">兑换类型：</label>
+                                <div class="col-sm-2">
+                                    <input type="hidden" name="exchangeType" id="exchangeTypeHidden" th:value="${exchangeType}"/>
+                                    <select id="exchangeTypeSearch" class="multiselect" multiple="">
+                                        <option value="1">充积分</option>
+                                        <option value="2">积分卡</option>
+                                        <option value="3">换商品</option>
+                                    </select>
                                 </div>
                                 <div class="col-sm-3">
                                     <button class="btn btn-white btn-default btn-round btn-sm"
@@ -467,7 +488,7 @@
         });
 
         $("#pointCodes").tag({});
-
+        initMultiSelect();
         initDatePicker();
 
         var tableOption = {
@@ -566,15 +587,33 @@
             ],
             caption: "充值记录列表"
         };
+        backMultiSelect();
         initTable(grid_selector, pager_selector, tableOption);
     });
 
     function search() {
+        getPostData();
         jQuery(grid_selector).setGridParam({
             url: "/api/auditrecord/listpage",
             postData: transformToJson($('#auditRecordSearchForm').serializeArray()),
         }).trigger("reloadGrid", [{page: 1}]);
         return false;
+    }
+
+    function getPostData(){
+        var exchangeType = [];
+        $("#exchangeTypeSearch option:selected").each(function () {
+            exchangeType.push($(this).val());
+        });
+        $("#exchangeTypeHidden").val(exchangeType.join(""));
+    }
+
+    /**
+     * 将input中内容，回填到多选框中
+     */
+    function backMultiSelect(){
+        var exchangeType = $("#exchangeTypeHidden").val();
+        $('#exchangeTypeSearch').multiselect('select', exchangeType.split(""), true);
     }
 
     //    function exchangeTypeFormatter(cellvalue, options, rowObject) {
