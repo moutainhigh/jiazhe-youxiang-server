@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.controller.partnerorder;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.ExportExcelUtils;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.partnerorder.PartnerOrderInfoAdapter;
@@ -54,9 +55,11 @@ public class APIPartnerOrderInfoController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER, operate = "分页查询商家订单信息", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute PartnerOrderInfoPageReq req) {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        Date serviceTimeStart = req.getServiceTimeStart() == CommonConstant.NULL_TIME ? null : new Date(req.getServiceTimeStart());
-        Date serviceTimeEnd = req.getServiceTimeEnd() == CommonConstant.NULL_TIME ? null : new Date(req.getServiceTimeEnd());
-        List<PartnerOrderInfoDTO> dtoList = partnerOrderInfoBiz.getList(req.getStatus(), req.getCustomerCityCode(), req.getPartnerId(), req.getServiceItemId(), serviceTimeStart, serviceTimeEnd, req.getCustomerMobile(), paging);
+        Date serviceTimeStart = req.getServiceTimeStart() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getServiceTimeStart()));
+        Date serviceTimeEnd = req.getServiceTimeEnd() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getServiceTimeEnd()));
+        Date orderTimeStart = req.getOrderTimeStart() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getOrderTimeStart()));
+        Date orderTimeEnd = req.getOrderTimeEnd() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getOrderTimeEnd()));
+        List<PartnerOrderInfoDTO> dtoList = partnerOrderInfoBiz.getList(req.getStatus(), req.getCustomerCityCode(), req.getPartnerId(), req.getServiceItemId(), orderTimeStart,orderTimeEnd,serviceTimeStart, serviceTimeEnd, req.getCustomerMobile(), paging);
         List<PartnerOrderInfoResp> respList = dtoList.stream().map(PartnerOrderInfoAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(respList, paging);
     }
@@ -129,9 +132,11 @@ public class APIPartnerOrderInfoController extends BaseController {
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.PARTNER_ORDER, operate = "导出商家订单", level = LogLevelEnum.LEVEL_3)
     public void export(@ModelAttribute PartnerOrderInfoPageReq req, HttpServletResponse response){
+        Date orderTimeStart = req.getOrderTimeStart() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getOrderTimeStart()));
+        Date orderTimeEnd = req.getOrderTimeEnd() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getOrderTimeEnd()));
         Date serviceTimeStart = req.getServiceTimeStart() == CommonConstant.NULL_TIME ? null : new Date(req.getServiceTimeStart());
         Date serviceTimeEnd = req.getServiceTimeEnd() == CommonConstant.NULL_TIME ? null : new Date(req.getServiceTimeEnd());
-        List<PartnerOrderInfoDTO> dtoList = partnerOrderInfoBiz.getList(req.getStatus(), req.getCustomerCityCode(), req.getPartnerId(), req.getServiceItemId(), serviceTimeStart, serviceTimeEnd, req.getCustomerMobile());
+        List<PartnerOrderInfoDTO> dtoList = partnerOrderInfoBiz.getList(req.getStatus(), req.getCustomerCityCode(), req.getPartnerId(), req.getServiceItemId(), orderTimeStart,orderTimeEnd,serviceTimeStart, serviceTimeEnd, req.getCustomerMobile());
         ExportExcelUtils.exportPartnerOrder(response, dtoList);
     }
 }
