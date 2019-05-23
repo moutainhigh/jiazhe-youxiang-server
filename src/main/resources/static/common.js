@@ -167,6 +167,30 @@ function initMultiSelect() {
 }
 
 /**
+ * 初始化可搜索的下拉框
+ */
+function initSearchSelect(){
+    if(!ace.vars['touch']) {
+        $('.chosen-select').chosen({allow_single_deselect:true});
+        $(window)
+            .off('resize.chosen')
+            .on('resize.chosen', function() {
+                $('.chosen-select').each(function() {
+                    var $this = $(this);
+                    $this.next().css({'width': $this.parent().width()});
+                })
+            }).trigger('resize.chosen');
+        $(document).on('settings.ace.chosen', function(e, event_name, event_val) {
+            if(event_name != 'sidebar_collapsed') return;
+            $('.chosen-select').each(function() {
+                var $this = $(this);
+                $this.next().css({'width': $this.parent().width()});
+            })
+        });
+    }
+}
+
+/**
  * 生成表格中带颜色的文字
  * @param text
  * @param color

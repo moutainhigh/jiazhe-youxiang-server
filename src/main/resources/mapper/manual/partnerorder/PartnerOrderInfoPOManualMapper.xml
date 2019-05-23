@@ -50,6 +50,12 @@
             <if test="serviceItemId != null and serviceItemId != 0">
                 AND service_item_id = #{serviceItemId}
             </if>
+            <if test="orderTimeStart != null">
+                AND order_time &gt;= #{orderTimeStart}
+            </if>
+            <if test="orderTimeEnd != null">
+                AND order_time &lt;= #{orderTimeEnd}
+            </if>
             <if test="serviceTimeStart != null">
                 AND service_time &gt;= #{serviceTimeStart}
             </if>
@@ -80,6 +86,12 @@
             </if>
             <if test="serviceItemId != null and serviceItemId != 0">
                 AND service_item_id = #{serviceItemId}
+            </if>
+            <if test="orderTimeStart != null">
+                AND order_time &gt;= #{orderTimeStart}
+            </if>
+            <if test="orderTimeEnd != null">
+                AND order_time &lt;= #{orderTimeEnd}
             </if>
             <if test="serviceTimeStart != null">
                 AND service_time &gt;= #{serviceTimeStart}

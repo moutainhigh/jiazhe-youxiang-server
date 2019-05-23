@@ -22,6 +22,11 @@
             width: 4px;
             height: 10px;
         }
+
+        .chosen-container-single .chosen-single {
+            height: 30px;
+            border-radius:0px;
+        }
     </style>
 </head>
 
@@ -59,7 +64,7 @@
                                     <label class="col-sm-1 control-label no-padding-right">城市：</label>
                                     <div class="col-sm-2">
                                         <select id="searchCustomerCityCode" name="customerCityCode"
-                                                class="selectpicker show-tick form-control">
+                                                class="chosen-select form-control">
                                             <option value="000000">所有</option>
                                         </select>
                                     </div>
@@ -79,6 +84,45 @@
                                     </div>
                                 </div>
                                 <div class="space-2"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-1 control-label no-padding-right">兑换时间起：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <div class="input-group">
+                                                <input class="form-control date-picker" id="searchOrderTimeStart"
+                                                       type="text" readonly/>
+                                                <span class="input-group-addon">
+                                                <i class="fa fa-calendar bigger-110"></i>
+                                            </span>
+                                                <input type="hidden" value=0 name="orderTimeStart"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <label class="col-sm-1 control-label no-padding-right">兑换时间止：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <div class="input-group">
+                                                <input class="form-control date-picker" id="searchOrderTimeEnd"
+                                                       type="text" readonly/>
+                                                <span class="input-group-addon">
+                                                <i class="fa fa-calendar bigger-110"></i>
+                                            </span>
+                                                <input type="hidden" value=0 name="orderTimeEnd"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label class="col-sm-1 control-label no-padding-right">客户电话：</label>
+                                    <div class="col-sm-2">
+                                        <div class="pos-rel">
+                                            <input id="searchMobile" name="customerMobile" class="form-control"
+                                                   type="text"
+                                                   style="height:30px"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-2">
+                                </div>
                                 <div class="form-group">
                                     <label class="col-sm-1 control-label no-padding-right">预约时间起：</label>
                                     <div class="col-sm-2">
@@ -107,14 +151,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <label class="col-sm-1 control-label no-padding-right">客户电话：</label>
-                                    <div class="col-sm-2">
-                                        <div class="pos-rel">
-                                            <input id="searchMobile" name="customerMobile" class="form-control"
-                                                   type="text"
-                                                   style="height:30px"/>
-                                        </div>
-                                    </div>
+
                                     <div class="col-sm-3">
                                         <button class="btn btn-white btn-default btn-round btn-sm"
                                                 onclick="return search()">
@@ -184,6 +221,14 @@
 
                                     <div class="profile-info-value">
                                         <span id="left">加载中...</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 区间说明</div>
+
+                                    <div class="profile-info-value">
+                                        <span>指预约时间起 至 预约时间止</span>
                                     </div>
                                 </div>
 
@@ -336,209 +381,211 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-1"></div>
-                    <div class="col-xs-12 col-sm-9">
-                        <form id="partnerOrderForm" class="form-horizontal" role="form">
-                            <input id="partnerOrderId" type="hidden" name="id" value=0/>
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right">客户姓名：</label>
-                                <div class="col-sm-8">
-                                    <div class="pos-rel">
-                                        <input id="saveCustomerName" name="customerName" class="form-control"
-                                               type="text" style="height:30px"/>
+                    <div class="col-sm-12">
+                        <div class="col-xs-12 col-sm-1"></div>
+                        <div class="col-xs-12 col-sm-9">
+                            <form id="partnerOrderForm" class="form-horizontal" role="form">
+                                <input id="partnerOrderId" type="hidden" name="id" value=0/>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right">客户姓名：</label>
+                                    <div class="col-sm-8">
+                                        <div class="pos-rel">
+                                            <input id="saveCustomerName" name="customerName" class="form-control"
+                                                   type="text" style="height:30px"/>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="space-2"></div>
+                                <div class="space-2"></div>
 
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right">客户电话：</label>
-                                <div class="col-sm-8">
-                                    <div class="pos-rel">
-                                        <input id="saveCustomerMobile" name="customerMobile" class="form-control"
-                                               type="text" style="height:30px"/>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right">客户电话：</label>
+                                    <div class="col-sm-8">
+                                        <div class="pos-rel">
+                                            <input id="saveCustomerMobile" name="customerMobile" class="form-control"
+                                                   type="text" style="height:30px"/>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="space-2"></div>
+                                <div class="space-2"></div>
 
-                            <!--此处选择城市-->
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right">所属城市：</label>
-                                <div class="col-sm-8">
-                                    <select id="saveCustomerCityCode" name="customerCityCode"
-                                            class="selectpicker show-tick form-control">
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="space-2"></div>
-
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right">兑换密钥：</label>
-                                <div class="col-sm-8">
-                                    <div class="pos-rel">
-                                        <!--<input id="saveKeyt" name="keyt" class="form-control"-->
-                                               <!--type="text" style="height:30px"/>-->
-                                        <textarea id="saveKeyt" name="keyt"
-                                                  class="form-control"
-                                                  style="resize:none;height: 100px"></textarea>
+                                <!--此处选择城市-->
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right">所属城市：</label>
+                                    <div class="col-sm-8">
+                                        <select id="saveCustomerCityCode" name="customerCityCode"
+                                                class="selectpicker show-tick form-control">
+                                        </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="space-2"></div>
+                                <div class="space-2"></div>
 
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right"
-                                       for="saveOrderTime">兑换时间：</label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        <input class="form-control date-picker" id="saveOrderTime"
-                                               type="text" readonly/>
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-calendar bigger-110"></i>
-                                        </span>
-                                        <input type="hidden" value=0 name="orderTime"/>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right">兑换密钥：</label>
+                                    <div class="col-sm-8">
+                                        <div class="pos-rel">
+                                            <!--<input id="saveKeyt" name="keyt" class="form-control"-->
+                                                   <!--type="text" style="height:30px"/>-->
+                                            <textarea id="saveKeyt" name="keyt"
+                                                      class="form-control"
+                                                      style="resize:none;height: 100px"></textarea>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="space-2"></div>
+                                <div class="space-2"></div>
 
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right"
-                                       for="saveServiceTime">预约时间：</label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        <input class="form-control date-picker" id="saveServiceTime"
-                                               type="text" readonly/>
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-calendar bigger-110"></i>
-                                        </span>
-                                        <input type="hidden" value=0 name="serviceTime"/>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right"
+                                           for="saveOrderTime">兑换时间：</label>
+                                    <div class="col-sm-8">
+                                        <div class="input-group">
+                                            <input class="form-control date-picker" id="saveOrderTime"
+                                                   type="text" readonly/>
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-calendar bigger-110"></i>
+                                            </span>
+                                            <input type="hidden" value=0 name="orderTime"/>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="space-2"></div>
+                                <div class="space-2"></div>
 
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right">预约地点：</label>
-                                <div class="col-sm-8">
-                                    <div class="pos-rel">
-                                        <!--<input id="saveCustomerAddress" name="customerAddress" class="form-control"-->
-                                               <!--type="text" style="height:30px"/>-->
-                                        <textarea id="saveCustomerAddress" name="customerAddress"
-                                                  class="form-control"
-                                                  style="resize:none;height: 100px"></textarea>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right"
+                                           for="saveServiceTime">预约时间：</label>
+                                    <div class="col-sm-8">
+                                        <div class="input-group">
+                                            <input class="form-control date-picker" id="saveServiceTime"
+                                                   type="text" readonly/>
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-calendar bigger-110"></i>
+                                            </span>
+                                            <input type="hidden" value=0 name="serviceTime"/>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="space-2"></div>
+                                <div class="space-2"></div>
 
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right">订单来源：</label>
-                                <div class="col-sm-8">
-                                    <select id="saveOrderSource" name="orderSource"
-                                            class="selectpicker show-tick form-control">>
-                                        <option value="400电话">400电话</option>
-                                        <option value="小程序">小程序</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="space-2"></div>
-
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right">保洁师姓名：</label>
-                                <div class="col-sm-8">
-                                    <div class="pos-rel">
-                                        <input id="saveWorkerName" name="workerName" class="form-control"
-                                               type="text" style="height:30px"/>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right">预约地点：</label>
+                                    <div class="col-sm-8">
+                                        <div class="pos-rel">
+                                            <!--<input id="saveCustomerAddress" name="customerAddress" class="form-control"-->
+                                                   <!--type="text" style="height:30px"/>-->
+                                            <textarea id="saveCustomerAddress" name="customerAddress"
+                                                      class="form-control"
+                                                      style="resize:none;height: 100px"></textarea>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="space-2"></div>
+                                <div class="space-2"></div>
 
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right">保洁师电话：</label>
-                                <div class="col-sm-8">
-                                    <div class="pos-rel">
-                                        <input id="saveWorkerMobile" name="workerMobile" class="form-control"
-                                               type="text" style="height:30px"/>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right">订单来源：</label>
+                                    <div class="col-sm-8">
+                                        <select id="saveOrderSource" name="orderSource"
+                                                class="selectpicker show-tick form-control">>
+                                            <option value="400电话">400电话</option>
+                                            <option value="小程序">小程序</option>
+                                        </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="space-2"></div>
+                                <div class="space-2"></div>
 
-                            <!--此处选择服务商家-->
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right">服务商家：</label>
-                                <div class="col-sm-8">
-                                    <select id="savePartner" name="partnerId"
-                                            class="selectpicker show-tick form-control">
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="space-2"></div>
-                            <!--此处选择服务项目-->
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right">服务项目：</label>
-                                <div class="col-sm-8">
-                                    <select id="saveServiceItem" name="serviceItemId"
-                                            class="selectpicker show-tick form-control">
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="space-2"></div>
-
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right">备注：</label>
-                                <div class="col-sm-8">
-                                    <div class="pos-rel">
-                                        <textarea id="saveRemark" name="remark"
-                                                  class="form-control"
-                                                  style="resize:none;height: 100px"></textarea>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right">保洁师姓名：</label>
+                                    <div class="col-sm-8">
+                                        <div class="pos-rel">
+                                            <input id="saveWorkerName" name="workerName" class="form-control"
+                                                   type="text" style="height:30px"/>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="space-2"></div>
+                                <div class="space-2"></div>
 
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right">预付：</label>
-                                <div class="col-sm-8">
-                                    <div class="pos-rel">
-                                        <input id="savePrePay" name="prePay"
-                                               class="form-control" type="text"
-                                               style="height:30px"/>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right">保洁师电话：</label>
+                                    <div class="col-sm-8">
+                                        <div class="pos-rel">
+                                            <input id="saveWorkerMobile" name="workerMobile" class="form-control"
+                                                   type="text" style="height:30px"/>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="space-2"></div>
+                                <div class="space-2"></div>
 
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right">再次支付：</label>
-                                <div class="col-sm-8">
-                                    <div class="pos-rel">
-                                        <input id="saveAppendPay" name="appendPay"
-                                               class="form-control" type="text"
-                                               style="height:30px"/>
+                                <!--此处选择服务商家-->
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right">服务商家：</label>
+                                    <div class="col-sm-8">
+                                        <select id="savePartner" name="partnerId"
+                                                class="selectpicker show-tick form-control">
+                                        </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="space-2"></div>
-
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label no-padding-right">订单状态：</label>
-                                <div class="col-sm-8">
-                                    <select id="saveStatus" name="status"
-                                            class="selectpicker show-tick form-control">
-                                        <option value=1>待派单</option>
-                                        <option value=2>待服务</option>
-                                        <option value=3>已完成</option>
-                                        <option value=4>已取消</option>
-                                    </select>
+                                <div class="space-2"></div>
+                                <!--此处选择服务项目-->
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right">服务项目：</label>
+                                    <div class="col-sm-8">
+                                        <select id="saveServiceItem" name="serviceItemId"
+                                                class="selectpicker show-tick form-control">
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="space-2"></div>
+                                <div class="space-2"></div>
 
-                        </form>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right">备注：</label>
+                                    <div class="col-sm-8">
+                                        <div class="pos-rel">
+                                            <textarea id="saveRemark" name="remark"
+                                                      class="form-control"
+                                                      style="resize:none;height: 100px"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-2"></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right">预付：</label>
+                                    <div class="col-sm-8">
+                                        <div class="pos-rel">
+                                            <input id="savePrePay" name="prePay"
+                                                   class="form-control" type="text"
+                                                   style="height:30px"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-2"></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right">再次支付：</label>
+                                    <div class="col-sm-8">
+                                        <div class="pos-rel">
+                                            <input id="saveAppendPay" name="appendPay"
+                                                   class="form-control" type="text"
+                                                   style="height:30px"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-2"></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label no-padding-right">订单状态：</label>
+                                    <div class="col-sm-8">
+                                        <select id="saveStatus" name="status"
+                                                class="selectpicker show-tick form-control">
+                                            <option value=1>待派单</option>
+                                            <option value=2>待服务</option>
+                                            <option value=3>已完成</option>
+                                            <option value=4>已取消</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="space-2"></div>
+
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -590,6 +637,7 @@
                             $("#saveCustomerCityCode").append("<option value=" + result[i].cityCode + ">" + result[i].cityName + "</option>");
                         }
                     }
+                    initSearchSelect();
                 }
             },
             error: error
