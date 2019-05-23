@@ -122,8 +122,18 @@
                             </div>
                         </div>
                         <div class="col-sm-9">
-                            <table id="grid-table"></table>
-                            <div id="grid-pager"></div>
+                            <div class="col-xs-12">
+                                <div class="alert alert-block alert-success" style="margin-bottom:0px;">
+                                    <button type="button" class="close" data-dismiss="alert">
+                                        <i class="ace-icon fa fa-times"></i>
+                                    </button>
+                                    消耗实物价值自2019-05-27 00:00:00起开始统计
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <table id="grid-table"></table>
+                                <div id="grid-pager"></div>
+                            </div>
                         </div>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -332,7 +342,7 @@
             str += getRedirectButton("btn-primary", "../material/index?payeeId=" + rowObject.id + "&&payerIds=" + $("#payerIdsHidden").val(), "转账明细");
         }
         if (permission.indexOf("materialUsedDetail") != -1) {
-            str += getRedirectButton("btn-primary", "../auditrecord/index?submitterName=" + rowObject.payeeName + "&&status=4&&exchangeType=3", "消耗明细");
+            str += getRedirectButton("btn-primary", "../auditrecord/index?submitterName=" + rowObject.payeeName + "&&status=4&&exchangeType=3&&submitStartTime=1558886400000", "消耗明细");
         }
         return str;
     }
