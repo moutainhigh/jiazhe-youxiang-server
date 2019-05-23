@@ -158,6 +158,7 @@ public class APIAuditRecordController extends BaseController {
             auditRecordDTO = new AuditRecordDTO();
             auditRecordDTO.setId(0);
             auditRecordDTO.setVersion(0);
+            auditRecordDTO.setSubmitTime(new Date());
         } else {
             auditRecordDTO = auditRecordBiz.getById(req.getId());
             if (CommonConstant.CODE_DELETED.equals(auditRecordDTO.getIsDeleted())) {
@@ -172,7 +173,6 @@ public class APIAuditRecordController extends BaseController {
             auditRecordDTO.setVersion(auditRecordDTO.getVersion() + 1);
             auditRecordDTO.setModTime(new Date(System.currentTimeMillis()));
         }
-        auditRecordDTO.setSubmitTime(new Date());
         auditRecordDTO.setStatus(req.getStatus());
         auditRecordDTO.setBankOutletsName(req.getBankOutletsName());
         auditRecordDTO.setExchangeType(req.getExchangeType());

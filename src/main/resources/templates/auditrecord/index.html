@@ -144,7 +144,7 @@
                                             <span class="input-group-addon">
                                             <i class="fa fa-calendar bigger-110"></i>
                                         </span>
-                                            <input type="hidden" value=0 name="submitStartTime"/>
+                                            <input type="hidden" th:value="${submitStartTime==nul?0:submitStartTime}" name="submitStartTime"/>
                                         </div>
                                     </div>
                                 </div>
@@ -460,6 +460,14 @@
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
+
+        //初始化起始查询时间
+        var submitStartTime = parseInt($("#searchSubmitStartTime").next().next().val());
+        if(submitStartTime == 0){
+            $("#searchSubmitStartTime").val('');
+        }else{
+            $("#searchSubmitStartTime").val(dateFormat(submitStartTime));
+        }
 
         //将项目列表填入到projectId中
         $.ajax({

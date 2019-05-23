@@ -332,7 +332,7 @@
             str += getRedirectButton("btn-primary", "../material/index?payeeId=" + rowObject.id + "&&payerIds=" + $("#payerIdsHidden").val(), "转账明细");
         }
         if (permission.indexOf("materialUsedDetail") != -1) {
-            str += getRedirectButton("btn-primary", "../auditrecord/index?submitterName=" + rowObject.payeeName + "&&status=4&&exchangeType=3", "消耗明细");
+            str += getRedirectButton("btn-primary", "../auditrecord/index?submitterName=" + rowObject.payeeName + "&&status=4&&exchangeType=3&&submitStartTime=1558886400000", "消耗明细");
         }
         return str;
     }
