@@ -166,6 +166,9 @@ function initMultiSelect() {
     });
 }
 
+/**
+ * 初始化可搜索的下拉框
+ */
 function initSearchSelect(){
     if(!ace.vars['touch']) {
         $('.chosen-select').chosen({allow_single_deselect:true});
