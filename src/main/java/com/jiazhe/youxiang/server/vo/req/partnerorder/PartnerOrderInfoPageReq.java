@@ -25,6 +25,12 @@ public class PartnerOrderInfoPageReq extends PageSizeNumReq {
     @ApiModelProperty("服务项目id")
     private Integer serviceItemId;
 
+    @ApiModelProperty("兑换时间起")
+    private Long orderTimeStart;
+
+    @ApiModelProperty("兑换时间止")
+    private Long orderTimeEnd;
+
     @ApiModelProperty("预约时间起")
     private Long serviceTimeStart;
 
@@ -85,5 +91,21 @@ public class PartnerOrderInfoPageReq extends PageSizeNumReq {
 
     public void setServiceTimeEnd(Long serviceTimeEnd) {
         this.serviceTimeEnd = serviceTimeEnd;
+    }
+
+    public Long getOrderTimeStart() {
+        return orderTimeStart;
+    }
+
+    public void setOrderTimeStart(Long orderTimeStart) {
+        this.orderTimeStart = orderTimeStart;
+    }
+
+    public Long getOrderTimeEnd() {
+        return orderTimeEnd;
+    }
+
+    public void setOrderTimeEnd(Long orderTimeEnd) {
+        this.orderTimeEnd = orderTimeEnd;
     }
 }

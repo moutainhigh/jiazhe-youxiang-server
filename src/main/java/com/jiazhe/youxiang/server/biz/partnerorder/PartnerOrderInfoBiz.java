@@ -21,8 +21,8 @@ public class PartnerOrderInfoBiz {
     @Autowired
     private PartnerOrderInfoService partnerOrderInfoService ;
 
-    public List<PartnerOrderInfoDTO> getList(Byte status, String customerCityCode, Integer partnerId, Integer serviceItemId, Date serviceTimeStart, Date serviceTimeEnd, String customerMobile, Paging paging) {
-        return partnerOrderInfoService.getList(status, customerCityCode, partnerId, serviceItemId, serviceTimeStart, serviceTimeEnd, customerMobile, paging);
+    public List<PartnerOrderInfoDTO> getList(Byte status, String customerCityCode, Integer partnerId, Integer serviceItemId,Date orderTimeStart,Date orderTimeEnd, Date serviceTimeStart, Date serviceTimeEnd, String customerMobile, Paging paging) {
+        return partnerOrderInfoService.getList(status, customerCityCode, partnerId, serviceItemId, orderTimeStart,orderTimeEnd,serviceTimeStart, serviceTimeEnd, customerMobile, paging);
     }
 
     public OverviewMoneyResp calOverviewMoney(Date timeStart, Date timeEnd) {
@@ -37,7 +37,7 @@ public class PartnerOrderInfoBiz {
         partnerOrderInfoService.save(dto);
     }
 
-    public List<PartnerOrderInfoDTO> getList(Byte status, String customerCityCode, Integer partnerId, Integer serviceItemId, Date serviceTimeStart, Date serviceTimeEnd, String customerMobile) {
-        return partnerOrderInfoService.getList(status,customerCityCode,partnerId,serviceItemId,serviceTimeStart,serviceTimeEnd,customerMobile);
+    public List<PartnerOrderInfoDTO> getList(Byte status, String customerCityCode, Integer partnerId, Integer serviceItemId, Date orderTimeStart,Date orderTimeEnd ,Date serviceTimeStart, Date serviceTimeEnd, String customerMobile) {
+        return partnerOrderInfoService.getList(status,customerCityCode,partnerId,serviceItemId,orderTimeStart,orderTimeEnd,serviceTimeStart,serviceTimeEnd,customerMobile);
     }
 }

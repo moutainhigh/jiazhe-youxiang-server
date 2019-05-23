@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface PartnerOrderInfoService {
 
-    List<PartnerOrderInfoDTO> getList(Byte status, String customerCityCode, Integer partnerId, Integer serviceItemId, Date serviceTimeStart, Date serviceTimeEnd, String customerMobile, Paging paging);
+    List<PartnerOrderInfoDTO> getList(Byte status, String customerCityCode, Integer partnerId, Integer serviceItemId, Date orderTimeStart , Date orderTimeEnd ,Date serviceTimeStart, Date serviceTimeEnd, String customerMobile, Paging paging);
 
     OverviewMoneyResp calOverviewMoney(Date timeStart, Date timeEnd);
 
@@ -22,5 +22,5 @@ public interface PartnerOrderInfoService {
 
     void save(PartnerOrderInfoDTO dto);
 
-    List<PartnerOrderInfoDTO> getList(Byte status, String customerCityCode, Integer partnerId, Integer serviceItemId, Date serviceTimeStart, Date serviceTimeEnd, String customerMobile);
+    List<PartnerOrderInfoDTO> getList(Byte status, String customerCityCode, Integer partnerId, Integer serviceItemId,Date orderTimeStart , Date orderTimeEnd, Date serviceTimeStart, Date serviceTimeEnd, String customerMobile);
 }
