@@ -12,8 +12,28 @@ import java.util.List;
  * @date 2018/12/9
  */
 public interface PartnerOrderInfoPOManualMapper {
-    
-    Integer count(@Param("status") Byte status, @Param("customerCityCode")String customerCityCode, @Param("partnerId") Integer partnerId, @Param("serviceItemId")Integer serviceItemId, @Param("serviceTimeStart") Date serviceTimeStart, @Param("serviceTimeEnd")Date serviceTimeEnd, @Param("customerMobile") String customerMobile);
 
-    List<PartnerOrderInfoPO> query(@Param("status")Byte status, @Param("customerCityCode")String customerCityCode,  @Param("partnerId")Integer partnerId,@Param("serviceItemId") Integer serviceItemId, @Param("serviceTimeStart")Date serviceTimeStart, @Param("serviceTimeEnd")Date serviceTimeEnd, @Param("customerMobile")String customerMobile, @Param("offset")Integer offset, @Param("limit")Integer limit);
+    Integer count(
+            @Param("status") Byte status,
+            @Param("customerCityCode") String customerCityCode,
+            @Param("partnerId") Integer partnerId,
+            @Param("serviceItemId") Integer serviceItemId,
+            @Param("orderTimeStart") Date orderTimeStart,
+            @Param("orderTimeEnd") Date orderTimeEnd,
+            @Param("serviceTimeStart") Date serviceTimeStart,
+            @Param("serviceTimeEnd") Date serviceTimeEnd,
+            @Param("customerMobile") String customerMobile);
+
+    List<PartnerOrderInfoPO> query(
+            @Param("status") Byte status,
+            @Param("customerCityCode") String customerCityCode,
+            @Param("partnerId") Integer partnerId,
+            @Param("serviceItemId") Integer serviceItemId,
+            @Param("orderTimeStart") Date orderTimeStart,
+            @Param("orderTimeEnd") Date orderTimeEnd,
+            @Param("serviceTimeStart") Date serviceTimeStart,
+            @Param("serviceTimeEnd") Date serviceTimeEnd,
+            @Param("customerMobile") String customerMobile,
+            @Param("offset") Integer offset,
+            @Param("limit") Integer limit);
 }
