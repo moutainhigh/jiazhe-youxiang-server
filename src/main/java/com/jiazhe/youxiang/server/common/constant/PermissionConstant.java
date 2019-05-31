@@ -115,7 +115,7 @@ public class PermissionConstant {
 
     //消费记录管理
     public static final String AUDIT_RECORD_MANAGEMENT = "auditRecordManagement";
-    //消费记录管理
+    //消费记录查询
     public static final String AUDIT_RECORD_SEARCH = "auditRecordSearch";
     //消费记录审核
     public static final String AUDIT_RECORD_CHECK = "auditRecordCheck";
