@@ -175,11 +175,13 @@
                                     </select>
                                 </div>
                                 <div class="col-sm-3">
-                                    <button class="btn btn-white btn-default btn-round btn-sm"
-                                            onclick="return search()">
-                                        <i class="ace-icon fa fa-search red2"></i>
-                                        查询
-                                    </button>
+                                    <shiro:hasPermission name="auditRecordSearch">
+                                        <button class="btn btn-white btn-default btn-round btn-sm"
+                                                onclick="return search()">
+                                            <i class="ace-icon fa fa-search red2"></i>
+                                            查询
+                                        </button>
+                                    </shiro:hasPermission>
                                     <shiro:hasPermission name="chargeReceiptExport">
                                         &nbsp;&nbsp;&nbsp;&nbsp;
                                         <button class="btn btn-white btn-default btn-round btn-sm"
@@ -805,8 +807,8 @@
         if (hasExchangeType(result.exchangeType, '1')) {
             $(".exchangeType1").css("display", "");
             $("#customerMobile").val(result.customerMobile);
-            $("#givingPoint").val(result.givingPoint);
-
+            var rate = result.exchangePoint > 0 ? (result.givingPoint/result.exchangePoint).toFixed(2):'错误';
+            $("#givingPoint").val(result.givingPoint + '/' + rate);
         } else {
             $(".exchangeType1").css("display", "none");
         }
