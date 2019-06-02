@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.service;
 
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
+import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordSumDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
 import java.util.Date;
@@ -102,4 +103,19 @@ public interface AuditRecordService {
      * @return
      */
     List<AuditRecordDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes,String exchangePoint, Date submitStartTime, Date submitEndTime,String exchangeType);
+
+    /**
+     * 求和
+     * @param customerInfo
+     * @param submitterName
+     * @param status
+     * @param chargeReceiptStatus
+     * @param pointCodes
+     * @param exchangePoint
+     * @param submitStartTime
+     * @param submitEndTime
+     * @param exchangeType
+     * @return
+     */
+    AuditRecordSumDTO sum(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint, Date submitStartTime, Date submitEndTime, String exchangeType);
 }
