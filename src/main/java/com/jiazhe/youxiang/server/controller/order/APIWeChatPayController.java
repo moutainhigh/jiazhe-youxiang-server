@@ -1,13 +1,11 @@
 package com.jiazhe.youxiang.server.controller.order;
 
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.jiazhe.youxiang.base.util.IpAdrressUtil;
 import com.jiazhe.youxiang.base.util.RandomUtil;
 import com.jiazhe.youxiang.base.util.WeChatPayUtils;
 import com.jiazhe.youxiang.server.biz.order.OrderInfoBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
-import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.WeChatPayConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
@@ -15,30 +13,24 @@ import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.WeChatPayCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.OrderException;
 import com.jiazhe.youxiang.server.common.exceptions.WeChatPayException;
-import com.jiazhe.youxiang.server.controller.APISignInController;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.WeChatUnifiedOrderReq;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.UnifiedOrderResp;
 import io.swagger.annotations.ApiOperation;
-import net.sf.json.JSONObject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.RequestHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.logging.Logger;
 
 /**
  * @author tu
@@ -61,9 +53,10 @@ public class APIWeChatPayController {
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "微信统一下单", level = LogLevelEnum.LEVEL_1)
     public Object unifiedOrder(@ModelAttribute WeChatUnifiedOrderReq req, HttpServletRequest request) {
         UnifiedOrderResp unifiedOrderResp = new UnifiedOrderResp();
-        SortedMap<String, Object> wxparam = new TreeMap<String, Object>();
+        Map<String, String> wxparam = new HashMap<>();
         wxparam.put("appid", WeChatPayConstant.APP_ID);
         wxparam.put("mch_id", WeChatPayConstant.MCH_ID);
+        wxparam.put("device_info",WeChatPayConstant.DEVICE_INFO);
         String nonceStr = RandomUtil.generateVerifyCode(32);
         OrderInfoDTO orderInfoDTO = orderInfoBiz.getByOrderNo(req.getOutTradeNo());
         if (null == orderInfoDTO) {
@@ -72,7 +65,7 @@ public class APIWeChatPayController {
         wxparam.put("nonce_str", nonceStr);
         wxparam.put("body", req.getBody());
         wxparam.put("out_trade_no", req.getOutTradeNo());
-        wxparam.put("total_fee", req.getTotalFee());
+        wxparam.put("total_fee", String.valueOf(req.getTotalFee()));
         wxparam.put("spbill_create_ip", IpAdrressUtil.getIpAddress(request));
         wxparam.put("notify_url", WeChatPayConstant.NOTIFY_URL);
         wxparam.put("trade_type", WeChatPayConstant.TRADE_TYPE);
