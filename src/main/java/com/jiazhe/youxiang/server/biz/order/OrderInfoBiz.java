@@ -154,11 +154,11 @@ public class OrderInfoBiz {
 
     /**
      * 微信付款成功通知
-     *
-     * @param orderNo
+     * @param transactionId 微信支付订单号
+     * @param orderNo 商户订单号
      * @param wxPay
      */
-    public void wxNotify(String orderNo, BigDecimal wxPay) {
-        orderInfoService.wxNotify(orderNo, wxPay);
+    public void wxNotify(String transactionId,String orderNo, Integer wxPay) {
+        orderInfoService.wxNotify(transactionId,orderNo, wxPay);
     }
 }

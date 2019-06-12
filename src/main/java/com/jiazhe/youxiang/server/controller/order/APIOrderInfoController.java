@@ -110,7 +110,7 @@ public class APIOrderInfoController extends BaseController {
     public Object customerNeedPayCash(@ModelAttribute IdReq req) {
         BigDecimal needPayCash = orderInfoBiz.customerNeedPayCash(req.getId());
         NeedPayResp needPayResp = new NeedPayResp();
-        needPayResp.setPayCash(needPayCash);
+        needPayResp.setPayCash(needPayCash.multiply(new BigDecimal(100)).intValue());
         return ResponseFactory.buildResponse(needPayResp);
     }
 
@@ -132,7 +132,7 @@ public class APIOrderInfoController extends BaseController {
     public Object customerPay(@ModelAttribute CustomerPayReq req) {
         BigDecimal needPayCash = orderInfoBiz.customerPay(req.getOrderId(), req.getPayCash(), req.getSerialNumber());
         NeedPayResp needPayResp = new NeedPayResp();
-        needPayResp.setPayCash(needPayCash);
+        needPayResp.setPayCash(needPayCash.multiply(new BigDecimal(100)).intValue());
         return ResponseFactory.buildResponse(needPayResp);
     }
 

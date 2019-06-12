@@ -118,9 +118,9 @@ public class APIWeChatPayController {
             // 验签
             if (WeChatPayUtils.isTenpaySign(paynotifyMap, WeChatPayConstant.API_KEY)) {
                 String orderNo = paynotifyMap.get("out_trade_no").toString();
-                String transaction_id = paynotifyMap.get("transaction_id").toString();
-                BigDecimal wxPay = new BigDecimal(paynotifyMap.get("total_fee").toString());
-                orderInfoBiz.wxNotify(orderNo,wxPay);
+                String transactionId = paynotifyMap.get("transaction_id").toString();
+                Integer wxPay = new Integer(paynotifyMap.get("total_fee").toString());
+                orderInfoBiz.wxNotify(transactionId,orderNo,wxPay);
             } else {
                 logger.info("微信支付回调验证失败");
             }

@@ -15,14 +15,17 @@ public class NeedPayResp extends BaseObject {
     @ApiModelProperty("订单id")
     private Integer orderId;
 
-    @ApiModelProperty("待在线支付金额")
-    private BigDecimal payCash;
+    @ApiModelProperty("订单编号")
+    private String orderCode;
 
-    public BigDecimal getPayCash() {
+    @ApiModelProperty("待在线支付金额，单位：分")
+    private Integer payCash;
+
+    public Integer getPayCash() {
         return payCash;
     }
 
-    public void setPayCash(BigDecimal payCash) {
+    public void setPayCash(Integer payCash) {
         this.payCash = payCash;
     }
 
@@ -32,5 +35,13 @@ public class NeedPayResp extends BaseObject {
 
     public void setOrderId(Integer orderId) {
         this.orderId = orderId;
+    }
+
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
     }
 }
