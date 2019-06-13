@@ -10,12 +10,12 @@ public class WeChatPayConstant {
     /**
      微信支付分配的公众账号ID（企业号corpid即为此appId）
      */
-    public static String APP_ID = "";
+    public static String APP_ID = "wx68281f971cf77b90";
 
     /**
      微信支付分配的商户号
      */
-    public static String MCH_ID = "";
+    public static String MCH_ID = "1499770702";
 
     /**
      * 自定义参数，可以为终端设备号(门店号或收银设备ID)，PC网页或公众号内支付可以传"WEB"
@@ -40,6 +40,6 @@ public class WeChatPayConstant {
     /**
      key为商户平台设置的密钥key
      */
-    public static String API_KEY = "";
+    public static String API_KEY = "youxianghulian20180509lizhelizhe";
 
 }

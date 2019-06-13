@@ -27,10 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * @author tu
@@ -48,53 +45,48 @@ public class APIWeChatPayController {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(APIWeChatPayController.class);
 
     @AppApi
-    @ApiOperation(value = "微信统一下单", httpMethod = "POST", response = UnifiedOrderResp.class, notes = "微信统一下单")
-    @RequestMapping(value = "/unifiedorder", method = RequestMethod.POST)
+    @ApiOperation(value = "微信统一下单", httpMethod = "GET", response = UnifiedOrderResp.class, notes = "微信统一下单")
+    @RequestMapping(value = "/unifiedorder", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "微信统一下单", level = LogLevelEnum.LEVEL_1)
     public Object unifiedOrder(@ModelAttribute WeChatUnifiedOrderReq req, HttpServletRequest request) {
-        UnifiedOrderResp unifiedOrderResp = new UnifiedOrderResp();
-        Map<String, String> wxparam = new HashMap<>();
-        wxparam.put("appid", WeChatPayConstant.APP_ID);
-        wxparam.put("mch_id", WeChatPayConstant.MCH_ID);
-        wxparam.put("device_info",WeChatPayConstant.DEVICE_INFO);
-        String nonceStr = RandomUtil.generateVerifyCode(32);
-        OrderInfoDTO orderInfoDTO = orderInfoBiz.getByOrderNo(req.getOutTradeNo());
+        OrderInfoDTO orderInfoDTO = orderInfoBiz.getById(req.getOrderId());
         if (null == orderInfoDTO) {
             throw new OrderException(OrderCodeEnum.ORDER_NOT_EXIST);
         }
-        wxparam.put("nonce_str", nonceStr);
-        wxparam.put("body", req.getBody());
-        wxparam.put("out_trade_no", req.getOutTradeNo());
-        wxparam.put("total_fee", String.valueOf(req.getTotalFee()));
-        wxparam.put("spbill_create_ip", IpAdrressUtil.getIpAddress(request));
-        wxparam.put("notify_url", WeChatPayConstant.NOTIFY_URL);
-        wxparam.put("trade_type", WeChatPayConstant.TRADE_TYPE);
-        String sign = WeChatPayUtils.createSign("UTF-8", wxparam, WeChatPayConstant.API_KEY);
-        wxparam.put("sign", sign);
-        String requestXml = WeChatPayUtils.getRequestXml(wxparam);
+        UnifiedOrderResp unifiedOrderResp = new UnifiedOrderResp();
+        //需要保证参数的顺序
+        Map<String, String> param = new LinkedHashMap<>();
+        param.put("appid", WeChatPayConstant.APP_ID);
+        param.put("body", req.getBody());
+        param.put("device_info",WeChatPayConstant.DEVICE_INFO);
+        param.put("mch_id", WeChatPayConstant.MCH_ID);
+        String nonceStr = RandomUtil.generateVerifyCode(32);
+        param.put("nonce_str", nonceStr);
+        param.put("notify_url", WeChatPayConstant.NOTIFY_URL);
+        param.put("out_trade_no", req.getOrderNo());
+        param.put("spbill_create_ip", IpAdrressUtil.getIpAddress(request));
+        param.put("total_fee", String.valueOf(req.getTotalFee()));
+        param.put("trade_type", WeChatPayConstant.TRADE_TYPE);
+        String sign = WeChatPayUtils.createSign("UTF-8", param, WeChatPayConstant.API_KEY);
+        param.put("sign", sign);
+        String requestXml = WeChatPayUtils.getRequestXml(param);
         String result = WeChatPayUtils.httpsRequest(WeChatPayConstant.URL, "POST", requestXml);
-        SortedMap<String, Object> signParam = new TreeMap<String, Object>();
+        System.out.println(result);
         try {
             Map<String, String> map = WeChatPayUtils.doXMLParse(result);
             String returnCode = map.get("return_code");
-            String resultCode = map.get("result_code");
-            if (returnCode.contains("SUCCESS") && resultCode.contains("SUCCESS")) {
-                unifiedOrderResp.setPrepayId(map.get("prepay_id"));
-//                signParam.put("appid", WeChatPayConstant.APP_ID);
-//                signParam.put("partnerid", WeChatPayConstant.MCH_ID);
-//                signParam.put("timeStamp", String.valueOf(System.currentTimeMillis() / 1000));
-//                signParam.put("nonceStr", map.get("nonce_str"));
-//                signParam.put("prepayid", map.get("prepay_id"));
-//                signParam.put("package", "Sign=WXPay");
-//                String signAgain = WeChatPayUtils.createSign("UTF-8", signParam, WeChatPayConstant.API_KEY);
-//                signParam.put("paySign", signAgain);
-//                unifiedOrderResp.setSign(signAgain);
-                unifiedOrderResp.setSign(map.get("sign"));
-                return ResponseFactory.buildResponse(unifiedOrderResp);
-            } else {
+            if(!returnCode.equals("SUCCESS")){
                 logger.info("发起预支付失败，原因：" + map.get("return_msg"));
                 throw new WeChatPayException(WeChatPayCodeEnum.PRE_PAY_ERROR);
             }
+            String resultCode = map.get("result_code");
+            if (!resultCode.equals("SUCCESS")) {
+                logger.info("发起预支付失败，原因：" + map.get("err_code_des"));
+                throw new WeChatPayException(WeChatPayCodeEnum.PRE_PAY_ERROR);
+            }
+            unifiedOrderResp.setPrepayId(map.get("prepay_id"));
+            unifiedOrderResp.setPaySign(map.get("sign"));
+            return ResponseFactory.buildResponse(unifiedOrderResp);
         } catch (Exception e) {
             logger.info("发起预支付失败，异常信息：" + e.getMessage());
             throw new WeChatPayException(WeChatPayCodeEnum.PRE_PAY_ERROR);

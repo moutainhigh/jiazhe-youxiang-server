@@ -14,7 +14,7 @@ public class UnifiedOrderResp extends BaseVO {
     private String prepayId;
 
     @ApiModelProperty("签名")
-    private String sign;
+    private String paySign;
 
     public String getPrepayId() {
         return prepayId;
@@ -24,11 +24,11 @@ public class UnifiedOrderResp extends BaseVO {
         this.prepayId = prepayId;
     }
 
-    public String getSign() {
-        return sign;
+    public String getPaySign() {
+        return paySign;
     }
 
-    public void setSign(String sign) {
-        this.sign = sign;
+    public void setPaySign(String paySign) {
+        this.paySign = paySign;
     }
 }
