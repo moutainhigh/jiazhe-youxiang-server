@@ -156,7 +156,7 @@
         <foreach collection="list" item="item" index="index" open="" close="" separator=";">
             update point_exchange_code
             <set>
-                point_expiry_time = #{item.pointExpiryTime},expiry_time = #{item.expiryTime},status=1,mod_time=NOW()
+                point_effective_time = #{item.pointEffectiveTime},point_expiry_time = #{item.pointExpiryTime},expiry_time = #{item.expiryTime},status=1,mod_time=NOW()
             </set>
             where id = #{item.id}
         </foreach>
