@@ -20,13 +20,13 @@ import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.UnifiedOrderResp;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -40,15 +40,20 @@ import java.util.Map;
 @RequestMapping("api/wxpay")
 public class APIWeChatPayController {
 
+    private static String SUCCESS = "SUCCESS";
+
     @Autowired
     private OrderInfoBiz orderInfoBiz;
+
+    @Value("${spring.boot.admin.client.instance.service-url}")
+    private String DOMAIN;
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(APIWeChatPayController.class);
 
     @AppApi
-    @ApiOperation(value = "微信统一下单", httpMethod = "GET", response = UnifiedOrderResp.class, notes = "微信统一下单")
-    @RequestMapping(value = "/unifiedorder", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "微信统一下单", level = LogLevelEnum.LEVEL_1)
+    @ApiOperation(value = "微信统一下单", httpMethod = "POST", response = UnifiedOrderResp.class, notes = "微信统一下单")
+    @RequestMapping(value = "/unifiedorder", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.WECHAT_PAY, operate = "微信统一下单", level = LogLevelEnum.LEVEL_2)
     public Object unifiedOrder(@ModelAttribute WeChatUnifiedOrderReq req, HttpServletRequest request) {
         OrderInfoDTO orderInfoDTO = orderInfoBiz.getById(req.getOrderId());
         if (null == orderInfoDTO) {
@@ -59,11 +64,12 @@ public class APIWeChatPayController {
         Map<String, String> param = new LinkedHashMap<>();
         param.put("appid", WeChatPayConstant.APP_ID);
         param.put("body", req.getBody());
-        param.put("device_info",WeChatPayConstant.DEVICE_INFO);
+        param.put("device_info", WeChatPayConstant.DEVICE_INFO);
         param.put("mch_id", WeChatPayConstant.MCH_ID);
         String nonceStr = RandomUtil.generateCode(WeChatPayConstant.NONCE_STR_LENGTH);
         param.put("nonce_str", nonceStr);
-        param.put("notify_url", WeChatPayConstant.NOTIFY_URL);
+        param.put("notify_url", DOMAIN + WeChatPayConstant.NOTIFY_URL);
+        System.out.println(DOMAIN);
         param.put("out_trade_no", req.getOrderNo());
         param.put("spbill_create_ip", IpAdrressUtil.getIpAddress(request));
         param.put("total_fee", String.valueOf(req.getTotalFee()));
@@ -76,12 +82,12 @@ public class APIWeChatPayController {
         try {
             Map<String, String> map = WeChatPayUtils.doXMLParse(result);
             String returnCode = map.get("return_code");
-            if(!returnCode.equals("SUCCESS")){
+            if (!returnCode.equals(SUCCESS)) {
                 logger.info("发起预支付失败，原因：" + map.get("return_msg"));
                 throw new WeChatPayException(WeChatPayCodeEnum.PRE_PAY_ERROR);
             }
             String resultCode = map.get("result_code");
-            if (!resultCode.equals("SUCCESS")) {
+            if (!resultCode.equals(SUCCESS)) {
                 logger.info("发起预支付失败，原因：" + map.get("err_code_des"));
                 throw new WeChatPayException(WeChatPayCodeEnum.PRE_PAY_ERROR);
             }
@@ -96,22 +102,36 @@ public class APIWeChatPayController {
 
     @ApiOperation(value = "接收微信付款结果通知", httpMethod = "POST", notes = "接收微信付款结果通知")
     @RequestMapping(value = "/notify", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "接收微信付款通知", level = LogLevelEnum.LEVEL_1)
-    public Object notify(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String strXml = WeChatPayUtils.parseRequst(request);
-        Map<String, String> paynotifyMap = WeChatPayUtils.doXMLParse(strXml);
-        if (paynotifyMap.get("result_code").toString().equalsIgnoreCase("SUCCESS")) {
-            // 验签
-            if (WeChatPayUtils.isTenpaySign(paynotifyMap, WeChatPayConstant.API_KEY)) {
-                String orderNo = paynotifyMap.get("out_trade_no").toString();
-                String transactionId = paynotifyMap.get("transaction_id").toString();
-                Integer wxPay = new Integer(paynotifyMap.get("total_fee").toString());
-                orderInfoBiz.wxNotify(transactionId,orderNo,wxPay);
-            } else {
-                logger.info("微信支付回调验证失败");
+    @CustomLog(moduleName = ModuleEnum.WECHAT_PAY, operate = "接收微信付款通知", level = LogLevelEnum.LEVEL_2)
+    public String notify(HttpServletRequest request) throws Exception {
+        try {
+            String strXml = WeChatPayUtils.parseRequst(request);
+            Map<String, String> payNotifyMap = WeChatPayUtils.doXMLParse(strXml);
+            if (payNotifyMap.get("return_code").equalsIgnoreCase(SUCCESS)) {
+                // 验签
+                if (WeChatPayUtils.isTenpaySign(payNotifyMap, WeChatPayConstant.API_KEY)) {
+                    String orderNo = payNotifyMap.get("out_trade_no").toString();
+                    String transactionId = payNotifyMap.get("transaction_id").toString();
+                    Integer wxPay = new Integer(payNotifyMap.get("total_fee").toString());
+                    if(payNotifyMap.get("result_code").equals(SUCCESS)){
+                        orderInfoBiz.wxNotify(transactionId, orderNo, wxPay);
+                    }
+                } else {
+                    logger.info("微信付款通知，验签失败");
+                }
             }
+        } catch (Exception e) {
+            logger.error("付款成功通知商户，报异常" + e.getMessage());
+        } finally {
+            return generateNotifyXml();
         }
-        return null;
+    }
+
+    private String generateNotifyXml() {
+        Map<String, String> map = new LinkedHashMap<>();
+        map.put("return_code", "SUCCESS");
+        map.put("return_msg", "OK");
+        return WeChatPayUtils.getRequestXml(map);
     }
 
 

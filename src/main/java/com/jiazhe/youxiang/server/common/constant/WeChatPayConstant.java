@@ -41,7 +41,7 @@ public class WeChatPayConstant {
     /**
     通知地址【接收微信支付异步通知回调地址，通知url必须为直接可访问的url，不能携带参数。】
      */
-    public static String NOTIFY_URL = "https://admin.offline.ue-link.com/api/wxpay/notify";
+    public static String NOTIFY_URL = "/api/wxpay/notify";
 
     /**
      key为商户平台设置的密钥key

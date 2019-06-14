@@ -126,9 +126,7 @@ public class WeChatPayUtils {
             }
         }
         sb.append("key=" + apiKey);
-
         //将API返回的数据根据用签名算法进行计算新的签名，用来跟API返回的签名进行比较
-
         //算出签名
         String resultSign = "";
         String tobesign = sb.toString();
