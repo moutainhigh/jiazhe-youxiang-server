@@ -165,4 +165,40 @@ public class OrderInfoAdapter {
         appendOrderDTO.setComments(req.getComments());
         return appendOrderDTO;
     }
+
+    public static OrderInfoPO dto2Po(OrderInfoDTO orderInfoDTO) {
+        if (orderInfoDTO == null) {
+            return null;
+        }
+        OrderInfoPO orderInfoPO = new OrderInfoPO();
+        orderInfoPO.setId(orderInfoDTO.getId());
+        orderInfoPO.setOrderCode(orderInfoDTO.getOrderCode());
+        orderInfoPO.setCustomerId(orderInfoDTO.getCustomerId());
+        orderInfoPO.setCustomerCityCode(orderInfoDTO.getCustomerCityCode());
+        orderInfoPO.setCustomerCityName(orderInfoDTO.getCustomerCityName());
+        orderInfoPO.setProductId(orderInfoDTO.getProductId());
+        orderInfoPO.setProductPrice(orderInfoDTO.getProductPrice());
+        orderInfoPO.setCount(orderInfoDTO.getCount());
+        orderInfoPO.setCustomerAddress(orderInfoDTO.getCustomerAddress());
+        orderInfoPO.setCustomerMobile(orderInfoDTO.getCustomerMobile());
+        orderInfoPO.setCustomerName(orderInfoDTO.getCustomerName());
+        orderInfoPO.setCustomerRemark(orderInfoDTO.getCustomerRemark());
+        orderInfoPO.setWorkerName(orderInfoDTO.getWorkerName());
+        orderInfoPO.setWorkerMobile(orderInfoDTO.getWorkerMobile());
+        orderInfoPO.setOrderTime(orderInfoDTO.getOrderTime());
+        orderInfoPO.setServiceTime(orderInfoDTO.getServiceTime());
+        orderInfoPO.setRealServiceTime(orderInfoDTO.getRealServiceTime());
+        orderInfoPO.setPayPoint(orderInfoDTO.getPayPoint());
+        orderInfoPO.setPayRechargeCard(orderInfoDTO.getPayRechargeCard());
+        orderInfoPO.setPayVoucher(orderInfoDTO.getPayVoucher());
+        orderInfoPO.setPayCash(orderInfoDTO.getPayCash());
+        orderInfoPO.setCost(orderInfoDTO.getCost());
+        orderInfoPO.setTotalAmount(orderInfoDTO.getTotalAmount());
+        orderInfoPO.setComments(orderInfoDTO.getComments());
+        orderInfoPO.setType(orderInfoDTO.getType());
+        orderInfoPO.setStatus(orderInfoDTO.getStatus());
+        orderInfoPO.setAuditReason(orderInfoDTO.getAuditReason());
+        orderInfoPO.setExtInfo(orderInfoDTO.getExtInfo());
+        return orderInfoPO;
+    }
 }

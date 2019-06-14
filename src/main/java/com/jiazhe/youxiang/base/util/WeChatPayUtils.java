@@ -7,14 +7,25 @@ import org.w3c.dom.NodeList;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * @author TU
@@ -40,7 +51,7 @@ public class WeChatPayUtils {
     }
 
     //请求xml组装
-    public static String getRequestXml(SortedMap<String, Object> parameters) {
+    public static String getRequestXml(Map<String, String> parameters) {
         StringBuffer sb = new StringBuffer();
         sb.append("<xml>");
         Set es = parameters.entrySet();
@@ -49,7 +60,7 @@ public class WeChatPayUtils {
             Map.Entry entry = (Map.Entry) it.next();
             String key = (String) entry.getKey();
             String value = (String) entry.getValue();
-            if ("attach".equalsIgnoreCase(key) || "body".equalsIgnoreCase(key) || "sign".equalsIgnoreCase(key)) {
+            if ("detail".equalsIgnoreCase(key)) {
                 sb.append("<" + key + ">" + "<![CDATA[" + value + "]]></" + key + ">");
             } else {
                 sb.append("<" + key + ">" + value + "</" + key + ">");
@@ -60,7 +71,7 @@ public class WeChatPayUtils {
     }
 
     //生成签名
-    public static String createSign(String characterEncoding, SortedMap<String, Object> parameters, String apiKey) {
+    public static String createSign(String characterEncoding, Map<String, String> parameters, String apiKey) {
         StringBuffer sb = new StringBuffer();
         Set es = parameters.entrySet();
         Iterator it = es.iterator();
@@ -115,9 +126,7 @@ public class WeChatPayUtils {
             }
         }
         sb.append("key=" + apiKey);
-
         //将API返回的数据根据用签名算法进行计算新的签名，用来跟API返回的签名进行比较
-
         //算出签名
         String resultSign = "";
         String tobesign = sb.toString();

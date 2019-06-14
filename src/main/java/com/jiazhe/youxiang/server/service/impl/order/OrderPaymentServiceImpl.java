@@ -70,7 +70,7 @@ public class OrderPaymentServiceImpl implements OrderPaymentService {
 
     @Override
     public void insert(OrderPaymentPO orderPaymentPO) {
-        orderPaymentPOMapper.insert(orderPaymentPO);
+        orderPaymentPOMapper.insertSelective(orderPaymentPO);
     }
 
     @Override

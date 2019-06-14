@@ -88,6 +88,7 @@ public class MessageServiceImpl implements MessageService {
             } else {
                 SendSingleMsgResp resp = MsgUtils.sendBusinessMsg(po.getMobile(), msgTemplateDTO.getTencentTemplateId(), msgTemplateDTO.getTencentTemplateContent(), msgTemplateDTO.getAliTemplateCode(), msgTemplateDTO.getAliTemplateContent(), po.getContent().split(";"));
                 if (resp.isSuccess()) {
+                    po.setSendTime(new Date());
                     po.setServiceProvider(resp.getServiceProvider());
                     po.setId(null);
                     messagePOMapper.insertSelective(po);
