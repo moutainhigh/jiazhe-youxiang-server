@@ -27,7 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author tu
@@ -60,7 +61,7 @@ public class APIWeChatPayController {
         param.put("body", req.getBody());
         param.put("device_info",WeChatPayConstant.DEVICE_INFO);
         param.put("mch_id", WeChatPayConstant.MCH_ID);
-        String nonceStr = RandomUtil.generateVerifyCode(32);
+        String nonceStr = RandomUtil.generateCode(WeChatPayConstant.NONCE_STR_LENGTH);
         param.put("nonce_str", nonceStr);
         param.put("notify_url", WeChatPayConstant.NOTIFY_URL);
         param.put("out_trade_no", req.getOrderNo());

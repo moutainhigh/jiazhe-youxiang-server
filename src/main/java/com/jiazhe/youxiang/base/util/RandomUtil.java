@@ -19,6 +19,22 @@ public class RandomUtil {
      * param n:验证码位数
      */
     public static String generateVerifyCode(int n) {
+        return generateNumber(n);
+    }
+
+    /**
+     * 生成n位盐值
+     */
+    public static String generateSalt(int n) {
+        return generateCode(n);
+    }
+
+    /**
+     * 生成n位纯数字
+     * @param n
+     * @return
+     */
+    public static String generateNumber(int n){
         StringBuilder verifyCode = new StringBuilder("");
         int length = NumSequence.length;
         for (int i = 0; i < n; i++) {
@@ -29,9 +45,11 @@ public class RandomUtil {
     }
 
     /**
-     * 生成n位盐值
+     * 生成n位(数字，26位大小写字母组合)
+     * @param n
+     * @return
      */
-    public static String generateSalt(int n) {
+    public static String generateCode(int n){
         StringBuilder saltCode = new StringBuilder("");
         int length = codeSequence.length;
         for (int i = 0; i < n; i++) {

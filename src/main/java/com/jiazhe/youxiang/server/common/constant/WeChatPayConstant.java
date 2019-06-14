@@ -28,9 +28,15 @@ public class WeChatPayConstant {
     public static String TRADE_TYPE = "JSAPI";
 
     /**
+     * 随机字符串长度
+     */
+    public static Integer NONCE_STR_LENGTH = 32 ;
+
+    /**
     统一下单接口地址
      */
     public static String URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+
 
     /**
     通知地址【接收微信支付异步通知回调地址，通知url必须为直接可访问的url，不能携带参数。】

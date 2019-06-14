@@ -60,7 +60,7 @@ public class WeChatPayUtils {
             Map.Entry entry = (Map.Entry) it.next();
             String key = (String) entry.getKey();
             String value = (String) entry.getValue();
-            if ("attach".equalsIgnoreCase(key) || "body".equalsIgnoreCase(key) || "sign".equalsIgnoreCase(key)) {
+            if ("detail".equalsIgnoreCase(key)) {
                 sb.append("<" + key + ">" + "<![CDATA[" + value + "]]></" + key + ">");
             } else {
                 sb.append("<" + key + ">" + value + "</" + key + ">");
