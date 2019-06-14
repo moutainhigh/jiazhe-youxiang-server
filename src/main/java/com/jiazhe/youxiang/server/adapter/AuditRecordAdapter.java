@@ -3,7 +3,9 @@ package com.jiazhe.youxiang.server.adapter;
 import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.domain.po.AuditRecordPO;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
+import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordSumDTO;
 import com.jiazhe.youxiang.server.vo.resp.auditrecord.AuditRecordResp;
+import com.jiazhe.youxiang.server.vo.resp.auditrecord.AuditRecordSumResp;
 
 import java.util.stream.Collectors;
 
@@ -119,5 +121,14 @@ public class AuditRecordAdapter {
         auditRecordPO.setAddTime(auditRecordDTO.getAddTime());
         auditRecordPO.setModTime(auditRecordDTO.getModTime());
         return auditRecordPO;
+    }
+
+    public static AuditRecordSumResp sumDto2SumResp(AuditRecordSumDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+        AuditRecordSumResp auditRecordSumResp = new AuditRecordSumResp();
+        auditRecordSumResp.setExchangePointSum(dto.getExchangePointSum());
+        return auditRecordSumResp;
     }
 }

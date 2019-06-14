@@ -16,6 +16,7 @@ import com.jiazhe.youxiang.server.domain.po.AuditRecordPO;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeRecordPO;
 import com.jiazhe.youxiang.server.domain.po.PointPO;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
+import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordSumDTO;
 import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
@@ -285,5 +286,13 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     public List<AuditRecordDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint,Date submitStartTime, Date submitEndTime,String exchangeType) {
         List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(null, customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint,submitStartTime, submitEndTime,exchangeType, null, null);
         return auditRecordPOList.stream().map(AuditRecordAdapter::PO2DTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public AuditRecordSumDTO sum(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint, Date submitStartTime, Date submitEndTime, String exchangeType) {
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(null, customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint,submitStartTime, submitEndTime,exchangeType, null, null);
+        AuditRecordSumDTO dto = new AuditRecordSumDTO();
+        dto.setExchangePointSum(auditRecordPOList.stream().map(AuditRecordPO::getExchangePoint).reduce(BigDecimal.ZERO, BigDecimal::add));
+        return dto;
     }
 }

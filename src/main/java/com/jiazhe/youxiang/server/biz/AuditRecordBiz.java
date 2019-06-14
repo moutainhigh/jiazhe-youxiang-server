@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.biz;
 
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
+import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordSumDTO;
 import com.jiazhe.youxiang.server.service.AuditRecordService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,5 +60,9 @@ public class AuditRecordBiz {
 
     public void uncompleteChargeReceipt(Integer id) {
         auditRecordService.changeChargeReceiptStatus(id, CommonConstant.CHARGE_RECEIPT_UNCOMPLETE,null);
+    }
+
+    public AuditRecordSumDTO sum(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint, Date submitStartTime, Date submitEndTime, String exchangeType) {
+        return auditRecordService.sum(customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint, submitStartTime, submitEndTime, exchangeType);
     }
 }

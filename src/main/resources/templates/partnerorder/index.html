@@ -372,11 +372,11 @@
 </div>
 
 <!--商户订单modal-->
-<div id="modal-partnerOrder" class="modal fade" tabindex="-1" style="overflow: scroll">
+<div id="modal-partnerOrder" class="modal fade" tabindex="-1" style="overflow: scroll" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" onclick="beforeCloseModal()">&times;</button>
                 <h4 class="blue bigger" id="partnerOrderModalTitle"></h4>
             </div>
             <div class="modal-body">
@@ -385,7 +385,8 @@
                         <div class="col-xs-12 col-sm-1"></div>
                         <div class="col-xs-12 col-sm-9">
                             <form id="partnerOrderForm" class="form-horizontal" role="form">
-                                <input id="partnerOrderId" type="hidden" name="id" value=0/>
+                                <input id="operateType" type="hidden" value="0"/>
+                                <input id="partnerOrderId" value=0 type="hidden" name="id" />
                                 <div class="form-group">
                                     <label class="col-sm-4 control-label no-padding-right">客户姓名：</label>
                                     <div class="col-sm-8">
@@ -777,6 +778,19 @@
         return str;
     }
 
+    function beforeCloseModal(){
+        var operateType = $("#operateType").val();
+        if(operateType == '1' || operateType == '2'){ //1为新建 2为修改 3为查看
+            confirm("确定关闭此对话框？",function(result){
+                if(result){
+                    $('#modal-partnerOrder').modal('hide');
+                }
+            })
+        }else {
+            $('#modal-partnerOrder').modal('hide');
+        }
+    }
+
     function openShow(id) {
         fillPartnerOrderForm(id)
         $("#partnerOrderModalTitle").html("商家订单-查看");
@@ -785,6 +799,7 @@
         $("#partnerOrderForm input").attr("disabled", "disabled");
         $("#partnerOrderForm select").attr("disabled", "disabled");
         $("#partnerOrderForm textarea").attr("disabled", "disabled");
+        $("#operateType").val('3');
     }
 
     function openEdit(id) {
@@ -795,6 +810,7 @@
         $("#partnerOrderForm input").removeAttr("disabled");
         $("#partnerOrderForm select").removeAttr("disabled");
         $("#partnerOrderForm textarea").removeAttr("disabled");
+        $("#operateType").val('2');
     }
 
     function openNew() {
@@ -813,6 +829,7 @@
         $("#partnerOrderForm input").removeAttr("disabled");
         $("#partnerOrderForm select").removeAttr("disabled");
         $("#partnerOrderForm textarea").removeAttr("disabled");
+        $("#operateType").val('1');
     }
 
     function initForm() {

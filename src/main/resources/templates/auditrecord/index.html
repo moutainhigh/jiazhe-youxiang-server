@@ -175,11 +175,13 @@
                                     </select>
                                 </div>
                                 <div class="col-sm-3">
-                                    <button class="btn btn-white btn-default btn-round btn-sm"
-                                            onclick="return search()">
-                                        <i class="ace-icon fa fa-search red2"></i>
-                                        查询
-                                    </button>
+                                    <shiro:hasPermission name="auditRecordSearch">
+                                        <button class="btn btn-white btn-default btn-round btn-sm"
+                                                onclick="return search()">
+                                            <i class="ace-icon fa fa-search red2"></i>
+                                            查询
+                                        </button>
+                                    </shiro:hasPermission>
                                     <shiro:hasPermission name="chargeReceiptExport">
                                         &nbsp;&nbsp;&nbsp;&nbsp;
                                         <button class="btn btn-white btn-default btn-round btn-sm"
@@ -455,6 +457,7 @@
     var imgUrls;
     var picIndex = 0;
     var rotate = 0;//旋转度数
+    var allSum = 0;
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -473,7 +476,7 @@
         $.ajax({
             url: "/api/project/getlist",
             dataType: "json",
-            async: false,
+            async: true,
             data: {
                 pageSize: 10000,
                 pageNum: 1
@@ -495,6 +498,7 @@
             error: error
         });
 
+        calculateAllSum();
         $("#pointCodes").tag({});
         initMultiSelect();
         initDatePicker();
@@ -513,7 +517,7 @@
                     width: 50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return generateSpan(auditRecordStatus[rowObject.status - 1], auditRecordColor[rowObject.status - 1]);
+                        return rowObject.id ==0 ? "本页小计：":generateSpan(auditRecordStatus[rowObject.status - 1], auditRecordColor[rowObject.status - 1]);
                     }
                 },
                 {name: 'exchangePoint', index: 'exchangePoint', width: 70, sortable: false},
@@ -533,10 +537,8 @@
                 {
                     name: 'customerMobile',
                     index: 'customerMobile',
-                    width: 80, sortable: false,
-                    formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.customerMobile;
-                    }
+                    width: 80,
+                    sortable: false
                 },
                 {
                     name: 'givingPoint',
@@ -544,7 +546,7 @@
                     width: 50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return hasExchangeType(rowObject.exchangeType, '1') ? rowObject.givingPoint : "--";
+                        return rowObject.id == 0 ? '': hasExchangeType(rowObject.exchangeType, '1') ? rowObject.givingPoint : "--";
                     }
                 },
                 {
@@ -553,7 +555,7 @@
                     width: 60,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return hasExchangeType(rowObject.exchangeType, '2') ? rowObject.pointCodes : "--";
+                        return rowObject.id == 0 ? '': hasExchangeType(rowObject.exchangeType, '2') ? rowObject.pointCodes : "--";
                     }
                 },
                 {
@@ -562,7 +564,7 @@
                     width: 100,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return hasExchangeType(rowObject.exchangeType, '3') ? generateProductValue(rowObject.productValue, rowObject.exchangePoint) : "--";
+                        return rowObject.id == 0 ? '': hasExchangeType(rowObject.exchangeType, '3') ? generateProductValue(rowObject.productValue, rowObject.exchangePoint) : "--";
                     }
                 },
                 {
@@ -571,7 +573,7 @@
                     width: 120,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return timeFormat(rowObject.submitTime)
+                        return rowObject.id == 0 ? '': timeFormat(rowObject.submitTime);
                     }
                 },
                 {
@@ -580,7 +582,7 @@
                     width: 50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.status > 2 ? rowObject.auditorName : "";
+                        return rowObject.id == 0 ? '': rowObject.status > 2 ? rowObject.auditorName : "";
                     }
                 },
                 {
@@ -589,11 +591,29 @@
                     width: 120,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.status > 2 ? timeFormat(rowObject.auditTime) : "";
+                        return rowObject.id == 0 ? '': rowObject.status > 2 ? timeFormat(rowObject.auditTime) : "";
                     }
                 },
             ],
-            caption: "充值记录列表"
+            footerrow: true,
+            caption: "充值记录列表",
+            loadComplete:function(data){
+                if("error" in data){
+                    bootboxalert(data.error.message);
+                    return false;
+                }
+                var table = this;
+                setTimeout(function () {
+                    $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
+                    updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
+                }, 0);
+                var rows = data.data;
+                var pageSum = 0;
+                for(var i = 0, l = rows.length; i<l; i++) {
+                    pageSum += rows[i].exchangePoint;
+                }
+                $(this).jqGrid("footerData", "set", {id:0,_action:'',exchangePoint:pageSum,status:'',customerName:'总合计：',customerMobile:allSum});
+            }
         };
         backMultiSelect();
         initTable(grid_selector, pager_selector, tableOption);
@@ -601,6 +621,7 @@
 
     function search() {
         getPostData();
+        calculateAllSum();
         jQuery(grid_selector).setGridParam({
             url: "/api/auditrecord/listpage",
             postData: transformToJson($('#auditRecordSearchForm').serializeArray()),
@@ -669,6 +690,9 @@
     }
 
     function customFormatter(cellvalue, options, rowObject) {
+        if(rowObject.id == 0){
+            return '【兑换总积分】汇总';
+        }
         var str = "";
         var btnStyle = "btn-danger";
         if (permission.indexOf("chargeReceiptManagement") != -1) {
@@ -805,8 +829,8 @@
         if (hasExchangeType(result.exchangeType, '1')) {
             $(".exchangeType1").css("display", "");
             $("#customerMobile").val(result.customerMobile);
-            $("#givingPoint").val(result.givingPoint);
-
+            var rate = result.exchangePoint > 0 ? (result.givingPoint/result.exchangePoint).toFixed(2):'错误';
+            $("#givingPoint").val(result.givingPoint + '/' + rate);
         } else {
             $(".exchangeType1").css("display", "none");
         }
@@ -939,6 +963,24 @@
         }
         window.location.href = "/api/auditrecord/export?" + param;
         return false;
+    }
+
+    function calculateAllSum(){
+        $.ajax({
+            url: "/api/auditrecord/sum",
+            dataType: "json",
+            async: false,
+            data: transformToJson($('#auditRecordSearchForm').serializeArray()),
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    allSum = data.data.exchangePointSum;
+                }
+            },
+            error: error
+        });
     }
 
 </script>
