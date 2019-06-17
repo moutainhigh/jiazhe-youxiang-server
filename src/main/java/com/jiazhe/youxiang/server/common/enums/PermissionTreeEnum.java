@@ -104,22 +104,24 @@ public enum PermissionTreeEnum {
     /***************************消费记录相关相关**************************************/
     //消费记录管理
     AUDIT_RECORD_MANAGEMENT(5, 0, "消费记录管理", PermissionConstant.AUDIT_RECORD_MANAGEMENT),
+    //消费记录查询
+    AUDIT_RECORD_SEARCH(501, 5, "消费记录查询", PermissionConstant.AUDIT_RECORD_SEARCH),
     //消费记录审核
-    AUDIT_RECORD_CHECK(501, 5, "消费记录审核", PermissionConstant.AUDIT_RECORD_CHECK),
+    AUDIT_RECORD_CHECK(502, 5, "消费记录审核", PermissionConstant.AUDIT_RECORD_CHECK),
     //凭证管理
-    CHARGE_RECEIPT_MANAGEMENT(502, 5, "凭证管理", PermissionConstant.CHARGE_RECEIPT_MANAGEMENT),
+    CHARGE_RECEIPT_MANAGEMENT(503, 5, "凭证管理", PermissionConstant.CHARGE_RECEIPT_MANAGEMENT),
     //凭证导出
-    CHARGE_RECEIPT_EXPORT(503, 5, "凭证导出", PermissionConstant.CHARGE_RECEIPT_EXPORT),
+    CHARGE_RECEIPT_EXPORT(504, 5, "凭证导出", PermissionConstant.CHARGE_RECEIPT_EXPORT),
     //凭证添加
-    CHARGE_RECEIPT_ADD(504, 5, "凭证添加", PermissionConstant.CHARGE_RECEIPT_ADD),
+    CHARGE_RECEIPT_ADD(505, 5, "凭证添加", PermissionConstant.CHARGE_RECEIPT_ADD),
     //凭证删除
-    CHARGE_RECEIPT_DELETE(505, 5, "凭证删除", PermissionConstant.CHARGE_RECEIPT_DELETE),
+    CHARGE_RECEIPT_DELETE(506, 5, "凭证删除", PermissionConstant.CHARGE_RECEIPT_DELETE),
     //凭证修改
-    CHARGE_RECEIPT_EDIT(506, 5, "凭证修改", PermissionConstant.CHARGE_RECEIPT_EDIT),
+    CHARGE_RECEIPT_EDIT(507, 5, "凭证修改", PermissionConstant.CHARGE_RECEIPT_EDIT),
     //完成凭证录入
-    COMPLETE_CHARGE_RECEIPT(507, 5, "完成凭证录入", PermissionConstant.COMPLETE_CHARGE_RECEIPT),
+    COMPLETE_CHARGE_RECEIPT(508, 5, "完成凭证录入", PermissionConstant.COMPLETE_CHARGE_RECEIPT),
     //重置凭证录入未完成
-    UNCOMPLETE_CHARGE_RECEIPT(508, 5, "重置凭证录入未完成", PermissionConstant.UNCOMPLETE_CHARGE_RECEIPT),
+    UNCOMPLETE_CHARGE_RECEIPT(509, 5, "重置凭证录入未完成", PermissionConstant.UNCOMPLETE_CHARGE_RECEIPT),
 
     /***************************查询模块相关**************************************/
     //信息查询

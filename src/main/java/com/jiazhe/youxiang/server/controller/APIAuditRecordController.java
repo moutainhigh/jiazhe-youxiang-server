@@ -18,6 +18,7 @@ import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.exceptions.AuditRecordException;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
+import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordSumDTO;
 import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -27,6 +28,7 @@ import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordCheckReq;
 import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordPageReq;
 import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordSaveReq;
 import com.jiazhe.youxiang.server.vo.resp.auditrecord.AuditRecordResp;
+import com.jiazhe.youxiang.server.vo.resp.auditrecord.AuditRecordSumResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.WaitingDealCountResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
@@ -224,5 +226,16 @@ public class APIAuditRecordController extends BaseController {
         Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
         List<ChargeReceiptDTO> dtoList = chargeReceiptBiz.getList(req.getCustomerInfo(), req.getSubmitterName(),req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(),req.getExchangePoint(), submitStartTime, submitEndTime,req.getExchangeType());
         ExportExcelUtils.exportChargeReceipt(response, dtoList);
+    }
+
+    @ApiOperation(value = "根据条件求字段之和", httpMethod = "GET", notes = "根据条件求字段之和",response = AuditRecordResp.class)
+    @RequestMapping(value = "/sum", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "根据条件求字段之和", level = LogLevelEnum.LEVEL_1)
+    public Object sum(@ModelAttribute AuditRecordPageReq req, HttpServletResponse response) {
+        Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
+        Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
+        AuditRecordSumDTO dto = auditRecordBiz.sum(req.getCustomerInfo(), req.getSubmitterName(),req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(),req.getExchangePoint(), submitStartTime, submitEndTime,req.getExchangeType());
+        AuditRecordSumResp resp = AuditRecordAdapter.sumDto2SumResp(dto);
+        return ResponseFactory.buildResponse(resp);
     }
 }

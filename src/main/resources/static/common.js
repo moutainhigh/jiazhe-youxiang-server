@@ -271,8 +271,8 @@ function initTable(grid_selector, pager_selector, options) {
         {name: 'id', index: 'id', sortable: false, hidden: true},
         {name: '_action', index: '_action', width: 100, sortable: false}
     ]
-
-
+    var footerrow = options.hasOwnProperty("footerrow") ? options.footerrow : false;
+    var userDataOnFooter = options.hasOwnProperty("userDataOnFooter") ? options.userDataOnFooter : false;
     var postData = options.hasOwnProperty("postData") ? options.postData : "";
     var rownumbers = options.hasOwnProperty("rownumbers") ? options.rownumbers : true;
     var datatype = options.hasOwnProperty("datatype") ? options.datatype : "json";
@@ -327,6 +327,7 @@ function initTable(grid_selector, pager_selector, options) {
         height: height,
         colNames: colNames,
         colModel: colModel,
+        footerrow: footerrow,
         rowNum: rowNum,
         rowList: rowList,
         pager: pager_selector,
