@@ -132,4 +132,6 @@ public interface OrderInfoService {
      * @param wxPay 微信支付金额 单位：分
      */
     void wxNotify(String transactionId ,String orderNo, Integer wxPay);
+
+    List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime);
 }

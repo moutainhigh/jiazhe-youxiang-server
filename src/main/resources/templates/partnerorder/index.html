@@ -153,16 +153,20 @@
                                     </div>
 
                                     <div class="col-sm-3">
-                                        <button class="btn btn-white btn-default btn-round btn-sm"
-                                                onclick="return search()">
-                                            <i class="ace-icon fa fa-search red2"></i>
-                                            查询
-                                        </button>&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <button class="btn btn-white btn-default btn-round btn-sm"
-                                                onclick="exportExcel();return false;">
-                                            <i class="ace-icon fa  fa-file-excel-o red2"></i>
-                                            导出
-                                        </button>
+                                        <shiro:hasPermission name="partnerOrderSearch">
+                                            <button class="btn btn-white btn-default btn-round btn-sm"
+                                                    onclick="return search()">
+                                                <i class="ace-icon fa fa-search red2"></i>
+                                                查询
+                                            </button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </shiro:hasPermission>
+                                        <shiro:hasPermission name="partnerOrderExport">
+                                            <button class="btn btn-white btn-default btn-round btn-sm"
+                                                    onclick="exportExcel();return false;">
+                                                <i class="ace-icon fa  fa-file-excel-o red2"></i>
+                                                导出
+                                            </button>
+                                        </shiro:hasPermission>
                                     </div>
                                 </div>
                             </form>

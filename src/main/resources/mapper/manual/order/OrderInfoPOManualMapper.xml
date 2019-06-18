@@ -90,7 +90,9 @@
             </if>
             AND o.is_deleted = 0 ORDER BY o.add_time desc
         </where>
-        limit #{offset},#{limit}
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
     </select>
 
     <select id="count" resultType="java.lang.Integer">

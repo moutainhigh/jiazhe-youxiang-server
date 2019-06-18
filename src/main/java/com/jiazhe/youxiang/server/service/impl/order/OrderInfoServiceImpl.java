@@ -43,7 +43,6 @@ import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.jaxb.OrderAdapter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -768,6 +767,19 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderPaymentPO.setSerialNumber(transactionId);
         orderPaymentService.insert(orderPaymentPO);
         orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
+    }
+
+    @Override
+    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime) {
+        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile,productId,realServiceStartTime,realServiceEndTime, null, null);
+        List<OrderInfoDTO> orderInfoDTOList = orderInfoPOList.stream().map(OrderInfoAdapter::PO2DTO).collect(Collectors.toList());
+        orderInfoDTOList.forEach(bean -> {
+            ProductDTO productDTO = productService.getById(bean.getProductId());
+            CustomerDTO customerDTO = customerService.getById(bean.getCustomerId());
+            bean.setProductDTO(productDTO);
+            bean.setCustomerDTO(customerDTO);
+        });
+        return orderInfoDTOList;
     }
 
     private OrderRefundDTO paymentDto2RefundDto(OrderPaymentDTO paymentDTO) {
