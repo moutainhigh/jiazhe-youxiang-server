@@ -654,6 +654,7 @@
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
     var orderStatus = ['待付款', '待派单', '待服务', '服务完成', '取消待审核', '取消未通过', '已取消'];
+    var orderType = ['员工下单','客户下单'];
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -684,7 +685,7 @@
             postData: transformToJson($('#orderInfoSearchForm').serializeArray()),
             shrinkToFit: false,
             autoScroll: true,
-            colNames: ['', '操作', '状态', '商品名称', '单价', '数量', '下单时间','服务时间','下单账号', '服务对象电话', '服务对象姓名','成本',  '积分支付金额','代金券抵扣金额', '充值卡支付金额', '在线支付金额','订单号','待支付'],
+            colNames: ['', '操作', '状态', '商品名称', '单价', '数量', '下单时间','服务时间','下单账号', '服务对象电话', '服务对象姓名','成本',  '积分支付金额','代金券抵扣金额', '充值卡支付金额', '在线支付金额','订单号','待支付','订单来源'],
 //            colNames: ['', '操作', '状态', '商品名称', '单价', '数量', '下单时间','预约时间','服务时间','下单账号', '服务对象电话', '服务对象姓名','成本',  '积分支付金额','代金券抵扣金额', '充值卡支付金额', '在线支付金额','订单号','待支付'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
@@ -713,7 +714,10 @@
                 {name: 'payRechargeCard', index: 'payRechargeCard', width: 100,sortable: false},
                 {name: 'payCash', index: 'payCash', width: 100,sortable: false},
                 {name: 'orderCode', index: 'orderCode', width: 120, sortable: false},
-                {name: 'payment', index: 'payment', width: 60,sortable: false}
+                {name: 'payment', index: 'payment', width: 60,sortable: false},
+                {name: 'type', index: 'type', width: 80,sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return orderType[rowObject.type];
+                }}
             ],
             loadComplete: function (data) {
                 if("error" in data){
