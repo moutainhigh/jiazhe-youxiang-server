@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.controller.order;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
+import com.jiazhe.youxiang.base.util.ExportExcelUtils;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.order.OrderInfoBiz;
@@ -39,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
@@ -272,6 +274,23 @@ public class APIOrderInfoController extends BaseController {
         WaitingDealCountResp waitingDealCountResp = new WaitingDealCountResp();
         waitingDealCountResp.setCount(count);
         return ResponseFactory.buildResponse(waitingDealCountResp);
+    }
+
+    @RequiresPermissions(PermissionConstant.ORDER_EXPORT)
+    @ApiOperation(value = "【后台】导出订单", httpMethod = "GET", notes = "导出订单")
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "导出订单", level = LogLevelEnum.LEVEL_3)
+    public void export(@ModelAttribute OrderInfoPageReq req, HttpServletResponse response){
+        //如果包含0，说明查全部订单，否则按需查询
+        if (Arrays.asList(req.getStatus().split(",")).contains(String.valueOf(CommonConstant.ORDER_ALL))) {
+            req.setStatus(null);
+        }
+        Date orderStartTime = req.getOrderStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getOrderStartTime()));
+        Date orderEndTime = req.getOrderEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getOrderEndTime()));
+        Date realServiceStartTime = req.getRealServiceTimeStart() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getRealServiceTimeStart()));
+        Date realServiceEndTime = req.getRealServiceTimeEnd() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getRealServiceTimeEnd()));
+        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getStatus(), req.getOrderCode(), req.getMobile(), req.getCustomerMobile(), orderStartTime, orderEndTime, req.getWorkerMobile(), req.getProductId(),realServiceStartTime,realServiceEndTime);
+        ExportExcelUtils.exportOrder(response, orderInfoDTOList);
     }
 
 }

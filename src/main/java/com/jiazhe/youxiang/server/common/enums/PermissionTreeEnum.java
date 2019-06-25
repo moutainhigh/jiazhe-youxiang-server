@@ -74,18 +74,20 @@ public enum PermissionTreeEnum {
     ORDER_MANAGEMENT(3, 0, "订单管理", PermissionConstant.ORDER_MANAGEMENT),
     //订单查询
     ORDER_SEARCH(301, 3, "订单查询", PermissionConstant.ORDER_SEARCH),
+    //订单导出
+    ORDER_EXPORT(302, 3, "订单导出", PermissionConstant.ORDER_EXPORT),
     //订单预约
-    ORDER_RESERVATION(301, 3, "订单预约", PermissionConstant.ORDER_RESERVATION),
+    ORDER_RESERVATION(303, 3, "订单预约", PermissionConstant.ORDER_RESERVATION),
     //订单修改
-    ORDER_EDIT(302, 3, "订单修改", PermissionConstant.ORDER_EDIT),
+    ORDER_EDIT(304, 3, "订单修改", PermissionConstant.ORDER_EDIT),
     //订单完成
-    ORDER_COMPLETE(303, 3, "订单完成", PermissionConstant.ORDER_COMPLETE),
+    ORDER_COMPLETE(305, 3, "订单完成", PermissionConstant.ORDER_COMPLETE),
     //订单追加
-    ORDER_APPEND(304, 3, "订单追加", PermissionConstant.ORDER_APPEND),
+    ORDER_APPEND(306, 3, "订单追加", PermissionConstant.ORDER_APPEND),
     //订单审核
-    ORDER_CHECK(305, 3, "订单审核", PermissionConstant.ORDER_CHECK),
+    ORDER_CHECK(307, 3, "订单审核", PermissionConstant.ORDER_CHECK),
     //订单取消
-    ORDER_CANCEL(306, 3, "订单取消", PermissionConstant.ORDER_CANCEL),
+    ORDER_CANCEL(308, 3, "订单取消", PermissionConstant.ORDER_CANCEL),
 
     /***************************项目相关**************************************/
     //项目管理

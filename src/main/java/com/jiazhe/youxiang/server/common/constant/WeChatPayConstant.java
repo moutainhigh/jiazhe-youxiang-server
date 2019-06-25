@@ -13,6 +13,11 @@ public class WeChatPayConstant {
     public static String APP_ID = "wx68281f971cf77b90";
 
     /**
+     公众号的appSecret
+     */
+    public static String APP_SECRET = "c31167daaa97053eb66c162c75aa38e4";
+
+    /**
      微信支付分配的商户号
      */
     public static String MCH_ID = "1499770702";
@@ -47,5 +52,10 @@ public class WeChatPayConstant {
      key为商户平台设置的密钥key
      */
     public static String API_KEY = "youxianghulian20180509lizhelizhe";
+
+    /**
+     * 根据code获取openid的url
+     */
+    public static String AUTH_URL = "https://api.weixin.qq.com/sns/oauth2/access_token?";
 
 }

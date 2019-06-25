@@ -161,4 +161,8 @@ public class OrderInfoBiz {
     public void wxNotify(String transactionId,String orderNo, Integer wxPay) {
         orderInfoService.wxNotify(transactionId,orderNo, wxPay);
     }
+
+    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime) {
+        return orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, realServiceStartTime, realServiceEndTime);
+    }
 }

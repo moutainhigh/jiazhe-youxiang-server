@@ -248,7 +248,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         //自激活时间起，有效期天数
         if (pointExchangeCodePO.getExpiryType().equals(CommonConstant.POINT_ACTIVE_PERIOD)) {
             pointPO.setEffectiveTime(new Date(DateUtil.getFirstSecond(pointExchangeCodePO.getPointEffectiveTime().getTime())));
-            pointPO.setExpiryTime(new Date(DateUtil.getLastSecond(pointExchangeCodePO.getExpiryTime().getTime())));
+            pointPO.setExpiryTime(new Date(DateUtil.getLastSecond(pointExchangeCodePO.getPointExpiryTime().getTime())));
         }
         pointPO.setDescription(pointExchangeCodePO.getBatchDescription());
         pointPO.setFaceValue(pointExchangeCodePO.getFaceValue());

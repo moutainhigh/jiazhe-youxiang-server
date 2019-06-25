@@ -45,135 +45,142 @@
             <div class="page-content">
                 <div class="row">
                     <div class="col-xs-12" style="padding-top:40px">
-                        <shiro:hasPermission name="orderSearch">
-                            <form id="orderInfoSearchForm" class="form-horizontal" role="form">
-                                <div class="form-group">
-                                    <label class="col-sm-1 control-label no-padding-right">状态：</label>
-                                    <div class="col-sm-2">
-                                        <select id="searchStatus" name="status"
-                                                class="selectpicker show-tick form-control">
-                                            <option value="0" th:selected="${status} == 0">所有</option>
-                                            <option value="1" th:selected="${status} == 1">待付款</option>
-                                            <option value="2" th:selected="${status} == 2">待派单</option>
-                                            <option value="3" th:selected="${status} == 3">待服务</option>
-                                            <option value="4" th:selected="${status} == 4">已完成</option>
-                                            <option value="5" th:selected="${status} == 5">取消待审核</option>
-                                            <option value="6" th:selected="${status} == 6">取消未通过</option>
-                                            <option value="7" th:selected="${status} == 7">已取消</option>
-                                        </select>
+                        <form id="orderInfoSearchForm" class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">状态：</label>
+                                <div class="col-sm-2">
+                                    <select id="searchStatus" name="status"
+                                            class="selectpicker show-tick form-control">
+                                        <option value="0" th:selected="${status} == 0">所有</option>
+                                        <option value="1" th:selected="${status} == 1">待付款</option>
+                                        <option value="2" th:selected="${status} == 2">待派单</option>
+                                        <option value="3" th:selected="${status} == 3">待服务</option>
+                                        <option value="4" th:selected="${status} == 4">已完成</option>
+                                        <option value="5" th:selected="${status} == 5">取消待审核</option>
+                                        <option value="6" th:selected="${status} == 6">取消未通过</option>
+                                        <option value="7" th:selected="${status} == 7">已取消</option>
+                                    </select>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">订单号：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="searchOrderCode" name="orderCode" class="form-control"
+                                               type="text"
+                                               style="height:30px"/>
                                     </div>
-                                    <label class="col-sm-1 control-label no-padding-right">订单号：</label>
-                                    <div class="col-sm-2">
-                                        <div class="pos-rel">
-                                            <input id="searchOrderCode" name="orderCode" class="form-control"
-                                                   type="text"
-                                                   style="height:30px"/>
-                                        </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">下单账号：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="searchMobile" name="mobile" class="form-control" type="text"
+                                               th:value="${mobile}"
+                                               style="height:30px"/>
                                     </div>
-                                    <label class="col-sm-1 control-label no-padding-right">下单账号：</label>
-                                    <div class="col-sm-2">
-                                        <div class="pos-rel">
-                                            <input id="searchMobile" name="mobile" class="form-control" type="text"
-                                                   th:value="${mobile}"
-                                                   style="height:30px"/>
-                                        </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">服务对象电话：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="searchCustomerMobile" name="customerMobile" class="form-control"
+                                               type="text"
+                                               style="height:30px"/>
                                     </div>
-                                    <label class="col-sm-1 control-label no-padding-right">服务对象电话：</label>
-                                    <div class="col-sm-2">
-                                        <div class="pos-rel">
-                                            <input id="searchCustomerMobile" name="customerMobile" class="form-control"
-                                                   type="text"
-                                                   style="height:30px"/>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">下单时间起：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <div class="input-group">
+                                            <input class="form-control date-picker" id="searchOrderStartTime"
+                                                   type="text" readonly/>
+                                            <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                            <input type="hidden" value=0 name="orderStartTime"/>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="space-2"></div>
-                                <div class="form-group">
-                                    <label class="col-sm-1 control-label no-padding-right">下单时间起：</label>
-                                    <div class="col-sm-2">
-                                        <div class="pos-rel">
-                                            <div class="input-group">
-                                                <input class="form-control date-picker" id="searchOrderStartTime"
-                                                       type="text" readonly/>
-                                                <span class="input-group-addon">
-                                                <i class="fa fa-calendar bigger-110"></i>
-                                            </span>
-                                                <input type="hidden" value=0 name="orderStartTime"/>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                    <label class="col-sm-1 control-label no-padding-right">下单时间止：</label>
-                                    <div class="col-sm-2">
-                                        <div class="pos-rel">
-                                            <div class="input-group">
-                                                <input class="form-control date-picker" id="searchOrderEndTime"
-                                                       type="text" readonly/>
-                                                <span class="input-group-addon">
-                                                <i class="fa fa-calendar bigger-110"></i>
-                                            </span>
-                                                <input type="hidden" value=0 name="orderEndTime"/>
-                                            </div>
+                                <label class="col-sm-1 control-label no-padding-right">下单时间止：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <div class="input-group">
+                                            <input class="form-control date-picker" id="searchOrderEndTime"
+                                                   type="text" readonly/>
+                                            <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                            <input type="hidden" value=0 name="orderEndTime"/>
                                         </div>
-                                    </div>
-
-                                    <label class="col-sm-1 control-label no-padding-right">服务人员电话：</label>
-                                    <div class="col-sm-2">
-                                        <div class="pos-rel">
-                                            <input id="searchWorkerMobile" name="workerMobile" class="form-control"
-                                                   type="text"
-                                                   style="height:30px"/>
-                                        </div>
-                                    </div>
-
-                                    <label class="col-sm-1 control-label no-padding-right">商品：</label>
-                                    <div class="col-sm-2">
-                                        <select id="product" name="productId"
-                                                class="chosen-select form-control">
-                                            <option value="0">所有</option>
-                                        </select>
                                     </div>
                                 </div>
-                                <div class="space-2"></div>
-                                <div class="form-group">
-                                    <label class="col-sm-1 control-label no-padding-right">服务时间起：</label>
-                                    <div class="col-sm-2">
-                                        <div class="pos-rel">
-                                            <div class="input-group">
-                                                <input class="form-control date-picker" id="searchRealServiceTimeStart"
-                                                       type="text" readonly/>
-                                                <span class="input-group-addon">
-                                                <i class="fa fa-calendar bigger-110"></i>
-                                            </span>
-                                                <input type="hidden" value=0 name="realServiceTimeStart"/>
-                                            </div>
+
+                                <label class="col-sm-1 control-label no-padding-right">服务人员电话：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="searchWorkerMobile" name="workerMobile" class="form-control"
+                                               type="text"
+                                               style="height:30px"/>
+                                    </div>
+                                </div>
+
+                                <label class="col-sm-1 control-label no-padding-right">商品：</label>
+                                <div class="col-sm-2">
+                                    <select id="product" name="productId"
+                                            class="chosen-select form-control">
+                                        <option value="0">所有</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">服务时间起：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <div class="input-group">
+                                            <input class="form-control date-picker" id="searchRealServiceTimeStart"
+                                                   type="text" readonly/>
+                                            <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                            <input type="hidden" value=0 name="realServiceTimeStart"/>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <label class="col-sm-1 control-label no-padding-right">服务时间止：</label>
-                                    <div class="col-sm-2">
-                                        <div class="pos-rel">
-                                            <div class="input-group">
-                                                <input class="form-control date-picker" id="searchRealServiceTimeEnd"
-                                                       type="text" readonly/>
-                                                <span class="input-group-addon">
-                                                <i class="fa fa-calendar bigger-110"></i>
-                                            </span>
-                                                <input type="hidden" value=0 name="realServiceTimeEnd"/>
-                                            </div>
+                                <label class="col-sm-1 control-label no-padding-right">服务时间止：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <div class="input-group">
+                                            <input class="form-control date-picker" id="searchRealServiceTimeEnd"
+                                                   type="text" readonly/>
+                                            <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                            <input type="hidden" value=0 name="realServiceTimeEnd"/>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div class="col-sm-3">
+                                <div class="col-sm-3">
+                                    <shiro:hasPermission name="orderSearch">
                                         <button class="btn btn-white btn-default btn-round btn-sm"
                                                 onclick="return search()">
                                             <i class="ace-icon fa fa-search red2"></i>
                                             查询
                                         </button>
-                                    </div>
+                                    </shiro:hasPermission>
+                                    <shiro:hasPermission name="orderExport">
+                                        <button class="btn btn-white btn-default btn-round btn-sm"
+                                                onclick="exportExcel();return false;">
+                                            <i class="ace-icon fa  fa-file-excel-o red2"></i>
+                                            导出
+                                        </button>
+                                    </shiro:hasPermission>
                                 </div>
-                            </form>
-                        </shiro:hasPermission>
+                            </div>
+                        </form>
                     </div><!-- /.col -->
 
                     <div class="col-xs-12" style="text-align: right" id="buttonDiv">
@@ -647,6 +654,7 @@
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
     var orderStatus = ['待付款', '待派单', '待服务', '服务完成', '取消待审核', '取消未通过', '已取消'];
+    var orderType = ['员工下单','客户下单'];
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -677,7 +685,7 @@
             postData: transformToJson($('#orderInfoSearchForm').serializeArray()),
             shrinkToFit: false,
             autoScroll: true,
-            colNames: ['', '操作', '状态', '商品名称', '单价', '数量', '下单时间','服务时间','下单账号', '服务对象电话', '服务对象姓名','成本',  '积分支付金额','代金券抵扣金额', '充值卡支付金额', '在线支付金额','订单号','待支付'],
+            colNames: ['', '操作', '状态', '商品名称', '单价', '数量', '下单时间','服务时间','下单账号', '服务对象电话', '服务对象姓名','成本',  '积分支付金额','代金券抵扣金额', '充值卡支付金额', '在线支付金额','订单号','待支付','订单来源'],
 //            colNames: ['', '操作', '状态', '商品名称', '单价', '数量', '下单时间','预约时间','服务时间','下单账号', '服务对象电话', '服务对象姓名','成本',  '积分支付金额','代金券抵扣金额', '充值卡支付金额', '在线支付金额','订单号','待支付'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
@@ -706,7 +714,10 @@
                 {name: 'payRechargeCard', index: 'payRechargeCard', width: 100,sortable: false},
                 {name: 'payCash', index: 'payCash', width: 100,sortable: false},
                 {name: 'orderCode', index: 'orderCode', width: 120, sortable: false},
-                {name: 'payment', index: 'payment', width: 60,sortable: false}
+                {name: 'payment', index: 'payment', width: 60,sortable: false},
+                {name: 'type', index: 'type', width: 80,sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return orderType[rowObject.type];
+                }}
             ],
             loadComplete: function (data) {
                 if("error" in data){
@@ -1314,6 +1325,17 @@
                 bootboxalert("服务器异常，请联系管理员");
             }
         });
+    }
+
+    //导出为excel
+    function exportExcel() {
+        var obj = transformToJson($('#orderInfoSearchForm').serializeArray());
+        var param = "";
+        for(var key in obj){
+            param = param + key + "=" + obj[key] + "&" ;
+        }
+        window.location.href = "/api/orderinfo/export?" + param;
+        return false;
     }
 
 </script>

@@ -15,7 +15,9 @@ import com.jiazhe.youxiang.server.common.exceptions.OrderException;
 import com.jiazhe.youxiang.server.common.exceptions.WeChatPayException;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OpenIdReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.WeChatUnifiedOrderReq;
+import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OpenIdResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.UnifiedOrderResp;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
@@ -49,6 +52,38 @@ public class APIWeChatPayController {
     private String DOMAIN;
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(APIWeChatPayController.class);
+
+
+    @AppApi
+    @ApiOperation(value = "用户同意授权，获取code", httpMethod = "POST", response = UnifiedOrderResp.class, notes = "用户同意授权，获取code")
+    @RequestMapping(value = "/auth", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.WECHAT_PAY, operate = "用户同意授权，获取code", level = LogLevelEnum.LEVEL_1)
+    public void auth(@ModelAttribute WeChatUnifiedOrderReq req, HttpServletRequest request) {
+
+    }
+
+    @AppApi
+    @ApiOperation(value = "通过code换取网页授权openid", httpMethod = "GET", response = OpenIdResp.class, notes = "通过code换取网页授权openid")
+    @RequestMapping(value = "/getopenid", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.WECHAT_PAY, operate = "通过code换取网页授权openid", level = LogLevelEnum.LEVEL_1)
+    public Object getOpenId(@ModelAttribute OpenIdReq req) {
+        Map<String, String> param = new LinkedHashMap<>();
+        param.put("appid",WeChatPayConstant.APP_ID);
+        param.put("secret",WeChatPayConstant.APP_SECRET);
+        param.put("code", req.getCode());
+        param.put("grant_type", "authorization_code");
+        StringBuilder url = new StringBuilder(WeChatPayConstant.AUTH_URL);
+        for (String k : param.keySet()) {
+            url.append(k).append("=").append(param.get(k));
+        }
+        RestTemplate restTemplate = new RestTemplate();
+        String result = restTemplate.getForObject(url.toString(), String.class);
+        if(result.contains("errcode")){
+            throw new WeChatPayException(WeChatPayCodeEnum.GET_OPENID_ERROR);
+        }else {
+            return ResponseFactory.buildResponse(result);
+        }
+    }
 
     @AppApi
     @ApiOperation(value = "微信统一下单", httpMethod = "POST", response = UnifiedOrderResp.class, notes = "微信统一下单")
@@ -113,7 +148,7 @@ public class APIWeChatPayController {
                     String orderNo = payNotifyMap.get("out_trade_no").toString();
                     String transactionId = payNotifyMap.get("transaction_id").toString();
                     Integer wxPay = new Integer(payNotifyMap.get("total_fee").toString());
-                    if(payNotifyMap.get("result_code").equals(SUCCESS)){
+                    if (payNotifyMap.get("result_code").equals(SUCCESS)) {
                         orderInfoBiz.wxNotify(transactionId, orderNo, wxPay);
                     }
                 } else {
