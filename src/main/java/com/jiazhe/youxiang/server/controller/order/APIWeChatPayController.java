@@ -32,6 +32,8 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * @author tu
@@ -68,20 +70,20 @@ public class APIWeChatPayController {
     @CustomLog(moduleName = ModuleEnum.WECHAT_PAY, operate = "通过code换取网页授权openid", level = LogLevelEnum.LEVEL_1)
     public Object getOpenId(@ModelAttribute OpenIdReq req) {
         Map<String, String> param = new LinkedHashMap<>();
-        param.put("appid",WeChatPayConstant.APP_ID);
-        param.put("secret",WeChatPayConstant.APP_SECRET);
+        param.put("appid", WeChatPayConstant.APP_ID);
+        param.put("secret", WeChatPayConstant.APP_SECRET);
         param.put("code", req.getCode());
         param.put("grant_type", "authorization_code");
         StringBuilder url = new StringBuilder(WeChatPayConstant.AUTH_URL);
         for (String k : param.keySet()) {
             url.append(k).append("=").append(param.get(k)).append("&");
         }
-        url.deleteCharAt(url.length()-1);
+        url.deleteCharAt(url.length() - 1);
         RestTemplate restTemplate = new RestTemplate();
         String result = restTemplate.getForObject(url.toString(), String.class);
-        if(result.contains("errcode")){
+        if (result.contains("errcode")) {
             throw new WeChatPayException(WeChatPayCodeEnum.GET_OPENID_ERROR);
-        }else {
+        } else {
             return ResponseFactory.buildResponse(result);
         }
     }
@@ -106,7 +108,7 @@ public class APIWeChatPayController {
         param.put("nonce_str", nonceStr);
         param.put("notify_url", DOMAIN + WeChatPayConstant.NOTIFY_URL);
         System.out.println(DOMAIN);
-        param.put("openid",req.getOpenId());
+        param.put("openid", req.getOpenId());
         param.put("out_trade_no", req.getOrderNo());
         param.put("spbill_create_ip", IpAdrressUtil.getIpAddress(request));
         param.put("total_fee", String.valueOf(req.getTotalFee()));
@@ -128,8 +130,21 @@ public class APIWeChatPayController {
                 logger.info("发起预支付失败，原因：" + map.get("err_code_des"));
                 throw new WeChatPayException(WeChatPayCodeEnum.PRE_PAY_ERROR);
             }
+            //二次签名
+            String timeStamp = String.valueOf(System.currentTimeMillis() / 1000);
+            SortedMap<String, String> finalPackage = new TreeMap<>();
+            finalPackage.put("appId", WeChatPayConstant.APP_ID);
+            finalPackage.put("timeStamp", timeStamp);
+            finalPackage.put("nonceStr", nonceStr);
+            finalPackage.put("package", "prepay_id=" + map.get("prepay_id"));
+            finalPackage.put("signType", "MD5");
+            String signAgain = WeChatPayUtils.createSign("UTF-8", finalPackage, WeChatPayConstant.API_KEY);
+            unifiedOrderResp.setAppId(WeChatPayConstant.APP_ID);
+            unifiedOrderResp.setTimeStamp(timeStamp);
+            unifiedOrderResp.setNonceStr(nonceStr);
             unifiedOrderResp.setPrepayId(map.get("prepay_id"));
-            unifiedOrderResp.setPaySign(map.get("sign"));
+            unifiedOrderResp.setSignType("MD5");
+            unifiedOrderResp.setPaySign(signAgain);
             return ResponseFactory.buildResponse(unifiedOrderResp);
         } catch (Exception e) {
             logger.info("发起预支付失败，异常信息：" + e.getMessage());
