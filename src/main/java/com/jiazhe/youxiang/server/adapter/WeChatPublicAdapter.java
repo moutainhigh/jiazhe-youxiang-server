@@ -24,6 +24,11 @@ public class WeChatPublicAdapter {
         SignatureResp signatureResp = new SignatureResp();
         signatureResp.setSignature(dto.getSignature());
         signatureResp.setAppid(dto.getAppid());
+        signatureResp.setTimestamp(dto.getTimestamp());
+        signatureResp.setNonceStr(dto.getNonceStr());
+        signatureResp.setUrl(dto.getUrl());
+        signatureResp.setAccessToken(dto.getAccessToken());
+        signatureResp.setJsapiTicket(dto.getJsapiTicket());
         return signatureResp;
     }
 }
