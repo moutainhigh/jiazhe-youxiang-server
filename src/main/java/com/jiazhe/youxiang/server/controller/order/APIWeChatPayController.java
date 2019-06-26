@@ -106,6 +106,7 @@ public class APIWeChatPayController {
         param.put("nonce_str", nonceStr);
         param.put("notify_url", DOMAIN + WeChatPayConstant.NOTIFY_URL);
         System.out.println(DOMAIN);
+        param.put("openid",req.getOpenId());
         param.put("out_trade_no", req.getOrderNo());
         param.put("spbill_create_ip", IpAdrressUtil.getIpAddress(request));
         param.put("total_fee", String.valueOf(req.getTotalFee()));
