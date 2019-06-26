@@ -74,8 +74,9 @@ public class APIWeChatPayController {
         param.put("grant_type", "authorization_code");
         StringBuilder url = new StringBuilder(WeChatPayConstant.AUTH_URL);
         for (String k : param.keySet()) {
-            url.append(k).append("=").append(param.get(k));
+            url.append(k).append("=").append(param.get(k)).append("&");
         }
+        url.deleteCharAt(url.length()-1);
         RestTemplate restTemplate = new RestTemplate();
         String result = restTemplate.getForObject(url.toString(), String.class);
         if(result.contains("errcode")){
