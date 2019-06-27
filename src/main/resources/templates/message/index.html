@@ -548,9 +548,9 @@
 
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
-//        if (permission.indexOf("messageShow") != -1) {
-//            str += getFunctionButton("btn-success", "showMsgContent(" + rowObject.id + ")", "查看");
-//        }
+        if (permission.indexOf("messageShow") != -1) {
+            str += getFunctionButton("btn-success", "showMsgContent(" + rowObject.id + ")", "查看");
+        }
         if (permission.indexOf("messageResend") != -1) {
             if (rowObject.status == 1) {
                 str += getFunctionButton("btn-info", "resend(" + rowObject.id + ")", "再次发送");
@@ -620,7 +620,7 @@
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
-                    bootboxalert("短信内容为：" + data.data.message);
+                    bootboxalert(data.data.message);
                 }
             },
             error: error

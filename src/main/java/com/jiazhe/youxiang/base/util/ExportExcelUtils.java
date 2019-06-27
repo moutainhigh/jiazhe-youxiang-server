@@ -135,7 +135,7 @@ public class ExportExcelUtils {
         String fileName = System.currentTimeMillis() + ".xlsx";
         //新增数据行，并且设置单元格数据
         int rowNum = 1;
-        String[] headers = {"客户姓名", "客户手机号", "城市", "兑换密钥", "兑换时间", "预约时间", "订单来源", "服务人员姓名", "服务人员电话", "服务项目", "服务商", "预付", "再支付"};
+        String[] headers = {"客户姓名", "客户手机号", "城市", "地址", "兑换密钥", "兑换时间", "预约时间", "订单来源", "服务人员姓名", "服务人员电话", "服务项目", "服务商", "预付", "再支付"};
         //headers表示excel表中第一行的表头
         XSSFRow row = sheet.createRow(0);
         //在excel表中添加表头
@@ -150,18 +150,19 @@ public class ExportExcelUtils {
             row1.createCell(0).setCellValue(dto.getCustomerName());
             row1.createCell(1).setCellValue(dto.getCustomerMobile());
             row1.createCell(2).setCellValue(dto.getCustomerCityName());
-            row1.createCell(3).setCellValue(dto.getKeyt());
-            row1.createCell(4).setCellValue(DateUtil.dateToStr(dto.getOrderTime()));
-            row1.createCell(5).setCellValue(DateUtil.dateToStr(dto.getServiceTime()));
-            row1.createCell(6).setCellValue(dto.getOrderSource());
-            row1.createCell(7).setCellValue(dto.getWorkerName());
-            row1.createCell(8).setCellValue(dto.getWorkerMobile());
-            row1.createCell(9).setCellValue(dto.getServiceItemDTO().getName());
-            row1.createCell(10).setCellValue(dto.getPartnerDTO().getName());
-            XSSFCell cell_11 = row1.createCell(11);
+            row1.createCell(3).setCellValue(dto.getCustomerAddress());
+            row1.createCell(4).setCellValue(dto.getKeyt());
+            row1.createCell(5).setCellValue(DateUtil.dateToStr(dto.getOrderTime()));
+            row1.createCell(6).setCellValue(DateUtil.dateToStr(dto.getServiceTime()));
+            row1.createCell(7).setCellValue(dto.getOrderSource());
+            row1.createCell(8).setCellValue(dto.getWorkerName());
+            row1.createCell(9).setCellValue(dto.getWorkerMobile());
+            row1.createCell(10).setCellValue(dto.getServiceItemDTO().getName());
+            row1.createCell(11).setCellValue(dto.getPartnerDTO().getName());
+            XSSFCell cell_11 = row1.createCell(12);
             cell_11.setCellType(CellType.NUMERIC);
             cell_11.setCellValue(dto.getPrePay().doubleValue());
-            XSSFCell cell_12 = row1.createCell(12);
+            XSSFCell cell_12 = row1.createCell(13);
             cell_12.setCellType(CellType.NUMERIC);
             cell_12.setCellValue(dto.getAppendPay().doubleValue());
             rowNum++;
@@ -176,7 +177,7 @@ public class ExportExcelUtils {
         XSSFSheet sheet = workbook.createSheet("Sheet1");
         String fileName = System.currentTimeMillis() + ".xlsx";
         int rowNum = 1;
-        String[] headers = {"订单号","商品名称","下单价格","数量","下单时间", "服务时间", "订单成本", "城市","订单状态"};
+        String[] headers = {"订单号","商品名称","下单价格","数量","下单时间", "服务时间", "订单成本", "城市", "地址","订单状态"};
         XSSFRow row = sheet.createRow(0);
         //在excel表中添加表头
         for (int i = 0; i < headers.length; i++) {
@@ -201,7 +202,8 @@ public class ExportExcelUtils {
             cell_6.setCellType(CellType.NUMERIC);
             cell_6.setCellValue(dto.getCost().doubleValue());
             row1.createCell(7).setCellValue(dto.getCustomerCityName());
-            row1.createCell(8).setCellValue(orderStatus[dto.getStatus().intValue()]);
+            row1.createCell(8).setCellValue(dto.getCustomerAddress());
+            row1.createCell(9).setCellValue(orderStatus[dto.getStatus().intValue()]);
             rowNum++;
         }
         resetColumnWidth(sheet, headers.length, false);
