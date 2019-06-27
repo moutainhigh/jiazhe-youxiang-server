@@ -36,6 +36,6 @@ public class MessageTemplateServiceImpl implements MessageTemplateService {
     @Override
     public MessageTemplateDTO getById(int id) {
         MessageTemplatePO po = msgTemplatePOMapper.selectByPrimaryKey(id);
-        return MessageTemplateAdapter.po2Dto(po);
+        return null == po ? null : MessageTemplateAdapter.po2Dto(po);
     }
 }

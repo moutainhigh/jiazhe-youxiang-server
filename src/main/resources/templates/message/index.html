@@ -620,7 +620,7 @@
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
-                    bootboxalert("短信内容为：" + data.data.message);
+                    bootboxalert(data.data.message);
                 }
             },
             error: error
