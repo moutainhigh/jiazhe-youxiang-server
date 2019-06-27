@@ -134,4 +134,11 @@ public interface OrderInfoService {
     void wxNotify(String transactionId ,String orderNo, Integer wxPay);
 
     List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime);
+
+    /**
+     * 计算订单待支付金额（元）
+     * @param dto
+     * @return
+     */
+    BigDecimal calculateORderNeedPay(OrderInfoDTO dto);
 }

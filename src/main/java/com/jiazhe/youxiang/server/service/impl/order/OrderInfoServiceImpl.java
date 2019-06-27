@@ -725,7 +725,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (poList.size() > 1) {
             throw new OrderException(OrderCodeEnum.ORDER_CODE_REPEAT);
         }
-        return OrderInfoAdapter.PO2DTO(poList.get(0));
+        OrderInfoDTO orderInfoDTO = OrderInfoAdapter.PO2DTO(poList.get(0));
+        orderInfoDTO.setPayment(calculateORderNeedPay(orderInfoDTO));
+        return orderInfoDTO;
     }
 
     @Override
@@ -738,7 +740,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (!orderInfoDTO.getStatus().equals(CommonConstant.ORDER_UNPAID)) {
             throw new OrderException(OrderCodeEnum.ORDER_NOT_UNPAID);
         }
-        if (orderInfoDTO.getPayment().compareTo(new BigDecimal(wxPay)) != 0) {
+        if (orderInfoDTO.getPayment().multiply(new BigDecimal(100)).compareTo(new BigDecimal(wxPay)) != 0) {
             throw new OrderException(OrderCodeEnum.WECHAT_PAY_FEE_ERROR);
         }
         //服务型商品
@@ -780,6 +782,15 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             bean.setCustomerDTO(customerDTO);
         });
         return orderInfoDTOList;
+    }
+
+    @Override
+    public BigDecimal calculateORderNeedPay(OrderInfoDTO dto) {
+        Integer needPayCount = dto.getCount();
+        BigDecimal needPay = dto.getProductPrice().multiply(new BigDecimal(needPayCount));
+        BigDecimal hasPay = dto.getPayPoint().add(dto.getPayRechargeCard()).add(dto.getPayVoucher().add(dto.getPayCash()));
+        BigDecimal left = needPay.subtract(hasPay);
+        return left;
     }
 
     private OrderRefundDTO paymentDto2RefundDto(OrderPaymentDTO paymentDTO) {

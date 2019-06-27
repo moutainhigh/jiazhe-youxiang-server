@@ -117,11 +117,7 @@ public class OrderInfoBiz {
      * @return
      */
     private BigDecimal calculateOrderNeedPay(OrderInfoDTO dto) {
-        Integer needPayCount = dto.getCount();
-        BigDecimal needPay = dto.getProductPrice().multiply(new BigDecimal(needPayCount));
-        BigDecimal hasPay = dto.getPayPoint().add(dto.getPayRechargeCard()).add(dto.getPayVoucher().add(dto.getPayCash()));
-        BigDecimal left = needPay.subtract(hasPay);
-        return left;
+        return orderInfoService.calculateORderNeedPay(dto);
     }
 
     public NeedPayResp userPlaceOrder(PlaceOrderDTO placeOrderDTO) {
