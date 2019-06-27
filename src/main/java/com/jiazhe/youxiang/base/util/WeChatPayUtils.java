@@ -89,7 +89,6 @@ public class WeChatPayUtils {
     }
 
     /**
-     *
      * @param map
      * @param apiKey
      * @return
@@ -113,7 +112,6 @@ public class WeChatPayUtils {
             }
             packageParams.put(parameter, v);
         }
-
         StringBuffer sb = new StringBuffer();
         Set es = packageParams.entrySet();
         Iterator it = es.iterator();
@@ -128,21 +126,14 @@ public class WeChatPayUtils {
         sb.append("key=" + apiKey);
         //将API返回的数据根据用签名算法进行计算新的签名，用来跟API返回的签名进行比较
         //算出签名
-        String resultSign = "";
-        String tobesign = sb.toString();
-        if (null == charset || "".equals(charset)) {
-            resultSign = MD5Utils.MD5Encode(tobesign, charset).toUpperCase();
-        } else {
-            resultSign = MD5Utils.MD5Encode(tobesign, charset).toUpperCase();
-        }
-        String tenpaySign = packageParams.get("sign").toUpperCase();
-        return tenpaySign.equals(resultSign);
+        String signParam = sb.toString();
+        String resultSign = MD5Utils.MD5Encode(signParam, charset).toUpperCase();
+        return signFromAPIResponse.toUpperCase().equals(resultSign);
     }
 
     //请求方法
     public static String httpsRequest(String requestUrl, String requestMethod, String outputStr) {
         try {
-
             URL url = new URL(requestUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
@@ -185,30 +176,30 @@ public class WeChatPayUtils {
 
     public static Map<String, String> doXMLParse(String strXML) throws Exception {
         try {
-              Map<String, String> data = new HashMap<String, String>();
-              DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-              DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-              InputStream stream = new ByteArrayInputStream(strXML.getBytes("UTF-8"));
-              org.w3c.dom.Document doc = documentBuilder.parse(stream);
-              doc.getDocumentElement().normalize();
-              NodeList nodeList = doc.getDocumentElement().getChildNodes();
-              for (int idx = 0; idx < nodeList.getLength(); ++idx) {
-                        Node node = nodeList.item(idx);
-                        if (node.getNodeType() == Node.ELEMENT_NODE) {
-                                  org.w3c.dom.Element element = (org.w3c.dom.Element) node;
-                                  data.put(element.getNodeName(), element.getTextContent());
-                        }
-              }
-              try {
-                        stream.close();
-              } catch (Exception ex) {
-                        // do nothing
-              }
-              return data;
-            } catch (Exception ex) {
-                      throw ex;
+            Map<String, String> data = new HashMap<String, String>();
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            InputStream stream = new ByteArrayInputStream(strXML.getBytes("UTF-8"));
+            org.w3c.dom.Document doc = documentBuilder.parse(stream);
+            doc.getDocumentElement().normalize();
+            NodeList nodeList = doc.getDocumentElement().getChildNodes();
+            for (int idx = 0; idx < nodeList.getLength(); ++idx) {
+                Node node = nodeList.item(idx);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    org.w3c.dom.Element element = (org.w3c.dom.Element) node;
+                    data.put(element.getNodeName(), element.getTextContent());
+                }
             }
-  }
+            try {
+                stream.close();
+            } catch (Exception ex) {
+                // do nothing
+            }
+            return data;
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
 
     public static String parseRequst(HttpServletRequest request) throws UnsupportedEncodingException {
         request.setCharacterEncoding("utf-8");

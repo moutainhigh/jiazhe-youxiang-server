@@ -194,6 +194,9 @@ public class MessageServiceImpl implements MessageService {
     public String show(Integer id) {
         MessagePO messagePO = messagePOMapper.selectByPrimaryKey(id);
         MessageTemplateDTO msgTemplateDTO = msgTemplateService.getById(messagePO.getMessageTemplateId());
+        if(null == msgTemplateDTO){
+            return messagePO.getContent();
+        }
         return MsgUtils.param2Content(messagePO.getContent(), Strings.isEmpty(msgTemplateDTO.getTencentTemplateContent()) ? msgTemplateDTO.getAliTemplateContent() : msgTemplateDTO.getTencentTemplateContent());
     }
 }

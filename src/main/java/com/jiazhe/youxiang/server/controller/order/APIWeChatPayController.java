@@ -160,7 +160,7 @@ public class APIWeChatPayController {
             String strXml = WeChatPayUtils.parseRequst(request);
             Map<String, String> payNotifyMap = WeChatPayUtils.doXMLParse(strXml);
             if (payNotifyMap.get("return_code").equalsIgnoreCase(SUCCESS)) {
-                // 验签
+                // 支付成功后验签
                 if (WeChatPayUtils.isTenpaySign(payNotifyMap, WeChatPayConstant.API_KEY)) {
                     String orderNo = payNotifyMap.get("out_trade_no").toString();
                     String transactionId = payNotifyMap.get("transaction_id").toString();
