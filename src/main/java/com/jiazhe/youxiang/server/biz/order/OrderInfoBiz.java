@@ -201,7 +201,7 @@ public class OrderInfoBiz {
             String tradeState = map.get("trade_state");
             if (tradeState.equals(SUCCESS)) {
                 dto.setTradeState("SUCCESS");
-                dto.setTotalFee(new Integer(map.get("transaction_id")));
+                dto.setTotalFee(new Integer(map.get("total_fee")));
                 dto.setTransactionId(map.get("transaction_id"));
                 wxNotify(dto.getTransactionId(), orderCode, dto.getTotalFee());
                 return dto;
