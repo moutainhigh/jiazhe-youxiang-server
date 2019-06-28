@@ -88,6 +88,8 @@ public class PermissionConstant {
     public static final String ORDER_SEARCH = "orderSearch";
     //订单导出
     public static final String ORDER_EXPORT = "orderExport";
+    //订单微信支付验证
+    public static final String ORDER_TENPAY_CHECK = "orderTenpayCheck";
     //订单预约
     public static final String ORDER_RESERVATION = "orderReservation";
     //订单修改
