@@ -148,7 +148,7 @@ public class APIWeChatPayController {
     @CustomLog(moduleName = ModuleEnum.WECHAT_PAY, operate = "接收微信付款通知", level = LogLevelEnum.LEVEL_2)
     public String notify(HttpServletRequest request) throws Exception {
         try {
-            String strXml = WeChatPayUtils.parseRequst(request);
+            String strXml = WeChatPayUtils.parseRequest(request);
             Map<String, String> payNotifyMap = WeChatPayUtils.doXMLParse(strXml);
             if (payNotifyMap.get("return_code").equalsIgnoreCase(SUCCESS)) {
                 // 支付成功后验签
