@@ -43,7 +43,7 @@ public class WeChatPayConstant {
     /**
     统一下单接口地址
      */
-    public static String URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+    public static String UNIFIEDORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 
 
     /**
@@ -61,5 +61,10 @@ public class WeChatPayConstant {
      * 根据code获取openid的url
      */
     public static String AUTH_URL = "https://api.weixin.qq.com/sns/oauth2/access_token?";
+
+    /**
+     * 订单查询url
+     */
+    public static String ORDER_QUERY_URL = "https://api.mch.weixin.qq.com/pay/orderquery";
 
 }

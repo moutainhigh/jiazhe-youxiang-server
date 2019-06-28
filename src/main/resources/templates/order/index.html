@@ -752,6 +752,11 @@
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
         str += getFunctionButton("btn-success", "showOrder(" + rowObject.id + ")", "查看");
+        if(rowObject.status == 1) {
+            if (permission.indexOf("orderTenpayCheck")) {
+                str += getFunctionButton("btn-primary", "checkTenpay(" + rowObject.orderCode + ")", "微信支付检查");
+            }
+        }
         if (rowObject.status == 2) {
             if (permission.indexOf("orderCancel") != -1) {
                 str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
@@ -792,6 +797,33 @@
             }
         }
         return str;
+    }
+
+    //微信支付检查，如果支付成功，则改变订单的状态并返回交易流水号
+    function checkTenpay(orderCode) {
+        $.ajax({
+            url: "/api/orderinfo/checktenpay",
+            dataType: "json",
+            async: false,
+            data: {
+                orderCode: orderCode
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    if (result.tradeState == 'SUCCESS') {
+                        bootboxalert("该订单已用微信支付"+result.totalFee/100 + "元，微信端订单号为："+result.transactionId);
+                        jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                    } else {
+                        bootboxalert(result.reason);
+                    }
+                }
+            },
+            error: error
+        });
     }
 
     function showAppendOrder(id) {

@@ -55,15 +55,6 @@ public class APIWeChatPayController {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(APIWeChatPayController.class);
 
-
-    @AppApi
-    @ApiOperation(value = "用户同意授权，获取code", httpMethod = "POST", response = UnifiedOrderResp.class, notes = "用户同意授权，获取code")
-    @RequestMapping(value = "/auth", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.WECHAT_PAY, operate = "用户同意授权，获取code", level = LogLevelEnum.LEVEL_1)
-    public void auth(@ModelAttribute WeChatUnifiedOrderReq req, HttpServletRequest request) {
-
-    }
-
     @AppApi
     @ApiOperation(value = "通过code换取网页授权openid", httpMethod = "GET", response = OpenIdResp.class, notes = "通过code换取网页授权openid")
     @RequestMapping(value = "/getopenid", method = RequestMethod.GET)
@@ -116,7 +107,7 @@ public class APIWeChatPayController {
         String sign = WeChatPayUtils.createSign("UTF-8", param, WeChatPayConstant.API_KEY);
         param.put("sign", sign);
         String requestXml = WeChatPayUtils.getRequestXml(param);
-        String result = WeChatPayUtils.httpsRequest(WeChatPayConstant.URL, "POST", requestXml);
+        String result = WeChatPayUtils.httpsRequest(WeChatPayConstant.UNIFIEDORDER_URL, "POST", requestXml);
         System.out.println(result);
         try {
             Map<String, String> map = WeChatPayUtils.doXMLParse(result);

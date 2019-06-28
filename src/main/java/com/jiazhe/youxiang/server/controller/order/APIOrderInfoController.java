@@ -17,19 +17,14 @@ import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.OrderException;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
+import com.jiazhe.youxiang.server.dto.order.orderinfo.TenpayQureyDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.AppendOrderReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerOrderInfoPageReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerPayReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerPlaceOrderReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderCancelUnpassReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderInfoPageReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserPlaceOrderReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserReservationOrderReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.*;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
+import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.TenpayQureyResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.WaitingDealCountResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.Logical;
@@ -274,6 +269,16 @@ public class APIOrderInfoController extends BaseController {
         WaitingDealCountResp waitingDealCountResp = new WaitingDealCountResp();
         waitingDealCountResp.setCount(count);
         return ResponseFactory.buildResponse(waitingDealCountResp);
+    }
+
+    @RequiresPermissions(PermissionConstant.ORDER_TENPAY_CHECK)
+    @ApiOperation(value = "验证订单是否已经微信支付", httpMethod = "GET", response = TenpayQureyResp.class, notes = "验证订单是否已经微信支付")
+    @RequestMapping(value = "/checktenpay", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "验证订单是否已经微信支付", level = LogLevelEnum.LEVEL_1)
+    public Object checkTenpay(@ModelAttribute OrderReq req) {
+        TenpayQureyDTO dto = orderInfoBiz.checkTenPay(req.getOrderCode());
+        TenpayQureyResp resp = OrderInfoAdapter.TenpayQureyDto2Resp(dto);
+        return ResponseFactory.buildResponse(resp);
     }
 
     @RequiresPermissions(PermissionConstant.ORDER_EXPORT)
