@@ -727,6 +727,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
         OrderInfoDTO orderInfoDTO = OrderInfoAdapter.PO2DTO(poList.get(0));
         orderInfoDTO.setPayment(calculateORderNeedPay(orderInfoDTO));
+        orderInfoDTO.setProductDTO(productService.getById(orderInfoDTO.getProductId()));
         return orderInfoDTO;
     }
 
