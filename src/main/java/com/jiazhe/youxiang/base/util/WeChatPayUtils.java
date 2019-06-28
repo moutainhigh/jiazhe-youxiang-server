@@ -5,12 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -201,28 +201,26 @@ public class WeChatPayUtils {
         }
     }
 
-    public static String parseRequst(HttpServletRequest request) throws UnsupportedEncodingException {
-        request.setCharacterEncoding("utf-8");
-        String body = "";
+    public static String parseRequest(HttpServletRequest request) throws IOException {
+        InputStream inStream = null;
+        ByteArrayOutputStream outSteam = null;
+        String resultXml = "";
         try {
-            ServletInputStream inputStream = request.getInputStream();
-            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
-            while (true) {
-                String info = br.readLine();
-                if (info == null) {
-                    break;
-                }
-                if (body == null || "".equals(body)) {
-                    body = info;
-                } else {
-                    body += info;
-                }
+            inStream = request.getInputStream();
+            outSteam = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            while ((len = inStream.read(buffer)) != -1) {
+                outSteam.write(buffer, 0, len);
             }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            resultXml = new String(outSteam.toByteArray(), "utf-8");
+
+        } catch (Exception e) {
+            logger.error("解析request失败");
+        } finally {
+            outSteam.close();
+            inStream.close();
         }
-        return body;
+        return resultXml;
     }
 }
