@@ -745,11 +745,11 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             throw new OrderException(OrderCodeEnum.WECHAT_PAY_FEE_ERROR);
         }
         //服务型商品
-        if (orderInfoDTO.getType().equals(CommonConstant.SERVICE_PRODUCT)) {
+        if (orderInfoDTO.getProductDTO().getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
             orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
         }
         //电子码商品
-        if (orderInfoDTO.getType().equals(CommonConstant.ELE_PRODUCT)) {
+        if (orderInfoDTO.getProductDTO().getProductType().equals(CommonConstant.ELE_PRODUCT)) {
             orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
             //发放电子码
             List<EleProductCodeDTO> eleProductCodeDTOList = sendEleProductCode(orderInfoDTO.getProductId(), orderInfoDTO.getCount());
