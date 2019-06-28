@@ -158,13 +158,15 @@ public class APIWeChatPayController {
                     Integer wxPay = new Integer(payNotifyMap.get("total_fee").toString());
                     if (payNotifyMap.get("result_code").equals(SUCCESS)) {
                         orderInfoBiz.wxNotify(transactionId, orderNo, wxPay);
+                    }else{
+                        logger.info("微信付款通知成功，业务失败：" + payNotifyMap.get("result_code"));
                     }
                 } else {
-                    logger.info("微信付款通知，验签失败");
+                    logger.info("微信付款通知成功，业务失败：验签失败");
                 }
             }
         } catch (Exception e) {
-            logger.error("付款成功通知商户，报异常" + e.getMessage());
+            logger.error("微信付款通知成功，业务失败：异常信息" + e.getMessage());
         } finally {
             return generateNotifyXml();
         }
