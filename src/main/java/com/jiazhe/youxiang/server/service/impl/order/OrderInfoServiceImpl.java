@@ -735,6 +735,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     public void wxNotify(String transactionId, String orderNo, Integer wxPay) {
         OrderInfoDTO orderInfoDTO = getByOrderNo(orderNo);
         OrderInfoPO orderInfoPO = OrderInfoAdapter.dto2Po(orderInfoDTO);
+        orderInfoPO.setPayCash(new BigDecimal(wxPay).divide(new BigDecimal(100)));
         if (orderInfoDTO == null) {
             throw new OrderException(OrderCodeEnum.ORDER_NOT_EXIST);
         }
