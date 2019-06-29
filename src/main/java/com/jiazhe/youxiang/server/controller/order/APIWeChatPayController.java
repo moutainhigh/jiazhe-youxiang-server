@@ -155,7 +155,7 @@ public class APIWeChatPayController {
                 if (WeChatPayUtils.isTenpaySign(payNotifyMap, WeChatPayConstant.API_KEY)) {
                     String orderNo = payNotifyMap.get("out_trade_no").toString();
                     String transactionId = payNotifyMap.get("transaction_id").toString();
-                    Integer wxPay = new Integer(payNotifyMap.get("total_fee").toString());
+                    Integer wxPay = new Integer(payNotifyMap.get("cash_fee").toString());
                     if (payNotifyMap.get("result_code").equals(SUCCESS)) {
                         orderInfoBiz.wxNotify(transactionId, orderNo, wxPay);
                     }else{
