@@ -53,6 +53,15 @@ public class APIWeChatPayController {
     @Value("${spring.boot.admin.client.instance.service-url}")
     private String DOMAIN;
 
+    @Value("${wechat_public.appid}")
+    private String APP_ID;
+
+    @Value("${wechat_public.secret}")
+    private String APP_SECRET;
+
+    @Value("${wechat_public.mchid}")
+    private String MCH_ID;
+
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(APIWeChatPayController.class);
 
     @AppApi
@@ -61,8 +70,8 @@ public class APIWeChatPayController {
     @CustomLog(moduleName = ModuleEnum.WECHAT_PAY, operate = "通过code换取网页授权openid", level = LogLevelEnum.LEVEL_1)
     public Object getOpenId(@ModelAttribute OpenIdReq req) {
         Map<String, String> param = new LinkedHashMap<>();
-        param.put("appid", WeChatPayConstant.APP_ID);
-        param.put("secret", WeChatPayConstant.APP_SECRET);
+        param.put("appid", APP_ID);
+        param.put("secret", APP_SECRET);
         param.put("code", req.getCode());
         param.put("grant_type", "authorization_code");
         StringBuilder url = new StringBuilder(WeChatPayConstant.AUTH_URL);
@@ -91,10 +100,10 @@ public class APIWeChatPayController {
         UnifiedOrderResp unifiedOrderResp = new UnifiedOrderResp();
         //需要保证参数的顺序
         Map<String, String> param = new LinkedHashMap<>();
-        param.put("appid", WeChatPayConstant.APP_ID);
+        param.put("appid", APP_ID);
         param.put("body", req.getBody());
         param.put("device_info", WeChatPayConstant.DEVICE_INFO);
-        param.put("mch_id", WeChatPayConstant.MCH_ID);
+        param.put("mch_id", MCH_ID);
         String nonceStr = RandomUtil.generateCode(WeChatPayConstant.NONCE_STR_LENGTH);
         param.put("nonce_str", nonceStr);
         param.put("notify_url", DOMAIN + WeChatPayConstant.NOTIFY_URL);
@@ -124,13 +133,13 @@ public class APIWeChatPayController {
             //二次签名
             String timeStamp = String.valueOf(System.currentTimeMillis() / 1000);
             SortedMap<String, String> finalPackage = new TreeMap<>();
-            finalPackage.put("appId", WeChatPayConstant.APP_ID);
+            finalPackage.put("appId", APP_ID);
             finalPackage.put("timeStamp", timeStamp);
             finalPackage.put("nonceStr", nonceStr);
             finalPackage.put("package", "prepay_id=" + map.get("prepay_id"));
             finalPackage.put("signType", "MD5");
             String signAgain = WeChatPayUtils.createSign("UTF-8", finalPackage, WeChatPayConstant.API_KEY);
-            unifiedOrderResp.setAppId(WeChatPayConstant.APP_ID);
+            unifiedOrderResp.setAppId(APP_ID);
             unifiedOrderResp.setTimeStamp(timeStamp);
             unifiedOrderResp.setNonceStr(nonceStr);
             unifiedOrderResp.setPrepayId(map.get("prepay_id"));

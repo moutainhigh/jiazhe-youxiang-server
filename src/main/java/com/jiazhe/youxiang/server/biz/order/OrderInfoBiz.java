@@ -5,18 +5,16 @@ import com.jiazhe.youxiang.base.util.WeChatPayUtils;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.WeChatPayConstant;
 import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
-import com.jiazhe.youxiang.server.common.enums.WeChatPayCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.OrderException;
-import com.jiazhe.youxiang.server.common.exceptions.WeChatPayException;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.*;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.order.OrderInfoService;
 import com.jiazhe.youxiang.server.vo.Paging;
-import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -38,6 +36,11 @@ public class OrderInfoBiz {
     private OrderInfoService orderInfoService;
     @Autowired
     private CustomerService customerService;
+
+    @Value("${wechat_public.appid}")
+    private String APP_ID;
+    @Value("${wechat_public.mchid}")
+    private String MCH_ID;
 
     public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime, Paging paging) {
         List<OrderInfoDTO> orderInfoDTOList = orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, realServiceStartTime, realServiceEndTime, paging);
@@ -172,8 +175,8 @@ public class OrderInfoBiz {
 
     public TenpayQureyDTO checkTenPay(String orderCode) {
         Map<String, String> param = new LinkedHashMap<>();
-        param.put("appid", WeChatPayConstant.APP_ID);
-        param.put("mch_id", WeChatPayConstant.MCH_ID);
+        param.put("appid", APP_ID);
+        param.put("mch_id", MCH_ID);
         String nonceStr = RandomUtil.generateCode(WeChatPayConstant.NONCE_STR_LENGTH);
         param.put("nonce_str", nonceStr);
         param.put("out_trade_no", orderCode);

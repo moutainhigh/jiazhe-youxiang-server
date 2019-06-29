@@ -8,24 +8,6 @@ package com.jiazhe.youxiang.server.common.constant;
 public class WeChatPayConstant {
 
     /**
-     微信支付分配的公众账号ID（企业号corpid即为此appId）
-     */
-    //public static String APP_ID = "wx68281f971cf77b90";
-    public static String APP_ID = "wx02f6f30dc9c7123e";
-
-    /**
-     公众号的appSecret
-     */
-    //public static String APP_SECRET = "c31167daaa97053eb66c162c75aa38e4";
-    public static String APP_SECRET = "a31efd6020fd5f4f109bce001942ba84";
-
-    /**
-     微信支付分配的商户号
-     */
-    //public static String MCH_ID = "1499770702";
-    public static String MCH_ID = "1541609211";
-
-    /**
      * 自定义参数，可以为终端设备号(门店号或收银设备ID)，PC网页或公众号内支付可以传"WEB"
      */
     public static String DEVICE_INFO = "WEB";
