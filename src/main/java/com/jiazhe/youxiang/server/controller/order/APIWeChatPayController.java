@@ -157,23 +157,25 @@ public class APIWeChatPayController {
     @CustomLog(moduleName = ModuleEnum.WECHAT_PAY, operate = "接收微信付款通知", level = LogLevelEnum.LEVEL_2)
     public String notify(HttpServletRequest request) throws Exception {
         try {
-            String strXml = WeChatPayUtils.parseRequst(request);
+            String strXml = WeChatPayUtils.parseRequest(request);
             Map<String, String> payNotifyMap = WeChatPayUtils.doXMLParse(strXml);
             if (payNotifyMap.get("return_code").equalsIgnoreCase(SUCCESS)) {
                 // 支付成功后验签
                 if (WeChatPayUtils.isTenpaySign(payNotifyMap, WeChatPayConstant.API_KEY)) {
                     String orderNo = payNotifyMap.get("out_trade_no").toString();
                     String transactionId = payNotifyMap.get("transaction_id").toString();
-                    Integer wxPay = new Integer(payNotifyMap.get("total_fee").toString());
+                    Integer wxPay = new Integer(payNotifyMap.get("cash_fee").toString());
                     if (payNotifyMap.get("result_code").equals(SUCCESS)) {
                         orderInfoBiz.wxNotify(transactionId, orderNo, wxPay);
+                    }else{
+                        logger.info("微信付款通知成功，业务失败：" + payNotifyMap.get("result_code"));
                     }
                 } else {
-                    logger.info("微信付款通知，验签失败");
+                    logger.info("微信付款通知成功，业务失败：验签失败");
                 }
             }
         } catch (Exception e) {
-            logger.error("付款成功通知商户，报异常" + e.getMessage());
+            logger.error("微信付款通知成功，业务失败：异常信息" + e.getMessage());
         } finally {
             return generateNotifyXml();
         }
