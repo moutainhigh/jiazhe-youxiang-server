@@ -20,15 +20,11 @@ public class SystemController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemController.class);
 
-    @Value("${db.test}")
-    private String TEST;
-
     /**
      * 进入登陆页面
      */
-    @RequestMapping(value = {"/", "/system/index"})
+    @RequestMapping(value = {"/system/index"})
     public String main() {
-        LOGGER.info("---------------"+TEST);
         return "login/index";
     }
 
