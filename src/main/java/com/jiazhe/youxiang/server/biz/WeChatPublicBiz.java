@@ -28,9 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service("weChatPublicBiz")
 public class WeChatPublicBiz {
-
-    Logger logger = LoggerFactory.getLogger(WeChatPublicBiz.class);
-
+    
     @Value("${wechat_public.appid}")
     private String WECHAT_PUBLIC_APPID;
 
@@ -64,27 +62,21 @@ public class WeChatPublicBiz {
     public SignatureDTO getSignature(String timestamp, String nonceStr, String url) {
         SignatureDTO signatureDTO = new SignatureDTO();
         String jsapiTicket = null;
-        logger.info("----timestamp:" + timestamp);
         signatureDTO.setTimestamp(timestamp);
-        logger.info("----nonceStr:" + nonceStr);
         signatureDTO.setNonceStr(nonceStr);
-        logger.info("----url:" + url);
         signatureDTO.setUrl(url);
         if (Strings.isNotBlank(WECHAT_API_CACHE.get(CACHE_KEY_JSAPI_TICKET))) {
             jsapiTicket = WECHAT_API_CACHE.get(CACHE_KEY_JSAPI_TICKET);
-            logger.info("----jsapiTicket:" + jsapiTicket);
             signatureDTO.setJsapiTicket(jsapiTicket);
         } else {
             //获得access_token
             String accessToken = getAccessToken();
             signatureDTO.setAccessToken(accessToken);
-            logger.info("----accessToken:" + accessToken);
             //获得jsapi_ticket
             if (Strings.isBlank(accessToken)) {
                 throw new WeChatPublicException(WeChatPublicCodeEnum.GET_ACCESS_TOKEN_ERROR);
             }
             jsapiTicket = getJsapiTicket(accessToken);
-            logger.info("----jsapiTicket:" + jsapiTicket);
             signatureDTO.setJsapiTicket(jsapiTicket);
             if (Strings.isBlank(jsapiTicket)) {
                 throw new WeChatPublicException(WeChatPublicCodeEnum.GET_JSAPI_TICKET_ERROR);
@@ -92,8 +84,6 @@ public class WeChatPublicBiz {
         }
         //执行签名算法并返回签名
         String signature = createSignature(jsapiTicket, timestamp, nonceStr, url);
-        logger.info("----signature:" + signature);
-
         signatureDTO.setSignature(signature);
         signatureDTO.setAppid(WECHAT_PUBLIC_APPID);
         return signatureDTO;
