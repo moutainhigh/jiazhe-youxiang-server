@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service("weChatPublicBiz")
 public class WeChatPublicBiz {
-    
+
     @Value("${wechat_public.appid}")
     private String WECHAT_PUBLIC_APPID;
 
