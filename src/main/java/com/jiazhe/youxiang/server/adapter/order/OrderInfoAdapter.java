@@ -3,12 +3,10 @@ package com.jiazhe.youxiang.server.adapter.order;
 import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
 import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.domain.po.OrderInfoPO;
-import com.jiazhe.youxiang.server.dto.order.orderinfo.AppendOrderDTO;
-import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
-import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
-import com.jiazhe.youxiang.server.dto.order.orderinfo.UserReservationOrderDTO;
+import com.jiazhe.youxiang.server.dto.order.orderinfo.*;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.*;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
+import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.TenpayQureyResp;
 
 import java.util.Date;
 
@@ -164,5 +162,53 @@ public class OrderInfoAdapter {
         appendOrderDTO.setRechargeCardIds(req.getRechargeCardIds());
         appendOrderDTO.setComments(req.getComments());
         return appendOrderDTO;
+    }
+
+    public static OrderInfoPO dto2Po(OrderInfoDTO orderInfoDTO) {
+        if (orderInfoDTO == null) {
+            return null;
+        }
+        OrderInfoPO orderInfoPO = new OrderInfoPO();
+        orderInfoPO.setId(orderInfoDTO.getId());
+        orderInfoPO.setOrderCode(orderInfoDTO.getOrderCode());
+        orderInfoPO.setCustomerId(orderInfoDTO.getCustomerId());
+        orderInfoPO.setCustomerCityCode(orderInfoDTO.getCustomerCityCode());
+        orderInfoPO.setCustomerCityName(orderInfoDTO.getCustomerCityName());
+        orderInfoPO.setProductId(orderInfoDTO.getProductId());
+        orderInfoPO.setProductPrice(orderInfoDTO.getProductPrice());
+        orderInfoPO.setCount(orderInfoDTO.getCount());
+        orderInfoPO.setCustomerAddress(orderInfoDTO.getCustomerAddress());
+        orderInfoPO.setCustomerMobile(orderInfoDTO.getCustomerMobile());
+        orderInfoPO.setCustomerName(orderInfoDTO.getCustomerName());
+        orderInfoPO.setCustomerRemark(orderInfoDTO.getCustomerRemark());
+        orderInfoPO.setWorkerName(orderInfoDTO.getWorkerName());
+        orderInfoPO.setWorkerMobile(orderInfoDTO.getWorkerMobile());
+        orderInfoPO.setOrderTime(orderInfoDTO.getOrderTime());
+        orderInfoPO.setServiceTime(orderInfoDTO.getServiceTime());
+        orderInfoPO.setRealServiceTime(orderInfoDTO.getRealServiceTime());
+        orderInfoPO.setPayPoint(orderInfoDTO.getPayPoint());
+        orderInfoPO.setPayRechargeCard(orderInfoDTO.getPayRechargeCard());
+        orderInfoPO.setPayVoucher(orderInfoDTO.getPayVoucher());
+        orderInfoPO.setPayCash(orderInfoDTO.getPayCash());
+        orderInfoPO.setCost(orderInfoDTO.getCost());
+        orderInfoPO.setTotalAmount(orderInfoDTO.getTotalAmount());
+        orderInfoPO.setComments(orderInfoDTO.getComments());
+        orderInfoPO.setType(orderInfoDTO.getType());
+        orderInfoPO.setStatus(orderInfoDTO.getStatus());
+        orderInfoPO.setAuditReason(orderInfoDTO.getAuditReason());
+        orderInfoPO.setExtInfo(orderInfoDTO.getExtInfo());
+        return orderInfoPO;
+    }
+
+    public static TenpayQureyResp TenpayQureyDto2Resp(TenpayQureyDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+        TenpayQureyResp tenpayQureyResp = new TenpayQureyResp();
+        tenpayQureyResp.setTradeState(dto.getTradeState());
+        tenpayQureyResp.setTransactionId(dto.getTransactionId());
+        tenpayQureyResp.setTotalFee(dto.getTotalFee());
+        tenpayQureyResp.setReason(dto.getReason());
+        return tenpayQureyResp;
     }
 }

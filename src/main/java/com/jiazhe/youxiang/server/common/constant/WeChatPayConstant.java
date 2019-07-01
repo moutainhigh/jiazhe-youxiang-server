@@ -7,23 +7,46 @@ package com.jiazhe.youxiang.server.common.constant;
  */
 public class WeChatPayConstant {
 
-    //统一下单接口地址
-    public static String URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+    /**
+     * 自定义参数，可以为终端设备号(门店号或收银设备ID)，PC网页或公众号内支付可以传"WEB"
+     */
+    public static String DEVICE_INFO = "WEB";
 
-    //应用id
-    public static String APP_ID = "123";
+    /**
+     交易类型
+     */
+    public static String TRADE_TYPE = "JSAPI";
 
-    //商户号
-    public static String MCH_ID = "456";
+    /**
+     * 随机字符串长度
+     */
+    public static Integer NONCE_STR_LENGTH = 32 ;
 
-    //通知地址【接收微信支付异步通知回调地址，通知url必须为直接可访问的url，不能携带参数。】
-    public static String NOTIFY_URL = "http://www.weixin.qq.com/wxpay/pay";
+    /**
+    统一下单接口地址
+     */
+    public static String UNIFIEDORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 
-    //交易类型
-    public static String TRADE_TYPE = "APP";
 
-    public static String API_KEY = "111";
+    /**
+    通知地址【接收微信支付异步通知回调地址，通知url必须为直接可访问的url，不能携带参数。】
+     */
+    public static String NOTIFY_URL = "/api/wxpay/notify";
 
-    public static String AppSecret = "111";
+    /**
+     key为商户平台设置的密钥key
+     */
+    //public static String API_KEY = "youxianghulian20180509lizhelizhe";
+    public static String API_KEY = "beijingchengyi20190625chengyi625";
+
+    /**
+     * 根据code获取openid的url
+     */
+    public static String AUTH_URL = "https://api.weixin.qq.com/sns/oauth2/access_token?";
+
+    /**
+     * 订单查询url
+     */
+    public static String ORDER_QUERY_URL = "https://api.mch.weixin.qq.com/pay/orderquery";
 
 }

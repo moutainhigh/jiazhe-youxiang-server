@@ -5,16 +5,27 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * @author TU
@@ -40,7 +51,7 @@ public class WeChatPayUtils {
     }
 
     //请求xml组装
-    public static String getRequestXml(SortedMap<String, Object> parameters) {
+    public static String getRequestXml(Map<String, String> parameters) {
         StringBuffer sb = new StringBuffer();
         sb.append("<xml>");
         Set es = parameters.entrySet();
@@ -49,7 +60,7 @@ public class WeChatPayUtils {
             Map.Entry entry = (Map.Entry) it.next();
             String key = (String) entry.getKey();
             String value = (String) entry.getValue();
-            if ("attach".equalsIgnoreCase(key) || "body".equalsIgnoreCase(key) || "sign".equalsIgnoreCase(key)) {
+            if ("detail".equalsIgnoreCase(key)) {
                 sb.append("<" + key + ">" + "<![CDATA[" + value + "]]></" + key + ">");
             } else {
                 sb.append("<" + key + ">" + value + "</" + key + ">");
@@ -60,7 +71,7 @@ public class WeChatPayUtils {
     }
 
     //生成签名
-    public static String createSign(String characterEncoding, SortedMap<String, Object> parameters, String apiKey) {
+    public static String createSign(String characterEncoding, Map<String, String> parameters, String apiKey) {
         StringBuffer sb = new StringBuffer();
         Set es = parameters.entrySet();
         Iterator it = es.iterator();
@@ -78,7 +89,6 @@ public class WeChatPayUtils {
     }
 
     /**
-     *
      * @param map
      * @param apiKey
      * @return
@@ -102,7 +112,6 @@ public class WeChatPayUtils {
             }
             packageParams.put(parameter, v);
         }
-
         StringBuffer sb = new StringBuffer();
         Set es = packageParams.entrySet();
         Iterator it = es.iterator();
@@ -115,25 +124,16 @@ public class WeChatPayUtils {
             }
         }
         sb.append("key=" + apiKey);
-
         //将API返回的数据根据用签名算法进行计算新的签名，用来跟API返回的签名进行比较
-
         //算出签名
-        String resultSign = "";
-        String tobesign = sb.toString();
-        if (null == charset || "".equals(charset)) {
-            resultSign = MD5Utils.MD5Encode(tobesign, charset).toUpperCase();
-        } else {
-            resultSign = MD5Utils.MD5Encode(tobesign, charset).toUpperCase();
-        }
-        String tenpaySign = packageParams.get("sign").toUpperCase();
-        return tenpaySign.equals(resultSign);
+        String signParam = sb.toString();
+        String resultSign = MD5Utils.MD5Encode(signParam, charset).toUpperCase();
+        return signFromAPIResponse.toUpperCase().equals(resultSign);
     }
 
     //请求方法
     public static String httpsRequest(String requestUrl, String requestMethod, String outputStr) {
         try {
-
             URL url = new URL(requestUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
@@ -176,53 +176,51 @@ public class WeChatPayUtils {
 
     public static Map<String, String> doXMLParse(String strXML) throws Exception {
         try {
-              Map<String, String> data = new HashMap<String, String>();
-              DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-              DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-              InputStream stream = new ByteArrayInputStream(strXML.getBytes("UTF-8"));
-              org.w3c.dom.Document doc = documentBuilder.parse(stream);
-              doc.getDocumentElement().normalize();
-              NodeList nodeList = doc.getDocumentElement().getChildNodes();
-              for (int idx = 0; idx < nodeList.getLength(); ++idx) {
-                        Node node = nodeList.item(idx);
-                        if (node.getNodeType() == Node.ELEMENT_NODE) {
-                                  org.w3c.dom.Element element = (org.w3c.dom.Element) node;
-                                  data.put(element.getNodeName(), element.getTextContent());
-                        }
-              }
-              try {
-                        stream.close();
-              } catch (Exception ex) {
-                        // do nothing
-              }
-              return data;
+            Map<String, String> data = new HashMap<String, String>();
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            InputStream stream = new ByteArrayInputStream(strXML.getBytes("UTF-8"));
+            org.w3c.dom.Document doc = documentBuilder.parse(stream);
+            doc.getDocumentElement().normalize();
+            NodeList nodeList = doc.getDocumentElement().getChildNodes();
+            for (int idx = 0; idx < nodeList.getLength(); ++idx) {
+                Node node = nodeList.item(idx);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    org.w3c.dom.Element element = (org.w3c.dom.Element) node;
+                    data.put(element.getNodeName(), element.getTextContent());
+                }
+            }
+            try {
+                stream.close();
             } catch (Exception ex) {
-                      throw ex;
+                // do nothing
             }
-  }
-
-    public static String parseRequst(HttpServletRequest request) throws UnsupportedEncodingException {
-        request.setCharacterEncoding("utf-8");
-        String body = "";
-        try {
-            ServletInputStream inputStream = request.getInputStream();
-            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
-            while (true) {
-                String info = br.readLine();
-                if (info == null) {
-                    break;
-                }
-                if (body == null || "".equals(body)) {
-                    body = info;
-                } else {
-                    body += info;
-                }
-            }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            return data;
+        } catch (Exception ex) {
+            throw ex;
         }
-        return body;
+    }
+
+    public static String parseRequest(HttpServletRequest request) throws IOException {
+        InputStream inStream = null;
+        ByteArrayOutputStream outSteam = null;
+        String resultXml = "";
+        try {
+            inStream = request.getInputStream();
+            outSteam = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            while ((len = inStream.read(buffer)) != -1) {
+                outSteam.write(buffer, 0, len);
+            }
+            resultXml = new String(outSteam.toByteArray(), "utf-8");
+
+        } catch (Exception e) {
+            logger.error("解析request失败");
+        } finally {
+            outSteam.close();
+            inStream.close();
+        }
+        return resultXml;
     }
 }

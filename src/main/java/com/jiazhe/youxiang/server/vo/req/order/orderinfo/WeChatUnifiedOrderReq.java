@@ -12,16 +12,19 @@ import java.math.BigDecimal;
  */
 public class WeChatUnifiedOrderReq extends BaseVO{
 
-    @ApiModelProperty("商品描述")
+    @ApiModelProperty("商品描述，必填")
     private String body;
 
-    @ApiModelProperty("订单号")
-    private String outTradeNo;
+    @ApiModelProperty("订单id，必填")
+    private Integer orderId;
 
-    @ApiModelProperty("支付金额，以分为单位")
+    @ApiModelProperty("订单号，必填")
+    private String orderNo;
+
+    @ApiModelProperty("支付金额，以分为单位，必填")
     private Integer totalFee;
 
-    @ApiModelProperty("支付用户open_id")
+    @ApiModelProperty("支付用户open_id，必填")
     private String openId;
 
     public String getBody() {
@@ -32,12 +35,20 @@ public class WeChatUnifiedOrderReq extends BaseVO{
         this.body = body;
     }
 
-    public String getOutTradeNo() {
-        return outTradeNo;
+    public Integer getOrderId() {
+        return orderId;
     }
 
-    public void setOutTradeNo(String outTradeNo) {
-        this.outTradeNo = outTradeNo;
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
     public Integer getTotalFee() {

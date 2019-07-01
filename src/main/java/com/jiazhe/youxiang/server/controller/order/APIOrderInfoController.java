@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.controller.order;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
+import com.jiazhe.youxiang.base.util.ExportExcelUtils;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.order.OrderInfoBiz;
@@ -16,19 +17,14 @@ import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.OrderException;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
+import com.jiazhe.youxiang.server.dto.order.orderinfo.TenpayQureyDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.AppendOrderReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerOrderInfoPageReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerPayReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerPlaceOrderReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderCancelUnpassReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderInfoPageReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserPlaceOrderReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserReservationOrderReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.*;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
+import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.TenpayQureyResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.WaitingDealCountResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.Logical;
@@ -39,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
@@ -110,7 +107,7 @@ public class APIOrderInfoController extends BaseController {
     public Object customerNeedPayCash(@ModelAttribute IdReq req) {
         BigDecimal needPayCash = orderInfoBiz.customerNeedPayCash(req.getId());
         NeedPayResp needPayResp = new NeedPayResp();
-        needPayResp.setPayCash(needPayCash);
+        needPayResp.setPayCash(needPayCash.multiply(new BigDecimal(100)).intValue());
         return ResponseFactory.buildResponse(needPayResp);
     }
 
@@ -132,7 +129,7 @@ public class APIOrderInfoController extends BaseController {
     public Object customerPay(@ModelAttribute CustomerPayReq req) {
         BigDecimal needPayCash = orderInfoBiz.customerPay(req.getOrderId(), req.getPayCash(), req.getSerialNumber());
         NeedPayResp needPayResp = new NeedPayResp();
-        needPayResp.setPayCash(needPayCash);
+        needPayResp.setPayCash(needPayCash.multiply(new BigDecimal(100)).intValue());
         return ResponseFactory.buildResponse(needPayResp);
     }
 
@@ -272,6 +269,33 @@ public class APIOrderInfoController extends BaseController {
         WaitingDealCountResp waitingDealCountResp = new WaitingDealCountResp();
         waitingDealCountResp.setCount(count);
         return ResponseFactory.buildResponse(waitingDealCountResp);
+    }
+
+    @RequiresPermissions(PermissionConstant.ORDER_TENPAY_CHECK)
+    @ApiOperation(value = "验证订单是否已经微信支付", httpMethod = "GET", response = TenpayQureyResp.class, notes = "验证订单是否已经微信支付")
+    @RequestMapping(value = "/checktenpay", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "验证订单是否已经微信支付", level = LogLevelEnum.LEVEL_1)
+    public Object checkTenpay(@ModelAttribute OrderReq req) {
+        TenpayQureyDTO dto = orderInfoBiz.checkTenPay(req.getOrderCode());
+        TenpayQureyResp resp = OrderInfoAdapter.TenpayQureyDto2Resp(dto);
+        return ResponseFactory.buildResponse(resp);
+    }
+
+    @RequiresPermissions(PermissionConstant.ORDER_EXPORT)
+    @ApiOperation(value = "【后台】导出订单", httpMethod = "GET", notes = "导出订单")
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "导出订单", level = LogLevelEnum.LEVEL_3)
+    public void export(@ModelAttribute OrderInfoPageReq req, HttpServletResponse response){
+        //如果包含0，说明查全部订单，否则按需查询
+        if (Arrays.asList(req.getStatus().split(",")).contains(String.valueOf(CommonConstant.ORDER_ALL))) {
+            req.setStatus(null);
+        }
+        Date orderStartTime = req.getOrderStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getOrderStartTime()));
+        Date orderEndTime = req.getOrderEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getOrderEndTime()));
+        Date realServiceStartTime = req.getRealServiceTimeStart() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getRealServiceTimeStart()));
+        Date realServiceEndTime = req.getRealServiceTimeEnd() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getRealServiceTimeEnd()));
+        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getStatus(), req.getOrderCode(), req.getMobile(), req.getCustomerMobile(), orderStartTime, orderEndTime, req.getWorkerMobile(), req.getProductId(),realServiceStartTime,realServiceEndTime);
+        ExportExcelUtils.exportOrder(response, orderInfoDTOList);
     }
 
 }

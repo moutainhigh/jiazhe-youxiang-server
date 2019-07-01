@@ -127,8 +127,18 @@ public interface OrderInfoService {
 
     /**
      * 微信支付成功后，通知
-     * @param orderNo
-     * @param wxPay
+     * @param transactionId 微信支付订单号
+     * @param orderNo 商户订单号
+     * @param wxPay 微信支付金额 单位：分
      */
-    void wxNotify(String orderNo, BigDecimal wxPay);
+    void wxNotify(String transactionId ,String orderNo, Integer wxPay);
+
+    List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime);
+
+    /**
+     * 计算订单待支付金额（元）
+     * @param dto
+     * @return
+     */
+    BigDecimal calculateORderNeedPay(OrderInfoDTO dto);
 }
