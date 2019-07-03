@@ -53,7 +53,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/api/signin/**", "anon");//登录、发送验证码等匿名访问
         filterChainDefinitionMap.put("/api/product/**", "anon");//放开商品验证
         //微信回调url
-        filterChainDefinitionMap.put("/api/wechatpublic/checkSignature", "anon");//验证签名
+        filterChainDefinitionMap.put("/api/wechatpublic/**", "anon");//验证签名
         filterChainDefinitionMap.put("/api/wxpay/**", "anon");//微信支付相关
         filterChainDefinitionMap.put("/api/syscity/getcitylist", "anon");//城市查询接口
         filterChainDefinitionMap.put("/api/syscity/getprovincelist", "anon");//省份查询接口
