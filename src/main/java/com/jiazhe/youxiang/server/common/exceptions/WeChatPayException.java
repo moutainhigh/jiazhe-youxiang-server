@@ -11,4 +11,8 @@ public class WeChatPayException extends CommonException {
     public WeChatPayException(WeChatPayCodeEnum weChatPayCodeEnum) {
         super(weChatPayCodeEnum.getCode(), weChatPayCodeEnum.getType(), weChatPayCodeEnum.getMessage());
     }
+
+    public WeChatPayException(Integer code,String type,String msg) {
+        super(code,type,msg);
+    }
 }
