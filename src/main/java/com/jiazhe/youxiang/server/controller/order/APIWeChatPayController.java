@@ -82,7 +82,7 @@ public class APIWeChatPayController {
         RestTemplate restTemplate = new RestTemplate();
         String result = restTemplate.getForObject(url.toString(), String.class);
         if (result.contains("errcode")) {
-            throw new WeChatPayException(WeChatPayCodeEnum.GET_OPENID_ERROR);
+            throw new WeChatPayException(WeChatPayCodeEnum.GET_OPENID_ERROR.getCode(), WeChatPayCodeEnum.GET_OPENID_ERROR.getType(), result);
         } else {
             return ResponseFactory.buildResponse(result);
         }
@@ -167,7 +167,7 @@ public class APIWeChatPayController {
                     Integer wxPay = new Integer(payNotifyMap.get("cash_fee").toString());
                     if (payNotifyMap.get("result_code").equals(SUCCESS)) {
                         orderInfoBiz.wxNotify(transactionId, orderNo, wxPay);
-                    }else{
+                    } else {
                         logger.info("微信付款通知成功，业务失败：" + payNotifyMap.get("result_code"));
                     }
                 } else {
