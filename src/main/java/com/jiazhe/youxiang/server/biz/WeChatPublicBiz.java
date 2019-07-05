@@ -60,24 +60,30 @@ public class WeChatPublicBiz {
      * @return
      */
     public SignatureDTO getSignature(String timestamp, String nonceStr, String url) {
+        SignatureDTO signatureDTO = new SignatureDTO();
         String jsapiTicket = null;
+        signatureDTO.setTimestamp(timestamp);
+        signatureDTO.setNonceStr(nonceStr);
+        signatureDTO.setUrl(url);
         if (Strings.isNotBlank(WECHAT_API_CACHE.get(CACHE_KEY_JSAPI_TICKET))) {
             jsapiTicket = WECHAT_API_CACHE.get(CACHE_KEY_JSAPI_TICKET);
+            signatureDTO.setJsapiTicket(jsapiTicket);
         } else {
             //获得access_token
             String accessToken = getAccessToken();
+            signatureDTO.setAccessToken(accessToken);
             //获得jsapi_ticket
             if (Strings.isBlank(accessToken)) {
                 throw new WeChatPublicException(WeChatPublicCodeEnum.GET_ACCESS_TOKEN_ERROR);
             }
             jsapiTicket = getJsapiTicket(accessToken);
+            signatureDTO.setJsapiTicket(jsapiTicket);
             if (Strings.isBlank(jsapiTicket)) {
                 throw new WeChatPublicException(WeChatPublicCodeEnum.GET_JSAPI_TICKET_ERROR);
             }
         }
         //执行签名算法并返回签名
         String signature = createSignature(jsapiTicket, timestamp, nonceStr, url);
-        SignatureDTO signatureDTO = new SignatureDTO();
         signatureDTO.setSignature(signature);
         signatureDTO.setAppid(WECHAT_PUBLIC_APPID);
         return signatureDTO;

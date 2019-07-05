@@ -25,6 +25,13 @@ public class SignatureDTO extends BaseObject {
      */
     private String appid;
 
+
+    private String timestamp;
+    private String nonceStr;
+    private String url;
+    private String accessToken;
+    private String jsapiTicket;
+
     public String getSignature() {
         return signature;
     }
@@ -39,5 +46,45 @@ public class SignatureDTO extends BaseObject {
 
     public void setAppid(String appid) {
         this.appid = appid;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getNonceStr() {
+        return nonceStr;
+    }
+
+    public void setNonceStr(String nonceStr) {
+        this.nonceStr = nonceStr;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getJsapiTicket() {
+        return jsapiTicket;
+    }
+
+    public void setJsapiTicket(String jsapiTicket) {
+        this.jsapiTicket = jsapiTicket;
     }
 }

@@ -7,6 +7,8 @@ package com.jiazhe.youxiang.server.common.enums;
  */
 public enum WeChatPayCodeEnum {
     PRE_PAY_ERROR(115001, "PRE_PAY_ERROR", "发起支付失败"),
+    GET_OPENID_ERROR(115002, "GET_OPENID_ERROR", "获取用户openid失败"),
+
             ;
 
     WeChatPayCodeEnum(Integer code, String type, String message) {

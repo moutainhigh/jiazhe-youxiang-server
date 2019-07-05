@@ -13,8 +13,20 @@ public class UnifiedOrderResp extends BaseVO {
     @ApiModelProperty("统一下单预付id")
     private String prepayId;
 
+    @ApiModelProperty("appId")
+    private String appId;
+
+    @ApiModelProperty("timeStamp")
+    private String timeStamp;
+
+    @ApiModelProperty("nonceStr")
+    private String nonceStr;
+
     @ApiModelProperty("签名")
-    private String sign;
+    private String paySign;
+
+    @ApiModelProperty("签名算法")
+    private String signType;
 
     public String getPrepayId() {
         return prepayId;
@@ -24,11 +36,43 @@ public class UnifiedOrderResp extends BaseVO {
         this.prepayId = prepayId;
     }
 
-    public String getSign() {
-        return sign;
+    public String getPaySign() {
+        return paySign;
     }
 
-    public void setSign(String sign) {
-        this.sign = sign;
+    public void setPaySign(String paySign) {
+        this.paySign = paySign;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public String getNonceStr() {
+        return nonceStr;
+    }
+
+    public void setNonceStr(String nonceStr) {
+        this.nonceStr = nonceStr;
+    }
+
+    public String getSignType() {
+        return signType;
+    }
+
+    public void setSignType(String signType) {
+        this.signType = signType;
     }
 }

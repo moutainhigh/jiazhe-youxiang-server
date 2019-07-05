@@ -643,9 +643,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             });
             rcService.batchUpdate(rcdtoList);
         }
-        if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
-            throw new OrderException(OrderCodeEnum.ORDER_PAYMENT_NOT_ENOUGH);
-        }
+//        if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
+//            throw new OrderException(OrderCodeEnum.ORDER_PAYMENT_NOT_ENOUGH);
+//        }
         if (needPay[0].compareTo(BigDecimal.ZERO) == -1) {
             throw new OrderException(OrderCodeEnum.ORDER_OVER_PAYMENT);
         }
@@ -675,10 +675,11 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPO.setCost(dto.getCost());
         orderInfoPO.setComments(dto.getComments());
         orderInfoPO.setType(dto.getType());
-        if (needPay[0].compareTo(BigDecimal.ZERO) == 0) {//刚好可以支付
+        orderInfoPO.setExtInfo("");
+        //使用代金券-->积分卡-->充值卡可以完成支付
+        if (needPay[0].compareTo(BigDecimal.ZERO) == 0) {
             if (productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
-                orderInfoPO.setExtInfo("");
             }
             if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
@@ -692,11 +693,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 });
                 orderInfoPO.setExtInfo(jsonArray.toString());
             }
-        } else { //需要在线支付
+        } else{ //使用代金券-->积分卡-->充值卡不足以完成支付
             orderInfoPO.setStatus(CommonConstant.ORDER_UNPAID);
         }
         orderInfoPOManualMapper.insert(orderInfoPO);
-        if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
+        //支付完成并且是电子商品的话，将所选的电子码置为已发放状态，并记录相关的订单id和订单号
+        if (needPay[0].compareTo(BigDecimal.ZERO) == 0 && productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
             eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderCode);
         }
         orderPaymentPOList.stream().forEach(bean -> {
@@ -705,7 +707,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderPaymentService.batchInsert(orderPaymentPOList);
         NeedPayResp needPayResp = new NeedPayResp();
         needPayResp.setOrderId(orderInfoPO.getId());
-        needPayResp.setPayCash(needPay[0]);
+        needPayResp.setPayCash(needPay[0].multiply(new BigDecimal(100)).intValue());
+        needPayResp.setOrderCode(orderInfoPO.getOrderCode());
         return needPayResp;
     }
 
@@ -722,31 +725,35 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (poList.size() > 1) {
             throw new OrderException(OrderCodeEnum.ORDER_CODE_REPEAT);
         }
-        return OrderInfoAdapter.PO2DTO(poList.get(0));
+        OrderInfoDTO orderInfoDTO = OrderInfoAdapter.PO2DTO(poList.get(0));
+        orderInfoDTO.setPayment(calculateORderNeedPay(orderInfoDTO));
+        orderInfoDTO.setProductDTO(productService.getById(orderInfoDTO.getProductId()));
+        return orderInfoDTO;
     }
 
     @Override
-    public void wxNotify(String orderNo, BigDecimal wxPay) {
+    public void wxNotify(String transactionId, String orderNo, Integer wxPay) {
         OrderInfoDTO orderInfoDTO = getByOrderNo(orderNo);
-        OrderInfoPO orderInfoPO = new OrderInfoPO();
-        orderInfoPO.setId(orderInfoDTO.getId());
+        OrderInfoPO orderInfoPO = OrderInfoAdapter.dto2Po(orderInfoDTO);
+        orderInfoPO.setPayCash(new BigDecimal(wxPay).divide(new BigDecimal(100)));
         if (orderInfoDTO == null) {
             throw new OrderException(OrderCodeEnum.ORDER_NOT_EXIST);
         }
         if (!orderInfoDTO.getStatus().equals(CommonConstant.ORDER_UNPAID)) {
             throw new OrderException(OrderCodeEnum.ORDER_NOT_UNPAID);
         }
-        if (orderInfoDTO.getPayment().compareTo(wxPay) != 0) {
+        if (orderInfoDTO.getPayment().multiply(new BigDecimal(100)).compareTo(new BigDecimal(wxPay)) != 0) {
             throw new OrderException(OrderCodeEnum.WECHAT_PAY_FEE_ERROR);
         }
-        if (orderInfoDTO.getType().equals(CommonConstant.SERVICE_PRODUCT)) {//服务型商品
+        //服务型商品
+        if (orderInfoDTO.getProductDTO().getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
             orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
         }
-        if (orderInfoDTO.getType().equals(CommonConstant.ELE_PRODUCT)) {//电子码商品
+        //电子码商品
+        if (orderInfoDTO.getProductDTO().getProductType().equals(CommonConstant.ELE_PRODUCT)) {
             orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
             //发放电子码
-            List<EleProductCodeDTO> eleProductCodeDTOList = Lists.newArrayList();
-            eleProductCodeDTOList = sendEleProductCode(orderInfoDTO.getProductId(), orderInfoDTO.getCount());
+            List<EleProductCodeDTO> eleProductCodeDTOList = sendEleProductCode(orderInfoDTO.getProductId(), orderInfoDTO.getCount());
             eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderInfoDTO.getOrderCode());
             StringBuilder comments = new StringBuilder();
             eleProductCodeDTOList.stream().forEach(bean -> {
@@ -757,7 +764,35 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             });
             orderInfoPO.setComments(comments.toString());
         }
+        OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
+        orderPaymentPO.setPayMoney(new BigDecimal(wxPay).divide(new BigDecimal(100)));
+        orderPaymentPO.setOrderId(orderInfoPO.getId());
+        orderPaymentPO.setOrderCode(orderInfoPO.getOrderCode());
+        orderPaymentPO.setSerialNumber(transactionId);
+        orderPaymentService.insert(orderPaymentPO);
         orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
+    }
+
+    @Override
+    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime) {
+        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile,productId,realServiceStartTime,realServiceEndTime, null, null);
+        List<OrderInfoDTO> orderInfoDTOList = orderInfoPOList.stream().map(OrderInfoAdapter::PO2DTO).collect(Collectors.toList());
+        orderInfoDTOList.forEach(bean -> {
+            ProductDTO productDTO = productService.getById(bean.getProductId());
+            CustomerDTO customerDTO = customerService.getById(bean.getCustomerId());
+            bean.setProductDTO(productDTO);
+            bean.setCustomerDTO(customerDTO);
+        });
+        return orderInfoDTOList;
+    }
+
+    @Override
+    public BigDecimal calculateORderNeedPay(OrderInfoDTO dto) {
+        Integer needPayCount = dto.getCount();
+        BigDecimal needPay = dto.getProductPrice().multiply(new BigDecimal(needPayCount));
+        BigDecimal hasPay = dto.getPayPoint().add(dto.getPayRechargeCard()).add(dto.getPayVoucher().add(dto.getPayCash()));
+        BigDecimal left = needPay.subtract(hasPay);
+        return left;
     }
 
     private OrderRefundDTO paymentDto2RefundDto(OrderPaymentDTO paymentDTO) {
