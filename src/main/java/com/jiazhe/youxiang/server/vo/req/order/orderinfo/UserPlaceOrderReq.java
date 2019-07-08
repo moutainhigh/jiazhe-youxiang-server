@@ -65,6 +65,9 @@ public class UserPlaceOrderReq extends BaseVO {
     @ApiModelProperty("充值卡ids")
     private String rechargeCardIds;
 
+    @ApiModelProperty("是否支持微信支付 是：'true' 否：'false'")
+    private String cashSupport;
+
     @ApiModelProperty("订单成本")
     private BigDecimal cost;
 
@@ -197,5 +200,13 @@ public class UserPlaceOrderReq extends BaseVO {
 
     public void setPointIds(String pointIds) {
         this.pointIds = pointIds;
+    }
+
+    public String getCashSupport() {
+        return cashSupport;
+    }
+
+    public void setCashSupport(String cashSupport) {
+        this.cashSupport = cashSupport;
     }
 }
