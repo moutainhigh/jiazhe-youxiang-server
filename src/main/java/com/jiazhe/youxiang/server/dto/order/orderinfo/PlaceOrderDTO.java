@@ -57,9 +57,9 @@ public class PlaceOrderDTO extends BaseObject {
     private String rechargeCardIds;
 
     /**
-     * 每张充值卡使用的金额
+     * 是否支持在线支付
      */
-    private String cardMoneys;
+    private String cashSupport;
 
     private BigDecimal cost;
 
@@ -169,14 +169,6 @@ public class PlaceOrderDTO extends BaseObject {
         this.rechargeCardIds = rechargeCardIds;
     }
 
-    public String getCardMoneys() {
-        return cardMoneys;
-    }
-
-    public void setCardMoneys(String cardMoneys) {
-        this.cardMoneys = cardMoneys;
-    }
-
     public BigDecimal getCost() {
         return cost;
     }
@@ -215,5 +207,13 @@ public class PlaceOrderDTO extends BaseObject {
 
     public void setRealServiceTime(Date realServiceTime) {
         this.realServiceTime = realServiceTime;
+    }
+
+    public String getCashSupport() {
+        return cashSupport;
+    }
+
+    public void setCashSupport(String cashSupport) {
+        this.cashSupport = cashSupport;
     }
 }
