@@ -55,6 +55,9 @@ public class CustomerPlaceOrderReq  extends BaseVO {
     @ApiModelProperty("积分卡ids，可选")
     private String pointIds;
 
+    @ApiModelProperty("是否支持微信支付 是：'true' 否：'false'")
+    private String cashSupport;
+
     public Integer getCustomerId() {
         return customerId;
     }
@@ -149,5 +152,13 @@ public class CustomerPlaceOrderReq  extends BaseVO {
 
     public void setPointIds(String pointIds) {
         this.pointIds = pointIds;
+    }
+
+    public String getCashSupport() {
+        return cashSupport;
+    }
+
+    public void setCashSupport(String cashSupport) {
+        this.cashSupport = cashSupport;
     }
 }
