@@ -11,9 +11,11 @@ import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
+import com.jiazhe.youxiang.server.common.enums.CommonCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.CommonException;
 import com.jiazhe.youxiang.server.common.exceptions.OrderException;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
@@ -189,6 +191,9 @@ public class APIOrderInfoController extends BaseController {
     public Object customerPlaceOrder(@ModelAttribute CustomerPlaceOrderReq req) {
         if ((!req.getPointIds().isEmpty()) && (!req.getRechargeCardIds().isEmpty())) {
             throw new OrderException(OrderCodeEnum.POINT_RECHARGE_CARD_CONCURRENT_PAY);
+        }
+        if(!(req.getCashSupport().equals("true")||req.getCashSupport().equals("false"))){
+            throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR);
         }
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqCustomerPlaceOrder2DTOPlaceOrder(req);
         placeOrderDTO.setWorkerMobile("");

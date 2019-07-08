@@ -110,6 +110,7 @@ public class OrderInfoAdapter {
         placeOrderDTO.setPointIds(req.getPointIds());
         placeOrderDTO.setVoucherIds(req.getVoucherIds());
         placeOrderDTO.setRechargeCardIds(req.getRechargeCardIds());
+        placeOrderDTO.setCashSupport(req.getCashSupport());
         placeOrderDTO.setCost(req.getCost());
         placeOrderDTO.setComments(req.getComments());
         return placeOrderDTO;
@@ -132,6 +133,7 @@ public class OrderInfoAdapter {
         placeOrderDTO.setPointIds(req.getPointIds());
         placeOrderDTO.setVoucherIds(req.getVoucherIds());
         placeOrderDTO.setRechargeCardIds(req.getRechargeCardIds());
+        placeOrderDTO.setCashSupport(req.getCashSupport());
         return placeOrderDTO;
     }
 

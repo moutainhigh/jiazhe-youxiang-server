@@ -753,6 +753,9 @@
         var str = "";
         str += getFunctionButton("btn-success", "showOrder(" + rowObject.id + ")", "查看");
         if(rowObject.status == 1) {
+            if (permission.indexOf("orderCancel") != -1) {
+                str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
+            }
             if (permission.indexOf("orderTenpayCheck")) {
                 str += getFunctionButton("btn-primary", "checkTenpay(" + rowObject.orderCode + ")", "微信支付检查");
             }
