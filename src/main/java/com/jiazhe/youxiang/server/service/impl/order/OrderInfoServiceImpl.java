@@ -643,7 +643,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             });
             rcService.batchUpdate(rcdtoList);
         }
-        if(dto.getCashSupport().equals("false")){
+        if("false".equals(dto.getCashSupport())){
             if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
                 throw new OrderException(OrderCodeEnum.ORDER_PAYMENT_NOT_ENOUGH);
             }
