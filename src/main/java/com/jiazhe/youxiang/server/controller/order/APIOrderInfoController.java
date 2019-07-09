@@ -176,6 +176,10 @@ public class APIOrderInfoController extends BaseController {
     @RequestMapping(value = "/userplaceorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "下单", level = LogLevelEnum.LEVEL_2)
     public Object userPlaceOrder(@ModelAttribute UserPlaceOrderReq req) {
+        //如果cashSupport参数既不是true，也不是false，则设置为false
+        if(!("true".equals(req.getCashSupport())||"false".equals(req.getCashSupport()))){
+            req.setCashSupport("false");
+        }
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqUserPlaceOrder2DTOPlaceOrder(req);
         placeOrderDTO.setType(CommonConstant.USER_PLACE_ORDER);
         placeOrderDTO.setServiceTime(new Date(req.getRealServiceTime()));
@@ -194,6 +198,10 @@ public class APIOrderInfoController extends BaseController {
         }
         if(!(req.getCashSupport().equals("true")||req.getCashSupport().equals("false"))){
             throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR);
+        }
+        //如果cashSupport参数既不是true，也不是false，则设置为false
+        if(!("true".equals(req.getCashSupport())||"false".equals(req.getCashSupport()))){
+            req.setCashSupport("false");
         }
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqCustomerPlaceOrder2DTOPlaceOrder(req);
         placeOrderDTO.setWorkerMobile("");
