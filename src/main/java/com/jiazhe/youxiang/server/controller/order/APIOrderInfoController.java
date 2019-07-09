@@ -176,8 +176,8 @@ public class APIOrderInfoController extends BaseController {
     @RequestMapping(value = "/userplaceorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "下单", level = LogLevelEnum.LEVEL_2)
     public Object userPlaceOrder(@ModelAttribute UserPlaceOrderReq req) {
-        //如果cashSupport参数既不是true，也不是false，则设置为false
-        if(!("true".equals(req.getCashSupport())||"false".equals(req.getCashSupport()))){
+        //如果cashSupport参数不为true，则设置为false
+        if(!"true".equals(req.getCashSupport())){
             req.setCashSupport("false");
         }
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqUserPlaceOrder2DTOPlaceOrder(req);
@@ -196,11 +196,8 @@ public class APIOrderInfoController extends BaseController {
         if ((!req.getPointIds().isEmpty()) && (!req.getRechargeCardIds().isEmpty())) {
             throw new OrderException(OrderCodeEnum.POINT_RECHARGE_CARD_CONCURRENT_PAY);
         }
-        if(!(req.getCashSupport().equals("true")||req.getCashSupport().equals("false"))){
-            throw new CommonException(CommonCodeEnum.PARAMS_ILLEGAL_ERROR);
-        }
-        //如果cashSupport参数既不是true，也不是false，则设置为false
-        if(!("true".equals(req.getCashSupport())||"false".equals(req.getCashSupport()))){
+        //如果cashSupport参数不为true，则设置为false
+        if(!"true".equals(req.getCashSupport())){
             req.setCashSupport("false");
         }
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqCustomerPlaceOrder2DTOPlaceOrder(req);
