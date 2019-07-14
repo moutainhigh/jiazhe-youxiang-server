@@ -4,8 +4,10 @@ import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.domain.po.AuditRecordPO;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordSumDTO;
+import com.jiazhe.youxiang.server.dto.auditrecord.StatisticsDTO;
 import com.jiazhe.youxiang.server.vo.resp.auditrecord.AuditRecordResp;
 import com.jiazhe.youxiang.server.vo.resp.auditrecord.AuditRecordSumResp;
+import com.jiazhe.youxiang.server.vo.resp.auditrecord.StatisticsResp;
 
 import java.util.stream.Collectors;
 
@@ -130,5 +132,17 @@ public class AuditRecordAdapter {
         AuditRecordSumResp auditRecordSumResp = new AuditRecordSumResp();
         auditRecordSumResp.setExchangePointSum(dto.getExchangePointSum());
         return auditRecordSumResp;
+    }
+
+    public static StatisticsResp statisticsDto2Resp(StatisticsDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+        StatisticsResp statisticsResp = new StatisticsResp();
+        statisticsResp.setRecordNum(dto.getRecordNum());
+        statisticsResp.setTotalExchangePoint(dto.getTotalExchangePoint());
+        statisticsResp.setTotalGivingPoint(dto.getTotalGivingPoint());
+        statisticsResp.setTotalProductValue(dto.getTotalProductValue());
+        return statisticsResp;
     }
 }

@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
  * @description
  * @date 2018/10/22.
  */
-public class PageSizeNumReq extends BaseVO {
+public class   PageSizeNumReq extends BaseVO {
 
     @NotNull
     @Min(1)

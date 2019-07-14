@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.service;
 
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordSumDTO;
+import com.jiazhe.youxiang.server.dto.auditrecord.StatisticsDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
 import java.util.Date;
@@ -118,4 +119,13 @@ public interface AuditRecordService {
      * @return
      */
     AuditRecordSumDTO sum(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint, Date submitStartTime, Date submitEndTime, String exchangeType);
+
+    /**
+     * 小程序统计某个时间段内提交的小票信息
+     * @param id
+     * @param submitStartTime
+     * @param submitEndTime
+     * @return
+     */
+    StatisticsDTO statistics(Integer id, Date submitStartTime, Date submitEndTime);
 }
