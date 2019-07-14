@@ -41,6 +41,9 @@ public class AuditRecordSaveReq extends BaseVO {
     @ApiModelProperty("客户姓名")
     private String customerName;
 
+    @ApiModelProperty("卡号后四位，非必填")
+    private String cardNo;
+
     @ApiModelProperty("兑换的积分卡卡号集合，逗号连接")
     private String pointCodes;
 
@@ -115,6 +118,14 @@ public class AuditRecordSaveReq extends BaseVO {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    public String getCardNo() {
+        return cardNo;
+    }
+
+    public void setCardNo(String cardNo) {
+        this.cardNo = cardNo;
     }
 
     public String getPointCodes() {

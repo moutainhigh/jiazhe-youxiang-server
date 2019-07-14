@@ -180,6 +180,7 @@ public class APIAuditRecordController extends BaseController {
         auditRecordDTO.setExchangeType(req.getExchangeType());
         auditRecordDTO.setCustomerMobile(req.getCustomerMobile());
         auditRecordDTO.setCustomerName(req.getCustomerName());
+        auditRecordDTO.setCardNo(req.getCardNo());
         auditRecordDTO.setExchangePoint(req.getExchangePoint());
         auditRecordDTO.setGivingPoint(req.getGivingPoint());
         auditRecordDTO.setPointCodes(req.getPointCodes());
