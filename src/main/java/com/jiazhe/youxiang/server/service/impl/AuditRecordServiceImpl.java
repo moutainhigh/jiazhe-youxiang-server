@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl;
 
+import com.alibaba.druid.support.spring.stat.annotation.Stat;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.AuditRecordAdapter;
@@ -17,6 +18,7 @@ import com.jiazhe.youxiang.server.domain.po.PointExchangeRecordPO;
 import com.jiazhe.youxiang.server.domain.po.PointPO;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordSumDTO;
+import com.jiazhe.youxiang.server.dto.auditrecord.StatisticsDTO;
 import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
@@ -31,6 +33,7 @@ import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeRecordService;
 import com.jiazhe.youxiang.server.service.point.PointService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import com.jiazhe.youxiang.server.vo.req.PageSizeNumReq;
 import org.apache.logging.log4j.util.Strings;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +96,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
 
     @Override
     public Integer getCountByStatus(Byte status) {
-        return auditRecordPOManualMapper.count(null, null, null, status, null, null, null, null,null,null);
+        return auditRecordPOManualMapper.count(null, null, null, status, null, null, null, null, null, null);
     }
 
     @Override
@@ -283,16 +286,34 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     }
 
     @Override
-    public List<AuditRecordDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint,Date submitStartTime, Date submitEndTime,String exchangeType) {
-        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(null, customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint,submitStartTime, submitEndTime,exchangeType, null, null);
+    public List<AuditRecordDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint, Date submitStartTime, Date submitEndTime, String exchangeType) {
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(null, customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint, submitStartTime, submitEndTime, exchangeType, null, null);
         return auditRecordPOList.stream().map(AuditRecordAdapter::PO2DTO).collect(Collectors.toList());
     }
 
     @Override
     public AuditRecordSumDTO sum(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint, Date submitStartTime, Date submitEndTime, String exchangeType) {
-        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(null, customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint,submitStartTime, submitEndTime,exchangeType, null, null);
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(null, customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint, submitStartTime, submitEndTime, exchangeType, null, null);
         AuditRecordSumDTO dto = new AuditRecordSumDTO();
         dto.setExchangePointSum(auditRecordPOList.stream().map(AuditRecordPO::getExchangePoint).reduce(BigDecimal.ZERO, BigDecimal::add));
+        return dto;
+    }
+
+    @Override
+    public StatisticsDTO statistics(Integer id, Date submitStartTime, Date submitEndTime) {
+        StatisticsDTO dto = new StatisticsDTO();
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(id, null, null, null, null, null, null, submitStartTime, submitEndTime, null, null, null);
+        if (!auditRecordPOList.isEmpty()) {
+            dto.setRecordNum(auditRecordPOList.size());
+            dto.setTotalExchangePoint(auditRecordPOList.stream().map(AuditRecordPO::getExchangePoint).reduce(BigDecimal::add).get());
+            dto.setTotalGivingPoint(auditRecordPOList.stream().map(AuditRecordPO::getGivingPoint).reduce(BigDecimal::add).get());
+            dto.setTotalProductValue(auditRecordPOList.stream().map(AuditRecordPO::getProductValue).reduce(BigDecimal::add).get());
+        } else {
+            dto.setRecordNum(0);
+            dto.setTotalExchangePoint(BigDecimal.ZERO);
+            dto.setTotalGivingPoint(BigDecimal.ZERO);
+            dto.setTotalProductValue(BigDecimal.ZERO);
+        }
         return dto;
     }
 }

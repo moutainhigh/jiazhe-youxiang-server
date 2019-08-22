@@ -161,7 +161,12 @@ public class SysUserServiceImpl implements SysUserService {
         if (null == sysUserPO) {
             throw new UserException(UserCodeEnum.USER_NOT_EXISTED);
         }
-        String newIpAddress = new String(ipAdrress + ";" + sysUserPO.getLastLoginIp());
+        if (sysUserPO.getLastLoginIp().contains(ipAdrress)) {
+            ipAdrress = "";
+        } else {
+            ipAdrress = ipAdrress + ";";
+        }
+        String newIpAddress = new String(ipAdrress + sysUserPO.getLastLoginIp());
         String[] newIpAddressAttr = newIpAddress.toString().split(";");
         if (newIpAddressAttr.length > CommonConstant.IP_WHITE_LIST_UPPER_LIMIT) {
             StringBuilder ip = new StringBuilder("");
@@ -199,7 +204,7 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public List<SysUserDTO> findByIds(String ids, Paging paging) {
-        List<SysUserPO> sysUserPOList = sysUserPOManualMapper.findByIds(ids,paging.getOffset(),paging.getLimit());
+        List<SysUserPO> sysUserPOList = sysUserPOManualMapper.findByIds(ids, paging.getOffset(), paging.getLimit());
         return sysUserPOList.stream().map(SysUserAdapter::po2Dto).collect(Collectors.toList());
     }
 

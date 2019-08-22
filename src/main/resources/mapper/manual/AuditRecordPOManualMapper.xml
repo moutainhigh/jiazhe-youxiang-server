@@ -51,7 +51,7 @@
                 AND submitter_id = #{submitterId}
             </if>
             <if test="customerInfo != null and customerInfo!=''">
-                AND (customer_mobile LIKE CONCAT('%',#{customerInfo},'%') OR customer_name LIKE CONCAT('%',#{customerInfo},'%'))
+                AND (customer_mobile LIKE CONCAT('%',#{customerInfo},'%') OR customer_name LIKE CONCAT('%',#{customerInfo},'%') OR card_no LIKE CONCAT('%',#{customerInfo},'%'))
             </if>
             <if test="submitterName != null and submitterName!=''">
                 AND submitter_name LIKE CONCAT('%',#{submitterName},'%')

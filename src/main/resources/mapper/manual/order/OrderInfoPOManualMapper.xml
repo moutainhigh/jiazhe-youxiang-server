@@ -88,6 +88,9 @@
             <if test="realServiceEndTime != null">
                 AND o.real_service_time &lt;= #{realServiceEndTime}
             </if>
+            <if test="customerCityCode != null and customerCityCode !=''">
+                AND o.customer_city_code = #{customerCityCode}
+            </if>
             AND o.is_deleted = 0 ORDER BY o.add_time desc
         </where>
         <if test="offset != null and limit != null">
@@ -128,6 +131,9 @@
             </if>
             <if test="realServiceEndTime != null">
                 AND o.real_service_time &lt;= #{realServiceEndTime}
+            </if>
+            <if test="customerCityCode != null and customerCityCode !=''">
+                AND o.customer_city_code = #{customerCityCode}
             </if>
             AND o.is_deleted = 0
         </where>

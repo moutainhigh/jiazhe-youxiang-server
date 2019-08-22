@@ -40,6 +40,9 @@ public class OrderInfoPageReq extends PageSizeNumReq {
     @ApiModelProperty("服务时间止")
     private Long realServiceTimeEnd;
 
+    @ApiModelProperty("城市")
+    private String customerCityCode;
+
     public String getStatus() {
         return status;
     }
@@ -118,5 +121,13 @@ public class OrderInfoPageReq extends PageSizeNumReq {
 
     public void setRealServiceTimeEnd(Long realServiceTimeEnd) {
         this.realServiceTimeEnd = realServiceTimeEnd;
+    }
+
+    public String getCustomerCityCode() {
+        return customerCityCode;
+    }
+
+    public void setCustomerCityCode(String customerCityCode) {
+        this.customerCityCode = customerCityCode;
     }
 }
