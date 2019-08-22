@@ -23,7 +23,7 @@
 
         .chosen-container-single .chosen-single {
             height: 30px;
-            border-radius:0px;
+            border-radius: 0px;
         }
     </style>
 </head>
@@ -163,6 +163,14 @@
                                     </div>
                                 </div>
 
+                                <label class="col-sm-1 control-label no-padding-right">城市（二级）：</label>
+                                <div class="col-sm-2">
+                                    <select id="city" name="customerCityCode"
+                                            class="chosen-select form-control">
+                                        <option value="">所有</option>
+                                    </select>
+                                </div>
+
                                 <div class="col-sm-3">
                                     <shiro:hasPermission name="orderSearch">
                                         <button class="btn btn-white btn-default btn-round btn-sm"
@@ -298,7 +306,7 @@
                                                                       class="form-control" disabled="disabled"
                                                                       style="resize:none;height: 100px;"></textarea>
                                                             <!--<input id="re_customerAddress" class="form-control"-->
-                                                                   <!--type="text" style="height:30px" readonly/>-->
+                                                            <!--type="text" style="height:30px" readonly/>-->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -309,7 +317,7 @@
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
                                                             <!--<input id="re_customerRemark" class="form-control"-->
-                                                                   <!--type="text" style="height:30px" readonly/>-->
+                                                            <!--type="text" style="height:30px" readonly/>-->
                                                             <textarea id="re_customerRemark"
                                                                       class="form-control" disabled="disabled"
                                                                       style="resize:none;height: 100px;"></textarea>
@@ -513,7 +521,7 @@
                                                     <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <!--<input id="app_customerAddress" class="form-control"-->
-                                                                   <!--type="text" style="height:30px" readonly/>-->
+                                                            <!--type="text" style="height:30px" readonly/>-->
                                                             <textarea id="app_customerAddress"
                                                                       class="form-control" disabled="disabled"
                                                                       style="resize:none;height: 100px;"></textarea>
@@ -654,7 +662,7 @@
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
     var orderStatus = ['待付款', '待派单', '待服务', '服务完成', '取消待审核', '取消未通过', '已取消'];
-    var orderType = ['员工下单','客户下单'];
+    var orderType = ['员工下单', '客户下单'];
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -673,6 +681,8 @@
 
         //商品下拉框
         initProduct();
+        //城市下拉框
+        initCity();
 
         $('#re_realServiceTime').datetimepicker({
             format: "YYYY-MM-DD HH:mm"
@@ -685,7 +695,7 @@
             postData: transformToJson($('#orderInfoSearchForm').serializeArray()),
             shrinkToFit: false,
             autoScroll: true,
-            colNames: ['', '操作', '状态', '商品名称', '单价', '数量', '下单时间','服务时间','下单账号', '服务对象电话', '服务对象姓名','成本',  '积分支付金额','代金券抵扣金额', '充值卡支付金额', '在线支付金额','订单号','待支付','订单来源'],
+            colNames: ['', '操作', '状态', '商品名称', '单价', '数量', '下单时间', '服务时间', '下单账号', '服务对象电话', '服务对象姓名', '成本', '积分支付金额', '代金券抵扣金额', '充值卡支付金额', '在线支付金额', '订单号', '待支付', '订单来源'],
 //            colNames: ['', '操作', '状态', '商品名称', '单价', '数量', '下单时间','预约时间','服务时间','下单账号', '服务对象电话', '服务对象姓名','成本',  '积分支付金额','代金券抵扣金额', '充值卡支付金额', '在线支付金额','订单号','待支付'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
@@ -699,28 +709,34 @@
                         return orderStatus[rowObject.status - 1];
                     }
                 },
-                {name: 'productResp.name', index: 'productResp.name', width: 150,sortable: false},
-                {name: 'productPrice', index: 'productPrice', width: 50,sortable: false},
-                {name: 'count', index: 'count', width: 50,sortable: false},
-                {name: 'orderTime', index: 'orderTime', width: 130,sortable: false,formatter:timeFormat},
+                {name: 'productResp.name', index: 'productResp.name', width: 150, sortable: false},
+                {name: 'productPrice', index: 'productPrice', width: 50, sortable: false},
+                {name: 'count', index: 'count', width: 50, sortable: false},
+                {name: 'orderTime', index: 'orderTime', width: 130, sortable: false, formatter: timeFormat},
 //                {name: 'serviceTime', index: 'serviceTime', width: 130,sortable: false,formatter:timeFormat},
-                {name: 'realServiceTime', index: 'realServiceTime', width: 130,sortable: false,formatter:timeFormat},
-                {name: 'customerResp.mobile', index: 'customerResp.mobile', width: 100,sortable: false},
-                {name: 'customerMobile', index: 'customerMobile', width: 100,sortable: false},
-                {name: 'customerName', index: 'customerName', width: 100,sortable: false},
-                {name: 'cost', index: 'cost', width: 50,sortable: false},
-                {name: 'payPoint', index: 'payPoint', width: 100,sortable: false},
-                {name: 'payVoucher', index: 'payVoucher', width: 100,sortable: false},
-                {name: 'payRechargeCard', index: 'payRechargeCard', width: 100,sortable: false},
-                {name: 'payCash', index: 'payCash', width: 100,sortable: false},
+                {name: 'realServiceTime', index: 'realServiceTime', width: 130, sortable: false, formatter: timeFormat},
+                {name: 'customerResp.mobile', index: 'customerResp.mobile', width: 100, sortable: false},
+                {name: 'customerMobile', index: 'customerMobile', width: 100, sortable: false},
+                {name: 'customerName', index: 'customerName', width: 100, sortable: false},
+                {name: 'cost', index: 'cost', width: 50, sortable: false},
+                {name: 'payPoint', index: 'payPoint', width: 100, sortable: false},
+                {name: 'payVoucher', index: 'payVoucher', width: 100, sortable: false},
+                {name: 'payRechargeCard', index: 'payRechargeCard', width: 100, sortable: false},
+                {name: 'payCash', index: 'payCash', width: 100, sortable: false},
                 {name: 'orderCode', index: 'orderCode', width: 120, sortable: false},
-                {name: 'payment', index: 'payment', width: 60,sortable: false},
-                {name: 'type', index: 'type', width: 80,sortable: false,formatter:function(cellvalue, options, rowObject){
-                    return orderType[rowObject.type];
-                }}
+                {name: 'payment', index: 'payment', width: 60, sortable: false},
+                {
+                    name: 'type',
+                    index: 'type',
+                    width: 80,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return orderType[rowObject.type];
+                    }
+                }
             ],
             loadComplete: function (data) {
-                if("error" in data){
+                if ("error" in data) {
                     bootboxalert(data.error.message);
                     return false;
                 }
@@ -752,7 +768,7 @@
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
         str += getFunctionButton("btn-success", "showOrder(" + rowObject.id + ")", "查看");
-        if(rowObject.status == 1) {
+        if (rowObject.status == 1) {
             if (permission.indexOf("orderCancel") != -1) {
                 str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
             }
@@ -818,7 +834,7 @@
                 } else {
                     var result = data.data;
                     if (result.tradeState == 'SUCCESS') {
-                        bootboxalert("该订单已用微信支付"+result.totalFee/100 + "元，微信端订单号为："+result.transactionId);
+                        bootboxalert("该订单已用微信支付" + result.totalFee / 100 + "元，微信端订单号为：" + result.transactionId);
                         jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                     } else {
                         bootboxalert(result.reason);
@@ -1335,7 +1351,7 @@
         })
     }
 
-    function initProduct(){
+    function initProduct() {
         $.ajax({
             url: "/api/product/getalllist",
             dataType: "json",
@@ -1351,7 +1367,32 @@
                 } else {
                     var result = data.data;
                     for (var i = 0; i < result.length; i++) {
-                        $("#product").append("<option value="+result[i].id+">"+result[i].name+"</option>");
+                        $("#product").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                    }
+                }
+                initSearchSelect();
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+    function initCity() {
+        $.ajax({
+            url: "/api/syscity/getopenlist",
+            dataType: "json",
+            async: true,
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        if(result[i].cityLevel == 2){//目前下单全为二级城市
+                            $("#city").append("<option value=" + result[i].cityCode + ">" + result[i].cityName + "</option>");
+                        }
                     }
                 }
                 initSearchSelect();
@@ -1366,8 +1407,8 @@
     function exportExcel() {
         var obj = transformToJson($('#orderInfoSearchForm').serializeArray());
         var param = "";
-        for(var key in obj){
-            param = param + key + "=" + obj[key] + "&" ;
+        for (var key in obj) {
+            param = param + key + "=" + obj[key] + "&";
         }
         window.location.href = "/api/orderinfo/export?" + param;
         return false;
