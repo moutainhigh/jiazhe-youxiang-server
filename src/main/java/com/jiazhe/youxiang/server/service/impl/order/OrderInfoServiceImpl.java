@@ -87,9 +87,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     private EleProductCodeService eleProductCodeService;
 
     @Override
-    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime,Paging paging) {
-        Integer count = orderInfoPOManualMapper.count(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile,productId,realServiceStartTime,realServiceEndTime);
-        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile,productId,realServiceStartTime,realServiceEndTime, paging.getOffset(), paging.getLimit());
+    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode, Paging paging) {
+        Integer count = orderInfoPOManualMapper.count(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, realServiceStartTime, realServiceEndTime,customerCityCode);
+        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, realServiceStartTime, realServiceEndTime, customerCityCode,paging.getOffset(), paging.getLimit());
         List<OrderInfoDTO> orderInfoDTOList = orderInfoPOList.stream().map(OrderInfoAdapter::PO2DTO).collect(Collectors.toList());
         orderInfoDTOList.forEach(bean -> {
             ProductDTO productDTO = productService.getById(bean.getProductId());
@@ -475,7 +475,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (null == productDTO || productDTO.getStatus().equals(Byte.valueOf("0"))) {
             throw new OrderException(OrderCodeEnum.PRODUCT_NOT_AVAILABLE);
         }
-        CommonValidator.validateNull(dto.getCustomerCityCode(),new OrderException(OrderCodeEnum.CITY_INFO_ERROR));
+        CommonValidator.validateNull(dto.getCustomerCityCode(), new OrderException(OrderCodeEnum.CITY_INFO_ERROR));
         ProductPriceDTO productPriceDTO = productPriceService.getPriceByCity(dto.getProductId(), dto.getCustomerCityCode());
         if (null == productPriceDTO || productPriceDTO.getStatus().equals(Byte.valueOf("0"))) {
             throw new OrderException(OrderCodeEnum.PRODUCT_NOT_AVAILABLE);
@@ -484,15 +484,15 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             throw new OrderException(OrderCodeEnum.ORDER_COUNT_LESS_THAN_LAST_NUM);
         }
         //服务类商品才检查预约时间、服务地址，服务联系电话等信息
-        if(dto.getType().equals(CommonConstant.CUSTOMER_PLACE_ORDER)) {
+        if (dto.getType().equals(CommonConstant.CUSTOMER_PLACE_ORDER)) {
             if (productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
                 long delayDays = dto.getServiceTime().getTime() / CommonConstant.ONE_DAY - System.currentTimeMillis() / CommonConstant.ONE_DAY;
                 if (productDTO.getDelayDays() > delayDays) {
                     throw new OrderException(OrderCodeEnum.SERVICE_TIME_ERROR);
                 }
             }
-            CommonValidator.validateNull(dto.getCustomerAddress(),new OrderException(OrderCodeEnum.SERVICE_ADDRESS_IS_NULL));
-            CommonValidator.validateNull(dto.getCustomerMobile(),new OrderException(OrderCodeEnum.SERVICE_MOBILE_IS_VALID));
+            CommonValidator.validateNull(dto.getCustomerAddress(), new OrderException(OrderCodeEnum.SERVICE_ADDRESS_IS_NULL));
+            CommonValidator.validateNull(dto.getCustomerMobile(), new OrderException(OrderCodeEnum.SERVICE_MOBILE_IS_VALID));
         }
         String orderCode = generateOrderCode();
         //待支付金额
@@ -643,7 +643,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             });
             rcService.batchUpdate(rcdtoList);
         }
-        if("false".equals(dto.getCashSupport())){
+        if ("false".equals(dto.getCashSupport())) {
             if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
                 throw new OrderException(OrderCodeEnum.ORDER_PAYMENT_NOT_ENOUGH);
             }
@@ -695,7 +695,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 });
                 orderInfoPO.setExtInfo(jsonArray.toString());
             }
-        } else{ //使用代金券-->积分卡-->充值卡不足以完成支付
+        } else { //使用代金券-->积分卡-->充值卡不足以完成支付
             orderInfoPO.setStatus(CommonConstant.ORDER_UNPAID);
         }
         orderInfoPOManualMapper.insert(orderInfoPO);
@@ -776,8 +776,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime) {
-        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile,productId,realServiceStartTime,realServiceEndTime, null, null);
+    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime,String customerCityCode) {
+        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, realServiceStartTime, realServiceEndTime, customerCityCode,null, null);
         List<OrderInfoDTO> orderInfoDTOList = orderInfoPOList.stream().map(OrderInfoAdapter::PO2DTO).collect(Collectors.toList());
         orderInfoDTOList.forEach(bean -> {
             ProductDTO productDTO = productService.getById(bean.getProductId());

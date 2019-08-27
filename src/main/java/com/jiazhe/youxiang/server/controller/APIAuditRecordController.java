@@ -19,6 +19,7 @@ import com.jiazhe.youxiang.server.common.exceptions.AuditRecordException;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordDTO;
 import com.jiazhe.youxiang.server.dto.auditrecord.AuditRecordSumDTO;
+import com.jiazhe.youxiang.server.dto.auditrecord.StatisticsDTO;
 import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -27,8 +28,10 @@ import com.jiazhe.youxiang.server.vo.req.IdReq;
 import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordCheckReq;
 import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordPageReq;
 import com.jiazhe.youxiang.server.vo.req.auditrecord.AuditRecordSaveReq;
+import com.jiazhe.youxiang.server.vo.req.auditrecord.StatisticsReq;
 import com.jiazhe.youxiang.server.vo.resp.auditrecord.AuditRecordResp;
 import com.jiazhe.youxiang.server.vo.resp.auditrecord.AuditRecordSumResp;
+import com.jiazhe.youxiang.server.vo.resp.auditrecord.StatisticsResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.WaitingDealCountResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
@@ -127,6 +130,21 @@ public class APIAuditRecordController extends BaseController {
         return ResponseFactory.buildPaginationResponse(auditRecordRespList, paging);
     }
 
+    @ApiOperation(value = "【审核小程序】根据提交人和提交时间统计", httpMethod = "GET", response = StatisticsResp.class, notes = "【审核小程序】根据提交人和提交时间统计")
+    @RequestMapping(value = "/statistics", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "【审核小程序】根据提交人和提交时间统计", level = LogLevelEnum.LEVEL_1)
+    public Object statistics(@ModelAttribute StatisticsReq req) {
+        SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+        if (null == sysUserDTO) {
+            throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
+        }
+        Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
+        Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
+        StatisticsDTO dto = auditRecordBiz.statistics(sysUserDTO.getId(), submitStartTime, submitEndTime);
+        StatisticsResp resp = AuditRecordAdapter.statisticsDto2Resp(dto);
+        return ResponseFactory.buildResponse(resp);
+    }
+
     @ApiOperation(value = "【审核小程序】保存消费记录信息", httpMethod = "POST", notes = "保存消费记录信息")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "保存消费记录信息", level = LogLevelEnum.LEVEL_2)
@@ -180,6 +198,7 @@ public class APIAuditRecordController extends BaseController {
         auditRecordDTO.setExchangeType(req.getExchangeType());
         auditRecordDTO.setCustomerMobile(req.getCustomerMobile());
         auditRecordDTO.setCustomerName(req.getCustomerName());
+        auditRecordDTO.setCardNo(req.getCardNo());
         auditRecordDTO.setExchangePoint(req.getExchangePoint());
         auditRecordDTO.setGivingPoint(req.getGivingPoint());
         auditRecordDTO.setPointCodes(req.getPointCodes());

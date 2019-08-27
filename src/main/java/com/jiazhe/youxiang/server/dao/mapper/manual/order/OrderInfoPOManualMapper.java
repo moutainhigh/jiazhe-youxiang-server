@@ -37,7 +37,8 @@ public interface OrderInfoPOManualMapper {
             @Param("workerMobile")String workerMobile,
             @Param("productId")Integer productId,
             @Param("realServiceStartTime")Date realServiceStartTime,
-            @Param("realServiceEndTime")Date realServiceEndTime
+            @Param("realServiceEndTime")Date realServiceEndTime,
+            @Param("customerCityCode")String customerCityCode
     );
 
     /**
@@ -67,6 +68,7 @@ public interface OrderInfoPOManualMapper {
             @Param("productId")Integer productId,
             @Param("realServiceStartTime")Date realServiceStartTime,
             @Param("realServiceEndTime")Date realServiceEndTime,
+            @Param("customerCityCode")String customerCityCode,
             @Param("offset")Integer offset,
             @Param("limit")Integer limit);
 
