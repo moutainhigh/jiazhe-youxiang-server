@@ -135,7 +135,7 @@ public class ExportExcelUtils {
         String fileName = System.currentTimeMillis() + ".xlsx";
         //新增数据行，并且设置单元格数据
         int rowNum = 1;
-        String[] headers = {"客户姓名", "客户手机号", "城市", "地址", "兑换密钥", "兑换时间", "预约时间", "订单来源", "服务人员姓名", "服务人员电话", "服务项目", "服务商", "预付", "再支付"};
+        String[] headers = {"客户姓名", "客户手机号", "城市", "地址", "兑换密钥", "兑换时间", "预约时间", "订单来源", "服务人员姓名", "服务人员电话", "服务项目", "服务商", "预付", "再支付", "备注"};
         //headers表示excel表中第一行的表头
         XSSFRow row = sheet.createRow(0);
         //在excel表中添加表头
@@ -159,12 +159,13 @@ public class ExportExcelUtils {
             row1.createCell(9).setCellValue(dto.getWorkerMobile());
             row1.createCell(10).setCellValue(dto.getServiceItemDTO().getName());
             row1.createCell(11).setCellValue(dto.getPartnerDTO().getName());
-            XSSFCell cell_11 = row1.createCell(12);
-            cell_11.setCellType(CellType.NUMERIC);
-            cell_11.setCellValue(dto.getPrePay().doubleValue());
-            XSSFCell cell_12 = row1.createCell(13);
+            XSSFCell cell_12 = row1.createCell(12);
             cell_12.setCellType(CellType.NUMERIC);
-            cell_12.setCellValue(dto.getAppendPay().doubleValue());
+            cell_12.setCellValue(dto.getPrePay().doubleValue());
+            XSSFCell cell_13 = row1.createCell(13);
+            cell_13.setCellType(CellType.NUMERIC);
+            cell_13.setCellValue(dto.getAppendPay().doubleValue());
+            row1.createCell(14).setCellValue(dto.getRemark());
             rowNum++;
         }
         resetColumnWidth(sheet, headers.length, false);
@@ -172,12 +173,12 @@ public class ExportExcelUtils {
     }
 
     public static void exportOrder(HttpServletResponse response, List<OrderInfoDTO> orderInfoDTOList) {
-        String[] orderStatus = {"","代付款","待派单","待服务","已完成","取消待审核","取消未通过","已取消"};
+        String[] orderStatus = {"", "代付款", "待派单", "待服务", "已完成", "取消待审核", "取消未通过", "已取消"};
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Sheet1");
         String fileName = System.currentTimeMillis() + ".xlsx";
         int rowNum = 1;
-        String[] headers = {"订单号","商品名称","下单价格","数量","下单时间", "服务时间", "订单成本", "城市", "地址","订单状态"};
+        String[] headers = {"订单号", "商品名称", "下单价格", "数量", "下单时间", "服务时间", "订单成本", "城市", "地址", "订单状态", "备注"};
         XSSFRow row = sheet.createRow(0);
         //在excel表中添加表头
         for (int i = 0; i < headers.length; i++) {
@@ -204,6 +205,7 @@ public class ExportExcelUtils {
             row1.createCell(7).setCellValue(dto.getCustomerCityName());
             row1.createCell(8).setCellValue(dto.getCustomerAddress());
             row1.createCell(9).setCellValue(orderStatus[dto.getStatus().intValue()]);
+            row1.createCell(10).setCellValue(dto.getComments());
             rowNum++;
         }
         resetColumnWidth(sheet, headers.length, false);
