@@ -66,6 +66,8 @@ public class ShiroConfig {
         //放开监控访问
         filterChainDefinitionMap.put("/actuator/**", "anon");
 
+        filterChainDefinitionMap.put("/boccc/**","anon");//中行信用卡接口匿名访问
+
         filterChainDefinitionMap.put("/**", "authc");//表示所有url必须通过认证才能访问
         filterChainDefinitionMap.put("/api/**", "perms");//接口通过权限认证
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
