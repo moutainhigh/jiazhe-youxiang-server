@@ -12,6 +12,8 @@ public class BOCCCConstant {
      */
     public static final String MERCHANT_NAME = "BJYX";
 
+    public static final String rootPath = "C:\\boccc\\";
+
     /**
      * 接口规范名称
      */
