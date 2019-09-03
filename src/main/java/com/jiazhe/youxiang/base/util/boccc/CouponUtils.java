@@ -55,10 +55,10 @@ public class CouponUtils {
         List<CouponEntity> list = getList();
         StringBuilder sb = new StringBuilder();
         for (CouponEntity coupon : list) {
-            sb.append(getProductId(coupon.getProductId())).append(BOCCCUtils.getSeparator());
-            sb.append(BOCCCUtils.complete(coupon.getId(), '0', true, 10)).append(BOCCCUtils.getSeparator());
-            sb.append("E").append(BOCCCUtils.getSeparator());
-            sb.append(BOCCCUtils.complete(coupon.getKeyt(), '0', true, 36)).append(BOCCCUtils.getSeparator());
+            sb.append(getProductId(coupon.getProductId())).append(BOCCCConstant.BOC_Separator);
+            sb.append(BOCCCUtils.complete(coupon.getId(), '0', true, 10)).append(BOCCCConstant.BOC_Separator);
+            sb.append("E").append(BOCCCConstant.BOC_Separator);
+            sb.append(BOCCCUtils.complete(coupon.getKeyt(), '0', true, 36)).append(BOCCCConstant.BOC_Separator);
             //预留字段还未拼接 TODO
             //TODO
             //换行
@@ -76,7 +76,7 @@ public class CouponUtils {
      * @return
      */
     public static String generateSourceFileName() {
-        return BOCCCConstant.rootPath + "COUPON." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.dateFormat(new Date()) + ".00.P";
+        return BOCCCConstant.rootPath + "COUPON." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P";
     }
 
     /**
@@ -85,7 +85,7 @@ public class CouponUtils {
      * @return
      */
     public static String generateZipFileName() {
-        return BOCCCConstant.rootPath + "COUPON." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.dateFormat(new Date()) + ".00.P.ZIP";
+        return BOCCCConstant.rootPath + "COUPON." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P.ZIP";
     }
 
     /**
@@ -94,7 +94,7 @@ public class CouponUtils {
      * @return
      */
     public static String generatePgpFileName() {
-        return BOCCCConstant.rootPath + "COUPON." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.dateFormat(new Date()) + ".00.P.ZIP.DAT";
+        return BOCCCConstant.rootPath + "COUPON." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P.ZIP.DAT";
     }
 
     public static List<CouponEntity> getList() throws Exception {

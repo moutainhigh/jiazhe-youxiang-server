@@ -15,21 +15,14 @@ import java.util.Date;
 /**
  * @author tu
  * @version 1.0
- * @description TODO
+ * @description BOCCC公共工具类
  * @created 2019-09-02 20:07
  */
 public class BOCCCUtils {
 
     public static Logger logger = LoggerFactory.getLogger(BOCCCUtils.class);
 
-    /**
-     * 字段间的分隔符
-     *
-     * @return
-     */
-    public static String getSeparator() {
-        return " |#| ";
-    }
+    private static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * 获取商户id
@@ -96,7 +89,6 @@ public class BOCCCUtils {
     public static void writeStringToFile(String filePath, String str) {
         try {
             FileOutputStream fos = new FileOutputStream(filePath);
-
             fos.write(str.getBytes());
             fos.close();
         } catch (Exception e) {
@@ -104,20 +96,28 @@ public class BOCCCUtils {
         }
     }
 
-    private static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-
     /**
-     * 字符串格式化为年月日
+     * 获取昨日的日期字符串
      *
-     * @param date
      * @return
-     * @throws Exception
      */
-    public static Date dateFormat(String date) throws Exception {
-        return df.parse(date);
+    public static String getYesterday() {
+        Date date = new Date(System.currentTimeMillis() - BOCCCConstant.DAY_SEC);
+        return df.format(date);
     }
 
-    public static String dateFormat(Date date) {
+    /**
+     * 获取今日的日期字符串
+     *
+     * @return
+     */
+    public static String getToday() {
+        Date date = new Date();
+        return df.format(date);
+    }
+
+    public static String getTomorrow() {
+        Date date = new Date(System.currentTimeMillis() + BOCCCConstant.DAY_SEC);
         return df.format(date);
     }
 

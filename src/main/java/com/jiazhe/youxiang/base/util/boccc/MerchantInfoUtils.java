@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.Date;
 
 /**
  * @author TU
@@ -97,32 +96,32 @@ public class MerchantInfoUtils {
     public static StringBuilder generateBin() throws Exception {
         StringBuilder sb = new StringBuilder();
         //添加商户id
-        sb.append(BOCCCUtils.getMerchantId()).append(BOCCCUtils.getSeparator());
+        sb.append(BOCCCUtils.getMerchantId()).append(BOCCCConstant.BOC_Separator);
         //添加省，市，县
-        sb.append(Province).append(BOCCCUtils.getSeparator());
-        sb.append(City).append(BOCCCUtils.getSeparator());
-        sb.append(County).append(BOCCCUtils.getSeparator());
+        sb.append(Province).append(BOCCCConstant.BOC_Separator);
+        sb.append(City).append(BOCCCConstant.BOC_Separator);
+        sb.append(County).append(BOCCCConstant.BOC_Separator);
         //添加商户名称
-        sb.append(BOCCCUtils.complete(MerchantName, ' ', false, 200)).append(BOCCCUtils.getSeparator());
+        sb.append(BOCCCUtils.complete(MerchantName, ' ', false, 200)).append(BOCCCConstant.BOC_Separator);
         //添加门店名称
-        sb.append(BOCCCUtils.complete(ShopName, ' ', false, 200)).append(BOCCCUtils.getSeparator());
+        sb.append(BOCCCUtils.complete(ShopName, ' ', false, 200)).append(BOCCCConstant.BOC_Separator);
         //添加商户简介
-        sb.append(BOCCCUtils.complete(MerchantDescription, ' ', false, 200)).append(BOCCCUtils.getSeparator());
+        sb.append(BOCCCUtils.complete(MerchantDescription, ' ', false, 200)).append(BOCCCConstant.BOC_Separator);
         //添加门店地址
-        sb.append(BOCCCUtils.complete(ShopAddress, ' ', false, 200)).append(BOCCCUtils.getSeparator());
+        sb.append(BOCCCUtils.complete(ShopAddress, ' ', false, 200)).append(BOCCCConstant.BOC_Separator);
         //添加门店电话
-        sb.append(BOCCCUtils.complete(ShopTel, ' ', false, 20)).append(BOCCCUtils.getSeparator());
+        sb.append(BOCCCUtils.complete(ShopTel, ' ', false, 20)).append(BOCCCConstant.BOC_Separator);
         //添加门店营业时间
-        sb.append(BOCCCUtils.complete(ShopWorkTime, ' ', false, 100)).append(BOCCCUtils.getSeparator());
+        sb.append(BOCCCUtils.complete(ShopWorkTime, ' ', false, 100)).append(BOCCCConstant.BOC_Separator);
         //添加网站
-        sb.append(BOCCCUtils.complete(MerchantWebSite, ' ', false, 100)).append(BOCCCUtils.getSeparator());
+        sb.append(BOCCCUtils.complete(MerchantWebSite, ' ', false, 100)).append(BOCCCConstant.BOC_Separator);
         //添加经纬度
-        sb.append(BOCCCUtils.complete(Longitude, ' ', true, 50)).append(BOCCCUtils.getSeparator());
-        sb.append(BOCCCUtils.complete(Latitude, ' ', true, 50)).append(BOCCCUtils.getSeparator());
+        sb.append(BOCCCUtils.complete(Longitude, ' ', true, 50)).append(BOCCCConstant.BOC_Separator);
+        sb.append(BOCCCUtils.complete(Latitude, ' ', true, 50)).append(BOCCCConstant.BOC_Separator);
         //添加图片ID
-        sb.append(getPicId()).append(BOCCCUtils.getSeparator());
+        sb.append(getPicId()).append(BOCCCConstant.BOC_Separator);
         //门店开启关闭状态
-        sb.append(isOpen).append(BOCCCUtils.getSeparator());
+        sb.append(isOpen).append(BOCCCConstant.BOC_Separator);
         //预留字段还未拼接 TODO
         //TODO
         //换行
@@ -138,7 +137,7 @@ public class MerchantInfoUtils {
      * @return
      */
     public static String generateSourceFileName() {
-        return BOCCCConstant.rootPath + "MER." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.dateFormat(new Date()) + ".00.P";
+        return BOCCCConstant.rootPath + "MER." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P";
     }
 
     /**
@@ -147,7 +146,7 @@ public class MerchantInfoUtils {
      * @return
      */
     public static String generateZipFileName() {
-        return BOCCCConstant.rootPath + "MER." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.dateFormat(new Date()) + ".00.P.ZIP";
+        return BOCCCConstant.rootPath + "MER." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P.ZIP";
     }
 
     /**
@@ -156,7 +155,7 @@ public class MerchantInfoUtils {
      * @return
      */
     public static String generatePgpFileName() {
-        return BOCCCConstant.rootPath + "MER." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.dateFormat(new Date()) + ".00.P.ZIP.DAT";
+        return BOCCCConstant.rootPath + "MER." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P.ZIP.DAT";
     }
 
 

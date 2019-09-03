@@ -169,29 +169,29 @@ public class ProductInfoUtils {
         int count = ProductIds.length;
         for (int i = 0; i < count; i++) {
             //添加商品id
-            sb.append(getProductId(ProductIds[i])).append(BOCCCUtils.getSeparator());
+            sb.append(getProductId(ProductIds[i])).append(BOCCCConstant.BOC_Separator);
             //添加商品名称
-            sb.append(BOCCCUtils.complete(ProductNames[i], ' ', false, 40)).append(BOCCCUtils.getSeparator());
+            sb.append(BOCCCUtils.complete(ProductNames[i], ' ', false, 40)).append(BOCCCConstant.BOC_Separator);
             //添加商品所属大类
-            sb.append(ProductCategories[i]).append(BOCCCUtils.getSeparator());
+            sb.append(ProductCategories[i]).append(BOCCCConstant.BOC_Separator);
             //添加商品所属小类
-            sb.append(ProductTypes[i]).append(BOCCCUtils.getSeparator());
+            sb.append(ProductTypes[i]).append(BOCCCConstant.BOC_Separator);
             //添加可使用商户
-            sb.append(BOCCCUtils.getMerchantId()).append(BOCCCUtils.getSeparator());
+            sb.append(BOCCCUtils.getMerchantId()).append(BOCCCConstant.BOC_Separator);
             //添加价格
-            sb.append(BOCCCUtils.complete(ProductPrices[i], ' ', true, 11)).append(BOCCCUtils.getSeparator());
+            sb.append(BOCCCUtils.complete(ProductPrices[i], ' ', true, 11)).append(BOCCCConstant.BOC_Separator);
             //添加积分
-            sb.append(BOCCCUtils.complete(ProductPoints[i], ' ', true, 11)).append(BOCCCUtils.getSeparator());
+            sb.append(BOCCCUtils.complete(ProductPoints[i], ' ', true, 11)).append(BOCCCConstant.BOC_Separator);
             //添加有效期开始日期
-            sb.append(BOCCCUtils.complete(EffectBeginDate, ' ', false, 10)).append(BOCCCUtils.getSeparator());
+            sb.append(BOCCCUtils.complete(EffectBeginDate, ' ', false, 10)).append(BOCCCConstant.BOC_Separator);
             //添加有效期结束日期
-            sb.append(BOCCCUtils.complete(EffectEndDate, ' ', false, 10)).append(BOCCCUtils.getSeparator());
+            sb.append(BOCCCUtils.complete(EffectEndDate, ' ', false, 10)).append(BOCCCConstant.BOC_Separator);
             //添加秒杀标志
-            sb.append(secKill).append(BOCCCUtils.getSeparator());
+            sb.append(secKill).append(BOCCCConstant.BOC_Separator);
             //添加商品描述1-10
             String space200 = BOCCCUtils.generate(200, ' ');
             for (int j = 0; j < 10; j++) {
-                sb.append(space200).append(BOCCCUtils.getSeparator());
+                sb.append(space200).append(BOCCCConstant.BOC_Separator);
             }
             //预留字段还未拼接 TODO
             //TODO
@@ -209,7 +209,7 @@ public class ProductInfoUtils {
      * @return
      */
     public static String generateSourceFileName() {
-        return BOCCCConstant.rootPath + "WARES." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.dateFormat(new Date()) + ".00.P";
+        return BOCCCConstant.rootPath + "WARES." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P";
     }
 
     /**
@@ -218,7 +218,7 @@ public class ProductInfoUtils {
      * @return
      */
     public static String generateZipFileName() {
-        return BOCCCConstant.rootPath + "WARES." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.dateFormat(new Date()) + ".00.P.ZIP";
+        return BOCCCConstant.rootPath + "WARES." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P.ZIP";
     }
 
     /**
@@ -227,7 +227,7 @@ public class ProductInfoUtils {
      * @return
      */
     public static String generatePgpFileName() {
-        return BOCCCConstant.rootPath + "WARES." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.dateFormat(new Date()) + ".00.P.ZIP.DAT";
+        return BOCCCConstant.rootPath + "WARES." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P.ZIP.DAT";
     }
 
 
