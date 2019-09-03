@@ -26,5 +26,5 @@ public class BOCCCConstant {
      * 私钥路径
      */
     public static String privateKeyPath = "C:\\boccc\\key\\secret_partner.asc";
-    
+
 }

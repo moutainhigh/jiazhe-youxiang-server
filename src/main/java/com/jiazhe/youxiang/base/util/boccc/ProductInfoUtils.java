@@ -9,7 +9,7 @@ import java.util.Date;
 
 /**
  * @author TU
- * @description 中行工具类
+ * @description 商品信息工具类
  * @date 2019-09-02.
  */
 public class ProductInfoUtils {
