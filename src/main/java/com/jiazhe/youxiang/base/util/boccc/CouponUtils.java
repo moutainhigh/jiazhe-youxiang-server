@@ -116,7 +116,6 @@ public class CouponUtils {
 //        Connection conn = DriverManager.getConnection(url, "root", "rewq4321++");
         Statement state = conn.createStatement();
         ResultSet rs = state.executeQuery(sql.toString());
-        System.out.println("库中查询结束");
         while (rs.next()) {
             CouponEntity coupon = new CouponEntity();
             coupon.setId(rs.getString("id"));

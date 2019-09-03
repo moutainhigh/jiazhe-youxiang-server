@@ -31,7 +31,7 @@ public class QuartzConfig {
     private static final Integer WECHAT_API_EXPIRES_IN_TIME = 7200;
 
     /**
-     *
+     * 中行定时任务间隔时间 1天
      */
     private static final Integer ONE_DAY = 24 * 60 * 60;
 
@@ -64,7 +64,7 @@ public class QuartzConfig {
                 .repeatForever();
         return TriggerBuilder.newTrigger().forJob(BOCCCQuartzDetail())
                 .withIdentity("BOCCCQuartz")
-                .startAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-09-03 15:15:00"))
+                .startAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-09-03 15:58:00"))
                 .withSchedule(scheduleBuilder)
                 .build();
     }

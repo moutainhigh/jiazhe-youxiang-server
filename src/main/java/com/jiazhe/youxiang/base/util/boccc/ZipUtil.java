@@ -47,7 +47,6 @@ public class ZipUtil {
                 }
             }
 
-            System.out.println("压缩完毕");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
