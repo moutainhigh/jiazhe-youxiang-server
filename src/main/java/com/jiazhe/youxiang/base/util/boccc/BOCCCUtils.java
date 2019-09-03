@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.base.util.boccc;
 
+import com.jiazhe.youxiang.server.common.constant.BOCCCConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +30,17 @@ public class BOCCCUtils {
      */
     public static String getSeparator() {
         return " |#| ";
+    }
+
+    /**
+     * 获取商户id
+     * 命名规则为MXXXXNNNNN
+     * (XXXX为四位第三方系统名称，NNNNN为数字编码，范围为00001~99999)
+     *
+     * @return
+     */
+    public static String getMerchantId() throws Exception {
+        return "M" + BOCCCConstant.MERCHANT_NAME + complete(BOCCCConstant.MERCHANT_ID, '0', true, 5);
     }
 
 

@@ -100,23 +100,6 @@ public class ProductInfoUtils {
      */
     private final static String[] ProductTypes = {"0407"};
 
-    /**
-     * 10位
-     * 可使用商户id
-     */
-    private final static String MerchantId = "12565";
-
-    /**
-     * 获取商户id
-     * 命名规则为MXXXXNNNNN
-     * (XXXX为四位第三方系统名称，NNNNN为数字编码，范围为00001~99999)
-     *
-     * @return
-     */
-    public static String getMerchantId() throws Exception {
-        return "M" + BOCCCConstant.MERCHANT_NAME + BOCCCUtils.complete(MerchantId, '0', true, 5);
-    }
-
 
     /**
      * 11位  需要补全
@@ -195,7 +178,7 @@ public class ProductInfoUtils {
             //添加商品所属小类
             sb.append(ProductTypes[i]).append(BOCCCUtils.getSeparator());
             //添加可使用商户
-            sb.append(getMerchantId()).append(BOCCCUtils.getSeparator());
+            sb.append(BOCCCUtils.getMerchantId()).append(BOCCCUtils.getSeparator());
             //添加价格
             sb.append(BOCCCUtils.complete(ProductPrices[i], ' ', true, 11)).append(BOCCCUtils.getSeparator());
             //添加积分
@@ -211,6 +194,8 @@ public class ProductInfoUtils {
             for (int j = 0; j < 10; j++) {
                 sb.append(space200).append(BOCCCUtils.getSeparator());
             }
+            //预留字段还未拼接 TODO
+            //TODO
             //添加换行信息
             sb.append("\r\n");
         }
