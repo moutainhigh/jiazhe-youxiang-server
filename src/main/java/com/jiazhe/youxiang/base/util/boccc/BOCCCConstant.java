@@ -1,5 +1,8 @@
 package com.jiazhe.youxiang.base.util.boccc;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 /**
  * @author TU
  * @description 中行信用卡常量  Bank Of China Credit Card
@@ -20,16 +23,21 @@ public class BOCCCConstant {
     /**
      * 生成文件的根目录
      */
-    public static final String rootPath = "C:\\boccc\\";
+    public static final String rootPath = "/opt/jiazhe/webserver/files/boccc/";
 
     /**
-     * 公钥路径
+     * PGP加密解密公钥路径
      */
-    public static String publicKeyPath = "C:\\boccc\\key\\public_partner.asc";
+    public static String publicKeyPath = "/opt/jiazhe/webserver/files/boccc/pgp.key/public_partner.asc";
 
     /**
-     * 私钥路径
+     * PGP加密解密私钥路径
      */
-    public static String privateKeyPath = "C:\\boccc\\key\\secret_partner.asc";
+    public static String privateKeyPath = "/opt/jiazhe/webserver/files/boccc/pgp.key/secret_partner.asc";
+
+    /**
+     * 登录中行服务器key
+     */
+    public static String loginPrivateKeyPath = "/opt/jiazhe/webserver/files/boccc/pgp.key/partner08.key";
 
 }
