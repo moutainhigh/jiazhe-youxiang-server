@@ -272,6 +272,85 @@
             <artifactId>jedis</artifactId>
         </dependency>
 
+        <!--PGP加密-->
+        <dependency>
+            <groupId>com.boc.security</groupId>
+            <artifactId>com.boc.security</artifactId>
+            <version>1.2</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/com.boc.security-1.2.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>cryptix-jce-api</groupId>
+            <artifactId>cryptix-jce-api</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/cryptix-jce-api.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>cryptix-jce-compat</groupId>
+            <artifactId>cryptix-jce-compat</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/cryptix-jce-compat.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>cryptix-jce-provider</groupId>
+            <artifactId>cryptix-jce-provider</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/cryptix-jce-provider.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>cryptix-jce-tests</groupId>
+            <artifactId>cryptix-jce-tests</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/cryptix-jce-tests.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>cryptix-message-api</groupId>
+            <artifactId>cryptix-message-api</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/cryptix-message-api.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>cryptix-openpgp-provider</groupId>
+            <artifactId>cryptix-openpgp-provider</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/cryptix-openpgp-provider.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>cryptix-pki-api</groupId>
+            <artifactId>cryptix-pki-api</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/cryptix-pki-api.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>local_policy</groupId>
+            <artifactId>local_policy</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/local_policy.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>PGPEncrypt</groupId>
+            <artifactId>PGPEncrypt</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/PGPEncrypt.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>US_export_policy</groupId>
+            <artifactId>US_export_policy</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/US_export_policy.jar</systemPath>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>

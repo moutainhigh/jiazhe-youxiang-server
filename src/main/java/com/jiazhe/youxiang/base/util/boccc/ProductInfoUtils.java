@@ -21,7 +21,7 @@ public class ProductInfoUtils {
      * 商品的唯一编码，命名规则为WXXXXNNNNNN
      * (XXXX为四位第三方系统名称，NNNNNN为数字编码，范围为000001~999999)
      */
-    private final static String[] ProductIds = {"1"};
+    private final static String[] ProductIds = {"123"};
 
     public static String getProductId(String id) throws Exception {
         return "W" + BOCCCConstant.MERCHANT_NAME + BOCCCUtils.complete(id, '0', true, 6);
@@ -271,7 +271,7 @@ public class ProductInfoUtils {
         //第五步，压缩文件加密中
         String pgpFileName = generatePgpFileName();
         logger.info("压缩文件加密中...");
-        //TODO
+        PgpEncryUtil.Encry(zipFileName,BOCCCConstant.publicKeyPath,generatePgpFileName());
         logger.info("压缩文件加密完成，路径为：" + pgpFileName);
     }
 

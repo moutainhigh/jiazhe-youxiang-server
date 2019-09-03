@@ -12,7 +12,21 @@ public class BOCCCConstant {
      */
     public static final String MERCHANT_NAME = "BJYX";
 
+    /**
+     * 生成文件的根目录
+     */
     public static final String rootPath = "C:\\boccc\\";
+
+    /**
+     * 公钥路径
+     */
+    public static String publicKeyPath = "C:\\boccc\\key\\public_partner.asc";
+
+    /**
+     * 私钥路径
+     */
+    public static String secretKeyPath = "C:\\boccc\\key\\secret_partner.asc";
+
 
     /**
      * 接口规范名称
