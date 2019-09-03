@@ -1,4 +1,4 @@
-package com.jiazhe.youxiang.server.common.constant;
+package com.jiazhe.youxiang.base.util.boccc;
 
 /**
  * @author TU

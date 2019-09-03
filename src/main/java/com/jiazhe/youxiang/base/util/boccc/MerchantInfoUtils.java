@@ -1,6 +1,5 @@
 package com.jiazhe.youxiang.base.util.boccc;
 
-import com.jiazhe.youxiang.server.common.constant.BOCCCConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
