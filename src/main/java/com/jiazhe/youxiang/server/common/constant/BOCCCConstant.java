@@ -25,16 +25,6 @@ public class BOCCCConstant {
     /**
      * 私钥路径
      */
-    public static String secretKeyPath = "C:\\boccc\\key\\secret_partner.asc";
-
-
-    /**
-     * 接口规范名称
-     */
-    public static final String WARES = "WARES"; //商品信息接口
-    public static final String MER = "MER"; //商户信息接口
-    public static final String COUPON = "COUPON"; //优惠券信息接口
-    public static final String PIC = "PIC"; //商品图及商户图片包
-    public static final String CUSED = "CUSED"; //优惠券使用更新接口
-    public static final String CCANCEL = "CCANCEL"; //第三方反馈退货结果接口
+    public static String privateKeyPath = "C:\\boccc\\key\\secret_partner.asc";
+    
 }

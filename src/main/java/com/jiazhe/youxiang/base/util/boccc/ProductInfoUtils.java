@@ -253,26 +253,45 @@ public class ProductInfoUtils {
      * @return
      */
     public static void generateFile() throws Exception {
+
+        //三种类型文件路径
+        String sourceFileName = generateSourceFileName();
+        String zipFileName = generateZipFileName();
+        String pgpFileName = generatePgpFileName();
+
         //第一步，检查各个参数是否合法
         check();
+
         //第二步，按照规则组成商品信息字符串
         StringBuilder sb = generateBin();
+
         //第三步，写入文件中
         logger.info("源文件生成中...");
-        String sourceFileName = generateSourceFileName();
         BOCCCUtils.writeStringToFile(sourceFileName, sb.toString());
         logger.info("源文件生成完成，路径为：" + sourceFileName);
+
         //第四步，源文件压缩中
         logger.info("源文件压缩中...");
         File sourceFile = new File(sourceFileName);
-        String zipFileName = generateZipFileName();
         new ZipUtil(new File(zipFileName)).zipFiles(sourceFile);
         logger.info("源文件压缩完成，路径为：" + zipFileName);
+
         //第五步，压缩文件加密中
-        String pgpFileName = generatePgpFileName();
         logger.info("压缩文件加密中...");
-        PgpEncryUtil.Encry(zipFileName,BOCCCConstant.publicKeyPath,generatePgpFileName());
+        PgpEncryUtil.Encry(zipFileName, BOCCCConstant.publicKeyPath, generatePgpFileName());
         logger.info("压缩文件加密完成，路径为：" + pgpFileName);
+
+//        //第六步，文件解密中
+//        logger.info("加密文件解密中...");
+//        PgpDecryUtil decryU = new PgpDecryUtil();
+//        decryU.setPassphrase("youxianghulian0612");
+//        decryU.DecryUtil(pgpFileName, zipFileName, BOCCCConstant.privateKeyPath);
+//        logger.info("解密完成，路径为：" + zipFileName);
+//
+//        //第七步，文件解压缩
+//        logger.info("文件解压中...");
+//        UnZipUtil.ZipContraFile(zipFileName, sourceFileName.substring(0,sourceFileName.lastIndexOf("\\")));
+//        System.out.println("解压后路径" + sourceFileName);
     }
 
     public static void main(String[] args) throws Exception {
