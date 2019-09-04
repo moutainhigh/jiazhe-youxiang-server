@@ -43,6 +43,8 @@ public class VoucherExchangeCodeSaveDTO extends BaseObject{
 
     private Byte expiryType;
 
+    private String bocccProductId;
+
     private Byte status;
 
     private Byte used;
@@ -159,6 +161,14 @@ public class VoucherExchangeCodeSaveDTO extends BaseObject{
 
     public void setExpiryType(Byte expiryType) {
         this.expiryType = expiryType;
+    }
+
+    public String getBocccProductId() {
+        return bocccProductId;
+    }
+
+    public void setBocccProductId(String bocccProductId) {
+        this.bocccProductId = bocccProductId;
     }
 
     public Byte getStatus() {

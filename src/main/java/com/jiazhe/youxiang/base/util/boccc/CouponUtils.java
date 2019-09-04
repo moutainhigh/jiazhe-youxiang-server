@@ -28,16 +28,12 @@ public class CouponUtils {
      * 商品的唯一编码，命名规则为WXXXXNNNNNN
      * (XXXX为四位第三方系统名称，NNNNNN为数字编码，范围为000001~999999)
      */
-    private final static String[] ProductIds = {"123","456"};
-
-    public static String getProductId(String id) throws Exception {
-        return "W" + BOCCCConstant.MERCHANT_NAME + BOCCCUtils.complete(id, '0', true, 6);
-    }
+    private final static String[] ProductIds = {"WXXXX0000001"};
 
     /**
      * 第三方系统中代金券批次id
      */
-    private final static String[] CouponBatchIds = {"1","2"};
+    private final static String[] CouponBatchIds = {"1"};
 
     /**
      * 检查各个参数是否合法
@@ -47,7 +43,7 @@ public class CouponUtils {
     public static void check() throws Exception {
         int count = ProductIds.length;
         if (CouponBatchIds.length != count) {
-            throw new Exception("ProductNames长度和ProductIds不匹配");
+            throw new Exception("CouponBatchIds长度和ProductIds不匹配");
         }
     }
 
@@ -55,7 +51,7 @@ public class CouponUtils {
         List<CouponEntity> list = getList();
         StringBuilder sb = new StringBuilder();
         for (CouponEntity coupon : list) {
-            sb.append(getProductId(coupon.getProductId())).append(BOCCCConstant.BOC_Separator);
+            sb.append(coupon.getProductId()).append(BOCCCConstant.BOC_Separator);
             sb.append(BOCCCUtils.complete(coupon.getId(), '0', true, 10)).append(BOCCCConstant.BOC_Separator);
             sb.append("E").append(BOCCCConstant.BOC_Separator);
             sb.append(BOCCCUtils.complete(coupon.getKeyt(), '0', true, 36)).append(BOCCCConstant.BOC_Separator);
@@ -109,11 +105,16 @@ public class CouponUtils {
         }
         List<CouponEntity> list = new ArrayList<>();
         Class.forName("com.mysql.jdbc.Driver");
+        //本地环境数据库
+        String url = "jdbc:mysql://localhost:3306/youxiang?useUnicode=true&characterEncoding=UTF8&connectTimeout=1000&socketTimeout=10000&allowMultiQueries=true";
+        Connection conn = DriverManager.getConnection(url, "root", "root");
         //测试环境数据库
-        String url = "jdbc:mysql://cdb-21q33fb6.bj.tencentcdb.com:10018/youxiang?useUnicode=true&characterEncoding=UTF8&connectTimeout=1000&socketTimeout=10000&allowMultiQueries=true";
-        Connection conn = DriverManager.getConnection(url, "root", "rewq4321$#@!");
+//        String url = "jdbc:mysql://cdb-21q33fb6.bj.tencentcdb.com:10018/youxiang?useUnicode=true&characterEncoding=UTF8&connectTimeout=1000&socketTimeout=10000&allowMultiQueries=true";
+//        Connection conn = DriverManager.getConnection(url, "root", "rewq4321$#@!");
+        //生产环境数据库
 //        String url = "jdbc:mysql://bj-cdb-9l8ozcar.sql.tencentcdb.com:63546/coupon?characterEncoding=UTF-8&useCursorFetch=true&defaultFetchSize=2000";
 //        Connection conn = DriverManager.getConnection(url, "root", "rewq4321++");
+        int count = 0, error = 0;
         Statement state = conn.createStatement();
         ResultSet rs = state.executeQuery(sql.toString());
         while (rs.next()) {
@@ -121,10 +122,20 @@ public class CouponUtils {
             coupon.setId(rs.getString("id"));
             coupon.setBatchId(rs.getString("batch_id"));
             coupon.setKeyt(rs.getString("keyt"));
-            coupon.setProductId(map.get(coupon.getBatchId()));
+            String productId = rs.getString("boccc_product_id");
+            coupon.setProductId(productId);
+            if (!productId.equals(map.get(coupon.getBatchId()))) {
+                error++;
+            }
+            count++;
             list.add(coupon);
         }
         conn.close();//关闭通道
+        if (error > 0) {
+            logger.error("生成优惠券总数：" + count + "，错误个数：" + error + "个，原因，数据库中boccc_product_id和本类中ProductIds对不上！");
+        } else {
+            logger.error("成功生成优惠券：" + count + "个。");
+        }
         return list;
     }
 

@@ -283,6 +283,7 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
         //修改充值卡兑换码的使用状态
         voucherExchangeCodePO.setUsed(CommonConstant.CODE_HAS_USED);
         voucherExchangeCodePO.setCustomerId(customerDTO.getId());
+        voucherExchangeCodePO.setUsedTime(new Date());
         voucherExchangeCodePOMapper.updateByPrimaryKeySelective(voucherExchangeCodePO);
     }
 

@@ -61,6 +61,7 @@ public class VoucherExchangeCodeAdapter {
         voucherExchangeCodePO.setVoucherExpiryTime(voucherExchangeCodeSaveDTO.getVoucherExpiryTime());
         voucherExchangeCodePO.setValidityPeriod(voucherExchangeCodeSaveDTO.getValidityPeriod());
         voucherExchangeCodePO.setExpiryType(voucherExchangeCodeSaveDTO.getExpiryType());
+        voucherExchangeCodePO.setBocccProductId(voucherExchangeCodeSaveDTO.getBocccProductId());
         voucherExchangeCodePO.setStatus(voucherExchangeCodeSaveDTO.getStatus());
         voucherExchangeCodePO.setUsed(voucherExchangeCodeSaveDTO.getUsed());
         voucherExchangeCodePO.setCustomerId(voucherExchangeCodeSaveDTO.getCustomerId());

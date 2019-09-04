@@ -251,10 +251,15 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">中行商品ID：</label>
                                                     <div class="col-sm-8">
-                                                        <div class="pos-rel">
+                                                        <div class="pos-rel col-sm-11">
                                                             <input id="saveBoccProductId" name="bocccProductId"
                                                                    class="form-control" type="text"
                                                                    style="height:30px"/>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <span class="help-button" data-rel="popover" data-trigger="hover" data-placement="left"
+                                                                  data-content="商品的唯一编码，命名规则为WXXXXNNNNNN(XXXX为四位第三方系统名称，NNNNN为数字编码，范围为000001~999999)"
+                                                                  title="中行信用卡对接商品ID">?</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -317,6 +322,9 @@
         $(window).resize(function () {
             $("#grid-table").setGridWidth($(window).width() * 0.96);
         });
+
+        $('[data-rel=popover]').popover({container:'body'});
+
         $('#selectCityAndProduct').load('../pageimport/selectcityandproduct');
         //将项目列表填入到projectId中
         $.ajax({

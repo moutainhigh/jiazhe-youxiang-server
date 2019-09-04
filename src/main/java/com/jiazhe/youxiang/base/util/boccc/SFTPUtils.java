@@ -107,7 +107,6 @@ public class SFTPUtils {
                 jsch.addIdentity(privateKey);
             }
             session = jsch.getSession(username, host, port);
-
             if (password != null) {
                 session.setPassword(password);
             }
@@ -184,7 +183,7 @@ public class SFTPUtils {
             sftp.cd(directory);
         }
         File localDirectory = new File(savePath);
-        if(!localDirectory.exists()){
+        if (!localDirectory.exists()) {
             localDirectory.mkdirs();
         }
         File file = new File(savePath + "\\" + downloadFile);
@@ -216,6 +215,21 @@ public class SFTPUtils {
     public void delete(String directory, String deleteFile) throws SftpException {
         sftp.cd(directory);
         sftp.rm(deleteFile);
+    }
+
+    public boolean isExistDir(String path, ChannelSftp sftp) {
+        boolean isExist = false;
+        try {
+            SftpATTRS sftpATTRS = sftp.lstat(path);
+            isExist = true;
+            return sftpATTRS.isDir();
+        } catch (Exception e) {
+            if (e.getMessage().toLowerCase().equals("no such file")) {
+                isExist = false;
+            }
+        }
+        return isExist;
+
     }
 
     /**
@@ -269,13 +283,20 @@ public class SFTPUtils {
         sftp.login();
         //本地将要上传的文件夹
         File uploadPath = new File(BOCCCConstant.uploadPath + BOCCCUtils.getToday());
-        File[] fs = uploadPath.listFiles();
-        for (File file : fs) {
-            InputStream is = new FileInputStream(file);
-            //outPath为上传到中行服务器的路径
-            sftp.upload(outPath, "", file.getName(), is);
+        //中行接收文件路径存在
+        if (sftp.isExistDir(outPath, sftp.sftp)) {
+            if (uploadPath.exists()) {
+                File[] fs = uploadPath.listFiles();
+                for (File file : fs) {
+                    InputStream is = new FileInputStream(file);
+                    //outPath为上传到中行服务器的路径
+                    sftp.upload(outPath, "", file.getName(), is);
+                }
+                sftp.logout();
+            }
+        }else{
+            logger.error("中行上传文件夹路径定义有误！！！");
         }
-        sftp.logout();
         logger.info("上传文件完成");
     }
 
@@ -285,17 +306,21 @@ public class SFTPUtils {
         sftp.login();
         //下载到本地服务器的路径
         String downloadPath = BOCCCConstant.downloadPath + BOCCCUtils.getToday();
-        Vector v = sftp.listFiles(inPath);
-        Iterator it = v.iterator();
-        while (it.hasNext()) {
-            ChannelSftp.LsEntry entry = (ChannelSftp.LsEntry) it.next();
-            String fileName = entry.getFilename();
-            SftpATTRS attrs = entry.getAttrs();
-            if (!attrs.isDir() && fileName.contains(BOCCCUtils.getYesterday())) {
-                sftp.download(inPath, entry.getFilename(), downloadPath);
+        if (sftp.isExistDir(inPath, sftp.sftp)) {
+            Vector v = sftp.listFiles(inPath);
+            Iterator it = v.iterator();
+            while (it.hasNext()) {
+                ChannelSftp.LsEntry entry = (ChannelSftp.LsEntry) it.next();
+                String fileName = entry.getFilename();
+                SftpATTRS attrs = entry.getAttrs();
+                if (!attrs.isDir() && fileName.contains(BOCCCUtils.getYesterday())) {
+                    sftp.download(inPath, entry.getFilename(), downloadPath);
+                }
             }
+            sftp.logout();
+        }else{
+            logger.error("中行下载文件存放路径定义有误！！！");
         }
-        sftp.logout();
         logger.info("下载文件完成");
     }
 }

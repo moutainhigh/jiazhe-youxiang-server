@@ -8,7 +8,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 
 /**
  * @author TU
- * @description
+ * @description  定时任务
  * @date 2019-09-03.
  */
 public class BOCCCQuartz extends QuartzJobBean {
@@ -20,8 +20,9 @@ public class BOCCCQuartz extends QuartzJobBean {
         logger.info("中行定时任务执行开始执行");
         //定时下载文件（退货信息文件，每日优惠券剩余数量文件，每日商品购买清单文件）
         try {
+            logger.info("定时任务下载文件执行中");
             SFTPUtils.download();
-            logger.info("下载文件失败");
+            logger.info("定时任务下载文件执行完成");
         } catch (Exception e) {
             logger.info("下载文件失败，异常信息：" + e.getMessage());
         }

@@ -159,6 +159,7 @@ public class VoucherExchangeCodeBatchServiceImpl implements VoucherExchangeCodeB
             voucherExchangeCodeSaveDTO.setVoucherExpiryTime(batchPO.getVoucherExpiryTime());
             voucherExchangeCodeSaveDTO.setValidityPeriod(batchPO.getValidityPeriod());
             voucherExchangeCodeSaveDTO.setExpiryType(batchPO.getExpiryType());
+            voucherExchangeCodeSaveDTO.setBocccProductId(batchPO.getBocccProductId());
             voucherExchangeCodeSaveDTO.setStatus(CommonConstant.CODE_STOP_USING);
             voucherExchangeCodeSaveDTO.setUsed(CommonConstant.CODE_NOT_USED);
             voucherExchangeCodeSaveDTOList.add(voucherExchangeCodeSaveDTO);

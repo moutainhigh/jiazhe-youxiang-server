@@ -121,6 +121,7 @@ public class VoucherExchangeCodeBatchAdapter {
         voucherExchangeCodeBatchPO.setVoucherExpiryTime(voucherExchangeCodeBatchSaveDTO.getVoucherExpiryTime());
         voucherExchangeCodeBatchPO.setValidityPeriod(voucherExchangeCodeBatchSaveDTO.getValidityPeriod());
         voucherExchangeCodeBatchPO.setExpiryType(voucherExchangeCodeBatchSaveDTO.getExpiryType());
+        voucherExchangeCodeBatchPO.setBocccProductId(voucherExchangeCodeBatchSaveDTO.getBocccProductId());
         voucherExchangeCodeBatchPO.setDescription(voucherExchangeCodeBatchSaveDTO.getDescription());
         return voucherExchangeCodeBatchPO;
     }
