@@ -295,7 +295,7 @@ public class SFTPUtils {
                 sftp.logout();
             }
         }else{
-            logger.error("中行上传文件夹路径定义有误！！！");
+            logger.error("BOCCC-ERROR：中行上传文件夹路径定义有误！！！");
         }
         logger.info("上传文件完成");
     }
@@ -319,7 +319,7 @@ public class SFTPUtils {
             }
             sftp.logout();
         }else{
-            logger.error("中行下载文件存放路径定义有误！！！");
+            logger.error("BOCCC-ERROR：中行下载文件存放路径定义有误！！！");
         }
         logger.info("下载文件完成");
     }

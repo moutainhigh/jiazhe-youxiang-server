@@ -112,7 +112,7 @@ public class CouponUtils {
 //        String url = "jdbc:mysql://cdb-21q33fb6.bj.tencentcdb.com:10018/youxiang?useUnicode=true&characterEncoding=UTF8&connectTimeout=1000&socketTimeout=10000&allowMultiQueries=true";
 //        Connection conn = DriverManager.getConnection(url, "root", "rewq4321$#@!");
         //生产环境数据库
-//        String url = "jdbc:mysql://bj-cdb-9l8ozcar.sql.tencentcdb.com:63546/coupon?characterEncoding=UTF-8&useCursorFetch=true&defaultFetchSize=2000";
+//        String url = "jdbc:mysql://bj-cdb-9l8ozcar.sql.tencentcdb.com:63546/youxiang?characterEncoding=UTF-8&useCursorFetch=true&defaultFetchSize=2000";
 //        Connection conn = DriverManager.getConnection(url, "root", "rewq4321++");
         int count = 0, error = 0;
         Statement state = conn.createStatement();
@@ -132,9 +132,9 @@ public class CouponUtils {
         }
         conn.close();//关闭通道
         if (error > 0) {
-            logger.error("生成优惠券总数：" + count + "，错误个数：" + error + "个，原因，数据库中boccc_product_id和本类中ProductIds对不上！");
+            logger.error("BOCCC-ERROR：生成优惠券总数：" + count + "，错误个数：" + error + "个，原因，数据库中boccc_product_id和本类中ProductIds对不上！");
         } else {
-            logger.error("成功生成优惠券：" + count + "个。");
+            logger.info("成功生成优惠券：" + count + "个。");
         }
         return list;
     }
