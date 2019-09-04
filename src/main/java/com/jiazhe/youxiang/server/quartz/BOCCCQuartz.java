@@ -1,6 +1,5 @@
 package com.jiazhe.youxiang.server.quartz;
 
-import com.jiazhe.youxiang.base.util.boccc.CouponUtils;
 import com.jiazhe.youxiang.base.util.boccc.SFTPUtils;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -27,7 +26,7 @@ public class BOCCCQuartz extends QuartzJobBean {
             logger.info("下载文件失败，异常信息：" + e.getMessage());
         }
 
-        //定时分析退货信息，生成退货信息结果至上传文件
+        //定时分析退货信息，生成退货信息结果至上传文件夹
         try {
 
         } catch (Exception e) {
@@ -36,10 +35,11 @@ public class BOCCCQuartz extends QuartzJobBean {
 
         //定时上传指定文件夹的文件
         try {
+            logger.info("定时任务上传文件执行中");
             SFTPUtils.upload();
-            logger.info("上传文件");
+            logger.info("定时任务上传文件执行完成");
         } catch (Exception e) {
-            logger.info("上传文件失败，异常信息：" + e.getMessage());
+            logger.info("定时任务上传文件执行失败，异常信息：" + e.getMessage());
         }
 
         //定时分析每日优惠券剩余数量

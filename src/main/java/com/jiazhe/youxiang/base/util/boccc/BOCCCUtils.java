@@ -22,7 +22,7 @@ public class BOCCCUtils {
 
     public static Logger logger = LoggerFactory.getLogger(BOCCCUtils.class);
 
-    private static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    private static SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 
     /**
      * 获取商户id

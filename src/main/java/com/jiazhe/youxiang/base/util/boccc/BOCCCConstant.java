@@ -48,12 +48,12 @@ public class BOCCCConstant {
     public static String loginPrivateKeyPath = rootPath + "pgp.key/partner08.key";
 
     /**
-     * 下载到本地的文件路径
+     * 下载到本地文件的根路径
      */
     public static String downloadPath = rootPath + "download/";
 
     /**
-     * 将要上传的文件路径
+     * 将要上传的文件的根路径
      */
     public static String uploadPath = rootPath + "upload/";
 
