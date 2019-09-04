@@ -50,6 +50,10 @@ public class VoucherExchangeCodePO implements Serializable {
 
     private Date modTime;
 
+    private String bocccProductId;
+
+    private Date usedTime;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -234,5 +238,21 @@ public class VoucherExchangeCodePO implements Serializable {
 
     public void setModTime(Date modTime) {
         this.modTime = modTime;
+    }
+
+    public String getBocccProductId() {
+        return bocccProductId;
+    }
+
+    public void setBocccProductId(String bocccProductId) {
+        this.bocccProductId = bocccProductId == null ? null : bocccProductId.trim();
+    }
+
+    public Date getUsedTime() {
+        return usedTime;
+    }
+
+    public void setUsedTime(Date usedTime) {
+        this.usedTime = usedTime;
     }
 }

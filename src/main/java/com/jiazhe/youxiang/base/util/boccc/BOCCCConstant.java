@@ -57,4 +57,9 @@ public class BOCCCConstant {
      */
     public static String uploadPath = rootPath + "upload/";
 
+    /**
+     * 包含 中行信用卡  字样的优惠券
+     */
+    public static String couponName = "中行信用卡";
+
 }

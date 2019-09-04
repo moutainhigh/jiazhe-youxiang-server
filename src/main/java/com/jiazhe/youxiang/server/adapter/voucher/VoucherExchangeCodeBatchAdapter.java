@@ -55,6 +55,7 @@ public class VoucherExchangeCodeBatchAdapter {
         voucherExchangeCodeBatchSaveDTO.setValidityPeriod(req.getValidityPeriod());
         voucherExchangeCodeBatchSaveDTO.setExpiryType(req.getExpiryType());
         voucherExchangeCodeBatchSaveDTO.setDescription(req.getDescription());
+        voucherExchangeCodeBatchSaveDTO.setBocccProductId(req.getBocccProductId());
         return voucherExchangeCodeBatchSaveDTO;
     }
 
@@ -78,6 +79,7 @@ public class VoucherExchangeCodeBatchAdapter {
         voucherExchangeCodeBatchEditResp.setVoucherExpiryTime(voucherExchangeCodeBatchEditDTO.getVoucherExpiryTime().getTime());
         voucherExchangeCodeBatchEditResp.setValidityPeriod(voucherExchangeCodeBatchEditDTO.getValidityPeriod());
         voucherExchangeCodeBatchEditResp.setExpiryType(voucherExchangeCodeBatchEditDTO.getExpiryType());
+        voucherExchangeCodeBatchEditResp.setBocccProductId(voucherExchangeCodeBatchEditDTO.getBocccProductId());
         return voucherExchangeCodeBatchEditResp;
     }
 
@@ -144,6 +146,7 @@ public class VoucherExchangeCodeBatchAdapter {
         voucherExchangeCodeBatchEditDTO.setVoucherExpiryTime(voucherExchangeCodeBatchPO.getVoucherExpiryTime());
         voucherExchangeCodeBatchEditDTO.setValidityPeriod(voucherExchangeCodeBatchPO.getValidityPeriod());
         voucherExchangeCodeBatchEditDTO.setExpiryType(voucherExchangeCodeBatchPO.getExpiryType());
+        voucherExchangeCodeBatchEditDTO.setBocccProductId(voucherExchangeCodeBatchPO.getBocccProductId());
         return voucherExchangeCodeBatchEditDTO;
     }
 }

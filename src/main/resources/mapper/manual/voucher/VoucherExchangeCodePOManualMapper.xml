@@ -25,13 +25,15 @@
         <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
         <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
         <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
+        <result column="boccc_product_id" property="bocccProductId" jdbcType="VARCHAR" />
+        <result column="used_time" property="usedTime" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="Base_Column_List">
        id, batch_id, batch_name, voucher_name, batch_description, project_id, city_codes,
     product_ids, count, code, keyt, expiry_time, voucher_effective_time, voucher_expiry_time,
     validity_period, expiry_type, status, used, customer_id, ext_info, is_deleted, add_time,
-    mod_time
+    mod_time,boccc_product_id,used_time
     </sql>
 
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">

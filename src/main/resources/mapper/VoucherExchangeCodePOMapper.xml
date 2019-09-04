@@ -25,6 +25,8 @@
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
     <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
     <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
+    <result column="boccc_product_id" property="bocccProductId" jdbcType="VARCHAR" />
+    <result column="used_time" property="usedTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -88,7 +90,7 @@
     id, batch_id, batch_name, voucher_name, batch_description, project_id, city_codes, 
     product_ids, count, code, keyt, expiry_time, voucher_effective_time, voucher_expiry_time, 
     validity_period, expiry_type, status, used, customer_id, ext_info, is_deleted, add_time, 
-    mod_time
+    mod_time, boccc_product_id, used_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodePOExample" >
     select
@@ -128,8 +130,8 @@
       voucher_effective_time, voucher_expiry_time, 
       validity_period, expiry_type, status, 
       used, customer_id, ext_info, 
-      is_deleted, add_time, mod_time
-      )
+      is_deleted, add_time, mod_time, 
+      boccc_product_id, used_time)
     values (#{id,jdbcType=INTEGER}, #{batchId,jdbcType=INTEGER}, #{batchName,jdbcType=VARCHAR}, 
       #{voucherName,jdbcType=VARCHAR}, #{batchDescription,jdbcType=VARCHAR}, #{projectId,jdbcType=INTEGER}, 
       #{cityCodes,jdbcType=VARCHAR}, #{productIds,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER}, 
@@ -137,8 +139,8 @@
       #{voucherEffectiveTime,jdbcType=TIMESTAMP}, #{voucherExpiryTime,jdbcType=TIMESTAMP}, 
       #{validityPeriod,jdbcType=INTEGER}, #{expiryType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
       #{used,jdbcType=TINYINT}, #{customerId,jdbcType=INTEGER}, #{extInfo,jdbcType=VARCHAR}, 
-      #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}
-      )
+      #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}, 
+      #{bocccProductId,jdbcType=VARCHAR}, #{usedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodePO" >
     insert into voucher_exchange_code
@@ -212,6 +214,12 @@
       <if test="modTime != null" >
         mod_time,
       </if>
+      <if test="bocccProductId != null" >
+        boccc_product_id,
+      </if>
+      <if test="usedTime != null" >
+        used_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -282,6 +290,12 @@
       </if>
       <if test="modTime != null" >
         #{modTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bocccProductId != null" >
+        #{bocccProductId,jdbcType=VARCHAR},
+      </if>
+      <if test="usedTime != null" >
+        #{usedTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -363,6 +377,12 @@
       <if test="record.modTime != null" >
         mod_time = #{record.modTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.bocccProductId != null" >
+        boccc_product_id = #{record.bocccProductId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.usedTime != null" >
+        used_time = #{record.usedTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -392,7 +412,9 @@
       ext_info = #{record.extInfo,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=TINYINT},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
-      mod_time = #{record.modTime,jdbcType=TIMESTAMP}
+      mod_time = #{record.modTime,jdbcType=TIMESTAMP},
+      boccc_product_id = #{record.bocccProductId,jdbcType=VARCHAR},
+      used_time = #{record.usedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -466,6 +488,12 @@
       <if test="modTime != null" >
         mod_time = #{modTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="bocccProductId != null" >
+        boccc_product_id = #{bocccProductId,jdbcType=VARCHAR},
+      </if>
+      <if test="usedTime != null" >
+        used_time = #{usedTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -492,7 +520,9 @@
       ext_info = #{extInfo,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=TINYINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},
-      mod_time = #{modTime,jdbcType=TIMESTAMP}
+      mod_time = #{modTime,jdbcType=TIMESTAMP},
+      boccc_product_id = #{bocccProductId,jdbcType=VARCHAR},
+      used_time = #{usedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

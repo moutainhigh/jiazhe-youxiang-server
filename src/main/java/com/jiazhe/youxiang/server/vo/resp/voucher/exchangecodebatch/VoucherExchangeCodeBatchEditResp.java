@@ -2,9 +2,6 @@ package com.jiazhe.youxiang.server.vo.resp.voucher.exchangecodebatch;
 
 import com.jiazhe.youxiang.server.vo.BaseObject;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 /**
  * @author TU
  * @description
@@ -41,6 +38,8 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
     private Integer validityPeriod;
 
     private Byte expiryType;
+
+    private String bocccProductId;
 
     public Integer getId() {
         return id;
@@ -160,5 +159,13 @@ public class VoucherExchangeCodeBatchEditResp extends BaseObject {
 
     public void setVoucherEffectiveTime(Long voucherEffectiveTime) {
         this.voucherEffectiveTime = voucherEffectiveTime;
+    }
+
+    public String getBocccProductId() {
+        return bocccProductId;
+    }
+
+    public void setBocccProductId(String bocccProductId) {
+        this.bocccProductId = bocccProductId;
     }
 }

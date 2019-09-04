@@ -49,6 +49,9 @@ public class VoucherExchangeCodeBatchSaveReq  extends BaseVO{
     @ApiModelProperty("代金券过期类型")
     private Byte expiryType;
 
+    @ApiModelProperty("对应中行商品ID")
+    private String bocccProductId;
+
     @ApiModelProperty("描述信息")
     private String description;
 
@@ -162,5 +165,13 @@ public class VoucherExchangeCodeBatchSaveReq  extends BaseVO{
 
     public void setVoucherEffectiveTime(Long voucherEffectiveTime) {
         this.voucherEffectiveTime = voucherEffectiveTime;
+    }
+
+    public String getBocccProductId() {
+        return bocccProductId;
+    }
+
+    public void setBocccProductId(String bocccProductId) {
+        this.bocccProductId = bocccProductId;
     }
 }

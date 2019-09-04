@@ -1564,6 +1564,136 @@ public class VoucherExchangeCodePOExample {
             addCriterion("mod_time not between", value1, value2, "modTime");
             return (Criteria) this;
         }
+
+        public Criteria andBocccProductIdIsNull() {
+            addCriterion("boccc_product_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBocccProductIdIsNotNull() {
+            addCriterion("boccc_product_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBocccProductIdEqualTo(String value) {
+            addCriterion("boccc_product_id =", value, "bocccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBocccProductIdNotEqualTo(String value) {
+            addCriterion("boccc_product_id <>", value, "bocccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBocccProductIdGreaterThan(String value) {
+            addCriterion("boccc_product_id >", value, "bocccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBocccProductIdGreaterThanOrEqualTo(String value) {
+            addCriterion("boccc_product_id >=", value, "bocccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBocccProductIdLessThan(String value) {
+            addCriterion("boccc_product_id <", value, "bocccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBocccProductIdLessThanOrEqualTo(String value) {
+            addCriterion("boccc_product_id <=", value, "bocccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBocccProductIdLike(String value) {
+            addCriterion("boccc_product_id like", value, "bocccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBocccProductIdNotLike(String value) {
+            addCriterion("boccc_product_id not like", value, "bocccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBocccProductIdIn(List<String> values) {
+            addCriterion("boccc_product_id in", values, "bocccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBocccProductIdNotIn(List<String> values) {
+            addCriterion("boccc_product_id not in", values, "bocccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBocccProductIdBetween(String value1, String value2) {
+            addCriterion("boccc_product_id between", value1, value2, "bocccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBocccProductIdNotBetween(String value1, String value2) {
+            addCriterion("boccc_product_id not between", value1, value2, "bocccProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedTimeIsNull() {
+            addCriterion("used_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedTimeIsNotNull() {
+            addCriterion("used_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedTimeEqualTo(Date value) {
+            addCriterion("used_time =", value, "usedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedTimeNotEqualTo(Date value) {
+            addCriterion("used_time <>", value, "usedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedTimeGreaterThan(Date value) {
+            addCriterion("used_time >", value, "usedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("used_time >=", value, "usedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedTimeLessThan(Date value) {
+            addCriterion("used_time <", value, "usedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedTimeLessThanOrEqualTo(Date value) {
+            addCriterion("used_time <=", value, "usedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedTimeIn(List<Date> values) {
+            addCriterion("used_time in", values, "usedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedTimeNotIn(List<Date> values) {
+            addCriterion("used_time not in", values, "usedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedTimeBetween(Date value1, Date value2) {
+            addCriterion("used_time between", value1, value2, "usedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedTimeNotBetween(Date value1, Date value2) {
+            addCriterion("used_time not between", value1, value2, "usedTime");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

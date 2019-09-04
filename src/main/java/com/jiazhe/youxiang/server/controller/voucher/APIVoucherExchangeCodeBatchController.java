@@ -83,6 +83,7 @@ public class APIVoucherExchangeCodeBatchController extends BaseController {
         CommonValidator.validateNull(req.getProjectId(), new VoucherException(VoucherCodeEnum.PROJECT_IS_NULL));
         CommonValidator.validateNull(req.getCityCodes(), new VoucherException(VoucherCodeEnum.CITY_IS_NULL));
         CommonValidator.validateNull(req.getProductIds(), new VoucherException(VoucherCodeEnum.PRODUCT_IS_NULL));
+        
         //批次过期时间为空
         if (req.getExpiryTime() == CommonConstant.NULL_TIME) {
             throw new VoucherException(VoucherCodeEnum.BATCH_EXPIRY_TIME_IS_NULL);

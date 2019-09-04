@@ -1,8 +1,6 @@
 package com.jiazhe.youxiang.server.dto.voucher.exchangecodebatch;
 
 import com.jiazhe.youxiang.server.vo.BaseObject;
-import io.swagger.annotations.ApiModelProperty;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -42,6 +40,8 @@ public class VoucherExchangeCodeBatchSaveDTO extends BaseObject {
     private Byte expiryType;
 
     private String description;
+
+    private String bocccProductId;
 
     public Integer getId() {
         return id;
@@ -153,5 +153,13 @@ public class VoucherExchangeCodeBatchSaveDTO extends BaseObject {
 
     public void setVoucherEffectiveTime(Date voucherEffectiveTime) {
         this.voucherEffectiveTime = voucherEffectiveTime;
+    }
+
+    public String getBocccProductId() {
+        return bocccProductId;
+    }
+
+    public void setBocccProductId(String bocccProductId) {
+        this.bocccProductId = bocccProductId;
     }
 }

@@ -22,12 +22,13 @@
         <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
         <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
         <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
+        <result column="boccc_product_id" property="bocccProductId" jdbcType="VARCHAR" />
     </resultMap>
 
     <sql id="Base_Column_List">
       id, name, voucher_name, project_id, is_made, description, amount, city_codes, product_ids,
     count, expiry_time, voucher_effective_time, voucher_expiry_time, validity_period,
-    expiry_type, status, ext_info, is_deleted, add_time, mod_time
+    expiry_type, status, ext_info, is_deleted, add_time, mod_time,boccc_product_id
     </sql>
 
     <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodeBatchPO">

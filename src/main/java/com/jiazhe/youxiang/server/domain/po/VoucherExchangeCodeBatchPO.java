@@ -44,6 +44,8 @@ public class VoucherExchangeCodeBatchPO implements Serializable {
 
     private Date modTime;
 
+    private String bocccProductId;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -204,5 +206,13 @@ public class VoucherExchangeCodeBatchPO implements Serializable {
 
     public void setModTime(Date modTime) {
         this.modTime = modTime;
+    }
+
+    public String getBocccProductId() {
+        return bocccProductId;
+    }
+
+    public void setBocccProductId(String bocccProductId) {
+        this.bocccProductId = bocccProductId == null ? null : bocccProductId.trim();
     }
 }

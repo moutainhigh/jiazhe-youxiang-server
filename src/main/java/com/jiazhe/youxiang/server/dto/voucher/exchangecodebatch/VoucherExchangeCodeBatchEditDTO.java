@@ -45,6 +45,8 @@ public class VoucherExchangeCodeBatchEditDTO extends BaseObject {
 
     private Byte expiryType;
 
+    private String bocccProductId;
+
     public Integer getId() {
         return id;
     }
@@ -171,5 +173,13 @@ public class VoucherExchangeCodeBatchEditDTO extends BaseObject {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getBocccProductId() {
+        return bocccProductId;
+    }
+
+    public void setBocccProductId(String bocccProductId) {
+        this.bocccProductId = bocccProductId;
     }
 }
