@@ -25,18 +25,6 @@ public class BOCCCUtils {
     private static SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 
     /**
-     * 获取商户id
-     * 命名规则为MXXXXNNNNN
-     * (XXXX为四位第三方系统名称，NNNNN为数字编码，范围为00001~99999)
-     *
-     * @return
-     */
-    public static String getMerchantId() throws Exception {
-        return "M" + BOCCCConstant.MERCHANT_NAME + complete(BOCCCConstant.MERCHANT_ID, '0', true, 5);
-    }
-
-
-    /**
      * 生成n个字符
      *
      * @param n

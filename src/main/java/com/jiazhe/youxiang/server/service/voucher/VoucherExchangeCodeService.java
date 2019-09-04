@@ -103,4 +103,11 @@ public interface VoucherExchangeCodeService {
      * @param voucherExchangeCodeDTOS
      */
     void batchUpdateCodeAndKeyt(List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOS);
+
+    /**
+     * 统计使用对接情况 1统计中行对接
+     * @param type
+     * @return
+     */
+    List<VoucherExchangeCodeDTO> getYesterdayUsed(String type);
 }

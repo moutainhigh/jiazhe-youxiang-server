@@ -18,14 +18,14 @@ public class BOCCCConstant {
     public static final String BOC_Separator = " |#| ";
 
     /**
-     * 商户ID
-     */
-    public static final String MERCHANT_ID = "12345";
-
-    /**
      * 商户名称：北京悠享首字母大写
      */
     public static final String MERCHANT_NAME = "BJYX";
+
+    /**
+     * 商户ID
+     */
+    public static final String MERCHANT_ID = "M" + MERCHANT_NAME + "XXXXNNNNNNNNNN";
 
     /**
      * 生成文件的根目录

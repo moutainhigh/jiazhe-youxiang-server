@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.quartz;
 
+import com.jiazhe.youxiang.base.util.boccc.CouponUsedUtils;
 import com.jiazhe.youxiang.base.util.boccc.SFTPUtils;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -33,6 +34,16 @@ public class BOCCCQuartz extends QuartzJobBean {
         } catch (Exception e) {
 
         }
+
+        //定时生成前一日的使用情况
+        try {
+            logger.info("定时任务优惠券使用情况文件生成中");
+            CouponUsedUtils.generateFile();
+            logger.info("定时任务优惠券使用情况文件生成完成");
+        } catch (Exception e) {
+
+        }
+
 
         //定时上传指定文件夹的文件
         try {

@@ -298,4 +298,28 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
         List<VoucherExchangeCodePO> poList = voucherExchangeCodeDTOS.stream().map(VoucherExchangeCodeAdapter::dto2Po).collect(Collectors.toList());
         voucherExchangeCodePOManualMapper.batchUpdateCodeAndKeyt(poList);
     }
+
+    /**
+     *
+     * @param type
+     * @return
+     */
+    @Override
+    public List<VoucherExchangeCodeDTO> getYesterdayUsed(String type) {
+        Date yesterday = new Date(System.currentTimeMillis() - CommonConstant.ONE_DAY);
+        Date yesterdayBegin = new Date(DateUtil.getFirstSecond(yesterday.getTime()));
+        Date yesterdayEnd = new Date(DateUtil.getLastSecond(yesterday.getTime()));
+        VoucherExchangeCodePOExample example = new VoucherExchangeCodePOExample();
+        VoucherExchangeCodePOExample.Criteria criteria = example.createCriteria();
+        if(type.equals("1")){
+            criteria.andBocccProductIdIsNotNull();
+        }
+        criteria.andUsedEqualTo(CommonConstant.CODE_HAS_USED);
+        criteria.andUsedTimeBetween(yesterdayBegin,yesterdayEnd);
+        criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+        List<VoucherExchangeCodePO> poList = voucherExchangeCodePOMapper.selectByExample(example);
+        return poList.stream().map(VoucherExchangeCodeAdapter::PO2DTO).collect(Collectors.toList());
+    }
+
+
 }

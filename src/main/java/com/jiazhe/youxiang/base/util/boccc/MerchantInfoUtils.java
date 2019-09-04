@@ -96,7 +96,7 @@ public class MerchantInfoUtils {
     public static StringBuilder generateBin() throws Exception {
         StringBuilder sb = new StringBuilder();
         //添加商户id
-        sb.append(BOCCCUtils.getMerchantId()).append(BOCCCConstant.BOC_Separator);
+        sb.append(BOCCCConstant.MERCHANT_ID).append(BOCCCConstant.BOC_Separator);
         //添加省，市，县
         sb.append(Province).append(BOCCCConstant.BOC_Separator);
         sb.append(City).append(BOCCCConstant.BOC_Separator);
@@ -137,7 +137,7 @@ public class MerchantInfoUtils {
      * @return
      */
     public static String generateSourceFileName() {
-        return BOCCCConstant.rootPath + "MER." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P";
+        return "MER." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P";
     }
 
     /**
@@ -146,7 +146,7 @@ public class MerchantInfoUtils {
      * @return
      */
     public static String generateZipFileName() {
-        return BOCCCConstant.rootPath + "MER." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P.ZIP";
+        return "MER." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P.ZIP";
     }
 
     /**
@@ -155,7 +155,7 @@ public class MerchantInfoUtils {
      * @return
      */
     public static String generatePgpFileName() {
-        return BOCCCConstant.rootPath + "MER." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P.ZIP.DAT";
+        return "MER." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P.ZIP.DAT";
     }
 
 
@@ -167,9 +167,9 @@ public class MerchantInfoUtils {
     public static void generateFile() throws Exception {
 
         //三种类型文件路径
-        String sourceFileName = generateSourceFileName();
-        String zipFileName = generateZipFileName();
-        String pgpFileName = generatePgpFileName();
+        String sourceFileName = BOCCCConstant.rootPath + generateSourceFileName();
+        String zipFileName = BOCCCConstant.rootPath + generateZipFileName();
+        String pgpFileName = BOCCCConstant.rootPath + generatePgpFileName();
 
         //第一步，检查各个参数是否合法
         check();
@@ -190,7 +190,7 @@ public class MerchantInfoUtils {
 
         //第五步，压缩文件加密中
         logger.info("压缩文件加密中...");
-        PgpEncryUtil.Encry(zipFileName, BOCCCConstant.publicKeyPath, generatePgpFileName());
+        PgpEncryUtil.Encry(zipFileName, BOCCCConstant.publicKeyPath, pgpFileName);
         logger.info("压缩文件加密完成，路径为：" + pgpFileName);
 
 //        //第六步，文件解密中
