@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
@@ -202,6 +203,31 @@ public class BOCCCUtils {
             }
         }
         return null;
+    }
+
+    /**
+     * 追加文件：使用FileWriter
+     *
+     * @param fileName 不存在时可以自动新建文件
+     * @param content
+     */
+    public static void contentAppend(String fileName, String content) {
+        FileWriter writer = null;
+        try {
+            // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
+            writer = new FileWriter(fileName, true);
+            writer.write(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (writer != null) {
+                    writer.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

@@ -149,6 +149,8 @@ public class HandCouponUtils {
     }
 
     public static void main(String[] args) throws Exception {
-        generateFile();
+//        generateFile();
+        String result = "123";
+        BOCCCUtils.contentAppend(BOCCCConstant.rootPath + "test.txt",result);
     }
 }
