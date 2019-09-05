@@ -34,9 +34,9 @@ public class CCancelUtils {
     }
 
     /**
-     * 获取昨日中行信用卡对接已经使用的代金券兑换码
+     * 模拟获取退货的代金券
      *
-     * @param type 统计对接哪种类型使用情况  1中行信用卡对接
+     * @param type
      * @return
      */
     public static List<VoucherExchangeCodeDTO> getYesterdayUsed(String type) {
@@ -50,7 +50,6 @@ public class CCancelUtils {
         int i = 1;
         for (VoucherExchangeCodeDTO dto : list) {
             sb.append(BOCCCUtils.complete(String.valueOf(i), '0', true, 19)).append(BOCCCConstant.BOC_Separator);
-
             sb.append(dto.getBocccProductId()).append(BOCCCConstant.BOC_Separator);
             sb.append(BOCCCUtils.complete(String.valueOf(dto.getId()), '0', true, 10)).append(BOCCCConstant.BOC_Separator);
             sb.append("E").append(BOCCCConstant.BOC_Separator);
@@ -77,48 +76,36 @@ public class CCancelUtils {
     public static void generateFile() throws Exception {
 
         //三种类型文件路径
-        String sourceFileName = BOCCCConstant.rootPath + "cused/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_SOURCE, -1);
-        String zipFileName = BOCCCConstant.rootPath + "cused/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_ZIP, -1);
-        String pgpFileName = BOCCCConstant.rootPath + "cused/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_PGP, -1);
+        String sourceFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_SOURCE, -1);
+        String zipFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_ZIP, -1);
+        String pgpFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_PGP, -1);
 
-        //第一步，获取昨日使用的代金券兑换码
+        //第一步，获取昨日退货的代金券兑换码
         List<VoucherExchangeCodeDTO> list = getYesterdayUsed("1");
 
-        //第二步，按照规则组成已经使用的代金券兑换码字符串
+        //第二步，按照规则组成昨日退货的代金券兑换码字符串
         if (list.isEmpty()) {
-            logger.info("昨日使用代金券数量为：0");
+            logger.info("昨日代金券退货数量为：0");
             return;
         }
-        logger.info("昨日使用代金券数量为：" + list.size());
-        //代金券使用数量不为0，则去生成文件夹
-        File usedPath = new File(BOCCCConstant.rootPath + "cused/" + BOCCCUtils.getToday());
-        if (!usedPath.exists()) {
-            usedPath.mkdirs();
-        }
+        logger.info("昨日代金券退货数量为：" + list.size());
+        //代金券退货数量不为0，则在根目录下去生成文件
         StringBuilder sb = generateBin(list);
 
         //第三步，写入文件中
-        logger.info("昨日使用代金券源文件生成中...");
+        logger.info("昨日退货代金券源文件生成中...");
         BOCCCUtils.writeStringToFile(sourceFileName, sb.toString());
-        logger.info("昨日使用代金券源文件生成完成，路径为：" + sourceFileName);
+        logger.info("昨日退货代金券源文件生成完成，路径为：" + sourceFileName);
 
         //第四步，源文件压缩中
-        logger.info("昨日使用代金券源文件压缩中...");
+        logger.info("昨日退货代金券源文件压缩中...");
         File sourceFile = new File(sourceFileName);
         new ZipUtil(new File(zipFileName)).zipFiles(sourceFile);
-        logger.info("昨日使用代金券源文件压缩完成，路径为：" + zipFileName);
+        logger.info("昨日退货代金券源文件压缩完成，路径为：" + zipFileName);
 
         //第五步，压缩文件加密中
-        logger.info("昨日使用代金券压缩文件加密中...");
+        logger.info("昨日退货代金券压缩文件加密中...");
         PgpEncryUtil.Encry(zipFileName, BOCCCConstant.publicKeyPath, pgpFileName);
-        logger.info("昨日使用代金券压缩文件加密完成，路径为：" + pgpFileName);
-
-        //第六步，将加密文件复制到待上传的文件夹中
-        String uploadPath = BOCCCConstant.uploadPath + BOCCCUtils.getToday();
-        File file = new File(uploadPath);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-        FileUtils.copyFileToDirectory(new File(pgpFileName), new File(uploadPath));
+        logger.info("昨日退货代金券压缩文件加密完成，路径为：" + pgpFileName);
     }
 }
