@@ -17,19 +17,19 @@ import java.util.List;
  * @date 2019-09-05.
  */
 @Component
-public class AutoCCancelUtils {
+public class AutoCCancelInfoUtils {
 
-    public static Logger logger = LoggerFactory.getLogger(AutoCCancelUtils.class);
+    public static Logger logger = LoggerFactory.getLogger(AutoCCancelInfoUtils.class);
 
-    public static AutoCCancelUtils cCancelUtils;
+    public static AutoCCancelInfoUtils cCancelInfoUtils;
 
     @Autowired
     private VoucherExchangeCodeService voucherExchangeCodeService;
 
     @PostConstruct
     public void init() {
-        cCancelUtils = this;
-        cCancelUtils.voucherExchangeCodeService = this.voucherExchangeCodeService;
+        cCancelInfoUtils = this;
+        cCancelInfoUtils.voucherExchangeCodeService = this.voucherExchangeCodeService;
     }
 
     /**
@@ -39,7 +39,7 @@ public class AutoCCancelUtils {
      * @return
      */
     public static List<VoucherExchangeCodeDTO> getYesterdayUsed(String type) {
-        List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOList = cCancelUtils.voucherExchangeCodeService.getYesterdayUsed(type);
+        List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOList = cCancelInfoUtils.voucherExchangeCodeService.getYesterdayUsed(type);
         return voucherExchangeCodeDTOList;
     }
 

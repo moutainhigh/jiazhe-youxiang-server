@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @author tu
  * @version 1.0
- * @description 优惠券已使用工具类，定时自动执行
+ * @description 优惠券昨日已使用，定时自动执行
  * @created 2019-09-03 20:24
  */
 @Component

@@ -1,7 +1,7 @@
 package com.jiazhe.youxiang.server.quartz;
 
 import com.jiazhe.youxiang.base.util.boccc.AutoCCancelResultUtils;
-import com.jiazhe.youxiang.base.util.boccc.AutoCCancelUtils;
+import com.jiazhe.youxiang.base.util.boccc.AutoCCancelInfoUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoCouponUsedUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoSFTPUtils;
 import org.quartz.JobExecutionException;
@@ -25,7 +25,7 @@ public class BOCCCQuartz extends QuartzJobBean {
         //模拟中行生成退货信息
         try {
             logger.info("模拟生成中行退货信息");
-            AutoCCancelUtils.generateFile();
+            AutoCCancelInfoUtils.generateFile();
             logger.info("模拟生成中行退货信息完成");
         } catch (Exception e) {
             logger.info("模拟生成中行退货信息失败，异常信息：" + e.getMessage());
