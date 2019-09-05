@@ -10,9 +10,9 @@ import java.io.File;
  * @description 商品信息工具类
  * @date 2019-09-02.
  */
-public class ProductInfoUtils {
+public class HandProductInfoUtils {
 
-    public static Logger logger = LoggerFactory.getLogger(ProductInfoUtils.class);
+    public static Logger logger = LoggerFactory.getLogger(HandProductInfoUtils.class);
 
     /**
      * 11位

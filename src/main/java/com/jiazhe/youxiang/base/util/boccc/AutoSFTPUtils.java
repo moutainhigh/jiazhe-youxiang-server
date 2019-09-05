@@ -31,13 +31,13 @@ import java.util.Vector;
 /**
  * @author tu
  * @version 1.0
- * @description SFTP工具类
+ * @description SFTP工具类，定时自动下载、上传
  * @created 2019-09-03 20:53
  */
 @Component
-public class SFTPUtils {
+public class AutoSFTPUtils {
 
-    public static Logger logger = LoggerFactory.getLogger(SFTPUtils.class);
+    public static Logger logger = LoggerFactory.getLogger(AutoSFTPUtils.class);
 
     private ChannelSftp sftp;
 
@@ -76,7 +76,7 @@ public class SFTPUtils {
     /**
      * 构造基于密码认证的sftp对象
      */
-    public SFTPUtils(String USERNAME, String PASSWORD, String HOST, int PORT) {
+    public AutoSFTPUtils(String USERNAME, String PASSWORD, String HOST, int PORT) {
         username = USERNAME;
         password = PASSWORD;
         host = HOST;
@@ -86,14 +86,14 @@ public class SFTPUtils {
     /**
      * 构造基于秘钥认证的sftp对象
      */
-    public SFTPUtils(String USERNAME, String HOST, int PORT) {
+    public AutoSFTPUtils(String USERNAME, String HOST, int PORT) {
         username = USERNAME;
         host = HOST;
         port = PORT;
         privateKey = BOCCCConstant.loginPrivateKeyPath;
     }
 
-    public SFTPUtils() {
+    public AutoSFTPUtils() {
     }
 
     /**
@@ -279,7 +279,7 @@ public class SFTPUtils {
      */
     public static void upload() throws SftpException, IOException {
         logger.info("上传文件中");
-        SFTPUtils sftp = new SFTPUtils(username, password, host, port);
+        AutoSFTPUtils sftp = new AutoSFTPUtils(username, password, host, port);
         sftp.login();
         //本地将要上传的文件夹
         File uploadPath = new File(BOCCCConstant.uploadPath + BOCCCUtils.getToday());
@@ -302,7 +302,7 @@ public class SFTPUtils {
 
     public static void download() throws SftpException, FileNotFoundException {
         logger.info("下载文件中");
-        SFTPUtils sftp = new SFTPUtils(username, password, host, port);
+        AutoSFTPUtils sftp = new AutoSFTPUtils(username, password, host, port);
         sftp.login();
         //下载到本地服务器的路径
         String downloadPath = BOCCCConstant.downloadPath + BOCCCUtils.getToday();

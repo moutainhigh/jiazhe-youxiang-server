@@ -2,7 +2,6 @@ package com.jiazhe.youxiang.base.util.boccc;
 
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
 import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeCodeService;
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +13,15 @@ import java.util.List;
 
 /**
  * @author TU
- * @description 模拟生成退货文件
+ * @description 模拟生成退货文件，实际生产中不放入定时任务
  * @date 2019-09-05.
  */
 @Component
-public class CCancelUtils {
+public class AutoCCancelUtils {
 
-    public static Logger logger = LoggerFactory.getLogger(CCancelUtils.class);
+    public static Logger logger = LoggerFactory.getLogger(AutoCCancelUtils.class);
 
-    public static CCancelUtils cCancelUtils;
+    public static AutoCCancelUtils cCancelUtils;
 
     @Autowired
     private VoucherExchangeCodeService voucherExchangeCodeService;

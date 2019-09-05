@@ -26,11 +26,11 @@ import java.util.List;
  * @created 2019-09-03 20:24
  */
 @Component
-public class CouponUsedUtils {
+public class AutoCouponUsedUtils {
 
-    public static Logger logger = LoggerFactory.getLogger(CouponUsedUtils.class);
+    public static Logger logger = LoggerFactory.getLogger(AutoCouponUsedUtils.class);
 
-    public static CouponUsedUtils couponUsedUtils;
+    public static AutoCouponUsedUtils couponUsedUtils;
 
     @Autowired
     private VoucherExchangeCodeService voucherExchangeCodeService;

@@ -10,9 +10,9 @@ import java.io.File;
  * @description 商户信息工具类
  * @date 2019-09-03.
  */
-public class MerchantInfoUtils {
+public class HandMerchantInfoUtils {
 
-    public static Logger logger = LoggerFactory.getLogger(MerchantInfoUtils.class);
+    public static Logger logger = LoggerFactory.getLogger(HandMerchantInfoUtils.class);
 
     /**
      * 省

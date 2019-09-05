@@ -8,8 +8,8 @@ package com.jiazhe.youxiang.base.util.boccc;
 /**
  * @author tu
  * @version 1.0
- * @description 上传文件至中行服务器
- * @created 2019-09-03 20:45
+ * @description 商品图片加解密
+ * @created 2019-09-05 18:39
  */
-public class UploadUtils {
+public class HandPicUtils {
 }

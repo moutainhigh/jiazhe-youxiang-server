@@ -18,9 +18,9 @@ import java.util.Map;
  * @description 优惠券信息工具类
  * @date 2019-09-03.
  */
-public class CouponUtils {
+public class HandCouponUtils {
 
-    public static Logger logger = LoggerFactory.getLogger(CouponUtils.class);
+    public static Logger logger = LoggerFactory.getLogger(HandCouponUtils.class);
 
     /**
      * 11位

@@ -21,11 +21,11 @@ import java.io.InputStreamReader;
  * @date 2019-09-05.
  */
 @Component
-public class CCancelResultUtils {
+public class AutoCCancelResultUtils {
 
-    public static Logger logger = LoggerFactory.getLogger(CCancelResultUtils.class);
+    public static Logger logger = LoggerFactory.getLogger(AutoCCancelResultUtils.class);
 
-    public static CCancelResultUtils cCancelResultUtils;
+    public static AutoCCancelResultUtils cCancelResultUtils;
 
     @Autowired
     private VoucherExchangeCodeService voucherExchangeCodeService;
