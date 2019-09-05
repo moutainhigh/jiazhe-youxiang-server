@@ -194,16 +194,12 @@ public class MerchantInfoUtils {
         logger.info("压缩文件加密完成，路径为：" + pgpFileName);
 
 //        //第六步，文件解密中
-//        logger.info("加密文件解密中...");
 //        PgpDecryUtil decryU = new PgpDecryUtil();
 //        decryU.setPassphrase("youxianghulian0612");
 //        decryU.DecryUtil(pgpFileName, zipFileName, BOCCCConstant.privateKeyPath);
-//        logger.info("解密完成，路径为：" + zipFileName);
 //
 //        //第七步，文件解压缩
-//        logger.info("文件解压中...");
-//        UnZipUtil.ZipContraFile(zipFileName, sourceFileName.substring(0,sourceFileName.lastIndexOf("\\")));
-//        System.out.println("解压后路径" + sourceFileName);
+//        UnZipUtil.ZipContraFile(zipFileName, BOCCCConstant.rootPath);
     }
 
     public static void main(String[] args) throws Exception {

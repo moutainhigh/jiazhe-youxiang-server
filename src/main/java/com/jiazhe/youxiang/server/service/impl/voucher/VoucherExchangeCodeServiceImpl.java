@@ -312,7 +312,7 @@ public class VoucherExchangeCodeServiceImpl implements VoucherExchangeCodeServic
         VoucherExchangeCodePOExample example = new VoucherExchangeCodePOExample();
         VoucherExchangeCodePOExample.Criteria criteria = example.createCriteria();
         if(type.equals("1")){
-            criteria.andBocccProductIdIsNotNull();
+            criteria.andBocccProductIdNotEqualTo("");
         }
         criteria.andUsedEqualTo(CommonConstant.CODE_HAS_USED);
         criteria.andUsedTimeBetween(yesterdayBegin,yesterdayEnd);

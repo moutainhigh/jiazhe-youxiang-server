@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @author tu
  * @version 1.0
- * @description 优惠券已使用工具类
+ * @description 优惠券已使用工具类，定时自动执行
  * @created 2019-09-03 20:24
  */
 @Component
@@ -108,9 +108,9 @@ public class CouponUsedUtils {
     public static void generateFile() throws Exception {
 
         //三种类型文件路径
-        String sourceFileName = BOCCCConstant.rootPath + generateSourceFileName();
-        String zipFileName = BOCCCConstant.rootPath + generateZipFileName();
-        String pgpFileName = BOCCCConstant.rootPath + generatePgpFileName();
+        String sourceFileName = BOCCCConstant.rootPath + "cused/" + BOCCCUtils.getToday() + "/" + generateSourceFileName();
+        String zipFileName = BOCCCConstant.rootPath + "cused/" + BOCCCUtils.getToday() + "/" + generateZipFileName();
+        String pgpFileName = BOCCCConstant.rootPath + "cused/" + BOCCCUtils.getToday() + "/" + generatePgpFileName();
 
         //第一步，获取昨日使用的代金券兑换码
         List<VoucherExchangeCodeDTO> list = getYesterdayUsed("1");
@@ -121,6 +121,14 @@ public class CouponUsedUtils {
             return;
         }
         logger.info("昨日使用代金券数量为：" + list.size());
+
+        //代金券使用数量不为0，则去生成文件夹
+        File usedPath = new File(BOCCCConstant.rootPath + "cused/" + BOCCCUtils.getToday());
+        if(!usedPath.exists()){
+            usedPath.mkdirs();
+        }
+
+
         StringBuilder sb = generateBin(list);
 
         //第三步，写入文件中
@@ -147,10 +155,4 @@ public class CouponUsedUtils {
         }
         FileUtils.copyFileToDirectory(new File(pgpFileName), new File(uploadPath));
     }
-
-    public static void main(String[] args) throws Exception {
-        generateFile();
-    }
-
-
 }

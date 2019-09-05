@@ -8,7 +8,11 @@ package com.jiazhe.youxiang.base.util.boccc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -104,9 +108,37 @@ public class BOCCCUtils {
         return df.format(date);
     }
 
+    /**
+     * 获取明日的日期字符串
+     *
+     * @return
+     */
     public static String getTomorrow() {
         Date date = new Date(System.currentTimeMillis() + BOCCCConstant.DAY_SEC);
         return df.format(date);
+    }
+
+    /**
+     * 根据文件名模板生成文件名
+     *
+     * @param name 文件名模板
+     * @param day  -1表示昨日文件  0表示今日文件   1表示明日文件
+     * @return
+     */
+    public static String getFileName(String name, int day) {
+        String result = "";
+        switch (day) {
+            case -1:
+                result = name.replace("XXXX", BOCCCConstant.MERCHANT_NAME).replace("YYYYMMDD", getYesterday());
+                break;
+            case 0:
+                result = name.replace("XXXX", BOCCCConstant.MERCHANT_NAME).replace("YYYYMMDD", getToday());
+                break;
+            case 1:
+                result = name.replace("XXXX", BOCCCConstant.MERCHANT_NAME).replace("YYYYMMDD", getTomorrow());
+                break;
+        }
+        return result;
     }
 
 
@@ -120,6 +152,56 @@ public class BOCCCUtils {
      */
     public static String generateFileEndChar(int n) throws Exception {
         return "TLRL" + complete(String.valueOf(n), '0', true, 15);
+    }
+
+    /**
+     * 读取文件最后一行
+     *
+     * @param file
+     * @param charset
+     * @return
+     * @throws IOException
+     */
+    public static String readLastLine(File file, String charset) throws IOException {
+        if (!file.exists() || file.isDirectory() || !file.canRead()) {
+            return null;
+        }
+        RandomAccessFile raf = null;
+        try {
+            raf = new RandomAccessFile(file, "r");
+            long len = raf.length();
+            if (len == 0L) {
+                return "";
+            } else {
+                long pos = len - 1;
+                while (pos > 0) {
+                    pos--;
+                    raf.seek(pos);
+                    if (raf.readByte() == '\n') {
+                        break;
+                    }
+                }
+                if (pos == 0) {
+                    raf.seek(0);
+                }
+                byte[] bytes = new byte[(int) (len - pos)];
+                raf.read(bytes);
+                if (charset == null) {
+                    return new String(bytes);
+                } else {
+                    return new String(bytes, charset);
+                }
+            }
+        } catch (FileNotFoundException e) {
+        } finally {
+            if (raf != null) {
+                try {
+                    raf.close();
+                } catch (Exception e2) {
+                }
+            }
+        }
+        return null;
     }
 
 }

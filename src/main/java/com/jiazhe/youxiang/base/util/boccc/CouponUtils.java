@@ -9,7 +9,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,10 +107,10 @@ public class CouponUtils {
         //本地环境数据库
         String url = "jdbc:mysql://localhost:3306/youxiang?useUnicode=true&characterEncoding=UTF8&connectTimeout=1000&socketTimeout=10000&allowMultiQueries=true";
         Connection conn = DriverManager.getConnection(url, "root", "root");
-        //测试环境数据库
+//        //测试环境数据库
 //        String url = "jdbc:mysql://cdb-21q33fb6.bj.tencentcdb.com:10018/youxiang?useUnicode=true&characterEncoding=UTF8&connectTimeout=1000&socketTimeout=10000&allowMultiQueries=true";
 //        Connection conn = DriverManager.getConnection(url, "root", "rewq4321$#@!");
-        //生产环境数据库
+//        //生产环境数据库
 //        String url = "jdbc:mysql://bj-cdb-9l8ozcar.sql.tencentcdb.com:63546/youxiang?characterEncoding=UTF-8&useCursorFetch=true&defaultFetchSize=2000";
 //        Connection conn = DriverManager.getConnection(url, "root", "rewq4321++");
         int count = 0, error = 0;
@@ -173,18 +172,6 @@ public class CouponUtils {
         logger.info("压缩文件加密中...");
         PgpEncryUtil.Encry(zipFileName, BOCCCConstant.publicKeyPath, pgpFileName);
         logger.info("压缩文件加密完成，路径为：" + pgpFileName);
-
-//        //第六步，文件解密中
-//        logger.info("加密文件解密中...");
-//        PgpDecryUtil decryU = new PgpDecryUtil();
-//        decryU.setPassphrase("youxianghulian0612");
-//        decryU.DecryUtil(pgpFileName, zipFileName, BOCCCConstant.privateKeyPath);
-//        logger.info("解密完成，路径为：" + zipFileName);
-//
-//        //第七步，文件解压缩
-//        logger.info("文件解压中...");
-//        UnZipUtil.ZipContraFile(zipFileName, sourceFileName.substring(0,sourceFileName.lastIndexOf("\\")));
-//        System.out.println("解压后路径" + sourceFileName);
     }
 
     public static void main(String[] args) throws Exception {

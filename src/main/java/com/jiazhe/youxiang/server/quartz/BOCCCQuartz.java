@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.quartz;
 
+import com.jiazhe.youxiang.base.util.boccc.CCancelResultUtils;
 import com.jiazhe.youxiang.base.util.boccc.CouponUsedUtils;
 import com.jiazhe.youxiang.base.util.boccc.SFTPUtils;
 import org.quartz.JobExecutionException;
@@ -30,9 +31,11 @@ public class BOCCCQuartz extends QuartzJobBean {
 
         //定时分析退货信息，生成退货信息结果至上传文件夹
         try {
-
+            logger.info("定时任务分析退货信息执行中");
+            CCancelResultUtils.generateFile();
+            logger.info("定时任务分析退货信息执行完成");
         } catch (Exception e) {
-
+            logger.info("定时任务分析退货信息执行失败，异常信息：" + e.getMessage());
         }
 
         //定时生成前一日的使用情况
