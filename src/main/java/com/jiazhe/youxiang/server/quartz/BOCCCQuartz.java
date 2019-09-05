@@ -9,21 +9,36 @@ import com.jiazhe.youxiang.base.util.boccc.AutoSFTPUtils;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.stereotype.Component;
 
 /**
  * @author TU
- * @description  定时任务
+ * @description 中行信用卡定时任务，根据不同环境判断是否执行
  * @date 2019-09-03.
  */
 public class BOCCCQuartz extends QuartzJobBean {
 
     private static final Logger logger = LoggerFactory.getLogger(BOCCCQuartz.class);
 
+    @Value("${spring.profiles.active}")
+    private String ENVIRONMENT;
+
     @Override
     protected void executeInternal(org.quartz.JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        logger.info("中行定时任务执行开始执行");
 
+        /**
+         * 根据不同环境，判断此定时任务是否执行
+         */
+        switch (ENVIRONMENT) {
+            case "xls":
+                return;
+            case "demo":
+                return;
+        }
+
+        logger.info("当前环境为：" + ENVIRONMENT + "，中行定时任务执行开始执行");
 //        //模拟中行生成退货信息
 //        try {
 //            logger.info("模拟生成中行退货信息");
