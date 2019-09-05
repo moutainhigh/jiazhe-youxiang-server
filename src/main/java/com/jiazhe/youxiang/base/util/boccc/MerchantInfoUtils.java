@@ -75,6 +75,7 @@ public class MerchantInfoUtils {
      */
     public final static String PicId = "1";
 
+
     public static String getPicId() throws Exception {
         return "P" + BOCCCConstant.MERCHANT_NAME + BOCCCUtils.complete(PicId, '0', true, 5);
     }
@@ -132,44 +133,17 @@ public class MerchantInfoUtils {
     }
 
     /**
-     * 源文件的文件路径
-     *
-     * @return
-     */
-    public static String generateSourceFileName() {
-        return "MER." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P";
-    }
-
-    /**
-     * 压缩文件的文件路径
-     *
-     * @return
-     */
-    public static String generateZipFileName() {
-        return "MER." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P.ZIP";
-    }
-
-    /**
-     * 加密文件文件路径
-     *
-     * @return
-     */
-    public static String generatePgpFileName() {
-        return "MER." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P.ZIP.DAT";
-    }
-
-
-    /**
-     * 根据以上信息，生成商品信息加密压缩文件
+     * 根据以上信息，生成商户信息加密压缩文件
      *
      * @return
      */
     public static void generateFile() throws Exception {
 
-        //三种类型文件路径
-        String sourceFileName = BOCCCConstant.rootPath + generateSourceFileName();
-        String zipFileName = BOCCCConstant.rootPath + generateZipFileName();
-        String pgpFileName = BOCCCConstant.rootPath + generatePgpFileName();
+        //三种类型文件路径 day=-1表示昨日文件  0表示今日文件   1表示明日文件
+        int day = 1;
+        String sourceFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.MER_SOURCE, day);
+        String zipFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.MER_ZIP, day);
+        String pgpFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.MER_PGP, day);
 
         //第一步，检查各个参数是否合法
         check();
@@ -178,20 +152,20 @@ public class MerchantInfoUtils {
         StringBuilder sb = generateBin();
 
         //第三步，写入文件中
-        logger.info("源文件生成中...");
+        logger.info("商户信息源文件生成中...");
         BOCCCUtils.writeStringToFile(sourceFileName, sb.toString());
-        logger.info("源文件生成完成，路径为：" + sourceFileName);
+        logger.info("商户信息源文件生成完成，路径为：" + sourceFileName);
 
         //第四步，源文件压缩中
-        logger.info("源文件压缩中...");
+        logger.info("商户信息源文件压缩中...");
         File sourceFile = new File(sourceFileName);
         new ZipUtil(new File(zipFileName)).zipFiles(sourceFile);
-        logger.info("源文件压缩完成，路径为：" + zipFileName);
+        logger.info("商户信息源文件压缩完成，路径为：" + zipFileName);
 
         //第五步，压缩文件加密中
-        logger.info("压缩文件加密中...");
+        logger.info("商户信息压缩文件加密中...");
         PgpEncryUtil.Encry(zipFileName, BOCCCConstant.publicKeyPath, pgpFileName);
-        logger.info("压缩文件加密完成，路径为：" + pgpFileName);
+        logger.info("商户信息压缩文件加密完成，路径为：" + pgpFileName);
 
 //        //第六步，文件解密中
 //        PgpDecryUtil decryU = new PgpDecryUtil();

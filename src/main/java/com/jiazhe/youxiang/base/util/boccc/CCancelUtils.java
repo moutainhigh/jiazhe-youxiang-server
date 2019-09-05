@@ -1,11 +1,5 @@
-/*
- * Copyright (c) 2019 橙谊科技
- * All rights reserved.
- *
- */
 package com.jiazhe.youxiang.base.util.boccc;
 
-import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
 import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeCodeService;
 import org.apache.commons.io.FileUtils;
@@ -18,27 +12,25 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.util.List;
 
-
 /**
- * @author tu
- * @version 1.0
- * @description 优惠券已使用工具类，定时自动执行
- * @created 2019-09-03 20:24
+ * @author TU
+ * @description 模拟生成退货文件
+ * @date 2019-09-05.
  */
 @Component
-public class CouponUsedUtils {
+public class CCancelUtils {
 
-    public static Logger logger = LoggerFactory.getLogger(CouponUsedUtils.class);
+    public static Logger logger = LoggerFactory.getLogger(CCancelUtils.class);
 
-    public static CouponUsedUtils couponUsedUtils;
+    public static CCancelUtils cCancelUtils;
 
     @Autowired
     private VoucherExchangeCodeService voucherExchangeCodeService;
 
     @PostConstruct
     public void init() {
-        couponUsedUtils = this;
-        couponUsedUtils.voucherExchangeCodeService = this.voucherExchangeCodeService;
+        cCancelUtils = this;
+        cCancelUtils.voucherExchangeCodeService = this.voucherExchangeCodeService;
     }
 
     /**
@@ -48,20 +40,25 @@ public class CouponUsedUtils {
      * @return
      */
     public static List<VoucherExchangeCodeDTO> getYesterdayUsed(String type) {
-        List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOList = couponUsedUtils.voucherExchangeCodeService.getYesterdayUsed(type);
+        List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOList = cCancelUtils.voucherExchangeCodeService.getYesterdayUsed(type);
         return voucherExchangeCodeDTOList;
     }
 
     public static StringBuilder generateBin(List<VoucherExchangeCodeDTO> list) throws Exception {
 
         StringBuilder sb = new StringBuilder();
+        int i = 1;
         for (VoucherExchangeCodeDTO dto : list) {
+            sb.append(BOCCCUtils.complete(String.valueOf(i), '0', true, 19)).append(BOCCCConstant.BOC_Separator);
+
             sb.append(dto.getBocccProductId()).append(BOCCCConstant.BOC_Separator);
             sb.append(BOCCCUtils.complete(String.valueOf(dto.getId()), '0', true, 10)).append(BOCCCConstant.BOC_Separator);
             sb.append("E").append(BOCCCConstant.BOC_Separator);
             sb.append(BOCCCUtils.complete(dto.getKeyt(), '0', true, 36)).append(BOCCCConstant.BOC_Separator);
-            sb.append(DateUtil.yyyyMMDD(dto.getUsedTime())).append(BOCCCConstant.BOC_Separator);
-            sb.append(BOCCCConstant.MERCHANT_ID).append(BOCCCConstant.BOC_Separator);
+            sb.append(BOCCCUtils.complete("", ' ', false, 1)).append(BOCCCConstant.BOC_Separator);
+            sb.append("20190901").append(BOCCCConstant.BOC_Separator);
+            sb.append("19:23:23").append(BOCCCConstant.BOC_Separator);
+            sb.append(BOCCCUtils.complete("", ' ', false, 200)).append(BOCCCConstant.BOC_Separator);
             //预留字段还未拼接 TODO
             //TODO
             //换行
@@ -80,9 +77,9 @@ public class CouponUsedUtils {
     public static void generateFile() throws Exception {
 
         //三种类型文件路径
-        String sourceFileName = BOCCCConstant.rootPath + "cused/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CUSED_SOURCE, 1);
-        String zipFileName = BOCCCConstant.rootPath + "cused/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CUSED_ZIP, 1);
-        String pgpFileName = BOCCCConstant.rootPath + "cused/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CUSED_PGP, 1);
+        String sourceFileName = BOCCCConstant.rootPath + "cused/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_SOURCE, -1);
+        String zipFileName = BOCCCConstant.rootPath + "cused/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_ZIP, -1);
+        String pgpFileName = BOCCCConstant.rootPath + "cused/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_PGP, -1);
 
         //第一步，获取昨日使用的代金券兑换码
         List<VoucherExchangeCodeDTO> list = getYesterdayUsed("1");

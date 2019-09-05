@@ -59,37 +59,9 @@ public class CouponUtils {
             //换行
             sb.append("\r\n");
         }
-
         //添加文件尾部信息
         sb.append(BOCCCUtils.generateFileEndChar(list.size()));
         return sb;
-    }
-
-    /**
-     * 源文件的文件路径
-     *
-     * @return
-     */
-    public static String generateSourceFileName() {
-        return "COUPON." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P";
-    }
-
-    /**
-     * 压缩文件的文件路径
-     *
-     * @return
-     */
-    public static String generateZipFileName() {
-        return "COUPON." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P.ZIP";
-    }
-
-    /**
-     * 加密文件文件路径
-     *
-     * @return
-     */
-    public static String generatePgpFileName() {
-        return "COUPON." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.P.ZIP.DAT";
     }
 
     public static List<CouponEntity> getList() throws Exception {
@@ -146,10 +118,12 @@ public class CouponUtils {
      */
     public static void generateFile() throws Exception {
 
-        //三种类型文件路径
-        String sourceFileName = BOCCCConstant.rootPath +generateSourceFileName();
-        String zipFileName = BOCCCConstant.rootPath +generateZipFileName();
-        String pgpFileName = BOCCCConstant.rootPath +generatePgpFileName();
+        //三种类型文件路径 day=-1表示昨日文件  0表示今日文件   1表示明日文件
+        int day = 1;
+        String sourceFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.COUPON_SOURCE, day);
+        String zipFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.COUPON_ZIP, day);
+        String pgpFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.COUPON_PGP, day);
+
 
         //第一步，检查各个参数是否合法
         check();
@@ -158,20 +132,20 @@ public class CouponUtils {
         StringBuilder sb = generateBin();
 
         //第三步，写入文件中
-        logger.info("源文件生成中...");
+        logger.info("优惠券信息源文件生成中...");
         BOCCCUtils.writeStringToFile(sourceFileName, sb.toString());
-        logger.info("源文件生成完成，路径为：" + sourceFileName);
+        logger.info("优惠券信息源文件生成完成，路径为：" + sourceFileName);
 
         //第四步，源文件压缩中
-        logger.info("源文件压缩中...");
+        logger.info("优惠券信息源文件压缩中...");
         File sourceFile = new File(sourceFileName);
         new ZipUtil(new File(zipFileName)).zipFiles(sourceFile);
-        logger.info("源文件压缩完成，路径为：" + zipFileName);
+        logger.info("优惠券信息源文件压缩完成，路径为：" + zipFileName);
 
         //第五步，压缩文件加密中
-        logger.info("压缩文件加密中...");
+        logger.info("优惠券信息压缩文件加密中...");
         PgpEncryUtil.Encry(zipFileName, BOCCCConstant.publicKeyPath, pgpFileName);
-        logger.info("压缩文件加密完成，路径为：" + pgpFileName);
+        logger.info("优惠券信息压缩文件加密完成，路径为：" + pgpFileName);
     }
 
     public static void main(String[] args) throws Exception {

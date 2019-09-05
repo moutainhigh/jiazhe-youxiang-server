@@ -30,13 +30,6 @@ public class CCancelResultUtils {
     @Autowired
     private VoucherExchangeCodeService voucherExchangeCodeService;
 
-    /**
-     * 中行下传的退货信息文件名，昨日文件
-     */
-    private final static String cCancelInfoPgpFileName = "CCANCEL.BOC" + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getYesterday() + ".00.ZIP.DAT";
-    private final static String cCancelInfoZipFileName = "CCANCEL.BOC" + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getYesterday() + ".00.ZIP";
-    private final static String cCancelInfoSourceFileName = "CCANCEL.BOC" + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getYesterday() + ".00.C";
-
     @PostConstruct
     public void init() {
         cCancelResultUtils = this;
@@ -51,10 +44,10 @@ public class CCancelResultUtils {
         String line = "";
         while ((line = br.readLine()) != null) {
             if (line.contains("TLRL")) {
+                sb.append(line);
+            } else {
                 sb.append(cancelResult(line));
                 sb.append("\r\n");
-            } else {
-                sb.append(line);
             }
         }
         br.close();
@@ -64,34 +57,6 @@ public class CCancelResultUtils {
     }
 
     /**
-     * 源文件的文件路径
-     *
-     * @return
-     */
-    public static String generateSourceFileName() {
-        return "CCANCEL." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.C";
-    }
-
-    /**
-     * 压缩文件的文件路径
-     *
-     * @return
-     */
-    public static String generateZipFileName() {
-        return "CCANCEL." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.C.ZIP";
-    }
-
-    /**
-     * 加密文件文件路径
-     *
-     * @return
-     */
-    public static String generatePgpFileName() {
-        return "CCANCEL." + BOCCCConstant.MERCHANT_NAME + "." + BOCCCUtils.getToday() + ".00.C.ZIP.DAT";
-    }
-
-
-    /**
      * 根据以上信息，生成商品信息加密压缩文件
      *
      * @return
@@ -99,12 +64,12 @@ public class CCancelResultUtils {
     public static void generateFile() throws Exception {
 
         //三种类型文件路径
-        String sourceFileName = BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday() + "/" + generateSourceFileName();
-        String zipFileName = BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday() + "/" + generateZipFileName();
-        String pgpFileName = BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday() + "/" + generatePgpFileName();
+        String sourceFileName = BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BJYX_CCANCEL_SOURCE, 1);
+        String zipFileName = BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BJYX_CCANCEL_ZIP, 1);
+        String pgpFileName = BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BJYX_CCANCEL_PGP, 1);
 
         //第一步，判断download文件夹中是否有下传的退货信息加密文件,
-        File BOCCCancelPgpFile = new File(BOCCCConstant.downloadPath + BOCCCUtils.getToday() + "/" + cCancelInfoPgpFileName);
+        File BOCCCancelPgpFile = new File(BOCCCConstant.downloadPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_PGP, -1));
         if (BOCCCancelPgpFile.exists()) {
             //如果中行下传了加密文件，复制到ccancel当日文件夹下
             File file = new File(BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday());
@@ -120,13 +85,13 @@ public class CCancelResultUtils {
         //第二步，解密文件
         PgpDecryUtil decryU = new PgpDecryUtil();
         decryU.setPassphrase("youxianghulian0612");
-        decryU.DecryUtil(BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday() + "/" + cCancelInfoPgpFileName, BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday() + "/" + cCancelInfoZipFileName, BOCCCConstant.privateKeyPath);
+        decryU.DecryUtil(BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_PGP, -1), BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_ZIP, -1), BOCCCConstant.privateKeyPath);
 
         //第三步，解压缩文件
-        UnZipUtil.ZipContraFile(BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday() + "/" + cCancelInfoZipFileName, BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday());
+        UnZipUtil.ZipContraFile(BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_ZIP, -1), BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday());
 
         //第四步,读取文件进行分析生成源文件字符串
-        StringBuilder sb = generateBin(BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday() + "/" + cCancelInfoSourceFileName);
+        StringBuilder sb = generateBin(BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_SOURCE, -1));
 
         //第五步，源文件压缩中
         logger.info("源文件生成中...");
@@ -151,7 +116,6 @@ public class CCancelResultUtils {
             file.mkdirs();
         }
         FileUtils.copyFileToDirectory(new File(pgpFileName), new File(uploadPath));
-
     }
 
     public static String cancelResult(String cancelStr) throws Exception {
@@ -159,21 +123,17 @@ public class CCancelResultUtils {
         String keyt = cancelStr.substring(61, 97);
         String failureDesc = "";
         String cancelStatus = "Y";
-        VoucherExchangeCodePO po = cCancelResultUtils.voucherExchangeCodeService.findByKeyt(keyt);
+        VoucherExchangeCodePO po = cCancelResultUtils.voucherExchangeCodeService.findByKeyt(String.valueOf(Long.valueOf(keyt)));
         if (null == po) {
-            sb.append("N");
+            cancelStatus = "N";
             failureDesc = "优惠券码不存在";
         } else {
             if (po.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
-                sb.append("N");
+                cancelStatus = "N";
                 failureDesc = "优惠券码已经使用";
             }
         }
-        sb.append(cancelStatus).append(cancelStr.substring(103, 134)).append(BOCCCUtils.complete(failureDesc, ' ', false, 200)).append(cancelStr.substring(334, 354));
+        sb.append(cancelStatus).append(cancelStr.substring(103, 134)).append(BOCCCUtils.complete(failureDesc, ' ', false, 200)).append(cancelStr.substring(334, cancelStr.length()));
         return sb.toString();
-    }
-
-    public static void main(String[] args) throws Exception {
-        generateFile();
     }
 }
