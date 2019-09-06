@@ -5,8 +5,11 @@
  */
 package com.jiazhe.youxiang.base.util.boccc;
 
+import com.jiazhe.youxiang.base.util.RSAUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,6 +17,8 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -23,11 +28,27 @@ import java.util.Date;
  * @description BOCCC公共工具类
  * @created 2019-09-02 20:07
  */
+@Component
 public class BOCCCUtils {
 
     public static Logger logger = LoggerFactory.getLogger(BOCCCUtils.class);
 
     private static SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+
+    private static String PUBLIC_KEY;
+
+    private static String PRIVATE_KEY;
+
+    @Value("${boccc.rsa.public_key}")
+    public void setPublicKey(String publicKey) {
+        PUBLIC_KEY = publicKey;
+    }
+
+    @Value("${boccc.rsa.private_key}")
+    public void setPrivateKey(String privateKey) {
+        PRIVATE_KEY = privateKey;
+    }
+
 
     /**
      * 生成n个字符
@@ -228,6 +249,74 @@ public class BOCCCUtils {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * 中行信用卡，利用公钥解密字符串
+     *
+     * @param content
+     * @return
+     * @throws Exception
+     */
+    public static String publicDecrypt(String content) throws Exception {
+        //将Base64编码后的公钥转换成PublicKey对象
+        PublicKey publicKey = RSAUtil.string2PublicKey(PUBLIC_KEY);
+        //加密后的内容Base64解码
+        byte[] base642Byte = RSAUtil.base642Byte(content);
+        //用公钥解密
+        byte[] publicDecrypt = RSAUtil.publicDecrypt(base642Byte, publicKey);
+        return new String(publicDecrypt);
+    }
+
+    /**
+     * 中行信用卡，利用公钥加密字符串
+     *
+     * @param content
+     * @return
+     * @throws Exception
+     */
+    public static String publicEncrypt(String content) throws Exception {
+        //将Base64编码后的公钥转换成PublicKey对象
+        PublicKey publicKey = RSAUtil.string2PublicKey(PUBLIC_KEY);
+        //用公钥加密
+        byte[] publicEncrypt = RSAUtil.publicEncrypt(content.getBytes(), publicKey);
+        //加密后的内容Base64编码
+        String byte2Base64 = RSAUtil.byte2Base64(publicEncrypt);
+        return new String(byte2Base64);
+    }
+
+    /**
+     * 中行信用卡，利用私钥解密字符串
+     *
+     * @param content
+     * @return
+     * @throws Exception
+     */
+    public static String privateDecrypt(String content) throws Exception {
+        //将Base64编码后的私钥转换成PrivateKey对象
+        PrivateKey privateKey = RSAUtil.string2PrivateKey(PRIVATE_KEY);
+        //加密后的内容Base64解码
+        byte[] base642Byte = RSAUtil.base642Byte(content);
+        //用私钥解密
+        byte[] privateDecrypt = RSAUtil.privateDecrypt(base642Byte, privateKey);
+        return new String(privateDecrypt);
+    }
+
+    /**
+     * 中行信用卡，利用私钥加密字符串
+     *
+     * @param content
+     * @return
+     * @throws Exception
+     */
+    public static String privateEncrypt(String content) throws Exception {
+        //将Base64编码后的私钥转换成PrivateKey对象
+        PrivateKey privateKey = RSAUtil.string2PrivateKey(PRIVATE_KEY);
+        //用私钥加密
+        byte[] publicEncrypt = RSAUtil.privateEncrypt(content.getBytes(), privateKey);
+        //加密后的内容Base64编码
+        String byte2Base64 = RSAUtil.byte2Base64(publicEncrypt);
+        return new String(byte2Base64);
     }
 
 }
