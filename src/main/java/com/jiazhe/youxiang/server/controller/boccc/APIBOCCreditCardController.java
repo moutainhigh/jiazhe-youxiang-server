@@ -58,14 +58,15 @@ public class APIBOCCreditCardController extends BaseController {
                 if (null == dto) {
                     resp.setStat("03");
                     resp.setResult("券码不存在");
-                }
-                if (dto.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
-                    resp.setStat("02");
-                    resp.setResult("券码已使用");
-                }
-                if (dto.getUsed().equals(CommonConstant.CODE_HAS_REFUND)) {
-                    resp.setStat("01");
-                    resp.setResult("重复退货");
+                }else{
+                    if (dto.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
+                        resp.setStat("02");
+                        resp.setResult("券码已使用");
+                    }
+                    if (dto.getUsed().equals(CommonConstant.CODE_HAS_REFUND)) {
+                        resp.setStat("01");
+                        resp.setResult("重复退货");
+                    }
                 }
             }
         } catch (Exception e) {

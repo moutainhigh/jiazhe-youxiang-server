@@ -34,7 +34,7 @@ public class BOCCCQuartz extends QuartzJobBean {
 
         logger.info("定时任务：当前环境为：" + ENVIRONMENT + "，定时任务开始执行");
 
-        String content = "{" +"\"orderId\": \"01\"," + "\"waresId\": \"01\"," + "\"wInfo\": \"120088644437\"," + "\"returnDate\": \"20190911\"," + "\"returnTime\": \"190000\"" +"}";
+        String content = "{" +"\"orderId\": \"01\"," + "\"waresId\": \"01\"," + "\"wInfo\": \"116248488970\"," + "\"returnDate\": \"20190911\"," + "\"returnTime\": \"190000\"" +"}";
 //        String publicEncrypt = BOCCCUtils.publicEncrypt(content.trim());
 //        logger.info("公钥加密内容：" + publicEncrypt);
 //        String privateDecrypt = BOCCCUtils.privateDecrypt(publicEncrypt);
