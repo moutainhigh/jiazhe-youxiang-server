@@ -77,7 +77,7 @@ public class AutoDailyPurchaseAnalysisUtils {
             }
             FileUtils.copyFileToDirectory(BOCCCancelPgpFile, file);
         } else {
-            logger.info("未收到总行发给第三方每日购买文件");
+            logger.info("未收到总行下传的每日购买清单加密文件");
             return;
         }
 

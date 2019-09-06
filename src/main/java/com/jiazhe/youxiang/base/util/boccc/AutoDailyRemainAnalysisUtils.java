@@ -77,7 +77,7 @@ public class AutoDailyRemainAnalysisUtils {
             }
             FileUtils.copyFileToDirectory(BOCCCancelPgpFile, file);
         } else {
-            logger.info("未收到总行发给第三方每日优惠券剩余文件");
+            logger.info("未收到总行下传的每日优惠券剩余加密文件");
             return;
         }
 

@@ -78,7 +78,7 @@ public class AutoCCancelResultUtils {
             }
             FileUtils.copyFileToDirectory(BOCCCancelPgpFile, file);
         } else {
-            logger.info("未收到总行发给第三方退货信息");
+            logger.info("未收到总行下传的每日退货加密文件");
             return;
         }
 
@@ -94,20 +94,20 @@ public class AutoCCancelResultUtils {
         StringBuilder sb = generateBin(BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_SOURCE, -1));
 
         //第五步，源文件压缩中
-        logger.info("源文件生成中...");
+        logger.info("退货结果源文件生成中...");
         BOCCCUtils.writeStringToFile(sourceFileName, sb.toString());
-        logger.info("源文件生成完成，路径为：" + sourceFileName);
+        logger.info("退货结果源文件生成完成，路径为：" + sourceFileName);
 
         //第六步，源文件压缩中
-        logger.info("源文件压缩中...");
+        logger.info("退货结果源文件压缩中...");
         File sourceFile = new File(sourceFileName);
         new ZipUtil(new File(zipFileName)).zipFiles(sourceFile);
-        logger.info("源文件压缩完成，路径为：" + zipFileName);
+        logger.info("退货结果源文件压缩完成，路径为：" + zipFileName);
 
         //第七步，压缩文件加密中
-        logger.info("压缩文件加密中...");
+        logger.info("退货结果压缩文件加密中...");
         PgpEncryUtil.Encry(zipFileName, BOCCCConstant.publicKeyPath, pgpFileName);
-        logger.info("压缩文件加密完成，路径为：" + pgpFileName);
+        logger.info("退货结果压缩文件加密完成，路径为：" + pgpFileName);
 
         //第八步，将文件放复制至upload文件夹中
         String uploadPath = BOCCCConstant.uploadPath + BOCCCUtils.getToday();

@@ -1,7 +1,6 @@
 package com.jiazhe.youxiang.server.quartz;
 
 import com.jiazhe.youxiang.base.util.boccc.AutoCCancelResultUtils;
-import com.jiazhe.youxiang.base.util.boccc.AutoCCancelInfoUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoCouponUsedUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoDailyPurchaseAnalysisUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoDailyRemainAnalysisUtils;
@@ -11,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.quartz.QuartzJobBean;
-import org.springframework.stereotype.Component;
 
 /**
  * @author TU
@@ -38,7 +36,7 @@ public class BOCCCQuartz extends QuartzJobBean {
                 return;
         }
 
-        logger.info("当前环境为：" + ENVIRONMENT + "，中行定时任务执行开始执行");
+        logger.info("定时任务：当前环境为：" + ENVIRONMENT + "，定时任务开始执行");
 //        //模拟中行生成退货信息
 //        try {
 //            logger.info("模拟生成中行退货信息");
@@ -66,14 +64,14 @@ public class BOCCCQuartz extends QuartzJobBean {
             logger.error("定时任务：分析退货信息执行失败，异常信息：" + e.getMessage());
         }
 
-//        //定时生成前一日的使用情况
-//        try {
-//            logger.info("定时任务：前一日优惠券使用情况文件生成中");
-//            AutoCouponUsedUtils.generateFile();
-//            logger.info("定时任务：前一日优惠券使用情况文件生成完成");
-//        } catch (Exception e) {
-//            logger.error("定时任务：前一日优惠券使用情况文件生成失败，异常信息：" + e.getMessage());
-//        }
+        //定时生成前一日的使用情况
+        try {
+            logger.info("定时任务：前一日优惠券使用情况文件生成中");
+            AutoCouponUsedUtils.generateFile();
+            logger.info("定时任务：前一日优惠券使用情况文件生成完成");
+        } catch (Exception e) {
+            logger.error("定时任务：前一日优惠券使用情况文件生成失败，异常信息：" + e.getMessage());
+        }
 
         //定时上传指定文件夹的文件
         try {
@@ -84,23 +82,23 @@ public class BOCCCQuartz extends QuartzJobBean {
             logger.error("定时任务：上传文件执行失败，异常信息：" + e.getMessage());
         }
 
-//        //定时分析前一日优惠券剩余数量
-//        try {
-//            logger.info("定时任务：分析前一日优惠券剩余数量");
-//            AutoDailyRemainAnalysisUtils.generateFile();
-//            logger.info("定时任务：前一日优惠券剩余数量分析完成");
-//        } catch (Exception e) {
-//            logger.error("定时任务：前一日优惠券剩余数量分析失败，异常信息：" + e.getMessage());
-//        }
-//
-//        //定时分析前一日商品购买清单
-//        try {
-//            logger.info("定时任务：分析前一日商品购买数量");
-//            AutoDailyPurchaseAnalysisUtils.generateFile();
-//            logger.info("定时任务：前一日商品购买数量分析完成");
-//        } catch (Exception e) {
-//            logger.error("定时任务：前一日商品购买数量分析失败，异常信息：" + e.getMessage());
-//        }
-        logger.info("中行定时任务执行完成");
+        //定时分析前一日优惠券剩余数量
+        try {
+            logger.info("定时任务：分析前一日优惠券剩余数量");
+            AutoDailyRemainAnalysisUtils.generateFile();
+            logger.info("定时任务：前一日优惠券剩余数量分析完成");
+        } catch (Exception e) {
+            logger.error("定时任务：前一日优惠券剩余数量分析失败，异常信息：" + e.getMessage());
+        }
+
+        //定时分析前一日商品购买清单
+        try {
+            logger.info("定时任务：分析前一日商品购买数量");
+            AutoDailyPurchaseAnalysisUtils.generateFile();
+            logger.info("定时任务：前一日商品购买数量分析完成");
+        } catch (Exception e) {
+            logger.error("定时任务：前一日商品购买数量分析失败，异常信息：" + e.getMessage());
+        }
+        logger.info("定时任务：当前环境为：" + ENVIRONMENT + "，定时任务执行完成");
     }
 }
