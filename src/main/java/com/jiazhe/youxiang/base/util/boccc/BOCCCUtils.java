@@ -6,17 +6,20 @@
 package com.jiazhe.youxiang.base.util.boccc;
 
 import com.jiazhe.youxiang.base.util.RSAUtil;
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.Cipher;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.security.Key;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.text.SimpleDateFormat;
@@ -265,7 +268,7 @@ public class BOCCCUtils {
             //加密后的内容Base64解码
             byte[] base642Byte = RSAUtil.base642Byte(content);
             //用公钥解密
-            byte[] publicDecrypt = RSAUtil.publicDecrypt(base642Byte, publicKey);
+            byte[] publicDecrypt = decrypt(base642Byte, publicKey);
             return new String(publicDecrypt);
         } catch (Exception e) {
             logger.info("公钥解密失败，原因：" + e.getMessage());
@@ -285,7 +288,7 @@ public class BOCCCUtils {
             //将Base64编码后的公钥转换成PublicKey对象
             PublicKey publicKey = RSAUtil.string2PublicKey(PUBLIC_KEY);
             //用公钥加密
-            byte[] publicEncrypt = RSAUtil.publicEncrypt(content.getBytes(), publicKey);
+            byte[] publicEncrypt = encrypt(content.getBytes(), publicKey);
             //加密后的内容Base64编码
             String byte2Base64 = RSAUtil.byte2Base64(publicEncrypt);
             return new String(byte2Base64);
@@ -309,7 +312,7 @@ public class BOCCCUtils {
             //加密后的内容Base64解码
             byte[] base642Byte = RSAUtil.base642Byte(content);
             //用私钥解密
-            byte[] privateDecrypt = RSAUtil.privateDecrypt(base642Byte, privateKey);
+            byte[] privateDecrypt = decrypt(base642Byte, privateKey);
             return new String(privateDecrypt);
         } catch (Exception e) {
             logger.info("私钥解密失败，原因：" + e.getMessage());
@@ -329,7 +332,7 @@ public class BOCCCUtils {
             //将Base64编码后的私钥转换成PrivateKey对象
             PrivateKey privateKey = RSAUtil.string2PrivateKey(PRIVATE_KEY);
             //用私钥加密
-            byte[] publicEncrypt = RSAUtil.privateEncrypt(content.getBytes(), privateKey);
+            byte[] publicEncrypt = encrypt(content.getBytes(), privateKey);
             //加密后的内容Base64编码
             String byte2Base64 = RSAUtil.byte2Base64(publicEncrypt);
             return new String(byte2Base64);
@@ -337,6 +340,37 @@ public class BOCCCUtils {
             logger.info("私钥加密失败，原因：" + e.getMessage());
         }
         return null;
+    }
+
+    /**
+     * 分步加密
+     *
+     * @param content
+     * @param key
+     * @return
+     * @throws Exception
+     */
+    public static byte[] encrypt(byte[] content, Key key) throws Exception {
+        Cipher cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        byte[] enBytes = null;
+        for (int i = 0; i < content.length; i += 64) {
+            // 注意要使用2的倍数，否则会出现加密后的内容再解密时为乱码
+            byte[] doFinal = cipher.doFinal(ArrayUtils.subarray(content, i, i + 64));
+            enBytes = ArrayUtils.addAll(enBytes, doFinal);
+        }
+        return enBytes;
+    }
+
+    public static byte[] decrypt(byte[] content, Key privateKey) throws Exception {
+        Cipher cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.DECRYPT_MODE, privateKey);
+        byte[] enBytes = null;
+        for (int i = 0; i < content.length; i += 128) {
+            byte[] doFinal = cipher.doFinal(ArrayUtils.subarray(content, i, i + 128));
+            enBytes = ArrayUtils.addAll(enBytes, doFinal);
+        }
+        return enBytes;
     }
 
 }
