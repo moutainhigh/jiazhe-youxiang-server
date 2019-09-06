@@ -12,7 +12,7 @@ public class DateUtil {
    private static Logger logger = LoggerFactory.getLogger(DateUtil.class);
 
     /**
-     * 将字符串转为date类型
+     * 将字符串yyyy-MM-dd 转为date类型
      */
     public static Date strToDate(String str)  {
         //小写的mm表示的是分钟
@@ -27,8 +27,23 @@ public class DateUtil {
         return null;
     }
 
+    /**
+     * 将Date转为 yyyy-MM-dd字符串
+     * @param date
+     * @return
+     */
     public static String dateToStr(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return  sdf.format(date);
+    }
+
+    /**
+     * 将Date转为yyyy-MM-dd HH:mm:ss字符串
+     * @param date
+     * @return
+     */
+    public static String secondToStr(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return  sdf.format(date);
     }
 
