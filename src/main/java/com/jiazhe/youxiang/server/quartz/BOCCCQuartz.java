@@ -34,21 +34,16 @@ public class BOCCCQuartz extends QuartzJobBean {
 
         logger.info("定时任务：当前环境为：" + ENVIRONMENT + "，定时任务开始执行");
 
-        try {
-            String content = "中行信用卡积分业务";
-            String publicEncrypt = BOCCCUtils.publicEncrypt(content);
-            logger.info("公钥加密内容：" + publicEncrypt);
-            String privateDecrypt =BOCCCUtils.privateDecrypt(publicEncrypt);
-            logger.info("私钥解密内容：" + privateDecrypt);
+        String content = "{" +"\"orderId\": \"01\"," + "\"waresId\": \"01\"," + "\"wInfo\": \"120088644437\"," + "\"returnDate\": \"20190911\"," + "\"returnTime\": \"190000\"" +"}";
+//        String publicEncrypt = BOCCCUtils.publicEncrypt(content.trim());
+//        logger.info("公钥加密内容：" + publicEncrypt);
+//        String privateDecrypt = BOCCCUtils.privateDecrypt(publicEncrypt);
+//        logger.info("私钥解密内容：" + privateDecrypt);
 
-            String privateEncrypt=BOCCCUtils.privateEncrypt(content);
-            logger.info("私钥加密内容：" + privateEncrypt);
-            String publicDecrypt = BOCCCUtils.publicDecrypt(privateEncrypt);
-            logger.info("公钥解密内容：" + publicDecrypt);
-
-        } catch (Exception e) {
-            logger.error("加解密失败，异常信息：" + e.getMessage());
-        }
+        String privateEncrypt = BOCCCUtils.privateEncrypt(content);
+        logger.info("私钥加密内容：" + privateEncrypt);
+        String publicDecrypt = BOCCCUtils.publicDecrypt(privateEncrypt);
+        logger.info("公钥解密内容：" + publicDecrypt);
 
 
 //        //模拟中行生成退货信息

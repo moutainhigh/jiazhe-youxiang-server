@@ -258,14 +258,19 @@ public class BOCCCUtils {
      * @return
      * @throws Exception
      */
-    public static String publicDecrypt(String content) throws Exception {
-        //将Base64编码后的公钥转换成PublicKey对象
-        PublicKey publicKey = RSAUtil.string2PublicKey(PUBLIC_KEY);
-        //加密后的内容Base64解码
-        byte[] base642Byte = RSAUtil.base642Byte(content);
-        //用公钥解密
-        byte[] publicDecrypt = RSAUtil.publicDecrypt(base642Byte, publicKey);
-        return new String(publicDecrypt);
+    public static String publicDecrypt(String content) {
+        try {
+            //将Base64编码后的公钥转换成PublicKey对象
+            PublicKey publicKey = RSAUtil.string2PublicKey(PUBLIC_KEY);
+            //加密后的内容Base64解码
+            byte[] base642Byte = RSAUtil.base642Byte(content);
+            //用公钥解密
+            byte[] publicDecrypt = RSAUtil.publicDecrypt(base642Byte, publicKey);
+            return new String(publicDecrypt);
+        } catch (Exception e) {
+            logger.info("公钥解密失败，原因：" + e.getMessage());
+        }
+        return null;
     }
 
     /**
@@ -275,14 +280,19 @@ public class BOCCCUtils {
      * @return
      * @throws Exception
      */
-    public static String publicEncrypt(String content) throws Exception {
-        //将Base64编码后的公钥转换成PublicKey对象
-        PublicKey publicKey = RSAUtil.string2PublicKey(PUBLIC_KEY);
-        //用公钥加密
-        byte[] publicEncrypt = RSAUtil.publicEncrypt(content.getBytes(), publicKey);
-        //加密后的内容Base64编码
-        String byte2Base64 = RSAUtil.byte2Base64(publicEncrypt);
-        return new String(byte2Base64);
+    public static String publicEncrypt(String content) {
+        try {
+            //将Base64编码后的公钥转换成PublicKey对象
+            PublicKey publicKey = RSAUtil.string2PublicKey(PUBLIC_KEY);
+            //用公钥加密
+            byte[] publicEncrypt = RSAUtil.publicEncrypt(content.getBytes(), publicKey);
+            //加密后的内容Base64编码
+            String byte2Base64 = RSAUtil.byte2Base64(publicEncrypt);
+            return new String(byte2Base64);
+        } catch (Exception e) {
+            logger.info("公钥加密失败，原因：" + e.getMessage());
+        }
+        return null;
     }
 
     /**
@@ -292,14 +302,19 @@ public class BOCCCUtils {
      * @return
      * @throws Exception
      */
-    public static String privateDecrypt(String content) throws Exception {
-        //将Base64编码后的私钥转换成PrivateKey对象
-        PrivateKey privateKey = RSAUtil.string2PrivateKey(PRIVATE_KEY);
-        //加密后的内容Base64解码
-        byte[] base642Byte = RSAUtil.base642Byte(content);
-        //用私钥解密
-        byte[] privateDecrypt = RSAUtil.privateDecrypt(base642Byte, privateKey);
-        return new String(privateDecrypt);
+    public static String privateDecrypt(String content) {
+        try {
+            //将Base64编码后的私钥转换成PrivateKey对象
+            PrivateKey privateKey = RSAUtil.string2PrivateKey(PRIVATE_KEY);
+            //加密后的内容Base64解码
+            byte[] base642Byte = RSAUtil.base642Byte(content);
+            //用私钥解密
+            byte[] privateDecrypt = RSAUtil.privateDecrypt(base642Byte, privateKey);
+            return new String(privateDecrypt);
+        } catch (Exception e) {
+            logger.info("私钥解密失败，原因：" + e.getMessage());
+        }
+        return null;
     }
 
     /**
@@ -309,14 +324,19 @@ public class BOCCCUtils {
      * @return
      * @throws Exception
      */
-    public static String privateEncrypt(String content) throws Exception {
-        //将Base64编码后的私钥转换成PrivateKey对象
-        PrivateKey privateKey = RSAUtil.string2PrivateKey(PRIVATE_KEY);
-        //用私钥加密
-        byte[] publicEncrypt = RSAUtil.privateEncrypt(content.getBytes(), privateKey);
-        //加密后的内容Base64编码
-        String byte2Base64 = RSAUtil.byte2Base64(publicEncrypt);
-        return new String(byte2Base64);
+    public static String privateEncrypt(String content) {
+        try {
+            //将Base64编码后的私钥转换成PrivateKey对象
+            PrivateKey privateKey = RSAUtil.string2PrivateKey(PRIVATE_KEY);
+            //用私钥加密
+            byte[] publicEncrypt = RSAUtil.privateEncrypt(content.getBytes(), privateKey);
+            //加密后的内容Base64编码
+            String byte2Base64 = RSAUtil.byte2Base64(publicEncrypt);
+            return new String(byte2Base64);
+        } catch (Exception e) {
+            logger.info("私钥加密失败，原因：" + e.getMessage());
+        }
+        return null;
     }
 
 }

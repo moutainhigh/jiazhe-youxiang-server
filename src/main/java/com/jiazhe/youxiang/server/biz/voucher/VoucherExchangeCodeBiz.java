@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.biz.voucher;
 
+import com.jiazhe.youxiang.server.adapter.voucher.VoucherExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeEditDTO;
@@ -59,5 +60,9 @@ public class VoucherExchangeCodeBiz {
 
     public void allStopUsing(Integer id) {
         voucherExchangeCodeService.batchChangeStatus(id, CommonConstant.CODE_STOP_USING);
+    }
+
+    public VoucherExchangeCodeDTO findByKeyt(String keyt) {
+        return VoucherExchangeCodeAdapter.PO2DTO(voucherExchangeCodeService.findByKeyt(keyt));
     }
 }
