@@ -272,6 +272,13 @@
             <artifactId>jedis</artifactId>
         </dependency>
 
+        <!--xml转换-->
+        <dependency>
+            <groupId>xom</groupId>
+            <artifactId>xom</artifactId>
+            <version>1.2.5</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>

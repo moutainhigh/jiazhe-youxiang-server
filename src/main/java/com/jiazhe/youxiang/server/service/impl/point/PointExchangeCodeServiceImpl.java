@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.service.impl.point;
 
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.ExchangeCodeCheckUtil;
+import com.jiazhe.youxiang.base.util.ListUtils;
 import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
@@ -31,6 +32,7 @@ import com.jiazhe.youxiang.server.service.point.PointService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Role;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -335,18 +337,49 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
         }
         PointExchangeCodePO pointExchangeCodePO = findByCode(code);
-        if(null == pointExchangeCodePO){
+        if (null == pointExchangeCodePO) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
         }
-        if(CommonConstant.CODE_START_USING.equals(pointExchangeCodePO.getStatus())){
+        if (CommonConstant.CODE_START_USING.equals(pointExchangeCodePO.getStatus())) {
             throw new PointException(PointCodeEnum.CODE_HAS_START_USING);
         }
-        if(CommonConstant.CODE_HAS_USED.equals(pointExchangeCodePO.getUsed())){
+        if (CommonConstant.CODE_HAS_USED.equals(pointExchangeCodePO.getUsed())) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_USED);
         }
         PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO = pointExchangeCodeBatchService.getById(pointExchangeCodePO.getBatchId());
         if (pointExchangeCodeBatchEditDTO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
             throw new PointException(PointCodeEnum.BATCH_HAS_STOPPED_USING);
+        }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public PointExchangeCodeDTO queryStock(String orderNo, String giftNo, Date expiryDate) {
+        PointExchangeCodePO pointExchangeCodePO = pointExchangeCodePOManualMapper.queryStock(giftNo, expiryDate);
+        if (null != pointExchangeCodePO) {
+            pointExchangeCodePO.setStatus(CommonConstant.CODE_START_USING);
+            pointExchangeCodePO.setOutOrderCode(orderNo);
+            pointExchangeCodePOMapper.updateByPrimaryKeySelective(pointExchangeCodePO);
+        }
+        return PointExchangeCodeAdapter.po2Dto(pointExchangeCodePO);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public PointExchangeCodeDTO reverseValue(String orderNo) {
+        PointExchangeCodePOExample example = new PointExchangeCodePOExample();
+        PointExchangeCodePOExample.Criteria criteria = example.createCriteria();
+        criteria.andOutOrderCodeEqualTo(orderNo);
+        criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+        List<PointExchangeCodePO> list = pointExchangeCodePOMapper.selectByExample(example);
+        if (list.isEmpty()) {
+            return null;
+        } else {
+            PointExchangeCodePO po = new PointExchangeCodePO();
+            po.setId(list.get(0).getId());
+            po.setUsed(CommonConstant.CODE_HAS_REFUND);
+            pointExchangeCodePOMapper.updateByPrimaryKeySelective(po);
+            return PointExchangeCodeAdapter.po2Dto(list.get(0));
         }
     }
 

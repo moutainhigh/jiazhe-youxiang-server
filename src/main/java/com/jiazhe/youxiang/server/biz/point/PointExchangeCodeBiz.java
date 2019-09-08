@@ -9,6 +9,7 @@ import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -84,5 +85,29 @@ public class PointExchangeCodeBiz {
 
     public void checkByCode(String code) {
         pointExchangeCodeService.checkByCode(code);
+    }
+
+    /**
+     * 中行查询库存
+     *
+     * @param orderNo
+     * @param giftNo
+     * @param expiryDate
+     * @return
+     */
+    public PointExchangeCodeDTO queryStock(String orderNo, String giftNo, Date expiryDate) {
+        PointExchangeCodeDTO pointExchangeCodeDTO = pointExchangeCodeService.queryStock(orderNo, giftNo, expiryDate);
+        return pointExchangeCodeDTO;
+    }
+
+    /**
+     * 中行退货校验
+     *
+     * @param orderNo
+     * @return
+     */
+    public PointExchangeCodeDTO reverseValue(String orderNo) {
+        PointExchangeCodeDTO pointExchangeCodeDTO = pointExchangeCodeService.reverseValue(orderNo);
+        return pointExchangeCodeDTO;
     }
 }

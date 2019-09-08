@@ -80,9 +80,9 @@ public class DateUtil {
     /**
      * 返回yyyyMMDDhhmmss
      */
-    public static String yyyyMMDDhhmmss() {
+    public static String yyyyMMDDhhmmss(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        String str = sdf.format(new Date());
+        String str = sdf.format(date);
         return str;
     }
 

@@ -21,7 +21,7 @@
         <result column="status" property="status" jdbcType="TINYINT"/>
         <result column="used" property="used" jdbcType="TINYINT"/>
         <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
-        <result column="out_order_code" property="outOrderCode" jdbcType="VARCHAR" />
+        <result column="out_order_code" property="outOrderCode" jdbcType="VARCHAR"/>
         <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
         <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
         <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
@@ -157,10 +157,18 @@
         <foreach collection="list" item="item" index="index" open="" close="" separator=";">
             update point_exchange_code
             <set>
-                point_effective_time = #{item.pointEffectiveTime},point_expiry_time = #{item.pointExpiryTime},expiry_time = #{item.expiryTime},status=1,mod_time=NOW()
+                point_effective_time = #{item.pointEffectiveTime},point_expiry_time =
+                #{item.pointExpiryTime},expiry_time = #{item.expiryTime},status=1,mod_time=NOW()
             </set>
             where id = #{item.id}
         </foreach>
     </update>
+
+    <select id="queryStock" resultType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO">
+        SELECT pec.*
+        FROM point_exchange_code pec LEFT JOIN point_exchange_code_batch pecb on pec.batch_id = pecb.id
+        WHERE pecb.gift_no = #{giftNo} AND pec.expiry_time > #{expiryDate} AND pecb.status = 1 AND pec.is_deleted = 0 AND pec.used = 0 AND pec.out_order_code = ''
+        ORDER BY pec.add_time ASC limit 0,1
+    </select>
 
 </mapper>
