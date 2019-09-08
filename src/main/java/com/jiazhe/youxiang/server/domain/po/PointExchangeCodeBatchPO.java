@@ -47,6 +47,8 @@ public class PointExchangeCodeBatchPO implements Serializable {
 
     private Date modTime;
 
+    private String gitfNo;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -215,5 +217,13 @@ public class PointExchangeCodeBatchPO implements Serializable {
 
     public void setModTime(Date modTime) {
         this.modTime = modTime;
+    }
+
+    public String getGitfNo() {
+        return gitfNo;
+    }
+
+    public void setGitfNo(String gitfNo) {
+        this.gitfNo = gitfNo == null ? null : gitfNo.trim();
     }
 }

@@ -161,10 +161,11 @@ public class CommonConstant {
     public static final Integer EXCHANGETYPE_QRCODE_EXCHANGE = 4;
 
     /**
-     * 是否已经使用
+     * 0未使用 1已使用 2已退货
      */
     public static final Byte CODE_NOT_USED = Byte.valueOf("0");
     public static final Byte CODE_HAS_USED = Byte.valueOf("1");
+    public static final Byte CODE_HAS_REFUND = Byte.valueOf("2");
 
     /**
      * 批次下的码是否已经制作

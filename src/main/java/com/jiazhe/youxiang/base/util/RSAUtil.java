@@ -41,18 +41,37 @@ public class RSAUtil {
         PRIVATE_KEY = privateKey;
     }
 
+    /**
+     * 扫描二维码充值密钥
+     */
     private static String PUBLIC_KEY;
-
     private static String PRIVATE_KEY;
 
     /**
-     * 利用公钥解密字符串
+     * 中行储蓄卡(BOCDC）密钥
+     */
+    private static String BOCDC_PUBLIC_KEY;
+    private static String BOCDC_PRIVATE_KEY;
+
+    @Value("${bocdc.rsa.public_key}")
+    public void setBOCDCPublicKey(String publicKey) {
+        BOCDC_PUBLIC_KEY = publicKey;
+    }
+
+    @Value("${bocdc.rsa.private_key}")
+    public void setBOCDCPrivateKey(String privateKey) {
+        BOCDC_PRIVATE_KEY = privateKey;
+    }
+
+
+    /**
+     * 扫描二维码功能，公钥解密
      *
      * @param decryptStr
      * @return
      * @throws Exception
      */
-    public static String publicDecrypt(String decryptStr) throws Exception {
+    public static String qrPublicDecrypt(String decryptStr) throws Exception {
         //将Base64编码后的公钥转换成PublicKey对象
         PublicKey publicKey = RSAUtil.string2PublicKey(PUBLIC_KEY);
         //加密后的内容Base64解码
@@ -62,6 +81,27 @@ public class RSAUtil {
         return new String(publicDecrypt);
     }
 
+    /**
+     * 中行储蓄卡，私钥加密
+     *
+     * @param str
+     * @return
+     * @throws Exception
+     */
+    public static String bocdcPrivateEncrypt(String str) throws Exception {
+        return RSAUtil.privateEncrypt(str, BOCDC_PRIVATE_KEY);
+    }
+
+    /**
+     * 中行储蓄卡，私钥解密
+     *
+     * @param str
+     * @return
+     * @throws Exception
+     */
+    public static String bocdcPrivateDecrypt(String str) throws Exception {
+        return RSAUtil.privateDecrypt(str, BOCDC_PRIVATE_KEY);
+    }
 
     /**
      * 生成秘钥对

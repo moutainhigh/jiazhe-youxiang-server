@@ -1425,6 +1425,76 @@ public class PointExchangeCodeBatchPOExample {
             addCriterion("mod_time not between", value1, value2, "modTime");
             return (Criteria) this;
         }
+
+        public Criteria andGitfNoIsNull() {
+            addCriterion("gitf_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGitfNoIsNotNull() {
+            addCriterion("gitf_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGitfNoEqualTo(String value) {
+            addCriterion("gitf_no =", value, "gitfNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGitfNoNotEqualTo(String value) {
+            addCriterion("gitf_no <>", value, "gitfNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGitfNoGreaterThan(String value) {
+            addCriterion("gitf_no >", value, "gitfNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGitfNoGreaterThanOrEqualTo(String value) {
+            addCriterion("gitf_no >=", value, "gitfNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGitfNoLessThan(String value) {
+            addCriterion("gitf_no <", value, "gitfNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGitfNoLessThanOrEqualTo(String value) {
+            addCriterion("gitf_no <=", value, "gitfNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGitfNoLike(String value) {
+            addCriterion("gitf_no like", value, "gitfNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGitfNoNotLike(String value) {
+            addCriterion("gitf_no not like", value, "gitfNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGitfNoIn(List<String> values) {
+            addCriterion("gitf_no in", values, "gitfNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGitfNoNotIn(List<String> values) {
+            addCriterion("gitf_no not in", values, "gitfNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGitfNoBetween(String value1, String value2) {
+            addCriterion("gitf_no between", value1, value2, "gitfNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGitfNoNotBetween(String value1, String value2) {
+            addCriterion("gitf_no not between", value1, value2, "gitfNo");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

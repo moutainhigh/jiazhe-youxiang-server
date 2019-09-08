@@ -160,7 +160,7 @@ public class PointBiz {
         //将二维码利用公钥解密
         String purchaseOrderStr = "";
         try {
-            purchaseOrderStr = RSAUtil.publicDecrypt(qrCode);
+            purchaseOrderStr = RSAUtil.qrPublicDecrypt(qrCode);
         } catch (Exception e) {
             throw new PointException(PointCodeEnum.QRCODE_DECRYPT_ERROR);
         }

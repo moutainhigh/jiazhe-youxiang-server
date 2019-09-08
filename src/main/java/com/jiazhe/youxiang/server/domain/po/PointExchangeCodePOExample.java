@@ -1565,6 +1565,76 @@ public class PointExchangeCodePOExample {
             addCriterion("mod_time not between", value1, value2, "modTime");
             return (Criteria) this;
         }
+
+        public Criteria andOutOrderCodeIsNull() {
+            addCriterion("out_order_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutOrderCodeIsNotNull() {
+            addCriterion("out_order_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutOrderCodeEqualTo(String value) {
+            addCriterion("out_order_code =", value, "outOrderCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutOrderCodeNotEqualTo(String value) {
+            addCriterion("out_order_code <>", value, "outOrderCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutOrderCodeGreaterThan(String value) {
+            addCriterion("out_order_code >", value, "outOrderCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutOrderCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("out_order_code >=", value, "outOrderCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutOrderCodeLessThan(String value) {
+            addCriterion("out_order_code <", value, "outOrderCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutOrderCodeLessThanOrEqualTo(String value) {
+            addCriterion("out_order_code <=", value, "outOrderCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutOrderCodeLike(String value) {
+            addCriterion("out_order_code like", value, "outOrderCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutOrderCodeNotLike(String value) {
+            addCriterion("out_order_code not like", value, "outOrderCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutOrderCodeIn(List<String> values) {
+            addCriterion("out_order_code in", values, "outOrderCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutOrderCodeNotIn(List<String> values) {
+            addCriterion("out_order_code not in", values, "outOrderCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutOrderCodeBetween(String value1, String value2) {
+            addCriterion("out_order_code between", value1, value2, "outOrderCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutOrderCodeNotBetween(String value1, String value2) {
+            addCriterion("out_order_code not between", value1, value2, "outOrderCode");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
