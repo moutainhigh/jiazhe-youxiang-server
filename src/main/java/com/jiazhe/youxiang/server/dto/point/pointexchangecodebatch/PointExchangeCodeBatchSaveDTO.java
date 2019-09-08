@@ -44,6 +44,8 @@ public class PointExchangeCodeBatchSaveDTO extends BaseObject {
 
     private Byte expiryType;
 
+    private String giftNo;
+
     private String extInfo;
 
     public Integer getId() {
@@ -172,5 +174,13 @@ public class PointExchangeCodeBatchSaveDTO extends BaseObject {
 
     public void setPointEffectiveTime(Date pointEffectiveTime) {
         this.pointEffectiveTime = pointEffectiveTime;
+    }
+
+    public String getGiftNo() {
+        return giftNo;
+    }
+
+    public void setGiftNo(String giftNo) {
+        this.giftNo = giftNo;
     }
 }

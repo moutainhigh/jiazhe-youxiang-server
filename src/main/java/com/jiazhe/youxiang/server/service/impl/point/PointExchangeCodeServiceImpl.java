@@ -227,6 +227,9 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         if (pointExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_USED);
         }
+        if (pointExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_REFUND)) {
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_REFUND);
+        }
         if (pointExchangeCodePO.getExpiryTime().getTime() < System.currentTimeMillis()) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_EXPIRIED);
         }

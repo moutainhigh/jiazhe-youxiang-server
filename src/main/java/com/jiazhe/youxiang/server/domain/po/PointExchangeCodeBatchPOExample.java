@@ -1426,73 +1426,73 @@ public class PointExchangeCodeBatchPOExample {
             return (Criteria) this;
         }
 
-        public Criteria andGitfNoIsNull() {
-            addCriterion("gitf_no is null");
+        public Criteria andGiftNoIsNull() {
+            addCriterion("gift_no is null");
             return (Criteria) this;
         }
 
-        public Criteria andGitfNoIsNotNull() {
-            addCriterion("gitf_no is not null");
+        public Criteria andGiftNoIsNotNull() {
+            addCriterion("gift_no is not null");
             return (Criteria) this;
         }
 
-        public Criteria andGitfNoEqualTo(String value) {
-            addCriterion("gitf_no =", value, "gitfNo");
+        public Criteria andGiftNoEqualTo(String value) {
+            addCriterion("gift_no =", value, "giftNo");
             return (Criteria) this;
         }
 
-        public Criteria andGitfNoNotEqualTo(String value) {
-            addCriterion("gitf_no <>", value, "gitfNo");
+        public Criteria andGiftNoNotEqualTo(String value) {
+            addCriterion("gift_no <>", value, "giftNo");
             return (Criteria) this;
         }
 
-        public Criteria andGitfNoGreaterThan(String value) {
-            addCriterion("gitf_no >", value, "gitfNo");
+        public Criteria andGiftNoGreaterThan(String value) {
+            addCriterion("gift_no >", value, "giftNo");
             return (Criteria) this;
         }
 
-        public Criteria andGitfNoGreaterThanOrEqualTo(String value) {
-            addCriterion("gitf_no >=", value, "gitfNo");
+        public Criteria andGiftNoGreaterThanOrEqualTo(String value) {
+            addCriterion("gift_no >=", value, "giftNo");
             return (Criteria) this;
         }
 
-        public Criteria andGitfNoLessThan(String value) {
-            addCriterion("gitf_no <", value, "gitfNo");
+        public Criteria andGiftNoLessThan(String value) {
+            addCriterion("gift_no <", value, "giftNo");
             return (Criteria) this;
         }
 
-        public Criteria andGitfNoLessThanOrEqualTo(String value) {
-            addCriterion("gitf_no <=", value, "gitfNo");
+        public Criteria andGiftNoLessThanOrEqualTo(String value) {
+            addCriterion("gift_no <=", value, "giftNo");
             return (Criteria) this;
         }
 
-        public Criteria andGitfNoLike(String value) {
-            addCriterion("gitf_no like", value, "gitfNo");
+        public Criteria andGiftNoLike(String value) {
+            addCriterion("gift_no like", value, "giftNo");
             return (Criteria) this;
         }
 
-        public Criteria andGitfNoNotLike(String value) {
-            addCriterion("gitf_no not like", value, "gitfNo");
+        public Criteria andGiftNoNotLike(String value) {
+            addCriterion("gift_no not like", value, "giftNo");
             return (Criteria) this;
         }
 
-        public Criteria andGitfNoIn(List<String> values) {
-            addCriterion("gitf_no in", values, "gitfNo");
+        public Criteria andGiftNoIn(List<String> values) {
+            addCriterion("gift_no in", values, "giftNo");
             return (Criteria) this;
         }
 
-        public Criteria andGitfNoNotIn(List<String> values) {
-            addCriterion("gitf_no not in", values, "gitfNo");
+        public Criteria andGiftNoNotIn(List<String> values) {
+            addCriterion("gift_no not in", values, "giftNo");
             return (Criteria) this;
         }
 
-        public Criteria andGitfNoBetween(String value1, String value2) {
-            addCriterion("gitf_no between", value1, value2, "gitfNo");
+        public Criteria andGiftNoBetween(String value1, String value2) {
+            addCriterion("gift_no between", value1, value2, "giftNo");
             return (Criteria) this;
         }
 
-        public Criteria andGitfNoNotBetween(String value1, String value2) {
-            addCriterion("gitf_no not between", value1, value2, "gitfNo");
+        public Criteria andGiftNoNotBetween(String value1, String value2) {
+            addCriterion("gift_no not between", value1, value2, "giftNo");
             return (Criteria) this;
         }
     }

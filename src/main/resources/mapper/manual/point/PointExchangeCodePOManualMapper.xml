@@ -21,6 +21,7 @@
         <result column="status" property="status" jdbcType="TINYINT"/>
         <result column="used" property="used" jdbcType="TINYINT"/>
         <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
+        <result column="out_order_code" property="outOrderCode" jdbcType="VARCHAR" />
         <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
         <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
         <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
@@ -30,7 +31,7 @@
     <sql id="Base_Column_List">
         id, batch_id, batch_name, point_name, batch_description, project_id, city_codes,
     product_ids, code, keyt, face_value, expiry_time, point_effective_time, point_expiry_time,
-    validity_period, expiry_type, status, used, customer_id, ext_info, is_deleted, add_time,
+    validity_period, expiry_type, status, used, customer_id, out_order_code, ext_info, is_deleted, add_time,
     mod_time
     </sql>
 
