@@ -105,7 +105,7 @@ public class BOCCCUtils {
         byte[] source = content.getBytes(BOCCCConstant.CHAR_SET);
         byte[] dest = new byte[n];
         System.arraycopy(source, 0, dest, 0, n);
-        return new String(dest);
+        return new String(dest,BOCCCConstant.CHAR_SET);
     }
 
     /**

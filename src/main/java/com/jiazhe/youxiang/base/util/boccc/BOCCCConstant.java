@@ -60,9 +60,14 @@ public class BOCCCConstant {
     public static String uploadPath = rootPath + "upload/";
 
     /**
-     * 将要生成的商户信息excel文件的路径
+     * 商户信息路径，包括手动上传的excel，自动生成的源文件、压缩文件、加密文件
      */
     public static String merchantPath = rootPath + "merchant/";
+
+    /**
+     * 商品信息路径，包括手动上传的excel，自动生成的源文件、压缩文件、加密文件
+     */
+    public static String productPath = rootPath + "product/";
 
     /**
      * 九个接口文件名模板

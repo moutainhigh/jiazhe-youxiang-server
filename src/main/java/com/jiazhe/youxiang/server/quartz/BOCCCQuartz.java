@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.quartz;
 
 import com.jiazhe.youxiang.base.util.boccc.AutoMerchantInfoUtils;
+import com.jiazhe.youxiang.base.util.boccc.AutoProductInfoUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoSFTPUtils;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCUtils;
 import org.quartz.JobExecutionException;
@@ -43,6 +44,15 @@ public class BOCCCQuartz extends QuartzJobBean {
             logger.info("生成商户信息完成");
         } catch (Exception e) {
             logger.error("生成商户信息失败，异常信息：" + e.getMessage());
+        }
+
+        //定时生成商品信息
+        try {
+            logger.info("生成商品信息");
+            AutoProductInfoUtils.generateFile();
+            logger.info("生成商品信息完成");
+        } catch (Exception e) {
+            logger.error("生成商品信息失败，异常信息：" + e.getMessage());
         }
 
 //        //模拟中行生成退货信息

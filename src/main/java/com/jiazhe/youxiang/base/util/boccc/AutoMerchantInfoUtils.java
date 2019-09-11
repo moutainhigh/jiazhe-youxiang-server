@@ -63,8 +63,6 @@ public class AutoMerchantInfoUtils {
         } else {
             sb.append(BOCCCUtils.generateFileEndChar(0));
         }
-
-
         return sb;
     }
 
