@@ -47,17 +47,17 @@ public class HandMerchantInfoUtils {
     /**
      * 门店地址
      */
-    private final static String ShopAddress = "北京市昌平区珠江摩尔";
+    private final static String ShopAddress = "北京市昌平区北清路1号珠江摩尔国际大厦";
 
     /**
      * 门店电话
      */
-    private final static String ShopTel = "010-88888888";
+    private final static String ShopTel = "4000-852-818";
 
     /**
      * 门店营业时间 hh24:mm:ss  -  hh24:mm:ss
      */
-    private final static String ShopWorkTime = "hh24:mm:ss-hh24:mm:ss";
+    private final static String ShopWorkTime = "8:00:00-17:00:00";
 
     /**
      * 商户网址
@@ -78,6 +78,10 @@ public class HandMerchantInfoUtils {
 
     public static String getPicId() throws Exception {
         return "P" + BOCCCConstant.MERCHANT_NAME + BOCCCUtils.complete(PicId, '0', true, 5);
+    }
+
+    public static String getFirstReservedDomain() throws Exception {
+        return "M" + BOCCCConstant.MERCHANT_NAME + BOCCCUtils.complete(PicId, '0', true, 10);
     }
 
     /**
@@ -123,8 +127,10 @@ public class HandMerchantInfoUtils {
         sb.append(getPicId()).append(BOCCCConstant.BOC_Separator);
         //门店开启关闭状态
         sb.append(isOpen).append(BOCCCConstant.BOC_Separator);
-        //预留字段还未拼接 TODO
-        //TODO
+        //预留字段还未拼接
+        sb.append(getFirstReservedDomain()).append(BOCCCConstant.BOC_Separator);
+        sb.append("").append(BOCCCConstant.BOC_Separator);
+        sb.append("").append(BOCCCConstant.BOC_Separator);
         //换行
         sb.append("\r\n");
         //添加文件尾部信息

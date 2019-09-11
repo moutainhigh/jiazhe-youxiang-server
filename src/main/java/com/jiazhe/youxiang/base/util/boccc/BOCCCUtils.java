@@ -19,6 +19,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
 import java.security.Key;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -92,8 +93,8 @@ public class BOCCCUtils {
      * @param content
      * @return
      */
-    public static int getBytes(String content) {
-        byte[] bytes = content.getBytes();
+    public static int getBytes(String content) throws UnsupportedEncodingException {
+        byte[] bytes = content.getBytes("GBK");
         return bytes.length;
     }
 
