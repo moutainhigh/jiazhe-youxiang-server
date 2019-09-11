@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.base.config;
 
+import com.jiazhe.youxiang.server.quartz.BOCCCQuartz;
 import com.jiazhe.youxiang.server.quartz.WeChatAPICacheQuartz;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -27,6 +28,11 @@ public class QuartzConfig {
      */
     private static final Integer WECHAT_API_EXPIRES_IN_TIME = 7200;
 
+    /**
+     * 中行定时任务间隔时间 1天
+     */
+    private static final Integer ONE_DAY = 24 * 60 * 60;
+
 //    @Bean
 //    public JobDetail orderQuartzDetail(){
 //        return JobBuilder.newJob(OrderQuartz.class).withIdentity("orderQuartz").storeDurably().build();
@@ -43,6 +49,23 @@ public class QuartzConfig {
 //                .build();
 //    }
 
+    @Bean
+    public JobDetail BOCCCQuartzDetail() {
+        return JobBuilder.newJob(BOCCCQuartz.class).withIdentity("BOCCCQuartz").storeDurably().build();
+    }
+
+    @Bean
+    public Trigger BOCCCQuartzTrigger() throws Exception{
+        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
+                .withIntervalInSeconds(ONE_DAY)
+                .repeatForever();
+        return TriggerBuilder.newTrigger().forJob(BOCCCQuartzDetail())
+                .withIdentity("BOCCCQuartz")
+                .startNow()
+//                .startAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-09-04 01:00:00"))
+                .withSchedule(scheduleBuilder)
+                .build();
+    }
 
     @Bean
     public JobDetail weChatAPICacheQuartzDetail() {

@@ -1,5 +1,12 @@
 package com.jiazhe.youxiang.base.util.boccc;
 
+import com.jiazhe.youxiang.base.util.ExcelUtils;
+import com.jiazhe.youxiang.server.common.enums.EleProductCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.EleProductCodeException;
+import org.apache.commons.io.FileUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,127 +21,50 @@ public class AutoMerchantInfoUtils {
 
     public static Logger logger = LoggerFactory.getLogger(AutoMerchantInfoUtils.class);
 
-    /**
-     * 省
-     */
-    private final static String Province = "110000";
-
-    /**
-     * 市
-     */
-    private final static String City = "110100";
-
-    /**
-     * 县
-     */
-    private final static String County = "110114";
-
-    /**
-     * 商户名称
-     */
-    private final static String MerchantName = "北京悠享互联信息技术有限公司";
-
-    /**
-     * 门店名称
-     */
-    private final static String ShopName = "北京悠享";
-
-    /**
-     * 商户简介
-     */
-    private final static String MerchantDescription = "家政先锋";
-
-    /**
-     * 门店地址
-     */
-    private final static String ShopAddress = "北京市昌平区北清路1号珠江摩尔国际大厦";
-
-    /**
-     * 门店电话
-     */
-    private final static String ShopTel = "4000-852-818";
-
-    /**
-     * 门店营业时间 hh24:mm:ss  -  hh24:mm:ss
-     */
-    private final static String ShopWorkTime = "8:00:00-17:00:00";
-
-    /**
-     * 商户网址
-     */
-    private final static String MerchantWebSite = "www.ue-link.com";
-
-    /**
-     * 经纬度
-     */
-    private final static String Longitude = "";
-    private final static String Latitude = "";
-
-    /**
-     * 门店图片ID
-     */
-    public final static String PicId = "1";
-
-
-    public static String getPicId() throws Exception {
-        return "P" + BOCCCConstant.MERCHANT_NAME + BOCCCUtils.complete(PicId, '0', true, 5);
-    }
-
-    public static String getFirstReservedDomain() throws Exception {
-        return "M" + BOCCCConstant.MERCHANT_NAME + BOCCCUtils.complete(PicId, '0', true, 10);
-    }
-
-    /**
-     * 门店是否开启  门店是否关闭标识，Y是正常、N是关闭
-     */
-    private final static String isOpen = "Y";
-
-    /**
-     * 检查各个参数是否合法
-     *
-     * @throws Exception
-     */
-    public static void check() throws Exception {
-
-    }
-
     public static StringBuilder generateBin() throws Exception {
         StringBuilder sb = new StringBuilder();
-        //添加商户id
-        sb.append(BOCCCConstant.MERCHANT_ID).append(BOCCCConstant.BOC_Separator);
-        //添加省，市，县
-        sb.append(Province).append(BOCCCConstant.BOC_Separator);
-        sb.append(City).append(BOCCCConstant.BOC_Separator);
-        sb.append(County).append(BOCCCConstant.BOC_Separator);
-        //添加商户名称
-        sb.append(BOCCCUtils.complete(MerchantName, ' ', false, 200)).append(BOCCCConstant.BOC_Separator);
-        //添加门店名称
-        sb.append(BOCCCUtils.complete(ShopName, ' ', false, 200)).append(BOCCCConstant.BOC_Separator);
-        //添加商户简介
-        sb.append(BOCCCUtils.complete(MerchantDescription, ' ', false, 200)).append(BOCCCConstant.BOC_Separator);
-        //添加门店地址
-        sb.append(BOCCCUtils.complete(ShopAddress, ' ', false, 200)).append(BOCCCConstant.BOC_Separator);
-        //添加门店电话
-        sb.append(BOCCCUtils.complete(ShopTel, ' ', false, 20)).append(BOCCCConstant.BOC_Separator);
-        //添加门店营业时间
-        sb.append(BOCCCUtils.complete(ShopWorkTime, ' ', false, 100)).append(BOCCCConstant.BOC_Separator);
-        //添加网站
-        sb.append(BOCCCUtils.complete(MerchantWebSite, ' ', false, 100)).append(BOCCCConstant.BOC_Separator);
-        //添加经纬度
-        sb.append(BOCCCUtils.complete(Longitude, ' ', true, 50)).append(BOCCCConstant.BOC_Separator);
-        sb.append(BOCCCUtils.complete(Latitude, ' ', true, 50)).append(BOCCCConstant.BOC_Separator);
-        //添加图片ID
-        sb.append(getPicId()).append(BOCCCConstant.BOC_Separator);
-        //门店开启关闭状态
-        sb.append(isOpen).append(BOCCCConstant.BOC_Separator);
-        //预留字段还未拼接
-        sb.append(getFirstReservedDomain()).append(BOCCCConstant.BOC_Separator);
-        sb.append("").append(BOCCCConstant.BOC_Separator);
-        sb.append("").append(BOCCCConstant.BOC_Separator);
-        //换行
-        sb.append("\r\n");
-        //添加文件尾部信息
-        sb.append(BOCCCUtils.generateFileEndChar(1));
+        //判断今日是否有商户excel文件，有则根据excel生成，无则直接生成文件尾
+        String merchantExcelUrl = BOCCCConstant.merchantPath + BOCCCUtils.getToday() + ".xlsx";
+        File merchantExcel = new File(merchantExcelUrl);
+        if (merchantExcel.exists()) {
+            Sheet sheet = ExcelUtils.excel2Sheet(merchantExcelUrl);
+            int count = 0;
+            for (Row row : sheet) {
+                //跳过表头
+                if (count == 0) {
+                    count++;
+                } else {
+                    if (!ExcelUtils.getStringValue(row.getCell(0)).equals("")) {
+                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(1)), ' ', false, 10)).append(BOCCCConstant.BOC_Separator);
+                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(2)), ' ', false, 6)).append(BOCCCConstant.BOC_Separator);
+                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(3)), ' ', false, 6)).append(BOCCCConstant.BOC_Separator);
+                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(4)), ' ', false, 6)).append(BOCCCConstant.BOC_Separator);
+                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(5)), ' ', false, 200)).append(BOCCCConstant.BOC_Separator);
+                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(6)), ' ', false, 200)).append(BOCCCConstant.BOC_Separator);
+                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(7)), ' ', false, 200)).append(BOCCCConstant.BOC_Separator);
+                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(8)), ' ', false, 200)).append(BOCCCConstant.BOC_Separator);
+                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(9)), ' ', false, 20)).append(BOCCCConstant.BOC_Separator);
+                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(10)), ' ', false, 100)).append(BOCCCConstant.BOC_Separator);
+                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(11)), ' ', false, 100)).append(BOCCCConstant.BOC_Separator);
+                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(12)), ' ', false, 50)).append(BOCCCConstant.BOC_Separator);
+                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(13)), ' ', false, 50)).append(BOCCCConstant.BOC_Separator);
+                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(14)), ' ', false, 10)).append(BOCCCConstant.BOC_Separator);
+                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(15)), ' ', false, 1)).append(BOCCCConstant.BOC_Separator);
+                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(16)), ' ', false, 15)).append(BOCCCConstant.BOC_Separator);
+                        sb.append("").append(BOCCCConstant.BOC_Separator);
+                        sb.append("").append(BOCCCConstant.BOC_Separator);
+                        sb.append("\r\n");
+                        count++;
+                    }
+                }
+            }
+            //添加文件尾部信息
+            sb.append(BOCCCUtils.generateFileEndChar(count - 1));
+        } else {
+            sb.append(BOCCCUtils.generateFileEndChar(0));
+        }
+
+
         return sb;
     }
 
@@ -145,44 +75,37 @@ public class AutoMerchantInfoUtils {
      */
     public static void generateFile() throws Exception {
 
-        //三种类型文件路径 day=-1表示昨日文件  0表示今日文件   1表示明日文件
-        int day = 1;
-        String sourceFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.MER_SOURCE, day);
-        String zipFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.MER_ZIP, day);
-        String pgpFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.MER_PGP, day);
+        BOCCCUtils.mkDirs(BOCCCConstant.merchantPath + BOCCCUtils.getToday());
 
-        //第一步，检查各个参数是否合法
-        check();
+        String sourceFileName = BOCCCConstant.merchantPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.MER_SOURCE, 0);
+        String zipFileName = BOCCCConstant.merchantPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.MER_ZIP, 0);
+        String pgpFileName = BOCCCConstant.merchantPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.MER_PGP, 0);
 
-        //第二步，按照规则组成商品信息字符串
+        //第1步，按照规则组成商品信息字符串
         StringBuilder sb = generateBin();
 
-        //第三步，写入文件中
+        //第2步，写入文件中
         logger.info("商户信息源文件生成中...");
         BOCCCUtils.writeStringToFile(sourceFileName, sb.toString());
         logger.info("商户信息源文件生成完成，路径为：" + sourceFileName);
 
-        //第四步，源文件压缩中
+        //第3步，源文件压缩中
         logger.info("商户信息源文件压缩中...");
         File sourceFile = new File(sourceFileName);
         new ZipUtil(new File(zipFileName)).zipFiles(sourceFile);
         logger.info("商户信息源文件压缩完成，路径为：" + zipFileName);
 
-        //第五步，压缩文件加密中
+        //第4步，压缩文件加密中
         logger.info("商户信息压缩文件加密中...");
         PgpEncryUtil.Encry(zipFileName, BOCCCConstant.publicKeyPath, pgpFileName);
         logger.info("商户信息压缩文件加密完成，路径为：" + pgpFileName);
 
-//        //第六步，文件解密中
-//        PgpDecryUtil decryU = new PgpDecryUtil();
-//        decryU.setPassphrase("youxianghulian0612");
-//        decryU.DecryUtil(pgpFileName, zipFileName, BOCCCConstant.privateKeyPath);
-//
-//        //第七步，文件解压缩
-//        UnZipUtil.ZipContraFile(zipFileName, BOCCCConstant.rootPath);
+        //第5步，复制加密文件至upload里
+        BOCCCUtils.copyToUpload(pgpFileName);
     }
 
     public static void main(String[] args) throws Exception {
         generateFile();
     }
+
 }

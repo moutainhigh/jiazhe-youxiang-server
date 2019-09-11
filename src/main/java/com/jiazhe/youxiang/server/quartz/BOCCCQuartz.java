@@ -1,11 +1,15 @@
 package com.jiazhe.youxiang.server.quartz;
 
+import com.jiazhe.youxiang.base.util.boccc.AutoMerchantInfoUtils;
+import com.jiazhe.youxiang.base.util.boccc.AutoSFTPUtils;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCUtils;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+
+import java.util.Arrays;
 
 /**
  * @author TU
@@ -25,28 +29,21 @@ public class BOCCCQuartz extends QuartzJobBean {
         /**
          * 根据不同环境，判断此定时任务是否执行
          */
-        switch (ENVIRONMENT) {
-            case "dev":
-                return;
-            case "xls":
-                return;
-            case "demo":
-                return;
+        String[] BOCCC_ENVIRONMENT = {"dev", "boccc", "boccctest"};
+        if (!Arrays.asList(BOCCC_ENVIRONMENT).contains(ENVIRONMENT)) {
+            return;
         }
 
         logger.info("定时任务：当前环境为：" + ENVIRONMENT + "，定时任务开始执行");
 
-        String content = "{" +"\"orderId\": \"000000000000000000000000000000001\"," + "\"waresId\": \"01\"," + "\"wInfo\": \"116248488970\"," + "\"returnDate\": \"20190911\"," + "\"returnTime\": \"190000\"" +"}";
-        String publicEncrypt = BOCCCUtils.publicEncrypt(content.trim());
-        logger.info("公钥加密内容：" + publicEncrypt);
-        String privateDecrypt = BOCCCUtils.privateDecrypt(publicEncrypt);
-        logger.info("私钥解密内容：" + privateDecrypt);
-
-        String privateEncrypt = BOCCCUtils.privateEncrypt(content);
-        logger.info("私钥加密内容：" + privateEncrypt);
-        String publicDecrypt = BOCCCUtils.publicDecrypt(privateEncrypt);
-        logger.info("公钥解密内容：" + publicDecrypt);
-
+        //定时生成商户信息
+        try {
+            logger.info("生成商户信息");
+            AutoMerchantInfoUtils.generateFile();
+            logger.info("生成商户信息完成");
+        } catch (Exception e) {
+            logger.error("生成商户信息失败，异常信息：" + e.getMessage());
+        }
 
 //        //模拟中行生成退货信息
 //        try {
@@ -84,14 +81,14 @@ public class BOCCCQuartz extends QuartzJobBean {
 //            logger.error("定时任务：前一日优惠券使用情况文件生成失败，异常信息：" + e.getMessage());
 //        }
 //
-//        //定时上传指定文件夹的文件
-//        try {
-//            logger.info("定时任务：上传文件执行中");
-//            AutoSFTPUtils.upload();
-//            logger.info("定时任务：上传文件执行完成");
-//        } catch (Exception e) {
-//            logger.error("定时任务：上传文件执行失败，异常信息：" + e.getMessage());
-//        }
+        //定时上传指定文件夹的文件
+        try {
+            logger.info("定时任务：上传文件执行中");
+            AutoSFTPUtils.upload();
+            logger.info("定时任务：上传文件执行完成");
+        } catch (Exception e) {
+            logger.error("定时任务：上传文件执行失败，异常信息：" + e.getMessage());
+        }
 //
 //        //定时分析前一日优惠券剩余数量
 //        try {

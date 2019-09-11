@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.base.util.boccc;
 
 import com.jiazhe.youxiang.base.util.RSAUtil;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +71,8 @@ public class BOCCCUtils {
     }
 
     /**
+     * 补全内容，如果内容超过，则截取
+     *
      * @param content   原始内容
      * @param c         用哪个字符来补充
      * @param isDigital 是否是数字，如果是数字域左补空格、其它域右补空格
@@ -78,13 +81,31 @@ public class BOCCCUtils {
      */
     public static String complete(String content, char c, boolean isDigital, int n) throws Exception {
         if (getBytes(content) > n) {
-            throw new Exception("内容超过将要补全的位数，发生错误");
-        }
-        if (isDigital) {
-            return generate(n - getBytes(content), c) + content;
+            return split(content, n);
+        } else if (getBytes(content) == n) {
+            return content;
         } else {
-            return content + generate(n - getBytes(content), c);
+            if (isDigital) {
+                return generate(n - getBytes(content), c) + content;
+            } else {
+                return content + generate(n - getBytes(content), c);
+            }
         }
+    }
+
+    /**
+     * 截取 n个字符
+     *
+     * @param content
+     * @param n
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    public static String split(String content, int n) throws UnsupportedEncodingException {
+        byte[] source = content.getBytes(BOCCCConstant.CHAR_SET);
+        byte[] dest = new byte[n];
+        System.arraycopy(source, 0, dest, 0, n);
+        return new String(dest);
     }
 
     /**
@@ -94,7 +115,7 @@ public class BOCCCUtils {
      * @return
      */
     public static int getBytes(String content) throws UnsupportedEncodingException {
-        byte[] bytes = content.getBytes("GBK");
+        byte[] bytes = content.getBytes(BOCCCConstant.CHAR_SET);
         return bytes.length;
     }
 
@@ -254,6 +275,34 @@ public class BOCCCUtils {
             }
         }
     }
+
+    /**
+     * 将pgp文件copy至今日待上传的文件夹下
+     *
+     * @param pgpFileName
+     * @throws Exception
+     */
+    public static void copyToUpload(String pgpFileName) throws Exception {
+        String uploadPath = BOCCCConstant.uploadPath + BOCCCUtils.getToday();
+        File file = new File(uploadPath);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        FileUtils.copyFileToDirectory(new File(pgpFileName), new File(uploadPath));
+    }
+
+    /**
+     * 判断路径是否存在，不存在则生成
+     *
+     * @param path
+     */
+    public static void mkDirs(String path) {
+        File usedPath = new File(path);
+        if (!usedPath.exists()) {
+            usedPath.mkdirs();
+        }
+    }
+
 
     /**
      * 中行信用卡，利用公钥解密字符串

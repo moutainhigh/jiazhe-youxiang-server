@@ -7,6 +7,8 @@ package com.jiazhe.youxiang.base.util.boccc;
  */
 public class BOCCCConstant {
 
+    public static final String CHAR_SET = "GBK";
+
     /**
      * 1天的毫秒数
      */
@@ -56,6 +58,11 @@ public class BOCCCConstant {
      * 将要上传的文件的根路径
      */
     public static String uploadPath = rootPath + "upload/";
+
+    /**
+     * 将要生成的商户信息excel文件的路径
+     */
+    public static String merchantPath = rootPath + "merchant/";
 
     /**
      * 九个接口文件名模板

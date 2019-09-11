@@ -206,10 +206,9 @@ public class AutoProductInfoUtils {
     public static void generateFile() throws Exception {
 
         //三种类型文件路径 day=-1表示昨日文件  0表示今日文件   1表示明日文件
-        int day = 1;
-        String sourceFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.WARES_SOURCE, day);
-        String zipFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.WARES_ZIP, day);
-        String pgpFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.WARES_PGP, day);
+        String sourceFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.WARES_SOURCE, 0);
+        String zipFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.WARES_ZIP, 0);
+        String pgpFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.WARES_PGP, 0);
 
         //第一步，检查各个参数是否合法
         check();
