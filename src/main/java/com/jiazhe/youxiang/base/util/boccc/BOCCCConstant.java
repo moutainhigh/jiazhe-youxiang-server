@@ -73,7 +73,6 @@ public class BOCCCConstant {
     public static String COUPON_ZIP = "COUPON." + MERCHANT_NAME + ".YYYYMMDD.00.P.ZIP";
     public static String COUPON_PGP = "COUPON." + MERCHANT_NAME + ".YYYYMMDD.00.P.ZIP.DAT";
     // 4、图片信息
-    public static String PIC_SOURCE = "PIC." + MERCHANT_NAME + ".YYYYMMDD.00.P.ZIP";
     public static String PIC_ZIP = "PIC." + MERCHANT_NAME + ".YYYYMMDD.00.P.ZIP";
     public static String PIC_PGP = "PIC." + MERCHANT_NAME + ".YYYYMMDD.00.P.ZIP.DAT";
     // 5、优惠券使用更新
