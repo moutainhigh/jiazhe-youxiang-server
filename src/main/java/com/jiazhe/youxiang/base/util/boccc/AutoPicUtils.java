@@ -16,9 +16,9 @@ import java.io.File;
  * @description 商品、商户图片加密
  * @created 2019-09-05 18:39
  */
-public class HandPicUtils {
+public class AutoPicUtils {
 
-    public static Logger logger = LoggerFactory.getLogger(HandPicUtils.class);
+    public static Logger logger = LoggerFactory.getLogger(AutoPicUtils.class);
 
 
     /**
@@ -35,10 +35,9 @@ public class HandPicUtils {
 
 
         //第1步，压缩路径下所有文件
-        logger.info("图片文件源文件压缩中...");
-        File sourceFile = new File(sourceFileName);
-        new ZipUtil(new File(zipFileName)).zipDirectory(sourceFile);
-        logger.info("图片文件源文件压缩完成，路径为：" + zipFileName);
+//        logger.info("图片文件源文件压缩中...");
+//        new ZipUtil(new File(zipFileName)).zipDirectory(sourceFile);
+//        logger.info("图片文件源文件压缩完成，路径为：" + zipFileName);
 
         //第2步，压缩文件加密中
         logger.info("图片文件压缩文件加密中...");
