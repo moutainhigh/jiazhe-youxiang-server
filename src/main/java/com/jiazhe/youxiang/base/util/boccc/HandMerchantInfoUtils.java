@@ -67,8 +67,8 @@ public class HandMerchantInfoUtils {
     /**
      * 经纬度
      */
-    private final static String Longitude = "116.24";
-    private final static String Latitude = "39.56";
+    private final static String Longitude = "";
+    private final static String Latitude = "";
 
     /**
      * 门店图片ID

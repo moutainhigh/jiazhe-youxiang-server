@@ -19,7 +19,7 @@ public class HandProductInfoUtils {
      * 商品的唯一编码，命名规则为WXXXXNNNNNN
      * (XXXX为四位第三方系统名称，NNNNNN为数字编码，范围为000001~999999)
      */
-    private final static String[] ProductIds = {"123"};
+    private final static String[] ProductIds = {"1", "2", "3", "4"};
 
     public static String getProductId(String id) throws Exception {
         return "W" + BOCCCConstant.MERCHANT_NAME + BOCCCUtils.complete(id, '0', true, 6);
@@ -29,7 +29,7 @@ public class HandProductInfoUtils {
      * 40位   需要补全
      * 商品中文名称
      */
-    private final static String[] ProductNames = {"擦玻璃"};
+    private final static String[] ProductNames = {"日常保洁", "擦玻璃", "皮沙发护理", "家电清洗"};
 
     /**
      * 2位  不用补全
@@ -42,7 +42,7 @@ public class HandProductInfoUtils {
      * 05	汽车服务
      * 06  其它
      */
-    private final static String[] ProductCategories = {"04"};
+    private final static String ProductCategories = "04";
 
     /**
      * 4位  不用补全
@@ -96,20 +96,20 @@ public class HandProductInfoUtils {
      * 0500	销售维护	05
      * 0501	租车服务	05
      */
-    private final static String[] ProductTypes = {"0407"};
+    private final static String ProductTypes = "0401";
 
 
     /**
      * 11位  需要补全
      * 价格  格式带两位小数位，例如：345.00
      */
-    private final static String[] ProductPrices = {"345.00"};
+    private final static String[] ProductPrices = {"345.00", "345.00", "345.00", "345.00"};
 
     /**
      * 11位  需要补全
      * 积分
      */
-    private final static String[] ProductPoints = {"100"};
+    private final static String[] ProductPoints = {"100", "100", "100", "100"};
 
     /**
      * 10位  不需要补全
@@ -139,12 +139,6 @@ public class HandProductInfoUtils {
         if (ProductNames.length != count) {
             throw new Exception("ProductNames长度和ProductIds不匹配");
         }
-        if (ProductCategories.length != count) {
-            throw new Exception("ProductCategories长度和ProductIds不匹配");
-        }
-        if (ProductTypes.length != count) {
-            throw new Exception("ProductTypes长度和ProductIds不匹配");
-        }
         if (ProductPrices.length != count) {
             throw new Exception("ProductPrices长度和ProductIds不匹配");
         }
@@ -172,19 +166,19 @@ public class HandProductInfoUtils {
             //添加商品名称
             sb.append(BOCCCUtils.complete(ProductNames[i], ' ', false, 40)).append(BOCCCConstant.BOC_Separator);
             //添加商品所属大类
-            sb.append(ProductCategories[i]).append(BOCCCConstant.BOC_Separator);
+            sb.append(ProductCategories).append(BOCCCConstant.BOC_Separator);
             //添加商品所属小类
-            sb.append(ProductTypes[i]).append(BOCCCConstant.BOC_Separator);
+            sb.append(ProductTypes).append(BOCCCConstant.BOC_Separator);
             //添加可使用商户
             sb.append(BOCCCConstant.MERCHANT_ID).append(BOCCCConstant.BOC_Separator);
-            //添加价格
-            sb.append(BOCCCUtils.complete(ProductPrices[i], ' ', true, 11)).append(BOCCCConstant.BOC_Separator);
+            //添加价格，价格为空
+            sb.append(BOCCCUtils.complete("", ' ', true, 11)).append(BOCCCConstant.BOC_Separator);
             //添加积分
             sb.append(BOCCCUtils.complete(ProductPoints[i], ' ', true, 11)).append(BOCCCConstant.BOC_Separator);
             //添加有效期开始日期
-            sb.append(BOCCCUtils.complete(EffectBeginDate, ' ', false, 10)).append(BOCCCConstant.BOC_Separator);
+            sb.append(EffectBeginDate).append(BOCCCConstant.BOC_Separator);
             //添加有效期结束日期
-            sb.append(BOCCCUtils.complete(EffectEndDate, ' ', false, 10)).append(BOCCCConstant.BOC_Separator);
+            sb.append(EffectEndDate).append(BOCCCConstant.BOC_Separator);
             //添加秒杀标志
             sb.append(secKill).append(BOCCCConstant.BOC_Separator);
             //添加商品描述1-10
@@ -192,8 +186,10 @@ public class HandProductInfoUtils {
             for (int j = 0; j < 10; j++) {
                 sb.append(space200).append(BOCCCConstant.BOC_Separator);
             }
-            //预留字段还未拼接 TODO
-            //TODO
+            //预留字段还未拼接
+            sb.append("").append(BOCCCConstant.BOC_Separator);
+            sb.append("").append(BOCCCConstant.BOC_Separator);
+            sb.append("").append(BOCCCConstant.BOC_Separator);
             //添加换行信息
             sb.append("\r\n");
         }
