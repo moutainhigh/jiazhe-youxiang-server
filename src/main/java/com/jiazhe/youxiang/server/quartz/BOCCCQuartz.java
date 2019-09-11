@@ -26,6 +26,8 @@ public class BOCCCQuartz extends QuartzJobBean {
          * 根据不同环境，判断此定时任务是否执行
          */
         switch (ENVIRONMENT) {
+            case "dev":
+                return;
             case "xls":
                 return;
             case "demo":

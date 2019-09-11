@@ -27,12 +27,12 @@ public class HandCouponUtils {
      * 商品的唯一编码，命名规则为WXXXXNNNNNN
      * (XXXX为四位第三方系统名称，NNNNNN为数字编码，范围为000001~999999)
      */
-    private final static String[] ProductIds = {"WXXXX0000001"};
+    private final static String[] ProductIds = {"WBJYX000001"};
 
     /**
      * 第三方系统中代金券批次id
      */
-    private final static String[] CouponBatchIds = {"1"};
+    private final static String[] CouponBatchIds = {"32"};
 
     /**
      * 检查各个参数是否合法
@@ -52,10 +52,12 @@ public class HandCouponUtils {
         for (CouponEntity coupon : list) {
             sb.append(coupon.getProductId()).append(BOCCCConstant.BOC_Separator);
             sb.append(BOCCCUtils.complete(coupon.getId(), '0', true, 10)).append(BOCCCConstant.BOC_Separator);
-            sb.append("E").append(BOCCCConstant.BOC_Separator);
-            sb.append(BOCCCUtils.complete(coupon.getKeyt(), '0', true, 36)).append(BOCCCConstant.BOC_Separator);
-            //预留字段还未拼接 TODO
-            //TODO
+            sb.append("R").append(BOCCCConstant.BOC_Separator);
+            sb.append(BOCCCUtils.complete(coupon.getKeyt(), ' ', false, 36)).append(BOCCCConstant.BOC_Separator);
+            //预留字段还未拼接
+            sb.append("").append(BOCCCConstant.BOC_Separator);
+            sb.append("").append(BOCCCConstant.BOC_Separator);
+            sb.append("").append(BOCCCConstant.BOC_Separator);
             //换行
             sb.append("\r\n");
         }
@@ -69,19 +71,19 @@ public class HandCouponUtils {
         Map<String, String> map = new HashMap();
         for (int i = 0; i < CouponBatchIds.length; i++) {
             map.put(CouponBatchIds[i], ProductIds[i]);
-            sql.append("select * from voucher_exchange_code where batch_id ='" + CouponBatchIds[i] + "' ");
+            sql.append("select pec.id as id, pecb.id as batch_id, pec.keyt as keyt, pecb.gift_no as gift_no from point_exchange_code pec left join point_exchange_code_batch pecb on pecb.id = pec.batch_id where batch_id = '" + CouponBatchIds[i] + "' ");
             if (i != CouponBatchIds.length - 1) {
                 sql.append("union ALL ");
             }
         }
         List<CouponEntity> list = new ArrayList<>();
         Class.forName("com.mysql.jdbc.Driver");
-        //本地环境数据库
-        String url = "jdbc:mysql://localhost:3306/youxiang?useUnicode=true&characterEncoding=UTF8&connectTimeout=1000&socketTimeout=10000&allowMultiQueries=true";
-        Connection conn = DriverManager.getConnection(url, "root", "root");
-//        //测试环境数据库
-//        String url = "jdbc:mysql://cdb-21q33fb6.bj.tencentcdb.com:10018/youxiang?useUnicode=true&characterEncoding=UTF8&connectTimeout=1000&socketTimeout=10000&allowMultiQueries=true";
-//        Connection conn = DriverManager.getConnection(url, "root", "rewq4321$#@!");
+        //local环境数据库
+//        String url = "jdbc:mysql://localhost:3306/youxiang?useUnicode=true&characterEncoding=UTF8&connectTimeout=1000&socketTimeout=10000&allowMultiQueries=true";
+//        Connection conn = DriverManager.getConnection(url, "root", "root");
+//        //dev环境数据库
+        String url = "jdbc:mysql://cdb-21q33fb6.bj.tencentcdb.com:10018/youxiang?useUnicode=true&characterEncoding=UTF8&connectTimeout=1000&socketTimeout=10000&allowMultiQueries=true";
+        Connection conn = DriverManager.getConnection(url, "root", "rewq4321$#@!");
 //        //生产环境数据库
 //        String url = "jdbc:mysql://bj-cdb-9l8ozcar.sql.tencentcdb.com:63546/youxiang?characterEncoding=UTF-8&useCursorFetch=true&defaultFetchSize=2000";
 //        Connection conn = DriverManager.getConnection(url, "root", "rewq4321++");
@@ -93,7 +95,7 @@ public class HandCouponUtils {
             coupon.setId(rs.getString("id"));
             coupon.setBatchId(rs.getString("batch_id"));
             coupon.setKeyt(rs.getString("keyt"));
-            String productId = rs.getString("boccc_product_id");
+            String productId = rs.getString("gift_no");
             coupon.setProductId(productId);
             if (!productId.equals(map.get(coupon.getBatchId()))) {
                 error++;
@@ -103,7 +105,7 @@ public class HandCouponUtils {
         }
         conn.close();//关闭通道
         if (error > 0) {
-            logger.error("BOCCC-ERROR：生成优惠券总数：" + count + "，错误个数：" + error + "个，原因，数据库中boccc_product_id和本类中ProductIds对不上！");
+            logger.error("BOCCC-ERROR：生成优惠券总数：" + count + "，错误个数：" + error + "个，原因，数据库中gift_no和本类中ProductIds对不上！");
         } else {
             logger.info("成功生成优惠券：" + count + "个。");
         }
@@ -149,8 +151,6 @@ public class HandCouponUtils {
     }
 
     public static void main(String[] args) throws Exception {
-//        generateFile();
-        String result = "123";
-        BOCCCUtils.contentAppend(BOCCCConstant.rootPath + "test.txt",result);
+        generateFile();
     }
 }
