@@ -2,7 +2,7 @@ package com.jiazhe.youxiang.server.service.impl.point;
 
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.ExchangeCodeCheckUtil;
-import com.jiazhe.youxiang.base.util.ListUtils;
+import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponEntity;
 import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
@@ -32,7 +32,6 @@ import com.jiazhe.youxiang.server.service.point.PointService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Role;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -381,6 +380,11 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
             pointExchangeCodePOMapper.updateByPrimaryKeySelective(po);
             return PointExchangeCodeAdapter.po2Dto(list.get(0));
         }
+    }
+
+    @Override
+    public List<BOCCCCouponEntity> getBOCCCCoupon(List<Integer> batchIds) {
+        return pointExchangeCodePOManualMapper.getBOCCCCoupon(batchIds);
     }
 
 }

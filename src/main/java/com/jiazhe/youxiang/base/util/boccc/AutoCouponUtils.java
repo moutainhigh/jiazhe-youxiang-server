@@ -2,7 +2,6 @@ package com.jiazhe.youxiang.base.util.boccc;
 
 import com.jiazhe.youxiang.base.util.ExcelUtils;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
-import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeCodeService;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.slf4j.Logger;
@@ -12,14 +11,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author TU
@@ -43,6 +36,7 @@ public class AutoCouponUtils {
     }
 
     public static StringBuilder generateBin() throws Exception {
+        List<Integer> batchIds = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         //判断今日是否有优惠券excel文件，有则根据excel生成，无则直接生成文件尾
         String productExcelUrl = BOCCCConstant.couponPath + BOCCCUtils.getToday() + ".xlsx";
@@ -56,16 +50,27 @@ public class AutoCouponUtils {
                     count++;
                 } else {
                     if (!ExcelUtils.getStringValue(row.getCell(0)).equals("")) {
-                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(1)), ' ', false, 11)).append(BOCCCConstant.BOC_Separator);
-                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(2)), ' ', false, 40)).append(BOCCCConstant.BOC_Separator);
-                        sb.append("").append(BOCCCConstant.BOC_Separator);
-                        sb.append("\r\n");
+                        batchIds.add(Integer.valueOf(ExcelUtils.getStringValue(row.getCell(2)).trim()));
                         count++;
                     }
                 }
             }
+            int couponCount = 0;
+            List<BOCCCCouponEntity> list = couponUtils.pointExchangeCodeService.getBOCCCCoupon(batchIds);
+            for (BOCCCCouponEntity entity : list) {
+                couponCount++;
+                sb.append(entity.getGiftNo()).append(BOCCCConstant.BOC_Separator);
+                sb.append(BOCCCUtils.complete(entity.getId(), '0', true, 10)).append(BOCCCConstant.BOC_Separator);
+                sb.append("R").append(BOCCCConstant.BOC_Separator);
+                sb.append(BOCCCUtils.complete(entity.getKeyt(), ' ', false, 36)).append(BOCCCConstant.BOC_Separator);
+                //预留字段还未拼接
+                sb.append("").append(BOCCCConstant.BOC_Separator);
+                sb.append("").append(BOCCCConstant.BOC_Separator);
+                sb.append("").append(BOCCCConstant.BOC_Separator);
+                sb.append("\r\n");
+            }
             //添加文件尾部信息
-            sb.append(BOCCCUtils.generateFileEndChar(count - 1));
+            sb.append(BOCCCUtils.generateFileEndChar(couponCount));
         } else {
             sb.append(BOCCCUtils.generateFileEndChar(0));
         }
@@ -85,7 +90,7 @@ public class AutoCouponUtils {
         String zipFileName = BOCCCConstant.couponPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.COUPON_ZIP, 0);
         String pgpFileName = BOCCCConstant.couponPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.COUPON_PGP, 0);
 
-        //第1步，按照规则组成商品信息字符串
+        //第1步，按照规则组成优惠券字符串
         StringBuilder sb = generateBin();
 
         //第2步，写入文件中

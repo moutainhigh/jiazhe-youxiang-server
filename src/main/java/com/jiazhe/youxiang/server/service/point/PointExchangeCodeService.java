@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.point;
 
+import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponEntity;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeEditDTO;
@@ -153,4 +154,11 @@ public interface PointExchangeCodeService {
      * @return
      */
     PointExchangeCodeDTO reverseValue(String orderNo);
+
+    /**
+     * 中行信用卡专用获取批次下的兑换码信息
+     * @param batchIds
+     * @return
+     */
+    List<BOCCCCouponEntity> getBOCCCCoupon(List<Integer> batchIds);
 }

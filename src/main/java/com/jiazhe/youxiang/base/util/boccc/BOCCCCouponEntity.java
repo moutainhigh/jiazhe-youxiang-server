@@ -2,16 +2,16 @@ package com.jiazhe.youxiang.base.util.boccc;
 
 /**
  * @author TU
- * @description   代金券实体类
+ * @description   中行信用卡专用代金券实体类
  * @date 2019-09-03.
  */
-public class CouponEntity {
+public class BOCCCCouponEntity {
 
     private String id;
 
     private String batchId;
 
-    private String productId;
+    private String giftNo;
 
     private String keyt;
 
@@ -31,12 +31,12 @@ public class CouponEntity {
         this.batchId = batchId;
     }
 
-    public String getProductId() {
-        return productId;
+    public String getGiftNo() {
+        return giftNo;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setGiftNo(String giftNo) {
+        this.giftNo = giftNo;
     }
 
     public String getKeyt() {

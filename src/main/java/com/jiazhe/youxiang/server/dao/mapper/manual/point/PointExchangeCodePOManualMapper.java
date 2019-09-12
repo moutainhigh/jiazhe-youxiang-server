@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.dao.mapper.manual.point;
 
+import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponEntity;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import org.apache.ibatis.annotations.Param;
@@ -116,4 +117,11 @@ public interface PointExchangeCodePOManualMapper {
      * @return
      */
     PointExchangeCodePO queryStock(@Param("giftNo") String giftNo, @Param("expiryDate") Date expiryDate);
+
+    /**
+     * 中行信用卡专用获取批次下兑换码信息
+     * @param batchIds
+     * @return
+     */
+    List<BOCCCCouponEntity> getBOCCCCoupon(List<Integer> batchIds);
 }
