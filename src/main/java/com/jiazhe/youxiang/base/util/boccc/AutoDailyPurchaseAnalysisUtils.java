@@ -123,4 +123,11 @@ public class AutoDailyPurchaseAnalysisUtils {
 
     }
 
+    public static void main(String[] args) throws Exception {
+        //模拟中行下发的每日购买清单文件
+        File sourceFile = new File(BOCCCConstant.rootPath + "CSELL.BOCBJYX.20190912.00.B");
+        new ZipUtil(new File(BOCCCConstant.rootPath + "CSELL.BOCBJYX.20190912.00.ZIP")).zipFiles(sourceFile);
+        PgpEncryUtil.Encry(BOCCCConstant.rootPath + "CSELL.BOCBJYX.20190912.00.ZIP", BOCCCConstant.publicKeyPath, BOCCCConstant.rootPath + "CSELL.BOCBJYX.20190912.00.ZIP.DAT");
+    }
+
 }
