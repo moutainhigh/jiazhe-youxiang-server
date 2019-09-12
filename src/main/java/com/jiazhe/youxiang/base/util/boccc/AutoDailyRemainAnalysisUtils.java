@@ -71,10 +71,10 @@ public class AutoDailyRemainAnalysisUtils {
                 totalUsed += used;
                 left = Integer.valueOf(line.substring(48, 56).trim());
                 totalLeft += left;
-                sb.append(productId + " 总数量：" + count + "个；总使用：" + used + "个；总剩余：" + left + "个；").append("\r\n");
+                sb.append(productId + " 总数量：" + count + "个； 总使用：" + used + "个； 总剩余：" + left + "个；").append("\r\n");
             }
         }
-        sb.append("---------总数量：" + totalCount + "个；总使用：" + totalUsed + "个；总剩余：" + totalLeft + "个；---------");
+        sb.append("--------总数量：" + totalCount + "个； 总使用：" + totalUsed + "个； 总剩余：" + totalLeft + "个；--------");
         sb.append("\r\n").append("\r\n").append("\r\n");
         br.close();
         isr.close();
