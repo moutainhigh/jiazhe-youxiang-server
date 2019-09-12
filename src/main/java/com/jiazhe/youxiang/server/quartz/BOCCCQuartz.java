@@ -2,15 +2,13 @@ package com.jiazhe.youxiang.server.quartz;
 
 import com.jiazhe.youxiang.base.util.boccc.AutoCouponUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoMerchantInfoUtils;
+import com.jiazhe.youxiang.base.util.boccc.AutoPicUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoProductInfoUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoSFTPUtils;
-import com.jiazhe.youxiang.base.util.boccc.BOCCCUtils;
-import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.EnvironmentConstant;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.util.Arrays;
@@ -65,6 +63,15 @@ public class BOCCCQuartz extends QuartzJobBean {
             logger.error("生成优惠券失败，异常信息：" + e.getMessage());
         }
 
+        //定时生成图片信息
+        try {
+            logger.info("生成图片");
+            AutoPicUtils.generateFile();
+            logger.info("生成图片完成");
+        } catch (Exception e) {
+            logger.error("生成图片失败，异常信息：" + e.getMessage());
+        }
+
 //        //模拟中行生成退货信息
 //        try {
 //            logger.info("模拟生成中行退货信息");
@@ -102,13 +109,13 @@ public class BOCCCQuartz extends QuartzJobBean {
 //        }
 //
         //定时上传指定文件夹的文件
-//        try {
-//            logger.info("定时任务：上传文件执行中");
-//            AutoSFTPUtils.upload();
-//            logger.info("定时任务：上传文件执行完成");
-//        } catch (Exception e) {
-//            logger.error("定时任务：上传文件执行失败，异常信息：" + e.getMessage());
-//        }
+        try {
+            logger.info("定时任务：上传文件执行中");
+            AutoSFTPUtils.upload();
+            logger.info("定时任务：上传文件执行完成");
+        } catch (Exception e) {
+            logger.error("定时任务：上传文件执行失败，异常信息：" + e.getMessage());
+        }
 //
 //        //定时分析前一日优惠券剩余数量
 //        try {

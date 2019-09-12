@@ -75,6 +75,11 @@ public class BOCCCConstant {
     public static String couponPath = rootPath + "coupon/";
 
     /**
+     * 优惠券信息路径，包括手动上传的excel，自动生成的源文件、压缩文件、加密文件
+     */
+    public static String picPath = rootPath + "pic/";
+
+    /**
      * 九个接口文件名模板
      */
     // 1、商品信息

@@ -74,11 +74,11 @@ public class AutoProductInfoUtils {
      */
     public static void generateFile() throws Exception {
 
-        BOCCCUtils.mkDirs(BOCCCConstant.productPath + BOCCCUtils.getToday());
+        BOCCCUtils.mkDirs(BOCCCConstant.productPath + "work/" + BOCCCUtils.getToday());
 
-        String sourceFileName = BOCCCConstant.productPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.WARES_SOURCE, 0);
-        String zipFileName = BOCCCConstant.productPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.WARES_ZIP, 0);
-        String pgpFileName = BOCCCConstant.productPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.WARES_PGP, 0);
+        String sourceFileName = BOCCCConstant.productPath + "work/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.WARES_SOURCE, 0);
+        String zipFileName = BOCCCConstant.productPath + "work/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.WARES_ZIP, 0);
+        String pgpFileName = BOCCCConstant.productPath + "work/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.WARES_PGP, 0);
 
         //第1步，按照规则组成商品信息字符串
         StringBuilder sb = generateBin();

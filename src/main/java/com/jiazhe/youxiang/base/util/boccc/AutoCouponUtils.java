@@ -84,11 +84,11 @@ public class AutoCouponUtils {
      */
     public static void generateFile() throws Exception {
 
-        BOCCCUtils.mkDirs(BOCCCConstant.couponPath + BOCCCUtils.getToday());
+        BOCCCUtils.mkDirs(BOCCCConstant.couponPath + "work/" + BOCCCUtils.getToday());
 
-        String sourceFileName = BOCCCConstant.couponPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.COUPON_SOURCE, 0);
-        String zipFileName = BOCCCConstant.couponPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.COUPON_ZIP, 0);
-        String pgpFileName = BOCCCConstant.couponPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.COUPON_PGP, 0);
+        String sourceFileName = BOCCCConstant.couponPath + "work/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.COUPON_SOURCE, 0);
+        String zipFileName = BOCCCConstant.couponPath + "work/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.COUPON_ZIP, 0);
+        String pgpFileName = BOCCCConstant.couponPath + "work/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.COUPON_PGP, 0);
 
         //第1步，按照规则组成优惠券字符串
         StringBuilder sb = generateBin();
@@ -111,9 +111,5 @@ public class AutoCouponUtils {
 
         //第5步，复制加密文件至upload里
         BOCCCUtils.copyToUpload(pgpFileName);
-    }
-
-    public static void main(String[] args) throws Exception {
-        generateFile();
     }
 }

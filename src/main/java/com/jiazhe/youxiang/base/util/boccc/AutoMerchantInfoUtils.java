@@ -1,10 +1,6 @@
 package com.jiazhe.youxiang.base.util.boccc;
 
 import com.jiazhe.youxiang.base.util.ExcelUtils;
-import com.jiazhe.youxiang.server.common.enums.EleProductCodeEnum;
-import com.jiazhe.youxiang.server.common.exceptions.EleProductCodeException;
-import org.apache.commons.io.FileUtils;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.slf4j.Logger;
@@ -73,11 +69,11 @@ public class AutoMerchantInfoUtils {
      */
     public static void generateFile() throws Exception {
 
-        BOCCCUtils.mkDirs(BOCCCConstant.merchantPath + BOCCCUtils.getToday());
+        BOCCCUtils.mkDirs(BOCCCConstant.merchantPath + "work/" + BOCCCUtils.getToday());
 
-        String sourceFileName = BOCCCConstant.merchantPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.MER_SOURCE, 0);
-        String zipFileName = BOCCCConstant.merchantPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.MER_ZIP, 0);
-        String pgpFileName = BOCCCConstant.merchantPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.MER_PGP, 0);
+        String sourceFileName = BOCCCConstant.merchantPath + "work/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.MER_SOURCE, 0);
+        String zipFileName = BOCCCConstant.merchantPath + "work/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.MER_ZIP, 0);
+        String pgpFileName = BOCCCConstant.merchantPath + "work/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.MER_PGP, 0);
 
         //第1步，按照规则组成商品信息字符串
         StringBuilder sb = generateBin();

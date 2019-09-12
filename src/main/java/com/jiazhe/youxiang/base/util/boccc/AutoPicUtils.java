@@ -20,7 +20,6 @@ public class AutoPicUtils {
 
     public static Logger logger = LoggerFactory.getLogger(AutoPicUtils.class);
 
-
     /**
      * 生成压缩图片文件
      *
@@ -28,21 +27,34 @@ public class AutoPicUtils {
      */
     public static void generateFile() throws Exception {
 
-        //三种类型文件路径 day=-1表示昨日文件  0表示今日文件   1表示明日文件
-        int day = 1;
-        String zipFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.PIC_ZIP, day);
-        String pgpFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.PIC_PGP, day);
+        BOCCCUtils.mkDirs(BOCCCConstant.picPath + "work/" + BOCCCUtils.getToday());
 
+        //存放手动上传进来的png文件的文件夹
+        String todayPicPath = BOCCCConstant.picPath + BOCCCUtils.getToday();
 
-        //第1步，压缩路径下所有文件
-//        logger.info("图片文件源文件压缩中...");
-//        new ZipUtil(new File(zipFileName)).zipDirectory(sourceFile);
-//        logger.info("图片文件源文件压缩完成，路径为：" + zipFileName);
+        //下级文件夹boc中，存放每日生成的压缩、加密文件
+        String zipFileName = BOCCCConstant.picPath + "work/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.PIC_ZIP, 0);
+        String pgpFileName = BOCCCConstant.picPath + "work/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.PIC_PGP, 0);
+
+        //第1步，判断路径是否存在，存在则压缩路径下所有文件，不存在则压缩一个空文件
+        File file = new File(todayPicPath);
+        if (file.exists()) {
+            logger.info("图片文件源文件压缩中...");
+            new ZipUtil(new File(zipFileName)).zipFiles(new File(todayPicPath));
+            logger.info("图片文件源文件压缩完成，路径为：" + zipFileName);
+        } else {
+            logger.info("图片空文件压缩中...");
+            new ZipUtil(new File(zipFileName)).zipFiles(new File(""));
+            logger.info("图片空文件压缩完成...");
+        }
 
         //第2步，压缩文件加密中
         logger.info("图片文件压缩文件加密中...");
         PgpEncryUtil.Encry(zipFileName, BOCCCConstant.publicKeyPath, pgpFileName);
         logger.info("图片文件压缩文件加密完成，路径为：" + pgpFileName);
+
+        //第3步，复制加密文件至upload里
+        BOCCCUtils.copyToUpload(pgpFileName);
     }
 
 
