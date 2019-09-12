@@ -1,7 +1,7 @@
 package com.jiazhe.youxiang.base.util.boccc;
 
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
-import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeCodeService;
+import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +24,12 @@ public class AutoCCancelInfoUtils {
     public static AutoCCancelInfoUtils cCancelInfoUtils;
 
     @Autowired
-    private VoucherExchangeCodeService voucherExchangeCodeService;
+    private PointExchangeCodeService pointExchangeCodeService;
 
     @PostConstruct
     public void init() {
         cCancelInfoUtils = this;
-        cCancelInfoUtils.voucherExchangeCodeService = this.voucherExchangeCodeService;
+        cCancelInfoUtils.pointExchangeCodeService = this.pointExchangeCodeService;
     }
 
     /**
@@ -38,9 +38,8 @@ public class AutoCCancelInfoUtils {
      * @param type
      * @return
      */
-    public static List<VoucherExchangeCodeDTO> getYesterdayUsed(String type) {
-//        List<VoucherExchangeCodeDTO> voucherExchangeCodeDTOList = cCancelInfoUtils.voucherExchangeCodeService.getYesterdayUsed(type);
-//        return voucherExchangeCodeDTOList;
+    public static List<BOCCCCouponUsedEntity> getYesterdayUsed(String type) {
+//        List<BOCCCCouponUsedEntity> list = cCancelInfoUtils.pointExchangeCodeService.getYesterdayUsed(type);
         return null;
     }
 
@@ -69,7 +68,7 @@ public class AutoCCancelInfoUtils {
     }
 
     /**
-     * 根据以上信息，生成昨日已使用优惠券加密压缩文件
+     * 根据以上信息，模拟生成退货信息文件
      *
      * @return
      */
@@ -82,7 +81,7 @@ public class AutoCCancelInfoUtils {
         String pgpFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_PGP, -1);
 
         //第一步，获取昨日退货的代金券兑换码
-        List<VoucherExchangeCodeDTO> list = getYesterdayUsed("1");
+        List<VoucherExchangeCodeDTO> list = null;
 
         //第二步，按照规则组成昨日退货的代金券兑换码字符串
         if (list.isEmpty()) {

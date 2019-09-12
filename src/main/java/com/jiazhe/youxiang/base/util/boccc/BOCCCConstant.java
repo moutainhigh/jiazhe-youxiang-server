@@ -85,6 +85,11 @@ public class BOCCCConstant {
     public static String cusedPath = rootPath + "cused/";
 
     /**
+     * 每日购买商品清单
+     */
+    public static String dailyPurchase = rootPath + "dailypurchase/";
+
+    /**
      * 九个接口文件名模板
      */
     // 1、商品信息

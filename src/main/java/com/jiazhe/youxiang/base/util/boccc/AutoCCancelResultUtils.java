@@ -56,7 +56,7 @@ public class AutoCCancelResultUtils {
     }
 
     /**
-     * 根据以上信息，生成商品信息加密压缩文件
+     * 根据以上信息，生成退货信息反馈结果
      *
      * @return
      */

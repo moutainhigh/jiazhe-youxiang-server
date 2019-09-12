@@ -95,7 +95,7 @@ public class AutoDailyRemainAnalysisUtils {
         StringBuilder sb = generateBin(BOCCCConstant.rootPath + "dailyremain/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CREMA_SOURCE, -1));
 
         //第五步，将当前结果追加到月份文件中
-        BOCCCUtils.contentAppend(BOCCCConstant.rootPath + "dailyremain/" + BOCCCUtils.getYesterday() + ".txt", sb.toString());
+        BOCCCUtils.contentAppend(BOCCCConstant.rootPath + "dailyremain/" + BOCCCUtils.getYesterday() + "剩余总清单.txt", sb.toString());
 
     }
 

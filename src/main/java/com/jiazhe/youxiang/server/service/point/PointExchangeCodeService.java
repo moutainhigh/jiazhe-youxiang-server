@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.service.point;
 
 import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponEntity;
+import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponUsedEntity;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeEditDTO;
@@ -161,4 +162,10 @@ public interface PointExchangeCodeService {
      * @return
      */
     List<BOCCCCouponEntity> getBOCCCCoupon(List<Integer> batchIds);
+
+    /**
+     * 中行信用卡专用获取昨日使用兑换码信息
+     * @return
+     */
+    List<BOCCCCouponUsedEntity> getBOCCCYesterdayUsed();
 }

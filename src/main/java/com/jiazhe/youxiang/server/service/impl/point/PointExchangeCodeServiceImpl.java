@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.service.impl.point;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.ExchangeCodeCheckUtil;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponEntity;
+import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponUsedEntity;
 import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
@@ -385,6 +386,13 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     @Override
     public List<BOCCCCouponEntity> getBOCCCCoupon(List<Integer> batchIds) {
         return pointExchangeCodePOManualMapper.getBOCCCCoupon(batchIds);
+    }
+
+    @Override
+    public List<BOCCCCouponUsedEntity> getBOCCCYesterdayUsed() {
+        Date beginTime = new Date(DateUtil.getFirstSecond(System.currentTimeMillis() - CommonConstant.ONE_DAY));
+        Date endTime = new Date(DateUtil.getLastSecond(System.currentTimeMillis() - CommonConstant.ONE_DAY));
+        return pointExchangeCodePOManualMapper.getBOCCCUsed(beginTime, endTime);
     }
 
 }

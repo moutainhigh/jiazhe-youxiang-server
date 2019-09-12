@@ -69,15 +69,17 @@ public class AutoDailyPurchaseAnalysisUtils {
     @Deprecated
     public static void generateFile() throws Exception {
 
-        //第一步，判断download文件夹中是否有下传的退货信息加密文件,
-        File BOCCCancelPgpFile = new File(BOCCCConstant.downloadPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CSELL_PGP, -1));
-        if (BOCCCancelPgpFile.exists()) {
+        String sourceFileName = BOCCCConstant.dailyPurchase + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CSELL_SOURCE, -1);
+        String zipFileName = BOCCCConstant.dailyPurchase + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CSELL_ZIP, -1);
+        String pgpFileName = BOCCCConstant.dailyPurchase + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CSELL_PGP, -1);
+
+        //第一步，判断download文件夹中是否有下传的每日购买清单加密文件
+        File dailyPurchasePgpFile = new File(BOCCCConstant.downloadPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CSELL_PGP, -1));
+        if (dailyPurchasePgpFile.exists()) {
             //如果中行下传了每日购买加密文件，复制到dailypurchase当日文件夹下
-            File file = new File(BOCCCConstant.rootPath + "dailypurchase/" + BOCCCUtils.getToday());
-            if (!file.exists()) {
-                file.mkdirs();
-            }
-            FileUtils.copyFileToDirectory(BOCCCancelPgpFile, file);
+            String path = BOCCCConstant.dailyPurchase + BOCCCUtils.getToday();
+            BOCCCUtils.mkDirs(path);
+            FileUtils.copyFileToDirectory(dailyPurchasePgpFile, new File(path));
         } else {
             logger.info("未收到总行下传的每日购买清单加密文件");
             return;
@@ -86,16 +88,17 @@ public class AutoDailyPurchaseAnalysisUtils {
         //第二步，解密文件
         PgpDecryUtil decryU = new PgpDecryUtil();
         decryU.setPassphrase(EnvironmentConstant.PASSPHRASE);
-        decryU.DecryUtil(BOCCCConstant.rootPath + "dailypurchase/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CSELL_PGP, -1), BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CSELL_ZIP, -1), BOCCCConstant.privateKeyPath);
+        decryU.DecryUtil(pgpFileName, zipFileName, BOCCCConstant.privateKeyPath);
 
         //第三步，解压缩文件
-        UnZipUtil.ZipContraFile(BOCCCConstant.rootPath + "dailypurchase/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CSELL_ZIP, -1), BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday());
+        UnZipUtil.ZipContraFile(zipFileName, BOCCCConstant.dailyPurchase + BOCCCUtils.getToday());
 
-        //第四步,读取文件进行分析生成源文件字符串
-        StringBuilder sb = generateBin(BOCCCConstant.rootPath + "dailypurchase/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CSELL_SOURCE, -1));
+        //第四步,读取文件进行分析，生成 【日期+购买数量】 字符串
+        StringBuilder sb = generateBin(sourceFileName);
 
-        //第五步，将当前结果追加到月份文件中
-        BOCCCUtils.contentAppend(BOCCCConstant.rootPath + "dailypurchase/" + BOCCCUtils.getYesterday() + ".txt",sb.toString());
+        //第五步，将当前结果追加到月度购买清单，年度购买清单
+        BOCCCUtils.contentAppend(BOCCCConstant.dailyPurchase + "月度购买清单" + BOCCCUtils.getYesterday().substring(0, 4) + ".txt", sb.toString());
+        BOCCCUtils.contentAppend(BOCCCConstant.dailyPurchase + "年度购买清单" + BOCCCUtils.getYesterday().substring(0, 2) + ".txt", sb.toString());
 
     }
 }

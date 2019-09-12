@@ -69,7 +69,6 @@ public class AutoCouponUtils {
                 sb.append("").append(BOCCCConstant.BOC_Separator);
                 sb.append("\r\n");
             }
-            //添加文件尾部信息
             sb.append(BOCCCUtils.generateFileEndChar(couponCount));
         } else {
             sb.append(BOCCCUtils.generateFileEndChar(0));
