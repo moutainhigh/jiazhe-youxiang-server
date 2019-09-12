@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.base.util.boccc;
 
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
+import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeCodeService;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -32,12 +33,12 @@ public class AutoCouponUsedUtils {
     public static AutoCouponUsedUtils couponUsedUtils;
 
     @Autowired
-    private VoucherExchangeCodeService voucherExchangeCodeService;
+    private PointExchangeCodeService pointExchangeCodeService;
 
     @PostConstruct
     public void init() {
         couponUsedUtils = this;
-        couponUsedUtils.voucherExchangeCodeService = this.voucherExchangeCodeService;
+        couponUsedUtils.pointExchangeCodeService = this.pointExchangeCodeService;
     }
 
     /**

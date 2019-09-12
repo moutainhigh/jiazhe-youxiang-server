@@ -1,7 +1,9 @@
 package com.jiazhe.youxiang.base.util.boccc;
 
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.constant.EnvironmentConstant;
 import com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodePO;
+import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeCodeService;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -28,12 +30,12 @@ public class AutoCCancelResultUtils {
     public static AutoCCancelResultUtils cCancelResultUtils;
 
     @Autowired
-    private VoucherExchangeCodeService voucherExchangeCodeService;
+    private PointExchangeCodeService pointExchangeCodeService;
 
     @PostConstruct
     public void init() {
         cCancelResultUtils = this;
-        cCancelResultUtils.voucherExchangeCodeService = this.voucherExchangeCodeService;
+        cCancelResultUtils.pointExchangeCodeService = this.pointExchangeCodeService;
     }
 
     public static StringBuilder generateBin(String filePath) throws Exception {
@@ -84,7 +86,7 @@ public class AutoCCancelResultUtils {
 
         //第二步，解密文件
         PgpDecryUtil decryU = new PgpDecryUtil();
-        decryU.setPassphrase(EnvironmentConstants.PASSPHRASE);
+        decryU.setPassphrase(EnvironmentConstant.PASSPHRASE);
         decryU.DecryUtil(BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_PGP, -1), BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_ZIP, -1), BOCCCConstant.privateKeyPath);
 
         //第三步，解压缩文件
@@ -120,20 +122,20 @@ public class AutoCCancelResultUtils {
 
     public static String cancelResult(String cancelStr) throws Exception {
         StringBuilder sb = new StringBuilder(cancelStr.substring(0, 102));
-        String keyt = cancelStr.substring(61, 97);
-        String failureDesc = "";
-        String cancelStatus = "Y";
-        VoucherExchangeCodePO po = cCancelResultUtils.voucherExchangeCodeService.findByKeyt(String.valueOf(Long.valueOf(keyt)));
-        if (null == po) {
-            cancelStatus = "N";
-            failureDesc = "优惠券码不存在";
-        } else {
-            if (po.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
-                cancelStatus = "N";
-                failureDesc = "优惠券码已经使用";
-            }
-        }
-        sb.append(cancelStatus).append(cancelStr.substring(103, 134)).append(BOCCCUtils.complete(failureDesc, ' ', false, 200)).append(cancelStr.substring(334, cancelStr.length()));
+//        String keyt = cancelStr.substring(61, 97);
+//        String failureDesc = "";
+//        String cancelStatus = "Y";
+//        VoucherExchangeCodePO po = cCancelResultUtils.voucherExchangeCodeService.findByKeyt(String.valueOf(Long.valueOf(keyt)));
+//        if (null == po) {
+//            cancelStatus = "N";
+//            failureDesc = "优惠券码不存在";
+//        } else {
+//            if (po.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
+//                cancelStatus = "N";
+//                failureDesc = "优惠券码已经使用";
+//            }
+//        }
+//        sb.append(cancelStatus).append(cancelStr.substring(103, 134)).append(BOCCCUtils.complete(failureDesc, ' ', false, 200)).append(cancelStr.substring(334, cancelStr.length()));
         return sb.toString();
     }
 }

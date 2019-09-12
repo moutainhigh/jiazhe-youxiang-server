@@ -1,9 +1,12 @@
 package com.jiazhe.youxiang.server.quartz;
 
+import com.jiazhe.youxiang.base.util.boccc.AutoCouponUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoMerchantInfoUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoProductInfoUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoSFTPUtils;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCUtils;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.constant.EnvironmentConstant;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +24,6 @@ public class BOCCCQuartz extends QuartzJobBean {
 
     private static final Logger logger = LoggerFactory.getLogger(BOCCCQuartz.class);
 
-    @Value("${spring.profiles.active}")
-    private String ENVIRONMENT;
-
     @Override
     protected void executeInternal(org.quartz.JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
@@ -31,11 +31,12 @@ public class BOCCCQuartz extends QuartzJobBean {
          * 根据不同环境，判断此定时任务是否执行
          */
         String[] BOCCC_ENVIRONMENT = {"dev", "boccc", "boccctest"};
-        if (!Arrays.asList(BOCCC_ENVIRONMENT).contains(ENVIRONMENT)) {
+
+        if (!Arrays.asList(BOCCC_ENVIRONMENT).contains(EnvironmentConstant.ENVIRONMENT)) {
             return;
         }
 
-        logger.info("定时任务：当前环境为：" + ENVIRONMENT + "，定时任务开始执行");
+        logger.info("定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务开始执行");
 
         //定时生成商户信息
         try {
@@ -53,6 +54,15 @@ public class BOCCCQuartz extends QuartzJobBean {
             logger.info("生成商品信息完成");
         } catch (Exception e) {
             logger.error("生成商品信息失败，异常信息：" + e.getMessage());
+        }
+
+        //定时生成优惠券信息
+        try {
+            logger.info("生成优惠券");
+            AutoCouponUtils.generateFile();
+            logger.info("生成优惠券完成");
+        } catch (Exception e) {
+            logger.error("生成优惠券失败，异常信息：" + e.getMessage());
         }
 
 //        //模拟中行生成退货信息
@@ -92,13 +102,13 @@ public class BOCCCQuartz extends QuartzJobBean {
 //        }
 //
         //定时上传指定文件夹的文件
-        try {
-            logger.info("定时任务：上传文件执行中");
-            AutoSFTPUtils.upload();
-            logger.info("定时任务：上传文件执行完成");
-        } catch (Exception e) {
-            logger.error("定时任务：上传文件执行失败，异常信息：" + e.getMessage());
-        }
+//        try {
+//            logger.info("定时任务：上传文件执行中");
+//            AutoSFTPUtils.upload();
+//            logger.info("定时任务：上传文件执行完成");
+//        } catch (Exception e) {
+//            logger.error("定时任务：上传文件执行失败，异常信息：" + e.getMessage());
+//        }
 //
 //        //定时分析前一日优惠券剩余数量
 //        try {
@@ -117,6 +127,6 @@ public class BOCCCQuartz extends QuartzJobBean {
 //        } catch (Exception e) {
 //            logger.error("定时任务：前一日商品购买数量分析失败，异常信息：" + e.getMessage());
 //        }
-        logger.info("定时任务：当前环境为：" + ENVIRONMENT + "，定时任务执行完成");
+        logger.info("定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务执行完成");
     }
 }

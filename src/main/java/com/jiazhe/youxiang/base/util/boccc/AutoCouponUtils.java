@@ -1,8 +1,16 @@
 package com.jiazhe.youxiang.base.util.boccc;
 
+import com.jiazhe.youxiang.base.util.ExcelUtils;
+import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
+import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeCodeService;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,100 +26,51 @@ import java.util.Map;
  * @description 优惠券信息工具类
  * @date 2019-09-03.
  */
+@Component
 public class AutoCouponUtils {
 
     public static Logger logger = LoggerFactory.getLogger(AutoCouponUtils.class);
 
-    /**
-     * 11位
-     * 商品的唯一编码，命名规则为WXXXXNNNNNN
-     * (XXXX为四位第三方系统名称，NNNNNN为数字编码，范围为000001~999999)
-     */
-    private final static String[] ProductIds = {"WBJYX000001"};
+    public static AutoCouponUtils couponUtils;
 
-    /**
-     * 第三方系统中代金券批次id
-     */
-    private final static String[] CouponBatchIds = {"32"};
+    @Autowired
+    private PointExchangeCodeService pointExchangeCodeService;
 
-    /**
-     * 检查各个参数是否合法
-     *
-     * @throws Exception
-     */
-    public static void check() throws Exception {
-        int count = ProductIds.length;
-        if (CouponBatchIds.length != count) {
-            throw new Exception("CouponBatchIds长度和ProductIds不匹配");
-        }
+    @PostConstruct
+    public void init() {
+        couponUtils = this;
+        couponUtils.pointExchangeCodeService = this.pointExchangeCodeService;
     }
 
     public static StringBuilder generateBin() throws Exception {
-        List<CouponEntity> list = getList();
         StringBuilder sb = new StringBuilder();
-        for (CouponEntity coupon : list) {
-            sb.append(coupon.getProductId()).append(BOCCCConstant.BOC_Separator);
-            sb.append(BOCCCUtils.complete(coupon.getId(), '0', true, 10)).append(BOCCCConstant.BOC_Separator);
-            sb.append("R").append(BOCCCConstant.BOC_Separator);
-            sb.append(BOCCCUtils.complete(coupon.getKeyt(), ' ', false, 36)).append(BOCCCConstant.BOC_Separator);
-            //预留字段还未拼接
-            sb.append("").append(BOCCCConstant.BOC_Separator);
-            sb.append("").append(BOCCCConstant.BOC_Separator);
-            sb.append("").append(BOCCCConstant.BOC_Separator);
-            //换行
-            sb.append("\r\n");
+        //判断今日是否有优惠券excel文件，有则根据excel生成，无则直接生成文件尾
+        String productExcelUrl = BOCCCConstant.couponPath + BOCCCUtils.getToday() + ".xlsx";
+        File merchantExcel = new File(productExcelUrl);
+        if (merchantExcel.exists()) {
+            Sheet sheet = ExcelUtils.excel2Sheet(productExcelUrl);
+            int count = 0;
+            for (Row row : sheet) {
+                //跳过表头
+                if (count == 0) {
+                    count++;
+                } else {
+                    if (!ExcelUtils.getStringValue(row.getCell(0)).equals("")) {
+                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(1)), ' ', false, 11)).append(BOCCCConstant.BOC_Separator);
+                        sb.append(BOCCCUtils.complete(ExcelUtils.getStringValue(row.getCell(2)), ' ', false, 40)).append(BOCCCConstant.BOC_Separator);
+                        sb.append("").append(BOCCCConstant.BOC_Separator);
+                        sb.append("\r\n");
+                        count++;
+                    }
+                }
+            }
+            //添加文件尾部信息
+            sb.append(BOCCCUtils.generateFileEndChar(count - 1));
+        } else {
+            sb.append(BOCCCUtils.generateFileEndChar(0));
         }
-        //添加文件尾部信息
-        sb.append(BOCCCUtils.generateFileEndChar(list.size()));
         return sb;
     }
-
-    public static List<CouponEntity> getList() throws Exception {
-        StringBuilder sql = new StringBuilder();
-        Map<String, String> map = new HashMap();
-        for (int i = 0; i < CouponBatchIds.length; i++) {
-            map.put(CouponBatchIds[i], ProductIds[i]);
-            sql.append("select pec.id as id, pecb.id as batch_id, pec.keyt as keyt, pecb.gift_no as gift_no from point_exchange_code pec left join point_exchange_code_batch pecb on pecb.id = pec.batch_id where batch_id = '" + CouponBatchIds[i] + "' ");
-            if (i != CouponBatchIds.length - 1) {
-                sql.append("union ALL ");
-            }
-        }
-        List<CouponEntity> list = new ArrayList<>();
-        Class.forName("com.mysql.jdbc.Driver");
-        //local环境数据库
-//        String url = "jdbc:mysql://localhost:3306/youxiang?useUnicode=true&characterEncoding=UTF8&connectTimeout=1000&socketTimeout=10000&allowMultiQueries=true";
-//        Connection conn = DriverManager.getConnection(url, "root", "root");
-//        //dev环境数据库
-        String url = "jdbc:mysql://cdb-21q33fb6.bj.tencentcdb.com:10018/youxiang?useUnicode=true&characterEncoding=UTF8&connectTimeout=1000&socketTimeout=10000&allowMultiQueries=true";
-        Connection conn = DriverManager.getConnection(url, "root", "rewq4321$#@!");
-//        //生产环境数据库
-//        String url = "jdbc:mysql://bj-cdb-9l8ozcar.sql.tencentcdb.com:63546/youxiang?characterEncoding=UTF-8&useCursorFetch=true&defaultFetchSize=2000";
-//        Connection conn = DriverManager.getConnection(url, "root", "rewq4321++");
-        int count = 0, error = 0;
-        Statement state = conn.createStatement();
-        ResultSet rs = state.executeQuery(sql.toString());
-        while (rs.next()) {
-            CouponEntity coupon = new CouponEntity();
-            coupon.setId(rs.getString("id"));
-            coupon.setBatchId(rs.getString("batch_id"));
-            coupon.setKeyt(rs.getString("keyt"));
-            String productId = rs.getString("gift_no");
-            coupon.setProductId(productId);
-            if (!productId.equals(map.get(coupon.getBatchId()))) {
-                error++;
-            }
-            count++;
-            list.add(coupon);
-        }
-        conn.close();//关闭通道
-        if (error > 0) {
-            logger.error("BOCCC-ERROR：生成优惠券总数：" + count + "，错误个数：" + error + "个，原因，数据库中gift_no和本类中ProductIds对不上！");
-        } else {
-            logger.info("成功生成优惠券：" + count + "个。");
-        }
-        return list;
-    }
-
 
     /**
      * 根据以上信息，生成商品信息加密压缩文件
@@ -120,34 +79,33 @@ public class AutoCouponUtils {
      */
     public static void generateFile() throws Exception {
 
-        //三种类型文件路径 day=-1表示昨日文件  0表示今日文件   1表示明日文件
-        int day = 1;
-        String sourceFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.COUPON_SOURCE, day);
-        String zipFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.COUPON_ZIP, day);
-        String pgpFileName = BOCCCConstant.rootPath + BOCCCUtils.getFileName(BOCCCConstant.COUPON_PGP, day);
+        BOCCCUtils.mkDirs(BOCCCConstant.couponPath + BOCCCUtils.getToday());
 
+        String sourceFileName = BOCCCConstant.couponPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.COUPON_SOURCE, 0);
+        String zipFileName = BOCCCConstant.couponPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.COUPON_ZIP, 0);
+        String pgpFileName = BOCCCConstant.couponPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.COUPON_PGP, 0);
 
-        //第一步，检查各个参数是否合法
-        check();
-
-        //第二步，按照规则组成商品信息字符串
+        //第1步，按照规则组成商品信息字符串
         StringBuilder sb = generateBin();
 
-        //第三步，写入文件中
-        logger.info("优惠券信息源文件生成中...");
+        //第2步，写入文件中
+        logger.info("优惠券源文件生成中...");
         BOCCCUtils.writeStringToFile(sourceFileName, sb.toString());
-        logger.info("优惠券信息源文件生成完成，路径为：" + sourceFileName);
+        logger.info("优惠券源文件生成完成，路径为：" + sourceFileName);
 
-        //第四步，源文件压缩中
-        logger.info("优惠券信息源文件压缩中...");
+        //第3步，源文件压缩中
+        logger.info("优惠券源文件压缩中...");
         File sourceFile = new File(sourceFileName);
         new ZipUtil(new File(zipFileName)).zipFiles(sourceFile);
-        logger.info("优惠券信息源文件压缩完成，路径为：" + zipFileName);
+        logger.info("优惠券源文件压缩完成，路径为：" + zipFileName);
 
-        //第五步，压缩文件加密中
-        logger.info("优惠券信息压缩文件加密中...");
+        //第4步，压缩文件加密中
+        logger.info("优惠券压缩文件加密中...");
         PgpEncryUtil.Encry(zipFileName, BOCCCConstant.publicKeyPath, pgpFileName);
-        logger.info("优惠券信息压缩文件加密完成，路径为：" + pgpFileName);
+        logger.info("优惠券压缩文件加密完成，路径为：" + pgpFileName);
+
+        //第5步，复制加密文件至upload里
+        BOCCCUtils.copyToUpload(pgpFileName);
     }
 
     public static void main(String[] args) throws Exception {

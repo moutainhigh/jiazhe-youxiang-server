@@ -5,6 +5,8 @@
  */
 package com.jiazhe.youxiang.base.util.boccc;
 
+import com.jiazhe.youxiang.server.common.constant.EnvironmentConstant;
+import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeCodeService;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -32,12 +34,12 @@ public class AutoDailyRemainAnalysisUtils {
     public static AutoDailyRemainAnalysisUtils dailyPurchaseAnalysisUtils;
 
     @Autowired
-    private VoucherExchangeCodeService voucherExchangeCodeService;
+    private PointExchangeCodeService pointExchangeCodeService;
 
     @PostConstruct
     public void init() {
         dailyPurchaseAnalysisUtils = this;
-        dailyPurchaseAnalysisUtils.voucherExchangeCodeService = this.voucherExchangeCodeService;
+        dailyPurchaseAnalysisUtils.pointExchangeCodeService = this.pointExchangeCodeService;
     }
 
     public static StringBuilder generateBin(String filePath) throws Exception {
@@ -83,7 +85,7 @@ public class AutoDailyRemainAnalysisUtils {
 
         //第二步，解密文件
         PgpDecryUtil decryU = new PgpDecryUtil();
-        decryU.setPassphrase(EnvironmentConstants.PASSPHRASE);
+        decryU.setPassphrase(EnvironmentConstant.PASSPHRASE);
         decryU.DecryUtil(BOCCCConstant.rootPath + "dailyremain/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CREMA_PGP, -1), BOCCCConstant.rootPath + "ccancel/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CREMA_ZIP, -1), BOCCCConstant.privateKeyPath);
 
         //第三步，解压缩文件

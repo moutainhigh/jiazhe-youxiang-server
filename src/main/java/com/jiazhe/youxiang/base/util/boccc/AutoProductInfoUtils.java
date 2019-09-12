@@ -17,7 +17,6 @@ public class AutoProductInfoUtils {
 
     public static Logger logger = LoggerFactory.getLogger(AutoProductInfoUtils.class);
 
-
     public static StringBuilder generateBin() throws Exception {
         StringBuilder sb = new StringBuilder();
         //判断今日是否有商品excel文件，有则根据excel生成，无则直接生成文件尾
