@@ -63,7 +63,6 @@ public class AutoCouponUtils {
                 sb.append(BOCCCUtils.complete(entity.getId(), '0', true, 10)).append(BOCCCConstant.BOC_Separator);
                 sb.append("R").append(BOCCCConstant.BOC_Separator);
                 sb.append(BOCCCUtils.complete(entity.getKeyt(), ' ', false, 36)).append(BOCCCConstant.BOC_Separator);
-                //预留字段还未拼接
                 sb.append("").append(BOCCCConstant.BOC_Separator);
                 sb.append("").append(BOCCCConstant.BOC_Separator);
                 sb.append("").append(BOCCCConstant.BOC_Separator);
