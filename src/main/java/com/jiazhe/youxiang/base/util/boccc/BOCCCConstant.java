@@ -30,6 +30,11 @@ public class BOCCCConstant {
     public static final String MERCHANT_ID = "M" + MERCHANT_NAME + "00001";
 
     /**
+     * 门店ID
+     */
+    public static final String SHOP_ID = "M" + MERCHANT_NAME + "0000000001";
+
+    /**
      * 生成文件的根目录
      */
     public static final String rootPath = "/opt/jiazhe/webserver/files/boccc/";

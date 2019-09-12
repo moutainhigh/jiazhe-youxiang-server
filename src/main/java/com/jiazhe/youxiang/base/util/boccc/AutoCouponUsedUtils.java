@@ -46,12 +46,12 @@ public class AutoCouponUsedUtils {
             sb.append(BOCCCUtils.generateFileEndChar(0));
         } else {
             for (BOCCCCouponUsedEntity used : list) {
-                sb.append(used.getGiftNo()).append(BOCCCConstant.BOC_Separator);
+                sb.append(BOCCCUtils.complete(used.getGiftNo(), ' ', false, 11)).append(BOCCCConstant.BOC_Separator);
                 sb.append(BOCCCUtils.complete(String.valueOf(used.getId()), '0', true, 10)).append(BOCCCConstant.BOC_Separator);
                 sb.append("R").append(BOCCCConstant.BOC_Separator);
                 sb.append(BOCCCUtils.complete(used.getKeyt(), ' ', false, 36)).append(BOCCCConstant.BOC_Separator);
                 sb.append(DateUtil.yyyyMMDD(used.getUsedTime())).append(BOCCCConstant.BOC_Separator);
-                sb.append(BOCCCConstant.MERCHANT_ID).append(BOCCCConstant.BOC_Separator);
+                sb.append(BOCCCConstant.SHOP_ID).append(BOCCCConstant.BOC_Separator);
                 //预留字段还未拼接
                 sb.append("").append(BOCCCConstant.BOC_Separator);
                 sb.append("").append(BOCCCConstant.BOC_Separator);
