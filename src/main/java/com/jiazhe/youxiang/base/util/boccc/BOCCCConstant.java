@@ -90,9 +90,19 @@ public class BOCCCConstant {
     public static String cusedPath = rootPath + "cused/";
 
     /**
+     * 退货信息包括返回退货信息反馈接口
+     */
+    public static String ccancelPath = rootPath + "ccancel/";
+
+    /**
      * 每日购买商品清单
      */
     public static String dailyPurchase = rootPath + "dailypurchase/";
+
+    /**
+     * 每日剩余清单
+     */
+    public static String dailyRemain = rootPath + "dailyremain/";
 
     /**
      * 九个接口文件名模板
