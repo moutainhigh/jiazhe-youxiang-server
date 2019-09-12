@@ -26,6 +26,8 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author tu
@@ -105,7 +107,7 @@ public class BOCCCUtils {
         byte[] source = content.getBytes(BOCCCConstant.CHAR_SET);
         byte[] dest = new byte[n];
         System.arraycopy(source, 0, dest, 0, n);
-        return new String(dest,BOCCCConstant.CHAR_SET);
+        return new String(dest, BOCCCConstant.CHAR_SET);
     }
 
     /**
@@ -301,6 +303,16 @@ public class BOCCCUtils {
         if (!usedPath.exists()) {
             usedPath.mkdirs();
         }
+    }
+
+    /**
+     * 判断是不是最后一行
+     * @param line
+     * @return
+     */
+    public static boolean isLastLine(String line) {
+        String pattern = "TLRL\\d{15}";
+        return Pattern.matches(pattern, line);
     }
 
 

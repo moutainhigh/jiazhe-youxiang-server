@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.base.util.boccc;
 
+import com.jiazhe.youxiang.base.util.ExcelUtils;
 import com.jiazhe.youxiang.server.common.constant.EnvironmentConstant;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import org.apache.commons.io.FileUtils;
@@ -18,6 +19,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author tu
@@ -45,16 +51,31 @@ public class AutoDailyPurchaseAnalysisUtils {
         FileInputStream fis = new FileInputStream(filePath);
         InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
         BufferedReader br = new BufferedReader(isr);
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder("---------" + BOCCCUtils.getYesterday() + "---------").append("\r\n");
+        Map<String, Integer> map = new HashMap<>();
         String line = "";
+        String productId = "";
+        Integer count = 0;
         while ((line = br.readLine()) != null) {
-            if (line.contains("TLRL")) {
-                sb.append("\r\n").append("\r\n").append("\r\n");
+            if (BOCCCUtils.isLastLine(line)) {
+                logger.info("每日购买清单文件读取完成");
             } else {
-                sb.append(line);
-                sb.append("\r\n");
+                count++;
+                productId = line.substring(24, 35);
+                if (map.containsKey(productId)) {
+                    map.put(productId, map.get(productId) + 1);
+                } else {
+                    map.put(productId, 1);
+                }
             }
         }
+        List<String> keySort = new ArrayList<>(map.keySet());
+        Collections.sort(keySort);
+        for (String key : keySort) {
+            sb.append(key + " ： " + map.get(key) + "个；").append("\r\n");
+        }
+        sb.append("---------合计：" + count + "个--------");
+        sb.append("\r\n").append("\r\n").append("\r\n");
         br.close();
         isr.close();
         fis.close();
@@ -93,12 +114,13 @@ public class AutoDailyPurchaseAnalysisUtils {
         //第三步，解压缩文件
         UnZipUtil.ZipContraFile(zipFileName, BOCCCConstant.dailyPurchase + BOCCCUtils.getToday());
 
-        //第四步,读取文件进行分析，生成 【日期+购买数量】 字符串
+        //第四步,读取文件进行分析，生成 【购买商品ID：购买数量】 字符串
         StringBuilder sb = generateBin(sourceFileName);
 
         //第五步，将当前结果追加到月度购买清单，年度购买清单
-        BOCCCUtils.contentAppend(BOCCCConstant.dailyPurchase + "月度购买清单" + BOCCCUtils.getYesterday().substring(0, 4) + ".txt", sb.toString());
-        BOCCCUtils.contentAppend(BOCCCConstant.dailyPurchase + "年度购买清单" + BOCCCUtils.getYesterday().substring(0, 2) + ".txt", sb.toString());
+        BOCCCUtils.contentAppend(BOCCCConstant.dailyPurchase + "月度购买清单" + BOCCCUtils.getYesterday().substring(0, 6) + ".txt", sb.toString());
+        BOCCCUtils.contentAppend(BOCCCConstant.dailyPurchase + "年度购买清单" + BOCCCUtils.getYesterday().substring(0, 4) + ".txt", sb.toString());
 
     }
+
 }

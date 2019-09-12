@@ -115,6 +115,12 @@ public class AutoCCancelResultUtils {
         BOCCCUtils.copyToUpload(pgpFileName);
     }
 
+    /**
+     * 通过退货信息，拼接退货信息接口
+     * @param cancelStr
+     * @return
+     * @throws Exception
+     */
     public static String cancelResult(String cancelStr) throws Exception {
         StringBuilder sb = new StringBuilder(cancelStr.substring(0, 102));
         String keyt = cancelStr.substring(61, 97);
