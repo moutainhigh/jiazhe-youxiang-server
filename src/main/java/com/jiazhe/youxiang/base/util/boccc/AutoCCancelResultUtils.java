@@ -1,10 +1,7 @@
 package com.jiazhe.youxiang.base.util.boccc;
 
-import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.EnvironmentConstant;
-import com.jiazhe.youxiang.server.domain.po.VoucherExchangeCodePO;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
-import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeCodeService;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +60,7 @@ public class AutoCCancelResultUtils {
      *
      * @return
      */
+    @Deprecated
     public static void generateFile() throws Exception {
 
         //三种类型文件路径

@@ -73,6 +73,7 @@ public class AutoCCancelInfoUtils {
      *
      * @return
      */
+    @Deprecated
     public static void generateFile() throws Exception {
 
         //三种类型文件路径

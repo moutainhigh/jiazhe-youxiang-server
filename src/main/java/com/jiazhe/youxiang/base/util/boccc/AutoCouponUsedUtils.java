@@ -7,7 +7,6 @@ package com.jiazhe.youxiang.base.util.boccc;
 
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
-import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeCodeService;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,12 +77,13 @@ public class AutoCouponUsedUtils {
      *
      * @return
      */
+    @Deprecated
     public static void generateFile() throws Exception {
 
         //三种类型文件路径
-        String sourceFileName = BOCCCConstant.rootPath + "cused/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CUSED_SOURCE, 1);
-        String zipFileName = BOCCCConstant.rootPath + "cused/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CUSED_ZIP, 1);
-        String pgpFileName = BOCCCConstant.rootPath + "cused/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CUSED_PGP, 1);
+        String sourceFileName = BOCCCConstant.cusedPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CUSED_SOURCE, 0);
+        String zipFileName = BOCCCConstant.cusedPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CUSED_ZIP, 0);
+        String pgpFileName = BOCCCConstant.cusedPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CUSED_PGP, 0);
 
         //第一步，获取昨日使用的代金券兑换码
         List<VoucherExchangeCodeDTO> list = getYesterdayUsed("1");

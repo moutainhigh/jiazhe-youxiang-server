@@ -80,6 +80,11 @@ public class BOCCCConstant {
     public static String picPath = rootPath + "pic/";
 
     /**
+     * 优惠券已使用信息
+     */
+    public static String cusedPath = rootPath + "cused/";
+
+    /**
      * 九个接口文件名模板
      */
     // 1、商品信息

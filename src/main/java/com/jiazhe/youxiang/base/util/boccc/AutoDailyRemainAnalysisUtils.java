@@ -7,7 +7,6 @@ package com.jiazhe.youxiang.base.util.boccc;
 
 import com.jiazhe.youxiang.server.common.constant.EnvironmentConstant;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
-import com.jiazhe.youxiang.server.service.voucher.VoucherExchangeCodeService;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +66,7 @@ public class AutoDailyRemainAnalysisUtils {
      *
      * @return
      */
+    @Deprecated
     public static void generateFile() throws Exception {
 
         //第一步，判断download文件夹中是否有下传的退货信息加密文件,
