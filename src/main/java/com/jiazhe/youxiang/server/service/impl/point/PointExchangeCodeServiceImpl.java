@@ -2,7 +2,6 @@ package com.jiazhe.youxiang.server.service.impl.point;
 
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.ExchangeCodeCheckUtil;
-import com.jiazhe.youxiang.base.util.HttpUtil;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCConstant;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponEntity;
@@ -310,18 +309,23 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         pointExchangeCodePOMapper.updateByPrimaryKeySelective(pointExchangeCodePO);
         //如果当前环境是中行信用卡环境，则通知中行信用卡方面
         if (Arrays.asList(BOCCCConstant.BOCCC_ENVIRONMENT).contains(EnvironmentConstant.ENVIRONMENT)) {
-            try {
-                BOCCCUsedReq usedReq = new BOCCCUsedReq();
-                usedReq.setWaresId(pointExchangeCodeBatchEditDTO.getGiftNo());
-                usedReq.setwEid(BOCCCUtils.complete(String.valueOf(pointExchangeCodePO.getId()), '0', true, 10));
-                usedReq.setwInfo(pointExchangeCodePO.getKeyt());
-                Map map = new HashMap(2);
-                map.put("requestType", "S");
-                map.put("data", BOCCCUtils.publicEncrypt(JacksonUtil.toJSon(usedReq)));
-                logger.info(HttpUtil.httpPost(BOCCCUtils.REAL_TIME_USED_URL, map));
-            } catch (Exception e) {
-                logger.error("第三方通知中行失败，原因：" + e.getMessage());
-            }
+            Thread t = new Thread(new Runnable(){
+                @Override
+                public void run(){
+                    try {
+                        BOCCCUsedReq usedReq = new BOCCCUsedReq();
+                        usedReq.setWaresId(pointExchangeCodeBatchEditDTO.getGiftNo());
+                        usedReq.setwEid(BOCCCUtils.complete(String.valueOf(pointExchangeCodePO.getId()), '0', true, 10));
+                        usedReq.setwInfo(pointExchangeCodePO.getKeyt());
+                        Map map = new HashMap(2);
+                        map.put("requestType", "S");
+                        map.put("data", BOCCCUtils.publicEncrypt(JacksonUtil.toJSon(usedReq)));
+                        BOCCCUtils.httpPost(BOCCCUtils.REAL_TIME_USED_URL, map, 1, 2);
+                    } catch (Exception e) {
+                        logger.error("第三方通知中行失败，原因：" + e.getMessage());
+                    }
+                }});
+            t.start();
         }
     }
 

@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.base.util.boccc;
 
+import com.jiazhe.youxiang.base.util.HttpUtil;
 import com.jiazhe.youxiang.base.util.RSAUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -26,7 +27,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.regex.Matcher;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -369,6 +370,22 @@ public class BOCCCUtils {
     public static boolean isLastLine(String line) {
         String pattern = "TLRL\\d{15}";
         return Pattern.matches(pattern, line);
+    }
+
+    /**
+     * @param url
+     * @param map
+     * @param current 当前执行次数
+     * @param total   重试次数
+     * @throws Exception
+     */
+    public static void httpPost(String url, Map map, Integer current, Integer total) throws Exception {
+        logger.info("httpPost执行中共" + total + "次，当前执行：" + current + "次。");
+        String result = HttpUtil.httpPost(url, map);
+        if ("".equals(result) && current < total) {
+            Thread.sleep(1000 * (long) Math.pow(2, current));
+            httpPost(url, map, current + 1, total);
+        }
     }
 
     /**

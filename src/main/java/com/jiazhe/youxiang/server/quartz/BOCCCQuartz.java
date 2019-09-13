@@ -81,13 +81,13 @@ public class BOCCCQuartz extends QuartzJobBean {
 //        }
 
         //定时下载文件（退货信息文件，每日优惠券剩余数量文件，每日商品购买清单文件）
-        try {
-            logger.info("定时任务：下载文件执行中");
-            AutoSFTPUtils.download();
-            logger.info("定时任务：下载文件执行完成");
-        } catch (Exception e) {
-            logger.info("定时任务：下载文件失败，异常信息：" + e.getMessage());
-        }
+//        try {
+//            logger.info("定时任务：下载文件执行中");
+//            AutoSFTPUtils.download();
+//            logger.info("定时任务：下载文件执行完成");
+//        } catch (Exception e) {
+//            logger.info("定时任务：下载文件失败，异常信息：" + e.getMessage());
+//        }
 
         //定时分析退货信息，生成退货信息结果至上传文件夹
 //        try {
@@ -117,13 +117,13 @@ public class BOCCCQuartz extends QuartzJobBean {
 //        }
 
 //        //定时分析前一日优惠券剩余数量
-        try {
-            logger.info("定时任务：分析前一日优惠券剩余数量");
-            AutoDailyRemainAnalysisUtils.generateFile();
-            logger.info("定时任务：前一日优惠券剩余数量分析完成");
-        } catch (Exception e) {
-            logger.error("定时任务：前一日优惠券剩余数量分析失败，异常信息：" + e.getMessage());
-        }
+//        try {
+//            logger.info("定时任务：分析前一日优惠券剩余数量");
+//            AutoDailyRemainAnalysisUtils.generateFile();
+//            logger.info("定时任务：前一日优惠券剩余数量分析完成");
+//        } catch (Exception e) {
+//            logger.error("定时任务：前一日优惠券剩余数量分析失败，异常信息：" + e.getMessage());
+//        }
 
         //定时分析前一日商品购买清单
 //        try {
