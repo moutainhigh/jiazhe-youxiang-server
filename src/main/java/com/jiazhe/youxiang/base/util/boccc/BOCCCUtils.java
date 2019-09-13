@@ -44,6 +44,16 @@ public class BOCCCUtils {
     private static SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 
     /**
+     * 最大重试次数为10次
+     */
+    private static Integer MAX_RETRY_TIME = 15;
+
+    /**
+     * 每次重试间隔
+     */
+    private static Integer[] RETRY_INTERVAL = {15, 15, 30, 180, 600, 1200, 1800, 1800, 1800, 3600, 10800, 10800, 10800, 21600, 21600};
+
+    /**
      * 中行公钥
      */
     private static String ZH_PUBLIC_KEY;
@@ -375,16 +385,22 @@ public class BOCCCUtils {
     /**
      * @param url
      * @param map
-     * @param current 当前执行次数
-     * @param total   重试次数
+     * @param current 当前重试次数 0为第一次，1为重试的第一次
+     * @param total   重试次数（最大重试次数为10次，第一次current=0的那一次不计入）
      * @throws Exception
      */
     public static void httpPost(String url, Map map, Integer current, Integer total) throws Exception {
-        logger.info("httpPost执行中共" + total + "次，当前执行：" + current + "次。");
+        logger.info("httpPost共重试" + total + "次，当前执行第：" + current + "次。");
         String result = HttpUtil.httpPost(url, map);
         if ("".equals(result) && current < total) {
-            Thread.sleep(1000 * (long) Math.pow(2, current));
-            httpPost(url, map, current + 1, total);
+            logger.info("httpPost：第" + current + "次重试完成，下次重试时间等待（秒）：" + RETRY_INTERVAL[current]);
+            Thread.sleep(1000L * RETRY_INTERVAL[current]);
+            httpPost(url, map, ++current, total);
+        } else {
+            if ("".equals(result)) {
+                logger.info(url + map.toString() + "：最终执行失败！");
+            }
+            logger.info("执行完成");
         }
     }
 

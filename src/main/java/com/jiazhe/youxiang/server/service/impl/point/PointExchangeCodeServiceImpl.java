@@ -320,7 +320,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
                         Map map = new HashMap(2);
                         map.put("requestType", "S");
                         map.put("data", BOCCCUtils.publicEncrypt(JacksonUtil.toJSon(usedReq)));
-                        BOCCCUtils.httpPost(BOCCCUtils.REAL_TIME_USED_URL, map, 1, 2);
+                        BOCCCUtils.httpPost(BOCCCUtils.REAL_TIME_USED_URL, map, 0, 3);
                     } catch (Exception e) {
                         logger.error("第三方通知中行失败，原因：" + e.getMessage());
                     }
