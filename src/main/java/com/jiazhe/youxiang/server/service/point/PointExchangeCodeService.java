@@ -168,4 +168,10 @@ public interface PointExchangeCodeService {
      * @return
      */
     List<BOCCCCouponUsedEntity> getBOCCCYesterdayUsed();
+
+    /**
+     * 中行专用标记码已使用
+     * @return
+     */
+    void markRefund(Integer id);
 }

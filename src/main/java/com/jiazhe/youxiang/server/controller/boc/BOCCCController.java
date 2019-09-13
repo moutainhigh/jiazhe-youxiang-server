@@ -2,8 +2,14 @@ package com.jiazhe.youxiang.server.controller.boc;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.DateUtil;
+import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCUtils;
+import com.jiazhe.youxiang.server.biz.point.PointExchangeCodeBiz;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherExchangeCodeBiz;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
+import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
+import com.jiazhe.youxiang.server.vo.req.boc.BOCCCRefundReq;
 import com.jiazhe.youxiang.server.vo.resp.boc.BOCCCResp;
 import io.swagger.annotations.ApiOperation;
 import net.sf.json.JSONObject;
@@ -29,10 +35,10 @@ public class BOCCCController extends BaseController {
     public static Logger logger = LoggerFactory.getLogger(BOCCCController.class);
 
     @Autowired
-    private VoucherExchangeCodeBiz voucherExchangeCodeBiz;
+    private PointExchangeCodeBiz pointExchangeCodeBiz;
 
     /**
-     * 中行退货前请求
+     * 中行信用卡退货前请求
      *
      * @param data
      * @return
@@ -43,26 +49,32 @@ public class BOCCCController extends BaseController {
         logger.info(data);
         BOCCCResp resp = new BOCCCResp();
         try {
-            String reqJson = BOCCCUtils.publicDecrypt(data);
+            String reqJson = BOCCCUtils.privateDecrypt(data);
             if (null == reqJson) {
                 resp.setStat("05");
                 resp.setResult("解密异常");
             } else {
-//                BOCCCRefundReq req = JacksonUtil.readValue(reqJson, BOCCCRefundReq.class);
-//                VoucherExchangeCodeDTO dto = voucherExchangeCodeBiz.findByKeyt(req.getwInfo());
-//                if (null == dto) {
-//                    resp.setStat("03");
-//                    resp.setResult("券码不存在");
-//                }else{
-//                    if (dto.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
-//                        resp.setStat("02");
-//                        resp.setResult("券码已使用");
-//                    }
-//                    if (dto.getUsed().equals(CommonConstant.CODE_HAS_REFUND)) {
-//                        resp.setStat("01");
-//                        resp.setResult("重复退货");
-//                    }
-//                }
+                BOCCCRefundReq req = JacksonUtil.readValue(reqJson, BOCCCRefundReq.class);
+                PointExchangeCodeDTO dto = pointExchangeCodeBiz.findByKeyt(req.getwInfo());
+                if (null == dto) {
+                    resp.setStat("03");
+                    resp.setResult("券码不存在");
+                } else {
+                    if (dto.getUsed().equals(CommonConstant.CODE_NOT_USED)) {
+                        pointExchangeCodeBiz.markRefund(dto.getId());
+                        resp.setStat("00");
+                        resp.setResult("券码可以退货");
+                    }
+                    if (dto.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
+                        resp.setStat("02");
+                        resp.setResult("券码已使用");
+                    }
+                    if (dto.getUsed().equals(CommonConstant.CODE_HAS_REFUND)) {
+                        resp.setStat("01");
+                        resp.setResult("重复退货");
+                    }
+
+                }
             }
         } catch (Exception e) {
             resp.setStat("99");

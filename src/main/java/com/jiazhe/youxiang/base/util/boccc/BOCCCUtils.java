@@ -42,20 +42,65 @@ public class BOCCCUtils {
 
     private static SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 
-    private static String PUBLIC_KEY;
+    /**
+     * 中行公钥
+     */
+    private static String ZH_PUBLIC_KEY;
+    /**
+     * 三方公钥
+     */
+    private static String SF_PUBLIC_KEY;
 
-    private static String PRIVATE_KEY;
+    /**
+     * 三方私钥
+     */
+    private static String SF_PRIVATE_KEY;
 
-    @Value("${boccc.rsa.public_key}")
-    public void setPublicKey(String publicKey) {
-        PUBLIC_KEY = publicKey;
+
+    /**
+     * 中行信用卡实时接口：已使用请求
+     */
+    private static String REAL_TIME_USED_URL;
+
+    /**
+     * 中行信用卡实时接口：已退货请求
+     */
+    private static String REAL_TIME_REFUND_URL;
+
+    /**
+     * 中行信用卡解密字符串
+     */
+    public static String PASSPHRASE;
+
+    @Value("${boccc.rsa.zh_public_key}")
+    public void setZHPublicKey(String publicKey) {
+        ZH_PUBLIC_KEY = publicKey;
     }
 
-    @Value("${boccc.rsa.private_key}")
-    public void setPrivateKey(String privateKey) {
-        PRIVATE_KEY = privateKey;
+    @Value("${boccc.rsa.sf_public_key}")
+    public void setSFPublicKey(String publicKey) {
+        SF_PUBLIC_KEY = publicKey;
     }
 
+    @Value("${boccc.rsa.sf_private_key}")
+    public void setSFPrivateKey(String privateKey) {
+        SF_PUBLIC_KEY = privateKey;
+    }
+
+    @Value("${boccc.realtime.used_url}")
+    public void setUsedUrl(String usedUrl) {
+        REAL_TIME_USED_URL = usedUrl;
+    }
+
+    @Value("${boccc.realtime.refund_url}")
+    public void setRefundUrl(String refundUrl) {
+        REAL_TIME_REFUND_URL = refundUrl;
+    }
+
+    @Value("${boccc.pgp.passphrase}")
+    public void setPassPhrase(String passphrase) {
+        PASSPHRASE = passphrase;
+    }
 
     /**
      * 生成n个字符
@@ -165,6 +210,16 @@ public class BOCCCUtils {
     public static String getTomorrow() {
         Date date = new Date(System.currentTimeMillis() + BOCCCConstant.DAY_SEC);
         return df.format(date);
+    }
+
+    /**
+     * 获取当前时间字符串
+     *
+     * @return
+     */
+    public static String getNowTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+        return sdf.format(new Date());
     }
 
     /**
@@ -307,6 +362,7 @@ public class BOCCCUtils {
 
     /**
      * 判断是不是最后一行
+     *
      * @param line
      * @return
      */
@@ -315,31 +371,8 @@ public class BOCCCUtils {
         return Pattern.matches(pattern, line);
     }
 
-
     /**
-     * 中行信用卡，利用公钥解密字符串
-     *
-     * @param content
-     * @return
-     * @throws Exception
-     */
-    public static String publicDecrypt(String content) {
-        try {
-            //将Base64编码后的公钥转换成PublicKey对象
-            PublicKey publicKey = RSAUtil.string2PublicKey(PUBLIC_KEY);
-            //加密后的内容Base64解码
-            byte[] base642Byte = RSAUtil.base642Byte(content);
-            //用公钥解密
-            byte[] publicDecrypt = decrypt(base642Byte, publicKey);
-            return new String(publicDecrypt);
-        } catch (Exception e) {
-            logger.info("公钥解密失败，原因：" + e.getMessage());
-        }
-        return null;
-    }
-
-    /**
-     * 中行信用卡，利用公钥加密字符串
+     * 中行信用卡，利用中行公钥加密字符串
      *
      * @param content
      * @return
@@ -348,7 +381,7 @@ public class BOCCCUtils {
     public static String publicEncrypt(String content) {
         try {
             //将Base64编码后的公钥转换成PublicKey对象
-            PublicKey publicKey = RSAUtil.string2PublicKey(PUBLIC_KEY);
+            PublicKey publicKey = RSAUtil.string2PublicKey(ZH_PUBLIC_KEY);
             //用公钥加密
             byte[] publicEncrypt = encrypt(content.getBytes(), publicKey);
             //加密后的内容Base64编码
@@ -361,7 +394,7 @@ public class BOCCCUtils {
     }
 
     /**
-     * 中行信用卡，利用私钥解密字符串
+     * 中行信用卡，利用三方私钥解密字符串
      *
      * @param content
      * @return
@@ -370,7 +403,7 @@ public class BOCCCUtils {
     public static String privateDecrypt(String content) {
         try {
             //将Base64编码后的私钥转换成PrivateKey对象
-            PrivateKey privateKey = RSAUtil.string2PrivateKey(PRIVATE_KEY);
+            PrivateKey privateKey = RSAUtil.string2PrivateKey(SF_PRIVATE_KEY);
             //加密后的内容Base64解码
             byte[] base642Byte = RSAUtil.base642Byte(content);
             //用私钥解密
@@ -378,28 +411,6 @@ public class BOCCCUtils {
             return new String(privateDecrypt);
         } catch (Exception e) {
             logger.info("私钥解密失败，原因：" + e.getMessage());
-        }
-        return null;
-    }
-
-    /**
-     * 中行信用卡，利用私钥加密字符串
-     *
-     * @param content
-     * @return
-     * @throws Exception
-     */
-    public static String privateEncrypt(String content) {
-        try {
-            //将Base64编码后的私钥转换成PrivateKey对象
-            PrivateKey privateKey = RSAUtil.string2PrivateKey(PRIVATE_KEY);
-            //用私钥加密
-            byte[] publicEncrypt = encrypt(content.getBytes(), privateKey);
-            //加密后的内容Base64编码
-            String byte2Base64 = RSAUtil.byte2Base64(publicEncrypt);
-            return new String(byte2Base64);
-        } catch (Exception e) {
-            logger.info("私钥加密失败，原因：" + e.getMessage());
         }
         return null;
     }

@@ -2,10 +2,12 @@ package com.jiazhe.youxiang.server.service.impl.point;
 
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.ExchangeCodeCheckUtil;
+import com.jiazhe.youxiang.base.util.boccc.BOCCCConstant;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponEntity;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponUsedEntity;
 import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.constant.EnvironmentConstant;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.PointCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
@@ -37,6 +39,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -295,6 +298,10 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         pointExchangeCodePO.setUsed(CommonConstant.CODE_HAS_USED);
         pointExchangeCodePO.setCustomerId(customerId);
         pointExchangeCodePOMapper.updateByPrimaryKeySelective(pointExchangeCodePO);
+        //如果当前环境是中行信用卡环境，则通知中行信用卡方面
+        if (Arrays.asList(BOCCCConstant.BOCCC_ENVIRONMENT).contains(EnvironmentConstant.ENVIRONMENT)) {
+
+        }
     }
 
     @Override
@@ -393,6 +400,14 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         Date beginTime = new Date(DateUtil.getFirstSecond(System.currentTimeMillis() - CommonConstant.ONE_DAY));
         Date endTime = new Date(DateUtil.getLastSecond(System.currentTimeMillis() - CommonConstant.ONE_DAY));
         return pointExchangeCodePOManualMapper.getBOCCCUsed(beginTime, endTime);
+    }
+
+    @Override
+    public void markRefund(Integer id) {
+        PointExchangeCodePO po = pointExchangeCodePOMapper.selectByPrimaryKey(id);
+        po.setUsed(CommonConstant.CODE_HAS_REFUND);
+        po.setModTime(new Date());
+        pointExchangeCodePOMapper.updateByPrimaryKeySelective(po);
     }
 
 }

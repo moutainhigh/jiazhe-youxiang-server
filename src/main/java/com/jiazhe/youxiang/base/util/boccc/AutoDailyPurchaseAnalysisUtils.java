@@ -108,7 +108,7 @@ public class AutoDailyPurchaseAnalysisUtils {
 
         //第二步，解密文件
         PgpDecryUtil decryU = new PgpDecryUtil();
-        decryU.setPassphrase(EnvironmentConstant.PASSPHRASE);
+        decryU.setPassphrase(BOCCCUtils.PASSPHRASE);
         decryU.DecryUtil(pgpFileName, zipFileName, BOCCCConstant.privateKeyPath);
 
         //第三步，解压缩文件

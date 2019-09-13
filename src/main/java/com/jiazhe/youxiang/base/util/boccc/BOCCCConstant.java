@@ -7,6 +7,14 @@ package com.jiazhe.youxiang.base.util.boccc;
  */
 public class BOCCCConstant {
 
+    /**
+     * 中行信用卡环境执行
+     */
+    public static String[] BOCCC_ENVIRONMENT = {"dev", "boccc", "boccctest"};
+
+    /**
+     * BOCCC文件编码格式
+     */
     public static final String CHAR_SET = "GBK";
 
     /**
@@ -40,12 +48,12 @@ public class BOCCCConstant {
     public static final String rootPath = "/opt/jiazhe/webserver/files/boccc/";
 
     /**
-     * PGP加密解密公钥路径
+     * PGP 三方加密公钥路径，这里公钥和私钥不是一对
      */
     public static String publicKeyPath = rootPath + "pgp.key/jiazheng_public.asc";
 
     /**
-     * PGP加密解密私钥路径
+     * PGP 三方解密私钥路径，这里公钥和私钥不是一对
      */
     public static String privateKeyPath = rootPath + "pgp.key/jiazheng_private.asc";
 

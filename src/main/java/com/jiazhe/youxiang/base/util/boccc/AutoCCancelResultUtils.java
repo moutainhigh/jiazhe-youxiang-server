@@ -86,7 +86,7 @@ public class AutoCCancelResultUtils {
 
         //第2步，解密文件
         PgpDecryUtil decryU = new PgpDecryUtil();
-        decryU.setPassphrase(EnvironmentConstant.PASSPHRASE);
+        decryU.setPassphrase(BOCCCUtils.PASSPHRASE);
         decryU.DecryUtil(BOCCCConstant.ccancelPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_PGP, -1), BOCCCConstant.ccancelPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_ZIP, -1), BOCCCConstant.privateKeyPath);
 
         //第3步，解压缩文件
@@ -117,6 +117,7 @@ public class AutoCCancelResultUtils {
 
     /**
      * 通过退货信息，拼接退货信息接口
+     *
      * @param cancelStr
      * @return
      * @throws Exception

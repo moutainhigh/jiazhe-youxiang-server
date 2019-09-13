@@ -4,6 +4,7 @@ import com.jiazhe.youxiang.base.util.boccc.AutoCCancelResultUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoDailyPurchaseAnalysisUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoDailyRemainAnalysisUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoSFTPUtils;
+import com.jiazhe.youxiang.base.util.boccc.BOCCCConstant;
 import com.jiazhe.youxiang.server.common.constant.EnvironmentConstant;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -27,9 +28,7 @@ public class BOCCCQuartz extends QuartzJobBean {
         /**
          * 根据不同环境，判断此定时任务是否执行
          */
-        String[] BOCCC_ENVIRONMENT = {"dev", "boccc", "boccctest"};
-
-        if (!Arrays.asList(BOCCC_ENVIRONMENT).contains(EnvironmentConstant.ENVIRONMENT)) {
+        if (!Arrays.asList(BOCCCConstant.BOCCC_ENVIRONMENT).contains(EnvironmentConstant.ENVIRONMENT)) {
             return;
         }
 

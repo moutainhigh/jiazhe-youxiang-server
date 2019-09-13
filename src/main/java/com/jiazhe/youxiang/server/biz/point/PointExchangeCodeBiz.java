@@ -1,7 +1,9 @@
 package com.jiazhe.youxiang.server.biz.point;
 
+import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
+import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeEditDTO;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
@@ -109,5 +111,17 @@ public class PointExchangeCodeBiz {
     public PointExchangeCodeDTO reverseValue(String orderNo) {
         PointExchangeCodeDTO pointExchangeCodeDTO = pointExchangeCodeService.reverseValue(orderNo);
         return pointExchangeCodeDTO;
+    }
+
+    public PointExchangeCodeDTO findByKeyt(String keyt) {
+        return PointExchangeCodeAdapter.po2Dto(pointExchangeCodeService.findByKeyt(keyt));
+    }
+
+    /**
+     * 中行标记退货
+     * @param id
+     */
+    public void markRefund(Integer id) {
+        pointExchangeCodeService.markRefund(id);
     }
 }

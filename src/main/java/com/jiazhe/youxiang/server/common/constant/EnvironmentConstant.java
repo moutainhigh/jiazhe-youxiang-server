@@ -19,14 +19,10 @@ import org.springframework.stereotype.Component;
 @Configuration
 public class EnvironmentConstant {
 
+    /**
+     * 环境
+     */
     public static String ENVIRONMENT;
-
-    public static String PASSPHRASE ;
-
-    @Value("${boccc.pgp.passphrase}")
-    public void setPassPhrase(String passphrase) {
-        PASSPHRASE = passphrase;
-    }
 
     @Value("${spring.profiles.active}")
     public void setEnvironment(String Environment) {

@@ -9,14 +9,29 @@ import com.jiazhe.youxiang.server.vo.BaseVO;
  */
 public class BOCCCRefundReq extends BaseVO {
 
+    /**
+     * 订单ID
+     */
     private String orderId ;
 
+    /**
+     * 商品ID
+     */
     private String waresId ;
 
+    /**
+     * 优惠券码
+     */
     private String wInfo ;
 
+    /**
+     * 退货日期
+     */
     private String returnDate ;
 
+    /**
+     * 退货时间
+     */
     private String returnTime ;
 
     public String getOrderId() {
