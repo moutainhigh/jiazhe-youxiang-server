@@ -124,4 +124,12 @@ public class PointExchangeCodeBiz {
     public void markRefund(Integer id) {
         pointExchangeCodeService.markRefund(id);
     }
+
+    /**
+     * 告知中行信用卡退货
+     * @param keyt
+     */
+    public void refundByKeyt(String keyt) {
+        //TODO
+    }
 }

@@ -208,4 +208,12 @@ public class APIPointExchangeCodeController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
+    @ApiOperation(value = "【第三方请求中行信用卡】告知退货", httpMethod = "POST", notes = "【第三方请求中行信用卡】告知退货")
+    @RequestMapping(value = "/refundbykeyt", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.POINT, operate = "告知退货", level = LogLevelEnum.LEVEL_3)
+    public Object refundByKeyt(@RequestParam String keyt) {
+        pointExchangeCodeBiz.refundByKeyt(keyt);
+        return ResponseFactory.buildSuccess();
+    }
+
 }
