@@ -60,12 +60,12 @@ public class BOCCCUtils {
     /**
      * 中行信用卡实时接口：已使用请求
      */
-    private static String REAL_TIME_USED_URL;
+    public static String REAL_TIME_USED_URL;
 
     /**
      * 中行信用卡实时接口：已退货请求
      */
-    private static String REAL_TIME_REFUND_URL;
+    public static String REAL_TIME_REFUND_URL;
 
     /**
      * 中行信用卡解密字符串
@@ -84,7 +84,7 @@ public class BOCCCUtils {
 
     @Value("${boccc.rsa.sf_private_key}")
     public void setSFPrivateKey(String privateKey) {
-        SF_PUBLIC_KEY = privateKey;
+        SF_PRIVATE_KEY = privateKey;
     }
 
     @Value("${boccc.realtime.used_url}")

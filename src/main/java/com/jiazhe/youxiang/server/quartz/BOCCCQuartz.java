@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.base.util.boccc.AutoDailyPurchaseAnalysisUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoDailyRemainAnalysisUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoSFTPUtils;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCConstant;
+import com.jiazhe.youxiang.base.util.boccc.BOCCCUtils;
 import com.jiazhe.youxiang.server.common.constant.EnvironmentConstant;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;

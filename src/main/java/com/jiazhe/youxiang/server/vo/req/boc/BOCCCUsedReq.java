@@ -19,7 +19,7 @@ import java.util.Date;
  */
 public class BOCCCUsedReq extends BaseVO {
 
-    BOCCCUsedReq() {
+    public BOCCCUsedReq() {
         this.wSign = "R";
         this.usedDate = BOCCCUtils.getNowTime().substring(0, 8);
         this.usedTime = BOCCCUtils.getNowTime().substring(9, 17);
@@ -40,6 +40,11 @@ public class BOCCCUsedReq extends BaseVO {
      * 优惠券标识
      */
     private String wSign;
+
+    /**
+     * 优惠券码
+     */
+    private String wInfo;
 
     /**
      * 使用日期
@@ -71,23 +76,22 @@ public class BOCCCUsedReq extends BaseVO {
         return wSign;
     }
 
-    public void setwSign(String wSign) {
-        this.wSign = wSign;
+    public String getwInfo() {
+        return wInfo;
+    }
+
+    public void setwInfo(String wInfo) {
+        this.wInfo = wInfo;
     }
 
     public String getUsedDate() {
         return usedDate;
     }
 
-    public void setUsedDate(String usedDate) {
-        this.usedDate = usedDate;
-    }
-
     public String getUsedTime() {
         return usedTime;
     }
 
-    public void setUsedTime(String usedTime) {
-        this.usedTime = usedTime;
-    }
+
+
 }

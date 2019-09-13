@@ -2,9 +2,12 @@ package com.jiazhe.youxiang.server.service.impl.point;
 
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.ExchangeCodeCheckUtil;
+import com.jiazhe.youxiang.base.util.HttpUtil;
+import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCConstant;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponEntity;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponUsedEntity;
+import com.jiazhe.youxiang.base.util.boccc.BOCCCUtils;
 import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.EnvironmentConstant;
@@ -33,7 +36,10 @@ import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeRecordService;
 import com.jiazhe.youxiang.server.service.point.PointService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import com.jiazhe.youxiang.server.vo.req.boc.BOCCCUsedReq;
 import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +47,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -51,6 +59,8 @@ import java.util.stream.Collectors;
  */
 @Service("pointExchangeCodeService")
 public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
+
+    public static Logger logger = LoggerFactory.getLogger(PointExchangeCodeServiceImpl.class);
 
     @Autowired
     private PointExchangeCodePOMapper pointExchangeCodePOMapper;
@@ -300,7 +310,18 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         pointExchangeCodePOMapper.updateByPrimaryKeySelective(pointExchangeCodePO);
         //如果当前环境是中行信用卡环境，则通知中行信用卡方面
         if (Arrays.asList(BOCCCConstant.BOCCC_ENVIRONMENT).contains(EnvironmentConstant.ENVIRONMENT)) {
-
+            try {
+                BOCCCUsedReq usedReq = new BOCCCUsedReq();
+                usedReq.setWaresId(pointExchangeCodeBatchEditDTO.getGiftNo());
+                usedReq.setwEid(BOCCCUtils.complete(String.valueOf(pointExchangeCodePO.getId()), '0', true, 10));
+                usedReq.setwInfo(pointExchangeCodePO.getKeyt());
+                Map map = new HashMap(2);
+                map.put("requestType", "S");
+                map.put("data", BOCCCUtils.publicEncrypt(JacksonUtil.toJSon(usedReq)));
+                logger.info(HttpUtil.httpPost(BOCCCUtils.REAL_TIME_USED_URL, map));
+            } catch (Exception e) {
+                logger.error("第三方通知中行失败，原因：" + e.getMessage());
+            }
         }
     }
 
