@@ -170,8 +170,15 @@ public interface PointExchangeCodeService {
     List<BOCCCCouponUsedEntity> getBOCCCYesterdayUsed();
 
     /**
-     * 中行专用标记码已使用
+     * 中行信用卡专用标记码已使用
      * @return
      */
     void markRefund(Integer id);
+
+    /**
+     * 中行信用卡退货
+     * @param id
+     * @param force
+     */
+    void bocccRefund(Integer id, Integer force);
 }

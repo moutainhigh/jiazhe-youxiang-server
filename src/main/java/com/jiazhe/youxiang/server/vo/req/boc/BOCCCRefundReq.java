@@ -4,35 +4,39 @@ import com.jiazhe.youxiang.server.vo.BaseVO;
 
 /**
  * @author TU
- * @description  中行信用卡（BOCCC）请求退货接口
+ * @description 中行信用卡（BOCCC）请求退货接口
  * @date 2019-09-06.
  */
 public class BOCCCRefundReq extends BaseVO {
 
-    /**
-     * 订单ID
-     */
-    private String orderId ;
+    public BOCCCRefundReq() {
+        this.flag = "Y";
+    }
 
     /**
      * 商品ID
      */
-    private String waresId ;
+    private String waresId;
+
+    /**
+     * 库存编码
+     */
+    private String wEid;
+
+    /**
+     * 订单ID
+     */
+    private String orderId;
 
     /**
      * 优惠券码
      */
-    private String wInfo ;
+    private String wInfo;
 
     /**
-     * 退货日期
+     * 是否可以退货 N不可以 Y可以
      */
-    private String returnDate ;
-
-    /**
-     * 退货时间
-     */
-    private String returnTime ;
+    private String flag;
 
     public String getOrderId() {
         return orderId;
@@ -58,19 +62,15 @@ public class BOCCCRefundReq extends BaseVO {
         this.wInfo = wInfo;
     }
 
-    public String getReturnDate() {
-        return returnDate;
+    public String getwEid() {
+        return wEid;
     }
 
-    public void setReturnDate(String returnDate) {
-        this.returnDate = returnDate;
+    public void setwEid(String wEid) {
+        this.wEid = wEid;
     }
 
-    public String getReturnTime() {
-        return returnTime;
-    }
-
-    public void setReturnTime(String returnTime) {
-        this.returnTime = returnTime;
+    public String getFlag() {
+        return flag;
     }
 }

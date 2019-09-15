@@ -118,7 +118,8 @@ public class PointExchangeCodeBiz {
     }
 
     /**
-     * 中行标记退货
+     * 中行信用卡标记退货
+     *
      * @param id
      */
     public void markRefund(Integer id) {
@@ -126,10 +127,12 @@ public class PointExchangeCodeBiz {
     }
 
     /**
-     * 告知中行信用卡退货
-     * @param keyt
+     * 中行信用卡退货
+     *
+     * @param id
+     * @param force
      */
-    public void refundByKeyt(String keyt) {
-        //TODO
+    public void bocccRefund(Integer id, Integer force) {
+        pointExchangeCodeService.bocccRefund(id, force);
     }
 }

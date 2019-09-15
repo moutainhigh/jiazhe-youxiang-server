@@ -138,6 +138,8 @@ public enum PermissionTreeEnum {
     POINT_CODE_SEARCH_EDIT(60102, 601, "兑换码修改", PermissionConstant.POINT_CODE_SEARCH_EDIT),
     //兑换码启、停用
     POINT_CODE_SEARCH_STATUS_CHANGE(60103, 601, "兑换码启、停用", PermissionConstant.POINT_CODE_SEARCH_STATUS_CHANGE),
+    //中行兑换码退货
+    POINT_CODE_SEARCH_FEFUND(60104, 601, "中行信用卡退货", PermissionConstant.POINT_CODE_SEARCH_FEFUND),
     //积分卡查询
     POINT_SEARCH_PAGE(602, 6, "积分卡查询", PermissionConstant.POINT_SEARCH),
     //积分卡查询
