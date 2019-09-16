@@ -15,18 +15,39 @@ import com.jiazhe.youxiang.server.vo.BaseVO;
  */
 public class BOCDCQueryStockResp extends BaseVO {
 
+    /**
+     * 处理结果（0000代表成功）
+     */
     private String bizCode;
 
+    /**
+     * 信息描述
+     */
     private String bizDesc;
 
+    /**
+     * 礼品卡号
+     */
     private String giftCardNo;
 
+    /**
+     * 礼品卡密码
+     */
     private String giftCardPwd;
 
+    /**
+     * 凭证码/二维码
+     */
     private String eviCode;
 
+    /**
+     * 卡密有效期
+     */
     private String cardExpDate;
 
+    /**
+     * ebuy券码ID/服务码
+     */
     private String ebuyId;
 
     public String getBizCode() {

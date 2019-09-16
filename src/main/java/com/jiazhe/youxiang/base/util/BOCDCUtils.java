@@ -5,14 +5,12 @@
  */
 package com.jiazhe.youxiang.base.util;
 
+import com.jiazhe.youxiang.server.common.enums.BOCDCBizCodeEnum;
+import com.jiazhe.youxiang.server.vo.resp.boc.BOCDCCommonResp;
 import net.sf.json.JSONObject;
 import net.sf.json.xml.XMLSerializer;
-import org.apache.logging.log4j.core.util.IOUtils;
-import org.json.XML;
+import org.apache.commons.lang.StringUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Iterator;
 
 /**
@@ -52,10 +50,17 @@ public class BOCDCUtils {
      * @param sign
      * @return
      */
-    public static void checkParam(String param, String sign) throws Exception{
-        if(ShaUtils.getSha256(param).equals(sign)){
-            throw new Exception("报文有误");
+    public static boolean checkParam(String param, String sign) {
+        if (StringUtils.isEmpty(param)) {
+            return false;
         }
+        if (StringUtils.isEmpty(sign)) {
+            return false;
+        }
+        if (!ShaUtils.getSha256(param).equals(sign)) {
+            return false;
+        }
+        return true;
     }
 
     public static String xml2JsonStr(String xml) {
@@ -75,4 +80,14 @@ public class BOCDCUtils {
         return "<" + (isEnd ? "/" : "") + key + ">";
     }
 
+    /**
+     * 生成失败返回值
+     * @return
+     */
+    public static Object genrateFailReturn() {
+        BOCDCCommonResp resp = new BOCDCCommonResp();
+        resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
+        resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getMessage());
+        return generateReturn(resp);
+    }
 }

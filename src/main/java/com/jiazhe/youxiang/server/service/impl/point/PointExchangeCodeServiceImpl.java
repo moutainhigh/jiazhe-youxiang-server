@@ -9,6 +9,7 @@ import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponUsedEntity;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCUtils;
 import com.jiazhe.youxiang.server.adapter.point.PointAdapter;
 import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
+import com.jiazhe.youxiang.server.biz.BOCDCBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.EnvironmentConstant;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
@@ -39,6 +40,8 @@ import com.jiazhe.youxiang.server.service.point.PointService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.req.boc.BOCCCRefundReq;
 import com.jiazhe.youxiang.server.vo.req.boc.BOCCCUsedReq;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,6 +81,9 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     private CustomerService customerService;
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private BOCDCBiz bocdcBiz;
 
     @Override
     public List<PointExchangeCodeDTO> getByBatchId(Integer id) {
@@ -330,6 +336,10 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
                 }
             });
             t.start();
+            if (StringUtils.isNotEmpty(pointExchangeCodePO.getOutOrderCode())) {
+                //调用中行使用状态核对实时接口
+                bocdcBiz.statusCheck(pointExchangeCodePO.getOutOrderCode(), CommonConstant.CODE_USE_STATUS_USED, DateUtil.yyyyMMDD2(new Date()));
+            }
         }
     }
 
@@ -379,6 +389,9 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         if (CommonConstant.CODE_START_USING.equals(pointExchangeCodePO.getStatus())) {
             throw new PointException(PointCodeEnum.CODE_HAS_START_USING);
         }
+        if (CommonConstant.CODE_HAS_REFUND.equals(pointExchangeCodePO.getUsed())) {
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_REFUND);
+        }
         if (CommonConstant.CODE_HAS_USED.equals(pointExchangeCodePO.getUsed())) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_USED);
         }
@@ -402,21 +415,26 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public PointExchangeCodeDTO reverseValue(String orderNo) {
+    public PointExchangeCodeDTO queryByOrderNo(String orderNo) {
         PointExchangeCodePOExample example = new PointExchangeCodePOExample();
         PointExchangeCodePOExample.Criteria criteria = example.createCriteria();
         criteria.andOutOrderCodeEqualTo(orderNo);
         criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
         List<PointExchangeCodePO> list = pointExchangeCodePOMapper.selectByExample(example);
-        if (list.isEmpty()) {
+        if (CollectionUtils.isNotEmpty(list) || list.size() > 1) {
             return null;
-        } else {
-            PointExchangeCodePO po = new PointExchangeCodePO();
-            po.setId(list.get(0).getId());
-            po.setUsed(CommonConstant.CODE_HAS_REFUND);
-            pointExchangeCodePOMapper.updateByPrimaryKeySelective(po);
-            return PointExchangeCodeAdapter.po2Dto(list.get(0));
         }
+        return PointExchangeCodeAdapter.po2Dto(list.get(0));
+    }
+
+    @Override
+    public void changeCodeUsedStatus(Integer id, Byte usedStaus) {
+        //TODO niexiao 没有任何校验
+        PointExchangeCodePO po = new PointExchangeCodePO();
+        po.setId(id);
+        po.setUsed(usedStaus);
+        po.setModTime(new Timestamp(System.currentTimeMillis()));
+        pointExchangeCodePOMapper.updateByPrimaryKeySelective(po);
     }
 
     @Override
@@ -486,6 +504,5 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         }
 
     }
-
 
 }

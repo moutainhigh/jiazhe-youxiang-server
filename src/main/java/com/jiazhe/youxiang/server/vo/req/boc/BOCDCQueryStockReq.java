@@ -15,16 +15,26 @@ import com.jiazhe.youxiang.server.vo.BaseVO;
  */
 public class BOCDCQueryStockReq extends BaseVO {
 
+    /**
+     * 订单号（需要加密）
+     */
     private String orderNo;
 
-    private String userId;
-
+    /**
+     * 下单时间
+     */
     private String tranDate;
-
+    /**
+     * 订单状态
+     */
     private String orderStatus;
-
+    /**
+     * 礼品编号（需要加密）
+     */
     private String giftNo;
-
+    /**
+     * 卡密有效天数
+     */
     private String validDate;
 
     public String getOrderNo() {
@@ -33,14 +43,6 @@ public class BOCDCQueryStockReq extends BaseVO {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getTranDate() {

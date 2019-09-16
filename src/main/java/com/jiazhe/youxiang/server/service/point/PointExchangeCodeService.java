@@ -140,7 +140,7 @@ public interface PointExchangeCodeService {
     void checkByCode(String code);
 
     /**
-     * 中行储蓄卡查询库存
+     * 中行储蓄卡查询库存，不成功返回null
      *
      * @param orderNo
      * @param giftNo
@@ -148,8 +148,9 @@ public interface PointExchangeCodeService {
      */
     PointExchangeCodeDTO queryStock(String orderNo, String giftNo, Date expiryDate);
 
+
     /**
-     * 中行退货校验
+     * 通过订单号（中行）查找兑换码
      *
      * @param orderNo
      * @return
@@ -181,4 +182,15 @@ public interface PointExchangeCodeService {
      * @param force
      */
     void bocccRefund(Integer id, Integer force);
+
+    PointExchangeCodeDTO queryByOrderNo(String orderNo);
+
+    /**
+     * 修改兑换码使用状态（中行）
+     *
+     * @param id
+     * @param usedStaus
+     */
+    void changeCodeUsedStatus(Integer id, Byte usedStaus);
+
 }

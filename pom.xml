@@ -86,6 +86,12 @@
             <artifactId>spring-boot-starter-log4j2</artifactId>
             <version>2.0.4.RELEASE</version>
         </dependency>
+
+        <!--Spring 重试组件-->
+        <dependency>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
+        </dependency>
         <!--swagger2依赖-->
         <dependency>
             <groupId>io.springfox</groupId>
@@ -279,14 +285,7 @@
             <version>1.2.5</version>
         </dependency>
 
-        <!--PGP加密-->
-        <!--<dependency>-->
-            <!--<groupId>com.boc.security</groupId>-->
-            <!--<artifactId>com.boc.security</artifactId>-->
-            <!--<version>1.2</version>-->
-            <!--<scope>system</scope>-->
-            <!--<systemPath>${basedir}/lib/com.boc.security-1.2.jar</systemPath>-->
-        <!--</dependency>-->
+        <!--本地jar包-->
         <dependency>
             <groupId>cryptix-jce-api</groupId>
             <artifactId>cryptix-jce-api</artifactId>
@@ -369,6 +368,12 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>js-sha256</artifactId>
+            <version>0.7.1</version>
         </dependency>
 
     </dependencies>
