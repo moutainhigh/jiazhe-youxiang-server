@@ -410,7 +410,7 @@
         if (rowObject.used == 1) {
             str += getFunctionButton("btn-green", "getOrderPaymentList(" + rowObject.id + ")", "消费记录");
             if (permission.indexOf("pointCodeRefund") != -1) {
-                str += getFunctionButton("btn-danger", "bocccRefund(\"" + rowObject.id + "\",\"0\",\"该兑换码已经充值，确定退货吗？\")", "退货");
+                str += getFunctionButton("btn-danger", "refund(\"" + rowObject.id + "\",\"0\",\"该兑换码已经充值，确定退货吗？\")", "退货");
             }
         }
         return str;

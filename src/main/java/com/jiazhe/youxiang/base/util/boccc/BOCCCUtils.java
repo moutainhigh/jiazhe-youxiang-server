@@ -44,39 +44,14 @@ public class BOCCCUtils {
     private static SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 
     /**
-     * 最大重试次数为10次
-     */
-    private static Integer MAX_RETRY_TIME = 15;
-
-    /**
      * 每次重试间隔
      */
     private static Integer[] RETRY_INTERVAL = {15, 15, 30, 180, 600, 1200, 1800, 1800, 1800, 3600, 10800, 10800, 10800, 21600, 21600};
 
     /**
-     * 中行信用卡实时接口：已使用请求
-     */
-    public static String REAL_TIME_USED_URL;
-
-    /**
-     * 中行信用卡实时接口：已退货请求
-     */
-    public static String REAL_TIME_REFUND_URL;
-
-    /**
      * 中行信用卡解密字符串
      */
     public static String PASSPHRASE;
-
-    @Value("${boccc.realtime.used_url}")
-    public void setUsedUrl(String usedUrl) {
-        REAL_TIME_USED_URL = usedUrl;
-    }
-
-    @Value("${boccc.realtime.refund_url}")
-    public void setRefundUrl(String refundUrl) {
-        REAL_TIME_REFUND_URL = refundUrl;
-    }
 
     @Value("${boccc.pgp.passphrase}")
     public void setPassPhrase(String passphrase) {
@@ -107,7 +82,7 @@ public class BOCCCUtils {
      * @param n         补全至n位
      * @return
      */
-    public static String complete(String content, char c, boolean isDigital, int n) throws Exception {
+    public static String complete(String content, char c, boolean isDigital, int n) {
         if (getBytes(content) > n) {
             return split(content, n);
         } else if (getBytes(content) == n) {
@@ -127,13 +102,17 @@ public class BOCCCUtils {
      * @param content
      * @param n
      * @return
-     * @throws UnsupportedEncodingException
      */
-    public static String split(String content, int n) throws UnsupportedEncodingException {
-        byte[] source = content.getBytes(BOCCCConstant.CHAR_SET);
-        byte[] dest = new byte[n];
-        System.arraycopy(source, 0, dest, 0, n);
-        return new String(dest, BOCCCConstant.CHAR_SET);
+    public static String split(String content, int n) {
+        try {
+            byte[] source = content.getBytes(BOCCCConstant.CHAR_SET);
+            byte[] dest = new byte[n];
+            System.arraycopy(source, 0, dest, 0, n);
+            return new String(dest, BOCCCConstant.CHAR_SET);
+        } catch (Exception e) {
+            logger.error("字符串截取异常，原因：" + e.getMessage());
+        }
+        return "";
     }
 
     /**
@@ -142,9 +121,14 @@ public class BOCCCUtils {
      * @param content
      * @return
      */
-    public static int getBytes(String content) throws UnsupportedEncodingException {
-        byte[] bytes = content.getBytes(BOCCCConstant.CHAR_SET);
-        return bytes.length;
+    public static int getBytes(String content) {
+        try {
+            byte[] bytes = content.getBytes(BOCCCConstant.CHAR_SET);
+            return bytes.length;
+        } catch (Exception e) {
+            logger.error("获取字符串字节数异常，原因：" + e.getMessage());
+        }
+        return 0;
     }
 
     /**
@@ -237,56 +221,6 @@ public class BOCCCUtils {
      */
     public static String generateFileEndChar(int n) throws Exception {
         return "TLRL" + complete(String.valueOf(n), '0', true, 15);
-    }
-
-    /**
-     * 读取文件最后一行
-     *
-     * @param file
-     * @param charset
-     * @return
-     * @throws IOException
-     */
-    public static String readLastLine(File file, String charset) throws IOException {
-        if (!file.exists() || file.isDirectory() || !file.canRead()) {
-            return null;
-        }
-        RandomAccessFile raf = null;
-        try {
-            raf = new RandomAccessFile(file, "r");
-            long len = raf.length();
-            if (len == 0L) {
-                return "";
-            } else {
-                long pos = len - 1;
-                while (pos > 0) {
-                    pos--;
-                    raf.seek(pos);
-                    if (raf.readByte() == '\n') {
-                        break;
-                    }
-                }
-                if (pos == 0) {
-                    raf.seek(0);
-                }
-                byte[] bytes = new byte[(int) (len - pos)];
-                raf.read(bytes);
-                if (charset == null) {
-                    return new String(bytes);
-                } else {
-                    return new String(bytes, charset);
-                }
-            }
-        } catch (FileNotFoundException e) {
-        } finally {
-            if (raf != null) {
-                try {
-                    raf.close();
-                } catch (Exception e2) {
-                }
-            }
-        }
-        return null;
     }
 
     /**

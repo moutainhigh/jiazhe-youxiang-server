@@ -107,21 +107,13 @@ public class PointExchangeCodeBiz {
     }
 
     /**
-     * 中行信用卡标记退货
-     *
-     * @param id
-     */
-    public void markRefund(Integer id) {
-        pointExchangeCodeService.markRefund(id);
-    }
-
-    /**
-     * 中行信用卡退货
+     * 兑换码退货
      *
      * @param id
      * @param force
      */
-    public void bocccRefund(Integer id, Integer force) {
-        pointExchangeCodeService.bocccRefund(id, force);
+    public void refund(Integer id, Integer force) {
+        pointExchangeCodeService.refund(id, force);
     }
+
 }

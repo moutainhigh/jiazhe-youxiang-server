@@ -10,6 +10,7 @@ import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponUsedEntity;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCUtils;
 import com.jiazhe.youxiang.server.adapter.point.PointAdapter;
 import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
+import com.jiazhe.youxiang.server.biz.BOCCCBiz;
 import com.jiazhe.youxiang.server.biz.BOCDCBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.EnvironmentConstant;
@@ -40,7 +41,6 @@ import com.jiazhe.youxiang.server.service.point.PointExchangeRecordService;
 import com.jiazhe.youxiang.server.service.point.PointService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.req.boc.BOCCCRefundReq;
-import com.jiazhe.youxiang.server.vo.req.boc.BOCCCUsedReq;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -85,6 +85,8 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
 
     @Autowired
     private BOCDCBiz bocdcBiz;
+    @Autowired
+    private BOCCCBiz bocccBiz;
 
     @Override
     public List<PointExchangeCodeDTO> getByBatchId(Integer id) {
@@ -317,30 +319,16 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         pointExchangeCodePO.setUsed(CommonConstant.CODE_HAS_USED);
         pointExchangeCodePO.setCustomerId(customerId);
         pointExchangeCodePOMapper.updateByPrimaryKeySelective(pointExchangeCodePO);
-        //如果当前环境是中行信用卡环境，则通知中行信用卡方面
+        //如果当前环境是中行信用卡环境，则通知中行信用卡方面兑换码已使用
         if (Arrays.asList(BOCCCConstant.BOCCC_ENVIRONMENT).contains(EnvironmentConstant.ENVIRONMENT)) {
-            Thread t = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        BOCCCUsedReq usedReq = new BOCCCUsedReq();
-                        usedReq.setWaresId(pointExchangeCodeBatchEditDTO.getGiftNo());
-                        usedReq.setwEid(BOCCCUtils.complete(String.valueOf(pointExchangeCodePO.getId()), '0', true, 10));
-                        usedReq.setwInfo(pointExchangeCodePO.getKeyt());
-                        Map map = new HashMap(2);
-                        map.put("requestType", "S");
-                        map.put("data", RSAUtil.bocccPublicEncrypt(JacksonUtil.toJSon(usedReq)));
-                        BOCCCUtils.httpPost(BOCCCUtils.REAL_TIME_USED_URL, map, 0, 10);
-                    } catch (Exception e) {
-                        logger.error("第三方通知中行信用卡兑换码使用失败，原因：" + e.getMessage());
-                    }
-                }
-            });
-            t.start();
-            if (StringUtils.isNotEmpty(pointExchangeCodePO.getOutOrderCode())) {
-                //调用中行使用状态核对实时接口
-                bocdcBiz.statusCheck(pointExchangeCodePO.getOutOrderCode(), CommonConstant.CODE_USE_STATUS_USED, DateUtil.yyyyMMDD2(new Date()));
-            }
+            String waresId = pointExchangeCodeBatchEditDTO.getGiftNo();
+            String wEid = BOCCCUtils.complete(String.valueOf(pointExchangeCodePO.getId()), '0', true, 10);
+            String wInfo = pointExchangeCodePO.getKeyt();
+            bocccBiz.bocccUsedUpdate(waresId, wEid, wInfo);
+        }
+        if (StringUtils.isNotEmpty(pointExchangeCodePO.getOutOrderCode())) {
+            //调用中行使用状态核对实时接口
+            bocdcBiz.statusCheck(pointExchangeCodePO.getOutOrderCode(), CommonConstant.CODE_USE_STATUS_USED, DateUtil.yyyyMMDD2(new Date()));
         }
     }
 
@@ -450,24 +438,16 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         return pointExchangeCodePOManualMapper.getBOCCCUsed(beginTime, endTime);
     }
 
-    @Override
-    public void markRefund(Integer id) {
-        PointExchangeCodePO po = pointExchangeCodePOMapper.selectByPrimaryKey(id);
-        po.setUsed(CommonConstant.CODE_HAS_REFUND);
-        po.setModTime(new Date());
-        pointExchangeCodePOMapper.updateByPrimaryKeySelective(po);
-    }
-
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void bocccRefund(Integer id, Integer force) {
+    public void refund(Integer id, Integer force) {
         PointExchangeCodePO po = pointExchangeCodePOMapper.selectByPrimaryKey(id);
         if (po.getUsed().equals(CommonConstant.CODE_HAS_REFUND)) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_REFUND);
         }
         PointExchangeRecordDTO recordDTO = pointExchangeRecordService.findByCodeId(id);
         PointDTO pointDTO = pointService.getById(recordDTO.getPointId());
-        if (force == 0) {//如果不是强制退货，则判断一下是否消费了
+        if (force == 0) {//如果不是强制退货，则判断一下该积分充值后的积分卡是否消费了
             if (!pointDTO.getFaceValue().equals(pointDTO.getBalance())) {
                 String message = "该积分卡面额为：" + pointDTO.getFaceValue() + ",现余额为：" + pointDTO.getBalance() + "，是否强制退货？";
                 throw new PointException(PointCodeEnum.POINT_HAS_CONSUMED.getCode(), PointCodeEnum.POINT_HAS_CONSUMED.getType(), message);
@@ -479,29 +459,14 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         pointPO.setStatus(CommonConstant.CODE_STOP_USING);
         pointPO.setDescription("中行信用卡退货");
         pointService.update(pointPO);
-        //如果当前环境是中行信用卡环境，则通知中行信用卡方面
+        //如果当前环境是中行信用卡环境，则通知中行信用卡方面退货
         if (Arrays.asList(BOCCCConstant.BOCCC_ENVIRONMENT).contains(EnvironmentConstant.ENVIRONMENT)) {
             PointExchangeCodeBatchEditDTO batchEditDTO = pointExchangeCodeBatchService.getById(po.getBatchId());
-            Thread t = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        BOCCCRefundReq refundReq = new BOCCCRefundReq();
-                        refundReq.setWaresId(batchEditDTO.getGiftNo());
-                        refundReq.setwEid(BOCCCUtils.complete(String.valueOf(po.getId()), '0', true, 10));
-                        //TODO 这个订单ID从哪里来的
-                        refundReq.setOrderId(po.getOutOrderCode());
-                        refundReq.setwInfo(po.getKeyt());
-                        Map map = new HashMap(2);
-                        map.put("requestType", "R");
-                        map.put("data", RSAUtil.bocccPublicEncrypt(JacksonUtil.toJSon(refundReq)));
-                        BOCCCUtils.httpPost(BOCCCUtils.REAL_TIME_REFUND_URL, map, 0, 10);
-                    } catch (Exception e) {
-                        logger.error("第三方通知中行信用卡退货失败，原因：" + e.getMessage());
-                    }
-                }
-            });
-            t.start();
+            String waresId = batchEditDTO.getGiftNo();
+            String wEid = BOCCCUtils.complete(String.valueOf(po.getId()), '0', true, 10);
+            String orderId = po.getOutOrderCode();
+            String wInfo = po.getKeyt();
+            bocccBiz.bocccRefundUpdate(waresId, wEid, orderId, wInfo);
         }
 
     }

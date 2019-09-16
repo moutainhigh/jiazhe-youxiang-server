@@ -152,8 +152,6 @@ public class PermissionConstant {
     public static final String POINT_CODE_SEARCH_EDIT = "pointCodeSearchEdit";
     //积分卡兑换码启、停用
     public static final String POINT_CODE_SEARCH_STATUS_CHANGE = "pointCodeSearchStatusChange";
-    //中行积分卡兑换码退货
-    public static final String POINT_CODE_SEARCH_FEFUND = "pointCodeRefund";
     //充值卡查询
     public static final String RECHARGE_CARD_SEARCH = "rechargeCardSearch";
     //充值卡修改
@@ -225,6 +223,8 @@ public class PermissionConstant {
     public static final String POINT_CODE_EDIT = "pointCodeEdit";
     //积分卡兑换码启、停用
     public static final String POINT_CODE_STATUS_CHANGE = "pointCodeStatusChange";
+    //中行积分卡兑换码退货
+    public static final String POINT_CODE_REFUND = "pointCodeRefund";
     //启、停用所有积分卡兑换码（包括已经兑换为的积分卡）
     public static final String ALL_POINT_CODE_STATUS_CHANGE = "allPointCodeStatusChange";
     //充值卡兑换码批次管理

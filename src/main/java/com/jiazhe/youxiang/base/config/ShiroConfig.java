@@ -60,6 +60,8 @@ public class ShiroConfig {
 
         //中行相关url
         filterChainDefinitionMap.put("/bocdc/**","anon");//储蓄卡
+        filterChainDefinitionMap.put("/boccc/**","anon");//信用卡
+
         //swagger相关连接可以直接访问
         filterChainDefinitionMap.put("/swagger-ui.html", "anon");
         filterChainDefinitionMap.put("/swagger-resources/**", "anon");

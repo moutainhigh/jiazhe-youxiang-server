@@ -132,7 +132,7 @@ public class RSAUtil {
      * @throws Exception
      */
     public static String bocccPublicEncrypt(String str) throws Exception {
-        return RSAUtil.privateDecrypt(str, ZH_PUBLIC_KEY);
+        return RSAUtil.publicEncrypt(str, ZH_PUBLIC_KEY);
     }
 
     /**

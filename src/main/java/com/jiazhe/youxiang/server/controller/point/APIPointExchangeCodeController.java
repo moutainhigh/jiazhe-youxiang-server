@@ -212,14 +212,15 @@ public class APIPointExchangeCodeController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    @ApiOperation(value = "【第三方请求中行信用卡】告知退货", httpMethod = "POST", notes = "【第三方请求中行信用卡】告知退货")
-    @RequestMapping(value = "/bocccrefund", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.POINT, operate = "告知退货", level = LogLevelEnum.LEVEL_3)
-    public Object bocccRefund(@RequestParam Integer id, @RequestParam Integer force) {
+    @RequiresPermissions(PermissionConstant.POINT_CODE_REFUND)
+    @ApiOperation(value = "请求退货", httpMethod = "POST", notes = "请求退货")
+    @RequestMapping(value = "/refund", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.POINT, operate = "请求退货", level = LogLevelEnum.LEVEL_3)
+    public Object refund(@RequestParam Integer id, @RequestParam Integer force) {
         if (!Arrays.asList(BOCCCConstant.BOCCC_ENVIRONMENT).contains(EnvironmentConstant.ENVIRONMENT)) {
             throw new PointException(PointCodeEnum.FEFUND_EVN_BOCCC);
         }
-        pointExchangeCodeBiz.bocccRefund(id, force);
+        pointExchangeCodeBiz.refund(id, force);
         return ResponseFactory.buildSuccess();
     }
 
