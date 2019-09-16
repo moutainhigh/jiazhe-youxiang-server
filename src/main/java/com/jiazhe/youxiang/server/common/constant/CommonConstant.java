@@ -253,4 +253,10 @@ public class CommonConstant {
 
     public static final int VER_CODE_LENGTH = 4;
 
+    /**
+     * 中行储蓄卡使用状态核对实时接口，使用状态
+     */
+    public static final String CODE_USE_STATUS_UNUSED = "00";
+    public static final String CODE_USE_STATUS_USED = "01";
+
 }

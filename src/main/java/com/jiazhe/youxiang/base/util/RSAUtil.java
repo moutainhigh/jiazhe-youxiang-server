@@ -82,14 +82,14 @@ public class RSAUtil {
     }
 
     /**
-     * 中行储蓄卡，私钥加密
+     * 中行储蓄卡，公钥加密
      *
      * @param str
      * @return
      * @throws Exception
      */
-    public static String bocdcPrivateEncrypt(String str) throws Exception {
-        return RSAUtil.privateEncrypt(str, BOCDC_PRIVATE_KEY);
+    public static String bocdcPublicEncrypt(String str) throws Exception {
+        return RSAUtil.publicEncrypt(str, BOCDC_PUBLIC_KEY);
     }
 
     /**

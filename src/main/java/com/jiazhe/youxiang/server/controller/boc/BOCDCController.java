@@ -5,27 +5,26 @@
  */
 package com.jiazhe.youxiang.server.controller.boc;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jiazhe.youxiang.base.util.BOCDCUtils;
-import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
-import com.jiazhe.youxiang.server.biz.point.PointBiz;
-import com.jiazhe.youxiang.server.biz.point.PointExchangeCodeBiz;
-import com.jiazhe.youxiang.server.biz.point.PointExchangeRecordBiz;
-import com.jiazhe.youxiang.server.common.constant.CommonConstant;
-import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
-import com.jiazhe.youxiang.server.dto.point.pointexchangerecord.PointExchangeRecordDTO;
+import com.jiazhe.youxiang.base.util.RSAUtil;
+import com.jiazhe.youxiang.server.biz.BOCDCBiz;
+import com.jiazhe.youxiang.server.common.annotation.AppApi;
+import com.jiazhe.youxiang.server.vo.req.boc.BOCDCCommonReq;
 import com.jiazhe.youxiang.server.vo.req.boc.BOCDCQueryStockReq;
 import com.jiazhe.youxiang.server.vo.req.boc.BOCDCReverseValueReq;
+import com.jiazhe.youxiang.server.vo.resp.DemoResp;
 import com.jiazhe.youxiang.server.vo.resp.boc.BOCDCQueryStockResp;
 import com.jiazhe.youxiang.server.vo.resp.boc.BOCDCReverseValueResp;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
 
 
 /**
@@ -38,81 +37,75 @@ import java.util.Date;
 @RequestMapping("bocdc")
 public class BOCDCController {
 
-    @Autowired
-    private PointExchangeCodeBiz pointExchangeCodeBiz;
-    @Autowired
-    private PointExchangeRecordBiz pointExchangeRecordBiz;
-    @Autowired
-    private PointBiz pointBiz;
+    private static final Logger LOGGER = LoggerFactory.getLogger(BOCDCController.class);
 
-    private static String[] bizCode = {"0000", "2222", "9999"};
-    private static String[] bizDesc = {"交易成功", "商户返回已使用", "报文格式错误"};
+    @Autowired
+    private BOCDCBiz bocdcBiz;
 
+    @AppApi
     @ApiOperation(value = "中行储蓄卡获取可用码", httpMethod = "POST", response = BOCDCQueryStockResp.class, notes = "中行储蓄卡获取可用码")
     @RequestMapping(value = "/queryStock", method = RequestMethod.POST)
-    public Object queryStock(@RequestParam("param") String param, @RequestParam("sign") String sign) {
-        BOCDCQueryStockResp resp = new BOCDCQueryStockResp();
-        String orderNo;
-        String giftNo;
-        Integer validDate;
-        try {
-//            BOCDCUtils.checkParam(param, sign);
-            String paramStr = BOCDCUtils.xml2JsonStr(param);
-            BOCDCQueryStockReq req = JacksonUtil.readValue(paramStr, BOCDCQueryStockReq.class);
-            orderNo = req.getOrderNo();
-            giftNo = req.getGiftNo();
-            validDate = Integer.valueOf(req.getValidDate());
-//            orderNo = RSAUtil.bocdcPrivateDecrypt(req.getOrderNo());
-//            giftNo = RSAUtil.bocdcPrivateDecrypt(req.getGiftNo());
-            Date expiryDate = new Date(DateUtil.getLastSecond(System.currentTimeMillis() + CommonConstant.ONE_DAY * Integer.valueOf(validDate)));
-            PointExchangeCodeDTO dto = pointExchangeCodeBiz.queryStock(orderNo, giftNo, expiryDate);
-            if (null != dto) {
-                resp.setBizCode(bizCode[0]);
-                resp.setBizDesc(bizDesc[0]);
-                resp.setGiftCardNo(dto.getCode());
-                resp.setGiftCardPwd(dto.getKeyt());
-//                resp.setGiftCardPwd(RSAUtil.bocdcPrivateEncrypt(dto.getKeyt()));
-//                resp.setGiftCardNo(RSAUtil.bocdcPrivateEncrypt(dto.getCode()));
-                resp.setCardExpDate(DateUtil.yyyyMMDD(dto.getExpiryTime()));
-            }
-        } catch (Exception e) {
-            resp.setBizCode(bizCode[2]);
-            resp.setBizDesc(bizDesc[2]);
+    public Object queryStock(@ModelAttribute BOCDCCommonReq req) {
+        LOGGER.error("HTTP调用[queryStock]方法，参数:{}", JSONObject.toJSON(req));
+        if (!BOCDCUtils.checkParam(req.getParam(), req.getSign())) {
+            return BOCDCUtils.genrateFailReturn();
         }
+        String paramStr = BOCDCUtils.xml2JsonStr(req.getParam());
+        BOCDCQueryStockReq queryStockReq = JacksonUtil.readValue(paramStr, BOCDCQueryStockReq.class);
+        try {
+            queryStockReq.setOrderNo(RSAUtil.bocdcPrivateDecrypt(queryStockReq.getOrderNo()));
+            queryStockReq.setGiftNo(RSAUtil.bocdcPrivateDecrypt(queryStockReq.getGiftNo()));
+        } catch (Exception e) {
+            LOGGER.error("HTTP调用[queryStock]方法解密失败，message:{}", e.getMessage());
+            return BOCDCUtils.genrateFailReturn();
+        }
+//        BOCDCQueryStockResp resp = bocdcBiz.queryStock(queryStockReq);
+//        return BOCDCUtils.generateReturn(resp);
+        return JSONObject.toJSON(queryStockReq);
+    }
+
+    @AppApi
+    @ApiOperation(value = "中行储蓄卡退货", httpMethod = "POST", response = BOCDCReverseValueResp.class, notes = "中行储蓄卡退货")
+    @RequestMapping(value = "/reverseValue", method = RequestMethod.POST)
+    public Object reverseValue(@ModelAttribute BOCDCCommonReq req) {
+        LOGGER.error("HTTP调用[reverseValue]方法，参数:{}", JSONObject.toJSON(req));
+        if (!BOCDCUtils.checkParam(req.getParam(), req.getSign())) {
+            return BOCDCUtils.genrateFailReturn();
+        }
+        String paramStr = BOCDCUtils.xml2JsonStr(req.getParam());
+        BOCDCReverseValueReq reverseValueReq = JacksonUtil.readValue(paramStr, BOCDCReverseValueReq.class);
+        try {
+            reverseValueReq.setOrderNo(RSAUtil.bocdcPrivateDecrypt(reverseValueReq.getOrderNo()));
+        }catch (Exception e) {
+            LOGGER.error("HTTP调用[reverseValue]方法解密失败，message:{}", e.getMessage());
+            return BOCDCUtils.genrateFailReturn();
+        }
+        BOCDCReverseValueResp resp = bocdcBiz.reverseValue(reverseValueReq);
         return BOCDCUtils.generateReturn(resp);
     }
 
-    @ApiOperation(value = "中行储蓄卡退货", httpMethod = "POST", response = BOCDCReverseValueResp.class, notes = "中行储蓄卡退货")
-    @RequestMapping(value = "/reverseValue", method = RequestMethod.POST)
-    public Object reverseValue(@RequestParam("param") String param, @RequestParam("sign") String sign) {
-        BOCDCReverseValueResp resp = new BOCDCReverseValueResp();
-        String orderNo;
-        try {
-//            BOCDCUtils.checkParam(param, sign);
-            String paramStr = BOCDCUtils.xml2JsonStr(param);
-            BOCDCReverseValueReq req = JacksonUtil.readValue(paramStr, BOCDCReverseValueReq.class);
-//            orderNo = RSAUtil.bocdcPrivateDecrypt(req.getOrderNo());
-            orderNo = req.getOrderNo();
-            PointExchangeCodeDTO dto = pointExchangeCodeBiz.reverseValue(orderNo);
-            if (null != dto) {
-                if (dto.getUsed().equals(CommonConstant.CODE_NOT_USED)) {
-                    resp.setBizCode(bizCode[0]);
-                    resp.setBizDesc(bizDesc[0]);
-                } else if(dto.getUsed().equals(CommonConstant.CODE_HAS_USED)){
-                    PointExchangeRecordDTO pointExchangeRecordDto = pointExchangeRecordBiz.getByCodeId(dto.getId());
-                    resp.setBizCode(bizCode[1]);
-                    resp.setBizDesc(bizDesc[1]);
-                    resp.setUseTime(DateUtil.yyyyMMDDhhmmss(pointExchangeRecordDto.getAddTime()));
-                } else{
-                    resp.setBizCode(bizCode[2]);
-                    resp.setBizDesc(bizDesc[2]);
-                }
-            }
-        } catch (Exception e) {
-            resp.setBizCode(bizCode[2]);
-            resp.setBizDesc(bizDesc[2]);
-            return BOCDCUtils.generateReturn(resp);
-        }
-        return BOCDCUtils.generateReturn(resp);
+
+    @AppApi
+    @ApiOperation(value = "使用状态核对实时接口", httpMethod = "GET", response = DemoResp.class, notes = "使用状态核对实时接口")
+    @RequestMapping(value = "/statusCheck", method = RequestMethod.GET)
+    public Object statusCheck() throws Exception {
+        long start = System.currentTimeMillis();
+
+        bocdcBiz.statusCheck("2017042312", "1", "2018/02/20");
+        //Future<String> task2 = bocdcBiz.statusCheck("abc", "435", "13242");
+        //Future<String> task3 = bocdcBiz.statusCheck("213", "12673", "12342");
+
+//        while (true) {
+//            if (task1.isDone() ) {
+//                // 三个任务都调用完成，退出循环等待
+//                break;
+//            }
+//            Thread.sleep(1000);
+//        }
+        Thread.sleep(6000);
+        long end = System.currentTimeMillis();
+
+        System.out.println("任务全部完成，总耗时：" + (end - start) + "毫秒");
+        return "任务全部完成，总耗时：" + (end - start) + "毫秒";
     }
 }
