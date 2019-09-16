@@ -213,9 +213,9 @@ public class APIPointExchangeCodeController extends BaseController {
     }
 
     @RequiresPermissions(PermissionConstant.POINT_CODE_REFUND)
-    @ApiOperation(value = "请求退货", httpMethod = "POST", notes = "请求退货")
+    @ApiOperation(value = "第三方请求中行退货", httpMethod = "POST", notes = "第三方请求中行退货")
     @RequestMapping(value = "/refund", method = RequestMethod.POST)
-    @CustomLog(moduleName = ModuleEnum.POINT, operate = "请求退货", level = LogLevelEnum.LEVEL_3)
+    @CustomLog(moduleName = ModuleEnum.POINT, operate = "第三方请求中行退货", level = LogLevelEnum.LEVEL_3)
     public Object refund(@RequestParam Integer id, @RequestParam Integer force) {
         if (!Arrays.asList(BOCCCConstant.BOCCC_ENVIRONMENT).contains(EnvironmentConstant.ENVIRONMENT)) {
             throw new PointException(PointCodeEnum.REFUND_EVN_BOCCC);

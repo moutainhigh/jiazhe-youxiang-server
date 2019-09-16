@@ -4,6 +4,9 @@ import com.jiazhe.youxiang.base.controller.BaseController;
 import com.alibaba.fastjson.JSONObject;
 import com.jiazhe.youxiang.server.biz.BOCCCBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
+import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
+import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.vo.resp.boc.BOCCCResp;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -37,8 +40,9 @@ public class BOCCCController extends BaseController {
      * @return
      */
     @AppApi
-    @ApiOperation(value = "退货信息接口、退货验证", httpMethod = "POST", response = BOCCCResp.class, notes = "退货信息接口、退货验证")
+    @ApiOperation(value = "退货信息接口、退货验证【中行请求第三方退货】", httpMethod = "POST", response = BOCCCResp.class, notes = "退货信息接口、退货验证【中行请求第三方退货】")
     @RequestMapping(value = "/refundcheck", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.BOCCC, operate = "中行请求第三方退货", level = LogLevelEnum.LEVEL_3)
     public Object refundCheck(@RequestParam("data") String data) {
         LOGGER.error("HTTP调用[refundCheck]方法，参数:{}", data);
         BOCCCResp resp = bocccBiz.bocccRefundCheck(data);
