@@ -148,15 +148,6 @@ public interface PointExchangeCodeService {
      */
     PointExchangeCodeDTO queryStock(String orderNo, String giftNo, Date expiryDate);
 
-
-    /**
-     * 通过订单号（中行）查找兑换码
-     *
-     * @param orderNo
-     * @return
-     */
-    PointExchangeCodeDTO reverseValue(String orderNo);
-
     /**
      * 中行信用卡专用获取批次下的兑换码信息
      * @param batchIds
@@ -183,6 +174,12 @@ public interface PointExchangeCodeService {
      */
     void bocccRefund(Integer id, Integer force);
 
+    /**
+     * 通过订单号（中行）查找兑换码
+     *
+     * @param orderNo
+     * @return
+     */
     PointExchangeCodeDTO queryByOrderNo(String orderNo);
 
     /**
