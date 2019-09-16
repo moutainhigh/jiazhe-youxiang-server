@@ -61,6 +61,9 @@ public class PointExchangeCodeResp extends BaseVO {
     @ApiModelProperty("是否已经使用，1为已经使用，0为未使用")
     private Byte used;
 
+    @ApiModelProperty("对应外部订单号")
+    private String outOrderCode;
+
     private ProjectResp projectResp;
 
     private CustomerResp customerResp;
@@ -183,6 +186,14 @@ public class PointExchangeCodeResp extends BaseVO {
 
     public void setUsed(Byte used) {
         this.used = used;
+    }
+
+    public String getOutOrderCode() {
+        return outOrderCode;
+    }
+
+    public void setOutOrderCode(String outOrderCode) {
+        this.outOrderCode = outOrderCode;
     }
 
     public ProjectResp getProjectResp() {

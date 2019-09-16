@@ -4,6 +4,7 @@ import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,18 +16,21 @@ public interface PointExchangeCodePOManualMapper {
 
     /**
      * 批量更新
+     *
      * @param poList
      */
     void batchUpdate(List<PointExchangeCodePO> poList);
 
     /**
      * 批量插入积分卡兑换码，此时卡号和密码为空
+     *
      * @param pointExchangeCodePOList
      */
     void batchInsert(List<PointExchangeCodePO> pointExchangeCodePOList);
 
     /**
      * 批量启用、停用
+     *
      * @param batchId
      * @param status
      */
@@ -34,6 +38,7 @@ public interface PointExchangeCodePOManualMapper {
 
     /**
      * 分页列表总数量
+     *
      * @param batchId
      * @param code
      * @param keyt
@@ -45,6 +50,7 @@ public interface PointExchangeCodePOManualMapper {
 
     /**
      * 分页列表
+     *
      * @param batchId
      * @param code
      * @param keyt
@@ -58,6 +64,7 @@ public interface PointExchangeCodePOManualMapper {
 
     /**
      * 通过keyt查找积分兑换码
+     *
      * @param keyt
      * @return
      */
@@ -65,18 +72,21 @@ public interface PointExchangeCodePOManualMapper {
 
     /**
      * 获取已有积分卡的最大id
+     *
      * @return
      */
     Integer getMaxId();
 
     /**
      * 批量更新代金券的code和keyt
+     *
      * @param poList
      */
     void batchUpdateCodeAndKeyt(List<PointExchangeCodePO> poList);
 
     /**
      * 根据卡号codes查询所有兑换码
+     *
      * @param codes
      * @return
      */
@@ -84,6 +94,7 @@ public interface PointExchangeCodePOManualMapper {
 
     /**
      * 批量激活兑换码，更新兑换码的过期时间
+     *
      * @param pointExchangeCodeDtoList
      */
     void batchActive(List<PointExchangeCodeDTO> pointExchangeCodeDtoList);
@@ -91,8 +102,18 @@ public interface PointExchangeCodePOManualMapper {
 
     /**
      * 通过code查找积分兑换码
+     *
      * @param code
      * @return
      */
     PointExchangeCodePO findByCode(@Param("code") String code);
+
+    /**
+     * 通过中行储蓄卡礼品编号查询一个兑换码
+     *
+     * @param giftNo
+     * @param expiryDate
+     * @return
+     */
+    PointExchangeCodePO queryStock(@Param("giftNo") String giftNo, @Param("expiryDate") Date expiryDate);
 }

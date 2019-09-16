@@ -19,6 +19,7 @@
     <result column="validity_period" property="validityPeriod" jdbcType="INTEGER" />
     <result column="expiry_type" property="expiryType" jdbcType="TINYINT" />
     <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="gift_no" property="giftNo" jdbcType="VARCHAR" />
     <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
     <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
@@ -28,7 +29,7 @@
   <sql id="Base_Column_List">
     id, name, point_name, is_virtual, is_made, description, amount, project_id, city_codes,
     product_ids, face_value, expiry_time, point_effective_time, point_expiry_time, validity_period,
-    expiry_type, status, ext_info, is_deleted, add_time, mod_time
+    expiry_type, status, gift_no, ext_info, is_deleted, add_time, mod_time
   </sql>
 
   <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO">

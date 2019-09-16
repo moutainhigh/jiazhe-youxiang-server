@@ -102,6 +102,7 @@ public class APISignInController extends BaseController {
             throw new LoginException(LoginCodeEnum.LOGIN_PASSWRLD_WRONG);
         }
         // 判断白名单里是否有该ip，没有发验证码
+        //TODO niexiao 记得放开注释
 //        if (!IpAdrressUtil.ipIsWhite(IpAdrressUtil.getIpAddress(request), sysUserDTO.getLastLoginIp())) {
 //            //判断有没有短信bizId传过来
 //            if(Strings.isEmpty(req.getIdentifyingCode())){

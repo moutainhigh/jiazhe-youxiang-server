@@ -48,6 +48,8 @@ public class PointExchangeCodeBatchEditDTO extends BaseObject {
 
     private Byte expiryType;
 
+    private String giftNo;
+
     private String extInfo;
 
     public Integer getId() {
@@ -192,5 +194,13 @@ public class PointExchangeCodeBatchEditDTO extends BaseObject {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getGiftNo() {
+        return giftNo;
+    }
+
+    public void setGiftNo(String giftNo) {
+        this.giftNo = giftNo;
     }
 }
