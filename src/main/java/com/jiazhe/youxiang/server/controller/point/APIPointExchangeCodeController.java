@@ -218,7 +218,7 @@ public class APIPointExchangeCodeController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "请求退货", level = LogLevelEnum.LEVEL_3)
     public Object refund(@RequestParam Integer id, @RequestParam Integer force) {
         if (!Arrays.asList(BOCCCConstant.BOCCC_ENVIRONMENT).contains(EnvironmentConstant.ENVIRONMENT)) {
-            throw new PointException(PointCodeEnum.FEFUND_EVN_BOCCC);
+            throw new PointException(PointCodeEnum.REFUND_EVN_BOCCC);
         }
         pointExchangeCodeBiz.refund(id, force);
         return ResponseFactory.buildSuccess();

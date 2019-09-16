@@ -416,11 +416,11 @@
         return str;
     }
 
-    function bocccRefund(id, force, txt) {
+    function refund(id, force, txt) {
         confirm(txt, function (result) {
             if (result) {
                 $.ajax({
-                    url: "/api/pointexchangecode/bocccrefund",
+                    url: "/api/pointexchangecode/refund",
                     dataType: "json",
                     async: false,
                     data: {

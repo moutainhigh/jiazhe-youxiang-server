@@ -80,68 +80,13 @@ public class BOCCCBiz {
         REAL_TIME_REFUND_URL = refundUrl;
     }
 
-    @Async
-    @Retryable(value = {BOCCCException.class},
-            maxAttempts = 15, backoff = @Backoff(delay = 5000L, multiplier = 2))
-    public void bocccUsedUpdate(String waresId, String wEid, String wInfo) {
-        LOGGER.info("Biz调用[bocccUsedUpdate]接口，waresId:{},wEid:{},wInfo:{}", waresId, wEid, wInfo);
-        BOCCCUsedReq usedReq = new BOCCCUsedReq();
-        usedReq.setWaresId(waresId);
-        usedReq.setwEid(wEid);
-        usedReq.setwInfo(wInfo);
-        BOCCCReq req = new BOCCCReq();
-        req.setRequestType("S");
-        try {
-            req.setData(RSAUtil.bocccPublicEncrypt(JacksonUtil.toJSon(usedReq)));
-        } catch (Exception e) {
-            LOGGER.error("加密失败，usedReq：{}，message:{}", JacksonUtil.toJSon(usedReq), e.getMessage());
-            throw new BOCCCException(BOCCCCodeEnum.PARAM_ENCRYPT_ERROR.getCode(), BOCCCCodeEnum.PARAM_ENCRYPT_ERROR.getType(), e.getMessage());
-        }
-        RestTemplate restTemplate = new RestTemplate();
-        String result;
-        try {
-            LOGGER.info("HTTP调用中行信用卡使用状态更新实时接口，入参:{}", JSONObject.toJSON(req));
-            ResponseEntity<String> response = restTemplate.postForEntity(REAL_TIME_USED_URL, req, String.class);
-            result = new String(response.getBody().getBytes("ISO8859-1"), "utf-8");
-            LOGGER.info("HTTP调用中行使用状态更新实时接口成功，入参:{}，返回值:{}", JSONObject.toJSON(req), JSONObject.toJSON(result));
-        } catch (RestClientException | UnsupportedEncodingException e) {
-            LOGGER.info("HTTP调用中行使用状态更新实时接口失败，RestClientException message:{}", e.getMessage());
-            throw new BOCCCException(BOCCCCodeEnum.USED_UPDATE_ERROR.getCode(), BOCCCCodeEnum.USED_UPDATE_ERROR.getType(), e.getMessage());
-        }
-    }
-
-    @Async
-    @Retryable(value = {BOCCCException.class},
-            maxAttempts = 10, backoff = @Backoff(delay = 5000L, multiplier = 2))
-    public void bocccRefundUpdate(String waresId, String wEid, String orderInfo, String wInfo) {
-        LOGGER.info("Biz调用[bocccRefundUpdate]接口，waresId:{},wEid:{},orderInfo:{},wInfo:{}", waresId, wEid, orderInfo, wInfo);
-        BOCCCRefundReq refundReq = new BOCCCRefundReq();
-        refundReq.setWaresId(waresId);
-        refundReq.setwEid(wEid);
-        refundReq.setOrderId(orderInfo);
-        refundReq.setwInfo(wInfo);
-        BOCCCReq req = new BOCCCReq();
-        req.setRequestType("R");
-        try {
-            req.setData(RSAUtil.bocccPublicEncrypt(JacksonUtil.toJSon(refundReq)));
-        } catch (Exception e) {
-            LOGGER.error("加密失败，refundReq：{}，message:{}", JacksonUtil.toJSon(refundReq), e.getMessage());
-            throw new BOCCCException(BOCCCCodeEnum.PARAM_ENCRYPT_ERROR.getCode(), BOCCCCodeEnum.PARAM_ENCRYPT_ERROR.getType(), e.getMessage());
-        }
-        RestTemplate restTemplate = new RestTemplate();
-        String result;
-        try {
-            LOGGER.info("HTTP调用中行信用卡退货更新实时接口，入参:{}", JSONObject.toJSON(req));
-            ResponseEntity<String> response = restTemplate.postForEntity(REAL_TIME_REFUND_URL, req, String.class);
-            result = new String(response.getBody().getBytes("ISO8859-1"), "utf-8");
-            LOGGER.info("HTTP调用中行退货更新实时接口成功，入参:{}，返回值:{}", JSONObject.toJSON(req), JSONObject.toJSON(result));
-        } catch (RestClientException | UnsupportedEncodingException e) {
-            LOGGER.info("HTTP调用中行退货更新实时接口失败，RestClientException message:{}", e.getMessage());
-            throw new BOCCCException(BOCCCCodeEnum.REFUND_UPDATE_ERROR.getCode(), BOCCCCodeEnum.REFUND_UPDATE_ERROR.getType(), e.getMessage());
-        }
-    }
-
+    /**
+     * 第一个实时接口 【退货信息接口】【中行请求第三方】
+     * @param data
+     * @return
+     */
     public BOCCCResp bocccRefundCheck(String data) {
+        LOGGER.info("Biz调用[bocccRefundCheck]接口，data:{}", data);
         BOCCCResp resp = new BOCCCResp();
         try {
             String reqJson = RSAUtil.bocccPrivateDecrypt(data);
@@ -178,4 +123,79 @@ public class BOCCCBiz {
         resp.setDate(DateUtil.secondToStr(new Date()));
         return resp;
     }
+
+    /**
+     * 第二个实时接口 【优惠券已使用更新接口】【请求中行】
+     * @param waresId
+     * @param wEid
+     * @param wInfo
+     */
+    @Async
+    @Retryable(value = {BOCCCException.class},
+            maxAttempts = 15, backoff = @Backoff(delay = 5000L, multiplier = 2))
+    public void bocccUsedUpdate(String waresId, String wEid, String wInfo) {
+        LOGGER.info("Biz调用[bocccUsedUpdate]接口，waresId:{},wEid:{},wInfo:{}", waresId, wEid, wInfo);
+        BOCCCUsedReq usedReq = new BOCCCUsedReq();
+        usedReq.setWaresId(waresId);
+        usedReq.setwEid(wEid);
+        usedReq.setwInfo(wInfo);
+        BOCCCReq req = new BOCCCReq();
+        req.setRequestType("S");
+        try {
+            req.setData(RSAUtil.bocccPublicEncrypt(JacksonUtil.toJSon(usedReq)));
+        } catch (Exception e) {
+            LOGGER.error("加密失败，usedReq：{}，message:{}", JacksonUtil.toJSon(usedReq), e.getMessage());
+            throw new BOCCCException(BOCCCCodeEnum.PARAM_ENCRYPT_ERROR.getCode(), BOCCCCodeEnum.PARAM_ENCRYPT_ERROR.getType(), e.getMessage());
+        }
+        RestTemplate restTemplate = new RestTemplate();
+        String result;
+        try {
+            LOGGER.info("HTTP调用中行信用卡使用状态更新实时接口，入参:{}", JSONObject.toJSON(req));
+            ResponseEntity<String> response = restTemplate.postForEntity(REAL_TIME_USED_URL, req, String.class);
+            result = new String(response.getBody().getBytes("ISO8859-1"), "utf-8");
+            LOGGER.info("HTTP调用中行使用状态更新实时接口成功，入参:{}，返回值:{}", JSONObject.toJSON(req), JSONObject.toJSON(result));
+        } catch (RestClientException | UnsupportedEncodingException e) {
+            LOGGER.info("HTTP调用中行使用状态更新实时接口失败，RestClientException message:{}", e.getMessage());
+            throw new BOCCCException(BOCCCCodeEnum.USED_UPDATE_ERROR.getCode(), BOCCCCodeEnum.USED_UPDATE_ERROR.getType(), e.getMessage());
+        }
+    }
+
+    /**
+     * 第三个实时接口 【优惠券退货更新接口】【三方请求中行】
+     * @param waresId
+     * @param wEid
+     * @param orderInfo
+     * @param wInfo
+     */
+    @Async
+    @Retryable(value = {BOCCCException.class},
+            maxAttempts = 10, backoff = @Backoff(delay = 5000L, multiplier = 2))
+    public void bocccRefundUpdate(String waresId, String wEid, String orderInfo, String wInfo) {
+        LOGGER.info("Biz调用[bocccRefundUpdate]接口，waresId:{},wEid:{},orderInfo:{},wInfo:{}", waresId, wEid, orderInfo, wInfo);
+        BOCCCRefundReq refundReq = new BOCCCRefundReq();
+        refundReq.setWaresId(waresId);
+        refundReq.setwEid(wEid);
+        refundReq.setOrderId(orderInfo);
+        refundReq.setwInfo(wInfo);
+        BOCCCReq req = new BOCCCReq();
+        req.setRequestType("R");
+        try {
+            req.setData(RSAUtil.bocccPublicEncrypt(JacksonUtil.toJSon(refundReq)));
+        } catch (Exception e) {
+            LOGGER.error("加密失败，refundReq：{}，message:{}", JacksonUtil.toJSon(refundReq), e.getMessage());
+            throw new BOCCCException(BOCCCCodeEnum.PARAM_ENCRYPT_ERROR.getCode(), BOCCCCodeEnum.PARAM_ENCRYPT_ERROR.getType(), e.getMessage());
+        }
+        RestTemplate restTemplate = new RestTemplate();
+        String result;
+        try {
+            LOGGER.info("HTTP调用中行信用卡退货更新实时接口，入参:{}", JSONObject.toJSON(req));
+            ResponseEntity<String> response = restTemplate.postForEntity(REAL_TIME_REFUND_URL, req, String.class);
+            result = new String(response.getBody().getBytes("ISO8859-1"), "utf-8");
+            LOGGER.info("HTTP调用中行退货更新实时接口成功，入参:{}，返回值:{}", JSONObject.toJSON(req), JSONObject.toJSON(result));
+        } catch (RestClientException | UnsupportedEncodingException e) {
+            LOGGER.info("HTTP调用中行退货更新实时接口失败，RestClientException message:{}", e.getMessage());
+            throw new BOCCCException(BOCCCCodeEnum.REFUND_UPDATE_ERROR.getCode(), BOCCCCodeEnum.REFUND_UPDATE_ERROR.getType(), e.getMessage());
+        }
+    }
+
 }
