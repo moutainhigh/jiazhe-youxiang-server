@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.controller.boc;
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
+import com.jiazhe.youxiang.base.util.RSAUtil;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCUtils;
 import com.jiazhe.youxiang.server.biz.point.PointExchangeCodeBiz;
 import com.jiazhe.youxiang.server.biz.voucher.VoucherExchangeCodeBiz;
@@ -49,7 +50,7 @@ public class BOCCCController extends BaseController {
         logger.info(data);
         BOCCCResp resp = new BOCCCResp();
         try {
-            String reqJson = BOCCCUtils.privateDecrypt(data);
+            String reqJson = RSAUtil.bocccPrivateDecrypt(data);
             if (null == reqJson) {
                 resp.setStat("05");
                 resp.setResult("解密异常");

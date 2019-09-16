@@ -54,21 +54,6 @@ public class BOCCCUtils {
     private static Integer[] RETRY_INTERVAL = {15, 15, 30, 180, 600, 1200, 1800, 1800, 1800, 3600, 10800, 10800, 10800, 21600, 21600};
 
     /**
-     * 中行公钥
-     */
-    private static String ZH_PUBLIC_KEY;
-    /**
-     * 三方公钥
-     */
-    private static String SF_PUBLIC_KEY;
-
-    /**
-     * 三方私钥
-     */
-    private static String SF_PRIVATE_KEY;
-
-
-    /**
      * 中行信用卡实时接口：已使用请求
      */
     public static String REAL_TIME_USED_URL;
@@ -82,21 +67,6 @@ public class BOCCCUtils {
      * 中行信用卡解密字符串
      */
     public static String PASSPHRASE;
-
-    @Value("${boccc.rsa.zh_public_key}")
-    public void setZHPublicKey(String publicKey) {
-        ZH_PUBLIC_KEY = publicKey;
-    }
-
-    @Value("${boccc.rsa.sf_public_key}")
-    public void setSFPublicKey(String publicKey) {
-        SF_PUBLIC_KEY = publicKey;
-    }
-
-    @Value("${boccc.rsa.sf_private_key}")
-    public void setSFPrivateKey(String privateKey) {
-        SF_PRIVATE_KEY = privateKey;
-    }
 
     @Value("${boccc.realtime.used_url}")
     public void setUsedUrl(String usedUrl) {
@@ -403,80 +373,4 @@ public class BOCCCUtils {
             logger.info("执行完成");
         }
     }
-
-    /**
-     * 中行信用卡，利用中行公钥加密字符串
-     *
-     * @param content
-     * @return
-     * @throws Exception
-     */
-    public static String publicEncrypt(String content) {
-        try {
-            //将Base64编码后的公钥转换成PublicKey对象
-            PublicKey publicKey = RSAUtil.string2PublicKey(ZH_PUBLIC_KEY);
-            //用公钥加密
-            byte[] publicEncrypt = encrypt(content.getBytes(), publicKey);
-            //加密后的内容Base64编码
-            String byte2Base64 = RSAUtil.byte2Base64(publicEncrypt);
-            return new String(byte2Base64);
-        } catch (Exception e) {
-            logger.info("公钥加密失败，原因：" + e.getMessage());
-        }
-        return null;
-    }
-
-    /**
-     * 中行信用卡，利用三方私钥解密字符串
-     *
-     * @param content
-     * @return
-     * @throws Exception
-     */
-    public static String privateDecrypt(String content) {
-        try {
-            //将Base64编码后的私钥转换成PrivateKey对象
-            PrivateKey privateKey = RSAUtil.string2PrivateKey(SF_PRIVATE_KEY);
-            //加密后的内容Base64解码
-            byte[] base642Byte = RSAUtil.base642Byte(content);
-            //用私钥解密
-            byte[] privateDecrypt = decrypt(base642Byte, privateKey);
-            return new String(privateDecrypt);
-        } catch (Exception e) {
-            logger.info("私钥解密失败，原因：" + e.getMessage());
-        }
-        return null;
-    }
-
-    /**
-     * 分步加密
-     *
-     * @param content
-     * @param key
-     * @return
-     * @throws Exception
-     */
-    public static byte[] encrypt(byte[] content, Key key) throws Exception {
-        Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.ENCRYPT_MODE, key);
-        byte[] enBytes = null;
-        for (int i = 0; i < content.length; i += 64) {
-            // 注意要使用2的倍数，否则会出现加密后的内容再解密时为乱码
-            byte[] doFinal = cipher.doFinal(ArrayUtils.subarray(content, i, i + 64));
-            enBytes = ArrayUtils.addAll(enBytes, doFinal);
-        }
-        return enBytes;
-    }
-
-    public static byte[] decrypt(byte[] content, Key privateKey) throws Exception {
-        Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.DECRYPT_MODE, privateKey);
-        byte[] enBytes = null;
-        for (int i = 0; i < content.length; i += 128) {
-            byte[] doFinal = cipher.doFinal(ArrayUtils.subarray(content, i, i + 128));
-            enBytes = ArrayUtils.addAll(enBytes, doFinal);
-        }
-        return enBytes;
-    }
-
 }

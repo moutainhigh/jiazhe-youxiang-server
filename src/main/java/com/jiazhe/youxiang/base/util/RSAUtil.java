@@ -33,25 +33,19 @@ public class RSAUtil {
 
     @Value("${ras.public_key}")
     public void setPublicKey(String publicKey) {
-        PUBLIC_KEY = publicKey;
+        QR_PUBLIC_KEY = publicKey;
     }
 
     @Value("${ras.private_key}")
     public void setPrivateKey(String privateKey) {
-        PRIVATE_KEY = privateKey;
+        QR_PRIVATE_KEY = privateKey;
     }
 
     /**
      * 扫描二维码充值密钥
      */
-    private static String PUBLIC_KEY;
-    private static String PRIVATE_KEY;
-
-    /**
-     * 中行储蓄卡(BOCDC）密钥
-     */
-    private static String BOCDC_PUBLIC_KEY;
-    private static String BOCDC_PRIVATE_KEY;
+    private static String QR_PUBLIC_KEY;
+    private static String QR_PRIVATE_KEY;
 
     @Value("${bocdc.rsa.public_key}")
     public void setBOCDCPublicKey(String publicKey) {
@@ -63,6 +57,33 @@ public class RSAUtil {
         BOCDC_PRIVATE_KEY = privateKey;
     }
 
+    /**
+     * 中行储蓄卡(BOCDC）密钥
+     */
+    private static String BOCDC_PUBLIC_KEY;
+    private static String BOCDC_PRIVATE_KEY;
+
+    @Value("${boccc.rsa.zh_public_key}")
+    public void setZHPublicKey(String publicKey) {
+        ZH_PUBLIC_KEY = publicKey;
+    }
+
+    @Value("${boccc.rsa.sf_public_key}")
+    public void setSFPublicKey(String publicKey) {
+        SF_PUBLIC_KEY = publicKey;
+    }
+
+    @Value("${boccc.rsa.sf_private_key}")
+    public void setSFPrivateKey(String privateKey) {
+        SF_PRIVATE_KEY = privateKey;
+    }
+
+    /**
+     * 中行公钥，三方公钥，三方私钥
+     */
+    private static String ZH_PUBLIC_KEY;
+    private static String SF_PUBLIC_KEY;
+    private static String SF_PRIVATE_KEY;
 
     /**
      * 扫描二维码功能，公钥解密
@@ -73,7 +94,7 @@ public class RSAUtil {
      */
     public static String qrPublicDecrypt(String decryptStr) throws Exception {
         //将Base64编码后的公钥转换成PublicKey对象
-        PublicKey publicKey = RSAUtil.string2PublicKey(PUBLIC_KEY);
+        PublicKey publicKey = RSAUtil.string2PublicKey(QR_PUBLIC_KEY);
         //加密后的内容Base64解码
         byte[] base642Byte = RSAUtil.base642Byte(decryptStr);
         //用公钥解密
@@ -101,6 +122,28 @@ public class RSAUtil {
      */
     public static String bocdcPrivateDecrypt(String str) throws Exception {
         return RSAUtil.privateDecrypt(str, BOCDC_PRIVATE_KEY);
+    }
+
+    /**
+     * 中行信用卡，利用中行公钥加密字符串
+     *
+     * @param str
+     * @return
+     * @throws Exception
+     */
+    public static String bocccPublicEncrypt(String str) throws Exception {
+        return RSAUtil.privateDecrypt(str, ZH_PUBLIC_KEY);
+    }
+
+    /**
+     * 中行信用卡，利用三方私钥解密字符串
+     *
+     * @param str
+     * @return
+     * @throws Exception
+     */
+    public static String bocccPrivateDecrypt(String str) throws Exception {
+        return RSAUtil.privateDecrypt(str, SF_PRIVATE_KEY);
     }
 
     /**

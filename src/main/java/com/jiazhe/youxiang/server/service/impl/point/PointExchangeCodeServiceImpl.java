@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.service.impl.point;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.ExchangeCodeCheckUtil;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
+import com.jiazhe.youxiang.base.util.RSAUtil;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCConstant;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponEntity;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponUsedEntity;
@@ -328,7 +329,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
                         usedReq.setwInfo(pointExchangeCodePO.getKeyt());
                         Map map = new HashMap(2);
                         map.put("requestType", "S");
-                        map.put("data", BOCCCUtils.publicEncrypt(JacksonUtil.toJSon(usedReq)));
+                        map.put("data", RSAUtil.bocccPublicEncrypt(JacksonUtil.toJSon(usedReq)));
                         BOCCCUtils.httpPost(BOCCCUtils.REAL_TIME_USED_URL, map, 0, 10);
                     } catch (Exception e) {
                         logger.error("第三方通知中行信用卡兑换码使用失败，原因：" + e.getMessage());
@@ -493,7 +494,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
                         refundReq.setwInfo(po.getKeyt());
                         Map map = new HashMap(2);
                         map.put("requestType", "R");
-                        map.put("data", BOCCCUtils.publicEncrypt(JacksonUtil.toJSon(refundReq)));
+                        map.put("data", RSAUtil.bocccPublicEncrypt(JacksonUtil.toJSon(refundReq)));
                         BOCCCUtils.httpPost(BOCCCUtils.REAL_TIME_REFUND_URL, map, 0, 10);
                     } catch (Exception e) {
                         logger.error("第三方通知中行信用卡退货失败，原因：" + e.getMessage());

@@ -10,7 +10,7 @@ public class BOCCCConstant {
     /**
      * 中行信用卡环境执行
      */
-    public static String[] BOCCC_ENVIRONMENT = {"dev", "boccc", "boccctest"};
+    public static String[] BOCCC_ENVIRONMENT = {"dev", "boccc-test", "boccc-online"};
 
     /**
      * BOCCC文件编码格式

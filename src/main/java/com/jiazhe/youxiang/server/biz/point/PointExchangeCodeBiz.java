@@ -102,17 +102,6 @@ public class PointExchangeCodeBiz {
         return pointExchangeCodeDTO;
     }
 
-    /**
-     * 中行退货校验
-     *
-     * @param orderNo
-     * @return
-     */
-    public PointExchangeCodeDTO reverseValue(String orderNo) {
-        PointExchangeCodeDTO pointExchangeCodeDTO = pointExchangeCodeService.reverseValue(orderNo);
-        return pointExchangeCodeDTO;
-    }
-
     public PointExchangeCodeDTO findByKeyt(String keyt) {
         return PointExchangeCodeAdapter.po2Dto(pointExchangeCodeService.findByKeyt(keyt));
     }
