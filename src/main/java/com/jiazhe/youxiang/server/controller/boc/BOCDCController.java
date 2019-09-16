@@ -59,9 +59,8 @@ public class BOCDCController {
             LOGGER.error("HTTP调用[queryStock]方法解密失败，message:{}", e.getMessage());
             return BOCDCUtils.genrateFailReturn();
         }
-//        BOCDCQueryStockResp resp = bocdcBiz.queryStock(queryStockReq);
-//        return BOCDCUtils.generateReturn(resp);
-        return JSONObject.toJSON(queryStockReq);
+        BOCDCQueryStockResp resp = bocdcBiz.queryStock(queryStockReq);
+        return BOCDCUtils.generateReturn(resp);
     }
 
     @AppApi
