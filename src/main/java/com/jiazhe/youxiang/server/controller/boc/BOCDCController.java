@@ -50,7 +50,8 @@ public class BOCDCController {
         if (!BOCDCUtils.checkParam(req.getParam(), req.getSign())) {
             return BOCDCUtils.genrateFailReturn();
         }
-        String paramStr = BOCDCUtils.xml2JsonStr(req.getParam());
+        String paramStr = BOCDCUtils.trimBizData(req.getParam());
+        paramStr = BOCDCUtils.xml2JsonStr(paramStr);
         BOCDCQueryStockReq queryStockReq = JacksonUtil.readValue(paramStr, BOCDCQueryStockReq.class);
         try {
             queryStockReq.setOrderNo(RSAUtil.bocdcPrivateDecrypt(queryStockReq.getOrderNo()));
@@ -71,11 +72,12 @@ public class BOCDCController {
         if (!BOCDCUtils.checkParam(req.getParam(), req.getSign())) {
             return BOCDCUtils.genrateFailReturn();
         }
-        String paramStr = BOCDCUtils.xml2JsonStr(req.getParam());
+        String paramStr = BOCDCUtils.trimBizData(req.getParam());
+        paramStr = BOCDCUtils.xml2JsonStr(paramStr);
         BOCDCReverseValueReq reverseValueReq = JacksonUtil.readValue(paramStr, BOCDCReverseValueReq.class);
         try {
             reverseValueReq.setOrderNo(RSAUtil.bocdcPrivateDecrypt(reverseValueReq.getOrderNo()));
-        }catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.error("HTTP调用[reverseValue]方法解密失败，message:{}", e.getMessage());
             return BOCDCUtils.genrateFailReturn();
         }
