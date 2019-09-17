@@ -58,8 +58,6 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/api/syscity/getcitylist", "anon");//城市查询接口
         filterChainDefinitionMap.put("/api/syscity/getprovincelist", "anon");//省份查询接口
 
-        //中行相关url
-        filterChainDefinitionMap.put("/bocdc/**","anon");//储蓄卡
         //swagger相关连接可以直接访问
         filterChainDefinitionMap.put("/swagger-ui.html", "anon");
         filterChainDefinitionMap.put("/swagger-resources/**", "anon");
@@ -67,9 +65,12 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/webjars/**", "anon");
         //放开监控访问
         filterChainDefinitionMap.put("/actuator/**", "anon");
+        //中行相关url
+        filterChainDefinitionMap.put("/externalapi/**","anon");//外部接口放开验证
 
         filterChainDefinitionMap.put("/**", "authc");//表示所有url必须通过认证才能访问
         filterChainDefinitionMap.put("/api/**", "perms");//接口通过权限认证
+
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
         return bean;
