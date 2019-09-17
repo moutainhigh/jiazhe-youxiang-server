@@ -10,6 +10,8 @@ import org.quartz.TriggerBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.text.SimpleDateFormat;
+
 /**
  * @author TU
  * @description
@@ -61,8 +63,8 @@ public class QuartzConfig {
                 .repeatForever();
         return TriggerBuilder.newTrigger().forJob(BOCCCQuartzDetail())
                 .withIdentity("BOCCCQuartz")
-                .startNow()
-//                .startAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-09-04 01:00:00"))
+//                .startNow()
+               .startAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-09-04 01:00:00"))
                 .withSchedule(scheduleBuilder)
                 .build();
     }

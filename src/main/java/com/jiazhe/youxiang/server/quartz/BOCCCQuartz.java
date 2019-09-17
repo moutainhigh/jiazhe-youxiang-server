@@ -1,8 +1,12 @@
 package com.jiazhe.youxiang.server.quartz;
 
 import com.jiazhe.youxiang.base.util.boccc.AutoCCancelResultUtils;
+import com.jiazhe.youxiang.base.util.boccc.AutoCouponUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoDailyPurchaseAnalysisUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoDailyRemainAnalysisUtils;
+import com.jiazhe.youxiang.base.util.boccc.AutoMerchantInfoUtils;
+import com.jiazhe.youxiang.base.util.boccc.AutoPicUtils;
+import com.jiazhe.youxiang.base.util.boccc.AutoProductInfoUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoSFTPUtils;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCConstant;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCUtils;
@@ -35,41 +39,41 @@ public class BOCCCQuartz extends QuartzJobBean {
 
         logger.info("定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务开始执行");
 
-//        //定时生成商户信息
-//        try {
-//            logger.info("生成商户信息");
-//            AutoMerchantInfoUtils.generateFile();
-//            logger.info("生成商户信息完成");
-//        } catch (Exception e) {
-//            logger.error("生成商户信息失败，异常信息：" + e.getMessage());
-//        }
-//
-//        //定时生成商品信息
-//        try {
-//            logger.info("生成商品信息");
-//            AutoProductInfoUtils.generateFile();
-//            logger.info("生成商品信息完成");
-//        } catch (Exception e) {
-//            logger.error("生成商品信息失败，异常信息：" + e.getMessage());
-//        }
-//
-//        //定时生成优惠券信息
-//        try {
-//            logger.info("生成优惠券");
-//            AutoCouponUtils.generateFile();
-//            logger.info("生成优惠券完成");
-//        } catch (Exception e) {
-//            logger.error("生成优惠券失败，异常信息：" + e.getMessage());
-//        }
-//
-//        //定时生成图片信息
-//        try {
-//            logger.info("生成图片");
-//            AutoPicUtils.generateFile();
-//            logger.info("生成图片完成");
-//        } catch (Exception e) {
-//            logger.error("生成图片失败，异常信息：" + e.getMessage());
-//        }
+        //定时生成商户信息
+        try {
+            logger.info("生成商户信息");
+            AutoMerchantInfoUtils.generateFile();
+            logger.info("生成商户信息完成");
+        } catch (Exception e) {
+            logger.error("生成商户信息失败，异常信息：" + e.getMessage());
+        }
+
+        //定时生成商品信息
+        try {
+            logger.info("生成商品信息");
+            AutoProductInfoUtils.generateFile();
+            logger.info("生成商品信息完成");
+        } catch (Exception e) {
+            logger.error("生成商品信息失败，异常信息：" + e.getMessage());
+        }
+
+        //定时生成优惠券信息
+        try {
+            logger.info("生成优惠券");
+            AutoCouponUtils.generateFile();
+            logger.info("生成优惠券完成");
+        } catch (Exception e) {
+            logger.error("生成优惠券失败，异常信息：" + e.getMessage());
+        }
+
+        //定时生成图片信息
+        try {
+            logger.info("生成图片");
+            AutoPicUtils.generateFile();
+            logger.info("生成图片完成");
+        } catch (Exception e) {
+            logger.error("生成图片失败，异常信息：" + e.getMessage());
+        }
 
         //模拟中行生成退货信息
 //        try {

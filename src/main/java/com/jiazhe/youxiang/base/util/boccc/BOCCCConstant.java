@@ -50,12 +50,12 @@ public class BOCCCConstant {
     /**
      * PGP 三方加密公钥路径，这里公钥和私钥不是一对
      */
-    public static String publicKeyPath = rootPath + "pgp.key/jiazheng_public.asc";
+    public static String publicKeyPath = rootPath + "pgp.key/dsfpublic.asc";
 
     /**
      * PGP 三方解密私钥路径，这里公钥和私钥不是一对
      */
-    public static String privateKeyPath = rootPath + "pgp.key/jiazheng_private.asc";
+    public static String privateKeyPath = rootPath + "pgp.key/dealsecret.asc";
 
     /**
      * 登录中行服务器key路径
