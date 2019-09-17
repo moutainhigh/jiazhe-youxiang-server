@@ -84,7 +84,8 @@ public class BOCDCBiz {
             if (dto == null) {
                 //说明售卖不成功
                 resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
-                resp.setBizDesc(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getMessage());
+//                resp.setBizDesc(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getMessage());
+                resp.setBizDesc(JSONObject.toJSONString(req));
             } else {
                 resp.setBizCode(BOCDCBizCodeEnum.SUCCESS.getCode());
                 resp.setBizDesc(BOCDCBizCodeEnum.SUCCESS.getMessage());
@@ -117,6 +118,7 @@ public class BOCDCBiz {
                 //说明没找到
                 resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
                 resp.setBizDesc(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getMessage());
+                resp.setBizDesc(JSONObject.toJSONString(reverseValueReq));
             } else {
                 if (dto.getUsed().equals(CommonConstant.CODE_NOT_USED)) {
                     resp.setBizCode(BOCDCBizCodeEnum.SUCCESS.getCode());
@@ -160,6 +162,7 @@ public class BOCDCBiz {
             throw new BOCDCException(BOCDCCodeEnum.STATUS_CHECK_ERROR.getCode(), BOCDCCodeEnum.STATUS_CHECK_ERROR.getType(), e.getMessage());
         }
         req.setParam(createParam(orderNo, useStatus, useTime));
+
         //使用SHA-256算法生成sign签名
         req.setSign(ShaUtils.getSha256(req.getParam()));
         RestTemplate restTemplate = new RestTemplate();
@@ -196,7 +199,8 @@ public class BOCDCBiz {
                 "<useStatus>%s</useStatus>" +
                 "<useTime>%s</useTime>" +
                 "</data>";
-        return String.format(template, orderNo, useStatus, useTime);
+        String result = String.format(template, orderNo, useStatus, useTime);
+        return result.trim().replaceAll("\r|\n", "");
     }
 
 

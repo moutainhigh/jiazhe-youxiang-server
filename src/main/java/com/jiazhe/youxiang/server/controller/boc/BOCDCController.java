@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @created 2019-09-08 11:11
  */
 @RestController
-@RequestMapping("bocdc")
+@RequestMapping("externalapi/bocdc")
 public class BOCDCController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BOCDCController.class);
@@ -44,7 +44,7 @@ public class BOCDCController {
 
     @AppApi
     @ApiOperation(value = "中行储蓄卡获取可用码", httpMethod = "POST", response = BOCDCQueryStockResp.class, notes = "中行储蓄卡获取可用码")
-    @RequestMapping(value = "/queryStock", method = RequestMethod.POST)
+    @RequestMapping(value = "/querystock", method = RequestMethod.POST)
     public Object queryStock(@ModelAttribute BOCDCCommonReq req) {
         LOGGER.error("HTTP调用[queryStock]方法，参数:{}", JSONObject.toJSON(req));
         if (!BOCDCUtils.checkParam(req.getParam(), req.getSign())) {
@@ -65,7 +65,7 @@ public class BOCDCController {
 
     @AppApi
     @ApiOperation(value = "中行储蓄卡退货", httpMethod = "POST", response = BOCDCReverseValueResp.class, notes = "中行储蓄卡退货")
-    @RequestMapping(value = "/reverseValue", method = RequestMethod.POST)
+    @RequestMapping(value = "/reversevalue", method = RequestMethod.POST)
     public Object reverseValue(@ModelAttribute BOCDCCommonReq req) {
         LOGGER.error("HTTP调用[reverseValue]方法，参数:{}", JSONObject.toJSON(req));
         if (!BOCDCUtils.checkParam(req.getParam(), req.getSign())) {
