@@ -147,8 +147,8 @@ public class BOCDCBiz {
      */
     @Async
     @Retryable(value = {BOCDCException.class},
-            maxAttempts = 2,
-            backoff = @Backoff(delay = 200L, multiplier = 2))
+            maxAttempts = 5,
+            backoff = @Backoff(delay = 500L, multiplier = 2))
     public void statusCheck(String orderNo, String useStatus, String useTime) {
         LOGGER.info("Biz调用[statusCheck]接口，orderNo:{},useStatus:{},useTime:{}", orderNo, useStatus, useTime);
         BOCDCCommonReq req = new BOCDCCommonReq();
