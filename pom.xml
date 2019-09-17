@@ -321,21 +321,21 @@
             <artifactId>pki-api</artifactId>
             <version>1.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.cryptix.boc</groupId>
-            <artifactId>local_policy</artifactId>
-            <version>1.0</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.cryptix.boc</groupId>-->
+            <!--<artifactId>local_policy</artifactId>-->
+            <!--<version>1.0</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.cryptix.boc</groupId>
             <artifactId>PGPEncrypt</artifactId>
             <version>1.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.cryptix.boc</groupId>
-            <artifactId>US_export_policy</artifactId>
-            <version>1.0</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.cryptix.boc</groupId>-->
+            <!--<artifactId>US_export_policy</artifactId>-->
+            <!--<version>1.0</version>-->
+        <!--</dependency>-->
 
         <!--SFTP-->
         <dependency>
