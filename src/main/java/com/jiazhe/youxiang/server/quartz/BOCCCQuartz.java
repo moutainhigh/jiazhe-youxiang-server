@@ -30,14 +30,14 @@ public class BOCCCQuartz extends QuartzJobBean {
     @Override
     protected void executeInternal(org.quartz.JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
+        logger.info("定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务开始执行");
+
         /**
          * 根据不同环境，判断此定时任务是否执行
          */
         if (!Arrays.asList(BOCCCConstant.BOCCC_ENVIRONMENT).contains(EnvironmentConstant.ENVIRONMENT)) {
             return;
         }
-
-        logger.info("定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务开始执行");
 
         //定时生成商户信息
         try {
