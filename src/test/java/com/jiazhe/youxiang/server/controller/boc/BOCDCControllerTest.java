@@ -3,10 +3,6 @@ package com.jiazhe.youxiang.server.controller.boc;
 import com.jiazhe.youxiang.base.util.RSAUtil;
 import com.jiazhe.youxiang.base.util.ShaUtils;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URLEncoder;
 
@@ -16,6 +12,9 @@ import java.net.URLEncoder;
  *
  */
 public class BOCDCControllerTest {
+
+
+    private static String BOCDC_PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCB0iSuZYgNRIAK85PRw1vHHa5bHrCP2+zf4RlorO+1otQ/Kd+k6JciNI2/aJQmQoaebY7l1woM7dNc1/Lvur+KYORMecVBwRh0J64pd8IdlUVnPPs5gAOkaWr6iDtGO6RLvsT1Avq/ZKcEoskGmdozmcvvcUcr3urfS7RflW5kSwIDAQAB";
 
     @Test
     //根据公钥加密,根据私钥解密
@@ -62,6 +61,7 @@ public class BOCDCControllerTest {
         System.out.println("解密之后:giftnojimi=>" + giftnojimi + "==>ordernojimi" + ordernojimi);
         System.out.println("验签sign:" + sign);
     }
+
     @Test
     public void testSha() {
         String param = "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>" +
@@ -84,4 +84,54 @@ public class BOCDCControllerTest {
         System.out.println("验签:sign: " + RSAUtil.privateDecrypt(param, privateKey));
     }
 
+    @Test
+    public void testBocdcDecrypt() throws Exception {
+        String orderNo = "2016121200";
+        String userId = "TC20001923535";
+        String tranDate = "20170808";
+        String orderStatus = "04";
+        String giftNo = "IGI022566255";
+        String validDate = "90";
+        String template = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+                "<data>" +
+                "<orderNo>%s</orderNo>" +
+                "<userId>%s</userId>" +
+                "<tranDate>%s</tranDate>" +
+                "<orderStatus>%s</orderStatus>" +
+                "<giftNo>%s</giftNo>" +
+                "<validDate>%s</validDate>" +
+                "</data>";
+        String before = String.format(template, orderNo, userId, tranDate, orderStatus, giftNo, validDate);
+        orderNo = RSAUtil.publicEncrypt(orderNo, BOCDC_PUBLIC_KEY);
+        giftNo = RSAUtil.publicEncrypt(giftNo, BOCDC_PUBLIC_KEY);
+        String after = String.format(template, orderNo, userId, tranDate, orderStatus, giftNo, validDate);
+        after = after.trim().replaceAll("\r|\n", "");
+        String sign = ShaUtils.getSha256(after);
+
+        System.out.println("加密前：param=" + before);
+        System.out.println("加密后：param=" + after + "&sign=" + sign);
+
+    }
+
+    @Test
+    public void testBocdcDecrypt2() throws Exception {
+        String orderNo = "2016121200";
+        String channel = "02";
+        String ebuyId = "4E323916DE880098E05316BCC468D1C0";
+        String template = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+                "<data>" +
+                "<orderNo>%s</orderNo>" +
+                "<channel>%s</channel>" +
+                "<ebuyId>%s</ebuyId>" +
+                "</data>";
+        String before = String.format(template, orderNo, channel, ebuyId);
+        orderNo = RSAUtil.publicEncrypt(orderNo, BOCDC_PUBLIC_KEY);
+        String after =  String.format(template, orderNo, channel, ebuyId);
+        after = after.trim().replaceAll("\r|\n", "");
+        String sign = ShaUtils.getSha256(after);
+
+        System.out.println("加密前：param=" + before);
+        System.out.println("加密后：param=" + after + "&sign=" + sign);
+
+    }
 }
