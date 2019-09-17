@@ -49,8 +49,9 @@
                                     <div class="col-sm-3">
                                         <select id="searchUsed" name="used" class="selectpicker show-tick form-control">
                                             <option value="">所有</option>
-                                            <option value=1>已使用</option>
                                             <option value=0>未使用</option>
+                                            <option value=1>已使用</option>
+                                            <option value=2>已退货</option>
                                         </select>
                                     </div>
                                 </div>
@@ -282,6 +283,9 @@
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
 
+    var usedText = ["未使用","已使用","已退货"];
+    var usedColor = ["00FF00","FF0000","0000FF"];
+
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -315,7 +319,7 @@
         var tableOption = {
             url: "/api/pointexchangecode/listpage",
             postData: transformToJson($('#pointExchangeCodeSearchForm').serializeArray()),
-            colNames: ['', '积分卡名称', '卡号', '密码', '启用状态', '使用状态', '客户电话', '面额', '兑换比例', '兑换码过期时间', '积分卡有效期', '操作'],
+            colNames: ['', '积分卡名称', '卡号', '密码', '启用状态', '使用状态', '客户电话', '面额', '兑换比例', '兑换码过期时间', '积分卡有效期', '外部订单号', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
 //                {name: 'batchName', index: 'batchName', width: 100, sortable: false},
@@ -329,7 +333,7 @@
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         var text = rowObject.status == 1 ? "启用" : "停用";
-                        var color = rowObject.status == 1 ? "00FF00" : "0000FF";
+                        var color = rowObject.status == 1 ? "00FF00" : "FF0000";
                         return generateSpan(text, color)
                     }
                 },
@@ -339,9 +343,7 @@
                     width: 30,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        var text = rowObject.used == 1 ? "已使用" : "未使用";
-                        var color = rowObject.used == 1 ? "FF0000" : "00FF00";
-                        return generateSpan(text, color)
+                        return generateSpan(usedText[rowObject.used], usedColor[rowObject.used]);
                     }
                 },
                 {name: 'customerResp.mobile', index: 'customerResp.mobile', width: 60, sortable: false},
@@ -378,6 +380,7 @@
                         }
                     }
                 },
+                {name: 'outOrderCode', index: 'outOrderCode', width: 40, sortable: false},
                 {name: '_action', index: '_action', width: 50, sortable: false, formatter: customFormatter}
             ],
             caption: "积分卡兑换码列表"

@@ -41,6 +41,7 @@ public class PointExchangeCodeAdapter {
         pointExchangeCodeDTO.setExpiryType(pointExchangeCodePO.getExpiryType());
         pointExchangeCodeDTO.setStatus(pointExchangeCodePO.getStatus());
         pointExchangeCodeDTO.setUsed(pointExchangeCodePO.getUsed());
+        pointExchangeCodeDTO.setOutOrderCode(pointExchangeCodePO.getOutOrderCode());
         pointExchangeCodeDTO.setCustomerId(pointExchangeCodePO.getCustomerId());
         return pointExchangeCodeDTO;
     }
@@ -92,6 +93,7 @@ public class PointExchangeCodeAdapter {
         pointExchangeCodeResp.setPointEffectiveTime(pointExchangeCodeDTO.getPointEffectiveTime().getTime());
         pointExchangeCodeResp.setStatus(pointExchangeCodeDTO.getStatus());
         pointExchangeCodeResp.setUsed(pointExchangeCodeDTO.getUsed());
+        pointExchangeCodeResp.setOutOrderCode(pointExchangeCodeDTO.getOutOrderCode());
         pointExchangeCodeResp.setProjectResp(ProjectAdapter.projectDTO2VO(pointExchangeCodeDTO.getProjectDTO()));
         pointExchangeCodeResp.setCustomerResp(CustomerAdapter.customerDTO2VO(pointExchangeCodeDTO.getCustomerDTO()));
         return pointExchangeCodeResp;

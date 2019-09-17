@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 maoyan.com
+ * Copyright (c) 2017 ue-link.com
  * All rights reserved.
  *
  */
@@ -161,10 +161,11 @@ public class CommonConstant {
     public static final Integer EXCHANGETYPE_QRCODE_EXCHANGE = 4;
 
     /**
-     * 是否已经使用
+     * 0未使用 1已使用 2已退货
      */
     public static final Byte CODE_NOT_USED = Byte.valueOf("0");
     public static final Byte CODE_HAS_USED = Byte.valueOf("1");
+    public static final Byte CODE_HAS_REFUND = Byte.valueOf("2");
 
     /**
      * 批次下的码是否已经制作
@@ -251,5 +252,11 @@ public class CommonConstant {
     public static final Byte MSG_TYPE_VER_CODE = Byte.valueOf("4");
 
     public static final int VER_CODE_LENGTH = 4;
+
+    /**
+     * 中行储蓄卡使用状态核对实时接口，使用状态
+     */
+    public static final String CODE_USE_STATUS_UNUSED = "00";
+    public static final String CODE_USE_STATUS_USED = "01";
 
 }

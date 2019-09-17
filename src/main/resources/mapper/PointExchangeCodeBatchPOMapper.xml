@@ -23,6 +23,7 @@
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
     <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
     <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
+    <result column="gift_no" property="giftNo" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -85,7 +86,7 @@
   <sql id="Base_Column_List" >
     id, name, point_name, is_virtual, is_made, description, amount, project_id, city_codes, 
     product_ids, face_value, expiry_time, point_effective_time, point_expiry_time, validity_period, 
-    expiry_type, status, ext_info, is_deleted, add_time, mod_time
+    expiry_type, status, ext_info, is_deleted, add_time, mod_time, gift_no
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPOExample" >
     select
@@ -125,7 +126,7 @@
       point_effective_time, point_expiry_time, 
       validity_period, expiry_type, status, 
       ext_info, is_deleted, add_time, 
-      mod_time)
+      mod_time, gift_no)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{pointName,jdbcType=VARCHAR}, 
       #{isVirtual,jdbcType=TINYINT}, #{isMade,jdbcType=TINYINT}, #{description,jdbcType=VARCHAR}, 
       #{amount,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{cityCodes,jdbcType=VARCHAR}, 
@@ -133,7 +134,7 @@
       #{pointEffectiveTime,jdbcType=TIMESTAMP}, #{pointExpiryTime,jdbcType=TIMESTAMP}, 
       #{validityPeriod,jdbcType=INTEGER}, #{expiryType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
       #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
-      #{modTime,jdbcType=TIMESTAMP})
+      #{modTime,jdbcType=TIMESTAMP}, #{giftNo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO" >
     insert into point_exchange_code_batch
@@ -201,6 +202,9 @@
       <if test="modTime != null" >
         mod_time,
       </if>
+      <if test="giftNo != null" >
+        gift_no,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -265,6 +269,9 @@
       </if>
       <if test="modTime != null" >
         #{modTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="giftNo != null" >
+        #{giftNo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -340,6 +347,9 @@
       <if test="record.modTime != null" >
         mod_time = #{record.modTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.giftNo != null" >
+        gift_no = #{record.giftNo,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -367,7 +377,8 @@
       ext_info = #{record.extInfo,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=TINYINT},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
-      mod_time = #{record.modTime,jdbcType=TIMESTAMP}
+      mod_time = #{record.modTime,jdbcType=TIMESTAMP},
+      gift_no = #{record.giftNo,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -435,6 +446,9 @@
       <if test="modTime != null" >
         mod_time = #{modTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="giftNo != null" >
+        gift_no = #{giftNo,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -459,7 +473,8 @@
       ext_info = #{extInfo,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=TINYINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},
-      mod_time = #{modTime,jdbcType=TIMESTAMP}
+      mod_time = #{modTime,jdbcType=TIMESTAMP},
+      gift_no = #{giftNo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

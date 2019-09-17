@@ -46,6 +46,7 @@ public enum PointCodeEnum {
     PROJECT_IS_NOT_EXIST(116037, "PROJECT_IS_NOT_EXIST", "所属项目不存在"),
     POINT_NOT_EXIST(116038, "POINT_NOT_EXIST", "该积分卡不存在"),
     CODE_HAS_START_USING(116039, "CODE_HAS_START_USING", "兑换码已经被启用"),
+    EXCHANGE_CODE_HAS_REFUND(116040, "EXCHANGE_CODE_HAS_REFUND", "兑换码已退货"),
     ;
 
     PointCodeEnum(Integer code, String type, String message) {

@@ -19,3 +19,7 @@
 |积分卡管理|116|com.jiazhe.youxiang.server.common.enum.PointCodeEnum|
 |商家订单管理|117|com.jiazhe.youxiang.server.common.enum.PartnerOrderCodeEnum|
 |微信公众号相关|118|com.jiazhe.youxiang.server.common.enum.WeChatPublicCodeEnum|
+|消费凭证管理相关|119|com.jiazhe.youxiang.server.common.enums.ChargeReceiptCodeEnum|
+|发送短信的异常|120|com.jiazhe.youxiang.server.common.enums.MessageCodeEnum|
+|物料管理的相关|121|com.jiazhe.youxiang.server.common.enums.MaterialCodeEnum|
+|中行储蓄卡相关|122|com.jiazhe.youxiang.server.common.enums.BOCDCCodeEnum|
