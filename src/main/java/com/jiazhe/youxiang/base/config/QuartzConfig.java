@@ -63,8 +63,8 @@ public class QuartzConfig {
                 .repeatForever();
         return TriggerBuilder.newTrigger().forJob(BOCCCQuartzDetail())
                 .withIdentity("BOCCCQuartz")
-//                .startNow()
-               .startAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-09-04 01:00:00"))
+                .startNow()
+//               .startAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-09-04 01:00:00"))
                 .withSchedule(scheduleBuilder)
                 .build();
     }
