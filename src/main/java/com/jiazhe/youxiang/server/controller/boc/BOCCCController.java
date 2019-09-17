@@ -1,7 +1,7 @@
 package com.jiazhe.youxiang.server.controller.boc;
 
-import com.jiazhe.youxiang.base.controller.BaseController;
 import com.alibaba.fastjson.JSONObject;
+import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.server.biz.BOCCCBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
@@ -17,15 +17,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
-
 /**
  * @author TU
  * @description 中行信用卡接口  Bank Of China Credit Card
  * @date 2019-09-02.
  */
 @RestController
-@RequestMapping("boccc")
+@RequestMapping("externalapi/boccc")
 public class BOCCCController extends BaseController {
 
     public static Logger LOGGER = LoggerFactory.getLogger(BOCCCController.class);

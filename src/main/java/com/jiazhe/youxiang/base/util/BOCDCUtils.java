@@ -87,7 +87,7 @@ public class BOCDCUtils {
     public static Object genrateFailReturn() {
         BOCDCCommonResp resp = new BOCDCCommonResp();
         resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
-        resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getMessage());
+        resp.setBizDesc(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getMessage());
         return generateReturn(resp);
     }
 }
