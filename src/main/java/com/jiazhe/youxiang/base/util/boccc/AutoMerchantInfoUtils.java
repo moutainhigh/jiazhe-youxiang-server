@@ -78,8 +78,6 @@ public class AutoMerchantInfoUtils {
         //第1步，按照规则组成商品信息字符串
         StringBuilder sb = generateBin();
 
-        logger.info("商户字符串编码为：" + StringEncodeUtils.getEncoding(sb.toString()));
-
         //第2步，写入文件中
         logger.info("商户信息源文件生成中...");
         BOCCCUtils.writeStringToFile(sourceFileName, sb.toString());

@@ -137,7 +137,7 @@ public class BOCCCUtils {
 //            e.printStackTrace();
 //        }
         try {
-            FileUtils.writeStringToFile(new File(filePath), str, "UTF-8");
+            FileUtils.writeStringToFile(new File(filePath), str, BOCCCConstant.CHAR_SET);
         } catch (Exception e) {
             logger.error("写入文件错误");
         }
