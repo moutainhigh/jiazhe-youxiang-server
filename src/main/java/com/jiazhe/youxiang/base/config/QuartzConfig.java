@@ -1,7 +1,10 @@
 package com.jiazhe.youxiang.base.config;
 
 import com.jiazhe.youxiang.server.quartz.BOCCCQuartz;
+import com.jiazhe.youxiang.server.quartz.OrderQuartz;
 import com.jiazhe.youxiang.server.quartz.WeChatAPICacheQuartz;
+import org.quartz.CronScheduleBuilder;
+import org.quartz.CronTrigger;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.SimpleScheduleBuilder;
@@ -9,6 +12,7 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import java.text.SimpleDateFormat;
 
@@ -35,43 +39,53 @@ public class QuartzConfig {
      */
     private static final Integer ONE_DAY = 24 * 60 * 60;
 
-//    @Bean
-//    public JobDetail orderQuartzDetail(){
-//        return JobBuilder.newJob(OrderQuartz.class).withIdentity("orderQuartz").storeDurably().build();
-//    }
-//
-//    @Bean
-//    public Trigger orderQuartzTrigger(){
-//        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
-//                .withIntervalInSeconds(ORDER_QUARTZ)
-//                .repeatForever();
-//        return TriggerBuilder.newTrigger().forJob(orderQuartzDetail())
-//                .withIdentity("orderQuartz")
-//                .withSchedule(scheduleBuilder)
-//                .build();
-//    }
-
     @Bean
-    public JobDetail BOCCCQuartzDetail() {
-        return JobBuilder.newJob(BOCCCQuartz.class).withIdentity("BOCCCQuartz").storeDurably().build();
+    public JobDetail orderQuartzDetail() {
+        return JobBuilder.newJob(OrderQuartz.class).withIdentity("orderJob").storeDurably().build();
     }
 
     @Bean
-    public Trigger BOCCCQuartzTrigger() throws Exception{
+    public Trigger orderQuartzTrigger() {
         SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
-                .withIntervalInSeconds(ONE_DAY)
+                .withIntervalInSeconds(ORDER_QUARTZ)
                 .repeatForever();
-        return TriggerBuilder.newTrigger().forJob(BOCCCQuartzDetail())
-                .withIdentity("BOCCCQuartz")
-                .startNow()
-//               .startAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-09-04 01:00:00"))
+        return TriggerBuilder.newTrigger().forJob(orderQuartzDetail())
+                .withIdentity("orderTrigger")
                 .withSchedule(scheduleBuilder)
                 .build();
     }
 
     @Bean
+    public JobDetail BOCCCQuartzDetail() {
+        return JobBuilder.newJob(BOCCCQuartz.class).withIdentity("BOCCCJob").storeDurably().build();
+    }
+
+//    @Bean
+//    public Trigger BOCCCQuartzTrigger() throws Exception{
+//        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
+//                .withIntervalInSeconds(ONE_DAY)
+//                .repeatForever();
+//        return TriggerBuilder.newTrigger().forJob(BOCCCQuartzDetail())
+//                .withIdentity("BOCCCTrigger")
+//                .startNow()
+//                .startAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-09-18 22:58:00"))
+//                .withSchedule(scheduleBuilder)
+//                .build();
+//    }
+
+    //每天凌晨一点执行任务
+    @Bean
+    public CronTrigger BOCCCCronTrigger() {
+        return TriggerBuilder.newTrigger()
+                .forJob(BOCCCQuartzDetail())
+                .withIdentity("BOCCCTrigger")
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 ? * *"))
+                .build();
+    }
+
+    @Bean
     public JobDetail weChatAPICacheQuartzDetail() {
-        return JobBuilder.newJob(WeChatAPICacheQuartz.class).withIdentity("weChatAPICacheQuartz").storeDurably().build();
+        return JobBuilder.newJob(WeChatAPICacheQuartz.class).withIdentity("weChatAPICacheJob").storeDurably().build();
     }
 
     @Bean
@@ -80,7 +94,7 @@ public class QuartzConfig {
                 .withIntervalInSeconds(WECHAT_API_EXPIRES_IN_TIME)
                 .repeatForever();
         return TriggerBuilder.newTrigger().forJob(weChatAPICacheQuartzDetail())
-                .withIdentity("weChatAPICacheQuartz")
+                .withIdentity("weChatAPICacheTrigger")
                 .withSchedule(scheduleBuilder)
                 .build();
     }
