@@ -117,6 +117,8 @@ public class AutoDailyPurchaseAnalysisUtils {
         //第四步,读取文件进行分析，生成 【购买商品ID：购买数量】 字符串
         StringBuilder sb = generateBin(sourceFileName);
 
+        logger.info("每日购买清单分析文件字符串编码为：" + StringEncodeUtils.getEncoding(sb.toString()));
+
         //第五步，将当前结果追加到月度购买清单，年度购买清单
         BOCCCUtils.contentAppend(BOCCCConstant.dailyPurchase + "月度购买清单" + BOCCCUtils.getYesterday().substring(0, 6) + ".txt", sb.toString());
         BOCCCUtils.contentAppend(BOCCCConstant.dailyPurchase + "年度购买清单" + BOCCCUtils.getYesterday().substring(0, 4) + ".txt", sb.toString());

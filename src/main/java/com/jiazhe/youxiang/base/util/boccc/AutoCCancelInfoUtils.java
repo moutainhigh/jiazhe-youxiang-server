@@ -74,6 +74,8 @@ public class AutoCCancelInfoUtils {
 
         StringBuilder sb = generateBin();
 
+        logger.info("模拟生成退货文件字符串编码为：" + StringEncodeUtils.getEncoding(sb.toString()));
+
         //第三步，写入文件中
         logger.info("昨日退货代金券源文件生成中...");
         BOCCCUtils.writeStringToFile(sourceFileName, sb.toString());

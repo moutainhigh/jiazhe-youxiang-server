@@ -95,6 +95,8 @@ public class AutoCCancelResultUtils {
         //第4步,读取文件进行分析生成源文件字符串
         StringBuilder sb = generateBin(BOCCCConstant.ccancelPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_SOURCE, -1));
 
+        logger.info("退货反馈字符串编码为：" + StringEncodeUtils.getEncoding(sb.toString()));
+
         //第5步，源文件压缩中
         logger.info("退货结果源文件生成中...");
         BOCCCUtils.writeStringToFile(sourceFileName, sb.toString());

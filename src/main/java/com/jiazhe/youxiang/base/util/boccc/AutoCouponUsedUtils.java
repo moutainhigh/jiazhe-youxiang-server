@@ -81,6 +81,8 @@ public class AutoCouponUsedUtils {
         //第1步，按照规则拼接已使用代金券信息
         StringBuilder sb = generateBin();
 
+        logger.info("已使用优惠券字符串编码为：" + StringEncodeUtils.getEncoding(sb.toString()));
+
         //第2步，写入文件中
         logger.info("昨日使用代金券源文件生成中...");
         BOCCCUtils.writeStringToFile(sourceFileName, sb.toString());

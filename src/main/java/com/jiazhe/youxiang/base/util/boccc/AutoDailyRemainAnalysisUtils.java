@@ -115,6 +115,8 @@ public class AutoDailyRemainAnalysisUtils {
         //第四步,读取文件进行分析生成源文件字符串
         StringBuilder sb = generateBin(BOCCCConstant.rootPath + "dailyremain/" + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CREMA_SOURCE, -1));
 
+        logger.info("每日退货分析文件字符串编码为：" + StringEncodeUtils.getEncoding(sb.toString()));
+
         //第五步，将当前结果追加到月度剩余清单，年度剩余清单
         BOCCCUtils.contentAppend(BOCCCConstant.dailyRemain + "月度剩余清单" + BOCCCUtils.getYesterday().substring(0, 6) + ".txt", sb.toString());
         BOCCCUtils.contentAppend(BOCCCConstant.dailyRemain + "年度剩余清单" + BOCCCUtils.getYesterday().substring(0, 4) + ".txt", sb.toString());

@@ -129,18 +129,18 @@ public class BOCCCUtils {
      * @param str
      */
     public static void writeStringToFile(String filePath, String str) {
-        try {
-            FileOutputStream fos = new FileOutputStream(filePath);
-            fos.write(str.getBytes());
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 //        try {
-//            FileUtils.writeStringToFile(new File(filePath), str, "UTF-8");
+//            FileOutputStream fos = new FileOutputStream(filePath);
+//            fos.write(str.getBytes());
+//            fos.close();
 //        } catch (Exception e) {
-//            logger.error("写入文件错误");
+//            e.printStackTrace();
 //        }
+        try {
+            FileUtils.writeStringToFile(new File(filePath), str, "UTF-8");
+        } catch (Exception e) {
+            logger.error("写入文件错误");
+        }
 
     }
 
