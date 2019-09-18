@@ -6,25 +6,16 @@
 package com.jiazhe.youxiang.base.util.boccc;
 
 import com.jiazhe.youxiang.base.util.HttpUtil;
-import com.jiazhe.youxiang.base.util.RSAUtil;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.Cipher;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.io.UnsupportedEncodingException;
-import java.security.Key;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -145,6 +136,12 @@ public class BOCCCUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+//        try {
+//            FileUtils.writeStringToFile(new File(filePath), str, "UTF-8");
+//        } catch (Exception e) {
+//            logger.error("写入文件错误");
+//        }
+
     }
 
     /**
@@ -284,6 +281,10 @@ public class BOCCCUtils {
     public static boolean isLastLine(String line) {
         String pattern = "TLRL\\d{15}";
         return Pattern.matches(pattern, line);
+    }
+
+    public static String UTF82GBK(String str) throws Exception {
+        return new String(str.getBytes("utf8"), "GBK");
     }
 
     /**
