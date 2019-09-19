@@ -147,37 +147,12 @@ public class RSAUtil {
      * @throws Exception
      */
     public static String bocccPrivateDecrypt(String str) {
-        LOGGER.error(SF_PRIVATE_KEY);
         try {
             return RSAUtil.privateDecrypt(str, SF_PRIVATE_KEY);
         } catch (Exception e) {
             LOGGER.error("中行行用卡实时接口，解密失败，异常信息：" + e.getMessage());
         }
         return null;
-    }
-
-    public static void main(String[] args) throws Exception{
-        System.out.println(RSAUtil.publicEncrypt("123", "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDCp7ueeye5Gd8ncKWGP+73WIho" +
-                "OXW3gquAFNzDWgK5/ViOQKJToPJShvfKomd6UCQvbd8lmGyzJw6D6RSTAz0HRyqI" +
-                "0X7vskKpIJObS6MwBcKaR5NrEKaFaoAngurvb8ROTXX3uNhul5wfHwkePw2XrxYV" +
-                "IR+yBXAsgPZr0d76uQIDAQAB"));
-        System.out.println(RSAUtil.privateDecrypt("TDgmt0M2I6EvNPx9O94m6G8SGZ0CEaw3vVYZSfqvnfZEC6NxZhrVLO/Q1KKqkojOZnABcO8s1poo" +
-                "yNIHQPlvYAA/xxd69uoI4VRCx1WgKYVH5f1SlldcBNPVsuslAkWeof89aHqAg90FfeLUBNTzLdk2" +
-                "Nr1ymkXVi+8Asmsbi3M=", "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAMKnu557J7kZ3ydw" +
-                "pYY/7vdYiGg5dbeCq4AU3MNaArn9WI5AolOg8lKG98qiZ3pQJC9t3yWYbLMnDoPp" +
-                "FJMDPQdHKojRfu+yQqkgk5tLozAFwppHk2sQpoVqgCeC6u9vxE5Ndfe42G6XnB8f" +
-                "CR4/DZevFhUhH7IFcCyA9mvR3vq5AgMBAAECgYAdK3+dLz1zqqHbSjEz3g7UeCrw" +
-                "23N9jZJfvkCa8bko4ANORfdNavgFT/6AGjhBhxL1HJTtEFtxuW+eauZPZZPWaW9q" +
-                "p7OAMYj1iPyqZDlFOHoS8P9/yvDtnN61vwueqcy/4KEU6uL8WXNbnQWF/LR9qVek" +
-                "8/ATFP9KjNJLftgSgQJBAOYAwNNOa9OUp4mzu2tk6fzLraYaaBruGsj2107ndF++" +
-                "QdwevIBe96iI3b2SE3fSwvXAbJCwtVe9OpDASuBwR2kCQQDYqCz/dnRb+lPOBrQw" +
-                "9Ej2CFNvfdbeqKG9tLljZKN0covR/yoEeWFW4Ui4u34knSuvu++h8xeNIdFuK1Qv" +
-                "t37RAkAcW1tqsfB5VYqSX6ZrxzVSBYqTQA41w8VpoYVKJR8j7sEP8norGYpPLRCp" +
-                "nqjnzQRcaCz6ac7x0lK2Jf8VTMKBAkBeutHJ9RIVcVOZPqckzHrmUGei1QPRISxv" +
-                "FQkGI2ewr7Dg5c+KW0QrR5+TXi9edPY4BVVWm0KN6951bC6IGpQxAkBcVbvh+vVs" +
-                "iLW7SdOox5Q4820RCXU7l+aACtB71L7avsc52KYof2YBtIFXmrT5a8NXpfFSVb+B" +
-                "69Cqd5NInmDK"));
-
     }
 
     /**
