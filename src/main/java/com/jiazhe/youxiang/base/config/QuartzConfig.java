@@ -1,7 +1,6 @@
 package com.jiazhe.youxiang.base.config;
 
 import com.jiazhe.youxiang.server.quartz.BOCCCQuartz;
-import com.jiazhe.youxiang.server.quartz.OrderQuartz;
 import com.jiazhe.youxiang.server.quartz.WeChatAPICacheQuartz;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
@@ -12,9 +11,6 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.quartz.SchedulerFactoryBean;
-
-import java.text.SimpleDateFormat;
 
 /**
  * @author TU
@@ -39,21 +35,21 @@ public class QuartzConfig {
      */
     private static final Integer ONE_DAY = 24 * 60 * 60;
 
-    @Bean
-    public JobDetail orderQuartzDetail() {
-        return JobBuilder.newJob(OrderQuartz.class).withIdentity("orderJob").storeDurably().build();
-    }
-
-    @Bean
-    public Trigger orderQuartzTrigger() {
-        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
-                .withIntervalInSeconds(ORDER_QUARTZ)
-                .repeatForever();
-        return TriggerBuilder.newTrigger().forJob(orderQuartzDetail())
-                .withIdentity("orderTrigger")
-                .withSchedule(scheduleBuilder)
-                .build();
-    }
+//    @Bean
+//    public JobDetail orderQuartzDetail() {
+//        return JobBuilder.newJob(OrderQuartz.class).withIdentity("orderJob").storeDurably().build();
+//    }
+//
+//    @Bean
+//    public Trigger orderQuartzTrigger() {
+//        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
+//                .withIntervalInSeconds(ORDER_QUARTZ)
+//                .repeatForever();
+//        return TriggerBuilder.newTrigger().forJob(orderQuartzDetail())
+//                .withIdentity("orderTrigger")
+//                .withSchedule(scheduleBuilder)
+//                .build();
+//    }
 
     @Bean
     public JobDetail BOCCCQuartzDetail() {

@@ -6,28 +6,20 @@
 package com.jiazhe.youxiang.server.biz;
 
 import com.alibaba.fastjson.JSONObject;
-import com.jiazhe.youxiang.base.util.BOCDCUtils;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.RSAUtil;
-import com.jiazhe.youxiang.base.util.ShaUtils;
-import com.jiazhe.youxiang.base.util.boccc.BOCCCUtils;
 import com.jiazhe.youxiang.server.biz.point.PointExchangeCodeBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.BOCCCBizCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.BOCCCCodeEnum;
-import com.jiazhe.youxiang.server.common.enums.BOCDCCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.BOCCCException;
-import com.jiazhe.youxiang.server.common.exceptions.BOCDCException;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
-import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.vo.req.boc.BOCCCRefundReq;
 import com.jiazhe.youxiang.server.vo.req.boc.BOCCCReq;
 import com.jiazhe.youxiang.server.vo.req.boc.BOCCCUsedReq;
-import com.jiazhe.youxiang.server.vo.req.boc.BOCDCCommonReq;
 import com.jiazhe.youxiang.server.vo.resp.boc.BOCCCResp;
-import com.jiazhe.youxiang.server.vo.resp.boc.BOCDCCommonResp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +34,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author tu
@@ -104,6 +94,7 @@ public class BOCCCBiz {
                         pointExchangeCodeService.changeCodeUsedStatus(dto.getId(), CommonConstant.CODE_HAS_REFUND);
                         resp.setStat(BOCCCBizCodeEnum.SUCCESS.getCode());
                         resp.setResult(BOCCCBizCodeEnum.SUCCESS.getMessage());
+                        resp.setDate(DateUtil.secondToStr(new Date()));
                     }
                     if (dto.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
                         resp.setStat(BOCCCBizCodeEnum.CODE_HAS_USED.getCode());
