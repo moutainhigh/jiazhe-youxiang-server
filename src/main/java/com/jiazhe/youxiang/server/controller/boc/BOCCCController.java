@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,8 +37,8 @@ public class BOCCCController extends BaseController {
      * @return
      */
     @AppApi
-    @ApiOperation(value = "退货信息接口、退货验证【中行请求第三方退货】", httpMethod = "POST", response = BOCCCResp.class, notes = "退货信息接口、退货验证【中行请求第三方退货】")
-    @RequestMapping(value = "/refundcheck", method = RequestMethod.POST)
+    @ApiOperation(value = "退货信息接口、退货验证【中行请求第三方退货】", response = BOCCCResp.class, notes = "退货信息接口、退货验证【中行请求第三方退货】")
+    @RequestMapping(value = "/refundcheck")
     @CustomLog(moduleName = ModuleEnum.BOCCC, operate = "中行请求第三方退货", level = LogLevelEnum.LEVEL_3)
     public Object refundCheck(@RequestParam("data") String data) {
         LOGGER.error("HTTP调用[refundCheck]方法，参数:{}", data);
