@@ -47,8 +47,6 @@ public class BOCCCBiz {
     private static final Logger LOGGER = LoggerFactory.getLogger(BOCCCBiz.class);
     @Autowired
     private PointExchangeCodeBiz pointExchangeCodeBiz;
-    @Autowired
-    private PointExchangeCodeService pointExchangeCodeService;
 
     /**
      * 中行信用卡实时接口：已使用请求
@@ -94,7 +92,7 @@ public class BOCCCBiz {
                         resp.setResult(BOCCCBizCodeEnum.CODE_NOT_EXIST.getMessage());
                     } else {
                         if (dto.getUsed().equals(CommonConstant.CODE_NOT_USED)) {
-                            pointExchangeCodeService.changeCodeUsedStatus(dto.getId(), CommonConstant.CODE_HAS_REFUND);
+                            pointExchangeCodeBiz.changeCodeUsedStatus(dto.getId(), CommonConstant.CODE_HAS_REFUND);
                             resp.setStat(BOCCCBizCodeEnum.SUCCESS.getCode());
                             resp.setResult(BOCCCBizCodeEnum.SUCCESS.getMessage());
                             resp.setDate(DateUtil.secondToStr(new Date()));

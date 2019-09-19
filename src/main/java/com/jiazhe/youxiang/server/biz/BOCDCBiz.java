@@ -11,6 +11,7 @@ import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.RSAUtil;
 import com.jiazhe.youxiang.base.util.ShaUtils;
+import com.jiazhe.youxiang.server.biz.point.PointExchangeCodeBiz;
 import com.jiazhe.youxiang.server.biz.point.PointExchangeRecordBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.BOCDCBizCodeEnum;
@@ -63,9 +64,8 @@ public class BOCDCBiz {
 
     @Autowired
     private PointExchangeRecordBiz pointExchangeRecordBiz;
-
     @Autowired
-    private PointExchangeCodeService pointExchangeCodeService;
+    private PointExchangeCodeBiz pointExchangeCodeBiz;
 
     /**
      * 查询库存订单下发实时接口
@@ -80,7 +80,7 @@ public class BOCDCBiz {
             giftNo = req.getGiftNo();
             validDate = Integer.valueOf(req.getValidDate());
             Date expiryDate = new Date(DateUtil.getLastSecond(System.currentTimeMillis() + CommonConstant.ONE_DAY * Integer.valueOf(validDate)));
-            PointExchangeCodeDTO dto = pointExchangeCodeService.queryStock(orderNo, giftNo, expiryDate);
+            PointExchangeCodeDTO dto = pointExchangeCodeBiz.queryStock(orderNo, giftNo, expiryDate);
             if (dto == null) {
                 //说明售卖不成功
                 resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
@@ -113,7 +113,7 @@ public class BOCDCBiz {
         String orderNo;
         try {
             orderNo = reverseValueReq.getOrderNo();
-            PointExchangeCodeDTO dto = pointExchangeCodeService.queryByOrderNo(orderNo);
+            PointExchangeCodeDTO dto = pointExchangeCodeBiz.queryByOrderNo(orderNo);
             if (dto == null) {
                 //说明没找到
                 resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
@@ -124,7 +124,7 @@ public class BOCDCBiz {
                     resp.setBizCode(BOCDCBizCodeEnum.SUCCESS.getCode());
                     resp.setBizDesc(BOCDCBizCodeEnum.SUCCESS.getMessage());
                     //更新兑换码使用状态
-                    pointExchangeCodeService.changeCodeUsedStatus(dto.getId(), CommonConstant.CODE_HAS_REFUND);
+                    pointExchangeCodeBiz.changeCodeUsedStatus(dto.getId(), CommonConstant.CODE_HAS_REFUND);
                 } else if (dto.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
                     PointExchangeRecordDTO pointExchangeRecordDto = pointExchangeRecordBiz.getByCodeId(dto.getId());
                     resp.setBizCode(BOCDCBizCodeEnum.MERCHANT_RETURNS_USED.getCode());

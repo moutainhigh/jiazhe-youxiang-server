@@ -116,4 +116,23 @@ public class PointExchangeCodeBiz {
         pointExchangeCodeService.refund(id, force);
     }
 
+    /**
+     * 修改兑换码使用状态（中行）
+     *
+     * @param id
+     * @param usedStaus
+     */
+    public void changeCodeUsedStatus(Integer id, Byte usedStaus) {
+        pointExchangeCodeService.changeCodeUsedStatus(id, usedStaus);
+    }
+
+    /**
+     * 通过订单号（中行）查找兑换码
+     *
+     * @param orderNo
+     * @return
+     */
+    public PointExchangeCodeDTO queryByOrderNo(String orderNo) {
+        return pointExchangeCodeService.queryByOrderNo(orderNo);
+    }
 }
