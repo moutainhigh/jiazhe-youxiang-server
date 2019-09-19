@@ -11,6 +11,10 @@ public class BOCCCRefundReq extends BaseVO {
 
     public BOCCCRefundReq() {
         this.flag = "Y";
+        this.waresId = "";
+        this.wEid = "";
+        this.orderId = "";
+        this.wInfo = "";
     }
 
     /**

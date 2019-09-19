@@ -23,7 +23,9 @@ public class BOCCCUsedReq extends BaseVO {
         this.wSign = "R";
         this.usedDate = BOCCCUtils.getNowTime().substring(0, 8);
         this.usedTime = BOCCCUtils.getNowTime().substring(9, 17);
-
+        this.waresId = "";
+        this.wEid = "";
+        this.wInfo = "";
     }
 
     /**

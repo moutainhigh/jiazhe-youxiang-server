@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.base.util;
 
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,26 +132,31 @@ public class RSAUtil {
     /**
      * 中行信用卡，利用中行公钥加密字符串
      *
-     * @param str
+     * @param str 加密字符串，加密为16进制的
      * @return
      * @throws Exception
      */
     public static String bocccPublicEncrypt(String str) throws Exception {
-        return RSAUtil.publicEncrypt(str, ZH_PUBLIC_KEY);
+        PublicKey publicKey = RSAUtil.string2PublicKey(ZH_PUBLIC_KEY);
+        byte[] publicEncrypt = encrypt(str.getBytes(), publicKey);
+        return StringUtil.toHexString(publicEncrypt);
     }
 
     /**
      * 中行信用卡，利用三方私钥解密字符串
      *
-     * @param str
+     * @param str 入参为16进制的，解密为正常字符串
      * @return
      * @throws Exception
      */
     public static String bocccPrivateDecrypt(String str) {
         try {
-            return RSAUtil.privateDecrypt(str, SF_PRIVATE_KEY);
+            byte[] arr = StringUtil.toByteArray(str);
+            PrivateKey privateKey = RSAUtil.string2PrivateKey(SF_PRIVATE_KEY);
+            byte[] publicDecrypt = decrypt(arr, privateKey);
+            return new String(publicDecrypt);
         } catch (Exception e) {
-            LOGGER.error("中行行用卡实时接口，解密失败，异常信息：" + e.getMessage());
+            LOGGER.error("中行信用卡实时接口，解密失败，异常信息：" + e.getMessage());
         }
         return null;
     }
@@ -405,5 +411,4 @@ public class RSAUtil {
         }
         return enBytes;
     }
-
 }

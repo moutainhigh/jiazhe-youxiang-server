@@ -18,4 +18,8 @@ alter table recharge_card_exchange_code_batch modify column city_codes VARCHAR(5
 alter table recharge_card_exchange_code modify column city_codes VARCHAR(5000) NOT NULL DEFAULT '' COMMENT '适用城市code集合，粒度到2级城市，以逗号隔开';
 alter table recharge_card modify column city_codes VARCHAR(5000) NOT NULL DEFAULT '' COMMENT '适用城市code集合，粒度到2级城市，以逗号隔开';
 
+/**
+日志中detail长度太短了
+ */
+alter table sys_log modify column detail VARCHAR(5000) NOT NULL DEFAULT '' COMMENT '操作的详细信息';
 

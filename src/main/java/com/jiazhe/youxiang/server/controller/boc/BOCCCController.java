@@ -41,6 +41,7 @@ public class BOCCCController extends BaseController {
     @RequestMapping(value = "/refundcheck")
     @CustomLog(moduleName = ModuleEnum.BOCCC, operate = "中行请求第三方退货", level = LogLevelEnum.LEVEL_3)
     public Object refundCheck(@RequestParam("data") String data) {
+        //中行定义传过来的data是base64
         LOGGER.error("HTTP调用[refundCheck]方法，参数:{}", data);
         BOCCCResp resp = bocccBiz.bocccRefundCheck(data);
         LOGGER.error("HTTP调用[refundCheck]方法，成功。返回:{}", JSONObject.toJSON(resp));

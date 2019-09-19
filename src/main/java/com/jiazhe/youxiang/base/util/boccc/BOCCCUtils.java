@@ -282,30 +282,4 @@ public class BOCCCUtils {
         String pattern = "TLRL\\d{15}";
         return Pattern.matches(pattern, line);
     }
-
-    public static String UTF82GBK(String str) throws Exception {
-        return new String(str.getBytes("utf8"), "GBK");
-    }
-
-    /**
-     * @param url
-     * @param map
-     * @param current 当前重试次数 0为第一次，1为重试的第一次
-     * @param total   重试次数（最大重试次数为10次，第一次current=0的那一次不计入）
-     * @throws Exception
-     */
-    public static void httpPost(String url, Map map, Integer current, Integer total) throws Exception {
-        logger.info("httpPost共重试" + total + "次，当前执行第：" + current + "次。");
-        String result = HttpUtil.httpPost(url, map);
-        if ("".equals(result) && current < total) {
-            logger.info("httpPost：第" + current + "次重试完成，下次重试时间等待（秒）：" + RETRY_INTERVAL[current]);
-            Thread.sleep(1000L * RETRY_INTERVAL[current]);
-            httpPost(url, map, ++current, total);
-        } else {
-            if ("".equals(result)) {
-                logger.info(url + map.toString() + "：最终执行失败！");
-            }
-            logger.info("执行完成");
-        }
-    }
 }
