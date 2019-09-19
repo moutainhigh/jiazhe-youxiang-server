@@ -72,6 +72,7 @@ public class BOCCCBiz {
 
     /**
      * 第一个实时接口 【退货信息接口】【中行请求第三方】
+     *
      * @param data
      * @return
      */
@@ -84,26 +85,33 @@ public class BOCCCBiz {
                 resp.setStat(BOCCCBizCodeEnum.DECRYPT_EXCEPTIOM.getCode());
                 resp.setResult(BOCCCBizCodeEnum.DECRYPT_EXCEPTIOM.getMessage());
             } else {
-                BOCCCRefundReq req = JacksonUtil.readValue(reqJson, BOCCCRefundReq.class);
-                PointExchangeCodeDTO dto = pointExchangeCodeBiz.findByKeyt(req.getwInfo());
-                if (null == dto) {
-                    resp.setStat(BOCCCBizCodeEnum.CODE_NOT_EXIST.getCode());
-                    resp.setResult(BOCCCBizCodeEnum.CODE_NOT_EXIST.getMessage());
-                } else {
-                    if (dto.getUsed().equals(CommonConstant.CODE_NOT_USED)) {
-                        pointExchangeCodeService.changeCodeUsedStatus(dto.getId(), CommonConstant.CODE_HAS_REFUND);
-                        resp.setStat(BOCCCBizCodeEnum.SUCCESS.getCode());
-                        resp.setResult(BOCCCBizCodeEnum.SUCCESS.getMessage());
-                        resp.setDate(DateUtil.secondToStr(new Date()));
+                BOCCCRefundReq req = null;
+                try {
+                    req = JacksonUtil.readValue(reqJson, BOCCCRefundReq.class);
+                    PointExchangeCodeDTO dto = pointExchangeCodeBiz.findByKeyt(req.getwInfo());
+                    if (null == dto) {
+                        resp.setStat(BOCCCBizCodeEnum.CODE_NOT_EXIST.getCode());
+                        resp.setResult(BOCCCBizCodeEnum.CODE_NOT_EXIST.getMessage());
+                    } else {
+                        if (dto.getUsed().equals(CommonConstant.CODE_NOT_USED)) {
+                            pointExchangeCodeService.changeCodeUsedStatus(dto.getId(), CommonConstant.CODE_HAS_REFUND);
+                            resp.setStat(BOCCCBizCodeEnum.SUCCESS.getCode());
+                            resp.setResult(BOCCCBizCodeEnum.SUCCESS.getMessage());
+                            resp.setDate(DateUtil.secondToStr(new Date()));
+                        }
+                        if (dto.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
+                            resp.setStat(BOCCCBizCodeEnum.CODE_HAS_USED.getCode());
+                            resp.setResult(BOCCCBizCodeEnum.CODE_HAS_USED.getMessage());
+                        }
+                        if (dto.getUsed().equals(CommonConstant.CODE_HAS_REFUND)) {
+                            resp.setStat(BOCCCBizCodeEnum.REFUND_AGAIN.getCode());
+                            resp.setResult(BOCCCBizCodeEnum.REFUND_AGAIN.getMessage());
+                        }
                     }
-                    if (dto.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
-                        resp.setStat(BOCCCBizCodeEnum.CODE_HAS_USED.getCode());
-                        resp.setResult(BOCCCBizCodeEnum.CODE_HAS_USED.getMessage());
-                    }
-                    if (dto.getUsed().equals(CommonConstant.CODE_HAS_REFUND)) {
-                        resp.setStat(BOCCCBizCodeEnum.REFUND_AGAIN.getCode());
-                        resp.setResult(BOCCCBizCodeEnum.REFUND_AGAIN.getMessage());
-                    }
+                } catch (Exception e) {
+                    resp.setStat(BOCCCBizCodeEnum.DATA_FORMAT_EXCEPTION.getCode());
+                    resp.setResult(BOCCCBizCodeEnum.DATA_FORMAT_EXCEPTION.getMessage());
+                    LOGGER.error("请求参数异常，异常信息：" + e.getMessage());
                 }
             }
         } catch (Exception e) {
@@ -117,6 +125,7 @@ public class BOCCCBiz {
 
     /**
      * 第二个实时接口 【优惠券已使用更新接口】【请求中行】
+     *
      * @param waresId
      * @param wEid
      * @param wInfo
@@ -153,6 +162,7 @@ public class BOCCCBiz {
 
     /**
      * 第三个实时接口 【优惠券退货更新接口】【三方请求中行】
+     *
      * @param waresId
      * @param wEid
      * @param orderInfo
