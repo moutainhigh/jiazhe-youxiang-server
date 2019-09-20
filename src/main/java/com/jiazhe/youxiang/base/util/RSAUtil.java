@@ -134,6 +134,13 @@ public class RSAUtil {
      * 中行信用卡，利用中行公钥加密字符串
      *
      * @param str 加密字符串，加密为16进制的
+     *            由于中行那边不是分步解密，如果这里我们用分步加密，
+     *            到中行那边就会由于内容太多而导致解密失败
+     *            所以加解密存在4种情况
+     *            ①分步加密  可以   分步解密
+     *            ②分步加密   不可以   直接解密（分步加密内容比直接加密内容长）
+     *            ③直接加密    可以    分步解密
+     *            ④直接加密     可以     直接解密
      * @return
      * @throws Exception
      */
@@ -143,9 +150,8 @@ public class RSAUtil {
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
         byte[] enc = cipher.doFinal(str.getBytes("UTF-8"));
         return new String(Hex.encode(enc), "ISO-8859-1").toUpperCase();
-//        byte[] publicEncrypt = encrypt(str.getBytes("UTF-8"), publicKey);
+//        byte[] publicEncrypt = encrypt(str.getBytes(), publicKey);
 //        return new String(Hex.encode(publicEncrypt), "ISO-8859-1").toUpperCase();
-//       return StringUtil.toHexString(publicEncrypt);
     }
 
     /**
@@ -157,10 +163,10 @@ public class RSAUtil {
      */
     public static String bocccPrivateDecrypt(String str) {
         try {
-            byte[] arr = StringUtil.toByteArray(str);
+            byte[] arr = Hex.decode(str);
             PrivateKey privateKey = RSAUtil.string2PrivateKey(SF_PRIVATE_KEY);
-            byte[] publicDecrypt = decrypt(arr, privateKey);
-            return new String(publicDecrypt);
+            byte[] privateDecrypt = decrypt(arr, privateKey);
+            return new String(privateDecrypt);
         } catch (Exception e) {
             LOGGER.error("中行信用卡实时接口，解密失败，异常信息：" + e.getMessage());
         }
@@ -417,26 +423,4 @@ public class RSAUtil {
         }
         return enBytes;
     }
-
-    public static void main(String[] args) throws Exception {
-        String str = "MIHPMA0GCSqGSIb3DQEBAQUAA4G9ADCBuQKBsQC9si+PSFtm2S6nnXZUApXaI9oRiMDpfvldt6JT" +
-                "P1zgD5ExoQaNkgoubQ1/x0zODlxm6hMaSNlDWrrCWtET7fxaQjuSHmdf4Kh+xlwVVlwChFcu+QqN";
-        String key = "MIHPMA0GCSqGSIb3DQEBAQUAA4G9ADCBuQKBsQC9si+PSFtm2S6nnXZUApXaI9oRiMDpfvldt6JT" +
-                "P1zgD5ExoQaNkgoubQ1/x0zODlxm6hMaSNlDWrrCWtET7fxaQjuSHmdf4Kh+xlwVVlwChFcu+QqN" +
-                "AeBThhuDAzTavgVAAHEAgE/AuQsPlCvfZgz8NEm310o8xjaj93G7BeX1fcG82CPHWc19NUzuxEhD" +
-                "h+LPXSjI/QjYTqJm/OTTNUmsIC7UiN7VEBeCU1Qb1QCFiwIDAQAB";
-        PublicKey publicKey = RSAUtil.string2PublicKey(key);
-        Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-        byte[] enc = cipher.doFinal(str.getBytes("UTF-8"));
-        System.out.println(new String(Hex.encode(enc), "ISO-8859-1").toUpperCase());
-
-        byte[] publicEncrypt = encrypt(str.getBytes("UTF-8"), publicKey);
-        System.out.println(new String(Hex.encode(publicEncrypt), "ISO-8859-1").toUpperCase());
-
-        System.out.println(new String(Hex.encode(publicEncrypt), "ISO-8859-1").toUpperCase());
-        System.out.println(StringUtil.toHexString(publicEncrypt));
-    }
-
-
 }
