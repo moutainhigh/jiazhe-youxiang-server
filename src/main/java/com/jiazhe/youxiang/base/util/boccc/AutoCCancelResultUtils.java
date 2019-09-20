@@ -1,7 +1,6 @@
 package com.jiazhe.youxiang.base.util.boccc;
 
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
-import com.jiazhe.youxiang.server.common.constant.EnvironmentConstant;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import org.apache.commons.io.FileUtils;
@@ -139,5 +138,19 @@ public class AutoCCancelResultUtils {
         }
         sb.append(cancelStatus).append(cancelStr.substring(103, 134)).append(BOCCCUtils.complete(failureDesc, ' ', false, 200)).append(cancelStr.substring(334, cancelStr.length()));
         return sb.toString();
+    }
+
+    public static void main(String[] args) throws Exception{
+        logger.info("中心");
+        PgpDecryUtil decryU = new PgpDecryUtil();
+        decryU.setPassphrase("m1h2q3");
+        decryU.DecryUtil(BOCCCConstant.downloadPath + BOCCCUtils.getToday() + "/CCANCEL.BOCYIMA.20160913.00.ZIP.DAT", BOCCCConstant.downloadPath + BOCCCUtils.getToday() + "/" + "CCANCEL.BOCYIMA.20160913.00.ZIP", BOCCCConstant.privateKeyPath);
+        decryU.DecryUtil(BOCCCConstant.downloadPath + BOCCCUtils.getToday() + "/CREMA.BOCYIMA.20160913.00.ZIP.DAT", BOCCCConstant.downloadPath + BOCCCUtils.getToday() + "/" + "CREMA.BOCYIMA.20160913.00.ZIP", BOCCCConstant.privateKeyPath);
+        decryU.DecryUtil(BOCCCConstant.downloadPath + BOCCCUtils.getToday() + "/CSELL.BOCYIMA.20160913.00.ZIP.DAT", BOCCCConstant.downloadPath + BOCCCUtils.getToday() + "/" + "CSELL.BOCYIMA.20160913.00.ZIP", BOCCCConstant.privateKeyPath);
+
+        UnZipUtil.ZipContraFile(BOCCCConstant.downloadPath + BOCCCUtils.getToday() + "/CCANCEL.BOCYIMA.20160913.00.ZIP" , BOCCCConstant.downloadPath + BOCCCUtils.getToday());
+        UnZipUtil.ZipContraFile(BOCCCConstant.downloadPath + BOCCCUtils.getToday() + "/CREMA.BOCYIMA.20160913.00.ZIP", BOCCCConstant.downloadPath + BOCCCUtils.getToday());
+        UnZipUtil.ZipContraFile(BOCCCConstant.downloadPath + BOCCCUtils.getToday() + "/CSELL.BOCYIMA.20160913.00.ZIP", BOCCCConstant.downloadPath + BOCCCUtils.getToday());
+
     }
 }
