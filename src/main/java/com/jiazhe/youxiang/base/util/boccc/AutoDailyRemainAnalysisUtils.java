@@ -121,11 +121,4 @@ public class AutoDailyRemainAnalysisUtils {
 
     }
 
-    public static void main(String[] args) throws Exception {
-        //模拟中行下发的每日剩余清单文件
-        File sourceFile = new File(BOCCCConstant.rootPath + "CREMA.BOCBJYX.20190912.00.B");
-        new ZipUtil(new File(BOCCCConstant.rootPath + "CREMA.BOCBJYX.20190912.00.ZIP")).zipFiles(sourceFile);
-        PgpEncryUtil.Encry(BOCCCConstant.rootPath + "CREMA.BOCBJYX.20190912.00.ZIP", BOCCCConstant.publicKeyPath, BOCCCConstant.rootPath + "CREMA.BOCBJYX.20190912.00.ZIP.DAT");
-    }
-
 }

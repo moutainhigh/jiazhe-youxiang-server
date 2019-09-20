@@ -57,7 +57,6 @@ public class AutoPicUtils {
         BOCCCUtils.copyToUpload(pgpFileName);
     }
 
-
     public static void main(String[] args) throws Exception {
         generateFile();
     }
