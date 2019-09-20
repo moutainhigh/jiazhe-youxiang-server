@@ -7,6 +7,7 @@ package com.jiazhe.youxiang.server.biz;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jiazhe.youxiang.base.util.DateUtil;
+import com.jiazhe.youxiang.base.util.HttpsClientRequestFactory;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.RSAUtil;
 import com.jiazhe.youxiang.server.biz.point.PointExchangeCodeBiz;
@@ -15,9 +16,7 @@ import com.jiazhe.youxiang.server.common.enums.BOCCCBizCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.BOCCCCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.BOCCCException;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
-import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.vo.req.boc.BOCCCRefundReq;
-import com.jiazhe.youxiang.server.vo.req.boc.BOCCCReq;
 import com.jiazhe.youxiang.server.vo.req.boc.BOCCCUsedReq;
 import com.jiazhe.youxiang.server.vo.resp.boc.BOCCCResp;
 import org.slf4j.Logger;
@@ -34,6 +33,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author tu
@@ -130,26 +131,34 @@ public class BOCCCBiz {
      */
     @Async
     @Retryable(value = {BOCCCException.class},
-            maxAttempts = 15, backoff = @Backoff(delay = 5000L, multiplier = 2))
+            maxAttempts = 10, backoff = @Backoff(delay = 5000L, multiplier = 2))
     public void bocccUsedUpdate(String waresId, String wEid, String wInfo) {
         LOGGER.info("Biz调用[bocccUsedUpdate]接口，waresId:{},wEid:{},wInfo:{}", waresId, wEid, wInfo);
         BOCCCUsedReq usedReq = new BOCCCUsedReq();
         usedReq.setWaresId(waresId);
         usedReq.setwEid(wEid);
         usedReq.setwInfo(wInfo);
-        BOCCCReq req = new BOCCCReq();
-        req.setRequestType("S");
+        Map<String, String> req = new HashMap<>(2);
+        String usedReqStr = JacksonUtil.toJSon(usedReq).replace("\"", "\\\"");
         try {
-            req.setData(RSAUtil.bocccPublicEncrypt(JacksonUtil.toJSon(usedReq)));
+
+            LOGGER.info("加密前的使用数据：" + usedReqStr);
+            String data = RSAUtil.bocccPublicEncrypt(usedReqStr);
+            req.put("data", data);
+            LOGGER.info("加密后的使用数据：" + data);
         } catch (Exception e) {
-            LOGGER.error("加密失败，usedReq：{}，message:{}", JacksonUtil.toJSon(usedReq), e.getMessage());
+            LOGGER.error("加密失败，usedReq:{}，message:{}", usedReqStr, e.getMessage());
             throw new BOCCCException(BOCCCCodeEnum.PARAM_ENCRYPT_ERROR.getCode(), BOCCCCodeEnum.PARAM_ENCRYPT_ERROR.getType(), e.getMessage());
         }
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate(new HttpsClientRequestFactory());
+//        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
+//        StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter(Charset.forName("UTF-8"));
+//        messageConverters.add(stringHttpMessageConverter);
+//        restTemplate.setMessageConverters(messageConverters);
         String result;
         try {
             LOGGER.info("HTTP调用中行信用卡使用状态更新实时接口，入参:{}", JSONObject.toJSON(req));
-            ResponseEntity<String> response = restTemplate.postForEntity(REAL_TIME_USED_URL, req, String.class);
+            ResponseEntity<String> response = restTemplate.getForEntity(REAL_TIME_USED_URL, String.class, req);
             result = new String(response.getBody().getBytes("ISO8859-1"), "utf-8");
             LOGGER.info("HTTP调用中行使用状态更新实时接口成功，入参:{}，返回值:{}", JSONObject.toJSON(req), JSONObject.toJSON(result));
         } catch (RestClientException | UnsupportedEncodingException e) {
@@ -176,15 +185,16 @@ public class BOCCCBiz {
         refundReq.setwEid(wEid);
         refundReq.setOrderId(orderInfo);
         refundReq.setwInfo(wInfo);
-        BOCCCReq req = new BOCCCReq();
-        req.setRequestType("R");
+        Map req = new HashMap<>(2);
+        String refundReqStr = JacksonUtil.toJSon(refundReq);
         try {
-            req.setData(RSAUtil.bocccPublicEncrypt(JacksonUtil.toJSon(refundReq)));
+            String data = RSAUtil.bocccPublicEncrypt(refundReqStr);
+            req.put("data", data);
         } catch (Exception e) {
-            LOGGER.error("加密失败，refundReq：{}，message:{}", JacksonUtil.toJSon(refundReq), e.getMessage());
+            LOGGER.error("加密失败，refundReq：{}，message:{}", refundReqStr, e.getMessage());
             throw new BOCCCException(BOCCCCodeEnum.PARAM_ENCRYPT_ERROR.getCode(), BOCCCCodeEnum.PARAM_ENCRYPT_ERROR.getType(), e.getMessage());
         }
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate(new HttpsClientRequestFactory());
         String result;
         try {
             LOGGER.info("HTTP调用中行信用卡退货更新实时接口，入参:{}", JSONObject.toJSON(req));
@@ -195,6 +205,7 @@ public class BOCCCBiz {
             LOGGER.info("HTTP调用中行退货更新实时接口失败，RestClientException message:{}", e.getMessage());
             throw new BOCCCException(BOCCCCodeEnum.REFUND_UPDATE_ERROR.getCode(), BOCCCCodeEnum.REFUND_UPDATE_ERROR.getType(), e.getMessage());
         }
+
     }
 
 }

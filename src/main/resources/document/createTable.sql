@@ -7,7 +7,7 @@ CREATE TABLE `sys_log` (
     `operator_id` INT(10) UNSIGNED NOT NULL COMMENT '操作人id',
     `operator_name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '操作人名称',
     `ip` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '操作的ip地址',
-    `detail` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '操作的详细信息',
+    `detail` VARCHAR(5000) NOT NULL DEFAULT '' COMMENT '操作的详细信息',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
