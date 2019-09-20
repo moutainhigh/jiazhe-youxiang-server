@@ -57,4 +57,5 @@ public class StringUtil {
         String byte2Base64 = RSAUtil.byte2Base64(arr);
         System.out.println(byte2Base64);
     }
+
 }

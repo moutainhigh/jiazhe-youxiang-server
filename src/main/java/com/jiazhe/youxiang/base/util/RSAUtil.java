@@ -7,6 +7,7 @@ package com.jiazhe.youxiang.base.util;
 
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.bouncycastle.util.encoders.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -138,8 +139,13 @@ public class RSAUtil {
      */
     public static String bocccPublicEncrypt(String str) throws Exception {
         PublicKey publicKey = RSAUtil.string2PublicKey(ZH_PUBLIC_KEY);
-        byte[] publicEncrypt = encrypt(str.getBytes(), publicKey);
-        return StringUtil.toHexString(publicEncrypt);
+        Cipher cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+        byte[] enc = cipher.doFinal(str.getBytes("UTF-8"));
+        return new String(Hex.encode(enc), "ISO-8859-1").toUpperCase();
+//        byte[] publicEncrypt = encrypt(str.getBytes("UTF-8"), publicKey);
+//        return new String(Hex.encode(publicEncrypt), "ISO-8859-1").toUpperCase();
+//       return StringUtil.toHexString(publicEncrypt);
     }
 
     /**
@@ -411,4 +417,25 @@ public class RSAUtil {
         }
         return enBytes;
     }
+
+    public static void main(String[] args) throws Exception {
+        String str = "123";
+        String key = "MIHPMA0GCSqGSIb3DQEBAQUAA4G9ADCBuQKBsQC9si+PSFtm2S6nnXZUApXaI9oRiMDpfvldt6JT" +
+                "P1zgD5ExoQaNkgoubQ1/x0zODlxm6hMaSNlDWrrCWtET7fxaQjuSHmdf4Kh+xlwVVlwChFcu+QqN" +
+                "AeBThhuDAzTavgVAAHEAgE/AuQsPlCvfZgz8NEm310o8xjaj93G7BeX1fcG82CPHWc19NUzuxEhD" +
+                "h+LPXSjI/QjYTqJm/OTTNUmsIC7UiN7VEBeCU1Qb1QCFiwIDAQAB";
+        PublicKey publicKey = RSAUtil.string2PublicKey(key);
+        Cipher cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+        byte[] enc = cipher.doFinal(str.getBytes("UTF-8"));
+        System.out.println(new String(Hex.encode(enc), "ISO-8859-1").toUpperCase());
+
+        byte[] publicEncrypt = encrypt(str.getBytes("UTF-8"), publicKey);
+        System.out.println(new String(Hex.encode(publicEncrypt), "ISO-8859-1").toUpperCase());
+
+        System.out.println(new String(Hex.encode(publicEncrypt), "ISO-8859-1").toUpperCase());
+        System.out.println(StringUtil.toHexString(publicEncrypt));
+    }
+
+
 }

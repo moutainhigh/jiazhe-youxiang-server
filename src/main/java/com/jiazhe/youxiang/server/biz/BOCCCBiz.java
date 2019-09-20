@@ -141,6 +141,7 @@ public class BOCCCBiz {
         Map<String, String> req = new HashMap<>(2);
         String usedReqStr = JacksonUtil.toJSon(usedReq).replace("\"", "\\\"");
         try {
+            LOGGER.info(usedReqStr);
             String data = RSAUtil.bocccPublicEncrypt(usedReqStr);
             req.put("data", data);
         } catch (Exception e) {
