@@ -182,6 +182,7 @@ public class BOCCCBiz {
         Map<String, String> req = new HashMap<>(2);
         String refundReqStr = JacksonUtil.toJSon(refundReq).replace("\"", "\\\"");
         try {
+            LOGGER.info(refundReqStr);
             String data = RSAUtil.bocccPublicEncrypt(refundReqStr);
             req.put("data", data);
         } catch (Exception e) {
@@ -192,7 +193,7 @@ public class BOCCCBiz {
         String result;
         try {
             LOGGER.info("HTTP调用中行信用卡退货更新实时接口，入参:{}", JSONObject.toJSON(req));
-            ResponseEntity<String> response = restTemplate.postForEntity(REAL_TIME_REFUND_URL, req, String.class);
+            ResponseEntity<String> response = restTemplate.getForEntity(REAL_TIME_REFUND_URL, String.class, req);
             result = new String(response.getBody().getBytes("ISO8859-1"), "utf-8");
             LOGGER.info("HTTP调用中行退货更新实时接口成功，入参:{}，返回值:{}", JSONObject.toJSON(req), JSONObject.toJSON(result));
         } catch (RestClientException | UnsupportedEncodingException e) {
