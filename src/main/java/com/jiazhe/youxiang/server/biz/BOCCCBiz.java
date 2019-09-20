@@ -123,7 +123,7 @@ public class BOCCCBiz {
     }
 
     /**
-     * 第二个实时接口 【优惠券已使用更新接口】【请求中行】
+     * 第二个实时接口 【优惠券已使用更新接口】【三方请求中行】
      *
      * @param waresId
      * @param wEid
@@ -141,20 +141,13 @@ public class BOCCCBiz {
         Map<String, String> req = new HashMap<>(2);
         String usedReqStr = JacksonUtil.toJSon(usedReq).replace("\"", "\\\"");
         try {
-
-            LOGGER.info("加密前的使用数据：" + usedReqStr);
             String data = RSAUtil.bocccPublicEncrypt(usedReqStr);
             req.put("data", data);
-            LOGGER.info("加密后的使用数据：" + data);
         } catch (Exception e) {
             LOGGER.error("加密失败，usedReq:{}，message:{}", usedReqStr, e.getMessage());
             throw new BOCCCException(BOCCCCodeEnum.PARAM_ENCRYPT_ERROR.getCode(), BOCCCCodeEnum.PARAM_ENCRYPT_ERROR.getType(), e.getMessage());
         }
         RestTemplate restTemplate = new RestTemplate(new HttpsClientRequestFactory());
-//        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
-//        StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter(Charset.forName("UTF-8"));
-//        messageConverters.add(stringHttpMessageConverter);
-//        restTemplate.setMessageConverters(messageConverters);
         String result;
         try {
             LOGGER.info("HTTP调用中行信用卡使用状态更新实时接口，入参:{}", JSONObject.toJSON(req));
@@ -185,8 +178,8 @@ public class BOCCCBiz {
         refundReq.setwEid(wEid);
         refundReq.setOrderId(orderInfo);
         refundReq.setwInfo(wInfo);
-        Map req = new HashMap<>(2);
-        String refundReqStr = JacksonUtil.toJSon(refundReq);
+        Map<String, String> req = new HashMap<>(2);
+        String refundReqStr = JacksonUtil.toJSon(refundReq).replace("\"", "\\\"");
         try {
             String data = RSAUtil.bocccPublicEncrypt(refundReqStr);
             req.put("data", data);
@@ -205,7 +198,6 @@ public class BOCCCBiz {
             LOGGER.info("HTTP调用中行退货更新实时接口失败，RestClientException message:{}", e.getMessage());
             throw new BOCCCException(BOCCCCodeEnum.REFUND_UPDATE_ERROR.getCode(), BOCCCCodeEnum.REFUND_UPDATE_ERROR.getType(), e.getMessage());
         }
-
     }
 
 }
