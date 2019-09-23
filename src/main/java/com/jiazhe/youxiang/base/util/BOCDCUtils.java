@@ -82,6 +82,7 @@ public class BOCDCUtils {
 
     /**
      * 生成失败返回值
+     *
      * @return
      */
     public static Object genrateFailReturn() {
@@ -89,5 +90,13 @@ public class BOCDCUtils {
         resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
         resp.setBizDesc(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getMessage());
         return generateReturn(resp);
+    }
+
+    public static String trimBizData(String str) {
+        if (StringUtils.isNotEmpty(str)) {
+            return str.replaceAll("<bizdata>", "").replaceAll("</bizdata>", "");
+        }
+        return str;
+
     }
 }

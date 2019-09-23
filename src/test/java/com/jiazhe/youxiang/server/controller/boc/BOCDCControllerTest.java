@@ -93,14 +93,14 @@ public class BOCDCControllerTest {
         String giftNo = "IGI022566255";
         String validDate = "90";
         String template = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
-                "<data>" +
+                "<bizdata><data>" +
                 "<orderNo>%s</orderNo>" +
                 "<userId>%s</userId>" +
                 "<tranDate>%s</tranDate>" +
                 "<orderStatus>%s</orderStatus>" +
                 "<giftNo>%s</giftNo>" +
                 "<validDate>%s</validDate>" +
-                "</data>";
+                "</data></bizdata>";
         String before = String.format(template, orderNo, userId, tranDate, orderStatus, giftNo, validDate);
         orderNo = RSAUtil.publicEncrypt(orderNo, BOCDC_PUBLIC_KEY);
         giftNo = RSAUtil.publicEncrypt(giftNo, BOCDC_PUBLIC_KEY);
@@ -119,11 +119,11 @@ public class BOCDCControllerTest {
         String channel = "02";
         String ebuyId = "4E323916DE880098E05316BCC468D1C0";
         String template = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
-                "<data>" +
+                "<bizdata><data>" +
                 "<orderNo>%s</orderNo>" +
                 "<channel>%s</channel>" +
                 "<ebuyId>%s</ebuyId>" +
-                "</data>";
+                "</data></bizdata>";
         String before = String.format(template, orderNo, channel, ebuyId);
         orderNo = RSAUtil.publicEncrypt(orderNo, BOCDC_PUBLIC_KEY);
         String after =  String.format(template, orderNo, channel, ebuyId);
