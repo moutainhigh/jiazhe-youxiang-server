@@ -84,15 +84,16 @@ public class BOCDCBiz {
             if (dto == null) {
                 //说明售卖不成功
                 resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
-//                resp.setBizDesc(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getMessage());
+                resp.setBizDesc(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getMessage());
+                //TODO niexiao 删掉测试代码
                 resp.setBizDesc(JSONObject.toJSONString(req));
             } else {
                 resp.setBizCode(BOCDCBizCodeEnum.SUCCESS.getCode());
                 resp.setBizDesc(BOCDCBizCodeEnum.SUCCESS.getMessage());
-                resp.setGiftCardNo(dto.getCode());
-                resp.setGiftCardPwd(dto.getKeyt());
-//                resp.setGiftCardPwd(RSAUtil.bocdcPrivateEncrypt(dto.getKeyt()));
-//                resp.setGiftCardNo(RSAUtil.bocdcPrivateEncrypt(dto.getCode()));
+                //公钥加密
+                resp.setGiftCardNo(RSAUtil.bocdcPublicEncrypt(dto.getCode()));
+                resp.setGiftCardPwd(RSAUtil.bocdcPublicEncrypt(dto.getKeyt()));
+                resp.setEbuyId(RSAUtil.bocdcPublicEncrypt(dto.getId().toString()));
                 resp.setCardExpDate(DateUtil.yyyyMMDD(dto.getExpiryTime()));
             }
         } catch (Exception e) {
@@ -118,6 +119,7 @@ public class BOCDCBiz {
                 //说明没找到
                 resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
                 resp.setBizDesc(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getMessage());
+                //TODO niexiao 删掉测试代码
                 resp.setBizDesc(JSONObject.toJSONString(reverseValueReq));
             } else {
                 if (dto.getUsed().equals(CommonConstant.CODE_NOT_USED)) {
