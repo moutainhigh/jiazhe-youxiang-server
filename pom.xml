@@ -29,6 +29,7 @@
         <mybatis.generator.version>1.3.2</mybatis.generator.version>
         <mysql-connector.version>5.1.36</mysql-connector.version>
         <shiro.version>1.2.0</shiro.version>
+        <cryptix.version>20190923</cryptix.version>
     </properties>
 
     <dependencies>
@@ -291,57 +292,42 @@
             <version>1.2.5</version>
         </dependency>
 
-        <!--本地jar包-->
+        <!--cryptix包 PGP加解密文件-->
         <dependency>
             <groupId>com.cryptix</groupId>
-            <artifactId>jce-api</artifactId>
-            <version>1.0</version>
+            <artifactId>cryptix-jce-api</artifactId>
+            <version>${cryptix.version}</version>
         </dependency>
         <dependency>
             <groupId>com.cryptix</groupId>
-            <artifactId>jce-compat</artifactId>
-            <version>1.0</version>
+            <artifactId>cryptix-jce-compat</artifactId>
+            <version>${cryptix.version}</version>
         </dependency>
         <dependency>
             <groupId>com.cryptix</groupId>
-            <artifactId>jce-provider</artifactId>
-            <version>1.0</version>
+            <artifactId>cryptix-jce-provider</artifactId>
+            <version>${cryptix.version}</version>
         </dependency>
         <dependency>
             <groupId>com.cryptix</groupId>
-            <artifactId>jce-tests</artifactId>
-            <version>1.0</version>
+            <artifactId>cryptix-jce-tests</artifactId>
+            <version>${cryptix.version}</version>
         </dependency>
         <dependency>
             <groupId>com.cryptix</groupId>
-            <artifactId>message-api</artifactId>
-            <version>1.0</version>
+            <artifactId>cryptix-message-api</artifactId>
+            <version>${cryptix.version}</version>
         </dependency>
         <dependency>
             <groupId>com.cryptix</groupId>
-            <artifactId>openpgp-provider</artifactId>
-            <version>1.0</version>
+            <artifactId>cryptix-openpgp-provider</artifactId>
+            <version>${cryptix.version}</version>
         </dependency>
         <dependency>
             <groupId>com.cryptix</groupId>
-            <artifactId>pki-api</artifactId>
-            <version>1.0</version>
+            <artifactId>cryptix-pki-api</artifactId>
+            <version>${cryptix.version}</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.cryptix.boc</groupId>-->
-            <!--<artifactId>local_policy</artifactId>-->
-            <!--<version>1.0</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>com.cryptix.boc</groupId>-->
-            <!--<artifactId>PGPEncrypt</artifactId>-->
-            <!--<version>1.0</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>com.cryptix.boc</groupId>-->
-            <!--<artifactId>US_export_policy</artifactId>-->
-            <!--<version>1.0</version>-->
-        <!--</dependency>-->
 
         <!--SFTP-->
         <dependency>
