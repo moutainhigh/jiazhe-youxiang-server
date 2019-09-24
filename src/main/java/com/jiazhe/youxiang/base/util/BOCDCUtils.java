@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.base.util;
 
 import com.jiazhe.youxiang.server.common.enums.BOCDCBizCodeEnum;
+import com.jiazhe.youxiang.server.vo.req.boc.BOCDCCommonReq;
 import com.jiazhe.youxiang.server.vo.resp.boc.BOCDCCommonResp;
 import net.sf.json.JSONObject;
 import net.sf.json.xml.XMLSerializer;
@@ -98,5 +99,12 @@ public class BOCDCUtils {
         }
         return str;
 
+    }
+
+    public static void adaptive(BOCDCCommonReq req) {
+        if (req == null || StringUtils.isEmpty(req.getXmlStr()) || StringUtils.isNotEmpty(req.getParam())) {
+            return;
+        }
+        req.setParam(req.getXmlStr().replace("param=", ""));
     }
 }
