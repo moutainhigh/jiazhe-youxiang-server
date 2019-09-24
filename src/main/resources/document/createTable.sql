@@ -470,6 +470,8 @@ CREATE TABLE `order_refund` (
 drop table if exists `audit_record`;
 CREATE TABLE `audit_record` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
+    `city_code` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '兑换城市code',
+    `city_name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '兑换城市名称',
     `bank_outlets_name` VARCHAR(100) COMMENT '银行网点名称',
     `exchange_type` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '兑换类型 1是直接充值，2是兑换积分卡，3是兑换购物卡',
     `exchange_point` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '总兑换积分',
