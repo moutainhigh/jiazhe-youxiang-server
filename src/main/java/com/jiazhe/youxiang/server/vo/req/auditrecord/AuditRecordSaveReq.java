@@ -23,6 +23,12 @@ public class AuditRecordSaveReq extends BaseVO {
     @ApiModelProperty("版本号")
     private Integer version;
 
+    @ApiModelProperty("兑换城市编码")
+    private String cityCode;
+
+    @ApiModelProperty("兑换城市名称")
+    private String cityName;
+
     @ApiModelProperty("银行信息")
     private String bankOutletsName;
 
@@ -78,6 +84,22 @@ public class AuditRecordSaveReq extends BaseVO {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public String getCityCode() {
+        return cityCode;
+    }
+
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
     public String getBankOutletsName() {

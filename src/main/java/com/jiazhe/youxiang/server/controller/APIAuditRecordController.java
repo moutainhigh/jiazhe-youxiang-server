@@ -194,6 +194,8 @@ public class APIAuditRecordController extends BaseController {
             auditRecordDTO.setModTime(new Date(System.currentTimeMillis()));
         }
         auditRecordDTO.setStatus(req.getStatus());
+        auditRecordDTO.setCityCode(req.getCityCode());
+        auditRecordDTO.setCityName(req.getCityName());
         auditRecordDTO.setBankOutletsName(req.getBankOutletsName());
         auditRecordDTO.setExchangeType(req.getExchangeType());
         auditRecordDTO.setCustomerMobile(req.getCustomerMobile());

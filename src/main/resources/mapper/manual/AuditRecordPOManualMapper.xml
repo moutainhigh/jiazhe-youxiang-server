@@ -32,6 +32,8 @@
         <result column="point_codes" property="pointCodes" jdbcType="VARCHAR" />
         <result column="product_value" property="productValue" jdbcType="DECIMAL" />
         <result column="exchange_type" property="exchangeType" jdbcType="TINYINT" />
+        <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
+        <result column="city_name" property="cityName" jdbcType="VARCHAR" />
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -39,7 +41,7 @@
     audit_reason, remark, img_urls, pos_code, trade_time, card_no, bank_outlets_name,submit_time,
     submitter_id, submitter_name, status, audit_time, auditor_id, auditor_name, version,
     ext_info, is_deleted, add_time, mod_time, charge_receipt_status, point_codes, product_value,
-    exchange_type
+    exchange_type,city_code,city_name
   </sql>
 
     <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.AuditRecordPO">
