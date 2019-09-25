@@ -89,6 +89,9 @@
                 </if>
                 )
             </if>
+            <if test="cityCode != null and cityCode!=''">
+                AND city_code LIKE CONCAT('%',#{cityCode},'%')
+            </if>
             AND is_deleted = 0 ORDER BY mod_time DESC
         </where>
         <if test="offset != null and limit != null">
@@ -138,6 +141,9 @@
                     OR exchange_type in(3,13,23,123)
                 </if>
                 )
+            </if>
+            <if test="cityCode != null and cityCode!=''">
+                AND city_code LIKE CONCAT('%',#{cityCode},'%')
             </if>
             AND is_deleted = 0
         </where>

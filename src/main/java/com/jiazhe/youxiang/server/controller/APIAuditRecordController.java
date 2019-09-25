@@ -103,15 +103,18 @@ public class APIAuditRecordController extends BaseController {
         return ResponseFactory.buildResponse(auditRecordResp);
     }
 
-//    @RequiresPermissions(PermissionConstant.AUDIT_RECORD_MANAGEMENT)
+    //    @RequiresPermissions(PermissionConstant.AUDIT_RECORD_MANAGEMENT)
     @ApiOperation(value = "【后台】消费记录列表", httpMethod = "GET", response = AuditRecordResp.class, responseContainer = "List", notes = "【后台】消费记录列表")
     @RequestMapping(value = "/listpage", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "消费记录列表", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute AuditRecordPageReq req) {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
+        if (req.getCityCode().endsWith("00")) {
+            req.setCityCode(req.getCityCode().substring(0, 4));
+        }
         Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
         Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
-        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getCustomerInfo(), req.getSubmitterName(), req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(),req.getExchangePoint(), submitStartTime, submitEndTime,req.getExchangeType(), paging);
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getCustomerInfo(), req.getSubmitterName(), req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(), req.getExchangePoint(), submitStartTime, submitEndTime, req.getExchangeType(), req.getCityCode(),paging);
         List<AuditRecordResp> auditRecordRespList = auditRecordDTOList.stream().map(AuditRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(auditRecordRespList, paging);
     }
@@ -224,8 +227,8 @@ public class APIAuditRecordController extends BaseController {
     @ApiOperation(value = "完成凭证录入", httpMethod = "POST", notes = "完成凭证录入")
     @RequestMapping(value = "/completechargereceipt", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "完成凭证录入", level = LogLevelEnum.LEVEL_2)
-    public Object completeChargeReceipt(@ModelAttribute IdReq req,@RequestParam Byte check) {
-        auditRecordBiz.completeChargeReceipt(req.getId(),check);
+    public Object completeChargeReceipt(@ModelAttribute IdReq req, @RequestParam Byte check) {
+        auditRecordBiz.completeChargeReceipt(req.getId(), check);
         return ResponseFactory.buildSuccess();
     }
 
@@ -243,19 +246,25 @@ public class APIAuditRecordController extends BaseController {
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "导出消费凭证", level = LogLevelEnum.LEVEL_3)
     public void export(@ModelAttribute AuditRecordPageReq req, HttpServletResponse response) {
+        if (req.getCityCode().endsWith("00")) {
+            req.setCityCode(req.getCityCode().substring(0, 4));
+        }
         Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
         Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
-        List<ChargeReceiptDTO> dtoList = chargeReceiptBiz.getList(req.getCustomerInfo(), req.getSubmitterName(),req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(),req.getExchangePoint(), submitStartTime, submitEndTime,req.getExchangeType());
+        List<ChargeReceiptDTO> dtoList = chargeReceiptBiz.getList(req.getCustomerInfo(), req.getSubmitterName(), req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(), req.getExchangePoint(), submitStartTime, submitEndTime, req.getExchangeType(),req.getCityCode());
         ExportExcelUtils.exportChargeReceipt(response, dtoList);
     }
 
-    @ApiOperation(value = "根据条件求字段之和", httpMethod = "GET", notes = "根据条件求字段之和",response = AuditRecordResp.class)
+    @ApiOperation(value = "根据条件求字段之和", httpMethod = "GET", notes = "根据条件求字段之和", response = AuditRecordResp.class)
     @RequestMapping(value = "/sum", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "根据条件求字段之和", level = LogLevelEnum.LEVEL_1)
-    public Object sum(@ModelAttribute AuditRecordPageReq req, HttpServletResponse response) {
+    public Object sum(@ModelAttribute AuditRecordPageReq req) {
+        if (req.getCityCode().endsWith("00")) {
+            req.setCityCode(req.getCityCode().substring(0, 4));
+        }
         Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
         Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
-        AuditRecordSumDTO dto = auditRecordBiz.sum(req.getCustomerInfo(), req.getSubmitterName(),req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(),req.getExchangePoint(), submitStartTime, submitEndTime,req.getExchangeType());
+        AuditRecordSumDTO dto = auditRecordBiz.sum(req.getCustomerInfo(), req.getSubmitterName(), req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(), req.getExchangePoint(), submitStartTime, submitEndTime, req.getExchangeType(),req.getCityCode());
         AuditRecordSumResp resp = AuditRecordAdapter.sumDto2SumResp(dto);
         return ResponseFactory.buildResponse(resp);
     }

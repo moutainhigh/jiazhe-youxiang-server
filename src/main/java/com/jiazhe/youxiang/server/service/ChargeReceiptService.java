@@ -58,9 +58,13 @@ public interface ChargeReceiptService {
      * @param submitterName
      * @param submitStartTime
      * @param submitEndTime
+     * @param exchangeType
+     * @param exchangePoint
+     * @param pointCodes
+     * @param cityCode
      * @return
      */
-    List<ChargeReceiptDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes,String exchangePoint, Date submitStartTime, Date submitEndTime,String exchangeType);
+    List<ChargeReceiptDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes,String exchangePoint, Date submitStartTime, Date submitEndTime,String exchangeType,String cityCode);
 
     /**
      * 通过消费记录id，查找小票集合

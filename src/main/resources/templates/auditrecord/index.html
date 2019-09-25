@@ -49,6 +49,11 @@
             display: none;
         }
 
+        .chosen-container-single .chosen-single {
+            height: 30px;
+            border-radius: 0px;
+        }
+
     </style>
 </head>
 
@@ -172,6 +177,13 @@
                                         <option value="1">充积分</option>
                                         <option value="2">积分卡</option>
                                         <option value="3">换商品</option>
+                                    </select>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">兑换城市：</label>
+                                <div class="col-sm-2">
+                                    <select id="city" name="cityCode"
+                                            class="chosen-select form-control">
+                                        <option value="">所有</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-3">
@@ -508,6 +520,8 @@
             },
             error: error
         });
+        //城市下拉框
+        initCity();
 
         calculateAllSum();
         $("#pointCodes").tag({});
@@ -998,6 +1012,29 @@
                 }
             },
             error: error
+        });
+    }
+
+    function initCity() {
+        $.ajax({
+            url: "/api/syscity/getopenlist",
+            dataType: "json",
+            async: true,
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#city").append("<option value=" + result[i].cityCode + ">" + result[i].cityName + "("+ result[i].cityLevel + "级)</option>");
+                    }
+                }
+                initSearchSelect("city");
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
         });
     }
 
