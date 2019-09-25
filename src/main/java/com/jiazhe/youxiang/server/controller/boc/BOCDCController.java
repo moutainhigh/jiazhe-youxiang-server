@@ -41,7 +41,6 @@ import java.nio.charset.StandardCharsets;
  * @description 中行储蓄卡（BOCDC）controller
  * @created 2019-09-08 11:11
  */
-@RestController
 @RequestMapping("externalapi/bocdc")
 public class BOCDCController {
 
