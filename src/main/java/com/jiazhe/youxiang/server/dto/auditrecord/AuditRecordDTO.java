@@ -74,6 +74,10 @@ public class AuditRecordDTO extends BaseObject {
 
     private Byte isDeleted;
 
+    private String cityCode;
+
+    private String cityName;
+
     private List<PointExchangeCodeDTO> pointExchangeCodeDTOList;
 
     public Integer getId() {
@@ -306,6 +310,22 @@ public class AuditRecordDTO extends BaseObject {
 
     public void setSubmitTime(Date submitTime) {
         this.submitTime = submitTime;
+    }
+
+    public String getCityCode() {
+        return cityCode;
+    }
+
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
     public List<PointExchangeCodeDTO> getPointExchangeCodeDTOList() {

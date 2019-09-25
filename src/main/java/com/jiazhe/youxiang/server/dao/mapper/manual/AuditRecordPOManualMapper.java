@@ -25,6 +25,7 @@ public interface AuditRecordPOManualMapper {
      * @param submitStartTime
      * @param submitEndTime
      * @param exchangeType
+     * @param cityCode
      * @return
      */
     Integer count(
@@ -37,7 +38,8 @@ public interface AuditRecordPOManualMapper {
             @Param("exchangePoint") String exchangePoint,
             @Param("submitStartTime") Date submitStartTime,
             @Param("submitEndTime") Date submitEndTime,
-            @Param("exchangeType") String exchangeType
+            @Param("exchangeType") String exchangeType,
+            @Param("cityCode") String cityCode
     );
 
     /**
@@ -52,6 +54,7 @@ public interface AuditRecordPOManualMapper {
      * @param submitStartTime
      * @param submitEndTime
      * @param exchangeType
+     * @param cityCode
      * @param offset
      * @param limit
      * @return
@@ -67,6 +70,7 @@ public interface AuditRecordPOManualMapper {
             @Param("submitStartTime") Date submitStartTime,
             @Param("submitEndTime") Date submitEndTime,
             @Param("exchangeType") String exchangeType,
+            @Param("cityCode") String cityCode,
             @Param("offset") Integer offset,
             @Param("limit") Integer limit
     );

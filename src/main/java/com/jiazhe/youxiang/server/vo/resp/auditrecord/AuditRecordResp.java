@@ -65,6 +65,12 @@ public class AuditRecordResp extends BaseVO {
     @ApiModelProperty("银行卡后四位")
     private String cardNo;
 
+    @ApiModelProperty("兑换城市编码")
+    private String cityCode;
+
+    @ApiModelProperty("兑换城市名称")
+    private String cityName;
+
     @ApiModelProperty("银行网点")
     private String bankOutletsName;
 
@@ -299,6 +305,22 @@ public class AuditRecordResp extends BaseVO {
 
     public void setCardNo(String cardNo) {
         this.cardNo = cardNo;
+    }
+
+    public String getCityCode() {
+        return cityCode;
+    }
+
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
     public String getBankOutletsName() {

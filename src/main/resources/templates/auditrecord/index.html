@@ -49,6 +49,11 @@
             display: none;
         }
 
+        .chosen-container-single .chosen-single {
+            height: 30px;
+            border-radius: 0px;
+        }
+
     </style>
 </head>
 
@@ -174,6 +179,13 @@
                                         <option value="3">换商品</option>
                                     </select>
                                 </div>
+                                <label class="col-sm-1 control-label no-padding-right">兑换城市：</label>
+                                <div class="col-sm-2">
+                                    <select id="city" name="cityCode"
+                                            class="chosen-select form-control">
+                                        <option value="">所有</option>
+                                    </select>
+                                </div>
                                 <div class="col-sm-3">
                                     <shiro:hasPermission name="auditRecordSearch">
                                         <button class="btn btn-white btn-default btn-round btn-sm"
@@ -222,6 +234,17 @@
                                                 <input type="hidden" name="id" id="auditRecordId"/>
                                                 <input type="hidden" name="version" id="version">
                                                 <input type="hidden" name="status" id="saveStatus">
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">兑换城市：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="cityName" name="cityName"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">银行信息：</label>
@@ -497,6 +520,8 @@
             },
             error: error
         });
+        //城市下拉框
+        initCity();
 
         calculateAllSum();
         $("#pointCodes").tag({});
@@ -506,7 +531,7 @@
         var tableOption = {
             url: "/api/auditrecord/listpage",
             postData: transformToJson($('#auditRecordSearchForm').serializeArray()),
-            colNames: ['', '操作', '提交人', '状态', '兑换总积分', '客户姓名', '客户手机号', '后台充值', '兑换码卡号', '商品价值(兑换比例)', '提交时间', '审核人', '审核时间'],
+            colNames: ['', '操作', '提交人', '状态', '兑换总积分', '客户姓名', '客户手机号', '后台充值', '兑换码卡号', '商品价值(兑换比例)', '提交时间', '审核人', '审核时间','兑换城市'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter},
@@ -594,6 +619,12 @@
                         return rowObject.id == 0 ? '': rowObject.status > 2 ? timeFormat(rowObject.auditTime) : "";
                     }
                 },
+                {
+                    name: 'cityName',
+                    index: 'cityName',
+                    width: 50,
+                    sortable: false
+                }
             ],
             footerrow: true,
             caption: "充值记录列表",
@@ -758,6 +789,7 @@
                     $("#customerMobileShow").html(result.customerMobile);
                     $("#auditRecordId").val(result.id);
                     $("#version").val(result.version);
+                    $("#cityName").val(result.cityName);
                     $("#bankOutletsName").val(result.bankOutletsName);
                     $("#exchangeType").val(getExchangeTypeText(result.exchangeType));
                     $("#exchangePoint").val(result.exchangePoint);
@@ -980,6 +1012,29 @@
                 }
             },
             error: error
+        });
+    }
+
+    function initCity() {
+        $.ajax({
+            url: "/api/syscity/getopenlist",
+            dataType: "json",
+            async: true,
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#city").append("<option value=" + result[i].cityCode + ">" + result[i].cityName + "("+ result[i].cityLevel + "级)</option>");
+                    }
+                }
+                initSearchSelect("city");
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
         });
     }
 

@@ -65,6 +65,10 @@ public class AuditRecordPO implements Serializable {
 
     private Date submitTime;
 
+    private String cityCode;
+
+    private String cityName;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -305,5 +309,21 @@ public class AuditRecordPO implements Serializable {
 
     public void setSubmitTime(Date submitTime) {
         this.submitTime = submitTime;
+    }
+
+    public String getCityCode() {
+        return cityCode;
+    }
+
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode == null ? null : cityCode.trim();
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName == null ? null : cityName.trim();
     }
 }

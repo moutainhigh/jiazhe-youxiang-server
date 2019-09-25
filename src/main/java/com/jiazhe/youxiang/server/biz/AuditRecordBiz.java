@@ -39,12 +39,12 @@ public class AuditRecordBiz {
         return auditRecordService.getById(id);
     }
 
-    public List<AuditRecordDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint ,Date submitStartTime, Date submitEndTime,String exchangeType, Paging paging) {
-        return auditRecordService.getList(null, customerInfo, submitterName, status, chargeReceiptStatus, pointCodes,exchangePoint, submitStartTime, submitEndTime,exchangeType, paging);
+    public List<AuditRecordDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint ,Date submitStartTime, Date submitEndTime,String exchangeType, String cityCode ,Paging paging) {
+        return auditRecordService.getList(null, customerInfo, submitterName, status, chargeReceiptStatus, pointCodes,exchangePoint, submitStartTime, submitEndTime,exchangeType,cityCode, paging);
     }
 
     public List<AuditRecordDTO> getSubmitterList(Integer submitterId, String customerInfo, Byte status, Paging paging) {
-        return auditRecordService.getList(submitterId, customerInfo, null, status, null, null,null, null, null,null, paging);
+        return auditRecordService.getList(submitterId, customerInfo, null, status, null, null,null, null, null,null, null,paging);
     }
 
     public void save(AuditRecordDTO auditRecordDTO) {
@@ -63,8 +63,8 @@ public class AuditRecordBiz {
         auditRecordService.changeChargeReceiptStatus(id, CommonConstant.CHARGE_RECEIPT_UNCOMPLETE,null);
     }
 
-    public AuditRecordSumDTO sum(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint, Date submitStartTime, Date submitEndTime, String exchangeType) {
-        return auditRecordService.sum(customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint, submitStartTime, submitEndTime, exchangeType);
+    public AuditRecordSumDTO sum(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint, Date submitStartTime, Date submitEndTime, String exchangeType,String cityCode) {
+        return auditRecordService.sum(customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint, submitStartTime, submitEndTime, exchangeType,cityCode);
     }
 
     public StatisticsDTO statistics(Integer id, Date submitStartTime, Date submitEndTime) {

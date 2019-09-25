@@ -28,10 +28,11 @@ public interface AuditRecordService {
      * @param submitStartTime
      * @param submitEndTime
      * @param exchangeType
+     * @param cityCode
      * @param paging
      * @return
      */
-    List<AuditRecordDTO> getList(Integer submitterId, String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint,Date submitStartTime, Date submitEndTime, String exchangeType,Paging paging);
+    List<AuditRecordDTO> getList(Integer submitterId, String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint,Date submitStartTime, Date submitEndTime, String exchangeType,String cityCode, Paging paging);
 
     /**
      * 根据id获取详细记录
@@ -103,7 +104,7 @@ public interface AuditRecordService {
      * @param submitEndTime
      * @return
      */
-    List<AuditRecordDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes,String exchangePoint, Date submitStartTime, Date submitEndTime,String exchangeType);
+    List<AuditRecordDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes,String exchangePoint, Date submitStartTime, Date submitEndTime,String exchangeType,String cityCode);
 
     /**
      * 求和
@@ -116,9 +117,10 @@ public interface AuditRecordService {
      * @param submitStartTime
      * @param submitEndTime
      * @param exchangeType
+     * @param cityCode
      * @return
      */
-    AuditRecordSumDTO sum(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint, Date submitStartTime, Date submitEndTime, String exchangeType);
+    AuditRecordSumDTO sum(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint, Date submitStartTime, Date submitEndTime, String exchangeType,String cityCode);
 
     /**
      * 小程序统计某个时间段内提交的小票信息
