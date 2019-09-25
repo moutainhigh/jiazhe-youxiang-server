@@ -37,6 +37,9 @@ public class AuditRecordPageReq extends PageSizeNumReq {
     @ApiModelProperty("兑换类型")
     private String exchangeType;
 
+    @ApiModelProperty("兑换城市")
+    private String cityCode;
+
     public Byte getStatus() {
         return status;
     }
@@ -107,5 +110,13 @@ public class AuditRecordPageReq extends PageSizeNumReq {
 
     public void setExchangeType(String exchangeType) {
         this.exchangeType = exchangeType;
+    }
+
+    public String getCityCode() {
+        return cityCode;
+    }
+
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode;
     }
 }
