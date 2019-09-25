@@ -18,6 +18,7 @@ import com.jiazhe.youxiang.server.vo.resp.DemoResp;
 import com.jiazhe.youxiang.server.vo.resp.boc.BOCDCQueryStockResp;
 import com.jiazhe.youxiang.server.vo.resp.boc.BOCDCReverseValueResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 
 /**
@@ -45,7 +53,9 @@ public class BOCDCController {
     @AppApi
     @ApiOperation(value = "中行储蓄卡获取可用码", httpMethod = "POST", response = BOCDCQueryStockResp.class, notes = "中行储蓄卡获取可用码")
     @RequestMapping(value = "/querystock", method = RequestMethod.POST)
-    public Object queryStock(@ModelAttribute BOCDCCommonReq req) {
+    public Object queryStock(HttpServletRequest request) {
+        LOGGER.error("HTTP调用[queryStock]方法，参数:{}", JSONObject.toJSON(request));
+        BOCDCCommonReq req = getReq(request);
         LOGGER.error("HTTP调用[queryStock]方法，参数:{}", JSONObject.toJSON(req));
         BOCDCUtils.adaptive(req);
         if (!BOCDCUtils.checkParam(req.getParam(), req.getSign())) {
@@ -110,5 +120,58 @@ public class BOCDCController {
 
         System.out.println("任务全部完成，总耗时：" + (end - start) + "毫秒");
         return "任务全部完成，总耗时：" + (end - start) + "毫秒";
+    }
+
+    private BOCDCCommonReq getReq(HttpServletRequest request) {
+        BOCDCCommonReq req = new BOCDCCommonReq();
+        String reqStr = null;
+        String param = null;
+        String sign = null;
+        try {
+            reqStr = getRequestString(request);
+            LOGGER.info("requestStr:{}", reqStr);
+            reqStr = URLDecoder.decode(reqStr, "UTF-8");
+        } catch (Exception e) {
+            LOGGER.error("", e);
+        }
+        if (!StringUtils.isEmpty(reqStr)) {
+            String[] arr = reqStr.split("&");
+            if (arr.length == 2) {
+                param = arr[0];
+                sign = arr[1];
+                if (!StringUtils.isEmpty(param)) {
+                    if ("param=".equals(param.substring(0, 6))) {
+                        param = param.substring(6);
+                    }
+                }
+                if (!StringUtils.isEmpty(sign)) {
+                    if ("sign=".equals(sign.substring(0, 5))) {
+                        sign = sign.substring(5);
+                    }
+                }
+            }
+        }
+        LOGGER.info("## param:{},sign:{}", param, sign);
+        req.setParam(param);
+        req.setSign(sign);
+        return req;
+    }
+
+    private String getRequestString(HttpServletRequest request) {
+        String result = null;
+        try {
+            StringBuilder sb = new StringBuilder();
+            InputStream in = request.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            result = sb.toString();
+        } catch (Exception e) {
+            LOGGER.error("读取请求内容失败", e);
+        }
+        LOGGER.error("getRequestString的结果：", result);
+        return result;
     }
 }
