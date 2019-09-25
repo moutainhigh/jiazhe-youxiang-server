@@ -47,6 +47,7 @@ public class BOCDCController {
     @RequestMapping(value = "/querystock", method = RequestMethod.POST)
     public Object queryStock(@ModelAttribute BOCDCCommonReq req) {
         LOGGER.error("HTTP调用[queryStock]方法，参数:{}", JSONObject.toJSON(req));
+        BOCDCUtils.adaptive(req);
         if (!BOCDCUtils.checkParam(req.getParam(), req.getSign())) {
             return BOCDCUtils.genrateFailReturn();
         }
@@ -69,6 +70,7 @@ public class BOCDCController {
     @RequestMapping(value = "/reversevalue", method = RequestMethod.POST)
     public Object reverseValue(@ModelAttribute BOCDCCommonReq req) {
         LOGGER.error("HTTP调用[reverseValue]方法，参数:{}", JSONObject.toJSON(req));
+        BOCDCUtils.adaptive(req);
         if (!BOCDCUtils.checkParam(req.getParam(), req.getSign())) {
             return BOCDCUtils.genrateFailReturn();
         }
