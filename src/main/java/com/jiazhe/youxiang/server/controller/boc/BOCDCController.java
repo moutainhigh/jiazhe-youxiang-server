@@ -22,10 +22,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +42,7 @@ import java.nio.charset.StandardCharsets;
  * @description 中行储蓄卡（BOCDC）controller
  * @created 2019-09-08 11:11
  */
-@Controller
+@RestController
 @RequestMapping("externalapi/bocdc")
 public class BOCDCController {
 
@@ -54,10 +54,10 @@ public class BOCDCController {
     @AppApi
     @ApiOperation(value = "中行储蓄卡获取可用码", httpMethod = "POST", response = BOCDCQueryStockResp.class, notes = "中行储蓄卡获取可用码")
     @RequestMapping(value = "/querystock", method = RequestMethod.POST)
-    public Object queryStock(HttpServletRequest request) {
-        LOGGER.error("HTTP调用[queryStock]方法，参数:{}", JSONObject.toJSON(request));
-        BOCDCCommonReq req = getReq(request);
-        LOGGER.error("HTTP调用[queryStock]方法，参数:{}", JSONObject.toJSON(req));
+    public Object queryStock(@RequestParam("xmlStr") String xmlStr, @RequestParam("sign") String sign) {
+        LOGGER.info("HTTP调用[queryStock]方法，xmlStr:{},sign:{}", xmlStr, sign);
+        BOCDCCommonReq req = getReq(xmlStr, sign);
+        LOGGER.info("HTTP调用[queryStock]方法，参数:{}", JSONObject.toJSON(req));
         BOCDCUtils.adaptive(req);
         if (!BOCDCUtils.checkParam(req.getParam(), req.getSign())) {
             return BOCDCUtils.genrateFailReturn();
@@ -69,18 +69,19 @@ public class BOCDCController {
             queryStockReq.setOrderNo(RSAUtil.bocdcPrivateDecrypt(queryStockReq.getOrderNo()));
             queryStockReq.setGiftNo(RSAUtil.bocdcPrivateDecrypt(queryStockReq.getGiftNo()));
         } catch (Exception e) {
-            LOGGER.error("HTTP调用[queryStock]方法解密失败，message:{}", e.getMessage());
+            LOGGER.info("HTTP调用[queryStock]方法解密失败，message:{}", e.getMessage());
             return BOCDCUtils.genrateFailReturn();
         }
         BOCDCQueryStockResp resp = bocdcBiz.queryStock(queryStockReq);
         return BOCDCUtils.generateReturn(resp);
     }
 
+
     @AppApi
     @ApiOperation(value = "中行储蓄卡退货", httpMethod = "POST", response = BOCDCReverseValueResp.class, notes = "中行储蓄卡退货")
     @RequestMapping(value = "/reversevalue", method = RequestMethod.POST)
     public Object reverseValue(@ModelAttribute BOCDCCommonReq req) {
-        LOGGER.error("HTTP调用[reverseValue]方法，参数:{}", JSONObject.toJSON(req));
+        LOGGER.info("HTTP调用[reverseValue]方法，参数:{}", JSONObject.toJSON(req));
         BOCDCUtils.adaptive(req);
         if (!BOCDCUtils.checkParam(req.getParam(), req.getSign())) {
             return BOCDCUtils.genrateFailReturn();
@@ -91,7 +92,7 @@ public class BOCDCController {
         try {
             reverseValueReq.setOrderNo(RSAUtil.bocdcPrivateDecrypt(reverseValueReq.getOrderNo()));
         } catch (Exception e) {
-            LOGGER.error("HTTP调用[reverseValue]方法解密失败，message:{}", e.getMessage());
+            LOGGER.info("HTTP调用[reverseValue]方法解密失败，message:{}", e.getMessage());
             return BOCDCUtils.genrateFailReturn();
         }
         BOCDCReverseValueResp resp = bocdcBiz.reverseValue(reverseValueReq);
@@ -121,6 +122,13 @@ public class BOCDCController {
 
         System.out.println("任务全部完成，总耗时：" + (end - start) + "毫秒");
         return "任务全部完成，总耗时：" + (end - start) + "毫秒";
+    }
+
+    private BOCDCCommonReq getReq(String xmlStr, String sign) {
+        BOCDCCommonReq req = new BOCDCCommonReq();
+        req.setXmlStr(xmlStr);
+        req.setSign(sign);
+        return req;
     }
 
     private BOCDCCommonReq getReq(HttpServletRequest request) {
