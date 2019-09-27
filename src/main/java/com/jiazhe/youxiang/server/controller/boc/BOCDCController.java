@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,7 +57,6 @@ public class BOCDCController {
 //        LOGGER.error("HTTP调用[queryStock]方法，request:{}", JSONObject.toJSON(request));
         BOCDCCommonReq req = getReq(request);
         LOGGER.info("HTTP调用[queryStock]方法，参数:{}", JSONObject.toJSON(req));
-        BOCDCUtils.adaptive(req);
         if (!BOCDCUtils.checkParam(req.getParam(), req.getSign())) {
             return BOCDCUtils.genrateFailReturn();
         }
@@ -80,9 +78,9 @@ public class BOCDCController {
     @AppApi
     @ApiOperation(value = "中行储蓄卡退货", httpMethod = "POST", response = BOCDCReverseValueResp.class, notes = "中行储蓄卡退货")
     @RequestMapping(value = "/reversevalue", method = RequestMethod.POST)
-    public Object reverseValue(@ModelAttribute BOCDCCommonReq req) {
+    public Object reverseValue(HttpServletRequest request) {
+        BOCDCCommonReq req = getReq(request);
         LOGGER.info("HTTP调用[reverseValue]方法，参数:{}", JSONObject.toJSON(req));
-        BOCDCUtils.adaptive(req);
         if (!BOCDCUtils.checkParam(req.getParam(), req.getSign())) {
             return BOCDCUtils.genrateFailReturn();
         }
@@ -124,13 +122,14 @@ public class BOCDCController {
         return "任务全部完成，总耗时：" + (end - start) + "毫秒";
     }
 
-    private BOCDCCommonReq getReq(String xmlStr, String sign) {
-        BOCDCCommonReq req = new BOCDCCommonReq();
-        req.setXmlStr(xmlStr);
-        req.setSign(sign);
-        return req;
-    }
-
+    /**
+     * 通过请求报文获取请求参数
+     * 测试报文
+     * http://152.136.33.239:8081/externalapi/bocdc/querystock&xmlStr=param=%3C%3Fxml+version%3D%271.0%27+encoding%3D%27UTF-8%27+standalone%3D%27yes%27%3F%3E%3Cdata%3E%3CorderNo%3EUuIAKtFezIjzywD5Dh7BpvmpEBJ3uFvW%2BcPUfZ7DkWgtmQESVBduER4M0XRay9qdSw5L7CGl5N2sG3yqD0h7l8Qx1cgMO5LQwy04pS7TUNn7NwUeFIJFLmuNpNbHoOQkhBo7QjXIcmz9v%2BFxPpqvGbqm5k53E6NwmndNx02nmJo%3D%3C%2ForderNo%3E%3CtranDate%3E20190924113701%3C%2FtranDate%3E%3CorderStatus%3E04%3C%2ForderStatus%3E%3CvalidDate%3E15%3C%2FvalidDate%3E%3CgiftNo%3EIlcNPksPwvfcsCkWe4NnJzbtVz%2FvLLu3TQj3FxRSj8RZ5IDhyYbdJHhHX7trSHHC82erlf0d1zgavZ4r7lj8f51KTojdRCOMeH1JGBGZgoZCpeEAKs71dcnjIv%2FLYaYPLx4zQpEbKAPeIsffHNkLmgFjLgwh0F%2Bt6bX%2B%2FSq9PM4%3D%3C%2FgiftNo%3E%3C%2Fdata%3E&sign=ca4f23b1ea1aed296c4452957ee0a4b90e6cee5a1d117b9f2624d9abfc533bc2
+     *
+     * @param request
+     * @return
+     */
     private BOCDCCommonReq getReq(HttpServletRequest request) {
         BOCDCCommonReq req = new BOCDCCommonReq();
         String reqStr = null;
@@ -141,7 +140,7 @@ public class BOCDCController {
             LOGGER.info("requestStr:{}", reqStr);
             reqStr = URLDecoder.decode(reqStr, "UTF-8");
         } catch (Exception e) {
-            LOGGER.error("", e);
+            LOGGER.error("解析报文失败，message:{}", e);
         }
         if (!StringUtils.isEmpty(reqStr)) {
             String[] arr = reqStr.split("&");
@@ -160,12 +159,19 @@ public class BOCDCController {
                 }
             }
         }
-        LOGGER.info("## param:{},sign:{}", param, sign);
+        LOGGER.info("解析报文成功，param:{},sign:{}", param, sign);
         req.setParam(param);
         req.setSign(sign);
+        BOCDCUtils.adaptive(req);
         return req;
     }
 
+    /**
+     * 获取请求内容
+     *
+     * @param request
+     * @return
+     */
     private String getRequestString(HttpServletRequest request) {
         String result = null;
         try {
