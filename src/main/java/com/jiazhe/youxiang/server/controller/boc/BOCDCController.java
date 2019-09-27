@@ -54,9 +54,9 @@ public class BOCDCController {
     @AppApi
     @ApiOperation(value = "中行储蓄卡获取可用码", httpMethod = "POST", response = BOCDCQueryStockResp.class, notes = "中行储蓄卡获取可用码")
     @RequestMapping(value = "/querystock", method = RequestMethod.POST)
-    public Object queryStock(@RequestParam("xmlStr") String xmlStr, @RequestParam("sign") String sign) {
-        LOGGER.info("HTTP调用[queryStock]方法，xmlStr:{},sign:{}", xmlStr, sign);
-        BOCDCCommonReq req = getReq(xmlStr, sign);
+    public Object queryStock(HttpServletRequest request) {
+//        LOGGER.error("HTTP调用[queryStock]方法，request:{}", JSONObject.toJSON(request));
+        BOCDCCommonReq req = getReq(request);
         LOGGER.info("HTTP调用[queryStock]方法，参数:{}", JSONObject.toJSON(req));
         BOCDCUtils.adaptive(req);
         if (!BOCDCUtils.checkParam(req.getParam(), req.getSign())) {
