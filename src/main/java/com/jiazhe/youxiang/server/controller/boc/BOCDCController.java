@@ -22,7 +22,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -186,7 +185,7 @@ public class BOCDCController {
         } catch (Exception e) {
             LOGGER.error("读取请求内容失败", e);
         }
-        LOGGER.error("getRequestString的结果：", result);
+        LOGGER.info("getRequestString的结果：{}", result);
         return result;
     }
 }
