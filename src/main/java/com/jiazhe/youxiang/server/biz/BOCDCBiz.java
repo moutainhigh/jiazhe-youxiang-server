@@ -54,6 +54,9 @@ public class BOCDCBiz {
 
     private static final String CODE_SUCCESS = "0000";
 
+    private static final String MER_ID = "0000";
+
+
     private static String HTTP_URL;
 
     @Value("${bocdc.status_check.http_url}")
@@ -196,12 +199,13 @@ public class BOCDCBiz {
 
     private String createParam(String orderNo, String useStatus, String useTime) {
         String template = "<?xml version=\"1.0\" encoding=\"UTF-8\"  standalone=\"yes\"?>" +
-                "<data>" +
+                "<bizdata><data>" +
                 "<orderNo>%s</orderNo>" +
                 "<useStatus>%s</useStatus>" +
                 "<useTime>%s</useTime>" +
-                "</data>";
-        String result = String.format(template, orderNo, useStatus, useTime);
+                "<merId>%s</merId>" +
+                "</data></bizdata>";
+        String result = String.format(template, orderNo, useStatus, useTime, MER_ID);
         return result.trim().replaceAll("\r|\n", "");
     }
 
