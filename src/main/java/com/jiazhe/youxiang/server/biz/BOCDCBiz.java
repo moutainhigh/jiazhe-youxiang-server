@@ -54,14 +54,18 @@ public class BOCDCBiz {
 
     private static final String CODE_SUCCESS = "0000";
 
-    private static final String MER_ID = "0000";
-
+    private static String MER_ID;
 
     private static String HTTP_URL;
 
     @Value("${bocdc.status_check.http_url}")
     public void setHttpUrl(String httpUrl) {
         HTTP_URL = httpUrl;
+    }
+
+    @Value("${bocdc.merid}")
+    public void setMerId(String merId) {
+        MER_ID = merId;
     }
 
     @Autowired
