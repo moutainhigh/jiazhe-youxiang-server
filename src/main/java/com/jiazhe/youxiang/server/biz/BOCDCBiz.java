@@ -119,10 +119,13 @@ public class BOCDCBiz {
     public BOCDCReverseValueResp reverseValue(BOCDCReverseValueReq reverseValueReq) {
         BOCDCReverseValueResp resp = new BOCDCReverseValueResp();
         String orderNo;
+        Integer pointExchangeCodeId;
         try {
             orderNo = reverseValueReq.getOrderNo();
+            pointExchangeCodeId = Integer.valueOf(reverseValueReq.getEbuyId());
             PointExchangeCodeDTO dto = pointExchangeCodeService.queryByOrderNo(orderNo);
-            if (dto == null) {
+//            PointExchangeCodeDTO dto = pointExchangeCodeService.getById(pointExchangeCodeId);
+            if (dto == null || !dto.getId().equals(pointExchangeCodeId)) {
                 //说明没找到
                 resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
                 resp.setBizDesc(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getMessage());

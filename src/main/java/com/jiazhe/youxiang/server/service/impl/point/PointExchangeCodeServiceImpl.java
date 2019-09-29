@@ -383,7 +383,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         criteria.andOutOrderCodeEqualTo(orderNo);
         criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
         List<PointExchangeCodePO> list = pointExchangeCodePOMapper.selectByExample(example);
-        if (CollectionUtils.isNotEmpty(list) || list.size() > 1) {
+        if (CollectionUtils.isEmpty(list) || list.size() > 1) {
             return null;
         }
         return PointExchangeCodeAdapter.po2Dto(list.get(0));
