@@ -117,6 +117,7 @@ public class BOCDCBiz {
      * @return
      */
     public BOCDCReverseValueResp reverseValue(BOCDCReverseValueReq reverseValueReq) {
+        LOGGER.info("Biz调用[reverseValue]接口，入参:{}", JacksonUtil.toJSon(reverseValueReq));
         BOCDCReverseValueResp resp = new BOCDCReverseValueResp();
         String orderNo;
         Integer pointExchangeCodeId;
@@ -125,6 +126,7 @@ public class BOCDCBiz {
             pointExchangeCodeId = Integer.valueOf(reverseValueReq.getEbuyId());
             PointExchangeCodeDTO dto = pointExchangeCodeService.queryByOrderNo(orderNo);
 //            PointExchangeCodeDTO dto = pointExchangeCodeService.getById(pointExchangeCodeId);
+            LOGGER.info("尝试找到兑换码记录，orderNo:{},pointExchangeCodeId:{},PointExchangeCodeDTO:{},", orderNo, pointExchangeCodeId, JacksonUtil.toJSon(dto));
             if (dto == null || !dto.getId().equals(pointExchangeCodeId)) {
                 //说明没找到
                 resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
