@@ -103,7 +103,7 @@ public class BOCDCController {
     public Object statusCheck() throws Exception {
         long start = System.currentTimeMillis();
 
-        bocdcBiz.statusCheck("2017042312", "1", "2018/02/20");
+        bocdcBiz.statusCheck("1000028230", "1", "2018/02/20");
         //Future<String> task2 = bocdcBiz.statusCheck("abc", "435", "13242");
         //Future<String> task3 = bocdcBiz.statusCheck("213", "12673", "12342");
 

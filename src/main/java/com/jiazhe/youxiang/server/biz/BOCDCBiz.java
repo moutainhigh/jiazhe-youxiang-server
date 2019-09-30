@@ -37,7 +37,6 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -166,8 +165,8 @@ public class BOCDCBiz {
      */
     @Async
     @Retryable(value = {BOCDCException.class},
-            maxAttempts = 1,
-            backoff = @Backoff(delay = 500L, multiplier = 2))
+            maxAttempts = 10,
+            backoff = @Backoff(delay = 5000L, multiplier = 2))
     public void statusCheck(String orderNo, String useStatus, String useTime) {
         LOGGER.info("Biz调用[statusCheck]接口，orderNo:{},useStatus:{},useTime:{}", orderNo, useStatus, useTime);
         BOCDCCommonReq req = new BOCDCCommonReq();
@@ -179,18 +178,13 @@ public class BOCDCBiz {
             throw new BOCDCException(BOCDCCodeEnum.STATUS_CHECK_ERROR.getCode(), BOCDCCodeEnum.STATUS_CHECK_ERROR.getType(), e.getMessage());
         }
         req.setParam(createParam(orderNo, useStatus, useTime));
-
         //使用SHA-256算法生成sign签名
         req.setSign(ShaUtils.getSha256(req.getParam()));
-        RestTemplate restTemplate = new RestTemplate();
         String result;
-        BOCDCCommonResp resp;
         try {
             String postParam = getParamString(req);
             LOGGER.info("HTTP调用中行使用状态核对实时接口，入参:{}", postParam);
             result = HttpUtil.sendPost(HTTP_URL, postParam);
-//            ResponseEntity<String> response = restTemplate.postForEntity(HTTP_URL, req, String.class);
-//            result = new String(response.getBody().getBytes("ISO8859-1"), "utf-8");
             LOGGER.info("HTTP调用中行使用状态核对实时接口成功，入参:{}，返回值:{}", postParam, JSONObject.toJSON(result));
         } catch (RestClientException e) {
             LOGGER.info("HTTP调用中行使用状态核对实时接口失败，RestClientException message:{}", e.getMessage());
@@ -202,19 +196,12 @@ public class BOCDCBiz {
             String message = BOCDCCodeEnum.STATUS_CHECK_ERROR.getMessage() + "orderNo:" + orderNo + ",useStatus:" + useStatus + ",useTime:" + useTime;
             LOGGER.info("Biz调用[statusCheck]接口失败,message:{}", message);
             throw new BOCDCException(BOCDCCodeEnum.STATUS_CHECK_ERROR.getCode(), BOCDCCodeEnum.STATUS_CHECK_ERROR.getType(), message);
-        } else if (commonResp.getBizCode() != CODE_SUCCESS) {
+        } else if (!CODE_SUCCESS.equals(commonResp.getBizCode())) {
             String message = BOCDCCodeEnum.STATUS_CHECK_ERROR.getMessage() + "orderNo:" + orderNo + ",useStatus:" + useStatus + ",useTime:" + useTime;
             LOGGER.info("Biz调用[statusCheck]接口成功，但返回值不符合预期，返回值:{} message:{}", JSONObject.toJSON(commonResp), message);
         } else {
             LOGGER.info("Biz调用[statusCheck]接口成功，orderNo:{},useStatus:{},useTime:{}", orderNo, useStatus, useTime);
         }
-    }
-
-    private Map getParamMap(BOCDCCommonReq req) {
-        Map<String, String> result = Maps.newHashMap();
-        result.put("param", req.getParam());
-        result.put("sign", req.getSign());
-        return result;
     }
 
     private String getParamString(BOCDCCommonReq req) {
@@ -223,7 +210,7 @@ public class BOCDCBiz {
         try {
             param = URLEncoder.encode(req.getParam(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            LOGGER.error("对参数encode发生错误，message:{}", e.getMessage());
         }
         sb.append("param=").append(param).append("&sign=").append(req.getSign());
         return sb.toString();
@@ -241,7 +228,6 @@ public class BOCDCBiz {
         String result = String.format(template, orderNo, useStatus, useTime, MER_ID);
         return result.trim().replaceAll("\r|\n", "");
     }
-
 
     @Recover
     public void recover(BOCDCException e) {
