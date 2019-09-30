@@ -126,12 +126,18 @@ public class BOCDCControllerTest {
                 "</data></bizdata>";
         String before = String.format(template, orderNo, channel, ebuyId);
         orderNo = RSAUtil.publicEncrypt(orderNo, BOCDC_PUBLIC_KEY);
-        String after =  String.format(template, orderNo, channel, ebuyId);
+        String after = String.format(template, orderNo, channel, ebuyId);
         after = after.trim().replaceAll("\r|\n", "");
         String sign = ShaUtils.getSha256(after);
 
         System.out.println("加密前：param=" + before);
         System.out.println("加密后：param=" + after + "&sign=" + sign);
 
+    }
+    @Test
+    public void test1() {
+        String param = "<?xml version=\"1.0\" encoding=\"UTF-8\"  standalone=\"yes\"?><bizdata><data><orderNo>qv0G1h/8mriyFr1KWwsfOuGOMUONGqsdyjZf5GF7EbWEn8YWwKmeOV7AwZj1ZlsTs3mvRcuHzWk+4vZ55Tg05IPrAXgW0XmKBHBvMdQcE3Iht8M1oc3h5S4Qy0uDiR+OgHZZyNGoNwY3KnyIvg+82cDw=</orderNo><useStatus>1</useStatus><useTime>2018/02/20</useTime><merId>ISI1000033150</merId></data></bizdata>";
+        param = "<?xml version=\"1.0\" encoding=\"UTF-8\"  standalone=\"yes\"?><bizdata><data><orderNo>qsdM9ALGqQOPbd9RqNHayHeauCPGEE0h3iKDpbHOTkEh+1hcPXo3K8xAHKOFDW0AwlEg6oMGW4iyzNSLVRgzqggTeC7lyliaEOrGYGEO1HOcXFkR8opG8i2HZ+5t5/CzzqohozIA7fbSWc64uhaOOUSsCB8w84XSx7N+HEqOx8Q=</orderNo><useStatus>1</useStatus><useTime>2018/02/20</useTime><merId>ISI1000033150</merId></data></bizdata>";
+        System.out.println("sgin = " + ShaUtils.getSha256(param));
     }
 }

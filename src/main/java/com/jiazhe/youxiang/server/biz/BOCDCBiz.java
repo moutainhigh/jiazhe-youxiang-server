@@ -6,8 +6,10 @@
 package com.jiazhe.youxiang.server.biz;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
 import com.jiazhe.youxiang.base.util.BOCDCUtils;
 import com.jiazhe.youxiang.base.util.DateUtil;
+import com.jiazhe.youxiang.base.util.HttpUtil;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.RSAUtil;
 import com.jiazhe.youxiang.base.util.ShaUtils;
@@ -29,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
@@ -39,7 +40,9 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * 中行储蓄卡Biz
@@ -163,7 +166,7 @@ public class BOCDCBiz {
      */
     @Async
     @Retryable(value = {BOCDCException.class},
-            maxAttempts = 5,
+            maxAttempts = 1,
             backoff = @Backoff(delay = 500L, multiplier = 2))
     public void statusCheck(String orderNo, String useStatus, String useTime) {
         LOGGER.info("Biz调用[statusCheck]接口，orderNo:{},useStatus:{},useTime:{}", orderNo, useStatus, useTime);
@@ -183,15 +186,17 @@ public class BOCDCBiz {
         String result;
         BOCDCCommonResp resp;
         try {
-            LOGGER.info("HTTP调用中行使用状态核对实时接口，入参:{}", JSONObject.toJSON(req));
-            ResponseEntity<String> response = restTemplate.postForEntity(HTTP_URL, req, String.class);
-            result = new String(response.getBody().getBytes("ISO8859-1"), "utf-8");
-            LOGGER.info("HTTP调用中行使用状态核对实时接口成功，入参:{}，返回值:{}", JSONObject.toJSON(req), JSONObject.toJSON(result));
-        } catch (RestClientException | UnsupportedEncodingException e) {
+            String postParam = getParamString(req);
+            LOGGER.info("HTTP调用中行使用状态核对实时接口，入参:{}", postParam);
+            result = HttpUtil.sendPost(HTTP_URL, postParam);
+//            ResponseEntity<String> response = restTemplate.postForEntity(HTTP_URL, req, String.class);
+//            result = new String(response.getBody().getBytes("ISO8859-1"), "utf-8");
+            LOGGER.info("HTTP调用中行使用状态核对实时接口成功，入参:{}，返回值:{}", postParam, JSONObject.toJSON(result));
+        } catch (RestClientException e) {
             LOGGER.info("HTTP调用中行使用状态核对实时接口失败，RestClientException message:{}", e.getMessage());
             throw new BOCDCException(BOCDCCodeEnum.STATUS_CHECK_ERROR.getCode(), BOCDCCodeEnum.STATUS_CHECK_ERROR.getType(), e.getMessage());
         }
-        result = BOCDCUtils.xml2JsonStr(result);
+        result = BOCDCUtils.xml2JsonStr(result.trim());
         BOCDCCommonResp commonResp = JacksonUtil.readValue(result, BOCDCCommonResp.class);
         if (commonResp == null) {
             String message = BOCDCCodeEnum.STATUS_CHECK_ERROR.getMessage() + "orderNo:" + orderNo + ",useStatus:" + useStatus + ",useTime:" + useTime;
@@ -203,6 +208,25 @@ public class BOCDCBiz {
         } else {
             LOGGER.info("Biz调用[statusCheck]接口成功，orderNo:{},useStatus:{},useTime:{}", orderNo, useStatus, useTime);
         }
+    }
+
+    private Map getParamMap(BOCDCCommonReq req) {
+        Map<String, String> result = Maps.newHashMap();
+        result.put("param", req.getParam());
+        result.put("sign", req.getSign());
+        return result;
+    }
+
+    private String getParamString(BOCDCCommonReq req) {
+        StringBuilder sb = new StringBuilder();
+        String param = "";
+        try {
+            param = URLEncoder.encode(req.getParam(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        sb.append("param=").append(param).append("&sign=").append(req.getSign());
+        return sb.toString();
     }
 
 
