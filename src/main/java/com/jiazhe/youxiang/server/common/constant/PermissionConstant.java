@@ -102,6 +102,8 @@ public class PermissionConstant {
     public static final String ORDER_CHECK = "orderCheck";
     //订单取消
     public static final String ORDER_CANCEL = "orderCancel";
+    //订单备注显示
+    public static final String ORDER_REMARK_SHOW = "orderRemarkShow";
 
 
     //项目管理

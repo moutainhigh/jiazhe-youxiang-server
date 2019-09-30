@@ -11,11 +11,9 @@ import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
-import com.jiazhe.youxiang.server.common.enums.CommonCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
-import com.jiazhe.youxiang.server.common.exceptions.CommonException;
 import com.jiazhe.youxiang.server.common.exceptions.OrderException;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
@@ -23,7 +21,15 @@ import com.jiazhe.youxiang.server.dto.order.orderinfo.TenpayQureyDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.*;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.AppendOrderReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerOrderInfoPageReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerPayReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerPlaceOrderReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderCancelUnpassReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderInfoPageReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserPlaceOrderReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserReservationOrderReq;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.TenpayQureyResp;
@@ -179,6 +185,10 @@ public class APIOrderInfoController extends BaseController {
         //如果cashSupport参数不为true，则设置为false
         if(!"true".equals(req.getCashSupport())){
             req.setCashSupport("false");
+        }
+        //订单备注框有权限，可能传过来为空
+        if(null == req.getComments()){
+            req.setComments("");
         }
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqUserPlaceOrder2DTOPlaceOrder(req);
         placeOrderDTO.setType(CommonConstant.USER_PLACE_ORDER);

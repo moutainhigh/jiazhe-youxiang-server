@@ -90,6 +90,8 @@ public enum PermissionTreeEnum {
     ORDER_CHECK(308, 3, "订单审核", PermissionConstant.ORDER_CHECK),
     //订单取消
     ORDER_CANCEL(309, 3, "订单取消", PermissionConstant.ORDER_CANCEL),
+    //订单备注显示
+    ORDER_REMARK_SHOW(310, 3, "订单备注显示", PermissionConstant.ORDER_REMARK_SHOW),
 
     /***************************项目相关**************************************/
     //项目管理
