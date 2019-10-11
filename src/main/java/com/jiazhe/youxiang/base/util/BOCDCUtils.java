@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.base.util;
 
 import com.jiazhe.youxiang.server.common.enums.BOCDCBizCodeEnum;
+import com.jiazhe.youxiang.server.vo.req.boc.BOCDCCommonReq;
 import com.jiazhe.youxiang.server.vo.resp.boc.BOCDCCommonResp;
 import net.sf.json.JSONObject;
 import net.sf.json.xml.XMLSerializer;
@@ -23,7 +24,6 @@ public class BOCDCUtils {
 
     private static String xml_prefix = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>";
 
-
     /**
      * 拼接返回字符串
      *
@@ -32,7 +32,9 @@ public class BOCDCUtils {
      */
     public static String generateReturn(Object jsonStr) {
         JSONObject jsonObject = JSONObject.fromObject(jsonStr);
-        StringBuilder sb = new StringBuilder(xml_prefix + generateLabel("data", false));
+        StringBuilder sb = new StringBuilder(xml_prefix);
+        sb.append(generateLabel("bizdata", false));
+        sb.append(generateLabel("data", false));
         Iterator<String> it = jsonObject.keys();
         while (it.hasNext()) {
             String key = it.next();
@@ -40,6 +42,7 @@ public class BOCDCUtils {
             sb.append(generateLabel(key, false)).append(value).append(generateLabel(key, true));
         }
         sb.append(generateLabel("data", true));
+        sb.append(generateLabel("bizdata", true));
         return sb.toString();
     }
 
@@ -98,5 +101,12 @@ public class BOCDCUtils {
         }
         return str;
 
+    }
+
+    public static void adaptive(BOCDCCommonReq req) {
+        if (req == null || StringUtils.isEmpty(req.getXmlStr()) || StringUtils.isNotEmpty(req.getParam())) {
+            return;
+        }
+        req.setParam(req.getXmlStr().replace("param=", ""));
     }
 }

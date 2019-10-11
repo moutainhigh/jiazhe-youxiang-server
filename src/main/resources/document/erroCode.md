@@ -23,3 +23,4 @@
 |发送短信的异常|120|com.jiazhe.youxiang.server.common.enums.MessageCodeEnum|
 |物料管理的相关|121|com.jiazhe.youxiang.server.common.enums.MaterialCodeEnum|
 |中行储蓄卡相关|122|com.jiazhe.youxiang.server.common.enums.BOCDCCodeEnum|
+|中行信用卡相关|123|com.jiazhe.youxiang.server.common.enums.BOCCCCodeEnum|

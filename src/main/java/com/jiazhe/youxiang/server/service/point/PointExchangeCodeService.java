@@ -1,5 +1,7 @@
 package com.jiazhe.youxiang.server.service.point;
 
+import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponEntity;
+import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponUsedEntity;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeEditDTO;
@@ -146,6 +148,25 @@ public interface PointExchangeCodeService {
      */
     PointExchangeCodeDTO queryStock(String orderNo, String giftNo, Date expiryDate);
 
+    /**
+     * 中行信用卡专用获取批次下的兑换码信息
+     * @param batchIds
+     * @return
+     */
+    List<BOCCCCouponEntity> getBOCCCCoupon(List<Integer> batchIds);
+
+    /**
+     * 中行信用卡专用获取昨日使用兑换码信息
+     * @return
+     */
+    List<BOCCCCouponUsedEntity> getBOCCCYesterdayUsed();
+
+    /**
+     * 兑换码退货
+     * @param id
+     * @param force
+     */
+    void refund(Integer id, Integer force);
 
     /**
      * 通过订单号（中行）查找兑换码
@@ -162,4 +183,5 @@ public interface PointExchangeCodeService {
      * @param usedStaus
      */
     void changeCodeUsedStatus(Integer id, Byte usedStaus);
+
 }

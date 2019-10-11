@@ -4,11 +4,14 @@ import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
+import com.jiazhe.youxiang.base.util.boccc.BOCCCConstant;
+import com.jiazhe.youxiang.base.util.boccc.BOCCCUtils;
 import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.point.PointExchangeCodeBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.constant.EnvironmentConstant;
 import com.jiazhe.youxiang.server.common.constant.PermissionConstant;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
@@ -36,6 +39,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -205,6 +209,18 @@ public class APIPointExchangeCodeController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.POINT, operate = "【小程序】通过code检查", level = LogLevelEnum.LEVEL_1)
     public Object checkByCode(@RequestParam String code) {
         pointExchangeCodeBiz.checkByCode(code);
+        return ResponseFactory.buildSuccess();
+    }
+
+    @RequiresPermissions(PermissionConstant.POINT_CODE_REFUND)
+    @ApiOperation(value = "第三方请求中行退货", httpMethod = "POST", notes = "第三方请求中行退货")
+    @RequestMapping(value = "/refund", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.POINT, operate = "第三方请求中行退货", level = LogLevelEnum.LEVEL_3)
+    public Object refund(@RequestParam Integer id, @RequestParam Integer force) {
+        if (!Arrays.asList(BOCCCConstant.BOCCC_ENVIRONMENT).contains(EnvironmentConstant.ENVIRONMENT)) {
+            throw new PointException(PointCodeEnum.REFUND_EVN_BOCCC);
+        }
+        pointExchangeCodeBiz.refund(id, force);
         return ResponseFactory.buildSuccess();
     }
 

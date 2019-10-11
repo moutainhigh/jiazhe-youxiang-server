@@ -2,9 +2,18 @@ package com.jiazhe.youxiang.server.service.impl.point;
 
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.ExchangeCodeCheckUtil;
+import com.jiazhe.youxiang.base.util.JacksonUtil;
+import com.jiazhe.youxiang.base.util.RSAUtil;
+import com.jiazhe.youxiang.base.util.boccc.BOCCCConstant;
+import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponEntity;
+import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponUsedEntity;
+import com.jiazhe.youxiang.base.util.boccc.BOCCCUtils;
+import com.jiazhe.youxiang.server.adapter.point.PointAdapter;
 import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
+import com.jiazhe.youxiang.server.biz.BOCCCBiz;
 import com.jiazhe.youxiang.server.biz.BOCDCBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.constant.EnvironmentConstant;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.PointCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
@@ -16,6 +25,7 @@ import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePOExample;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeRecordPO;
 import com.jiazhe.youxiang.server.domain.po.PointPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.point.point.PointDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
@@ -30,16 +40,22 @@ import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeRecordService;
 import com.jiazhe.youxiang.server.service.point.PointService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import com.jiazhe.youxiang.server.vo.req.boc.BOCCCRefundReq;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -49,6 +65,8 @@ import java.util.stream.Collectors;
  */
 @Service("pointExchangeCodeService")
 public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
+
+    public static Logger logger = LoggerFactory.getLogger(PointExchangeCodeServiceImpl.class);
 
     @Autowired
     private PointExchangeCodePOMapper pointExchangeCodePOMapper;
@@ -67,6 +85,8 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
 
     @Autowired
     private BOCDCBiz bocdcBiz;
+    @Autowired
+    private BOCCCBiz bocccBiz;
 
     @Override
     public List<PointExchangeCodeDTO> getByBatchId(Integer id) {
@@ -299,6 +319,13 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         pointExchangeCodePO.setUsed(CommonConstant.CODE_HAS_USED);
         pointExchangeCodePO.setCustomerId(customerId);
         pointExchangeCodePOMapper.updateByPrimaryKeySelective(pointExchangeCodePO);
+        //如果当前环境是中行信用卡环境，则通知中行信用卡方面兑换码已使用
+        if (Arrays.asList(BOCCCConstant.BOCCC_ENVIRONMENT).contains(EnvironmentConstant.ENVIRONMENT)) {
+            String waresId = pointExchangeCodeBatchEditDTO.getGiftNo();
+            String wEid = BOCCCUtils.complete(String.valueOf(pointExchangeCodePO.getId()), '0', true, 10);
+            String wInfo = pointExchangeCodePO.getKeyt();
+            bocccBiz.bocccUsedUpdate(waresId, wEid, wInfo);
+        }
         if (StringUtils.isNotEmpty(pointExchangeCodePO.getOutOrderCode())) {
             //调用中行使用状态核对实时接口
             bocdcBiz.statusCheck(pointExchangeCodePO.getOutOrderCode(), CommonConstant.CODE_USE_STATUS_USED, DateUtil.yyyyMMDD2(new Date()));
@@ -383,7 +410,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         criteria.andOutOrderCodeEqualTo(orderNo);
         criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
         List<PointExchangeCodePO> list = pointExchangeCodePOMapper.selectByExample(example);
-        if (CollectionUtils.isNotEmpty(list) || list.size() > 1) {
+        if (CollectionUtils.isEmpty(list) || list.size() > 1) {
             return null;
         }
         return PointExchangeCodeAdapter.po2Dto(list.get(0));
@@ -397,6 +424,51 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         po.setUsed(usedStaus);
         po.setModTime(new Timestamp(System.currentTimeMillis()));
         pointExchangeCodePOMapper.updateByPrimaryKeySelective(po);
+    }
+
+    @Override
+    public List<BOCCCCouponEntity> getBOCCCCoupon(List<Integer> batchIds) {
+        return pointExchangeCodePOManualMapper.getBOCCCCoupon(batchIds);
+    }
+
+    @Override
+    public List<BOCCCCouponUsedEntity> getBOCCCYesterdayUsed() {
+        Date beginTime = new Date(DateUtil.getFirstSecond(System.currentTimeMillis() - CommonConstant.ONE_DAY));
+        Date endTime = new Date(DateUtil.getLastSecond(System.currentTimeMillis() - CommonConstant.ONE_DAY));
+        return pointExchangeCodePOManualMapper.getBOCCCUsed(beginTime, endTime);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void refund(Integer id, Integer force) {
+        PointExchangeCodePO po = pointExchangeCodePOMapper.selectByPrimaryKey(id);
+        if (po.getUsed().equals(CommonConstant.CODE_HAS_REFUND)) {
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_REFUND);
+        }
+        PointExchangeRecordDTO recordDTO = pointExchangeRecordService.findByCodeId(id);
+        PointDTO pointDTO = pointService.getById(recordDTO.getPointId());
+        if (force == 0) {//如果不是强制退货，则判断一下该积分充值后的积分卡是否消费了
+            if (!pointDTO.getFaceValue().equals(pointDTO.getBalance())) {
+                String message = "该积分卡面额为：" + pointDTO.getFaceValue() + ",现余额为：" + pointDTO.getBalance() + "，是否强制退货？";
+                throw new PointException(PointCodeEnum.POINT_HAS_CONSUMED.getCode(), PointCodeEnum.POINT_HAS_CONSUMED.getType(), message);
+            }
+        }
+        po.setUsed(CommonConstant.CODE_HAS_REFUND);
+        pointExchangeCodePOMapper.updateByPrimaryKeySelective(po);
+        PointPO pointPO = PointAdapter.dto2Po(pointDTO);
+        pointPO.setStatus(CommonConstant.CODE_STOP_USING);
+        pointPO.setDescription("中行信用卡退货");
+        pointService.update(pointPO);
+        //如果当前环境是中行信用卡环境，则通知中行信用卡方面退货
+        if (Arrays.asList(BOCCCConstant.BOCCC_ENVIRONMENT).contains(EnvironmentConstant.ENVIRONMENT)) {
+            PointExchangeCodeBatchEditDTO batchEditDTO = pointExchangeCodeBatchService.getById(po.getBatchId());
+            String waresId = batchEditDTO.getGiftNo();
+            String wEid = BOCCCUtils.complete(String.valueOf(po.getId()), '0', true, 10);
+            String orderId = po.getOutOrderCode();
+            String wInfo = po.getKeyt();
+            bocccBiz.bocccRefundUpdate(waresId, wEid, orderId, wInfo);
+        }
+
     }
 
 }

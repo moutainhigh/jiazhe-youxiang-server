@@ -171,4 +171,23 @@
         ORDER BY pec.add_time ASC limit 0,1
     </select>
 
+    <select id="getBOCCCCoupon" parameterType="java.util.List"
+            resultType="com.jiazhe.youxiang.base.util.boccc.BOCCCCouponEntity">
+        SELECT pec.id as id, pecb.id as batch_id, pecb.gift_no as gift_no, pec.keyt as keyt
+        FROM point_exchange_code pec LEFT JOIN point_exchange_code_batch pecb on pec.batch_id = pecb.id
+        WHERE pecb.id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="getBOCCCUsed" resultType="com.jiazhe.youxiang.base.util.boccc.BOCCCCouponUsedEntity">
+        SELECT pec.id as id, pecb.id as batch_id, pecb.gift_no as gift_no, pec.keyt as keyt,per.add_time as used_time
+        FROM point_exchange_code pec
+        LEFT JOIN point_exchange_code_batch pecb on pec.batch_id = pecb.id
+        LEFT JOIN point_exchange_record per on per.exchange_code_id = pec.id
+        WHERE  pec.used = 1 and per.add_time &gt;= #{beginTime} AND per.add_time &lt;= #{endTime}
+    </select>
+
+
 </mapper>
