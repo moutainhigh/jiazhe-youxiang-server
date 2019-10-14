@@ -301,7 +301,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         pointExchangeCodePOMapper.updateByPrimaryKeySelective(pointExchangeCodePO);
         if (StringUtils.isNotEmpty(pointExchangeCodePO.getOutOrderCode())) {
             //调用中行使用状态核对实时接口
-            bocdcBiz.statusCheck(pointExchangeCodePO.getOutOrderCode(), CommonConstant.CODE_USE_STATUS_USED, DateUtil.yyyyMMDD2(new Date()));
+            bocdcBiz.statusCheck(pointExchangeCodePO.getOutOrderCode(), CommonConstant.CODE_USE_STATUS_USED, DateUtil.yyyyMMDDhhmmss(new Date()));
         }
     }
 
