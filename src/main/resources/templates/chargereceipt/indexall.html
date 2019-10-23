@@ -12,6 +12,7 @@
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
     <script th:src="@{/static/editable-select/js/jquery-editable-select.min.js}"></script>
+    <script th:src="@{/static/ace-master/js/bootstrap-tag.min.js}"></script>
 
     <style>
         .ui-jqgrid .ui-jqgrid-bdiv {
@@ -46,6 +47,16 @@
             width: auto;
             overflow: scroll;
             height: 500px;
+        }
+
+        /*隐藏×*/
+        span button {
+            display: none;
+        }
+
+        /*隐藏*/
+        #pointCodes + input {
+            display: none;
         }
     </style>
 </head>
@@ -153,6 +164,179 @@
                         <div id="grid-pager"></div>
                     </div><!-- /.col -->
 
+                    <div id="audit-modal-form" class="modal fade" tabindex="-1" style="overflow-y: scroll">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger" id="modal-title"></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-1"></div>
+                                        <div class="col-xs-12 col-sm-9">
+                                            <form id="auditForm" class="form-horizontal" role="form">
+                                                <input type="hidden" name="id" id="auditRecordId"/>
+                                                <input type="hidden" name="version" id="version">
+                                                <input type="hidden" name="status" id="saveStatus">
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">银行信息：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="bankOutletsName" name="bankOutletsName"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">兑换类型：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="exchangeType" name="exchangeType"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">兑换总积分：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="exchangePoint" name="exchangePoint"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">客户姓名：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="customerName" name="customerName"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 exchangeType1"></div>
+                                                <div class="form-group exchangeType1">
+                                                    <label class="col-sm-4 control-label no-padding-right">客户电话：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="customerMobile" name="customerMobile"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 exchangeType1"></div>
+                                                <div class="form-group exchangeType1">
+                                                    <label class="col-sm-4 control-label no-padding-right">后台充值积分：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="givingPoint" name="givingPoint"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 exchangeType2"></div>
+                                                <div class="form-group exchangeType2">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="pointCodes">积分兑换码卡号：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input type="text" name="pointCodes" id="pointCodes"
+                                                                   readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 exchangeType2"></div>
+                                                <div class="form-group exchangeType2">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="pointCodes">积分兑换码信息：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <div id="pointsInfo" class="form-control"
+                                                                 style="resize:none;height: 100px;overflow-y: scroll"
+                                                                 readonly></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 exchangeType3"></div>
+                                                <div class="form-group exchangeType3">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="productValue">商品价值：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="productValue" name="productValue"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">备注：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <textarea id="remark" name="remark"
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px"
+                                                                      readonly></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">充值凭证：</label>
+                                                    <div class="col-sm-8 float" id="pics">
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2 auditReason"></div>
+                                                <div class="form-group auditReason">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="auditReason">驳回理由：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <textarea id="auditReason" name="auditReason"
+                                                                      class="form-control"
+                                                                      style="resize:none;height: 100px"
+                                                                      readonly></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!--放大图片模态框-->
                     <div id="ShowImage_Form" class="modal fade" tabindex="-1" role="dialog"
                          aria-labelledby="myModalLabel" aria-hidden="true" style="overflow: scroll">
@@ -185,6 +369,7 @@
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
     var rotateFull = 0;
+    var imgUrls;
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -192,7 +377,7 @@
         });
 
         initDatePicker();
-
+        $("#pointCodes").tag({});
         $('#searchPosCode').editableSelect({
             effects: 'slide',
             filter: false
@@ -236,6 +421,7 @@
     function customFormatter(cellvalue, options, rowObject) {
         var str = "";
         str += "<a class='btn btn-minier btn-success' href='javascript:clickImg(\"" + encodeUrl(getImageUrl(rowObject.imgUrl)) + "\")'>查看小票</a>&nbsp;";
+        str += getFunctionButton("btn-primary", "showAuditRecord(" + rowObject.auditRecordId + ")", "审核记录");
         return str;
     }
 
@@ -257,6 +443,123 @@
         var zoomPicDoc = document.getElementById('zoomPicFull');
         rotateFull = (rotateFull + 90) % 360;
         zoomPicDoc.style.transform = 'rotate(' + rotateFull + 'deg)';
+    }
+
+    //查看提交审核记录
+    function showAuditRecord(id) {
+        huixian(id);
+        $("#passBtn").hide();
+        $("#unpassBtn").hide();
+        $("#auditReason").attr('readonly', 'readonly');
+        $("#posCode").attr('readonly', 'readonly');
+        $("#cardNo").attr('readonly', 'readonly');
+        $("#saveTradeTime").attr('disabled', 'disabled');
+        $("#exchangeProjectId").attr('disabled', "disabled");
+        $("#exchangeBatchId").attr('disabled', "disabled");
+        $("#modal-title").html("查看");
+    }
+
+    function huixian(id) {
+        $("#pics").empty();
+        $("#audit-modal-form").modal("show");
+        $.ajax({
+            url: "/api/auditrecord/getbyid",
+            dataType: "json",
+            async: false,
+            data: {
+                id: id
+            },
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    showByExchangeType(result);
+                    $("#customerMobileShow").html(result.customerMobile);
+                    $("#auditRecordId").val(result.id);
+                    $("#version").val(result.version);
+                    $("#bankOutletsName").val(result.bankOutletsName);
+                    $("#exchangeType").val(getExchangeTypeText(result.exchangeType));
+                    $("#exchangePoint").val(result.exchangePoint);
+                    $("#customerName").val(result.customerName);
+                    $("#auditReason").val(result.auditReason);
+                    $("#remark").val(result.remark);
+                    if (result.status == 3) { //审核不通过时显示不通过理由
+                        $(".auditReason").css("display", "");
+                    } else {
+                        $(".auditReason").css("display", "none");
+                    }
+                    imgUrls = result.imgUrls.split(",");
+                    for (var i = 0; i < imgUrls.length; i++) {
+                        $("#pics").append("<img class='item' target='_blank' src='" + getImageUrl(imgUrls[i]) + "'>")
+                    }
+                }
+            },
+            error: error
+        });
+    }
+
+    function showByExchangeType(result) {
+        if (hasExchangeType(result.exchangeType, '1')) {
+            $(".exchangeType1").css("display", "");
+            $("#customerMobile").val(result.customerMobile);
+            var rate = result.exchangePoint > 0 ? (result.givingPoint/result.exchangePoint).toFixed(2):'错误';
+            $("#givingPoint").val(result.givingPoint + '/' + rate);
+        } else {
+            $(".exchangeType1").css("display", "none");
+        }
+        if (hasExchangeType(result.exchangeType, '2')) {
+            $(".exchangeType2").css("display", "");
+            var $tag_obj = $('#pointCodes').data('tag');
+            var count = $tag_obj.values.length;
+            var pointCodes = result.pointCodes.split(',');
+            for (var i = 0; i < count; i++) {
+                $tag_obj.remove(0);
+            }
+            for (var i = 0; i < pointCodes.length; i++) {
+                $tag_obj.add(pointCodes[i]);
+            }
+            var pointsInfo = result.pointExchangeCodeRespList;
+            var pointsInfoHtml = '';
+            var totalValue = 0;
+            for (var i = 0; i < pointsInfo.length; i++) {
+                var status = pointsInfo[i].status == 0 ? "未启用" : "已启用";
+                var color = pointsInfo[i].status == 0 ? "00FF00" : "FF0000";
+                pointsInfoHtml += "[" + pointsInfo[i].code + "][" + pointsInfo[i].batchName + "][" + pointsInfo[i].faceValue + "积分][" + generateSpan(status, color) + "]</br>";
+                totalValue += pointsInfo[i].faceValue;
+            }
+            pointsInfoHtml += "合计：" + totalValue + "积分";
+            $("#pointsInfo").empty().append(pointsInfoHtml);
+        } else {
+            $(".exchangeType2").css("display", "none");
+        }
+        if (hasExchangeType(result.exchangeType, '3')) {
+            $(".exchangeType3").css("display", "");
+            $("#productValue").val(result.productValue);
+        } else {
+            $(".exchangeType3").css("display", "none");
+        }
+    }
+
+    function getExchangeTypeText(type) {
+        var exchangeType = type.toString().split('');
+        var exchangeTypeText = "";
+        if (exchangeType.indexOf('1') > -1) {
+            exchangeTypeText = exchangeTypeText + '充积分 ';
+        }
+        if (exchangeType.indexOf('2') > -1) {
+            exchangeTypeText = exchangeTypeText + '积分卡 ';
+        }
+        if (exchangeType.indexOf('3') > -1) {
+            exchangeTypeText = exchangeTypeText + '换商品 ';
+        }
+        return exchangeTypeText;
+    }
+
+    function hasExchangeType(type, value) {
+        var exchangeType = type.toString().split('');
+        return exchangeType.indexOf(value) > -1;
     }
 
 </script>
