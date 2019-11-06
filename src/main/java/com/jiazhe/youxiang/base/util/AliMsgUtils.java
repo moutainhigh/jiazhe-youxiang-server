@@ -116,12 +116,6 @@ public class AliMsgUtils {
         return sb.toString();
     }
 
-    public static void main(String[] args) {
-        String templateContent = "您于${time}兑换的${productName}服务，卡号为${code}，密码为${keyt}。如有任何疑惑请拨打客服电话1111";
-        String[] params = {"123", "4555", "345", "234"};
-        System.out.println(packageTemplateParam(templateContent, params));
-    }
-
     public static void validateTemplate(String aliTemplateCode, String aliTemplateContent) {
 
     }

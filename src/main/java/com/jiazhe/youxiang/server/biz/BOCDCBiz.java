@@ -6,8 +6,10 @@
 package com.jiazhe.youxiang.server.biz;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
 import com.jiazhe.youxiang.base.util.BOCDCUtils;
 import com.jiazhe.youxiang.base.util.DateUtil;
+import com.jiazhe.youxiang.base.util.HttpUtil;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.RSAUtil;
 import com.jiazhe.youxiang.base.util.ShaUtils;
@@ -29,17 +31,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * 中行储蓄卡Biz
@@ -54,11 +56,18 @@ public class BOCDCBiz {
 
     private static final String CODE_SUCCESS = "0000";
 
+    private static String MER_ID;
+
     private static String HTTP_URL;
 
     @Value("${bocdc.status_check.http_url}")
     public void setHttpUrl(String httpUrl) {
         HTTP_URL = httpUrl;
+    }
+
+    @Value("${bocdc.merid}")
+    public void setMerId(String merId) {
+        MER_ID = merId;
     }
 
     @Autowired
@@ -110,12 +119,17 @@ public class BOCDCBiz {
      * @return
      */
     public BOCDCReverseValueResp reverseValue(BOCDCReverseValueReq reverseValueReq) {
+        LOGGER.info("Biz调用[reverseValue]接口，入参:{}", JacksonUtil.toJSon(reverseValueReq));
         BOCDCReverseValueResp resp = new BOCDCReverseValueResp();
         String orderNo;
+        Integer pointExchangeCodeId;
         try {
             orderNo = reverseValueReq.getOrderNo();
+            pointExchangeCodeId = Integer.valueOf(reverseValueReq.getEbuyId());
             PointExchangeCodeDTO dto = pointExchangeCodeService.queryByOrderNo(orderNo);
-            if (dto == null) {
+//            PointExchangeCodeDTO dto = pointExchangeCodeService.getById(pointExchangeCodeId);
+            LOGGER.info("尝试找到兑换码记录，orderNo:{},pointExchangeCodeId:{},PointExchangeCodeDTO:{},", orderNo, pointExchangeCodeId, JacksonUtil.toJSon(dto));
+            if (dto == null || !dto.getId().equals(pointExchangeCodeId)) {
                 //说明没找到
                 resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
                 resp.setBizDesc(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getMessage());
@@ -151,8 +165,8 @@ public class BOCDCBiz {
      */
     @Async
     @Retryable(value = {BOCDCException.class},
-            maxAttempts = 5,
-            backoff = @Backoff(delay = 500L, multiplier = 2))
+            maxAttempts = 10,
+            backoff = @Backoff(delay = 5000L, multiplier = 2))
     public void statusCheck(String orderNo, String useStatus, String useTime) {
         LOGGER.info("Biz调用[statusCheck]接口，orderNo:{},useStatus:{},useTime:{}", orderNo, useStatus, useTime);
         BOCDCCommonReq req = new BOCDCCommonReq();
@@ -164,28 +178,25 @@ public class BOCDCBiz {
             throw new BOCDCException(BOCDCCodeEnum.STATUS_CHECK_ERROR.getCode(), BOCDCCodeEnum.STATUS_CHECK_ERROR.getType(), e.getMessage());
         }
         req.setParam(createParam(orderNo, useStatus, useTime));
-
         //使用SHA-256算法生成sign签名
         req.setSign(ShaUtils.getSha256(req.getParam()));
-        RestTemplate restTemplate = new RestTemplate();
         String result;
-        BOCDCCommonResp resp;
         try {
-            LOGGER.info("HTTP调用中行使用状态核对实时接口，入参:{}", JSONObject.toJSON(req));
-            ResponseEntity<String> response = restTemplate.postForEntity(HTTP_URL, req, String.class);
-            result = new String(response.getBody().getBytes("ISO8859-1"), "utf-8");
-            LOGGER.info("HTTP调用中行使用状态核对实时接口成功，入参:{}，返回值:{}", JSONObject.toJSON(req), JSONObject.toJSON(result));
-        } catch (RestClientException | UnsupportedEncodingException e) {
+            String postParam = getParamString(req);
+            LOGGER.info("HTTP调用中行使用状态核对实时接口，入参:{}", postParam);
+            result = HttpUtil.sendPost(HTTP_URL, postParam);
+            LOGGER.info("HTTP调用中行使用状态核对实时接口成功，入参:{}，返回值:{}", postParam, JSONObject.toJSON(result));
+        } catch (RestClientException e) {
             LOGGER.info("HTTP调用中行使用状态核对实时接口失败，RestClientException message:{}", e.getMessage());
             throw new BOCDCException(BOCDCCodeEnum.STATUS_CHECK_ERROR.getCode(), BOCDCCodeEnum.STATUS_CHECK_ERROR.getType(), e.getMessage());
         }
-        result = BOCDCUtils.xml2JsonStr(result);
+        result = BOCDCUtils.xml2JsonStr(result.trim());
         BOCDCCommonResp commonResp = JacksonUtil.readValue(result, BOCDCCommonResp.class);
         if (commonResp == null) {
             String message = BOCDCCodeEnum.STATUS_CHECK_ERROR.getMessage() + "orderNo:" + orderNo + ",useStatus:" + useStatus + ",useTime:" + useTime;
             LOGGER.info("Biz调用[statusCheck]接口失败,message:{}", message);
             throw new BOCDCException(BOCDCCodeEnum.STATUS_CHECK_ERROR.getCode(), BOCDCCodeEnum.STATUS_CHECK_ERROR.getType(), message);
-        } else if (commonResp.getBizCode() != CODE_SUCCESS) {
+        } else if (!CODE_SUCCESS.equals(commonResp.getBizCode())) {
             String message = BOCDCCodeEnum.STATUS_CHECK_ERROR.getMessage() + "orderNo:" + orderNo + ",useStatus:" + useStatus + ",useTime:" + useTime;
             LOGGER.info("Biz调用[statusCheck]接口成功，但返回值不符合预期，返回值:{} message:{}", JSONObject.toJSON(commonResp), message);
         } else {
@@ -193,18 +204,30 @@ public class BOCDCBiz {
         }
     }
 
+    private String getParamString(BOCDCCommonReq req) {
+        StringBuilder sb = new StringBuilder();
+        String param = "";
+        try {
+            param = URLEncoder.encode(req.getParam(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            LOGGER.error("对参数encode发生错误，message:{}", e.getMessage());
+        }
+        sb.append("param=").append(param).append("&sign=").append(req.getSign());
+        return sb.toString();
+    }
+
 
     private String createParam(String orderNo, String useStatus, String useTime) {
         String template = "<?xml version=\"1.0\" encoding=\"UTF-8\"  standalone=\"yes\"?>" +
-                "<data>" +
+                "<bizdata><data>" +
                 "<orderNo>%s</orderNo>" +
                 "<useStatus>%s</useStatus>" +
                 "<useTime>%s</useTime>" +
-                "</data>";
-        String result = String.format(template, orderNo, useStatus, useTime);
+                "<merId>%s</merId>" +
+                "</data></bizdata>";
+        String result = String.format(template, orderNo, useStatus, useTime, MER_ID);
         return result.trim().replaceAll("\r|\n", "");
     }
-
 
     @Recover
     public void recover(BOCDCException e) {
@@ -214,4 +237,3 @@ public class BOCDCBiz {
 
 
 }
-

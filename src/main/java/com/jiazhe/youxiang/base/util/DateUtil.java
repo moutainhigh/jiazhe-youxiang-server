@@ -33,6 +33,16 @@ public class DateUtil {
     }
 
     /**
+     * 将Date转为yyyy-MM-dd HH:mm:ss字符串
+     * @param date
+     * @return
+     */
+    public static String secondToStr(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return  sdf.format(date);
+    }
+
+    /**
      * 将字符串转为date类型
      */
     public static Date strToMinutes(String str) {

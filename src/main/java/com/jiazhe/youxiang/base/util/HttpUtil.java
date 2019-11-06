@@ -72,7 +72,7 @@ public final class HttpUtil {
         return null;
     }
 
-    public static String httpPost(String url,Map params) {
+    public static String httpPost(String url, Map params) {
         System.out.println(params.toString());
         PrintWriter out = null;
         BufferedReader in = null;
@@ -84,14 +84,14 @@ public final class HttpUtil {
             // 设置通用的请求属性
             conn.setRequestProperty("accept", "*/*");
             conn.setRequestProperty("connection", "Keep-Alive");
-            conn.setRequestProperty("user-agent","Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            conn.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
             // 发送POST请求必须设置如下两行
             conn.setDoOutput(true);
             conn.setDoInput(true);
             //1.获取URLConnection对象对应的输出流
             out = new PrintWriter(conn.getOutputStream());
             //2.中文有乱码的需要将PrintWriter改为如下
-            //out=new OutputStreamWriter(conn.getOutputStream(),"UTF-8")
+//            out = new PrintWriter(new OutputStreamWriter(conn.getOutputStream(), "UTF-8"));
             // 发送请求参数
             out.print(params.toString());
             // flush输出流的缓冲
@@ -103,25 +103,63 @@ public final class HttpUtil {
                 result += line;
             }
         } catch (Exception e) {
-            System.out.println("发送 POST 请求出现异常！"+e);
+            System.out.println("发送 POST 请求出现异常！" + e);
             e.printStackTrace();
         }
         //使用finally块来关闭输出流、输入流
-        finally{
-            try{
-                if(out!=null){
+        finally {
+            try {
+                if (out != null) {
                     out.close();
                 }
-                if(in!=null){
+                if (in != null) {
                     in.close();
                 }
-            }
-            catch(IOException ex){
+            } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
-        System.out.println("post推送结果："+result);
+        System.out.println("post推送结果：" + result);
         return result;
     }
 
+    /**
+     * 向指定URL发送POST方式的请求
+     *
+     * @param url   发送请求的URL
+     * @param param 请求参数
+     * @return URL 代表远程资源的响应
+     */
+    public static String sendPost(String url, String param) {
+        String result = "";
+        try {
+            URL realUrl = new URL(url);
+            //打开和URL之间的连接
+            URLConnection conn = realUrl.openConnection();
+            //设置通用的请求属性
+            conn.setRequestProperty("accept", "*/*");
+            conn.setRequestProperty("connection", "Keep-Alive");
+            conn.setRequestProperty("user-agent",
+                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            //发送POST请求必须设置如下两行
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            //获取URLConnection对象对应的输出流
+            PrintWriter out = new PrintWriter(conn.getOutputStream());
+            //发送请求参数
+            out.print(param);
+            //flush输出流的缓冲
+            out.flush();
+            // 定义 BufferedReader输入流来读取URL的响应
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+            String line;
+            while ((line = in.readLine()) != null) {
+                result += "\n" + line;
+            }
+        } catch (Exception e) {
+            System.out.println("发送POST请求出现异常" + e);
+            e.printStackTrace();
+        }
+        return result;
+    }
 }
