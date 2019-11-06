@@ -83,10 +83,12 @@
                     <div class="col-xs-12" style="text-align: right" id="buttonDiv">
                         <p style="margin:1px;height: 31px">
                             <shiro:hasPermission name="allPointCodeStatusChange">
-                                <a class="btn btn-success btn-round btn-sm" title="启用所有未使用码" role="button" onclick="allStartUsing()">
+                                <a class="btn btn-success btn-round btn-sm" title="启用所有未使用码" role="button"
+                                   onclick="allStartUsing()">
                                     启用所有码
                                 </a>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <a class="btn btn-success btn-round btn-sm" title="停用所有未使用码" role="button" onclick="allStopUsing()">
+                                <a class="btn btn-success btn-round btn-sm" title="停用所有未使用码" role="button"
+                                   onclick="allStopUsing()">
                                     停用所有码
                                 </a>
                             </shiro:hasPermission>
@@ -115,7 +117,8 @@
                                                 <input type="hidden" name="productIds" id="saveProductIds">
                                                 <input type="hidden" name="cityCodes" id="saveCityCodes">
                                                 <input type="hidden" name="expiryType" value=0 id="saveExpiryType">
-                                                <input type="hidden" name="validityPeriod" value=0 id="saveValidityPeriod">
+                                                <input type="hidden" name="validityPeriod" value=0
+                                                       id="saveValidityPeriod">
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">积分卡名称：</label>
@@ -158,7 +161,8 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right"> 【积分卡有效期】</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">
+                                                        【积分卡有效期】</label>
                                                     <div class="col-sm-8"></div>
                                                 </div>
 
@@ -283,8 +287,8 @@
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
 
-    var usedText = ["未使用","已使用","已退货"];
-    var usedColor = ["00FF00","FF0000","0000FF"];
+    var usedText = ["未使用", "已使用", "已退货"];
+    var usedColor = ["00FF00", "FF0000", "0000FF"];
 
     $(function () {
         //重新修改表格宽度
@@ -369,14 +373,14 @@
                     width: 100,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        if(rowObject.expiryType == 0){
-                            return timeFormat(rowObject.pointEffectiveTime)+"至"+timeFormat(rowObject.pointExpiryTime);
+                        if (rowObject.expiryType == 0) {
+                            return timeFormat(rowObject.pointEffectiveTime) + "至" + timeFormat(rowObject.pointExpiryTime);
                         }
-                        if(rowObject.expiryType == 1){
-                            return "自兑换之日起，"+rowObject.validityPeriod+"日有效";
+                        if (rowObject.expiryType == 1) {
+                            return "自兑换之日起，" + rowObject.validityPeriod + "日有效";
                         }
-                        if(rowObject.expiryType == 2){
-                            return "自激活之日起，"+rowObject.validityPeriod+"日有效";
+                        if (rowObject.expiryType == 2) {
+                            return "自激活之日起，" + rowObject.validityPeriod + "日有效";
                         }
                     }
                 },

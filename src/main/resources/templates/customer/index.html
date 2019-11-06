@@ -236,7 +236,7 @@
                                                     <label class="col-sm-3 control-label no-padding-right">数量：</label>
                                                     <div class="col-sm-9">
                                                         <div class="pos-rel">
-                                                            <input type="text" name="count" id="orderCount" readonly/>
+                                                            <input type="text" name="count" id="orderCount" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -415,7 +415,7 @@
         });
 
         $("#orderCount").ace_spinner({
-            value: 1, min: 1, max: 100, step: 1, on_sides: true, icon_up: 'ace-icon fa fa-plus',
+            value: 1, min: 1, max: 1000, step: 1, on_sides: true, icon_up: 'ace-icon fa fa-plus',
             icon_down: 'ace-icon fa fa-minus', btn_up_class: 'btn-success', btn_down_class: 'btn-danger'
         })
             .closest('.ace-spinner')

@@ -24,7 +24,6 @@ public class BOCDCUtils {
 
     private static String xml_prefix = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>";
 
-
     /**
      * 拼接返回字符串
      *
@@ -33,7 +32,9 @@ public class BOCDCUtils {
      */
     public static String generateReturn(Object jsonStr) {
         JSONObject jsonObject = JSONObject.fromObject(jsonStr);
-        StringBuilder sb = new StringBuilder(xml_prefix + generateLabel("data", false));
+        StringBuilder sb = new StringBuilder(xml_prefix);
+        sb.append(generateLabel("bizdata", false));
+        sb.append(generateLabel("data", false));
         Iterator<String> it = jsonObject.keys();
         while (it.hasNext()) {
             String key = it.next();
@@ -41,6 +42,7 @@ public class BOCDCUtils {
             sb.append(generateLabel(key, false)).append(value).append(generateLabel(key, true));
         }
         sb.append(generateLabel("data", true));
+        sb.append(generateLabel("bizdata", true));
         return sb.toString();
     }
 
