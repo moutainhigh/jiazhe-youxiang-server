@@ -9,17 +9,17 @@ import java.util.Date;
 
 public class DateUtil {
 
-   private static Logger logger = LoggerFactory.getLogger(DateUtil.class);
+    private static Logger logger = LoggerFactory.getLogger(DateUtil.class);
 
     /**
      * 将字符串转为date类型
      */
-    public static Date strToDate(String str)  {
+    public static Date strToDate(String str) {
         //小写的mm表示的是分钟
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;
         try {
-            date =  sdf.parse(str);
+            date = sdf.parse(str);
             return date;
         } catch (ParseException e) {
             logger.error("string转换yyyy-MM-dd错误");
@@ -29,17 +29,27 @@ public class DateUtil {
 
     public static String dateToStr(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(date);
+    }
+
+    /**
+     * 将Date转为yyyy-MM-dd HH:mm:ss字符串
+     * @param date
+     * @return
+     */
+    public static String secondToStr(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return  sdf.format(date);
     }
 
     /**
      * 将字符串转为date类型
      */
-    public static Date strToMinutes(String str)  {
+    public static Date strToMinutes(String str) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date date = null;
         try {
-            date =  sdf.parse(str);
+            date = sdf.parse(str);
             return date;
         } catch (ParseException e) {
             logger.error("string转换yyyy-MM-dd HH:mm错误");
@@ -50,11 +60,11 @@ public class DateUtil {
     /**
      * 将字符串转为date类型
      */
-    public static Date strToHour(String str)  {
+    public static Date strToHour(String str) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH");
         Date date = null;
         try {
-            date =  sdf.parse(str);
+            date = sdf.parse(str);
             return date;
         } catch (ParseException e) {
             logger.error("string转换yyyy-MM-dd HH错误");
@@ -65,11 +75,11 @@ public class DateUtil {
     /**
      * 将字符串转为date类型
      */
-    public static Date yyyyMMddHHmmssStrToSeconds(String str)  {
+    public static Date yyyyMMddHHmmssStrToSeconds(String str) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         Date date = null;
         try {
-            date =  sdf.parse(str);
+            date = sdf.parse(str);
             return date;
         } catch (ParseException e) {
             logger.error("string转换Date错误");
@@ -80,9 +90,9 @@ public class DateUtil {
     /**
      * 返回yyyyMMDDhhmmss
      */
-    public static String yyyyMMDDhhmmss() {
+    public static String yyyyMMDDhhmmss(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        String str = sdf.format(new Date());
+        String str = sdf.format(date);
         return str;
     }
 
@@ -109,6 +119,15 @@ public class DateUtil {
      */
     public static String yyyyMMDD(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String str = sdf.format(date);
+        return str;
+    }
+
+    /**
+     * 返回yyyy/MM/dd
+     */
+    public static String yyyyMMDD2(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         String str = sdf.format(date);
         return str;
     }

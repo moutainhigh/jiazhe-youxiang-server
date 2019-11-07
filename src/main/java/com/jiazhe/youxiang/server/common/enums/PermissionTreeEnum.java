@@ -90,6 +90,8 @@ public enum PermissionTreeEnum {
     ORDER_CHECK(308, 3, "订单审核", PermissionConstant.ORDER_CHECK),
     //订单取消
     ORDER_CANCEL(309, 3, "订单取消", PermissionConstant.ORDER_CANCEL),
+    //订单备注显示
+    ORDER_REMARK_SHOW(310, 3, "订单备注显示", PermissionConstant.ORDER_REMARK_SHOW),
 
     /***************************项目相关**************************************/
     //项目管理
@@ -225,8 +227,10 @@ public enum PermissionTreeEnum {
     RC_CODE_EDIT(70208, 702, "充值卡兑换码修改", PermissionConstant.RC_CODE_EDIT),
     //充值卡兑换码启、停用
     RC_CODE_STATUS_CHANGE(70209, 702, "单个充值卡兑换码启、停用", PermissionConstant.RC_CODE_STATUS_CHANGE),
+    //中行兑换码退货
+    POINT_CODE_FEFUND(70210, 702, "中行信用卡退货", PermissionConstant.POINT_CODE_REFUND),
     //充值卡兑换码启、停用
-    ALL_RC_CODE_STATUS_CHANGE(70210, 702, "所有充值卡兑换码启、停用", PermissionConstant.ALL_RC_CODE_STATUS_CHANGE),
+    ALL_RC_CODE_STATUS_CHANGE(70211, 702, "所有充值卡兑换码启、停用", PermissionConstant.ALL_RC_CODE_STATUS_CHANGE),
     //代金券兑换码批次管理
     VOUCHER_BATCH_MANAGEMENT(703, 7, "代金券兑换码批次管理", PermissionConstant.VOUCHER_BATCH_MANAGEMENT),
     //代金券兑换码批次查询
@@ -289,7 +293,7 @@ public enum PermissionTreeEnum {
     //商家订单查询
     PARTNER_ORDER_SEARCH(801, 8, "商家订单查询", PermissionConstant.PARTNER_ORDER_SEARCH),
     //商家订单导出
-    PARTNER_ORDER_EXPORT(802,8,"商家订单导出",PermissionConstant.PARTNER_ORDER_EXPORT),
+    PARTNER_ORDER_EXPORT(802, 8, "商家订单导出", PermissionConstant.PARTNER_ORDER_EXPORT),
     //商家订单添加
     PARTNER_ORDER_ADD(803, 8, "商家订单添加", PermissionConstant.PARTNER_ORDER_ADD),
     //商家订单修改
@@ -304,13 +308,13 @@ public enum PermissionTreeEnum {
     /****************短信管理********************/
     MESSAGE_MANAGEMENT(9, 0, "短信管理", PermissionConstant.MESSAGE_MANAGEMENT),
     //短信单条发送
-    MESSAGE_SINGLE_SEND(901,9, "单条发送", PermissionConstant.MESSAGE_SINGLE_SEND),
+    MESSAGE_SINGLE_SEND(901, 9, "单条发送", PermissionConstant.MESSAGE_SINGLE_SEND),
     //短信多条发送
-    MESSAGE_BATCH_SEND(902,9,"批量发送",PermissionConstant.MESSAGE_BATCH_SEND),
+    MESSAGE_BATCH_SEND(902, 9, "批量发送", PermissionConstant.MESSAGE_BATCH_SEND),
     //短信重新发送（包括重试和重新发送）
     MESSAGE_RESEND(903, 9, "短信重新发送", PermissionConstant.MESSAGE_RESEND),
     //短信展示
-    MESSAGE_SHOW(904,9,"查看短信",PermissionConstant.MESSAGE_SHOW),
+    MESSAGE_SHOW(904, 9, "查看短信", PermissionConstant.MESSAGE_SHOW),
 
     /****************物料管理********************/
     MATERIAL_MANAGEMENT(10, 0, "物料管理", PermissionConstant.MATERIAL_MANAGEMENT),
@@ -323,8 +327,7 @@ public enum PermissionTreeEnum {
     //修改转账
     MATERIAL_TRANSFER_MONEY_EDIT(1004, 10, "修改转账", PermissionConstant.MATERIAL_TRANSFER_MONEY_EDIT),
     //删除转账
-    MATERIAL_TRANSFER_MONEY_DELETE(1005, 10, "删除转账", PermissionConstant.MATERIAL_TRANSFER_MONEY_DELETE),
-    ;
+    MATERIAL_TRANSFER_MONEY_DELETE(1005, 10, "删除转账", PermissionConstant.MATERIAL_TRANSFER_MONEY_DELETE),;
 
     PermissionTreeEnum(Integer id, Integer pId, String name, String perm) {
         this.id = id;

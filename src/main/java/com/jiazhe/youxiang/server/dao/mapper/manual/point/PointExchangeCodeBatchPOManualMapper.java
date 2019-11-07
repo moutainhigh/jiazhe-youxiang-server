@@ -1,7 +1,6 @@
 package com.jiazhe.youxiang.server.dao.mapper.manual.point;
 
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO;
-import com.jiazhe.youxiang.server.domain.po.RechargeCardExchangeCodeBatchPO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

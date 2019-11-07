@@ -60,6 +60,9 @@ public class PointExchangeCodeBatchEditResp extends BaseVO {
     @ApiModelProperty("是否已经制作")
     private Byte isMade;
 
+    @ApiModelProperty("中行储蓄卡对应的商品编号")
+    private String giftNo;
+
     @ApiModelProperty("附加信息")
     private String extInfo;
 
@@ -197,5 +200,13 @@ public class PointExchangeCodeBatchEditResp extends BaseVO {
 
     public void setExtInfo(String extInfo) {
         this.extInfo = extInfo;
+    }
+
+    public String getGiftNo() {
+        return giftNo;
+    }
+
+    public void setGiftNo(String giftNo) {
+        this.giftNo = giftNo;
     }
 }

@@ -33,6 +33,8 @@ public enum ModuleEnum {
     CHARGE_RECEIPT(119,"消费凭证管理"),
     MESSAGE(120,"短信管理"),
     MATERIAL(121,"物料管理"),
+    BOCDC(122,"中行储蓄卡模块"),
+    BOCCC(123,"中行信用卡模块"),
     OTHER(999, "其他模块");
 
     private Integer id;

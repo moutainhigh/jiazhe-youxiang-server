@@ -51,6 +51,8 @@ public class PointExchangeCodePO implements Serializable {
 
     private Date modTime;
 
+    private String outOrderCode;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -235,5 +237,13 @@ public class PointExchangeCodePO implements Serializable {
 
     public void setModTime(Date modTime) {
         this.modTime = modTime;
+    }
+
+    public String getOutOrderCode() {
+        return outOrderCode;
+    }
+
+    public void setOutOrderCode(String outOrderCode) {
+        this.outOrderCode = outOrderCode == null ? null : outOrderCode.trim();
     }
 }

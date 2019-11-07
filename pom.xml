@@ -29,6 +29,7 @@
         <mybatis.generator.version>1.3.2</mybatis.generator.version>
         <mysql-connector.version>5.1.36</mysql-connector.version>
         <shiro.version>1.2.0</shiro.version>
+        <cryptix.version>20190923</cryptix.version>
     </properties>
 
     <dependencies>
@@ -85,6 +86,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
             <version>2.0.4.RELEASE</version>
+        </dependency>
+
+        <!--Spring 重试组件-->
+        <dependency>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
         </dependency>
         <!--swagger2依赖-->
         <dependency>
@@ -252,6 +259,12 @@
             <groupId>com.qcloud</groupId>
             <artifactId>cos_api</artifactId>
             <version>5.5.1</version>
+            <exclusions><!-- 去掉默认配置 -->
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!--tencent短信服务依赖包-->
@@ -272,13 +285,76 @@
             <artifactId>jedis</artifactId>
         </dependency>
 
+        <!--xml转换-->
+        <dependency>
+            <groupId>xom</groupId>
+            <artifactId>xom</artifactId>
+            <version>1.2.5</version>
+        </dependency>
+
+        <!--cryptix包 PGP加解密文件-->
+        <dependency>
+            <groupId>com.cryptix</groupId>
+            <artifactId>cryptix-jce-api</artifactId>
+            <version>${cryptix.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cryptix</groupId>
+            <artifactId>cryptix-jce-compat</artifactId>
+            <version>${cryptix.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cryptix</groupId>
+            <artifactId>cryptix-jce-provider</artifactId>
+            <version>${cryptix.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cryptix</groupId>
+            <artifactId>cryptix-jce-tests</artifactId>
+            <version>${cryptix.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cryptix</groupId>
+            <artifactId>cryptix-message-api</artifactId>
+            <version>${cryptix.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cryptix</groupId>
+            <artifactId>cryptix-openpgp-provider</artifactId>
+            <version>${cryptix.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cryptix</groupId>
+            <artifactId>cryptix-pki-api</artifactId>
+            <version>${cryptix.version}</version>
+        </dependency>
+
+        <!--SFTP-->
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.54</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>js-sha256</artifactId>
+            <version>0.7.1</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
+            </plugin> -->
 
             <!--mybatis-generator-->
             <plugin>

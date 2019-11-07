@@ -130,12 +130,13 @@ public class ExportExcelUtils {
     }
 
     public static void exportPartnerOrder(HttpServletResponse response, List<PartnerOrderInfoDTO> partnerOrderInfoDTOList) {
+        String[] orderStatus = {"","待派单","待服务","已完成","已取消"};
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Sheet1");
         String fileName = System.currentTimeMillis() + ".xlsx";
         //新增数据行，并且设置单元格数据
         int rowNum = 1;
-        String[] headers = {"客户姓名", "客户手机号", "城市", "地址", "兑换密钥", "兑换时间", "预约时间", "订单来源", "服务人员姓名", "服务人员电话", "服务项目", "服务商", "预付", "再支付"};
+        String[] headers = {"客户姓名", "客户手机号", "城市", "地址", "兑换密钥", "兑换时间", "预约时间", "订单来源", "服务人员姓名", "服务人员电话", "服务项目", "服务商", "预付", "再支付","订单状态"};
         //headers表示excel表中第一行的表头
         XSSFRow row = sheet.createRow(0);
         //在excel表中添加表头
@@ -165,6 +166,7 @@ public class ExportExcelUtils {
             XSSFCell cell_12 = row1.createCell(13);
             cell_12.setCellType(CellType.NUMERIC);
             cell_12.setCellValue(dto.getAppendPay().doubleValue());
+            row1.createCell(14).setCellValue(orderStatus[dto.getStatus().intValue()]);
             rowNum++;
         }
         resetColumnWidth(sheet, headers.length, false);

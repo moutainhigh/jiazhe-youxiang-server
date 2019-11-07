@@ -1,7 +1,9 @@
 package com.jiazhe.youxiang.server.biz.point;
 
+import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
+import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeEditDTO;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
@@ -9,6 +11,7 @@ import com.jiazhe.youxiang.server.vo.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -84,5 +87,52 @@ public class PointExchangeCodeBiz {
 
     public void checkByCode(String code) {
         pointExchangeCodeService.checkByCode(code);
+    }
+
+    /**
+     * 中行查询库存
+     *
+     * @param orderNo
+     * @param giftNo
+     * @param expiryDate
+     * @return
+     */
+    public PointExchangeCodeDTO queryStock(String orderNo, String giftNo, Date expiryDate) {
+        PointExchangeCodeDTO pointExchangeCodeDTO = pointExchangeCodeService.queryStock(orderNo, giftNo, expiryDate);
+        return pointExchangeCodeDTO;
+    }
+
+    public PointExchangeCodeDTO findByKeyt(String keyt) {
+        return PointExchangeCodeAdapter.po2Dto(pointExchangeCodeService.findByKeyt(keyt));
+    }
+
+    /**
+     * 兑换码退货
+     *
+     * @param id
+     * @param force
+     */
+    public void refund(Integer id, Integer force) {
+        pointExchangeCodeService.refund(id, force);
+    }
+
+    /**
+     * 修改兑换码使用状态（中行）
+     *
+     * @param id
+     * @param usedStaus
+     */
+    public void changeCodeUsedStatus(Integer id, Byte usedStaus) {
+        pointExchangeCodeService.changeCodeUsedStatus(id, usedStaus);
+    }
+
+    /**
+     * 通过订单号（中行）查找兑换码
+     *
+     * @param orderNo
+     * @return
+     */
+    public PointExchangeCodeDTO queryByOrderNo(String orderNo) {
+        return pointExchangeCodeService.queryByOrderNo(orderNo);
     }
 }

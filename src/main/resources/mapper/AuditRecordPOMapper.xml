@@ -32,6 +32,8 @@
     <result column="product_value" property="productValue" jdbcType="DECIMAL" />
     <result column="exchange_type" property="exchangeType" jdbcType="TINYINT" />
     <result column="submit_time" property="submitTime" jdbcType="TIMESTAMP" />
+    <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -96,7 +98,7 @@
     audit_reason, remark, img_urls, pos_code, trade_time, card_no, bank_outlets_name, 
     submitter_id, submitter_name, status, audit_time, auditor_id, auditor_name, version, 
     ext_info, is_deleted, add_time, mod_time, charge_receipt_status, point_codes, product_value, 
-    exchange_type, submit_time
+    exchange_type, submit_time, city_code, city_name
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.AuditRecordPOExample" >
     select
@@ -138,8 +140,8 @@
       auditor_id, auditor_name, version, 
       ext_info, is_deleted, add_time, 
       mod_time, charge_receipt_status, point_codes, 
-      product_value, exchange_type, submit_time
-      )
+      product_value, exchange_type, submit_time, 
+      city_code, city_name)
     values (#{id,jdbcType=INTEGER}, #{pointIds,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, 
       #{customerMobile,jdbcType=VARCHAR}, #{exchangePoint,jdbcType=DECIMAL}, #{givingPoint,jdbcType=DECIMAL}, 
       #{givingType,jdbcType=VARCHAR}, #{auditReason,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
@@ -149,8 +151,8 @@
       #{auditorId,jdbcType=INTEGER}, #{auditorName,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, 
       #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
       #{modTime,jdbcType=TIMESTAMP}, #{chargeReceiptStatus,jdbcType=TINYINT}, #{pointCodes,jdbcType=VARCHAR}, 
-      #{productValue,jdbcType=DECIMAL}, #{exchangeType,jdbcType=TINYINT}, #{submitTime,jdbcType=TIMESTAMP}
-      )
+      #{productValue,jdbcType=DECIMAL}, #{exchangeType,jdbcType=TINYINT}, #{submitTime,jdbcType=TIMESTAMP}, 
+      #{cityCode,jdbcType=VARCHAR}, #{cityName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.AuditRecordPO" >
     insert into audit_record
@@ -245,6 +247,12 @@
       <if test="submitTime != null" >
         submit_time,
       </if>
+      <if test="cityCode != null" >
+        city_code,
+      </if>
+      <if test="cityName != null" >
+        city_name,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -336,6 +344,12 @@
       </if>
       <if test="submitTime != null" >
         #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cityCode != null" >
+        #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityName != null" >
+        #{cityName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -438,6 +452,12 @@
       <if test="record.submitTime != null" >
         submit_time = #{record.submitTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.cityCode != null" >
+        city_code = #{record.cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cityName != null" >
+        city_name = #{record.cityName,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -474,7 +494,9 @@
       point_codes = #{record.pointCodes,jdbcType=VARCHAR},
       product_value = #{record.productValue,jdbcType=DECIMAL},
       exchange_type = #{record.exchangeType,jdbcType=TINYINT},
-      submit_time = #{record.submitTime,jdbcType=TIMESTAMP}
+      submit_time = #{record.submitTime,jdbcType=TIMESTAMP},
+      city_code = #{record.cityCode,jdbcType=VARCHAR},
+      city_name = #{record.cityName,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -569,6 +591,12 @@
       <if test="submitTime != null" >
         submit_time = #{submitTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="cityCode != null" >
+        city_code = #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityName != null" >
+        city_name = #{cityName,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -602,7 +630,9 @@
       point_codes = #{pointCodes,jdbcType=VARCHAR},
       product_value = #{productValue,jdbcType=DECIMAL},
       exchange_type = #{exchangeType,jdbcType=TINYINT},
-      submit_time = #{submitTime,jdbcType=TIMESTAMP}
+      submit_time = #{submitTime,jdbcType=TIMESTAMP},
+      city_code = #{cityCode,jdbcType=VARCHAR},
+      city_name = #{cityName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

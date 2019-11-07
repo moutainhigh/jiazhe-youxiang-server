@@ -54,6 +54,8 @@ public class PointExchangeCodeDTO extends BaseObject {
 
     private Byte used;
 
+    private String outOrderCode;
+
     private Integer customerId;
 
     private CustomerDTO customerDTO;
@@ -204,6 +206,14 @@ public class PointExchangeCodeDTO extends BaseObject {
 
     public void setUsed(Byte used) {
         this.used = used;
+    }
+
+    public String getOutOrderCode() {
+        return outOrderCode;
+    }
+
+    public void setOutOrderCode(String outOrderCode) {
+        this.outOrderCode = outOrderCode;
     }
 
     public Integer getCustomerId() {

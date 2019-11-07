@@ -39,6 +39,8 @@ public class AuditRecordAdapter {
         auditRecordResp.setImgUrls(auditRecordDTO.getImgUrls());
         auditRecordResp.setPosCode(auditRecordDTO.getPosCode());
         auditRecordResp.setCardNo(auditRecordDTO.getCardNo());
+        auditRecordResp.setCityCode(auditRecordDTO.getCityCode());
+        auditRecordResp.setCityName(auditRecordDTO.getCityName());
         auditRecordResp.setBankOutletsName(auditRecordDTO.getBankOutletsName());
         auditRecordResp.setTradeTime(auditRecordDTO.getTradeTime().getTime());
         auditRecordResp.setSubmitterId(auditRecordDTO.getSubmitterId());
@@ -73,6 +75,8 @@ public class AuditRecordAdapter {
         auditRecordDTO.setRemark(auditRecordPO.getRemark());
         auditRecordDTO.setPosCode(auditRecordPO.getPosCode());
         auditRecordDTO.setCardNo(auditRecordPO.getCardNo());
+        auditRecordDTO.setCityCode(auditRecordPO.getCityCode());
+        auditRecordDTO.setCityName(auditRecordPO.getCityName());
         auditRecordDTO.setBankOutletsName(auditRecordPO.getBankOutletsName());
         auditRecordDTO.setTradeTime(auditRecordPO.getTradeTime());
         auditRecordDTO.setImgUrls(auditRecordPO.getImgUrls());
@@ -110,6 +114,8 @@ public class AuditRecordAdapter {
         auditRecordPO.setImgUrls(auditRecordDTO.getImgUrls());
         auditRecordPO.setPosCode(auditRecordDTO.getPosCode());
         auditRecordPO.setCardNo(auditRecordDTO.getCardNo());
+        auditRecordPO.setCityCode(auditRecordDTO.getCityCode());
+        auditRecordPO.setCityName(auditRecordDTO.getCityName());
         auditRecordPO.setBankOutletsName(auditRecordDTO.getBankOutletsName());
         auditRecordPO.setTradeTime(auditRecordDTO.getTradeTime());
         auditRecordPO.setSubmitTime(auditRecordDTO.getSubmitTime());

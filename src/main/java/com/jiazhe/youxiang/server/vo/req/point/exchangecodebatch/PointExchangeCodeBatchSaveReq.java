@@ -59,6 +59,9 @@ public class PointExchangeCodeBatchSaveReq extends BaseVO{
     @ApiModelProperty("积分卡过期类型")
     private Byte expiryType;
 
+    @ApiModelProperty("中行储蓄卡对应的商品编号")
+    private String giftNo;
+
     @ApiModelProperty("描述信息")
     private String description;
 
@@ -188,5 +191,13 @@ public class PointExchangeCodeBatchSaveReq extends BaseVO{
 
     public void setPointEffectiveTime(Long pointEffectiveTime) {
         this.pointEffectiveTime = pointEffectiveTime;
+    }
+
+    public String getGiftNo() {
+        return giftNo;
+    }
+
+    public void setGiftNo(String giftNo) {
+        this.giftNo = giftNo;
     }
 }

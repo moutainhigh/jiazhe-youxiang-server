@@ -1425,6 +1425,76 @@ public class PointExchangeCodeBatchPOExample {
             addCriterion("mod_time not between", value1, value2, "modTime");
             return (Criteria) this;
         }
+
+        public Criteria andGiftNoIsNull() {
+            addCriterion("gift_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGiftNoIsNotNull() {
+            addCriterion("gift_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGiftNoEqualTo(String value) {
+            addCriterion("gift_no =", value, "giftNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGiftNoNotEqualTo(String value) {
+            addCriterion("gift_no <>", value, "giftNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGiftNoGreaterThan(String value) {
+            addCriterion("gift_no >", value, "giftNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGiftNoGreaterThanOrEqualTo(String value) {
+            addCriterion("gift_no >=", value, "giftNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGiftNoLessThan(String value) {
+            addCriterion("gift_no <", value, "giftNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGiftNoLessThanOrEqualTo(String value) {
+            addCriterion("gift_no <=", value, "giftNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGiftNoLike(String value) {
+            addCriterion("gift_no like", value, "giftNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGiftNoNotLike(String value) {
+            addCriterion("gift_no not like", value, "giftNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGiftNoIn(List<String> values) {
+            addCriterion("gift_no in", values, "giftNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGiftNoNotIn(List<String> values) {
+            addCriterion("gift_no not in", values, "giftNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGiftNoBetween(String value1, String value2) {
+            addCriterion("gift_no between", value1, value2, "giftNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andGiftNoNotBetween(String value1, String value2) {
+            addCriterion("gift_no not between", value1, value2, "giftNo");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

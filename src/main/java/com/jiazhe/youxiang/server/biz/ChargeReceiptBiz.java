@@ -37,8 +37,8 @@ public class ChargeReceiptBiz {
         return chargeReceiptService.getById(id);
     }
 
-    public List<ChargeReceiptDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint,Date submitStartTime, Date submitEndTime,String exchangeType) {
-        return chargeReceiptService.getList(customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint,submitStartTime, submitEndTime,exchangeType);
+    public List<ChargeReceiptDTO> getList(String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint,Date submitStartTime, Date submitEndTime,String exchangeType,String cityCode) {
+        return chargeReceiptService.getList(customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint,submitStartTime, submitEndTime,exchangeType,cityCode);
     }
 
     public boolean hasExisted(ChargeReceiptSaveDTO dto) {

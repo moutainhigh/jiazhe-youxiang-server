@@ -82,6 +82,7 @@ public class PointExchangeCodeBatchAdapter {
         pointExchangeCodeBatchSaveDTO.setPointExpiryTime(new Date(req.getPointExpiryTime()));
         pointExchangeCodeBatchSaveDTO.setValidityPeriod(req.getValidityPeriod());
         pointExchangeCodeBatchSaveDTO.setExpiryType(req.getExpiryType());
+        pointExchangeCodeBatchSaveDTO.setGiftNo(req.getGiftNo());
         pointExchangeCodeBatchSaveDTO.setDescription(req.getDescription());
         pointExchangeCodeBatchSaveDTO.setExtInfo(req.getExtInfo());
         return pointExchangeCodeBatchSaveDTO;
@@ -107,6 +108,7 @@ public class PointExchangeCodeBatchAdapter {
         pointExchangeCodeBatchPO.setPointExpiryTime(pointExchangeCodeBatchSaveDTO.getPointExpiryTime());
         pointExchangeCodeBatchPO.setValidityPeriod(pointExchangeCodeBatchSaveDTO.getValidityPeriod());
         pointExchangeCodeBatchPO.setExpiryType(pointExchangeCodeBatchSaveDTO.getExpiryType());
+        pointExchangeCodeBatchPO.setGiftNo(pointExchangeCodeBatchSaveDTO.getGiftNo());
         pointExchangeCodeBatchPO.setExtInfo(pointExchangeCodeBatchSaveDTO.getExtInfo());
         return pointExchangeCodeBatchPO;
     }
@@ -132,6 +134,7 @@ public class PointExchangeCodeBatchAdapter {
         pointExchangeCodeBatchEditResp.setPointExpiryTime(pointExchangeCodeBatchEditDTO.getPointExpiryTime().getTime());
         pointExchangeCodeBatchEditResp.setValidityPeriod(pointExchangeCodeBatchEditDTO.getValidityPeriod());
         pointExchangeCodeBatchEditResp.setExpiryType(pointExchangeCodeBatchEditDTO.getExpiryType());
+        pointExchangeCodeBatchEditResp.setGiftNo(pointExchangeCodeBatchEditDTO.getGiftNo());
         pointExchangeCodeBatchEditResp.setExtInfo(pointExchangeCodeBatchEditDTO.getExtInfo());
         return pointExchangeCodeBatchEditResp;
     }
@@ -158,6 +161,7 @@ public class PointExchangeCodeBatchAdapter {
         pointExchangeCodeBatchEditDTO.setPointExpiryTime(pointExchangeCodeBatchPO.getPointExpiryTime());
         pointExchangeCodeBatchEditDTO.setValidityPeriod(pointExchangeCodeBatchPO.getValidityPeriod());
         pointExchangeCodeBatchEditDTO.setExpiryType(pointExchangeCodeBatchPO.getExpiryType());
+        pointExchangeCodeBatchEditDTO.setGiftNo(pointExchangeCodeBatchPO.getGiftNo());
         pointExchangeCodeBatchEditDTO.setExtInfo(pointExchangeCodeBatchPO.getExtInfo());
         return pointExchangeCodeBatchEditDTO;
     }
