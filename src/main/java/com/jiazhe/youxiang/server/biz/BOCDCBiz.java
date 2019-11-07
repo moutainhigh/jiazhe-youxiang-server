@@ -6,7 +6,6 @@
 package com.jiazhe.youxiang.server.biz;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Maps;
 import com.jiazhe.youxiang.base.util.BOCDCUtils;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.HttpUtil;
@@ -41,7 +40,6 @@ import org.springframework.web.client.RestClientException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * 中行储蓄卡Biz
@@ -80,6 +78,7 @@ public class BOCDCBiz {
      * 查询库存订单下发实时接口
      */
     public BOCDCQueryStockResp queryStock(BOCDCQueryStockReq req) {
+        LOGGER.info("Biz调用[queryStock]方法，入参:{}", JacksonUtil.toJSon(req));
         BOCDCQueryStockResp resp = new BOCDCQueryStockResp();
         String orderNo;
         String giftNo;
@@ -109,6 +108,7 @@ public class BOCDCBiz {
             resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
             resp.setBizDesc(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getMessage());
         }
+        LOGGER.info("Biz调用[queryStock]方法成功，入参:{},出参:{}", JacksonUtil.toJSon(req), JacksonUtil.toJSon(resp));
         return resp;
     }
 
