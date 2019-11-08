@@ -155,7 +155,7 @@ public class APIAuditRecordController extends BaseController {
         CommonValidator.validateNull(req.getBankOutletsName(), new AuditRecordException(AuditRecordCodeEnum.BANK_NAME_IS_NULL));
         CommonValidator.validateNull(req.getExchangeType(), new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_TYPE_IS_NULL));
         CommonValidator.validateNull(req.getExchangePoint(), new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_POINT_IS_NULL));
-        if (req.getExchangeType().toString().contains(CommonConstant.EXCHANGE_ENTITY.toString()) && req.getExchangeType().toString().equals(CommonConstant.PRE_PURCHASE.toString())) {
+        if (req.getExchangeType().toString().contains(CommonConstant.EXCHANGE_ENTITY.toString()) && req.getExchangeType().toString().contains(CommonConstant.PRE_PURCHASE.toString())) {
             throw new AuditRecordException(AuditRecordCodeEnum.ENTITY_AND_PREPURCHASE_EXIST);
         }
         //根据兑换类型，约束各种字段的填写条件
