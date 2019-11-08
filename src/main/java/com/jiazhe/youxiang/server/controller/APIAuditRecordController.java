@@ -155,6 +155,9 @@ public class APIAuditRecordController extends BaseController {
         CommonValidator.validateNull(req.getBankOutletsName(), new AuditRecordException(AuditRecordCodeEnum.BANK_NAME_IS_NULL));
         CommonValidator.validateNull(req.getExchangeType(), new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_TYPE_IS_NULL));
         CommonValidator.validateNull(req.getExchangePoint(), new AuditRecordException(AuditRecordCodeEnum.EXCHANGE_POINT_IS_NULL));
+        if (req.getExchangeType().toString().contains(CommonConstant.EXCHANGE_ENTITY.toString()) && req.getExchangeType().toString().equals(CommonConstant.PRE_PURCHASE.toString())) {
+            throw new AuditRecordException(AuditRecordCodeEnum.ENTITY_AND_PREPURCHASE_EXIST);
+        }
         //根据兑换类型，约束各种字段的填写条件
         if (req.getExchangeType().toString().contains(CommonConstant.DIRECT_CHARGE.toString())) {
             CommonValidator.validateNull(req.getCustomerMobile(), new AuditRecordException(AuditRecordCodeEnum.CUSTOMER_MOBILE_IS_NULL));
@@ -169,7 +172,7 @@ public class APIAuditRecordController extends BaseController {
         } else {
             req.setPointCodes("");
         }
-        if (req.getExchangeType().toString().contains(CommonConstant.EXCHANGE_ENTITY.toString())) {
+        if (req.getExchangeType().toString().contains(CommonConstant.EXCHANGE_ENTITY.toString())||req.getExchangeType().toString().equals(CommonConstant.PRE_PURCHASE.toString())) {
             CommonValidator.validateNull(req.getProductValue(), new AuditRecordException(AuditRecordCodeEnum.PRODUCT_VALUE_IS_NULL));
         } else {
             req.setProductValue(BigDecimal.ZERO);

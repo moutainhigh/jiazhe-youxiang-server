@@ -36,7 +36,7 @@ public class AuditRecordResp extends BaseVO {
     private BigDecimal givingPoint;
 
     @ApiModelProperty("兑换类型")
-    private Byte exchangeType;
+    private Integer exchangeType;
 
     @ApiModelProperty("凭证完成状态，0未完成 1已完成")
     private Byte chargeReceiptStatus;
@@ -155,11 +155,11 @@ public class AuditRecordResp extends BaseVO {
         this.chargeReceiptPoint = chargeReceiptPoint;
     }
 
-    public Byte getExchangeType() {
+    public Integer getExchangeType() {
         return exchangeType;
     }
 
-    public void setExchangeType(Byte exchangeType) {
+    public void setExchangeType(Integer exchangeType) {
         this.exchangeType = exchangeType;
     }
 

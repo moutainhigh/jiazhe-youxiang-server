@@ -33,7 +33,7 @@ public class AuditRecordSaveReq extends BaseVO {
     private String bankOutletsName;
 
     @ApiModelProperty("兑换类型")
-    private Byte exchangeType;
+    private Integer exchangeType;
 
     @ApiModelProperty("小票积分数量")
     private BigDecimal exchangePoint;
@@ -110,11 +110,11 @@ public class AuditRecordSaveReq extends BaseVO {
         this.bankOutletsName = bankOutletsName;
     }
 
-    public Byte getExchangeType() {
+    public Integer getExchangeType() {
         return exchangeType;
     }
 
-    public void setExchangeType(Byte exchangeType) {
+    public void setExchangeType(Integer exchangeType) {
         this.exchangeType = exchangeType;
     }
 
