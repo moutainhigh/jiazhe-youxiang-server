@@ -1936,52 +1936,52 @@ public class AuditRecordPOExample {
             return (Criteria) this;
         }
 
-        public Criteria andExchangeTypeEqualTo(Byte value) {
+        public Criteria andExchangeTypeEqualTo(Integer value) {
             addCriterion("exchange_type =", value, "exchangeType");
             return (Criteria) this;
         }
 
-        public Criteria andExchangeTypeNotEqualTo(Byte value) {
+        public Criteria andExchangeTypeNotEqualTo(Integer value) {
             addCriterion("exchange_type <>", value, "exchangeType");
             return (Criteria) this;
         }
 
-        public Criteria andExchangeTypeGreaterThan(Byte value) {
+        public Criteria andExchangeTypeGreaterThan(Integer value) {
             addCriterion("exchange_type >", value, "exchangeType");
             return (Criteria) this;
         }
 
-        public Criteria andExchangeTypeGreaterThanOrEqualTo(Byte value) {
+        public Criteria andExchangeTypeGreaterThanOrEqualTo(Integer value) {
             addCriterion("exchange_type >=", value, "exchangeType");
             return (Criteria) this;
         }
 
-        public Criteria andExchangeTypeLessThan(Byte value) {
+        public Criteria andExchangeTypeLessThan(Integer value) {
             addCriterion("exchange_type <", value, "exchangeType");
             return (Criteria) this;
         }
 
-        public Criteria andExchangeTypeLessThanOrEqualTo(Byte value) {
+        public Criteria andExchangeTypeLessThanOrEqualTo(Integer value) {
             addCriterion("exchange_type <=", value, "exchangeType");
             return (Criteria) this;
         }
 
-        public Criteria andExchangeTypeIn(List<Byte> values) {
+        public Criteria andExchangeTypeIn(List<Integer> values) {
             addCriterion("exchange_type in", values, "exchangeType");
             return (Criteria) this;
         }
 
-        public Criteria andExchangeTypeNotIn(List<Byte> values) {
+        public Criteria andExchangeTypeNotIn(List<Integer> values) {
             addCriterion("exchange_type not in", values, "exchangeType");
             return (Criteria) this;
         }
 
-        public Criteria andExchangeTypeBetween(Byte value1, Byte value2) {
+        public Criteria andExchangeTypeBetween(Integer value1, Integer value2) {
             addCriterion("exchange_type between", value1, value2, "exchangeType");
             return (Criteria) this;
         }
 
-        public Criteria andExchangeTypeNotBetween(Byte value1, Byte value2) {
+        public Criteria andExchangeTypeNotBetween(Integer value1, Integer value2) {
             addCriterion("exchange_type not between", value1, value2, "exchangeType");
             return (Criteria) this;
         }

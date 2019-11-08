@@ -31,7 +31,7 @@
         <result column="charge_receipt_status" property="chargeReceiptStatus" jdbcType="TINYINT" />
         <result column="point_codes" property="pointCodes" jdbcType="VARCHAR" />
         <result column="product_value" property="productValue" jdbcType="DECIMAL" />
-        <result column="exchange_type" property="exchangeType" jdbcType="TINYINT" />
+        <result column="exchange_type" property="exchangeType" jdbcType="INTEGER" />
         <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
         <result column="city_name" property="cityName" jdbcType="VARCHAR" />
     </resultMap>
@@ -79,13 +79,16 @@
             <if test="exchangeType != null and exchangeType!=''">
                 AND ( 1=0
                 <if test="exchangeType.contains('1'.toString())">
-                    OR exchange_type in (1,12,13,123)
+                    OR exchange_type in (1,12,13,14,123,124,134,1234)
                 </if>
                 <if test="exchangeType.contains('2'.toString())">
-                    OR exchange_type in (2,12,23,123)
+                    OR exchange_type in (2,12,23,24,123,124,234,1234)
                 </if>
                 <if test="exchangeType.contains('3'.toString())">
-                    OR exchange_type in(3,13,23,123)
+                    OR exchange_type in(3,13,23,34,123,134,234,1234)
+                </if>
+                <if test="exchangeType.contains('4'.toString())">
+                    OR exchange_type in(4,14,24,34,124,134,234,1234)
                 </if>
                 )
             </if>
@@ -132,13 +135,16 @@
             <if test="exchangeType != null and exchangeType!=''">
                 AND ( 1=0
                 <if test="exchangeType.contains('1'.toString())">
-                    OR exchange_type in (1,12,13,123)
+                    OR exchange_type in (1,12,13,14,123,124,134,1234)
                 </if>
                 <if test="exchangeType.contains('2'.toString())">
-                    OR exchange_type in (2,12,23,123)
+                    OR exchange_type in (2,12,23,24,123,124,234,1234)
                 </if>
                 <if test="exchangeType.contains('3'.toString())">
-                    OR exchange_type in(3,13,23,123)
+                    OR exchange_type in(3,13,23,34,123,134,234,1234)
+                </if>
+                <if test="exchangeType.contains('4'.toString())">
+                    OR exchange_type in(4,14,24,34,124,134,234,1234)
                 </if>
                 )
             </if>
