@@ -211,10 +211,13 @@
                                                 <div class="form-group">
                                                     <label class="col-sm-3 control-label no-padding-right">商品：</label>
                                                     <div class="col-sm-9">
-                                                        <select id="orderProductId" name="productId"
-                                                                onchange="productChanged()"
-                                                                class="selectpicker show-tick form-control">
-                                                        </select>
+                                                        <input type="hidden" id="orderProductId" name="productId"
+                                                               readonly/>
+                                                        <div class="pos-rel">
+                                                            <ul id="productTree" class="ztree"
+                                                                style="margin-top:0; width:100%; height:auto;">
+                                                            </ul>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -405,6 +408,7 @@
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
+    var productTree;
     var cityTree;
     $(function () {
         //重新修改表格宽度
@@ -882,10 +886,11 @@
         $("#orderForm textarea").val('');
         $("#orderCustomerId").val(id);
         $("#order-modal").modal("show");
-        $("#orderProductId option:first").prop("selected", 'selected');
         $("#orderCount").ace_spinner('value', 1);
-        if ($("#orderProductId").val() == '') {
-            cityTree.destroy();
+        if (getSelectedProductId() == "") {
+            if (cityTree) {
+                cityTree.destroy();
+            }
         } else {
             refreshCity();
         }
@@ -900,8 +905,15 @@
         $("#orderVoucherArea").empty();
         $("#orderRechargeCardArea").empty();
         $("#orderPointArea").empty();
-        $("#orderProductId").empty();
-        $("#orderProductId").append("<option value=>请选择商品</option>");
+        // $("#orderProductId").empty();
+        var setting = {
+            view: {selectedMulti: false},
+            check: {enable: true, chkStyle: "radio", radioType: "all"},
+            data: {simpleData: {enable: true}},
+            edit: {enable: false},
+            callback: {onCheck: productChanged}
+        };
+        var zProductNodes = [];
         $.ajax({
             url: "/api/product/getlist",
             dataType: "json",
@@ -918,23 +930,32 @@
                 } else {
                     var result = data.data;
                     for (var i = 0; i < result.length; i++) {
-                        $("#orderProductId").append("<option data-last-num=" + result[i].lastNum + " data-product-type=" + result[i].productType + " value=" + result[i].id + ">" + result[i].name + "</option>");
+                        var zNode = {};
+                        zNode.id = parseInt(result[i].id);
+                        if (result[i].productCategory)
+                            zNode.pId = parseInt(result[i].productCategory.id);
+                        zNode.name = result[i].name;
+                        zNode.lastNum = result[i].lastNum;
+                        zNode.productType = result[i].productType;
+                        zProductNodes.push(zNode);
                     }
                 }
             },
             error: error
         });
+        productTree = $.fn.zTree.init($("#productTree"), setting, zProductNodes);
+
     }
 
-    function productChanged() {
-        if ($("#orderProductId").val() == '') {
+    function productChanged(event, treeId, treeNode) {
+        if (!treeNode.checked) {
             cityTree.destroy();
         } else {
             refreshCity();
         }
-        var lastNum = parseFloat($("#orderProductId").find("option:selected").attr("data-last-num"));
+        var lastNum = parseFloat(treeNode.lastNum);
         $("#orderCount").ace_spinner('value', lastNum);
-        if ($("#orderProductId").find("option:selected").attr("data-product-type") == '0') {//服务类
+        if (treeNode.productType == '0') {//服务类
             $(".virtual").css("display", "");
         } else {//电子卡
             $(".virtual").css("display", "none");
@@ -942,6 +963,13 @@
         $("#orderVoucherArea").empty();
         $("#orderRechargeCardArea").empty();
         $("#orderPointArea").empty();
+    }
+
+    function getSelectedProductId() {
+        var nodes = productTree.getCheckedNodes(true);
+        if (nodes && nodes[0])
+            return nodes[0].id ? nodes[0].id : "";
+        return "";
     }
 
     function refreshCity() {
@@ -958,7 +986,7 @@
             data: {
                 pageSize: 10000,
                 pageNum: 1,
-                productId: $("#orderProductId").val(),
+                productId: getSelectedProductId(),
                 status: 1
             },
             dataType: "json",
@@ -987,7 +1015,6 @@
     }
 
     function zTreeOnClick(event, treeId, treeNode) {
-        console.log(treeId);
         var nodes = cityTree.getCheckedNodes(true);
         if (nodes.length < 1) {
             $("#orderCityCode").val('');
@@ -1014,7 +1041,7 @@
                 pageSize: 10000,
                 pageNum: 1,
                 customerId: $("#orderCustomerId").val(),
-                productId: $("#orderProductId").val(),
+                productId: getSelectedProductId(),
                 cityCode: $("#orderCityCode").val()
             },
             type: "GET",
@@ -1048,7 +1075,7 @@
                 pageSize: 10000,
                 pageNum: 1,
                 customerId: $("#orderCustomerId").val(),
-                productId: $("#orderProductId").val(),
+                productId: getSelectedProductId(),
                 cityCode: $("#orderCityCode").val()
             },
             type: "GET",
@@ -1082,7 +1109,7 @@
                 pageSize: 10000,
                 pageNum: 1,
                 customerId: $("#orderCustomerId").val(),
-                productId: $("#orderProductId").val(),
+                productId: getSelectedProductId(),
                 cityCode: $("#orderCityCode").val()
             },
             type: "GET",
@@ -1128,7 +1155,7 @@
     //下单
     function placeOrder() {
         $("#orderRealServiceTime").next().next().val($("#orderRealServiceTime").val() == '' ? 0 : new Date($("#orderRealServiceTime").val()).getTime());
-        if ($("#orderProductId").val() == "") {
+        if (getSelectedProductId() == "") {
             bootboxalert("请选择商品");
             return false;
         }
@@ -1136,7 +1163,7 @@
             bootboxalert("请选择城市");
             return false;
         }
-        if(!isNumber($("#orderCost").val())){
+        if (!isNumber($("#orderCost").val())) {
             bootboxalert("请正确填写订单成本");
             return false;
         }
@@ -1201,7 +1228,7 @@
         $("#orderVoucherIds").val(voucherIds);
         $("#orderRechargeCardIds").val(rechargeCardIds);
         $("#orderPointIds").val(pointIds);
-
+        $("#orderProductId").val(getSelectedProductId());
         $.ajax({
             url: "/api/orderinfo/userplaceorder",
             dataType: "json",

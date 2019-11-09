@@ -89,8 +89,8 @@ public class ProductBiz {
         return productService.getById(id);
     }
 
-    public List<ProductDTO> getList(Integer productCategoryId, String name, Integer productType, List<String> cityCodes, Integer status, Paging paging) {
-        return productService.getList(productCategoryId, name, productType, cityCodes, status, paging, false);
+    public List<ProductDTO> getList(Integer productCategoryId, String name, Integer productType, List<String> cityCodes, Integer status, Paging paging,boolean detail) {
+        return productService.getList(productCategoryId, name, productType, cityCodes, status, paging, detail);
     }
 
     public List<ProductDTO> getAllList(Integer productType,  Integer status) {
