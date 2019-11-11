@@ -57,6 +57,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/api/wxpay/**", "anon");//微信支付相关
         filterChainDefinitionMap.put("/api/syscity/getcitylist", "anon");//城市查询接口
         filterChainDefinitionMap.put("/api/syscity/getprovincelist", "anon");//省份查询接口
+        filterChainDefinitionMap.put("/api/syscity/getopenlist", "anon");//开放城市列表接口
 
         //swagger相关连接可以直接访问
         filterChainDefinitionMap.put("/swagger-ui.html", "anon");
