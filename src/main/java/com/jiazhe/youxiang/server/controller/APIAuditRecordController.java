@@ -109,8 +109,8 @@ public class APIAuditRecordController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "消费记录列表", level = LogLevelEnum.LEVEL_1)
     public Object listPage(@ModelAttribute AuditRecordPageReq req) {
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
-        if (req.getCityCode().endsWith("00")) {
-            req.setCityCode(req.getCityCode().substring(0, 4));
+        if (req.getCityCode().endsWith("0000")) {
+            req.setCityCode(req.getCityCode().substring(0, 2));
         }
         Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
         Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
