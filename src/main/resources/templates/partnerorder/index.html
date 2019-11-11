@@ -25,7 +25,7 @@
 
         .chosen-container-single .chosen-single {
             height: 30px;
-            border-radius:0px;
+            border-radius: 0px;
         }
     </style>
 </head>
@@ -376,7 +376,8 @@
 </div>
 
 <!--商户订单modal-->
-<div id="modal-partnerOrder" class="modal fade" tabindex="-1" style="overflow: scroll" aria-hidden="true" data-backdrop="static">
+<div id="modal-partnerOrder" class="modal fade" tabindex="-1" style="overflow: scroll" aria-hidden="true"
+     data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -390,7 +391,9 @@
                         <div class="col-xs-12 col-sm-9">
                             <form id="partnerOrderForm" class="form-horizontal" role="form">
                                 <input id="operateType" type="hidden" value="0"/>
-                                <input id="partnerOrderId" value=0 type="hidden" name="id" />
+                                <input id="partnerOrderId" value=0 type="hidden" name="id"/>
+                                <input id="saveCustomerCityCode" name="customerCityCode" value="" type="hidden"/>
+                                <input id="saveCustomerCityName" name="customerCityName" value="" type="hidden"/>
                                 <div class="form-group">
                                     <label class="col-sm-4 control-label no-padding-right">客户姓名：</label>
                                     <div class="col-sm-8">
@@ -413,13 +416,23 @@
                                 </div>
                                 <div class="space-2"></div>
 
-                                <!--此处选择城市-->
+                                <!--<div class="form-group">-->
+                                <!--<label class="col-sm-4 control-label no-padding-right">所属城市：</label>-->
+                                <!--<div class="col-sm-8">-->
+                                <!--<select id="saveCustomerCityCode" name="customerCityCode"-->
+                                <!--class="selectpicker show-tick form-control">-->
+                                <!--</select>-->
+                                <!--</div>-->
+                                <!--</div>-->
+
                                 <div class="form-group">
-                                    <label class="col-sm-4 control-label no-padding-right">所属城市：</label>
+                                    <label class="col-sm-4 control-label no-padding-right">城市：</label>
                                     <div class="col-sm-8">
-                                        <select id="saveCustomerCityCode" name="customerCityCode"
-                                                class="selectpicker show-tick form-control">
-                                        </select>
+                                        <div class="pos-rel">
+                                            <ul id="cityTree" class="ztree"
+                                                style="margin-top:0; width:100%; height:auto;">
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="space-2"></div>
@@ -428,8 +441,6 @@
                                     <label class="col-sm-4 control-label no-padding-right">兑换密钥：</label>
                                     <div class="col-sm-8">
                                         <div class="pos-rel">
-                                            <!--<input id="saveKeyt" name="keyt" class="form-control"-->
-                                                   <!--type="text" style="height:30px"/>-->
                                             <textarea id="saveKeyt" name="keyt"
                                                       class="form-control"
                                                       style="resize:none;height: 100px"></textarea>
@@ -474,8 +485,6 @@
                                     <label class="col-sm-4 control-label no-padding-right">预约地点：</label>
                                     <div class="col-sm-8">
                                         <div class="pos-rel">
-                                            <!--<input id="saveCustomerAddress" name="customerAddress" class="form-control"-->
-                                                   <!--type="text" style="height:30px"/>-->
                                             <textarea id="saveCustomerAddress" name="customerAddress"
                                                       class="form-control"
                                                       style="resize:none;height: 100px"></textarea>
@@ -616,7 +625,8 @@
 <script type="text/javascript">
     var grid_selector = "#grid-table";
     var pager_selector = "#grid-pager";
-    var orderStatus = ['待派单','待服务', '已完成', '已取消'];
+    var orderStatus = ['待派单', '待服务', '已完成', '已取消'];
+    var cityTree;
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -624,29 +634,60 @@
         });
 
         initDatePicker();
+        initCity();
 
-        //初始化二级城市
-        $.ajax({
-            url: "/api/syscity/getopenlist",
-            dataType: "json",
-            async: true,
-            type: "GET",
-            success: function (data) {
-                if ('error' in data) {
-                    bootboxalert(data.error.message);
-                } else {
-                    var result = data.data;
-                    for (var i = 0; i < result.length; i++) {
-                        if (result[i].cityLevel == 2) {
-                            $("#searchCustomerCityCode").append("<option value=" + result[i].cityCode + ">" + result[i].cityName + "</option>");
-                            $("#saveCustomerCityCode").append("<option value=" + result[i].cityCode + ">" + result[i].cityName + "</option>");
+        //初始化查询城市和模态框里的城市
+        function initCity() {
+            var setting = {
+                view: {selectedMulti: false},
+                check: {enable: true, chkStyle: "radio", radioType: "all"},
+                data: {simpleData: {enable: true}},
+                edit: {enable: false},
+                callback: {onCheck: zTreeOnClick}
+            };
+            var zCityNodes = [];
+            $.ajax({
+                url: "/api/syscity/getopenlist",
+                dataType: "json",
+                async: true,
+                type: "GET",
+                success: function (data) {
+                    if ('error' in data) {
+                        bootboxalert(data.error.message);
+                    } else {
+                        var result = data.data;
+                        for (var i = 0; i < result.length; i++) {
+                            //初始化查询框的city列表
+                            if (result[i].cityLevel == 2) {
+                                $("#searchCustomerCityCode").append("<option value=" + result[i].cityCode + ">" + result[i].cityName + "</option>");
+                                $("#saveCustomerCityCode").append("<option value=" + result[i].cityCode + ">" + result[i].cityName + "</option>");
+                            }
+                            //初始化模态框的city列表
+                            var zNode = {};
+                            zNode.id = parseInt(result[i].cityCode);
+                            zNode.pId = parseInt(result[i].parentCode);
+                            zNode.name = result[i].cityName;
+                            zNode.nocheck = (result[i].cityLevel == 1);
+                            zCityNodes.push(zNode);
                         }
+                        initSearchSelect("searchCustomerCityCode");
+                        cityTree = $.fn.zTree.init($("#cityTree"), setting, zCityNodes);
                     }
-                    initSearchSelect();
-                }
-            },
-            error: error
-        });
+                },
+                error: error
+            });
+        }
+
+        function zTreeOnClick(event, treeId, treeNode) {
+            var nodes = cityTree.getCheckedNodes(true);
+            if (nodes.length < 1) {
+                $("#saveCustomerCityCode").val('');
+                $("#saveCustomerCityName").val('');
+            } else {
+                $("#saveCustomerCityCode").val(nodes[0].id);
+                $("#saveCustomerCityName").val(nodes[0].name);
+            }
+        }
 
         //初始化服务商家
         $.ajax({
@@ -728,14 +769,14 @@
                         return dateFormat(rowObject.serviceTime);
                     }
                 },
-                {name: 'orderSource', index: 'orderSource', width: 100,sortable: false},
-                {name: 'workerName', index: 'workerName', width: 100,sortable: false},
-                {name: 'serviceItemResp.name', index: 'serviceItem', width: 100,sortable: false},
-                {name: 'prePay', index: 'prePay',width: 50, sortable: false},
-                {name: 'appendPay', index: 'appendPay', width: 50,sortable: false}
+                {name: 'orderSource', index: 'orderSource', width: 100, sortable: false},
+                {name: 'workerName', index: 'workerName', width: 100, sortable: false},
+                {name: 'serviceItemResp.name', index: 'serviceItem', width: 100, sortable: false},
+                {name: 'prePay', index: 'prePay', width: 50, sortable: false},
+                {name: 'appendPay', index: 'appendPay', width: 50, sortable: false}
             ],
             loadComplete: function (data) {
-                if("error" in data){
+                if ("error" in data) {
                     bootboxalert(data.error.message);
                     return false;
                 }
@@ -782,17 +823,19 @@
         return str;
     }
 
-    function beforeCloseModal(){
-        var operateType = $("#operateType").val();
-        if(operateType == '1' || operateType == '2'){ //1为新建 2为修改 3为查看
-            confirm("确定关闭此对话框？",function(result){
-                if(result){
-                    $('#modal-partnerOrder').modal('hide');
-                }
-            })
-        }else {
-            $('#modal-partnerOrder').modal('hide');
-        }
+    //关闭前调用
+    function beforeCloseModal() {
+//        var operateType = $("#operateType").val();
+//        if(operateType == '1' || operateType == '2'){ //1为新建 2为修改 3为查看
+//            confirm("确定关闭此对话框？",function(result){
+//                if(result){
+//                    $('#modal-partnerOrder').modal('hide');
+//                }
+//            })
+//        }else {
+//            $('#modal-partnerOrder').modal('hide');
+//        }
+        $('#modal-partnerOrder').modal('hide');
     }
 
     function openShow(id) {
@@ -839,6 +882,8 @@
     function initForm() {
         $("#partnerOrderForm input").val('');
         $("#partnerOrderForm textarea").val('');
+        uncheckAll();
+        cityTree.expandAll(false);
         $("#saveCustomerCityCode option:first").prop("selected", 'selected');
         $("#saveOrderSource option:first").prop("selected", 'selected');
         $("#savePartner option:first").prop("selected", 'selected');
@@ -863,6 +908,7 @@
                 $("#partnerOrderForm #saveCustomerName").val(result.customerName);
                 $("#partnerOrderForm #saveCustomerMobile").val(result.customerMobile);
                 $("#partnerOrderForm #saveCustomerCityCode").val(result.customerCityCode);
+                $("#partnerOrderForm #saveCustomerCityName").val(result.customerCityName);
                 $("#partnerOrderForm #saveKeyt").val(result.keyt);
                 $("#partnerOrderForm #saveOrderTime").val(dateFormat(result.orderTime));
                 $('#saveOrderTime').datepicker('update');
@@ -880,6 +926,7 @@
                 $("#partnerOrderForm #savePrePay").val(result.prePay);
                 $("#partnerOrderForm #saveAppendPay").val(result.appendPay);
                 $("#partnerOrderForm #saveStatus").val(result.status);
+                checkNodes(result.customerCityCode);
             },
             error: error
         });
@@ -905,14 +952,12 @@
         }
     }
 
-    function save(data) {
-        var data = transformToJson($('#partnerOrderForm').serializeArray());
-        data.customerCityName = $("#saveCustomerCityCode option:selected").text();
+    function save() {
         $.ajax({
             url: "/api/partnerorderinfo/save",
             dataType: "json",
             async: false,
-            data: data,
+            data: transformToJson($('#partnerOrderForm').serializeArray()),
             type: "POST",
             success: function (data) {
                 if ('error' in data) {
@@ -1043,11 +1088,27 @@
     function exportExcel() {
         var obj = transformToJson($('#partnerOrderInfoSearchForm').serializeArray());
         var param = "";
-        for(var key in obj){
-            param = param + key + "=" + obj[key] + "&" ;
+        for (var key in obj) {
+            param = param + key + "=" + obj[key] + "&";
         }
         window.location.href = "/api/partnerorderinfo/export?" + param;
         return false;
+    }
+
+    //根据城市的code，勾选checkbox，并展开节点
+    function checkNodes(id) {
+        var node = cityTree.getNodeByParam("id", id);
+        cityTree.checkNode(node, true, false);
+        var parentNode = cityTree.getNodeByParam("id", id.substr(0, 2) + "0000");
+        cityTree.expandNode(parentNode, true, false, false);
+    }
+
+    //全不选
+    function uncheckAll() {
+        var nodes = cityTree.transformToArray(cityTree.getNodes());
+        for (var i = 0; i < nodes.length; i++) {
+            cityTree.checkNode(nodes[i], false, false);
+        }
     }
 </script>
 </html>

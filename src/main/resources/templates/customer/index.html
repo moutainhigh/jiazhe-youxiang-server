@@ -978,6 +978,7 @@
                         zNode.pId = parseInt(result[i].cityCode.substring(0, 2) + "0000");
                         zNode.name = result[i].cityName + "(" + result[i].price + "元)";
                         zNode.price = result[i].price;
+                        zNode.nocheck = (result[i].cityCode.substr(2,6) == "0000");
                         zCityNodes.push(zNode);
                     }
                 }
