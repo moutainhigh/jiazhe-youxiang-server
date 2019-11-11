@@ -929,14 +929,30 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
+                    var prefix = "parent";
+                    var parentNode = {};
                     for (var i = 0; i < result.length; i++) {
                         var zNode = {};
                         zNode.id = parseInt(result[i].id);
-                        if (result[i].productCategory)
-                            zNode.pId = parseInt(result[i].productCategory.id);
+                        if (result[i].productCategory) {
+                            var pid = prefix + parseInt(result[i].productCategory.id);
+                            zNode.pId = pid;
+                            if (!parentNode[pid]) {
+                                parentNode[pid] = result[i].productCategory;
+                            }
+                        }
+                        zNode.value = parseInt(result[i].id);
                         zNode.name = result[i].name;
                         zNode.lastNum = result[i].lastNum;
                         zNode.productType = result[i].productType;
+                        zProductNodes.push(zNode);
+                    }
+                    for (var key in parentNode) {
+                        var zNode = {};
+                        zNode.id = key;
+                        zNode.value = "";
+                        zNode.nocheck = true;
+                        zNode.name = parentNode[key].name;
                         zProductNodes.push(zNode);
                     }
                 }
@@ -968,7 +984,7 @@
     function getSelectedProductId() {
         var nodes = productTree.getCheckedNodes(true);
         if (nodes && nodes[0])
-            return nodes[0].id ? nodes[0].id : "";
+            return nodes[0].value ? nodes[0].value : "";
         return "";
     }
 
