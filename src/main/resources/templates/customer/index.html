@@ -84,7 +84,7 @@
 
                         <div id="grid-pager"></div>
                     </div><!-- /.col -->
-                    <div id="modal-form" class="modal fade" tabindex="-1">
+                    <div id="modal-form" class="modal fade" tabindex="-1" aria-hidden="true" data-backdrop="static">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -176,7 +176,7 @@
                                 </div>
 
                                 <div class="modal-footer">
-                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal" >
                                         <i class="ace-icon fa fa-times"></i>
                                         取消
                                     </button>
@@ -191,11 +191,11 @@
                     </div>
 
                     <!--下单modal-->
-                    <div id="order-modal" class="modal fade" tabindex="-1" style="overflow: scroll">
+                    <div id="order-modal" class="modal fade" tabindex="-1" style="overflow: scroll" aria-hidden="true" data-backdrop="static">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <button type="button" class="close" data-dismiss="modal" >&times;</button>
                                     <h4 class="blue bigger">后台下单</h4>
                                 </div>
                                 <div class="modal-body">
@@ -978,6 +978,7 @@
                         zNode.pId = parseInt(result[i].cityCode.substring(0, 2) + "0000");
                         zNode.name = result[i].cityName + "(" + result[i].price + "元)";
                         zNode.price = result[i].price;
+                        zNode.nocheck = (result[i].cityCode.substr(2,6) == "0000");
                         zCityNodes.push(zNode);
                     }
                 }

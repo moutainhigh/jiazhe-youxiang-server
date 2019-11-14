@@ -473,7 +473,7 @@ CREATE TABLE `audit_record` (
     `city_code` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '兑换城市code',
     `city_name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '兑换城市名称',
     `bank_outlets_name` VARCHAR(100) COMMENT '银行网点名称',
-    `exchange_type` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '兑换类型 1是直接充值，2是兑换积分卡，3是兑换购物卡',
+    `exchange_type` INT(10) NOT NULL DEFAULT '1' COMMENT '兑换类型 1是直接充值，2是兑换积分卡，3是兑换商品，4是预采购',
     `exchange_point` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '总兑换积分',
     `giving_point` DECIMAL(8 , 2 ) NOT NULL DEFAULT '0.00' COMMENT '后台充值积分',
     `giving_type` VARCHAR(100) COMMENT '赠送类型 弃用',

@@ -177,6 +177,7 @@
                                         <option value="1">充积分</option>
                                         <option value="2">积分卡</option>
                                         <option value="3">换商品</option>
+                                        <option value="4">预采购</option>
                                     </select>
                                 </div>
                                 <label class="col-sm-1 control-label no-padding-right">兑换城市：</label>
@@ -438,7 +439,7 @@
 
                     <!--放大图片模态框-->
                     <div id="ShowImage_Form" class="modal fade" tabindex="-1" role="dialog"
-                         aria-labelledby="myModalLabel" aria-hidden="true" style="overflow: scroll">
+                         aria-labelledby="myModalLabel" style="overflow: scroll" aria-hidden="true" data-backdrop="static">
                         <div class="modal-dialog"
                              style="width:100%;height:100%;background-color: rgba(64,64,64,1);margin:0px;padding:0px;">
                             <div class="modal-content"
@@ -477,6 +478,7 @@
     var pager_selector = "#grid-pager";
     var auditRecordStatus = ['未提交', '已提交', '已驳回', '已通过'];
     var auditRecordColor = ['000000', '0000FF', 'FF0000', '00FF00'];
+    var exchangeType = ['','充积分','积分卡','换商品','预采购']
     var imgUrls;
     var picIndex = 0;
     var rotate = 0;//旋转度数
@@ -589,7 +591,7 @@
                     width: 100,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.id == 0 ? '': hasExchangeType(rowObject.exchangeType, '3') ? generateProductValue(rowObject.productValue, rowObject.exchangePoint) : "--";
+                        return rowObject.id == 0 ? '': (hasExchangeType(rowObject.exchangeType, '3')||hasExchangeType(rowObject.exchangeType,'4')) ? generateProductValue(rowObject.exchangeType,rowObject.productValue, rowObject.exchangePoint) : "--";
                     }
                 },
                 {
@@ -686,16 +688,23 @@
      * @param exchangePoint
      * @returns {string}
      */
-    function generateProductValue(productValue, exchangePoint) {
+    function generateProductValue(exchangeType,productValue, exchangePoint) {
+        var productText = '';
+        if(hasExchangeType(exchangeType,'3')){
+            productText = '【换商品】';
+        }
+        if(hasExchangeType(exchangeType,'4')){
+            productText = '【预采购】';
+        }
         if (exchangePoint > 0) {
             var rate = productValue / exchangePoint;
             if (rate > 2.5) {
-                return generateSpan(productValue + '(' + rate.toFixed(2) + ')', 'FF0000');
+                return generateSpan(productText + productValue + '(' + rate.toFixed(2) + ')', 'FF0000');
             } else {
-                return productValue + '(' + rate.toFixed(2) + ')';
+                return productText + productValue + '(' + rate.toFixed(2) + ')';
             }
         } else {
-            return generateSpan(productValue + '(错误)', 'FF0000');
+            return generateSpan(productText + productValue + '(错误)', 'FF0000');
         }
 
     }
@@ -711,6 +720,9 @@
         }
         if (exchangeType.indexOf('3') > -1) {
             exchangeTypeText = exchangeTypeText + '换商品 ';
+        }
+        if (exchangeType.indexOf('4') > -1) {
+            exchangeTypeText = exchangeTypeText + '预采购 ';
         }
         return exchangeTypeText;
     }
@@ -891,7 +903,7 @@
         } else {
             $(".exchangeType2").css("display", "none");
         }
-        if (hasExchangeType(result.exchangeType, '3')) {
+        if (hasExchangeType(result.exchangeType, '3')||hasExchangeType(result.exchangeType,'4')) {
             $(".exchangeType3").css("display", "");
             $("#productValue").val(result.productValue);
         } else {
