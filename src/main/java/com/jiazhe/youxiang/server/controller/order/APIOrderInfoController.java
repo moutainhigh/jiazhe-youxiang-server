@@ -77,7 +77,7 @@ public class APIOrderInfoController extends BaseController {
         Date orderEndTime = req.getOrderEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getOrderEndTime()));
         Date realServiceStartTime = req.getRealServiceTimeStart() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getRealServiceTimeStart()));
         Date realServiceEndTime = req.getRealServiceTimeEnd() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getRealServiceTimeEnd()));
-        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getStatus(), req.getOrderCode(), req.getMobile(), req.getCustomerMobile(), orderStartTime, orderEndTime, req.getWorkerMobile(), req.getProductId(),realServiceStartTime,realServiceEndTime,req.getCustomerCityCode(),paging);
+        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getStatus(), req.getOrderCode(), req.getMobile(), req.getCustomerMobile(), orderStartTime, orderEndTime, req.getWorkerMobile(), req.getProductId(),req.getServiceProductId(),realServiceStartTime,realServiceEndTime,req.getCustomerCityCode(),paging);
         List<OrderInfoResp> orderInfoRespList = orderInfoDTOList.stream().map(OrderInfoAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(orderInfoRespList, paging);
     }
