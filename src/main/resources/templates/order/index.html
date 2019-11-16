@@ -23,7 +23,7 @@
 
         .chosen-container-single .chosen-single {
             height: 30px;
-            border-radius:0px;
+            border-radius: 0px;
         }
     </style>
 </head>
@@ -291,7 +291,7 @@
                                                                       class="form-control" disabled="disabled"
                                                                       style="resize:none;height: 100px;"></textarea>
                                                             <!--<input id="re_customerAddress" class="form-control"-->
-                                                                   <!--type="text" style="height:30px" readonly/>-->
+                                                            <!--type="text" style="height:30px" readonly/>-->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -302,7 +302,7 @@
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
                                                             <!--<input id="re_customerRemark" class="form-control"-->
-                                                                   <!--type="text" style="height:30px" readonly/>-->
+                                                            <!--type="text" style="height:30px" readonly/>-->
                                                             <textarea id="re_customerRemark"
                                                                       class="form-control" disabled="disabled"
                                                                       style="resize:none;height: 100px;"></textarea>
@@ -506,7 +506,7 @@
                                                     <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <!--<input id="app_customerAddress" class="form-control"-->
-                                                                   <!--type="text" style="height:30px" readonly/>-->
+                                                            <!--type="text" style="height:30px" readonly/>-->
                                                             <textarea id="app_customerAddress"
                                                                       class="form-control" disabled="disabled"
                                                                       style="resize:none;height: 100px;"></textarea>
@@ -677,7 +677,7 @@
             postData: transformToJson($('#orderInfoSearchForm').serializeArray()),
             shrinkToFit: false,
             autoScroll: true,
-            colNames: ['', '操作', '状态', '商品名称', '单价', '数量', '下单时间','服务时间','下单账号', '服务对象电话', '服务对象姓名','成本',  '积分支付金额','代金券抵扣金额', '充值卡支付金额', '在线支付金额','订单号','待支付'],
+            colNames: ['', '操作', '状态', '商品名称', '单价', '数量', '下单时间', '服务时间', '下单账号', '服务对象电话', '服务对象姓名', '成本', '积分支付金额', '代金券抵扣金额', '充值卡支付金额', '在线支付金额', '订单号', '待支付'],
 //            colNames: ['', '操作', '状态', '商品名称', '单价', '数量', '下单时间','预约时间','服务时间','下单账号', '服务对象电话', '服务对象姓名','成本',  '积分支付金额','代金券抵扣金额', '充值卡支付金额', '在线支付金额','订单号','待支付'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
@@ -691,25 +691,25 @@
                         return orderStatus[rowObject.status - 1];
                     }
                 },
-                {name: 'productResp.name', index: 'productResp.name', width: 150,sortable: false},
-                {name: 'productPrice', index: 'productPrice', width: 50,sortable: false},
-                {name: 'count', index: 'count', width: 50,sortable: false},
-                {name: 'orderTime', index: 'orderTime', width: 130,sortable: false,formatter:timeFormat},
+                {name: 'productResp.name', index: 'productResp.name', width: 150, sortable: false},
+                {name: 'productPrice', index: 'productPrice', width: 50, sortable: false},
+                {name: 'count', index: 'count', width: 50, sortable: false},
+                {name: 'orderTime', index: 'orderTime', width: 130, sortable: false, formatter: timeFormat},
 //                {name: 'serviceTime', index: 'serviceTime', width: 130,sortable: false,formatter:timeFormat},
-                {name: 'realServiceTime', index: 'realServiceTime', width: 130,sortable: false,formatter:timeFormat},
-                {name: 'customerResp.mobile', index: 'customerResp.mobile', width: 100,sortable: false},
-                {name: 'customerMobile', index: 'customerMobile', width: 100,sortable: false},
-                {name: 'customerName', index: 'customerName', width: 100,sortable: false},
-                {name: 'cost', index: 'cost', width: 50,sortable: false},
-                {name: 'payPoint', index: 'payPoint', width: 100,sortable: false},
-                {name: 'payVoucher', index: 'payVoucher', width: 100,sortable: false},
-                {name: 'payRechargeCard', index: 'payRechargeCard', width: 100,sortable: false},
-                {name: 'payCash', index: 'payCash', width: 100,sortable: false},
+                {name: 'realServiceTime', index: 'realServiceTime', width: 130, sortable: false, formatter: timeFormat},
+                {name: 'customerResp.mobile', index: 'customerResp.mobile', width: 100, sortable: false},
+                {name: 'customerMobile', index: 'customerMobile', width: 100, sortable: false},
+                {name: 'customerName', index: 'customerName', width: 100, sortable: false},
+                {name: 'cost', index: 'cost', width: 50, sortable: false},
+                {name: 'payPoint', index: 'payPoint', width: 100, sortable: false},
+                {name: 'payVoucher', index: 'payVoucher', width: 100, sortable: false},
+                {name: 'payRechargeCard', index: 'payRechargeCard', width: 100, sortable: false},
+                {name: 'payCash', index: 'payCash', width: 100, sortable: false},
                 {name: 'orderCode', index: 'orderCode', width: 120, sortable: false},
-                {name: 'payment', index: 'payment', width: 60,sortable: false}
+                {name: 'payment', index: 'payment', width: 60, sortable: false}
             ],
             loadComplete: function (data) {
-                if("error" in data){
+                if ("error" in data) {
                     bootboxalert(data.error.message);
                     return false;
                 }
@@ -1189,28 +1189,48 @@
     }
 
     function userCancelOrder(id) {
-        confirm("确定要取消该订单吗？", function (result) {
-            if (result) {
-                $.ajax({
-                    url: "/api/orderinfo/usercancelorder",
-                    dataType: "json",
-                    async: false,
-                    data: {
-                        id: id
-                    },
-                    type: "POST",
-                    success: function (data) {
-                        if ('error' in data) {
-                            bootboxalert(data.error.message);
-                        } else {
-                            bootboxalert("取消成功");
-                            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                        }
-                    },
-                    error: error
+        prompt("请输入取消订单的成本", function (cost) {
+            if (isNumber(cost)) {
+                confirm("确定要取消该订单吗？", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/orderinfo/usercancelorder",
+                            dataType: "json",
+                            async: false,
+                            data: {
+                                orderId: id, cost: cost
+                            },
+                            type: "POST",
+                            success: function (data) {
+                                if ('error' in data) {
+                                    bootboxalert(data.error.message);
+                                } else {
+                                    bootboxalert("取消成功");
+                                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                                }
+                            },
+                            error: error
+                        });
+                    }
                 });
+            } else if (cost !== null) {
+                if (cost === "") {
+                    alert("输入成本不能为空");
+                } else {
+                    alert("输入成本不符合规范");
+                }
             }
         });
+    }
+
+    function isNumber(val) {
+        var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+        var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+        if (regPos.test(val) || regNeg.test(val)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     function userCompleteOrder(id, cost) {
@@ -1289,7 +1309,7 @@
         })
     }
 
-    function initProduct(){
+    function initProduct() {
         $.ajax({
             url: "/api/product/getalllist",
             dataType: "json",
@@ -1305,7 +1325,7 @@
                 } else {
                     var result = data.data;
                     for (var i = 0; i < result.length; i++) {
-                        $("#product").append("<option value="+result[i].id+">"+result[i].name+"</option>");
+                        $("#product").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
                     }
                 }
                 initSearchSelect();
