@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.adapter.order;
 
 import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
 import com.jiazhe.youxiang.server.adapter.ProductAdapter;
+import com.jiazhe.youxiang.server.domain.po.OrderInfoPO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.*;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.*;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;

@@ -28,7 +28,7 @@ import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerPlaceOrderReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderCancelUnpassReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderCancelWithCostReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderInfoPageReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderCodeReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserPlaceOrderReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserReservationOrderReq;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
@@ -303,7 +303,7 @@ public class APIOrderInfoController extends BaseController {
     @ApiOperation(value = "验证订单是否已经微信支付", httpMethod = "GET", response = TenpayQureyResp.class, notes = "验证订单是否已经微信支付")
     @RequestMapping(value = "/checktenpay", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "验证订单是否已经微信支付", level = LogLevelEnum.LEVEL_1)
-    public Object checkTenpay(@ModelAttribute OrderReq req) {
+    public Object checkTenpay(@ModelAttribute OrderCodeReq req) {
         TenpayQureyDTO dto = orderInfoBiz.checkTenPay(req.getOrderCode());
         TenpayQureyResp resp = OrderInfoAdapter.TenpayQureyDto2Resp(dto);
         return ResponseFactory.buildResponse(resp);
@@ -322,7 +322,7 @@ public class APIOrderInfoController extends BaseController {
         Date orderEndTime = req.getOrderEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getOrderEndTime()));
         Date realServiceStartTime = req.getRealServiceTimeStart() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getRealServiceTimeStart()));
         Date realServiceEndTime = req.getRealServiceTimeEnd() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getRealServiceTimeEnd()));
-        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getStatus(), req.getOrderCode(), req.getMobile(), req.getCustomerMobile(), orderStartTime, orderEndTime, req.getWorkerMobile(), req.getProductId(),realServiceStartTime,realServiceEndTime,req.getCustomerCityCode());
+        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getStatus(), req.getOrderCode(), req.getMobile(), req.getCustomerMobile(), orderStartTime, orderEndTime, req.getWorkerMobile(), req.getProductId(),req.getServiceProductId(),realServiceStartTime,realServiceEndTime,req.getCustomerCityCode());
         ExportExcelUtils.exportOrder(response, orderInfoDTOList);
     }
 

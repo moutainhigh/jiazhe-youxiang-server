@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.dao.mapper.manual.order;
 
+import com.jiazhe.youxiang.server.domain.po.OrderInfoPO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
