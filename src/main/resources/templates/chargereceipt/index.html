@@ -9,10 +9,11 @@
     <!-- CSS -->
     <link rel="stylesheet" th:href="@{/static/init.css}"/>
     <link rel="stylesheet" th:href="@{/static/editable-select/css/jquery-editable-select.min.css}"/>
+    <link rel="stylesheet" th:href="@{/static/Viewer.js/css/viewer.min.css}"/>
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
     <script th:src="@{/static/editable-select/js/jquery-editable-select.min.js}"></script>
-
+    <script th:src="@{/static/Viewer.js/js/viewer.min.js}"></script>
     <style>
         .ui-jqgrid .ui-jqgrid-bdiv {
             overflow-x: auto;
@@ -47,6 +48,13 @@
             overflow: scroll;
             height: 500px;
         }
+
+        .viewer-container {
+            position: relative;
+            height: 100% !important;
+            width: 100% !important;
+        }
+
     </style>
 </head>
 
@@ -182,9 +190,9 @@
                                 <div class="modal-body" style="text-align: center">
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-6">
-                                            <a href="javascript:rotatePicture()" title="顺时针旋转90度">
-                                                <i class="ace-icon fa fa-repeat"></i>
-                                            </a>
+                                            <!--<a href="javascript:rotatePicture()" title="顺时针旋转90度">-->
+                                                <!--<i class="ace-icon fa fa-repeat"></i>-->
+                                            <!--</a>-->
                                             <div class="pic_div" id="img_show">
 
                                             </div>
@@ -412,7 +420,10 @@
     function showimage(source) {
         rotate = 0;
         $("#saveImgUrl").val(source);
-        $("#modal-form").find("#img_show").html("<image id='zoomPic' width='400px' src='" + getImageUrl(source) + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' />");
+        $("#modal-form").find("#img_show").html("<image id='zoomPic' width='400px' data-original='" + getImageUrl(source) + "' src='" + getImageUrl(source) + "' style='display: none' />");
+        new Viewer(document.getElementById('zoomPic'), {
+            url: 'data-original', inline: true,navbar:false,button:false,title:false
+        });
     }
 
     //全屏查看小票
@@ -452,7 +463,7 @@
                     $("#exchangeType").html(getExchangeTypeText(result.exchangeType));
                     $("#status").html(auditRecordStatus[result.status - 1]);
                     $("#totalExchangePoint").html(result.exchangePoint);
-                    $("#totalChargeReceiptPoint").html(generateSpan(result.chargeReceiptPoint,result.chargeReceiptPoint==result.exchangePoint?"00FF00":"FF0000"));
+                    $("#totalChargeReceiptPoint").html(generateSpan(result.chargeReceiptPoint, result.chargeReceiptPoint == result.exchangePoint ? "00FF00" : "FF0000"));
                     $("#customerName").html(result.customerName);
                     var imgUrls = result.imgUrls.split(",");
                     for (var i = 0; i < imgUrls.length; i++) {
@@ -466,8 +477,8 @@
         });
     }
 
-    //刷新录入的小票积分
-    function refreshChargeReceiptPoint(){
+    //刷新录入的小票积分img_show
+    function refreshChargeReceiptPoint() {
         $.ajax({
             url: "/api/auditrecord/getbyid",
             dataType: "json",
@@ -481,7 +492,7 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    $("#totalChargeReceiptPoint").html(generateSpan(result.chargeReceiptPoint,result.chargeReceiptPoint==result.exchangePoint?"00FF00":"FF0000"));
+                    $("#totalChargeReceiptPoint").html(generateSpan(result.chargeReceiptPoint, result.chargeReceiptPoint == result.exchangePoint ? "00FF00" : "FF0000"));
                 }
             },
             error: error
@@ -605,14 +616,14 @@
             type: "POST",
             success: function (data) {
                 if ('error' in data) {
-                    if(data.error.code == 119008){
-                        confirm('有类似的小票记录，还需要继续保存吗？',function(result){
-                            if(result){
+                    if (data.error.code == 119008) {
+                        confirm('有类似的小票记录，还需要继续保存吗？', function (result) {
+                            if (result) {
                                 $("#check").val(0);
                                 save(type);
                             }
                         });
-                    }else{
+                    } else {
                         bootboxalert(data.error.message);
                     }
                 } else {
@@ -711,19 +722,19 @@
             async: false,
             data: {
                 id: id,
-                check:$("#totalPointCheck").val()
+                check: $("#totalPointCheck").val()
             },
             type: "POST",
             success: function (data) {
                 if ('error' in data) {
-                    if(data.error.code == 111025){
-                        confirm(data.error.message+",还需要继续完成吗？", function (result) {
+                    if (data.error.code == 111025) {
+                        confirm(data.error.message + ",还需要继续完成吗？", function (result) {
                             if (result) {
                                 $("#totalPointCheck").val(0);
                                 changeChargeReceiptStatus(url, id, chargeReceiptStatus, status);
                             }
                         });
-                    }else{
+                    } else {
                         bootboxalert(data.error.message);
                     }
                 } else {
