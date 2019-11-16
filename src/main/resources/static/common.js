@@ -118,6 +118,8 @@ function confirm(message, callback) {
 function prompt(title, callback) {
     bootbox.prompt({
         value: 0,
+        placeholder: title ? title : "请输入信息",
+        required : true,
         title: title ? title : "请输入信息",
         callback: callback,
     });
