@@ -26,6 +26,7 @@ import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerOrderInfoPageRe
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerPayReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerPlaceOrderReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderCancelUnpassReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderCancelWithCostReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderInfoPageReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserPlaceOrderReq;
@@ -163,8 +164,15 @@ public class APIOrderInfoController extends BaseController {
     @ApiOperation(value = "员工取消订单", httpMethod = "POST", notes = "员工取消订单")
     @RequestMapping(value = "/usercancelorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "员工取消订单", level = LogLevelEnum.LEVEL_2)
-    public Object userCancelOrder(@ModelAttribute IdReq req) {
-        orderInfoBiz.userCancelOrder(req.getId());
+    public Object userCancelOrder(@ModelAttribute OrderCancelWithCostReq req) {
+        Integer orderId=req.getOrderId();
+        CommonValidator.validateNull(orderId, new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CANCEL));
+        BigDecimal cost=req.getCost();
+        CommonValidator.validateNull(cost, new OrderException(OrderCodeEnum.ORDER_COST_IS_NULL));
+        OrderInfoDTO orderInfoDTO=new OrderInfoDTO();
+        orderInfoDTO.setId(orderId);
+        orderInfoDTO.setCost(cost);
+        orderInfoBiz.userCancelOrder(orderInfoDTO);
         return ResponseFactory.buildSuccess();
     }
 

@@ -63,8 +63,8 @@ public class OrderInfoBiz {
         orderInfoService.orderCancelUnpass(id, auditReason);
     }
 
-    public void userCancelOrder(Integer id) {
-        orderInfoService.userCancelOrder(id);
+    public void userCancelOrder(OrderInfoDTO orderInfoDTO) {
+        orderInfoService.userCancelOrder(orderInfoDTO);
 
     }
 
