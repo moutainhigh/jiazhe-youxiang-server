@@ -219,6 +219,8 @@ public class APIOrderInfoController extends BaseController {
             req.setCashSupport("false");
         }
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqCustomerPlaceOrder2DTOPlaceOrder(req);
+        //前台下单，扣分商品和服务商品一样
+        placeOrderDTO.setServiceProductId(req.getProductId());
         placeOrderDTO.setWorkerMobile("");
         placeOrderDTO.setWorkerName("");
         placeOrderDTO.setCost(BigDecimal.ZERO);

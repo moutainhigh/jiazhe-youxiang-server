@@ -100,6 +100,7 @@ public class OrderInfoAdapter {
         PlaceOrderDTO placeOrderDTO = new PlaceOrderDTO();
         placeOrderDTO.setCustomerId(req.getCustomerId());
         placeOrderDTO.setProductId(req.getProductId());
+        placeOrderDTO.setServiceProductId(req.getServiceProductId());
         placeOrderDTO.setCustomerCityCode(req.getCustomerCityCode());
         placeOrderDTO.setCount(req.getCount());
         placeOrderDTO.setCustomerAddress(req.getCustomerAddress());

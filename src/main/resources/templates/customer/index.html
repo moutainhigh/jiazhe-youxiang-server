@@ -988,13 +988,13 @@
 
     function productChanged(event, treeId, treeNode) {
         if (!treeNode.checked) {
+            $("#serviceProductId").val(0);
             cityTree.destroy();
-            $("#serviceProductId").val([0]).trigger("change");
         } else {
+            $("#serviceProductId").val(treeNode.id);
             refreshCity();
-            //同步服务商品信息
-            $("#serviceProductId").val([treeNode.id]).trigger("change");
         }
+        $("#serviceProductId").trigger("chosen:updated");
         var lastNum = parseFloat(treeNode.lastNum);
         $("#orderCount").ace_spinner('value', lastNum);
         if (treeNode.productType == '0') {//服务类

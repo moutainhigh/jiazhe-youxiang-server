@@ -662,6 +662,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPO.setOrderCode(orderCode);
         orderInfoPO.setCustomerId(dto.getCustomerId());
         orderInfoPO.setProductId(dto.getProductId());
+        orderInfoPO.setServiceProductId(dto.getServiceProductId());
         orderInfoPO.setCustomerCityCode(dto.getCustomerCityCode());
         orderInfoPO.setCustomerCityName(productPriceDTO.getCityName());
         orderInfoPO.setProductPrice(productPriceDTO.getPrice());
