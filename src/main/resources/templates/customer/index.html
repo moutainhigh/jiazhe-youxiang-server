@@ -223,6 +223,16 @@
                                                     </div>
                                                 </div>
 
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label no-padding-right">服务商品：</label>
+                                                    <div class="col-sm-9">
+                                                        <select id="serviceProductId" name="serviceProductId"
+                                                                class="chosen-select form-control">
+                                                            <option value="0">--未选择--</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
                                                     <label class="col-sm-3 control-label no-padding-right">城市：</label>
@@ -908,6 +918,7 @@
         $("#orderVoucherArea").empty();
         $("#orderRechargeCardArea").empty();
         $("#orderPointArea").empty();
+        $("#order-modal").resize();
     }
 
     function initProduct() {
@@ -941,6 +952,9 @@
                     var prefix = "parent";
                     var parentNode = {};
                     for (var i = 0; i < result.length; i++) {
+                        //服务商品初始化
+                        $("#serviceProductId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                        //扣分商品树状初始化（大类--> 商品）
                         var zNode = {};
                         zNode.id = parseInt(result[i].id);
                         if (result[i].productCategory) {
@@ -968,15 +982,18 @@
             },
             error: error
         });
+        initSearchSelect("serviceProductId");
         productTree = $.fn.zTree.init($("#productTree"), setting, zProductNodes);
-
     }
 
     function productChanged(event, treeId, treeNode) {
         if (!treeNode.checked) {
             cityTree.destroy();
+            $("#serviceProductId").val([0]).trigger("change");
         } else {
             refreshCity();
+            //同步服务商品信息
+            $("#serviceProductId").val([treeNode.id]).trigger("change");
         }
         var lastNum = parseFloat(treeNode.lastNum);
         $("#orderCount").ace_spinner('value', lastNum);

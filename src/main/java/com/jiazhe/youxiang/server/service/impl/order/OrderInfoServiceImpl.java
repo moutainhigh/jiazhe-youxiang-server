@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.service.impl.order;
 import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
+import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
@@ -93,8 +94,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         List<OrderInfoDTO> orderInfoDTOList = orderInfoPOList.stream().map(OrderInfoAdapter::PO2DTO).collect(Collectors.toList());
         orderInfoDTOList.forEach(bean -> {
             ProductDTO productDTO = productService.getById(bean.getProductId());
+            ProductDTO serviceProductDTO = productService.getById(bean.getServiceProductId());
             CustomerDTO customerDTO = customerService.getById(bean.getCustomerId());
             bean.setProductDTO(productDTO);
+            bean.setServiceProductDTO(serviceProductDTO);
             bean.setCustomerDTO(customerDTO);
         });
         paging.setTotal(count);
@@ -107,8 +110,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         OrderInfoDTO dto = OrderInfoAdapter.PO2DTO(po);
         CustomerDTO customerDTO = customerService.getById(dto.getCustomerId());
         ProductDTO productDTO = productService.getById(dto.getProductId());
+        ProductDTO serviceProductDTO = productService.getById(dto.getServiceProductId());
         dto.setCustomerDTO(customerDTO);
         dto.setProductDTO(productDTO);
+        dto.setServiceProductDTO(serviceProductDTO);
         return dto;
     }
 
@@ -782,8 +787,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         List<OrderInfoDTO> orderInfoDTOList = orderInfoPOList.stream().map(OrderInfoAdapter::PO2DTO).collect(Collectors.toList());
         orderInfoDTOList.forEach(bean -> {
             ProductDTO productDTO = productService.getById(bean.getProductId());
+            ProductDTO serviceProductDTO = productService.getById(bean.getServiceProductId());
             CustomerDTO customerDTO = customerService.getById(bean.getCustomerId());
             bean.setProductDTO(productDTO);
+            bean.setServiceProductDTO(serviceProductDTO);
             bean.setCustomerDTO(customerDTO);
         });
         return orderInfoDTOList;
