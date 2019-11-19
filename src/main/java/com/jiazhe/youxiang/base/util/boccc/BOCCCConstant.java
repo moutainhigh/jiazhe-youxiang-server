@@ -30,7 +30,7 @@ public class BOCCCConstant {
     /**
      * 商户名称：北京悠享首字母大写
      */
-    public static final String MERCHANT_NAME = "BJYX";
+    public static final String MERCHANT_NAME = "YOUX";
 
     /**
      * 商户ID
@@ -60,7 +60,7 @@ public class BOCCCConstant {
     /**
      * 登录中行服务器key路径
      */
-    public static String loginPrivateKeyPath = rootPath + "pgp.key/partner08.key";
+    public static String loginPrivateKeyPath = rootPath + "pgp.key/YOUX.key";
 
     /**
      * 下载到本地文件的根路径
