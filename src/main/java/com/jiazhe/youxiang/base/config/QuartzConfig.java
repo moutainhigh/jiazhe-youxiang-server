@@ -76,7 +76,7 @@ public class QuartzConfig {
                 .forJob(BOCCCQuartzDetail())
                 .withIdentity("BOCCCTrigger")
 //                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 ? * *"))
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 40 15 ? * *"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 55 15 ? * *"))
                 .build();
     }
 
