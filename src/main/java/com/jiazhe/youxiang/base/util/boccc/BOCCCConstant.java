@@ -60,7 +60,7 @@ public class BOCCCConstant {
     /**
      * 登录中行服务器key路径
      */
-    public static String loginPrivateKeyPath = rootPath + "pgp.key/YOUX.key";
+    public static String loginPrivateKeyPath = rootPath + "sftp.key/YOUX.key";
 
     /**
      * 下载到本地文件的根路径
