@@ -12,8 +12,6 @@ import org.quartz.TriggerBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.text.SimpleDateFormat;
-
 /**
  * @author TU
  * @description
@@ -77,8 +75,8 @@ public class QuartzConfig {
         return TriggerBuilder.newTrigger()
                 .forJob(BOCCCQuartzDetail())
                 .withIdentity("BOCCCTrigger")
-                .startAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-11-19 15:10:00"))
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 ? * *"))
+//                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 ? * *"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 30 15 ? * *"))
                 .build();
     }
 
