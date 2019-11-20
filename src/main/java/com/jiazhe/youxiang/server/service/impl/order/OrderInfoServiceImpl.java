@@ -354,7 +354,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
                     //支付积分数量
                     BigDecimal thisPointPay;
-                    BigDecimal conversionRate = new BigDecimal(bean.getProjectDTO().getPointConversionRate());
+                    BigDecimal conversionRate = bean.getProjectDTO().getPointConversionRate();
                     if (needPay[0].compareTo(bean.getBalance().multiply(conversionRate)) == 1) {
                         thisPointPay = bean.getBalance();
                     } else {
@@ -573,7 +573,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
                     //支付积分数量
                     BigDecimal thisPointPay;
-                    BigDecimal conversionRate = new BigDecimal(bean.getProjectDTO().getPointConversionRate());
+                    BigDecimal conversionRate = bean.getProjectDTO().getPointConversionRate();
                     if (needPay[0].compareTo(bean.getBalance().multiply(conversionRate)) == 1) {
                         thisPointPay = bean.getBalance();
                     } else {

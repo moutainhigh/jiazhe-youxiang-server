@@ -278,7 +278,7 @@ CREATE TABLE `project` (
     `name` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '项目名称',
     `description` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '项目描述信息',
     `priority` INT(10) NOT NULL DEFAULT '0' COMMENT '排序序号',
-    `point_conversion_rate` INT(10) UNSIGNED NOT NULL DEFAULT '5' COMMENT '积分兑换比例',
+    `point_conversion_rate` DECIMAL(8 , 4) NOT NULL DEFAULT '0.00' COMMENT '积分兑换比例',
     `status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '状态：0:未启动，1：进行中，2：已结束',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
