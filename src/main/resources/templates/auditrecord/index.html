@@ -486,6 +486,7 @@
     var picIndex = 0;
     var rotate = 0;//旋转度数
     var allSum = 0;
+    var allValue = 0;//总商品价值
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -547,7 +548,7 @@
                     width: 50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.id == 0 ? "本页小计：" : generateSpan(auditRecordStatus[rowObject.status - 1], auditRecordColor[rowObject.status - 1]);
+                        return rowObject.id == 0 ? "本页积分：" : generateSpan(auditRecordStatus[rowObject.status - 1], auditRecordColor[rowObject.status - 1]);
                     }
                 },
                 {name: 'exchangePoint', index: 'exchangePoint', width: 70, sortable: false},
@@ -576,7 +577,7 @@
                     width: 50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.id == 0 ? '' : hasExchangeType(rowObject.exchangeType, '1') ? rowObject.givingPoint : "--";
+                        return rowObject.id == 0 ? '总价值：' : hasExchangeType(rowObject.exchangeType, '1') ? rowObject.givingPoint : "--";
                     }
                 },
                 {
@@ -585,7 +586,7 @@
                     width: 60,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.id == 0 ? '' : hasExchangeType(rowObject.exchangeType, '2') ? rowObject.pointCodes : "--";
+                        return rowObject.id == 0 ? cellvalue : hasExchangeType(rowObject.exchangeType, '2') ? rowObject.pointCodes : "--";
                     }
                 },
                 {
@@ -653,8 +654,10 @@
                     _action: '',
                     exchangePoint: pageSum,
                     status: '',
-                    customerName: '总合计：',
-                    customerMobile: allSum
+                    customerName: '总积分：',
+                    customerMobile: allSum,
+                    givingPoint: '',
+                    pointCodes: allValue
                 });
             }
         };
@@ -1039,6 +1042,7 @@
                     bootboxalert(data.error.message);
                 } else {
                     allSum = data.data.exchangePointSum;
+                    allValue = data.data.productValueSum;
                 }
             },
             error: error
