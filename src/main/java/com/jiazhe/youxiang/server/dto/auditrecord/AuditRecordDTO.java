@@ -30,7 +30,7 @@ public class AuditRecordDTO extends BaseObject {
 
     private BigDecimal givingPoint;
 
-    private Byte exchangeType;
+    private Integer exchangeType;
 
     private Byte chargeReceiptStatus;
 
@@ -128,11 +128,11 @@ public class AuditRecordDTO extends BaseObject {
         this.chargeReceiptPoint = chargeReceiptPoint;
     }
 
-    public Byte getExchangeType() {
+    public Integer getExchangeType() {
         return exchangeType;
     }
 
-    public void setExchangeType(Byte exchangeType) {
+    public void setExchangeType(Integer exchangeType) {
         this.exchangeType = exchangeType;
     }
 
