@@ -49,7 +49,7 @@
             update recharge_card_exchange_code
             <set>
                 batch_name = #{item.batchName},recharge_card_name = #{item.rechargeCardName},batch_description =
-                #{item.batchDescription},project_id = #{item.projectId},
+                #{item.batchDescription},project_id = #{item.projectId},status = #{item.status},
                 city_codes = #{item.cityCodes},product_ids = #{item.productIds},expiry_time =
                 #{item.expiryTime},recharge_card_effective_time = #{item.rechargeCardEffectiveTime},
                 expiry_type = #{item.expiryType},recharge_card_expiry_time = #{item.rechargeCardExpiryTime},
