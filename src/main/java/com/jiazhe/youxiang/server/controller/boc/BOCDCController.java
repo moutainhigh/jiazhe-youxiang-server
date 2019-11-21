@@ -57,11 +57,15 @@ public class BOCDCController {
         BOCDCCommonReq req = getReq(request);
         LOGGER.info("HTTP调用[queryStock]方法，参数:{}", JSONObject.toJSON(req));
         if (!BOCDCUtils.checkParam(req.getParam(), req.getSign())) {
+            LOGGER.info("HTTP调用[queryStock]方法,入参没有通过检查，参数:{}", JSONObject.toJSON(req));
             return BOCDCUtils.genrateFailReturn();
         }
         String paramStr = BOCDCUtils.trimBizData(req.getParam());
+        LOGGER.info("BOCDCUtils.trimBizData paramStr:{}", paramStr);
         paramStr = BOCDCUtils.xml2JsonStr(paramStr);
+        LOGGER.info("BOCDCUtils.xml2JsonStr paramStr:{}", paramStr);
         BOCDCQueryStockReq queryStockReq = JacksonUtil.readValue(paramStr, BOCDCQueryStockReq.class);
+        LOGGER.info("JacksonUtil.readValue queryStockReq:{}", JSONObject.toJSON(queryStockReq));
         try {
             queryStockReq.setOrderNo(RSAUtil.bocdcPrivateDecrypt(queryStockReq.getOrderNo()));
             queryStockReq.setGiftNo(RSAUtil.bocdcPrivateDecrypt(queryStockReq.getGiftNo()));
@@ -103,7 +107,7 @@ public class BOCDCController {
     public Object statusCheck() throws Exception {
         long start = System.currentTimeMillis();
 
-        bocdcBiz.statusCheck("1000028230", "1", "2018/02/20");
+        bocdcBiz.statusCheck("1000028593", "1", "20191014160353");
         //Future<String> task2 = bocdcBiz.statusCheck("abc", "435", "13242");
         //Future<String> task3 = bocdcBiz.statusCheck("213", "12673", "12342");
 

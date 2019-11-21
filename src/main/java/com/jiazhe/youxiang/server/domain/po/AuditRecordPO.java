@@ -61,7 +61,7 @@ public class AuditRecordPO implements Serializable {
 
     private BigDecimal productValue;
 
-    private Byte exchangeType;
+    private Integer exchangeType;
 
     private Date submitTime;
 
@@ -295,11 +295,11 @@ public class AuditRecordPO implements Serializable {
         this.productValue = productValue;
     }
 
-    public Byte getExchangeType() {
+    public Integer getExchangeType() {
         return exchangeType;
     }
 
-    public void setExchangeType(Byte exchangeType) {
+    public void setExchangeType(Integer exchangeType) {
         this.exchangeType = exchangeType;
     }
 

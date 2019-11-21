@@ -209,11 +209,12 @@ public class CommonConstant {
     public static final Byte AUDIT_RECORD_PASS = Byte.valueOf("4");
 
     /**
-     * 小程序提交记录状态【1直接充积分，2拿积分卡自行充值，3兑换实物】
+     * 小程序提交记录状态【1直接充积分，2拿积分卡自行充值，3兑换实物，4是预采购】
      */
     public static final Byte DIRECT_CHARGE = Byte.valueOf("1");
     public static final Byte SELF_CHARGE = Byte.valueOf("2");
     public static final Byte EXCHANGE_ENTITY = Byte.valueOf("3");
+    public static final Byte PRE_PURCHASE = Byte.valueOf("4");
 
     /**
      * 下单方式【0后台员工下单  1客户自己下单】
