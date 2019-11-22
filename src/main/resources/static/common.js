@@ -339,4 +339,5 @@ function initTable(grid_selector, pager_selector, options) {
         jsonReader: jsonReader,
         caption: caption
     });
+
 }

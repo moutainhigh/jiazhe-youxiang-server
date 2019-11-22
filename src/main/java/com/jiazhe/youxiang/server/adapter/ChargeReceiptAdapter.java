@@ -28,11 +28,11 @@ public class ChargeReceiptAdapter {
         chargeReceiptDTO.setCustomerName(chargeReceiptPO.getCustomerName());
         chargeReceiptDTO.setInputerId(chargeReceiptPO.getInputerId());
         chargeReceiptDTO.setInputerName(chargeReceiptPO.getInputerName());
-        chargeReceiptDTO.setImgUrl(chargeReceiptPO.getImgUrl());
         chargeReceiptDTO.setExtInfo(chargeReceiptPO.getExtInfo());
         chargeReceiptDTO.setIsDeleted(chargeReceiptPO.getIsDeleted());
         chargeReceiptDTO.setAddTime(chargeReceiptPO.getAddTime());
         chargeReceiptDTO.setModTime(chargeReceiptPO.getModTime());
+        chargeReceiptDTO.setImgUrl(chargeReceiptPO.getImgUrl());
         return chargeReceiptDTO;
     }
 
@@ -51,6 +51,7 @@ public class ChargeReceiptAdapter {
         chargeReceiptResp.setInputerId(chargeReceiptDTO.getInputerId());
         chargeReceiptResp.setInputerName(chargeReceiptDTO.getInputerName());
         chargeReceiptResp.setImgUrl(chargeReceiptDTO.getImgUrl());
+        chargeReceiptResp.setExchangeMobile(chargeReceiptDTO.getExchangeMobile());
         chargeReceiptResp.setExtInfo(chargeReceiptDTO.getExtInfo());
         chargeReceiptResp.setIsDeleted(chargeReceiptDTO.getIsDeleted());
         chargeReceiptResp.setAddTime(chargeReceiptDTO.getAddTime().getTime());

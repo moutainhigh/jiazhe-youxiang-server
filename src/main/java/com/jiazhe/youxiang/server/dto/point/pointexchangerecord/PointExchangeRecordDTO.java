@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.dto.point.pointexchangerecord;
 
 import com.jiazhe.youxiang.server.vo.BaseObject;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.Date;
 
@@ -24,6 +25,8 @@ public class PointExchangeRecordDTO extends BaseObject {
     private Integer operatorId;
 
     private String operatorName;
+
+    private String extInfo;
 
     private Date addTime;
 
@@ -74,6 +77,32 @@ public class PointExchangeRecordDTO extends BaseObject {
     public void setOperatorName(String operatorName) {
         this.operatorName = operatorName;
     }
+
+    public String getExtInfo() {
+        return extInfo;
+    }
+
+    public void setExtInfo(String extInfo) {
+        this.extInfo = extInfo;
+    }
+
+    public String getReceiptInfo() {
+        StringBuilder sb = new StringBuilder();
+        if (StringUtils.isNotEmpty(this.extInfo)) {
+            String[] s = this.extInfo.split(",");
+            if (s != null && s.length == 7 && StringUtils.isNotEmpty(s[3]) && StringUtils.isNotEmpty(s[4]) && StringUtils.isNotEmpty(s[5])) {
+                String cardNo = s[3];
+                cardNo = cardNo.substring(cardNo.lastIndexOf('*') + 1);
+                sb.append(cardNo);
+                sb.append(',');
+                sb.append(s[4]);
+                sb.append(',');
+                sb.append(s[5]);
+            }
+        }
+        return sb.toString();
+    }
+
 
     public Date getAddTime() {
         return addTime;

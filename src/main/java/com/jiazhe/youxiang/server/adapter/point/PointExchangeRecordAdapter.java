@@ -25,6 +25,7 @@ public class PointExchangeRecordAdapter {
         pointExchangeRecordDTO.setExchangeType(pointExchangeRecordPO.getExchangeType());
         pointExchangeRecordDTO.setOperatorId(pointExchangeRecordPO.getOperatorId());
         pointExchangeRecordDTO.setOperatorName(pointExchangeRecordPO.getOperatorName());
+        pointExchangeRecordDTO.setExtInfo(pointExchangeRecordPO.getExtInfo());
         pointExchangeRecordDTO.setAddTime(pointExchangeRecordPO.getAddTime());
         return pointExchangeRecordDTO;
     }
