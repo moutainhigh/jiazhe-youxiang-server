@@ -682,7 +682,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (needPay[0].compareTo(BigDecimal.ZERO) == 0) {
             if (productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
-                orderInfoPO.setExtInfo("");
             }
             if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);

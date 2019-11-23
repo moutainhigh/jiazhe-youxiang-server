@@ -16,7 +16,6 @@ import com.jiazhe.youxiang.server.service.order.OrderTrackService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
 import org.slf4j.LoggerFactory;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,9 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * @author TU
@@ -82,10 +78,10 @@ public class OrderInfoBiz {
         orderTrackService.create(orderTrackDTO);
     }
 
-    public void userCancelOrder(OrderInfoDTO orderInfoDTO) {
-        orderInfoService.userCancelOrder(orderInfoDTO);
+    public void userCancelOrder(Integer id) {
+        orderInfoService.userCancelOrder(id);
         OrderTrackDTO orderTrackDTO = new OrderTrackDTO();
-        orderTrackDTO.setOrderid(orderInfoDTO.getId());
+        orderTrackDTO.setOrderid(id);
         orderTrackDTO.setOpreation(OrderOpreationTypeEnum.CANCEL);
         orderTrackService.create(orderTrackDTO);
     }
@@ -178,7 +174,7 @@ public class OrderInfoBiz {
         if (null == customerDTO) {
             throw new OrderException(OrderCodeEnum.CUSTOMER_NOT_EXIST);
         }
-        return getList(status, null, customerDTO.getMobile(), null, null, null, null,null,null,null, paging);
+        return getList(status, null, customerDTO.getMobile(), null, null, null, null, null, null, null,null, paging);
     }
 
     /**

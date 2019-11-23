@@ -172,7 +172,7 @@ public class APIOrderInfoController extends BaseController {
         OrderInfoDTO orderInfoDTO = new OrderInfoDTO();
         orderInfoDTO.setId(orderId);
         orderInfoDTO.setCost(cost);
-        orderInfoBiz.userCancelOrder(orderInfoDTO);
+        orderInfoBiz.userCancelOrder(orderId);
         return ResponseFactory.buildSuccess();
     }
 

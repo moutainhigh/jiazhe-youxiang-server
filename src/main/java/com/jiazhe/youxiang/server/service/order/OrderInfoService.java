@@ -77,7 +77,7 @@ public interface OrderInfoService {
      *
      * @param id
      */
-    void userCancelOrder(OrderInfoDTO orderInfoDTO);
+    void userCancelOrder(Integer id);
 
     /**
      * 员工完成订单，所有状态下的订单都能置为已完成状态

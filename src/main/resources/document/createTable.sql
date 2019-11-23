@@ -394,8 +394,8 @@ CREATE TABLE `customer_address` (
 )  ENGINE=INNODB COMMENT='客户地址信息表';
 
 
-drop table if exists ``;
-CREATE TABLE `` (
+drop table if exists `order_info`;
+CREATE TABLE `order_info` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
     `order_code` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '订单编号',
     `customer_id` INT(10) UNSIGNED NOT NULL COMMENT '客户id',
@@ -572,8 +572,8 @@ CREATE TABLE `service_item` (
     PRIMARY KEY (`id`)
 )  ENGINE=INNODB COMMENT='服务项目';
 
-drop table if exists `partner_`;
-CREATE TABLE `partner_` (
+drop table if exists `partner_order_info`;
+CREATE TABLE `partner_order_info` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
     `customer_name` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '客户姓名',
     `customer_mobile` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '客户电话',

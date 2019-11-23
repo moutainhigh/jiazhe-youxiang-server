@@ -463,7 +463,7 @@
                     $("#exchangeType").html(getExchangeTypeText(result.exchangeType));
                     $("#status").html(auditRecordStatus[result.status - 1]);
                     $("#totalExchangePoint").html(result.exchangePoint);
-                    $("#totalChargeReceiptPoint").html(generateSpan(result.chargeReceiptPoint, result.chargeReceiptPoint == result.exchangePoint ? "00FF00" : "FF0000"));
+                    $("#totalChargeReceiptPoint").html(generateSpan(result.chargeReceiptPoint,result.chargeReceiptPoint==result.exchangePoint?"00FF00":"FF0000"));
                     $("#customerName").html(result.customerName);
                     var imgUrls = result.imgUrls.split(",");
                     for (var i = 0; i < imgUrls.length; i++) {
@@ -477,8 +477,8 @@
         });
     }
 
-    //刷新录入的小票积分img_show
-    function refreshChargeReceiptPoint() {
+    //刷新录入的小票积分
+    function refreshChargeReceiptPoint(){
         $.ajax({
             url: "/api/auditrecord/getbyid",
             dataType: "json",
@@ -492,7 +492,7 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    $("#totalChargeReceiptPoint").html(generateSpan(result.chargeReceiptPoint, result.chargeReceiptPoint == result.exchangePoint ? "00FF00" : "FF0000"));
+                    $("#totalChargeReceiptPoint").html(generateSpan(result.chargeReceiptPoint,result.chargeReceiptPoint==result.exchangePoint?"00FF00":"FF0000"));
                 }
             },
             error: error
@@ -616,14 +616,14 @@
             type: "POST",
             success: function (data) {
                 if ('error' in data) {
-                    if (data.error.code == 119008) {
-                        confirm('有类似的小票记录，还需要继续保存吗？', function (result) {
-                            if (result) {
+                    if(data.error.code == 119008){
+                        confirm('有类似的小票记录，还需要继续保存吗？',function(result){
+                            if(result){
                                 $("#check").val(0);
                                 save(type);
                             }
                         });
-                    } else {
+                    }else{
                         bootboxalert(data.error.message);
                     }
                 } else {
@@ -722,19 +722,19 @@
             async: false,
             data: {
                 id: id,
-                check: $("#totalPointCheck").val()
+                check:$("#totalPointCheck").val()
             },
             type: "POST",
             success: function (data) {
                 if ('error' in data) {
-                    if (data.error.code == 111025) {
-                        confirm(data.error.message + ",还需要继续完成吗？", function (result) {
+                    if(data.error.code == 111025){
+                        confirm(data.error.message+",还需要继续完成吗？", function (result) {
                             if (result) {
                                 $("#totalPointCheck").val(0);
                                 changeChargeReceiptStatus(url, id, chargeReceiptStatus, status);
                             }
                         });
-                    } else {
+                    }else{
                         bootboxalert(data.error.message);
                     }
                 } else {
