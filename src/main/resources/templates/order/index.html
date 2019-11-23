@@ -390,6 +390,16 @@
                                                         </div>
                                                     </div>
                                                 </shiro:hasPermission>
+                                                <div class="order_track space-2"></div>
+                                                <div class="order_track form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">操作记录：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <textarea id="re_order_track" disabled class="form-control"
+                                                                      style="resize:none;height: 100px"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
@@ -1167,11 +1177,22 @@
                     $("#re_workerName").val(result.workerName);
                     $("#re_cost").val(result.cost);
                     $("#re_comments").val(result.comments);
+                    parseOrderTrackInfo(result.orderTrackInfo);
                     $("#orderReservationModal").modal("show");
                 }
             },
             error: error
         });
+    }
+
+    function parseOrderTrackInfo(info) {
+        if (info) {
+            $(".order_track").show();
+            $("#re_order_track").val(info);
+        } else {
+            $(".order_track").hide();
+            $("#re_order_track").val("");
+        }
     }
 
     function showOrder(id) {
@@ -1253,28 +1274,49 @@
     }
 
     function userCancelOrder(id) {
-        confirm("确定要取消该订单吗？", function (result) {
-            if (result) {
-                $.ajax({
-                    url: "/api/orderinfo/usercancelorder",
-                    dataType: "json",
-                    async: false,
-                    data: {
-                        id: id
-                    },
-                    type: "POST",
-                    success: function (data) {
-                        if ('error' in data) {
-                            bootboxalert(data.error.message);
-                        } else {
-                            bootboxalert("取消成功");
-                            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                        }
-                    },
-                    error: error
+        prompt("请输入取消订单的成本", function (cost) {
+            if (isNumber(cost)) {
+                confirm("确定要取消该订单吗？", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/orderinfo/usercancelorder",
+                            dataType: "json",
+                            async: false,
+                            data: {
+                                orderId: id, cost: cost
+                            },
+                            type: "POST",
+                            success: function (data) {
+                                if ('error' in data) {
+                                    bootboxalert(data.error.message);
+                                } else {
+                                    bootboxalert("取消成功");
+                                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                                }
+                            },
+                            error: error
+                        });
+                    }
                 });
+            } else if (cost !== null) {
+                if (cost === "") {
+                    alert("输入成本不能为空");
+                } else {
+                    alert("输入成本不符合规范");
+                }
             }
+            return cost;
         });
+    }
+
+    function isNumber(val) {
+        var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+        var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+        if (regPos.test(val) || regNeg.test(val)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     function userCompleteOrder(id, cost) {

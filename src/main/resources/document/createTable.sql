@@ -394,8 +394,8 @@ CREATE TABLE `customer_address` (
 )  ENGINE=INNODB COMMENT='客户地址信息表';
 
 
-drop table if exists `order_info`;
-CREATE TABLE `order_info` (
+drop table if exists ``;
+CREATE TABLE `` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
     `order_code` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '订单编号',
     `customer_id` INT(10) UNSIGNED NOT NULL COMMENT '客户id',
@@ -572,8 +572,8 @@ CREATE TABLE `service_item` (
     PRIMARY KEY (`id`)
 )  ENGINE=INNODB COMMENT='服务项目';
 
-drop table if exists `partner_order_info`;
-CREATE TABLE `partner_order_info` (
+drop table if exists `partner_`;
+CREATE TABLE `partner_` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
     `customer_name` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '客户姓名',
     `customer_mobile` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '客户电话',
@@ -759,4 +759,16 @@ CREATE TABLE `material_info` (
     PRIMARY KEY (`id`)
 )  ENGINE=INNODB COMMENT='物料信息';
 
-
+DROP TABLE IF EXISTS `order_track`;
+CREATE TABLE `order_track` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `orderId` int(10) NOT NULL COMMENT '订单ID',
+  `opreation` int(10) NOT NULL DEFAULT '0' COMMENT '操作类型(0其他 1 创建 2 更新 3 取消 )',
+  `userName` varchar(255) NOT NULL DEFAULT '' COMMENT '用户姓名',
+  `msg` longtext NOT NULL COMMENT '描述信息',
+  `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
+  `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
+  `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB COMMENT='订单操作留痕表';

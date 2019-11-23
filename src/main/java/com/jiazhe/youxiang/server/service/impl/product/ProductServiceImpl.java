@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.server.service.impl.product;
 
 import com.google.common.collect.Lists;
+import com.jiazhe.youxiang.base.util.StringUtil;
 import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.biz.EleProductCodeBiz;
 import com.jiazhe.youxiang.server.biz.ProductBiz;
@@ -29,6 +30,7 @@ import com.jiazhe.youxiang.server.service.product.ProductService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -100,7 +102,14 @@ public class ProductServiceImpl implements ProductService {
             //获取商品的价格map，不限制价格生效状态
             Map<Integer, List<ProductPriceDTO>> productPriceMap = productPriceService.getPriceMap(productIds, cityCodes, null);
             productDTOList.forEach(item -> {
-                item.setProductCategory(productCategory);
+                if (productCategory != null)
+                    item.setProductCategory(productCategory);
+                else {
+                    ProductCategoryDTO temp = item.getProductCategory();
+                    if (temp != null) {
+                        item.setProductCategory(productCategoryService.getCategoryById(temp.getId()));
+                    }
+                }
                 item.setProductPriceList(productPriceMap.get(item.getId()));
             });
         }
