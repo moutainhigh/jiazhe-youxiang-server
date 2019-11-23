@@ -22,8 +22,8 @@ public interface OrderInfoService {
      *
      * @param status
      * @param orderCode
-     * @param mobile         下单人手机号
-     * @param customerMobile 收货人手机号
+     * @param mobile           下单人手机号
+     * @param customerMobile   收货人手机号
      * @param orderStartTime
      * @param orderEndTime
      * @param workerMobile
@@ -31,7 +31,7 @@ public interface OrderInfoService {
      * @param paging
      * @return
      */
-    List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode, Paging paging);
+    List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode, Paging paging);
 
     /**
      * 获取订单信息
@@ -75,9 +75,9 @@ public interface OrderInfoService {
     /**
      * 员工直接后台取消订单【除了已完成状态订单，其余都能取消】
      *
-     * @param id
+     * @param
      */
-    void userCancelOrder(Integer id);
+    void userCancelOrder(OrderInfoDTO orderInfoDTO);
 
     /**
      * 员工完成订单，所有状态下的订单都能置为已完成状态
@@ -146,7 +146,7 @@ public interface OrderInfoService {
      */
     void wxNotify(String transactionId, String orderNo, Integer wxPay);
 
-    List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime,String customerCityCode);
+    List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId,Date realServiceStartTime, Date realServiceEndTime, String customerCityCode);
 
     /**
      * 计算订单待支付金额（元）

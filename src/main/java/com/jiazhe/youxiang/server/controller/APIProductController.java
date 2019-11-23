@@ -232,7 +232,7 @@ public class APIProductController extends BaseController {
         CommonValidator.validatePaging(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         //调用BIZ方法
-        List<ProductDTO> productDTOList = productBiz.getList(req.getProductCategoryId(), req.getName(), req.getProductType(), req.getCityCodes(), req.getStatus(), paging);
+        List<ProductDTO> productDTOList = productBiz.getList(req.getProductCategoryId(), req.getName(), req.getProductType(), req.getCityCodes(), req.getStatus(), paging, true);
         //将DTO转成VO
         List<ProductResp> result = productDTOList.stream().map(ProductAdapter::productDTO2VO).collect(Collectors.toList());
         //用ResponseFactory将返回值包装
