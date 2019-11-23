@@ -373,6 +373,17 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <div class="order_track space-2"></div>
+                                                <div class="order_track form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">操作记录：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <textarea id="re_order_track" disabled class="form-control"
+                                                                      style="resize:none;height: 100px"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
@@ -1103,11 +1114,22 @@
                     $("#re_workerName").val(result.workerName);
                     $("#re_cost").val(result.cost);
                     $("#re_comments").val(result.comments);
+                    parseOrderTrackInfo(result.orderTrackInfo);
                     $("#orderReservationModal").modal("show");
                 }
             },
             error: error
         });
+    }
+
+    function parseOrderTrackInfo(info) {
+        if (info) {
+            $(".order_track").show();
+            $("#re_order_track").val(info);
+        } else {
+            $(".order_track").hide();
+            $("#re_order_track").val("");
+        }
     }
 
     function showOrder(id) {
