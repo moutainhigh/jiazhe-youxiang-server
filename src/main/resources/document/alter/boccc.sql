@@ -1,1 +1,0 @@
-alter table project modify column point_conversion_rate DECIMAL(8 , 4) NOT NULL DEFAULT '0.00' COMMENT '积分兑换比例';

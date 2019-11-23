@@ -9,3 +9,8 @@ alter table audit_record modify column exchange_type INT(10) NOT NULL DEFAULT '1
 alter table order_info modify column product_id INT(10) UNSIGNED NOT NULL COMMENT '扣分商品id';
 alter table order_info add column service_product_id INT(10) UNSIGNED NOT NULL COMMENT '服务商品id';
 update order_info set service_product_id = product_id;
+
+/**
+积分体系转换
+ */
+alter table project modify column point_conversion_rate DECIMAL(8 , 4) NOT NULL DEFAULT '0.00' COMMENT '积分兑换比例';
