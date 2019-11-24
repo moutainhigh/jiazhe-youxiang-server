@@ -15,6 +15,7 @@ import com.jiazhe.youxiang.server.service.order.OrderInfoService;
 import com.jiazhe.youxiang.server.service.order.OrderTrackService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,8 +50,8 @@ public class OrderInfoBiz {
     @Value("${wechat_public.mchid}")
     private String MCH_ID;
 
-    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode,Paging paging) {
-        List<OrderInfoDTO> orderInfoDTOList = orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, realServiceStartTime, realServiceEndTime,customerCityCode, paging);
+    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode, Paging paging) {
+        List<OrderInfoDTO> orderInfoDTOList = orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, realServiceStartTime, realServiceEndTime, customerCityCode, paging);
         orderInfoDTOList.stream().forEach(bean -> {
             //计算待支付金额放入订单信息中
             bean.setPayment(calculateOrderNeedPay(bean));
@@ -141,7 +142,7 @@ public class OrderInfoBiz {
             return "";
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
-            if (sb.length() > 0) sb.append("\\r\\n");
+            if (sb.length() > 0) sb.append("<br>");
             sb.append(parseOrderTrackInfo(i + 1, list.get(i)));
         }
         return sb.toString();
@@ -151,9 +152,10 @@ public class OrderInfoBiz {
         if (info == null) return "";
         StringBuilder sb = new StringBuilder();
         sb.append("【").append(index).append("】 ");
-        sb.append(info.getUsername());
-        sb.append("在 ").append(DateUtil.dateToStr(info.getAddTime())).append(" ");
-        sb.append(info.getOpreation().getMessage()).append(info.getMsg());
+        sb.append(info.getUsername()).append(" ");
+        sb.append("在 ").append(DateUtil.secondToStr(info.getAddTime())).append(" ");
+        sb.append(info.getOpreation().getMessage());
+        if (StringUtils.isNotBlank(info.getMsg())) sb.append("==>").append(info.getMsg());
         return sb.toString();
     }
 
@@ -174,7 +176,7 @@ public class OrderInfoBiz {
         if (null == customerDTO) {
             throw new OrderException(OrderCodeEnum.CUSTOMER_NOT_EXIST);
         }
-        return getList(status, null, customerDTO.getMobile(), null, null, null, null, null, null, null,null, paging);
+        return getList(status, null, customerDTO.getMobile(), null, null, null, null, null, null, null, null, paging);
     }
 
     /**
@@ -227,9 +229,18 @@ public class OrderInfoBiz {
 
     private String parseOrderTrackInfo(String fieldName, Object oldValue, Object newValue) {
         if (Objects.equals(oldValue, newValue)) return "";
+        if (oldValue instanceof BigDecimal && newValue instanceof BigDecimal) {
+            if (((BigDecimal) oldValue).compareTo((BigDecimal) newValue) == 0) return "";
+        }
         StringBuilder sb = new StringBuilder();
-        sb.append(" ").append(fieldName).append("[由").append(oldValue).append("改为").append(newValue).append("] ");
+        sb.append(" ").append(fieldName).append("[由 \"").append(fieldToStr(oldValue)).append("\" 改为 \"").append(fieldToStr(newValue)).append("\" ]; ");
         return sb.toString();
+    }
+
+    private String fieldToStr(Object field) {
+        if (field == null) return "null";
+        if (field instanceof Date) return DateUtil.secondToStr((Date) field);
+        return field.toString();
     }
 
     public NeedPayResp customerPlaceOrder(PlaceOrderDTO placeOrderDTO) {
@@ -255,8 +266,8 @@ public class OrderInfoBiz {
         orderInfoService.wxNotify(transactionId, orderNo, wxPay);
     }
 
-    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime,String customerCityCode) {
-        return orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, realServiceStartTime, realServiceEndTime,customerCityCode);
+    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode) {
+        return orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, realServiceStartTime, realServiceEndTime, customerCityCode);
     }
 
     public TenpayQureyDTO checkTenPay(String orderCode) {
