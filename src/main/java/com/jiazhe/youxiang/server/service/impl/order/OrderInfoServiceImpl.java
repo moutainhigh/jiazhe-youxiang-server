@@ -213,16 +213,15 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void userCancelOrder(OrderInfoDTO orderInfoDTO) {
-        OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(orderInfoDTO.getId());
+    public void userCancelOrder(Integer id) {
+        OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
         //订单不是已完成状态，才能取消
         if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_COMPLETE)) {
             throw new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CANCEL);
         } else {
-            orderInfoPO.setCost(orderInfoDTO.getCost());
             orderInfoPO.setStatus(CommonConstant.ORDER_CANCEL);
             //退款功能共用，提出公共方法
-            orderRefund(orderInfoDTO.getId());
+            orderRefund(id);
         }
         orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
     }

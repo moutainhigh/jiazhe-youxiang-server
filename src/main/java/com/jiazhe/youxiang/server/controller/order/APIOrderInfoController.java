@@ -165,14 +165,14 @@ public class APIOrderInfoController extends BaseController {
     @RequestMapping(value = "/usercancelorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "员工取消订单", level = LogLevelEnum.LEVEL_2)
     public Object userCancelOrder(@ModelAttribute OrderCancelWithCostReq req) {
-        Integer orderId=req.getOrderId();
+        Integer orderId = req.getOrderId();
         CommonValidator.validateNull(orderId, new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CANCEL));
-        BigDecimal cost=req.getCost();
+        BigDecimal cost = req.getCost();
         CommonValidator.validateNull(cost, new OrderException(OrderCodeEnum.ORDER_COST_IS_NULL));
-        OrderInfoDTO orderInfoDTO=new OrderInfoDTO();
+        OrderInfoDTO orderInfoDTO = new OrderInfoDTO();
         orderInfoDTO.setId(orderId);
         orderInfoDTO.setCost(cost);
-        orderInfoBiz.userCancelOrder(orderInfoDTO);
+        orderInfoBiz.userCancelOrder(orderId);
         return ResponseFactory.buildSuccess();
     }
 
@@ -276,6 +276,7 @@ public class APIOrderInfoController extends BaseController {
     public Object getById(@ModelAttribute IdReq req) {
         OrderInfoDTO orderInfoDTO = orderInfoBiz.getById(req.getId());
         OrderInfoResp orderInfoResp = OrderInfoAdapter.DTO2Resp(orderInfoDTO);
+        orderInfoResp.setOrderTrackInfo(orderInfoBiz.getOrderTrackInfo(req.getId()));
         return ResponseFactory.buildResponse(orderInfoResp);
     }
 

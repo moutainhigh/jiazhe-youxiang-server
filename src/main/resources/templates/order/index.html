@@ -413,6 +413,16 @@
                                                         </div>
                                                     </div>
                                                 </shiro:hasPermission>
+                                                <div class="order_track space-2"></div>
+                                                <div class="order_track form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">操作记录：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <div id="re_order_track" disabled class="form-control"
+                                                                 style="resize:none;"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
@@ -1204,11 +1214,22 @@
                     $("#re_workerName").val(result.workerName);
                     $("#re_cost").val(result.cost);
                     $("#re_comments").val(result.comments);
+                    parseOrderTrackInfo(result.orderTrackInfo);
                     $("#orderReservationModal").modal("show");
                 }
             },
             error: error
         });
+    }
+
+    function parseOrderTrackInfo(info) {
+        if (info) {
+            $(".order_track").show();
+            $("#re_order_track").html($("<div>" + info + "</div>"));
+        } else {
+            $(".order_track").hide();
+            $("#re_order_track").html("");
+        }
     }
 
     function showOrder(id) {
@@ -1323,16 +1344,6 @@
             }
             return cost;
         });
-    }
-
-    function isNumber(val) {
-        var regPos = /^\d+(\.\d+)?$/; //非负浮点数
-        var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
-        if (regPos.test(val) || regNeg.test(val)) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     function userCompleteOrder(id, cost) {

@@ -104,6 +104,9 @@ public class OrderInfoResp extends BaseVO {
     @ApiModelProperty("电子码信息")
     private String extInfo;
 
+    @ApiModelProperty("订单操作记录")
+    private String orderTrackInfo;
+
     private CustomerResp customerResp;
 
     private ProductResp productResp;
@@ -364,5 +367,13 @@ public class OrderInfoResp extends BaseVO {
 
     public void setExtInfo(String extInfo) {
         this.extInfo = extInfo;
+    }
+
+    public String getOrderTrackInfo() {
+        return orderTrackInfo;
+    }
+
+    public void setOrderTrackInfo(String orderTrackInfo) {
+        this.orderTrackInfo = orderTrackInfo;
     }
 }

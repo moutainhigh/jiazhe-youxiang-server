@@ -167,7 +167,7 @@ public class ProductAdapter {
         productCategoryPO.setThumbnailUrl(dto.getThumbnailUrl());
         productCategoryPO.setDetailImgUrl(dto.getDetailImgUrl());
         productCategoryPO.setPriority(dto.getPriority());
-        if (dto.getStatus() != null) {
+        if(dto.getStatus()!=null){
             productCategoryPO.setStatus(dto.getStatus().byteValue());
         }
         return productCategoryPO;
@@ -184,7 +184,7 @@ public class ProductAdapter {
         productCategoryDTO.setThumbnailUrl(po.getThumbnailUrl());
         productCategoryDTO.setDetailImgUrl(po.getDetailImgUrl());
         productCategoryDTO.setPriority(po.getPriority());
-        if (po.getStatus() != null) {
+        if(po.getStatus()!=null){
             productCategoryDTO.setStatus(po.getStatus().intValue());
         }
         return productCategoryDTO;

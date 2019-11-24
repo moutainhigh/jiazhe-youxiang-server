@@ -40,7 +40,7 @@ function timeFormat(time) {
     // return time.replace('T',' ').substring(0,19);
     var d = new Date(time);
     var year = d.getFullYear();
-    var month = (d.getMonth() + 1) > 9 ? (d.getMonth() + 1) : '0' + (d.getMonth() + 1);
+    var month = (d.getMonth() + 1) > 9 ? (d.getMonth() + 1) : '0' + (d.getMonth()+1);
     var date = d.getDate() > 9 ? d.getDate() : '0' + d.getDate();
     var hours = d.getHours() > 9 ? d.getHours() : '0' + d.getHours();
     var minutes = d.getMinutes() > 9 ? d.getMinutes() : '0' + d.getMinutes();
@@ -52,7 +52,7 @@ function dateFormat(time) {
     // return time.substring(0,10);
     var d = new Date(time);
     var year = d.getFullYear();
-    var month = (d.getMonth() + 1) > 9 ? (d.getMonth() + 1) : '0' + (d.getMonth() + 1);
+    var month = (d.getMonth() + 1) > 9 ? (d.getMonth() + 1) : '0' + (d.getMonth()+1);
     var date = d.getDate() > 9 ? d.getDate() : '0' + d.getDate();
     return year + '-' + month + '-' + date;
 }
@@ -72,11 +72,11 @@ function isInteger(input) {
  * @param input
  * @returns {boolean}
  */
-function isNumber(input) {
+function isNumber(input){
     var regPos = /^\d+(\.\d+)?$/;
-    if (regPos.test(input)) {
+    if(regPos.test(input)){
         return true;
-    } else {
+    }else{
         return false;
     }
 }
@@ -134,15 +134,16 @@ bootbox.setDefaults("locale", "zh_CN");
 /**
  * 日期选择器初始化
  */
-function initDatePicker() {
+function initDatePicker(){
     $('.date-picker').datepicker({
         language: 'zh-CN',
         autoclose: true,
         todayHighlight: true,
         clearBtn: true,  //添加清除按钮，可选值：true/false
-    }).on('changeDate', function () {
-        $(this).next().next().val($(this).val() == '' ? 0 : new Date($(this).val()).getTime());
-    }).next().on(ace.click_event, function () {
+    }).on('changeDate',function () {
+        $(this).next().next().val($(this).val()==''?0:new Date($(this).val()).getTime());
+    }).
+    next().on(ace.click_event, function () {
         $(this).prev().focus();
     });
 }
@@ -205,8 +206,8 @@ function initSearchSelect(selectId){
  * @param color
  * @returns {string}
  */
-function generateSpan(text, color) {
-    return "<span style='color:#" + color + "'>" + text + "</span>";
+function generateSpan(text,color){
+    return "<span style='color:#"+color+"'>"+text+"</span>";
 }
 
 /**
@@ -246,12 +247,12 @@ function getRedirectButton(style, url, name) {
  * @param url
  * @returns {*}
  */
-function encodeUrl(url) {
+function encodeUrl(url){
     var native = ['+'];
     var transfer = ['%2B'];
-    for (var i = 0; i < native.length; i++) {
-        while (url.indexOf(native[i]) != -1) {
-            url = url.replace(native[i], transfer[i]);
+    for(var i=0;i<native.length;i++){
+        while(url.indexOf(native[i]) != -1){
+            url = url.replace(native[i],transfer[i]);
         }
     }
     return url;
@@ -303,7 +304,7 @@ function initTable(grid_selector, pager_selector, options) {
     var multiselect = options.hasOwnProperty("multiselect") ? options.multiselect : false;
     var emptyrecords = options.hasOwnProperty("emptyrecords") ? options.emptyrecords : "0条数据";
     var loadComplete = options.hasOwnProperty("loadComplete") ? options.loadComplete : function (data) {
-        if ("error" in data) {
+        if("error" in data){
             bootboxalert(data.error.message);
             return false;
         }
@@ -342,7 +343,7 @@ function initTable(grid_selector, pager_selector, options) {
         pager: pager_selector,
         altRows: altRows,
         viewrecords: viewrecords,
-        multiselect: multiselect,
+        multiselect:multiselect,
         emptyrecords: emptyrecords,
         loadComplete: loadComplete,
         jsonReader: jsonReader,
