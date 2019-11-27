@@ -12,7 +12,7 @@ public class MaterialSummaryDto {
     /**
      * 员工id（收款人id）
      */
-    private Integer id ;
+    private Integer id;
 
     /**
      * 收款人姓名
@@ -27,18 +27,22 @@ public class MaterialSummaryDto {
     /**
      * 总购买物料价值
      */
-    private BigDecimal productValueTotal ;
+    private BigDecimal productValueTotal;
 
     /**
-     * 总消耗物料价值
+     * 总消耗物料价值(已审核)
      */
-    private BigDecimal usedProductValueTotal ;
+    private BigDecimal usedProductValueTotal;
+
+    /**
+     * 总消耗物料价值(已审核)
+     */
+    private BigDecimal uncheckProductValueTotal;
 
     /**
      * 剩余物料价值
      */
     private BigDecimal leftProductValueTotal;
-
 
 
     public Integer getId() {
@@ -87,5 +91,13 @@ public class MaterialSummaryDto {
 
     public void setLeftProductValueTotal(BigDecimal leftProductValueTotal) {
         this.leftProductValueTotal = leftProductValueTotal;
+    }
+
+    public BigDecimal getUncheckProductValueTotal() {
+        return uncheckProductValueTotal;
+    }
+
+    public void setUncheckProductValueTotal(BigDecimal uncheckProductValueTotal) {
+        this.uncheckProductValueTotal = uncheckProductValueTotal;
     }
 }

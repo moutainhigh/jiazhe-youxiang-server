@@ -24,8 +24,11 @@ public class MaterialSummaryResp extends BaseVO {
     @ApiModelProperty("采购实物价值")
     private BigDecimal productValueTotal ;
 
-    @ApiModelProperty("消费实物价值")
+    @ApiModelProperty("消费实物价值（已审核）")
     private BigDecimal usedProductValueTotal ;
+
+    @ApiModelProperty("消费实物价值（未审核）")
+    private BigDecimal uncheckProductValueTotal ;
 
     @ApiModelProperty("剩余实物价值")
     private BigDecimal leftProductValueTotal ;
@@ -76,5 +79,13 @@ public class MaterialSummaryResp extends BaseVO {
 
     public void setLeftProductValueTotal(BigDecimal leftProductValueTotal) {
         this.leftProductValueTotal = leftProductValueTotal;
+    }
+
+    public BigDecimal getUncheckProductValueTotal() {
+        return uncheckProductValueTotal;
+    }
+
+    public void setUncheckProductValueTotal(BigDecimal uncheckProductValueTotal) {
+        this.uncheckProductValueTotal = uncheckProductValueTotal;
     }
 }

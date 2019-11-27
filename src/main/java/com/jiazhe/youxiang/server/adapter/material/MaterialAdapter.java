@@ -25,6 +25,7 @@ public class MaterialAdapter {
         materialSummaryResp.setProductValueTotal(materialSummaryDto.getProductValueTotal());
         materialSummaryResp.setUsedProductValueTotal(materialSummaryDto.getUsedProductValueTotal());
         materialSummaryResp.setLeftProductValueTotal(materialSummaryDto.getLeftProductValueTotal());
+        materialSummaryResp.setUncheckProductValueTotal(materialSummaryDto.getUncheckProductValueTotal());
         return materialSummaryResp;
     }
 
