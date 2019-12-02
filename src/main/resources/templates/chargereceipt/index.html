@@ -172,7 +172,8 @@
                     </div><!-- /.col -->
 
                     <!--提交信息模态框-->
-                    <div id="modal-form" class="modal fade" tabindex="-1" style="overflow: scroll;" aria-hidden="true" data-backdrop="static">
+                    <div id="modal-form" class="modal fade" tabindex="-1" style="overflow: scroll;" aria-hidden="true"
+                         data-backdrop="static">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -316,7 +317,8 @@
 
                     <!--放大图片模态框-->
                     <div id="ShowImage_Form" class="modal fade" tabindex="-1" role="dialog"
-                         aria-labelledby="myModalLabel" style="overflow: scroll" aria-hidden="true" data-backdrop="static">
+                         aria-labelledby="myModalLabel" style="overflow: scroll" aria-hidden="true"
+                         data-backdrop="static">
                         <div class="modal-dialog"
                              style="width:100%;height:100%;background-color: rgba(64,64,64,1);margin:0px;padding:0px;">
                             <div class="modal-content"
@@ -370,7 +372,7 @@
             postData: {
                 auditRecordId: $("#auditRecordId").val()
             },
-            colNames: ['', '小票积分', '客户姓名', 'POS机编号', '银行卡后四位', '交易时间', '录入人', '操作'],
+            colNames: ['', '小票积分', '客户姓名', 'POS机编号', '银行卡后四位', '交易时间', '录入人', '兑换手机', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'exchangePoint', index: 'exchangePoint', width: 40, sortable: false},
@@ -387,6 +389,13 @@
                     }
                 },
                 {name: 'inputerName', index: 'inputerName', sortable: false, width: 40},
+                {
+                    name: 'exchangeMobile', index: 'exchangeMobile', sortable: false, width: 60,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return isEmpty(cellvalue) ? "--" : cellvalue;
+                    }
+                },
+
                 {name: '_action', index: '_action', sortable: false, width: 100, formatter: customFormatter}
             ],
             caption: "凭证列表"
@@ -452,7 +461,7 @@
                     $("#exchangeType").html(getExchangeTypeText(result.exchangeType));
                     $("#status").html(auditRecordStatus[result.status - 1]);
                     $("#totalExchangePoint").html(result.exchangePoint);
-                    $("#totalChargeReceiptPoint").html(generateSpan(result.chargeReceiptPoint,result.chargeReceiptPoint==result.exchangePoint?"00FF00":"FF0000"));
+                    $("#totalChargeReceiptPoint").html(generateSpan(result.chargeReceiptPoint, result.chargeReceiptPoint == result.exchangePoint ? "00FF00" : "FF0000"));
                     $("#customerName").html(result.customerName);
                     var imgUrls = result.imgUrls.split(",");
                     for (var i = 0; i < imgUrls.length; i++) {
@@ -467,7 +476,7 @@
     }
 
     //刷新录入的小票积分
-    function refreshChargeReceiptPoint(){
+    function refreshChargeReceiptPoint() {
         $.ajax({
             url: "/api/auditrecord/getbyid",
             dataType: "json",
@@ -481,7 +490,7 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    $("#totalChargeReceiptPoint").html(generateSpan(result.chargeReceiptPoint,result.chargeReceiptPoint==result.exchangePoint?"00FF00":"FF0000"));
+                    $("#totalChargeReceiptPoint").html(generateSpan(result.chargeReceiptPoint, result.chargeReceiptPoint == result.exchangePoint ? "00FF00" : "FF0000"));
                 }
             },
             error: error
@@ -605,14 +614,14 @@
             type: "POST",
             success: function (data) {
                 if ('error' in data) {
-                    if(data.error.code == 119008){
-                        confirm('有类似的小票记录，还需要继续保存吗？',function(result){
-                            if(result){
+                    if (data.error.code == 119008) {
+                        confirm('有类似的小票记录，还需要继续保存吗？', function (result) {
+                            if (result) {
                                 $("#check").val(0);
                                 save(type);
                             }
                         });
-                    }else{
+                    } else {
                         bootboxalert(data.error.message);
                     }
                 } else {
@@ -711,19 +720,19 @@
             async: false,
             data: {
                 id: id,
-                check:$("#totalPointCheck").val()
+                check: $("#totalPointCheck").val()
             },
             type: "POST",
             success: function (data) {
                 if ('error' in data) {
-                    if(data.error.code == 111025){
-                        confirm(data.error.message+",还需要继续完成吗？", function (result) {
+                    if (data.error.code == 111025) {
+                        confirm(data.error.message + ",还需要继续完成吗？", function (result) {
                             if (result) {
                                 $("#totalPointCheck").val(0);
                                 changeChargeReceiptStatus(url, id, chargeReceiptStatus, status);
                             }
                         });
-                    }else{
+                    } else {
                         bootboxalert(data.error.message);
                     }
                 } else {
@@ -734,6 +743,16 @@
             },
             error: error
         });
+    }
+
+
+    //判空
+    function isEmpty(obj) {
+        if (typeof obj == "undefined" || obj == null || obj == "") {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 </script>
