@@ -51,9 +51,9 @@ public class MaterialServiceImpl implements MaterialService {
         Integer count = materialInfoPOManualMapper.getSummaryCount(payerIds, payeeIds);
         paging.setTotal(count);
         List<MaterialSummaryDto> dtoList = materialInfoPOManualMapper.getSummaryList(payerIds, payeeIds, paging.getOffset(), paging.getLimit());
-        dtoList.stream().forEach(bean -> {
-            bean.setLeftProductValueTotal(bean.getProductValueTotal().subtract(bean.getUsedProductValueTotal()));
-        });
+        dtoList.stream().forEach(bean ->
+                bean.setLeftProductValueTotal(bean.getProductValueTotal().subtract(bean.getUsedProductValueTotal()).subtract(bean.getUncheckProductValueTotal()))
+        );
         return dtoList;
     }
 
@@ -72,26 +72,26 @@ public class MaterialServiceImpl implements MaterialService {
             dto.setProductValueTotal(BigDecimal.ZERO);
             dto.setUsedProductValueTotal(BigDecimal.ZERO);
             dto.setLeftProductValueTotal(BigDecimal.ZERO);
-        }else{
+        } else {
             dto.setLeftProductValueTotal(dto.getProductValueTotal().subtract(dto.getUsedProductValueTotal()));
         }
         return dto;
     }
 
     @Override
-    public void save(Integer id ,Integer payeeId, BigDecimal transferAmount, BigDecimal materialValue, Date transferTime, String remark) {
+    public void save(Integer id, Integer payeeId, BigDecimal transferAmount, BigDecimal materialValue, Date transferTime, String remark) {
         SysUserDTO payerDto = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
         if (null == payerDto) {
             throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
-        MaterialInfoPO po ;
-        if(id == 0){
+        MaterialInfoPO po;
+        if (id == 0) {
             po = new MaterialInfoPO();
             po.setPayerId(payerDto.getId());
             po.setPayerName(payerDto.getDisplayName());
-        }else{
+        } else {
             po = materialInfoPOMapper.selectByPrimaryKey(id);
-            if(!po.getPayerId().equals(payerDto.getId())){
+            if (!po.getPayerId().equals(payerDto.getId())) {
                 throw new MaterialException(MaterialCodeEnum.CANNOT_CHANGE_OTHERS_PAY);
             }
         }
@@ -105,9 +105,9 @@ public class MaterialServiceImpl implements MaterialService {
         po.setMaterialValue(materialValue);
         po.setTransferTime(transferTime);
         po.setRemark(remark);
-        if(id == 0){
+        if (id == 0) {
             materialInfoPOMapper.insertSelective(po);
-        }else{
+        } else {
             materialInfoPOMapper.updateByPrimaryKeySelective(po);
         }
     }

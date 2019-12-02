@@ -231,6 +231,11 @@ public class ProductAdapter {
         productDTO.setPriority(productPO.getPriority());
         productDTO.setSmsTemplate(productPO.getSmsTemplate());
         productDTO.setEffectiveDays(productPO.getEffectiveDays());
+        if (productPO.getProductCategoryId() != null) {
+            ProductCategoryDTO productCategoryDTO = new ProductCategoryDTO();
+            productCategoryDTO.setId(productPO.getProductCategoryId());
+            productDTO.setProductCategory(productCategoryDTO);
+        }
         return productDTO;
     }
 
