@@ -1043,7 +1043,7 @@
                         var zNode = {};
                         zNode.id = parseInt(result[i].cityCode);
                         zNode.pId = parseInt(result[i].cityCode.substring(0, 2) + "0000");
-                        zNode.name = result[i].cityName + "(" + result[i].price + "元)";
+                        zNode.name = result[i].cityName + "(" + result[i].price + "积分)";
                         zNode.price = result[i].price;
                         zNode.nocheck = (result[i].cityCode.substr(2, 6) == "0000");
                         zCityNodes.push(zNode);
@@ -1166,7 +1166,7 @@
                         for (var i = 0; i < result.length; i++) {
                             $("#orderPointArea").append("<div class='checkbox'><label>" +
                                 "<input onchange='payMoneyChange()' name='pointCheckbox' type='checkbox' class='ace' value=" + result[i].id + ">" +
-                                "<span class='lbl'> " + result[i].name + "[" + dateFormat(result[i].expiryTime) + "]（剩余积分：" + result[i].balance + "分；1积分=" + result[i].projectResp.pointConversionRate + "元）</span></label>" +
+                                "<span class='lbl'> " + result[i].name + "[" + dateFormat(result[i].expiryTime) + "]（剩余积分：" + result[i].balance + "分；500积分=1元）</span></label>" +
                                 "<input type='hidden' id='leftMoney_" + result[i].id + "' value=" + result[i].balance + ">" +
                                 "<input type='hidden' id='conversionRate_" + result[i].id + "' value=" + result[i].projectResp.pointConversionRate + ">" +
                                 "</div>");

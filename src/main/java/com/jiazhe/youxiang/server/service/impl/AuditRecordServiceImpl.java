@@ -294,6 +294,7 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(null, customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint, submitStartTime, submitEndTime, exchangeType, cityCode, null,null);
         AuditRecordSumDTO dto = new AuditRecordSumDTO();
         dto.setExchangePointSum(auditRecordPOList.stream().map(AuditRecordPO::getExchangePoint).reduce(BigDecimal.ZERO, BigDecimal::add));
+        dto.setProductValueSum(auditRecordPOList.stream().map(AuditRecordPO::getProductValue).reduce(BigDecimal.ZERO, BigDecimal::add));
         return dto;
     }
 

@@ -287,13 +287,14 @@
         var tableOption = {
             url: "/api/material/listsummarypage",
             postData: transformToJson($('#materialInfoSearchForm').serializeArray()),
-            colNames: ['', '收款人', '收款总额', '采购实物价值', '消耗实物价值', '剩余实物价值','操作'],
+            colNames: ['', '收款人', '收款总额', '采购实物价值', '消耗实物价值(已审核)','消耗实物价值(未审核)', '剩余实物价值','操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'payeeName', index: 'payeeName', width: 70, sortable: false},
                 {name: 'receiveTotal', index: 'receiveTotal', width: 50, sortable: false},
                 {name: 'productValueTotal', index: 'productValueTotal', width: 50, sortable: false},
                 {name: 'usedProductValueTotal', index: 'usedProductValueTotal', width: 50, sortable: false},
+                {name: 'uncheckProductValueTotal', index: 'uncheckProductValueTotal', width: 50, sortable: false},
                 {name: 'leftProductValueTotal', index: 'leftProductValueTotal', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
                     var color = rowObject.leftProductValueTotal < 0 ? "FF0000" : "000000"
                     return generateSpan(rowObject.leftProductValueTotal,color);

@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl.point;
 
+import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.server.adapter.point.PointExchangeRecordAdapter;
 import com.jiazhe.youxiang.server.common.enums.PointCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.PointException;
@@ -9,6 +10,7 @@ import com.jiazhe.youxiang.server.domain.po.PointExchangeRecordPO;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeRecordPOExample;
 import com.jiazhe.youxiang.server.dto.point.pointexchangerecord.PointExchangeRecordDTO;
 import com.jiazhe.youxiang.server.service.point.PointExchangeRecordService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -80,5 +82,26 @@ public class PointExchangeRecordServiceImpl implements PointExchangeRecordServic
             throw new PointException(PointCodeEnum.CODE_2_RECORD_EXCEPTION);
         }
         return true;
+    }
+
+    @Override
+    public List<PointExchangeRecordDTO> findByExtInfos(List<String> receiptInfos) {
+        List<PointExchangeRecordDTO> result = Lists.newArrayList();
+        PointExchangeRecordPOExample example = new PointExchangeRecordPOExample();
+        if (CollectionUtils.isEmpty(receiptInfos)) {
+            return result;
+        }
+        receiptInfos.stream().forEach(item -> {
+            PointExchangeRecordPOExample.Criteria criteria = example.createCriteria();
+            criteria.andExtInfoLike("%" + item + "%");
+            example.or(criteria);
+        });
+        List<PointExchangeRecordPO> poList = pointExchangeRecordPOMapper.selectByExample(example);
+        if (CollectionUtils.isNotEmpty(poList)) {
+            poList.stream().forEach(item -> {
+                result.add(PointExchangeRecordAdapter.po2Dto(item));
+            });
+        }
+        return result;
     }
 }

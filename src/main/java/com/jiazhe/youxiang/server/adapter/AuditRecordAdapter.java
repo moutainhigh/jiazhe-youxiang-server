@@ -137,6 +137,7 @@ public class AuditRecordAdapter {
         }
         AuditRecordSumResp auditRecordSumResp = new AuditRecordSumResp();
         auditRecordSumResp.setExchangePointSum(dto.getExchangePointSum());
+        auditRecordSumResp.setProductValueSum(dto.getProductValueSum());
         return auditRecordSumResp;
     }
 
