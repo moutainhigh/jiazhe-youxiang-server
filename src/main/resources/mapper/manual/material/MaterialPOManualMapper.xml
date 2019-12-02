@@ -59,7 +59,7 @@
             <if test="payeeIds != null and payeeIds != ''">
                 AND record.submitter_id in ${payeeIds}
             </if>
-            AND record.is_deleted = 0 AND record.status = 4 AND record.submit_time >= date_format('2019-05-27 00:00:00',
+            AND record.is_deleted = 0 AND record.status = 4 AND record.submit_time >= date_format('2019-12-01 00:00:00',
             '%Y-%m-%d %H:%i:%s')
         </where>
         UNION ALL
@@ -74,7 +74,7 @@
             <if test="payeeIds != null and payeeIds != ''">
                 AND record.submitter_id in ${payeeIds}
             </if>
-            AND record.is_deleted = 0 AND record.status != 4 AND record.submit_time >= date_format('2019-05-27
+            AND record.is_deleted = 0 AND record.status != 4 AND record.submit_time >= date_format('2019-12-01
             00:00:00',
             '%Y-%m-%d %H:%i:%s')
         </where>
@@ -105,7 +105,7 @@
             <if test="payeeIds != null and payeeIds != ''">
                 AND record.submitter_id in ${payeeIds}
             </if>
-            AND record.is_deleted = 0 AND record.submit_time >= date_format('2019-05-27 00:00:00', '%Y-%m-%d %H:%i:%s')
+            AND record.is_deleted = 0 AND record.submit_time >= date_format('2019-12-01 00:00:00', '%Y-%m-%d %H:%i:%s')
         </where>
         ) as temp
     </select>
@@ -142,7 +142,7 @@
             <if test="payeeIds != null and payeeIds != ''">
                 AND record.submitter_id in ${payeeIds}
             </if>
-            AND record.is_deleted = 0 AND record.status = 4 AND record.submit_time >= date_format('2019-05-27 00:00:00',
+            AND record.is_deleted = 0 AND record.status = 4 AND record.submit_time >= date_format('2019-12-01 00:00:00',
             '%Y-%m-%d %H:%i:%s')
         </where>
         ) as temp
