@@ -47,3 +47,19 @@ alter TABLE point_exchange_code modify column face_value DECIMAL(20,4) NOT NULL 
 alter TABLE material_info modify column transfer_amount DECIMAL(20,4) NOT NULL DEFAULT '0.00' COMMENT '转账金额';
 alter TABLE material_info modify column material_value DECIMAL(20,4) NOT NULL DEFAULT '0.00' COMMENT '物料价值';
 
+/**
+develop已经执行，test、master未执行
+ */
+DROP TABLE IF EXISTS `order_track`;
+CREATE TABLE `order_track` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `orderId` int(10) NOT NULL COMMENT '订单ID',
+  `opreation` int(10) NOT NULL DEFAULT '0' COMMENT '操作类型(0其他 1 创建 2 更新 3 取消 )',
+  `userName` varchar(255) NOT NULL DEFAULT '' COMMENT '用户姓名',
+  `msg` longtext NOT NULL COMMENT '描述信息',
+  `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
+  `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
+  `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB COMMENT='订单操作留痕表';
