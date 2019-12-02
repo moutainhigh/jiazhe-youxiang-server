@@ -26,11 +26,11 @@ import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerOrderInfoPageRe
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerPayReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerPlaceOrderReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderCancelUnpassReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderCancelWithCostReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderInfoPageReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderCodeReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserPlaceOrderReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserReservationOrderReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.*;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.OrderInfoResp;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.TenpayQureyResp;
@@ -77,7 +77,7 @@ public class APIOrderInfoController extends BaseController {
         Date orderEndTime = req.getOrderEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getOrderEndTime()));
         Date realServiceStartTime = req.getRealServiceTimeStart() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getRealServiceTimeStart()));
         Date realServiceEndTime = req.getRealServiceTimeEnd() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getRealServiceTimeEnd()));
-        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getStatus(), req.getOrderCode(), req.getMobile(), req.getCustomerMobile(), orderStartTime, orderEndTime, req.getWorkerMobile(), req.getProductId(),realServiceStartTime,realServiceEndTime,req.getCustomerCityCode(),paging);
+        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getStatus(), req.getOrderCode(), req.getMobile(), req.getCustomerMobile(), orderStartTime, orderEndTime, req.getWorkerMobile(), req.getProductId(),req.getServiceProductId(),realServiceStartTime,realServiceEndTime,req.getCustomerCityCode(),paging);
         List<OrderInfoResp> orderInfoRespList = orderInfoDTOList.stream().map(OrderInfoAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(orderInfoRespList, paging);
     }
@@ -219,6 +219,8 @@ public class APIOrderInfoController extends BaseController {
             req.setCashSupport("false");
         }
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqCustomerPlaceOrder2DTOPlaceOrder(req);
+        //前台下单，扣分商品和服务商品一样
+        placeOrderDTO.setServiceProductId(req.getProductId());
         placeOrderDTO.setWorkerMobile("");
         placeOrderDTO.setWorkerName("");
         placeOrderDTO.setCost(BigDecimal.ZERO);
@@ -304,7 +306,7 @@ public class APIOrderInfoController extends BaseController {
     @ApiOperation(value = "验证订单是否已经微信支付", httpMethod = "GET", response = TenpayQureyResp.class, notes = "验证订单是否已经微信支付")
     @RequestMapping(value = "/checktenpay", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "验证订单是否已经微信支付", level = LogLevelEnum.LEVEL_1)
-    public Object checkTenpay(@ModelAttribute OrderReq req) {
+    public Object checkTenpay(@ModelAttribute OrderCodeReq req) {
         TenpayQureyDTO dto = orderInfoBiz.checkTenPay(req.getOrderCode());
         TenpayQureyResp resp = OrderInfoAdapter.TenpayQureyDto2Resp(dto);
         return ResponseFactory.buildResponse(resp);
@@ -323,7 +325,7 @@ public class APIOrderInfoController extends BaseController {
         Date orderEndTime = req.getOrderEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getOrderEndTime()));
         Date realServiceStartTime = req.getRealServiceTimeStart() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getRealServiceTimeStart()));
         Date realServiceEndTime = req.getRealServiceTimeEnd() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getRealServiceTimeEnd()));
-        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getStatus(), req.getOrderCode(), req.getMobile(), req.getCustomerMobile(), orderStartTime, orderEndTime, req.getWorkerMobile(), req.getProductId(),realServiceStartTime,realServiceEndTime,req.getCustomerCityCode());
+        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getStatus(), req.getOrderCode(), req.getMobile(), req.getCustomerMobile(), orderStartTime, orderEndTime, req.getWorkerMobile(), req.getProductId(),req.getServiceProductId(),realServiceStartTime,realServiceEndTime,req.getCustomerCityCode());
         ExportExcelUtils.exportOrder(response, orderInfoDTOList);
     }
 

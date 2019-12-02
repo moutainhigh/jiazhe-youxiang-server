@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.domain.po;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class ProjectPO implements Serializable {
@@ -12,7 +13,7 @@ public class ProjectPO implements Serializable {
 
     private Integer priority;
 
-    private Integer pointConversionRate;
+    private BigDecimal pointConversionRate;
 
     private Byte status;
 
@@ -58,11 +59,11 @@ public class ProjectPO implements Serializable {
         this.priority = priority;
     }
 
-    public Integer getPointConversionRate() {
+    public BigDecimal getPointConversionRate() {
         return pointConversionRate;
     }
 
-    public void setPointConversionRate(Integer pointConversionRate) {
+    public void setPointConversionRate(BigDecimal pointConversionRate) {
         this.pointConversionRate = pointConversionRate;
     }
 

@@ -176,7 +176,7 @@
                                 </div>
 
                                 <div class="modal-footer">
-                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal" >
+                                    <button class="btn btn-sm modal-footer-btn" data-dismiss="modal">
                                         <i class="ace-icon fa fa-times"></i>
                                         取消
                                     </button>
@@ -191,11 +191,12 @@
                     </div>
 
                     <!--下单modal-->
-                    <div id="order-modal" class="modal fade" tabindex="-1" style="overflow: scroll" aria-hidden="true" data-backdrop="static">
+                    <div id="order-modal" class="modal fade" tabindex="-1" style="overflow: scroll" aria-hidden="true"
+                         data-backdrop="static">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" >&times;</button>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                                     <h4 class="blue bigger">后台下单</h4>
                                 </div>
                                 <div class="modal-body">
@@ -210,7 +211,7 @@
                                                 <input type="hidden" name="customerCityCode" id="orderCityCode">
                                                 <input type="hidden" name="productPrice" id="orderProductPrice">
                                                 <div class="form-group">
-                                                    <label class="col-sm-3 control-label no-padding-right">商品：</label>
+                                                    <label class="col-sm-3 control-label no-padding-right">扣分商品：</label>
                                                     <div class="col-sm-9">
                                                         <input type="hidden" id="orderProductId" name="productId"
                                                                readonly/>
@@ -219,6 +220,16 @@
                                                                 style="margin-top:0; width:100%; height:auto;">
                                                             </ul>
                                                         </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label no-padding-right">服务商品：</label>
+                                                    <div class="col-sm-9">
+                                                        <select id="serviceProductId" name="serviceProductId"
+                                                                class="chosen-select form-control">
+                                                            <option value="0">--未选择--</option>
+                                                        </select>
                                                     </div>
                                                 </div>
 
@@ -239,7 +250,7 @@
                                                     <label class="col-sm-3 control-label no-padding-right">数量：</label>
                                                     <div class="col-sm-9">
                                                         <div class="pos-rel">
-                                                            <input type="text" name="count" id="orderCount" />
+                                                            <input type="text" name="count" id="orderCount"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -390,9 +401,14 @@
                                         取消
                                     </button>
 
-                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="placeOrder()">
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="placeOrder(false)">
                                         <i class="ace-icon fa fa-check"></i>
                                         下单
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary modal-footer-btn" onclick="placeOrder(true)">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        下单并继续
                                     </button>
                                 </div>
                             </div>
@@ -902,6 +918,7 @@
         $("#orderVoucherArea").empty();
         $("#orderRechargeCardArea").empty();
         $("#orderPointArea").empty();
+        $("#serviceProductId_chosen").width(420);
     }
 
     function initProduct() {
@@ -935,6 +952,9 @@
                     var prefix = "parent";
                     var parentNode = {};
                     for (var i = 0; i < result.length; i++) {
+                        //服务商品初始化
+                        $("#serviceProductId").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                        //扣分商品树状初始化（大类--> 商品）
                         var zNode = {};
                         zNode.id = parseInt(result[i].id);
                         if (result[i].productCategory) {
@@ -962,16 +982,19 @@
             },
             error: error
         });
+        initSearchSelect("serviceProductId");
         productTree = $.fn.zTree.init($("#productTree"), setting, zProductNodes);
-
     }
 
     function productChanged(event, treeId, treeNode) {
         if (!treeNode.checked) {
+            $("#serviceProductId").val(0);
             cityTree.destroy();
         } else {
+            $("#serviceProductId").val(treeNode.id);
             refreshCity();
         }
+        $("#serviceProductId").trigger("chosen:updated");
         var lastNum = parseFloat(treeNode.lastNum);
         $("#orderCount").ace_spinner('value', lastNum);
         if (treeNode.productType == '0') {//服务类
@@ -1022,7 +1045,7 @@
                         zNode.pId = parseInt(result[i].cityCode.substring(0, 2) + "0000");
                         zNode.name = result[i].cityName + "(" + result[i].price + "积分)";
                         zNode.price = result[i].price;
-                        zNode.nocheck = (result[i].cityCode.substr(2,6) == "0000");
+                        zNode.nocheck = (result[i].cityCode.substr(2, 6) == "0000");
                         zCityNodes.push(zNode);
                     }
                 }
@@ -1172,8 +1195,8 @@
         }
     }
 
-    //下单
-    function placeOrder() {
+    //下单 keepOn为true：下单并继续；为false，下单关闭模态框，重新刷新页面
+    function placeOrder(keepOn) {
         $("#orderRealServiceTime").next().next().val($("#orderRealServiceTime").val() == '' ? 0 : new Date($("#orderRealServiceTime").val()).getTime());
         if (getSelectedProductId() == "") {
             bootboxalert("请选择商品");
@@ -1191,11 +1214,11 @@
         if (needPay > 0) {
             confirm("所选金额不足以支付订单，还继续下单吗？", function (result) {
                 if (result) {
-                    saveOrder();
+                    saveOrder(keepOn);
                 }
             });
         } else {
-            saveOrder();
+            saveOrder(keepOn);
         }
     }
 
@@ -1222,7 +1245,7 @@
     }
 
     //保存订单
-    function saveOrder() {
+    function saveOrder(keepOn) {
         var voucherIds = "";
         var rechargeCardIds = "";
         var pointIds = "";
@@ -1259,9 +1282,14 @@
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
-                    $("#order-modal").modal("hide");
-                    bootboxalert("下单成功");
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                    if (keepOn) {
+                        bootboxalert("下单成功，继续下单");
+                        refreshCard();
+                    } else {
+                        $("#order-modal").modal("hide");
+                        bootboxalert("下单成功");
+                        jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                    }
                 }
             },
             error: error

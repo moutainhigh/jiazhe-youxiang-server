@@ -71,7 +71,7 @@ public class QuartzConfig {
 
     //每天凌晨一点执行任务
     @Bean
-    public CronTrigger BOCCCCronTrigger() {
+    public CronTrigger BOCCCCronTrigger() throws Exception {
         return TriggerBuilder.newTrigger()
                 .forJob(BOCCCQuartzDetail())
                 .withIdentity("BOCCCTrigger")

@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -180,9 +181,9 @@ public class APIProjectController extends BaseController {
         return ResponseFactory.buildSuccess();
     }
 
-    private static void validatePointConversionRate(Integer rate) {
-        if (rate == null || rate < 0) {
-            throw new ProjectException(ProjectCodeEnum.PROJECT_NAME_IS_NULL);
+    private static void validatePointConversionRate(BigDecimal rate) {
+        if (rate == null || rate.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new ProjectException(ProjectCodeEnum.PROJECT_POINT_CONVERSION_RATE_ERROR);
 
         }
     }

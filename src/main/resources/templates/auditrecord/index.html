@@ -718,11 +718,11 @@
             productText = '【预采购】';
         }
         if (exchangePoint > 0) {
-            var rate = productValue / exchangePoint;
-            if (rate > 2.5) {
-                return generateSpan(productText + productValue + '(' + rate.toFixed(2) + ')', 'FF0000');
+            var rate = exchangePoint / productValue;
+            if (rate < 1250) {
+                return generateSpan(productText + productValue + '(' + rate.toFixed(0) + ')', 'FF0000');
             } else {
-                return productText + productValue + '(' + rate.toFixed(2) + ')';
+                return productText + productValue + '(' + rate.toFixed(0) + ')';
             }
         } else {
             return generateSpan(productText + productValue + '(错误)', 'FF0000');

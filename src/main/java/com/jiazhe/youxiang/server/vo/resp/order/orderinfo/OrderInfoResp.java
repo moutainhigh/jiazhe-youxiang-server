@@ -111,6 +111,8 @@ public class OrderInfoResp extends BaseVO {
 
     private ProductResp productResp;
 
+    private ProductResp serviceProductResp;
+
     public Integer getId() {
         return id;
     }
@@ -333,6 +335,14 @@ public class OrderInfoResp extends BaseVO {
 
     public void setProductResp(ProductResp productResp) {
         this.productResp = productResp;
+    }
+
+    public ProductResp getServiceProductResp() {
+        return serviceProductResp;
+    }
+
+    public void setServiceProductResp(ProductResp serviceProductResp) {
+        this.serviceProductResp = serviceProductResp;
     }
 
     public String getCustomerCityCode() {

@@ -279,7 +279,7 @@ public class AutoSFTPUtils {
      */
     public static void upload() throws SftpException, IOException {
         logger.info("上传文件中");
-        AutoSFTPUtils sftp = new AutoSFTPUtils(username, password, host, port);
+        AutoSFTPUtils sftp = new AutoSFTPUtils(username, host, port);
         sftp.login();
         //本地将要上传的文件夹
         File uploadPath = new File(BOCCCConstant.uploadPath + BOCCCUtils.getToday());
@@ -302,7 +302,7 @@ public class AutoSFTPUtils {
 
     public static void download() throws SftpException, FileNotFoundException {
         logger.info("下载文件中");
-        AutoSFTPUtils sftp = new AutoSFTPUtils(username, password, host, port);
+        AutoSFTPUtils sftp = new AutoSFTPUtils(username, host, port);
         sftp.login();
         //下载到本地服务器的路径
         String downloadPath = BOCCCConstant.downloadPath + BOCCCUtils.getToday();
@@ -323,4 +323,5 @@ public class AutoSFTPUtils {
         }
         logger.info("下载文件完成");
     }
+
 }

@@ -7,6 +7,8 @@ package com.jiazhe.youxiang.server.dto.project;
 
 import com.jiazhe.youxiang.server.vo.BaseObject;
 
+import java.math.BigDecimal;
+
 /**
  * 在这里编写类的功能描述
  *
@@ -35,7 +37,7 @@ public class ProjectDTO extends BaseObject {
     /**
      * 积分兑换比例
      */
-    private Integer pointConversionRate;
+    private BigDecimal pointConversionRate;
 
     /**
      * 项目状态
@@ -74,11 +76,11 @@ public class ProjectDTO extends BaseObject {
         this.priority = priority;
     }
 
-    public Integer getPointConversionRate() {
+    public BigDecimal getPointConversionRate() {
         return pointConversionRate;
     }
 
-    public void setPointConversionRate(Integer pointConversionRate) {
+    public void setPointConversionRate(BigDecimal pointConversionRate) {
         this.pointConversionRate = pointConversionRate;
     }
 
