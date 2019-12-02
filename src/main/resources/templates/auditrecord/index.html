@@ -717,7 +717,7 @@
         if (hasExchangeType(exchangeType, '4')) {
             productText = '【预采购】';
         }
-        if (exchangePoint > 0) {
+        if (exchangePoint > 0 && productValue > 0) {
             var rate = exchangePoint / productValue;
             if (rate < 5000) {
                 return generateSpan(productText + productValue + '(' + rate.toFixed(0) + ')', 'FF0000');
