@@ -719,7 +719,7 @@
         }
         if (exchangePoint > 0) {
             var rate = exchangePoint / productValue;
-            if (rate < 1250) {
+            if (rate < 5000) {
                 return generateSpan(productText + productValue + '(' + rate.toFixed(0) + ')', 'FF0000');
             } else {
                 return productText + productValue + '(' + rate.toFixed(0) + ')';
