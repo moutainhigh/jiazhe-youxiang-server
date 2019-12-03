@@ -12,6 +12,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpATTRS;
 import com.jcraft.jsch.SftpException;
+import com.jiazhe.youxiang.base.util.JacksonUtil;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -310,9 +311,10 @@ public class AutoSFTPUtils {
         logger.info("上传文件中,参数为: username:{},host:{},port:{},loginPrivateKeyPath:{},uploadPath:{},outPath:{}", username, host, port, loginPrivateKeyPath, uploadPath, outPath);
         AutoSFTPUtils sftp = new AutoSFTPUtils(username, host, port, loginPrivateKeyPath);
         sftp.login();
-        logger.info("上传文件中,login完成");
+        logger.info("上传文件中,login完成 sftp.sftp{}", JacksonUtil.toJSon(sftp.sftp));
         //本地将要上传的文件夹
         File uploadFile = new File(uploadPath);
+        logger.info("上传文件中,uploadFile:{}", JacksonUtil.toJSon(uploadFile));
         //中行接收文件路径存在
         if (sftp.isExistDir(outPath, sftp.sftp)) {
             if (uploadFile.exists()) {
@@ -321,6 +323,7 @@ public class AutoSFTPUtils {
                     InputStream is = new FileInputStream(file);
                     //outPath为上传到中行服务器的路径
                     sftp.upload(outPath, "", file.getName(), is);
+                    logger.info("上传文件中222");
                 }
                 sftp.logout();
             }
