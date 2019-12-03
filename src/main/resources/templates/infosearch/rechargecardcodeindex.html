@@ -340,7 +340,9 @@
                     }
                 },
                 {name: 'customerResp.mobile', index: 'customerResp.mobile', width: 60, sortable: false},
-                {name: 'faceValue', index: 'faceValue', width: 30, sortable: false},
+                {name: 'faceValue', index: 'faceValue', width: 30, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.faceValue);
+                }},
                 {
                     name: 'expiryTime',
                     index: 'expiryTime',

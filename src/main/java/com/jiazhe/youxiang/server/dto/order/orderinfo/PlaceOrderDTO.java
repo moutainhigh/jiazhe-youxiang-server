@@ -21,6 +21,8 @@ public class PlaceOrderDTO extends BaseObject {
 
     private Integer productId;
 
+    private Integer serviceProductId;
+
     private String customerCityCode;
 
     private Integer count;
@@ -79,6 +81,14 @@ public class PlaceOrderDTO extends BaseObject {
 
     public void setProductId(Integer productId) {
         this.productId = productId;
+    }
+
+    public Integer getServiceProductId() {
+        return serviceProductId;
+    }
+
+    public void setServiceProductId(Integer serviceProductId) {
+        this.serviceProductId = serviceProductId;
     }
 
     public Integer getCount() {

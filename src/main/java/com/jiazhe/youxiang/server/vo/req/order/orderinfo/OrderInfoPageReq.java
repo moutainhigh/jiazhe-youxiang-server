@@ -31,8 +31,11 @@ public class OrderInfoPageReq extends PageSizeNumReq {
     @ApiModelProperty("服务人员电话")
     private String workerMobile;
 
-    @ApiModelProperty("商品id")
+    @ApiModelProperty("扣分商品id")
     private Integer productId;
+
+    @ApiModelProperty("服务商品id")
+    private Integer serviceProductId;
 
     @ApiModelProperty("服务时间起")
     private Long realServiceTimeStart;
@@ -105,6 +108,14 @@ public class OrderInfoPageReq extends PageSizeNumReq {
 
     public void setProductId(Integer productId) {
         this.productId = productId;
+    }
+
+    public Integer getServiceProductId() {
+        return serviceProductId;
+    }
+
+    public void setServiceProductId(Integer serviceProductId) {
+        this.serviceProductId = serviceProductId;
     }
 
     public Long getRealServiceTimeStart() {

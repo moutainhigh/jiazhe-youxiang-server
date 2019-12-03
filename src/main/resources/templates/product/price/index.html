@@ -233,7 +233,9 @@
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'cityName', index: 'cityName', width: 50, sortable: false},
                 {name: 'cityCode', index: 'cityName', sortable: false},
-                {name: 'price', index: 'price', sortable: false},
+                {name: 'price', index: 'price', sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.price);
+                }},
                 {name: 'status', index: 'status', sortable: false, formatter: statusFormatter},
                 {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
             ],

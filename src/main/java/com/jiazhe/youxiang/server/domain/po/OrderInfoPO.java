@@ -67,6 +67,8 @@ public class OrderInfoPO implements Serializable {
 
     private Date modTime;
 
+    private Integer serviceProductId;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -315,5 +317,13 @@ public class OrderInfoPO implements Serializable {
 
     public void setModTime(Date modTime) {
         this.modTime = modTime;
+    }
+
+    public Integer getServiceProductId() {
+        return serviceProductId;
+    }
+
+    public void setServiceProductId(Integer serviceProductId) {
+        this.serviceProductId = serviceProductId;
     }
 }

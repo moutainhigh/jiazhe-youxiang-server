@@ -30,6 +30,11 @@ public class ChargeReceiptDTO extends BaseObject {
 
     private String inputerName;
 
+    /**
+     * 兑换者的手机
+     */
+    private String exchangeMobile;
+
     private String extInfo;
 
     private Byte isDeleted;
@@ -110,6 +115,14 @@ public class ChargeReceiptDTO extends BaseObject {
 
     public void setInputerName(String inputerName) {
         this.inputerName = inputerName;
+    }
+
+    public String getExchangeMobile() {
+        return exchangeMobile;
+    }
+
+    public void setExchangeMobile(String exchangeMobile) {
+        this.exchangeMobile = exchangeMobile;
     }
 
     public String getExtInfo() {

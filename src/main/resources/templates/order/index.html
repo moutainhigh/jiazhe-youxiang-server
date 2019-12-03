@@ -129,9 +129,9 @@
                                     </div>
                                 </div>
 
-                                <label class="col-sm-1 control-label no-padding-right">商品：</label>
+                                <label class="col-sm-1 control-label no-padding-right">服务商品：</label>
                                 <div class="col-sm-2">
-                                    <select id="product" name="productId"
+                                    <select id="serviceProduct" name="serviceProductId"
                                             class="chosen-select form-control">
                                         <option value="0">所有</option>
                                     </select>
@@ -175,6 +175,16 @@
                                     </select>
                                 </div>
 
+                                <label class="col-sm-1 control-label no-padding-right">扣分商品：</label>
+                                <div class="col-sm-2">
+                                    <select id="product" name="productId"
+                                            class="chosen-select form-control">
+                                        <option value="0">所有</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+                            <div class="form-group">
                                 <div class="col-sm-3">
                                     <shiro:hasPermission name="orderSearch">
                                         <button class="btn btn-white btn-default btn-round btn-sm"
@@ -248,7 +258,19 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">商品名：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">服务商品：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="re_serviceProductName"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">扣分商品：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
                                                             <input id="re_productName"
@@ -479,7 +501,19 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-3 control-label no-padding-right">商品名：</label>
+                                                    <label class="col-sm-3 control-label no-padding-right">服务商品：</label>
+                                                    <div class="col-sm-9">
+                                                        <div class="pos-rel">
+                                                            <input id="app_serviceProductName"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label no-padding-right">扣分商品：</label>
                                                     <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="app_productName"
@@ -599,7 +633,7 @@
                                                     <label class="col-sm-3 control-label no-padding-right">追加数量：</label>
                                                     <div class="col-sm-9">
                                                         <div class="pos-rel">
-                                                            <input type="text" name="count" id="appendCount" readonly/>
+                                                            <input type="text" name="count" id="appendCount"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -688,7 +722,7 @@
         });
 
         $("#appendCount").ace_spinner({
-            value: 1, min: 1, max: 100, step: 1, on_sides: true, icon_up: 'ace-icon fa fa-plus',
+            value: 1, min: 1, max: 1000, step: 1, on_sides: true, icon_up: 'ace-icon fa fa-plus',
             icon_down: 'ace-icon fa fa-minus', btn_up_class: 'btn-success', btn_down_class: 'btn-danger'
         }).closest('.ace-spinner')
             .on('changed.fu.spinbox', function () {
@@ -713,8 +747,7 @@
             postData: transformToJson($('#orderInfoSearchForm').serializeArray()),
             shrinkToFit: false,
             autoScroll: true,
-            colNames: ['', '操作', '状态', '商品名称', '单价', '数量', '下单时间', '服务时间', '下单账号', '服务对象电话', '服务对象姓名', '成本', '积分支付金额', '代金券抵扣金额', '充值卡支付金额', '在线支付金额', '订单号', '待支付', '订单来源'],
-//            colNames: ['', '操作', '状态', '商品名称', '单价', '数量', '下单时间','预约时间','服务时间','下单账号', '服务对象电话', '服务对象姓名','成本',  '积分支付金额','代金券抵扣金额', '充值卡支付金额', '在线支付金额','订单号','待支付'],
+            colNames: ['', '操作', '状态', '服务商品', '扣分商品', '单价', '数量', '下单时间', '服务时间', '下单账号', '服务对象电话', '服务对象姓名', '成本', '积分支付金额', '代金券抵扣金额', '充值卡支付金额', '在线支付金额', '订单号', '待支付', '订单来源'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: '_action', index: '_action', width: 180, sortable: false, formatter: customFormatter},
@@ -727,22 +760,36 @@
                         return orderStatus[rowObject.status - 1];
                     }
                 },
-                {name: 'productResp.name', index: 'productResp.name', width: 150, sortable: false},
-                {name: 'productPrice', index: 'productPrice', width: 50, sortable: false},
+                {name: 'serviceProductResp.name', index: 'productResp.name', width: 100, sortable: false},
+                {name: 'productResp.name', index: 'productResp.name', width: 100, sortable: false},
+                {name: 'productPrice', index: 'productPrice', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.productPrice);
+                }},
                 {name: 'count', index: 'count', width: 50, sortable: false},
                 {name: 'orderTime', index: 'orderTime', width: 130, sortable: false, formatter: timeFormat},
-//                {name: 'serviceTime', index: 'serviceTime', width: 130,sortable: false,formatter:timeFormat},
                 {name: 'realServiceTime', index: 'realServiceTime', width: 130, sortable: false, formatter: timeFormat},
                 {name: 'customerResp.mobile', index: 'customerResp.mobile', width: 100, sortable: false},
                 {name: 'customerMobile', index: 'customerMobile', width: 100, sortable: false},
                 {name: 'customerName', index: 'customerName', width: 100, sortable: false},
-                {name: 'cost', index: 'cost', width: 50, sortable: false},
-                {name: 'payPoint', index: 'payPoint', width: 100, sortable: false},
-                {name: 'payVoucher', index: 'payVoucher', width: 100, sortable: false},
-                {name: 'payRechargeCard', index: 'payRechargeCard', width: 100, sortable: false},
-                {name: 'payCash', index: 'payCash', width: 100, sortable: false},
+                {name: 'cost', index: 'cost', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.cost);
+                }},
+                {name: 'payPoint', index: 'payPoint', width: 100, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.payPoint);
+                }},
+                {name: 'payVoucher', index: 'payVoucher', width: 100, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.payVoucher);
+                }},
+                {name: 'payRechargeCard', index: 'payRechargeCard', width: 100, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.payRechargeCard);
+                }},
+                {name: 'payCash', index: 'payCash', width: 100, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.payCash);
+                }},
                 {name: 'orderCode', index: 'orderCode', width: 120, sortable: false},
-                {name: 'payment', index: 'payment', width: 60, sortable: false},
+                {name: 'payment', index: 'payment', width: 60, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.payment);
+                }},
                 {
                     name: 'type',
                     index: 'type',
@@ -935,6 +982,7 @@
                     $("#app_orderCode").val(result.orderCode);
                     $("#app_orderTime").val(timeFormat(result.orderTime));
                     $("#app_productName").val(result.productResp.name);
+                    $("#app_serviceProductName").val(result.serviceProductResp.name);
                     $("#app_productPrice").val(result.productPrice);
                     $("#app_count").val(result.count);
                     $("#app_customerName").val(result.customerName);
@@ -1217,6 +1265,7 @@
                     $("#re_orderCode").val(result.orderCode);
                     $("#re_orderTime").val(timeFormat(result.orderTime));
                     $("#re_productName").val(result.productResp.name);
+                    $("#re_serviceProductName").val(result.serviceProductResp.name);
                     $("#re_count").val(result.count);
                     $("#re_customerName").val(result.customerName);
                     $("#re_customerMobile").val(result.customerMobile);
@@ -1458,9 +1507,11 @@
                     var result = data.data;
                     for (var i = 0; i < result.length; i++) {
                         $("#product").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                        $("#serviceProduct").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
                     }
                 }
                 initSearchSelect("product");
+                initSearchSelect("serviceProduct");
             },
             error: function () {
                 bootboxalert("服务器异常，请联系管理员");

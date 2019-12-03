@@ -81,6 +81,22 @@ function isNumber(input) {
     }
 }
 
+/**
+ * 格式化数字，转为带逗号的
+ * @param n
+ * @returns {string}
+ */
+function formatNumberWithComma(num) {
+    if (!/^(\+|-)?(\d+)(\.\d+)?$/.test(num)) {
+        return num;
+    }
+    var a = RegExp.$1, b = RegExp.$2, c = RegExp.$3;
+    var re = new RegExp().compile("(\\d)(\\d{3})(,|$)");
+    while (re.test(b))   b = b.replace(re, "$1,$2$3");
+    return a + "" + b + "" + c;
+
+}
+
 //replace icons with FontAwesome icons like above
 function updatePagerIcons(table) {
     var replacement =
@@ -348,4 +364,5 @@ function initTable(grid_selector, pager_selector, options) {
         jsonReader: jsonReader,
         caption: caption
     });
+
 }
