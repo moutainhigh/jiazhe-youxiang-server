@@ -1044,12 +1044,12 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    $("#total").html(result.total);
-                    $("#spend").html(result.spend);
-                    $("#left").html(result.left);
-                    $("#intervalTotal").html(result.intervalTotal);
-                    $("#intervalSpend").html(result.intervalSpend);
-                    $("#intervalLeft").html(result.intervalLeft);
+                    $("#total").html(formatNumberWithComma(result.total));
+                    $("#spend").html(formatNumberWithComma(result.spend));
+                    $("#left").html(formatNumberWithComma(result.left));
+                    $("#intervalTotal").html(formatNumberWithComma(result.intervalTotal));
+                    $("#intervalSpend").html(formatNumberWithComma(result.intervalSpend));
+                    $("#intervalLeft").html(formatNumberWithComma(result.intervalLeft));
                     showAlertInfo();
                 }
             },
@@ -1078,7 +1078,7 @@
                     for (var i = 0; i < result.length; i++) {
                         var str = "<tr>" +
                             "<td>" + dateFormat(result[i].advanceTime) + "</td>" +
-                            "<td>" + result[i].advancePay + "</td>" +
+                            "<td>" + formatNumberWithComma(result[i].advancePay) + "</td>" +
                             "<td>" + result[i].remark + "</td>" +
                             "</td></tr>"
                         $("#modelTbody").append(str);

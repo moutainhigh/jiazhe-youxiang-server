@@ -473,8 +473,8 @@
                     $("#bankOutletsName").html(result.bankOutletsName);
                     $("#exchangeType").html(getExchangeTypeText(result.exchangeType));
                     $("#status").html(auditRecordStatus[result.status - 1]);
-                    $("#totalExchangePoint").html(result.exchangePoint);
-                    $("#totalChargeReceiptPoint").html(generateSpan(result.chargeReceiptPoint, result.chargeReceiptPoint == result.exchangePoint ? "00FF00" : "FF0000"));
+                    $("#totalExchangePoint").html(formatNumberWithComma(result.exchangePoint));
+                    $("#totalChargeReceiptPoint").html(generateSpan(formatNumberWithComma(result.chargeReceiptPoint), result.chargeReceiptPoint == result.exchangePoint ? "00FF00" : "FF0000"));
                     $("#customerName").html(result.customerName);
                     var imgUrls = result.imgUrls.split(",");
                     for (var i = 0; i < imgUrls.length; i++) {
@@ -503,7 +503,7 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    $("#totalChargeReceiptPoint").html(generateSpan(result.chargeReceiptPoint, result.chargeReceiptPoint == result.exchangePoint ? "00FF00" : "FF0000"));
+                    $("#totalChargeReceiptPoint").html(generateSpan(formatNumberWithComma(result.chargeReceiptPoint), result.chargeReceiptPoint == result.exchangePoint ? "00FF00" : "FF0000"));
                 }
             },
             error: error
@@ -551,7 +551,7 @@
         if (hasExchangeType(result.exchangeType, '1')) {
             $(".exchangeType1").css("display", "");
             $("#customerMobile").html(result.customerMobile);
-            $("#givingPoint").html(result.givingPoint);
+            $("#givingPoint").html(formatNumberWithComma(result.givingPoint));
         } else {
             $(".exchangeType1").css("display", "none");
         }
@@ -563,7 +563,7 @@
         }
         if (hasExchangeType(result.exchangeType, '3')) {
             $(".exchangeType3").css("display", "");
-            $("#productValue").html(result.productValue);
+            $("#productValue").html(formatNumberWithComma(result.productValue));
         } else {
             $(".exchangeType3").css("display", "none");
         }
