@@ -597,7 +597,7 @@
                     width: 100,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.id == 0 ? '' : ((hasExchangeType(rowObject.exchangeType, '3') || hasExchangeType(rowObject.exchangeType, '4')) && isEmpty(rowObject.givingPoint) && isEmpty(rowObject.pointCodes)) ? generateProductValue(rowObject.exchangeType, rowObject.productValue, rowObject.exchangePoint) : "--";
+                        return rowObject.id == 0 ? '' : (hasExchangeType(rowObject.exchangeType, '3') || hasExchangeType(rowObject.exchangeType, '4')) ? generateProductValue(rowObject.exchangeType, rowObject.productValue, rowObject.exchangePoint) : "--";
                     }
                 },
                 {
