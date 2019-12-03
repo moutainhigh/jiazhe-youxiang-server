@@ -281,8 +281,12 @@
                         return generateSpan(text, color);
                     }
                 },
-                {name: 'faceValue', index: 'faceValue', width: 20, sortable: false},
-                {name: 'balance', index: 'balance', width: 20, sortable: false},
+                {name: 'faceValue', index: 'faceValue', width: 20, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.faceValue);
+                }},
+                {name: 'balance', index: 'balance', width: 20, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.balance);
+                }},
                 {name: 'projectResp.pointConversionRate', index: 'projectResp.pointConversionRate', width: 30, sortable: false},
                 {
                     name: 'addTime',

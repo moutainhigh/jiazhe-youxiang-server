@@ -551,7 +551,9 @@
                         return rowObject.id == 0 ? "本页积分：" : generateSpan(auditRecordStatus[rowObject.status - 1], auditRecordColor[rowObject.status - 1]);
                     }
                 },
-                {name: 'exchangePoint', index: 'exchangePoint', width: 70, sortable: false},
+                {name: 'exchangePoint', index: 'exchangePoint', width: 70, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.exchangePoint);
+                }},
 //                {
 //                    name: 'exchangeType',
 //                    index: 'exchangeType',
@@ -577,7 +579,7 @@
                     width: 50,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.id == 0 ? '总价值：' : hasExchangeType(rowObject.exchangeType, '1') ? rowObject.givingPoint : "--";
+                        return rowObject.id == 0 ? '总价值：' : hasExchangeType(rowObject.exchangeType, '1') ? formatNumberWithComma(rowObject.givingPoint) : "--";
                     }
                 },
                 {
@@ -595,7 +597,7 @@
                     width: 100,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.id == 0 ? '' : ((hasExchangeType(rowObject.exchangeType, '3') || hasExchangeType(rowObject.exchangeType, '4')) && isEmpty(rowObject.givingPoint) && isEmpty(rowObject.pointCodes)) ? generateProductValue(rowObject.exchangeType, rowObject.productValue, rowObject.exchangePoint) : "--";
+                        return rowObject.id == 0 ? '' : (hasExchangeType(rowObject.exchangeType, '3') || hasExchangeType(rowObject.exchangeType, '4')) ? generateProductValue(rowObject.exchangeType, rowObject.productValue, rowObject.exchangePoint) : "--";
                     }
                 },
                 {
@@ -652,12 +654,12 @@
                 $(this).jqGrid("footerData", "set", {
                     id: 0,
                     _action: '',
-                    exchangePoint: pageSum,
+                    exchangePoint: formatNumberWithComma(pageSum),
                     status: '',
                     customerName: '总积分：',
-                    customerMobile: allSum,
+                    customerMobile: formatNumberWithComma(allSum),
                     givingPoint: '',
-                    pointCodes: allValue
+                    pointCodes: formatNumberWithComma(allValue)
                 });
             }
         };
@@ -720,9 +722,9 @@
         if (exchangePoint > 0 && productValue > 0) {
             var rate = exchangePoint / productValue;
             if (rate < 5000) {
-                return generateSpan(productText + productValue + '(' + rate.toFixed(0) + ')', 'FF0000');
+                return generateSpan(productText + formatNumberWithComma(productValue) + '(' + formatNumberWithComma(rate.toFixed(0)) + ')', 'FF0000');
             } else {
-                return productText + productValue + '(' + rate.toFixed(0) + ')';
+                return productText + formatNumberWithComma(productValue) + '(' + formatNumberWithComma(rate.toFixed(0)) + ')';
             }
         } else {
             return generateSpan(productText + productValue + '(错误)', 'FF0000');

@@ -506,7 +506,7 @@
     }
 
     function pointFormatter(cellvalue, options, rowObject) {
-        var str = "剩余积分：" + rowObject.pointBalance + " ";
+        var str = "剩余积分：" + formatNumberWithComma(rowObject.pointBalance) + " ";
         var pointUrl = "/infosearch/pointindex?mobile=" + rowObject.mobile;
         if (permission.indexOf("customerPointDetail") != -1) {
             str += getRedirectButton("btn-success", pointUrl, "详情");
@@ -521,7 +521,7 @@
     }
 
     function rechargeCardFormatter(cellvalue, options, rowObject) {
-        var str = "余额：" + rowObject.rechargeCardBalance + " ";
+        var str = "余额：" + formatNumberWithComma(rowObject.rechargeCardBalance) + " ";
         var rechargeCardUrl = "/infosearch/rechargecardindex?mobile=" + rowObject.mobile;
         if (permission.indexOf("customerRechargeCardDetail") != -1) {
             str += getRedirectButton("btn-success", rechargeCardUrl, "详情");
@@ -536,7 +536,7 @@
     }
 
     function voucherFormatter(cellvalue, options, rowObject) {
-        var str = "剩余张数：" + rowObject.voucherCount + " ";
+        var str = "剩余张数：" + formatNumberWithComma(rowObject.voucherCount) + " ";
         var voucherUrl = "/infosearch/voucherindex?mobile=" + rowObject.mobile;
         if (permission.indexOf("customerVoucherDetail") != -1) {
             str += getRedirectButton("btn-success", voucherUrl, "详情");
