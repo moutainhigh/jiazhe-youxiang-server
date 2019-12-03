@@ -784,7 +784,7 @@
         str += getFunctionButton("btn-success", "showOrder(" + rowObject.id + ")", "查看");
         if (rowObject.status == 1) {
             if (permission.indexOf("orderCancel") != -1) {
-                str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
+                str += getFunctionButton("btn-danger", "userCancelOrder(" + JSON.stringify(rowObject) + ")", "取消订单");
             }
             if (permission.indexOf("orderTenpayCheck")) {
                 str += getFunctionButton("btn-primary", "checkTenpay(" + rowObject.orderCode + ")", "微信支付检查");
@@ -792,7 +792,7 @@
         }
         if (rowObject.status == 2) {
             if (permission.indexOf("orderCancel") != -1) {
-                str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
+                str += getFunctionButton("btn-danger", "userCancelOrder(" + JSON.stringify(rowObject) + ")", "取消订单");
             }
             if (permission.indexOf("orderReservation") != -1) {
                 str += getFunctionButton("btn-primary", "userReservationOrder(" + rowObject.id + ")", "预约");
@@ -809,12 +809,12 @@
                 str += getFunctionButton("btn-primary", "showAppendOrder(" + rowObject.id + ")", "追加订单");
             }
             if (permission.indexOf("orderCancel") != -1) {
-                str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
+                str += getFunctionButton("btn-danger", "userCancelOrder(" + JSON.stringify(rowObject) + ")", "取消订单");
             }
         }
         if (rowObject.status == 5) {
             if (permission.indexOf("orderCheck") != -1) {
-                str += getFunctionButton("btn-primary", "orderCancelPass(" + rowObject.id + ")", "审核通过");
+                str += getFunctionButton("btn-primary", "orderCancelPass(" + JSON.stringify(rowObject) + ")", "审核通过");
                 str += getFunctionButton("btn-danger", "orderCancelUnpass(" + rowObject.id + ")", "审核不通过");
             }
             if (permission.indexOf("orderComplete") != -1) {
@@ -823,7 +823,7 @@
         }
         if (rowObject.status == 6) {
             if (permission.indexOf("orderCancel") != -1) {
-                str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
+                str += getFunctionButton("btn-danger", "userCancelOrder(" + JSON.stringify(rowObject) + ")", "取消订单");
             }
             if (permission.indexOf("orderComplete") != -1) {
                 str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + "," + rowObject.cost + ")", "完成订单");
@@ -1275,8 +1275,8 @@
         });
     }
 
-    function userCancelOrder(id) {
-        prompt("请输入取消订单的成本", function (cost) {
+    function userCancelOrder(row) {
+        prompt("请输入取消订单的成本", row.cost, function (cost) {
             if (isNumber(cost)) {
                 confirm("确定要取消该订单吗？", function (result) {
                     if (result) {
@@ -1285,7 +1285,7 @@
                             dataType: "json",
                             async: false,
                             data: {
-                                orderId: id, cost: cost
+                                orderId: row.id, cost: cost
                             },
                             type: "POST",
                             success: function (data) {
@@ -1336,26 +1336,30 @@
         });
     }
 
-    function orderCancelPass(id) {
-        confirm("确定通过审核该订单的取消？", function (result) {
-            if (result) {
-                $.ajax({
-                    url: "/api/orderinfo/ordercancelpass",
-                    dataType: "json",
-                    async: false,
-                    data: {
-                        id: id
-                    },
-                    type: "POST",
-                    success: function (data) {
-                        if ('error' in data) {
-                            bootboxalert(data.error.message);
-                        } else {
-                            bootboxalert("成功取消该订单");
-                            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                        }
-                    },
-                    error: error
+    function orderCancelPass(row) {
+        prompt("请输入取消订单的成本", row.cost, function (cost) {
+            if (isNumber(cost)) {
+                confirm("确定通过审核该订单的取消？", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/orderinfo/ordercancelpass",
+                            dataType: "json",
+                            async: false,
+                            data: {
+                                orderId: row.id, cost: cost
+                            },
+                            type: "POST",
+                            success: function (data) {
+                                if ('error' in data) {
+                                    bootboxalert(data.error.message);
+                                } else {
+                                    bootboxalert("成功取消该订单");
+                                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                                }
+                            },
+                            error: error
+                        });
+                    }
                 });
             }
         });
