@@ -100,7 +100,14 @@ public class ProductServiceImpl implements ProductService {
             //获取商品的价格map，不限制价格生效状态
             Map<Integer, List<ProductPriceDTO>> productPriceMap = productPriceService.getPriceMap(productIds, cityCodes, null);
             productDTOList.forEach(item -> {
-                item.setProductCategory(productCategory);
+                if (productCategory != null)
+                    item.setProductCategory(productCategory);
+                else {
+                    ProductCategoryDTO temp = item.getProductCategory();
+                    if (temp != null) {
+                        item.setProductCategory(productCategoryService.getCategoryById(temp.getId()));
+                    }
+                }
                 item.setProductPriceList(productPriceMap.get(item.getId()));
             });
         }

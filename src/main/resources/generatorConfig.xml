@@ -91,5 +91,6 @@
         <!--<table tableName="message" domainObjectName="MessagePO"/>-->
         <!--<table tableName="message_template" domainObjectName="MessageTemplatePO"/>-->
         <!--<table tableName="material_info" domainObjectName="MaterialInfoPO"/>-->
+        <!--<table tableName="order_track" domainObjectName="OrderTrackPO"/>-->
     </context>
 </generatorConfiguration>

@@ -6,7 +6,7 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="priority" property="priority" jdbcType="INTEGER" />
-    <result column="point_conversion_rate" property="pointConversionRate" jdbcType="INTEGER" />
+    <result column="point_conversion_rate" property="pointConversionRate" jdbcType="DECIMAL" />
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
@@ -111,7 +111,7 @@
       ext_info, is_deleted, add_time, 
       mod_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
-      #{priority,jdbcType=INTEGER}, #{pointConversionRate,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, 
+      #{priority,jdbcType=INTEGER}, #{pointConversionRate,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, 
       #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
       #{modTime,jdbcType=TIMESTAMP})
   </insert>
@@ -163,7 +163,7 @@
         #{priority,jdbcType=INTEGER},
       </if>
       <if test="pointConversionRate != null" >
-        #{pointConversionRate,jdbcType=INTEGER},
+        #{pointConversionRate,jdbcType=DECIMAL},
       </if>
       <if test="status != null" >
         #{status,jdbcType=TINYINT},
@@ -204,7 +204,7 @@
         priority = #{record.priority,jdbcType=INTEGER},
       </if>
       <if test="record.pointConversionRate != null" >
-        point_conversion_rate = #{record.pointConversionRate,jdbcType=INTEGER},
+        point_conversion_rate = #{record.pointConversionRate,jdbcType=DECIMAL},
       </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=TINYINT},
@@ -232,7 +232,7 @@
       name = #{record.name,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR},
       priority = #{record.priority,jdbcType=INTEGER},
-      point_conversion_rate = #{record.pointConversionRate,jdbcType=INTEGER},
+      point_conversion_rate = #{record.pointConversionRate,jdbcType=DECIMAL},
       status = #{record.status,jdbcType=TINYINT},
       ext_info = #{record.extInfo,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=TINYINT},
@@ -255,7 +255,7 @@
         priority = #{priority,jdbcType=INTEGER},
       </if>
       <if test="pointConversionRate != null" >
-        point_conversion_rate = #{pointConversionRate,jdbcType=INTEGER},
+        point_conversion_rate = #{pointConversionRate,jdbcType=DECIMAL},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
@@ -280,7 +280,7 @@
     set name = #{name,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       priority = #{priority,jdbcType=INTEGER},
-      point_conversion_rate = #{pointConversionRate,jdbcType=INTEGER},
+      point_conversion_rate = #{pointConversionRate,jdbcType=DECIMAL},
       status = #{status,jdbcType=TINYINT},
       ext_info = #{extInfo,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=TINYINT},

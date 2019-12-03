@@ -28,6 +28,8 @@ public class OrderInfoDTO extends BaseObject {
 
     private Integer productId;
 
+    private Integer serviceProductId;
+
     private BigDecimal productPrice;
 
     private Integer count;
@@ -76,6 +78,8 @@ public class OrderInfoDTO extends BaseObject {
 
     private ProductDTO productDTO;
 
+    private ProductDTO serviceProductDTO;
+
     private CustomerDTO customerDTO;
 
     public Integer getId() {
@@ -108,6 +112,14 @@ public class OrderInfoDTO extends BaseObject {
 
     public void setProductId(Integer productId) {
         this.productId = productId;
+    }
+
+    public Integer getServiceProductId() {
+        return serviceProductId;
+    }
+
+    public void setServiceProductId(Integer serviceProductId) {
+        this.serviceProductId = serviceProductId;
     }
 
     public BigDecimal getProductPrice() {
@@ -292,6 +304,14 @@ public class OrderInfoDTO extends BaseObject {
 
     public void setProductDTO(ProductDTO productDTO) {
         this.productDTO = productDTO;
+    }
+
+    public ProductDTO getServiceProductDTO() {
+        return serviceProductDTO;
+    }
+
+    public void setServiceProductDTO(ProductDTO serviceProductDTO) {
+        this.serviceProductDTO = serviceProductDTO;
     }
 
     public CustomerDTO getCustomerDTO() {

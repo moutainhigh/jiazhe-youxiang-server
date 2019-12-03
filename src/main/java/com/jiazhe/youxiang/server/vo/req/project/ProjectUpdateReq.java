@@ -8,6 +8,8 @@ package com.jiazhe.youxiang.server.vo.req.project;
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.math.BigDecimal;
+
 /**
  * 项目更新Req
  *
@@ -25,8 +27,8 @@ public class ProjectUpdateReq extends BaseVO {
     private String description;
     @ApiModelProperty("排序")
     private Integer priority;
-    @ApiModelProperty("积分兑换比例，默认5")
-    private Integer pointConversionRate = 5;
+    @ApiModelProperty("积分兑换比例")
+    private BigDecimal pointConversionRate;
     @ApiModelProperty("项目状态")
     private Integer status;
 
@@ -62,11 +64,11 @@ public class ProjectUpdateReq extends BaseVO {
         this.priority = priority;
     }
 
-    public Integer getPointConversionRate() {
+    public BigDecimal getPointConversionRate() {
         return pointConversionRate;
     }
 
-    public void setPointConversionRate(Integer pointConversionRate) {
+    public void setPointConversionRate(BigDecimal pointConversionRate) {
         this.pointConversionRate = pointConversionRate;
     }
 

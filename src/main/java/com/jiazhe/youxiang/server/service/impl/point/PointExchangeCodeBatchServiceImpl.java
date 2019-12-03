@@ -261,7 +261,7 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
             throw new PointException(PointCodeEnum.PROJECT_IS_NULL);
         }
         BigDecimal result = new BigDecimal(bonus);
-        return result.multiply(new BigDecimal(projectDTO.getPointConversionRate()));
+        return result.multiply(projectDTO.getPointConversionRate());
     }
 
     @Override

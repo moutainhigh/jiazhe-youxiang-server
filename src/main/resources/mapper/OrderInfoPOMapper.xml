@@ -33,6 +33,7 @@
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
     <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
     <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
+    <result column="service_product_id" property="serviceProductId" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -97,7 +98,7 @@
     product_price, count, customer_address, customer_mobile, customer_name, customer_remark, 
     worker_name, worker_mobile, order_time, service_time, real_service_time, pay_recharge_card, 
     pay_point, pay_voucher, pay_cash, total_amount, cost, comments, type, status, audit_reason, 
-    ext_info, is_deleted, add_time, mod_time
+    ext_info, is_deleted, add_time, mod_time, service_product_id
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.OrderInfoPOExample" >
     select
@@ -140,7 +141,7 @@
       total_amount, cost, comments, 
       type, status, audit_reason, 
       ext_info, is_deleted, add_time, 
-      mod_time)
+      mod_time, service_product_id)
     values (#{id,jdbcType=INTEGER}, #{orderCode,jdbcType=VARCHAR}, #{customerId,jdbcType=INTEGER}, 
       #{productId,jdbcType=INTEGER}, #{customerCityCode,jdbcType=VARCHAR}, #{customerCityName,jdbcType=VARCHAR}, 
       #{productPrice,jdbcType=DECIMAL}, #{count,jdbcType=INTEGER}, #{customerAddress,jdbcType=VARCHAR}, 
@@ -151,7 +152,7 @@
       #{totalAmount,jdbcType=DECIMAL}, #{cost,jdbcType=DECIMAL}, #{comments,jdbcType=VARCHAR}, 
       #{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{auditReason,jdbcType=VARCHAR}, 
       #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
-      #{modTime,jdbcType=TIMESTAMP})
+      #{modTime,jdbcType=TIMESTAMP}, #{serviceProductId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.OrderInfoPO" >
     insert into order_info
@@ -249,6 +250,9 @@
       <if test="modTime != null" >
         mod_time,
       </if>
+      <if test="serviceProductId != null" >
+        service_product_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -343,6 +347,9 @@
       </if>
       <if test="modTime != null" >
         #{modTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceProductId != null" >
+        #{serviceProductId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -448,6 +455,9 @@
       <if test="record.modTime != null" >
         mod_time = #{record.modTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.serviceProductId != null" >
+        service_product_id = #{record.serviceProductId,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -485,7 +495,8 @@
       ext_info = #{record.extInfo,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=TINYINT},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
-      mod_time = #{record.modTime,jdbcType=TIMESTAMP}
+      mod_time = #{record.modTime,jdbcType=TIMESTAMP},
+      service_product_id = #{record.serviceProductId,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -583,6 +594,9 @@
       <if test="modTime != null" >
         mod_time = #{modTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="serviceProductId != null" >
+        service_product_id = #{serviceProductId,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -617,7 +631,8 @@
       ext_info = #{extInfo,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=TINYINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},
-      mod_time = #{modTime,jdbcType=TIMESTAMP}
+      mod_time = #{modTime,jdbcType=TIMESTAMP},
+      service_product_id = #{serviceProductId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

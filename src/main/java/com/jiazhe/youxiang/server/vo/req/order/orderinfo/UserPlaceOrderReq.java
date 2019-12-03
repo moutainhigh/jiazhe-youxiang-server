@@ -17,8 +17,11 @@ public class UserPlaceOrderReq extends BaseVO {
     @ApiModelProperty("客户id")
     private Integer customerId;
 
-    @ApiModelProperty("商品id")
+    @ApiModelProperty("扣分商品id")
     private Integer productId;
+
+    @ApiModelProperty("服务商品id")
+    private Integer serviceProductId;
 
     @ApiModelProperty("下单城市code")
     private String customerCityCode;
@@ -88,6 +91,14 @@ public class UserPlaceOrderReq extends BaseVO {
 
     public void setProductId(Integer productId) {
         this.productId = productId;
+    }
+
+    public Integer getServiceProductId() {
+        return serviceProductId;
+    }
+
+    public void setServiceProductId(Integer serviceProductId) {
+        this.serviceProductId = serviceProductId;
     }
 
     public String getCustomerCityCode() {
