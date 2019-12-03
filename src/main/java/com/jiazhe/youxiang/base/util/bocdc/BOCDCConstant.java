@@ -13,7 +13,7 @@ public class BOCDCConstant {
 
     public static String MER_ID;
     public static String HTTP_URL;
-    public static String rootPath;
+    public static String ROOT_PATH;
     public static String uploadPath;
     public static String loginPrivateKeyPath;
     public static String reconciliationPath;
@@ -58,7 +58,7 @@ public class BOCDCConstant {
 
     @Value("${bocdc.sftp.rootPath}")
     public void setRootpath(String rootPath) {
-        BOCDCConstant.rootPath = rootPath;
+        BOCDCConstant.ROOT_PATH = rootPath;
     }
 
     @Value("${bocdc.sftp.uploadPath}")

@@ -148,6 +148,10 @@ public class AutoSFTPUtils {
      * @param input        输入流
      */
     public void upload(String basePath, String directory, String sftpFileName, InputStream input) throws SftpException {
+        if (sftp == null) {
+            logger.error("中行上传发生错误，sftp为空");
+            return;
+        }
         try {
             sftp.cd(basePath);
             sftp.cd(directory);
@@ -311,7 +315,7 @@ public class AutoSFTPUtils {
         logger.info("上传文件中,参数为: username:{},host:{},port:{},loginPrivateKeyPath:{},uploadPath:{},outPath:{}", username, host, port, loginPrivateKeyPath, uploadPath, outPath);
         AutoSFTPUtils sftp = new AutoSFTPUtils(username, host, port, loginPrivateKeyPath);
         sftp.login();
-        logger.info("上传文件中,login完成 sftp.sftp{}", JacksonUtil.toJSon(sftp.sftp));
+        logger.info("上传文件中,login完成 sftp.sftp:{}", JacksonUtil.toJSon(sftp.sftp));
         //本地将要上传的文件夹
         File uploadFile = new File(uploadPath);
         logger.info("上传文件中,uploadFile:{}", JacksonUtil.toJSon(uploadFile));
@@ -319,11 +323,12 @@ public class AutoSFTPUtils {
         if (sftp.isExistDir(outPath, sftp.sftp)) {
             if (uploadFile.exists()) {
                 File[] fs = uploadFile.listFiles();
+                logger.info("上传文件中 listFiles:{}", JacksonUtil.toJSon(fs));
                 for (File file : fs) {
                     InputStream is = new FileInputStream(file);
+                    logger.info("上传文件中 is:{}", JacksonUtil.toJSon(is));
                     //outPath为上传到中行服务器的路径
                     sftp.upload(outPath, "", file.getName(), is);
-                    logger.info("上传文件中222");
                 }
                 sftp.logout();
             }
