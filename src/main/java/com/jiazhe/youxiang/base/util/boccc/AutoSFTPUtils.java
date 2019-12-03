@@ -86,11 +86,11 @@ public class AutoSFTPUtils {
     /**
      * 构造基于秘钥认证的sftp对象
      */
-    public AutoSFTPUtils(String USERNAME, String HOST, int PORT) {
+    public AutoSFTPUtils(String USERNAME, String HOST, int PORT, String loginPrivateKeyPath) {
         username = USERNAME;
         host = HOST;
         port = PORT;
-        privateKey = BOCCCConstant.loginPrivateKeyPath;
+        privateKey = loginPrivateKeyPath;
     }
 
     public AutoSFTPUtils() {
@@ -294,8 +294,37 @@ public class AutoSFTPUtils {
                 }
                 sftp.logout();
             }
-        }else{
+        } else {
             logger.error("BOCCC-ERROR：中行上传文件夹路径定义有误！！！");
+        }
+        logger.info("上传文件完成");
+    }
+
+    /**
+     * 上传当日文件夹下所有文件至中行服务器
+     *
+     * @throws SftpException
+     * @throws IOException
+     */
+    public static void upload(String username, String host, int port, String loginPrivateKeyPath, String uploadPath, String outPath) throws SftpException, IOException {
+        logger.info("上传文件中");
+        AutoSFTPUtils sftp = new AutoSFTPUtils(username, host, port, loginPrivateKeyPath);
+        sftp.login();
+        //本地将要上传的文件夹
+        File uploadFile = new File(uploadPath);
+        //中行接收文件路径存在
+        if (sftp.isExistDir(outPath, sftp.sftp)) {
+            if (uploadFile.exists()) {
+                File[] fs = uploadFile.listFiles();
+                for (File file : fs) {
+                    InputStream is = new FileInputStream(file);
+                    //outPath为上传到中行服务器的路径
+                    sftp.upload(outPath, "", file.getName(), is);
+                }
+                sftp.logout();
+            }
+        } else {
+            logger.error("中行上传文件夹路径定义有误！！！");
         }
         logger.info("上传文件完成");
     }
@@ -318,7 +347,7 @@ public class AutoSFTPUtils {
                 }
             }
             sftp.logout();
-        }else{
+        } else {
             logger.error("BOCCC-ERROR：中行下载文件存放路径定义有误！！！");
         }
         logger.info("下载文件完成");

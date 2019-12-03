@@ -2,8 +2,6 @@ package com.jiazhe.youxiang.server.service.impl.point;
 
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.ExchangeCodeCheckUtil;
-import com.jiazhe.youxiang.base.util.JacksonUtil;
-import com.jiazhe.youxiang.base.util.RSAUtil;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCConstant;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponEntity;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponUsedEntity;
@@ -40,7 +38,6 @@ import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeRecordService;
 import com.jiazhe.youxiang.server.service.point.PointService;
 import com.jiazhe.youxiang.server.vo.Paging;
-import com.jiazhe.youxiang.server.vo.req.boc.BOCCCRefundReq;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -53,9 +50,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -424,6 +419,17 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         po.setUsed(usedStaus);
         po.setModTime(new Timestamp(System.currentTimeMillis()));
         pointExchangeCodePOMapper.updateByPrimaryKeySelective(po);
+    }
+
+    @Override
+    public List<PointExchangeCodeDTO> getBOCDCReconciliationInfo(Date beginDate, Date endDate) {
+        PointExchangeCodePOExample example = new PointExchangeCodePOExample();
+        PointExchangeCodePOExample.Criteria criteria = example.createCriteria();
+        criteria.andOutOrderCodeNotEqualTo("");
+        criteria.andModTimeBetween(beginDate, endDate);
+        criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+        List<PointExchangeCodePO> list = pointExchangeCodePOMapper.selectByExample(example);
+        return list.stream().map(PointExchangeCodeAdapter::po2Dto).collect(Collectors.toList());
     }
 
     @Override

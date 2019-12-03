@@ -6,12 +6,19 @@
 package com.jiazhe.youxiang.server.biz;
 
 import com.alibaba.fastjson.JSONObject;
-import com.jiazhe.youxiang.base.util.BOCDCUtils;
+import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.base.util.DateUtil;
+import com.jiazhe.youxiang.base.util.FileUtil;
 import com.jiazhe.youxiang.base.util.HttpUtil;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.RSAUtil;
 import com.jiazhe.youxiang.base.util.ShaUtils;
+import com.jiazhe.youxiang.base.util.boccc.AutoSFTPUtils;
+import com.jiazhe.youxiang.base.util.boccc.BOCCCUtils;
+import com.jiazhe.youxiang.base.util.boccc.PgpEncryUtil;
+import com.jiazhe.youxiang.base.util.boccc.ZipUtil;
+import com.jiazhe.youxiang.base.util.bocdc.BOCDCConstant;
+import com.jiazhe.youxiang.base.util.bocdc.BOCDCUtils;
 import com.jiazhe.youxiang.server.biz.point.PointExchangeRecordBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.BOCDCBizCodeEnum;
@@ -26,10 +33,10 @@ import com.jiazhe.youxiang.server.vo.req.boc.BOCDCReverseValueReq;
 import com.jiazhe.youxiang.server.vo.resp.boc.BOCDCCommonResp;
 import com.jiazhe.youxiang.server.vo.resp.boc.BOCDCQueryStockResp;
 import com.jiazhe.youxiang.server.vo.resp.boc.BOCDCReverseValueResp;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
@@ -37,9 +44,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 中行储蓄卡Biz
@@ -54,19 +64,8 @@ public class BOCDCBiz {
 
     private static final String CODE_SUCCESS = "0000";
 
-    private static String MER_ID;
+    private static final String MERCHANTSOURCE = "0000";
 
-    private static String HTTP_URL;
-
-    @Value("${bocdc.status_check.http_url}")
-    public void setHttpUrl(String httpUrl) {
-        HTTP_URL = httpUrl;
-    }
-
-    @Value("${bocdc.merid}")
-    public void setMerId(String merId) {
-        MER_ID = merId;
-    }
 
     @Autowired
     private PointExchangeRecordBiz pointExchangeRecordBiz;
@@ -184,7 +183,7 @@ public class BOCDCBiz {
         try {
             String postParam = getParamString(req);
             LOGGER.info("HTTP调用中行使用状态核对实时接口，入参:{}", postParam);
-            result = HttpUtil.sendPost(HTTP_URL, postParam);
+            result = HttpUtil.sendPost(BOCDCConstant.HTTP_URL, postParam);
             LOGGER.info("HTTP调用中行使用状态核对实时接口成功，入参:{}，返回值:{}", postParam, JSONObject.toJSON(result));
         } catch (RestClientException e) {
             LOGGER.info("HTTP调用中行使用状态核对实时接口失败，RestClientException message:{}", e.getMessage());
@@ -225,7 +224,7 @@ public class BOCDCBiz {
                 "<useTime>%s</useTime>" +
                 "<merId>%s</merId>" +
                 "</data></bizdata>";
-        String result = String.format(template, orderNo, useStatus, useTime, MER_ID);
+        String result = String.format(template, orderNo, useStatus, useTime, BOCDCConstant.MER_ID);
         return result.trim().replaceAll("\r|\n", "");
     }
 
@@ -236,4 +235,109 @@ public class BOCDCBiz {
     }
 
 
+    /**
+     * 生成并上传对账文件
+     */
+    public void uploadReconciliationFile() throws Exception {
+        LOGGER.info("Biz执行[uploadReconciliationFile]方法");
+        FileUtil.mkDirs(BOCDCConstant.reconciliationPath + "/" + getFristDayOfThisMonth());
+        String sourceFileName = getFileName(BOCDCConstant.sourceFileName);
+        String zipFileName = getFileName(BOCDCConstant.zipFileName);
+        String pgpFileName = getFileName(BOCDCConstant.pgpFileName);
+        String uploadPath = BOCDCConstant.uploadPath + "/" + getFristDayOfThisMonth();
+        //第1步，按照规则组成对账信息字符串
+        String reconciliationInfoString = getReconciliationInfo();
+
+        //TODO niexiao
+        //第2步，写入文件中
+        LOGGER.info("对账信息源文件生成中...");
+        BOCCCUtils.writeStringToFile(sourceFileName, reconciliationInfoString);
+        LOGGER.info("对账信息源文件生成完成，路径为：" + sourceFileName);
+
+        //第3步，源文件压缩中
+        LOGGER.info("对账信息源文件压缩中...");
+        File sourceFile = new File(sourceFileName);
+        new ZipUtil(new File(zipFileName)).zipFiles(sourceFile);
+        LOGGER.info("对账信息源文件压缩完成，路径为：" + zipFileName);
+
+        //第4步，压缩文件加密中
+        LOGGER.info("对账信息压缩文件加密中...");
+        PgpEncryUtil.Encry(zipFileName, BOCDCConstant.publicKeyPath, pgpFileName);
+        LOGGER.info("对账信息压缩文件加密完成，路径为：" + pgpFileName);
+
+        //第5步，复制加密文件至upload里
+        FileUtil.copyToPath(pgpFileName, uploadPath);
+
+        //第6步，上传加密文件
+        AutoSFTPUtils.upload(BOCDCConstant.username, BOCDCConstant.host, BOCDCConstant.port, BOCDCConstant.loginPrivateKeyPath, uploadPath, BOCDCConstant.outPath);
+    }
+
+
+    /**
+     * 生成对账信息字符串
+     *
+     * @return
+     */
+    private String getReconciliationInfo() {
+        StringBuilder sb = new StringBuilder();
+        List<String> reconciliationInfoList = Lists.newArrayList();
+        List<PointExchangeCodeDTO> dtoList = pointExchangeCodeService.getBOCDCReconciliationInfo(getBeginDate(), getEndDate());
+        if (CollectionUtils.isNotEmpty(dtoList)) {
+            dtoList.stream().forEach(item -> {
+                sb.append(item.getOutOrderCode());
+                sb.append("|");
+                sb.append(getUseStatus(item.getUsed().intValue()));
+                sb.append("|");
+                sb.append(MERCHANTSOURCE);
+                reconciliationInfoList.add(sb.toString());
+                sb.delete(0, sb.length());
+            });
+        }
+        return String.join("\r\n", reconciliationInfoList);
+    }
+
+    private String getUseStatus(int used) {
+        //TODO niexiao 整理代码
+        switch (used) {
+            case 0:
+            default:
+                return "00";
+            case 1:
+                return "01";
+            case 2:
+                return "02";
+        }
+    }
+
+    /**
+     * 获得上月1日
+     */
+    private Date getBeginDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -1);
+        calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+        return calendar.getTime();
+    }
+
+    private Date getEndDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -1);
+        calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return calendar.getTime();
+    }
+
+    /**
+     * 获得本月第一天日期
+     *
+     * @return
+     */
+    private String getFristDayOfThisMonth() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+        return DateUtil.yyyyMMDD(calendar.getTime());
+    }
+
+    private String getFileName(String fileName) {
+        return BOCDCConstant.reconciliationPath + "/" + getFristDayOfThisMonth() + "/" + fileName.replace("#YYYYMMDD#", getFristDayOfThisMonth());
+    }
 }

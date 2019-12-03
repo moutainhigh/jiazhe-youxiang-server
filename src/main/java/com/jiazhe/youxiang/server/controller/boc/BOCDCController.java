@@ -6,9 +6,9 @@
 package com.jiazhe.youxiang.server.controller.boc;
 
 import com.alibaba.fastjson.JSONObject;
-import com.jiazhe.youxiang.base.util.BOCDCUtils;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.RSAUtil;
+import com.jiazhe.youxiang.base.util.bocdc.BOCDCUtils;
 import com.jiazhe.youxiang.server.biz.BOCDCBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.vo.req.boc.BOCDCCommonReq;
@@ -124,6 +124,15 @@ public class BOCDCController {
         System.out.println("任务全部完成，总耗时：" + (end - start) + "毫秒");
         return "任务全部完成，总耗时：" + (end - start) + "毫秒";
     }
+
+    @AppApi
+    @ApiOperation(value = "上传对账信息", httpMethod = "GET", notes = "上传对账信息")
+    @RequestMapping(value = "/uploadreconciliationfile", method = RequestMethod.GET)
+    public Object uploadReconciliationFile() throws Exception {
+        bocdcBiz.uploadReconciliationFile();
+        return "任务全部完成";
+    }
+
 
     /**
      * 通过请求报文获取请求参数
