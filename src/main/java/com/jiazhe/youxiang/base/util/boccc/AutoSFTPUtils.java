@@ -307,9 +307,10 @@ public class AutoSFTPUtils {
      * @throws IOException
      */
     public static void upload(String username, String host, int port, String loginPrivateKeyPath, String uploadPath, String outPath) throws SftpException, IOException {
-        logger.info("上传文件中");
+        logger.info("上传文件中,参数为: username:{},host:{},port:{},loginPrivateKeyPath:{},uploadPath:{},outPath:{}", username, host, port, loginPrivateKeyPath, uploadPath, outPath);
         AutoSFTPUtils sftp = new AutoSFTPUtils(username, host, port, loginPrivateKeyPath);
         sftp.login();
+        logger.info("上传文件中,login完成");
         //本地将要上传的文件夹
         File uploadFile = new File(uploadPath);
         //中行接收文件路径存在
