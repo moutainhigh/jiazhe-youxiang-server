@@ -273,8 +273,12 @@
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'payerName', index: 'payerName', width: 70, sortable: false},
                 {name: 'payeeName', index: 'payeeName', width: 70, sortable: false},
-                {name: 'transferAmount', index: 'transferAmount', width: 50, sortable: false},
-                {name: 'materialValue', index: 'materialValue', width: 50, sortable: false},
+                {name: 'transferAmount', index: 'transferAmount', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.transferAmount);
+                }},
+                {name: 'materialValue', index: 'materialValue', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.materialValue);
+                }},
                 {name: 'transferTime', index: 'transferTime', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
                     return dateFormat(rowObject.transferTime);
                 }},

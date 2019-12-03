@@ -291,13 +291,21 @@
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'payeeName', index: 'payeeName', width: 40, sortable: false},
-                {name: 'receiveTotal', index: 'receiveTotal', width: 50, sortable: false},
-                {name: 'productValueTotal', index: 'productValueTotal', width: 50, sortable: false},
-                {name: 'usedProductValueTotal', index: 'usedProductValueTotal', width: 70, sortable: false},
-                {name: 'uncheckProductValueTotal', index: 'uncheckProductValueTotal', width: 70, sortable: false},
+                {name: 'receiveTotal', index: 'receiveTotal', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.receiveTotal);
+                }},
+                {name: 'productValueTotal', index: 'productValueTotal', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.productValueTotal);
+                }},
+                {name: 'usedProductValueTotal', index: 'usedProductValueTotal', width: 70, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.usedProductValueTotal);
+                }},
+                {name: 'uncheckProductValueTotal', index: 'uncheckProductValueTotal', width: 70, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.uncheckProductValueTotal);
+                }},
                 {name: 'leftProductValueTotal', index: 'leftProductValueTotal', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
                     var color = rowObject.leftProductValueTotal < 0 ? "FF0000" : "000000"
-                    return generateSpan(rowObject.leftProductValueTotal,color);
+                    return generateSpan(formatNumberWithComma(rowObject.leftProductValueTotal),color);
                 }},
                 {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
             ],

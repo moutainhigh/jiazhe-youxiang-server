@@ -776,8 +776,12 @@
                 {name: 'orderSource', index: 'orderSource', width: 100, sortable: false},
                 {name: 'workerName', index: 'workerName', width: 100, sortable: false},
                 {name: 'serviceItemResp.name', index: 'serviceItem', width: 100, sortable: false},
-                {name: 'prePay', index: 'prePay', width: 50, sortable: false},
-                {name: 'appendPay', index: 'appendPay', width: 50, sortable: false}
+                {name: 'prePay', index: 'prePay', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.prePay);
+                }},
+                {name: 'appendPay', index: 'appendPay', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.appendPay);
+                }}
             ],
             loadComplete: function (data) {
                 if ("error" in data) {
