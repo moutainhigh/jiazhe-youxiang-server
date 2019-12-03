@@ -229,6 +229,7 @@ public class AutoSFTPUtils {
             isExist = true;
             return sftpATTRS.isDir();
         } catch (Exception e) {
+            logger.info("上传文件中 Exception:{}", e.getMessage());
             if (e.getMessage().toLowerCase().equals("no such file")) {
                 isExist = false;
             }
