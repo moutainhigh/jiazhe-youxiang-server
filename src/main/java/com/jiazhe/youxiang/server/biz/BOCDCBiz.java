@@ -7,6 +7,9 @@ package com.jiazhe.youxiang.server.biz;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
+import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.SftpException;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.FileUtil;
 import com.jiazhe.youxiang.base.util.HttpUtil;
@@ -19,6 +22,7 @@ import com.jiazhe.youxiang.base.util.boccc.PgpEncryUtil;
 import com.jiazhe.youxiang.base.util.boccc.ZipUtil;
 import com.jiazhe.youxiang.base.util.bocdc.BOCDCConstant;
 import com.jiazhe.youxiang.base.util.bocdc.BOCDCUtils;
+import com.jiazhe.youxiang.base.util.bocdc.SFTPUtils;
 import com.jiazhe.youxiang.server.biz.point.PointExchangeRecordBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.BOCDCBizCodeEnum;
@@ -45,11 +49,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * 中行储蓄卡Biz
@@ -269,7 +276,9 @@ public class BOCDCBiz {
         FileUtil.copyToPath(pgpFileName, uploadPath);
 
         //第6步，上传加密文件
-        AutoSFTPUtils.upload(BOCDCConstant.username, BOCDCConstant.host, BOCDCConstant.port, BOCDCConstant.loginPrivateKeyPath, uploadPath, BOCDCConstant.outPath);
+        //AutoSFTPUtils.upload(BOCDCConstant.username, BOCDCConstant.host, BOCDCConstant.port, BOCDCConstant.loginPrivateKeyPath, uploadPath, BOCDCConstant.outPath);
+
+        uploadToSFTP(BOCDCConstant.outPath,new File(pgpFileName));
     }
 
 
@@ -339,5 +348,49 @@ public class BOCDCBiz {
 
     private String getFileName(String fileName) {
         return BOCDCConstant.reconciliationPath + "/" + getFristDayOfThisMonth() + "/" + fileName.replace("#YYYYMMDD#", getFristDayOfThisMonth());
+    }
+
+    private void uploadToSFTP(String targetPath, File file) throws FileNotFoundException, SftpException, JSchException {
+        ChannelSftp channelSftp = null;
+        String dstFilePath; // 目标文件名(带路径)，如： D:\\file\\file.doc,这个路径应该是远程目标服务器下要保存的路径
+        try {
+            // 一、 获取channelSftp对象
+            channelSftp = SFTPUtils.getChannel(BOCDCConstant.username, null, BOCDCConstant.loginPrivateKeyPath, BOCDCConstant.host, BOCDCConstant.port);
+            // 二、 判断远程路径dstDirPath是否存在(通道配置的路径)
+            try {
+                Vector dir = channelSftp.ls(targetPath);
+                if (dir == null) { // 如果路径不存在，则创建
+                    channelSftp.mkdir(targetPath);
+                }
+            } catch (SftpException e) { // 如果dstDirPath不存在，则会报错，此时捕获异常并创建dstDirPath路径
+                channelSftp.mkdir(targetPath); // 此时创建路o如果再报错，即创建失败，则抛出异常
+                e.printStackTrace();
+            }
+            // 三、 推送文件
+            try {
+                LOGGER.info("send the file : {}", file.getName());
+                dstFilePath = targetPath + "/" + file.getName();
+                LOGGER.info("the file all path is :{}", dstFilePath);
+                // 推送: dstFilePath——传送过去的文件路径(全路径),采用默认的覆盖式推送
+                channelSftp.put(new FileInputStream(file), dstFilePath); // jsch触发推送操作的方法
+            } catch (SftpException e) {
+                LOGGER.debug("An error occurred during sftp push, send data fail, the target path is :{}", targetPath);
+                if (LOGGER.isDebugEnabled()) {
+                    e.printStackTrace();
+                }
+            }
+        } finally {
+            // 处理后事
+            if (channelSftp != null) {
+                channelSftp.quit();
+            }
+            try {
+                SFTPUtils.closeChannel();
+            } catch (Exception e) {
+                if (LOGGER.isDebugEnabled()) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
