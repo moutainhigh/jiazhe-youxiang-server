@@ -246,7 +246,7 @@ public class BOCDCBiz {
         String zipFileName = getFileName(BOCDCConstant.zipFileName, monthOffset);
         String pgpFileName = getFileName(BOCDCConstant.pgpFileName, monthOffset);
         //第1步，按照规则组成对账信息字符串
-        String reconciliationInfoString = getReconciliationInfo();
+        String reconciliationInfoString = getReconciliationInfo(monthOffset);
 
         //TODO niexiao
         //第2步，写入文件中
@@ -276,10 +276,10 @@ public class BOCDCBiz {
      *
      * @return
      */
-    private String getReconciliationInfo() {
+    private String getReconciliationInfo(int monthOffset) {
         StringBuilder sb = new StringBuilder();
         List<String> reconciliationInfoList = Lists.newArrayList();
-        List<PointExchangeCodeDTO> dtoList = pointExchangeCodeService.getBOCDCReconciliationInfo(getFristDayOfLastMonth(), getLastDayOfLastMonth());
+        List<PointExchangeCodeDTO> dtoList = pointExchangeCodeService.getBOCDCReconciliationInfo(getFristDayOfLastMonth(monthOffset), getLastDayOfLastMonth(monthOffset));
         if (CollectionUtils.isNotEmpty(dtoList)) {
             dtoList.stream().forEach(item -> {
                 sb.append(item.getOutOrderCode());
@@ -331,9 +331,6 @@ public class BOCDCBiz {
         return calendar.getTime();
     }
 
-    private Date getFristDayOfLastMonth() {
-        return getFristDayOfLastMonth(0);
-    }
 
     /**
      * 获得上月最后一天
@@ -349,10 +346,6 @@ public class BOCDCBiz {
         return calendar.getTime();
     }
 
-    private Date getLastDayOfLastMonth() {
-        return getLastDayOfLastMonth(0);
-    }
-
     /**
      * 获得本月第一天日期
      *
@@ -366,10 +359,6 @@ public class BOCDCBiz {
         return DateUtil.yyyyMMDD(calendar.getTime());
     }
 
-    private String getFristDayOfThisMonth() {
-        return getFristDayOfThisMonth(0);
-    }
-
     /**
      * 获得文件名
      *
@@ -377,7 +366,7 @@ public class BOCDCBiz {
      * @return
      */
     private String getFileName(String fileName, int monthOffset) {
-        return BOCDCConstant.reconciliationPath + "/" + getFristDayOfThisMonth(monthOffset) + "/" + fileName.replace("#YYYYMMDD#", getFristDayOfThisMonth());
+        return BOCDCConstant.reconciliationPath + "/" + getFristDayOfThisMonth(monthOffset) + "/" + fileName.replace("#YYYYMMDD#", getFristDayOfThisMonth(monthOffset));
     }
 
     /**
