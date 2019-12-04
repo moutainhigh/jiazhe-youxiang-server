@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -63,11 +64,16 @@ public class OrderInfoBiz {
         orderInfoService.customerCancelOrder(id);
     }
 
-    public void orderCancelPass(Integer id) {
-        orderInfoService.orderCancelPass(id);
+    public void orderCancelPass(OrderInfoDTO orderInfoDTO) {
+        Integer orderId = orderInfoDTO.getId();
+        OrderInfoDTO oldOrderInfo = orderInfoService.getById(orderId);
+        StringBuilder sb = new StringBuilder();
+        sb.append(parseOrderTrackInfo("订单成本", oldOrderInfo.getCost(), orderInfoDTO.getCost()));
+        orderInfoService.orderCancelPass(orderInfoDTO);
         OrderTrackDTO orderTrackDTO = new OrderTrackDTO();
-        orderTrackDTO.setOrderid(id);
+        orderTrackDTO.setOrderid(orderInfoDTO.getId());
         orderTrackDTO.setOpreation(OrderOpreationTypeEnum.PASS);
+        orderTrackDTO.setMsg(sb.toString());
         orderTrackService.create(orderTrackDTO);
     }
 
@@ -79,11 +85,16 @@ public class OrderInfoBiz {
         orderTrackService.create(orderTrackDTO);
     }
 
-    public void userCancelOrder(Integer id) {
-        orderInfoService.userCancelOrder(id);
+    public void userCancelOrder(OrderInfoDTO orderInfoDTO) {
+        Integer orderId = orderInfoDTO.getId();
+        OrderInfoDTO oldOrderInfo = orderInfoService.getById(orderId);
+        StringBuilder sb = new StringBuilder();
+        sb.append(parseOrderTrackInfo("订单成本", oldOrderInfo.getCost(), orderInfoDTO.getCost()));
+        orderInfoService.userCancelOrder(orderInfoDTO);
         OrderTrackDTO orderTrackDTO = new OrderTrackDTO();
-        orderTrackDTO.setOrderid(id);
+        orderTrackDTO.setOrderid(orderInfoDTO.getId());
         orderTrackDTO.setOpreation(OrderOpreationTypeEnum.CANCEL);
+        orderTrackDTO.setMsg(sb.toString());
         orderTrackService.create(orderTrackDTO);
     }
 
@@ -240,6 +251,16 @@ public class OrderInfoBiz {
     private String fieldToStr(Object field) {
         if (field == null) return "null";
         if (field instanceof Date) return DateUtil.secondToStr((Date) field);
+        if (field instanceof BigDecimal) {
+            DecimalFormat df = new DecimalFormat("#.0000");
+            if (BigDecimal.ZERO.compareTo((BigDecimal) field) == 0) {
+                return "0.0000";
+            } else if (BigDecimal.ZERO.compareTo((BigDecimal) field) > 0 && new BigDecimal(1).compareTo((BigDecimal) field) < 0) {
+                return "0" + df.format(field);
+            } else {
+                return df.format(field);
+            }
+        }
         return field.toString();
     }
 

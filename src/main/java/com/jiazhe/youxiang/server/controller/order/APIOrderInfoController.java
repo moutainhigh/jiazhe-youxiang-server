@@ -146,8 +146,15 @@ public class APIOrderInfoController extends BaseController {
     @ApiOperation(value = "审核通过", httpMethod = "POST", notes = "审核通过")
     @RequestMapping(value = "/ordercancelpass", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "审核通过", level = LogLevelEnum.LEVEL_2)
-    public Object orderCancelPass(@ModelAttribute IdReq req) {
-        orderInfoBiz.orderCancelPass(req.getId());
+    public Object orderCancelPass(@ModelAttribute OrderCancelWithCostReq req) {
+        Integer orderId = req.getOrderId();
+        CommonValidator.validateNull(orderId, new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CANCEL));
+        BigDecimal cost = req.getCost();
+        CommonValidator.validateNull(cost, new OrderException(OrderCodeEnum.ORDER_COST_IS_NULL));
+        OrderInfoDTO orderInfoDTO = new OrderInfoDTO();
+        orderInfoDTO.setId(orderId);
+        orderInfoDTO.setCost(cost);
+        orderInfoBiz.orderCancelPass(orderInfoDTO);
         return ResponseFactory.buildSuccess();
     }
 
@@ -172,7 +179,7 @@ public class APIOrderInfoController extends BaseController {
         OrderInfoDTO orderInfoDTO = new OrderInfoDTO();
         orderInfoDTO.setId(orderId);
         orderInfoDTO.setCost(cost);
-        orderInfoBiz.userCancelOrder(orderId);
+        orderInfoBiz.userCancelOrder(orderInfoDTO);
         return ResponseFactory.buildSuccess();
     }
 

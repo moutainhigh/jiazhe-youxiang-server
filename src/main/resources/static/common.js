@@ -131,9 +131,9 @@ function confirm(message, callback) {
     });
 }
 
-function prompt(title, callback) {
+function prompt(title, oldValue, callback) {
     bootbox.prompt({
-        value: 0,
+        value: oldValue ? oldValue : 0,
         placeholder: title ? title : "请输入信息",
         required: true,
         title: title ? title : "请输入信息",
