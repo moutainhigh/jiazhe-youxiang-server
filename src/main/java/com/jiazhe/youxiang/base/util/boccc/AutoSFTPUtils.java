@@ -180,6 +180,34 @@ public class AutoSFTPUtils {
     }
 
     /**
+     * linux上传文件
+     */
+    public void upload(String directory, File file) {
+        try {
+            if (null != sftp) {
+                sftp.cd(directory);
+                logger.info("cd {}", directory);
+                FileInputStream stream = new FileInputStream(file);
+                try {
+                    sftp.put(stream, file.getName());
+                } catch (Exception e) {
+                    logger.error("upload error", e);
+                } finally {
+                    stream.close();
+                }
+            }
+        } catch (Exception e) {
+            logger.error("upload:" + host, e);
+        } finally {
+            if (sftp != null) {
+                sftp.disconnect();
+                sftp.exit();
+            }
+        }
+    }
+
+
+    /**
      * 下载文件，文件名不改变。
      *
      * @param directory    下载目录
@@ -331,10 +359,10 @@ public class AutoSFTPUtils {
             File[] fs = uploadFile.listFiles();
             logger.info("上传文件中 listFiles:{}", JacksonUtil.toJSon(fs));
             for (File file : fs) {
-                InputStream is = new FileInputStream(file);
-                logger.info("上传文件中 is:{}", JacksonUtil.toJSon(is));
+//                InputStream is = new FileInputStream(file);
+//                logger.info("上传文件中 is:{}", JacksonUtil.toJSon(is));
                 //outPath为上传到中行服务器的路径
-                sftp.upload(outPath, "", file.getName(), is);
+                sftp.upload(outPath,file);
             }
             sftp.logout();
         }
