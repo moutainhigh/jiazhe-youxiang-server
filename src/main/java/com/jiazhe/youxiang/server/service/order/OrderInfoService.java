@@ -60,9 +60,9 @@ public interface OrderInfoService {
     /**
      * 订单取消审核通过
      *
-     * @param id
+     * @param orderInfoDTO
      */
-    void orderCancelPass(Integer id);
+    void orderCancelPass(OrderInfoDTO orderInfoDTO);
 
     /**
      * 订单取消审核不通过
@@ -75,9 +75,9 @@ public interface OrderInfoService {
     /**
      * 员工直接后台取消订单【除了已完成状态订单，其余都能取消】
      *
-     * @param
+     * @param orderInfoDTO
      */
-    void userCancelOrder(Integer id);
+    void userCancelOrder(OrderInfoDTO orderInfoDTO);
 
     /**
      * 员工完成订单，所有状态下的订单都能置为已完成状态
