@@ -11,8 +11,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class BOCDCConstant {
 
+    /**
+     * 执行环境
+     */
+    public static String[] BOCDC_ENVIRONMENT = {"test", "online"};
+    /**
+     * 商户ID
+     */
     public static String MER_ID;
-    public static String HTTP_URL;
+    /**
+     * 状态检查HTTP接口
+     */
+    public static String STATUS_CHECK_HTTP_URL;
     public static String ROOT_PATH;
     public static String uploadPath;
     public static String loginPrivateKeyPath;
@@ -48,7 +58,7 @@ public class BOCDCConstant {
 
     @Value("${bocdc.status_check.http_url}")
     public void setHttpUrl(String httpUrl) {
-        HTTP_URL = httpUrl;
+        STATUS_CHECK_HTTP_URL = httpUrl;
     }
 
     @Value("${bocdc.merid}")

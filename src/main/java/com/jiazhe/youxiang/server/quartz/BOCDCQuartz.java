@@ -1,6 +1,6 @@
 package com.jiazhe.youxiang.server.quartz;
 
-import com.jiazhe.youxiang.base.util.boccc.AutoSFTPUtils;
+import com.jiazhe.youxiang.base.util.bocdc.BOCDCConstant;
 import com.jiazhe.youxiang.server.biz.BOCDCBiz;
 import com.jiazhe.youxiang.server.common.constant.EnvironmentConstant;
 import org.quartz.JobExecutionException;
@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+
+import java.util.Arrays;
 
 /**
  * @author TU
@@ -25,23 +27,23 @@ public class BOCDCQuartz extends QuartzJobBean {
     protected void executeInternal(org.quartz.JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
         logger.info("定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务开始执行");
-//
-//        /**
-//         * 根据不同环境，判断此定时任务是否执行
-//         */
-//        if (!Arrays.asList(BOCCCConstant.BOCCC_ENVIRONMENT).contains(EnvironmentConstant.ENVIRONMENT)) {
-//            return;
-//        }
 
+        /**
+         * 根据不同环境，判断此定时任务是否执行
+         */
+        if (!Arrays.asList(BOCDCConstant.BOCDC_ENVIRONMENT).contains(EnvironmentConstant.ENVIRONMENT)) {
+            return;
+        }
         //定时生成对账信息
         try {
             logger.info("生成生成对账信息文件");
-            bocdcBiz.uploadReconciliationFile();
+            //TODO niexiao 验证完成后放开
+            //bocdcBiz.uploadReconciliationFile();
             logger.info("生成生成对账信息文件完成");
         } catch (Exception e) {
             logger.error("生成生成对账信息文件失败，异常信息：" + e.getMessage());
         }
 
-            logger.info("定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务执行完成");
-        }
+        logger.info("定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务执行完成");
     }
+}

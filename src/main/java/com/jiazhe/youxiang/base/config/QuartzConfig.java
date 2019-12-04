@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.base.config;
 
 import com.jiazhe.youxiang.server.quartz.BOCCCQuartz;
+import com.jiazhe.youxiang.server.quartz.BOCDCQuartz;
 import com.jiazhe.youxiang.server.quartz.WeChatAPICacheQuartz;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
@@ -56,6 +57,7 @@ public class QuartzConfig {
         return JobBuilder.newJob(BOCCCQuartz.class).withIdentity("BOCCCJob").storeDurably().build();
     }
 
+
 //    @Bean
 //    public Trigger BOCCCQuartzTrigger() throws Exception{
 //        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
@@ -76,6 +78,23 @@ public class QuartzConfig {
                 .forJob(BOCCCQuartzDetail())
                 .withIdentity("BOCCCTrigger")
                 .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 ? * *"))
+                .build();
+    }
+
+    @Bean
+    public JobDetail BOCDCQuartzDetail() {
+        return JobBuilder.newJob(BOCDCQuartz.class).withIdentity("BOCDCJob").storeDurably().build();
+    }
+
+    //每月一日上午9点上传储蓄卡对账信息
+    @Bean
+    public CronTrigger BOCDCCronTrigger() {
+        return TriggerBuilder.newTrigger()
+                .forJob(BOCDCQuartzDetail())
+                .withIdentity("BOCDCTrigger")
+//                .withSchedule(CronScheduleBuilder.cronSchedule("0 * * * * ? *"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 9 1 * ? *"))
+
                 .build();
     }
 

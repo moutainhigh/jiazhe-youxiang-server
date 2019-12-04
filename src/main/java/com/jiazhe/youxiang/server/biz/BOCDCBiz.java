@@ -16,7 +16,6 @@ import com.jiazhe.youxiang.base.util.HttpUtil;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.RSAUtil;
 import com.jiazhe.youxiang.base.util.ShaUtils;
-import com.jiazhe.youxiang.base.util.boccc.AutoSFTPUtils;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCUtils;
 import com.jiazhe.youxiang.base.util.boccc.PgpEncryUtil;
 import com.jiazhe.youxiang.base.util.boccc.ZipUtil;
@@ -190,7 +189,7 @@ public class BOCDCBiz {
         try {
             String postParam = getParamString(req);
             LOGGER.info("HTTP调用中行使用状态核对实时接口，入参:{}", postParam);
-            result = HttpUtil.sendPost(BOCDCConstant.HTTP_URL, postParam);
+            result = HttpUtil.sendPost(BOCDCConstant.STATUS_CHECK_HTTP_URL, postParam);
             LOGGER.info("HTTP调用中行使用状态核对实时接口成功，入参:{}，返回值:{}", postParam, JSONObject.toJSON(result));
         } catch (RestClientException e) {
             LOGGER.info("HTTP调用中行使用状态核对实时接口失败，RestClientException message:{}", e.getMessage());
@@ -271,14 +270,10 @@ public class BOCDCBiz {
         LOGGER.info("对账信息压缩文件加密中...");
         PgpEncryUtil.Encry(zipFileName, BOCDCConstant.publicKeyPath, pgpFileName);
         LOGGER.info("对账信息压缩文件加密完成，路径为：" + pgpFileName);
-
-        //第5步，复制加密文件至upload里
-        FileUtil.copyToPath(pgpFileName, uploadPath);
-
-        //第6步，上传加密文件
-        //AutoSFTPUtils.upload(BOCDCConstant.username, BOCDCConstant.host, BOCDCConstant.port, BOCDCConstant.loginPrivateKeyPath, uploadPath, BOCDCConstant.outPath);
-
-        uploadToSFTP(BOCDCConstant.outPath,new File(pgpFileName));
+        //第5步，上传加密文件
+        LOGGER.info("对账信息加密压缩文件上传中...");
+        uploadToSFTP(BOCDCConstant.outPath, new File(pgpFileName));
+        LOGGER.info("对账信息加密压缩文件上传完成");
     }
 
 
@@ -290,7 +285,7 @@ public class BOCDCBiz {
     private String getReconciliationInfo() {
         StringBuilder sb = new StringBuilder();
         List<String> reconciliationInfoList = Lists.newArrayList();
-        List<PointExchangeCodeDTO> dtoList = pointExchangeCodeService.getBOCDCReconciliationInfo(getBeginDate(), getEndDate());
+        List<PointExchangeCodeDTO> dtoList = pointExchangeCodeService.getBOCDCReconciliationInfo(getFristDayOfLastMonth(), getLastDayOfLastMonth());
         if (CollectionUtils.isNotEmpty(dtoList)) {
             dtoList.stream().forEach(item -> {
                 sb.append(item.getOutOrderCode());
@@ -305,15 +300,23 @@ public class BOCDCBiz {
         return String.join("\r\n", reconciliationInfoList);
     }
 
+    /**
+     * 获得使用状态
+     * @param used
+     * @return
+     */
     private String getUseStatus(int used) {
         //TODO niexiao 整理代码
         switch (used) {
             case 0:
             default:
+                //未使用
                 return "00";
             case 1:
+                //已使用
                 return "01";
             case 2:
+                //已退货
                 return "02";
         }
     }
@@ -321,14 +324,18 @@ public class BOCDCBiz {
     /**
      * 获得上月1日
      */
-    private Date getBeginDate() {
+    private Date getFristDayOfLastMonth() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, -1);
         calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
         return calendar.getTime();
     }
 
-    private Date getEndDate() {
+    /**
+     * 获得上月最后一天
+     * @return
+     */
+    private Date getLastDayOfLastMonth() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, -1);
         calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
@@ -346,13 +353,27 @@ public class BOCDCBiz {
         return DateUtil.yyyyMMDD(calendar.getTime());
     }
 
+    /**
+     * 获得文件名
+     * @param fileName
+     * @return
+     */
     private String getFileName(String fileName) {
         return BOCDCConstant.reconciliationPath + "/" + getFristDayOfThisMonth() + "/" + fileName.replace("#YYYYMMDD#", getFristDayOfThisMonth());
     }
 
+    /**
+     * 将文件上传到SFTP指定文件夹
+     *
+     * @param targetPath
+     * @param file
+     * @throws FileNotFoundException
+     * @throws SftpException
+     * @throws JSchException
+     */
     private void uploadToSFTP(String targetPath, File file) throws FileNotFoundException, SftpException, JSchException {
         ChannelSftp channelSftp = null;
-        String dstFilePath; // 目标文件名(带路径)，如： D:\\file\\file.doc,这个路径应该是远程目标服务器下要保存的路径
+        String dstFilePath;
         try {
             // 一、 获取channelSftp对象
             channelSftp = SFTPUtils.getChannel(BOCDCConstant.username, null, BOCDCConstant.loginPrivateKeyPath, BOCDCConstant.host, BOCDCConstant.port);
