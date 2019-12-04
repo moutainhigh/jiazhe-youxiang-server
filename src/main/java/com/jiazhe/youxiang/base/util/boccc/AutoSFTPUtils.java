@@ -230,6 +230,7 @@ public class AutoSFTPUtils {
         boolean isExist = false;
         try {
             SftpATTRS sftpATTRS = sftp.lstat(path);
+            logger.info("上传文件中 SftpATTRS sftpATTRS = sftp.lstat(path) sftpATTRS:{}",JacksonUtil.toJSon(sftpATTRS));
             isExist = true;
             return sftpATTRS.isDir();
         } catch (Exception e) {
