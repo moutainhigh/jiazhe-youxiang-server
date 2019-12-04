@@ -326,21 +326,17 @@ public class AutoSFTPUtils {
         File uploadFile = new File(uploadPath);
         logger.info("上传文件中,uploadFile:{}", JacksonUtil.toJSon(uploadFile));
         //中行接收文件路径存在
-        if (sftp.isExistDir(outPath, sftp.sftp)) {
-            logger.info("上传文件中 111111");
-            if (uploadFile.exists()) {
-                File[] fs = uploadFile.listFiles();
-                logger.info("上传文件中 listFiles:{}", JacksonUtil.toJSon(fs));
-                for (File file : fs) {
-                    InputStream is = new FileInputStream(file);
-                    logger.info("上传文件中 is:{}", JacksonUtil.toJSon(is));
-                    //outPath为上传到中行服务器的路径
-                    sftp.upload(outPath, "", file.getName(), is);
-                }
-                sftp.logout();
+        logger.info("上传文件中 111111");
+        if (uploadFile.exists()) {
+            File[] fs = uploadFile.listFiles();
+            logger.info("上传文件中 listFiles:{}", JacksonUtil.toJSon(fs));
+            for (File file : fs) {
+                InputStream is = new FileInputStream(file);
+                logger.info("上传文件中 is:{}", JacksonUtil.toJSon(is));
+                //outPath为上传到中行服务器的路径
+                sftp.upload(outPath, "", file.getName(), is);
             }
-        } else {
-            logger.error("中行上传文件夹路径定义有误！！！");
+            sftp.logout();
         }
         logger.info("上传文件完成");
     }
