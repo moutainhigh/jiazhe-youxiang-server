@@ -118,6 +118,9 @@ public class AutoSFTPUtils {
             Channel channel = session.openChannel("sftp");
             channel.connect();
             sftp = (ChannelSftp) channel;
+            if (sftp == null) {
+                logger.error("sftp登录失败");
+            }
         } catch (JSchException e) {
             e.printStackTrace();
         }
