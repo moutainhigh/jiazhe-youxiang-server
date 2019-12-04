@@ -38,7 +38,7 @@ public class BOCDCQuartz extends QuartzJobBean {
         try {
             logger.info("生成生成对账信息文件");
             //TODO niexiao 验证完成后放开
-            //bocdcBiz.uploadReconciliationFile();
+            //bocdcBiz.uploadReconciliationFile(0);
             logger.info("生成生成对账信息文件完成");
         } catch (Exception e) {
             logger.error("生成生成对账信息文件失败，异常信息：" + e.getMessage());

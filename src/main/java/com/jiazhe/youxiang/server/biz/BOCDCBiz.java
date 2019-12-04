@@ -239,13 +239,12 @@ public class BOCDCBiz {
     /**
      * 生成并上传对账文件
      */
-    public void uploadReconciliationFile() throws Exception {
+    public void uploadReconciliationFile(int monthOffset) throws Exception {
         LOGGER.info("Biz执行[uploadReconciliationFile]方法");
-        FileUtil.mkDirs(BOCDCConstant.reconciliationPath + "/" + getFristDayOfThisMonth());
-        String sourceFileName = getFileName(BOCDCConstant.sourceFileName);
-        String zipFileName = getFileName(BOCDCConstant.zipFileName);
-        String pgpFileName = getFileName(BOCDCConstant.pgpFileName);
-        String uploadPath = BOCDCConstant.uploadPath + "/" + getFristDayOfThisMonth();
+        FileUtil.mkDirs(BOCDCConstant.reconciliationPath + "/" + getFristDayOfThisMonth(monthOffset));
+        String sourceFileName = getFileName(BOCDCConstant.sourceFileName, monthOffset);
+        String zipFileName = getFileName(BOCDCConstant.zipFileName, monthOffset);
+        String pgpFileName = getFileName(BOCDCConstant.pgpFileName, monthOffset);
         //第1步，按照规则组成对账信息字符串
         String reconciliationInfoString = getReconciliationInfo();
 
@@ -297,6 +296,7 @@ public class BOCDCBiz {
 
     /**
      * 获得使用状态
+     *
      * @param used
      * @return
      */
@@ -319,43 +319,65 @@ public class BOCDCBiz {
 
     /**
      * 获得上月1日
+     *
+     * @param monthOffset
+     * @return
      */
-    private Date getFristDayOfLastMonth() {
+    private Date getFristDayOfLastMonth(int monthOffset) {
         Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, monthOffset);
         calendar.add(Calendar.MONTH, -1);
         calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
         return calendar.getTime();
     }
 
+    private Date getFristDayOfLastMonth() {
+        return getFristDayOfLastMonth(0);
+    }
+
     /**
      * 获得上月最后一天
+     *
+     * @param monthOffset
      * @return
      */
-    private Date getLastDayOfLastMonth() {
+    private Date getLastDayOfLastMonth(int monthOffset) {
         Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, monthOffset);
         calendar.add(Calendar.MONTH, -1);
         calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         return calendar.getTime();
     }
 
+    private Date getLastDayOfLastMonth() {
+        return getLastDayOfLastMonth(0);
+    }
+
     /**
      * 获得本月第一天日期
      *
+     * @param monthOffset
      * @return
      */
-    private String getFristDayOfThisMonth() {
+    private String getFristDayOfThisMonth(int monthOffset) {
         Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, monthOffset);
         calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
         return DateUtil.yyyyMMDD(calendar.getTime());
     }
 
+    private String getFristDayOfThisMonth() {
+        return getFristDayOfThisMonth(0);
+    }
+
     /**
      * 获得文件名
+     *
      * @param fileName
      * @return
      */
-    private String getFileName(String fileName) {
-        return BOCDCConstant.reconciliationPath + "/" + getFristDayOfThisMonth() + "/" + fileName.replace("#YYYYMMDD#", getFristDayOfThisMonth());
+    private String getFileName(String fileName, int monthOffset) {
+        return BOCDCConstant.reconciliationPath + "/" + getFristDayOfThisMonth(monthOffset) + "/" + fileName.replace("#YYYYMMDD#", getFristDayOfThisMonth());
     }
 
     /**

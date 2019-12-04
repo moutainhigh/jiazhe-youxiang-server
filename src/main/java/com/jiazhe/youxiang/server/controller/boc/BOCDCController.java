@@ -128,8 +128,8 @@ public class BOCDCController {
     @AppApi
     @ApiOperation(value = "上传对账信息", httpMethod = "GET", notes = "上传对账信息")
     @RequestMapping(value = "/uploadreconciliationfile", method = RequestMethod.GET)
-    public Object uploadReconciliationFile() throws Exception {
-        bocdcBiz.uploadReconciliationFile();
+    public Object uploadReconciliationFile(int monthOffset) throws Exception {
+        bocdcBiz.uploadReconciliationFile(monthOffset);
         return "任务全部完成";
     }
 
