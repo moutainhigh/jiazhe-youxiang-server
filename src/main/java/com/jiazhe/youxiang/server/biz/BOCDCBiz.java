@@ -68,11 +68,6 @@ public class BOCDCBiz {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BOCDCBiz.class);
 
-    private static final String CODE_SUCCESS = "0000";
-
-    private static final String MERCHANTSOURCE = "0000";
-
-
     @Autowired
     private PointExchangeRecordBiz pointExchangeRecordBiz;
 
@@ -201,7 +196,7 @@ public class BOCDCBiz {
             String message = BOCDCCodeEnum.STATUS_CHECK_ERROR.getMessage() + "orderNo:" + orderNo + ",useStatus:" + useStatus + ",useTime:" + useTime;
             LOGGER.info("Biz调用[statusCheck]接口失败,message:{}", message);
             throw new BOCDCException(BOCDCCodeEnum.STATUS_CHECK_ERROR.getCode(), BOCDCCodeEnum.STATUS_CHECK_ERROR.getType(), message);
-        } else if (!CODE_SUCCESS.equals(commonResp.getBizCode())) {
+        } else if (!BOCDCConstant.CODE_SUCCESS.equals(commonResp.getBizCode())) {
             String message = BOCDCCodeEnum.STATUS_CHECK_ERROR.getMessage() + "orderNo:" + orderNo + ",useStatus:" + useStatus + ",useTime:" + useTime;
             LOGGER.info("Biz调用[statusCheck]接口成功，但返回值不符合预期，返回值:{} message:{}", JSONObject.toJSON(commonResp), message);
         } else {
@@ -292,12 +287,12 @@ public class BOCDCBiz {
                 sb.append("|");
                 sb.append(getUseStatus(item.getUsed().intValue()));
                 sb.append("|");
-                sb.append(MERCHANTSOURCE);
+                sb.append(BOCDCConstant.MER_ID);
                 reconciliationInfoList.add(sb.toString());
                 sb.delete(0, sb.length());
             });
         }
-        return String.join("\r\n", reconciliationInfoList);
+        return String.join("\r", reconciliationInfoList);
     }
 
     /**
@@ -316,8 +311,9 @@ public class BOCDCBiz {
                 //已使用
                 return "01";
             case 2:
+                //TODO niexiao 注意修改
                 //已退货
-                return "02";
+                return "01";
         }
     }
 

@@ -426,6 +426,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         PointExchangeCodePOExample example = new PointExchangeCodePOExample();
         PointExchangeCodePOExample.Criteria criteria = example.createCriteria();
         criteria.andOutOrderCodeNotEqualTo("");
+//        criteria.andUsedEqualTo(CommonConstant.CODE_HAS_USED);
         criteria.andModTimeBetween(beginDate, endDate);
         criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
         List<PointExchangeCodePO> list = pointExchangeCodePOMapper.selectByExample(example);

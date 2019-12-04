@@ -15,10 +15,26 @@ public class BOCDCConstant {
      * 执行环境
      */
     public static String[] BOCDC_ENVIRONMENT = {"test", "online"};
+
+    /**
+     * 成功代码
+     */
+    public static final String CODE_SUCCESS = "0000";
     /**
      * 商户ID
      */
     public static String MER_ID;
+
+    /**
+     * 中行信用卡实时接口：已使用请求
+     */
+    public static String REAL_TIME_USED_URL;
+
+    /**
+     * 中行信用卡实时接口：已退货请求
+     */
+    public static String REAL_TIME_REFUND_URL;
+
     /**
      * 状态检查HTTP接口
      */
@@ -64,6 +80,16 @@ public class BOCDCConstant {
     @Value("${bocdc.merid}")
     public void setMerId(String merId) {
         MER_ID = merId;
+    }
+
+    @Value("${boccc.realtime.used_url}")
+    public void setUsedUrl(String usedUrl) {
+        REAL_TIME_USED_URL = usedUrl;
+    }
+
+    @Value("${boccc.realtime.refund_url}")
+    public void setRefundUrl(String refundUrl) {
+        REAL_TIME_REFUND_URL = refundUrl;
     }
 
     @Value("${bocdc.sftp.rootPath}")
