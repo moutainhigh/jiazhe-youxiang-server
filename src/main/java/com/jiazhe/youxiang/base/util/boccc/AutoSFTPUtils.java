@@ -226,6 +226,7 @@ public class AutoSFTPUtils {
     }
 
     public boolean isExistDir(String path, ChannelSftp sftp) {
+        logger.info("上传文件中 执行[isExistDir]");
         boolean isExist = false;
         try {
             SftpATTRS sftpATTRS = sftp.lstat(path);
@@ -325,6 +326,7 @@ public class AutoSFTPUtils {
         logger.info("上传文件中,uploadFile:{}", JacksonUtil.toJSon(uploadFile));
         //中行接收文件路径存在
         if (sftp.isExistDir(outPath, sftp.sftp)) {
+            logger.info("上传文件中 111111");
             if (uploadFile.exists()) {
                 File[] fs = uploadFile.listFiles();
                 logger.info("上传文件中 listFiles:{}", JacksonUtil.toJSon(fs));
