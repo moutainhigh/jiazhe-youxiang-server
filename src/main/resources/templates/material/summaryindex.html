@@ -373,10 +373,10 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    $("#receiveTotal").html(result.receiveTotal);
-                    $("#productValueTotal").html(result.productValueTotal);
-                    $("#usedProductValueTotal").html(result.usedProductValueTotal);
-                    $("#leftProductValueTotal").html(result.leftProductValueTotal);
+                    $("#receiveTotal").html(formatNumberWithComma(result.receiveTotal));
+                    $("#productValueTotal").html(formatNumberWithComma(result.productValueTotal));
+                    $("#usedProductValueTotal").html(formatNumberWithComma(result.usedProductValueTotal));
+                    $("#leftProductValueTotal").html(formatNumberWithComma(result.leftProductValueTotal));
                     showAlertInfo();
                 }
             },
