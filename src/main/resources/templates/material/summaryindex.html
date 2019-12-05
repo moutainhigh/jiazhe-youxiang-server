@@ -287,7 +287,7 @@
         var tableOption = {
             url: "/api/material/listsummarypage",
             postData: transformToJson($('#materialInfoSearchForm').serializeArray()),
-            colNames: ['', '收款人', '收款总额', '采购实物价值', '消耗实物价值(已审核)','消耗实物价值(未审核)', '剩余实物价值','操作'],
+            colNames: ['', '收款人', '收款总额', '采购实物价值', '消耗实物价值(已审核)','消耗实物价值(待审核)', '剩余实物价值','操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'payeeName', index: 'payeeName', width: 40, sortable: false},
