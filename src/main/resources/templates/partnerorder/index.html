@@ -385,7 +385,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" onclick="beforeCloseModal()">&times;</button>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="blue bigger" id="partnerOrderModalTitle"></h4>
             </div>
             <div class="modal-body">
@@ -615,9 +615,15 @@
                 </button>
 
                 <button class="btn btn-sm btn-primary modal-footer-btn modal-footer-btn-save"
-                        onclick="savePartnerOrder()" id="partnerOrderSaveBtn">
+                        onclick="savePartnerOrder(false)" id="partnerOrderSaveBtn">
                     <i class="ace-icon fa fa-check"></i>
                     保存
+                </button>
+
+                <button class="btn btn-sm btn-primary modal-footer-btn modal-footer-btn-save"
+                        onclick="savePartnerOrder(true)" id="partnerOrderSaveAndOnBtn">
+                    <i class="ace-icon fa fa-check"></i>
+                    保存并继续
                 </button>
             </div>
         </div>
@@ -773,13 +779,13 @@
                         return dateFormat(rowObject.serviceTime);
                     }
                 },
-                {name: 'orderSource', index: 'orderSource', width: 100, sortable: false},
+                {name: 'orderSource', index: 'orderSource', width: 80, sortable: false},
                 {name: 'workerName', index: 'workerName', width: 100, sortable: false},
                 {name: 'serviceItemResp.name', index: 'serviceItem', width: 100, sortable: false},
-                {name: 'prePay', index: 'prePay', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
+                {name: 'prePay', index: 'prePay', width: 100, sortable: false,formatter:function(cellvalue, options, rowObject){
                     return formatNumberWithComma(rowObject.prePay);
                 }},
-                {name: 'appendPay', index: 'appendPay', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
+                {name: 'appendPay', index: 'appendPay', width: 100, sortable: false,formatter:function(cellvalue, options, rowObject){
                     return formatNumberWithComma(rowObject.appendPay);
                 }}
             ],
@@ -849,25 +855,11 @@
         return str;
     }
 
-    //关闭前调用
-    function beforeCloseModal() {
-//        var operateType = $("#operateType").val();
-//        if(operateType == '1' || operateType == '2'){ //1为新建 2为修改 3为查看
-//            confirm("确定关闭此对话框？",function(result){
-//                if(result){
-//                    $('#modal-partnerOrder').modal('hide');
-//                }
-//            })
-//        }else {
-//            $('#modal-partnerOrder').modal('hide');
-//        }
-        $('#modal-partnerOrder').modal('hide');
-    }
-
     function openShow(id) {
         fillPartnerOrderForm(id)
         $("#partnerOrderModalTitle").html("商家订单-查看");
         $("#partnerOrderSaveBtn").hide();
+        $("#partnerOrderSaveAndOnBtn").hide();
         $("#modal-partnerOrder").modal("show");
         $("#partnerOrderForm input").attr("disabled", "disabled");
         $("#partnerOrderForm select").attr("disabled", "disabled");
@@ -879,6 +871,7 @@
         fillPartnerOrderForm(id);
         $("#partnerOrderModalTitle").html("商家订单-修改");
         $("#partnerOrderSaveBtn").show();
+        $("#partnerOrderSaveAndOnBtn").hide();
         $("#modal-partnerOrder").modal("show");
         $("#partnerOrderForm input").removeAttr("disabled");
         $("#partnerOrderForm select").removeAttr("disabled");
@@ -926,6 +919,7 @@
         $("#saveServiceTime").next().next().val(0);
         $("#partnerOrderModalTitle").html("商家订单-新建");
         $("#partnerOrderSaveBtn").show();
+        $("#partnerOrderSaveAndOnBtn").show();
         $("#modal-partnerOrder").modal("show");
         $("#partnerOrderForm input").removeAttr("disabled");
         $("#partnerOrderForm select").removeAttr("disabled");
@@ -986,7 +980,8 @@
         });
     }
 
-    function savePartnerOrder() {
+    //下单 keepOn为true：下单并继续；为false，下单关闭模态框，重新刷新页面
+    function savePartnerOrder(keepOn) {
         if (!isNumber($("#savePrePay").val())) {
             bootboxalert("预付必须为数字！");
             return false;
@@ -995,18 +990,18 @@
             bootboxalert("再次支付必须为数字！");
             return false;
         }
-        if ($("#saveStatus").val() == "2") {
+        if ($("#saveStatus").val() == "3") {
             confirm("已完成订单，除了备注为非必填外，其他都为必填，需要继续保存吗？", function (result) {
                 if (result) {
-                    save();
+                    save(keepOn);
                 }
             });
         } else {
-            save();
+            save(keepOn);
         }
     }
 
-    function save() {
+    function save(keepOn) {
         $.ajax({
             url: "/api/partnerorderinfo/save",
             dataType: "json",
@@ -1017,9 +1012,13 @@
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
-                    $("#modal-partnerOrder").modal('hide');
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                    refreshOverviewMoney();
+                    if(keepOn){
+                        bootboxalert("保存成功，请继续");
+                    }else{
+                        $("#modal-partnerOrder").modal('hide');
+                        jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                        refreshOverviewMoney();
+                    }
                 }
             },
             error: error
