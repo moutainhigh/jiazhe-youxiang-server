@@ -74,7 +74,7 @@
             <if test="payeeIds != null and payeeIds != ''">
                 AND record.submitter_id in ${payeeIds}
             </if>
-            AND record.is_deleted = 0 AND record.status != 4 AND record.submit_time >= date_format('2019-12-01
+            AND record.is_deleted = 0 AND record.status = 2 AND record.submit_time >= date_format('2019-12-01
             00:00:00',
             '%Y-%m-%d %H:%i:%s')
         </where>
