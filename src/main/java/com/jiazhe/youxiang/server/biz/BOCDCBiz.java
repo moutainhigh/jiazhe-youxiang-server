@@ -291,7 +291,7 @@ public class BOCDCBiz {
                 sb.delete(0, sb.length());
             });
         }
-        return String.join("\n", reconciliationInfoList);
+        return String.join("\n", reconciliationInfoList) + "\n";
     }
 
     /**
