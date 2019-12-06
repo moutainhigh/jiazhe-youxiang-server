@@ -6,7 +6,6 @@
 package com.jiazhe.youxiang.server.biz;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
@@ -278,7 +277,6 @@ public class BOCDCBiz {
      */
     private String getReconciliationInfo(int monthOffset) {
         StringBuilder sb = new StringBuilder();
-        List<String> reconciliationInfoList = Lists.newArrayList();
         List<PointExchangeCodeDTO> dtoList = pointExchangeCodeService.getBOCDCReconciliationInfo(getFristDayOfLastMonth(monthOffset), getLastDayOfLastMonth(monthOffset));
         if (CollectionUtils.isNotEmpty(dtoList)) {
             dtoList.stream().forEach(item -> {
@@ -287,11 +285,10 @@ public class BOCDCBiz {
                 sb.append(getUseStatus(item.getUsed().intValue()));
                 sb.append("|");
                 sb.append(BOCDCConstant.MER_ID);
-                reconciliationInfoList.add(sb.toString());
-                sb.delete(0, sb.length());
+                sb.append("\n");
             });
         }
-        return String.join("\n", reconciliationInfoList) + "\n";
+        return sb.toString();
     }
 
     /**
