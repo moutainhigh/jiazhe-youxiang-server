@@ -15,7 +15,9 @@ public enum OrderOpreationTypeEnum {
     PASS(5, "pass", "审核通过"),
     UNPASS(6, "unpass", "审核未通过"),
     RESERVATION(7, "reservation", "预约服务"),
-    APPEND(8, "append", "追加订单");
+    APPEND(8, "append", "追加订单"),
+    PARTNER_CREATE(9, "append", "新建商家订单"),
+    PARTNER_UPDATE(10, "append", "修改商家订单");
 
     OrderOpreationTypeEnum(Integer code, String type, String message) {
         this.code = code;

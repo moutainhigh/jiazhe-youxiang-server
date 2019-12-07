@@ -602,6 +602,16 @@
                                 </div>
                                 <div class="space-2"></div>
 
+                                <div class="order_track space-2"></div>
+                                <div class="order_track form-group">
+                                    <label class="col-sm-4 control-label no-padding-right">操作记录：</label>
+                                    <div class="col-sm-8">
+                                        <div class="pos-rel">
+                                            <div id="re_order_track" disabled class="form-control"
+                                                 style="resize:none;"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -776,12 +786,24 @@
                 {name: 'orderSource', index: 'orderSource', width: 100, sortable: false},
                 {name: 'workerName', index: 'workerName', width: 100, sortable: false},
                 {name: 'serviceItemResp.name', index: 'serviceItem', width: 100, sortable: false},
-                {name: 'prePay', index: 'prePay', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
-                    return formatNumberWithComma(rowObject.prePay);
-                }},
-                {name: 'appendPay', index: 'appendPay', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
-                    return formatNumberWithComma(rowObject.appendPay);
-                }}
+                {
+                    name: 'prePay',
+                    index: 'prePay',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return formatNumberWithComma(rowObject.prePay);
+                    }
+                },
+                {
+                    name: 'appendPay',
+                    index: 'appendPay',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return formatNumberWithComma(rowObject.appendPay);
+                    }
+                }
             ],
             loadComplete: function (data) {
                 if ("error" in data) {
@@ -931,6 +953,7 @@
         $("#partnerOrderForm select").removeAttr("disabled");
         $("#partnerOrderForm textarea").removeAttr("disabled");
         $("#operateType").val('1');
+        parseOrderTrackInfo();
     }
 
     function initForm() {
@@ -980,10 +1003,21 @@
                 $("#partnerOrderForm #savePrePay").val(result.prePay);
                 $("#partnerOrderForm #saveAppendPay").val(result.appendPay);
                 $("#partnerOrderForm #saveStatus").val(result.status);
+                parseOrderTrackInfo(result.orderTrackInfo);
                 checkNodes(result.customerCityCode);
             },
             error: error
         });
+    }
+
+    function parseOrderTrackInfo(info) {
+        if (info) {
+            $(".order_track").show();
+            $("#re_order_track").html($("<div>" + info + "</div>"));
+        } else {
+            $(".order_track").hide();
+            $("#re_order_track").html("");
+        }
     }
 
     function savePartnerOrder() {
