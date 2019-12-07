@@ -287,7 +287,7 @@
         var tableOption = {
             url: "/api/material/listsummarypage",
             postData: transformToJson($('#materialInfoSearchForm').serializeArray()),
-            colNames: ['', '收款人', '收款总额', '采购实物价值', '消耗实物价值(已审核)','消耗实物价值(未审核)', '剩余实物价值','操作'],
+            colNames: ['', '收款人', '收款总额', '采购实物价值', '消耗实物价值(已审核)','消耗实物价值(待审核)', '剩余实物价值','操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'payeeName', index: 'payeeName', width: 40, sortable: false},
@@ -351,7 +351,7 @@
             str += getRedirectButton("btn-primary", "../material/index?payeeId=" + rowObject.id + "&&payerIds=" + $("#payerIdsHidden").val(), "转账明细");
         }
         if (permission.indexOf("materialUsedDetail") != -1) {
-            str += getRedirectButton("btn-primary", "../auditrecord/index?submitterName=" + rowObject.payeeName + "&&status=4&&exchangeType=3&&submitStartTime=1575129600000", "消耗明细");
+            str += getRedirectButton("btn-primary", "../auditrecord/index?submitterName=" + rowObject.payeeName + "&&status=4&&exchangeType=34&&submitStartTime=1575129600000", "消耗明细");
         }
         return str;
     }
@@ -373,10 +373,10 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    $("#receiveTotal").html(result.receiveTotal);
-                    $("#productValueTotal").html(result.productValueTotal);
-                    $("#usedProductValueTotal").html(result.usedProductValueTotal);
-                    $("#leftProductValueTotal").html(result.leftProductValueTotal);
+                    $("#receiveTotal").html(formatNumberWithComma(result.receiveTotal));
+                    $("#productValueTotal").html(formatNumberWithComma(result.productValueTotal));
+                    $("#usedProductValueTotal").html(formatNumberWithComma(result.usedProductValueTotal));
+                    $("#leftProductValueTotal").html(formatNumberWithComma(result.leftProductValueTotal));
                     showAlertInfo();
                 }
             },
