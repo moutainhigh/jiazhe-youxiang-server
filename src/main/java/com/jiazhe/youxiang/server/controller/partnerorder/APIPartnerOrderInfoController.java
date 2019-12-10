@@ -73,7 +73,7 @@ public class APIPartnerOrderInfoController extends BaseController {
     public Object getById(@ModelAttribute IdReq req) {
         PartnerOrderInfoDTO dto = partnerOrderInfoBiz.getById(req.getId());
         PartnerOrderInfoResp resp = PartnerOrderInfoAdapter.DTO2Resp(dto);
-        resp.setOrderTrackInfo(orderTrackBiz.getOrderTrackInfo(req.getId()));
+        resp.setOrderTrackInfo(orderTrackBiz.getPartnerOrderTrackInfo(req.getId()));
         return ResponseFactory.buildResponse(resp);
     }
 

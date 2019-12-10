@@ -70,7 +70,7 @@ public class OrderInfoBiz {
         orderTrackDTO.setOrderid(orderInfoDTO.getId());
         orderTrackDTO.setOpreation(OrderOpreationTypeEnum.PASS);
         orderTrackDTO.setMsg(sb.toString());
-        orderTrackBiz.create(orderTrackDTO);
+        orderTrackBiz.createOrderTrack(orderTrackDTO);
     }
 
     public void orderCancelUnpass(Integer id, String auditReason) {
@@ -78,7 +78,7 @@ public class OrderInfoBiz {
         OrderTrackDTO orderTrackDTO = new OrderTrackDTO();
         orderTrackDTO.setOrderid(id);
         orderTrackDTO.setOpreation(OrderOpreationTypeEnum.UNPASS);
-        orderTrackBiz.create(orderTrackDTO);
+        orderTrackBiz.createOrderTrack(orderTrackDTO);
     }
 
     public void userCancelOrder(OrderInfoDTO orderInfoDTO) {
@@ -91,7 +91,7 @@ public class OrderInfoBiz {
         orderTrackDTO.setOrderid(orderInfoDTO.getId());
         orderTrackDTO.setOpreation(OrderOpreationTypeEnum.CANCEL);
         orderTrackDTO.setMsg(sb.toString());
-        orderTrackBiz.create(orderTrackDTO);
+        orderTrackBiz.createOrderTrack(orderTrackDTO);
     }
 
     public BigDecimal customerNeedPayCash(Integer id) {
@@ -119,7 +119,7 @@ public class OrderInfoBiz {
         OrderTrackDTO orderTrackDTO = new OrderTrackDTO();
         orderTrackDTO.setOrderid(id);
         orderTrackDTO.setOpreation(OrderOpreationTypeEnum.COMPLETE);
-        orderTrackBiz.create(orderTrackDTO);
+        orderTrackBiz.createOrderTrack(orderTrackDTO);
     }
 
     public void userReservationOrder(UserReservationOrderDTO dto) {
@@ -130,13 +130,13 @@ public class OrderInfoBiz {
         sb.append(OrderTrackBiz.parseOrderTrackInfo("服务人员电话", oldOrderInfo.getWorkerMobile(), dto.getWorkerMobile()));
         sb.append(OrderTrackBiz.parseOrderTrackInfo("服务时间", oldOrderInfo.getRealServiceTime(), dto.getRealServiceTime()));
         sb.append(OrderTrackBiz.parseOrderTrackInfo("订单成本", oldOrderInfo.getCost(), dto.getCost()));
-        sb.append(OrderTrackBiz.parseOrderTrackInfo("订单备注", oldOrderInfo.getWorkerName(), dto.getWorkerName()));
+        sb.append(OrderTrackBiz.parseOrderTrackInfo("订单备注", oldOrderInfo.getComments(), dto.getComments()));
         OrderTrackDTO orderTrackDTO = new OrderTrackDTO();
         orderTrackDTO.setOrderid(orderId);
         orderTrackDTO.setOpreation(OrderOpreationTypeEnum.RESERVATION);
         orderTrackDTO.setMsg(sb.toString());
         orderInfoService.userReservationOrder(dto);
-        orderTrackBiz.create(orderTrackDTO);
+        orderTrackBiz.createOrderTrack(orderTrackDTO);
     }
 
     public OrderInfoDTO getById(Integer id) {
@@ -178,7 +178,7 @@ public class OrderInfoBiz {
         OrderTrackDTO orderTrackDTO = new OrderTrackDTO();
         orderTrackDTO.setOrderid(needPayResp.getOrderId());
         orderTrackDTO.setOpreation(OrderOpreationTypeEnum.CREATE);
-        orderTrackBiz.create(orderTrackDTO);
+        orderTrackBiz.createOrderTrack(orderTrackDTO);
         return needPayResp;
     }
 
@@ -187,7 +187,7 @@ public class OrderInfoBiz {
         OrderTrackDTO orderTrackDTO = new OrderTrackDTO();
         orderTrackDTO.setOrderid(appendOrderDTO.getOrderId());
         orderTrackDTO.setOpreation(OrderOpreationTypeEnum.APPEND);
-        orderTrackBiz.create(orderTrackDTO);
+        orderTrackBiz.createOrderTrack(orderTrackDTO);
     }
 
     public void prePaymentCheck(Integer id) {
@@ -202,13 +202,13 @@ public class OrderInfoBiz {
         sb.append(OrderTrackBiz.parseOrderTrackInfo("服务人员电话", oldOrderInfo.getWorkerMobile(), userReservationOrderDTO.getWorkerMobile()));
         sb.append(OrderTrackBiz.parseOrderTrackInfo("服务时间", oldOrderInfo.getRealServiceTime(), userReservationOrderDTO.getRealServiceTime()));
         sb.append(OrderTrackBiz.parseOrderTrackInfo("订单成本", oldOrderInfo.getCost(), userReservationOrderDTO.getCost()));
-        sb.append(OrderTrackBiz.parseOrderTrackInfo("订单备注", oldOrderInfo.getWorkerName(), userReservationOrderDTO.getWorkerName()));
+        sb.append(OrderTrackBiz.parseOrderTrackInfo("订单备注", oldOrderInfo.getComments(), userReservationOrderDTO.getComments()));
         OrderTrackDTO orderTrackDTO = new OrderTrackDTO();
         orderTrackDTO.setOrderid(orderId);
         orderTrackDTO.setOpreation(OrderOpreationTypeEnum.UPDATE);
         orderTrackDTO.setMsg(sb.toString());
         orderInfoService.userChangeReservationInfo(userReservationOrderDTO);
-        orderTrackBiz.create(orderTrackDTO);
+        orderTrackBiz.createOrderTrack(orderTrackDTO);
     }
 
     public NeedPayResp customerPlaceOrder(PlaceOrderDTO placeOrderDTO) {

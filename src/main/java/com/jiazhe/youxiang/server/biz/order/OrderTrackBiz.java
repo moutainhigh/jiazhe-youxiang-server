@@ -2,7 +2,9 @@ package com.jiazhe.youxiang.server.biz.order;
 
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderTrackDTO;
+import com.jiazhe.youxiang.server.dto.partnerorder.PartnerOrderTrackDTO;
 import com.jiazhe.youxiang.server.service.order.OrderTrackService;
+import com.jiazhe.youxiang.server.service.partnerorder.PartnerOrderTrackService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,13 +26,31 @@ import java.util.Objects;
 public class OrderTrackBiz {
     @Autowired
     private OrderTrackService orderTrackService;
+    @Autowired
+    private PartnerOrderTrackService partnerOrderTrackService;
 
-    public void create(OrderTrackDTO orderTrackDTO) {
+    public void createOrderTrack(OrderTrackDTO orderTrackDTO) {
         orderTrackService.create(orderTrackDTO);
+    }
+
+    public void createPartnerOrderTrack(PartnerOrderTrackDTO orderTrackDTO) {
+        partnerOrderTrackService.create(orderTrackDTO);
     }
 
     public String getOrderTrackInfo(Integer id) {
         List<OrderTrackDTO> list = orderTrackService.getList(id);
+        if (list == null || list.size() == 0)
+            return "";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            if (sb.length() > 0) sb.append("<br>");
+            sb.append(parseOrderTrackInfo(i + 1, list.get(i)));
+        }
+        return sb.toString();
+    }
+
+    public String getPartnerOrderTrackInfo(Integer id) {
+        List<PartnerOrderTrackDTO> list = partnerOrderTrackService.getList(id);
         if (list == null || list.size() == 0)
             return "";
         StringBuilder sb = new StringBuilder();
