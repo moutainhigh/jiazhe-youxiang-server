@@ -87,13 +87,18 @@ public class BOCDCBiz {
             giftNo = req.getGiftNo();
             validDate = Integer.valueOf(req.getValidDate());
             Date expiryDate = new Date(DateUtil.getLastSecond(System.currentTimeMillis() + CommonConstant.ONE_DAY * Integer.valueOf(validDate)));
-            PointExchangeCodeDTO dto = pointExchangeCodeService.queryStock(orderNo, giftNo, expiryDate);
+            //先不判断有效期
+            PointExchangeCodeDTO dto = pointExchangeCodeService.queryStock(orderNo, giftNo, null);
             if (dto == null) {
                 //说明售卖不成功
                 resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
                 resp.setBizDesc(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getMessage());
                 //TODO niexiao 删掉测试代码
                 resp.setBizDesc(JSONObject.toJSONString(req));
+            } else if (expiryDate.compareTo(dto.getExpiryTime()) == 1) {
+                //说明查询到的积分码过期时间不足
+                resp.setBizCode(BOCDCBizCodeEnum.MERCHANT_RETURNS_EXPIRY_DATE_ERROR.getCode());
+                resp.setBizDesc(BOCDCBizCodeEnum.MERCHANT_RETURNS_EXPIRY_DATE_ERROR.getMessage());
             } else {
                 resp.setBizCode(BOCDCBizCodeEnum.SUCCESS.getCode());
                 resp.setBizDesc(BOCDCBizCodeEnum.SUCCESS.getMessage());
