@@ -2085,6 +2085,66 @@ public class OrderInfoPOExample {
             addCriterion("mod_time not between", value1, value2, "modTime");
             return (Criteria) this;
         }
+
+        public Criteria andServiceProductIdIsNull() {
+            addCriterion("service_product_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceProductIdIsNotNull() {
+            addCriterion("service_product_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceProductIdEqualTo(Integer value) {
+            addCriterion("service_product_id =", value, "serviceProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceProductIdNotEqualTo(Integer value) {
+            addCriterion("service_product_id <>", value, "serviceProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceProductIdGreaterThan(Integer value) {
+            addCriterion("service_product_id >", value, "serviceProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceProductIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("service_product_id >=", value, "serviceProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceProductIdLessThan(Integer value) {
+            addCriterion("service_product_id <", value, "serviceProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceProductIdLessThanOrEqualTo(Integer value) {
+            addCriterion("service_product_id <=", value, "serviceProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceProductIdIn(List<Integer> values) {
+            addCriterion("service_product_id in", values, "serviceProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceProductIdNotIn(List<Integer> values) {
+            addCriterion("service_product_id not in", values, "serviceProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceProductIdBetween(Integer value1, Integer value2) {
+            addCriterion("service_product_id between", value1, value2, "serviceProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andServiceProductIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("service_product_id not between", value1, value2, "serviceProductId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

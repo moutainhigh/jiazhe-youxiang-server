@@ -1,9 +1,6 @@
 package com.jiazhe.youxiang.server.quartz;
 
-import com.jiazhe.youxiang.base.util.boccc.AutoCCancelResultUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoCouponUtils;
-import com.jiazhe.youxiang.base.util.boccc.AutoDailyPurchaseAnalysisUtils;
-import com.jiazhe.youxiang.base.util.boccc.AutoDailyRemainAnalysisUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoMerchantInfoUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoPicUtils;
 import com.jiazhe.youxiang.base.util.boccc.AutoProductInfoUtils;
@@ -110,14 +107,14 @@ public class BOCCCQuartz extends QuartzJobBean {
 //            logger.error("定时任务：前一日优惠券使用情况文件生成失败，异常信息：" + e.getMessage());
 //        }
 
-//        //定时上传指定文件夹的文件
-//        try {
-//            logger.info("定时任务：上传文件执行中");
-//            AutoSFTPUtils.upload();
-//            logger.info("定时任务：上传文件执行完成");
-//        } catch (Exception e) {
-//            logger.error("定时任务：上传文件执行失败，异常信息：" + e.getMessage());
-//        }
+        //定时上传指定文件夹的文件
+        try {
+            logger.info("定时任务：上传文件执行中");
+            AutoSFTPUtils.upload();
+            logger.info("定时任务：上传文件执行完成");
+        } catch (Exception e) {
+            logger.error("定时任务：上传文件执行失败，异常信息：" + e.getMessage());
+        }
 
 //        //定时分析前一日优惠券剩余数量
 //        try {

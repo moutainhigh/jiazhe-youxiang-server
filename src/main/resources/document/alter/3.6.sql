@@ -1,10 +1,23 @@
 /**
-3.6.1 第一批次上线
+3.6.1 第一批次上线  develop、test、master已执行
  */
 alter table audit_record modify column exchange_type INT(10) NOT NULL DEFAULT '1' COMMENT '兑换类型 1是直接充值，2是兑换积分卡，3是兑换商品，4是预购';
 
 /**
-积分转换体系
+
+3.6.2 第二批次上线 develop已经执行，test、master未执行
+ */
+alter table order_info modify column product_id INT(10) UNSIGNED NOT NULL COMMENT '扣分商品id';
+alter table order_info add column service_product_id INT(10) UNSIGNED NOT NULL COMMENT '服务商品id';
+update order_info set service_product_id = product_id;
+
+/**
+积分体系转换 兑换比例：develop已经执行，test、master未执行
+ */
+alter table project modify column point_conversion_rate DECIMAL(8 , 4) NOT NULL DEFAULT '0.00' COMMENT '积分兑换比例';
+
+/**
+积分转换体系 数据范围扩大：兑换比例：develop、test未执行，master未执行
  */
 alter TABLE recharge_card modify column face_value DECIMAL(20,4) NOT NULL DEFAULT '0.00' COMMENT '充值卡面值（最初的价值）';
 alter TABLE recharge_card modify column balance DECIMAL(20,4) NOT NULL DEFAULT '0.00' COMMENT '充值卡余额';
@@ -34,3 +47,33 @@ alter TABLE point_exchange_code modify column face_value DECIMAL(20,4) NOT NULL 
 alter TABLE material_info modify column transfer_amount DECIMAL(20,4) NOT NULL DEFAULT '0.00' COMMENT '转账金额';
 alter TABLE material_info modify column material_value DECIMAL(20,4) NOT NULL DEFAULT '0.00' COMMENT '物料价值';
 
+/**
+develop已经执行，test、master未执行
+ */
+DROP TABLE IF EXISTS `order_track`;
+CREATE TABLE `order_track` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `orderId` int(10) NOT NULL COMMENT '订单ID',
+  `opreation` int(10) NOT NULL DEFAULT '0' COMMENT '操作类型(0其他 1 创建 2 更新 3 取消 )',
+  `userName` varchar(255) NOT NULL DEFAULT '' COMMENT '用户姓名',
+  `msg` longtext NOT NULL COMMENT '描述信息',
+  `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
+  `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
+  `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB COMMENT='客户订单操作留痕表';
+
+DROP TABLE IF EXISTS `partner_order_track`;
+CREATE TABLE `partner_order_track` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `orderId` int(10) NOT NULL COMMENT '订单ID',
+  `opreation` int(10) NOT NULL DEFAULT '0' COMMENT '操作类型()',
+  `userName` varchar(255) NOT NULL DEFAULT '' COMMENT '用户姓名',
+  `msg` longtext NOT NULL COMMENT '描述信息',
+  `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
+  `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
+  `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB COMMENT='商家订单操作留痕表';

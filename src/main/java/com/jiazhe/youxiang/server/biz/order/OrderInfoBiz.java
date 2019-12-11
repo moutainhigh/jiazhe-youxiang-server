@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.base.util.WeChatPayUtils;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.WeChatPayConstant;
 import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.OrderOpreationTypeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.OrderException;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.*;
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -26,6 +28,7 @@ import java.util.*;
  * @date 2018/10/23.
  */
 @Service("orderInfoBiz")
+@Transactional
 public class OrderInfoBiz {
 
     private static String SUCCESS = "SUCCESS";
@@ -36,14 +39,16 @@ public class OrderInfoBiz {
     private OrderInfoService orderInfoService;
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private OrderTrackBiz orderTrackBiz;
 
     @Value("${wechat_public.appid}")
     private String APP_ID;
     @Value("${wechat_public.mchid}")
     private String MCH_ID;
 
-    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode,Paging paging) {
-        List<OrderInfoDTO> orderInfoDTOList = orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, realServiceStartTime, realServiceEndTime,customerCityCode, paging);
+    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode, Paging paging) {
+        List<OrderInfoDTO> orderInfoDTOList = orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, serviceProductId, realServiceStartTime, realServiceEndTime, customerCityCode, paging);
         orderInfoDTOList.stream().forEach(bean -> {
             //计算待支付金额放入订单信息中
             bean.setPayment(calculateOrderNeedPay(bean));
@@ -55,17 +60,38 @@ public class OrderInfoBiz {
         orderInfoService.customerCancelOrder(id);
     }
 
-    public void orderCancelPass(Integer id) {
-        orderInfoService.orderCancelPass(id);
+    public void orderCancelPass(OrderInfoDTO orderInfoDTO) {
+        Integer orderId = orderInfoDTO.getId();
+        OrderInfoDTO oldOrderInfo = orderInfoService.getById(orderId);
+        StringBuilder sb = new StringBuilder();
+        sb.append(OrderTrackBiz.parseOrderTrackInfo("订单成本", oldOrderInfo.getCost(), orderInfoDTO.getCost()));
+        orderInfoService.orderCancelPass(orderInfoDTO);
+        OrderTrackDTO orderTrackDTO = new OrderTrackDTO();
+        orderTrackDTO.setOrderid(orderInfoDTO.getId());
+        orderTrackDTO.setOpreation(OrderOpreationTypeEnum.PASS);
+        orderTrackDTO.setMsg(sb.toString());
+        orderTrackBiz.createOrderTrack(orderTrackDTO);
     }
 
     public void orderCancelUnpass(Integer id, String auditReason) {
         orderInfoService.orderCancelUnpass(id, auditReason);
+        OrderTrackDTO orderTrackDTO = new OrderTrackDTO();
+        orderTrackDTO.setOrderid(id);
+        orderTrackDTO.setOpreation(OrderOpreationTypeEnum.UNPASS);
+        orderTrackBiz.createOrderTrack(orderTrackDTO);
     }
 
-    public void userCancelOrder(Integer id) {
-        orderInfoService.userCancelOrder(id);
-
+    public void userCancelOrder(OrderInfoDTO orderInfoDTO) {
+        Integer orderId = orderInfoDTO.getId();
+        OrderInfoDTO oldOrderInfo = orderInfoService.getById(orderId);
+        StringBuilder sb = new StringBuilder();
+        sb.append(OrderTrackBiz.parseOrderTrackInfo("订单成本", oldOrderInfo.getCost(), orderInfoDTO.getCost()));
+        orderInfoService.userCancelOrder(orderInfoDTO);
+        OrderTrackDTO orderTrackDTO = new OrderTrackDTO();
+        orderTrackDTO.setOrderid(orderInfoDTO.getId());
+        orderTrackDTO.setOpreation(OrderOpreationTypeEnum.CANCEL);
+        orderTrackDTO.setMsg(sb.toString());
+        orderTrackBiz.createOrderTrack(orderTrackDTO);
     }
 
     public BigDecimal customerNeedPayCash(Integer id) {
@@ -90,10 +116,27 @@ public class OrderInfoBiz {
 
     public void userCompleteOrder(Integer id) {
         orderInfoService.userCompleteOrder(id);
+        OrderTrackDTO orderTrackDTO = new OrderTrackDTO();
+        orderTrackDTO.setOrderid(id);
+        orderTrackDTO.setOpreation(OrderOpreationTypeEnum.COMPLETE);
+        orderTrackBiz.createOrderTrack(orderTrackDTO);
     }
 
     public void userReservationOrder(UserReservationOrderDTO dto) {
+        Integer orderId = dto.getOrderId();
+        OrderInfoDTO oldOrderInfo = orderInfoService.getById(orderId);
+        StringBuilder sb = new StringBuilder();
+        sb.append(OrderTrackBiz.parseOrderTrackInfo("服务人员姓名", oldOrderInfo.getWorkerName(), dto.getWorkerName()));
+        sb.append(OrderTrackBiz.parseOrderTrackInfo("服务人员电话", oldOrderInfo.getWorkerMobile(), dto.getWorkerMobile()));
+        sb.append(OrderTrackBiz.parseOrderTrackInfo("服务时间", oldOrderInfo.getRealServiceTime(), dto.getRealServiceTime()));
+        sb.append(OrderTrackBiz.parseOrderTrackInfo("订单成本", oldOrderInfo.getCost(), dto.getCost()));
+        sb.append(OrderTrackBiz.parseOrderTrackInfo("订单备注", oldOrderInfo.getComments(), dto.getComments()));
+        OrderTrackDTO orderTrackDTO = new OrderTrackDTO();
+        orderTrackDTO.setOrderid(orderId);
+        orderTrackDTO.setOpreation(OrderOpreationTypeEnum.RESERVATION);
+        orderTrackDTO.setMsg(sb.toString());
         orderInfoService.userReservationOrder(dto);
+        orderTrackBiz.createOrderTrack(orderTrackDTO);
     }
 
     public OrderInfoDTO getById(Integer id) {
@@ -117,7 +160,7 @@ public class OrderInfoBiz {
         if (null == customerDTO) {
             throw new OrderException(OrderCodeEnum.CUSTOMER_NOT_EXIST);
         }
-        return getList(status, null, customerDTO.getMobile(), null, null, null, null, null, null, null,null, paging);
+        return getList(status, null, customerDTO.getMobile(), null, null, null, null, null, null, null, null, null, paging);
     }
 
     /**
@@ -131,11 +174,20 @@ public class OrderInfoBiz {
     }
 
     public NeedPayResp userPlaceOrder(PlaceOrderDTO placeOrderDTO) {
-        return orderInfoService.placeOrder(placeOrderDTO);
+        NeedPayResp needPayResp = orderInfoService.placeOrder(placeOrderDTO);
+        OrderTrackDTO orderTrackDTO = new OrderTrackDTO();
+        orderTrackDTO.setOrderid(needPayResp.getOrderId());
+        orderTrackDTO.setOpreation(OrderOpreationTypeEnum.CREATE);
+        orderTrackBiz.createOrderTrack(orderTrackDTO);
+        return needPayResp;
     }
 
     public void appendOrder(AppendOrderDTO appendOrderDTO) {
         orderInfoService.appendOrder(appendOrderDTO);
+        OrderTrackDTO orderTrackDTO = new OrderTrackDTO();
+        orderTrackDTO.setOrderid(appendOrderDTO.getOrderId());
+        orderTrackDTO.setOpreation(OrderOpreationTypeEnum.APPEND);
+        orderTrackBiz.createOrderTrack(orderTrackDTO);
     }
 
     public void prePaymentCheck(Integer id) {
@@ -143,7 +195,20 @@ public class OrderInfoBiz {
     }
 
     public void userChangeReservationInfo(UserReservationOrderDTO userReservationOrderDTO) {
+        Integer orderId = userReservationOrderDTO.getOrderId();
+        OrderInfoDTO oldOrderInfo = orderInfoService.getById(orderId);
+        StringBuilder sb = new StringBuilder();
+        sb.append(OrderTrackBiz.parseOrderTrackInfo("服务人员姓名", oldOrderInfo.getWorkerName(), userReservationOrderDTO.getWorkerName()));
+        sb.append(OrderTrackBiz.parseOrderTrackInfo("服务人员电话", oldOrderInfo.getWorkerMobile(), userReservationOrderDTO.getWorkerMobile()));
+        sb.append(OrderTrackBiz.parseOrderTrackInfo("服务时间", oldOrderInfo.getRealServiceTime(), userReservationOrderDTO.getRealServiceTime()));
+        sb.append(OrderTrackBiz.parseOrderTrackInfo("订单成本", oldOrderInfo.getCost(), userReservationOrderDTO.getCost()));
+        sb.append(OrderTrackBiz.parseOrderTrackInfo("订单备注", oldOrderInfo.getComments(), userReservationOrderDTO.getComments()));
+        OrderTrackDTO orderTrackDTO = new OrderTrackDTO();
+        orderTrackDTO.setOrderid(orderId);
+        orderTrackDTO.setOpreation(OrderOpreationTypeEnum.UPDATE);
+        orderTrackDTO.setMsg(sb.toString());
         orderInfoService.userChangeReservationInfo(userReservationOrderDTO);
+        orderTrackBiz.createOrderTrack(orderTrackDTO);
     }
 
     public NeedPayResp customerPlaceOrder(PlaceOrderDTO placeOrderDTO) {
@@ -169,8 +234,8 @@ public class OrderInfoBiz {
         orderInfoService.wxNotify(transactionId, orderNo, wxPay);
     }
 
-    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime,String customerCityCode) {
-        return orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, realServiceStartTime, realServiceEndTime,customerCityCode);
+    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode) {
+        return orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, serviceProductId, realServiceStartTime, realServiceEndTime, customerCityCode);
     }
 
     public TenpayQureyDTO checkTenPay(String orderCode) {

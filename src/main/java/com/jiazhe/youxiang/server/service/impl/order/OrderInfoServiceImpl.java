@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.service.impl.order;
 import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
+import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
@@ -87,14 +88,16 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     private EleProductCodeService eleProductCodeService;
 
     @Override
-    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode, Paging paging) {
-        Integer count = orderInfoPOManualMapper.count(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, realServiceStartTime, realServiceEndTime,customerCityCode);
-        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, realServiceStartTime, realServiceEndTime, customerCityCode,paging.getOffset(), paging.getLimit());
+    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId,Date realServiceStartTime, Date realServiceEndTime, String customerCityCode, Paging paging) {
+        Integer count = orderInfoPOManualMapper.count(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, serviceProductId,realServiceStartTime, realServiceEndTime,customerCityCode);
+        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, serviceProductId,realServiceStartTime, realServiceEndTime, customerCityCode,paging.getOffset(), paging.getLimit());
         List<OrderInfoDTO> orderInfoDTOList = orderInfoPOList.stream().map(OrderInfoAdapter::PO2DTO).collect(Collectors.toList());
         orderInfoDTOList.forEach(bean -> {
             ProductDTO productDTO = productService.getById(bean.getProductId());
+            ProductDTO serviceProductDTO = productService.getById(bean.getServiceProductId());
             CustomerDTO customerDTO = customerService.getById(bean.getCustomerId());
             bean.setProductDTO(productDTO);
+            bean.setServiceProductDTO(serviceProductDTO);
             bean.setCustomerDTO(customerDTO);
         });
         paging.setTotal(count);
@@ -107,8 +110,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         OrderInfoDTO dto = OrderInfoAdapter.PO2DTO(po);
         CustomerDTO customerDTO = customerService.getById(dto.getCustomerId());
         ProductDTO productDTO = productService.getById(dto.getProductId());
+        ProductDTO serviceProductDTO = productService.getById(dto.getServiceProductId());
         dto.setCustomerDTO(customerDTO);
         dto.setProductDTO(productDTO);
+        dto.setServiceProductDTO(serviceProductDTO);
         return dto;
     }
 
@@ -179,13 +184,14 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void orderCancelPass(Integer id) {
-        OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
+    public void orderCancelPass(OrderInfoDTO orderInfoDTO) {
+        OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(orderInfoDTO.getId());
         //订单为取消待审核状态，才能审核
         if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_CANCELWATINGCHECK)) {
             orderInfoPO.setStatus(CommonConstant.ORDER_CANCEL);
+            orderInfoPO.setCost(orderInfoDTO.getCost());
             //退款功能共用，提出公共方法
-            orderRefund(id);
+            orderRefund(orderInfoDTO.getId());
         } else {
             throw new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CHECK);
         }
@@ -208,15 +214,16 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void userCancelOrder(Integer id) {
-        OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
+    public void userCancelOrder(OrderInfoDTO orderInfoDTO) {
+        OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(orderInfoDTO.getId());
         //订单不是已完成状态，才能取消
         if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_COMPLETE)) {
             throw new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CANCEL);
         } else {
+            orderInfoPO.setCost(orderInfoDTO.getCost());
             orderInfoPO.setStatus(CommonConstant.ORDER_CANCEL);
             //退款功能共用，提出公共方法
-            orderRefund(id);
+            orderRefund(orderInfoDTO.getId());
         }
         orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
     }
@@ -354,7 +361,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
                     //支付积分数量
                     BigDecimal thisPointPay;
-                    BigDecimal conversionRate = new BigDecimal(bean.getProjectDTO().getPointConversionRate());
+                    BigDecimal conversionRate = bean.getProjectDTO().getPointConversionRate();
                     if (needPay[0].compareTo(bean.getBalance().multiply(conversionRate)) == 1) {
                         thisPointPay = bean.getBalance();
                     } else {
@@ -573,7 +580,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
                     //支付积分数量
                     BigDecimal thisPointPay;
-                    BigDecimal conversionRate = new BigDecimal(bean.getProjectDTO().getPointConversionRate());
+                    BigDecimal conversionRate = bean.getProjectDTO().getPointConversionRate();
                     if (needPay[0].compareTo(bean.getBalance().multiply(conversionRate)) == 1) {
                         thisPointPay = bean.getBalance();
                     } else {
@@ -656,6 +663,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPO.setOrderCode(orderCode);
         orderInfoPO.setCustomerId(dto.getCustomerId());
         orderInfoPO.setProductId(dto.getProductId());
+        orderInfoPO.setServiceProductId(dto.getServiceProductId());
         orderInfoPO.setCustomerCityCode(dto.getCustomerCityCode());
         orderInfoPO.setCustomerCityName(productPriceDTO.getCityName());
         orderInfoPO.setProductPrice(productPriceDTO.getPrice());
@@ -776,13 +784,15 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Date realServiceStartTime, Date realServiceEndTime,String customerCityCode) {
-        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, realServiceStartTime, realServiceEndTime, customerCityCode,null, null);
+    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId,Date realServiceStartTime, Date realServiceEndTime,String customerCityCode) {
+        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, serviceProductId,realServiceStartTime, realServiceEndTime, customerCityCode,null, null);
         List<OrderInfoDTO> orderInfoDTOList = orderInfoPOList.stream().map(OrderInfoAdapter::PO2DTO).collect(Collectors.toList());
         orderInfoDTOList.forEach(bean -> {
             ProductDTO productDTO = productService.getById(bean.getProductId());
+            ProductDTO serviceProductDTO = productService.getById(bean.getServiceProductId());
             CustomerDTO customerDTO = customerService.getById(bean.getCustomerId());
             bean.setProductDTO(productDTO);
+            bean.setServiceProductDTO(serviceProductDTO);
             bean.setCustomerDTO(customerDTO);
         });
         return orderInfoDTOList;

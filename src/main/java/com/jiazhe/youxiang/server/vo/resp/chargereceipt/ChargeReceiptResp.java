@@ -31,6 +31,11 @@ public class ChargeReceiptResp extends BaseVO {
 
     private String imgUrl;
 
+    /**
+     * 兑换者的手机
+     */
+    private String exchangeMobile;
+
     private String extInfo;
 
     private Byte isDeleted;
@@ -111,6 +116,22 @@ public class ChargeReceiptResp extends BaseVO {
         this.inputerName = inputerName;
     }
 
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public String getExchangeMobile() {
+        return exchangeMobile;
+    }
+
+    public void setExchangeMobile(String exchangeMobile) {
+        this.exchangeMobile = exchangeMobile;
+    }
+
     public String getExtInfo() {
         return extInfo;
     }
@@ -141,13 +162,5 @@ public class ChargeReceiptResp extends BaseVO {
 
     public void setModTime(Long modTime) {
         this.modTime = modTime;
-    }
-
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
     }
 }

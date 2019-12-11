@@ -389,7 +389,9 @@
             colNames: ['', '小票积分', '客户姓名', 'POS机编号', '银行卡后四位', '交易时间', '录入人', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
-                {name: 'exchangePoint', index: 'exchangePoint', width: 40, sortable: false},
+                {name: 'exchangePoint', index: 'exchangePoint', width: 40, sortable: false,formatter:function(cellvalue,options,rowObject){
+                    return formatNumberWithComma(rowObject.exchangePoint);
+                }},
                 {name: 'customerName', index: 'submitterName', width: 40, sortable: false},
                 {name: 'posCode', index: 'posCode', width: 100, sortable: false},
                 {name: 'cardNo', index: 'cardNo', width: 40, sortable: false},

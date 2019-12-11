@@ -10,6 +10,7 @@
     <link rel="stylesheet" th:href="@{/static/init.css}"/>
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
+    <script th:src="@{/static/clipboard.js}"></script>
 
     <style>
         .ui-jqgrid .ui-jqgrid-bdiv {
@@ -29,6 +30,9 @@
 </head>
 
 <body class="no-skin">
+<div style="display: none">
+    <button id="clipboard-btn" data-clipboard-text=""></button>
+</div>
 <div class="main-container ace-save-state" id="main-container">
     <div class="main-content">
         <div class="main-content-inner">
@@ -125,9 +129,9 @@
                                     </div>
                                 </div>
 
-                                <label class="col-sm-1 control-label no-padding-right">商品：</label>
+                                <label class="col-sm-1 control-label no-padding-right">服务商品：</label>
                                 <div class="col-sm-2">
-                                    <select id="product" name="productId"
+                                    <select id="serviceProduct" name="serviceProductId"
                                             class="chosen-select form-control">
                                         <option value="0">所有</option>
                                     </select>
@@ -171,6 +175,16 @@
                                     </select>
                                 </div>
 
+                                <label class="col-sm-1 control-label no-padding-right">扣分商品：</label>
+                                <div class="col-sm-2">
+                                    <select id="product" name="productId"
+                                            class="chosen-select form-control">
+                                        <option value="0">所有</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+                            <div class="form-group">
                                 <div class="col-sm-3">
                                     <shiro:hasPermission name="orderSearch">
                                         <button class="btn btn-white btn-default btn-round btn-sm"
@@ -204,7 +218,8 @@
                     </div><!-- /.col -->
 
                     <!--预约、修改预约信息模态框-->
-                    <div id="orderReservationModal" class="modal fade" tabindex="-1" style="overflow: scroll" aria-hidden="true" data-backdrop="static">
+                    <div id="orderReservationModal" class="modal fade" tabindex="-1" style="overflow: scroll"
+                         aria-hidden="true" data-backdrop="static">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -243,7 +258,19 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">商品名：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">服务商品：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="re_serviceProductName"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">扣分商品：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
                                                             <input id="re_productName"
@@ -390,6 +417,16 @@
                                                         </div>
                                                     </div>
                                                 </shiro:hasPermission>
+                                                <div class="order_track space-2"></div>
+                                                <div class="order_track form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">操作记录：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <div id="re_order_track" disabled class="form-control"
+                                                                 style="resize:none;"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
@@ -418,7 +455,8 @@
                     </div>
 
                     <!--追加订单模态框-->
-                    <div id="appendOrderModal" class="modal fade" tabindex="-1" style="overflow: scroll" aria-hidden="true" data-backdrop="static">
+                    <div id="appendOrderModal" class="modal fade" tabindex="-1" style="overflow: scroll"
+                         aria-hidden="true" data-backdrop="static">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -463,7 +501,19 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-3 control-label no-padding-right">商品名：</label>
+                                                    <label class="col-sm-3 control-label no-padding-right">服务商品：</label>
+                                                    <div class="col-sm-9">
+                                                        <div class="pos-rel">
+                                                            <input id="app_serviceProductName"
+                                                                   class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label no-padding-right">扣分商品：</label>
                                                     <div class="col-sm-9">
                                                         <div class="pos-rel">
                                                             <input id="app_productName"
@@ -583,7 +633,7 @@
                                                     <label class="col-sm-3 control-label no-padding-right">追加数量：</label>
                                                     <div class="col-sm-9">
                                                         <div class="pos-rel">
-                                                            <input type="text" name="count" id="appendCount" readonly/>
+                                                            <input type="text" name="count" id="appendCount"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -672,7 +722,7 @@
         });
 
         $("#appendCount").ace_spinner({
-            value: 1, min: 1, max: 100, step: 1, on_sides: true, icon_up: 'ace-icon fa fa-plus',
+            value: 1, min: 1, max: 1000, step: 1, on_sides: true, icon_up: 'ace-icon fa fa-plus',
             icon_down: 'ace-icon fa fa-minus', btn_up_class: 'btn-success', btn_down_class: 'btn-danger'
         }).closest('.ace-spinner')
             .on('changed.fu.spinbox', function () {
@@ -697,8 +747,7 @@
             postData: transformToJson($('#orderInfoSearchForm').serializeArray()),
             shrinkToFit: false,
             autoScroll: true,
-            colNames: ['', '操作', '状态', '商品名称', '单价', '数量', '下单时间', '服务时间', '下单账号', '服务对象电话', '服务对象姓名', '成本', '积分支付金额', '代金券抵扣金额', '充值卡支付金额', '在线支付金额', '订单号', '待支付', '订单来源'],
-//            colNames: ['', '操作', '状态', '商品名称', '单价', '数量', '下单时间','预约时间','服务时间','下单账号', '服务对象电话', '服务对象姓名','成本',  '积分支付金额','代金券抵扣金额', '充值卡支付金额', '在线支付金额','订单号','待支付'],
+            colNames: ['', '操作', '状态', '服务商品', '扣分商品', '单价', '数量', '下单时间', '服务时间', '下单账号', '服务对象电话', '服务对象姓名', '成本', '积分支付金额', '代金券抵扣金额', '充值卡支付金额', '在线支付金额', '订单号', '待支付', '订单来源'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: '_action', index: '_action', width: 180, sortable: false, formatter: customFormatter},
@@ -711,22 +760,36 @@
                         return orderStatus[rowObject.status - 1];
                     }
                 },
-                {name: 'productResp.name', index: 'productResp.name', width: 150, sortable: false},
-                {name: 'productPrice', index: 'productPrice', width: 50, sortable: false},
+                {name: 'serviceProductResp.name', index: 'productResp.name', width: 100, sortable: false},
+                {name: 'productResp.name', index: 'productResp.name', width: 100, sortable: false},
+                {name: 'productPrice', index: 'productPrice', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.productPrice);
+                }},
                 {name: 'count', index: 'count', width: 50, sortable: false},
                 {name: 'orderTime', index: 'orderTime', width: 130, sortable: false, formatter: timeFormat},
-//                {name: 'serviceTime', index: 'serviceTime', width: 130,sortable: false,formatter:timeFormat},
                 {name: 'realServiceTime', index: 'realServiceTime', width: 130, sortable: false, formatter: timeFormat},
                 {name: 'customerResp.mobile', index: 'customerResp.mobile', width: 100, sortable: false},
                 {name: 'customerMobile', index: 'customerMobile', width: 100, sortable: false},
                 {name: 'customerName', index: 'customerName', width: 100, sortable: false},
-                {name: 'cost', index: 'cost', width: 50, sortable: false},
-                {name: 'payPoint', index: 'payPoint', width: 100, sortable: false},
-                {name: 'payVoucher', index: 'payVoucher', width: 100, sortable: false},
-                {name: 'payRechargeCard', index: 'payRechargeCard', width: 100, sortable: false},
-                {name: 'payCash', index: 'payCash', width: 100, sortable: false},
+                {name: 'cost', index: 'cost', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.cost);
+                }},
+                {name: 'payPoint', index: 'payPoint', width: 100, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.payPoint);
+                }},
+                {name: 'payVoucher', index: 'payVoucher', width: 100, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.payVoucher);
+                }},
+                {name: 'payRechargeCard', index: 'payRechargeCard', width: 100, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.payRechargeCard);
+                }},
+                {name: 'payCash', index: 'payCash', width: 100, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.payCash);
+                }},
                 {name: 'orderCode', index: 'orderCode', width: 120, sortable: false},
-                {name: 'payment', index: 'payment', width: 60, sortable: false},
+                {name: 'payment', index: 'payment', width: 60, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.payment);
+                }},
                 {
                     name: 'type',
                     index: 'type',
@@ -757,6 +820,21 @@
         };
 
         initTable(grid_selector, pager_selector, tableOption);
+
+        //初始化复制信息的组件
+        var clipboard;
+        if (ClipboardJS)
+            clipboard = new ClipboardJS('#clipboard-btn');
+        if (clipboard) {
+            //优雅降级:safari 版本号>=10,提示复制成功;否则提示需在文字选中后，手动选择“拷贝”进行复制
+            clipboard.on('success', function (e) {
+                alert('复制成功!')
+                e.clearSelection();
+            });
+            clipboard.on('error', function (e) {
+                alert('请选择“拷贝”进行复制!')
+            });
+        }
     });
 
     function search() {
@@ -772,7 +850,7 @@
         str += getFunctionButton("btn-success", "showOrder(" + rowObject.id + ")", "查看");
         if (rowObject.status == 1) {
             if (permission.indexOf("orderCancel") != -1) {
-                str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
+                str += getFunctionButton("btn-danger", "userCancelOrder(" + JSON.stringify(rowObject) + ")", "取消订单");
             }
             if (permission.indexOf("orderTenpayCheck")) {
                 str += getFunctionButton("btn-primary", "checkTenpay(" + rowObject.orderCode + ")", "微信支付检查");
@@ -780,7 +858,7 @@
         }
         if (rowObject.status == 2) {
             if (permission.indexOf("orderCancel") != -1) {
-                str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
+                str += getFunctionButton("btn-danger", "userCancelOrder(" + JSON.stringify(rowObject) + ")", "取消订单");
             }
             if (permission.indexOf("orderReservation") != -1) {
                 str += getFunctionButton("btn-primary", "userReservationOrder(" + rowObject.id + ")", "预约");
@@ -797,12 +875,12 @@
                 str += getFunctionButton("btn-primary", "showAppendOrder(" + rowObject.id + ")", "追加订单");
             }
             if (permission.indexOf("orderCancel") != -1) {
-                str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
+                str += getFunctionButton("btn-danger", "userCancelOrder(" + JSON.stringify(rowObject) + ")", "取消订单");
             }
         }
         if (rowObject.status == 5) {
             if (permission.indexOf("orderCheck") != -1) {
-                str += getFunctionButton("btn-primary", "orderCancelPass(" + rowObject.id + ")", "审核通过");
+                str += getFunctionButton("btn-primary", "orderCancelPass(" + JSON.stringify(rowObject) + ")", "审核通过");
                 str += getFunctionButton("btn-danger", "orderCancelUnpass(" + rowObject.id + ")", "审核不通过");
             }
             if (permission.indexOf("orderComplete") != -1) {
@@ -811,13 +889,44 @@
         }
         if (rowObject.status == 6) {
             if (permission.indexOf("orderCancel") != -1) {
-                str += getFunctionButton("btn-danger", "userCancelOrder(" + rowObject.id + ")", "取消订单");
+                str += getFunctionButton("btn-danger", "userCancelOrder(" + JSON.stringify(rowObject) + ")", "取消订单");
             }
             if (permission.indexOf("orderComplete") != -1) {
                 str += getFunctionButton("btn-success", "userCompleteOrder(" + rowObject.id + "," + rowObject.cost + ")", "完成订单");
             }
         }
+
+        str += getFunctionButton("btn-primary", "copyOrderInfo(" + JSON.stringify(rowObject) + ")", "复制信息");
+
         return str;
+    }
+
+    function copyOrderInfo(rowData) {
+        var text = "";
+        if (rowData.customerAddress) {
+            text += rowData.customerAddress + "\r\n";
+        }
+        if (rowData.customerName) {
+            text += rowData.customerName + " ";
+        }
+        if (rowData.customerMobile) {
+            text += rowData.customerMobile + "\r\n";
+        }
+        if (rowData.productResp.name) {
+            text += rowData.productResp.name + "\r\n";
+        }
+        if (rowData.realServiceTime) {
+            text += timeFormat(rowData.realServiceTime) + "\r\n";
+        }
+        if (rowData.comments) {
+            text += "备注：" + rowData.comments;
+        }
+        if (text) {
+            $("#clipboard-btn").attr("data-clipboard-text", text);
+            $("#clipboard-btn").click();
+        } else {
+            alert("复制内容为空");
+        }
     }
 
     //微信支付检查，如果支付成功，则改变订单的状态并返回交易流水号
@@ -873,6 +982,7 @@
                     $("#app_orderCode").val(result.orderCode);
                     $("#app_orderTime").val(timeFormat(result.orderTime));
                     $("#app_productName").val(result.productResp.name);
+                    $("#app_serviceProductName").val(result.serviceProductResp.name);
                     $("#app_productPrice").val(result.productPrice);
                     $("#app_count").val(result.count);
                     $("#app_customerName").val(result.customerName);
@@ -1155,6 +1265,7 @@
                     $("#re_orderCode").val(result.orderCode);
                     $("#re_orderTime").val(timeFormat(result.orderTime));
                     $("#re_productName").val(result.productResp.name);
+                    $("#re_serviceProductName").val(result.serviceProductResp.name);
                     $("#re_count").val(result.count);
                     $("#re_customerName").val(result.customerName);
                     $("#re_customerMobile").val(result.customerMobile);
@@ -1167,11 +1278,22 @@
                     $("#re_workerName").val(result.workerName);
                     $("#re_cost").val(result.cost);
                     $("#re_comments").val(result.comments);
+                    parseOrderTrackInfo(result.orderTrackInfo);
                     $("#orderReservationModal").modal("show");
                 }
             },
             error: error
         });
+    }
+
+    function parseOrderTrackInfo(info) {
+        if (info) {
+            $(".order_track").show();
+            $("#re_order_track").html($("<div>" + info + "</div>"));
+        } else {
+            $(".order_track").hide();
+            $("#re_order_track").html("");
+        }
     }
 
     function showOrder(id) {
@@ -1252,28 +1374,39 @@
         });
     }
 
-    function userCancelOrder(id) {
-        confirm("确定要取消该订单吗？", function (result) {
-            if (result) {
-                $.ajax({
-                    url: "/api/orderinfo/usercancelorder",
-                    dataType: "json",
-                    async: false,
-                    data: {
-                        id: id
-                    },
-                    type: "POST",
-                    success: function (data) {
-                        if ('error' in data) {
-                            bootboxalert(data.error.message);
-                        } else {
-                            bootboxalert("取消成功");
-                            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                        }
-                    },
-                    error: error
+    function userCancelOrder(row) {
+        prompt("请输入取消订单的成本", row.cost, function (cost) {
+            if (isNumber(cost)) {
+                confirm("确定要取消该订单吗？", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/orderinfo/usercancelorder",
+                            dataType: "json",
+                            async: false,
+                            data: {
+                                orderId: row.id, cost: cost
+                            },
+                            type: "POST",
+                            success: function (data) {
+                                if ('error' in data) {
+                                    bootboxalert(data.error.message);
+                                } else {
+                                    bootboxalert("取消成功");
+                                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                                }
+                            },
+                            error: error
+                        });
+                    }
                 });
+            } else if (cost !== null) {
+                if (cost === "") {
+                    alert("输入成本不能为空");
+                } else {
+                    alert("输入成本不符合规范");
+                }
             }
+            return cost;
         });
     }
 
@@ -1302,26 +1435,30 @@
         });
     }
 
-    function orderCancelPass(id) {
-        confirm("确定通过审核该订单的取消？", function (result) {
-            if (result) {
-                $.ajax({
-                    url: "/api/orderinfo/ordercancelpass",
-                    dataType: "json",
-                    async: false,
-                    data: {
-                        id: id
-                    },
-                    type: "POST",
-                    success: function (data) {
-                        if ('error' in data) {
-                            bootboxalert(data.error.message);
-                        } else {
-                            bootboxalert("成功取消该订单");
-                            jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                        }
-                    },
-                    error: error
+    function orderCancelPass(row) {
+        prompt("请输入取消订单的成本", row.cost, function (cost) {
+            if (isNumber(cost)) {
+                confirm("确定通过审核该订单的取消？", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/orderinfo/ordercancelpass",
+                            dataType: "json",
+                            async: false,
+                            data: {
+                                orderId: row.id, cost: cost
+                            },
+                            type: "POST",
+                            success: function (data) {
+                                if ('error' in data) {
+                                    bootboxalert(data.error.message);
+                                } else {
+                                    bootboxalert("成功取消该订单");
+                                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                                }
+                            },
+                            error: error
+                        });
+                    }
                 });
             }
         });
@@ -1370,9 +1507,11 @@
                     var result = data.data;
                     for (var i = 0; i < result.length; i++) {
                         $("#product").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                        $("#serviceProduct").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
                     }
                 }
                 initSearchSelect("product");
+                initSearchSelect("serviceProduct");
             },
             error: function () {
                 bootboxalert("服务器异常，请联系管理员");
@@ -1392,7 +1531,7 @@
                 } else {
                     var result = data.data;
                     for (var i = 0; i < result.length; i++) {
-                        if(result[i].cityLevel == 2){//目前下单全为二级城市
+                        if (result[i].cityLevel == 2) {//目前下单全为二级城市
                             $("#city").append("<option value=" + result[i].cityCode + ">" + result[i].cityName + "</option>");
                         }
                     }

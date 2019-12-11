@@ -51,6 +51,7 @@ public class OrderInfoAdapter {
         orderInfoResp.setAuditReason(dto.getAuditReason());
         orderInfoResp.setExtInfo(dto.getExtInfo());
         orderInfoResp.setProductResp(ProductAdapter.productDTO2VO(dto.getProductDTO()));
+        orderInfoResp.setServiceProductResp(ProductAdapter.productDTO2VO(dto.getServiceProductDTO()));
         orderInfoResp.setCustomerResp(CustomerAdapter.customerDTO2VO(dto.getCustomerDTO()));
         return orderInfoResp;
     }
@@ -64,6 +65,7 @@ public class OrderInfoAdapter {
         orderInfoDTO.setOrderCode(orderInfoPO.getOrderCode());
         orderInfoDTO.setCustomerId(orderInfoPO.getCustomerId());
         orderInfoDTO.setProductId(orderInfoPO.getProductId());
+        orderInfoDTO.setServiceProductId(orderInfoPO.getServiceProductId());
         orderInfoDTO.setCustomerCityCode(orderInfoPO.getCustomerCityCode());
         orderInfoDTO.setCustomerCityName(orderInfoPO.getCustomerCityName());
         orderInfoDTO.setProductPrice(orderInfoPO.getProductPrice());
@@ -98,6 +100,7 @@ public class OrderInfoAdapter {
         PlaceOrderDTO placeOrderDTO = new PlaceOrderDTO();
         placeOrderDTO.setCustomerId(req.getCustomerId());
         placeOrderDTO.setProductId(req.getProductId());
+        placeOrderDTO.setServiceProductId(req.getServiceProductId());
         placeOrderDTO.setCustomerCityCode(req.getCustomerCityCode());
         placeOrderDTO.setCount(req.getCount());
         placeOrderDTO.setCustomerAddress(req.getCustomerAddress());

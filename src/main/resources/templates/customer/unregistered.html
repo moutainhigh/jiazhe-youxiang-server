@@ -215,7 +215,9 @@
                         return dateFormat(rowObject.tradeTime);
                     }
                 },
-                {name: 'exchangePoint', index: 'exchangePoint', sortable: false},
+                {name: 'exchangePoint', index: 'exchangePoint', sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.exchangePoint)
+                }},
 //                {name: 'posCode', index: 'posCode', width: 100, sortable: false},
 //                {name: 'inputerName', index: 'inputerName', sortable: false, width: 40},
                 {name: '_action', index: '_action', sortable: false, formatter: customFormatter}

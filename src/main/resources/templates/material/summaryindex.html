@@ -127,7 +127,7 @@
                                     <button type="button" class="close" data-dismiss="alert">
                                         <i class="ace-icon fa fa-times"></i>
                                     </button>
-                                    消耗实物价值自2019-05-27 00:00:00起开始统计
+                                    消耗实物价值自2019-12-01 00:00:00起开始统计
                                 </div>
                             </div>
                             <div class="col-xs-12">
@@ -287,16 +287,25 @@
         var tableOption = {
             url: "/api/material/listsummarypage",
             postData: transformToJson($('#materialInfoSearchForm').serializeArray()),
-            colNames: ['', '收款人', '收款总额', '采购实物价值', '消耗实物价值', '剩余实物价值','操作'],
+            colNames: ['', '收款人', '收款总额', '采购实物价值', '消耗实物价值(已审核)','消耗实物价值(待审核)', '剩余实物价值','操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
-                {name: 'payeeName', index: 'payeeName', width: 70, sortable: false},
-                {name: 'receiveTotal', index: 'receiveTotal', width: 50, sortable: false},
-                {name: 'productValueTotal', index: 'productValueTotal', width: 50, sortable: false},
-                {name: 'usedProductValueTotal', index: 'usedProductValueTotal', width: 50, sortable: false},
+                {name: 'payeeName', index: 'payeeName', width: 40, sortable: false},
+                {name: 'receiveTotal', index: 'receiveTotal', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.receiveTotal);
+                }},
+                {name: 'productValueTotal', index: 'productValueTotal', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.productValueTotal);
+                }},
+                {name: 'usedProductValueTotal', index: 'usedProductValueTotal', width: 70, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.usedProductValueTotal);
+                }},
+                {name: 'uncheckProductValueTotal', index: 'uncheckProductValueTotal', width: 70, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.uncheckProductValueTotal);
+                }},
                 {name: 'leftProductValueTotal', index: 'leftProductValueTotal', width: 50, sortable: false,formatter:function(cellvalue, options, rowObject){
                     var color = rowObject.leftProductValueTotal < 0 ? "FF0000" : "000000"
-                    return generateSpan(rowObject.leftProductValueTotal,color);
+                    return generateSpan(formatNumberWithComma(rowObject.leftProductValueTotal),color);
                 }},
                 {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter}
             ],
@@ -342,7 +351,7 @@
             str += getRedirectButton("btn-primary", "../material/index?payeeId=" + rowObject.id + "&&payerIds=" + $("#payerIdsHidden").val(), "转账明细");
         }
         if (permission.indexOf("materialUsedDetail") != -1) {
-            str += getRedirectButton("btn-primary", "../auditrecord/index?submitterName=" + rowObject.payeeName + "&&status=4&&exchangeType=3&&submitStartTime=1558886400000", "消耗明细");
+            str += getRedirectButton("btn-primary", "../auditrecord/index?submitterName=" + rowObject.payeeName + "&&status=4&&exchangeType=34&&submitStartTime=1575129600000", "消耗明细");
         }
         return str;
     }
@@ -364,10 +373,10 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    $("#receiveTotal").html(result.receiveTotal);
-                    $("#productValueTotal").html(result.productValueTotal);
-                    $("#usedProductValueTotal").html(result.usedProductValueTotal);
-                    $("#leftProductValueTotal").html(result.leftProductValueTotal);
+                    $("#receiveTotal").html(formatNumberWithComma(result.receiveTotal));
+                    $("#productValueTotal").html(formatNumberWithComma(result.productValueTotal));
+                    $("#usedProductValueTotal").html(formatNumberWithComma(result.usedProductValueTotal));
+                    $("#leftProductValueTotal").html(formatNumberWithComma(result.leftProductValueTotal));
                     showAlertInfo();
                 }
             },

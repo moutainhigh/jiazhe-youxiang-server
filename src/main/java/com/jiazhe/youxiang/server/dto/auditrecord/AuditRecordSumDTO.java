@@ -16,11 +16,24 @@ public class AuditRecordSumDTO extends BaseObject {
      */
     private BigDecimal exchangePointSum;
 
+    /**
+     * 商品价值之和
+     */
+    private BigDecimal productValueSum;
+
     public BigDecimal getExchangePointSum() {
         return exchangePointSum;
     }
 
     public void setExchangePointSum(BigDecimal exchangePointSum) {
         this.exchangePointSum = exchangePointSum;
+    }
+
+    public BigDecimal getProductValueSum() {
+        return productValueSum;
+    }
+
+    public void setProductValueSum(BigDecimal productValueSum) {
+        this.productValueSum = productValueSum;
     }
 }

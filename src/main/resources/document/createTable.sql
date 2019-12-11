@@ -278,7 +278,7 @@ CREATE TABLE `project` (
     `name` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '项目名称',
     `description` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '项目描述信息',
     `priority` INT(10) NOT NULL DEFAULT '0' COMMENT '排序序号',
-    `point_conversion_rate` INT(10) UNSIGNED NOT NULL DEFAULT '5' COMMENT '积分兑换比例',
+    `point_conversion_rate` DECIMAL(8 , 4) NOT NULL DEFAULT '0.00' COMMENT '积分兑换比例',
     `status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '状态：0:未启动，1：进行中，2：已结束',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
@@ -399,7 +399,8 @@ CREATE TABLE `order_info` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
     `order_code` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '订单编号',
     `customer_id` INT(10) UNSIGNED NOT NULL COMMENT '客户id',
-    `product_id` INT(10) UNSIGNED NOT NULL COMMENT '商品id',
+    `product_id` INT(10) UNSIGNED NOT NULL COMMENT '扣分商品id',
+    `service_product_id` INT(10) UNSIGNED NOT NULL COMMENT '服务商品id',
     `customer_city_code` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '客户下单的城市code',
     `customer_city_name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '客户下单的城市名称',
     `product_price` DECIMAL(20,4) NOT NULL DEFAULT '0.00' COMMENT '商品单价',
@@ -759,4 +760,30 @@ CREATE TABLE `material_info` (
     PRIMARY KEY (`id`)
 )  ENGINE=INNODB COMMENT='物料信息';
 
+DROP TABLE IF EXISTS `order_track`;
+CREATE TABLE `order_track` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `orderId` int(10) NOT NULL COMMENT '订单ID',
+  `opreation` int(10) NOT NULL DEFAULT '0' COMMENT '操作类型(0其他 1 创建 2 更新 3 取消 )',
+  `userName` varchar(255) NOT NULL DEFAULT '' COMMENT '用户姓名',
+  `msg` longtext NOT NULL COMMENT '描述信息',
+  `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
+  `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
+  `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB COMMENT='客户订单操作留痕表';
 
+DROP TABLE IF EXISTS `partner_order_track`;
+CREATE TABLE `partner_order_track` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `orderId` int(10) NOT NULL COMMENT '订单ID',
+  `opreation` int(10) NOT NULL DEFAULT '0' COMMENT '操作类型()',
+  `userName` varchar(255) NOT NULL DEFAULT '' COMMENT '用户姓名',
+  `msg` longtext NOT NULL COMMENT '描述信息',
+  `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
+  `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
+  `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB COMMENT='商家订单操作留痕表';

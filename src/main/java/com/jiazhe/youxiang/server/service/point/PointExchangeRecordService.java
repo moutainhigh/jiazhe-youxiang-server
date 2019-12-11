@@ -35,4 +35,11 @@ public interface PointExchangeRecordService {
      * @return
      */
     boolean hasCharged(String purchaseOrderStr);
+
+    /**
+     * 根据小票信息查询兑换记录
+     * @param receiptInfos
+     * @return
+     */
+    List<PointExchangeRecordDTO> findByExtInfos(List<String> receiptInfos);
 }
