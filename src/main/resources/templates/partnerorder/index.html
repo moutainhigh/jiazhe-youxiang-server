@@ -601,7 +601,16 @@
                                     </div>
                                 </div>
                                 <div class="space-2"></div>
-
+                                <div class="order_track space-2"></div>
+                                <div class="order_track form-group">
+                                    <label class="col-sm-4 control-label no-padding-right">操作记录：</label>
+                                    <div class="col-sm-8">
+                                        <div class="pos-rel">
+                                            <div id="re_order_track" disabled class="form-control"
+                                                 style="resize:none;"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -925,6 +934,7 @@
         $("#partnerOrderForm select").removeAttr("disabled");
         $("#partnerOrderForm textarea").removeAttr("disabled");
         $("#operateType").val('1');
+        parseOrderTrackInfo();
     }
 
     function initForm() {
@@ -974,10 +984,21 @@
                 $("#partnerOrderForm #savePrePay").val(result.prePay);
                 $("#partnerOrderForm #saveAppendPay").val(result.appendPay);
                 $("#partnerOrderForm #saveStatus").val(result.status);
+                parseOrderTrackInfo(result.orderTrackInfo);
                 checkNodes(result.customerCityCode);
             },
             error: error
         });
+    }
+
+    function parseOrderTrackInfo(info) {
+        if (info) {
+            $(".order_track").show();
+            $("#re_order_track").html($("<div>" + info + "</div>"));
+        } else {
+            $(".order_track").hide();
+            $("#re_order_track").html("");
+        }
     }
 
     //下单 keepOn为true：下单并继续；为false，下单关闭模态框，重新刷新页面

@@ -138,6 +138,9 @@
       #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.PartnerOrderInfoPO" >
+    <selectKey resultType = "integer" order = "AFTER" keyProperty = "id" >
+      select last_insert_id()
+    </selectKey>
     insert into partner_order_info
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
