@@ -84,6 +84,9 @@ public class PartnerOrderInfoResp extends BaseVO {
     @ApiModelProperty("修改时间")
     private Long modTime;
 
+    @ApiModelProperty("订单操作记录")
+    private String orderTrackInfo;
+
     public Integer getId() {
         return id;
     }
@@ -274,5 +277,13 @@ public class PartnerOrderInfoResp extends BaseVO {
 
     public void setModTime(Long modTime) {
         this.modTime = modTime;
+    }
+
+    public String getOrderTrackInfo() {
+        return orderTrackInfo;
+    }
+
+    public void setOrderTrackInfo(String orderTrackInfo) {
+        this.orderTrackInfo = orderTrackInfo;
     }
 }

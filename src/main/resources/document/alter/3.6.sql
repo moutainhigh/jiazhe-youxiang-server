@@ -62,4 +62,18 @@ CREATE TABLE `order_track` (
   `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB COMMENT='订单操作留痕表';
+) ENGINE=InnoDB COMMENT='客户订单操作留痕表';
+
+DROP TABLE IF EXISTS `partner_order_track`;
+CREATE TABLE `partner_order_track` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `orderId` int(10) NOT NULL COMMENT '订单ID',
+  `opreation` int(10) NOT NULL DEFAULT '0' COMMENT '操作类型()',
+  `userName` varchar(255) NOT NULL DEFAULT '' COMMENT '用户姓名',
+  `msg` longtext NOT NULL COMMENT '描述信息',
+  `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
+  `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
+  `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB COMMENT='商家订单操作留痕表';
