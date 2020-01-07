@@ -47,7 +47,7 @@ public class RCExchangeCodeBatchBiz {
      * @param id
      */
     public void startUsing(Integer id) {
-        rcExchangeCodeBatchService.changeBatchStatus(id, CommonConstant.CODE_STOP_USING);
+        rcExchangeCodeBatchService.changeBatchStatus(id, CommonConstant.CODE_START_USING);
     }
 
     /**
