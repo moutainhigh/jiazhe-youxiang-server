@@ -3,8 +3,10 @@
  * All rights reserved.
  *
  */
-package com.jiazhe.youxiang.base.util;
+package com.jiazhe.youxiang.base.util.bocdc;
 
+import com.jiazhe.youxiang.base.util.DateUtil;
+import com.jiazhe.youxiang.base.util.ShaUtils;
 import com.jiazhe.youxiang.server.common.enums.BOCDCBizCodeEnum;
 import com.jiazhe.youxiang.server.vo.req.boc.BOCDCCommonReq;
 import com.jiazhe.youxiang.server.vo.resp.boc.BOCDCCommonResp;
@@ -109,4 +111,5 @@ public class BOCDCUtils {
         }
         req.setParam(req.getXmlStr().replace("param=", ""));
     }
+
 }
