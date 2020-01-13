@@ -194,6 +194,11 @@ public class BOCCCConstant {
      */
     public static String inPath;
 
+    /**
+     * 中行信用卡解密PGP文件，字符串
+     */
+    public static String PASSPHRASE;
+
     @Value("${boccc.realtime.used_url}")
     public void setUsedUrl(String usedUrl) {
         REAL_TIME_USED_URL = usedUrl;
@@ -232,5 +237,10 @@ public class BOCCCConstant {
     @Value("${boccc.sftp.in}")
     public void setInPath(String INPATH) {
         inPath = INPATH;
+    }
+
+    @Value("${boccc.pgp.passphrase}")
+    public void setPassPhrase(String passphrase) {
+        PASSPHRASE = passphrase;
     }
 }
