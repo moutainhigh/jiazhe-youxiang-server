@@ -87,7 +87,6 @@ public class AutoDailyRemainAnalysisUtils {
      *
      * @return
      */
-    @Deprecated
     public static void generateFile() throws Exception {
 
         //第一步，判断download文件夹中是否有下传的退货信息加密文件,

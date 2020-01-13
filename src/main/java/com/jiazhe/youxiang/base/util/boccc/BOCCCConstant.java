@@ -1,10 +1,14 @@
 package com.jiazhe.youxiang.base.util.boccc;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 /**
  * @author TU
  * @description 中行信用卡常量  Bank Of China Credit Card
  * @date 2019-09-02.
  */
+@Component
 public class BOCCCConstant {
 
     /**
@@ -152,4 +156,81 @@ public class BOCCCConstant {
     public static String CSELL_SOURCE = "CSELL.BOC" + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".B";
     public static String CSELL_ZIP = "CSELL.BOC" + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".ZIP";
     public static String CSELL_PGP = "CSELL.BOC" + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".ZIP.DAT";
+
+    /**
+     * 中行信用卡实时接口：已使用请求
+     */
+    public static String REAL_TIME_USED_URL;
+
+    /**
+     * 中行信用卡实时接口：已退货请求
+     */
+    public static String REAL_TIME_REFUND_URL;
+
+    /**
+     * SFTP 登录用户名
+     */
+    public static String username;
+    /**
+     * SFTP 登录密码
+     */
+    public static String password;
+    /**
+     * SFTP 服务器地址IP地址
+     */
+    public static String host;
+    /**
+     * SFTP 端口
+     */
+    public static int port;
+
+    /**
+     * 上传到中行的根路径
+     */
+    public static String outPath;
+
+    /**
+     * 中行下发文件的根路径
+     */
+    public static String inPath;
+
+    @Value("${boccc.realtime.used_url}")
+    public void setUsedUrl(String usedUrl) {
+        REAL_TIME_USED_URL = usedUrl;
+    }
+
+    @Value("${boccc.realtime.refund_url}")
+    public void setRefundUrl(String refundUrl) {
+        REAL_TIME_REFUND_URL = refundUrl;
+    }
+
+    @Value("${boccc.sftp.username}")
+    public void setUsername(String USERNAME) {
+        username = USERNAME;
+    }
+
+    @Value("${boccc.sftp.password}")
+    public void setPassword(String PASSWORD) {
+        password = PASSWORD;
+    }
+
+    @Value("${boccc.sftp.host}")
+    public void setHost(String HOST) {
+        host = HOST;
+    }
+
+    @Value("${boccc.sftp.port}")
+    public void setPort(int PORT) {
+        port = PORT;
+    }
+
+    @Value("${boccc.sftp.out}")
+    public void setOutPath(String OUTPATH) {
+        outPath = OUTPATH;
+    }
+
+    @Value("${boccc.sftp.in}")
+    public void setInPath(String INPATH) {
+        inPath = INPATH;
+    }
 }

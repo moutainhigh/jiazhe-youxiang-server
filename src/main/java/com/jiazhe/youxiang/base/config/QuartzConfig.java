@@ -57,27 +57,13 @@ public class QuartzConfig {
         return JobBuilder.newJob(BOCCCQuartz.class).withIdentity("BOCCCJob").storeDurably().build();
     }
 
-
-//    @Bean
-//    public Trigger BOCCCQuartzTrigger() throws Exception{
-//        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
-//                .withIntervalInSeconds(ONE_DAY)
-//                .repeatForever();
-//        return TriggerBuilder.newTrigger().forJob(BOCCCQuartzDetail())
-//                .withIdentity("BOCCCTrigger")
-//                .startNow()
-//                .startAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-09-18 22:58:00"))
-//                .withSchedule(scheduleBuilder)
-//                .build();
-//    }
-
     //每天凌晨一点执行任务
     @Bean
     public CronTrigger BOCCCCronTrigger() throws Exception {
         return TriggerBuilder.newTrigger()
                 .forJob(BOCCCQuartzDetail())
                 .withIdentity("BOCCCTrigger")
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 ? * *"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 31 23 ? * *"))
                 .build();
     }
 

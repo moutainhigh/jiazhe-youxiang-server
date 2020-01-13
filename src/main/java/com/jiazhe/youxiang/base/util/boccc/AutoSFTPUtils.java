@@ -13,18 +13,13 @@ import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpATTRS;
 import com.jcraft.jsch.SftpException;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Vector;
@@ -35,230 +30,131 @@ import java.util.Vector;
  * @description SFTP工具类，定时自动下载、上传
  * @created 2019-09-03 20:53
  */
-@Component
 public class AutoSFTPUtils {
 
     public static Logger logger = LoggerFactory.getLogger(AutoSFTPUtils.class);
 
-    private ChannelSftp sftp;
+    static private Session session = null;
 
-    private Session session;
-    /**
-     * SFTP 登录用户名
-     */
-    private static String username;
-    /**
-     * SFTP 登录密码
-     */
-    private static String password;
-    /**
-     * 私钥
-     */
-    private static String privateKey;
-    /**
-     * SFTP 服务器地址IP地址
-     */
-    private static String host;
-    /**
-     * SFTP 端口
-     */
-    private static int port;
+    static private Channel channel = null;
+
+    static private int timeout = 60000;
 
     /**
-     * 上传到中行的根路径
+     * 获取一个通道对象
+     *
+     * @param username 远程要连接的服务器的用户名
+     * @param password 远程要连接的服务器的密码
+     * @param ip       远程服务器ip
+     * @param port     远程服务器的ssh服务端口
+     * @return ChannelSftp返回指向这个通道指定的地址的channel实例
+     * @throws JSchException
      */
-    private static String outPath;
-
-    /**
-     * 中行下发文件的根路径
-     */
-    private static String inPath;
-
-    /**
-     * 构造基于密码认证的sftp对象
-     */
-    public AutoSFTPUtils(String USERNAME, String PASSWORD, String HOST, int PORT) {
-        username = USERNAME;
-        password = PASSWORD;
-        host = HOST;
-        port = PORT;
-    }
-
-    /**
-     * 构造基于秘钥认证的sftp对象
-     */
-    public AutoSFTPUtils(String USERNAME, String HOST, int PORT, String loginPrivateKeyPath) {
-        username = USERNAME;
-        host = HOST;
-        port = PORT;
-        privateKey = loginPrivateKeyPath;
-    }
-
-    public AutoSFTPUtils() {
-    }
-
-    /**
-     * 连接sftp服务器
-     */
-    public void login() {
-        try {
-            JSch jsch = new JSch();
-            if (privateKey != null) {
-                // 设置私钥
-                jsch.addIdentity(privateKey);
-            }
-            session = jsch.getSession(username, host, port);
-            if (password != null) {
-                session.setPassword(password);
-            }
-            Properties config = new Properties();
-            config.put("StrictHostKeyChecking", "no");
-            session.setConfig(config);
-            session.connect();
-            Channel channel = session.openChannel("sftp");
-            channel.connect();
-            sftp = (ChannelSftp) channel;
-            if (sftp == null) {
-                logger.error("sftp登录失败");
-            }
-        } catch (JSchException e) {
-            e.printStackTrace();
+    public static ChannelSftp getChannel(String username, String password, String privateKey, String ip, int port) throws JSchException {
+        JSch jsch = new JSch();
+        session = jsch.getSession(username, ip, port);
+        logger.info("Session created...");
+        if (privateKey != null) {
+            jsch.addIdentity(privateKey);
         }
+        if (password != null) {
+            session.setPassword(password);
+        }
+        Properties config = new Properties();
+        config.put("StrictHostKeyChecking", "no");
+        session.setConfig(config);
+        session.setTimeout(timeout);
+        session.connect();
+        logger.info("Session connected, Opening Channel...");
+        channel = session.openChannel("sftp");
+        channel.connect();
+        logger.info("Connected successfully to ip :{}, ftpUsername is :{}, return :{}",
+                ip, username, channel);
+        return (ChannelSftp) channel;
     }
 
     /**
-     * 关闭连接 server
+     * 关闭channel和session
+     *
+     * @throws Exception
      */
-    public void logout() {
-        if (sftp != null) {
-            if (sftp.isConnected()) {
-                sftp.disconnect();
-            }
+    public static void closeChannel() throws Exception {
+        if (channel != null) {
+            channel.disconnect();
         }
         if (session != null) {
-            if (session.isConnected()) {
-                session.disconnect();
-            }
+            session.disconnect();
         }
     }
 
     /**
-     * 将输入流的数据上传到sftp作为文件。文件完整路径=basePath+directory
+     * 将当天的文件全部上传至中行信用卡服务器
      *
-     * @param basePath     服务器的基础路径
-     * @param directory    上传到该目录
-     * @param sftpFileName sftp端文件名
-     * @param input        输入流
+     * @throws FileNotFoundException
+     * @throws SftpException
+     * @throws JSchException
      */
-    public void upload(String basePath, String directory, String sftpFileName, InputStream input) throws SftpException {
-        if (sftp == null) {
-            logger.error("中行上传发生错误，sftp为空");
-            return;
-        }
+    public static void upload() throws FileNotFoundException, SftpException, JSchException {
+        ChannelSftp channelSftp = null;
         try {
-            sftp.cd(basePath);
-            sftp.cd(directory);
-        } catch (SftpException e) {
-            //目录不存在，则创建文件夹
-            String[] dirs = directory.split("/");
-            String tempPath = basePath;
-            for (String dir : dirs) {
-                if (null == dir || "".equals(dir)) {
-                    continue;
+            channelSftp = getChannel(BOCCCConstant.username, null, BOCCCConstant.loginPrivateKeyPath, BOCCCConstant.host, BOCCCConstant.port);
+            // 二、 判断远程路径dstDirPath是否存在(通道配置的路径)
+            try {
+                Vector dir = channelSftp.ls(BOCCCConstant.outPath);
+                if (dir == null) {
+                    channelSftp.mkdir(BOCCCConstant.outPath);
                 }
-                tempPath += "/" + dir;
-                try {
-                    sftp.cd(tempPath);
-                } catch (SftpException ex) {
-                    sftp.mkdir(tempPath);
-                    sftp.cd(tempPath);
-                }
+            } catch (SftpException e) {
+                logger.error("BOCCC-UPLOAD:{}", e.getMessage());
             }
-        }
-        //上传文件
-        sftp.put(input, sftpFileName);
-    }
-
-    /**
-     * linux上传文件
-     */
-    public void upload(String directory, File file) {
-        try {
-            if (null != sftp) {
-                sftp.cd(directory);
-                logger.info("cd {}", directory);
-                FileInputStream stream = new FileInputStream(file);
-                try {
-                    sftp.put(stream, file.getName());
-                } catch (Exception e) {
-                    logger.error("upload error", e);
-                } finally {
-                    stream.close();
+            // 三、 推送文件
+            try {
+                File uploadPath = new File(BOCCCConstant.uploadPath + BOCCCUtils.getToday());
+                if (uploadPath.exists()) {
+                    File[] fs = uploadPath.listFiles();
+                    for (File file : fs) {
+                        channelSftp.put(new FileInputStream(file), BOCCCConstant.uploadPath);
+                    }
                 }
+            } catch (SftpException e) {
+                logger.error("An error occurred during sftp push, send data fail, the target path is :{}", BOCCCConstant.uploadPath);
             }
-        } catch (Exception e) {
-            logger.error("upload:" + host, e);
         } finally {
-            if (sftp != null) {
-                sftp.disconnect();
-                sftp.exit();
+            if (channelSftp != null) {
+                channelSftp.quit();
+            }
+            try {
+                closeChannel();
+            } catch (Exception e) {
+                logger.info("BOCCC-UPLOAD Exception:{}", e.getMessage());
             }
         }
+        logger.info("BOCCC-UPLOAD:上传文件完成");
     }
 
 
     /**
      * 下载文件，文件名不改变。
      *
+     * @param sftp
      * @param directory    下载目录
      * @param downloadFile 下载的文件
      * @param savePath     存在本地的路径
      */
-    public void download(String directory, String downloadFile, String savePath) throws SftpException, FileNotFoundException {
+    public static void download(ChannelSftp sftp, String directory, String downloadFile, String savePath) throws SftpException, FileNotFoundException {
         if (directory != null && !"".equals(directory)) {
             sftp.cd(directory);
-        }
-        File localDirectory = new File(savePath);
-        if (!localDirectory.exists()) {
-            localDirectory.mkdirs();
         }
         File file = new File(savePath + "\\" + downloadFile);
         sftp.get(downloadFile, new FileOutputStream(file));
     }
 
-    /**
-     * 下载文件
-     *
-     * @param directory    下载目录
-     * @param downloadFile 下载的文件名
-     * @return 字节数组
-     */
-    public byte[] download(String directory, String downloadFile) throws SftpException, IOException {
-        if (directory != null && !"".equals(directory)) {
-            sftp.cd(directory);
-        }
-        InputStream is = sftp.get(downloadFile);
-        byte[] fileData = IOUtils.toByteArray(is);
-        return fileData;
-    }
-
-    /**
-     * 删除文件
-     *
-     * @param directory  要删除文件所在目录
-     * @param deleteFile 要删除的文件
-     */
-    public void delete(String directory, String deleteFile) throws SftpException {
-        sftp.cd(directory);
-        sftp.rm(deleteFile);
-    }
-
-    public boolean isExistDir(String path, ChannelSftp sftp) {
+    public static boolean isExistDir(ChannelSftp sftp, String path) {
         logger.info("上传文件中 执行[isExistDir]");
         boolean isExist = false;
         try {
             SftpATTRS sftpATTRS = sftp.lstat(path);
-            logger.info("上传文件中 SftpATTRS sftpATTRS = sftp.lstat(path) sftpATTRS:{}",JacksonUtil.toJSon(sftpATTRS));
+            logger.info("上传文件中 SftpATTRS sftpATTRS = sftp.lstat(path) sftpATTRS:{}", JacksonUtil.toJSon(sftpATTRS));
             isExist = true;
             return sftpATTRS.isDir();
         } catch (Exception e) {
@@ -268,129 +164,55 @@ public class AutoSFTPUtils {
             }
         }
         return isExist;
-
     }
 
     /**
-     * 列出目录下的文件
+     * 列出远程目录下的文件
      *
      * @param directory 要列出的目录
      */
-    public Vector<?> listFiles(String directory) throws SftpException {
+    public static Vector<?> listFiles(ChannelSftp sftp, String directory) throws SftpException {
         return sftp.ls(directory);
     }
 
-    @Value("${boccc.sftp.username}")
-    public void setUsername(String USERNAME) {
-        username = USERNAME;
-    }
-
-    @Value("${boccc.sftp.password}")
-    public void setPassword(String PASSWORD) {
-        password = PASSWORD;
-    }
-
-    @Value("${boccc.sftp.host}")
-    public void setHost(String HOST) {
-        host = HOST;
-    }
-
-    @Value("${boccc.sftp.port}")
-    public void setPort(int PORT) {
-        port = PORT;
-    }
-
-    @Value("${boccc.sftp.out}")
-    public void setOutPath(String OUTPATH) {
-        outPath = OUTPATH;
-    }
-
-    @Value("${boccc.sftp.in}")
-    public void setInPath(String INPATH) {
-        inPath = INPATH;
-    }
-
-    /**
-     * 上传当日文件夹下所有文件至中行服务器
-     *
-     * @throws SftpException
-     * @throws IOException
-     */
-    public static void upload() throws SftpException, IOException {
-        logger.info("上传文件中");
-        AutoSFTPUtils sftp = new AutoSFTPUtils(username, host, port);
-        sftp.login();
-        //本地将要上传的文件夹
-        File uploadPath = new File(BOCCCConstant.uploadPath + BOCCCUtils.getToday());
-        //中行接收文件路径存在
-        if (sftp.isExistDir(outPath, sftp.sftp)) {
-            if (uploadPath.exists()) {
-                File[] fs = uploadPath.listFiles();
-                for (File file : fs) {
-                    InputStream is = new FileInputStream(file);
-                    //outPath为上传到中行服务器的路径
-                    sftp.upload(outPath, "", file.getName(), is);
-                }
-                sftp.logout();
-            }
-        } else {
-            logger.error("BOCCC-ERROR：中行上传文件夹路径定义有误！！！");
-        }
-        logger.info("上传文件完成");
-    }
-
-    /**
-     * 上传当日文件夹下所有文件至中行服务器
-     *
-     * @throws SftpException
-     * @throws IOException
-     */
-    public static void upload(String username, String host, int port, String loginPrivateKeyPath, String uploadPath, String outPath) throws SftpException, IOException {
-        logger.info("上传文件中,参数为: username:{},host:{},port:{},loginPrivateKeyPath:{},uploadPath:{},outPath:{}", username, host, port, loginPrivateKeyPath, uploadPath, outPath);
-        AutoSFTPUtils sftp = new AutoSFTPUtils(username, host, port, loginPrivateKeyPath);
-        sftp.login();
-        logger.info("上传文件中,login完成 sftp.sftp:{}", JacksonUtil.toJSon(sftp.sftp));
-        //本地将要上传的文件夹
-        File uploadFile = new File(uploadPath);
-        logger.info("上传文件中,uploadFile:{}", JacksonUtil.toJSon(uploadFile));
-        //中行接收文件路径存在
-        logger.info("上传文件中 111111");
-        if (uploadFile.exists()) {
-            File[] fs = uploadFile.listFiles();
-            logger.info("上传文件中 listFiles:{}", JacksonUtil.toJSon(fs));
-            for (File file : fs) {
-//                InputStream is = new FileInputStream(file);
-//                logger.info("上传文件中 is:{}", JacksonUtil.toJSon(is));
-                //outPath为上传到中行服务器的路径
-                sftp.upload(outPath,file);
-            }
-            sftp.logout();
-        }
-        logger.info("上传文件完成");
-    }
-
     public static void download() throws SftpException, FileNotFoundException {
-        logger.info("下载文件中");
-        AutoSFTPUtils sftp = new AutoSFTPUtils(username, host, port);
-        sftp.login();
-        //下载到本地服务器的路径
-        String downloadPath = BOCCCConstant.downloadPath + BOCCCUtils.getToday();
-        if (sftp.isExistDir(inPath, sftp.sftp)) {
-            Vector v = sftp.listFiles(inPath);
-            Iterator it = v.iterator();
-            while (it.hasNext()) {
-                ChannelSftp.LsEntry entry = (ChannelSftp.LsEntry) it.next();
-                String fileName = entry.getFilename();
-                SftpATTRS attrs = entry.getAttrs();
-                if (!attrs.isDir() && fileName.contains(BOCCCUtils.getYesterday())) {
-                    sftp.download(inPath, entry.getFilename(), downloadPath);
-                }
+        logger.info("BOCCC-DOWNLOAD：下载文件开始...");
+        ChannelSftp sftp = null;
+        try {
+            sftp = getChannel(BOCCCConstant.username, null, BOCCCConstant.loginPrivateKeyPath, BOCCCConstant.host, BOCCCConstant.port);
+            String downloadPath = BOCCCConstant.downloadPath + BOCCCUtils.getToday();
+            //判断下载到本地的路径是否存在
+            File localDirectory = new File(downloadPath);
+            if (!localDirectory.exists()) {
+                localDirectory.mkdirs();
             }
-            sftp.logout();
-        } else {
-            logger.error("BOCCC-ERROR：中行下载文件存放路径定义有误！！！");
+            if (isExistDir(sftp, BOCCCConstant.inPath)) {
+                Vector v = listFiles(sftp, BOCCCConstant.inPath);
+                Iterator it = v.iterator();
+                while (it.hasNext()) {
+                    ChannelSftp.LsEntry entry = (ChannelSftp.LsEntry) it.next();
+                    String fileName = entry.getFilename();
+                    SftpATTRS attrs = entry.getAttrs();
+                    if (!attrs.isDir() && fileName.contains(BOCCCUtils.getYesterday())) {
+                        download(sftp, BOCCCConstant.inPath, entry.getFilename(), downloadPath);
+                    }
+                }
+            } else {
+                logger.error("BOCCC-DOWNLOAD：中行信用卡服务器待下载文件存放路径定义有误！！！");
+            }
+        } catch (Exception e) {
+            logger.error("BOCCC-DOWNLOAD Exception：{}", e.getMessage());
+        } finally {
+            if (sftp != null) {
+                sftp.quit();
+            }
+            try {
+                closeChannel();
+            } catch (Exception e) {
+                logger.info("BOCCC-DOWNLOAD Exception：{}", e.getMessage());
+            }
         }
-        logger.info("下载文件完成");
+        logger.info("BOCCC-DOWNLOAD：下载文件完成！！！");
     }
 
 }

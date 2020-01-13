@@ -87,7 +87,6 @@ public class AutoDailyPurchaseAnalysisUtils {
      *
      * @return
      */
-    @Deprecated
     public static void generateFile() throws Exception {
 
         String sourceFileName = BOCCCConstant.dailyPurchase + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CSELL_SOURCE, -1);
