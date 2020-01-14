@@ -34,12 +34,13 @@ public class DateUtil {
 
     /**
      * 将Date转为yyyy-MM-dd HH:mm:ss字符串
+     *
      * @param date
      * @return
      */
     public static String secondToStr(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return  sdf.format(date);
+        return sdf.format(date);
     }
 
     /**
@@ -164,5 +165,14 @@ public class DateUtil {
             logger.error("时间转换为XXXX-XX-XX 23:59:59的Long型错误");
         }
         return convert.getTime();
+    }
+
+    /**
+     * 获取今日的日期字符串
+     *
+     * @return
+     */
+    public static String getToday() {
+        return yyyyMMDD(new Date());
     }
 }

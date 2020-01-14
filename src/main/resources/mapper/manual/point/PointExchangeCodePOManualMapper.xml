@@ -167,8 +167,11 @@
     <select id="queryStock" resultType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO">
         SELECT pec.*
         FROM point_exchange_code pec LEFT JOIN point_exchange_code_batch pecb on pec.batch_id = pecb.id
-        WHERE pecb.gift_no = #{giftNo} AND pec.expiry_time > #{expiryDate} AND pecb.status = 1 AND pec.is_deleted = 0 AND pec.used = 0 AND pec.out_order_code = ''
-        ORDER BY pec.add_time ASC limit 0,1
+        WHERE pecb.gift_no = #{giftNo} AND pecb.status = 1 AND pec.is_deleted = 0 AND pec.used = 0 AND pec.out_order_code = ''
+        <if test="expiryDate != null" >
+            AND pec.expiry_time > #{expiryDate}
+        </if>
+        ORDER BY pec.expiry_time ASC limit 0,1
     </select>
 
     <select id="getBOCCCCoupon" parameterType="java.util.List"

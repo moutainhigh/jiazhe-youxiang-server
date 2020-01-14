@@ -15,6 +15,7 @@ public enum BOCDCBizCodeEnum {
 
     SUCCESS("0000", "成功"),
     MERCHANT_RETURNS_USED("2222", "商户返回已使用"),
+    MERCHANT_RETURNS_EXPIRY_DATE_ERROR("5555", "商户返回有效期不符"),
     MESSAGE_FORMAT_ERROR("9999", "报文格式错误"),
     ;
 
