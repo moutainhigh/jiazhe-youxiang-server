@@ -32,4 +32,5 @@ public class PointExchangeRecordBiz {
     public PointExchangeRecordDTO getByCodeId(Integer id) {
         return pointExchangeRecordService.findByCodeId(id);
     }
+
 }

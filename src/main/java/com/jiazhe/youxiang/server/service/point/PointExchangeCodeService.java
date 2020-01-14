@@ -184,4 +184,10 @@ public interface PointExchangeCodeService {
      */
     void changeCodeUsedStatus(Integer id, Byte usedStaus);
 
+    /**
+     * 查询中行储蓄卡对账信息
+     * @param beginDate
+     * @param endDate
+     */
+    List<PointExchangeCodeDTO>  getBOCDCReconciliationInfo(Date beginDate, Date endDate);
 }

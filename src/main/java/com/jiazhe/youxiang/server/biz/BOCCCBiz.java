@@ -10,6 +10,7 @@ import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.HttpsClientRequestFactory;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.RSAUtil;
+import com.jiazhe.youxiang.base.util.bocdc.BOCDCConstant;
 import com.jiazhe.youxiang.server.biz.point.PointExchangeCodeBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.BOCCCBizCodeEnum;
@@ -48,26 +49,6 @@ public class BOCCCBiz {
     private static final Logger LOGGER = LoggerFactory.getLogger(BOCCCBiz.class);
     @Autowired
     private PointExchangeCodeBiz pointExchangeCodeBiz;
-
-    /**
-     * 中行信用卡实时接口：已使用请求
-     */
-    public static String REAL_TIME_USED_URL;
-
-    /**
-     * 中行信用卡实时接口：已退货请求
-     */
-    public static String REAL_TIME_REFUND_URL;
-
-    @Value("${boccc.realtime.used_url}")
-    public void setUsedUrl(String usedUrl) {
-        REAL_TIME_USED_URL = usedUrl;
-    }
-
-    @Value("${boccc.realtime.refund_url}")
-    public void setRefundUrl(String refundUrl) {
-        REAL_TIME_REFUND_URL = refundUrl;
-    }
 
     /**
      * 第一个实时接口 【退货信息接口】【中行请求第三方】
@@ -152,7 +133,7 @@ public class BOCCCBiz {
         String result;
         try {
             LOGGER.info("HTTP调用中行信用卡使用状态更新实时接口，入参:{}", JSONObject.toJSON(req));
-            ResponseEntity<String> response = restTemplate.getForEntity(REAL_TIME_USED_URL, String.class, req);
+            ResponseEntity<String> response = restTemplate.getForEntity(BOCDCConstant.REAL_TIME_USED_URL, String.class, req);
             result = new String(response.getBody().getBytes("ISO8859-1"), "utf-8");
             LOGGER.info("HTTP调用中行使用状态更新实时接口成功，入参:{}，返回值:{}", JSONObject.toJSON(req), JSONObject.toJSON(result));
         } catch (RestClientException | UnsupportedEncodingException e) {
@@ -193,7 +174,7 @@ public class BOCCCBiz {
         String result;
         try {
             LOGGER.info("HTTP调用中行信用卡退货更新实时接口，入参:{}", JSONObject.toJSON(req));
-            ResponseEntity<String> response = restTemplate.getForEntity(REAL_TIME_REFUND_URL, String.class, req);
+            ResponseEntity<String> response = restTemplate.getForEntity(BOCDCConstant.REAL_TIME_REFUND_URL, String.class, req);
             result = new String(response.getBody().getBytes("ISO8859-1"), "utf-8");
             LOGGER.info("HTTP调用中行退货更新实时接口成功，入参:{}，返回值:{}", JSONObject.toJSON(req), JSONObject.toJSON(result));
         } catch (RestClientException | UnsupportedEncodingException e) {
