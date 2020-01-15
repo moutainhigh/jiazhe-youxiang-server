@@ -258,7 +258,7 @@ public class AutoSFTPUtils {
         boolean isExist = false;
         try {
             SftpATTRS sftpATTRS = sftp.lstat(path);
-            logger.info("上传文件中 SftpATTRS sftpATTRS = sftp.lstat(path) sftpATTRS:{}",JacksonUtil.toJSon(sftpATTRS));
+            logger.info("上传文件中 SftpATTRS sftpATTRS = sftp.lstat(path) sftpATTRS:{}", JacksonUtil.toJSon(sftpATTRS));
             isExist = true;
             return sftpATTRS.isDir();
         } catch (Exception e) {
@@ -318,7 +318,7 @@ public class AutoSFTPUtils {
      */
     public static void upload() throws SftpException, IOException {
         logger.info("上传文件中");
-        AutoSFTPUtils sftp = new AutoSFTPUtils(username, host, port);
+        AutoSFTPUtils sftp = new AutoSFTPUtils(username, password, host, port);
         sftp.login();
         //本地将要上传的文件夹
         File uploadPath = new File(BOCCCConstant.uploadPath + BOCCCUtils.getToday());
@@ -362,7 +362,7 @@ public class AutoSFTPUtils {
 //                InputStream is = new FileInputStream(file);
 //                logger.info("上传文件中 is:{}", JacksonUtil.toJSon(is));
                 //outPath为上传到中行服务器的路径
-                sftp.upload(outPath,file);
+                sftp.upload(outPath, file);
             }
             sftp.logout();
         }
@@ -371,7 +371,7 @@ public class AutoSFTPUtils {
 
     public static void download() throws SftpException, FileNotFoundException {
         logger.info("下载文件中");
-        AutoSFTPUtils sftp = new AutoSFTPUtils(username, host, port);
+        AutoSFTPUtils sftp = new AutoSFTPUtils(username, password, host, port);
         sftp.login();
         //下载到本地服务器的路径
         String downloadPath = BOCCCConstant.downloadPath + BOCCCUtils.getToday();
