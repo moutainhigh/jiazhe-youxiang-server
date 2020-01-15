@@ -80,7 +80,6 @@ public class QuartzConfig {
                 .withIdentity("BOCDCTrigger")
 //                .withSchedule(CronScheduleBuilder.cronSchedule("0 * * * * ? *"))
                 .withSchedule(CronScheduleBuilder.cronSchedule("0 0 9 1 * ? *"))
-
                 .build();
     }
 

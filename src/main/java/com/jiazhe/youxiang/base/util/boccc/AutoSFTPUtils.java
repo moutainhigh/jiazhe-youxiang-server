@@ -131,8 +131,7 @@ public class AutoSFTPUtils {
         }
         logger.info("BOCCC-UPLOAD:上传文件完成");
     }
-
-
+    
     /**
      * 下载文件，文件名不改变。
      *
