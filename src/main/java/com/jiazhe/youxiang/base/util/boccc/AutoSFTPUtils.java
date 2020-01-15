@@ -258,7 +258,7 @@ public class AutoSFTPUtils {
         boolean isExist = false;
         try {
             SftpATTRS sftpATTRS = sftp.lstat(path);
-            logger.info("上传文件中 SftpATTRS sftpATTRS = sftp.lstat(path) sftpATTRS:{}",JacksonUtil.toJSon(sftpATTRS));
+            logger.info("上传文件中 SftpATTRS sftpATTRS = sftp.lstat(path) sftpATTRS:{}", JacksonUtil.toJSon(sftpATTRS));
             isExist = true;
             return sftpATTRS.isDir();
         } catch (Exception e) {
@@ -362,7 +362,7 @@ public class AutoSFTPUtils {
 //                InputStream is = new FileInputStream(file);
 //                logger.info("上传文件中 is:{}", JacksonUtil.toJSon(is));
                 //outPath为上传到中行服务器的路径
-                sftp.upload(outPath,file);
+                sftp.upload(outPath, file);
             }
             sftp.logout();
         }
