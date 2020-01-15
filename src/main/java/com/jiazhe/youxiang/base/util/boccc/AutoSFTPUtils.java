@@ -12,6 +12,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpATTRS;
 import com.jcraft.jsch.SftpException;
+import com.jiazhe.youxiang.base.util.JacksonUtil;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,11 +87,11 @@ public class AutoSFTPUtils {
     /**
      * 构造基于秘钥认证的sftp对象
      */
-    public AutoSFTPUtils(String USERNAME, String HOST, int PORT) {
+    public AutoSFTPUtils(String USERNAME, String HOST, int PORT, String loginPrivateKeyPath) {
         username = USERNAME;
         host = HOST;
         port = PORT;
-        privateKey = BOCCCConstant.loginPrivateKeyPath;
+        privateKey = loginPrivateKeyPath;
     }
 
     public AutoSFTPUtils() {
@@ -117,6 +118,9 @@ public class AutoSFTPUtils {
             Channel channel = session.openChannel("sftp");
             channel.connect();
             sftp = (ChannelSftp) channel;
+            if (sftp == null) {
+                logger.error("sftp登录失败");
+            }
         } catch (JSchException e) {
             e.printStackTrace();
         }
@@ -147,6 +151,10 @@ public class AutoSFTPUtils {
      * @param input        输入流
      */
     public void upload(String basePath, String directory, String sftpFileName, InputStream input) throws SftpException {
+        if (sftp == null) {
+            logger.error("中行上传发生错误，sftp为空");
+            return;
+        }
         try {
             sftp.cd(basePath);
             sftp.cd(directory);
@@ -170,6 +178,34 @@ public class AutoSFTPUtils {
         //上传文件
         sftp.put(input, sftpFileName);
     }
+
+    /**
+     * linux上传文件
+     */
+    public void upload(String directory, File file) {
+        try {
+            if (null != sftp) {
+                sftp.cd(directory);
+                logger.info("cd {}", directory);
+                FileInputStream stream = new FileInputStream(file);
+                try {
+                    sftp.put(stream, file.getName());
+                } catch (Exception e) {
+                    logger.error("upload error", e);
+                } finally {
+                    stream.close();
+                }
+            }
+        } catch (Exception e) {
+            logger.error("upload:" + host, e);
+        } finally {
+            if (sftp != null) {
+                sftp.disconnect();
+                sftp.exit();
+            }
+        }
+    }
+
 
     /**
      * 下载文件，文件名不改变。
@@ -218,12 +254,15 @@ public class AutoSFTPUtils {
     }
 
     public boolean isExistDir(String path, ChannelSftp sftp) {
+        logger.info("上传文件中 执行[isExistDir]");
         boolean isExist = false;
         try {
             SftpATTRS sftpATTRS = sftp.lstat(path);
+            logger.info("上传文件中 SftpATTRS sftpATTRS = sftp.lstat(path) sftpATTRS:{}", JacksonUtil.toJSon(sftpATTRS));
             isExist = true;
             return sftpATTRS.isDir();
         } catch (Exception e) {
+            logger.info("上传文件中 Exception:{}", e.getMessage());
             if (e.getMessage().toLowerCase().equals("no such file")) {
                 isExist = false;
             }
@@ -279,7 +318,7 @@ public class AutoSFTPUtils {
      */
     public static void upload() throws SftpException, IOException {
         logger.info("上传文件中");
-        AutoSFTPUtils sftp = new AutoSFTPUtils(username, host, port);
+        AutoSFTPUtils sftp = new AutoSFTPUtils(username, password, host, port);
         sftp.login();
         //本地将要上传的文件夹
         File uploadPath = new File(BOCCCConstant.uploadPath + BOCCCUtils.getToday());
@@ -294,15 +333,45 @@ public class AutoSFTPUtils {
                 }
                 sftp.logout();
             }
-        }else{
+        } else {
             logger.error("BOCCC-ERROR：中行上传文件夹路径定义有误！！！");
+        }
+        logger.info("上传文件完成");
+    }
+
+    /**
+     * 上传当日文件夹下所有文件至中行服务器
+     *
+     * @throws SftpException
+     * @throws IOException
+     */
+    public static void upload(String username, String host, int port, String loginPrivateKeyPath, String uploadPath, String outPath) throws SftpException, IOException {
+        logger.info("上传文件中,参数为: username:{},host:{},port:{},loginPrivateKeyPath:{},uploadPath:{},outPath:{}", username, host, port, loginPrivateKeyPath, uploadPath, outPath);
+        AutoSFTPUtils sftp = new AutoSFTPUtils(username, host, port, loginPrivateKeyPath);
+        sftp.login();
+        logger.info("上传文件中,login完成 sftp.sftp:{}", JacksonUtil.toJSon(sftp.sftp));
+        //本地将要上传的文件夹
+        File uploadFile = new File(uploadPath);
+        logger.info("上传文件中,uploadFile:{}", JacksonUtil.toJSon(uploadFile));
+        //中行接收文件路径存在
+        logger.info("上传文件中 111111");
+        if (uploadFile.exists()) {
+            File[] fs = uploadFile.listFiles();
+            logger.info("上传文件中 listFiles:{}", JacksonUtil.toJSon(fs));
+            for (File file : fs) {
+//                InputStream is = new FileInputStream(file);
+//                logger.info("上传文件中 is:{}", JacksonUtil.toJSon(is));
+                //outPath为上传到中行服务器的路径
+                sftp.upload(outPath, file);
+            }
+            sftp.logout();
         }
         logger.info("上传文件完成");
     }
 
     public static void download() throws SftpException, FileNotFoundException {
         logger.info("下载文件中");
-        AutoSFTPUtils sftp = new AutoSFTPUtils(username, host, port);
+        AutoSFTPUtils sftp = new AutoSFTPUtils(username, password, host, port);
         sftp.login();
         //下载到本地服务器的路径
         String downloadPath = BOCCCConstant.downloadPath + BOCCCUtils.getToday();
@@ -318,7 +387,7 @@ public class AutoSFTPUtils {
                 }
             }
             sftp.logout();
-        }else{
+        } else {
             logger.error("BOCCC-ERROR：中行下载文件存放路径定义有误！！！");
         }
         logger.info("下载文件完成");
