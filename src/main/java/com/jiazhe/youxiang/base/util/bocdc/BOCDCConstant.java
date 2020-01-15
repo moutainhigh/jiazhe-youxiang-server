@@ -142,10 +142,10 @@ public class BOCDCConstant {
         BOCDCConstant.pgpFileName = pgpFileName;
     }
 
-    @Value("${bocdc.sftp.privateKey}")
-    public void setPrivateKey(String privateKey) {
-        BOCDCConstant.privateKey = privateKey;
-    }
+//    @Value("${bocdc.sftp.privateKey}")
+//    public void setPrivateKey(String privateKey) {
+//        BOCDCConstant.privateKey = privateKey;
+//    }
 
     @Value("${bocdc.sftp.username}")
     public void setUsername(String USERNAME) {
