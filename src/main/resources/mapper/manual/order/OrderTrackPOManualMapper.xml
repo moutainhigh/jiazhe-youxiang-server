@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.order.OrderTrackPOManualMapper">
+    <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.OrderTrackPO">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="orderId" property="orderid" jdbcType="INTEGER"/>
+        <result column="opreation" property="opreation" jdbcType="INTEGER"/>
+        <result column="userName" property="username" jdbcType="VARCHAR"/>
+        <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.jiazhe.youxiang.server.domain.po.OrderTrackPO" extends="BaseResultMap">
+        <result column="msg" property="msg" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, orderId, opreation, userName, ext_info, is_deleted, add_time, mod_time
+    </sql>
+    <sql id="Blob_Column_List">
+    msg
+    </sql>
+    <select id="getList" resultMap="ResultMapWithBLOBs">
+        SELECT
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        FROM order_track o
+        <where>
+            <if test="orderId != null">
+                AND o.orderId = #{orderId}
+            </if>
+            AND o.is_deleted = 0
+        </where>
+        order by add_time
+    </select>
+</mapper>

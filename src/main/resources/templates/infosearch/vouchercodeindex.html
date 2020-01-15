@@ -534,7 +534,7 @@
                     for (var i = 0; i < result.length; i++) {
                         var str = "<tr>" +
                             "<td>" + result[i].orderInfoResp.productResp.name + "</td>" +
-                            "<td>" + result[i].orderInfoResp.productPrice + "</td>" +
+                            "<td>" + formatNumberWithComma(result[i].orderInfoResp.productPrice) + "</td>" +
                             "<td>" + result[i].orderInfoResp.count + "</td>" +
                             "<td>" + timeFormat(result[i].orderInfoResp.orderTime) + "</td>" +
                             "<td>" + orderStatus[result[i].orderInfoResp.status - 1] + "</td>" +

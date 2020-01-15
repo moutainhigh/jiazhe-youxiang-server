@@ -410,7 +410,7 @@
                     width: 30,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.isVirtual == 1 ? "--" : rowObject.faceValue;
+                        return rowObject.isVirtual == 1 ? "--" : formatNumberWithComma(rowObject.faceValue);
                     }
                 },
                 {
@@ -419,7 +419,7 @@
                     width: 30,
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return rowObject.isVirtual == 1 ? "--" : rowObject.amount;
+                        return rowObject.isVirtual == 1 ? "--" : formatNumberWithComma(rowObject.amount);
                     }
                 },
                 {

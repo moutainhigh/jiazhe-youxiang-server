@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @description：
  * @date 2019-06-28
  */
-public class OrderReq extends BaseVO {
+public class OrderCodeReq extends BaseVO {
 
     @ApiModelProperty("订单号")
     private String orderCode;

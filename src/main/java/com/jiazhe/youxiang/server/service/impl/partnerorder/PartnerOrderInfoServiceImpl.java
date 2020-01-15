@@ -44,9 +44,9 @@ public class PartnerOrderInfoServiceImpl implements PartnerOrderInfoService {
 
 
     @Override
-    public List<PartnerOrderInfoDTO> getList(Byte status, String customerCityCode, Integer partnerId, Integer serviceItemId, Date orderTimeStart, Date orderTimeEnd ,Date serviceTimeStart, Date serviceTimeEnd, String customerMobile, Paging paging) {
-        Integer count = partnerOrderInfoPOManualMapper.count(status, customerCityCode, partnerId, serviceItemId, orderTimeStart,orderTimeEnd,serviceTimeStart, serviceTimeEnd, customerMobile);
-        List<PartnerOrderInfoPO> poList = partnerOrderInfoPOManualMapper.query(status, customerCityCode, partnerId, serviceItemId, orderTimeStart,orderTimeEnd,serviceTimeStart, serviceTimeEnd, customerMobile, paging.getOffset(), paging.getLimit());
+    public List<PartnerOrderInfoDTO> getList(Byte status, String customerCityCode, Integer partnerId, Integer serviceItemId, Date orderTimeStart, Date orderTimeEnd, Date serviceTimeStart, Date serviceTimeEnd, String customerMobile, Paging paging) {
+        Integer count = partnerOrderInfoPOManualMapper.count(status, customerCityCode, partnerId, serviceItemId, orderTimeStart, orderTimeEnd, serviceTimeStart, serviceTimeEnd, customerMobile);
+        List<PartnerOrderInfoPO> poList = partnerOrderInfoPOManualMapper.query(status, customerCityCode, partnerId, serviceItemId, orderTimeStart, orderTimeEnd, serviceTimeStart, serviceTimeEnd, customerMobile, paging.getOffset(), paging.getLimit());
         List<PartnerOrderInfoDTO> dtoList = poList.stream().map(PartnerOrderInfoAdapter::PO2DTO).collect(Collectors.toList());
         dtoList.forEach(bean -> {
             PartnerDTO partnerDTO = partnerService.getById(bean.getPartnerId());
@@ -104,6 +104,7 @@ public class PartnerOrderInfoServiceImpl implements PartnerOrderInfoService {
         PartnerOrderInfoPO poIn = PartnerOrderInfoAdapter.DTO2PO(dto);
         if (poIn.getId() == 0) {
             partnerOrderInfoPOMapper.insertSelective(poIn);
+            dto.setId(poIn.getId());
         } else {
             PartnerOrderInfoPO po = partnerOrderInfoPOMapper.selectByPrimaryKey(dto.getId());
             poIn.setAddTime(po.getAddTime());
@@ -114,8 +115,8 @@ public class PartnerOrderInfoServiceImpl implements PartnerOrderInfoService {
     }
 
     @Override
-    public List<PartnerOrderInfoDTO> getList(Byte status, String customerCityCode, Integer partnerId, Integer serviceItemId, Date orderTimeStart , Date orderTimeEnd ,Date serviceTimeStart, Date serviceTimeEnd, String customerMobile) {
-        List<PartnerOrderInfoPO> poList = partnerOrderInfoPOManualMapper.query(status, customerCityCode, partnerId, serviceItemId, orderTimeStart,orderTimeEnd,serviceTimeStart, serviceTimeEnd, customerMobile, null, null);
+    public List<PartnerOrderInfoDTO> getList(Byte status, String customerCityCode, Integer partnerId, Integer serviceItemId, Date orderTimeStart, Date orderTimeEnd, Date serviceTimeStart, Date serviceTimeEnd, String customerMobile) {
+        List<PartnerOrderInfoPO> poList = partnerOrderInfoPOManualMapper.query(status, customerCityCode, partnerId, serviceItemId, orderTimeStart, orderTimeEnd, serviceTimeStart, serviceTimeEnd, customerMobile, null, null);
         List<PartnerOrderInfoDTO> dtoList = poList.stream().map(PartnerOrderInfoAdapter::PO2DTO).collect(Collectors.toList());
         dtoList.forEach(bean -> {
             PartnerDTO partnerDTO = partnerService.getById(bean.getPartnerId());

@@ -30,7 +30,7 @@ public class BOCCCConstant {
     /**
      * 商户名称：北京悠享首字母大写
      */
-    public static final String MERCHANT_NAME = "BJYX";
+    public static final String MERCHANT_NAME = "YOUX";
 
     /**
      * 商户ID
@@ -60,7 +60,7 @@ public class BOCCCConstant {
     /**
      * 登录中行服务器key路径
      */
-    public static String loginPrivateKeyPath = rootPath + "pgp.key/partner08.key";
+    public static String loginPrivateKeyPath = rootPath + "sftp.key/YOUX.key";
 
     /**
      * 下载到本地文件的根路径
@@ -115,40 +115,41 @@ public class BOCCCConstant {
     /**
      * 九个接口文件名模板
      */
+    public static String FILE_INDEX = "00";
     // 1、商品信息
-    public static String WARES_SOURCE = "WARES." + MERCHANT_NAME + ".YYYYMMDD.00.P";
-    public static String WARES_ZIP = "WARES." + MERCHANT_NAME + ".YYYYMMDD.00.P.ZIP";
-    public static String WARES_PGP = "WARES." + MERCHANT_NAME + ".YYYYMMDD.00.P.ZIP.DAT";
+    public static String WARES_SOURCE = "WARES." + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".P";
+    public static String WARES_ZIP = "WARES." + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".P.ZIP";
+    public static String WARES_PGP = "WARES." + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".P.ZIP.DAT";
     // 2、商户信息
-    public static String MER_SOURCE = "MER." + MERCHANT_NAME + ".YYYYMMDD.00.P";
-    public static String MER_ZIP = "MER." + MERCHANT_NAME + ".YYYYMMDD.00.P.ZIP";
-    public static String MER_PGP = "MER." + MERCHANT_NAME + ".YYYYMMDD.00.P.ZIP.DAT";
+    public static String MER_SOURCE = "MER." + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".P";
+    public static String MER_ZIP = "MER." + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".P.ZIP";
+    public static String MER_PGP = "MER." + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".P.ZIP.DAT";
     // 3、优惠券信息
-    public static String COUPON_SOURCE = "COUPON." + MERCHANT_NAME + ".YYYYMMDD.00.P";
-    public static String COUPON_ZIP = "COUPON." + MERCHANT_NAME + ".YYYYMMDD.00.P.ZIP";
-    public static String COUPON_PGP = "COUPON." + MERCHANT_NAME + ".YYYYMMDD.00.P.ZIP.DAT";
+    public static String COUPON_SOURCE = "COUPON." + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".P";
+    public static String COUPON_ZIP = "COUPON." + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".P.ZIP";
+    public static String COUPON_PGP = "COUPON." + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".P.ZIP.DAT";
     // 4、图片信息
-    public static String PIC_ZIP = "PIC." + MERCHANT_NAME + ".YYYYMMDD.00.P.ZIP";
-    public static String PIC_PGP = "PIC." + MERCHANT_NAME + ".YYYYMMDD.00.P.ZIP.DAT";
+    public static String PIC_ZIP = "PIC." + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".P.ZIP";
+    public static String PIC_PGP = "PIC." + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".P.ZIP.DAT";
     // 5、优惠券使用更新
-    public static String CUSED_SOURCE = "CUSED." + MERCHANT_NAME + ".YYYYMMDD.00.U";
-    public static String CUSED_ZIP = "CUSED." + MERCHANT_NAME + ".YYYYMMDD.00.U.ZIP";
-    public static String CUSED_PGP = "CUSED." + MERCHANT_NAME + ".YYYYMMDD.00.U.ZIP.DAT";
+    public static String CUSED_SOURCE = "CUSED." + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".U";
+    public static String CUSED_ZIP = "CUSED." + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".U.ZIP";
+    public static String CUSED_PGP = "CUSED." + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".U.ZIP.DAT";
     // 6、反馈退货
-    public static String BJYX_CCANCEL_SOURCE = "CCANCEL." + MERCHANT_NAME + ".YYYYMMDD.00.C";
-    public static String BJYX_CCANCEL_ZIP = "CCANCEL." + MERCHANT_NAME + ".YYYYMMDD.00.C.ZIP";
-    public static String BJYX_CCANCEL_PGP = "CCANCEL." + MERCHANT_NAME + ".YYYYMMDD.00.C.ZIP.DAT";
+    public static String BJYX_CCANCEL_SOURCE = "CCANCEL." + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".C";
+    public static String BJYX_CCANCEL_ZIP = "CCANCEL." + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".C.ZIP";
+    public static String BJYX_CCANCEL_PGP = "CCANCEL." + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".C.ZIP.DAT";
 
     // 7、总行发给第三方的退货信息
-    public static String BOC_CCANCEL_SOURCE = "CCANCEL.BOC" + MERCHANT_NAME + ".YYYYMMDD.00.C";
-    public static String BOC_CCANCEL_ZIP = "CCANCEL.BOC" + MERCHANT_NAME + ".YYYYMMDD.00.ZIP";
-    public static String BOC_CCANCEL_PGP = "CCANCEL.BOC" + MERCHANT_NAME + ".YYYYMMDD.00.ZIP.DAT";
+    public static String BOC_CCANCEL_SOURCE = "CCANCEL.BOC" + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".C";
+    public static String BOC_CCANCEL_ZIP = "CCANCEL.BOC" + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".ZIP";
+    public static String BOC_CCANCEL_PGP = "CCANCEL.BOC" + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".ZIP.DAT";
     // 8、每日优惠券剩余
-    public static String CREMA_SOURCE = "CREMA.BOC" + MERCHANT_NAME + ".YYYYMMDD.00.B";
-    public static String CREMA_ZIP = "CREMA.BOC" + MERCHANT_NAME + ".YYYYMMDD.00.ZIP";
-    public static String CREMA_PGP = "CREMA.BOC" + MERCHANT_NAME + ".YYYYMMDD.00.ZIP.DAT";
+    public static String CREMA_SOURCE = "CREMA.BOC" + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".B";
+    public static String CREMA_ZIP = "CREMA.BOC" + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".ZIP";
+    public static String CREMA_PGP = "CREMA.BOC" + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".ZIP.DAT";
     // 9、每日商品购买清单
-    public static String CSELL_SOURCE = "CSELL.BOC" + MERCHANT_NAME + ".YYYYMMDD.00.B";
-    public static String CSELL_ZIP = "CSELL.BOC" + MERCHANT_NAME + ".YYYYMMDD.00.ZIP";
-    public static String CSELL_PGP = "CSELL.BOC" + MERCHANT_NAME + ".YYYYMMDD.00.ZIP.DAT";
+    public static String CSELL_SOURCE = "CSELL.BOC" + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".B";
+    public static String CSELL_ZIP = "CSELL.BOC" + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".ZIP";
+    public static String CSELL_PGP = "CSELL.BOC" + MERCHANT_NAME + ".YYYYMMDD." + FILE_INDEX + ".ZIP.DAT";
 }

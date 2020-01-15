@@ -7,6 +7,7 @@ import com.jiazhe.youxiang.base.util.ExportExcelUtils;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.order.OrderInfoBiz;
+import com.jiazhe.youxiang.server.biz.order.OrderTrackBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
@@ -26,8 +27,9 @@ import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerOrderInfoPageRe
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerPayReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.CustomerPlaceOrderReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderCancelUnpassReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderCancelWithCostReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderInfoPageReq;
-import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderReq;
+import com.jiazhe.youxiang.server.vo.req.order.orderinfo.OrderCodeReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserPlaceOrderReq;
 import com.jiazhe.youxiang.server.vo.req.order.orderinfo.UserReservationOrderReq;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
@@ -61,6 +63,8 @@ public class APIOrderInfoController extends BaseController {
 
     @Autowired
     private OrderInfoBiz orderInfoBiz;
+    @Autowired
+    private OrderTrackBiz orderTrackBiz;
 
     @RequiresPermissions(value = {PermissionConstant.ORDER_MANAGEMENT, PermissionConstant.ORDER_SEARCH, PermissionConstant.CUSTOMER_ORDER_DETAIL}, logical = Logical.OR)
     @ApiOperation(value = "【后台】分页查询订单信息", httpMethod = "GET", response = OrderInfoResp.class, responseContainer = "List", notes = "【后台】分页查询订单信息")
@@ -76,7 +80,7 @@ public class APIOrderInfoController extends BaseController {
         Date orderEndTime = req.getOrderEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getOrderEndTime()));
         Date realServiceStartTime = req.getRealServiceTimeStart() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getRealServiceTimeStart()));
         Date realServiceEndTime = req.getRealServiceTimeEnd() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getRealServiceTimeEnd()));
-        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getStatus(), req.getOrderCode(), req.getMobile(), req.getCustomerMobile(), orderStartTime, orderEndTime, req.getWorkerMobile(), req.getProductId(),realServiceStartTime,realServiceEndTime,req.getCustomerCityCode(),paging);
+        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getStatus(), req.getOrderCode(), req.getMobile(), req.getCustomerMobile(), orderStartTime, orderEndTime, req.getWorkerMobile(), req.getProductId(), req.getServiceProductId(), realServiceStartTime, realServiceEndTime, req.getCustomerCityCode(), paging);
         List<OrderInfoResp> orderInfoRespList = orderInfoDTOList.stream().map(OrderInfoAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(orderInfoRespList, paging);
     }
@@ -145,8 +149,15 @@ public class APIOrderInfoController extends BaseController {
     @ApiOperation(value = "审核通过", httpMethod = "POST", notes = "审核通过")
     @RequestMapping(value = "/ordercancelpass", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "审核通过", level = LogLevelEnum.LEVEL_2)
-    public Object orderCancelPass(@ModelAttribute IdReq req) {
-        orderInfoBiz.orderCancelPass(req.getId());
+    public Object orderCancelPass(@ModelAttribute OrderCancelWithCostReq req) {
+        Integer orderId = req.getOrderId();
+        CommonValidator.validateNull(orderId, new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CANCEL));
+        BigDecimal cost = req.getCost();
+        CommonValidator.validateNull(cost, new OrderException(OrderCodeEnum.ORDER_COST_IS_NULL));
+        OrderInfoDTO orderInfoDTO = new OrderInfoDTO();
+        orderInfoDTO.setId(orderId);
+        orderInfoDTO.setCost(cost);
+        orderInfoBiz.orderCancelPass(orderInfoDTO);
         return ResponseFactory.buildSuccess();
     }
 
@@ -163,8 +174,15 @@ public class APIOrderInfoController extends BaseController {
     @ApiOperation(value = "员工取消订单", httpMethod = "POST", notes = "员工取消订单")
     @RequestMapping(value = "/usercancelorder", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "员工取消订单", level = LogLevelEnum.LEVEL_2)
-    public Object userCancelOrder(@ModelAttribute IdReq req) {
-        orderInfoBiz.userCancelOrder(req.getId());
+    public Object userCancelOrder(@ModelAttribute OrderCancelWithCostReq req) {
+        Integer orderId = req.getOrderId();
+        CommonValidator.validateNull(orderId, new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CANCEL));
+        BigDecimal cost = req.getCost();
+        CommonValidator.validateNull(cost, new OrderException(OrderCodeEnum.ORDER_COST_IS_NULL));
+        OrderInfoDTO orderInfoDTO = new OrderInfoDTO();
+        orderInfoDTO.setId(orderId);
+        orderInfoDTO.setCost(cost);
+        orderInfoBiz.userCancelOrder(orderInfoDTO);
         return ResponseFactory.buildSuccess();
     }
 
@@ -183,11 +201,11 @@ public class APIOrderInfoController extends BaseController {
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "下单", level = LogLevelEnum.LEVEL_2)
     public Object userPlaceOrder(@ModelAttribute UserPlaceOrderReq req) {
         //如果cashSupport参数不为true，则设置为false
-        if(!"true".equals(req.getCashSupport())){
+        if (!"true".equals(req.getCashSupport())) {
             req.setCashSupport("false");
         }
         //订单备注框有权限，可能传过来为空
-        if(null == req.getComments()){
+        if (null == req.getComments()) {
             req.setComments("");
         }
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqUserPlaceOrder2DTOPlaceOrder(req);
@@ -207,10 +225,12 @@ public class APIOrderInfoController extends BaseController {
             throw new OrderException(OrderCodeEnum.POINT_RECHARGE_CARD_CONCURRENT_PAY);
         }
         //如果cashSupport参数不为true，则设置为false
-        if(!"true".equals(req.getCashSupport())){
+        if (!"true".equals(req.getCashSupport())) {
             req.setCashSupport("false");
         }
         PlaceOrderDTO placeOrderDTO = OrderInfoAdapter.ReqCustomerPlaceOrder2DTOPlaceOrder(req);
+        //前台下单，扣分商品和服务商品一样
+        placeOrderDTO.setServiceProductId(req.getProductId());
         placeOrderDTO.setWorkerMobile("");
         placeOrderDTO.setWorkerName("");
         placeOrderDTO.setCost(BigDecimal.ZERO);
@@ -266,6 +286,7 @@ public class APIOrderInfoController extends BaseController {
     public Object getById(@ModelAttribute IdReq req) {
         OrderInfoDTO orderInfoDTO = orderInfoBiz.getById(req.getId());
         OrderInfoResp orderInfoResp = OrderInfoAdapter.DTO2Resp(orderInfoDTO);
+        orderInfoResp.setOrderTrackInfo(orderTrackBiz.getOrderTrackInfo(req.getId()));
         return ResponseFactory.buildResponse(orderInfoResp);
     }
 
@@ -295,7 +316,7 @@ public class APIOrderInfoController extends BaseController {
     @ApiOperation(value = "验证订单是否已经微信支付", httpMethod = "GET", response = TenpayQureyResp.class, notes = "验证订单是否已经微信支付")
     @RequestMapping(value = "/checktenpay", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "验证订单是否已经微信支付", level = LogLevelEnum.LEVEL_1)
-    public Object checkTenpay(@ModelAttribute OrderReq req) {
+    public Object checkTenpay(@ModelAttribute OrderCodeReq req) {
         TenpayQureyDTO dto = orderInfoBiz.checkTenPay(req.getOrderCode());
         TenpayQureyResp resp = OrderInfoAdapter.TenpayQureyDto2Resp(dto);
         return ResponseFactory.buildResponse(resp);
@@ -305,7 +326,7 @@ public class APIOrderInfoController extends BaseController {
     @ApiOperation(value = "【后台】导出订单", httpMethod = "GET", notes = "导出订单")
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "导出订单", level = LogLevelEnum.LEVEL_3)
-    public void export(@ModelAttribute OrderInfoPageReq req, HttpServletResponse response){
+    public void export(@ModelAttribute OrderInfoPageReq req, HttpServletResponse response) {
         //如果包含0，说明查全部订单，否则按需查询
         if (Arrays.asList(req.getStatus().split(",")).contains(String.valueOf(CommonConstant.ORDER_ALL))) {
             req.setStatus(null);
@@ -314,7 +335,7 @@ public class APIOrderInfoController extends BaseController {
         Date orderEndTime = req.getOrderEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getOrderEndTime()));
         Date realServiceStartTime = req.getRealServiceTimeStart() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getRealServiceTimeStart()));
         Date realServiceEndTime = req.getRealServiceTimeEnd() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getRealServiceTimeEnd()));
-        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getStatus(), req.getOrderCode(), req.getMobile(), req.getCustomerMobile(), orderStartTime, orderEndTime, req.getWorkerMobile(), req.getProductId(),realServiceStartTime,realServiceEndTime,req.getCustomerCityCode());
+        List<OrderInfoDTO> orderInfoDTOList = orderInfoBiz.getList(req.getStatus(), req.getOrderCode(), req.getMobile(), req.getCustomerMobile(), orderStartTime, orderEndTime, req.getWorkerMobile(), req.getProductId(), req.getServiceProductId(), realServiceStartTime, realServiceEndTime, req.getCustomerCityCode());
         ExportExcelUtils.exportOrder(response, orderInfoDTOList);
     }
 

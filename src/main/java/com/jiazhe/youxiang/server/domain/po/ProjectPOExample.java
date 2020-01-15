@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.domain.po;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -375,52 +376,52 @@ public class ProjectPOExample {
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateEqualTo(Integer value) {
+        public Criteria andPointConversionRateEqualTo(BigDecimal value) {
             addCriterion("point_conversion_rate =", value, "pointConversionRate");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateNotEqualTo(Integer value) {
+        public Criteria andPointConversionRateNotEqualTo(BigDecimal value) {
             addCriterion("point_conversion_rate <>", value, "pointConversionRate");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateGreaterThan(Integer value) {
+        public Criteria andPointConversionRateGreaterThan(BigDecimal value) {
             addCriterion("point_conversion_rate >", value, "pointConversionRate");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateGreaterThanOrEqualTo(Integer value) {
+        public Criteria andPointConversionRateGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("point_conversion_rate >=", value, "pointConversionRate");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateLessThan(Integer value) {
+        public Criteria andPointConversionRateLessThan(BigDecimal value) {
             addCriterion("point_conversion_rate <", value, "pointConversionRate");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateLessThanOrEqualTo(Integer value) {
+        public Criteria andPointConversionRateLessThanOrEqualTo(BigDecimal value) {
             addCriterion("point_conversion_rate <=", value, "pointConversionRate");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateIn(List<Integer> values) {
+        public Criteria andPointConversionRateIn(List<BigDecimal> values) {
             addCriterion("point_conversion_rate in", values, "pointConversionRate");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateNotIn(List<Integer> values) {
+        public Criteria andPointConversionRateNotIn(List<BigDecimal> values) {
             addCriterion("point_conversion_rate not in", values, "pointConversionRate");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateBetween(Integer value1, Integer value2) {
+        public Criteria andPointConversionRateBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("point_conversion_rate between", value1, value2, "pointConversionRate");
             return (Criteria) this;
         }
 
-        public Criteria andPointConversionRateNotBetween(Integer value1, Integer value2) {
+        public Criteria andPointConversionRateNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("point_conversion_rate not between", value1, value2, "pointConversionRate");
             return (Criteria) this;
         }

@@ -11,6 +11,7 @@
     <!--<link rel="stylesheet" th:href="@{/static/editable-select/css/jquery-editable-select.min.css}"/>-->
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
+    <script th:src="@{/static/clipboard.js}"></script>
     <!--<script th:src="@{/static/editable-select/js/jquery-editable-select.min.js}"></script>-->
 
     <style>
@@ -31,6 +32,9 @@
 </head>
 
 <body class="no-skin">
+<div style="display: none">
+    <button id="clipboard-btn" data-clipboard-text=""></button>
+</div>
 <div class="main-container ace-save-state" id="main-container">
     <div class="main-content">
         <div class="main-content-inner">
@@ -381,7 +385,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" onclick="beforeCloseModal()">&times;</button>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="blue bigger" id="partnerOrderModalTitle"></h4>
             </div>
             <div class="modal-body">
@@ -597,7 +601,16 @@
                                     </div>
                                 </div>
                                 <div class="space-2"></div>
-
+                                <div class="order_track space-2"></div>
+                                <div class="order_track form-group">
+                                    <label class="col-sm-4 control-label no-padding-right">操作记录：</label>
+                                    <div class="col-sm-8">
+                                        <div class="pos-rel">
+                                            <div id="re_order_track" disabled class="form-control"
+                                                 style="resize:none;"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -611,9 +624,15 @@
                 </button>
 
                 <button class="btn btn-sm btn-primary modal-footer-btn modal-footer-btn-save"
-                        onclick="savePartnerOrder()" id="partnerOrderSaveBtn">
+                        onclick="savePartnerOrder(false)" id="partnerOrderSaveBtn">
                     <i class="ace-icon fa fa-check"></i>
                     保存
+                </button>
+
+                <button class="btn btn-sm btn-primary modal-footer-btn modal-footer-btn-save"
+                        onclick="savePartnerOrder(true)" id="partnerOrderSaveAndOnBtn">
+                    <i class="ace-icon fa fa-check"></i>
+                    保存并继续
                 </button>
             </div>
         </div>
@@ -737,7 +756,7 @@
             colNames: ['', '操作', '状态', '客户姓名', '客户手机号', '城市', '兑换码密钥', '兑换时间', '预约时间', '订单来源', '服务人员姓名', '服务项目', '预付', '再支付'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
-                {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter},
+                {name: '_action', index: '_action', width: 160, sortable: false, formatter: customFormatter},
                 {
                     name: 'status',
                     index: 'status',
@@ -769,11 +788,15 @@
                         return dateFormat(rowObject.serviceTime);
                     }
                 },
-                {name: 'orderSource', index: 'orderSource', width: 100, sortable: false},
+                {name: 'orderSource', index: 'orderSource', width: 80, sortable: false},
                 {name: 'workerName', index: 'workerName', width: 100, sortable: false},
                 {name: 'serviceItemResp.name', index: 'serviceItem', width: 100, sortable: false},
-                {name: 'prePay', index: 'prePay', width: 50, sortable: false},
-                {name: 'appendPay', index: 'appendPay', width: 50, sortable: false}
+                {name: 'prePay', index: 'prePay', width: 100, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.prePay);
+                }},
+                {name: 'appendPay', index: 'appendPay', width: 100, sortable: false,formatter:function(cellvalue, options, rowObject){
+                    return formatNumberWithComma(rowObject.appendPay);
+                }}
             ],
             loadComplete: function (data) {
                 if ("error" in data) {
@@ -797,6 +820,21 @@
         initTable(grid_selector, pager_selector, tableOption);
 
         refreshOverviewMoney();
+
+        //初始化复制信息的组件
+        var clipboard;
+        if (ClipboardJS)
+            clipboard = new ClipboardJS('#clipboard-btn');
+        if (clipboard) {
+            //优雅降级:safari 版本号>=10,提示复制成功;否则提示需在文字选中后，手动选择“拷贝”进行复制
+            clipboard.on('success', function (e) {
+                alert('复制成功!')
+                e.clearSelection();
+            });
+            clipboard.on('error', function (e) {
+                alert('请选择“拷贝”进行复制!')
+            });
+        }
     });
 
     function search() {
@@ -820,28 +858,17 @@
                 str += getFunctionButton("btn-primary", "openEdit(" + rowObject.id + ")", "修改");
             }
         }
-        return str;
-    }
 
-    //关闭前调用
-    function beforeCloseModal() {
-//        var operateType = $("#operateType").val();
-//        if(operateType == '1' || operateType == '2'){ //1为新建 2为修改 3为查看
-//            confirm("确定关闭此对话框？",function(result){
-//                if(result){
-//                    $('#modal-partnerOrder').modal('hide');
-//                }
-//            })
-//        }else {
-//            $('#modal-partnerOrder').modal('hide');
-//        }
-        $('#modal-partnerOrder').modal('hide');
+        str += getFunctionButton("btn-primary", "copyOrderInfo(" + JSON.stringify(rowObject) + ")", "复制信息");
+
+        return str;
     }
 
     function openShow(id) {
         fillPartnerOrderForm(id)
         $("#partnerOrderModalTitle").html("商家订单-查看");
         $("#partnerOrderSaveBtn").hide();
+        $("#partnerOrderSaveAndOnBtn").hide();
         $("#modal-partnerOrder").modal("show");
         $("#partnerOrderForm input").attr("disabled", "disabled");
         $("#partnerOrderForm select").attr("disabled", "disabled");
@@ -853,11 +880,40 @@
         fillPartnerOrderForm(id);
         $("#partnerOrderModalTitle").html("商家订单-修改");
         $("#partnerOrderSaveBtn").show();
+        $("#partnerOrderSaveAndOnBtn").hide();
         $("#modal-partnerOrder").modal("show");
         $("#partnerOrderForm input").removeAttr("disabled");
         $("#partnerOrderForm select").removeAttr("disabled");
         $("#partnerOrderForm textarea").removeAttr("disabled");
         $("#operateType").val('2');
+    }
+
+    function copyOrderInfo(rowData) {
+        var text = "";
+        if (rowData.customerAddress) {
+            text += rowData.customerAddress + "\r\n";
+        }
+        if (rowData.customerName) {
+            text += rowData.customerName + " ";
+        }
+        if (rowData.customerMobile) {
+            text += rowData.customerMobile + "\r\n";
+        }
+        if (rowData.serviceItemResp.name) {
+            text += rowData.serviceItemResp.name + "\r\n";
+        }
+        if (rowData.serviceTime) {
+            text += timeFormat(rowData.serviceTime) + "\r\n";
+        }
+        if (rowData.remark) {
+            text += "备注：" + rowData.remark;
+        }
+        if (text) {
+            $("#clipboard-btn").attr("data-clipboard-text", text);
+            $("#clipboard-btn").click();
+        } else {
+            alert("复制内容为空");
+        }
     }
 
     function openNew() {
@@ -872,11 +928,13 @@
         $("#saveServiceTime").next().next().val(0);
         $("#partnerOrderModalTitle").html("商家订单-新建");
         $("#partnerOrderSaveBtn").show();
+        $("#partnerOrderSaveAndOnBtn").show();
         $("#modal-partnerOrder").modal("show");
         $("#partnerOrderForm input").removeAttr("disabled");
         $("#partnerOrderForm select").removeAttr("disabled");
         $("#partnerOrderForm textarea").removeAttr("disabled");
         $("#operateType").val('1');
+        parseOrderTrackInfo();
     }
 
     function initForm() {
@@ -926,13 +984,25 @@
                 $("#partnerOrderForm #savePrePay").val(result.prePay);
                 $("#partnerOrderForm #saveAppendPay").val(result.appendPay);
                 $("#partnerOrderForm #saveStatus").val(result.status);
+                parseOrderTrackInfo(result.orderTrackInfo);
                 checkNodes(result.customerCityCode);
             },
             error: error
         });
     }
 
-    function savePartnerOrder() {
+    function parseOrderTrackInfo(info) {
+        if (info) {
+            $(".order_track").show();
+            $("#re_order_track").html($("<div>" + info + "</div>"));
+        } else {
+            $(".order_track").hide();
+            $("#re_order_track").html("");
+        }
+    }
+
+    //下单 keepOn为true：下单并继续；为false，下单关闭模态框，重新刷新页面
+    function savePartnerOrder(keepOn) {
         if (!isNumber($("#savePrePay").val())) {
             bootboxalert("预付必须为数字！");
             return false;
@@ -941,18 +1011,18 @@
             bootboxalert("再次支付必须为数字！");
             return false;
         }
-        if ($("#saveStatus").val() == "2") {
+        if ($("#saveStatus").val() == "3") {
             confirm("已完成订单，除了备注为非必填外，其他都为必填，需要继续保存吗？", function (result) {
                 if (result) {
-                    save();
+                    save(keepOn);
                 }
             });
         } else {
-            save();
+            save(keepOn);
         }
     }
 
-    function save() {
+    function save(keepOn) {
         $.ajax({
             url: "/api/partnerorderinfo/save",
             dataType: "json",
@@ -963,9 +1033,13 @@
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
-                    $("#modal-partnerOrder").modal('hide');
-                    jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
-                    refreshOverviewMoney();
+                    if(keepOn){
+                        bootboxalert("保存成功，请继续");
+                    }else{
+                        $("#modal-partnerOrder").modal('hide');
+                        jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
+                        refreshOverviewMoney();
+                    }
                 }
             },
             error: error
@@ -990,12 +1064,12 @@
                     bootboxalert(data.error.message);
                 } else {
                     var result = data.data;
-                    $("#total").html(result.total);
-                    $("#spend").html(result.spend);
-                    $("#left").html(result.left);
-                    $("#intervalTotal").html(result.intervalTotal);
-                    $("#intervalSpend").html(result.intervalSpend);
-                    $("#intervalLeft").html(result.intervalLeft);
+                    $("#total").html(formatNumberWithComma(result.total));
+                    $("#spend").html(formatNumberWithComma(result.spend));
+                    $("#left").html(formatNumberWithComma(result.left));
+                    $("#intervalTotal").html(formatNumberWithComma(result.intervalTotal));
+                    $("#intervalSpend").html(formatNumberWithComma(result.intervalSpend));
+                    $("#intervalLeft").html(formatNumberWithComma(result.intervalLeft));
                     showAlertInfo();
                 }
             },
@@ -1024,7 +1098,7 @@
                     for (var i = 0; i < result.length; i++) {
                         var str = "<tr>" +
                             "<td>" + dateFormat(result[i].advanceTime) + "</td>" +
-                            "<td>" + result[i].advancePay + "</td>" +
+                            "<td>" + formatNumberWithComma(result[i].advancePay) + "</td>" +
                             "<td>" + result[i].remark + "</td>" +
                             "</td></tr>"
                         $("#modelTbody").append(str);
