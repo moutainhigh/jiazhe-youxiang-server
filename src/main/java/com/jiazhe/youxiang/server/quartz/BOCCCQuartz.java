@@ -112,13 +112,13 @@ public class BOCCCQuartz extends QuartzJobBean {
         }
 
         //定时上传指定文件夹的文件
-//        try {
-//            logger.info("定时任务：上传文件执行中");
-//            AutoSFTPUtils.upload();
-//            logger.info("定时任务：上传文件执行完成");
-//        } catch (Exception e) {
-//            logger.error("定时任务：上传文件执行失败，异常信息：" + e.getMessage());
-//        }
+        try {
+            logger.info("定时任务：上传文件执行中");
+            AutoSFTPUtils.upload();
+            logger.info("定时任务：上传文件执行完成");
+        } catch (Exception e) {
+            logger.error("定时任务：上传文件执行失败，异常信息：" + e.getMessage());
+        }
 
         //定时分析前一日优惠券剩余数量
         try {

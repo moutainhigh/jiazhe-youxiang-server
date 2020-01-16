@@ -1,10 +1,14 @@
 package com.jiazhe.youxiang.server.common.constant;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 /**
  * @author tu
  * @description：微信支付相关常量
  * @date 2018/12/9
  */
+@Component
 public class WeChatPayConstant {
 
     /**
@@ -34,12 +38,6 @@ public class WeChatPayConstant {
     public static String NOTIFY_URL = "/api/wxpay/notify";
 
     /**
-     key为商户平台设置的密钥key
-     */
-    //public static String API_KEY = "youxianghulian20180509lizhelizhe";
-    public static String API_KEY = "beijingchengyi20190625chengyi625";
-
-    /**
      * 根据code获取openid的url
      */
     public static String AUTH_URL = "https://api.weixin.qq.com/sns/oauth2/access_token?";
@@ -48,5 +46,15 @@ public class WeChatPayConstant {
      * 订单查询url
      */
     public static String ORDER_QUERY_URL = "https://api.mch.weixin.qq.com/pay/orderquery";
+
+    /**
+     key为商户平台设置的密钥key
+     */
+    public static String API_KEY ;
+
+    @Value("${wechat_pay_api_key}")
+    public static void setApiKey(String apiKey) {
+        API_KEY = apiKey;
+    }
 
 }
