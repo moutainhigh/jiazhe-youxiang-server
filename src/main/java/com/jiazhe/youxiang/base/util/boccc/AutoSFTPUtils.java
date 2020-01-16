@@ -145,7 +145,7 @@ public class AutoSFTPUtils {
         if (directory != null && !"".equals(directory)) {
             sftp.cd(directory);
         }
-        File file = new File(savePath + "\\" + downloadFile);
+        File file = new File(savePath + "/" + downloadFile);
         sftp.get(downloadFile, new FileOutputStream(file));
     }
 
