@@ -57,13 +57,13 @@ public class QuartzConfig {
         return JobBuilder.newJob(BOCCCQuartz.class).withIdentity("BOCCCJob").storeDurably().build();
     }
 
-    //每天凌晨一点执行任务
+    //每天凌晨00:01点执行任务
     @Bean
     public CronTrigger BOCCCCronTrigger() throws Exception {
         return TriggerBuilder.newTrigger()
                 .forJob(BOCCCQuartzDetail())
                 .withIdentity("BOCCCTrigger")
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 ? * *"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 1 0 ? * *"))
                 .build();
     }
 

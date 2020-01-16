@@ -113,11 +113,11 @@ public class AutoSFTPUtils {
                 if (uploadPath.exists()) {
                     File[] fs = uploadPath.listFiles();
                     for (File file : fs) {
-                        channelSftp.put(new FileInputStream(file), BOCCCConstant.uploadPath);
+                        channelSftp.put(new FileInputStream(file), BOCCCConstant.outPath + "/" + file.getName());
                     }
                 }
             } catch (SftpException e) {
-                logger.error("An error occurred during sftp push, send data fail, the target path is :{}", BOCCCConstant.uploadPath);
+                logger.error("An error occurred during sftp push, send data fail, the target path is :{}", BOCCCConstant.outPath);
             }
         } finally {
             if (channelSftp != null) {
