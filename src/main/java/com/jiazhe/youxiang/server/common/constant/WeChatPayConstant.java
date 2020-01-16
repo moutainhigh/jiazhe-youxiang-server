@@ -53,7 +53,7 @@ public class WeChatPayConstant {
     public static String API_KEY ;
 
     @Value("${wechat_pay_api_key}")
-    public static void setApiKey(String apiKey) {
+    public void setApiKey(String apiKey) {
         API_KEY = apiKey;
     }
 
