@@ -106,7 +106,7 @@ public class BOCDCBiz {
                 resp.setGiftCardNo(RSAUtil.bocdcPublicEncrypt(dto.getCode()));
                 resp.setGiftCardPwd(RSAUtil.bocdcPublicEncrypt(dto.getKeyt()));
                 resp.setEbuyId(RSAUtil.bocdcPublicEncrypt(dto.getId().toString()));
-                resp.setCardExpDate(DateUtil.yyyyMMDD(dto.getExpiryTime()));
+                resp.setCardExpDate(DateUtil.yyyyMMDD(expiryDate));
             }
         } catch (Exception e) {
             resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
