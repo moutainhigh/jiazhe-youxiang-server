@@ -322,6 +322,16 @@ public class APIOrderInfoController extends BaseController {
         return ResponseFactory.buildResponse(resp);
     }
 
+//    @RequiresPermissions(PermissionConstant.ORDER_TENPAY_CHECK)
+    @ApiOperation(value = "验证订单是否已经微信退款", httpMethod = "GET", response = TenpayQureyResp.class, notes = "验证订单是否已经微信支付退款")
+    @RequestMapping(value = "/checktenpayrefund", method = RequestMethod.GET)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "验证订单是否已经微信支付退款", level = LogLevelEnum.LEVEL_1)
+    public Object checkTenpayRefund(@ModelAttribute OrderCodeReq req) {
+        TenpayQureyDTO dto = orderInfoBiz.checkTenPayRefund(req.getOrderCode());
+        TenpayQureyResp resp = OrderInfoAdapter.TenpayQureyDto2Resp(dto);
+        return ResponseFactory.buildResponse(resp);
+    }
+
     @RequiresPermissions(PermissionConstant.ORDER_EXPORT)
     @ApiOperation(value = "【后台】导出订单", httpMethod = "GET", notes = "导出订单")
     @RequestMapping(value = "/export", method = RequestMethod.GET)

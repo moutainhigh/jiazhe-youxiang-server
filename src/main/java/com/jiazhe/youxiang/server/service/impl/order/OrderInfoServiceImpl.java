@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
+import com.jiazhe.youxiang.server.biz.WeChatPayBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.OrderException;
@@ -86,11 +87,13 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     private PointService pointService;
     @Autowired
     private EleProductCodeService eleProductCodeService;
+    @Autowired
+    private WeChatPayBiz weChatPayBiz;
 
     @Override
-    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId,Date realServiceStartTime, Date realServiceEndTime, String customerCityCode, Paging paging) {
-        Integer count = orderInfoPOManualMapper.count(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, serviceProductId,realServiceStartTime, realServiceEndTime,customerCityCode);
-        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, serviceProductId,realServiceStartTime, realServiceEndTime, customerCityCode,paging.getOffset(), paging.getLimit());
+    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode, Paging paging) {
+        Integer count = orderInfoPOManualMapper.count(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, serviceProductId, realServiceStartTime, realServiceEndTime, customerCityCode);
+        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, serviceProductId, realServiceStartTime, realServiceEndTime, customerCityCode, paging.getOffset(), paging.getLimit());
         List<OrderInfoDTO> orderInfoDTOList = orderInfoPOList.stream().map(OrderInfoAdapter::PO2DTO).collect(Collectors.toList());
         orderInfoDTOList.forEach(bean -> {
             ProductDTO productDTO = productService.getById(bean.getProductId());
@@ -784,8 +787,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId,Date realServiceStartTime, Date realServiceEndTime,String customerCityCode) {
-        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, serviceProductId,realServiceStartTime, realServiceEndTime, customerCityCode,null, null);
+    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode) {
+        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, serviceProductId, realServiceStartTime, realServiceEndTime, customerCityCode, null, null);
         List<OrderInfoDTO> orderInfoDTOList = orderInfoPOList.stream().map(OrderInfoAdapter::PO2DTO).collect(Collectors.toList());
         orderInfoDTOList.forEach(bean -> {
             ProductDTO productDTO = productService.getById(bean.getProductId());
@@ -844,6 +847,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 }
                 if (bean.getPayType().equals(CommonConstant.PAY_CASH)) {
                     //微信退款
+                    weChatPayBiz.wechatRefund(bean.getOrderCode(), bean.getPayMoney().multiply(new BigDecimal(100)).intValue());
                 }
             });
         }
