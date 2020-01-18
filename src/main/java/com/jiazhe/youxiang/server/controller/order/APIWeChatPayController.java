@@ -85,7 +85,7 @@ public class APIWeChatPayController {
             throw new OrderException(OrderCodeEnum.ORDER_NOT_EXIST);
         }
         UnifiedOrderResp unifiedOrderResp = weChatPayBiz.unifiedOrder(req, request);
-        return ResponseFactory.buildResponse(unifiedOrderResp);
+        return unifiedOrderResp;
 
     }
 
@@ -117,6 +117,8 @@ public class APIWeChatPayController {
                 } else {
                     logger.info("微信付款通知成功，业务失败：验签失败");
                 }
+            } else {
+                logger.info("微信付款通知成功，业务失败：" + payNotifyMap.get("return_msg"));
             }
         } catch (Exception e) {
             logger.error("微信付款通知成功，业务失败：异常信息" + e.getMessage());
@@ -138,21 +140,24 @@ public class APIWeChatPayController {
     public String refundNotify(HttpServletRequest request) throws Exception {
         try {
             String strXml = WeChatPayUtils.parseRequest(request);
-            Map<String, String> payNotifyMap = WeChatPayUtils.doXMLParse(strXml);
-            if (payNotifyMap.get("return_code").equalsIgnoreCase(SUCCESS)) {
-                // 退款成功后验签
-                if (WeChatPayUtils.isTenpaySign(payNotifyMap, WeChatPayConstant.API_KEY)) {
-                    String orderNo = payNotifyMap.get("out_trade_no").toString();
-                    String transactionId = payNotifyMap.get("transaction_id").toString();
-                    Integer wxPay = new Integer(payNotifyMap.get("cash_fee").toString());
-                    if (payNotifyMap.get("result_code").equals(SUCCESS)) {
-                        orderInfoBiz.wxRefundNotify(transactionId, orderNo, wxPay);
-                    } else {
-                        logger.info("微信退款通知成功，业务失败：" + payNotifyMap.get("result_code"));
+            Map<String, String> refundNotifyMap = WeChatPayUtils.doXMLParse(strXml);
+            if (SUCCESS.equalsIgnoreCase(refundNotifyMap.get("return_code"))) {
+                // 退款成功后解析字符串
+                String reqInfo = refundNotifyMap.get("req_info");
+                Map<String, String> reqInfoMap = WeChatPayUtils.refundResultDecrypt(reqInfo);
+                if (null != reqInfo) {
+                    String refundStatus = reqInfoMap.get("refund_status");
+                    if (SUCCESS.equalsIgnoreCase(refundStatus)) {
+                        String orderNo = reqInfoMap.get("out_trade_no").toString();
+                        Integer wxRefund = new Integer(reqInfoMap.get("settlement_refund_fee").toString());
+                        String refundId = reqInfoMap.get("refundId").toString();
+                        orderInfoBiz.wxRefundNotify(refundId, orderNo, wxRefund);
                     }
                 } else {
-                    logger.info("微信退款通知成功，业务失败：验签失败");
+                    logger.info("微信退款通知成功，业务失败：原因未知");
                 }
+            } else {
+                logger.info("微信退款通知成功，业务失败：" + refundNotifyMap.get("return_msg"));
             }
         } catch (Exception e) {
             logger.error("微信付款通知成功，业务失败：异常信息" + e.getMessage());

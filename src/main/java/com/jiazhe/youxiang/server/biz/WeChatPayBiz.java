@@ -36,7 +36,7 @@ public class WeChatPayBiz {
 
     private static final Logger logger = LoggerFactory.getLogger(WeChatPayBiz.class);
 
-    //统一下单
+    //统一下单，三方请求微信
     public UnifiedOrderResp unifiedOrder(WeChatUnifiedOrderReq req, HttpServletRequest request) {
         UnifiedOrderResp unifiedOrderResp = new UnifiedOrderResp();
         //需要保证参数的顺序
@@ -92,7 +92,7 @@ public class WeChatPayBiz {
         }
     }
 
-    //微信退款
+    //微信退款，三方请求微信
     public void wechatRefund(String orderCode,Integer money) {
         //需要保证参数的顺序
         Map<String, String> param = new LinkedHashMap<>();
@@ -113,12 +113,12 @@ public class WeChatPayBiz {
         try {
             Map<String, String> map = WeChatPayUtils.doXMLParse(result);
             String returnCode = map.get("return_code");
-            if (!returnCode.equals("SUCCESS")) {
+            if (!returnCode.equalsIgnoreCase("SUCCESS")) {
                 logger.info("发起退款失败，原因：" + map.get("return_msg"));
                 throw new WeChatPayException(WeChatPayCodeEnum.WECHAT_REFUND_ERROR);
             }
             String resultCode = map.get("result_code");
-            if (!resultCode.equals("SUCCESS")) {
+            if (!resultCode.equalsIgnoreCase("SUCCESS")) {
                 logger.info("发起退款失败，原因：" + map.get("err_code_des"));
                 throw new WeChatPayException(WeChatPayCodeEnum.WECHAT_REFUND_ERROR);
             }

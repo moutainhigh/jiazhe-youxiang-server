@@ -233,12 +233,12 @@ public class OrderInfoBiz {
     /**
      * 微信退款成功通知
      *
-     * @param transactionId
+     * @param refundId
      * @param orderNo
-     * @param wxPay
+     * @param wxRefund
      */
-    public void wxRefundNotify(String transactionId, String orderNo, Integer wxPay) {
-
+    public void wxRefundNotify(String refundId, String orderNo, Integer wxRefund) {
+        orderInfoService.wxRefundNotify(refundId, orderNo, wxRefund);
     }
 
     public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode) {

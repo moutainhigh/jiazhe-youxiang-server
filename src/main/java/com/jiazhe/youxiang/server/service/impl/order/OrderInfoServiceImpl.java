@@ -14,6 +14,7 @@ import com.jiazhe.youxiang.server.dao.mapper.manual.order.OrderInfoPOManualMappe
 import com.jiazhe.youxiang.server.domain.po.OrderInfoPO;
 import com.jiazhe.youxiang.server.domain.po.OrderInfoPOExample;
 import com.jiazhe.youxiang.server.domain.po.OrderPaymentPO;
+import com.jiazhe.youxiang.server.domain.po.OrderRefundPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.eleproductexcode.EleProductCodeDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.AppendOrderDTO;
@@ -747,11 +748,11 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Override
     public void wxNotify(String transactionId, String orderNo, Integer wxPay) {
         OrderInfoDTO orderInfoDTO = getByOrderNo(orderNo);
-        OrderInfoPO orderInfoPO = OrderInfoAdapter.dto2Po(orderInfoDTO);
-        orderInfoPO.setPayCash(new BigDecimal(wxPay).divide(new BigDecimal(100)));
         if (orderInfoDTO == null) {
             throw new OrderException(OrderCodeEnum.ORDER_NOT_EXIST);
         }
+        OrderInfoPO orderInfoPO = OrderInfoAdapter.dto2Po(orderInfoDTO);
+        orderInfoPO.setPayCash(new BigDecimal(wxPay).divide(new BigDecimal(100)));
         if (!orderInfoDTO.getStatus().equals(CommonConstant.ORDER_UNPAID)) {
             throw new OrderException(OrderCodeEnum.ORDER_NOT_UNPAID);
         }
@@ -784,6 +785,20 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderPaymentPO.setSerialNumber(transactionId);
         orderPaymentService.insert(orderPaymentPO);
         orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
+    }
+
+    @Override
+    public void wxRefundNotify(String refundId,String orderNo, Integer wxRefund) {
+        OrderInfoDTO orderInfoDTO = getByOrderNo(orderNo);
+        if (orderInfoDTO == null) {
+            throw new OrderException(OrderCodeEnum.ORDER_NOT_EXIST);
+        }
+        OrderRefundPO orderRefundPO = new OrderRefundPO();
+        orderRefundPO.setRefundMoney(new BigDecimal(wxRefund).divide(new BigDecimal(100)));
+        orderRefundPO.setOrderId(orderInfoDTO.getId());
+        orderRefundPO.setOrderCode(orderInfoDTO.getOrderCode());
+        orderRefundPO.setSerialNumber(refundId);
+        orderRefundService.insert(orderRefundPO);
     }
 
     @Override
