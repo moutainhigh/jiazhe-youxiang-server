@@ -145,6 +145,7 @@ public class APIWeChatPayController {
                 // 退款成功后解析字符串
                 String reqInfo = refundNotifyMap.get("req_info");
                 Map<String, String> reqInfoMap = WeChatPayUtils.refundResultDecrypt(reqInfo);
+                logger.info("微信退款成功通知：reqInfoMap：{}", reqInfoMap);
                 if (null != reqInfo) {
                     String refundStatus = reqInfoMap.get("refund_status");
                     if (SUCCESS.equalsIgnoreCase(refundStatus)) {
