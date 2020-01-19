@@ -153,7 +153,7 @@ public class WeChatPayUtils {
             String result = new String(cipher.doFinal(reqInfo_base64));
             return doXMLParse(result);
         } catch (Exception e) {
-            logger.info("退款回调参数req_info解密/解析失败");
+            logger.info("退款回调参数req_info解密/解析失败：" + e.getMessage());
         }
         return null;
     }
