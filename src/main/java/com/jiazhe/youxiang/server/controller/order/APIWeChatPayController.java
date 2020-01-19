@@ -144,9 +144,10 @@ public class APIWeChatPayController {
             if (SUCCESS.equalsIgnoreCase(refundNotifyMap.get("return_code"))) {
                 // 退款成功后解析字符串
                 String reqInfo = refundNotifyMap.get("req_info");
+                logger.info("微信退款成功通知：reqInfo：{}", reqInfo);
                 Map<String, String> reqInfoMap = WeChatPayUtils.refundResultDecrypt(reqInfo);
-                logger.info("微信退款成功通知：reqInfoMap：{}", reqInfoMap);
-                if (null != reqInfo) {
+                logger.info("微信退款成功通知，解密后：reqInfoMap：{}", reqInfoMap);
+                if (null != reqInfoMap) {
                     String refundStatus = reqInfoMap.get("refund_status");
                     if (SUCCESS.equalsIgnoreCase(refundStatus)) {
                         String orderNo = reqInfoMap.get("out_trade_no").toString();
