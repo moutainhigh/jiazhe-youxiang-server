@@ -6,6 +6,7 @@ import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.ExportExcelUtils;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
+import com.jiazhe.youxiang.server.biz.WeChatPayBiz;
 import com.jiazhe.youxiang.server.biz.order.OrderInfoBiz;
 import com.jiazhe.youxiang.server.biz.order.OrderTrackBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
@@ -65,6 +66,8 @@ public class APIOrderInfoController extends BaseController {
     private OrderInfoBiz orderInfoBiz;
     @Autowired
     private OrderTrackBiz orderTrackBiz;
+    @Autowired
+    private WeChatPayBiz weChatPayBiz;
 
     @RequiresPermissions(value = {PermissionConstant.ORDER_MANAGEMENT, PermissionConstant.ORDER_SEARCH, PermissionConstant.CUSTOMER_ORDER_DETAIL}, logical = Logical.OR)
     @ApiOperation(value = "【后台】分页查询订单信息", httpMethod = "GET", response = OrderInfoResp.class, responseContainer = "List", notes = "【后台】分页查询订单信息")
@@ -317,17 +320,17 @@ public class APIOrderInfoController extends BaseController {
     @RequestMapping(value = "/checktenpay", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.ORDER, operate = "验证订单是否已经微信支付", level = LogLevelEnum.LEVEL_1)
     public Object checkTenpay(@ModelAttribute OrderCodeReq req) {
-        TenpayQureyDTO dto = orderInfoBiz.checkTenPay(req.getOrderCode());
+        TenpayQureyDTO dto = weChatPayBiz.checkTenPay(req.getOrderCode());
         TenpayQureyResp resp = OrderInfoAdapter.TenpayQureyDto2Resp(dto);
         return ResponseFactory.buildResponse(resp);
     }
 
 //    @RequiresPermissions(PermissionConstant.ORDER_TENPAY_CHECK)
-    @ApiOperation(value = "验证订单是否已经微信退款", httpMethod = "GET", response = TenpayQureyResp.class, notes = "验证订单是否已经微信支付退款")
+    @ApiOperation(value = "验证订单是否已经微信退款", httpMethod = "GET", response = TenpayQureyResp.class, notes = "验证订单是否已经微信退款")
     @RequestMapping(value = "/checktenpayrefund", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "验证订单是否已经微信支付退款", level = LogLevelEnum.LEVEL_1)
+    @CustomLog(moduleName = ModuleEnum.ORDER, operate = "验证订单是否已经微信退款", level = LogLevelEnum.LEVEL_1)
     public Object checkTenpayRefund(@ModelAttribute OrderCodeReq req) {
-        TenpayQureyDTO dto = orderInfoBiz.checkTenPayRefund(req.getOrderCode());
+        TenpayQureyDTO dto = weChatPayBiz.checkTenPayRefund(req.getOrderCode());
         TenpayQureyResp resp = OrderInfoAdapter.TenpayQureyDto2Resp(dto);
         return ResponseFactory.buildResponse(resp);
     }

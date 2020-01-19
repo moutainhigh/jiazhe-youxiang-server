@@ -32,8 +32,6 @@ import java.util.*;
 @Transactional
 public class OrderInfoBiz {
 
-    private static String SUCCESS = "SUCCESS";
-
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(OrderInfoBiz.class);
 
     @Autowired
@@ -245,99 +243,4 @@ public class OrderInfoBiz {
         return orderInfoService.getList(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, serviceProductId, realServiceStartTime, realServiceEndTime, customerCityCode);
     }
 
-    public TenpayQureyDTO checkTenPay(String orderCode) {
-        Map<String, String> param = new LinkedHashMap<>();
-        param.put("appid", WeChatPayConstant.APP_ID);
-        param.put("mch_id", WeChatPayConstant.MCH_ID);
-        String nonceStr = RandomUtil.generateCode(WeChatPayConstant.NONCE_STR_LENGTH);
-        param.put("nonce_str", nonceStr);
-        param.put("out_trade_no", orderCode);
-        String sign = WeChatPayUtils.createSign("UTF-8", param, WeChatPayConstant.API_KEY);
-        param.put("sign", sign);
-        String requestXml = WeChatPayUtils.getRequestXml(param);
-        String result = WeChatPayUtils.httpsRequest(WeChatPayConstant.ORDER_QUERY_URL, "POST", requestXml);
-        System.out.println(result);
-        TenpayQureyDTO dto = new TenpayQureyDTO();
-        dto.setTradeState("FAIL");
-        try {
-            Map<String, String> map = WeChatPayUtils.doXMLParse(result);
-            String returnCode = map.get("return_code");
-            if (!returnCode.equals(SUCCESS)) {
-                dto.setReason(map.get("return_msg"));
-                logger.info("微信支付订单查询失败，原因：" + map.get("return_msg"));
-                return dto;
-            }
-            String resultCode = map.get("result_code");
-            if (!resultCode.equals(SUCCESS)) {
-                logger.info("微信支付订单查询失败，原因：" + map.get("err_code_des"));
-                dto.setReason(map.get("err_code_des"));
-                return dto;
-            }
-            String tradeState = map.get("trade_state");
-            if (tradeState.equals(SUCCESS)) {
-                dto.setTradeState("SUCCESS");
-                dto.setTotalFee(new Integer(map.get("total_fee")));
-                dto.setTransactionId(map.get("transaction_id"));
-                wxNotify(dto.getTransactionId(), orderCode, dto.getTotalFee());
-                return dto;
-            } else {
-                logger.info(map.get("trade_state_desc"));
-                dto.setReason(map.get("trade_state_desc"));
-                return dto;
-            }
-        } catch (Exception e) {
-            logger.info("微信支付订单查询失败，异常信息：" + e.getMessage());
-            dto.setReason("查询失败，未知异常");
-        }
-        return dto;
-    }
-
-    public TenpayQureyDTO checkTenPayRefund(String orderCode) {
-        Map<String, String> param = new LinkedHashMap<>();
-        param.put("appid", WeChatPayConstant.APP_ID);
-        param.put("mch_id", WeChatPayConstant.MCH_ID);
-        String nonceStr = RandomUtil.generateCode(WeChatPayConstant.NONCE_STR_LENGTH);
-        param.put("nonce_str", nonceStr);
-        param.put("out_trade_no", orderCode);
-        String sign = WeChatPayUtils.createSign("UTF-8", param, WeChatPayConstant.API_KEY);
-        param.put("sign", sign);
-        String requestXml = WeChatPayUtils.getRequestXml(param);
-        String result = WeChatPayUtils.httpsRequest(WeChatPayConstant.ORDER_REFUND_QUERY_URL, "POST", requestXml);
-        System.out.println(result);
-        TenpayQureyDTO dto = new TenpayQureyDTO();
-        dto.setTradeState("FAIL");
-        try {
-            Map<String, String> map = WeChatPayUtils.doXMLParse(result);
-            String returnCode = map.get("return_code");
-            if (!returnCode.equals(SUCCESS)) {
-                dto.setReason(map.get("return_msg"));
-                logger.info("微信退款查询失败，原因：" + map.get("return_msg"));
-                return dto;
-            }
-            String resultCode = map.get("result_code");
-            if (!resultCode.equals(SUCCESS)) {
-                logger.info("微信退款查询失败，原因：" + map.get("err_code_des"));
-                dto.setReason(map.get("err_code_des"));
-                return dto;
-            }
-            String refundState = map.get("refund_status_0");
-            if (SUCCESS.equals(refundState)) {
-                dto.setTradeState("SUCCESS");
-                dto.setTotalFee(new Integer(map.get("total_fee")));
-                dto.setTransactionId(map.get("transaction_id"));
-                wxNotify(dto.getTransactionId(), orderCode, dto.getTotalFee());
-            } else if ("PROCESSING".equals(refundState)) {
-                dto.setReason("退款处理中");
-            } else if ("REFUNDCLOSE".equals(refundState)) {
-                dto.setReason("退款已关闭");
-            } else {
-                dto.setReason("退款异常，请联系商户");
-            }
-            return dto;
-        } catch (Exception e) {
-            logger.info("微信支付订单查询失败，异常信息：" + e.getMessage());
-            dto.setReason("查询失败，未知异常");
-        }
-        return dto;
-    }
 }
