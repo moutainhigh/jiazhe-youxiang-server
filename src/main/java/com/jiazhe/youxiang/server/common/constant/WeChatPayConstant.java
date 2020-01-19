@@ -92,8 +92,8 @@ public class WeChatPayConstant {
     }
 
     @Value("${spring.boot.admin.client.instance.service-url}")
-    public void setDOMAIN(String DOMAIN) {
-        WeChatPayConstant.DOMAIN = DOMAIN;
+    public void setDOMAIN(String domain) {
+        DOMAIN = domain;
     }
 
     @Value("${wechat_public.appid}")
