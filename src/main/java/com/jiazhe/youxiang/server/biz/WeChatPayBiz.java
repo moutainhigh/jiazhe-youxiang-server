@@ -290,10 +290,10 @@ public class WeChatPayBiz {
         String nonceStr = RandomUtil.generateCode(32);
         param.put("nonce_str", nonceStr);
         //param.put("notify_url", WeChatPayConstant.DOMAIN + WeChatPayConstant.REFUND_NOTIFY_URL);
-        param.put("out_refund_no", "2020011700001");
-        param.put("out_trade_no", "2020011700001");
-        param.put("refund_fee", "1");
-        param.put("total_fee", "1");
+        param.put("out_refund_no", "2020011913006");
+        param.put("out_trade_no", "2020011913006");
+        param.put("refund_fee", "2");
+        param.put("total_fee", "2");
         String sign = WeChatPayUtils.createSign("UTF-8", param, "beijingchengyi20190625chengyi625");
         param.put("sign", sign);
         String requestXml = WeChatPayUtils.getRequestXml(param);

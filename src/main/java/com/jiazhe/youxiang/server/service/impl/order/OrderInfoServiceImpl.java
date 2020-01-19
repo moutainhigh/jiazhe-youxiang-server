@@ -779,6 +779,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderInfoPO.setComments(comments.toString());
         }
         OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
+        orderPaymentPO.setPayType(CommonConstant.PAY_CASH);
         orderPaymentPO.setPayMoney(new BigDecimal(wxPay).divide(new BigDecimal(100)));
         orderPaymentPO.setOrderId(orderInfoPO.getId());
         orderPaymentPO.setOrderCode(orderInfoPO.getOrderCode());
@@ -797,6 +798,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         List<OrderRefundDTO> orderRefundDTOList = orderRefundService.getBySerialNumber(refundId);
         if (orderRefundDTOList.isEmpty()) {
             OrderRefundPO orderRefundPO = new OrderRefundPO();
+            orderRefundPO.setRefundType(CommonConstant.PAY_CASH);
             orderRefundPO.setRefundMoney(new BigDecimal(wxRefund).divide(new BigDecimal(100)));
             orderRefundPO.setOrderId(orderInfoDTO.getId());
             orderRefundPO.setOrderCode(orderInfoDTO.getOrderCode());
