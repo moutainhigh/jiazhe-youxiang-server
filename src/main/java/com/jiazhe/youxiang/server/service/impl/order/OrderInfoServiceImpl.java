@@ -788,17 +788,21 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public void wxRefundNotify(String refundId,String orderNo, Integer wxRefund) {
+    public void wxRefundNotify(String refundId, String orderNo, Integer wxRefund) {
         OrderInfoDTO orderInfoDTO = getByOrderNo(orderNo);
         if (orderInfoDTO == null) {
             throw new OrderException(OrderCodeEnum.ORDER_NOT_EXIST);
         }
-        OrderRefundPO orderRefundPO = new OrderRefundPO();
-        orderRefundPO.setRefundMoney(new BigDecimal(wxRefund).divide(new BigDecimal(100)));
-        orderRefundPO.setOrderId(orderInfoDTO.getId());
-        orderRefundPO.setOrderCode(orderInfoDTO.getOrderCode());
-        orderRefundPO.setSerialNumber(refundId);
-        orderRefundService.insert(orderRefundPO);
+        //查询是否已经有退款记录，没有退款记录就新增一个
+        List<OrderRefundDTO> orderRefundDTOList = orderRefundService.getBySerialNumber(refundId);
+        if (orderRefundDTOList.isEmpty()) {
+            OrderRefundPO orderRefundPO = new OrderRefundPO();
+            orderRefundPO.setRefundMoney(new BigDecimal(wxRefund).divide(new BigDecimal(100)));
+            orderRefundPO.setOrderId(orderInfoDTO.getId());
+            orderRefundPO.setOrderCode(orderInfoDTO.getOrderCode());
+            orderRefundPO.setSerialNumber(refundId);
+            orderRefundService.insert(orderRefundPO);
+        }
     }
 
     @Override

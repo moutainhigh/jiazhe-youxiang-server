@@ -24,4 +24,11 @@ public interface OrderRefundService {
      * @param orderRefundPO
      */
     void insert(OrderRefundPO orderRefundPO);
+
+    /**
+     * 根据微信退款单号查询
+     * @param refundId
+     * @return
+     */
+    List<OrderRefundDTO> getBySerialNumber(String refundId);
 }

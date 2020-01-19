@@ -1,9 +1,11 @@
 package com.jiazhe.youxiang.server.service.impl.order;
 
 import com.jiazhe.youxiang.server.adapter.order.OrderRefundAdapter;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.dao.mapper.OrderRefundPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.order.OrderRefundPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.OrderRefundPO;
+import com.jiazhe.youxiang.server.domain.po.OrderRefundPOExample;
 import com.jiazhe.youxiang.server.dto.order.orderrefund.OrderRefundDTO;
 import com.jiazhe.youxiang.server.service.order.OrderRefundService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +35,15 @@ public class OrderRefundServiceImpl implements OrderRefundService {
     @Override
     public void insert(OrderRefundPO orderRefundPO) {
         orderRefundPOMapper.insertSelective(orderRefundPO);
+    }
+
+    @Override
+    public List<OrderRefundDTO> getBySerialNumber(String refundId) {
+        OrderRefundPOExample example = new OrderRefundPOExample();
+        OrderRefundPOExample.Criteria criteria = example.createCriteria();
+        criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+        criteria.andSerialNumberEqualTo(refundId);
+        List<OrderRefundPO> poList = orderRefundPOMapper.selectByExample(example);
+        return poList.stream().map(OrderRefundAdapter::PO2DTO).collect(Collectors.toList());
     }
 }

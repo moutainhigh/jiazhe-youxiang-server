@@ -131,7 +131,7 @@ public class WeChatPayBiz {
         try {
             KeyStore clientStore = KeyStore.getInstance("PKCS12");
             // 读取本机存放的PKCS12证书文件
-            FileInputStream instream = new FileInputStream("opt/cert/apiclient_cert.p12");
+            FileInputStream instream = new FileInputStream("/opt/jiazhe/webserver/files/tencentRefundCert/apiclient_cert.p12");
             try {
                 // 指定PKCS12的密码(商户ID)
                 clientStore.load(instream, WeChatPayConstant.MCH_ID.toCharArray());
@@ -264,9 +264,9 @@ public class WeChatPayBiz {
             String refundState = map.get("refund_status_0");
             if (SUCCESS.equals(refundState)) {
                 dto.setTradeState("SUCCESS");
-                dto.setTotalFee(new Integer(map.get("total_fee")));
-                dto.setTransactionId(map.get("transaction_id"));
-                orderInfoBiz.wxNotify(dto.getTransactionId(), orderCode, dto.getTotalFee());
+                dto.setTotalFee(new Integer(map.get("refund_fee_0")));
+                dto.setTransactionId(map.get("refund_id_0"));
+                orderInfoBiz.wxRefundNotify(dto.getTransactionId(), orderCode, dto.getTotalFee());
             } else if ("PROCESSING".equals(refundState)) {
                 dto.setReason("退款处理中");
             } else if ("REFUNDCLOSE".equals(refundState)) {
@@ -290,8 +290,8 @@ public class WeChatPayBiz {
         String nonceStr = RandomUtil.generateCode(32);
         param.put("nonce_str", nonceStr);
         //param.put("notify_url", WeChatPayConstant.DOMAIN + WeChatPayConstant.REFUND_NOTIFY_URL);
-        param.put("out_refund_no", "2020011614001");
-        param.put("out_trade_no", "2020011614001");
+        param.put("out_refund_no", "2020011700001");
+        param.put("out_trade_no", "2020011700001");
         param.put("refund_fee", "1");
         param.put("total_fee", "1");
         String sign = WeChatPayUtils.createSign("UTF-8", param, "beijingchengyi20190625chengyi625");
@@ -300,7 +300,7 @@ public class WeChatPayBiz {
         try {
             KeyStore clientStore = KeyStore.getInstance("PKCS12");
             // 读取本机存放的PKCS12证书文件
-            FileInputStream instream = new FileInputStream("opt/cert/apiclient_cert.p12");
+            FileInputStream instream = new FileInputStream("A:/opt/cert/apiclient_cert.p12");
             try {
                 // 指定PKCS12的密码(商户ID)
                 clientStore.load(instream, "1541609211".toCharArray());
@@ -320,16 +320,17 @@ public class WeChatPayBiz {
                 try {
                     HttpEntity entity = response.getEntity();
                     String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+                    System.out.println(result);
                     EntityUtils.consume(entity);
                     Map<String, String> map = WeChatPayUtils.doXMLParse(result);
                     String returnCode = map.get("return_code");
                     if (!returnCode.equalsIgnoreCase("SUCCESS")) {
-                        logger.info("发起退款失败，原因：" + map.get("return_msg"));
+                        System.out.println("发起退款失败，原因：" + map.get("return_msg"));
                         throw new WeChatPayException(WeChatPayCodeEnum.WECHAT_REFUND_ERROR);
                     }
                     String resultCode = map.get("result_code");
                     if (!resultCode.equalsIgnoreCase("SUCCESS")) {
-                        logger.info("发起退款失败，原因：" + map.get("err_code_des"));
+                        System.out.println("发起退款失败，原因：" + map.get("err_code_des"));
                         throw new WeChatPayException(WeChatPayCodeEnum.WECHAT_REFUND_ERROR);
                     }
                 } finally {

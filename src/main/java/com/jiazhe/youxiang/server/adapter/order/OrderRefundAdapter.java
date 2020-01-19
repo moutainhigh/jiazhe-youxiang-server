@@ -25,4 +25,21 @@ public class OrderRefundAdapter {
         orderRefundPO.setSerialNumber(orderRefundDTO.getSerialNumber());
         return orderRefundPO;
     }
+
+    public static OrderRefundDTO PO2DTO(OrderRefundPO orderRefundPO) {
+        if (orderRefundPO == null) {
+            return null;
+        }
+        OrderRefundDTO orderRefundDTO = new OrderRefundDTO();
+        orderRefundDTO.setId(orderRefundPO.getId());
+        orderRefundDTO.setOrderCode(orderRefundPO.getOrderCode());
+        orderRefundDTO.setOrderId(orderRefundPO.getOrderId());
+        orderRefundDTO.setRefundType(orderRefundPO.getRefundType());
+        orderRefundDTO.setPointId(orderRefundPO.getPointId());
+        orderRefundDTO.setRechargeCardId(orderRefundPO.getRechargeCardId());
+        orderRefundDTO.setVoucherId(orderRefundPO.getVoucherId());
+        orderRefundDTO.setRefundMoney(orderRefundPO.getRefundMoney());
+        orderRefundDTO.setSerialNumber(orderRefundPO.getSerialNumber());
+        return orderRefundDTO;
+    }
 }
