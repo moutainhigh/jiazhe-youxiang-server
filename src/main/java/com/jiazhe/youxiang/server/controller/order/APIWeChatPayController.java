@@ -150,7 +150,7 @@ public class APIWeChatPayController {
                     if (SUCCESS.equalsIgnoreCase(refundStatus)) {
                         String orderNo = reqInfoMap.get("out_trade_no").toString();
                         Integer wxRefund = new Integer(reqInfoMap.get("settlement_refund_fee").toString());
-                        String refundId = reqInfoMap.get("refundId").toString();
+                        String refundId = reqInfoMap.get("refund_id").toString();
                         orderInfoBiz.wxRefundNotify(refundId, orderNo, wxRefund);
                     }
                 } else {
