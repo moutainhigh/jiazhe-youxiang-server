@@ -85,7 +85,7 @@ public class APIWeChatPayController {
             throw new OrderException(OrderCodeEnum.ORDER_NOT_EXIST);
         }
         UnifiedOrderResp unifiedOrderResp = weChatPayBiz.unifiedOrder(req, request);
-        return unifiedOrderResp;
+        return ResponseFactory.buildResponse(unifiedOrderResp);
 
     }
 
