@@ -31,6 +31,7 @@ import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.Security;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -148,6 +149,7 @@ public class WeChatPayUtils {
             String apiKey_md5 = MD5Utils.MD5Encode(WeChatPayConstant.API_KEY, "utf-8").toLowerCase();
             //第三步，解密结果
             SecretKey secretKey = new SecretKeySpec(apiKey_md5.getBytes(), "AES");
+            Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
             String result = new String(cipher.doFinal(reqInfo_base64));

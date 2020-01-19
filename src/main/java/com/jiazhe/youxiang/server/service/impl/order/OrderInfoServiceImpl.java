@@ -852,18 +852,20 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         List<Integer> voucherIds = Lists.newArrayList();
         if (!orderPaymentDTOList.isEmpty()) {
             orderPaymentDTOList.stream().forEach(bean -> {
-                orderRefundDTOList.add(paymentDto2RefundDto(bean));
                 if (bean.getPayType().equals(CommonConstant.PAY_POINT)) {
+                    orderRefundDTOList.add(paymentDto2RefundDto(bean));
                     PointDTO pointDTO = pointService.getById(bean.getPointId());
                     pointDTO.setBalance(pointDTO.getBalance().add(bean.getPayMoney()));
                     pointDTOList.add(pointDTO);
                 }
                 if (bean.getPayType().equals(CommonConstant.PAY_RECHARGE_CARD)) {
+                    orderRefundDTOList.add(paymentDto2RefundDto(bean));
                     RCDTO rcdto = rcService.getById(bean.getRechargeCardId());
                     rcdto.setBalance(rcdto.getBalance().add(bean.getPayMoney()));
                     rcDTOList.add(rcdto);
                 }
                 if (bean.getPayType().equals(CommonConstant.PAY_VOUCHER)) {
+                    orderRefundDTOList.add(paymentDto2RefundDto(bean));
                     voucherIds.add(bean.getVoucherId());
                 }
                 if (bean.getPayType().equals(CommonConstant.PAY_CASH)) {
