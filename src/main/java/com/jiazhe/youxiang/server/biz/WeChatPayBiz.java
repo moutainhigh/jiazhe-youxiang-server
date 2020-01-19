@@ -114,6 +114,7 @@ public class WeChatPayBiz {
 
     //微信退款，三方请求微信
     public void wechatRefund(String orderCode, Integer money) {
+        logger.info("请求微信退款，orderCode:{},money:{}", orderCode, money);
         //需要保证参数的顺序
         Map<String, String> param = new LinkedHashMap<>();
         param.put("appid", WeChatPayConstant.APP_ID);
@@ -151,6 +152,7 @@ public class WeChatPayBiz {
                 try {
                     HttpEntity entity = response.getEntity();
                     String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+                    logger.info("请求微信退款返回结果：{}" + result);
                     EntityUtils.consume(entity);
                     Map<String, String> map = WeChatPayUtils.doXMLParse(result);
                     String returnCode = map.get("return_code");
@@ -290,10 +292,10 @@ public class WeChatPayBiz {
         String nonceStr = RandomUtil.generateCode(32);
         param.put("nonce_str", nonceStr);
         //param.put("notify_url", WeChatPayConstant.DOMAIN + WeChatPayConstant.REFUND_NOTIFY_URL);
-        param.put("out_refund_no", "2020011913006");
-        param.put("out_trade_no", "2020011913006");
-        param.put("refund_fee", "2");
-        param.put("total_fee", "2");
+        param.put("out_refund_no", "2019070422022");
+        param.put("out_trade_no", "2019070422022");
+        param.put("refund_fee", "1");
+        param.put("total_fee", "1");
         String sign = WeChatPayUtils.createSign("UTF-8", param, "beijingchengyi20190625chengyi625");
         param.put("sign", sign);
         String requestXml = WeChatPayUtils.getRequestXml(param);
