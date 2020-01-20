@@ -1,10 +1,13 @@
 package com.jiazhe.youxiang.server.service.point;
 
 
+import com.jiazhe.youxiang.server.domain.po.PointExchangeCodeBatchPO;
+import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -39,6 +42,14 @@ public interface PointExchangeCodeBatchService {
      * @param id
      */
     void generateCode(Integer id);
+
+    /**
+     * 批量插入兑换码
+     * @param batchPO
+     * @param pointExchangeCodePOList
+     */
+    @Transactional(rollbackFor = Exception.class)
+    void insertCodeAndKeyt(PointExchangeCodeBatchPO batchPO, List<PointExchangeCodePO> pointExchangeCodePOList);
 
     /**
      * 改变批次状态，业务重点：非虚拟批次需要改变批次下兑换码兑换的积分卡状态
