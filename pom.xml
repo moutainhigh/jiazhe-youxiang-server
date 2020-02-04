@@ -28,7 +28,7 @@
         <mtrace.zebra.version>1.1.14</mtrace.zebra.version>
         <mybatis.generator.version>1.3.2</mybatis.generator.version>
         <mysql-connector.version>5.1.36</mysql-connector.version>
-        <shiro.version>1.2.0</shiro.version>
+        <shiro.version>1.5.0</shiro.version>
         <cryptix.version>20190923</cryptix.version>
     </properties>
 
