@@ -279,9 +279,9 @@ public class OrderInfoBiz {
                 return dto;
             }
         } catch (Exception e) {
-            logger.info("发起预支付失败，异常信息：" + e.getMessage());
+            logger.info("微信支付订单查询失败，异常信息：" + e.getMessage());
             dto.setReason("查询失败，未知异常");
         }
-        return null;
+        return dto;
     }
 }
