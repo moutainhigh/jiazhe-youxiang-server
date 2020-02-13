@@ -203,6 +203,8 @@ public class OrderInfoBiz {
         sb.append(OrderTrackBiz.parseOrderTrackInfo("服务时间", oldOrderInfo.getRealServiceTime(), userReservationOrderDTO.getRealServiceTime()));
         sb.append(OrderTrackBiz.parseOrderTrackInfo("订单成本", oldOrderInfo.getCost(), userReservationOrderDTO.getCost()));
         sb.append(OrderTrackBiz.parseOrderTrackInfo("订单备注", oldOrderInfo.getComments(), userReservationOrderDTO.getComments()));
+        sb.append(OrderTrackBiz.parseOrderTrackInfo("订单状态", oldOrderInfo.getStatus(), userReservationOrderDTO.getStatus()));
+        sb.append(OrderTrackBiz.parseOrderTrackInfo("预约时间", oldOrderInfo.getServiceTime(), userReservationOrderDTO.getServiceTime()));
         OrderTrackDTO orderTrackDTO = new OrderTrackDTO();
         orderTrackDTO.setOrderid(orderId);
         orderTrackDTO.setOpreation(OrderOpreationTypeEnum.UPDATE);

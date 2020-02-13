@@ -88,9 +88,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     private EleProductCodeService eleProductCodeService;
 
     @Override
-    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId,Date realServiceStartTime, Date realServiceEndTime, String customerCityCode, Paging paging) {
-        Integer count = orderInfoPOManualMapper.count(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, serviceProductId,realServiceStartTime, realServiceEndTime,customerCityCode);
-        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, serviceProductId,realServiceStartTime, realServiceEndTime, customerCityCode,paging.getOffset(), paging.getLimit());
+    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode, Paging paging) {
+        Integer count = orderInfoPOManualMapper.count(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, serviceProductId, realServiceStartTime, realServiceEndTime, customerCityCode);
+        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, serviceProductId, realServiceStartTime, realServiceEndTime, customerCityCode, paging.getOffset(), paging.getLimit());
         List<OrderInfoDTO> orderInfoDTOList = orderInfoPOList.stream().map(OrderInfoAdapter::PO2DTO).collect(Collectors.toList());
         orderInfoDTOList.forEach(bean -> {
             ProductDTO productDTO = productService.getById(bean.getProductId());
@@ -262,6 +262,15 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
         if (!orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSERVICE)) {
             throw new OrderException(OrderCodeEnum.ORDER_STATUS_NOT_UNSERVICE);
+        }
+        //订单改为了待派单状态
+        if (CommonConstant.ORDER_UNSENT.equals(dto.getStatus()) || CommonConstant.ORDER_UNSERVICE.equals(dto.getStatus())) {
+            if (CommonConstant.ORDER_UNSENT.equals(dto.getStatus())) {
+                orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
+                orderInfoPO.setServiceTime(dto.getServiceTime());
+            }
+        } else {
+            throw new OrderException(OrderCodeEnum.ORDER_STATUS_ERROR);
         }
         orderInfoPO.setWorkerMobile(dto.getWorkerMobile());
         orderInfoPO.setWorkerName(dto.getWorkerName());
@@ -447,7 +456,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPO.setCost(appendOrderDTO.getCost());
         orderInfoPO.setComments(appendOrderDTO.getComments());
         orderInfoPO.setTotalAmount(orderInfoPO.getProductPrice().multiply(new BigDecimal(orderInfoPO.getCount())));
-        orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
+        //追加订单，订单状态不改变
+        //orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
         orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
     }
 
@@ -784,8 +794,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId,Date realServiceStartTime, Date realServiceEndTime,String customerCityCode) {
-        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, serviceProductId,realServiceStartTime, realServiceEndTime, customerCityCode,null, null);
+    public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode) {
+        List<OrderInfoPO> orderInfoPOList = orderInfoPOManualMapper.query(status, orderCode, mobile, customerMobile, orderStartTime, orderEndTime, workerMobile, productId, serviceProductId, realServiceStartTime, realServiceEndTime, customerCityCode, null, null);
         List<OrderInfoDTO> orderInfoDTOList = orderInfoPOList.stream().map(OrderInfoAdapter::PO2DTO).collect(Collectors.toList());
         orderInfoDTOList.forEach(bean -> {
             ProductDTO productDTO = productService.getById(bean.getProductId());
