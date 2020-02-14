@@ -43,8 +43,8 @@ public class AuditRecordBiz {
         return auditRecordService.getList(null, customerInfo, submitterName, status, chargeReceiptStatus, pointCodes,exchangePoint, submitStartTime, submitEndTime,exchangeType,cityCode, paging);
     }
 
-    public List<AuditRecordDTO> getSubmitterList(Integer submitterId, String customerInfo, Byte status, Paging paging) {
-        return auditRecordService.getList(submitterId, customerInfo, null, status, null, null,null, null, null,null, null,paging);
+    public List<AuditRecordDTO> getSubmitterList(Integer submitterId, String customerInfo, Byte status, Date submitStartTime, Date submitEndTime, Paging paging) {
+        return auditRecordService.getList(submitterId, customerInfo, null, status, null, null,null, submitStartTime, submitEndTime,null, null,paging);
     }
 
     public void save(AuditRecordDTO auditRecordDTO) {
