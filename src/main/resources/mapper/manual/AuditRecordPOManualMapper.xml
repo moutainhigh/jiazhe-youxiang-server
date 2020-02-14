@@ -52,8 +52,14 @@
             <if test="submitterId != null">
                 AND submitter_id = #{submitterId}
             </if>
-            <if test="customerInfo != null and customerInfo!=''">
-                AND (customer_mobile LIKE CONCAT('%',#{customerInfo},'%') OR customer_name LIKE CONCAT('%',#{customerInfo},'%') OR card_no LIKE CONCAT('%',#{customerInfo},'%'))
+            <if test="condition != null and condition!=''">
+                AND (
+                    customer_mobile LIKE CONCAT('%',#{condition},'%')
+                    OR customer_name LIKE CONCAT('%',#{condition},'%')
+                    OR card_no = #{condition}
+                    OR bank_outlets_name = #{condition}
+                    OR exchange_point = #{condition}
+                )
             </if>
             <if test="submitterName != null and submitterName!=''">
                 AND submitter_name LIKE CONCAT('%',#{submitterName},'%')
@@ -108,8 +114,14 @@
             <if test="submitterId != null">
                 AND submitter_id = #{submitterId}
             </if>
-            <if test="customerInfo != null and customerInfo!=''">
-                AND (customer_mobile LIKE CONCAT('%',#{customerInfo},'%') OR customer_name LIKE CONCAT('%',#{customerInfo},'%'))
+            <if test="condition != null and condition!=''">
+                AND (
+                customer_mobile LIKE CONCAT('%',#{condition},'%')
+                OR customer_name LIKE CONCAT('%',#{condition},'%')
+                OR card_no = #{condition}
+                OR bank_outlets_name = #{condition}
+                OR exchange_point = #{condition}
+                )
             </if>
             <if test="submitterName != null and submitterName!=''">
                 AND submitter_name LIKE CONCAT('%',#{submitterName},'%')

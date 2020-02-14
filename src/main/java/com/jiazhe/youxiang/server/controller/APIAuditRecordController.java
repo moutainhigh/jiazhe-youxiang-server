@@ -114,7 +114,7 @@ public class APIAuditRecordController extends BaseController {
         }
         Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
         Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
-        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getCustomerInfo(), req.getSubmitterName(), req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(), req.getExchangePoint(), submitStartTime, submitEndTime, req.getExchangeType(), req.getCityCode(), paging);
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getCondition(), req.getSubmitterName(), req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(), req.getExchangePoint(), submitStartTime, submitEndTime, req.getExchangeType(), req.getCityCode(), paging);
         List<AuditRecordResp> auditRecordRespList = auditRecordDTOList.stream().map(AuditRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(auditRecordRespList, paging);
     }
@@ -130,7 +130,7 @@ public class APIAuditRecordController extends BaseController {
         }
         Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
         Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
-        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getSubmitterList(sysUserDTO.getId(), req.getCustomerInfo(), req.getStatus(),submitStartTime,submitEndTime, paging);
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getSubmitterList(sysUserDTO.getId(), req.getCondition(), req.getStatus(),submitStartTime,submitEndTime, paging);
         List<AuditRecordResp> auditRecordRespList = auditRecordDTOList.stream().map(AuditRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(auditRecordRespList, paging);
     }
@@ -265,7 +265,7 @@ public class APIAuditRecordController extends BaseController {
         }
         Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
         Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
-        List<ChargeReceiptDTO> dtoList = chargeReceiptBiz.getList(req.getCustomerInfo(), req.getSubmitterName(), req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(), req.getExchangePoint(), submitStartTime, submitEndTime, req.getExchangeType(), req.getCityCode());
+        List<ChargeReceiptDTO> dtoList = chargeReceiptBiz.getList(req.getCondition(), req.getSubmitterName(), req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(), req.getExchangePoint(), submitStartTime, submitEndTime, req.getExchangeType(), req.getCityCode());
         ExportExcelUtils.exportChargeReceipt(response, dtoList);
     }
 
@@ -278,7 +278,7 @@ public class APIAuditRecordController extends BaseController {
         }
         Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
         Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
-        AuditRecordSumDTO dto = auditRecordBiz.sum(req.getCustomerInfo(), req.getSubmitterName(), req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(), req.getExchangePoint(), submitStartTime, submitEndTime, req.getExchangeType(), req.getCityCode());
+        AuditRecordSumDTO dto = auditRecordBiz.sum(req.getCondition(), req.getSubmitterName(), req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(), req.getExchangePoint(), submitStartTime, submitEndTime, req.getExchangeType(), req.getCityCode());
         AuditRecordSumResp resp = AuditRecordAdapter.sumDto2SumResp(dto);
         return ResponseFactory.buildResponse(resp);
     }
