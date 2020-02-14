@@ -13,7 +13,6 @@ import java.util.List;
  */
 public interface AuditRecordPOManualMapper {
     /**
-     *
      * @param submitterId
      * @param customerInfo
      * @param submitterName
@@ -43,7 +42,6 @@ public interface AuditRecordPOManualMapper {
     );
 
     /**
-     *
      * @param submitterId
      * @param customerInfo
      * @param submitterName
@@ -74,4 +72,11 @@ public interface AuditRecordPOManualMapper {
             @Param("offset") Integer offset,
             @Param("limit") Integer limit
     );
+
+    List<AuditRecordPO> statistics(
+            @Param("submitterId") Integer submitterId,
+            @Param("status") Byte[] status,
+            @Param("submitStartTime") Date submitStartTime,
+            @Param("submitEndTime") Date submitEndTime
+            );
 }

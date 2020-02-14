@@ -67,7 +67,7 @@ public class AuditRecordBiz {
         return auditRecordService.sum(customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint, submitStartTime, submitEndTime, exchangeType,cityCode);
     }
 
-    public StatisticsDTO statistics(Integer id, Date submitStartTime, Date submitEndTime) {
-        return auditRecordService.statistics(id,submitStartTime,submitEndTime);
+    public StatisticsDTO statistics(Integer id, Byte[] status,Date submitStartTime, Date submitEndTime) {
+        return auditRecordService.statistics(id,status,submitStartTime,submitEndTime);
     }
 }

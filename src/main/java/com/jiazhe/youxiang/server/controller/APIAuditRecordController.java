@@ -114,7 +114,7 @@ public class APIAuditRecordController extends BaseController {
         }
         Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
         Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
-        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getCustomerInfo(), req.getSubmitterName(), req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(), req.getExchangePoint(), submitStartTime, submitEndTime, req.getExchangeType(), req.getCityCode(),paging);
+        List<AuditRecordDTO> auditRecordDTOList = auditRecordBiz.getList(req.getCustomerInfo(), req.getSubmitterName(), req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(), req.getExchangePoint(), submitStartTime, submitEndTime, req.getExchangeType(), req.getCityCode(), paging);
         List<AuditRecordResp> auditRecordRespList = auditRecordDTOList.stream().map(AuditRecordAdapter::DTO2Resp).collect(Collectors.toList());
         return ResponseFactory.buildPaginationResponse(auditRecordRespList, paging);
     }
@@ -141,9 +141,17 @@ public class APIAuditRecordController extends BaseController {
         if (null == sysUserDTO) {
             throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
         }
+        String[] statusStr = req.getStatus().split(",");
+        if (statusStr.length < 1) {
+            throw new AuditRecordException(AuditRecordCodeEnum.STATUS_IS_NULL);
+        }
+        Byte[] status = new Byte[statusStr.length];
+        for (int i = 0; i < statusStr.length; i++) {
+            status[i] = Byte.valueOf(statusStr[i]);
+        }
         Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
         Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
-        StatisticsDTO dto = auditRecordBiz.statistics(sysUserDTO.getId(), submitStartTime, submitEndTime);
+        StatisticsDTO dto = auditRecordBiz.statistics(sysUserDTO.getId(), status, submitStartTime, submitEndTime);
         StatisticsResp resp = AuditRecordAdapter.statisticsDto2Resp(dto);
         return ResponseFactory.buildResponse(resp);
     }
@@ -172,7 +180,7 @@ public class APIAuditRecordController extends BaseController {
         } else {
             req.setPointCodes("");
         }
-        if (req.getExchangeType().toString().contains(CommonConstant.EXCHANGE_ENTITY.toString())||req.getExchangeType().toString().equals(CommonConstant.PRE_PURCHASE.toString())) {
+        if (req.getExchangeType().toString().contains(CommonConstant.EXCHANGE_ENTITY.toString()) || req.getExchangeType().toString().equals(CommonConstant.PRE_PURCHASE.toString())) {
             CommonValidator.validateNull(req.getProductValue(), new AuditRecordException(AuditRecordCodeEnum.PRODUCT_VALUE_IS_NULL));
         } else {
             req.setProductValue(BigDecimal.ZERO);
@@ -190,7 +198,8 @@ public class APIAuditRecordController extends BaseController {
             if (CommonConstant.CODE_DELETED.equals(auditRecordDTO.getIsDeleted())) {
                 throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_IS_NOT_EXIST);
             }
-            if (CommonConstant.AUDIT_RECORD_PASS.equals(auditRecordDTO.getStatus()) || CommonConstant.AUDIT_RECORD_HAS_SUBMITTED.equals(auditRecordDTO.getStatus())) {
+            //只有审核通过的记录不能修改
+            if (CommonConstant.AUDIT_RECORD_PASS.equals(auditRecordDTO.getStatus())) {
                 throw new AuditRecordException(AuditRecordCodeEnum.RECORD_CNANOT_CHANGE);
             }
             if (!auditRecordDTO.getVersion().equals(req.getVersion())) {
@@ -254,7 +263,7 @@ public class APIAuditRecordController extends BaseController {
         }
         Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
         Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
-        List<ChargeReceiptDTO> dtoList = chargeReceiptBiz.getList(req.getCustomerInfo(), req.getSubmitterName(), req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(), req.getExchangePoint(), submitStartTime, submitEndTime, req.getExchangeType(),req.getCityCode());
+        List<ChargeReceiptDTO> dtoList = chargeReceiptBiz.getList(req.getCustomerInfo(), req.getSubmitterName(), req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(), req.getExchangePoint(), submitStartTime, submitEndTime, req.getExchangeType(), req.getCityCode());
         ExportExcelUtils.exportChargeReceipt(response, dtoList);
     }
 
@@ -267,7 +276,7 @@ public class APIAuditRecordController extends BaseController {
         }
         Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
         Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
-        AuditRecordSumDTO dto = auditRecordBiz.sum(req.getCustomerInfo(), req.getSubmitterName(), req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(), req.getExchangePoint(), submitStartTime, submitEndTime, req.getExchangeType(),req.getCityCode());
+        AuditRecordSumDTO dto = auditRecordBiz.sum(req.getCustomerInfo(), req.getSubmitterName(), req.getStatus(), req.getChargeReceiptStatus(), req.getPointCodes(), req.getExchangePoint(), submitStartTime, submitEndTime, req.getExchangeType(), req.getCityCode());
         AuditRecordSumResp resp = AuditRecordAdapter.sumDto2SumResp(dto);
         return ResponseFactory.buildResponse(resp);
     }

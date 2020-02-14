@@ -155,4 +155,28 @@
         </where>
     </select>
 
+    <select id="statistics" resultType="com.jiazhe.youxiang.server.domain.po.AuditRecordPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM audit_record
+        <where>
+            <if test="submitterId != null">
+                AND submitter_id = #{submitterId}
+            </if>
+            <if test="submitStartTime != null">
+                AND submit_time &gt;= #{submitStartTime}
+            </if>
+            <if test="submitEndTime != null">
+                AND submit_time &lt;= #{submitEndTime}
+            </if>
+            <if test="status != null">
+                AND status IN
+                <foreach item="status" collection="status" open="(" separator="," close=")">
+                    #{status}
+                </foreach>
+            </if>
+            AND is_deleted = 0 ORDER BY mod_time DESC
+        </where>
+    </select>
+
 </mapper>
