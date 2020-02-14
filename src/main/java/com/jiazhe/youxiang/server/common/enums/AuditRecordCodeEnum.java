@@ -32,7 +32,9 @@ public enum AuditRecordCodeEnum {
     EXCHANGE_TYPE_IS_NULL(111023,"EXCHANGE_TYPE_IS_NULL","兑换类型不能为空"),
     CANNOT_COMPLETE_CHARGE_RECEIPT(111024,"CANNOT_COMPLETE_CHARGE_RECEIPT","充值记录未审核通过，不能完成"),
     CHARGE_RECEIPT_EXCHANGE_POINT_ERROR(111025,"CHARGE_RECEIPT_EXCHANGE_POINT_ERROR","小票积分填写错误"),
-    ENTITY_AND_PREPURCHASE_EXIST(111026,"ENTITY_AND_PREPURCHASE_EXIST","兑换商品和预采购不能同时存在"),;
+    ENTITY_AND_PREPURCHASE_EXIST(111026,"ENTITY_AND_PREPURCHASE_EXIST","兑换商品和预采购不能同时存在"),
+    STATUS_IS_NULL(111027, "STATUS_IS_NULL", "审核记录状态为空"),
+    ;
     AuditRecordCodeEnum(Integer code, String type, String message) {
         this.code = code;
         this.type = type;

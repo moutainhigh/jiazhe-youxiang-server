@@ -125,9 +125,10 @@ public interface AuditRecordService {
     /**
      * 小程序统计某个时间段内提交的小票信息
      * @param id
+     * @param status
      * @param submitStartTime
      * @param submitEndTime
      * @return
      */
-    StatisticsDTO statistics(Integer id, Date submitStartTime, Date submitEndTime);
+    StatisticsDTO statistics(Integer id, Byte[] status,Date submitStartTime, Date submitEndTime);
 }

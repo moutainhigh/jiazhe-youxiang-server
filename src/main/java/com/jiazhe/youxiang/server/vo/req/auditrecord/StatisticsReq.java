@@ -11,10 +11,21 @@ import io.swagger.annotations.ApiModelProperty;
 public class StatisticsReq extends BaseVO{
 
     @ApiModelProperty("提交时间起")
+    private String status;
+
+    @ApiModelProperty("提交时间起")
     private Long submitStartTime;
 
     @ApiModelProperty("提交时间止")
     private Long submitEndTime;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public Long getSubmitStartTime() {
         return submitStartTime;
