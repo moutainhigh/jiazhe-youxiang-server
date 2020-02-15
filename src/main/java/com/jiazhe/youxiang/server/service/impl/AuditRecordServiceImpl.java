@@ -71,9 +71,9 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     private ChargeReceiptService chargeReceiptService;
 
     @Override
-    public List<AuditRecordDTO> getList(Integer submitterId, String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint, Date submitStartTime, Date submitEndTime, String exchangeType, String cityCode, Paging paging) {
-        Integer count = auditRecordPOManualMapper.count(submitterId, customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint, submitStartTime, submitEndTime, exchangeType,cityCode);
-        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(submitterId, customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint, submitStartTime, submitEndTime, exchangeType, cityCode,paging.getOffset(), paging.getLimit());
+    public List<AuditRecordDTO> getList(Integer submitterId, String condition, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint, Date submitStartTime, Date submitEndTime, String exchangeType, String cityCode, Paging paging) {
+        Integer count = auditRecordPOManualMapper.count(submitterId, condition, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint, submitStartTime, submitEndTime, exchangeType,cityCode);
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(submitterId, condition, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint, submitStartTime, submitEndTime, exchangeType, cityCode,paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
         return auditRecordPOList.stream().map(AuditRecordAdapter::PO2DTO).collect(Collectors.toList());
     }

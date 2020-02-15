@@ -10,8 +10,8 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class AuditRecordPageReq extends PageSizeNumReq {
 
-    @ApiModelProperty("客户信息，姓名或电话")
-    private String customerInfo;
+    @ApiModelProperty("查询条件，姓名/电话/银行/卡号/积分数量")
+    private String condition;
 
     @ApiModelProperty("消费记录状态")
     private Byte status;
@@ -56,12 +56,12 @@ public class AuditRecordPageReq extends PageSizeNumReq {
         this.chargeReceiptStatus = chargeReceiptStatus;
     }
 
-    public String getCustomerInfo() {
-        return customerInfo;
+    public String getCondition() {
+        return condition;
     }
 
-    public void setCustomerInfo(String customerInfo) {
-        this.customerInfo = customerInfo;
+    public void setCondition(String condition) {
+        this.condition = condition;
     }
 
     public String getSubmitterName() {
