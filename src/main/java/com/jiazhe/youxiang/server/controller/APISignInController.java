@@ -104,19 +104,19 @@ public class APISignInController extends BaseController {
         }
         // 判断白名单里是否有该ip，没有发验证码
         //TODO niexiao 记得放开注释
-        if (!IpAdrressUtil.ipIsWhite(IpAdrressUtil.getIpAddress(request), sysUserDTO.getLastLoginIp())) {
-            //判断有没有短信bizId传过来
-            if(Strings.isEmpty(req.getIdentifyingCode())){
-                CommonValidator.validateNull(bizId, new LoginException(LoginCodeEnum.LOGIN_DIFFERENT_CLIENT));
-            }
-            CommonValidator.validateNull(identifyingCode, new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_EMPTY));
-            //判断验证码是否正确
-            MsgUtils.isVerified(sysUserDTO.getMobile(), identifyingCode);
-            logger.info("登陆ip为：" + IpAdrressUtil.getIpAddress(request));
-            sysUserBiz.updateLastLoginInfo(sysUserDTO.getId(), IpAdrressUtil.getIpAddress(request));
-        }
-//        logger.info("登陆ip为：" + IpAdrressUtil.getIpAddress(request));
-//        sysUserBiz.updateLastLoginInfo(sysUserDTO.getId(), IpAdrressUtil.getIpAddress(request));
+//        if (!IpAdrressUtil.ipIsWhite(IpAdrressUtil.getIpAddress(request), sysUserDTO.getLastLoginIp())) {
+//            //判断有没有短信bizId传过来
+//            if(Strings.isEmpty(req.getIdentifyingCode())){
+//                CommonValidator.validateNull(bizId, new LoginException(LoginCodeEnum.LOGIN_DIFFERENT_CLIENT));
+//            }
+//            CommonValidator.validateNull(identifyingCode, new LoginException(LoginCodeEnum.LOGIN_IDENTIFYING_CODE_EMPTY));
+//            //判断验证码是否正确
+//            MsgUtils.isVerified(sysUserDTO.getMobile(), identifyingCode);
+//            logger.info("登陆ip为：" + IpAdrressUtil.getIpAddress(request));
+//            sysUserBiz.updateLastLoginInfo(sysUserDTO.getId(), IpAdrressUtil.getIpAddress(request));
+//        }
+        logger.info("登陆ip为：" + IpAdrressUtil.getIpAddress(request));
+        sysUserBiz.updateLastLoginInfo(sysUserDTO.getId(), IpAdrressUtil.getIpAddress(request));
         Subject subject = SecurityUtils.getSubject();
         Collection<Session> sessions = sessionDAO.getActiveSessions();
         for (Session session : sessions) {
