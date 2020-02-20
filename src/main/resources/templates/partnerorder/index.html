@@ -189,88 +189,88 @@
                     </div><!-- /.col -->
 
                     <div class="col-xs-12">
-                        <div class="col-sm-3" style="height: 400px">
-                            <div class="profile-user-info profile-user-info-striped">
-                                <div class="profile-info-row">
-                                    <div class="profile-info-name"> 预支、消费情况</div>
-                                    <div class="profile-info-value">
-                                        <!--<a class="btn btn-minier btn-default" href="javascript:showOrder(1)">刷新</a>-->
-                                        <a href="javascript:refreshOverviewMoney()" data-action="reload">
-                                            <i class="ace-icon fa fa-refresh"></i>
-                                        </a>
-                                    </div>
-                                </div>
+                        <!--                        <div class="col-sm-3" style="height: 400px">-->
+                        <!--                            <div class="profile-user-info profile-user-info-striped">-->
+                        <!--                                <div class="profile-info-row">-->
+                        <!--                                    <div class="profile-info-name"> 预支、消费情况</div>-->
+                        <!--                                    <div class="profile-info-value">-->
+                        <!--                                        &lt;!&ndash;<a class="btn btn-minier btn-default" href="javascript:showOrder(1)">刷新</a>&ndash;&gt;-->
+                        <!--                                        <a href="javascript:refreshOverviewMoney()" data-action="reload">-->
+                        <!--                                            <i class="ace-icon fa fa-refresh"></i>-->
+                        <!--                                        </a>-->
+                        <!--                                    </div>-->
+                        <!--                                </div>-->
 
-                                <div class="profile-info-row">
-                                    <div class="profile-info-name"> 总预支</div>
-                                    <div class="profile-info-value">
-                                        <span id="total"> 加载中...</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <shiro:hasPermission name="advancePayManagement">
-                                            <a class="btn btn-minier btn-primary"
-                                               href="javascript:getAdvancePayList('1')">总明细</a>&nbsp;&nbsp;
-                                        </shiro:hasPermission>
-                                        <shiro:hasPermission name="advancePayAdd">
-                                            <a class="btn btn-minier btn-success"
-                                               href="javascript:openAdvancePayModal()">充值</a>
-                                        </shiro:hasPermission>
-                                    </div>
-                                </div>
+                        <!--                                <div class="profile-info-row">-->
+                        <!--                                    <div class="profile-info-name"> 总预支</div>-->
+                        <!--                                    <div class="profile-info-value">-->
+                        <!--                                        <span id="total"> 加载中...</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+                        <!--                                        <shiro:hasPermission name="advancePayManagement">-->
+                        <!--                                            <a class="btn btn-minier btn-primary"-->
+                        <!--                                               href="javascript:getAdvancePayList('1')">总明细</a>&nbsp;&nbsp;-->
+                        <!--                                        </shiro:hasPermission>-->
+                        <!--                                        <shiro:hasPermission name="advancePayAdd">-->
+                        <!--                                            <a class="btn btn-minier btn-success"-->
+                        <!--                                               href="javascript:openAdvancePayModal()">充值</a>-->
+                        <!--                                        </shiro:hasPermission>-->
+                        <!--                                    </div>-->
+                        <!--                                </div>-->
 
-                                <div class="profile-info-row">
-                                    <div class="profile-info-name"> 总消费</div>
+                        <!--                                <div class="profile-info-row">-->
+                        <!--                                    <div class="profile-info-name"> 总消费</div>-->
 
-                                    <div class="profile-info-value">
-                                        <span id="spend">加载中...</span>
-                                    </div>
-                                </div>
+                        <!--                                    <div class="profile-info-value">-->
+                        <!--                                        <span id="spend">加载中...</span>-->
+                        <!--                                    </div>-->
+                        <!--                                </div>-->
 
-                                <div class="profile-info-row">
-                                    <div class="profile-info-name"> 总余额</div>
+                        <!--                                <div class="profile-info-row">-->
+                        <!--                                    <div class="profile-info-name"> 总余额</div>-->
 
-                                    <div class="profile-info-value">
-                                        <span id="left">加载中...</span>
-                                    </div>
-                                </div>
+                        <!--                                    <div class="profile-info-value">-->
+                        <!--                                        <span id="left">加载中...</span>-->
+                        <!--                                    </div>-->
+                        <!--                                </div>-->
 
-                                <div class="profile-info-row">
-                                    <div class="profile-info-name"> 区间说明</div>
+                        <!--                                <div class="profile-info-row">-->
+                        <!--                                    <div class="profile-info-name"> 区间说明</div>-->
 
-                                    <div class="profile-info-value">
-                                        <span>指预约时间起 至 预约时间止</span>
-                                    </div>
-                                </div>
+                        <!--                                    <div class="profile-info-value">-->
+                        <!--                                        <span>指预约时间起 至 预约时间止</span>-->
+                        <!--                                    </div>-->
+                        <!--                                </div>-->
 
-                                <div class="profile-info-row">
-                                    <div class="profile-info-name"> 区间预支</div>
-                                    <div class="profile-info-value">
-                                        <span id="intervalTotal"> 加载中...</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <shiro:hasPermission name="advancePayManagement">
-                                            <a class="btn btn-minier btn-primary"
-                                               href="javascript:getAdvancePayList('2')">区间明细</a>&nbsp;&nbsp;
-                                        </shiro:hasPermission>
-                                    </div>
-                                </div>
+                        <!--                                <div class="profile-info-row">-->
+                        <!--                                    <div class="profile-info-name"> 区间预支</div>-->
+                        <!--                                    <div class="profile-info-value">-->
+                        <!--                                        <span id="intervalTotal"> 加载中...</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+                        <!--                                        <shiro:hasPermission name="advancePayManagement">-->
+                        <!--                                            <a class="btn btn-minier btn-primary"-->
+                        <!--                                               href="javascript:getAdvancePayList('2')">区间明细</a>&nbsp;&nbsp;-->
+                        <!--                                        </shiro:hasPermission>-->
+                        <!--                                    </div>-->
+                        <!--                                </div>-->
 
-                                <div class="profile-info-row">
-                                    <div class="profile-info-name"> 区间消费</div>
+                        <!--                                <div class="profile-info-row">-->
+                        <!--                                    <div class="profile-info-name"> 区间消费</div>-->
 
-                                    <div class="profile-info-value">
-                                        <span id="intervalSpend">加载中...</span>
-                                    </div>
-                                </div>
+                        <!--                                    <div class="profile-info-value">-->
+                        <!--                                        <span id="intervalSpend">加载中...</span>-->
+                        <!--                                    </div>-->
+                        <!--                                </div>-->
 
-                                <div class="profile-info-row">
-                                    <div class="profile-info-name"> 区间余额</div>
+                        <!--                                <div class="profile-info-row">-->
+                        <!--                                    <div class="profile-info-name"> 区间余额</div>-->
 
-                                    <div class="profile-info-value">
-                                        <span id="intervalLeft">加载中...</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="alert-info" style="padding-top: 20px">
-                            </div>
-                        </div>
-                        <div class="col-sm-9">
+                        <!--                                    <div class="profile-info-value">-->
+                        <!--                                        <span id="intervalLeft">加载中...</span>-->
+                        <!--                                    </div>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                            <div id="alert-info" style="padding-top: 20px">-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                        <div class="col-sm-12">
                             <table id="grid-table"></table>
                             <div id="grid-pager"></div>
                         </div>
@@ -791,12 +791,24 @@
                 {name: 'orderSource', index: 'orderSource', width: 80, sortable: false},
                 {name: 'workerName', index: 'workerName', width: 100, sortable: false},
                 {name: 'serviceItemResp.name', index: 'serviceItem', width: 100, sortable: false},
-                {name: 'prePay', index: 'prePay', width: 100, sortable: false,formatter:function(cellvalue, options, rowObject){
-                    return formatNumberWithComma(rowObject.prePay);
-                }},
-                {name: 'appendPay', index: 'appendPay', width: 100, sortable: false,formatter:function(cellvalue, options, rowObject){
-                    return formatNumberWithComma(rowObject.appendPay);
-                }}
+                {
+                    name: 'prePay',
+                    index: 'prePay',
+                    width: 100,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return formatNumberWithComma(rowObject.prePay);
+                    }
+                },
+                {
+                    name: 'appendPay',
+                    index: 'appendPay',
+                    width: 100,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return formatNumberWithComma(rowObject.appendPay);
+                    }
+                }
             ],
             loadComplete: function (data) {
                 if ("error" in data) {
@@ -1003,16 +1015,21 @@
 
     //下单 keepOn为true：下单并继续；为false，下单关闭模态框，重新刷新页面
     function savePartnerOrder(keepOn) {
-        if (!isNumber($("#savePrePay").val())) {
+        var prePay = $("#savePrePay").val();
+        var appendPay = $("#saveAppendPay").val()
+        if (!isNumber(prePay)) {
             bootboxalert("预付必须为数字！");
             return false;
         }
-        if (!isNumber($("#saveAppendPay").val())) {
+        if (!isNumber(appendPay)) {
             bootboxalert("再次支付必须为数字！");
             return false;
         }
+
         if ($("#saveStatus").val() == "3") {
-            confirm("已完成订单，除了备注为非必填外，其他都为必填，需要继续保存吗？", function (result) {
+            var sum = new Number(prePay) + new Number(appendPay);
+            var message = "确定要完成该商家订单吗？<span style='color:#FF0000'>该订单预付" + prePay + "元,再次支付" + appendPay + "元,总计" + sum + "元</span>";
+            confirm(message, function (result) {
                 if (result) {
                     save(keepOn);
                 }
@@ -1033,9 +1050,9 @@
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
-                    if(keepOn){
+                    if (keepOn) {
                         bootboxalert("保存成功，请继续");
-                    }else{
+                    } else {
                         $("#modal-partnerOrder").modal('hide');
                         jQuery(grid_selector).setGridParam({}).trigger("reloadGrid");
                         refreshOverviewMoney();
