@@ -8,9 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <!-- CSS -->
     <link rel="stylesheet" th:href="@{/static/init.css}"/>
+    <link rel="stylesheet" th:href="@{/static/Viewer.js/css/viewer.min.css}"/>
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
     <script th:src="@{/static/ace-master/js/bootstrap-tag.min.js}"></script>
+    <script th:src="@{/static/Viewer.js/js/viewer.min.js}"></script>
 
     <style>
         .ui-jqgrid .ui-jqgrid-bdiv {
@@ -52,6 +54,13 @@
         .chosen-container-single .chosen-single {
             height: 30px;
             border-radius: 0px;
+        }
+
+        .viewer-container {
+            position: relative;
+            min-height: 400px;
+            height: 100% !important;
+            width: 100% !important;
         }
 
     </style>
@@ -456,9 +465,9 @@
                                     <button id="previousBtn" onclick="previousPicture()" style="display:none"
                                             type="button" class="close" aria-hidden="true">上一张
                                     </button>
-                                    <button id="rotateBtn" onclick="rotatePicture()" type="button" class="close"
+                                    <!--<button id="rotateBtn" onclick="rotatePicture()" type="button" class="close"
                                             aria-hidden="true" title="顺时针旋转90度">旋转
-                                    </button>
+                                    </button>-->
                                     <span id="customerMobileShow"
                                           style="color:white;font-size:28px;position:fixed"></span>
                                 </div>
@@ -1007,11 +1016,23 @@
         });
     }
 
-    function showimage(source, first) {
+    function showimage2(source, first) {
         if (first) {
             $("#ShowImage_Form").modal('show');
         }
         $("#ShowImage_Form").find("#img_show").html("<image id='zoomPic' width='500px' src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' style='zoom:70%;'/>");
+    }
+
+    //图片单击放大显示
+    function showimage(source,first) {
+        rotate = 0;
+        $("#ShowImage_Form").find("#img_show").html("<image id='zoomPic' width='400px' data-original='" + source + "' src='" + source + "' style='display:none;' />");
+        new Viewer(document.getElementById('zoomPic'), {
+            url: 'data-original', inline: true,navbar:false,button:false,title:false
+        });
+        if (first) {
+            $("#ShowImage_Form").modal('show');
+        }
     }
 
     function bigimg(obj) {

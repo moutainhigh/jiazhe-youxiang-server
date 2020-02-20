@@ -9,10 +9,12 @@
     <!-- CSS -->
     <link rel="stylesheet" th:href="@{/static/init.css}"/>
     <link rel="stylesheet" th:href="@{/static/editable-select/css/jquery-editable-select.min.css}"/>
+    <link rel="stylesheet" th:href="@{/static/Viewer.js/css/viewer.min.css}"/>
     <!-- Javascript -->
     <script th:src="@{/static/init.js}"></script>
     <script th:src="@{/static/editable-select/js/jquery-editable-select.min.js}"></script>
     <script th:src="@{/static/ace-master/js/bootstrap-tag.min.js}"></script>
+    <script th:src="@{/static/Viewer.js/js/viewer.min.js}"></script>
 
     <style>
         .ui-jqgrid .ui-jqgrid-bdiv {
@@ -57,6 +59,13 @@
         /*隐藏*/
         #pointCodes + input {
             display: none;
+        }
+
+        .viewer-container {
+            position: relative;
+            min-height: 400px;
+            height: 100% !important;
+            width: 100% !important;
         }
     </style>
 </head>
@@ -309,7 +318,7 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">充值凭证：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">充值凭证1：</label>
                                                     <div class="col-sm-8 float" id="pics">
 
                                                     </div>
@@ -352,9 +361,9 @@
                                 <div class="modal-header" style="border-bottom: 0px;background-color: rgba(64,64,64,1)">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">关闭
                                     </button>
-                                    <button id="rotateBtn" onclick="rotatePictureFull()" type="button" class="close"
+                                    <!--<button id="rotateBtn" onclick="rotatePictureFull()" type="button" class="close"
                                             aria-hidden="true" title="顺时针旋转90度">旋转
-                                    </button>
+                                    </button>-->
                                 </div>
                                 <div class="modal-body"
                                      style="padding:0px;text-align: center;background-color: rgba(64,64,64,0.5)">
@@ -433,9 +442,16 @@
     }
 
     //全屏查看小票
-    function clickImg(source) {
+    function clickImg2(source) {
         $("#ShowImage_Form").modal('show');
         $("#ShowImage_Form").find("#imgShowFull").html("<image id='zoomPicFull' width='500px' src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' style='zoom:70%;'/>");
+    }
+    function clickImg(source) {
+        $("#ShowImage_Form").modal('show');
+        $("#ShowImage_Form").find("#imgShowFull").html("<image id='zoomPicFull' width='500px' src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' style='zoom:70%;display:none;'/>");
+        new Viewer(document.getElementById('zoomPicFull'), {
+            url: 'data-original', inline: true,navbar:false,button:false,title:false
+        });
     }
 
     function bigimg(obj) {
