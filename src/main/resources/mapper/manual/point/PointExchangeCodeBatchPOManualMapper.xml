@@ -53,7 +53,7 @@
     select count(*) from point_exchange_code_batch
     <where>
       <if test="name != null  and name != ''">
-        AND name = #{name}
+        AND name like concat('%',#{name},'%')
       </if>
       <if test="projectId != null  and projectId != ''">
         AND project_id = #{projectId}
