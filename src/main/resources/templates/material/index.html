@@ -382,11 +382,11 @@
     }
 
     function saveTransferMoney() {
-        if (!isNumber($("#transferAmountSave").val()) || $("#transferAmountSave").val() <= 0) {
+        if (!isNumber2($("#transferAmountSave").val())) {
             bootboxalert("转账金额非法");
             return false;
         }
-        if (!isNumber($("#materialValueSave").val()) || $("#materialValueSave").val() <= 0) {
+        if (!isNumber2($("#materialValueSave").val())) {
             bootboxalert("采购实物价值非法");
             return false;
         }

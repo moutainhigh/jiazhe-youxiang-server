@@ -32,7 +32,7 @@ public interface AuditRecordService {
      * @param paging
      * @return
      */
-    List<AuditRecordDTO> getList(Integer submitterId, String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint,Date submitStartTime, Date submitEndTime, String exchangeType,String cityCode, Paging paging);
+    List<AuditRecordDTO> getList(Integer submitterId, String condition, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint,Date submitStartTime, Date submitEndTime, String exchangeType,String cityCode, Paging paging);
 
     /**
      * 根据id获取详细记录
@@ -125,9 +125,10 @@ public interface AuditRecordService {
     /**
      * 小程序统计某个时间段内提交的小票信息
      * @param id
+     * @param status
      * @param submitStartTime
      * @param submitEndTime
      * @return
      */
-    StatisticsDTO statistics(Integer id, Date submitStartTime, Date submitEndTime);
+    StatisticsDTO statistics(Integer id, Byte[] status,Date submitStartTime, Date submitEndTime);
 }

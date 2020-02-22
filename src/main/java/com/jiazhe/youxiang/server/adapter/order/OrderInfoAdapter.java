@@ -149,6 +149,8 @@ public class OrderInfoAdapter {
         userReservationOrderDTO.setWorkerName(req.getWorkerName());
         userReservationOrderDTO.setWorkerMobile(req.getWorkerMobile());
         userReservationOrderDTO.setRealServiceTime(new Date(req.getRealServiceTime()));
+        userReservationOrderDTO.setStatus(req.getStatus());
+        userReservationOrderDTO.setServiceTime(new Date(req.getServiceTime()));
         userReservationOrderDTO.setCost(req.getCost());
         userReservationOrderDTO.setComments(req.getComments());
         return userReservationOrderDTO;

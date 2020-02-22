@@ -61,7 +61,6 @@ public class AutoCCancelResultUtils {
      *
      * @return
      */
-    @Deprecated
     public static void generateFile() throws Exception {
 
         //三种类型文件路径
@@ -85,7 +84,7 @@ public class AutoCCancelResultUtils {
 
         //第2步，解密文件
         PgpDecryUtil decryU = new PgpDecryUtil();
-        decryU.setPassphrase(BOCCCUtils.PASSPHRASE);
+        decryU.setPassphrase(BOCCCConstant.PASSPHRASE);
         decryU.DecryUtil(BOCCCConstant.ccancelPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_PGP, -1), BOCCCConstant.ccancelPath + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_ZIP, -1), BOCCCConstant.privateKeyPath);
 
         //第3步，解压缩文件
@@ -138,5 +137,10 @@ public class AutoCCancelResultUtils {
         }
         sb.append(cancelStatus).append(cancelStr.substring(103, 134)).append(BOCCCUtils.complete(failureDesc, ' ', false, 200)).append(cancelStr.substring(334, cancelStr.length()));
         return sb.toString();
+    }
+    public static void main(String[] args) throws Exception{
+        PgpDecryUtil decryU = new PgpDecryUtil();
+        decryU.setPassphrase("m1h2q3");
+        decryU.DecryUtil(BOCCCConstant.ccancelPath + BOCCCUtils.getYesterday() + "/CREMA.BOCYOUX.20200113.00.ZIP.DAT" , BOCCCConstant.ccancelPath + BOCCCUtils.getYesterday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.BOC_CCANCEL_ZIP, -1), BOCCCConstant.privateKeyPath);
     }
 }

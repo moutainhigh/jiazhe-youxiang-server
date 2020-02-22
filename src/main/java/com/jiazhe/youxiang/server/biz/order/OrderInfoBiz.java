@@ -203,6 +203,11 @@ public class OrderInfoBiz {
         sb.append(OrderTrackBiz.parseOrderTrackInfo("服务时间", oldOrderInfo.getRealServiceTime(), userReservationOrderDTO.getRealServiceTime()));
         sb.append(OrderTrackBiz.parseOrderTrackInfo("订单成本", oldOrderInfo.getCost(), userReservationOrderDTO.getCost()));
         sb.append(OrderTrackBiz.parseOrderTrackInfo("订单备注", oldOrderInfo.getComments(), userReservationOrderDTO.getComments()));
+        //如果订单状态改变了，则记录下这些信息
+        if(CommonConstant.ORDER_UNSENT.equals(userReservationOrderDTO.getStatus())){
+            sb.append(OrderTrackBiz.parseOrderTrackInfo("订单状态", "待服务", "待派单"));
+            sb.append(OrderTrackBiz.parseOrderTrackInfo("预约时间", oldOrderInfo.getServiceTime(), userReservationOrderDTO.getServiceTime()));
+        }
         OrderTrackDTO orderTrackDTO = new OrderTrackDTO();
         orderTrackDTO.setOrderid(orderId);
         orderTrackDTO.setOpreation(OrderOpreationTypeEnum.UPDATE);
@@ -279,9 +284,9 @@ public class OrderInfoBiz {
                 return dto;
             }
         } catch (Exception e) {
-            logger.info("发起预支付失败，异常信息：" + e.getMessage());
+            logger.info("微信支付订单查询失败，异常信息：" + e.getMessage());
             dto.setReason("查询失败，未知异常");
         }
-        return null;
+        return dto;
     }
 }
