@@ -32,6 +32,7 @@ import com.jiazhe.youxiang.server.vo.resp.login.SendVerificationCodeResp;
 import com.jiazhe.youxiang.server.vo.resp.login.SessionResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authz.AuthorizationInfo;

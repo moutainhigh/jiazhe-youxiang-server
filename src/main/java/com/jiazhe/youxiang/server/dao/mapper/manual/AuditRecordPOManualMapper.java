@@ -13,9 +13,8 @@ import java.util.List;
  */
 public interface AuditRecordPOManualMapper {
     /**
-     *
      * @param submitterId
-     * @param customerInfo
+     * @param condition
      * @param submitterName
      * @param status
      * @param chargeReceiptStatus
@@ -30,7 +29,7 @@ public interface AuditRecordPOManualMapper {
      */
     Integer count(
             @Param("submitterId") Integer submitterId,
-            @Param("customerInfo") String customerInfo,
+            @Param("condition") String condition,
             @Param("submitterName") String submitterName,
             @Param("status") Byte status,
             @Param("chargeReceiptStatus") Byte chargeReceiptStatus,
@@ -43,9 +42,8 @@ public interface AuditRecordPOManualMapper {
     );
 
     /**
-     *
      * @param submitterId
-     * @param customerInfo
+     * @param condition
      * @param submitterName
      * @param status
      * @param chargeReceiptStatus
@@ -61,7 +59,7 @@ public interface AuditRecordPOManualMapper {
      */
     List<AuditRecordPO> query(
             @Param("submitterId") Integer submitterId,
-            @Param("customerInfo") String customerInfo,
+            @Param("condition") String condition,
             @Param("submitterName") String submitterName,
             @Param("status") Byte status,
             @Param("chargeReceiptStatus") Byte chargeReceiptStatus,
@@ -74,4 +72,11 @@ public interface AuditRecordPOManualMapper {
             @Param("offset") Integer offset,
             @Param("limit") Integer limit
     );
+
+    List<AuditRecordPO> statistics(
+            @Param("submitterId") Integer submitterId,
+            @Param("status") Byte[] status,
+            @Param("submitStartTime") Date submitStartTime,
+            @Param("submitEndTime") Date submitEndTime
+            );
 }

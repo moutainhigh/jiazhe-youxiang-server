@@ -29,6 +29,12 @@ public class UserReservationOrderReq {
     @ApiModelProperty("订单备注")
     private String comments;
 
+    @ApiModelProperty("订单状态")
+    private Byte status;
+
+    @ApiModelProperty("预约时间")
+    private Long serviceTime;
+
     public String getWorkerName() {
         return workerName;
     }
@@ -75,5 +81,21 @@ public class UserReservationOrderReq {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public Long getServiceTime() {
+        return serviceTime;
+    }
+
+    public void setServiceTime(Long serviceTime) {
+        this.serviceTime = serviceTime;
     }
 }

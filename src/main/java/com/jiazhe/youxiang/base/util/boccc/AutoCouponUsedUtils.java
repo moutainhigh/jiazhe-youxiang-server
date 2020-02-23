@@ -69,7 +69,6 @@ public class AutoCouponUsedUtils {
      *
      * @return
      */
-    @Deprecated
     public static void generateFile() throws Exception {
 
         BOCCCUtils.mkDirs(BOCCCConstant.cusedPath + "work/" + BOCCCUtils.getToday());

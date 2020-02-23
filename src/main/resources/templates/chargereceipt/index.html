@@ -51,10 +51,15 @@
 
         .viewer-container {
             position: relative;
+            min-height: 400px;
             height: 100% !important;
             width: 100% !important;
         }
-
+        .modal-dialog{
+            margin-right: 10px !important;
+            width: 78%;
+            min-width: 600px;
+        }
     </style>
 </head>
 
@@ -190,7 +195,7 @@
                                 </div>
                                 <div class="modal-body" style="text-align: center">
                                     <div class="row">
-                                        <div class="col-xs-12 col-sm-6">
+                                        <div class="col-xs-12 col-sm-7">
                                             <!--<a href="javascript:rotatePicture()" title="顺时针旋转90度">-->
                                                 <!--<i class="ace-icon fa fa-repeat"></i>-->
                                             <!--</a>-->
@@ -198,7 +203,7 @@
 
                                             </div>
                                         </div>
-                                        <div class="col-xs-12 col-sm-6">
+                                        <div class="col-xs-12 col-sm-5">
                                             <div class="col-xs-12 col-sm-12">
                                                 <form id="chargeReceiptForm" class="form-horizontal" role="form">
                                                     <input type="hidden" name="auditRecordId" id="auditRecordId"
@@ -339,9 +344,9 @@
                                 <div class="modal-header" style="border-bottom: 0px;background-color: rgba(64,64,64,1)">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">关闭
                                     </button>
-                                    <button id="rotateBtn" onclick="rotatePictureFull()" type="button" class="close"
+                                    <!--<button id="rotateBtn" onclick="rotatePictureFull()" type="button" class="close"
                                             aria-hidden="true" title="顺时针旋转90度">旋转
-                                    </button>
+                                    </button>-->
                                 </div>
                                 <div class="modal-body"
                                      style="padding:0px;text-align: center;background-color: rgba(64,64,64,0.5)">
@@ -443,9 +448,16 @@
     }
 
     //全屏查看小票
-    function clickImg(source) {
+    function clickImg2(source) {
         $("#ShowImage_Form").modal('show');
         $("#ShowImage_Form").find("#imgShowFull").html("<image id='zoomPicFull' width='500px' src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' style='zoom:70%;'/>");
+    }
+    function clickImg(source) {
+        $("#ShowImage_Form").modal('show');
+        $("#ShowImage_Form").find("#imgShowFull").html("<image id='zoomPicFull' width='500px' src='" + source + "' onmousewheel='return bigimg(this)' class='cursor:pointer img-rounded ' style='zoom:70%;display:none;'/>");
+        new Viewer(document.getElementById('zoomPicFull'), {
+            url: 'data-original', inline: true,navbar:false,button:false,title:false
+        });
     }
 
 
