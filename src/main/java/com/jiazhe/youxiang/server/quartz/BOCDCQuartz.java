@@ -38,6 +38,7 @@ public class BOCDCQuartz extends QuartzJobBean {
         try {
             logger.info("生成生成对账信息文件");
             //线上上传数据必须每月1日上传上月客户使用数据
+
             bocdcBiz.uploadReconciliationFile(-1);
             logger.info("生成生成对账信息文件完成");
         } catch (Exception e) {
