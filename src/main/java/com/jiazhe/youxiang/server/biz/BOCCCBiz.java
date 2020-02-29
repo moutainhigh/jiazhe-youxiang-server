@@ -121,7 +121,7 @@ public class BOCCCBiz {
         usedReq.setwEid(wEid);
         usedReq.setwInfo(wInfo);
         Map<String, String> req = new HashMap<>(2);
-        String usedReqStr = JacksonUtil.toJSon(usedReq).replace("\"", "\\\"");
+        String usedReqStr = JacksonUtil.toJSon(usedReq);
         try {
             LOGGER.info(usedReqStr);
             String data = RSAUtil.bocccPublicEncrypt(usedReqStr);
@@ -162,7 +162,7 @@ public class BOCCCBiz {
         refundReq.setOrderId(orderInfo);
         refundReq.setwInfo(wInfo);
         Map<String, String> req = new HashMap<>(2);
-        String refundReqStr = JacksonUtil.toJSon(refundReq).replace("\"", "\\\"");
+        String refundReqStr = JacksonUtil.toJSon(refundReq);
         try {
             LOGGER.info(refundReqStr);
             String data = RSAUtil.bocccPublicEncrypt(refundReqStr);
