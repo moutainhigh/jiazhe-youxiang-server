@@ -2,6 +2,7 @@ package com.jiazhe.youxiang.server.controller.chargeoff;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
+import com.jiazhe.youxiang.base.validator.ChargeOffValidator;
 import com.jiazhe.youxiang.server.biz.ChargeOffBiz;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
@@ -43,6 +44,7 @@ public class APIChargeOffController extends BaseController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.CHARGE_OFF, operate = "添加核销记录", level = LogLevelEnum.LEVEL_1)
     public Object add(@ModelAttribute ChargeOffAddReq req) {
+        ChargeOffValidator.validateChargeOffAddReq(req);
         return ResponseFactory.buildSuccess();
     }
 
@@ -50,6 +52,8 @@ public class APIChargeOffController extends BaseController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.CHARGE_OFF, operate = "编辑核销记录", level = LogLevelEnum.LEVEL_1)
     public Object update(@ModelAttribute ChargeOffUpdateReq req) {
+        ChargeOffValidator.validateChargeOffUpdateReq(req);
+
         return ResponseFactory.buildSuccess();
     }
 
@@ -57,6 +61,8 @@ public class APIChargeOffController extends BaseController {
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.CHARGE_OFF, operate = "删除核销记录", level = LogLevelEnum.LEVEL_1)
     public Object delete(@ModelAttribute IdReq req) {
+        ChargeOffValidator.validateId(req);
+
         return ResponseFactory.buildSuccess();
     }
 
@@ -64,6 +70,7 @@ public class APIChargeOffController extends BaseController {
     @RequestMapping(value = "/querybyid", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.CHARGE_OFF, operate = "根据id查询核销记录", level = LogLevelEnum.LEVEL_1)
     public Object queryById(@ModelAttribute IdReq req) {
+        ChargeOffValidator.validateId(req);
         return ResponseFactory.buildSuccess();
     }
 
@@ -71,6 +78,7 @@ public class APIChargeOffController extends BaseController {
     @RequestMapping(value = "/fuzzyquery", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.CHARGE_OFF, operate = "模糊查询（小程序端）", level = LogLevelEnum.LEVEL_1)
     public Object fuzzyQuery(@ModelAttribute ChargeOffFuzzyQueryReq req) {
+        ChargeOffValidator.validateChargeOffFuzzyQueryReq(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildPaginationResponse(null, paging);
@@ -80,6 +88,7 @@ public class APIChargeOffController extends BaseController {
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.CHARGE_OFF, operate = "条件查询（PC端）", level = LogLevelEnum.LEVEL_1)
     public Object query(@ModelAttribute ChargeOffQueryReq req) {
+        ChargeOffValidator.validateChargeOffQueryReq(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         return ResponseFactory.buildPaginationResponse(null, paging);
     }
@@ -88,6 +97,7 @@ public class APIChargeOffController extends BaseController {
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.CHARGE_OFF, operate = "验证密码有效性", level = LogLevelEnum.LEVEL_1)
     public Object validateKeyt(@ModelAttribute ValidateKeytReq req) {
+        ChargeOffValidator.validateValidateKeytReq(req);
         return ResponseFactory.buildSuccess();
     }
 
@@ -95,6 +105,7 @@ public class APIChargeOffController extends BaseController {
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.CHARGE_OFF, operate = "导出核销详情（兑换密码粒度）", level = LogLevelEnum.LEVEL_1)
     public Object exportDetail(@ModelAttribute ChargeOffQueryReq req) {
+        ChargeOffValidator.validateChargeOffQueryReq(req);
         return ResponseFactory.buildSuccess();
     }
 }

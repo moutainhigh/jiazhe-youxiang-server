@@ -303,7 +303,6 @@ public class BOCDCBiz {
      * @return
      */
     private String getUseStatus(int used) {
-        //TODO niexiao 整理代码
         switch (used) {
             case 0:
             default:
@@ -313,9 +312,8 @@ public class BOCDCBiz {
                 //已使用
                 return "01";
             case 2:
-                //TODO niexiao 注意修改
                 //已退货
-                return "01";
+                return "02";
         }
     }
 
