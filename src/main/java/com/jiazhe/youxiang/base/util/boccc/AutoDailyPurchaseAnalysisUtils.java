@@ -87,7 +87,6 @@ public class AutoDailyPurchaseAnalysisUtils {
      *
      * @return
      */
-    @Deprecated
     public static void generateFile() throws Exception {
 
         String sourceFileName = BOCCCConstant.dailyPurchase + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CSELL_SOURCE, -1);
@@ -108,7 +107,7 @@ public class AutoDailyPurchaseAnalysisUtils {
 
         //第二步，解密文件
         PgpDecryUtil decryU = new PgpDecryUtil();
-        decryU.setPassphrase(BOCCCUtils.PASSPHRASE);
+        decryU.setPassphrase(BOCCCConstant.PASSPHRASE);
         decryU.DecryUtil(pgpFileName, zipFileName, BOCCCConstant.privateKeyPath);
 
         //第三步，解压缩文件

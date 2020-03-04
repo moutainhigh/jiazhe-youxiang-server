@@ -87,7 +87,6 @@ public class AutoDailyRemainAnalysisUtils {
      *
      * @return
      */
-    @Deprecated
     public static void generateFile() throws Exception {
 
         //第一步，判断download文件夹中是否有下传的退货信息加密文件,
@@ -106,7 +105,7 @@ public class AutoDailyRemainAnalysisUtils {
 
         //第二步，解密文件
         PgpDecryUtil decryU = new PgpDecryUtil();
-        decryU.setPassphrase(BOCCCUtils.PASSPHRASE);
+        decryU.setPassphrase(BOCCCConstant.PASSPHRASE);
         decryU.DecryUtil(BOCCCConstant.dailyRemain + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CREMA_PGP, -1), BOCCCConstant.dailyRemain + BOCCCUtils.getToday() + "/" + BOCCCUtils.getFileName(BOCCCConstant.CREMA_ZIP, -1), BOCCCConstant.privateKeyPath);
 
         //第三步，解压缩文件

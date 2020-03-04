@@ -28,7 +28,6 @@ import java.util.regex.Pattern;
  * @description BOCCC公共工具类
  * @created 2019-09-02 20:07
  */
-@Component
 public class BOCCCUtils {
 
     public static Logger logger = LoggerFactory.getLogger(BOCCCUtils.class);
@@ -39,16 +38,6 @@ public class BOCCCUtils {
      * 每次重试间隔
      */
     private static Integer[] RETRY_INTERVAL = {15, 15, 30, 180, 600, 1200, 1800, 1800, 1800, 3600, 10800, 10800, 10800, 21600, 21600};
-
-    /**
-     * 中行信用卡解密字符串
-     */
-    public static String PASSPHRASE;
-
-    @Value("${boccc.pgp.passphrase}")
-    public void setPassPhrase(String passphrase) {
-        PASSPHRASE = passphrase;
-    }
 
     /**
      * 生成n个字符
@@ -130,13 +119,6 @@ public class BOCCCUtils {
      * @param str
      */
     public static void writeStringToFile(String filePath, String str) {
-//        try {
-//            FileOutputStream fos = new FileOutputStream(filePath);
-//            fos.write(str.getBytes());
-//            fos.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         try {
             FileUtils.writeStringToFile(new File(filePath), str, BOCCCConstant.CHAR_SET);
         } catch (Exception e) {

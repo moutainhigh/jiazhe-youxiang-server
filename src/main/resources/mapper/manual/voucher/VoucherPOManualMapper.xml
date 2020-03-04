@@ -42,53 +42,57 @@
     </insert>
 
     <select id="query" resultType="com.jiazhe.youxiang.server.domain.po.VoucherPO">
-        SELECT rc.id, rc.name,rc.description,rc.customer_id, rc.project_id,
-        rc.city_codes,rc.product_ids,rc.count,rc.exchange_record_id,rc.effective_time,rc.expiry_time,rc.used,rc.status,rc.ext_info, rc.is_deleted,rc.add_time, rc.mod_time
-        FROM voucher rc LEFT JOIN
-        voucher_exchange_record rcec ON rc.id = rcec.voucher_id
-        LEFT JOIN customer c ON c.id = rc.customer_id
+        SELECT v.id, v.name,v.description,v.customer_id, v.project_id,
+        v.city_codes,v.product_ids,v.count,v.exchange_record_id,v.effective_time,v.expiry_time,v.used,v.status,v.ext_info, v.is_deleted,v.add_time, v.mod_time
+        FROM voucher v
+        <if test="exchangeType != null">
+          LEFT JOIN voucher_exchange_record ver ON v.id = ver.voucher_id
+        </if>
+--         LEFT JOIN customer c ON c.id = rc.customer_id
         <where>
             <if test="mobile != null and mobile != ''">
-                AND c.mobile = #{mobile}
+                AND v.customer_id = (select id from customer where mobile = #{mobile})
             </if>
             <if test="exchangeType != null">
-                AND rcec.exchange_type = #{exchangeType}
+                AND ver.exchange_type = #{exchangeType}
             </if>
             <if test="status != null">
-                AND rc.status = #{status}
+                AND v.status = #{status}
             </if>
             <if test="expiry == 0">
-                AND rc.expiry_time &gt; NOW()
+                AND v.expiry_time &gt; NOW()
             </if>
             <if test="expiry == 1">
-                AND rc.expiry_time &lt;= NOW()
+                AND v.expiry_time &lt;= NOW()
             </if>
-            AND rc.is_deleted = 0 ORDER BY rc.add_time desc
+            AND v.is_deleted = 0 ORDER BY v.add_time desc
         </where>
         limit #{offset},#{limit}
     </select>
 
     <select id="count" resultType="java.lang.Integer">
-        select count(*) FROM voucher rc LEFT JOIN
-        voucher_exchange_record rcec ON rc.id = rcec.voucher_id
-        LEFT JOIN customer c ON c.id = rc.customer_id
+        select count(*) FROM voucher v
+        <if test="exchangeType != null">
+          LEFT JOIN voucher_exchange_record ver ON v.id = ver.voucher_id
+        </if>
+--         LEFT JOIN customer c ON c.id = rc.customer_id
         <where>
             <if test="mobile != null and mobile != ''">
-                AND c.mobile = #{mobile}
+                AND v.customer_id = (select id from customer where mobile = #{mobile})
             </if>
             <if test="exchangeType != null">
-                AND rcec.exchange_type = #{exchangeType}
+                AND ver.exchange_type = #{exchangeType}
             </if>
             <if test="status != null">
-                AND rc.status = #{status}
+                AND v.status = #{status}
             </if>
             <if test="expiry == 0">
-                AND rc.expiry_time &gt; NOW()
+                AND v.expiry_time &gt; NOW()
             </if>
             <if test="expiry == 1">
-                AND rc.expiry_time &lt;= NOW()
+                AND v.expiry_time &lt;= NOW()
             </if>
-            AND rc.is_deleted = 0 ORDER BY rc.add_time desc
+            AND v.is_deleted = 0 ORDER BY v.add_time desc
         </where>
     </select>
 

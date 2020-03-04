@@ -71,9 +71,9 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     private ChargeReceiptService chargeReceiptService;
 
     @Override
-    public List<AuditRecordDTO> getList(Integer submitterId, String customerInfo, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint, Date submitStartTime, Date submitEndTime, String exchangeType, String cityCode, Paging paging) {
-        Integer count = auditRecordPOManualMapper.count(submitterId, customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint, submitStartTime, submitEndTime, exchangeType,cityCode);
-        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(submitterId, customerInfo, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint, submitStartTime, submitEndTime, exchangeType, cityCode,paging.getOffset(), paging.getLimit());
+    public List<AuditRecordDTO> getList(Integer submitterId, String condition, String submitterName, Byte status, Byte chargeReceiptStatus, String pointCodes, String exchangePoint, Date submitStartTime, Date submitEndTime, String exchangeType, String cityCode, Paging paging) {
+        Integer count = auditRecordPOManualMapper.count(submitterId, condition, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint, submitStartTime, submitEndTime, exchangeType,cityCode);
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(submitterId, condition, submitterName, status, chargeReceiptStatus, pointCodes, exchangePoint, submitStartTime, submitEndTime, exchangeType, cityCode,paging.getOffset(), paging.getLimit());
         paging.setTotal(count);
         return auditRecordPOList.stream().map(AuditRecordAdapter::PO2DTO).collect(Collectors.toList());
     }
@@ -248,7 +248,8 @@ public class AuditRecordServiceImpl implements AuditRecordService {
         if (null == po) {
             throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_IS_NOT_EXIST);
         }
-        if (!po.getStatus().equals(CommonConstant.AUDIT_RECORD_NOT_SUBMITTED)) {
+        //只有通过的审核不能删除
+        if (po.getStatus().equals(CommonConstant.AUDIT_RECORD_PASS)) {
             throw new AuditRecordException(AuditRecordCodeEnum.AUDIT_RECORD_CANNOT_DELETE);
         }
         po.setIsDeleted(CommonConstant.CODE_DELETED);
@@ -299,9 +300,9 @@ public class AuditRecordServiceImpl implements AuditRecordService {
     }
 
     @Override
-    public StatisticsDTO statistics(Integer id, Date submitStartTime, Date submitEndTime) {
+    public StatisticsDTO statistics(Integer id, Byte[] status,Date submitStartTime, Date submitEndTime) {
         StatisticsDTO dto = new StatisticsDTO();
-        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.query(id, null, null, null, null, null, null, submitStartTime, submitEndTime, null, null,null, null);
+        List<AuditRecordPO> auditRecordPOList = auditRecordPOManualMapper.statistics(id, status,submitStartTime, submitEndTime);
         if (!auditRecordPOList.isEmpty()) {
             dto.setRecordNum(auditRecordPOList.size());
             dto.setTotalExchangePoint(auditRecordPOList.stream().map(AuditRecordPO::getExchangePoint).reduce(BigDecimal::add).get());

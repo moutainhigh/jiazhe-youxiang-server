@@ -106,8 +106,8 @@
                                 <label class="col-sm-1 control-label no-padding-right">客户信息：</label>
                                 <div class="col-sm-2">
                                     <div class="pos-rel">
-                                        <input id="searchCustomerInfo" name="customerInfo" class="form-control"
-                                               type="text" placeholder="客户姓名或电话，模糊查询"
+                                        <input id="searchCondition" name="condition" class="form-control"
+                                               type="text" placeholder="姓名/电话/银行/卡号/积分数量"
                                                style="height:30px"/>
                                     </div>
                                 </div>
@@ -554,7 +554,7 @@
         var tableOption = {
             url: "/api/auditrecord/listpage",
             postData: transformToJson($('#auditRecordSearchForm').serializeArray()),
-            colNames: ['', '操作', '提交人', '状态', '兑换总积分', '客户姓名', '客户手机号', '后台充值', '兑换码卡号', '商品价值(兑换比例)', '提交时间', '审核人', '审核时间', '兑换城市'],
+            colNames: ['', '操作', '提交人', '状态', '兑换总积分', '结算金额', '客户姓名', '客户手机号', '后台充值', '兑换码卡号', '商品价值(兑换比例)', '提交时间', '审核人', '审核时间', '兑换城市'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: '_action', index: '_action', width: 100, sortable: false, formatter: customFormatter},
@@ -568,9 +568,22 @@
                         return rowObject.id == 0 ? "本页积分：" : generateSpan(auditRecordStatus[rowObject.status - 1], auditRecordColor[rowObject.status - 1]);
                     }
                 },
-                {name: 'exchangePoint', index: 'exchangePoint', width: 70, sortable: false,formatter:function(cellvalue, options, rowObject){
-                    return formatNumberWithComma(rowObject.exchangePoint);
-                }},
+                {
+                    name: 'exchangePoint',
+                    index: 'exchangePoint',
+                    width: 70,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return formatNumberWithComma(rowObject.exchangePoint);
+                    }
+                },
+                {
+                    width: 70,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return formatNumberWithComma(rowObject.exchangePoint / 500) + "元";
+                    }
+                },
 //                {
 //                    name: 'exchangeType',
 //                    index: 'exchangeType',
@@ -1101,6 +1114,10 @@
                 bootboxalert("服务器异常，请联系管理员");
             }
         });
+    }
+
+    function formatExchangePoint(exchangePoint) {
+        return formatNumberWithComma(exchangePoint) + "(" + formatNumberWithComma(exchangePoint / 500) + "元)";
     }
 
 </script>

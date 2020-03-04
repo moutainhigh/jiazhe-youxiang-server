@@ -293,11 +293,33 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
-                                                    <label class="col-sm-4 control-label no-padding-right">预约时间：</label>
+                                                    <label class="col-sm-4 control-label no-padding-right">订单状态：</label>
                                                     <div class="col-sm-8">
-                                                        <div class="pos-rel">
-                                                            <input id="re_serviceTime" class="form-control"
-                                                                   type="text" style="height:30px" readonly/>
+                                                        <select id="re_status" name="status"
+                                                                class="selectpicker show-tick form-control">
+                                                            <option value="1" disabled>待付款</option>
+                                                            <option value="2">待派单</option>
+                                                            <option value="3">待服务</option>
+                                                            <option value="4" disabled>已完成</option>
+                                                            <option value="5" disabled>取消待审核</option>
+                                                            <option value="6" disabled>取消未通过</option>
+                                                            <option value="7" disabled>已取消</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right"
+                                                           for="re_serviceTime">预约时间：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input class="form-control datetime-picker"
+                                                                   id="re_serviceTime" type="text"/>
+                                                            <span class="input-group-addon">
+                                                                    <i class="fa fa-calendar bigger-110"></i>
+                                                                </span>
+                                                            <input type="hidden" value=0 name="serviceTime"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -737,6 +759,12 @@
         initCity();
 
         $('#re_realServiceTime').datetimepicker({
+            format: "YYYY-MM-DD HH:mm"
+        }).next().on(ace.click_event, function () {
+            $(this).prev().focus();
+        });
+
+        $('#re_serviceTime').datetimepicker({
             format: "YYYY-MM-DD HH:mm"
         }).next().on(ace.click_event, function () {
             $(this).prev().focus();
@@ -1271,7 +1299,9 @@
                     $("#re_customerMobile").val(result.customerMobile);
                     $("#re_customerRemark").val(result.customerRemark);
                     $("#re_customerAddress").val(result.customerAddress);
+                    $("#re_status").val(result.status);
                     $("#re_serviceTime").val(timeFormat(result.serviceTime).substring(0, 16));
+                    $("#re_serviceTime").next().next().val(result.serviceTime);
                     $("#re_realServiceTime").val(timeFormat(result.realServiceTime).substring(0, 16));
                     $("#re_realServiceTime").next().next().val(result.realServiceTime);
                     $("#re_workerMobile").val(result.workerMobile);
@@ -1302,6 +1332,8 @@
         $("#reservationChangeBtn").css("display", "none");
         fillOrderInfo(id);
         $("#re_realServiceTime").attr("readonly", "readonly");
+        $("#re_status").attr("disabled", "disabled");
+        $("#re_serviceTime").attr("readonly", "readonly");
         $("#re_workerMobile").attr("readonly", "readonly");
         $("#re_workerName").attr("readonly", "readonly");
         $("#re_cost").attr("readonly", "readonly");
@@ -1314,6 +1346,8 @@
         $("#reservationChangeBtn").css("display", "none");
         fillOrderInfo(id);
         $("#re_realServiceTime").removeAttr("readonly");
+        $("#re_status").attr("disabled", "disabled");
+        $("#re_serviceTime").attr("readonly", "readonly");
         $("#re_workerMobile").removeAttr("readonly");
         $("#re_workerName").removeAttr("readonly");
         $("#re_cost").removeAttr("readonly");
@@ -1326,6 +1360,8 @@
         $("#reservationChangeBtn").css("display", "");
         fillOrderInfo(id);
         $("#re_realServiceTime").removeAttr("readonly");
+        $("#re_status").removeAttr("disabled");
+        $("#re_serviceTime").removeAttr("readonly");
         $("#re_workerMobile").removeAttr("readonly");
         $("#re_workerName").removeAttr("readonly");
         $("#re_cost").removeAttr("readonly");
@@ -1355,6 +1391,7 @@
 
     function changeReservationInfo() {
         $("#re_realServiceTime").next().next().val($("#re_realServiceTime").val() == '' ? 0 : new Date($("#re_realServiceTime").val()).getTime());
+        $("#re_serviceTime").next().next().val($("#re_serviceTime").val() == '' ? 0 : new Date($("#re_serviceTime").val()).getTime());
         $.ajax({
             url: "/api/orderinfo/userchangereservationinfo",
             dataType: "json",

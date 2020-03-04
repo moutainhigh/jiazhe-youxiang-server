@@ -52,8 +52,14 @@
             <if test="submitterId != null">
                 AND submitter_id = #{submitterId}
             </if>
-            <if test="customerInfo != null and customerInfo!=''">
-                AND (customer_mobile LIKE CONCAT('%',#{customerInfo},'%') OR customer_name LIKE CONCAT('%',#{customerInfo},'%') OR card_no LIKE CONCAT('%',#{customerInfo},'%'))
+            <if test="condition != null and condition!=''">
+                AND (
+                    customer_mobile LIKE CONCAT('%',#{condition},'%')
+                    OR customer_name LIKE CONCAT('%',#{condition},'%')
+                    OR card_no = #{condition}
+                    OR bank_outlets_name = #{condition}
+                    OR exchange_point = #{condition}
+                )
             </if>
             <if test="submitterName != null and submitterName!=''">
                 AND submitter_name LIKE CONCAT('%',#{submitterName},'%')
@@ -108,8 +114,14 @@
             <if test="submitterId != null">
                 AND submitter_id = #{submitterId}
             </if>
-            <if test="customerInfo != null and customerInfo!=''">
-                AND (customer_mobile LIKE CONCAT('%',#{customerInfo},'%') OR customer_name LIKE CONCAT('%',#{customerInfo},'%'))
+            <if test="condition != null and condition!=''">
+                AND (
+                customer_mobile LIKE CONCAT('%',#{condition},'%')
+                OR customer_name LIKE CONCAT('%',#{condition},'%')
+                OR card_no = #{condition}
+                OR bank_outlets_name = #{condition}
+                OR exchange_point = #{condition}
+                )
             </if>
             <if test="submitterName != null and submitterName!=''">
                 AND submitter_name LIKE CONCAT('%',#{submitterName},'%')
@@ -152,6 +164,30 @@
                 AND city_code LIKE CONCAT('%',#{cityCode},'%')
             </if>
             AND is_deleted = 0
+        </where>
+    </select>
+
+    <select id="statistics" resultType="com.jiazhe.youxiang.server.domain.po.AuditRecordPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM audit_record
+        <where>
+            <if test="submitterId != null">
+                AND submitter_id = #{submitterId}
+            </if>
+            <if test="submitStartTime != null">
+                AND submit_time &gt;= #{submitStartTime}
+            </if>
+            <if test="submitEndTime != null">
+                AND submit_time &lt;= #{submitEndTime}
+            </if>
+            <if test="status != null">
+                AND status IN
+                <foreach item="status" collection="status" open="(" separator="," close=")">
+                    #{status}
+                </foreach>
+            </if>
+            AND is_deleted = 0 ORDER BY mod_time DESC
         </where>
     </select>
 

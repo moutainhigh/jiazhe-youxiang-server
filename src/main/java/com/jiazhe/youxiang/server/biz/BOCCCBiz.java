@@ -10,6 +10,7 @@ import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.HttpsClientRequestFactory;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.RSAUtil;
+import com.jiazhe.youxiang.base.util.boccc.BOCCCConstant;
 import com.jiazhe.youxiang.base.util.bocdc.BOCDCConstant;
 import com.jiazhe.youxiang.server.biz.point.PointExchangeCodeBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
@@ -120,7 +121,7 @@ public class BOCCCBiz {
         usedReq.setwEid(wEid);
         usedReq.setwInfo(wInfo);
         Map<String, String> req = new HashMap<>(2);
-        String usedReqStr = JacksonUtil.toJSon(usedReq).replace("\"", "\\\"");
+        String usedReqStr = JacksonUtil.toJSon(usedReq);
         try {
             LOGGER.info(usedReqStr);
             String data = RSAUtil.bocccPublicEncrypt(usedReqStr);
@@ -133,7 +134,7 @@ public class BOCCCBiz {
         String result;
         try {
             LOGGER.info("HTTP调用中行信用卡使用状态更新实时接口，入参:{}", JSONObject.toJSON(req));
-            ResponseEntity<String> response = restTemplate.getForEntity(BOCDCConstant.REAL_TIME_USED_URL, String.class, req);
+            ResponseEntity<String> response = restTemplate.getForEntity(BOCCCConstant.REAL_TIME_USED_URL, String.class, req);
             result = new String(response.getBody().getBytes("ISO8859-1"), "utf-8");
             LOGGER.info("HTTP调用中行使用状态更新实时接口成功，入参:{}，返回值:{}", JSONObject.toJSON(req), JSONObject.toJSON(result));
         } catch (RestClientException | UnsupportedEncodingException e) {
@@ -161,7 +162,7 @@ public class BOCCCBiz {
         refundReq.setOrderId(orderInfo);
         refundReq.setwInfo(wInfo);
         Map<String, String> req = new HashMap<>(2);
-        String refundReqStr = JacksonUtil.toJSon(refundReq).replace("\"", "\\\"");
+        String refundReqStr = JacksonUtil.toJSon(refundReq);
         try {
             LOGGER.info(refundReqStr);
             String data = RSAUtil.bocccPublicEncrypt(refundReqStr);
@@ -174,7 +175,7 @@ public class BOCCCBiz {
         String result;
         try {
             LOGGER.info("HTTP调用中行信用卡退货更新实时接口，入参:{}", JSONObject.toJSON(req));
-            ResponseEntity<String> response = restTemplate.getForEntity(BOCDCConstant.REAL_TIME_REFUND_URL, String.class, req);
+            ResponseEntity<String> response = restTemplate.getForEntity(BOCCCConstant.REAL_TIME_REFUND_URL, String.class, req);
             result = new String(response.getBody().getBytes("ISO8859-1"), "utf-8");
             LOGGER.info("HTTP调用中行退货更新实时接口成功，入参:{}，返回值:{}", JSONObject.toJSON(req), JSONObject.toJSON(result));
         } catch (RestClientException | UnsupportedEncodingException e) {

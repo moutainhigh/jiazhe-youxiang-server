@@ -26,6 +26,10 @@ public class UserReservationOrderDTO extends BaseObject {
 
     private String comments;
 
+    private Byte status;
+
+    private Date serviceTime;
+
     public String getWorkerName() {
         return workerName;
     }
@@ -72,5 +76,21 @@ public class UserReservationOrderDTO extends BaseObject {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public Date getServiceTime() {
+        return serviceTime;
+    }
+
+    public void setServiceTime(Date serviceTime) {
+        this.serviceTime = serviceTime;
     }
 }

@@ -82,6 +82,22 @@ function isNumber(input) {
 }
 
 /**
+ * 浮点数,可以有负数
+ * @param input
+ * @returns {boolean}
+ */
+function isNumber2(input) {
+    var regPos = /^\-?\d+(\.\d+)?$/;
+    if (regPos.test(input)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+
+/**
  * 格式化数字，转为带逗号的
  * @param n
  * @returns {string}
@@ -94,7 +110,6 @@ function formatNumberWithComma(num) {
     var re = new RegExp("(\\d)(\\d{3})(,|$)");
     while (re.test(b))   b = b.replace(re, "$1,$2$3");
     return a + "" + b + "" + c;
-
 }
 
 //replace icons with FontAwesome icons like above
