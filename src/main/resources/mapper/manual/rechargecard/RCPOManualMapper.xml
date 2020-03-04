@@ -46,12 +46,14 @@
         SELECT rc.id, rc.name,rc.description,rc.customer_id, rc.project_id,
         rc.city_codes,rc.product_ids,rc.face_value,rc.balance,
         rc.exchange_record_id,rc.expiry_time,rc.effective_time,rc.status,rc.ext_info, rc.is_deleted,rc.add_time, rc.mod_time
-        FROM recharge_card rc LEFT JOIN
-        recharge_card_exchange_record rcec ON rc.id = rcec.recharge_card_id
-        LEFT JOIN customer c ON c.id = rc.customer_id
+        FROM recharge_card rc
+        <if test="exchangeType != null">
+        LEFT JOIN recharge_card_exchange_record rcec ON rc.id = rcec.recharge_card_id
+        </if>
+--         LEFT JOIN customer c ON c.id = rc.customer_id
         <where>
             <if test="mobile != null and mobile != ''">
-                AND c.mobile = #{mobile}
+                AND rc.customer_id = (select id from customer where mobile = #{mobile})
             </if>
             <if test="exchangeType != null">
                 AND rcec.exchange_type = #{exchangeType}
@@ -72,11 +74,13 @@
 
     <select id="count" resultType="java.lang.Integer">
         select count(*) FROM recharge_card rc
-        LEFT JOIN recharge_card_exchange_record rcec ON rc.id = rcec.recharge_card_id
-        LEFT JOIN customer c ON c.id = rc.customer_id
+        <if test="exchangeType != null">
+            LEFT JOIN recharge_card_exchange_record rcec ON rc.id = rcec.recharge_card_id
+        </if>
+--         LEFT JOIN customer c ON c.id = rc.customer_id
         <where>
             <if test="mobile != null and mobile != ''">
-                AND c.mobile = #{mobile}
+                AND rc.customer_id = (select id from customer where mobile = #{mobile})
             </if>
             <if test="exchangeType != null">
                 AND rcec.exchange_type = #{exchangeType}
