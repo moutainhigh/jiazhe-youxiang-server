@@ -5,6 +5,8 @@
  */
 package com.jiazhe.youxiang.server.dto.chargeoff;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 在这里编写类的功能描述
  *
@@ -39,9 +41,14 @@ public class ChargeOffQueryDTO {
     private Integer chargeOffType;
 
     /**
-     * 提交者id
+     * 提交者名称
      */
-    private Integer submitterId;
+    private String submitterName;
+
+    /**
+     * 核销总积分
+     */
+    private Integer totalPoint;
 
     public Long getSubmitterTimeBegin() {
         return submitterTimeBegin;
@@ -83,11 +90,19 @@ public class ChargeOffQueryDTO {
         this.chargeOffType = chargeOffType;
     }
 
-    public Integer getSubmitterId() {
-        return submitterId;
+    public String getSubmitterName() {
+        return submitterName;
     }
 
-    public void setSubmitterId(Integer submitterId) {
-        this.submitterId = submitterId;
+    public void setSubmitterName(String submitterName) {
+        this.submitterName = submitterName;
+    }
+
+    public Integer getTotalPoint() {
+        return totalPoint;
+    }
+
+    public void setTotalPoint(Integer totalPoint) {
+        this.totalPoint = totalPoint;
     }
 }

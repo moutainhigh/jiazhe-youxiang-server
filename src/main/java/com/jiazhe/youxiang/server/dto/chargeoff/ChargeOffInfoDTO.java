@@ -5,7 +5,7 @@
  */
 package com.jiazhe.youxiang.server.dto.chargeoff;
 
-import com.jiazhe.youxiang.server.vo.resp.chargeoff.ChargeOffPointResp;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,6 +27,11 @@ public class ChargeOffInfoDTO {
      * 兑换城市code
      */
     private String cityCode;
+
+    /**
+     * 兑换城市名称
+     */
+    private String cityName;
 
     /**
      * 兑换银行信息
@@ -54,7 +59,7 @@ public class ChargeOffInfoDTO {
     private String customerName;
 
     /**
-     * 客户姓名
+     * 客户手机号
      */
     private String customerMobile;
 
@@ -102,6 +107,14 @@ public class ChargeOffInfoDTO {
 
     public void setCityCode(String cityCode) {
         this.cityCode = cityCode;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
     public String getBankOutletsName() {

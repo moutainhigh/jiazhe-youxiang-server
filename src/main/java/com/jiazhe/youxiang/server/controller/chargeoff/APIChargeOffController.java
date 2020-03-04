@@ -12,6 +12,7 @@ import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffAddDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffFuzzyQueryDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffInfoDTO;
+import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffPointDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffQueryDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffUpdateDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
@@ -23,6 +24,7 @@ import com.jiazhe.youxiang.server.vo.req.chargeoff.ChargeOffQueryReq;
 import com.jiazhe.youxiang.server.vo.req.chargeoff.ChargeOffUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.chargeoff.ValidateKeytReq;
 import com.jiazhe.youxiang.server.vo.resp.chargeoff.ChargeOffInfoResp;
+import com.jiazhe.youxiang.server.vo.resp.chargeoff.ChargeOffPointResp;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,7 +103,7 @@ public class APIChargeOffController extends BaseController {
         ChargeOffValidator.validateChargeOffFuzzyQueryReq(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         ChargeOffFuzzyQueryDTO dto = ChargeOffAdapter.ChargeOffFuzzyQueryReq2DTO(req);
-        List<ChargeOffInfoDTO> dtoList = chargeOffBiz.fuzzyQuery(dto);
+        List<ChargeOffInfoDTO> dtoList = chargeOffBiz.fuzzyQuery(dto, paging);
         List<ChargeOffInfoResp> respList = dtoList.stream().map(ChargeOffAdapter::chargeOffInfoDTO2Resp).collect(Collectors.toList());
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildPaginationResponse(respList, paging);
@@ -115,20 +117,20 @@ public class APIChargeOffController extends BaseController {
         ChargeOffValidator.validateChargeOffQueryReq(req);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         ChargeOffQueryDTO dto = ChargeOffAdapter.ChargeOffQueryReq2DTO(req);
-        List<ChargeOffInfoDTO> dtoList = chargeOffBiz.query(dto);
+        List<ChargeOffInfoDTO> dtoList = chargeOffBiz.query(dto, paging);
         List<ChargeOffInfoResp> respList = dtoList.stream().map(ChargeOffAdapter::chargeOffInfoDTO2Resp).collect(Collectors.toList());
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildPaginationResponse(respList, paging);
     }
 
-    @ApiOperation(value = "验证密码有效性", httpMethod = "POST", notes = "验证密码有效性")
+    @ApiOperation(value = "验证密码有效性", httpMethod = "POST", notes = "验证密码有效性", response = ChargeOffPointResp.class)
     @RequestMapping(value = "/validatekeyt", method = RequestMethod.POST)
     @CustomLog(moduleName = ModuleEnum.CHARGE_OFF, operate = "验证密码有效性", level = LogLevelEnum.LEVEL_1)
     public Object validateKeyt(@ModelAttribute ValidateKeytReq req) {
         LOGGER.info("Controller调用[validateKeyt]方法,入参:{}", JacksonUtil.toJSon(req));
         ChargeOffValidator.validateValidateKeytReq(req);
-        chargeOffBiz.validateKeyt(req.getKeyt());
-        return ResponseFactory.buildSuccess();
+        ChargeOffPointDTO dto = chargeOffBiz.validateKeyt(req.getKeyt());
+        return ResponseFactory.buildResponse(ChargeOffAdapter.chargeOffPointDTO2Resp(dto));
     }
 
     @ApiOperation(value = "导出核销详情（兑换密码粒度）", httpMethod = "POST", notes = "导出核销详情（兑换密码粒度）")

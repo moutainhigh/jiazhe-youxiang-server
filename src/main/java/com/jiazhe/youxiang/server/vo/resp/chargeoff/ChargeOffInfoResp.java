@@ -26,6 +26,9 @@ public class ChargeOffInfoResp extends BaseVO {
     @ApiModelProperty("兑换城市code")
     private String cityCode;
 
+    @ApiModelProperty("兑换城市名称")
+    private String cityName;
+
     @ApiModelProperty("兑换银行信息")
     private String bankOutletsName;
 
@@ -41,7 +44,7 @@ public class ChargeOffInfoResp extends BaseVO {
     @ApiModelProperty("客户姓名")
     private String customerName;
 
-    @ApiModelProperty("客户姓名")
+    @ApiModelProperty("客户手机号")
     private String customerMobile;
 
     @ApiModelProperty("兑换商品价值")
@@ -76,6 +79,14 @@ public class ChargeOffInfoResp extends BaseVO {
 
     public void setCityCode(String cityCode) {
         this.cityCode = cityCode;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
     public String getBankOutletsName() {

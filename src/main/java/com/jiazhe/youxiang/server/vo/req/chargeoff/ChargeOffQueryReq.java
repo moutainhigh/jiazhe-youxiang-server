@@ -31,8 +31,11 @@ public class ChargeOffQueryReq extends PageSizeNumReq {
     @ApiModelProperty("兑换类型 0-换商品，1-充积分")
     private Integer chargeOffType;
 
-    @ApiModelProperty("提交者id")
-    private Integer submitterId;
+    @ApiModelProperty("提交者名称")
+    private String submitterName;
+
+    @ApiModelProperty("核销总积分")
+    private Integer totalPoint;
 
     public Long getSubmitterTimeBegin() {
         return submitterTimeBegin;
@@ -74,11 +77,19 @@ public class ChargeOffQueryReq extends PageSizeNumReq {
         this.chargeOffType = chargeOffType;
     }
 
-    public Integer getSubmitterId() {
-        return submitterId;
+    public String getSubmitterName() {
+        return submitterName;
     }
 
-    public void setSubmitterId(Integer submitterId) {
-        this.submitterId = submitterId;
+    public void setSubmitterName(String submitterName) {
+        this.submitterName = submitterName;
+    }
+
+    public Integer getTotalPoint() {
+        return totalPoint;
+    }
+
+    public void setTotalPoint(Integer totalPoint) {
+        this.totalPoint = totalPoint;
     }
 }

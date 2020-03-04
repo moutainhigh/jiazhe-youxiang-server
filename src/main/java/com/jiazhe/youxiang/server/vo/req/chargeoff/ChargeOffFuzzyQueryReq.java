@@ -26,7 +26,7 @@ public class ChargeOffFuzzyQueryReq extends PageSizeNumReq {
     @ApiModelProperty("提交状态 0-未提交，1-已提交，null-全部")
     private Integer stauts;
 
-    @ApiModelProperty("提交者id")
+    @ApiModelProperty("提交者id,默认查当前登录人")
     private Integer submitterId;
 
     @ApiModelProperty("查询条件")

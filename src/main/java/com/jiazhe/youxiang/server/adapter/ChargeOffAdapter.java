@@ -72,6 +72,7 @@ public class ChargeOffAdapter {
         ChargeOffInfoResp chargeOffInfoResp = new ChargeOffInfoResp();
         chargeOffInfoResp.setId(dto.getId());
         chargeOffInfoResp.setCityCode(dto.getCityCode());
+        chargeOffInfoResp.setCityName(dto.getCityName());
         chargeOffInfoResp.setBankOutletsName(dto.getBankOutletsName());
         chargeOffInfoResp.setChargeOffType(dto.getChargeOffType());
         if (CollectionUtils.isNotEmpty(dto.getPointList())) {
@@ -125,7 +126,8 @@ public class ChargeOffAdapter {
         chargeOffQueryDTO.setStauts(req.getStauts());
         chargeOffQueryDTO.setCityCode(req.getCityCode());
         chargeOffQueryDTO.setChargeOffType(req.getChargeOffType());
-        chargeOffQueryDTO.setSubmitterId(req.getSubmitterId());
+        chargeOffQueryDTO.setSubmitterName(req.getSubmitterName());
+        chargeOffQueryDTO.setTotalPoint(req.getTotalPoint());
         return chargeOffQueryDTO;
     }
 }
