@@ -96,12 +96,14 @@
         SELECT p.id, p.name,p.description,p.customer_id, p.project_id,
         p.city_codes,p.product_ids,p.face_value,p.balance,
         p.exchange_record_id,p.effective_time,p.expiry_time,p.status,p.ext_info, p.is_deleted,p.add_time, p.mod_time
-        FROM point p LEFT JOIN
-        point_exchange_record pec ON p.id = pec.point_id
-        LEFT JOIN customer c ON c.id = p.customer_id
+        FROM point p
+        <if test="exchangeType != null">
+            LEFT JOIN point_exchange_record pec ON p.id = pec.point_id
+        </if>
+--         LEFT JOIN customer c ON c.id = p.customer_id
         <where>
             <if test="mobile != null and mobile != ''">
-                AND c.mobile = #{mobile}
+                AND p.customer_id = (select id from customer where mobile = #{mobile})
             </if>
             <if test="exchangeType != null">
                 AND pec.exchange_type = #{exchangeType}
@@ -122,11 +124,13 @@
 
     <select id="count" resultType="java.lang.Integer">
         select count(*) FROM point p
-        LEFT JOIN point_exchange_record pec ON p.id = pec.point_id
-        LEFT JOIN customer c ON c.id = p.customer_id
+        <if test="exchangeType != null">
+            LEFT JOIN point_exchange_record pec ON p.id = pec.point_id
+        </if>
+--         LEFT JOIN customer c ON c.id = p.customer_id
         <where>
             <if test="mobile != null and mobile != ''">
-                AND c.mobile = #{mobile}
+                AND p.customer_id = (select id from customer where mobile = #{mobile})
             </if>
             <if test="exchangeType != null">
                 AND pec.exchange_type = #{exchangeType}
