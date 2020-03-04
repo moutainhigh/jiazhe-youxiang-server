@@ -390,6 +390,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     public PointExchangeCodeDTO queryStock(String orderNo, String giftNo, Date expiryDate) {
         PointExchangeCodePO pointExchangeCodePO = pointExchangeCodePOManualMapper.queryStock(giftNo, expiryDate);
         if (null != pointExchangeCodePO) {
+            //自动启用码
             pointExchangeCodePO.setStatus(CommonConstant.CODE_START_USING);
             pointExchangeCodePO.setOutOrderCode(orderNo);
             pointExchangeCodePOMapper.updateByPrimaryKeySelective(pointExchangeCodePO);
