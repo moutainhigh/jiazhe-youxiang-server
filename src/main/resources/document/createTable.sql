@@ -294,7 +294,7 @@ CREATE TABLE `product` (
     `name` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '商品名称',
     `description` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '商品描述信息',
     `delay_days` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '需提前预定的天数',
-    `delay_days` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '可预约的天数',
+    `book_days` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '可连续预约的天数',
     `thumbnail_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '缩略图url',
     `header_img_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '头部图url',
     `detail_img_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '详情图url',
