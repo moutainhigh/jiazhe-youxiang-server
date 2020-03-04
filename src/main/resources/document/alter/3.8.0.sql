@@ -55,4 +55,8 @@ CREATE TABLE `city_exchange_ratio` (
   PRIMARY KEY (`id`),
   KEY `idx_city_code` (`city_code`)
 ) ENGINE=InnoDB COMMENT='城市积分兑换比例';
+/**
+ 商品下单时间约束
+ */
+alter table product add column `book_days` INT(10) UNSIGNED NOT NULL DEFAULT 20 COMMENT '可连续预约的天数';
 
