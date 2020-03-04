@@ -42,6 +42,8 @@ public class ProductPO implements Serializable {
 
     private Date modTime;
 
+    private Integer bookDays;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -194,5 +196,13 @@ public class ProductPO implements Serializable {
 
     public void setModTime(Date modTime) {
         this.modTime = modTime;
+    }
+
+    public Integer getBookDays() {
+        return bookDays;
+    }
+
+    public void setBookDays(Integer bookDays) {
+        this.bookDays = bookDays;
     }
 }

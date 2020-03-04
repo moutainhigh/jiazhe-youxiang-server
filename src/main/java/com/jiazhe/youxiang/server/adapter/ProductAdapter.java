@@ -56,6 +56,7 @@ public class ProductAdapter {
         productResp.setName(dto.getName());
         productResp.setDescription(dto.getDescription());
         productResp.setDelayDays(dto.getDelayDays());
+        productResp.setBookDays(dto.getBookDays());
         productResp.setThumbnailUrl(dto.getThumbnailUrl());
         productResp.setHeaderImgUrl(dto.getHeaderImgUrl());
         productResp.setDetailImgUrl(dto.getDetailImgUrl());
@@ -83,6 +84,7 @@ public class ProductAdapter {
         productAddDTO.setName(req.getName());
         productAddDTO.setDescription(req.getDescription());
         productAddDTO.setDelayDays(req.getDelayDays());
+        productAddDTO.setBookDays(req.getBookDays());
         productAddDTO.setThumbnailUrl(req.getThumbnailUrl());
         productAddDTO.setHeaderImgUrl(req.getHeaderImgUrl());
         productAddDTO.setDetailImgUrl(req.getDetailImgUrl());
@@ -130,6 +132,7 @@ public class ProductAdapter {
         productUpdateDTO.setName(req.getName());
         productUpdateDTO.setDescription(req.getDescription());
         productUpdateDTO.setDelayDays(req.getDelayDays());
+        productUpdateDTO.setBookDays(req.getBookDays());
         productUpdateDTO.setEffectiveDays(req.getEffectiveDays());
         productUpdateDTO.setThumbnailUrl(req.getThumbnailUrl());
         productUpdateDTO.setHeaderImgUrl(req.getHeaderImgUrl());
@@ -199,6 +202,7 @@ public class ProductAdapter {
         productPO.setName(productAddDTO.getName());
         productPO.setDescription(productAddDTO.getDescription());
         productPO.setDelayDays(productAddDTO.getDelayDays());
+        productPO.setBookDays(productAddDTO.getBookDays());
         productPO.setThumbnailUrl(productAddDTO.getThumbnailUrl());
         productPO.setHeaderImgUrl(productAddDTO.getHeaderImgUrl());
         productPO.setDetailImgUrl(productAddDTO.getDetailImgUrl());
@@ -221,6 +225,7 @@ public class ProductAdapter {
         productDTO.setName(productPO.getName());
         productDTO.setDescription(productPO.getDescription());
         productDTO.setDelayDays(productPO.getDelayDays());
+        productDTO.setBookDays(productPO.getBookDays());
         productDTO.setThumbnailUrl(productPO.getThumbnailUrl());
         productDTO.setHeaderImgUrl(productPO.getHeaderImgUrl());
         productDTO.setDetailImgUrl(productPO.getDetailImgUrl());
@@ -248,6 +253,7 @@ public class ProductAdapter {
         productPO.setName(productUpdateDTO.getName());
         productPO.setDescription(productUpdateDTO.getDescription());
         productPO.setDelayDays(productUpdateDTO.getDelayDays());
+        productPO.setBookDays(productUpdateDTO.getBookDays());
         productPO.setEffectiveDays(productUpdateDTO.getEffectiveDays());
         productPO.setThumbnailUrl(productUpdateDTO.getThumbnailUrl());
         productPO.setHeaderImgUrl(productUpdateDTO.getHeaderImgUrl());
