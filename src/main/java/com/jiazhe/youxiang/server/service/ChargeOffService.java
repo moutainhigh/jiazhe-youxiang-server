@@ -25,7 +25,11 @@ public interface ChargeOffService {
 
     void add(ChargeOffAddDTO dto);
 
+    void addDetail(List<ChargeOffPointDTO> chargeOffPointDTOList);
+
     void update(ChargeOffUpdateDTO dto);
+
+    void updateDetail(List<ChargeOffPointDTO> chargeOffPointDTOList);
 
     void delete(Integer chargeOffId);
 
@@ -35,10 +39,4 @@ public interface ChargeOffService {
 
     List<ChargeOffInfoDTO> query(ChargeOffQueryDTO dto, Paging paging);
 
-    ChargeOffPointDTO validateKeyt(String keyt);
-
-
-    void addDetail(List<ChargeOffPointDTO> chargeOffPointDTOList);
-
-    void updateDetail(List<ChargeOffPointDTO> chargeOffPointDTOList);
 }

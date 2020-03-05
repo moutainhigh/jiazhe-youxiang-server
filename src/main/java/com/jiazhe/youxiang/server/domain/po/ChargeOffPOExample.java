@@ -436,6 +436,76 @@ public class ChargeOffPOExample {
             return (Criteria) this;
         }
 
+        public Criteria andChargeOffPointIsNull() {
+            addCriterion("charge_off_point is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointIsNotNull() {
+            addCriterion("charge_off_point is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointEqualTo(String value) {
+            addCriterion("charge_off_point =", value, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointNotEqualTo(String value) {
+            addCriterion("charge_off_point <>", value, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointGreaterThan(String value) {
+            addCriterion("charge_off_point >", value, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointGreaterThanOrEqualTo(String value) {
+            addCriterion("charge_off_point >=", value, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointLessThan(String value) {
+            addCriterion("charge_off_point <", value, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointLessThanOrEqualTo(String value) {
+            addCriterion("charge_off_point <=", value, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointLike(String value) {
+            addCriterion("charge_off_point like", value, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointNotLike(String value) {
+            addCriterion("charge_off_point not like", value, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointIn(List<String> values) {
+            addCriterion("charge_off_point in", values, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointNotIn(List<String> values) {
+            addCriterion("charge_off_point not in", values, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointBetween(String value1, String value2) {
+            addCriterion("charge_off_point between", value1, value2, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointNotBetween(String value1, String value2) {
+            addCriterion("charge_off_point not between", value1, value2, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
         public Criteria andTotalPointIsNull() {
             addCriterion("total_point is null");
             return (Criteria) this;

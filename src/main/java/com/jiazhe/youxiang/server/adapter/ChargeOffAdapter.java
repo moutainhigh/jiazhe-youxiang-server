@@ -8,6 +8,7 @@ package com.jiazhe.youxiang.server.adapter;
 import com.jiazhe.youxiang.server.domain.po.ChargeOffPO;
 import com.jiazhe.youxiang.server.domain.po.ChargeOffPointPO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffAddDTO;
+import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffFuzzyQueryDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffInfoDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffPointDTO;
@@ -21,7 +22,6 @@ import com.jiazhe.youxiang.server.vo.resp.chargeoff.ChargeOffInfoResp;
 import com.jiazhe.youxiang.server.vo.resp.chargeoff.ChargeOffPointResp;
 import org.apache.commons.collections.CollectionUtils;
 
-import java.util.Date;
 import java.util.stream.Collectors;
 
 /**
@@ -134,7 +134,7 @@ public class ChargeOffAdapter {
         return chargeOffQueryDTO;
     }
 
-    public static ChargeOffPO chargeOffAddDTO2PO(ChargeOffAddDTO dto) {
+    public static ChargeOffPO chargeOffDTO2PO(ChargeOffDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -151,7 +151,7 @@ public class ChargeOffAdapter {
         chargeOffPO.setRemark(dto.getRemark());
         chargeOffPO.setSubmitterId(dto.getSubmitterId());
         chargeOffPO.setSubmitterName(dto.getSubmitterName());
-        chargeOffPO.setSubmitterTime(new Date(dto.getSubmitterTime()));
+        chargeOffPO.setChargeOffPoint(String.join(",", dto.getKeytList()));
         return chargeOffPO;
     }
 
@@ -172,8 +172,45 @@ public class ChargeOffAdapter {
         if (dto == null) {
             return null;
         }
-        ChargeOffPO chargeOffPO = chargeOffAddDTO2PO(dto);
+        ChargeOffPO chargeOffPO = chargeOffDTO2PO(dto);
         chargeOffPO.setId(dto.getId());
         return chargeOffPO;
+    }
+
+    public static ChargeOffInfoDTO chargeOffPO2DTO(ChargeOffPO po) {
+        if (po == null) {
+            return null;
+        }
+        ChargeOffInfoDTO chargeOffInfoDTO = new ChargeOffInfoDTO();
+        chargeOffInfoDTO.setId(po.getId());
+        chargeOffInfoDTO.setCityCode(po.getCityCode());
+        chargeOffInfoDTO.setCityName(po.getCityName());
+        chargeOffInfoDTO.setBankOutletsName(po.getBankOutletsName());
+        chargeOffInfoDTO.setChargeOffType(po.getChargeOffType().intValue());
+        chargeOffInfoDTO.setTotalPoint(po.getTotalPoint());
+        chargeOffInfoDTO.setCustomerName(po.getCustomerName());
+        chargeOffInfoDTO.setCustomerMobile(po.getCustomerMobile());
+        chargeOffInfoDTO.setProductValue(po.getProductValue());
+        chargeOffInfoDTO.setStatus(po.getStatus().intValue());
+        chargeOffInfoDTO.setSubmitterId(po.getSubmitterId());
+        chargeOffInfoDTO.setSubmitterName(po.getSubmitterName());
+        chargeOffInfoDTO.setSubmitterTime(po.getSubmitterTime().getTime());
+        chargeOffInfoDTO.setRemark(po.getRemark());
+        return chargeOffInfoDTO;
+    }
+
+    public static ChargeOffPointDTO chargeOffPointPO2DTO(ChargeOffPointPO chargeOffPointPO) {
+        if (chargeOffPointPO == null) {
+            return null;
+        }
+        ChargeOffPointDTO chargeOffPointDTO = new ChargeOffPointDTO();
+        chargeOffPointDTO.setId(chargeOffPointPO.getId());
+        chargeOffPointDTO.setChargeOffId(chargeOffPointPO.getChargeOffId());
+        chargeOffPointDTO.setPointExchangeCodeId(chargeOffPointPO.getPointExchangeCodeId());
+        chargeOffPointDTO.setPointName(chargeOffPointPO.getPointName());
+        chargeOffPointDTO.setPointValue(chargeOffPointPO.getPointValue());
+        chargeOffPointDTO.setPointExchangeCodeCode(chargeOffPointPO.getPointExchangeCodeCode());
+        chargeOffPointDTO.setPointExchangeCodeKeyt(chargeOffPointPO.getPointExchangeCodeKeyt());
+        return chargeOffPointDTO;
     }
 }

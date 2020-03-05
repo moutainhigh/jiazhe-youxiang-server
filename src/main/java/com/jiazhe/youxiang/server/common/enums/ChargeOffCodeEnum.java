@@ -21,6 +21,7 @@ public enum ChargeOffCodeEnum {
     CHARGE_OFF_ID_IS_NULL(124011, "CHARGE_OFF_ID_IS_NULL", "核销Id不能为空"),
     KEYT_IS_NULL(124012, "KEYT_IS_NULL", "兑换码密码不能为空"),
     KEYT_ERROR(124013, "KEYT_ERROR", "兑换码密码相关错误"),
+    CHARGE_OFF_NOT_EXIST(124014, "CHARGE_OFF_NOT_EXIST", "核销记录不存在"),
     ;
 
     ChargeOffCodeEnum(Integer code, String type, String message) {

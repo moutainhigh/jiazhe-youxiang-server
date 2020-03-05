@@ -15,6 +15,8 @@ public class ChargeOffPO implements Serializable {
 
     private Byte chargeOffType;
 
+    private String chargeOffPoint;
+
     private Integer totalPoint;
 
     private String customerName;
@@ -81,6 +83,14 @@ public class ChargeOffPO implements Serializable {
 
     public void setChargeOffType(Byte chargeOffType) {
         this.chargeOffType = chargeOffType;
+    }
+
+    public String getChargeOffPoint() {
+        return chargeOffPoint;
+    }
+
+    public void setChargeOffPoint(String chargeOffPoint) {
+        this.chargeOffPoint = chargeOffPoint == null ? null : chargeOffPoint.trim();
     }
 
     public Integer getTotalPoint() {

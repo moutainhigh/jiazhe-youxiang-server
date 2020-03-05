@@ -11,7 +11,7 @@ package com.jiazhe.youxiang.server.dto.chargeoff;
  * @author niexiao
  * @created 2020-03-04
  */
-public class ChargeOffUpdateDTO extends ChargeOffAddDTO {
+public class ChargeOffUpdateDTO extends ChargeOffDTO {
 
     /**
      * 核销记录id

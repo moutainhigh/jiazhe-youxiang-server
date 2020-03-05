@@ -7,6 +7,7 @@
     <result column="city_name" property="cityName" jdbcType="VARCHAR" />
     <result column="bank_outlets_name" property="bankOutletsName" jdbcType="VARCHAR" />
     <result column="charge_off_type" property="chargeOffType" jdbcType="TINYINT" />
+    <result column="charge_off_point" property="chargeOffPoint" jdbcType="VARCHAR" />
     <result column="total_point" property="totalPoint" jdbcType="INTEGER" />
     <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
     <result column="customer_mobile" property="customerMobile" jdbcType="VARCHAR" />
@@ -80,9 +81,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, city_code, city_name, bank_outlets_name, charge_off_type, total_point, customer_name, 
-    customer_mobile, product_value, status, submitter_id, submitter_name, submitter_time, 
-    remark, ext_info, is_deleted, add_time, mod_time
+    id, city_code, city_name, bank_outlets_name, charge_off_type, charge_off_point, total_point, 
+    customer_name, customer_mobile, product_value, status, submitter_id, submitter_name, 
+    submitter_time, remark, ext_info, is_deleted, add_time, mod_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jiazhe.youxiang.server.domain.po.ChargeOffPOExample" >
     select
@@ -116,19 +117,19 @@
   </delete>
   <insert id="insert" parameterType="com.jiazhe.youxiang.server.domain.po.ChargeOffPO" >
     insert into charge_off (id, city_code, city_name, 
-      bank_outlets_name, charge_off_type, total_point, 
-      customer_name, customer_mobile, product_value, 
-      status, submitter_id, submitter_name, 
-      submitter_time, remark, ext_info, 
-      is_deleted, add_time, mod_time
-      )
+      bank_outlets_name, charge_off_type, charge_off_point, 
+      total_point, customer_name, customer_mobile, 
+      product_value, status, submitter_id, 
+      submitter_name, submitter_time, remark, 
+      ext_info, is_deleted, add_time, 
+      mod_time)
     values (#{id,jdbcType=INTEGER}, #{cityCode,jdbcType=VARCHAR}, #{cityName,jdbcType=VARCHAR}, 
-      #{bankOutletsName,jdbcType=VARCHAR}, #{chargeOffType,jdbcType=TINYINT}, #{totalPoint,jdbcType=INTEGER}, 
-      #{customerName,jdbcType=VARCHAR}, #{customerMobile,jdbcType=VARCHAR}, #{productValue,jdbcType=DECIMAL}, 
-      #{status,jdbcType=TINYINT}, #{submitterId,jdbcType=INTEGER}, #{submitterName,jdbcType=VARCHAR}, 
-      #{submitterTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{extInfo,jdbcType=VARCHAR}, 
-      #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP}
-      )
+      #{bankOutletsName,jdbcType=VARCHAR}, #{chargeOffType,jdbcType=TINYINT}, #{chargeOffPoint,jdbcType=VARCHAR}, 
+      #{totalPoint,jdbcType=INTEGER}, #{customerName,jdbcType=VARCHAR}, #{customerMobile,jdbcType=VARCHAR}, 
+      #{productValue,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, #{submitterId,jdbcType=INTEGER}, 
+      #{submitterName,jdbcType=VARCHAR}, #{submitterTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{modTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.ChargeOffPO" >
     insert into charge_off
@@ -147,6 +148,9 @@
       </if>
       <if test="chargeOffType != null" >
         charge_off_type,
+      </if>
+      <if test="chargeOffPoint != null" >
+        charge_off_point,
       </if>
       <if test="totalPoint != null" >
         total_point,
@@ -203,6 +207,9 @@
       </if>
       <if test="chargeOffType != null" >
         #{chargeOffType,jdbcType=TINYINT},
+      </if>
+      <if test="chargeOffPoint != null" >
+        #{chargeOffPoint,jdbcType=VARCHAR},
       </if>
       <if test="totalPoint != null" >
         #{totalPoint,jdbcType=INTEGER},
@@ -269,6 +276,9 @@
       <if test="record.chargeOffType != null" >
         charge_off_type = #{record.chargeOffType,jdbcType=TINYINT},
       </if>
+      <if test="record.chargeOffPoint != null" >
+        charge_off_point = #{record.chargeOffPoint,jdbcType=VARCHAR},
+      </if>
       <if test="record.totalPoint != null" >
         total_point = #{record.totalPoint,jdbcType=INTEGER},
       </if>
@@ -320,6 +330,7 @@
       city_name = #{record.cityName,jdbcType=VARCHAR},
       bank_outlets_name = #{record.bankOutletsName,jdbcType=VARCHAR},
       charge_off_type = #{record.chargeOffType,jdbcType=TINYINT},
+      charge_off_point = #{record.chargeOffPoint,jdbcType=VARCHAR},
       total_point = #{record.totalPoint,jdbcType=INTEGER},
       customer_name = #{record.customerName,jdbcType=VARCHAR},
       customer_mobile = #{record.customerMobile,jdbcType=VARCHAR},
@@ -351,6 +362,9 @@
       </if>
       <if test="chargeOffType != null" >
         charge_off_type = #{chargeOffType,jdbcType=TINYINT},
+      </if>
+      <if test="chargeOffPoint != null" >
+        charge_off_point = #{chargeOffPoint,jdbcType=VARCHAR},
       </if>
       <if test="totalPoint != null" >
         total_point = #{totalPoint,jdbcType=INTEGER},
@@ -400,6 +414,7 @@
       city_name = #{cityName,jdbcType=VARCHAR},
       bank_outlets_name = #{bankOutletsName,jdbcType=VARCHAR},
       charge_off_type = #{chargeOffType,jdbcType=TINYINT},
+      charge_off_point = #{chargeOffPoint,jdbcType=VARCHAR},
       total_point = #{totalPoint,jdbcType=INTEGER},
       customer_name = #{customerName,jdbcType=VARCHAR},
       customer_mobile = #{customerMobile,jdbcType=VARCHAR},

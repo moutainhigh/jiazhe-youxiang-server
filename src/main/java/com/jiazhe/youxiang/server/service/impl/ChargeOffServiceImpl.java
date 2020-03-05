@@ -5,10 +5,17 @@
  */
 package com.jiazhe.youxiang.server.service.impl;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.server.adapter.ChargeOffAdapter;
+import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.enums.ChargeOffCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.ChargeOffStatusEnum;
+import com.jiazhe.youxiang.server.common.exceptions.ChargeOffException;
 import com.jiazhe.youxiang.server.dao.mapper.ChargeOffPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.ChargeOffPointPOMapper;
+import com.jiazhe.youxiang.server.dao.mapper.manual.ChargeOffPOManualMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.ChargeOffPointPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.ChargeOffPO;
 import com.jiazhe.youxiang.server.domain.po.ChargeOffPointPO;
@@ -28,6 +35,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -46,6 +55,9 @@ public class ChargeOffServiceImpl implements ChargeOffService {
     private ChargeOffPOMapper chargeOffPOMapper;
 
     @Autowired
+    private ChargeOffPOManualMapper chargeOffPOManualMapper;
+
+    @Autowired
     private ChargeOffPointPOMapper chargeOffPointPOMapper;
 
     @Autowired
@@ -55,7 +67,11 @@ public class ChargeOffServiceImpl implements ChargeOffService {
     @Override
     public void add(ChargeOffAddDTO dto) {
         LOGGER.info("Service调用[add]方法,入参:{}", JacksonUtil.toJSon(dto));
-        ChargeOffPO chargeOffPO = ChargeOffAdapter.chargeOffAddDTO2PO(dto);
+        ChargeOffPO chargeOffPO = ChargeOffAdapter.chargeOffDTO2PO(dto);
+        //如果是提交 则需要更新提交时间
+        if (ChargeOffStatusEnum.COMMITTED.equals(ChargeOffStatusEnum.getByCode(dto.getStatus()))) {
+            chargeOffPO.setSubmitterTime(null);
+        }
         chargeOffPOMapper.insertSelective(chargeOffPO);
     }
 
@@ -68,8 +84,6 @@ public class ChargeOffServiceImpl implements ChargeOffService {
         List<ChargeOffPointPO> poList = chargeOffPointDTOList.stream().map(ChargeOffAdapter::chargeOffPointDTO2PO).collect(toList());
         chargeOffPointPOManualMapper.batchInsert(poList);
     }
-
-
 
     @Override
     public void update(ChargeOffUpdateDTO dto) {
@@ -90,35 +104,113 @@ public class ChargeOffServiceImpl implements ChargeOffService {
         addDetail(chargeOffPointDTOList);
     }
 
+
     @Override
     public void delete(Integer chargeOffId) {
         LOGGER.info("Service调用[delete]方法,chargeOffId:{}", chargeOffId);
+        ChargeOffInfoDTO chargeOffInfoDTO = queryById(chargeOffId, false);
+        if (chargeOffInfoDTO == null) {
+            throw new ChargeOffException(ChargeOffCodeEnum.CHARGE_OFF_NOT_EXIST);
+        }
+        //软删除核销记录
+        ChargeOffPO po = new ChargeOffPO();
+        po.setId(chargeOffId);
+        po.setIsDeleted(CommonConstant.CODE_DELETED);
+        po.setModTime(null);
+        chargeOffPOMapper.updateByPrimaryKeySelective(po);
 
+        //硬删除核销记录详情
+        ChargeOffPointPOExample pointPOExample = new ChargeOffPointPOExample();
+        pointPOExample.createCriteria().andChargeOffIdEqualTo(chargeOffId);
+        chargeOffPointPOMapper.deleteByExample(pointPOExample);
     }
+
 
     @Override
     public ChargeOffInfoDTO queryById(Integer chargeOffId) {
+        return queryById(chargeOffId, true);
+    }
+
+    private ChargeOffInfoDTO queryById(Integer chargeOffId, boolean includeDetail) {
         LOGGER.info("Service调用[queryById]方法,chargeOffId:{}", chargeOffId);
-        return null;
+        ChargeOffPO po = chargeOffPOMapper.selectByPrimaryKey(chargeOffId);
+        ChargeOffInfoDTO dto = ChargeOffAdapter.chargeOffPO2DTO(po);
+        ChargeOffPointPOExample chargeOffPointPOExample = new ChargeOffPointPOExample();
+        chargeOffPointPOExample.createCriteria()
+                .andChargeOffIdEqualTo(chargeOffId)
+                .andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+        if (includeDetail) {
+            //如果包含详情，则查询后放到dto里
+            List<ChargeOffPointPO> chargeOffPointPOList = chargeOffPointPOMapper.selectByExample(chargeOffPointPOExample);
+            dto.setPointList(chargeOffPointPOList.stream().map(ChargeOffAdapter::chargeOffPointPO2DTO).collect(toList()));
+        }
+        return dto;
     }
 
     @Override
     public List<ChargeOffInfoDTO> fuzzyQuery(ChargeOffFuzzyQueryDTO dto, Paging paging) {
         LOGGER.info("Service调用[fuzzyQuery]方法,入参:{}", JacksonUtil.toJSon(dto));
-        return null;
+        List<ChargeOffPO> poList = chargeOffPOManualMapper.fuzzyQuery(dto, paging.getOffset(), paging.getLimit());
+        return buildChargeOffInfoDTOList(poList);
     }
 
     @Override
     public List<ChargeOffInfoDTO> query(ChargeOffQueryDTO dto, Paging paging) {
         LOGGER.info("Service调用[query]方法,入参:{}", JacksonUtil.toJSon(dto));
-        return null;
+        List<ChargeOffPO> poList = chargeOffPOManualMapper.query(dto, paging.getOffset(), paging.getLimit());
+        return buildChargeOffInfoDTOList(poList);
     }
 
-    @Override
-    public ChargeOffPointDTO validateKeyt(String keyt) {
-        LOGGER.info("Service调用[validateKeyt]方法,keyt:{}", keyt);
-        return null;
+    /**
+     * 拼接完整的ChargeOffInfoDTO对象，包括核销详情
+     *
+     * @param poList
+     * @return
+     */
+    private List<ChargeOffInfoDTO> buildChargeOffInfoDTOList(List<ChargeOffPO> poList) {
+        List<ChargeOffInfoDTO> result = Lists.newArrayList();
+        if (CollectionUtils.isNotEmpty(poList)) {
+            List<Integer> chargeOffIdList = poList.stream().map(ChargeOffPO::getId).collect(toList());
+            Map<Integer, List<ChargeOffPointPO>> chargeOffPointPOMap = batchQueryDetail(chargeOffIdList);
+            result = poList.stream().map(ChargeOffAdapter::chargeOffPO2DTO).collect(Collectors.toList());
+            result.forEach(item -> {
+                List<ChargeOffPointPO> pointPOList = chargeOffPointPOMap.get(item.getId());
+                if (CollectionUtils.isNotEmpty(pointPOList)) {
+                    List<ChargeOffPointDTO> pointDTOList = pointPOList.stream().map(ChargeOffAdapter::chargeOffPointPO2DTO).collect(toList());
+                    item.setPointList(pointDTOList);
+                }
+            });
+        }
+        return result;
     }
 
+
+    /**
+     * 批量查询核销详情
+     *
+     * @param chargeOffIdList
+     * @return
+     */
+    private Map<Integer, List<ChargeOffPointPO>> batchQueryDetail(List<Integer> chargeOffIdList) {
+        LOGGER.info("Service调用[batchQueryDetail]方法,入参:{}", JacksonUtil.toJSon(chargeOffIdList));
+        ChargeOffPointPOExample chargeOffPointPOExample = new ChargeOffPointPOExample();
+        chargeOffPointPOExample.createCriteria()
+                .andChargeOffIdIn(chargeOffIdList)
+                .andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+        List<ChargeOffPointPO> pointPOList = chargeOffPointPOMapper.selectByExample(chargeOffPointPOExample);
+        Map<Integer, List<ChargeOffPointPO>> result = Maps.newHashMap();
+        if (CollectionUtils.isNotEmpty(pointPOList)) {
+            pointPOList.forEach(item -> {
+                result.merge(item.getChargeOffId(), Lists.newArrayList(item), (oldValue, newValue) -> {
+                    if (oldValue == null) {
+                        oldValue = Lists.newArrayList();
+                    }
+                    oldValue.addAll(newValue);
+                    return oldValue;
+                });
+            });
+        }
+        return result;
+    }
 
 }

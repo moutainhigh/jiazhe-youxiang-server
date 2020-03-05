@@ -16,6 +16,15 @@ import java.math.BigDecimal;
 public class ChargeOffPointDTO {
 
     /**
+     * 兑换详情id
+     */
+    private Integer id;
+    /**
+     * 核销记录Id
+     */
+    private Integer chargeOffId;
+
+    /**
      * 核销积分兑换码id
      */
     private Integer pointExchangeCodeId;
@@ -39,6 +48,22 @@ public class ChargeOffPointDTO {
      * 核销积分兑换码密码
      */
     private String pointExchangeCodeKeyt;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getChargeOffId() {
+        return chargeOffId;
+    }
+
+    public void setChargeOffId(Integer chargeOffId) {
+        this.chargeOffId = chargeOffId;
+    }
 
     public Integer getPointExchangeCodeId() {
         return pointExchangeCodeId;

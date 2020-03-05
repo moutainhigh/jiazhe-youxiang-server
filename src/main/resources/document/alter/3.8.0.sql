@@ -5,6 +5,7 @@ CREATE TABLE `charge_off` (
   `city_name` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '城市名称',
   `bank_outlets_name` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '银行信息',
   `charge_off_type` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '核销类型 0-换商品，1-充值积分',
+  `charge_off_point` varchar(2000) NOT NULL DEFAULT '' COMMENT '核销密码集合，逗号隔开，为了查询',
   `total_point` int(10) NOT NULL COMMENT '核销总积分',
   `customer_name` varchar(255) NOT NULL DEFAULT '' COMMENT '客户姓名',
   `customer_mobile` varchar(255) NOT NULL DEFAULT '' COMMENT '客户手机号',

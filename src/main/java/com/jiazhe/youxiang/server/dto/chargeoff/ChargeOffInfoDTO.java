@@ -21,7 +21,7 @@ public class ChargeOffInfoDTO {
     /**
      * 核销记录id
      */
-    private String id;
+    private Integer id;
 
     /**
      * 兑换城市code
@@ -93,11 +93,11 @@ public class ChargeOffInfoDTO {
      */
     private Long submitterTime;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

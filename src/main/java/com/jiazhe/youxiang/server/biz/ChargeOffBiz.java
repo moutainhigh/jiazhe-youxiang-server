@@ -11,10 +11,14 @@ import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.ChargeOffCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.ChargeOffStatusEnum;
 import com.jiazhe.youxiang.server.common.enums.ChargeOffTypeEnum;
+import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.ChargeOffException;
+import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.common.exceptions.PointException;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
+import com.jiazhe.youxiang.server.domain.po.SysCityPO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffAddDTO;
+import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffFuzzyQueryDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffInfoDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffPointDTO;
@@ -22,11 +26,14 @@ import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffQueryDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffUpdateDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.ChargeOffService;
 import com.jiazhe.youxiang.server.service.CustomerService;
+import com.jiazhe.youxiang.server.service.SysCityService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,13 +68,16 @@ public class ChargeOffBiz {
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private SysCityService sysCityService;
+
     /**
      * 消分专用手机
      */
     private String chargeOffSpecifiedMobile;
 
     @Value("${chargeoff.specified-mobile}")
-    public void setCosSecretId(String mobile) {
+    public void setChargeOffSpecifiedMobile(String mobile) {
         chargeOffSpecifiedMobile = mobile;
     }
 
@@ -76,6 +86,19 @@ public class ChargeOffBiz {
         LOGGER.info("Biz调用[add]方法,入参:{}", JacksonUtil.toJSon(dto));
         //验证密码有效性，获得兑换码信息
         List<ChargeOffPointDTO> chargeOffPointDTOList = validateKeytList(dto.getKeytList());
+        //填充城市信息
+        SysCityPO sysCityPO = sysCityService.getCityByCityCode(dto.getCityCode());
+        if (sysCityPO == null) {
+            throw new ChargeOffException(ChargeOffCodeEnum.CUSTOMER_MOBILE_IS_NULL);
+        }
+        dto.setCityName(sysCityPO.getCityName());
+        //填充提交人信息
+        SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+        if (null == sysUserDTO) {
+            throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
+        }
+        dto.setSubmitterId(sysUserDTO.getId());
+        dto.setSubmitterName(sysUserDTO.getLoginName());
         //当状态时已提交时,否则只是保存一下
         if (ChargeOffStatusEnum.COMMITTED.equals(ChargeOffStatusEnum.getByCode(dto.getStatus()))) {
             //进行实际核销
@@ -86,7 +109,6 @@ public class ChargeOffBiz {
         //保存核销详情
         chargeOffService.addDetail(chargeOffPointDTOList);
     }
-
 
     @Transactional
     public void update(ChargeOffUpdateDTO dto) {
@@ -116,6 +138,14 @@ public class ChargeOffBiz {
 
     public List<ChargeOffInfoDTO> fuzzyQuery(ChargeOffFuzzyQueryDTO dto, Paging paging) {
         LOGGER.info("Biz调用[fuzzyQuery]方法,入参:{}", JacksonUtil.toJSon(dto));
+        //如果提交人信息没有填，则默认使用当前登录用户
+        if (null == dto.getSubmitterId()) {
+            SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
+            if (null == sysUserDTO) {
+                throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
+            }
+            dto.setSubmitterId(sysUserDTO.getId());
+        }
         return chargeOffService.fuzzyQuery(dto, paging);
     }
 
@@ -182,7 +212,7 @@ public class ChargeOffBiz {
      *
      * @param dto
      */
-    private void doChargeOff(ChargeOffAddDTO dto) {
+    private void doChargeOff(ChargeOffDTO dto) {
         //真正充积分的手机
         String chargeOffMobile = chargeOffSpecifiedMobile;
         if (ChargeOffTypeEnum.POINT.equals(ChargeOffTypeEnum.getByCode(dto.getChargeOffType()))) {
@@ -199,7 +229,5 @@ public class ChargeOffBiz {
             customerDTO = customerService.getByMobile(dto.getCustomerMobile());
         }
         chargeOffKeytList(dto.getKeytList(), customerDTO.getId());
-        //更新提交时间
-        dto.setSubmitterTime(System.currentTimeMillis());
     }
 }
