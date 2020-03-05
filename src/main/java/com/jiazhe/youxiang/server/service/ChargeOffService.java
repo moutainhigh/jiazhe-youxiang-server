@@ -38,4 +38,7 @@ public interface ChargeOffService {
     ChargeOffPointDTO validateKeyt(String keyt);
 
 
+    void addDetail(List<ChargeOffPointDTO> chargeOffPointDTOList);
+
+    void updateDetail(List<ChargeOffPointDTO> chargeOffPointDTOList);
 }

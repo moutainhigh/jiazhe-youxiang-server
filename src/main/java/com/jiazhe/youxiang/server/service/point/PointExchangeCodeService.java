@@ -96,6 +96,14 @@ public interface PointExchangeCodeService {
     PointExchangeCodePO findByKeyt(String keyt);
 
     /**
+     * 批量根据密码查询兑换码
+     *
+     * @param keytList
+     * @return
+     */
+    List<PointExchangeCodePO> batchFindByKeyt(List<String> keytList);
+
+    /**
      * 根据卡号查询兑换码
      *
      * @param code
@@ -140,6 +148,20 @@ public interface PointExchangeCodeService {
     void checkByCode(String code);
 
     /**
+     * Keyt，检查兑换码是否存在，兑换码是否已经启用
+     *
+     * @param Keyt
+     */
+    void checkByKeyt(String Keyt);
+
+    /**
+     * 检查兑换码是否存在，兑换码是否已经启用
+     *
+     * @param pointExchangeCodePO
+     */
+    void check(PointExchangeCodePO pointExchangeCodePO);
+
+    /**
      * 中行储蓄卡查询库存，不成功返回null
      *
      * @param orderNo
@@ -150,6 +172,7 @@ public interface PointExchangeCodeService {
 
     /**
      * 中行信用卡专用获取批次下的兑换码信息
+     *
      * @param batchIds
      * @return
      */
@@ -157,12 +180,14 @@ public interface PointExchangeCodeService {
 
     /**
      * 中行信用卡专用获取昨日使用兑换码信息
+     *
      * @return
      */
     List<BOCCCCouponUsedEntity> getBOCCCYesterdayUsed();
 
     /**
      * 兑换码退货
+     *
      * @param id
      * @param force
      */
@@ -186,8 +211,9 @@ public interface PointExchangeCodeService {
 
     /**
      * 查询中行储蓄卡对账信息
+     *
      * @param beginDate
      * @param endDate
      */
-    List<PointExchangeCodeDTO>  getBOCDCReconciliationInfo(Date beginDate, Date endDate);
+    List<PointExchangeCodeDTO> getBOCDCReconciliationInfo(Date beginDate, Date endDate);
 }

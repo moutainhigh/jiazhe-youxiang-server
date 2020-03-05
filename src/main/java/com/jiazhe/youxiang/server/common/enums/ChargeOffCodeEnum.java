@@ -20,6 +20,7 @@ public enum ChargeOffCodeEnum {
     PRODUCT_VALUE_IS_NULL(124010, "PRODUCT_VALUE_IS_NULL", "兑换商品价值不能为空"),
     CHARGE_OFF_ID_IS_NULL(124011, "CHARGE_OFF_ID_IS_NULL", "核销Id不能为空"),
     KEYT_IS_NULL(124012, "KEYT_IS_NULL", "兑换码密码不能为空"),
+    KEYT_ERROR(124013, "KEYT_ERROR", "兑换码密码相关错误"),
     ;
 
     ChargeOffCodeEnum(Integer code, String type, String message) {

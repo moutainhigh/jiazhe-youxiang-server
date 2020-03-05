@@ -5,8 +5,6 @@
  */
 package com.jiazhe.youxiang.server.dto.chargeoff;
 
-import io.swagger.annotations.ApiModelProperty;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -22,6 +20,11 @@ public class ChargeOffAddDTO {
      * 兑换城市code
      */
     private String cityCode;
+
+    /**
+     * 兑换城市名称
+     */
+    private String cityName;
 
     /**
      * 兑换银行信息
@@ -68,12 +71,34 @@ public class ChargeOffAddDTO {
      */
     private String remark;
 
+    /**
+     * 提交者Id
+     */
+    private Integer submitterId;
+    /**
+     * 提交者姓名
+     */
+    private String submitterName;
+
+    /**
+     * 提交者时间
+     */
+    private Long submitterTime;
+
     public String getCityCode() {
         return cityCode;
     }
 
     public void setCityCode(String cityCode) {
         this.cityCode = cityCode;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
     public String getBankOutletsName() {
@@ -146,5 +171,29 @@ public class ChargeOffAddDTO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Integer getSubmitterId() {
+        return submitterId;
+    }
+
+    public void setSubmitterId(Integer submitterId) {
+        this.submitterId = submitterId;
+    }
+
+    public String getSubmitterName() {
+        return submitterName;
+    }
+
+    public void setSubmitterName(String submitterName) {
+        this.submitterName = submitterName;
+    }
+
+    public Long getSubmitterTime() {
+        return submitterTime;
+    }
+
+    public void setSubmitterTime(Long submitterTime) {
+        this.submitterTime = submitterTime;
     }
 }

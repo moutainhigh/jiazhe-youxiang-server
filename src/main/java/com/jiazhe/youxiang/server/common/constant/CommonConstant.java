@@ -5,9 +5,6 @@
  */
 package com.jiazhe.youxiang.server.common.constant;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 /**
  * 在这里编写类的功能描述
  *
@@ -155,13 +152,14 @@ public class CommonConstant {
     public static final Byte CODE_NOT_MADE = Byte.valueOf("0");
 
     /**
-     * 兑换方式【0-后台兑换码兑换，1-客户自行兑换码兑换，2-直接充值，3-审核系统来的,4-二维码兑换】
+     * 兑换方式【0-后台兑换码兑换，1-客户自行兑换码兑换，2-直接充值，3-审核系统来的,4-二维码兑换,5-核销兑换】
      */
     public static final Integer EXCHANGETYPE_USER_CODE_EXCHANGE = 0;
     public static final Integer EXCHANGETYPE_CUSTOMER_CODE_EXCHANGE = 1;
     public static final Integer EXCHANGETYPE_USER_DIRECTCHARGE = 2;
     public static final Integer EXCHANGETYPE_AUDITRECORD_PASS = 3;
     public static final Integer EXCHANGETYPE_QRCODE_EXCHANGE = 4;
+    public static final Integer EXCHANGETYPE_QRCODE_CHARGE_OFF = 5;
 
     /**
      * 0未使用 1已使用 2已退货

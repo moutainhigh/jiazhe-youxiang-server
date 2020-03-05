@@ -5,6 +5,8 @@
  */
 package com.jiazhe.youxiang.server.dto.chargeoff;
 
+import java.math.BigDecimal;
+
 /**
  * 在这里编写类的功能描述
  *
@@ -26,7 +28,7 @@ public class ChargeOffPointDTO {
     /**
      * 核销积分分值
      */
-    private Integer pointValue;
+    private BigDecimal pointValue;
 
     /**
      * 核销积分兑换码卡号
@@ -54,11 +56,11 @@ public class ChargeOffPointDTO {
         this.pointName = pointName;
     }
 
-    public Integer getPointValue() {
+    public BigDecimal getPointValue() {
         return pointValue;
     }
 
-    public void setPointValue(Integer pointValue) {
+    public void setPointValue(BigDecimal pointValue) {
         this.pointValue = pointValue;
     }
 

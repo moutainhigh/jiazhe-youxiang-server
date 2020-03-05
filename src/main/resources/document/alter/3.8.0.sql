@@ -30,7 +30,7 @@ CREATE TABLE `charge_off_point` (
   `charge_off_id` int(10) NOT NULL COMMENT '核销记录id',
   `point_exchange_code_id` INT(10) UNSIGNED NOT NULL COMMENT '积分兑换码id',
   `point_name` VARCHAR(255) NOT NULL COMMENT '兑换成积分卡的卡名',
-  `point_value` int(10) NOT NULL DEFAULT '0' COMMENT '积分分值',
+  `point_value` DECIMAL(20,4) NOT NULL DEFAULT '0.00' COMMENT '积分分值',
   `point_exchange_code_code` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '兑换码(卡号)',
   `point_exchange_code_keyt` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '密钥（密码）',
   `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',

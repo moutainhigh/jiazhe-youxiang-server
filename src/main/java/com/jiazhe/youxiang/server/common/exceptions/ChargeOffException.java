@@ -14,6 +14,10 @@ public class ChargeOffException extends CommonException {
         super(chargeOffCodeEnum.getCode(), chargeOffCodeEnum.getType(), chargeOffCodeEnum.getMessage());
     }
 
+    public ChargeOffException(ChargeOffCodeEnum chargeOffCodeEnum, String message) {
+        super(chargeOffCodeEnum.getCode(), chargeOffCodeEnum.getType(), message);
+    }
+
     public ChargeOffException(Integer code, String type, String message) {
         super(code, type, message);
     }

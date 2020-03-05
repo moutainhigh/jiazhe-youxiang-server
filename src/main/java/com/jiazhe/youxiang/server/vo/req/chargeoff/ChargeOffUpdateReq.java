@@ -21,7 +21,7 @@ public class ChargeOffUpdateReq extends BaseVO {
 
     private static final long serialVersionUID = -5978850408317122281L;
     @ApiModelProperty("核销记录id")
-    private String id;
+    private Integer id;
 
     @ApiModelProperty("兑换城市code")
     private String cityCode;
@@ -53,11 +53,11 @@ public class ChargeOffUpdateReq extends BaseVO {
     @ApiModelProperty("备注信息")
     private String remark;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

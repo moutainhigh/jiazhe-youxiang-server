@@ -51,7 +51,8 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author TU
@@ -90,7 +91,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         criteria.andIsDeletedEqualTo(Byte.valueOf("0"));
         criteria.andBatchIdEqualTo(id);
         List<PointExchangeCodePO> poList = pointExchangeCodePOMapper.selectByExample(example);
-        return poList.stream().map(PointExchangeCodeAdapter::po2Dto).collect(Collectors.toList());
+        return poList.stream().map(PointExchangeCodeAdapter::po2Dto).collect(toList());
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -115,10 +116,10 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         });
         pointExchangeCodePOManualMapper.batchUpdate(poList);
         //使用了的码，修改其积分卡的信息
-        List<Integer> usedIds = poList.stream().filter(bean -> bean.getUsed().equals(CommonConstant.CODE_HAS_USED)).map(PointExchangeCodePO::getId).collect(Collectors.toList());
+        List<Integer> usedIds = poList.stream().filter(bean -> bean.getUsed().equals(CommonConstant.CODE_HAS_USED)).map(PointExchangeCodePO::getId).collect(toList());
         if (!usedIds.isEmpty()) {
             List<PointExchangeRecordDTO> recordDTOList = pointExchangeRecordService.findByCodeIds(usedIds);
-            List<Integer> pointIds = recordDTOList.stream().map(PointExchangeRecordDTO::getPointId).collect(Collectors.toList());
+            List<Integer> pointIds = recordDTOList.stream().map(PointExchangeRecordDTO::getPointId).collect(toList());
             pointService.updateWithBatch(pointIds, batchSaveDTO);
         }
     }
@@ -160,7 +161,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     public List<PointExchangeCodeDTO> getList(Integer batchId, String code, String keyt, Byte status, Byte used, Paging paging) {
         Integer count = pointExchangeCodePOManualMapper.count(batchId, code, keyt, status, used);
         List<PointExchangeCodePO> poList = pointExchangeCodePOManualMapper.query(batchId, code, keyt, status, used, paging.getOffset(), paging.getLimit());
-        List<PointExchangeCodeDTO> dtoList = poList.stream().map(PointExchangeCodeAdapter::po2Dto).collect(Collectors.toList());
+        List<PointExchangeCodeDTO> dtoList = poList.stream().map(PointExchangeCodeAdapter::po2Dto).collect(toList());
         dtoList.stream().forEach(bean -> {
             ProjectDTO projectDTO = projectService.getById(bean.getProjectId());
             bean.setProjectDTO(projectDTO);
@@ -334,6 +335,16 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     }
 
     @Override
+    public List<PointExchangeCodePO> batchFindByKeyt(List<String> keytList) {
+        PointExchangeCodePOExample example = new PointExchangeCodePOExample();
+        example.createCriteria()
+                .andKeytIn(keytList)
+                .andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+        pointExchangeCodePOMapper.selectByExample(example);
+        return pointExchangeCodePOMapper.selectByExample(example);
+    }
+
+    @Override
     public PointExchangeCodePO findByCode(String code) {
         PointExchangeCodePO pointExchangeCodePO = pointExchangeCodePOManualMapper.findByCode(code);
         return pointExchangeCodePO;
@@ -346,14 +357,14 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
 
     @Override
     public void batchUpdateCodeAndKeyt(List<PointExchangeCodeDTO> pointExchangeCodeDTOS) {
-        List<PointExchangeCodePO> poList = pointExchangeCodeDTOS.stream().map(PointExchangeCodeAdapter::dto2Po).collect(Collectors.toList());
+        List<PointExchangeCodePO> poList = pointExchangeCodeDTOS.stream().map(PointExchangeCodeAdapter::dto2Po).collect(toList());
         pointExchangeCodePOManualMapper.batchUpdateCodeAndKeyt(poList);
     }
 
     @Override
     public List<PointExchangeCodeDTO> findByCodes(List<String> codes) {
         List<PointExchangeCodePO> pointExchangeCodePOList = pointExchangeCodePOManualMapper.findByCodes(codes);
-        return pointExchangeCodePOList.stream().map(PointExchangeCodeAdapter::po2Dto).collect(Collectors.toList());
+        return pointExchangeCodePOList.stream().map(PointExchangeCodeAdapter::po2Dto).collect(toList());
     }
 
     @Override
@@ -367,6 +378,20 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
         }
         PointExchangeCodePO pointExchangeCodePO = findByCode(code);
+        check(pointExchangeCodePO);
+    }
+
+    @Override
+    public void checkByKeyt(String Keyt) {
+        if (!ExchangeCodeCheckUtil.keytCheck(CommonConstant.POINT_EXCHANGE_CODE_PREFIX, Keyt)) {
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
+        }
+        PointExchangeCodePO pointExchangeCodePO = findByKeyt(Keyt);
+        check(pointExchangeCodePO);
+    }
+
+    @Override
+    public void check(PointExchangeCodePO pointExchangeCodePO) {
         if (null == pointExchangeCodePO) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
         }
@@ -431,7 +456,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         criteria.andModTimeBetween(beginDate, endDate);
         criteria.andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
         List<PointExchangeCodePO> list = pointExchangeCodePOMapper.selectByExample(example);
-        return list.stream().map(PointExchangeCodeAdapter::po2Dto).collect(Collectors.toList());
+        return list.stream().map(PointExchangeCodeAdapter::po2Dto).collect(toList());
     }
 
     @Override
