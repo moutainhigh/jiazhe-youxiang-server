@@ -43,4 +43,6 @@ public interface ChargeOffService {
     List<ChargeOffInfoDTO> query(ChargeOffQueryDTO dto, Paging paging);
 
     BigDecimal queryCityExchangeRatio(String cityCode);
+
+    BigDecimal querySummary(ChargeOffQueryDTO dto);
 }

@@ -186,6 +186,13 @@ public class ChargeOffServiceImpl implements ChargeOffService {
     }
 
     @Override
+    public BigDecimal querySummary(ChargeOffQueryDTO dto) {
+        LOGGER.info("Service调用[querySummary]方法,入参:{}", JacksonUtil.toJSon(dto));
+        return chargeOffPOManualMapper.querySummary(dto);
+    }
+
+
+    @Override
     public BigDecimal queryCityExchangeRatio(String cityCode) {
         LOGGER.info("Service调用[queryCityExchangeRatio]方法,cityCode:{}", cityCode);
         CityExchangeRatioPOExample example = new CityExchangeRatioPOExample();
@@ -201,6 +208,7 @@ public class ChargeOffServiceImpl implements ChargeOffService {
         }
         return poList.get(0).getExchangeRatio();
     }
+
 
     /**
      * 拼接完整的ChargeOffInfoDTO对象，包括核销详情

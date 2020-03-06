@@ -346,4 +346,9 @@ public class ChargeOffBiz {
             throw new ChargeOffException(ChargeOffCodeEnum.EXCHANGE_RATIO_OVER_LIMIT, message);
         }
     }
+
+    public BigDecimal querySummary(ChargeOffQueryDTO dto) {
+        LOGGER.info("Biz调用[querySummary]方法,入参:{}", JacksonUtil.toJSon(dto));
+        return chargeOffService.querySummary(dto);
+    }
 }

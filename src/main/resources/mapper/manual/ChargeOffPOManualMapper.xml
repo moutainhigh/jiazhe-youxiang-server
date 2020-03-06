@@ -91,6 +91,36 @@
         </where>
     </select>
 
+    <select id="querySummary" resultType="java.math.BigDecimal">
+        select
+        sum(total_point)
+        from charge_off
+        <where>
+            <if test="queryDTO.submitterName != null">
+                AND submitter_name = #{queryDTO.submitterName}
+            </if>
+            <if test="queryDTO.chargeOffType != null">
+                AND charge_off_type = #{queryDTO.chargeOffType}
+            </if>
+            <if test="queryDTO.status != null">
+                AND status = #{queryDTO.status}
+            </if>
+            <if test="queryDTO.cityCode != null">
+                AND city_code = #{queryDTO.cityCode}
+            </if>
+            <if test="queryDTO.totalPoint != null">
+                AND total_point = #{queryDTO.totalPoint}
+            </if>
+            <if test="queryDTO.submitterTimeBegin != null">
+                AND submitter_time &gt;= #{queryDTO.submitterTimeBegin}
+            </if>
+            <if test="queryDTO.submitterTimeEnd != null">
+                AND submitter_time &lt;= #{queryDTO.submitterTimeEnd}
+            </if>
+            AND is_deleted = 0
+        </where>
+    </select>
+
     <select id="fuzzyQueryCount" resultType="java.lang.Integer">
         select
         count(*)

@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffFuzzyQueryDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffQueryDTO;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ChargeOffPOManualMapper {
@@ -18,4 +19,6 @@ public interface ChargeOffPOManualMapper {
     int queryCount(@Param("queryDTO") ChargeOffQueryDTO queryDTO);
 
     int insertSelective(ChargeOffPO chargeOffPO);
+
+    BigDecimal querySummary(ChargeOffQueryDTO dto);
 }
