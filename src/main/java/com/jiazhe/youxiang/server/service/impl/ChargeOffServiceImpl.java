@@ -179,9 +179,14 @@ public class ChargeOffServiceImpl implements ChargeOffService {
     @Override
     public List<ChargeOffInfoDTO> query(ChargeOffQueryDTO dto, Paging paging) {
         LOGGER.info("Service调用[query]方法,入参:{}", JacksonUtil.toJSon(dto));
-        List<ChargeOffPO> poList = chargeOffPOManualMapper.query(dto, paging.getOffset(), paging.getLimit());
-        int count = chargeOffPOManualMapper.queryCount(dto);
-        paging.setTotal(count);
+        List<ChargeOffPO> poList;
+        if (paging == null) {
+            poList = chargeOffPOManualMapper.query(dto, null, null);
+        } else {
+            poList = chargeOffPOManualMapper.query(dto, paging.getOffset(), paging.getLimit());
+            int count = chargeOffPOManualMapper.queryCount(dto);
+            paging.setTotal(count);
+        }
         return buildChargeOffInfoDTOList(poList);
     }
 

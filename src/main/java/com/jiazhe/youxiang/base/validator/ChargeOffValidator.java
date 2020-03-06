@@ -80,9 +80,11 @@ public class ChargeOffValidator extends CommonValidator {
         }
     }
 
-    public static void validateChargeOffQueryReq(ChargeOffQueryReq req) {
+    public static void validateChargeOffQueryReq(ChargeOffQueryReq req, boolean hasPaging) {
         validateNull(req);
-        validatePaging(req);
+        if (hasPaging) {
+            validatePaging(req);
+        }
         if (null != req.getStatus() && null == ChargeOffStatusEnum.getByCode(req.getStatus())) {
             throw new ChargeOffException(ChargeOffCodeEnum.CHARGE_OFF_STATUS_ERROR);
         }
@@ -95,6 +97,7 @@ public class ChargeOffValidator extends CommonValidator {
             throw new ChargeOffException(ChargeOffCodeEnum.SUBMITTER_TIME_ERROR);
         }
     }
+
 
     public static void validateValidateKeytReq(ValidateKeytReq req) {
         validateNull(req);

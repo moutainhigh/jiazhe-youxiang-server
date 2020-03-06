@@ -1,11 +1,16 @@
 package com.jiazhe.youxiang.base.util;
 
+import com.jiazhe.youxiang.server.common.enums.ChargeOffTypeEnum;
+import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffInfoDTO;
+import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffPointDTO;
 import com.jiazhe.youxiang.server.dto.chargereceipt.ChargeReceiptDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.partnerorder.PartnerOrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rcexchangecode.RCExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.voucher.exchangecode.VoucherExchangeCodeDTO;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -19,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -130,13 +136,13 @@ public class ExportExcelUtils {
     }
 
     public static void exportPartnerOrder(HttpServletResponse response, List<PartnerOrderInfoDTO> partnerOrderInfoDTOList) {
-        String[] orderStatus = {"","待派单","待服务","已完成","已取消"};
+        String[] orderStatus = {"", "待派单", "待服务", "已完成", "已取消"};
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Sheet1");
         String fileName = System.currentTimeMillis() + ".xlsx";
         //新增数据行，并且设置单元格数据
         int rowNum = 1;
-        String[] headers = {"客户姓名", "客户手机号", "城市", "地址", "兑换密钥", "兑换时间", "预约时间", "订单来源", "服务人员姓名", "服务人员电话", "服务项目", "服务商", "预付", "再支付","订单状态"};
+        String[] headers = {"客户姓名", "客户手机号", "城市", "地址", "兑换密钥", "兑换时间", "预约时间", "订单来源", "服务人员姓名", "服务人员电话", "服务项目", "服务商", "预付", "再支付", "订单状态"};
         //headers表示excel表中第一行的表头
         XSSFRow row = sheet.createRow(0);
         //在excel表中添加表头
@@ -174,12 +180,12 @@ public class ExportExcelUtils {
     }
 
     public static void exportOrder(HttpServletResponse response, List<OrderInfoDTO> orderInfoDTOList) {
-        String[] orderStatus = {"","代付款","待派单","待服务","已完成","取消待审核","取消未通过","已取消"};
+        String[] orderStatus = {"", "代付款", "待派单", "待服务", "已完成", "取消待审核", "取消未通过", "已取消"};
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Sheet1");
         String fileName = System.currentTimeMillis() + ".xlsx";
         int rowNum = 1;
-        String[] headers = {"订单号","服务商品","扣分商品","下单价格","数量","下单时间", "服务时间", "订单成本", "城市", "地址","订单状态"};
+        String[] headers = {"订单号", "服务商品", "扣分商品", "下单价格", "数量", "下单时间", "服务时间", "订单成本", "城市", "地址", "订单状态"};
         XSSFRow row = sheet.createRow(0);
         //在excel表中添加表头
         for (int i = 0; i < headers.length; i++) {
@@ -305,5 +311,51 @@ public class ExportExcelUtils {
         } catch (IOException e) {
             logger.error("导出excel时出现IO异常，错误信息：" + e.getMessage());
         }
+    }
+
+    /**
+     * 导出核销详情
+     *
+     * @param response
+     * @param dtoList
+     */
+    public static void exportChargeOffDetail(HttpServletResponse response, List<ChargeOffInfoDTO> dtoList) {
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("核销详情");
+        String fileName = System.currentTimeMillis() + ".xlsx";
+        //新增数据行，并且设置单元格数据
+        int rowNum = 1;
+        String[] headers = {"序号", "操作人", "积分卡名称", "卡号", "密码", "积分数", "兑换类型", "充值手机号", "核销时间"};
+        //headers表示excel表中第一行的表头
+        XSSFRow row = sheet.createRow(0);
+        //在excel表中添加表头
+        for (int i = 0; i < headers.length; i++) {
+            XSSFCell cell = row.createCell(i);
+            XSSFRichTextString text = new XSSFRichTextString(headers[i]);
+            cell.setCellValue(text);
+        }
+        //在表中存放查询到的数据放入对应的列
+        for (ChargeOffInfoDTO dto : dtoList) {
+            if (CollectionUtils.isEmpty(dto.getPointList())) {
+                continue;
+            }
+            for (ChargeOffPointDTO pointDTO : dto.getPointList()) {
+                XSSFRow row1 = sheet.createRow(rowNum);
+                row1.createCell(0).setCellValue(rowNum);
+                row1.createCell(1).setCellValue(dto.getSubmitterName());
+                row1.createCell(2).setCellValue(pointDTO.getPointName());
+                row1.createCell(3).setCellValue(pointDTO.getPointExchangeCodeCode());
+                row1.createCell(4).setCellValue(pointDTO.getPointExchangeCodeKeyt());
+                row1.createCell(5).setCellValue(pointDTO.getPointValue().toPlainString());
+                ChargeOffTypeEnum chargeOffTypeEnum = ChargeOffTypeEnum.getByCode(dto.getChargeOffType());
+                row1.createCell(6).setCellValue(chargeOffTypeEnum == null ? "-" : chargeOffTypeEnum.getName());
+                row1.createCell(7).setCellValue(StringUtils.isEmpty(dto.getCustomerMobile()) ? "-" : dto.getCustomerMobile());
+                row1.createCell(8).setCellValue(DateUtil.yyyyMMDD(new Date(dto.getSubmitterTime())));
+                rowNum++;
+            }
+
+        }
+        resetColumnWidth(sheet, headers.length, false);
+        export(response, fileName, workbook);
     }
 }

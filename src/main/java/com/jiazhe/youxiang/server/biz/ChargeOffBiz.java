@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.server.biz;
 
 import com.google.common.collect.Lists;
+import com.jiazhe.youxiang.base.util.ExportExcelUtils;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.ChargeOffCodeEnum;
@@ -110,6 +111,7 @@ public class ChargeOffBiz {
 
     /**
      * 添加核销记录
+     *
      * @param dto
      */
     @Transactional
@@ -146,6 +148,7 @@ public class ChargeOffBiz {
 
     /**
      * 编辑核销记录
+     *
      * @param dto
      */
     @Transactional
@@ -166,6 +169,7 @@ public class ChargeOffBiz {
 
     /**
      * 删除核销记录
+     *
      * @param chargeOffId
      */
     public void delete(Integer chargeOffId) {
@@ -175,6 +179,7 @@ public class ChargeOffBiz {
 
     /**
      * 根据核销记录Id查找
+     *
      * @param chargeOffId
      * @return
      */
@@ -185,6 +190,7 @@ public class ChargeOffBiz {
 
     /**
      * 模糊查询
+     *
      * @param dto
      * @param paging
      * @return
@@ -204,6 +210,7 @@ public class ChargeOffBiz {
 
     /**
      * 精确查询
+     *
      * @param dto
      * @param paging
      * @return
@@ -215,6 +222,7 @@ public class ChargeOffBiz {
 
     /**
      * 验证单一密码
+     *
      * @param keyt
      * @return
      */
@@ -229,15 +237,17 @@ public class ChargeOffBiz {
 
     /**
      * 导出核销详情
+     *
      * @param dto
      */
     public void exportDetail(ChargeOffQueryDTO dto) {
         LOGGER.info("Biz调用[exportDetail]方法,入参:{}", JacksonUtil.toJSon(dto));
-        //TODO niexiao
+
     }
 
     /**
      * 批量验证密码
+     *
      * @param keytList
      * @param totalPoint
      * @return
@@ -288,6 +298,7 @@ public class ChargeOffBiz {
 
     /**
      * 核销密码
+     *
      * @param keytList
      * @param customerId
      */
