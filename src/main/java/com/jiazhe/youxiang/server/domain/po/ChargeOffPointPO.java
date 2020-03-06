@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.domain.po;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class ChargeOffPointPO implements Serializable {
@@ -12,7 +13,7 @@ public class ChargeOffPointPO implements Serializable {
 
     private String pointName;
 
-    private Integer pointValue;
+    private BigDecimal pointValue;
 
     private String pointExchangeCodeCode;
 
@@ -60,11 +61,11 @@ public class ChargeOffPointPO implements Serializable {
         this.pointName = pointName == null ? null : pointName.trim();
     }
 
-    public Integer getPointValue() {
+    public BigDecimal getPointValue() {
         return pointValue;
     }
 
-    public void setPointValue(Integer pointValue) {
+    public void setPointValue(BigDecimal pointValue) {
         this.pointValue = pointValue;
     }
 

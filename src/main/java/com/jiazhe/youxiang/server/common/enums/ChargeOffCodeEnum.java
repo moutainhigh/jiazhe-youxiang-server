@@ -20,7 +20,15 @@ public enum ChargeOffCodeEnum {
     PRODUCT_VALUE_IS_NULL(124010, "PRODUCT_VALUE_IS_NULL", "兑换商品价值不能为空"),
     CHARGE_OFF_ID_IS_NULL(124011, "CHARGE_OFF_ID_IS_NULL", "核销Id不能为空"),
     KEYT_IS_NULL(124012, "KEYT_IS_NULL", "兑换码密码不能为空"),
-    ;
+    KEYT_ERROR(124013, "KEYT_ERROR", "兑换码密码相关错误"),
+    CHARGE_OFF_NOT_EXIST(124014, "CHARGE_OFF_NOT_EXIST", "核销记录不存在"),
+    CITY_ERROR(124015, "CITY_ERROR", "城市信息错误"),
+    CITY_EXCHANGE_RATIO_ERROR(124016, "CITY_EXCHANGE_RATIO_ERROR", "城市兑换比例有误，出现重复"),
+    EXCHANGE_RATIO_OVER_LIMIT(124017, "EXCHANGE_RATIO_OVER_LIMIT", "实物商品兑换比例超过限制"),
+    TOTAL_POINT_ERROR(124018, "TOTAL_POINT_ERROR", "积分总值计算错误"),
+    ADD_CHARGE_OFF_ERROR(124019, "ADD_CHARGE_OFF_ERROR", "添加核销信息失败"),
+    CHARGE_OFF_IS_COMMITTED(124020, "CHARGE_OFF_IS_COMMITTED", "核销记录已提交，无法修改"),
+    SUBMITTER_TIME_ERROR(124021, "SUBMITTER_TIME_ERROR", "提交开始时间不能大于提交结束时间"),;
 
     ChargeOffCodeEnum(Integer code, String type, String message) {
         this.code = code;

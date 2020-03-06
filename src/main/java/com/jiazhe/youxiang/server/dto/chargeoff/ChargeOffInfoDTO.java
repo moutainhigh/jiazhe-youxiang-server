@@ -21,7 +21,7 @@ public class ChargeOffInfoDTO {
     /**
      * 核销记录id
      */
-    private String id;
+    private Integer id;
 
     /**
      * 兑换城市code
@@ -51,7 +51,7 @@ public class ChargeOffInfoDTO {
     /**
      * 核销总积分
      */
-    private Integer totalPoint;
+    private BigDecimal totalPoint;
 
     /**
      * 客户姓名
@@ -93,11 +93,11 @@ public class ChargeOffInfoDTO {
      */
     private Long submitterTime;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -141,11 +141,11 @@ public class ChargeOffInfoDTO {
         this.pointList = pointList;
     }
 
-    public Integer getTotalPoint() {
+    public BigDecimal getTotalPoint() {
         return totalPoint;
     }
 
-    public void setTotalPoint(Integer totalPoint) {
+    public void setTotalPoint(BigDecimal totalPoint) {
         this.totalPoint = totalPoint;
     }
 

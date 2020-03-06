@@ -25,6 +25,7 @@ import com.jiazhe.youxiang.server.vo.req.chargeoff.ChargeOffUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.chargeoff.ValidateKeytReq;
 import com.jiazhe.youxiang.server.vo.resp.chargeoff.ChargeOffInfoResp;
 import com.jiazhe.youxiang.server.vo.resp.chargeoff.ChargeOffPointResp;
+import com.jiazhe.youxiang.server.vo.resp.chargeoff.QuerySummaryResp;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -121,6 +123,19 @@ public class APIChargeOffController extends BaseController {
         List<ChargeOffInfoResp> respList = dtoList.stream().map(ChargeOffAdapter::chargeOffInfoDTO2Resp).collect(Collectors.toList());
         //用ResponseFactory将返回值包装
         return ResponseFactory.buildPaginationResponse(respList, paging);
+    }
+
+    @ApiOperation(value = "条件查询汇总数据（PC端）", httpMethod = "POST", notes = "条件查询汇总数据（PC端）", response = QuerySummaryResp.class, responseContainer = "List")
+    @RequestMapping(value = "/query", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.CHARGE_OFF, operate = "条件查询汇总数据（PC端）", level = LogLevelEnum.LEVEL_1)
+    public Object querySummary(@ModelAttribute ChargeOffQueryReq req) {
+        LOGGER.info("Controller调用[query]方法,入参:{}", JacksonUtil.toJSon(req));
+        ChargeOffValidator.validateChargeOffQueryReq(req);
+        ChargeOffQueryDTO dto = ChargeOffAdapter.ChargeOffQueryReq2DTO(req);
+        BigDecimal totalPoint = chargeOffBiz.querySummary(dto);
+        QuerySummaryResp resp = new QuerySummaryResp();
+        resp.setTotalPoint(totalPoint);
+        return ResponseFactory.buildResponse(resp);
     }
 
     @ApiOperation(value = "验证密码有效性", httpMethod = "POST", notes = "验证密码有效性", response = ChargeOffPointResp.class)

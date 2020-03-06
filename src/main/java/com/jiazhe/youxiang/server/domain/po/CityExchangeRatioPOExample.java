@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CityExchangeRatioExample {
+public class CityExchangeRatioPOExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public CityExchangeRatioExample() {
+    public CityExchangeRatioPOExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 

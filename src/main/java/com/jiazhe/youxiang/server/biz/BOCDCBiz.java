@@ -107,6 +107,8 @@ public class BOCDCBiz {
                 resp.setGiftCardPwd(RSAUtil.bocdcPublicEncrypt(dto.getKeyt()));
                 resp.setEbuyId(RSAUtil.bocdcPublicEncrypt(dto.getId().toString()));
                 resp.setCardExpDate(DateUtil.yyyyMMDD(expiryDate));
+                //将积分兑换码置为启用状态
+                pointExchangeCodeService.changeCodeStatus(dto.getId(),CommonConstant.CODE_START_USING);
             }
         } catch (Exception e) {
             resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());

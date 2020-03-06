@@ -95,7 +95,7 @@
         <!--<table tableName="partner_order_track" domainObjectName="PartnerOrderTrackPO"/>-->
 <!--        <table tableName="charge_off" domainObjectName="ChargeOffPO"/>-->
 <!--        <table tableName="charge_off_point" domainObjectName="ChargeOffPointPO"/>-->
-<!--        <table tableName="city_exchange_ratio" domainObjectName="CityExchangeRatio"/>-->
+        <table tableName="city_exchange_ratio" domainObjectName="CityExchangeRatioPO"/>
 
     </context>
 </generatorConfiguration>

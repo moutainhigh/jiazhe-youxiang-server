@@ -70,15 +70,34 @@ public class ChargeOffValidator extends CommonValidator {
     public static void validateChargeOffFuzzyQueryReq(ChargeOffFuzzyQueryReq req) {
         validateNull(req);
         validatePaging(req);
+        if (null != req.getStatus() || null == ChargeOffStatusEnum.getByCode(req.getStatus())) {
+            throw new ChargeOffException(ChargeOffCodeEnum.CHARGE_OFF_STATUS_ERROR);
+        }
+        if (req.getSubmitterTimeBegin() != null
+                && req.getSubmitterTimeEnd() != null
+                && req.getSubmitterTimeBegin() > req.getSubmitterTimeEnd()) {
+            throw new ChargeOffException(ChargeOffCodeEnum.SUBMITTER_TIME_ERROR);
+        }
     }
 
     public static void validateChargeOffQueryReq(ChargeOffQueryReq req) {
         validateNull(req);
         validatePaging(req);
+        if (null != req.getStatus() && null == ChargeOffStatusEnum.getByCode(req.getStatus())) {
+            throw new ChargeOffException(ChargeOffCodeEnum.CHARGE_OFF_STATUS_ERROR);
+        }
+        if (null != req.getChargeOffType() && null == ChargeOffTypeEnum.getByCode(req.getChargeOffType())) {
+            throw new ChargeOffException(ChargeOffCodeEnum.CHARGE_OFF_TYPE_ERROR);
+        }
+        if (req.getSubmitterTimeBegin() != null
+                && req.getSubmitterTimeEnd() != null
+                && req.getSubmitterTimeBegin() > req.getSubmitterTimeEnd()) {
+            throw new ChargeOffException(ChargeOffCodeEnum.SUBMITTER_TIME_ERROR);
+        }
     }
 
     public static void validateValidateKeytReq(ValidateKeytReq req) {
         validateNull(req);
-        validateNull(req.getKeyt(),new ChargeOffException(ChargeOffCodeEnum.KEYT_IS_NULL));
+        validateNull(req.getKeyt(), new ChargeOffException(ChargeOffCodeEnum.KEYT_IS_NULL));
     }
 }

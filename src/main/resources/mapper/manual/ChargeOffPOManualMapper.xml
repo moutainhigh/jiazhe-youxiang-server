@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.ChargeOffPOManualMapper">
+    <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.ChargeOffPO">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="city_code" property="cityCode" jdbcType="VARCHAR"/>
+        <result column="city_name" property="cityName" jdbcType="VARCHAR"/>
+        <result column="bank_outlets_name" property="bankOutletsName" jdbcType="VARCHAR"/>
+        <result column="charge_off_type" property="chargeOffType" jdbcType="TINYINT"/>
+        <result column="charge_off_point" property="chargeOffPoint" jdbcType="VARCHAR"/>
+        <result column="total_point" property="totalPoint" jdbcType="DECIMAL"/>
+        <result column="customer_name" property="customerName" jdbcType="VARCHAR"/>
+        <result column="customer_mobile" property="customerMobile" jdbcType="VARCHAR"/>
+        <result column="product_value" property="productValue" jdbcType="DECIMAL"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="submitter_id" property="submitterId" jdbcType="INTEGER"/>
+        <result column="submitter_name" property="submitterName" jdbcType="VARCHAR"/>
+        <result column="submitter_time" property="submitterTime" jdbcType="TIMESTAMP"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="ext_info" property="extInfo" jdbcType="VARCHAR"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="TINYINT"/>
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="mod_time" property="modTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, city_code, city_name, bank_outlets_name, charge_off_type, charge_off_point, total_point,
+    customer_name, customer_mobile, product_value, status, submitter_id, submitter_name,
+    submitter_time, remark, ext_info, is_deleted, add_time, mod_time
+  </sql>
+
+    <select id="query" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from charge_off
+        <where>
+            <if test="queryDTO.submitterName != null">
+                AND submitter_name = #{queryDTO.submitterName}
+            </if>
+            <if test="queryDTO.chargeOffType != null">
+                AND charge_off_type = #{queryDTO.chargeOffType}
+            </if>
+            <if test="queryDTO.status != null">
+                AND status = #{queryDTO.status}
+            </if>
+            <if test="queryDTO.cityCode != null">
+                AND city_code = #{queryDTO.cityCode}
+            </if>
+            <if test="queryDTO.totalPoint != null">
+                AND total_point = #{queryDTO.totalPoint}
+            </if>
+            <if test="queryDTO.submitterTimeBegin != null">
+                AND submitter_time &gt;= #{queryDTO.submitterTimeBegin}
+            </if>
+            <if test="queryDTO.submitterTimeEnd != null">
+                AND submitter_time &lt;= #{queryDTO.submitterTimeEnd}
+            </if>
+            AND is_deleted = 0 ORDER BY submitter_time desc
+        </where>
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </select>
+
+    <select id="queryCount" resultType="java.lang.Integer">
+        select
+        count(*)
+        from charge_off
+        <where>
+            <if test="queryDTO.submitterName != null">
+                AND submitter_name = #{queryDTO.submitterName}
+            </if>
+            <if test="queryDTO.chargeOffType != null">
+                AND charge_off_type = #{queryDTO.chargeOffType}
+            </if>
+            <if test="queryDTO.status != null">
+                AND status = #{queryDTO.status}
+            </if>
+            <if test="queryDTO.cityCode != null">
+                AND city_code = #{queryDTO.cityCode}
+            </if>
+            <if test="queryDTO.totalPoint != null">
+                AND total_point = #{queryDTO.totalPoint}
+            </if>
+            <if test="queryDTO.submitterTimeBegin != null">
+                AND submitter_time &gt;= #{queryDTO.submitterTimeBegin}
+            </if>
+            <if test="queryDTO.submitterTimeEnd != null">
+                AND submitter_time &lt;= #{queryDTO.submitterTimeEnd}
+            </if>
+            AND is_deleted = 0
+        </where>
+    </select>
+
+    <select id="querySummary" resultType="java.math.BigDecimal">
+        select
+        sum(total_point)
+        from charge_off
+        <where>
+            <if test="queryDTO.submitterName != null">
+                AND submitter_name = #{queryDTO.submitterName}
+            </if>
+            <if test="queryDTO.chargeOffType != null">
+                AND charge_off_type = #{queryDTO.chargeOffType}
+            </if>
+            <if test="queryDTO.status != null">
+                AND status = #{queryDTO.status}
+            </if>
+            <if test="queryDTO.cityCode != null">
+                AND city_code = #{queryDTO.cityCode}
+            </if>
+            <if test="queryDTO.totalPoint != null">
+                AND total_point = #{queryDTO.totalPoint}
+            </if>
+            <if test="queryDTO.submitterTimeBegin != null">
+                AND submitter_time &gt;= #{queryDTO.submitterTimeBegin}
+            </if>
+            <if test="queryDTO.submitterTimeEnd != null">
+                AND submitter_time &lt;= #{queryDTO.submitterTimeEnd}
+            </if>
+            AND is_deleted = 0
+        </where>
+    </select>
+
+    <select id="fuzzyQueryCount" resultType="java.lang.Integer">
+        select
+        count(*)
+        from charge_off
+        <where>
+            <if test="fuzzyQueryDTO.submitterTimeBegin != null">
+                AND submitter_time &gt;= #{fuzzyQueryDTO.submitterTimeBegin}
+            </if>
+            <if test="fuzzyQueryDTO.submitterTimeEnd != null">
+                AND submitter_time &lt;= #{fuzzyQueryDTO.submitterTimeEnd}
+            </if>
+            <if test="fuzzyQueryDTO.submitterId != null">
+                AND submitter_id = #{fuzzyQueryDTO.submitterId}
+            </if>
+            <if test="fuzzyQueryDTO.status != null">
+                AND status = #{fuzzyQueryDTO.status}
+            </if>
+            <if test="fuzzyQueryDTO.condition != null">
+                AND(
+                bank_outlets_name like concat('%',#{fuzzyQueryDTO.condition},'%')
+                OR customer_name like concat('%',#{fuzzyQueryDTO.condition},'%')
+                OR customer_mobile like concat('%',#{fuzzyQueryDTO.condition},'%')
+                OR product_value like concat('%',#{fuzzyQueryDTO.condition},'%')
+                OR charge_off_point like concat('%',#{fuzzyQueryDTO.condition},'%')
+                )
+            </if>
+            AND is_deleted = 0
+        </where>
+    </select>
+
+    <select id="fuzzyQuery" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from charge_off
+        <where>
+            <if test="fuzzyQueryDTO.submitterTimeBegin != null">
+                AND submitter_time &gt;= #{fuzzyQueryDTO.submitterTimeBegin}
+            </if>
+            <if test="fuzzyQueryDTO.submitterTimeEnd != null">
+                AND submitter_time &lt;= #{fuzzyQueryDTO.submitterTimeEnd}
+            </if>
+            <if test="fuzzyQueryDTO.submitterId != null">
+                AND submitter_id = #{fuzzyQueryDTO.submitterId}
+            </if>
+            <if test="fuzzyQueryDTO.status != null">
+                AND status = #{fuzzyQueryDTO.status}
+            </if>
+            <if test="fuzzyQueryDTO.condition != null">
+                AND(
+                bank_outlets_name like concat('%',#{fuzzyQueryDTO.condition},'%')
+                OR customer_name like concat('%',#{fuzzyQueryDTO.condition},'%')
+                OR customer_mobile like concat('%',#{fuzzyQueryDTO.condition},'%')
+                OR product_value like concat('%',#{fuzzyQueryDTO.condition},'%')
+                OR charge_off_point like concat('%',#{fuzzyQueryDTO.condition},'%')
+                )
+            </if>
+            AND is_deleted = 0 ORDER BY submitter_time desc
+        </where>
+        <if test="offset != null and limit != null">
+            limit #{offset},#{limit}
+        </if>
+    </select>
+
+    <insert id="insertSelective" parameterType="com.jiazhe.youxiang.server.domain.po.ChargeOffPO"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into charge_off
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="cityCode != null">
+                city_code,
+            </if>
+            <if test="cityName != null">
+                city_name,
+            </if>
+            <if test="bankOutletsName != null">
+                bank_outlets_name,
+            </if>
+            <if test="chargeOffType != null">
+                charge_off_type,
+            </if>
+            <if test="chargeOffPoint != null">
+                charge_off_point,
+            </if>
+            <if test="totalPoint != null">
+                total_point,
+            </if>
+            <if test="customerName != null">
+                customer_name,
+            </if>
+            <if test="customerMobile != null">
+                customer_mobile,
+            </if>
+            <if test="productValue != null">
+                product_value,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="submitterId != null">
+                submitter_id,
+            </if>
+            <if test="submitterName != null">
+                submitter_name,
+            </if>
+            <if test="submitterTime != null">
+                submitter_time,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="extInfo != null">
+                ext_info,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+            <if test="addTime != null">
+                add_time,
+            </if>
+            <if test="modTime != null">
+                mod_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="cityCode != null">
+                #{cityCode,jdbcType=VARCHAR},
+            </if>
+            <if test="cityName != null">
+                #{cityName,jdbcType=VARCHAR},
+            </if>
+            <if test="bankOutletsName != null">
+                #{bankOutletsName,jdbcType=VARCHAR},
+            </if>
+            <if test="chargeOffType != null">
+                #{chargeOffType,jdbcType=TINYINT},
+            </if>
+            <if test="chargeOffPoint != null">
+                #{chargeOffPoint,jdbcType=VARCHAR},
+            </if>
+            <if test="totalPoint != null">
+                #{totalPoint,jdbcType=DECIMAL},
+            </if>
+            <if test="customerName != null">
+                #{customerName,jdbcType=VARCHAR},
+            </if>
+            <if test="customerMobile != null">
+                #{customerMobile,jdbcType=VARCHAR},
+            </if>
+            <if test="productValue != null">
+                #{productValue,jdbcType=DECIMAL},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="submitterId != null">
+                #{submitterId,jdbcType=INTEGER},
+            </if>
+            <if test="submitterName != null">
+                #{submitterName,jdbcType=VARCHAR},
+            </if>
+            <if test="submitterTime != null">
+                #{submitterTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="extInfo != null">
+                #{extInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=TINYINT},
+            </if>
+            <if test="addTime != null">
+                #{addTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modTime != null">
+                #{modTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

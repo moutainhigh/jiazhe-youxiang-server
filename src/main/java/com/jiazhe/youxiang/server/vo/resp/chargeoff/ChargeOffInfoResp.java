@@ -21,7 +21,7 @@ public class ChargeOffInfoResp extends BaseVO {
 
     private static final long serialVersionUID = 977601635586057681L;
     @ApiModelProperty("核销记录id")
-    private String id;
+    private Integer id;
 
     @ApiModelProperty("兑换城市code")
     private String cityCode;
@@ -39,7 +39,7 @@ public class ChargeOffInfoResp extends BaseVO {
     private List<ChargeOffPointResp> pointList;
 
     @ApiModelProperty("核销总积分")
-    private Integer totalPoint;
+    private BigDecimal totalPoint;
 
     @ApiModelProperty("客户姓名")
     private String customerName;
@@ -65,11 +65,11 @@ public class ChargeOffInfoResp extends BaseVO {
     @ApiModelProperty("提交时间")
     private Long submitterTime;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -113,11 +113,11 @@ public class ChargeOffInfoResp extends BaseVO {
         this.pointList = pointList;
     }
 
-    public Integer getTotalPoint() {
+    public BigDecimal getTotalPoint() {
         return totalPoint;
     }
 
-    public void setTotalPoint(Integer totalPoint) {
+    public void setTotalPoint(BigDecimal totalPoint) {
         this.totalPoint = totalPoint;
     }
 

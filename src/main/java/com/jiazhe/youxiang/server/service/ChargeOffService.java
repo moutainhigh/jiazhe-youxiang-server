@@ -13,6 +13,7 @@ import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffQueryDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffUpdateDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -23,19 +24,25 @@ import java.util.List;
  */
 public interface ChargeOffService {
 
-    void add(ChargeOffAddDTO dto);
+    Integer add(ChargeOffAddDTO dto);
+
+    void addDetail(Integer chargeOffId, List<ChargeOffPointDTO> chargeOffPointDTOList);
 
     void update(ChargeOffUpdateDTO dto);
+
+    void updateDetail(Integer chargeOffId, List<ChargeOffPointDTO> chargeOffPointDTOList);
 
     void delete(Integer chargeOffId);
 
     ChargeOffInfoDTO queryById(Integer chargeOffId);
 
+    ChargeOffInfoDTO queryById(Integer chargeOffId, boolean includeDetail);
+
     List<ChargeOffInfoDTO> fuzzyQuery(ChargeOffFuzzyQueryDTO dto, Paging paging);
 
     List<ChargeOffInfoDTO> query(ChargeOffQueryDTO dto, Paging paging);
 
-    ChargeOffPointDTO validateKeyt(String keyt);
+    BigDecimal queryCityExchangeRatio(String cityCode);
 
-
+    BigDecimal querySummary(ChargeOffQueryDTO dto);
 }

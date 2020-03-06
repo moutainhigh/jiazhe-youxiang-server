@@ -15,7 +15,9 @@ public class ChargeOffPO implements Serializable {
 
     private Byte chargeOffType;
 
-    private Integer totalPoint;
+    private String chargeOffPoint;
+
+    private BigDecimal totalPoint;
 
     private String customerName;
 
@@ -83,11 +85,19 @@ public class ChargeOffPO implements Serializable {
         this.chargeOffType = chargeOffType;
     }
 
-    public Integer getTotalPoint() {
+    public String getChargeOffPoint() {
+        return chargeOffPoint;
+    }
+
+    public void setChargeOffPoint(String chargeOffPoint) {
+        this.chargeOffPoint = chargeOffPoint == null ? null : chargeOffPoint.trim();
+    }
+
+    public BigDecimal getTotalPoint() {
         return totalPoint;
     }
 
-    public void setTotalPoint(Integer totalPoint) {
+    public void setTotalPoint(BigDecimal totalPoint) {
         this.totalPoint = totalPoint;
     }
 

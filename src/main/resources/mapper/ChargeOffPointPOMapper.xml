@@ -6,7 +6,7 @@
     <result column="charge_off_id" property="chargeOffId" jdbcType="INTEGER" />
     <result column="point_exchange_code_id" property="pointExchangeCodeId" jdbcType="INTEGER" />
     <result column="point_name" property="pointName" jdbcType="VARCHAR" />
-    <result column="point_value" property="pointValue" jdbcType="INTEGER" />
+    <result column="point_value" property="pointValue" jdbcType="DECIMAL" />
     <result column="point_exchange_code_code" property="pointExchangeCodeCode" jdbcType="VARCHAR" />
     <result column="point_exchange_code_keyt" property="pointExchangeCodeKeyt" jdbcType="VARCHAR" />
     <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
@@ -112,7 +112,7 @@
       point_exchange_code_keyt, ext_info, is_deleted, 
       add_time, mod_time)
     values (#{id,jdbcType=INTEGER}, #{chargeOffId,jdbcType=INTEGER}, #{pointExchangeCodeId,jdbcType=INTEGER}, 
-      #{pointName,jdbcType=VARCHAR}, #{pointValue,jdbcType=INTEGER}, #{pointExchangeCodeCode,jdbcType=VARCHAR}, 
+      #{pointName,jdbcType=VARCHAR}, #{pointValue,jdbcType=DECIMAL}, #{pointExchangeCodeCode,jdbcType=VARCHAR}, 
       #{pointExchangeCodeKeyt,jdbcType=VARCHAR}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
       #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
   </insert>
@@ -167,7 +167,7 @@
         #{pointName,jdbcType=VARCHAR},
       </if>
       <if test="pointValue != null" >
-        #{pointValue,jdbcType=INTEGER},
+        #{pointValue,jdbcType=DECIMAL},
       </if>
       <if test="pointExchangeCodeCode != null" >
         #{pointExchangeCodeCode,jdbcType=VARCHAR},
@@ -211,7 +211,7 @@
         point_name = #{record.pointName,jdbcType=VARCHAR},
       </if>
       <if test="record.pointValue != null" >
-        point_value = #{record.pointValue,jdbcType=INTEGER},
+        point_value = #{record.pointValue,jdbcType=DECIMAL},
       </if>
       <if test="record.pointExchangeCodeCode != null" >
         point_exchange_code_code = #{record.pointExchangeCodeCode,jdbcType=VARCHAR},
@@ -242,7 +242,7 @@
       charge_off_id = #{record.chargeOffId,jdbcType=INTEGER},
       point_exchange_code_id = #{record.pointExchangeCodeId,jdbcType=INTEGER},
       point_name = #{record.pointName,jdbcType=VARCHAR},
-      point_value = #{record.pointValue,jdbcType=INTEGER},
+      point_value = #{record.pointValue,jdbcType=DECIMAL},
       point_exchange_code_code = #{record.pointExchangeCodeCode,jdbcType=VARCHAR},
       point_exchange_code_keyt = #{record.pointExchangeCodeKeyt,jdbcType=VARCHAR},
       ext_info = #{record.extInfo,jdbcType=VARCHAR},
@@ -266,7 +266,7 @@
         point_name = #{pointName,jdbcType=VARCHAR},
       </if>
       <if test="pointValue != null" >
-        point_value = #{pointValue,jdbcType=INTEGER},
+        point_value = #{pointValue,jdbcType=DECIMAL},
       </if>
       <if test="pointExchangeCodeCode != null" >
         point_exchange_code_code = #{pointExchangeCodeCode,jdbcType=VARCHAR},
@@ -294,7 +294,7 @@
     set charge_off_id = #{chargeOffId,jdbcType=INTEGER},
       point_exchange_code_id = #{pointExchangeCodeId,jdbcType=INTEGER},
       point_name = #{pointName,jdbcType=VARCHAR},
-      point_value = #{pointValue,jdbcType=INTEGER},
+      point_value = #{pointValue,jdbcType=DECIMAL},
       point_exchange_code_code = #{pointExchangeCodeCode,jdbcType=VARCHAR},
       point_exchange_code_keyt = #{pointExchangeCodeKeyt,jdbcType=VARCHAR},
       ext_info = #{extInfo,jdbcType=VARCHAR},

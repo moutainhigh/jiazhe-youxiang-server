@@ -436,6 +436,76 @@ public class ChargeOffPOExample {
             return (Criteria) this;
         }
 
+        public Criteria andChargeOffPointIsNull() {
+            addCriterion("charge_off_point is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointIsNotNull() {
+            addCriterion("charge_off_point is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointEqualTo(String value) {
+            addCriterion("charge_off_point =", value, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointNotEqualTo(String value) {
+            addCriterion("charge_off_point <>", value, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointGreaterThan(String value) {
+            addCriterion("charge_off_point >", value, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointGreaterThanOrEqualTo(String value) {
+            addCriterion("charge_off_point >=", value, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointLessThan(String value) {
+            addCriterion("charge_off_point <", value, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointLessThanOrEqualTo(String value) {
+            addCriterion("charge_off_point <=", value, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointLike(String value) {
+            addCriterion("charge_off_point like", value, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointNotLike(String value) {
+            addCriterion("charge_off_point not like", value, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointIn(List<String> values) {
+            addCriterion("charge_off_point in", values, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointNotIn(List<String> values) {
+            addCriterion("charge_off_point not in", values, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointBetween(String value1, String value2) {
+            addCriterion("charge_off_point between", value1, value2, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeOffPointNotBetween(String value1, String value2) {
+            addCriterion("charge_off_point not between", value1, value2, "chargeOffPoint");
+            return (Criteria) this;
+        }
+
         public Criteria andTotalPointIsNull() {
             addCriterion("total_point is null");
             return (Criteria) this;
@@ -446,52 +516,52 @@ public class ChargeOffPOExample {
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointEqualTo(Integer value) {
+        public Criteria andTotalPointEqualTo(BigDecimal value) {
             addCriterion("total_point =", value, "totalPoint");
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointNotEqualTo(Integer value) {
+        public Criteria andTotalPointNotEqualTo(BigDecimal value) {
             addCriterion("total_point <>", value, "totalPoint");
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointGreaterThan(Integer value) {
+        public Criteria andTotalPointGreaterThan(BigDecimal value) {
             addCriterion("total_point >", value, "totalPoint");
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointGreaterThanOrEqualTo(Integer value) {
+        public Criteria andTotalPointGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("total_point >=", value, "totalPoint");
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointLessThan(Integer value) {
+        public Criteria andTotalPointLessThan(BigDecimal value) {
             addCriterion("total_point <", value, "totalPoint");
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointLessThanOrEqualTo(Integer value) {
+        public Criteria andTotalPointLessThanOrEqualTo(BigDecimal value) {
             addCriterion("total_point <=", value, "totalPoint");
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointIn(List<Integer> values) {
+        public Criteria andTotalPointIn(List<BigDecimal> values) {
             addCriterion("total_point in", values, "totalPoint");
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointNotIn(List<Integer> values) {
+        public Criteria andTotalPointNotIn(List<BigDecimal> values) {
             addCriterion("total_point not in", values, "totalPoint");
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointBetween(Integer value1, Integer value2) {
+        public Criteria andTotalPointBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("total_point between", value1, value2, "totalPoint");
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointNotBetween(Integer value1, Integer value2) {
+        public Criteria andTotalPointNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("total_point not between", value1, value2, "totalPoint");
             return (Criteria) this;
         }

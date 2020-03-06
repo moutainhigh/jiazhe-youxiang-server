@@ -3,52 +3,85 @@
  * All rights reserved.
  *
  */
-package com.jiazhe.youxiang.server.vo.req.chargeoff;
+package com.jiazhe.youxiang.server.dto.chargeoff;
 
-import com.jiazhe.youxiang.server.vo.BaseVO;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * 添加核销记录
+ * 核销记录
  *
  * @author niexiao
  * @created 2020-03-04
  */
-public class ChargeOffAddReq extends BaseVO {
+public class ChargeOffDTO {
 
-    private static final long serialVersionUID = 576306228961860140L;
-    @ApiModelProperty("兑换城市code")
+    /**
+     * 兑换城市code
+     */
     private String cityCode;
 
-    @ApiModelProperty("兑换银行信息")
+    /**
+     * 兑换城市名称
+     */
+    private String cityName;
+
+    /**
+     * 兑换银行信息
+     */
     private String bankOutletsName;
 
-    @ApiModelProperty("兑换类型 0-换商品，1-充积分")
+    /**
+     * 兑换类型 0-换商品，1-充积分
+     */
     private Integer chargeOffType;
 
-    @ApiModelProperty("核销密码集合")
+    /**
+     * 核销密码集合
+     */
     private List<String> keytList;
 
-    @ApiModelProperty("核销总积分")
+    /**
+     * 核销总积分
+     */
     private BigDecimal totalPoint;
 
-    @ApiModelProperty("客户姓名")
+    /**
+     * 客户姓名
+     */
     private String customerName;
 
-    @ApiModelProperty("客户电话")
+    /**
+     * 客户电话
+     */
     private String customerMobile;
 
-    @ApiModelProperty("兑换商品价值")
+    /**
+     * 兑换商品价值
+     */
     private BigDecimal productValue;
 
-    @ApiModelProperty("提交状态 0-保存不提交，1-提交")
+    /**
+     * 提交状态 0-保存不提交，1-提交
+     */
     private Integer status;
 
-    @ApiModelProperty("备注信息")
+    /**
+     * 备注信息
+     */
     private String remark;
+
+    /**
+     * 提交者Id
+     */
+    private Integer submitterId;
+
+    /**
+     * 提交者姓名
+     */
+    private String submitterName;
 
     public String getCityCode() {
         return cityCode;
@@ -56,6 +89,14 @@ public class ChargeOffAddReq extends BaseVO {
 
     public void setCityCode(String cityCode) {
         this.cityCode = cityCode;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
     public String getBankOutletsName() {
@@ -129,4 +170,21 @@ public class ChargeOffAddReq extends BaseVO {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    public Integer getSubmitterId() {
+        return submitterId;
+    }
+
+    public void setSubmitterId(Integer submitterId) {
+        this.submitterId = submitterId;
+    }
+
+    public String getSubmitterName() {
+        return submitterName;
+    }
+
+    public void setSubmitterName(String submitterName) {
+        this.submitterName = submitterName;
+    }
+
 }

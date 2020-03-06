@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.domain.po;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -365,52 +366,52 @@ public class ChargeOffPointPOExample {
             return (Criteria) this;
         }
 
-        public Criteria andPointValueEqualTo(Integer value) {
+        public Criteria andPointValueEqualTo(BigDecimal value) {
             addCriterion("point_value =", value, "pointValue");
             return (Criteria) this;
         }
 
-        public Criteria andPointValueNotEqualTo(Integer value) {
+        public Criteria andPointValueNotEqualTo(BigDecimal value) {
             addCriterion("point_value <>", value, "pointValue");
             return (Criteria) this;
         }
 
-        public Criteria andPointValueGreaterThan(Integer value) {
+        public Criteria andPointValueGreaterThan(BigDecimal value) {
             addCriterion("point_value >", value, "pointValue");
             return (Criteria) this;
         }
 
-        public Criteria andPointValueGreaterThanOrEqualTo(Integer value) {
+        public Criteria andPointValueGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("point_value >=", value, "pointValue");
             return (Criteria) this;
         }
 
-        public Criteria andPointValueLessThan(Integer value) {
+        public Criteria andPointValueLessThan(BigDecimal value) {
             addCriterion("point_value <", value, "pointValue");
             return (Criteria) this;
         }
 
-        public Criteria andPointValueLessThanOrEqualTo(Integer value) {
+        public Criteria andPointValueLessThanOrEqualTo(BigDecimal value) {
             addCriterion("point_value <=", value, "pointValue");
             return (Criteria) this;
         }
 
-        public Criteria andPointValueIn(List<Integer> values) {
+        public Criteria andPointValueIn(List<BigDecimal> values) {
             addCriterion("point_value in", values, "pointValue");
             return (Criteria) this;
         }
 
-        public Criteria andPointValueNotIn(List<Integer> values) {
+        public Criteria andPointValueNotIn(List<BigDecimal> values) {
             addCriterion("point_value not in", values, "pointValue");
             return (Criteria) this;
         }
 
-        public Criteria andPointValueBetween(Integer value1, Integer value2) {
+        public Criteria andPointValueBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("point_value between", value1, value2, "pointValue");
             return (Criteria) this;
         }
 
-        public Criteria andPointValueNotBetween(Integer value1, Integer value2) {
+        public Criteria andPointValueNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("point_value not between", value1, value2, "pointValue");
             return (Criteria) this;
         }

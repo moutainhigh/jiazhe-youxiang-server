@@ -23,7 +23,7 @@ public class ChargeOffQueryReq extends PageSizeNumReq {
     private Long submitterTimeEnd;
 
     @ApiModelProperty("提交状态 0-未提交，1-已提交，null-全部")
-    private Integer stauts;
+    private Integer status;
 
     @ApiModelProperty("兑换城市code")
     private String cityCode;
@@ -53,12 +53,12 @@ public class ChargeOffQueryReq extends PageSizeNumReq {
         this.submitterTimeEnd = submitterTimeEnd;
     }
 
-    public Integer getStauts() {
-        return stauts;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setStauts(Integer stauts) {
-        this.stauts = stauts;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getCityCode() {

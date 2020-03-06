@@ -8,6 +8,8 @@ package com.jiazhe.youxiang.server.vo.resp.chargeoff;
 import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.math.BigDecimal;
+
 /**
  * 核销密码积分信息集合
  *
@@ -24,7 +26,7 @@ public class ChargeOffPointResp extends BaseVO {
     private String pointName;
 
     @ApiModelProperty("核销积分分值")
-    private Integer pointValue;
+    private BigDecimal pointValue;
 
     @ApiModelProperty("核销积分兑换码卡号")
     private String pointExchangeCodeCode;
@@ -48,11 +50,11 @@ public class ChargeOffPointResp extends BaseVO {
         this.pointName = pointName;
     }
 
-    public Integer getPointValue() {
+    public BigDecimal getPointValue() {
         return pointValue;
     }
 
-    public void setPointValue(Integer pointValue) {
+    public void setPointValue(BigDecimal pointValue) {
         this.pointValue = pointValue;
     }
 
