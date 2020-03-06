@@ -12,6 +12,7 @@ import com.jiazhe.youxiang.server.common.enums.ChargeOffCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.ChargeOffStatusEnum;
 import com.jiazhe.youxiang.server.common.enums.ChargeOffTypeEnum;
 import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.PointCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.ChargeOffException;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
 import com.jiazhe.youxiang.server.common.exceptions.PointException;
@@ -26,10 +27,12 @@ import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffQueryDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffUpdateDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.sysuser.SysUserDTO;
 import com.jiazhe.youxiang.server.service.ChargeOffService;
 import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.SysCityService;
+import com.jiazhe.youxiang.server.service.point.PointExchangeCodeBatchService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.commons.collections.CollectionUtils;
@@ -67,6 +70,9 @@ public class ChargeOffBiz {
     private PointExchangeCodeService pointExchangeCodeService;
 
     @Autowired
+    private PointExchangeCodeBatchService pointExchangeCodeBatchService;
+
+    @Autowired
     private CustomerService customerService;
 
     @Autowired
@@ -93,20 +99,23 @@ public class ChargeOffBiz {
     }
 
     @Value("${chargeoff.default-exchange-ratio}")
-    public void setDefaultExchangeRatio(BigDecimal defaultExchangeRatio) {
-        defaultExchangeRatio = defaultExchangeRatio;
+    public void setDefaultExchangeRatio(BigDecimal ratio) {
+        defaultExchangeRatio = ratio;
     }
 
     @Value("${chargeoff.point-cash-ratio}")
-    public void setPointCashRatio(BigDecimal pointCashRatio) {
-        pointCashRatio = pointCashRatio;
+    public void setPointCashRatio(BigDecimal ratio) {
+        pointCashRatio = ratio;
     }
 
+    /**
+     * 添加核销记录
+     * @param dto
+     */
     @Transactional
     public void add(ChargeOffAddDTO dto) {
         LOGGER.info("Biz调用[add]方法,入参:{}", JacksonUtil.toJSon(dto));
-        //验证密码有效性，获得兑换码信息
-        List<ChargeOffPointDTO> chargeOffPointDTOList = validateKeytList(dto.getKeytList());
+        List<ChargeOffPointDTO> chargeOffPointDTOList = validateKeytList(dto.getKeytList(), dto.getTotalPoint());
         //填充城市信息
         SysCityPO sysCityPO = sysCityService.getCityByCityCode(dto.getCityCode());
         if (sysCityPO == null) {
@@ -124,44 +133,62 @@ public class ChargeOffBiz {
         if (ChargeOffTypeEnum.PRODUCT.equals(ChargeOffTypeEnum.getByCode(dto.getChargeOffType()))) {
             validateRatio(dto.getTotalPoint(), dto.getProductValue(), dto.getCityCode());
         }
+        //保存核销信息
+        Integer chargeOffId = chargeOffService.add(dto);
         //当状态时已提交时,否则只是保存一下
         if (ChargeOffStatusEnum.COMMITTED.equals(ChargeOffStatusEnum.getByCode(dto.getStatus()))) {
             //进行实际核销
             doChargeOff(dto);
         }
-        //保存核销信息
-        chargeOffService.add(dto);
         //保存核销详情
-        chargeOffService.addDetail(chargeOffPointDTOList);
+        chargeOffService.addDetail(chargeOffId, chargeOffPointDTOList);
     }
 
-
+    /**
+     * 编辑核销记录
+     * @param dto
+     */
     @Transactional
     public void update(ChargeOffUpdateDTO dto) {
         LOGGER.info("Biz调用[update]方法,入参:{}", JacksonUtil.toJSon(dto));
         //验证密码有效性，获得兑换码信息
-        List<ChargeOffPointDTO> chargeOffPointDTOList = validateKeytList(dto.getKeytList());
+        List<ChargeOffPointDTO> chargeOffPointDTOList = validateKeytList(dto.getKeytList(), dto.getTotalPoint());
+        //更新核销信息
+        chargeOffService.update(dto);
         //当状态时已提交时,否则只是保存一下
         if (ChargeOffStatusEnum.COMMITTED.equals(ChargeOffStatusEnum.getByCode(dto.getStatus()))) {
             //进行实际核销
             doChargeOff(dto);
         }
-        //更新核销信息
-        chargeOffService.update(dto);
         //更新核销详情
-        chargeOffService.updateDetail(chargeOffPointDTOList);
+        chargeOffService.updateDetail(dto.getId(), chargeOffPointDTOList);
     }
 
+    /**
+     * 删除核销记录
+     * @param chargeOffId
+     */
     public void delete(Integer chargeOffId) {
         LOGGER.info("Biz调用[delete]方法,chargeOffId:{}", chargeOffId);
         chargeOffService.delete(chargeOffId);
     }
 
+    /**
+     * 根据核销记录Id查找
+     * @param chargeOffId
+     * @return
+     */
     public ChargeOffInfoDTO queryById(Integer chargeOffId) {
         LOGGER.info("Biz调用[queryById]方法,chargeOffId:{}", chargeOffId);
         return chargeOffService.queryById(chargeOffId);
     }
 
+    /**
+     * 模糊查询
+     * @param dto
+     * @param paging
+     * @return
+     */
     public List<ChargeOffInfoDTO> fuzzyQuery(ChargeOffFuzzyQueryDTO dto, Paging paging) {
         LOGGER.info("Biz调用[fuzzyQuery]方法,入参:{}", JacksonUtil.toJSon(dto));
         //如果提交人信息没有填，则默认使用当前登录用户
@@ -175,26 +202,47 @@ public class ChargeOffBiz {
         return chargeOffService.fuzzyQuery(dto, paging);
     }
 
+    /**
+     * 精确查询
+     * @param dto
+     * @param paging
+     * @return
+     */
     public List<ChargeOffInfoDTO> query(ChargeOffQueryDTO dto, Paging paging) {
         LOGGER.info("Biz调用[query]方法,入参:{}", JacksonUtil.toJSon(dto));
         return chargeOffService.query(dto, paging);
     }
 
+    /**
+     * 验证单一密码
+     * @param keyt
+     * @return
+     */
     public ChargeOffPointDTO validateKeyt(String keyt) {
         LOGGER.info("Biz调用[validateKeyt]方法,keyt:{}", keyt);
-        List<ChargeOffPointDTO> dtoList = validateKeytList(Lists.newArrayList(keyt));
+        List<ChargeOffPointDTO> dtoList = validateKeytList(Lists.newArrayList(keyt), null);
         if (CollectionUtils.isEmpty(dtoList)) {
             throw new ChargeOffException(ChargeOffCodeEnum.KEYT_ERROR, "兑换码不存在" + ",密码:" + keyt);
         }
         return dtoList.get(0);
     }
 
+    /**
+     * 导出核销详情
+     * @param dto
+     */
     public void exportDetail(ChargeOffQueryDTO dto) {
         LOGGER.info("Biz调用[exportDetail]方法,入参:{}", JacksonUtil.toJSon(dto));
         //TODO niexiao
     }
 
-    public List<ChargeOffPointDTO> validateKeytList(List<String> keytList) {
+    /**
+     * 批量验证密码
+     * @param keytList
+     * @param totalPoint
+     * @return
+     */
+    public List<ChargeOffPointDTO> validateKeytList(List<String> keytList, BigDecimal totalPoint) {
         if (CollectionUtils.isEmpty(keytList)) {
             return null;
         }
@@ -208,7 +256,12 @@ public class ChargeOffBiz {
                 throw new ChargeOffException(ChargeOffCodeEnum.KEYT_ERROR, "兑换码不存在" + ",密码:" + item);
             }
             try {
-                pointExchangeCodeService.chargeCheck(item, pointExchangeCodePO, null);
+                pointExchangeCodeService.validateCode(pointExchangeCodePO);
+                //验证积分批次是否启用
+                PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO = pointExchangeCodeBatchService.getById(pointExchangeCodePO.getBatchId());
+                if (pointExchangeCodeBatchEditDTO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
+                    throw new PointException(PointCodeEnum.BATCH_HAS_STOPPED_USING);
+                }
             } catch (PointException e) {
                 throw new ChargeOffException(ChargeOffCodeEnum.KEYT_ERROR, e.getCustomMsg() + ",密码:" + item);
             }
@@ -220,9 +273,24 @@ public class ChargeOffBiz {
             chargeOffPointDTO.setPointValue(pointExchangeCodePO.getFaceValue());
             result.add(chargeOffPointDTO);
         });
+        if (totalPoint != null) {
+            //计算实际的积分兑换码总和
+            BigDecimal realTotalPoint = result.stream()
+                    .map(ChargeOffPointDTO::getPointValue)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            if (realTotalPoint.compareTo(totalPoint) != 0) {
+                throw new ChargeOffException(ChargeOffCodeEnum.TOTAL_POINT_ERROR);
+            }
+        }
         return result;
     }
 
+    /**
+     * 核销密码
+     * @param keytList
+     * @param customerId
+     */
     public void chargeOffKeytList(List<String> keytList, Integer customerId) {
         if (CollectionUtils.isEmpty(keytList)) {
             return;
@@ -271,9 +339,11 @@ public class ChargeOffBiz {
         }
         //积分的现金价值 500积分1块钱
         BigDecimal pointCashValue = totalPoint.divide(pointCashRatio);
-        //
-        if (productValue.divide(pointCashValue).compareTo(ratioLimit) > 1) {
-            throw new ChargeOffException(ChargeOffCodeEnum.EXCHANGE_RATIO_OVER_LIMIT, "当前限制为：" + ratioLimit);
+        //当前兑换比例
+        BigDecimal currentRatio = productValue.divide(pointCashValue);
+        if (currentRatio.compareTo(ratioLimit) == 1) {
+            String message = ChargeOffCodeEnum.EXCHANGE_RATIO_OVER_LIMIT.getMessage() + "当前兑换比例为：" + currentRatio.toPlainString() + "，当前城市兑换比例限制为" + ratioLimit;
+            throw new ChargeOffException(ChargeOffCodeEnum.EXCHANGE_RATIO_OVER_LIMIT, message);
         }
     }
 }

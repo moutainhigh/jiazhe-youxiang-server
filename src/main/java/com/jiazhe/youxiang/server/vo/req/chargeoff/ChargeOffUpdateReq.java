@@ -41,7 +41,7 @@ public class ChargeOffUpdateReq extends BaseVO {
     @ApiModelProperty("客户姓名")
     private String customerName;
 
-    @ApiModelProperty("客户姓名")
+    @ApiModelProperty("客户手机")
     private String customerMobile;
 
     @ApiModelProperty("兑换商品价值")

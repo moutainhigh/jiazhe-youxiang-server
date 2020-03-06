@@ -22,6 +22,7 @@ import com.jiazhe.youxiang.server.vo.resp.chargeoff.ChargeOffInfoResp;
 import com.jiazhe.youxiang.server.vo.resp.chargeoff.ChargeOffPointResp;
 import org.apache.commons.collections.CollectionUtils;
 
+import java.util.Date;
 import java.util.stream.Collectors;
 
 /**
@@ -111,9 +112,13 @@ public class ChargeOffAdapter {
             return null;
         }
         ChargeOffFuzzyQueryDTO chargeOffFuzzyQueryDTO = new ChargeOffFuzzyQueryDTO();
-        chargeOffFuzzyQueryDTO.setSubmitterTimeBegin(req.getSubmitterTimeBegin());
-        chargeOffFuzzyQueryDTO.setSubmitterTimeEnd(req.getSubmitterTimeEnd());
-        chargeOffFuzzyQueryDTO.setStauts(req.getStauts());
+        if (req.getSubmitterTimeBegin() != null) {
+            chargeOffFuzzyQueryDTO.setSubmitterTimeBegin(new Date(req.getSubmitterTimeBegin()));
+        }
+        if (req.getSubmitterTimeEnd() != null) {
+            chargeOffFuzzyQueryDTO.setSubmitterTimeEnd(new Date(req.getSubmitterTimeEnd()));
+        }
+        chargeOffFuzzyQueryDTO.setStauts(req.getStatus());
         chargeOffFuzzyQueryDTO.setSubmitterId(req.getSubmitterId());
         chargeOffFuzzyQueryDTO.setCondition(req.getCondition());
         return chargeOffFuzzyQueryDTO;
@@ -124,9 +129,13 @@ public class ChargeOffAdapter {
             return null;
         }
         ChargeOffQueryDTO chargeOffQueryDTO = new ChargeOffQueryDTO();
-        chargeOffQueryDTO.setSubmitterTimeBegin(req.getSubmitterTimeBegin());
-        chargeOffQueryDTO.setSubmitterTimeEnd(req.getSubmitterTimeEnd());
-        chargeOffQueryDTO.setStauts(req.getStauts());
+        if (req.getSubmitterTimeBegin() != null) {
+            chargeOffQueryDTO.setSubmitterTimeBegin(new Date(req.getSubmitterTimeBegin()));
+        }
+        if (req.getSubmitterTimeEnd() != null) {
+            chargeOffQueryDTO.setSubmitterTimeEnd(new Date(req.getSubmitterTimeEnd()));
+        }
+        chargeOffQueryDTO.setStauts(req.getStatus());
         chargeOffQueryDTO.setCityCode(req.getCityCode());
         chargeOffQueryDTO.setChargeOffType(req.getChargeOffType());
         chargeOffQueryDTO.setSubmitterName(req.getSubmitterName());

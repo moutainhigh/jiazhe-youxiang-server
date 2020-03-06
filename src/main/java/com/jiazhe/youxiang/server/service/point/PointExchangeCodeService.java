@@ -90,13 +90,10 @@ public interface PointExchangeCodeService {
 
 
     /**
-     * 充值前的检查,并赋值相关信息
-     *
-     * @param keyt
+     * 检查兑换码是否符合充值条件
      * @param pointExchangeCodePO
-     * @param pointExchangeCodeBatchEditDTO
      */
-    void chargeCheck(String keyt, PointExchangeCodePO pointExchangeCodePO, PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO);
+    void validateCode(PointExchangeCodePO pointExchangeCodePO);
 
     /**
      * 根据密码查询兑换码

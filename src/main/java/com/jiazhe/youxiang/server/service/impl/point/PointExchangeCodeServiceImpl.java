@@ -233,9 +233,16 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void codeCharge(Integer type, Integer customerId, String keyt) {
-        PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO = null;
-        PointExchangeCodePO pointExchangeCodePO = null;
-        chargeCheck(keyt, pointExchangeCodePO, pointExchangeCodeBatchEditDTO);
+        if (!ExchangeCodeCheckUtil.keytCheck(CommonConstant.POINT_EXCHANGE_CODE_PREFIX, keyt)) {
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
+        }
+        PointExchangeCodePO pointExchangeCodePO = findByKeyt(keyt);
+        validateCode(pointExchangeCodePO);
+        PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO = pointExchangeCodeBatchService.getById(pointExchangeCodePO.getBatchId());
+        if (pointExchangeCodeBatchEditDTO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
+            throw new PointException(PointCodeEnum.BATCH_HAS_STOPPED_USING);
+        }
+
         CustomerDTO customerDTO = customerService.getById(customerId);
         if (null == customerDTO) {
             throw new PointException(PointCodeEnum.CUSTOMER_NOT_EXIST);
@@ -309,24 +316,13 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         }
     }
 
-
     @Override
-    public void chargeCheck(String keyt, PointExchangeCodePO pointExchangeCodePO, PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO) {
-        if (!ExchangeCodeCheckUtil.keytCheck(CommonConstant.POINT_EXCHANGE_CODE_PREFIX, keyt)) {
-            throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
-        }
-        if (pointExchangeCodePO == null) {
-            pointExchangeCodePO = findByKeyt(keyt);
-        }
+    public void validateCode(PointExchangeCodePO pointExchangeCodePO) {
         if (null == pointExchangeCodePO) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
         }
         if (pointExchangeCodePO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_STOPED_USING);
-        }
-        pointExchangeCodeBatchEditDTO = pointExchangeCodeBatchService.getById(pointExchangeCodePO.getBatchId());
-        if (pointExchangeCodeBatchEditDTO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
-            throw new PointException(PointCodeEnum.BATCH_HAS_STOPPED_USING);
         }
         if (pointExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_USED);

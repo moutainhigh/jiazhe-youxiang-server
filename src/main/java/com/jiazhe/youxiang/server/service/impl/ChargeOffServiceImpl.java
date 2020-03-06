@@ -72,43 +72,52 @@ public class ChargeOffServiceImpl implements ChargeOffService {
 
 
     @Override
-    public void add(ChargeOffAddDTO dto) {
+    public Integer add(ChargeOffAddDTO dto) {
         LOGGER.info("Service调用[add]方法,入参:{}", JacksonUtil.toJSon(dto));
         ChargeOffPO chargeOffPO = ChargeOffAdapter.chargeOffDTO2PO(dto);
         //如果是提交 则需要更新提交时间
         if (ChargeOffStatusEnum.COMMITTED.equals(ChargeOffStatusEnum.getByCode(dto.getStatus()))) {
             chargeOffPO.setSubmitterTime(null);
         }
-        chargeOffPOMapper.insertSelective(chargeOffPO);
+        chargeOffPOManualMapper.insertSelective(chargeOffPO);
+        return chargeOffPO.getId();
     }
 
     @Override
-    public void addDetail(List<ChargeOffPointDTO> chargeOffPointDTOList) {
+    public void addDetail(Integer chargeOffId, List<ChargeOffPointDTO> chargeOffPointDTOList) {
         LOGGER.info("Service调用[addDetail]方法,入参:{}", JacksonUtil.toJSon(chargeOffPointDTOList));
         if (CollectionUtils.isEmpty(chargeOffPointDTOList)) {
             return;
         }
         List<ChargeOffPointPO> poList = chargeOffPointDTOList.stream().map(ChargeOffAdapter::chargeOffPointDTO2PO).collect(toList());
+        poList.stream().forEach(item -> item.setChargeOffId(chargeOffId));
         chargeOffPointPOManualMapper.batchInsert(poList);
     }
 
     @Override
     public void update(ChargeOffUpdateDTO dto) {
         LOGGER.info("Service调用[update]方法,入参:{}", JacksonUtil.toJSon(dto));
+        ChargeOffInfoDTO chargeOffInfoDTO = queryById(dto.getId(), false);
+        if (chargeOffInfoDTO == null) {
+            throw new ChargeOffException(ChargeOffCodeEnum.CHARGE_OFF_NOT_EXIST);
+        }
+        //如果核销记录已提交 则无法修改
+        if (ChargeOffStatusEnum.COMMITTED.equals(ChargeOffStatusEnum.getByCode(dto.getStatus()))) {
+            throw new ChargeOffException(ChargeOffCodeEnum.CHARGE_OFF_IS_COMMITTED);
+        }
         ChargeOffPO chargeOffPO = ChargeOffAdapter.chargeOffUpdateDTO2PO(dto);
         chargeOffPOMapper.updateByPrimaryKeySelective(chargeOffPO);
     }
 
     @Override
-    public void updateDetail(List<ChargeOffPointDTO> chargeOffPointDTOList) {
+    public void updateDetail(Integer chargeOffId, List<ChargeOffPointDTO> chargeOffPointDTOList) {
         LOGGER.info("Service调用[updateDetail]方法,入参:{}", JacksonUtil.toJSon(chargeOffPointDTOList));
         //先硬删之前的详情记录
-        List<String> keytList = chargeOffPointDTOList.stream().map(ChargeOffPointDTO::getPointExchangeCodeKeyt).collect(toList());
         ChargeOffPointPOExample example = new ChargeOffPointPOExample();
-        example.createCriteria().andPointExchangeCodeKeytIn(keytList);
+        example.createCriteria().andChargeOffIdEqualTo(chargeOffId);
         chargeOffPointPOMapper.deleteByExample(example);
         //然后再重新插入进去
-        addDetail(chargeOffPointDTOList);
+        addDetail(chargeOffId, chargeOffPointDTOList);
     }
 
 
@@ -138,7 +147,8 @@ public class ChargeOffServiceImpl implements ChargeOffService {
         return queryById(chargeOffId, true);
     }
 
-    private ChargeOffInfoDTO queryById(Integer chargeOffId, boolean includeDetail) {
+    @Override
+    public ChargeOffInfoDTO queryById(Integer chargeOffId, boolean includeDetail) {
         LOGGER.info("Service调用[queryById]方法,chargeOffId:{}", chargeOffId);
         ChargeOffPO po = chargeOffPOMapper.selectByPrimaryKey(chargeOffId);
         if (po == null) {
@@ -161,6 +171,8 @@ public class ChargeOffServiceImpl implements ChargeOffService {
     public List<ChargeOffInfoDTO> fuzzyQuery(ChargeOffFuzzyQueryDTO dto, Paging paging) {
         LOGGER.info("Service调用[fuzzyQuery]方法,入参:{}", JacksonUtil.toJSon(dto));
         List<ChargeOffPO> poList = chargeOffPOManualMapper.fuzzyQuery(dto, paging.getOffset(), paging.getLimit());
+        int count = chargeOffPOManualMapper.fuzzyQueryCount(dto);
+        paging.setTotal(count);
         return buildChargeOffInfoDTOList(poList);
     }
 
@@ -168,6 +180,8 @@ public class ChargeOffServiceImpl implements ChargeOffService {
     public List<ChargeOffInfoDTO> query(ChargeOffQueryDTO dto, Paging paging) {
         LOGGER.info("Service调用[query]方法,入参:{}", JacksonUtil.toJSon(dto));
         List<ChargeOffPO> poList = chargeOffPOManualMapper.query(dto, paging.getOffset(), paging.getLimit());
+        int count = chargeOffPOManualMapper.queryCount(dto);
+        paging.setTotal(count);
         return buildChargeOffInfoDTOList(poList);
     }
 

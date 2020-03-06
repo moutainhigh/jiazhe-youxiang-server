@@ -24,17 +24,19 @@ import java.util.List;
  */
 public interface ChargeOffService {
 
-    void add(ChargeOffAddDTO dto);
+    Integer add(ChargeOffAddDTO dto);
 
-    void addDetail(List<ChargeOffPointDTO> chargeOffPointDTOList);
+    void addDetail(Integer chargeOffId, List<ChargeOffPointDTO> chargeOffPointDTOList);
 
     void update(ChargeOffUpdateDTO dto);
 
-    void updateDetail(List<ChargeOffPointDTO> chargeOffPointDTOList);
+    void updateDetail(Integer chargeOffId, List<ChargeOffPointDTO> chargeOffPointDTOList);
 
     void delete(Integer chargeOffId);
 
     ChargeOffInfoDTO queryById(Integer chargeOffId);
+
+    ChargeOffInfoDTO queryById(Integer chargeOffId, boolean includeDetail);
 
     List<ChargeOffInfoDTO> fuzzyQuery(ChargeOffFuzzyQueryDTO dto, Paging paging);
 

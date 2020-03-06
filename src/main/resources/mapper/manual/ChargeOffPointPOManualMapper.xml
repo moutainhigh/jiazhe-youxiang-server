@@ -22,14 +22,12 @@
   <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
     insert into charge_off_point (charge_off_id, point_exchange_code_id,
     point_name, point_value, point_exchange_code_code,
-    point_exchange_code_keyt, ext_info, is_deleted,
-    add_time, mod_time)
+    point_exchange_code_keyt)
     values
     <foreach collection="list" item="item" separator=",">
-      (#{chargeOffId,jdbcType=INTEGER}, #{pointExchangeCodeId,jdbcType=INTEGER},
-      #{pointName,jdbcType=VARCHAR}, #{pointValue,jdbcType=DECIMAL}, #{pointExchangeCodeCode,jdbcType=VARCHAR},
-      #{pointExchangeCodeKeyt,jdbcType=VARCHAR}, #{extInfo,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT},
-      #{addTime,jdbcType=TIMESTAMP}, #{modTime,jdbcType=TIMESTAMP})
+      (#{item.chargeOffId,jdbcType=INTEGER}, #{item.pointExchangeCodeId,jdbcType=INTEGER},
+      #{item.pointName,jdbcType=VARCHAR}, #{item.pointValue,jdbcType=DECIMAL}, #{item.pointExchangeCodeCode,jdbcType=VARCHAR},
+      #{item.pointExchangeCodeKeyt,jdbcType=VARCHAR})
     </foreach>
   </insert>
 

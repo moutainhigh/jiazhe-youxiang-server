@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface ChargeOffPointPOManualMapper {
 
-    void batchInsert(List<ChargeOffPointPO> chargeOffPointPOList);
+    void batchInsert(List<ChargeOffPointPO> list);
 
 }

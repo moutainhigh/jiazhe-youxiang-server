@@ -7,6 +7,8 @@ package com.jiazhe.youxiang.server.dto.chargeoff;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import java.util.Date;
+
 /**
  * 在这里编写类的功能描述
  *
@@ -18,12 +20,12 @@ public class ChargeOffQueryDTO {
     /**
      * 提交时间起
      */
-    private Long submitterTimeBegin;
+    private Date submitterTimeBegin;
 
     /**
      * 提交时间止
      */
-    private Long submitterTimeEnd;
+    private Date submitterTimeEnd;
 
     /**
      * 提交状态 0-未提交，1-已提交，null-全部
@@ -50,19 +52,19 @@ public class ChargeOffQueryDTO {
      */
     private Integer totalPoint;
 
-    public Long getSubmitterTimeBegin() {
+    public Date getSubmitterTimeBegin() {
         return submitterTimeBegin;
     }
 
-    public void setSubmitterTimeBegin(Long submitterTimeBegin) {
+    public void setSubmitterTimeBegin(Date submitterTimeBegin) {
         this.submitterTimeBegin = submitterTimeBegin;
     }
 
-    public Long getSubmitterTimeEnd() {
+    public Date getSubmitterTimeEnd() {
         return submitterTimeEnd;
     }
 
-    public void setSubmitterTimeEnd(Long submitterTimeEnd) {
+    public void setSubmitterTimeEnd(Date submitterTimeEnd) {
         this.submitterTimeEnd = submitterTimeEnd;
     }
 

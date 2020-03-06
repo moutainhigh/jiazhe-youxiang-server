@@ -12,4 +12,10 @@ public interface ChargeOffPOManualMapper {
     List<ChargeOffPO> query(@Param("queryDTO") ChargeOffQueryDTO queryDTO, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
     List<ChargeOffPO> fuzzyQuery(@Param("fuzzyQueryDTO") ChargeOffFuzzyQueryDTO fuzzyQueryDTO, @Param("offset") Integer offset, @Param("limit") Integer limit);
+
+    int fuzzyQueryCount(@Param("fuzzyQueryDTO") ChargeOffFuzzyQueryDTO fuzzyQueryDTO);
+
+    int queryCount(@Param("queryDTO") ChargeOffQueryDTO queryDTO);
+
+    int insertSelective(ChargeOffPO chargeOffPO);
 }
