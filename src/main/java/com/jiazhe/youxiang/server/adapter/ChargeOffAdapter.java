@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.server.adapter;
 
+import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.domain.po.ChargeOffPO;
 import com.jiazhe.youxiang.server.domain.po.ChargeOffPointPO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffAddDTO;
@@ -113,12 +114,12 @@ public class ChargeOffAdapter {
         }
         ChargeOffFuzzyQueryDTO chargeOffFuzzyQueryDTO = new ChargeOffFuzzyQueryDTO();
         if (req.getSubmitterTimeBegin() != null) {
-            chargeOffFuzzyQueryDTO.setSubmitterTimeBegin(new Date(req.getSubmitterTimeBegin()));
+            chargeOffFuzzyQueryDTO.setSubmitterTimeBegin(new Date(DateUtil.getFirstSecond(req.getSubmitterTimeBegin())));
         }
         if (req.getSubmitterTimeEnd() != null) {
-            chargeOffFuzzyQueryDTO.setSubmitterTimeEnd(new Date(req.getSubmitterTimeEnd()));
+            chargeOffFuzzyQueryDTO.setSubmitterTimeEnd(new Date(DateUtil.getLastSecond(req.getSubmitterTimeEnd())));
         }
-        chargeOffFuzzyQueryDTO.setStauts(req.getStatus());
+        chargeOffFuzzyQueryDTO.setStatus(req.getStatus());
         chargeOffFuzzyQueryDTO.setSubmitterId(req.getSubmitterId());
         chargeOffFuzzyQueryDTO.setCondition(req.getCondition());
         return chargeOffFuzzyQueryDTO;

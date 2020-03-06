@@ -70,7 +70,8 @@ public class ChargeOffValidator extends CommonValidator {
     public static void validateChargeOffFuzzyQueryReq(ChargeOffFuzzyQueryReq req) {
         validateNull(req);
         validatePaging(req);
-        if (null != req.getStatus() || null == ChargeOffStatusEnum.getByCode(req.getStatus())) {
+//        if (null != req.getStatus() || null == ChargeOffStatusEnum.getByCode(req.getStatus())) {
+        if(!(null == req.getStatus() || null != ChargeOffStatusEnum.getByCode(req.getStatus()))) {
             throw new ChargeOffException(ChargeOffCodeEnum.CHARGE_OFF_STATUS_ERROR);
         }
         if (req.getSubmitterTimeBegin() != null

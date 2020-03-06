@@ -28,7 +28,7 @@ public class ChargeOffFuzzyQueryDTO {
     /**
      * 提交状态 0-未提交，1-已提交，null-全部
      */
-    private Integer stauts;
+    private Integer status;
 
     /**
      * 提交者id
@@ -56,12 +56,12 @@ public class ChargeOffFuzzyQueryDTO {
         this.submitterTimeEnd = submitterTimeEnd;
     }
 
-    public Integer getStauts() {
-        return stauts;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setStauts(Integer stauts) {
-        this.stauts = stauts;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Integer getSubmitterId() {
