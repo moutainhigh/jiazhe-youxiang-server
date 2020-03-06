@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponUsedEntity;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeEditDTO;
+import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
@@ -87,6 +88,16 @@ public interface PointExchangeCodeService {
      */
     void codeCharge(Integer type, Integer customerId, String keyt);
 
+
+    /**
+     * 充值前的检查,并赋值相关信息
+     *
+     * @param keyt
+     * @param pointExchangeCodePO
+     * @param pointExchangeCodeBatchEditDTO
+     */
+    void chargeCheck(String keyt, PointExchangeCodePO pointExchangeCodePO, PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO);
+
     /**
      * 根据密码查询兑换码
      *
@@ -146,20 +157,6 @@ public interface PointExchangeCodeService {
      * @param code
      */
     void checkByCode(String code);
-
-    /**
-     * Keyt，检查兑换码是否存在，兑换码是否已经启用
-     *
-     * @param Keyt
-     */
-    void checkByKeyt(String Keyt);
-
-    /**
-     * 检查兑换码是否存在，兑换码是否已经启用
-     *
-     * @param pointExchangeCodePO
-     */
-    void check(PointExchangeCodePO pointExchangeCodePO);
 
     /**
      * 中行储蓄卡查询库存，不成功返回null

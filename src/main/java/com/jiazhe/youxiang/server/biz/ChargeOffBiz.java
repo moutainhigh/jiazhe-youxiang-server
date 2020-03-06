@@ -41,6 +41,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -76,9 +77,29 @@ public class ChargeOffBiz {
      */
     private String chargeOffSpecifiedMobile;
 
+    /**
+     * 默认兑换比例
+     */
+    private BigDecimal defaultExchangeRatio;
+
+    /**
+     * 积分与现金的兑换比例
+     */
+    private BigDecimal pointCashRatio;
+
     @Value("${chargeoff.specified-mobile}")
     public void setChargeOffSpecifiedMobile(String mobile) {
         chargeOffSpecifiedMobile = mobile;
+    }
+
+    @Value("${chargeoff.default-exchange-ratio}")
+    public void setDefaultExchangeRatio(BigDecimal defaultExchangeRatio) {
+        defaultExchangeRatio = defaultExchangeRatio;
+    }
+
+    @Value("${chargeoff.point-cash-ratio}")
+    public void setPointCashRatio(BigDecimal pointCashRatio) {
+        pointCashRatio = pointCashRatio;
     }
 
     @Transactional
@@ -89,7 +110,7 @@ public class ChargeOffBiz {
         //填充城市信息
         SysCityPO sysCityPO = sysCityService.getCityByCityCode(dto.getCityCode());
         if (sysCityPO == null) {
-            throw new ChargeOffException(ChargeOffCodeEnum.CUSTOMER_MOBILE_IS_NULL);
+            throw new ChargeOffException(ChargeOffCodeEnum.CITY_ERROR);
         }
         dto.setCityName(sysCityPO.getCityName());
         //填充提交人信息
@@ -99,6 +120,10 @@ public class ChargeOffBiz {
         }
         dto.setSubmitterId(sysUserDTO.getId());
         dto.setSubmitterName(sysUserDTO.getLoginName());
+        //如果是兑换商品，要额外查一下兑换比例
+        if (ChargeOffTypeEnum.PRODUCT.equals(ChargeOffTypeEnum.getByCode(dto.getChargeOffType()))) {
+            validateRatio(dto.getTotalPoint(), dto.getProductValue(), dto.getCityCode());
+        }
         //当状态时已提交时,否则只是保存一下
         if (ChargeOffStatusEnum.COMMITTED.equals(ChargeOffStatusEnum.getByCode(dto.getStatus()))) {
             //进行实际核销
@@ -109,6 +134,7 @@ public class ChargeOffBiz {
         //保存核销详情
         chargeOffService.addDetail(chargeOffPointDTOList);
     }
+
 
     @Transactional
     public void update(ChargeOffUpdateDTO dto) {
@@ -182,9 +208,9 @@ public class ChargeOffBiz {
                 throw new ChargeOffException(ChargeOffCodeEnum.KEYT_ERROR, "兑换码不存在" + ",密码:" + item);
             }
             try {
-                pointExchangeCodeService.check(pointExchangeCodePO);
+                pointExchangeCodeService.chargeCheck(item, pointExchangeCodePO, null);
             } catch (PointException e) {
-                throw new ChargeOffException(ChargeOffCodeEnum.KEYT_ERROR, e.getMessage() + ",密码:" + item);
+                throw new ChargeOffException(ChargeOffCodeEnum.KEYT_ERROR, e.getCustomMsg() + ",密码:" + item);
             }
             ChargeOffPointDTO chargeOffPointDTO = new ChargeOffPointDTO();
             chargeOffPointDTO.setPointExchangeCodeId(pointExchangeCodePO.getId());
@@ -229,5 +255,25 @@ public class ChargeOffBiz {
             customerDTO = customerService.getByMobile(dto.getCustomerMobile());
         }
         chargeOffKeytList(dto.getKeytList(), customerDTO.getId());
+    }
+
+    /**
+     * 校验兑换比例是否符合要求
+     *
+     * @param totalPoint
+     * @param productValue
+     * @param cityCode
+     */
+    private void validateRatio(BigDecimal totalPoint, BigDecimal productValue, String cityCode) {
+        BigDecimal ratioLimit = chargeOffService.queryCityExchangeRatio(cityCode);
+        if (ratioLimit == null) {
+            ratioLimit = defaultExchangeRatio;
+        }
+        //积分的现金价值 500积分1块钱
+        BigDecimal pointCashValue = totalPoint.divide(pointCashRatio);
+        //
+        if (productValue.divide(pointCashValue).compareTo(ratioLimit) > 1) {
+            throw new ChargeOffException(ChargeOffCodeEnum.EXCHANGE_RATIO_OVER_LIMIT, "当前限制为：" + ratioLimit);
+        }
     }
 }

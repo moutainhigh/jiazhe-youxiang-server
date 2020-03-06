@@ -8,7 +8,7 @@
         <result column="bank_outlets_name" property="bankOutletsName" jdbcType="VARCHAR" />
         <result column="charge_off_type" property="chargeOffType" jdbcType="TINYINT" />
         <result column="charge_off_point" property="chargeOffPoint" jdbcType="VARCHAR" />
-        <result column="total_point" property="totalPoint" jdbcType="INTEGER" />
+        <result column="total_point" property="totalPoint" jdbcType="DECIMAL" />
         <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
         <result column="customer_mobile" property="customerMobile" jdbcType="VARCHAR" />
         <result column="product_value" property="productValue" jdbcType="DECIMAL" />

@@ -13,6 +13,7 @@ import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffQueryDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffUpdateDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -39,4 +40,5 @@ public interface ChargeOffService {
 
     List<ChargeOffInfoDTO> query(ChargeOffQueryDTO dto, Paging paging);
 
+    BigDecimal queryCityExchangeRatio(String cityCode);
 }

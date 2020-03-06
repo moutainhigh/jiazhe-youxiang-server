@@ -5,6 +5,8 @@
  */
 package com.jiazhe.youxiang.server.dto.chargeoff;
 
+import io.swagger.models.auth.In;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -44,7 +46,7 @@ public class ChargeOffDTO {
     /**
      * 核销总积分
      */
-    private Integer totalPoint;
+    private BigDecimal totalPoint;
 
     /**
      * 客户姓名
@@ -121,11 +123,11 @@ public class ChargeOffDTO {
         this.keytList = keytList;
     }
 
-    public Integer getTotalPoint() {
+    public BigDecimal getTotalPoint() {
         return totalPoint;
     }
 
-    public void setTotalPoint(Integer totalPoint) {
+    public void setTotalPoint(BigDecimal totalPoint) {
         this.totalPoint = totalPoint;
     }
 

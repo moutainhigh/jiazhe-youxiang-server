@@ -229,32 +229,13 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         pointExchangeCodePOMapper.updateByPrimaryKeySelective(po);
     }
 
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void codeCharge(Integer type, Integer customerId, String keyt) {
-        if (!ExchangeCodeCheckUtil.keytCheck(CommonConstant.POINT_EXCHANGE_CODE_PREFIX, keyt)) {
-            throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
-        }
-        PointExchangeCodePO pointExchangeCodePO = findByKeyt(keyt);
-        if (null == pointExchangeCodePO) {
-            throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
-        }
-        if (pointExchangeCodePO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
-            throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_STOPED_USING);
-        }
-        PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO = pointExchangeCodeBatchService.getById(pointExchangeCodePO.getBatchId());
-        if (pointExchangeCodeBatchEditDTO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
-            throw new PointException(PointCodeEnum.BATCH_HAS_STOPPED_USING);
-        }
-        if (pointExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
-            throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_USED);
-        }
-        if (pointExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_REFUND)) {
-            throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_REFUND);
-        }
-        if (pointExchangeCodePO.getExpiryTime().getTime() < System.currentTimeMillis()) {
-            throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_EXPIRIED);
-        }
+        PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO = null;
+        PointExchangeCodePO pointExchangeCodePO = null;
+        chargeCheck(keyt, pointExchangeCodePO, pointExchangeCodeBatchEditDTO);
         CustomerDTO customerDTO = customerService.getById(customerId);
         if (null == customerDTO) {
             throw new PointException(PointCodeEnum.CUSTOMER_NOT_EXIST);
@@ -328,6 +309,36 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         }
     }
 
+
+    @Override
+    public void chargeCheck(String keyt, PointExchangeCodePO pointExchangeCodePO, PointExchangeCodeBatchEditDTO pointExchangeCodeBatchEditDTO) {
+        if (!ExchangeCodeCheckUtil.keytCheck(CommonConstant.POINT_EXCHANGE_CODE_PREFIX, keyt)) {
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
+        }
+        if (pointExchangeCodePO == null) {
+            pointExchangeCodePO = findByKeyt(keyt);
+        }
+        if (null == pointExchangeCodePO) {
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
+        }
+        if (pointExchangeCodePO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_STOPED_USING);
+        }
+        pointExchangeCodeBatchEditDTO = pointExchangeCodeBatchService.getById(pointExchangeCodePO.getBatchId());
+        if (pointExchangeCodeBatchEditDTO.getStatus().equals(CommonConstant.CODE_STOP_USING)) {
+            throw new PointException(PointCodeEnum.BATCH_HAS_STOPPED_USING);
+        }
+        if (pointExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_USED)) {
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_USED);
+        }
+        if (pointExchangeCodePO.getUsed().equals(CommonConstant.CODE_HAS_REFUND)) {
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_REFUND);
+        }
+        if (pointExchangeCodePO.getExpiryTime().getTime() < System.currentTimeMillis()) {
+            throw new PointException(PointCodeEnum.EXCHANGE_CODE_HAS_EXPIRIED);
+        }
+    }
+
     @Override
     public PointExchangeCodePO findByKeyt(String keyt) {
         PointExchangeCodePO pointExchangeCodePO = pointExchangeCodePOManualMapper.findByKeyt(keyt);
@@ -378,20 +389,6 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
         }
         PointExchangeCodePO pointExchangeCodePO = findByCode(code);
-        check(pointExchangeCodePO);
-    }
-
-    @Override
-    public void checkByKeyt(String Keyt) {
-        if (!ExchangeCodeCheckUtil.keytCheck(CommonConstant.POINT_EXCHANGE_CODE_PREFIX, Keyt)) {
-            throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
-        }
-        PointExchangeCodePO pointExchangeCodePO = findByKeyt(Keyt);
-        check(pointExchangeCodePO);
-    }
-
-    @Override
-    public void check(PointExchangeCodePO pointExchangeCodePO) {
         if (null == pointExchangeCodePO) {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
         }

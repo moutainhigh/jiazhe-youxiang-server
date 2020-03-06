@@ -36,7 +36,7 @@ public class ChargeOffUpdateReq extends BaseVO {
     private List<String> keytList;
 
     @ApiModelProperty("核销总积分")
-    private Integer totalPoint;
+    private BigDecimal totalPoint;
 
     @ApiModelProperty("客户姓名")
     private String customerName;
@@ -93,11 +93,11 @@ public class ChargeOffUpdateReq extends BaseVO {
         this.keytList = keytList;
     }
 
-    public Integer getTotalPoint() {
+    public BigDecimal getTotalPoint() {
         return totalPoint;
     }
 
-    public void setTotalPoint(Integer totalPoint) {
+    public void setTotalPoint(BigDecimal totalPoint) {
         this.totalPoint = totalPoint;
     }
 

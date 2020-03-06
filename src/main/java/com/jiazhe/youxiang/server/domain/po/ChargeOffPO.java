@@ -17,7 +17,7 @@ public class ChargeOffPO implements Serializable {
 
     private String chargeOffPoint;
 
-    private Integer totalPoint;
+    private BigDecimal totalPoint;
 
     private String customerName;
 
@@ -93,11 +93,11 @@ public class ChargeOffPO implements Serializable {
         this.chargeOffPoint = chargeOffPoint == null ? null : chargeOffPoint.trim();
     }
 
-    public Integer getTotalPoint() {
+    public BigDecimal getTotalPoint() {
         return totalPoint;
     }
 
-    public void setTotalPoint(Integer totalPoint) {
+    public void setTotalPoint(BigDecimal totalPoint) {
         this.totalPoint = totalPoint;
     }
 

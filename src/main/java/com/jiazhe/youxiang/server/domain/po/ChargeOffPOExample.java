@@ -516,52 +516,52 @@ public class ChargeOffPOExample {
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointEqualTo(Integer value) {
+        public Criteria andTotalPointEqualTo(BigDecimal value) {
             addCriterion("total_point =", value, "totalPoint");
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointNotEqualTo(Integer value) {
+        public Criteria andTotalPointNotEqualTo(BigDecimal value) {
             addCriterion("total_point <>", value, "totalPoint");
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointGreaterThan(Integer value) {
+        public Criteria andTotalPointGreaterThan(BigDecimal value) {
             addCriterion("total_point >", value, "totalPoint");
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointGreaterThanOrEqualTo(Integer value) {
+        public Criteria andTotalPointGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("total_point >=", value, "totalPoint");
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointLessThan(Integer value) {
+        public Criteria andTotalPointLessThan(BigDecimal value) {
             addCriterion("total_point <", value, "totalPoint");
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointLessThanOrEqualTo(Integer value) {
+        public Criteria andTotalPointLessThanOrEqualTo(BigDecimal value) {
             addCriterion("total_point <=", value, "totalPoint");
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointIn(List<Integer> values) {
+        public Criteria andTotalPointIn(List<BigDecimal> values) {
             addCriterion("total_point in", values, "totalPoint");
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointNotIn(List<Integer> values) {
+        public Criteria andTotalPointNotIn(List<BigDecimal> values) {
             addCriterion("total_point not in", values, "totalPoint");
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointBetween(Integer value1, Integer value2) {
+        public Criteria andTotalPointBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("total_point between", value1, value2, "totalPoint");
             return (Criteria) this;
         }
 
-        public Criteria andTotalPointNotBetween(Integer value1, Integer value2) {
+        public Criteria andTotalPointNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("total_point not between", value1, value2, "totalPoint");
             return (Criteria) this;
         }

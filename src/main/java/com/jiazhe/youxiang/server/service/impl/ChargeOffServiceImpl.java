@@ -15,11 +15,14 @@ import com.jiazhe.youxiang.server.common.enums.ChargeOffStatusEnum;
 import com.jiazhe.youxiang.server.common.exceptions.ChargeOffException;
 import com.jiazhe.youxiang.server.dao.mapper.ChargeOffPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.ChargeOffPointPOMapper;
+import com.jiazhe.youxiang.server.dao.mapper.CityExchangeRatioPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.ChargeOffPOManualMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.ChargeOffPointPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.ChargeOffPO;
 import com.jiazhe.youxiang.server.domain.po.ChargeOffPointPO;
 import com.jiazhe.youxiang.server.domain.po.ChargeOffPointPOExample;
+import com.jiazhe.youxiang.server.domain.po.CityExchangeRatioPO;
+import com.jiazhe.youxiang.server.domain.po.CityExchangeRatioPOExample;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffAddDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffFuzzyQueryDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffInfoDTO;
@@ -34,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -62,6 +66,9 @@ public class ChargeOffServiceImpl implements ChargeOffService {
 
     @Autowired
     private ChargeOffPointPOManualMapper chargeOffPointPOManualMapper;
+
+    @Autowired
+    private CityExchangeRatioPOMapper cityExchangeRatioPOMapper;
 
 
     @Override
@@ -134,6 +141,9 @@ public class ChargeOffServiceImpl implements ChargeOffService {
     private ChargeOffInfoDTO queryById(Integer chargeOffId, boolean includeDetail) {
         LOGGER.info("Service调用[queryById]方法,chargeOffId:{}", chargeOffId);
         ChargeOffPO po = chargeOffPOMapper.selectByPrimaryKey(chargeOffId);
+        if (po == null) {
+            return null;
+        }
         ChargeOffInfoDTO dto = ChargeOffAdapter.chargeOffPO2DTO(po);
         ChargeOffPointPOExample chargeOffPointPOExample = new ChargeOffPointPOExample();
         chargeOffPointPOExample.createCriteria()
@@ -159,6 +169,23 @@ public class ChargeOffServiceImpl implements ChargeOffService {
         LOGGER.info("Service调用[query]方法,入参:{}", JacksonUtil.toJSon(dto));
         List<ChargeOffPO> poList = chargeOffPOManualMapper.query(dto, paging.getOffset(), paging.getLimit());
         return buildChargeOffInfoDTOList(poList);
+    }
+
+    @Override
+    public BigDecimal queryCityExchangeRatio(String cityCode) {
+        LOGGER.info("Service调用[queryCityExchangeRatio]方法,cityCode:{}", cityCode);
+        CityExchangeRatioPOExample example = new CityExchangeRatioPOExample();
+        example.createCriteria()
+                .andCityCodeEqualTo(cityCode)
+                .andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED);
+        List<CityExchangeRatioPO> poList = cityExchangeRatioPOMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(poList)) {
+            return null;
+        }
+        if (poList.size() > 1) {
+            throw new ChargeOffException(ChargeOffCodeEnum.CITY_EXCHANGE_RATIO_ERROR);
+        }
+        return poList.get(0).getExchangeRatio();
     }
 
     /**
