@@ -5,8 +5,6 @@
  */
 package com.jiazhe.youxiang.server.dto.chargeoff;
 
-import io.swagger.annotations.ApiModelProperty;
-
 import java.util.Date;
 
 /**
@@ -30,7 +28,7 @@ public class ChargeOffQueryDTO {
     /**
      * 提交状态 0-未提交，1-已提交，null-全部
      */
-    private Integer stauts;
+    private Integer status;
 
     /**
      * 兑换城市code
@@ -68,12 +66,12 @@ public class ChargeOffQueryDTO {
         this.submitterTimeEnd = submitterTimeEnd;
     }
 
-    public Integer getStauts() {
-        return stauts;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setStauts(Integer stauts) {
-        this.stauts = stauts;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getCityCode() {

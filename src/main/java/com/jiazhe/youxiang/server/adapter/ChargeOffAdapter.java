@@ -135,7 +135,7 @@ public class ChargeOffAdapter {
         if (req.getSubmitterTimeEnd() != null) {
             chargeOffQueryDTO.setSubmitterTimeEnd(new Date(req.getSubmitterTimeEnd()));
         }
-        chargeOffQueryDTO.setStauts(req.getStatus());
+        chargeOffQueryDTO.setStatus(req.getStatus());
         chargeOffQueryDTO.setCityCode(req.getCityCode());
         chargeOffQueryDTO.setChargeOffType(req.getChargeOffType());
         chargeOffQueryDTO.setSubmitterName(req.getSubmitterName());

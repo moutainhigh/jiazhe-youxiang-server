@@ -20,5 +20,5 @@ public interface ChargeOffPOManualMapper {
 
     int insertSelective(ChargeOffPO chargeOffPO);
 
-    BigDecimal querySummary(ChargeOffQueryDTO dto);
+    BigDecimal querySummary(@Param("queryDTO") ChargeOffQueryDTO queryDTO);
 }

@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.controller.chargeoff;
 
 import com.jiazhe.youxiang.base.controller.BaseController;
+import com.jiazhe.youxiang.base.util.ExportExcelUtils;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.PagingParamUtil;
 import com.jiazhe.youxiang.base.validator.ChargeOffValidator;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -97,8 +99,8 @@ public class APIChargeOffController extends BaseController {
         return ResponseFactory.buildResponse(resp);
     }
 
-    @ApiOperation(value = "模糊查询（小程序端）", httpMethod = "POST", notes = "模糊查询（小程序端）", response = ChargeOffInfoResp.class, responseContainer = "List")
-    @RequestMapping(value = "/fuzzyquery", method = RequestMethod.POST)
+    @ApiOperation(value = "模糊查询（小程序端）", httpMethod = "GET", notes = "模糊查询（小程序端）", response = ChargeOffInfoResp.class, responseContainer = "List")
+    @RequestMapping(value = "/fuzzyquery", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.CHARGE_OFF, operate = "模糊查询（小程序端）", level = LogLevelEnum.LEVEL_1)
     public Object fuzzyQuery(@ModelAttribute ChargeOffFuzzyQueryReq req) {
         LOGGER.info("Controller调用[fuzzyQuery]方法,入参:{}", JacksonUtil.toJSon(req));
@@ -111,12 +113,12 @@ public class APIChargeOffController extends BaseController {
         return ResponseFactory.buildPaginationResponse(respList, paging);
     }
 
-    @ApiOperation(value = "条件查询（PC端）", httpMethod = "POST", notes = "条件查询（PC端）", response = ChargeOffInfoResp.class, responseContainer = "List")
-    @RequestMapping(value = "/query", method = RequestMethod.POST)
+    @ApiOperation(value = "条件查询（PC端）", httpMethod = "GET", notes = "条件查询（PC端）", response = ChargeOffInfoResp.class, responseContainer = "List")
+    @RequestMapping(value = "/query", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.CHARGE_OFF, operate = "条件查询（PC端）", level = LogLevelEnum.LEVEL_1)
     public Object query(@ModelAttribute ChargeOffQueryReq req) {
         LOGGER.info("Controller调用[query]方法,入参:{}", JacksonUtil.toJSon(req));
-        ChargeOffValidator.validateChargeOffQueryReq(req);
+        ChargeOffValidator.validateChargeOffQueryReq(req, true);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
         ChargeOffQueryDTO dto = ChargeOffAdapter.ChargeOffQueryReq2DTO(req);
         List<ChargeOffInfoDTO> dtoList = chargeOffBiz.query(dto, paging);
@@ -125,12 +127,12 @@ public class APIChargeOffController extends BaseController {
         return ResponseFactory.buildPaginationResponse(respList, paging);
     }
 
-    @ApiOperation(value = "条件查询汇总数据（PC端）", httpMethod = "POST", notes = "条件查询汇总数据（PC端）", response = QuerySummaryResp.class, responseContainer = "List")
-    @RequestMapping(value = "/query", method = RequestMethod.POST)
+    @ApiOperation(value = "条件查询汇总数据（PC端）", httpMethod = "GET", notes = "条件查询汇总数据（PC端）", response = QuerySummaryResp.class, responseContainer = "List")
+    @RequestMapping(value = "/querysummary", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.CHARGE_OFF, operate = "条件查询汇总数据（PC端）", level = LogLevelEnum.LEVEL_1)
     public Object querySummary(@ModelAttribute ChargeOffQueryReq req) {
-        LOGGER.info("Controller调用[query]方法,入参:{}", JacksonUtil.toJSon(req));
-        ChargeOffValidator.validateChargeOffQueryReq(req);
+        LOGGER.info("Controller调用[querySummary]方法,入参:{}", JacksonUtil.toJSon(req));
+        ChargeOffValidator.validateChargeOffQueryReq(req, false);
         ChargeOffQueryDTO dto = ChargeOffAdapter.ChargeOffQueryReq2DTO(req);
         BigDecimal totalPoint = chargeOffBiz.querySummary(dto);
         QuerySummaryResp resp = new QuerySummaryResp();
@@ -138,8 +140,8 @@ public class APIChargeOffController extends BaseController {
         return ResponseFactory.buildResponse(resp);
     }
 
-    @ApiOperation(value = "验证密码有效性", httpMethod = "POST", notes = "验证密码有效性", response = ChargeOffPointResp.class)
-    @RequestMapping(value = "/validatekeyt", method = RequestMethod.POST)
+    @ApiOperation(value = "验证密码有效性", httpMethod = "GET", notes = "验证密码有效性", response = ChargeOffPointResp.class)
+    @RequestMapping(value = "/validatekeyt", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.CHARGE_OFF, operate = "验证密码有效性", level = LogLevelEnum.LEVEL_1)
     public Object validateKeyt(@ModelAttribute ValidateKeytReq req) {
         LOGGER.info("Controller调用[validateKeyt]方法,入参:{}", JacksonUtil.toJSon(req));
@@ -148,14 +150,15 @@ public class APIChargeOffController extends BaseController {
         return ResponseFactory.buildResponse(ChargeOffAdapter.chargeOffPointDTO2Resp(dto));
     }
 
-    @ApiOperation(value = "导出核销详情（兑换密码粒度）", httpMethod = "POST", notes = "导出核销详情（兑换密码粒度）")
-    @RequestMapping(value = "/exportdetail", method = RequestMethod.POST)
+    @ApiOperation(value = "导出核销详情（兑换密码粒度）", httpMethod = "GET", notes = "导出核销详情（兑换密码粒度）")
+    @RequestMapping(value = "/exportdetail", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.CHARGE_OFF, operate = "导出核销详情（兑换密码粒度）", level = LogLevelEnum.LEVEL_1)
-    public Object exportDetail(@ModelAttribute ChargeOffQueryReq req) {
+    public Object exportDetail(@ModelAttribute ChargeOffQueryReq req, HttpServletResponse response) {
         LOGGER.info("Controller调用[exportDetail]方法,入参:{}", JacksonUtil.toJSon(req));
-        ChargeOffValidator.validateChargeOffQueryReq(req);
+        ChargeOffValidator.validateChargeOffQueryReq(req, false);
         ChargeOffQueryDTO dto = ChargeOffAdapter.ChargeOffQueryReq2DTO(req);
-        chargeOffBiz.exportDetail(dto);
+        List<ChargeOffInfoDTO> dtoList = chargeOffBiz.query(dto, null);
+        ExportExcelUtils.exportChargeOffDetail(response, dtoList);
         return ResponseFactory.buildSuccess();
     }
 }
