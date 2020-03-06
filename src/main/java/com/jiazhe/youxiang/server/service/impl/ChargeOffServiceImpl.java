@@ -102,7 +102,7 @@ public class ChargeOffServiceImpl implements ChargeOffService {
             throw new ChargeOffException(ChargeOffCodeEnum.CHARGE_OFF_NOT_EXIST);
         }
         //如果核销记录已提交 则无法修改
-        if (ChargeOffStatusEnum.COMMITTED.equals(ChargeOffStatusEnum.getByCode(dto.getStatus()))) {
+        if (ChargeOffStatusEnum.COMMITTED.equals(ChargeOffStatusEnum.getByCode(chargeOffInfoDTO.getStatus()))) {
             throw new ChargeOffException(ChargeOffCodeEnum.CHARGE_OFF_IS_COMMITTED);
         }
         ChargeOffPO chargeOffPO = ChargeOffAdapter.chargeOffUpdateDTO2PO(dto);
