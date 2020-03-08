@@ -33,7 +33,7 @@
         <include refid="Base_Column_List"/>
         from charge_off
         <where>
-            <if test="queryDTO.submitterName != null">
+            <if test="queryDTO.submitterName != null and queryDTO.submitterName != ''">
                 AND submitter_name = #{queryDTO.submitterName}
             </if>
             <if test="queryDTO.chargeOffType != null">
@@ -42,7 +42,7 @@
             <if test="queryDTO.status != null">
                 AND status = #{queryDTO.status}
             </if>
-            <if test="queryDTO.cityCode != null">
+            <if test="queryDTO.cityCode != null and queryDTO.cityCode != ''">
                 AND city_code = #{queryDTO.cityCode}
             </if>
             <if test="queryDTO.totalPoint != null">
@@ -66,7 +66,7 @@
         count(*)
         from charge_off
         <where>
-            <if test="queryDTO.submitterName != null">
+            <if test="queryDTO.submitterName != null and queryDTO.submitterName != ''">
                 AND submitter_name = #{queryDTO.submitterName}
             </if>
             <if test="queryDTO.chargeOffType != null">
@@ -75,7 +75,7 @@
             <if test="queryDTO.status != null">
                 AND status = #{queryDTO.status}
             </if>
-            <if test="queryDTO.cityCode != null">
+            <if test="queryDTO.cityCode != null and queryDTO.cityCode != ''">
                 AND city_code = #{queryDTO.cityCode}
             </if>
             <if test="queryDTO.totalPoint != null">
@@ -96,7 +96,7 @@
         sum(total_point)
         from charge_off
         <where>
-            <if test="queryDTO.submitterName != null">
+            <if test="queryDTO.submitterName != null and queryDTO.submitterName != ''">
                 AND submitter_name = #{queryDTO.submitterName}
             </if>
             <if test="queryDTO.chargeOffType != null">
@@ -105,7 +105,7 @@
             <if test="queryDTO.status != null">
                 AND status = #{queryDTO.status}
             </if>
-            <if test="queryDTO.cityCode != null">
+            <if test="queryDTO.cityCode != null and queryDTO.cityCode != ''">
                 AND city_code = #{queryDTO.cityCode}
             </if>
             <if test="queryDTO.totalPoint != null">
@@ -138,7 +138,7 @@
             <if test="fuzzyQueryDTO.status != null">
                 AND status = #{fuzzyQueryDTO.status}
             </if>
-            <if test="fuzzyQueryDTO.condition != null">
+            <if test="fuzzyQueryDTO.condition != null and fuzzyQueryDTO.condition != ''">
                 AND(
                 bank_outlets_name like concat('%',#{fuzzyQueryDTO.condition},'%')
                 OR customer_name like concat('%',#{fuzzyQueryDTO.condition},'%')

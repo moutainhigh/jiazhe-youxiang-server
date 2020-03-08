@@ -130,11 +130,15 @@ public class ChargeOffAdapter {
             return null;
         }
         ChargeOffQueryDTO chargeOffQueryDTO = new ChargeOffQueryDTO();
-        if (req.getSubmitterTimeBegin() != null) {
-            chargeOffQueryDTO.setSubmitterTimeBegin(new Date(req.getSubmitterTimeBegin()));
+        if (req.getSubmitterTimeBegin() == 0) {
+            chargeOffQueryDTO.setSubmitterTimeBegin(null);
+        }else{
+            chargeOffQueryDTO.setSubmitterTimeBegin(new Date(DateUtil.getFirstSecond(req.getSubmitterTimeBegin())));
         }
-        if (req.getSubmitterTimeEnd() != null) {
-            chargeOffQueryDTO.setSubmitterTimeEnd(new Date(req.getSubmitterTimeEnd()));
+        if (req.getSubmitterTimeEnd() == 0) {
+            chargeOffQueryDTO.setSubmitterTimeEnd(null);
+        }else{
+            chargeOffQueryDTO.setSubmitterTimeEnd(new Date(DateUtil.getLastSecond(req.getSubmitterTimeEnd())));
         }
         chargeOffQueryDTO.setStatus(req.getStatus());
         chargeOffQueryDTO.setCityCode(req.getCityCode());
