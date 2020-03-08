@@ -327,7 +327,12 @@ public enum PermissionTreeEnum {
     //修改转账
     MATERIAL_TRANSFER_MONEY_EDIT(1004, 10, "修改转账", PermissionConstant.MATERIAL_TRANSFER_MONEY_EDIT),
     //删除转账
-    MATERIAL_TRANSFER_MONEY_DELETE(1005, 10, "删除转账", PermissionConstant.MATERIAL_TRANSFER_MONEY_DELETE),;
+    MATERIAL_TRANSFER_MONEY_DELETE(1005, 10, "删除转账", PermissionConstant.MATERIAL_TRANSFER_MONEY_DELETE),
+
+    /****************核销管理********************/
+    CHARGE_OFF_MANAGEMENT(11, 0, "核销管理", PermissionConstant.CHARGE_OFF_MANAGEMENT),
+    CHARGE_OFF_SEARCH(1101, 11, "核销查询", PermissionConstant.CHARGE_OFF_SEARCH),
+    CHARGE_OFF_EXPORT(1102, 11, "核销导出", PermissionConstant.CHARGE_OFF_EXPORT),;
 
     PermissionTreeEnum(Integer id, Integer pId, String name, String perm) {
         this.id = id;
