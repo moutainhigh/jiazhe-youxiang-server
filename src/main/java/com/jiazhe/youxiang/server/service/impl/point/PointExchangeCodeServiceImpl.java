@@ -457,6 +457,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         //TODO niexiao 没有任何校验
         PointExchangeCodePO record = new PointExchangeCodePO();
         record.setUsed(CommonConstant.CODE_HAS_USED);
+        record.setModTime(null);
         PointExchangeCodePOExample example = new PointExchangeCodePOExample();
         example.createCriteria()
                 .andOutOrderCodeNotEqualTo("") //通过中行兑换得来
