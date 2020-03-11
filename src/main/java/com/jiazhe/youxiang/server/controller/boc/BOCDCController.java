@@ -134,6 +134,14 @@ public class BOCDCController {
         return "任务全部完成";
     }
 
+    @AppApi
+    @ApiOperation(value = "将从中行线上兑换且已过期的兑换码置为已使用", httpMethod = "GET", notes = "将从中行线上兑换且已过期的兑换码置为已使用")
+    @RequestMapping(value = "/useexpiredcode", method = RequestMethod.GET)
+    public Object useExpiredCode() {
+        bocdcBiz.useExpiredCode();
+        return "任务全部完成";
+    }
+
 
     /**
      * 通过请求报文获取请求参数
