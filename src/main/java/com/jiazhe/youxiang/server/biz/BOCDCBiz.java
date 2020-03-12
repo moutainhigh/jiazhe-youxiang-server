@@ -76,19 +76,6 @@ public class BOCDCBiz {
     @Autowired
     private PointExchangeCodeService pointExchangeCodeService;
 
-    @Autowired
-    private CustomerService customerService;
-
-    /**
-     * 消分专用手机
-     */
-    private String chargeOffSpecifiedMobile;
-
-    @Value("${chargeoff.specified-mobile}")
-    public void setChargeOffSpecifiedMobile(String mobile) {
-        chargeOffSpecifiedMobile = mobile;
-    }
-
     /**
      * 查询库存订单下发实时接口
      */
@@ -299,11 +286,7 @@ public class BOCDCBiz {
      */
     public void useExpiredCode() {
         LOGGER.info("Biz执行[useExpiredCode]方法");
-        CustomerDTO customerDTO = customerService.getByMobile(chargeOffSpecifiedMobile);
-        if (customerDTO == null) {
-            return;
-        }
-        int result = pointExchangeCodeService.useExpiredCode(customerDTO.getId());
+        int result = pointExchangeCodeService.useExpiredCode();
         LOGGER.info("Biz执行[useExpiredCode]方法成功，共修改{}条记录", result);
     }
 
