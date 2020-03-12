@@ -26,8 +26,10 @@ import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.BOCDCBizCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.BOCDCCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.BOCDCException;
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangerecord.PointExchangeRecordDTO;
+import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.vo.req.boc.BOCDCCommonReq;
 import com.jiazhe.youxiang.server.vo.req.boc.BOCDCQueryStockReq;
@@ -39,6 +41,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
@@ -72,6 +75,19 @@ public class BOCDCBiz {
 
     @Autowired
     private PointExchangeCodeService pointExchangeCodeService;
+
+    @Autowired
+    private CustomerService customerService;
+
+    /**
+     * 消分专用手机
+     */
+    private String chargeOffSpecifiedMobile;
+
+    @Value("${chargeoff.specified-mobile}")
+    public void setChargeOffSpecifiedMobile(String mobile) {
+        chargeOffSpecifiedMobile = mobile;
+    }
 
     /**
      * 查询库存订单下发实时接口
@@ -283,7 +299,11 @@ public class BOCDCBiz {
      */
     public void useExpiredCode() {
         LOGGER.info("Biz执行[useExpiredCode]方法");
-        int result = pointExchangeCodeService.useExpiredCode();
+        CustomerDTO customerDTO = customerService.getByMobile(chargeOffSpecifiedMobile);
+        if (customerDTO == null) {
+            return;
+        }
+        int result = pointExchangeCodeService.useExpiredCode(customerDTO.getId());
         LOGGER.info("Biz执行[useExpiredCode]方法成功，共修改{}条记录", result);
     }
 

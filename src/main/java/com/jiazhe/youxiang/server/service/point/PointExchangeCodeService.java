@@ -211,10 +211,11 @@ public interface PointExchangeCodeService {
      */
     List<PointExchangeCodeDTO> getBOCDCReconciliationInfo(Date beginDate, Date endDate);
 
+
     /**
      * 将从中行线上兑换且已过期的兑换码置为已使用
-     *
+     * @param customerId
      * @return
      */
-    int useExpiredCode();
+    int useExpiredCode(Integer customerId);
 }

@@ -453,10 +453,12 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     }
 
     @Override
-    public int useExpiredCode() {
+    public int useExpiredCode(Integer customerId) {
         //TODO niexiao 没有任何校验
         PointExchangeCodePO record = new PointExchangeCodePO();
         record.setUsed(CommonConstant.CODE_HAS_USED);
+        record.setCustomerId(customerId);
+        record.setExtInfo("中行过期兑换码自动兑换");
         record.setModTime(null);
         PointExchangeCodePOExample example = new PointExchangeCodePOExample();
         example.createCriteria()
