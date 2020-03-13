@@ -228,8 +228,8 @@
     var chargeOffStatus = ['未提交', '已提交'];
     var chargeOffColor = ['000000', '0000FF'];
     var chargeOffType = ['换商品', '充积分']
-    var allSum = 0; //积分总价值
-    var allValue = 0;//商品总价值
+    var allPoint = 0; //积分总价值
+    var allProductValue = 0;//商品总价值
     $(function () {
         //重新修改表格宽度
         $(window).resize(function () {
@@ -326,9 +326,9 @@
                     submitterName:'本页积分',
                     totalPoint: pageSum,
                     chargeOffType: '总积分：',
-                    status: formatNumberWithComma(allSum),
-//                    customerMobile:'总商品价值：',
-//                    productValue:formatNumberWithComma(allValue)
+                    status: formatNumberWithComma(allPoint),
+                    customerMobile:'总商品价值：',
+                    productValue:formatNumberWithComma(allProductValue)
                 });
             }
         };
@@ -392,9 +392,9 @@
                 if ('error' in data) {
                     bootboxalert(data.error.message);
                 } else {
-                    allSum = data.data.totalPoint;
+                    allPoint = data.data.totalPoint;
                     //此处未提供商品的价值
-                    allValue = data.data.totalPoint;
+                    allProductValue = data.data.totalProductValue;
                 }
             },
             error: error
