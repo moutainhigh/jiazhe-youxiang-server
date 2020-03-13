@@ -6,7 +6,6 @@
 package com.jiazhe.youxiang.server.biz;
 
 import com.google.common.collect.Lists;
-import com.jiazhe.youxiang.base.util.ExportExcelUtils;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.ChargeOffCodeEnum;
@@ -26,6 +25,7 @@ import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffInfoDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffPointDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffQueryDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffUpdateDTO;
+import com.jiazhe.youxiang.server.dto.chargeoff.QuerySummaryDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
@@ -358,7 +358,7 @@ public class ChargeOffBiz {
         }
     }
 
-    public BigDecimal querySummary(ChargeOffQueryDTO dto) {
+    public QuerySummaryDTO querySummary(ChargeOffQueryDTO dto) {
         LOGGER.info("Biz调用[querySummary]方法,入参:{}", JacksonUtil.toJSon(dto));
         return chargeOffService.querySummary(dto);
     }

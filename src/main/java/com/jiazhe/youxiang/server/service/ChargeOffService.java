@@ -11,6 +11,7 @@ import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffInfoDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffPointDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffQueryDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffUpdateDTO;
+import com.jiazhe.youxiang.server.dto.chargeoff.QuerySummaryDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
 import java.math.BigDecimal;
@@ -44,5 +45,7 @@ public interface ChargeOffService {
 
     BigDecimal queryCityExchangeRatio(String cityCode);
 
-    BigDecimal querySummary(ChargeOffQueryDTO dto);
+    BigDecimal queryTotalPoint(ChargeOffQueryDTO dto);
+
+    QuerySummaryDTO querySummary(ChargeOffQueryDTO dto);
 }
