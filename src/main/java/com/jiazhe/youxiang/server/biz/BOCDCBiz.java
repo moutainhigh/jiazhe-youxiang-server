@@ -26,8 +26,10 @@ import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.BOCDCBizCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.BOCDCCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.BOCDCException;
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangerecord.PointExchangeRecordDTO;
+import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.vo.req.boc.BOCDCCommonReq;
 import com.jiazhe.youxiang.server.vo.req.boc.BOCDCQueryStockReq;
@@ -39,6 +41,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
@@ -96,7 +99,7 @@ public class BOCDCBiz {
                 //TODO niexiao 删掉测试代码
                 resp.setBizDesc(JSONObject.toJSONString(req));
             } else if (expiryDate.compareTo(dto.getExpiryTime()) == 1) {
-                //说明查询到的积分码过期时间不足
+                //说明查询到的积分码有效时间不足
                 resp.setBizCode(BOCDCBizCodeEnum.MERCHANT_RETURNS_EXPIRY_DATE_ERROR.getCode());
                 resp.setBizDesc(BOCDCBizCodeEnum.MERCHANT_RETURNS_EXPIRY_DATE_ERROR.getMessage());
             } else {
@@ -108,7 +111,7 @@ public class BOCDCBiz {
                 resp.setEbuyId(RSAUtil.bocdcPublicEncrypt(dto.getId().toString()));
                 resp.setCardExpDate(DateUtil.yyyyMMDD(expiryDate));
                 //将积分兑换码置为启用状态
-                pointExchangeCodeService.changeCodeStatus(dto.getId(),CommonConstant.CODE_START_USING);
+                pointExchangeCodeService.changeCodeStatus(dto.getId(), CommonConstant.CODE_START_USING);
             }
         } catch (Exception e) {
             resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
@@ -241,9 +244,11 @@ public class BOCDCBiz {
         LOGGER.info("多次调用使用状态核对实时接口失败，message:{}", e.getMessage());
     }
 
-
     /**
      * 生成并上传对账文件
+     *
+     * @param monthOffset 月度偏移，0为查询当前月份，-1为上一个月
+     * @throws Exception
      */
     public void uploadReconciliationFile(int monthOffset) throws Exception {
         LOGGER.info("Biz执行[uploadReconciliationFile]方法");
@@ -274,6 +279,15 @@ public class BOCDCBiz {
         LOGGER.info("对账信息加密压缩文件上传中...");
         uploadToSFTP(BOCDCConstant.outPath, new File(pgpFileName));
         LOGGER.info("对账信息加密压缩文件上传完成");
+    }
+
+    /**
+     * 将从中行线上兑换且已过期的兑换码置为已使用
+     */
+    public void useExpiredCode() {
+        LOGGER.info("Biz执行[useExpiredCode]方法");
+        int result = pointExchangeCodeService.useExpiredCode();
+        LOGGER.info("Biz执行[useExpiredCode]方法成功，共修改{}条记录", result);
     }
 
 
