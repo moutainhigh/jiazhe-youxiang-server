@@ -576,6 +576,11 @@
 
     //生成兑换码
     function generateCode(id) {
+        $("#grid-table").find('tr[id='+id+']').find('a').each(function(){
+            if($(this).text() == '生成兑换码'){
+                $(this).text('生成中...').removeAttr("href");
+            }
+        });
         $.ajax({
             url: "/api/voucherexchangecodebatch/generatecode",
             dataType: "json",
@@ -586,7 +591,6 @@
             type: "POST",
             success: function (data) {
                 success(data)
-                bootboxalert("生成兑换码成功");
             },
             error: error
         });
