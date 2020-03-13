@@ -3,9 +3,8 @@
  * All rights reserved.
  *
  */
-package com.jiazhe.youxiang.server.vo.resp.chargeoff;
+package com.jiazhe.youxiang.server.dto.chargeoff;
 
-import com.jiazhe.youxiang.server.vo.BaseVO;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
@@ -16,13 +15,16 @@ import java.math.BigDecimal;
  * @author niexiao
  * @created 2020-03-06
  */
-public class QuerySummaryResp extends BaseVO {
+public class QuerySummaryDTO {
 
-    private static final long serialVersionUID = 5295059737464632339L;
-    @ApiModelProperty("总积分")
+    /**
+     * 总积分
+     */
     private BigDecimal totalPoint;
 
-    @ApiModelProperty("总商品价值")
+    /**
+     * 总商品价值
+     */
     private BigDecimal totalProductValue;
 
     public BigDecimal getTotalPoint() {

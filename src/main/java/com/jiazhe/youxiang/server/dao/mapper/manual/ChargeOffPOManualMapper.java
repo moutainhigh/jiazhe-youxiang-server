@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.dao.mapper.manual;
 import com.jiazhe.youxiang.server.domain.po.ChargeOffPO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffFuzzyQueryDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffQueryDTO;
+import com.jiazhe.youxiang.server.dto.chargeoff.QuerySummaryDTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
@@ -20,5 +21,7 @@ public interface ChargeOffPOManualMapper {
 
     int insertSelective(ChargeOffPO chargeOffPO);
 
-    BigDecimal querySummary(@Param("queryDTO") ChargeOffQueryDTO queryDTO);
+    BigDecimal queryTotalPoint(@Param("queryDTO") ChargeOffQueryDTO queryDTO);
+
+    QuerySummaryDTO querySummary(@Param("queryDTO") ChargeOffQueryDTO dto);
 }

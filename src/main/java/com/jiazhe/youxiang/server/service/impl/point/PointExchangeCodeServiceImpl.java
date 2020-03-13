@@ -453,6 +453,22 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     }
 
     @Override
+    public int useExpiredCode() {
+        //TODO niexiao 没有任何校验
+        PointExchangeCodePO record = new PointExchangeCodePO();
+        record.setUsed(CommonConstant.CODE_HAS_USED);
+        record.setExtInfo("中行过期兑换码自动兑换");
+        record.setModTime(null);
+        PointExchangeCodePOExample example = new PointExchangeCodePOExample();
+        example.createCriteria()
+                .andOutOrderCodeNotEqualTo("") //通过中行兑换得来
+                .andUsedEqualTo(CommonConstant.CODE_NOT_USED) //未使用
+                .andExpiryTimeLessThan(new Date()) //已过期
+                .andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED); //未删除
+      return  pointExchangeCodePOMapper.updateByExampleSelective(record, example);
+    }
+
+    @Override
     public List<BOCCCCouponEntity> getBOCCCCoupon(List<Integer> batchIds) {
         return pointExchangeCodePOManualMapper.getBOCCCCoupon(batchIds);
     }

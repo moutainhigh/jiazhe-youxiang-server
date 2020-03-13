@@ -15,12 +15,14 @@ import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffInfoDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffPointDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffQueryDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffUpdateDTO;
+import com.jiazhe.youxiang.server.dto.chargeoff.QuerySummaryDTO;
 import com.jiazhe.youxiang.server.vo.req.chargeoff.ChargeOffAddReq;
 import com.jiazhe.youxiang.server.vo.req.chargeoff.ChargeOffFuzzyQueryReq;
 import com.jiazhe.youxiang.server.vo.req.chargeoff.ChargeOffQueryReq;
 import com.jiazhe.youxiang.server.vo.req.chargeoff.ChargeOffUpdateReq;
 import com.jiazhe.youxiang.server.vo.resp.chargeoff.ChargeOffInfoResp;
 import com.jiazhe.youxiang.server.vo.resp.chargeoff.ChargeOffPointResp;
+import com.jiazhe.youxiang.server.vo.resp.chargeoff.QuerySummaryResp;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.Date;
@@ -226,5 +228,15 @@ public class ChargeOffAdapter {
         chargeOffPointDTO.setPointExchangeCodeCode(chargeOffPointPO.getPointExchangeCodeCode());
         chargeOffPointDTO.setPointExchangeCodeKeyt(chargeOffPointPO.getPointExchangeCodeKeyt());
         return chargeOffPointDTO;
+    }
+
+    public static QuerySummaryResp querySummaryDTO2Resq(QuerySummaryDTO querySummaryDTO) {
+        if (querySummaryDTO == null) {
+            return null;
+        }
+        QuerySummaryResp querySummaryResp = new QuerySummaryResp();
+        querySummaryResp.setTotalPoint(querySummaryDTO.getTotalPoint());
+        querySummaryResp.setTotalProductValue(querySummaryDTO.getTotalProductValue());
+        return querySummaryResp;
     }
 }

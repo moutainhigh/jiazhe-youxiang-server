@@ -16,6 +16,7 @@ import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffInfoDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffPointDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffQueryDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffUpdateDTO;
+import com.jiazhe.youxiang.server.dto.chargeoff.QuerySummaryDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.IdReq;
@@ -131,13 +132,11 @@ public class APIChargeOffController extends BaseController {
     @RequestMapping(value = "/querysummary", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.CHARGE_OFF, operate = "条件查询汇总数据（PC端）", level = LogLevelEnum.LEVEL_1)
     public Object querySummary(@ModelAttribute ChargeOffQueryReq req) {
-        LOGGER.info("Controller调用[querySummary]方法,入参:{}", JacksonUtil.toJSon(req));
+        LOGGER.info("Controller调用[queryTotalPoint]方法,入参:{}", JacksonUtil.toJSon(req));
         ChargeOffValidator.validateChargeOffQueryReq(req, false);
         ChargeOffQueryDTO dto = ChargeOffAdapter.ChargeOffQueryReq2DTO(req);
-        BigDecimal totalPoint = chargeOffBiz.querySummary(dto);
-        QuerySummaryResp resp = new QuerySummaryResp();
-        resp.setTotalPoint(totalPoint);
-        return ResponseFactory.buildResponse(resp);
+        QuerySummaryDTO querySummaryDTO = chargeOffBiz.querySummary(dto);
+        return ResponseFactory.buildResponse(ChargeOffAdapter.querySummaryDTO2Resq(querySummaryDTO));
     }
 
     @ApiOperation(value = "验证密码有效性", httpMethod = "GET", notes = "验证密码有效性", response = ChargeOffPointResp.class)

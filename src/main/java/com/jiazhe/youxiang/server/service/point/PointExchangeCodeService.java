@@ -5,7 +5,6 @@ import com.jiazhe.youxiang.base.util.boccc.BOCCCCouponUsedEntity;
 import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeEditDTO;
-import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchEditDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecodebatch.PointExchangeCodeBatchSaveDTO;
 import com.jiazhe.youxiang.server.vo.Paging;
 
@@ -91,6 +90,7 @@ public interface PointExchangeCodeService {
 
     /**
      * 检查兑换码是否符合充值条件
+     *
      * @param pointExchangeCodePO
      */
     void validateCode(PointExchangeCodePO pointExchangeCodePO);
@@ -210,4 +210,11 @@ public interface PointExchangeCodeService {
      * @param endDate
      */
     List<PointExchangeCodeDTO> getBOCDCReconciliationInfo(Date beginDate, Date endDate);
+
+
+    /**
+     * 将从中行线上兑换且已过期的兑换码置为已使用
+     * @return
+     */
+    int useExpiredCode();
 }

@@ -29,6 +29,7 @@ import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffInfoDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffPointDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffQueryDTO;
 import com.jiazhe.youxiang.server.dto.chargeoff.ChargeOffUpdateDTO;
+import com.jiazhe.youxiang.server.dto.chargeoff.QuerySummaryDTO;
 import com.jiazhe.youxiang.server.service.ChargeOffService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.commons.collections.CollectionUtils;
@@ -191,7 +192,13 @@ public class ChargeOffServiceImpl implements ChargeOffService {
     }
 
     @Override
-    public BigDecimal querySummary(ChargeOffQueryDTO dto) {
+    public BigDecimal queryTotalPoint(ChargeOffQueryDTO dto) {
+        LOGGER.info("Service调用[queryTotalPoint]方法,入参:{}", JacksonUtil.toJSon(dto));
+        return chargeOffPOManualMapper.queryTotalPoint(dto);
+    }
+
+    @Override
+    public QuerySummaryDTO querySummary(ChargeOffQueryDTO dto) {
         LOGGER.info("Service调用[querySummary]方法,入参:{}", JacksonUtil.toJSon(dto));
         return chargeOffPOManualMapper.querySummary(dto);
     }
