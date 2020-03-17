@@ -18,7 +18,7 @@
         <!-- null值数据库映射 -->
         <setting name="jdbcTypeForNull" value="NULL" />
         <!-- 单位是秒-->
-        <setting name="defaultStatementTimeout" value="15"/>
+        <setting name="defaultStatementTimeout" value="45"/>
         <!-- 列名自动映射 -->
         <setting name="mapUnderscoreToCamelCase" value="true" />
     </settings>

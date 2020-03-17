@@ -201,25 +201,14 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
             pointExchangeCodeSaveDTOS.add(pointExchangeCodeSaveDTO);
         }
         List<PointExchangeCodePO> pointExchangeCodePOList = pointExchangeCodeSaveDTOS.stream().map(PointExchangeCodeAdapter::DtoSave2Po).collect(Collectors.toList());
-        Long time1 = System.currentTimeMillis();
         pointExchangeCodeService.batchInsert(pointExchangeCodePOList);
-        Long time2 = System.currentTimeMillis();
         List<PointExchangeCodeDTO> pointExchangeCodeDTOS = pointExchangeCodeService.getByBatchId(batchPO.getId());
-        Long time3 = System.currentTimeMillis();
         pointExchangeCodeDTOS.stream().forEach(bean -> {
             Map map = GenerateCode.generateOneCode(CommonConstant.POINT_EXCHANGE_CODE_PREFIX, bean.getId());
             bean.setCode(map.get("code").toString());
             bean.setKeyt(map.get("keyt").toString());
         });
-        Long time4 = System.currentTimeMillis();
         pointExchangeCodeService.batchUpdateCodeAndKeyt(pointExchangeCodeDTOS);
-        Long time5 = System.currentTimeMillis();
-        System.out.println("插入时间：");
-        System.out.println(time2-time1);
-        System.out.println("生成码时间：");
-        System.out.println(time4-time3);
-        System.out.println("生成码时间：");
-        System.out.println(time5-time4);
     }
 
     @Transactional(rollbackFor = Exception.class)
