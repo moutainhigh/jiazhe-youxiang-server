@@ -360,6 +360,12 @@ public class ChargeOffBiz {
 
     public QuerySummaryDTO querySummary(ChargeOffQueryDTO dto) {
         LOGGER.info("Biz调用[querySummary]方法,入参:{}", JacksonUtil.toJSon(dto));
-        return chargeOffService.querySummary(dto);
+        QuerySummaryDTO result = chargeOffService.querySummary(dto);
+        if (null == result) {
+            result = new QuerySummaryDTO();
+            result.setTotalPoint(BigDecimal.ZERO);
+            result.setTotalProductValue(BigDecimal.ZERO);
+        }
+        return result;
     }
 }

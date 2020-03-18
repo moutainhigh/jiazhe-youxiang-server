@@ -71,7 +71,6 @@ public class ChargeOffServiceImpl implements ChargeOffService {
     @Autowired
     private CityExchangeRatioPOMapper cityExchangeRatioPOMapper;
 
-
     @Override
     public Integer add(ChargeOffAddDTO dto) {
         LOGGER.info("Service调用[add]方法,入参:{}", JacksonUtil.toJSon(dto));
@@ -121,7 +120,6 @@ public class ChargeOffServiceImpl implements ChargeOffService {
         addDetail(chargeOffId, chargeOffPointDTOList);
     }
 
-
     @Override
     public void delete(Integer chargeOffId) {
         LOGGER.info("Service调用[delete]方法,chargeOffId:{}", chargeOffId);
@@ -141,7 +139,6 @@ public class ChargeOffServiceImpl implements ChargeOffService {
         pointPOExample.createCriteria().andChargeOffIdEqualTo(chargeOffId);
         chargeOffPointPOMapper.deleteByExample(pointPOExample);
     }
-
 
     @Override
     public ChargeOffInfoDTO queryById(Integer chargeOffId) {
@@ -203,7 +200,6 @@ public class ChargeOffServiceImpl implements ChargeOffService {
         return chargeOffPOManualMapper.querySummary(dto);
     }
 
-
     @Override
     public BigDecimal queryCityExchangeRatio(String cityCode) {
         LOGGER.info("Service调用[queryCityExchangeRatio]方法,cityCode:{}", cityCode);
@@ -220,7 +216,6 @@ public class ChargeOffServiceImpl implements ChargeOffService {
         }
         return poList.get(0).getExchangeRatio();
     }
-
 
     /**
      * 拼接完整的ChargeOffInfoDTO对象，包括核销详情
@@ -244,7 +239,6 @@ public class ChargeOffServiceImpl implements ChargeOffService {
         }
         return result;
     }
-
 
     /**
      * 批量查询核销详情
