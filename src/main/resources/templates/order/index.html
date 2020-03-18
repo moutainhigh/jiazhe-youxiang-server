@@ -340,8 +340,19 @@
                                                     <label class="col-sm-4 control-label no-padding-right">服务对象电话：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <input id="re_customerMobile" class="form-control"
-                                                                   type="text" style="height:30px" readonly/>
+                                                            <input id="re_customerMobile" class="form-control" type="text"
+                                                                   style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">服务城市：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="re_customerCityName" class="form-control" type="text"
+                                                                   style="height:30px" readonly/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -354,8 +365,6 @@
                                                             <textarea id="re_customerAddress"
                                                                       class="form-control" disabled="disabled"
                                                                       style="resize:none;height: 100px;"></textarea>
-                                                            <!--<input id="re_customerAddress" class="form-control"-->
-                                                            <!--type="text" style="height:30px" readonly/>-->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -365,8 +374,6 @@
                                                     <label class="col-sm-4 control-label no-padding-right">客户留言：</label>
                                                     <div class="col-sm-8">
                                                         <div class="pos-rel">
-                                                            <!--<input id="re_customerRemark" class="form-control"-->
-                                                            <!--type="text" style="height:30px" readonly/>-->
                                                             <textarea id="re_customerRemark"
                                                                       class="form-control" disabled="disabled"
                                                                       style="resize:none;height: 100px;"></textarea>
@@ -591,11 +598,20 @@
 
                                                 <div class="space-2"></div>
                                                 <div class="form-group">
+                                                    <label class="col-sm-3 control-label no-padding-right">服务城市：</label>
+                                                    <div class="col-sm-9">
+                                                        <div class="pos-rel">
+                                                            <input id="app_customerCityName" class="form-control"
+                                                                   type="text" style="height:30px" readonly/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="space-2"></div>
+                                                <div class="form-group">
                                                     <label class="col-sm-3 control-label no-padding-right">服务地址：</label>
                                                     <div class="col-sm-9">
                                                         <div class="pos-rel">
-                                                            <!--<input id="app_customerAddress" class="form-control"-->
-                                                            <!--type="text" style="height:30px" readonly/>-->
                                                             <textarea id="app_customerAddress"
                                                                       class="form-control" disabled="disabled"
                                                                       style="resize:none;height: 100px;"></textarea>
@@ -1016,6 +1032,7 @@
                     $("#app_customerName").val(result.customerName);
                     $("#app_customerMobile").val(result.customerMobile);
                     $("#app_customerRemark").val(result.customerRemark);
+                    $("#app_customerCityName").val(result.customerCityName);
                     $("#app_customerAddress").val(result.customerAddress);
                     $("#app_serviceTime").val(timeFormat(result.serviceTime).substring(0, 16));
                     $("#app_realServiceTime").val(timeFormat(result.realServiceTime).substring(0, 16));
@@ -1299,6 +1316,7 @@
                     $("#re_customerMobile").val(result.customerMobile);
                     $("#re_customerRemark").val(result.customerRemark);
                     $("#re_customerAddress").val(result.customerAddress);
+                    $("#re_customerCityName").val(result.customerCityName);
                     $("#re_status").val(result.status);
                     $("#re_serviceTime").val(timeFormat(result.serviceTime).substring(0, 16));
                     $("#re_serviceTime").next().next().val(result.serviceTime);
