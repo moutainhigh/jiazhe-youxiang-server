@@ -39,15 +39,22 @@ public class ChargeReceiptBiz {
         if (CollectionUtils.isNotEmpty(result)) {
             result.stream().forEach(item -> receiptKeys.add(createReceiptKey(item)));
             List<PointExchangeRecordDTO> recordDTOList = pointExchangeRecordService.findByExtInfos(receiptKeys);
-            Map<String, PointExchangeRecordDTO> recordDTOMap = recordDTOList.stream().collect(toMap(PointExchangeRecordDTO::getReceiptInfo, Function.identity()));
-            if (MapUtils.isNotEmpty(recordDTOMap)) {
+            try {
+                Map<String, PointExchangeRecordDTO> recordDTOMap = recordDTOList.stream().collect(toMap(PointExchangeRecordDTO::getReceiptInfo, Function.identity()));
+                if (MapUtils.isNotEmpty(recordDTOMap)) {
+                    result.stream().forEach(item -> {
+                        PointExchangeRecordDTO recordDTO = recordDTOMap.get(createReceiptKey(item));
+                        if (recordDTO != null) {
+                            item.setExchangeMobile(recordDTO.getOperatorName());
+                        }
+                    });
+                }
+            } catch (IllegalStateException e) {
                 result.stream().forEach(item -> {
-                    PointExchangeRecordDTO recordDTO = recordDTOMap.get(createReceiptKey(item));
-                    if (recordDTO != null) {
-                        item.setExchangeMobile(recordDTO.getOperatorName());
-                    }
+                    item.setExchangeMobile("出现重复记录，请手动查询");
                 });
             }
+
         }
         return result;
     }
