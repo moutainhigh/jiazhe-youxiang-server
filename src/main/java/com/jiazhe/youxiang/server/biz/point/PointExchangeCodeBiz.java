@@ -3,7 +3,6 @@ package com.jiazhe.youxiang.server.biz.point;
 import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.CodeStatusEnum;
-import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeEditDTO;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;

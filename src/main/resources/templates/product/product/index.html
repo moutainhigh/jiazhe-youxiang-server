@@ -181,6 +181,18 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
+                                                    <label class="col-sm-4 control-label no-padding-right">可预约天数
+                                                        ：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="pos-rel">
+                                                            <input id="inputBookDays" name="bookDays"
+                                                                   class="form-control"
+                                                                   type="text" style="height: 30px;"/>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
                                                     <label class="col-sm-4 control-label no-padding-right">有效期天数
                                                         ：</label>
                                                     <div class="col-sm-8">
@@ -312,7 +324,7 @@
         var tableOption = {
             url: "/api/product/getlist",// 获取数据的地址
             postData: transformToJson($('#searchForm').serializeArray()),
-            colNames: ['', '商品名称', '商品描述', '最少购买数量', '单位', '需提前预约天数', '有效期天数 ', '商品分类 ', '商品状态', '排序', '操作'],
+            colNames: ['', '商品名称', '商品描述', '最少购买数量', '单位', '需提前预约天数', '可预约天数',  '有效期天数 ', '商品分类 ', '商品状态', '排序', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 50, sortable: false},
@@ -320,6 +332,7 @@
                 {name: 'lastNum', index: 'lastNum', width: 50, sortable: false},
                 {name: 'unitName', index: 'unitName', width: 50, sortable: false},
                 {name: 'delayDays', index: 'delayDays', width: 50, sortable: false},
+                {name: 'bookDays', index: 'bookDays', width: 50, sortable: false},
                 {name: 'effectiveDays', index: 'effectiveDays', width: 50, sortable: false},
                 {
                     name: 'productType',
@@ -455,6 +468,7 @@
         $("#inputDescription").val("");
         $("#inputLastNum").val("");
         $("#inputDelayDays").val("");
+        $("#inputBookDays").val("");
         $("#inputUnitName").val("");
         $("#inputEffectiveDays").val("");
         $("#inputSmsTemplate").val("");
@@ -498,6 +512,7 @@
                     $("#inputDescription").val(result.description);
                     $("#inputLastNum").val(result.lastNum);
                     $("#inputDelayDays").val(result.delayDays);
+                    $("#inputBookDays").val(result.bookDays);
                     $("#inputUnitName").val(result.unitName);
                     $("#inputEffectiveDays").val(result.effectiveDays);
                     $("#inputSmsTemplate").val(result.smsTemplate);

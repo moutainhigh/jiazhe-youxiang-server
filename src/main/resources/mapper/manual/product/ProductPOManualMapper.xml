@@ -7,6 +7,7 @@
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="description" property="description" jdbcType="VARCHAR"/>
         <result column="delay_days" property="delayDays" jdbcType="INTEGER"/>
+        <result column="book_days" property="bookDays" jdbcType="INTEGER"/>
         <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR"/>
         <result column="header_img_url" property="headerImgUrl" jdbcType="VARCHAR"/>
         <result column="detail_img_url" property="detailImgUrl" jdbcType="VARCHAR"/>
@@ -24,7 +25,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-    id, product_category_id, name, description, delay_days, thumbnail_url, header_img_url,
+    id, product_category_id, name, description, delay_days, book_days, thumbnail_url, header_img_url,
     detail_img_url, product_type, unit_name, last_num, status, priority, sms_template,
     effective_days, ext_info, is_deleted, add_time, mod_time
     </sql>

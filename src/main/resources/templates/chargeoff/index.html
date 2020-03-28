@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title></title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/static/init.css}"/>
+    <link rel="stylesheet" th:href="@{/static/Viewer.js/css/viewer.min.css}"/>
+    <!-- Javascript -->
+    <script th:src="@{/static/init.js}"></script>
+    <script th:src="@{/static/ace-master/js/bootstrap-tag.min.js}"></script>
+    <script th:src="@{/static/Viewer.js/js/viewer.min.js}"></script>
+
+    <style>
+        .ui-jqgrid .ui-jqgrid-bdiv {
+            overflow-x: auto;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 10px;
+        }
+
+        #ShowImage_Form::-webkit-scrollbar {
+            width: 15px;
+            height: 15px;
+        }
+
+        .float {
+            overflow: hidden;
+        }
+
+        .item {
+            float: left;
+            height: 100px;
+            width: 31%;
+            border-right: 3px solid #fff;
+            border-top: 3px solid #fff;
+        }
+
+        /*隐藏×*/
+        span button {
+            display: none;
+        }
+
+        /*隐藏*/
+        #pointCodes + input {
+            display: none;
+        }
+
+        .chosen-container-single .chosen-single {
+            height: 30px;
+            border-radius: 0px;
+        }
+
+        .viewer-container {
+            position: relative;
+            min-height: 400px;
+            height: 100% !important;
+            width: 100% !important;
+        }
+
+    </style>
+</head>
+
+<body class="no-skin">
+<div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a th:href="@{/main/main_center}">主页</a>
+                    </li>
+                    <li class="active">核销管理</li>
+                </ul><!-- /.breadcrumb -->
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xs-12" style="padding-top:40px">
+                        <form id="chargeOffSearchForm" class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">操作人：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="searchSubmitterName" name="submitterName" class="form-control"
+                                               type="text" placeholder="登录名" style="height:30px"/>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">总积分数量：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <input id="searchTotalPoint" name="totalPoint" class="form-control"
+                                               type="text" style="height:30px"/>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">状态：</label>
+                                <div class="col-sm-2">
+                                    <select id="searchStatus" name="status" class="selectpicker show-tick form-control">
+                                        <option value=>所有</option>
+                                        <option value=0 th:selected="${status} == 1">未提交</option>
+                                        <option value=1 th:selected="${status} == 2">已提交</option>
+                                    </select>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">核销类型：</label>
+                                <div class="col-sm-2">
+                                    <select id="searchChargeOffType" name="chargeOffType"
+                                            class="selectpicker show-tick form-control">
+                                        <option value=>所有</option>
+                                        <option value=0 th:selected="${status} == 0">换商品</option>
+                                        <option value=1 th:selected="${status} == 1">充积分</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="space-2"></div>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label no-padding-right">兑换城市：</label>
+                                <div class="col-sm-2">
+                                    <select id="city" name="cityCode"
+                                            class="chosen-select form-control">
+                                        <option value="">所有</option>
+                                    </select>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">提交时间起：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <div class="input-group">
+                                            <input class="form-control date-picker" id="searchSubmitterTimeBegin"
+                                                   type="text" readonly/>
+                                            <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                            <input type="hidden" value=0 name="submitterTimeBegin"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <label class="col-sm-1 control-label no-padding-right">提交时间止：</label>
+                                <div class="col-sm-2">
+                                    <div class="pos-rel">
+                                        <div class="input-group">
+                                            <input class="form-control date-picker" id="searchSubmitterTimeEnd"
+                                                   type="text" readonly/>
+                                            <span class="input-group-addon">
+                                            <i class="fa fa-calendar bigger-110"></i>
+                                        </span>
+                                            <input type="hidden" value=0 name="submitterTimeEnd"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <shiro:hasPermission name="chargeOffSearch">
+                                        <button class="btn btn-white btn-default btn-round btn-sm"
+                                                onclick="return search()">
+                                            <i class="ace-icon fa fa-search red2"></i>
+                                            查询
+                                        </button>
+                                    </shiro:hasPermission>
+                                    <shiro:hasPermission name="chargeOffExport">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <button class="btn btn-white btn-default btn-round btn-sm"
+                                                onclick="exportExcel();return false;">
+                                            <i class="ace-icon fa  fa-file-excel-o red2"></i>
+                                            导出对账单
+                                        </button>
+                                    </shiro:hasPermission>
+                                </div>
+
+                            </div>
+
+                        </form>
+                    </div><!-- /.col -->
+
+                    <div class="col-xs-12" style="text-align: right" id="buttonDiv">
+                        <p style="margin:1px;height: 31px">
+
+                        </p>
+                    </div><!-- /.col -->
+
+                    <div class="col-xs-12">
+                        <table id="grid-table"></table>
+
+                        <div id="grid-pager"></div>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+</div><!-- /.main-container -->
+
+<div id="modal-table" class="modal fade" tabindex="-1" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header no-padding">
+                <div class="table-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <span class="white">&times;</span>
+                    </button>
+                    核销兑换码记录详情
+                </div>
+            </div>
+            <div class="modal-body no-padding" style="height:250px">
+                <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                    <thead>
+                    <tr>
+                        <th>积分卡名称</th>
+                        <th>积分卡面额（分）</th>
+                        <th>卡号</th>
+                        <th>密码</th>
+                    </tr>
+                    </thead>
+                    <tbody id="modelTbody">
+                    <!--此处放消积分卡明细-->
+                    </tbody>
+                </table>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+</body>
+<script type="text/javascript">
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+    var chargeOffStatus = ['未提交', '已提交'];
+    var chargeOffColor = ['000000', '0000FF'];
+    var chargeOffType = ['换商品', '充积分']
+    var allPoint = 0; //积分总价值
+    var allProductValue = 0;//商品总价值
+    $(function () {
+        //重新修改表格宽度
+        $(window).resize(function () {
+            $("#grid-table").setGridWidth($(window).width() * 0.96);
+        });
+
+        //城市下拉框
+        initCity();
+
+        calculateAllSum();
+        initMultiSelect();
+        initDatePicker();
+
+        var tableOption = {
+            url: "/api/chargeoff/query",
+            postData: transformToJson($('#chargeOffSearchForm').serializeArray()),
+            colNames: ['', '操作', '城市', '银行信息', '操作人', '积分数量', '兑换类型', '状态', '客户姓名', '客户手机号', '商品价值（兑换比例）', '提交时间', '备注'],
+            colModel: [
+                {name: 'id', index: 'id', sortable: false, hidden: true},
+                {name: '_action', index: '_action', width: 80, sortable: false, formatter: customFormatter},
+                {name: 'cityName', index: 'cityName', width: 50, sortable: false},
+                {name: 'bankOutletsName', index: 'bankOutletsName', width: 50, sortable: false},
+                {name: 'submitterName', index: 'submitterName', width: 50, sortable: false},
+                {name: 'totalPoint', index: 'totalPoint', width: 50, sortable: false},
+                {
+                    name: 'chargeOffType',
+                    index: 'chargeOffType',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return rowObject.id == 0 ? '总积分：' : chargeOffType[rowObject.chargeOffType];
+                    }
+                },
+                {
+                    name: 'status',
+                    index: 'status',
+                    width: 50,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if(rowObject.id == 0){
+                            return cellvalue;
+                        }else{
+                            return generateSpan(chargeOffStatus[rowObject.status], chargeOffColor[rowObject.status]);
+                        }
+                    }
+                },
+                {name: 'customerName',index: 'customerName',width: 50,sortable: false},
+                {name: 'customerMobile',index: 'customerMobile',width: 80,sortable: false},
+                {
+                    name: 'productValue',
+                    index: 'productValue',
+                    width: 100,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if(rowObject.id == 0){
+                            return cellvalue;
+                        }else{
+                            return rowObject.chargeOffType == 0 ? (rowObject.productValue + '(' + rowObject.productValue/rowObject.totalPoint * 500 +')'): "--";
+                        }
+
+                    }
+                },
+                {
+                    name: 'submitterTime',
+                    index: 'submitterTime',
+                    width: 120,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return timeFormat(rowObject.submitterTime);
+                    }
+                },
+                {name: 'remark',index: 'remark',width: 120,sortable: false}
+            ],
+            footerrow: true,
+            caption: "短信密码核销列表",
+            loadComplete: function (data) {
+                if ("error" in data) {
+                    bootboxalert(data.error.message);
+                    return false;
+                }
+                var table = this;
+                setTimeout(function () {
+                    $("#jqgh_grid-table_rn").empty().append("序号");//第一列加上列名
+                    updatePagerIcons(table);//美化【首页，下一页，上一页，末页】
+                }, 0);
+                var rows = data.data;
+                var pageSum = 0;
+                for (var i = 0, l = rows.length; i < l; i++) {
+                    pageSum += rows[i].totalPoint;
+                }
+                $(this).jqGrid("footerData", "set", {
+                    id: 0,
+                    _action: '',
+                    submitterName:'本页积分',
+                    totalPoint: pageSum,
+                    chargeOffType: '总积分：',
+                    status: formatNumberWithComma(allPoint),
+                    customerMobile:'总商品价值：',
+                    productValue:formatNumberWithComma(allProductValue)
+                });
+            }
+        };
+        initTable(grid_selector, pager_selector, tableOption);
+    });
+
+    function search() {
+        calculateAllSum();
+        jQuery(grid_selector).setGridParam({
+            url: "/api/chargeoff/query",
+            postData: transformToJson($('#chargeOffSearchForm').serializeArray()),
+        }).trigger("reloadGrid", [{page: 1}]);
+        return false;
+    }
+
+    function customFormatter(cellvalue, options, rowObject) {
+        if (rowObject.id == 0) {
+            return '【核销积分】汇总';
+        }
+        var str = "";
+        str += getFunctionButton("btn-success", "show(" + JSON.stringify(rowObject.pointList) + ")", "查看");
+        return str;
+    }
+
+    function show(pointList){
+        $("#modelTbody").empty();
+        if(null == pointList){
+            bootboxalert('暂无相关信息');
+            return false;
+        }
+        for (var i = 0; i < pointList.length; i++) {
+            var str = "<tr>" +
+                "<td>" + pointList[i].pointName + "</td>" +
+                "<td>" + formatNumberWithComma(pointList[i].pointValue) + "</td>" +
+                "<td>" + pointList[i].pointExchangeCodeCode + "</td>" +
+                "<td>" + pointList[i].pointExchangeCodeKeyt + "</td>" +
+                "</td></tr>"
+            $("#modelTbody").append(str);
+        }
+        $("#modal-table").modal('show');
+    }
+
+    function exportExcel() {
+        var obj = transformToJson($('#chargeOffSearchForm').serializeArray());
+        var param = "";
+        for (var key in obj) {
+            param = param + key + "=" + obj[key] + "&";
+        }
+        window.location.href = "/api/chargeoff/exportdetail?" + param;
+        return false;
+    }
+
+    function calculateAllSum() {
+        $.ajax({
+            url: "/api/chargeoff/querysummary",
+            dataType: "json",
+            async: false,
+            data: transformToJson($('#chargeOffSearchForm').serializeArray()),
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    allPoint = data.data.totalPoint;
+                    //此处未提供商品的价值
+                    allProductValue = data.data.totalProductValue;
+                }
+            },
+            error: error
+        });
+    }
+
+    function initCity() {
+        $.ajax({
+            url: "/api/syscity/getopenlist",
+            dataType: "json",
+            async: true,
+            type: "GET",
+            success: function (data) {
+                if ('error' in data) {
+                    bootboxalert(data.error.message);
+                } else {
+                    var result = data.data;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#city").append("<option value=" + result[i].cityCode + ">" + result[i].cityName + "(" + result[i].cityLevel + "级)</option>");
+                    }
+                }
+                initSearchSelect("city");
+            },
+            error: function () {
+                bootboxalert("服务器异常，请联系管理员");
+            }
+        });
+    }
+
+</script>
+</html>
+

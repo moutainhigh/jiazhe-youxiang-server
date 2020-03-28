@@ -34,6 +34,10 @@ public class ProductDTO extends BaseObject{
      */
     private Integer delayDays;
     /**
+     * 商品可购买天数
+     */
+    private Integer bookDays;
+    /**
      * 商品缩略图url
      */
     private String thumbnailUrl;
@@ -117,6 +121,14 @@ public class ProductDTO extends BaseObject{
 
     public void setDelayDays(Integer delayDays) {
         this.delayDays = delayDays;
+    }
+
+    public Integer getBookDays() {
+        return bookDays;
+    }
+
+    public void setBookDays(Integer bookDays) {
+        this.bookDays = bookDays;
     }
 
     public String getThumbnailUrl() {
