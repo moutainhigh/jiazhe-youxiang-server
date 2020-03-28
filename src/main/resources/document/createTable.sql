@@ -754,7 +754,7 @@ CREATE TABLE `point_exchange_record` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增id',
     `point_id` INT(10) UNSIGNED NOT NULL COMMENT '积分卡Id',
     `exchange_code_id` INT(10) UNSIGNED COMMENT '兑换码id',
-    `exchange_type` INT(10) NOT NULL DEFAULT '0' COMMENT '0-后台兑换码兑换，1-客户自行兑换码兑换，2-直接充值，3-消费记录审核而来，4-二维码兑换',
+    `exchange_type` INT(10) NOT NULL DEFAULT '0' COMMENT '0-后台兑换码兑换，1-客户自行兑换码兑换，2-直接充值，3-消费记录审核而来，4-二维码兑换，5-核销兑换',
     `operator_id` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '操作人id',
     `operator_name` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '操作人名称',
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
