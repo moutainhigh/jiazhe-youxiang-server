@@ -12,7 +12,8 @@ CREATE TABLE `sys_log` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_operator_id` (`operator_id`)
 )  ENGINE=INNODB COMMENT='日志信息表';
 
 drop table if exists sys_user;
@@ -30,7 +31,8 @@ CREATE TABLE `sys_user` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_loginName` (`loginName`)
 )  ENGINE=INNODB COMMENT='后台用户表';
 
 drop table if exists sys_role;
@@ -43,7 +45,8 @@ CREATE TABLE `sys_role` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_name` (`name`)
 )  ENGINE=INNODB COMMENT='角色表';
 
 drop table if exists sys_role_permission;
@@ -55,7 +58,8 @@ CREATE TABLE `sys_role_permission` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_role_id` (`role_id`)
 )  ENGINE=INNODB COMMENT='角色权限关联表';
 
 drop table if exists sys_user_role;
@@ -67,7 +71,9 @@ CREATE TABLE `sys_user_role` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_user_id` (`user_id`),
+    KEY `idx_role_id` (`role_id`)
 )  ENGINE=INNODB COMMENT='用户角色关联表';
 
 drop table if exists sys_city;
@@ -84,7 +90,8 @@ CREATE TABLE `sys_city` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_city_code` (`city_code`)
 )  ENGINE=INNODB COMMENT='城市信息表';
 
 
@@ -107,7 +114,10 @@ CREATE TABLE `recharge_card` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_customer_id` (`customer_id`),
+    KEY `idx_project_id` (`project_id`),
+    KEY `idx_exchange_record_id` (`exchange_record_id`)
 )  ENGINE=INNODB COMMENT='充值卡信息表';
 
 
@@ -134,7 +144,8 @@ CREATE TABLE `recharge_card_exchange_code_batch` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_project_id` (`project_id`)
 )  ENGINE=INNODB COMMENT='充值卡兑换码批次信息表';
 
 drop table if exists recharge_card_exchange_code;
@@ -162,7 +173,11 @@ CREATE TABLE `recharge_card_exchange_code` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_batch_id` (`batch_id`),
+    KEY `idx_project_id` (`project_id`),
+    KEY `idx_code` (`code`),
+    KEY `idx_keyt` (`keyt`)
 )  ENGINE=INNODB COMMENT='充值卡兑换码信息表';
 
 
@@ -178,7 +193,10 @@ CREATE TABLE `recharge_card_exchange_record` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_recharge_card_id` (`recharge_card_id`),
+    KEY `idx_exchange_code_id` (`exchange_code_id`),
+    KEY `idx_operator_id` (`operator_id`)
 )  ENGINE=INNODB COMMENT='充值卡兑换记录表';
 
 
@@ -201,7 +219,10 @@ CREATE TABLE `voucher` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_customer_id` (`customer_id`),
+    KEY `idx_project_id` (`project_id`),
+    KEY `idx_exchange_record_id` (`exchange_record_id`)
 )  ENGINE=INNODB COMMENT='代金券信息表';
 
 drop table if exists voucher_exchange_code_batch;
@@ -226,7 +247,8 @@ CREATE TABLE `voucher_exchange_code_batch` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_project_id` (`project_id`)
 )  ENGINE=INNODB COMMENT='代金券兑换码批次信息表';
 
 drop table if exists voucher_exchange_code;
@@ -254,7 +276,11 @@ CREATE TABLE `voucher_exchange_code` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_batch_id` (`batch_id`),
+    KEY `idx_project_id` (`project_id`),
+    KEY `idx_code` (`code`),
+    KEY `idx_keyt` (`keyt`)
 )  ENGINE=INNODB COMMENT='代金券兑换码信息表';
 
 drop table if exists voucher_exchange_record;
@@ -269,7 +295,10 @@ CREATE TABLE `voucher_exchange_record` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_voucher_id` (`voucher_id`),
+    KEY `idx_exchange_code_id` (`exchange_code_id`),
+    KEY `idx_operator_id` (`operator_id`)
 )  ENGINE=INNODB COMMENT='代金券兑换记录表';
 
 drop table if exists project;
@@ -309,7 +338,8 @@ CREATE TABLE `product` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_product_category_id` (`product_category_id`)
 )  ENGINE=INNODB COMMENT='商品信息';
 
 drop table if exists electronic_product_exchange_code;
@@ -327,7 +357,12 @@ CREATE TABLE `electronic_product_exchange_code` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_product_id` (`product_id`),
+    KEY `idx_order_id` (`order_id`),
+    KEY `idx_order_code` (`order_code`),
+    KEY `idx_code` (`code`),
+    KEY `idx_keyt` (`keyt`)
 )  ENGINE=INNODB COMMENT='电子商品兑换码信息';
 
 drop table if exists product_price;
@@ -342,7 +377,9 @@ CREATE TABLE `product_price` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_city_code` (`city_code`),
+    KEY `idx_product_id` (`product_id`)
 )  ENGINE=INNODB COMMENT='商品价格信息表';
 
 drop table if exists product_category;
@@ -373,7 +410,8 @@ CREATE TABLE `customer` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_mobile` (`mobile`)
 )  ENGINE=INNODB COMMENT='客户信息表';
 
 drop table if exists `customer_address`;
@@ -391,7 +429,8 @@ CREATE TABLE `customer_address` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_customer_id` (`customer_id`)
 )  ENGINE=INNODB COMMENT='客户地址信息表';
 
 
@@ -429,7 +468,11 @@ CREATE TABLE `order_info` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_order_code` (`order_code`),
+    KEY `idx_customer_id` (`customer_id`),
+    KEY `idx_product_id` (`product_id`),
+    KEY `idx_service_product_id` (`service_product_id`)
 )  ENGINE=INNODB COMMENT='订单信息表';
 
 
@@ -448,7 +491,12 @@ CREATE TABLE `order_payment` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_order_code` (`order_code`),
+    KEY `idx_order_id` (`order_id`),
+    KEY `idx_point_id` (`point_id`),
+    KEY `idx_recharge_card_id` (`recharge_card_id`),
+    KEY `idx_voucher_id` (`voucher_id`)
 )  ENGINE=INNODB COMMENT='支付信息表';
 
 drop table if exists `order_refund`;
@@ -466,7 +514,12 @@ CREATE TABLE `order_refund` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_order_code` (`order_code`),
+    KEY `idx_order_id` (`order_id`),
+    KEY `idx_point_id` (`point_id`),
+    KEY `idx_recharge_card_id` (`recharge_card_id`),
+    KEY `idx_voucher_id` (`voucher_id`)
 )  ENGINE=INNODB COMMENT='退款信息表';
 
 drop table if exists `audit_record`;
@@ -503,7 +556,9 @@ CREATE TABLE `audit_record` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_submitter_id` (`submitter_id`),
+    KEY `idx_auditor_id` (`auditor_id`)
 )  ENGINE=INNODB COMMENT='兑换审核信息表';
 
 drop table if exists `charge_receipt`;
@@ -522,7 +577,9 @@ CREATE TABLE `charge_receipt` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_audit_record_id` (`audit_record_id`),
+    KEY `idx_inputer_id` (`inputer_id`)
 )  ENGINE=INNODB COMMENT='充值凭证表';
 
 drop table if exists `simple_session`;
@@ -534,7 +591,8 @@ CREATE TABLE `simple_session` (
     `ext_info` VARCHAR(1023) NOT NULL DEFAULT '' COMMENT '预留的其它字段',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_cookie` (`cookie`)
 )  ENGINE=INNODB COMMENT='登录记录信息表';
 
 drop table if exists `advance_pay`;
@@ -559,7 +617,8 @@ CREATE TABLE `partner` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_name` (`name`)
 )  ENGINE=INNODB COMMENT='合作商';
 
 drop table if exists `service_item`;
@@ -571,7 +630,8 @@ CREATE TABLE `service_item` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_name` (`name`)
 )  ENGINE=INNODB COMMENT='服务项目';
 
 drop table if exists `partner_order_info`;
@@ -598,7 +658,9 @@ CREATE TABLE `partner_order_info` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_service_item_id` (`service_item_id`),
+    KEY `idx_partner_id` (`partner_id`)
 )  ENGINE=INNODB COMMENT='合作商订单信息';
 
 drop table if exists point;
@@ -620,7 +682,10 @@ CREATE TABLE `point` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_customer_id` (`customer_id`),
+    KEY `idx_project_id` (`project_id`),
+    KEY `idx_exchange_record_id` (`exchange_record_id`)
 )  ENGINE=INNODB COMMENT='积分信息表';
 
 drop table if exists point_exchange_code_batch;
@@ -647,7 +712,8 @@ CREATE TABLE `point_exchange_code_batch` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_project_id` (`project_id`)
 )  ENGINE=INNODB COMMENT='积分兑换码批次信息表';
 
 drop table if exists point_exchange_code;
@@ -676,7 +742,11 @@ CREATE TABLE `point_exchange_code` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_batch_id` (`batch_id`),
+    KEY `idx_project_id` (`project_id`),
+    KEY `idx_code` (`code`),
+    KEY `idx_keyt` (`keyt`)
 )  ENGINE=INNODB COMMENT='积分兑换码信息表';
 
 drop table if exists point_exchange_record;
@@ -691,7 +761,10 @@ CREATE TABLE `point_exchange_record` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_point_id` (`point_id`),
+    KEY `idx_exchange_code_id` (`exchange_code_id`),
+    KEY `idx_operator_id` (`operator_id`)
 )  ENGINE=INNODB COMMENT='积分兑换记录表';
 
 /**
@@ -715,7 +788,9 @@ CREATE TABLE `message` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_message_template_id` (`message_template_id`),
+    KEY `idx_operator_id` (`operator_id`)
 )  ENGINE=INNODB COMMENT='短信记录表';
 
 /**
@@ -758,7 +833,9 @@ CREATE TABLE `material_info` (
     `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
     `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_payer_id` (`payer_id`),
+    KEY `idx_payee_id` (`payee_id`)
 )  ENGINE=INNODB COMMENT='物料信息';
 
 DROP TABLE IF EXISTS `order_track`;
@@ -772,7 +849,8 @@ CREATE TABLE `order_track` (
   `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
   `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_orderId` (`orderId`)
 ) ENGINE=InnoDB COMMENT='客户订单操作留痕表';
 
 DROP TABLE IF EXISTS `partner_order_track`;
@@ -786,7 +864,8 @@ CREATE TABLE `partner_order_track` (
   `is_deleted` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否已删除,0:未删除,1:已删除',
   `add_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `mod_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_orderId` (`orderId`)
 ) ENGINE=InnoDB COMMENT='商家订单操作留痕表';
 
 DROP TABLE IF EXISTS `charge_off`;

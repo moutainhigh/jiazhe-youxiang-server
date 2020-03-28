@@ -99,7 +99,7 @@
                 )
             </if>
             <if test="cityCode != null and cityCode!=''">
-                AND city_code LIKE CONCAT('%',#{cityCode},'%')
+                AND city_code LIKE CONCAT(#{cityCode},'%')
             </if>
             AND is_deleted = 0 ORDER BY mod_time DESC
         </where>
@@ -161,7 +161,7 @@
                 )
             </if>
             <if test="cityCode != null and cityCode!=''">
-                AND city_code LIKE CONCAT('%',#{cityCode},'%')
+                AND city_code LIKE CONCAT(#{cityCode},'%')
             </if>
             AND is_deleted = 0
         </where>

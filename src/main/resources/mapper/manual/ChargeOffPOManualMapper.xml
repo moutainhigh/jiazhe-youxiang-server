@@ -128,7 +128,7 @@
         sum(product_value) as totalProductValue
         from charge_off
         <where>
-            <if test="queryDTO.submitterName != null">
+            <if test="queryDTO.submitterName != null and queryDTO.submitterName != ''">
                 AND submitter_name = #{queryDTO.submitterName}
             </if>
             <if test="queryDTO.chargeOffType != null">
@@ -137,7 +137,7 @@
             <if test="queryDTO.status != null">
                 AND status = #{queryDTO.status}
             </if>
-            <if test="queryDTO.cityCode != null">
+            <if test="queryDTO.cityCode != null and queryDTO.cityCode != ''">
                 AND city_code = #{queryDTO.cityCode}
             </if>
             <if test="queryDTO.totalPoint != null">
