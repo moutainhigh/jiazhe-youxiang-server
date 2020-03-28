@@ -281,8 +281,9 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         pointRecordPO.setExchangeType(type);
         pointRecordPO.setOperatorId(0);
         pointRecordPO.setOperatorName("");
-        //如果后台用兑换码帮客户充值，同样记录操作人员的信息
-        if (type.equals(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE)) {
+        //如果后台用兑换码帮客户充值或核销充值，同样记录操作人员的信息
+        if (type.equals(CommonConstant.EXCHANGETYPE_USER_CODE_EXCHANGE)
+                || type.equals(CommonConstant.EXCHANGETYPE_QRCODE_CHARGE_OFF)) {
             SysUserDTO sysUserDTO = (SysUserDTO) SecurityUtils.getSubject().getPrincipal();
             if (null == sysUserDTO) {
                 throw new LoginException(LoginCodeEnum.LOGIN_NOT_SIGNIN_IN);
@@ -465,7 +466,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
                 .andUsedEqualTo(CommonConstant.CODE_NOT_USED) //未使用
                 .andExpiryTimeLessThan(new Date()) //已过期
                 .andIsDeletedEqualTo(CommonConstant.CODE_NOT_DELETED); //未删除
-      return  pointExchangeCodePOMapper.updateByExampleSelective(record, example);
+        return pointExchangeCodePOMapper.updateByExampleSelective(record, example);
     }
 
     @Override
