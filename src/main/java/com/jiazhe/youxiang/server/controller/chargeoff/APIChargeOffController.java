@@ -121,6 +121,9 @@ public class APIChargeOffController extends BaseController {
         LOGGER.info("Controller调用[query]方法,入参:{}", JacksonUtil.toJSon(req));
         ChargeOffValidator.validateChargeOffQueryReq(req, true);
         Paging paging = PagingParamUtil.pagingParamSwitch(req);
+        if (req.getCityCode().endsWith("0000")) {
+            req.setCityCode(req.getCityCode().substring(0, 2));
+        }
         ChargeOffQueryDTO dto = ChargeOffAdapter.ChargeOffQueryReq2DTO(req);
         List<ChargeOffInfoDTO> dtoList = chargeOffBiz.query(dto, paging);
         List<ChargeOffInfoResp> respList = dtoList.stream().map(ChargeOffAdapter::chargeOffInfoDTO2Resp).collect(Collectors.toList());
@@ -134,6 +137,9 @@ public class APIChargeOffController extends BaseController {
     public Object querySummary(@ModelAttribute ChargeOffQueryReq req) {
         LOGGER.info("Controller调用[queryTotalPoint]方法,入参:{}", JacksonUtil.toJSon(req));
         ChargeOffValidator.validateChargeOffQueryReq(req, false);
+        if (req.getCityCode().endsWith("0000")) {
+            req.setCityCode(req.getCityCode().substring(0, 2));
+        }
         ChargeOffQueryDTO dto = ChargeOffAdapter.ChargeOffQueryReq2DTO(req);
         QuerySummaryDTO querySummaryDTO = chargeOffBiz.querySummary(dto);
         return ResponseFactory.buildResponse(ChargeOffAdapter.querySummaryDTO2Resq(querySummaryDTO));

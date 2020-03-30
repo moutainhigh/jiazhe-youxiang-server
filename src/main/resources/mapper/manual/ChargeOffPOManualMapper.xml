@@ -43,7 +43,7 @@
                 AND status = #{queryDTO.status}
             </if>
             <if test="queryDTO.cityCode != null and queryDTO.cityCode != ''">
-                AND city_code = #{queryDTO.cityCode}
+                AND city_code LIKE CONCAT(#{queryDTO.cityCode},'%')
             </if>
             <if test="queryDTO.totalPoint != null">
                 AND total_point = #{queryDTO.totalPoint}
@@ -76,7 +76,7 @@
                 AND status = #{queryDTO.status}
             </if>
             <if test="queryDTO.cityCode != null and queryDTO.cityCode != ''">
-                AND city_code = #{queryDTO.cityCode}
+                AND city_code LIKE CONCAT(#{queryDTO.cityCode},'%')
             </if>
             <if test="queryDTO.totalPoint != null">
                 AND total_point = #{queryDTO.totalPoint}
@@ -106,7 +106,7 @@
                 AND status = #{queryDTO.status}
             </if>
             <if test="queryDTO.cityCode != null and queryDTO.cityCode != ''">
-                AND city_code = #{queryDTO.cityCode}
+                AND city_code LIKE CONCAT(#{queryDTO.cityCode},'%')
             </if>
             <if test="queryDTO.totalPoint != null">
                 AND total_point = #{queryDTO.totalPoint}
@@ -138,7 +138,7 @@
                 AND status = #{queryDTO.status}
             </if>
             <if test="queryDTO.cityCode != null and queryDTO.cityCode != ''">
-                AND city_code = #{queryDTO.cityCode}
+                AND city_code LIKE CONCAT(#{queryDTO.cityCode},'%')
             </if>
             <if test="queryDTO.totalPoint != null">
                 AND total_point = #{queryDTO.totalPoint}
