@@ -247,7 +247,7 @@ public class BOCDCBiz {
     /**
      * 生成并上传对账文件
      *
-     * @param monthOffset 月度偏移，0为查询当前月份，-1为上一个月
+     * @param monthOffset 月度偏移，0为发送本月文件（上月数据），-1为发送上月文件（上上月数据）
      * @throws Exception
      */
     public void uploadReconciliationFile(int monthOffset) throws Exception {
