@@ -25,6 +25,8 @@ public class ProductAddReq extends BaseVO {
     private String description;
     @ApiModelProperty("商品延迟购买天数，可空")
     private Integer delayDays;
+    @ApiModelProperty("商品可购买天数，可空")
+    private Integer bookDays;
     @ApiModelProperty("商品缩略图url，可空")
     private String thumbnailUrl;
     @ApiModelProperty("商品头部图url，可空")
@@ -74,6 +76,14 @@ public class ProductAddReq extends BaseVO {
 
     public void setDelayDays(Integer delayDays) {
         this.delayDays = delayDays;
+    }
+
+    public Integer getBookDays() {
+        return bookDays;
+    }
+
+    public void setBookDays(Integer bookDays) {
+        this.bookDays = bookDays;
     }
 
     public String getThumbnailUrl() {

@@ -33,6 +33,10 @@ public class ProductUpdateDTO extends BaseObject{
      */
     private Integer delayDays;
     /**
+     * 商品可购买天数
+     */
+    private Integer bookDays;
+    /**
      * 商品有效期天数
      */
     private Integer effectiveDays;
@@ -96,6 +100,14 @@ public class ProductUpdateDTO extends BaseObject{
 
     public void setDelayDays(Integer delayDays) {
         this.delayDays = delayDays;
+    }
+
+    public Integer getBookDays() {
+        return bookDays;
+    }
+
+    public void setBookDays(Integer bookDays) {
+        this.bookDays = bookDays;
     }
 
     public Integer getEffectiveDays() {

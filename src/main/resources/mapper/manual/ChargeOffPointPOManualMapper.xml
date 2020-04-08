@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jiazhe.youxiang.server.dao.mapper.manual.ChargeOffPointPOManualMapper" >
+  <resultMap id="BaseResultMap" type="com.jiazhe.youxiang.server.domain.po.ChargeOffPointPO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="charge_off_id" property="chargeOffId" jdbcType="INTEGER" />
+    <result column="point_exchange_code_id" property="pointExchangeCodeId" jdbcType="INTEGER" />
+    <result column="point_name" property="pointName" jdbcType="VARCHAR" />
+    <result column="point_value" property="pointValue" jdbcType="DECIMAL" />
+    <result column="point_exchange_code_code" property="pointExchangeCodeCode" jdbcType="VARCHAR" />
+    <result column="point_exchange_code_keyt" property="pointExchangeCodeKeyt" jdbcType="VARCHAR" />
+    <result column="ext_info" property="extInfo" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="mod_time" property="modTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, charge_off_id, point_exchange_code_id, point_name, point_value, point_exchange_code_code,
+    point_exchange_code_keyt, ext_info, is_deleted, add_time, mod_time
+  </sql>
+
+  <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+    insert into charge_off_point (charge_off_id, point_exchange_code_id,
+    point_name, point_value, point_exchange_code_code,
+    point_exchange_code_keyt)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.chargeOffId,jdbcType=INTEGER}, #{item.pointExchangeCodeId,jdbcType=INTEGER},
+      #{item.pointName,jdbcType=VARCHAR}, #{item.pointValue,jdbcType=DECIMAL}, #{item.pointExchangeCodeCode,jdbcType=VARCHAR},
+      #{item.pointExchangeCodeKeyt,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+
+</mapper>

@@ -36,9 +36,12 @@ public class BOCDCQuartz extends QuartzJobBean {
         }
         //定时生成对账信息
         try {
+            logger.info("将从中行线上兑换且已过期的兑换码置为已使用");
+            bocdcBiz.useExpiredCode();
+            logger.info("将从中行线上兑换且已过期的兑换码置为已使用完成");
+
             logger.info("生成生成对账信息文件");
             //线上上传数据必须每月1日上传上月客户使用数据
-
             bocdcBiz.uploadReconciliationFile(-1);
             logger.info("生成生成对账信息文件完成");
         } catch (Exception e) {

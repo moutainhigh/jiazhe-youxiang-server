@@ -140,6 +140,13 @@ public class PermissionConstant {
     //重置凭证录入未完成
     public static final String UNCOMPLETE_CHARGE_RECEIPT = "uncompleteChargeReceipt";
 
+    //核销管理
+    public static final String CHARGE_OFF_MANAGEMENT = "chargeOffManagement";
+    //核销查询
+    public static final String CHARGE_OFF_SEARCH = "chargeOffSearch";
+    //核销明细导出
+    public static final String CHARGE_OFF_EXPORT = "chargeOffExport";
+
     //信息查询
     public static final String INFO_SEARCH = "infoSearch";
     //积分卡查询

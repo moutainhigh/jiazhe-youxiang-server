@@ -633,17 +633,22 @@
 
     //生成兑换码
     function generateCode(id) {
+        //点击后，让生成兑换码按钮不能再次点击
+        $("#grid-table").find('tr[id='+id+']').find('a').each(function(){
+            if($(this).text() == '生成兑换码'){
+                $(this).text('生成中...').removeAttr("href");
+            }
+        });
         $.ajax({
             url: "/api/rcexchangecodebatch/generatecode",
             dataType: "json",
-            async: false,
+            async: true,
             data: {
                 id: id
             },
             type: "POST",
             success: function (data) {
                 success(data);
-                bootboxalert("生成兑换码成功");
             },
             error: error
         });

@@ -1324,6 +1324,66 @@ public class ProductPOExample {
             addCriterion("mod_time not between", value1, value2, "modTime");
             return (Criteria) this;
         }
+
+        public Criteria andBookDaysIsNull() {
+            addCriterion("book_days is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBookDaysIsNotNull() {
+            addCriterion("book_days is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBookDaysEqualTo(Integer value) {
+            addCriterion("book_days =", value, "bookDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andBookDaysNotEqualTo(Integer value) {
+            addCriterion("book_days <>", value, "bookDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andBookDaysGreaterThan(Integer value) {
+            addCriterion("book_days >", value, "bookDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andBookDaysGreaterThanOrEqualTo(Integer value) {
+            addCriterion("book_days >=", value, "bookDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andBookDaysLessThan(Integer value) {
+            addCriterion("book_days <", value, "bookDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andBookDaysLessThanOrEqualTo(Integer value) {
+            addCriterion("book_days <=", value, "bookDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andBookDaysIn(List<Integer> values) {
+            addCriterion("book_days in", values, "bookDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andBookDaysNotIn(List<Integer> values) {
+            addCriterion("book_days not in", values, "bookDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andBookDaysBetween(Integer value1, Integer value2) {
+            addCriterion("book_days between", value1, value2, "bookDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andBookDaysNotBetween(Integer value1, Integer value2) {
+            addCriterion("book_days not between", value1, value2, "bookDays");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
