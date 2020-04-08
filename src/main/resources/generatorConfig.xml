@@ -93,5 +93,9 @@
         <!--<table tableName="material_info" domainObjectName="MaterialInfoPO"/>-->
         <!--<table tableName="order_track" domainObjectName="OrderTrackPO"/>-->
         <!--<table tableName="partner_order_track" domainObjectName="PartnerOrderTrackPO"/>-->
+<!--        <table tableName="charge_off" domainObjectName="ChargeOffPO"/>-->
+<!--        <table tableName="charge_off_point" domainObjectName="ChargeOffPointPO"/>-->
+        <table tableName="city_exchange_ratio" domainObjectName="CityExchangeRatioPO"/>
+
     </context>
 </generatorConfiguration>

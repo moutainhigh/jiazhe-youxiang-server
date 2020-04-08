@@ -260,8 +260,8 @@ public class APIAuditRecordController extends BaseController {
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "导出消费凭证", level = LogLevelEnum.LEVEL_3)
     public void export(@ModelAttribute AuditRecordPageReq req, HttpServletResponse response) {
-        if (req.getCityCode().endsWith("00")) {
-            req.setCityCode(req.getCityCode().substring(0, 4));
+        if (req.getCityCode().endsWith("0000")) {
+            req.setCityCode(req.getCityCode().substring(0, 2));
         }
         Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
         Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));
@@ -273,8 +273,8 @@ public class APIAuditRecordController extends BaseController {
     @RequestMapping(value = "/sum", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.AUDIT_RECORD, operate = "根据条件求字段之和", level = LogLevelEnum.LEVEL_1)
     public Object sum(@ModelAttribute AuditRecordPageReq req) {
-        if (req.getCityCode().endsWith("00")) {
-            req.setCityCode(req.getCityCode().substring(0, 4));
+        if (req.getCityCode().endsWith("0000")) {
+            req.setCityCode(req.getCityCode().substring(0, 2));
         }
         Date submitStartTime = req.getSubmitStartTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getFirstSecond(req.getSubmitStartTime()));
         Date submitEndTime = req.getSubmitEndTime() == CommonConstant.NULL_TIME ? null : new Date(DateUtil.getLastSecond(req.getSubmitEndTime()));

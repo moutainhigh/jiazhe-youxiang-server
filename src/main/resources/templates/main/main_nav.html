@@ -137,6 +137,16 @@
                 </li>
             </shiro:hasPermission>
 
+            <shiro:hasPermission name="chargeOffManagement">
+                <li class="">
+                    <a th:href="@{/chargeoff/index}" target="iframeCenter">
+                        <i class="menu-icon fa fa-tasks"></i>
+                        <span class="menu-text"> 核销管理 </span>
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </shiro:hasPermission>
+
             <shiro:hasPermission name="infoSearch">
                 <li class="">
                     <a href="#" class="dropdown-toggle">
