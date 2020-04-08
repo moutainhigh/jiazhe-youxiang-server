@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.base.config;
 
+import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

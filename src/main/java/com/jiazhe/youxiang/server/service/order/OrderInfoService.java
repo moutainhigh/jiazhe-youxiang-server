@@ -146,7 +146,16 @@ public interface OrderInfoService {
      */
     void wxNotify(String transactionId, String orderNo, Integer wxPay);
 
-    List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId,Date realServiceStartTime, Date realServiceEndTime, String customerCityCode);
+    /**
+     * 微信退款成功后，通知
+     *
+     * @param refundId
+     * @param orderNo
+     * @param wxRefund
+     */
+    void wxRefundNotify(String refundId, String orderNo, Integer wxRefund);
+
+    List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode);
 
     /**
      * 计算订单待支付金额（元）
@@ -155,4 +164,5 @@ public interface OrderInfoService {
      * @return
      */
     BigDecimal calculateORderNeedPay(OrderInfoDTO dto);
+
 }

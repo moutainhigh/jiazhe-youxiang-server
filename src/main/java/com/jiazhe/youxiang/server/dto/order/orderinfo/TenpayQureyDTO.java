@@ -11,17 +11,17 @@ import io.swagger.annotations.ApiModelProperty;
 public class TenpayQureyDTO extends BaseObject {
 
     /**
-    支付状态
+    支付/退款 状态
      */
     private String tradeState;
 
     /**
-    微信支付订单号
+    微信支付订单号/退款 订单号
      */
     private String transactionId;
 
     /**
-    微信支付金额，分为单位
+    微信支付/退款金额，分为单位
      */
     private Integer totalFee;
 
