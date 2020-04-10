@@ -26,10 +26,8 @@ import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.BOCDCBizCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.BOCDCCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.BOCDCException;
-import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.point.pointexchangerecord.PointExchangeRecordDTO;
-import com.jiazhe.youxiang.server.service.CustomerService;
 import com.jiazhe.youxiang.server.service.point.PointExchangeCodeService;
 import com.jiazhe.youxiang.server.vo.req.boc.BOCDCCommonReq;
 import com.jiazhe.youxiang.server.vo.req.boc.BOCDCQueryStockReq;
@@ -41,7 +39,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
@@ -247,17 +244,17 @@ public class BOCDCBiz {
     /**
      * 生成并上传对账文件
      *
-     * @param monthOffset 月度偏移，0为查询当前月份，-1为上一个月
+     * @param month 月份
      * @throws Exception
      */
-    public void uploadReconciliationFile(int monthOffset) throws Exception {
+    public void uploadReconciliationFile(int month) throws Exception {
         LOGGER.info("Biz执行[uploadReconciliationFile]方法");
-        FileUtil.mkDirs(BOCDCConstant.reconciliationPath + "/" + getFristDayOfThisMonth(monthOffset));
-        String sourceFileName = getFileName(BOCDCConstant.sourceFileName, monthOffset);
-        String zipFileName = getFileName(BOCDCConstant.zipFileName, monthOffset);
-        String pgpFileName = getFileName(BOCDCConstant.pgpFileName, monthOffset);
+        FileUtil.mkDirs(BOCDCConstant.reconciliationPath + "/" + getFristDateStringOfMonth(month));
+        String sourceFileName = getFileName(BOCDCConstant.sourceFileName, month);
+        String zipFileName = getFileName(BOCDCConstant.zipFileName, month);
+        String pgpFileName = getFileName(BOCDCConstant.pgpFileName, month);
         //第1步，按照规则组成对账信息字符串
-        String reconciliationInfoString = getReconciliationInfo(monthOffset);
+        String reconciliationInfoString = getReconciliationInfo(month);
 
         //TODO niexiao
         //第2步，写入文件中
@@ -296,9 +293,9 @@ public class BOCDCBiz {
      *
      * @return
      */
-    private String getReconciliationInfo(int monthOffset) {
+    private String getReconciliationInfo(int month) {
         StringBuilder sb = new StringBuilder();
-        List<PointExchangeCodeDTO> dtoList = pointExchangeCodeService.getBOCDCReconciliationInfo(getFristDayOfLastMonth(monthOffset), getLastDayOfLastMonth(monthOffset));
+        List<PointExchangeCodeDTO> dtoList = pointExchangeCodeService.getBOCDCReconciliationInfo(getFristDateOfMonth(month - 1), getLastDateOfMonth(month - 1));
         if (CollectionUtils.isNotEmpty(dtoList)) {
             dtoList.stream().forEach(item -> {
                 sb.append(item.getOutOrderCode());
@@ -333,46 +330,42 @@ public class BOCDCBiz {
         }
     }
 
-    /**
-     * 获得上月1日
-     *
-     * @param monthOffset
-     * @return
-     */
-    private Date getFristDayOfLastMonth(int monthOffset) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, monthOffset);
-        calendar.add(Calendar.MONTH, -1);
-        calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-        return calendar.getTime();
-    }
-
 
     /**
-     * 获得上月最后一天
+     * 获得某月最后一天
      *
-     * @param monthOffset
+     * @param month
      * @return
      */
-    private Date getLastDayOfLastMonth(int monthOffset) {
+    private Date getLastDateOfMonth(int month) {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, monthOffset);
-        calendar.add(Calendar.MONTH, -1);
+        calendar.set(Calendar.MONTH, month - 1);
         calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         return calendar.getTime();
     }
 
     /**
-     * 获得本月第一天日期
+     * 获得某月第一天日期
      *
-     * @param monthOffset
+     * @param month
      * @return
      */
-    private String getFristDayOfThisMonth(int monthOffset) {
+    private Date getFristDateOfMonth(int month) {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, monthOffset);
+        //一月是0
+        calendar.set(Calendar.MONTH, month - 1);
         calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-        return DateUtil.yyyyMMDD(calendar.getTime());
+        return calendar.getTime();
+    }
+
+    /**
+     * 获得某月第一天日期
+     *
+     * @param month
+     * @return
+     */
+    private String getFristDateStringOfMonth(int month) {
+        return DateUtil.yyyyMMDD(getFristDateOfMonth(month));
     }
 
     /**
@@ -381,8 +374,8 @@ public class BOCDCBiz {
      * @param fileName
      * @return
      */
-    private String getFileName(String fileName, int monthOffset) {
-        return BOCDCConstant.reconciliationPath + "/" + getFristDayOfThisMonth(monthOffset) + "/" + fileName.replace("#YYYYMMDD#", getFristDayOfThisMonth(monthOffset));
+    private String getFileName(String fileName, int month) {
+        return BOCDCConstant.reconciliationPath + "/" + getFristDateStringOfMonth(month) + "/" + fileName.replace("#YYYYMMDD#", getFristDateStringOfMonth(month));
     }
 
     /**
