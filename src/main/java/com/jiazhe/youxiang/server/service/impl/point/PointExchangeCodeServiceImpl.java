@@ -181,7 +181,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
         }
         pointExchangeCodePO.setStatus(status);
-        pointExchangeCodePO.setModTime(new Timestamp(System.currentTimeMillis()));
+        pointExchangeCodePO.setModTime(null);
         //激活操作，判断兑换码过期类型，若为【激活之日XX天有效】修改相应的字段
         if (status.equals(CommonConstant.CODE_START_USING)) {
             PointExchangeCodeBatchEditDTO dto = pointExchangeCodeBatchService.getById(pointExchangeCodePO.getBatchId());
@@ -225,7 +225,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         po.setCityCodes(dto.getCityCodes());
         po.setProductIds(dto.getProductIds());
         po.setBatchDescription(dto.getBatchDescription());
-        po.setModTime(new Date());
+        po.setModTime(null);
         pointExchangeCodePOMapper.updateByPrimaryKeySelective(po);
     }
 
@@ -439,7 +439,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         PointExchangeCodePO po = new PointExchangeCodePO();
         po.setId(id);
         po.setUsed(usedStaus);
-        po.setModTime(new Timestamp(System.currentTimeMillis()));
+        po.setModTime(null);
         pointExchangeCodePOMapper.updateByPrimaryKeySelective(po);
     }
 
