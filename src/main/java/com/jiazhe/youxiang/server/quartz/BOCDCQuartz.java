@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.util.Arrays;
-import java.util.Date;
+import java.util.Calendar;
 
 /**
  * @author TU
@@ -42,8 +42,8 @@ public class BOCDCQuartz extends QuartzJobBean {
             logger.info("将从中行线上兑换且已过期的兑换码置为已使用完成");
 
             logger.info("生成生成对账信息文件");
-            //线上上传数据必须每月1日上传上月客户使用数据
-            int month = new Date().getMonth();
+            //获得当前月份，当前月份发送的是上个月的数据
+            int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
             bocdcBiz.uploadReconciliationFile(month);
             logger.info("生成生成对账信息文件完成");
         } catch (Exception e) {
