@@ -303,6 +303,8 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         //修改充值卡兑换码的使用状态
         pointExchangeCodePO.setUsed(CommonConstant.CODE_HAS_USED);
         pointExchangeCodePO.setCustomerId(customerId);
+        //需要更新修改时间
+        pointExchangeCodePO.setModTime(null);
         pointExchangeCodePOMapper.updateByPrimaryKeySelective(pointExchangeCodePO);
         //如果当前环境是中行信用卡环境，则通知中行信用卡方面兑换码已使用
         if (Arrays.asList(BOCCCConstant.BOCCC_ENVIRONMENT).contains(EnvironmentConstant.ENVIRONMENT)) {
