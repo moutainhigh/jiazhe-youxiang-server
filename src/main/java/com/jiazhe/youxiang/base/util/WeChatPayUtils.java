@@ -1,10 +1,19 @@
 package com.jiazhe.youxiang.base.util;
 
+import com.jiazhe.youxiang.server.common.constant.WeChatPayConstant;
+import org.apache.shiro.codec.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import sun.misc.BASE64Decoder;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,6 +28,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.Security;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -35,20 +48,6 @@ import java.util.TreeMap;
 public class WeChatPayUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(WeChatPayUtils.class);
-
-    /**
-     * 随机字符串生成   length表示生成字符串的长度
-     */
-    public static String getRandomString(int length) {
-        String base = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        Random random = new Random();
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < length; i++) {
-            int number = random.nextInt(base.length());
-            sb.append(base.charAt(number));
-        }
-        return sb.toString();
-    }
 
     //请求xml组装
     public static String getRequestXml(Map<String, String> parameters) {
@@ -89,6 +88,8 @@ public class WeChatPayUtils {
     }
 
     /**
+     * 支付成功，微信回调url时需要验证参数
+     *
      * @param map
      * @param apiKey
      * @return
@@ -129,6 +130,34 @@ public class WeChatPayUtils {
         String signParam = sb.toString();
         String resultSign = MD5Utils.MD5Encode(signParam, charset).toUpperCase();
         return signFromAPIResponse.toUpperCase().equals(resultSign);
+    }
+
+    /**
+     * (1）对加密串A做base64解码，得到加密串B
+     * （2）对商户key做md5，得到32位小写key* ( key设置路径：微信商户平台(pay.weixin.qq.com)-->账户设置-->API安全-->密钥设置 )
+     * （3）用key*对加密串B做AES-256-ECB解密（PKCS7Padding）
+     *
+     * @param reqInfo 为加密字符串A
+     * @return
+     */
+    public static Map<String, String> refundResultDecrypt(String reqInfo) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        try {
+            //第一步，base64解码
+            BASE64Decoder decoder = new BASE64Decoder();
+            byte[] reqInfo_base64 = decoder.decodeBuffer(reqInfo);
+            //第二步，获取key的md5值，小写
+            String apiKey_md5 = MD5Utils.MD5Encode(WeChatPayConstant.API_KEY, "utf-8").toLowerCase();
+            //第三步，解密结果
+            SecretKey secretKey = new SecretKeySpec(apiKey_md5.getBytes(), "AES");
+            Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            String result = new String(cipher.doFinal(reqInfo_base64));
+            return doXMLParse(result);
+        } catch (Exception e) {
+            logger.info("退款回调参数req_info解密/解析失败：" + e.getMessage());
+        }
+        return null;
     }
 
     //请求方法

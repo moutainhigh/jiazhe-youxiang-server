@@ -59,6 +59,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/api/syscity/getprovincelist", "anon");//省份查询接口
         filterChainDefinitionMap.put("/api/syscity/getopenlist", "anon");//开放城市列表接口
 
+        filterChainDefinitionMap.put("/api/orderinfo/checktenpayrefund", "anon");//微信支付退款查询
+
         //swagger相关连接可以直接访问
         filterChainDefinitionMap.put("/swagger-ui.html", "anon");
         filterChainDefinitionMap.put("/swagger-resources/**", "anon");
