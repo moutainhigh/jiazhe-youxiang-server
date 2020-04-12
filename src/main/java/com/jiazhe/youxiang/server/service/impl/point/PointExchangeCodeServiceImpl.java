@@ -181,7 +181,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
             throw new PointException(PointCodeEnum.EXCHANGE_CODE_NOT_EXISTED);
         }
         pointExchangeCodePO.setStatus(status);
-        pointExchangeCodePO.setModTime(null);
+        pointExchangeCodePO.setModTime(new Date());
         //激活操作，判断兑换码过期类型，若为【激活之日XX天有效】修改相应的字段
         if (status.equals(CommonConstant.CODE_START_USING)) {
             PointExchangeCodeBatchEditDTO dto = pointExchangeCodeBatchService.getById(pointExchangeCodePO.getBatchId());
@@ -225,7 +225,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         po.setCityCodes(dto.getCityCodes());
         po.setProductIds(dto.getProductIds());
         po.setBatchDescription(dto.getBatchDescription());
-        po.setModTime(null);
+        po.setModTime(new Date());
         pointExchangeCodePOMapper.updateByPrimaryKeySelective(po);
     }
 
@@ -304,7 +304,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         pointExchangeCodePO.setUsed(CommonConstant.CODE_HAS_USED);
         pointExchangeCodePO.setCustomerId(customerId);
         //需要更新修改时间
-        pointExchangeCodePO.setModTime(null);
+        pointExchangeCodePO.setModTime(new Date());
         pointExchangeCodePOMapper.updateByPrimaryKeySelective(pointExchangeCodePO);
         //如果当前环境是中行信用卡环境，则通知中行信用卡方面兑换码已使用
         if (Arrays.asList(BOCCCConstant.BOCCC_ENVIRONMENT).contains(EnvironmentConstant.ENVIRONMENT)) {
@@ -439,7 +439,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         PointExchangeCodePO po = new PointExchangeCodePO();
         po.setId(id);
         po.setUsed(usedStaus);
-        po.setModTime(null);
+        po.setModTime(new Date());
         pointExchangeCodePOMapper.updateByPrimaryKeySelective(po);
     }
 
@@ -461,7 +461,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         PointExchangeCodePO record = new PointExchangeCodePO();
         record.setUsed(CommonConstant.CODE_HAS_USED);
         record.setExtInfo("中行过期兑换码自动兑换");
-        record.setModTime(null);
+        record.setModTime(new Date());
         PointExchangeCodePOExample example = new PointExchangeCodePOExample();
         example.createCriteria()
                 .andOutOrderCodeNotEqualTo("") //通过中行兑换得来
