@@ -287,7 +287,7 @@
                         if(rowObject.id == 0){
                             return cellvalue;
                         }else{
-                            return rowObject.chargeOffType == 0 ? (rowObject.productValue + '(' + rowObject.productValue/rowObject.totalPoint * 500 +')'): "--";
+                            return rowObject.chargeOffType == 0 ? (rowObject.productValue + '(' + (rowObject.productValue/rowObject.totalPoint * 500).toFixed(2) +')'): "--";
                         }
 
                     }
