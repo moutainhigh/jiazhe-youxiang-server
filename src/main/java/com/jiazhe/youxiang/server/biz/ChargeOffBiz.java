@@ -351,7 +351,7 @@ public class ChargeOffBiz {
         //积分的现金价值 500积分1块钱
         BigDecimal pointCashValue = totalPoint.divide(pointCashRatio);
         //当前兑换比例
-        BigDecimal currentRatio = productValue.divide(pointCashValue);
+        BigDecimal currentRatio = productValue.divide(pointCashValue,2,BigDecimal.ROUND_HALF_UP);
         if (currentRatio.compareTo(ratioLimit) == 1) {
             String message = ChargeOffCodeEnum.EXCHANGE_RATIO_OVER_LIMIT.getMessage() + "当前兑换比例为：" + currentRatio.toPlainString() + "，当前城市兑换比例限制为" + ratioLimit;
             throw new ChargeOffException(ChargeOffCodeEnum.EXCHANGE_RATIO_OVER_LIMIT, message);
