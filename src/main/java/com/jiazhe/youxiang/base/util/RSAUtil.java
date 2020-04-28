@@ -417,8 +417,8 @@ public class RSAUtil {
         Cipher cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.DECRYPT_MODE, key);
         byte[] enBytes = null;
-        for (int i = 0; i < content.length; i += 128) {
-            byte[] doFinal = cipher.doFinal(ArrayUtils.subarray(content, i, i + 128));
+        for (int i = 0; i < content.length; i += 256) {
+            byte[] doFinal = cipher.doFinal(ArrayUtils.subarray(content, i, i + 256));
             enBytes = ArrayUtils.addAll(enBytes, doFinal);
         }
         return enBytes;

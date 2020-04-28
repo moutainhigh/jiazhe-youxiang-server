@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
+import com.jiazhe.youxiang.server.biz.WeChatPayBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.OrderException;
@@ -13,6 +14,7 @@ import com.jiazhe.youxiang.server.dao.mapper.manual.order.OrderInfoPOManualMappe
 import com.jiazhe.youxiang.server.domain.po.OrderInfoPO;
 import com.jiazhe.youxiang.server.domain.po.OrderInfoPOExample;
 import com.jiazhe.youxiang.server.domain.po.OrderPaymentPO;
+import com.jiazhe.youxiang.server.domain.po.OrderRefundPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.eleproductexcode.EleProductCodeDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.AppendOrderDTO;
@@ -86,6 +88,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     private PointService pointService;
     @Autowired
     private EleProductCodeService eleProductCodeService;
+    @Autowired
+    private WeChatPayBiz weChatPayBiz;
 
     @Override
     public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode, Paging paging) {
@@ -262,15 +266,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
         if (!orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSERVICE)) {
             throw new OrderException(OrderCodeEnum.ORDER_STATUS_NOT_UNSERVICE);
-        }
-        //订单改为了待派单状态
-        if (CommonConstant.ORDER_UNSENT.equals(dto.getStatus()) || CommonConstant.ORDER_UNSERVICE.equals(dto.getStatus())) {
-            if (CommonConstant.ORDER_UNSENT.equals(dto.getStatus())) {
-                orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
-                orderInfoPO.setServiceTime(dto.getServiceTime());
-            }
-        } else {
-            throw new OrderException(OrderCodeEnum.ORDER_STATUS_ERROR);
         }
         orderInfoPO.setWorkerMobile(dto.getWorkerMobile());
         orderInfoPO.setWorkerName(dto.getWorkerName());
@@ -456,8 +451,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPO.setCost(appendOrderDTO.getCost());
         orderInfoPO.setComments(appendOrderDTO.getComments());
         orderInfoPO.setTotalAmount(orderInfoPO.getProductPrice().multiply(new BigDecimal(orderInfoPO.getCount())));
-        //追加订单，订单状态不改变
-        //orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
+        orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
         orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
     }
 
@@ -504,9 +498,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (dto.getType().equals(CommonConstant.CUSTOMER_PLACE_ORDER)) {
             //服务类商品，检查预约时间、服务地址，服务联系电话等信息
             if (productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
-                Long bookStartTime = DateUtil.getFirstSecond(System.currentTimeMillis() + productDTO.getDelayDays() * CommonConstant.ONE_DAY);
-                Long bookEndTime = DateUtil.getLastSecond(System.currentTimeMillis() + (productDTO.getBookDays() + productDTO.getDelayDays()) * CommonConstant.ONE_DAY);
-                if (dto.getServiceTime().getTime() > bookEndTime || dto.getServiceTime().getTime() < bookStartTime) {
+                long delayDays = dto.getServiceTime().getTime() / CommonConstant.ONE_DAY - System.currentTimeMillis() / CommonConstant.ONE_DAY;
+                if (productDTO.getDelayDays() > delayDays) {
                     throw new OrderException(OrderCodeEnum.SERVICE_TIME_ERROR);
                 }
                 CommonValidator.validateNull(dto.getCustomerAddress(), new OrderException(OrderCodeEnum.SERVICE_ADDRESS_IS_NULL));
@@ -761,11 +754,11 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Override
     public void wxNotify(String transactionId, String orderNo, Integer wxPay) {
         OrderInfoDTO orderInfoDTO = getByOrderNo(orderNo);
-        OrderInfoPO orderInfoPO = OrderInfoAdapter.dto2Po(orderInfoDTO);
-        orderInfoPO.setPayCash(new BigDecimal(wxPay).divide(new BigDecimal(100)));
         if (orderInfoDTO == null) {
             throw new OrderException(OrderCodeEnum.ORDER_NOT_EXIST);
         }
+        OrderInfoPO orderInfoPO = OrderInfoAdapter.dto2Po(orderInfoDTO);
+        orderInfoPO.setPayCash(new BigDecimal(wxPay).divide(new BigDecimal(100)));
         if (!orderInfoDTO.getStatus().equals(CommonConstant.ORDER_UNPAID)) {
             throw new OrderException(OrderCodeEnum.ORDER_NOT_UNPAID);
         }
@@ -792,12 +785,32 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderInfoPO.setComments(comments.toString());
         }
         OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
+        orderPaymentPO.setPayType(CommonConstant.PAY_CASH);
         orderPaymentPO.setPayMoney(new BigDecimal(wxPay).divide(new BigDecimal(100)));
         orderPaymentPO.setOrderId(orderInfoPO.getId());
         orderPaymentPO.setOrderCode(orderInfoPO.getOrderCode());
         orderPaymentPO.setSerialNumber(transactionId);
         orderPaymentService.insert(orderPaymentPO);
         orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
+    }
+
+    @Override
+    public void wxRefundNotify(String refundId, String orderNo, Integer wxRefund) {
+        OrderInfoDTO orderInfoDTO = getByOrderNo(orderNo);
+        if (orderInfoDTO == null) {
+            throw new OrderException(OrderCodeEnum.ORDER_NOT_EXIST);
+        }
+        //查询是否已经有退款记录，没有退款记录就新增一个
+        List<OrderRefundDTO> orderRefundDTOList = orderRefundService.getBySerialNumber(refundId);
+        if (orderRefundDTOList.isEmpty()) {
+            OrderRefundPO orderRefundPO = new OrderRefundPO();
+            orderRefundPO.setRefundType(CommonConstant.PAY_CASH);
+            orderRefundPO.setRefundMoney(new BigDecimal(wxRefund).divide(new BigDecimal(100)));
+            orderRefundPO.setOrderId(orderInfoDTO.getId());
+            orderRefundPO.setOrderCode(orderInfoDTO.getOrderCode());
+            orderRefundPO.setSerialNumber(refundId);
+            orderRefundService.insert(orderRefundPO);
+        }
     }
 
     @Override
@@ -845,22 +858,25 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         List<Integer> voucherIds = Lists.newArrayList();
         if (!orderPaymentDTOList.isEmpty()) {
             orderPaymentDTOList.stream().forEach(bean -> {
-                orderRefundDTOList.add(paymentDto2RefundDto(bean));
                 if (bean.getPayType().equals(CommonConstant.PAY_POINT)) {
+                    orderRefundDTOList.add(paymentDto2RefundDto(bean));
                     PointDTO pointDTO = pointService.getById(bean.getPointId());
                     pointDTO.setBalance(pointDTO.getBalance().add(bean.getPayMoney()));
                     pointDTOList.add(pointDTO);
                 }
                 if (bean.getPayType().equals(CommonConstant.PAY_RECHARGE_CARD)) {
+                    orderRefundDTOList.add(paymentDto2RefundDto(bean));
                     RCDTO rcdto = rcService.getById(bean.getRechargeCardId());
                     rcdto.setBalance(rcdto.getBalance().add(bean.getPayMoney()));
                     rcDTOList.add(rcdto);
                 }
                 if (bean.getPayType().equals(CommonConstant.PAY_VOUCHER)) {
+                    orderRefundDTOList.add(paymentDto2RefundDto(bean));
                     voucherIds.add(bean.getVoucherId());
                 }
                 if (bean.getPayType().equals(CommonConstant.PAY_CASH)) {
                     //微信退款
+                    weChatPayBiz.wechatRefund(bean.getOrderCode(), bean.getPayMoney().multiply(new BigDecimal(100)).intValue());
                 }
             });
         }
