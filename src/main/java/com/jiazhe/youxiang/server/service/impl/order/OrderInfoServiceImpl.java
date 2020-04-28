@@ -509,6 +509,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             if(productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)){
                 dto.setCustomerAddress("");
                 dto.setCustomerMobile("");
+                dto.setCustomerName("");
             }
         }
         String orderCode = generateOrderCode();
