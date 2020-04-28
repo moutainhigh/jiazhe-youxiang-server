@@ -508,9 +508,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 if (dto.getServiceTime().getTime() > bookEndTime || dto.getServiceTime().getTime() < bookStartTime) {
                     throw new OrderException(OrderCodeEnum.SERVICE_TIME_ERROR);
                 }
+                CommonValidator.validateNull(dto.getCustomerAddress(), new OrderException(OrderCodeEnum.SERVICE_ADDRESS_IS_NULL));
+                CommonValidator.validateNull(dto.getCustomerMobile(), new OrderException(OrderCodeEnum.SERVICE_MOBILE_IS_VALID));
             }
-            CommonValidator.validateNull(dto.getCustomerAddress(), new OrderException(OrderCodeEnum.SERVICE_ADDRESS_IS_NULL));
-            CommonValidator.validateNull(dto.getCustomerMobile(), new OrderException(OrderCodeEnum.SERVICE_MOBILE_IS_VALID));
+
         }
         String orderCode = generateOrderCode();
         //待支付金额
