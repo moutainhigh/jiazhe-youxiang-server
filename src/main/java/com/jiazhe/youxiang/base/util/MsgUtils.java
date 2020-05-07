@@ -133,12 +133,12 @@ public class MsgUtils {
     }
 
     public static void validateTemplate(Integer tencentTemplateId, String tencentTemplateContent, String aliTemplateCode, String aliTemplateContent) {
-        if (tencentTemplateId != 0 && !("").equals(tencentTemplateContent)) {
-            TencentMsgUtils.validateTemplate(tencentTemplateId, tencentTemplateContent);
-        }
-        if (!("").equals(aliTemplateCode) && !("").equals(aliTemplateContent)) {
-            AliMsgUtils.validateTemplate(aliTemplateCode, aliTemplateContent);
-        }
+//        if (tencentTemplateId != 0 && !("").equals(tencentTemplateContent)) {
+//            TencentMsgUtils.validateTemplate(tencentTemplateId, tencentTemplateContent);
+//        }
+//        if (!("").equals(aliTemplateCode) && !("").equals(aliTemplateContent)) {
+//            AliMsgUtils.validateTemplate(aliTemplateCode, aliTemplateContent);
+//        }
     }
 
     /**
