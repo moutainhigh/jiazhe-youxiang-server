@@ -6,6 +6,7 @@
 package com.jiazhe.youxiang.server.controller.boc;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.RSAUtil;
 import com.jiazhe.youxiang.base.util.bocdc.BOCDCUtils;
@@ -33,6 +34,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -209,5 +214,41 @@ public class BOCDCController {
         }
         LOGGER.info("getRequestString的结果：{}", result);
         return result;
+    }
+
+
+    @AppApi
+    @ApiOperation(value = "并发测试", httpMethod = "POST", response = BOCDCQueryStockResp.class, notes = "并发测试")
+    @RequestMapping(value = "/concurrencyquerystocktest", method = RequestMethod.POST)
+    public Object concurrencyQueryStockTest(@RequestParam("orderNo") String orderNo) throws InterruptedException {
+        LOGGER.info("HTTP调用[concurrencyQueryStock]方法");
+
+        final int N = 10; // 线程数
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(N);
+
+        List<String> result = Lists.newArrayList();
+
+        for (int i = 0; i < N; i++) {
+            new Thread(() -> {
+                String currentOrderNo = orderNo + new Random().nextInt(100);
+
+                BOCDCQueryStockReq queryStockReq = new BOCDCQueryStockReq();
+                queryStockReq.setOrderNo(currentOrderNo);
+                queryStockReq.setGiftNo("IGI1006966309");
+                queryStockReq.setOrderStatus("04");
+                queryStockReq.setTranDate("20200515154219");
+                queryStockReq.setValidDate("90");
+                BOCDCQueryStockResp queryStockResp = bocdcBiz.queryStock(queryStockReq);
+                if (queryStockReq == null) {
+                    result.add(currentOrderNo + ": null");
+                } else {
+                    result.add(currentOrderNo + ":" + JSONObject.toJSON(queryStockResp).toString());
+                }
+            }).start();
+        }
+
+        TimeUnit.SECONDS.sleep(10);
+
+        return JSONObject.toJSON(result);
     }
 }

@@ -133,4 +133,10 @@ public interface PointExchangeCodePOManualMapper {
      * @return
      */
     List<BOCCCCouponUsedEntity> getBOCCCUsed(@Param("beginTime")Date beginTime, @Param("endTime")Date endTime);
+
+    /**
+     * 根据id查找记录，悲观锁
+     * @param id
+     */
+    PointExchangeCodePO findByIdForUpdate(Integer id);
 }

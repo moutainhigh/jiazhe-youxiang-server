@@ -192,5 +192,11 @@
         WHERE  pec.used = 1 and per.add_time &gt;= #{beginTime} AND per.add_time &lt;= #{endTime}
     </select>
 
+    <select id="findByIdForUpdate" resultType="com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM point_exchange_code WHERE id = #{id} for update
+    </select>
+
 
 </mapper>
