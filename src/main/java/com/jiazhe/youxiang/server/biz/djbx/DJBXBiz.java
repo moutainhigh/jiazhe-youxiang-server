@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.server.biz.djbx;
 
+import com.alibaba.fastjson.JSON;
 import com.jiazhe.youxiang.base.util.HttpUtil;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.RandomUtil;
@@ -14,9 +15,11 @@ import com.jiazhe.youxiang.server.common.exceptions.DJBXException;
 import com.jiazhe.youxiang.server.dto.djbx.PointsQueryDTO;
 import com.jiazhe.youxiang.server.vo.req.djbx.HeaderReq;
 import com.jiazhe.youxiang.server.vo.req.djbx.PointsQueryReq;
+import com.jiazhe.youxiang.server.vo.req.djbx.PointsTokenReq;
 import com.jiazhe.youxiang.server.vo.resp.djbx.GetUserInfoResp;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +28,9 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * 在这里编写类的功能描述
@@ -32,17 +38,28 @@ import org.springframework.stereotype.Service;
  * @author niexiao
  * @created 2020-05-19
  */
-@Service
+@Service("djbxBiz")
 public class DJBXBiz {
 
     public static Logger LOGGER = LoggerFactory.getLogger(DJBXBiz.class);
 
     @Value("${djbx.api.getuserinfo}")
     private String DJBX_API_GETUSERINFO;
+
+    @Value("${djbx.api.getPointsToken}")
+    private String DJBX_API_GETPOINTSTOKEN;
+
     @Value("${djbx.api.pointsinfo}")
     private String DJBX_API_POINTSINFO;
+
     @Value("${djbx.api.pointsdeduct}")
     private String DJBX_API_POINTSDEDUCT;
+
+    @Value("${djbx.api.sendverificode}")
+    private String DJBX_API_SENDVERIFICODE;
+
+    @Value("${djbx.secret}")
+    private String DJBX_SECRET;
 
     private final Integer SUCCESS_CODE = 0;
 
@@ -65,27 +82,72 @@ public class DJBXBiz {
 
     }
 
-    @Async
-    @Retryable(value = {Exception.class},
+    @Retryable(value = {DJBXException.class},
             maxAttempts = 10, backoff = @Backoff(delay = 5000L, multiplier = 2))
     public PointsQueryDTO queryPoints(String agentCode) {
         HeaderReq headerReq = new HeaderReq(RandomUtil.generateNumber(12), DJBXConstant.TRANS_CODE_POINTS_QUERY, DJBXConstant.SYS_CODE);
         PointsQueryReq req = new PointsQueryReq(headerReq, agentCode);
-        String token = DJBXConstant.djbxTokenMap.get("DJBX_DEFAULT_TOKEN").toString();
+        String token = DJBXConstant.djbxTokenMap.get(DJBXConstant.DJBX_TOKEN_DEFAULT_KEY).toString();
         String reqStr = JacksonUtil.toJSon(req);
         String result;
-        LOGGER.info("HTTP调用大家保险剩余积分接口，入参:{}", token, reqStr);
-        //result = HttpUtil.djbxHttpPost(DJBX_API_POINTSINFO, DJBXConstant.djbxTokenMap.get("DJBX_DEFAULT_TOKEN").toString(), JacksonUtil.toJSon(req));
-        result = HttpUtil.djbxHttpPost("https://life-work-wechat.djbx.com/dev/points/pointsshop/pointsinfo", token, reqStr);
-        LOGGER.info("HTTP调用大家保险剩余积分接口，返回值:{}", token, reqStr);
-        System.out.println(result);
-        return null;
+        LOGGER.info("HTTP调用大家保险剩余积分接口，使用token:{},入参:{}", token, reqStr);
+        result = HttpUtil.djbxHttpPost(DJBX_API_POINTSINFO, token, reqStr);
+        LOGGER.info("HTTP调用大家保险剩余积分接口，返回值:{}", result);
+        JSONObject json = JSONObject.fromObject(result);
+        if (null != json.get("code") && DJBXConstant.TOKEN_INVALID_CODE.equals(json.get("code").toString())) {
+            LOGGER.info("token过期，立马获取新的token重试");
+            getPointsToken();
+            throw new DJBXException(DJBXCodeEnum.TOKEN_INVALID);
+        }
+        PointsQueryDTO dto = new PointsQueryDTO();
+        if (null != json.get("resultInfo")) {
+            String resultInfoStr = json.get("resultInfo").toString();
+            JSONObject resultInfoJson = JSONObject.fromObject(resultInfoStr);
+            dto.setAgentCode(resultInfoJson.get("agentCode").toString());
+            dto.setPoints(new Integer(resultInfoJson.get("points").toString()));
+        }
+        return dto;
     }
 
-    public static void main(String[] args) {
-        DJBXBiz biz = new DJBXBiz();
-        biz.queryPoints("GX02001210");
+    @Async
+    @Retryable(value = {DJBXException.class},
+            maxAttempts = 10, backoff = @Backoff(delay = 5000L, multiplier = 2))
+    public void getPointsToken() {
+        PointsTokenReq req = new PointsTokenReq(DJBX_SECRET);
+        String reqStr = JacksonUtil.toJSon(req);
+        String result;
+        LOGGER.info("HTTP调用大家保险token获取接口，入参:{}", reqStr);
+        result = HttpUtil.djbxHttpPost(DJBX_API_GETPOINTSTOKEN, "", reqStr);
+        LOGGER.info("HTTP调用大家保险token获取接口，返回值:{}", result);
+        JSONObject json = JSONObject.fromObject(result);
+        if (null != json.get("code") && "0".equals(json.get("code").toString())) {
+            String token = json.get("token").toString();
+            DJBXConstant.djbxTokenMap.put(DJBXConstant.DJBX_TOKEN_DEFAULT_KEY, token);
+        } else {
+            throw new DJBXException(DJBXCodeEnum.GET_TOKEN_ERROR);
+        }
     }
+
+    @Async
+    @Retryable(value = {DJBXException.class},
+            maxAttempts = 10, backoff = @Backoff(delay = 5000L, multiplier = 2))
+    public void sendVerifiCode(String agentCode) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("agentCode", agentCode);
+        String token = DJBXConstant.djbxTokenMap.get(DJBXConstant.DJBX_TOKEN_DEFAULT_KEY).toString();
+        String reqStr = JacksonUtil.toJSon(jsonObject);
+        String result;
+        LOGGER.info("HTTP调用大家保险发送短信接口，使用token：{}，入参:{}", token, reqStr);
+        result = HttpUtil.djbxHttpPost(DJBX_API_SENDVERIFICODE, token, reqStr);
+        LOGGER.info("HTTP调用大家保险发送短信接口，返回值:{}", result);
+        JSONObject json = JSONObject.fromObject(result);
+        if (null != json.get("code") && DJBXConstant.TOKEN_INVALID_CODE.equals(json.get("code").toString())) {
+            LOGGER.info("token过期，立马获取新的token重试");
+            getPointsToken();
+            throw new DJBXException(DJBXCodeEnum.TOKEN_INVALID);
+        }
+    }
+
 
     private String createParams(String appvalue, String code) {
         return "appvalue=" + appvalue + "&code=" + code;
@@ -129,6 +191,5 @@ public class DJBXBiz {
     private Integer getInt(JSONObject jsonObject, String key) {
         return jsonObject != null && jsonObject.has(key) ? jsonObject.getInt(key) : null;
     }
-
 
 }

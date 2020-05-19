@@ -13,9 +13,9 @@ package com.jiazhe.youxiang.server.common.enums;
 public enum DJBXCodeEnum {
     APPVALUE_ERROR(125001, "APPVALUE_ERROR", "appValue不合法"),
     CODE_IS_NULL(125002, "CODE_IS_NULL", "code不能为空"),
-    GET_USER_INFO_ERROR(125003, "GET_USER_INFO_ERROR", "根据code获取用户信息失败")
-
-            ;
+    GET_USER_INFO_ERROR(125003, "GET_USER_INFO_ERROR", "根据code获取用户信息失败"),
+    TOKEN_INVALID(125004, "TOKEN_INVALID", "token失效"),
+    GET_TOKEN_ERROR(125005, "GET_TOKEN_ERROR", "获取token失败"),;
 
     DJBXCodeEnum(Integer code, String type, String message) {
         this.code = code;
