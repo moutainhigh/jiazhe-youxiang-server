@@ -10,7 +10,6 @@ import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.RandomUtil;
 import com.jiazhe.youxiang.server.common.constant.DJBXConstant;
 import com.jiazhe.youxiang.server.common.enums.DJBXCodeEnum;
-import com.jiazhe.youxiang.server.common.exceptions.BOCCCException;
 import com.jiazhe.youxiang.server.common.exceptions.DJBXException;
 import com.jiazhe.youxiang.server.dto.djbx.PointsQueryDTO;
 import com.jiazhe.youxiang.server.vo.req.djbx.HeaderReq;
@@ -67,15 +66,18 @@ public class DJBXBiz {
     }
 
     @Async
-    @Retryable(value = {BOCCCException.class},
+    @Retryable(value = {Exception.class},
             maxAttempts = 10, backoff = @Backoff(delay = 5000L, multiplier = 2))
     public PointsQueryDTO queryPoints(String agentCode) {
         HeaderReq headerReq = new HeaderReq(RandomUtil.generateNumber(12), DJBXConstant.TRANS_CODE_POINTS_QUERY, DJBXConstant.SYS_CODE);
         PointsQueryReq req = new PointsQueryReq(headerReq, agentCode);
+        String token = DJBXConstant.djbxTokenMap.get("DJBX_DEFAULT_TOKEN").toString();
+        String reqStr = JacksonUtil.toJSon(req);
         String result;
-        LOGGER.info("HTTP调用大家保险剩余积分接口，入参:{}", req);
+        LOGGER.info("HTTP调用大家保险剩余积分接口，入参:{}", token, reqStr);
         //result = HttpUtil.djbxHttpPost(DJBX_API_POINTSINFO, DJBXConstant.djbxTokenMap.get("DJBX_DEFAULT_TOKEN").toString(), JacksonUtil.toJSon(req));
-        result = HttpUtil.djbxHttpPost("https://life-work-wechat.djbx.com/dev/points/pointsshop/pointsinfo", DJBXConstant.djbxTokenMap.get("DJBX_DEFAULT_TOKEN").toString(), JacksonUtil.toJSon(req));
+        result = HttpUtil.djbxHttpPost("https://life-work-wechat.djbx.com/dev/points/pointsshop/pointsinfo", token, reqStr);
+        LOGGER.info("HTTP调用大家保险剩余积分接口，返回值:{}", token, reqStr);
         System.out.println(result);
         return null;
     }
