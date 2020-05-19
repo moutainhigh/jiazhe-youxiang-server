@@ -4,9 +4,15 @@
  *
  */
 package com.jiazhe.youxiang.server.biz.djbx;
+
 import com.jiazhe.youxiang.base.util.HttpUtil;
+import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
+import com.jiazhe.youxiang.server.biz.CustomerBiz;
+import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.djbx.AgentInfoDTO;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.jiazhe.youxiang.server.common.exceptions.BOCCCException;
 import com.jiazhe.youxiang.server.dto.djbx.PointsQueryDTO;
@@ -33,6 +39,9 @@ public class DJBXBiz {
 
     public static Logger LOGGER = LoggerFactory.getLogger(DJBXBiz.class);
 
+    @Autowired
+    private CustomerBiz customerBiz;
+
     @Value("${djbx.api.getuserinfo}")
     private String DJBX_API_GETUSERINFO;
     @Value("${djbx.api.pointsinfo}")
@@ -42,7 +51,8 @@ public class DJBXBiz {
 
     /**
      * 企业微信外部登录
-     *  @param appvalue
+     *
+     * @param appvalue
      * @param code
      * @return
      */
@@ -56,8 +66,18 @@ public class DJBXBiz {
             throw new DJBXException(DJBXCodeEnum.GET_USER_INFO_ERROR, resp.getMsg());
         }
         //TODO zhaoweixin 利用代理人信息，创建自己的用户，并使该用户在登录状态
-
-        return null;
+        String agentCode = resp.getAgentCode();
+        CustomerDTO customerDTO = customerBiz.getByMobile(agentCode);
+        //判断客户在本系统中是否已存在
+        if (customerDTO == null) {
+            //不存在则新建客户
+            CustomerAddDTO customerAddDTO = CustomerAdapter.getUserInfoResp2DTO(resp);
+            customerAddDTO.setRemark(respString);//把获取的全部信息当做备注，便于客户信息后续使用
+            customerBiz.add(customerAddDTO);
+            //查询新建的客户
+            customerDTO = customerBiz.getByMobile(customerAddDTO.getMobile());
+        }
+        return CustomerAdapter.customerDTO2AgentInfoDTO(customerDTO);
     }
 
     @Async

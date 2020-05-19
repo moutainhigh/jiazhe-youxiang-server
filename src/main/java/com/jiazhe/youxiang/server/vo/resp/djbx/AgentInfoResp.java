@@ -17,12 +17,22 @@ import io.swagger.annotations.ApiModelProperty;
 public class AgentInfoResp extends BaseVO {
 
     private static final long serialVersionUID = -8506257116596815644L;
+    @ApiModelProperty("sessionId")
+    private String sessionId;
     @ApiModelProperty("客户ID")
     private Integer customerId;
     @ApiModelProperty("代理人编码")
     private String agentCode;
     @ApiModelProperty("手机号码")
     private String mobile;
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
 
     public Integer getCustomerId() {
         return customerId;
