@@ -16,14 +16,14 @@ import java.util.Date;
  * @description 大家保险的<header>报文头
  * @created 2020-05-18 22:30
  */
-public class HeaderReq extends BaseVO{
+public class HeaderReq extends BaseVO {
 
-    public HeaderReq(String serialNo,String transCode,String sysCode){
+    public HeaderReq(String serialNo, String transCode, String sysCode) {
         this.serialNo = sysCode + serialNo;
         this.transCode = transCode;
         String nowStr = DateUtil.secondToStr(new Date());
-        this.transDate = nowStr.substring(0,10);
-        this.transTime = nowStr.substring(11,19);
+        this.transDate = nowStr.substring(0, 10);
+        this.transTime = nowStr.substring(11, 19);
         this.sysCode = sysCode;
     }
 

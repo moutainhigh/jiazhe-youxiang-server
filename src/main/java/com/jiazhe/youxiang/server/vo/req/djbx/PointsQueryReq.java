@@ -17,12 +17,10 @@ public class PointsQueryReq extends BaseVO {
 
     private HeaderReq header;
 
-    private PointsQuery pointsQuery;
+    private PointsQueryParam pointsQuery;
 
-    public PointsQueryReq(String serialNo, String transCode, String sysCode, String agentCode) {
-        HeaderReq header = new HeaderReq(serialNo, transCode, sysCode);
+    public PointsQueryReq(HeaderReq header, PointsQueryParam pointsQuery) {
         this.header = header;
-        PointsQuery pointsQuery = new PointsQuery(agentCode);
         this.pointsQuery = pointsQuery;
     }
 
@@ -35,21 +33,21 @@ public class PointsQueryReq extends BaseVO {
         this.header = header;
     }
 
-    public PointsQuery getPointsQuery() {
+    public PointsQueryParam getPointsQuery() {
         return pointsQuery;
     }
 
-    public void setPointsQuery(PointsQuery pointsQuery) {
+    public void setPointsQuery(PointsQueryParam pointsQuery) {
         this.pointsQuery = pointsQuery;
     }
 
 }
 
-class PointsQuery {
+class PointsQueryParam {
 
     private String agentCode;
 
-    public PointsQuery(String agentCode) {
+    public PointsQueryParam(String agentCode) {
         this.agentCode = agentCode;
     }
 
