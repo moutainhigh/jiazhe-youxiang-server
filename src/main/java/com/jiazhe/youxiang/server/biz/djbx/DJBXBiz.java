@@ -4,17 +4,22 @@
  *
  */
 package com.jiazhe.youxiang.server.biz.djbx;
-
 import com.jiazhe.youxiang.base.util.HttpUtil;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import com.jiazhe.youxiang.server.common.exceptions.BOCCCException;
+import com.jiazhe.youxiang.server.dto.djbx.PointsQueryDTO;
 import com.jiazhe.youxiang.server.common.enums.DJBXCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.DJBXException;
 import com.jiazhe.youxiang.server.vo.resp.djbx.GetUserInfoResp;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
+import org.springframework.scheduling.annotation.Async;
+
 
 /**
  * 在这里编写类的功能描述
@@ -29,6 +34,8 @@ public class DJBXBiz {
 
     @Value("${djbx.api.getuserinfo}")
     private String DJBX_API_GETUSERINFO;
+    @Value("${djbx.api.pointsinfo}")
+    private String DJBX_API_POINTSINFO;
 
     private final Integer SUCCESS_CODE = 0;
 
@@ -51,6 +58,13 @@ public class DJBXBiz {
 
     }
 
+    @Async
+    @Retryable(value = {BOCCCException.class},
+            maxAttempts = 10, backoff = @Backoff(delay = 5000L, multiplier = 2))
+    public PointsQueryDTO queryPoints(String agentCode) {
+//        PointsQueryReq req =  new PointsQueryReq();
+        return null;
+    }
 
     private String createParams(String appvalue, String code) {
         return "appvalue=" + appvalue + "&code=" + code;
@@ -94,5 +108,6 @@ public class DJBXBiz {
     private Integer getInt(JSONObject jsonObject, String key) {
         return jsonObject != null && jsonObject.has(key) ? jsonObject.getInt(key) : null;
     }
+
 
 }
