@@ -5,6 +5,7 @@
  */
 package com.jiazhe.youxiang.server.biz.djbx;
 import com.jiazhe.youxiang.base.util.HttpUtil;
+import com.jiazhe.youxiang.server.dto.djbx.AgentInfoDTO;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.jiazhe.youxiang.server.common.exceptions.BOCCCException;
@@ -41,11 +42,11 @@ public class DJBXBiz {
 
     /**
      * 企业微信外部登录
-     *
-     * @param appvalue
+     *  @param appvalue
      * @param code
+     * @return
      */
-    public void externalLogin(String appvalue, String code) {
+    public AgentInfoDTO externalLogin(String appvalue, String code) {
         LOGGER.info("Biz调用[externalLogin]方法，appvalue:{},code:{}", appvalue, code);
         //TODO niexiao 调用大家保险的接口，获得代理人信息
         String respString = HttpUtil.sendPost(DJBX_API_GETUSERINFO, createParams(appvalue, code));
@@ -56,6 +57,7 @@ public class DJBXBiz {
         }
         //TODO zhaoweixin 利用代理人信息，创建自己的用户，并使该用户在登录状态
 
+        return null;
     }
 
     @Async
