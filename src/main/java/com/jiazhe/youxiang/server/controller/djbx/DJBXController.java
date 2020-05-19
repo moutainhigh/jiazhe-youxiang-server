@@ -46,7 +46,7 @@ import javax.servlet.http.HttpServletResponse;
  * @created 2020-05-19
  */
 @RestController
-@RequestMapping("/api/externalapi/djbx")
+@RequestMapping("api/djbx")
 public class DJBXController {
 
     public static Logger LOGGER = LoggerFactory.getLogger(DJBXController.class);
