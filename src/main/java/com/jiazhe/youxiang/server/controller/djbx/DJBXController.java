@@ -8,14 +8,19 @@ package com.jiazhe.youxiang.server.controller.djbx;
 import com.jiazhe.youxiang.server.biz.djbx.DJBXBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
+import com.jiazhe.youxiang.server.common.enums.DJBXCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
+import com.jiazhe.youxiang.server.common.exceptions.DJBXException;
+import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.resp.boc.BOCCCResp;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,16 +49,20 @@ public class DJBXController {
      * @return
      */
     @AppApi
-    @ApiOperation(value = "大家保险企业微信登录", response = BOCCCResp.class, notes = "大家保险企业微信登录")
-    @RequestMapping(value = "/externallogin")
+    @ApiOperation(value = "大家保险企业微信登录", response = BOCCCResp.class, notes = "大家保险企业微信登录", httpMethod = "GET")
+    @RequestMapping(value = "/externallogin", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.DJBX, operate = "中行请求第三方退货", level = LogLevelEnum.LEVEL_3)
     public Object externalLogin(@RequestParam("appvalue") String appvalue, @RequestParam("code") String code) {
         LOGGER.error("HTTP调用[externalLogin]方法，appvalue:{},code:{}", appvalue, code);
         //TODO niexiao 参数校验
+        if (!APP_VALUE.equals(appvalue)) {
+            throw new DJBXException(DJBXCodeEnum.APPVALUE_ERROR);
+        }
+        if (StringUtils.isEmpty(code)) {
+            throw new DJBXException(DJBXCodeEnum.CODE_IS_NULL);
+        }
         djbxBiz.externalLogin(appvalue, code);
-
-
-        return null;
+        return ResponseFactory.buildSuccess();
     }
 
 }
