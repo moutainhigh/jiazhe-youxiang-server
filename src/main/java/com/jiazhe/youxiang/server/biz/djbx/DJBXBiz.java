@@ -4,21 +4,27 @@
  *
  */
 package com.jiazhe.youxiang.server.biz.djbx;
+
 import com.jiazhe.youxiang.base.util.HttpUtil;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import com.jiazhe.youxiang.server.common.exceptions.BOCCCException;
-import com.jiazhe.youxiang.server.dto.djbx.PointsQueryDTO;
+import com.jiazhe.youxiang.base.util.JacksonUtil;
+import com.jiazhe.youxiang.base.util.RandomUtil;
+import com.jiazhe.youxiang.server.common.constant.DJBXConstant;
 import com.jiazhe.youxiang.server.common.enums.DJBXCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.BOCCCException;
 import com.jiazhe.youxiang.server.common.exceptions.DJBXException;
+import com.jiazhe.youxiang.server.dto.djbx.PointsQueryDTO;
+import com.jiazhe.youxiang.server.vo.req.djbx.HeaderReq;
+import com.jiazhe.youxiang.server.vo.req.djbx.PointsQueryReq;
 import com.jiazhe.youxiang.server.vo.resp.djbx.GetUserInfoResp;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
 
 /**
@@ -36,6 +42,8 @@ public class DJBXBiz {
     private String DJBX_API_GETUSERINFO;
     @Value("${djbx.api.pointsinfo}")
     private String DJBX_API_POINTSINFO;
+    @Value("${djbx.api.pointsdeduct}")
+    private String DJBX_API_POINTSDEDUCT;
 
     private final Integer SUCCESS_CODE = 0;
 
@@ -62,8 +70,19 @@ public class DJBXBiz {
     @Retryable(value = {BOCCCException.class},
             maxAttempts = 10, backoff = @Backoff(delay = 5000L, multiplier = 2))
     public PointsQueryDTO queryPoints(String agentCode) {
-//        PointsQueryReq req =  new PointsQueryReq();
+        HeaderReq headerReq = new HeaderReq(RandomUtil.generateNumber(12), DJBXConstant.TRANS_CODE_POINTS_QUERY, DJBXConstant.SYS_CODE);
+        PointsQueryReq req = new PointsQueryReq(headerReq, agentCode);
+        String result;
+        LOGGER.info("HTTP调用大家保险剩余积分接口，入参:{}", req);
+        //result = HttpUtil.djbxHttpPost(DJBX_API_POINTSINFO, DJBXConstant.djbxTokenMap.get("DJBX_DEFAULT_TOKEN").toString(), JacksonUtil.toJSon(req));
+        result = HttpUtil.djbxHttpPost("https://life-work-wechat.djbx.com/dev/points/pointsshop/pointsinfo", DJBXConstant.djbxTokenMap.get("DJBX_DEFAULT_TOKEN").toString(), JacksonUtil.toJSon(req));
+        System.out.println(result);
         return null;
+    }
+
+    public static void main(String[] args) {
+        DJBXBiz biz = new DJBXBiz();
+        biz.queryPoints("GX02001210");
     }
 
     private String createParams(String appvalue, String code) {

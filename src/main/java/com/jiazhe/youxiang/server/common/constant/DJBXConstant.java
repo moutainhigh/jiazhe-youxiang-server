@@ -5,6 +5,9 @@
  */
 package com.jiazhe.youxiang.server.common.constant;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author tu
  * @version 1.0
@@ -14,7 +17,16 @@ package com.jiazhe.youxiang.server.common.constant;
 public class DJBXConstant {
 
     /**
-     * 消费积分的系统，本次上线积分商城为 A001
+     * 大家保险token
+   */
+    public static Map djbxTokenMap = new HashMap<String,String>();
+
+    static{
+        djbxTokenMap.put("DJBX_DEFAULT_TOKEN","eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJDTVNBUFAiLCJpZCI6IjEiLCJuYW1lIjoicG9pbnRzIiwiaWF0IjoxNTg5ODY0NDIzLCJleHAiOjE1OTA0NjkyMjN9.m0TXVdT_PpcaSzhPVaDo35N_YWHLa9Q90dviXIg8moI");
+    }
+
+    /**
+     * 消费统，本次上线积分商城为 A001
      */
     public final static String SYS_CODE = "A001";
 

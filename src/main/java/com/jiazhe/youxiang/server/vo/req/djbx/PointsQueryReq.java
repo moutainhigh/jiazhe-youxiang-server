@@ -19,11 +19,10 @@ public class PointsQueryReq extends BaseVO {
 
     private PointsQueryParam pointsQuery;
 
-    public PointsQueryReq(HeaderReq header, PointsQueryParam pointsQuery) {
+    public PointsQueryReq(HeaderReq header, String agentCode) {
         this.header = header;
-        this.pointsQuery = pointsQuery;
+        this.pointsQuery = new PointsQueryParam(agentCode);
     }
-
 
     public HeaderReq getHeader() {
         return header;
