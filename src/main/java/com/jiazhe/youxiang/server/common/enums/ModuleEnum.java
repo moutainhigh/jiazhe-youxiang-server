@@ -36,6 +36,7 @@ public enum ModuleEnum {
     BOCDC(122,"中行储蓄卡模块"),
     BOCCC(123,"中行信用卡模块"),
     CHARGE_OFF(124, "核销管理"),
+    DJBX(125,"大家保险模块"),
     OTHER(999, "其他模块");
 
     private Integer id;
