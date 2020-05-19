@@ -14,9 +14,13 @@ import com.jiazhe.youxiang.server.common.enums.DJBXCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.DJBXException;
 import com.jiazhe.youxiang.server.dto.djbx.PointsQueryDTO;
 import com.jiazhe.youxiang.server.vo.req.djbx.HeaderReq;
+import com.jiazhe.youxiang.server.vo.req.djbx.PointsConsumeParam;
+import com.jiazhe.youxiang.server.vo.req.djbx.PointsConsumeReq;
+import com.jiazhe.youxiang.server.vo.req.djbx.PointsQueryParam;
 import com.jiazhe.youxiang.server.vo.req.djbx.PointsQueryReq;
 import com.jiazhe.youxiang.server.vo.req.djbx.PointsTokenReq;
 import com.jiazhe.youxiang.server.vo.resp.djbx.GetUserInfoResp;
+import com.jiazhe.youxiang.server.vo.resp.djbx.PointsQueryResp;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.util.Strings;
@@ -85,8 +89,9 @@ public class DJBXBiz {
     @Retryable(value = {DJBXException.class},
             maxAttempts = 10, backoff = @Backoff(delay = 5000L, multiplier = 2))
     public PointsQueryDTO queryPoints(String agentCode) {
-        HeaderReq headerReq = new HeaderReq(RandomUtil.generateNumber(12), DJBXConstant.TRANS_CODE_POINTS_QUERY, DJBXConstant.SYS_CODE);
-        PointsQueryReq req = new PointsQueryReq(headerReq, agentCode);
+        HeaderReq headerReq = new HeaderReq(RandomUtil.generateNumber(12), DJBXConstant.TRANS_CODE_QUERY_POINTS, DJBXConstant.SYS_CODE);
+        PointsQueryParam pointsQueryParam = new PointsQueryParam(agentCode);
+        PointsQueryReq req = new PointsQueryReq(headerReq, pointsQueryParam);
         String token = DJBXConstant.djbxTokenMap.get(DJBXConstant.DJBX_TOKEN_DEFAULT_KEY).toString();
         String reqStr = JacksonUtil.toJSon(req);
         String result;
@@ -99,6 +104,35 @@ public class DJBXBiz {
             getPointsToken();
             throw new DJBXException(DJBXCodeEnum.TOKEN_INVALID);
         }
+        PointsQueryDTO dto = new PointsQueryDTO();
+        if (null != json.get("resultInfo")) {
+            String resultInfoStr = json.get("resultInfo").toString();
+            JSONObject resultInfoJson = JSONObject.fromObject(resultInfoStr);
+            dto.setAgentCode(resultInfoJson.get("agentCode").toString());
+            dto.setPoints(new Integer(resultInfoJson.get("points").toString()));
+        }
+        return dto;
+    }
+
+    @Retryable(value = {DJBXException.class},
+            maxAttempts = 10, backoff = @Backoff(delay = 5000L, multiplier = 2))
+    public PointsQueryDTO consumePoints(PointsConsumeParam pointsConsumeParam) {
+        HeaderReq headerReq = new HeaderReq(RandomUtil.generateNumber(12), DJBXConstant.TRANS_CODE_CONSUME_POINTS, DJBXConstant.SYS_CODE);
+        PointsConsumeReq req = new PointsConsumeReq(headerReq, pointsConsumeParam);
+        String token = DJBXConstant.djbxTokenMap.get(DJBXConstant.DJBX_TOKEN_DEFAULT_KEY).toString();
+        String reqStr = JacksonUtil.toJSon(req);
+        String result;
+        LOGGER.info("HTTP调用大家保险核销积分接口，使用token:{},入参:{}", token, reqStr);
+        result = HttpUtil.djbxHttpPost(DJBX_API_POINTSDEDUCT, token, reqStr);
+        LOGGER.info("HTTP调用大家保险核销积分接口，返回值:{}", result);
+        JSONObject json = JSONObject.fromObject(result);
+        if (null != json.get("code") && DJBXConstant.TOKEN_INVALID_CODE.equals(json.get("code").toString())) {
+            LOGGER.info("token过期，立马获取新的token重试");
+            getPointsToken();
+            throw new DJBXException(DJBXCodeEnum.TOKEN_INVALID);
+        }
+
+        //TODO 这里对结果的解析还没做，这个是积分查询结果的解析copy下来的
         PointsQueryDTO dto = new PointsQueryDTO();
         if (null != json.get("resultInfo")) {
             String resultInfoStr = json.get("resultInfo").toString();

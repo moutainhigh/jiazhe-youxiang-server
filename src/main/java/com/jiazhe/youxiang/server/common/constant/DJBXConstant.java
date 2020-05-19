@@ -36,7 +36,7 @@ public class DJBXConstant {
     /**
      * 积分查询接口编码
      */
-    public final static String TRANS_CODE_POINTS_QUERY = "JF0001";
+    public final static String TRANS_CODE_QUERY_POINTS = "JF0001";
 
     /**
      * 积分核销接口编码
