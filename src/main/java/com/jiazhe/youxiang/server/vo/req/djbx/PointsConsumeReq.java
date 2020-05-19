@@ -13,15 +13,15 @@ import com.jiazhe.youxiang.server.vo.BaseVO;
  * @description 积分核销接口请求参数
  * @created 2020-05-19 7:47
  */
-public class ConsumePointsReq extends BaseVO {
+public class PointsConsumeReq extends BaseVO {
 
     private HeaderReq header;
 
-    private ConsumePointsParam consumePoints;
+    private PointsConsumeParam pointsConsume;
 
-    public ConsumePointsReq(HeaderReq header, ConsumePointsParam consumePoints) {
+    public PointsConsumeReq(HeaderReq header, PointsConsumeParam pointsConsume) {
         this.header = header;
-        this.consumePoints = consumePoints;
+        this.pointsConsume = pointsConsume;
     }
 
     public HeaderReq getHeader() {
@@ -32,19 +32,19 @@ public class ConsumePointsReq extends BaseVO {
         this.header = header;
     }
 
-    public ConsumePointsParam getConsumePoints() {
-        return consumePoints;
+    public PointsConsumeParam getPointsConsume() {
+        return pointsConsume;
     }
 
-    public void setConsumePoints(ConsumePointsParam consumePoints) {
-        this.consumePoints = consumePoints;
+    public void setPointsConsume(PointsConsumeParam pointsConsume) {
+        this.pointsConsume = pointsConsume;
     }
 
 }
 
-class ConsumePointsParam {
+class PointsConsumeParam {
 
-    public ConsumePointsParam(String agentCode,String transactionId,String transactionType,String settlementType,Integer changePoints,String verifiCode){
+    public PointsConsumeParam(String agentCode,String transactionId,String transactionType,String settlementType,Integer changePoints,String verifiCode){
         this.agentCode = agentCode;
         this.transactionId = transactionId;
         this.transactionType = transactionType;
