@@ -882,6 +882,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderInfoPO.setOrderTime(new Date());
             orderInfoPO.setServiceTime(dto.getServiceTime());
             orderInfoPO.setRealServiceTime(dto.getServiceTime());
+            orderInfoPO.setPayPoint(BigDecimal.ZERO);
+            orderInfoPO.setPayRechargeCard(BigDecimal.ZERO);
+            orderInfoPO.setPayVoucher(BigDecimal.ZERO);
             orderInfoPO.setPayCash(needPay);
             orderInfoPO.setTotalAmount(productPriceDTO.getPrice().multiply(new BigDecimal(dto.getCount())));
             orderInfoPO.setCost(dto.getCost());
