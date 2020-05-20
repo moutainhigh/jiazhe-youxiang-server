@@ -9,10 +9,13 @@ import com.jiazhe.youxiang.base.util.HttpUtil;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.RandomUtil;
 import com.jiazhe.youxiang.server.common.constant.DJBXConstant;
+import com.jiazhe.youxiang.server.dto.djbx.AgentInfoDTO;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import com.jiazhe.youxiang.server.dto.djbx.PointsQueryDTO;
 import com.jiazhe.youxiang.server.common.enums.DJBXCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.DJBXException;
 import com.jiazhe.youxiang.server.dto.djbx.DJBXPlaceOrderDTO;
-import com.jiazhe.youxiang.server.dto.djbx.PointsQueryDTO;
 import com.jiazhe.youxiang.server.service.order.OrderInfoService;
 import com.jiazhe.youxiang.server.vo.req.djbx.HeaderReq;
 import com.jiazhe.youxiang.server.vo.req.djbx.PointsConsumeParam;
@@ -24,13 +27,11 @@ import com.jiazhe.youxiang.server.vo.resp.djbx.GetUserInfoResp;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
 
 
 /**
@@ -69,11 +70,11 @@ public class DJBXBiz {
 
     /**
      * 企业微信外部登录
-     *
-     * @param appvalue
+     *  @param appvalue
      * @param code
+     * @return
      */
-    public void externalLogin(String appvalue, String code) {
+    public AgentInfoDTO externalLogin(String appvalue, String code) {
         LOGGER.info("Biz调用[externalLogin]方法，appvalue:{},code:{}", appvalue, code);
         //TODO niexiao 调用大家保险的接口，获得代理人信息
         String respString = HttpUtil.sendPost(DJBX_API_GETUSERINFO, createParams(appvalue, code));
@@ -84,6 +85,7 @@ public class DJBXBiz {
         }
         //TODO zhaoweixin 利用代理人信息，创建自己的用户，并使该用户在登录状态
 
+        return null;
     }
 
     @Retryable(value = {DJBXException.class},

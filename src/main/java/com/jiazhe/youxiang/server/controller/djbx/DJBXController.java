@@ -5,9 +5,14 @@
  */
 package com.jiazhe.youxiang.server.controller.djbx;
 
+import com.jiazhe.youxiang.server.biz.djbx.DJBXBiz;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import com.alibaba.fastjson.JSONObject;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.server.adapter.DJBXAdapter;
-import com.jiazhe.youxiang.server.biz.djbx.DJBXBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
@@ -19,18 +24,16 @@ import com.jiazhe.youxiang.server.dto.djbx.DJBXPlaceOrderDTO;
 import com.jiazhe.youxiang.server.dto.djbx.PointsQueryDTO;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
 import com.jiazhe.youxiang.server.vo.req.djbx.DJBXPlaceOrderReq;
-import com.jiazhe.youxiang.server.vo.resp.boc.BOCCCResp;
+import com.jiazhe.youxiang.server.dto.djbx.AgentInfoDTO;
+import com.jiazhe.youxiang.server.vo.req.djbx.ExternalLoginReq;
+import com.jiazhe.youxiang.server.vo.resp.djbx.AgentInfoResp;
 import com.jiazhe.youxiang.server.vo.resp.djbx.PointsQueryResp;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -42,7 +45,7 @@ import java.util.Date;
  * @created 2020-05-19
  */
 @RestController
-@RequestMapping("externalapi/djbx")
+@RequestMapping("api/djbx")
 public class DJBXController {
 
     public static Logger LOGGER = LoggerFactory.getLogger(DJBXController.class);
@@ -55,25 +58,25 @@ public class DJBXController {
     /**
      * 大家保险企业微信登录
      *
-     * @param appvalue
-     * @param code
+     * @param req
      * @return
      */
     @AppApi
-    @ApiOperation(value = "大家保险企业微信登录", response = BOCCCResp.class, notes = "大家保险企业微信登录", httpMethod = "GET")
-    @RequestMapping(value = "/externallogin", method = RequestMethod.GET)
-    @CustomLog(moduleName = ModuleEnum.DJBX, operate = "中行请求第三方退货", level = LogLevelEnum.LEVEL_3)
-    public Object externalLogin(@RequestParam("appvalue") String appvalue, @RequestParam("code") String code) {
-        LOGGER.error("HTTP调用[externalLogin]方法，appvalue:{},code:{}", appvalue, code);
-        //TODO niexiao 参数校验
-        if (!APP_VALUE.equals(appvalue)) {
+    @ApiOperation(value = "大家保险企业微信登录", httpMethod = "POST", response = AgentInfoResp.class, notes = "大家保险企业微信登录")
+    @RequestMapping(value = "/externallogin", method = RequestMethod.POST)
+    @CustomLog(moduleName = ModuleEnum.DJBX, operate = "大家保险企业微信登录", level = LogLevelEnum.LEVEL_2)
+    public Object externalLogin(@ModelAttribute ExternalLoginReq req) {
+        LOGGER.error("HTTP调用[externalLogin]方法,参数为:{}", JSONObject.toJSON(req));
+        // 参数校验
+        CommonValidator.validateNull(req);
+        if (!APP_VALUE.equals(req.getAppvalue())) {
             throw new DJBXException(DJBXCodeEnum.APPVALUE_ERROR);
         }
-        if (StringUtils.isEmpty(code)) {
+        if (StringUtils.isEmpty(req.getCode())) {
             throw new DJBXException(DJBXCodeEnum.CODE_IS_NULL);
         }
-        djbxBiz.externalLogin(appvalue, code);
-        return ResponseFactory.buildSuccess();
+        AgentInfoDTO agentInfoDTO = djbxBiz.externalLogin(req.getAppvalue(), req.getCode());
+        return ResponseFactory.buildResponse(DJBXAdapter.agentInfoDTO2Resp(agentInfoDTO));
     }
 
     @AppApi
