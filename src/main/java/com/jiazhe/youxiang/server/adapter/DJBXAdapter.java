@@ -1,7 +1,11 @@
 package com.jiazhe.youxiang.server.adapter;
 
+import com.jiazhe.youxiang.server.dto.djbx.DJBXPlaceOrderDTO;
 import com.jiazhe.youxiang.server.dto.djbx.PointsQueryDTO;
+import com.jiazhe.youxiang.server.vo.req.djbx.DJBXPlaceOrderReq;
 import com.jiazhe.youxiang.server.vo.resp.djbx.PointsQueryResp;
+
+import java.util.Date;
 
 /**
  * @author TU
@@ -18,5 +22,25 @@ public class DJBXAdapter {
         pointsQueryResp.setAgentCode(dto.getAgentCode());
         pointsQueryResp.setPoints(dto.getPoints());
         return pointsQueryResp;
+    }
+
+    public static DJBXPlaceOrderDTO ReqDJBXPlaceOrder2DTOPlaceOrder(DJBXPlaceOrderReq req) {
+        if (req == null) {
+            return null;
+        }
+        DJBXPlaceOrderDTO dJBXPlaceOrderDTO = new DJBXPlaceOrderDTO();
+        dJBXPlaceOrderDTO.setAgentCode(req.getAgentCode());
+        dJBXPlaceOrderDTO.setVerifiCode(req.getVerifiCode());
+        dJBXPlaceOrderDTO.setCustomerId(req.getCustomerId());
+        dJBXPlaceOrderDTO.setProductId(req.getProductId());
+        dJBXPlaceOrderDTO.setCustomerCityCode(req.getCustomerCityCode());
+        dJBXPlaceOrderDTO.setCount(req.getCount());
+        dJBXPlaceOrderDTO.setCustomerAddress(req.getCustomerAddress());
+        dJBXPlaceOrderDTO.setCustomerMobile(req.getCustomerMobile());
+        dJBXPlaceOrderDTO.setCustomerName(req.getCustomerName());
+        dJBXPlaceOrderDTO.setCustomerRemark(req.getCustomerRemark());
+        dJBXPlaceOrderDTO.setServiceTime(new Date(req.getServiceTime()));
+        dJBXPlaceOrderDTO.setCashSupport(req.getCashSupport());
+        return dJBXPlaceOrderDTO;
     }
 }

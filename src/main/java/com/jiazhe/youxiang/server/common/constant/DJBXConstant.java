@@ -60,4 +60,21 @@ public class DJBXConstant {
      */
     public final static String APP_NAME = "points";
     public final static String USER_NAME = "points";
+
+    /**
+     * 大家保险订单号前缀
+     */
+    public final static String DJBX_ORDER_PREFIX = "DJBX_";
+
+    /**
+     * 交易类型 01-积分消费， 02-积分退回
+     */
+    public final static String DJBX_TRANSACTIONTYPE_CONSUME= "01";
+    public final static String DJBX_TRANSACTIONTYPE_BACK = "02";
+
+    /**
+     * 是否需要与积分商城结算  01-需要与积分商城结算，02-不需要与积分商城结算
+     */
+    public final static String DJBX_SETTLEMENTTYPE_NEED= "01";
+    public final static String DJBX_SETTLEMENTTYPE_NOTNEED = "02";
 }

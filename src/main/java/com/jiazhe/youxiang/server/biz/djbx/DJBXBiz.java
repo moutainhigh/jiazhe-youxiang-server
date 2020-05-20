@@ -5,14 +5,15 @@
  */
 package com.jiazhe.youxiang.server.biz.djbx;
 
-import com.alibaba.fastjson.JSON;
 import com.jiazhe.youxiang.base.util.HttpUtil;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.RandomUtil;
 import com.jiazhe.youxiang.server.common.constant.DJBXConstant;
 import com.jiazhe.youxiang.server.common.enums.DJBXCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.DJBXException;
+import com.jiazhe.youxiang.server.dto.djbx.DJBXPlaceOrderDTO;
 import com.jiazhe.youxiang.server.dto.djbx.PointsQueryDTO;
+import com.jiazhe.youxiang.server.service.order.OrderInfoService;
 import com.jiazhe.youxiang.server.vo.req.djbx.HeaderReq;
 import com.jiazhe.youxiang.server.vo.req.djbx.PointsConsumeParam;
 import com.jiazhe.youxiang.server.vo.req.djbx.PointsConsumeReq;
@@ -20,20 +21,16 @@ import com.jiazhe.youxiang.server.vo.req.djbx.PointsQueryParam;
 import com.jiazhe.youxiang.server.vo.req.djbx.PointsQueryReq;
 import com.jiazhe.youxiang.server.vo.req.djbx.PointsTokenReq;
 import com.jiazhe.youxiang.server.vo.resp.djbx.GetUserInfoResp;
-import com.jiazhe.youxiang.server.vo.resp.djbx.PointsQueryResp;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
-import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -46,6 +43,9 @@ import java.util.Map;
 public class DJBXBiz {
 
     public static Logger LOGGER = LoggerFactory.getLogger(DJBXBiz.class);
+
+    @Autowired
+    private OrderInfoService orderInfoService;
 
     @Value("${djbx.api.getuserinfo}")
     private String DJBX_API_GETUSERINFO;
@@ -114,9 +114,10 @@ public class DJBXBiz {
         return dto;
     }
 
-    @Retryable(value = {DJBXException.class},
-            maxAttempts = 10, backoff = @Backoff(delay = 5000L, multiplier = 2))
-    public PointsQueryDTO consumePoints(PointsConsumeParam pointsConsumeParam) {
+    //    @Async
+//    @Retryable(value = {DJBXException.class},
+//            maxAttempts = 10, backoff = @Backoff(delay = 5000L, multiplier = 2))
+    public boolean consumePoints(PointsConsumeParam pointsConsumeParam) {
         HeaderReq headerReq = new HeaderReq(RandomUtil.generateNumber(12), DJBXConstant.TRANS_CODE_CONSUME_POINTS, DJBXConstant.SYS_CODE);
         PointsConsumeReq req = new PointsConsumeReq(headerReq, pointsConsumeParam);
         String token = DJBXConstant.djbxTokenMap.get(DJBXConstant.DJBX_TOKEN_DEFAULT_KEY).toString();
@@ -131,16 +132,14 @@ public class DJBXBiz {
             getPointsToken();
             throw new DJBXException(DJBXCodeEnum.TOKEN_INVALID);
         }
-
-        //TODO 这里对结果的解析还没做，这个是积分查询结果的解析copy下来的
-        PointsQueryDTO dto = new PointsQueryDTO();
-        if (null != json.get("resultInfo")) {
-            String resultInfoStr = json.get("resultInfo").toString();
-            JSONObject resultInfoJson = JSONObject.fromObject(resultInfoStr);
-            dto.setAgentCode(resultInfoJson.get("agentCode").toString());
-            dto.setPoints(new Integer(resultInfoJson.get("points").toString()));
+        if (null != json.get("header")) {
+            String headerStr = json.get("header").toString();
+            JSONObject headerJson = JSONObject.fromObject(headerStr);
+            if ("00".equals(headerJson.get("resultCode"))) {
+                return true;
+            }
         }
-        return dto;
+        return false;
     }
 
     @Async
@@ -226,4 +225,12 @@ public class DJBXBiz {
         return jsonObject != null && jsonObject.has(key) ? jsonObject.getInt(key) : null;
     }
 
+    /**
+     * 大家保险端下单
+     *
+     * @param dto
+     */
+    public void placeOrder(DJBXPlaceOrderDTO dto) {
+        orderInfoService.djbxPlaceOrder(dto);
+    }
 }

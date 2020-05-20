@@ -5,6 +5,8 @@
  */
 package com.jiazhe.youxiang.server.vo.req.djbx;
 
+import java.math.BigDecimal;
+
 /**
  * @author tu
  * @version 1.0
@@ -13,7 +15,7 @@ package com.jiazhe.youxiang.server.vo.req.djbx;
  */
 public class PointsConsumeParam {
 
-    public PointsConsumeParam(String agentCode,String transactionId,String transactionType,String settlementType,Integer changePoints,String verifiCode){
+    public PointsConsumeParam(String agentCode,String transactionId,String transactionType,String settlementType,BigDecimal changePoints,String verifiCode){
         this.agentCode = agentCode;
         this.transactionId = transactionId;
         this.transactionType = transactionType;
@@ -30,7 +32,7 @@ public class PointsConsumeParam {
 
     private String settlementType;
 
-    private Integer changePoints;
+    private BigDecimal changePoints;
 
     private String verifiCode;
 
@@ -66,11 +68,11 @@ public class PointsConsumeParam {
         this.settlementType = settlementType;
     }
 
-    public Integer getChangePoints() {
+    public BigDecimal getChangePoints() {
         return changePoints;
     }
 
-    public void setChangePoints(Integer changePoints) {
+    public void setChangePoints(BigDecimal changePoints) {
         this.changePoints = changePoints;
     }
 
