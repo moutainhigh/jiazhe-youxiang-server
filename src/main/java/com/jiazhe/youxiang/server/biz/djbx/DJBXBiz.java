@@ -181,6 +181,10 @@ public class DJBXBiz {
             getPointsToken();
             throw new DJBXException(DJBXCodeEnum.TOKEN_INVALID);
         }
+        if (null != json.get("resultCode") && "1".equals(json.get("resultCode").toString())) {
+            LOGGER.info("获取验证码失败，请稍候再试");
+            throw new DJBXException(DJBXCodeEnum.TOKEN_INVALID);
+        }
     }
 
 

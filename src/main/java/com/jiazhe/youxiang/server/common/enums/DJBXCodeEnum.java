@@ -18,6 +18,7 @@ public enum DJBXCodeEnum {
     GET_TOKEN_ERROR(125005, "GET_TOKEN_ERROR", "获取token失败"),
     VERIFICODE_IS_NULL(125006, "VERIFICODE_IS_NULL", "验证码不能为空"),
     AGENTCODE_IS_NULL(125007, "AGENTCODE_IS_NULL", "经纪人账号不能为空"),
+    GET_VERIFICODE_ERROR(125008, "GET_VERIFICODE_ERROR", "获取验证码失败"),
     ;
 
     DJBXCodeEnum(Integer code, String type, String message) {
