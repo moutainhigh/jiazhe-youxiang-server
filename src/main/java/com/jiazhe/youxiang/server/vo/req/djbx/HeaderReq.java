@@ -18,8 +18,8 @@ import java.util.Date;
  */
 public class HeaderReq extends BaseVO {
 
-    public HeaderReq(String serialNo, String transCode, String sysCode) {
-        this.serialNo = sysCode + serialNo;
+    public HeaderReq(String seriaNo, String transCode, String sysCode) {
+        this.seriaNo = sysCode + seriaNo;
         this.transCode = transCode;
         String nowStr = DateUtil.secondToStr(new Date());
         this.transDate = nowStr.substring(0, 10);
@@ -27,7 +27,7 @@ public class HeaderReq extends BaseVO {
         this.sysCode = sysCode;
     }
 
-    private String serialNo;
+    private String seriaNo;
 
     private String transCode;
 
@@ -37,12 +37,12 @@ public class HeaderReq extends BaseVO {
 
     private String sysCode;
 
-    public String getSerialNo() {
-        return serialNo;
+    public String getSeriaNo() {
+        return seriaNo;
     }
 
     public void setSerialNo(String serialNo) {
-        this.serialNo = serialNo;
+        this.seriaNo = seriaNo;
     }
 
     public String getTransCode() {

@@ -17,11 +17,11 @@ public class PointsConsumeReq extends BaseVO {
 
     private HeaderReq header;
 
-    private PointsConsumeParam pointsConsume;
+    private PointsConsumeParam consumePoints;
 
     public PointsConsumeReq(HeaderReq header, PointsConsumeParam pointsConsume) {
         this.header = header;
-        this.pointsConsume = pointsConsume;
+        this.consumePoints = pointsConsume;
     }
 
     public HeaderReq getHeader() {
@@ -32,13 +32,12 @@ public class PointsConsumeReq extends BaseVO {
         this.header = header;
     }
 
-    public PointsConsumeParam getPointsConsume() {
-        return pointsConsume;
+    public PointsConsumeParam getConsumePoints() {
+        return consumePoints;
     }
 
-    public void setPointsConsume(PointsConsumeParam pointsConsume) {
-        this.pointsConsume = pointsConsume;
+    public void setConsumePoints(PointsConsumeParam consumePoints) {
+        this.consumePoints = consumePoints;
     }
-
 }
 

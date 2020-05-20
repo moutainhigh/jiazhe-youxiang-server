@@ -15,9 +15,9 @@ import java.math.BigDecimal;
  */
 public class PointsConsumeParam {
 
-    public PointsConsumeParam(String agentCode,String transactionId,String transactionType,String settlementType,BigDecimal changePoints,String verifiCode){
+    public PointsConsumeParam(String agentCode,String transactionID,String transactionType,String settlementType,BigDecimal changePoints,String verifiCode){
         this.agentCode = agentCode;
-        this.transactionId = transactionId;
+        this.transactionID = transactionID;
         this.transactionType = transactionType;
         this.settlementType = settlementType;
         this.changePoints = changePoints;
@@ -26,7 +26,7 @@ public class PointsConsumeParam {
 
     private String agentCode;
 
-    private String transactionId;
+    private String transactionID;
 
     private String transactionType;
 
@@ -44,12 +44,12 @@ public class PointsConsumeParam {
         this.agentCode = agentCode;
     }
 
-    public String getTransactionId() {
-        return transactionId;
+    public String getTransactionID() {
+        return transactionID;
     }
 
-    public void setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
+    public void setTransactionID(String transactionID) {
+        this.transactionID = transactionID;
     }
 
     public String getTransactionType() {
