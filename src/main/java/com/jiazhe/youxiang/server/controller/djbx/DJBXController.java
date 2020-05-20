@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @created 2020-05-19
  */
 @RestController
-@RequestMapping("externalapi/djbx")
+@RequestMapping("api/djbx")
 public class DJBXController {
 
     public static Logger LOGGER = LoggerFactory.getLogger(DJBXController.class);
