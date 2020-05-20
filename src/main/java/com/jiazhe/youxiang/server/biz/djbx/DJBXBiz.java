@@ -70,7 +70,8 @@ public class DJBXBiz {
 
     /**
      * 企业微信外部登录
-     *  @param appvalue
+     *
+     * @param appvalue
      * @param code
      * @return
      */
@@ -89,7 +90,7 @@ public class DJBXBiz {
     }
 
     @Retryable(value = {DJBXException.class},
-            maxAttempts = 10, backoff = @Backoff(delay = 5000L, multiplier = 2))
+            maxAttempts = 3, backoff = @Backoff(delay = 5000L, multiplier = 2))
     public PointsQueryDTO queryPoints(String agentCode) {
         HeaderReq headerReq = new HeaderReq(RandomUtil.generateNumber(12), DJBXConstant.TRANS_CODE_QUERY_POINTS, DJBXConstant.SYS_CODE);
         PointsQueryParam pointsQueryParam = new PointsQueryParam(agentCode);
@@ -116,9 +117,6 @@ public class DJBXBiz {
         return dto;
     }
 
-    //    @Async
-//    @Retryable(value = {DJBXException.class},
-//            maxAttempts = 10, backoff = @Backoff(delay = 5000L, multiplier = 2))
     public boolean consumePoints(PointsConsumeParam pointsConsumeParam) {
         HeaderReq headerReq = new HeaderReq(RandomUtil.generateNumber(12), DJBXConstant.TRANS_CODE_CONSUME_POINTS, DJBXConstant.SYS_CODE);
         PointsConsumeReq req = new PointsConsumeReq(headerReq, pointsConsumeParam);
@@ -137,8 +135,10 @@ public class DJBXBiz {
         if (null != json.get("header")) {
             String headerStr = json.get("header").toString();
             JSONObject headerJson = JSONObject.fromObject(headerStr);
-            if ("00".equals(headerJson.get("resultCode"))) {
+            if ("00".equals(headerJson.get("resultCode").toString())) {
                 return true;
+            } else {
+                throw new DJBXException(DJBXCodeEnum.PLACE_ORDER_ERROR,headerJson.get("resultMessage").toString() );
             }
         }
         return false;
@@ -146,7 +146,7 @@ public class DJBXBiz {
 
     @Async
     @Retryable(value = {DJBXException.class},
-            maxAttempts = 10, backoff = @Backoff(delay = 5000L, multiplier = 2))
+            maxAttempts = 3, backoff = @Backoff(delay = 5000L, multiplier = 2))
     public void getPointsToken() {
         PointsTokenReq req = new PointsTokenReq(DJBX_SECRET);
         String reqStr = JacksonUtil.toJSon(req);
@@ -165,7 +165,7 @@ public class DJBXBiz {
 
     @Async
     @Retryable(value = {DJBXException.class},
-            maxAttempts = 10, backoff = @Backoff(delay = 5000L, multiplier = 2))
+            maxAttempts = 3, backoff = @Backoff(delay = 5000L, multiplier = 2))
     public void sendVerifiCode(String agentCode) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("agentCode", agentCode);
