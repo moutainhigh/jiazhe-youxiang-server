@@ -23,8 +23,10 @@ public class AgentInfoResp extends BaseVO {
     private Integer customerId;
     @ApiModelProperty("代理人编码")
     private String agentCode;
-    @ApiModelProperty("手机号码")
-    private String mobile;
+    @ApiModelProperty("客户名 与代理人编码一致")
+    private String customerName;
+    @ApiModelProperty("客户电话")
+    private String customerMobile;
 
     public String getSessionId() {
         return sessionId;
@@ -50,11 +52,19 @@ public class AgentInfoResp extends BaseVO {
         this.agentCode = agentCode;
     }
 
-    public String getMobile() {
-        return mobile;
+    public String getCustomerName() {
+        return customerName;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCustomerMobile() {
+        return customerMobile;
+    }
+
+    public void setCustomerMobile(String customerMobile) {
+        this.customerMobile = customerMobile;
     }
 }
