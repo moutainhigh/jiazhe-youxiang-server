@@ -175,12 +175,13 @@ public class CommonConstant {
     public static final Byte EXCHANGE_CODE_NOT_MADE = Byte.valueOf("0");
 
     /**
-     * 支付类型【1为积分卡支付，2为充值卡支付，3为代金券支付，4为在线支付】
+     * 支付类型【1为积分卡支付，2为充值卡支付，3为代金券支付，4为在线支付 5大家保险积分】
      */
     public static final Byte PAY_POINT = Byte.valueOf("1");
     public static final Byte PAY_RECHARGE_CARD = Byte.valueOf("2");
     public static final Byte PAY_VOUCHER = Byte.valueOf("3");
     public static final Byte PAY_CASH = Byte.valueOf("4");
+    public static final Byte PAY_DJBX = Byte.valueOf("5");
 
     /**
      * 商品类型【0为服务型商品，1为电子商品】
@@ -215,10 +216,11 @@ public class CommonConstant {
     public static final Byte PRE_PURCHASE = Byte.valueOf("4");
 
     /**
-     * 下单方式【0后台员工下单  1客户自己下单】
+     * 下单方式【0后台员工下单  1客户自己下单 2大家保险员工下单】
      */
     public static final Byte USER_PLACE_ORDER = Byte.valueOf("0");
     public static final Byte CUSTOMER_PLACE_ORDER = Byte.valueOf("1");
+    public static final Byte DJBX_PLACE_ORDER = Byte.valueOf("2");
 
     /**
      * 消费凭证录入状态【0未完成  1已完成】
