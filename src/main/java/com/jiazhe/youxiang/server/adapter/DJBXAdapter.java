@@ -53,7 +53,8 @@ public class DJBXAdapter {
         AgentInfoResp agentInfoResp = new AgentInfoResp();
         agentInfoResp.setCustomerId(agentInfoDTO.getCustomerId());
         agentInfoResp.setAgentCode(agentInfoDTO.getAgentCode());
-        agentInfoResp.setMobile(agentInfoDTO.getMobile());
+        agentInfoResp.setCustomerName(agentInfoDTO.getAgentCode());
+        agentInfoResp.setCustomerMobile(agentInfoDTO.getMobile());
         return agentInfoResp;
     }
 }
