@@ -6,10 +6,16 @@
 package com.jiazhe.youxiang.base.util;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -156,6 +162,25 @@ public final class HttpUtil {
             while ((line = in.readLine()) != null) {
                 result += "\n" + line;
             }
+        } catch (Exception e) {
+            System.out.println("发送POST请求出现异常" + e);
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String djbxHttpPost(String url, String token, String param) {
+        String result = "";
+        try {
+            HttpClient httpClient = HttpClientBuilder.create().build();
+            HttpPost post = new HttpPost(url);
+            StringEntity postingString = new StringEntity(param);
+            post.setEntity(postingString);
+            post.setHeader("token", token);
+            post.setHeader("Content-type", "application/json");
+            HttpResponse response = httpClient.execute(post);
+            String content = EntityUtils.toString(response.getEntity());
+            result = content;
         } catch (Exception e) {
             System.out.println("发送POST请求出现异常" + e);
             e.printStackTrace();
