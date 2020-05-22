@@ -223,6 +223,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Override
     public void userCancelOrder(OrderInfoDTO orderInfoDTO) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(orderInfoDTO.getId());
+        if(CommonConstant.DJBX_PLACE_ORDER.equals(orderInfoPO.getType())){
+            throw new OrderException(OrderCodeEnum.DJBX_ORDER_USER_CANCEL_ERROR);
+        }
         //订单不是已完成状态，才能取消
         if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_COMPLETE)) {
             throw new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CANCEL);
@@ -668,7 +671,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             });
             rcService.batchUpdate(rcdtoList);
         }
-        if ("false".equals(dto.getCashSupport())) {
+        if ("false" .equals(dto.getCashSupport())) {
             if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
                 throw new OrderException(OrderCodeEnum.ORDER_PAYMENT_NOT_ENOUGH);
             }
@@ -914,7 +917,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             }
             orderInfoPOManualMapper.insert(orderInfoPO);
         } else {
-            if ("false".equals(dto.getCashSupport())) {
+            if ("false" .equals(dto.getCashSupport())) {
                 throw new OrderException(OrderCodeEnum.ORDER_PAYMENT_NOT_ENOUGH);
             }
         }
@@ -932,23 +935,27 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public void djbxCancelOrder(Integer id,String verifiCode) {
+    public void djbxCancelOrder(Integer id, String verifiCode) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
         CustomerDTO customerDTO = customerService.getById(orderInfoPO.getCustomerId());
-        //订单为待付款或待派单状态，直接走退款流程
+        //大家保险订单为待付款或待派单状态，直接走退款流程
         if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNPAID) || orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSENT)) {
             orderInfoPO.setStatus(CommonConstant.ORDER_CANCEL);
-            //退款功能共用，提出公共方法
+            //先掉用大家保险将积分冲正
             PointsConsumeParam pointsConsumeParam = new PointsConsumeParam(customerDTO.getName(), DJBXConstant.DJBX_ORDER_PREFIX + orderInfoPO.getOrderCode(), DJBXConstant.DJBX_TRANSACTIONTYPE_BACK, DJBXConstant.DJBX_SETTLEMENTTYPE_NEED, orderInfoPO.getTotalAmount(), verifiCode);
             boolean success = djbxBiz.consumePoints(pointsConsumeParam);
-            if(success) {
+            if (success) {
+                //退款功能共用，提出公共方法
                 orderRefund(id);
+            } else {
+                throw new OrderException(OrderCodeEnum.ORDER_CANCEL_ERROR);
             }
         }
-        //订单为待服务状态，直接将订单置为取消待审核状态，此时不退款
-        else if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSERVICE)) {
-            orderInfoPO.setStatus(CommonConstant.ORDER_CANCELWATINGCHECK);
-        } else {
+        //大家保险订单为待服务状态，不能置为取消待审核状态，因为取消需要验证码，后台不能取消
+//        else if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSERVICE)) {
+//            orderInfoPO.setStatus(CommonConstant.ORDER_CANCELWATINGCHECK);
+//        }
+        else {
             throw new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CANCEL);
         }
         orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
