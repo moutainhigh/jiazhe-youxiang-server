@@ -68,7 +68,7 @@ public class QuartzConfig {
                 .forJob(DJBXQuartzDetail())
                 .withIdentity("DJBXTrigger")
                 .startNow()
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 */2 * * ?"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 */1 * * ?"))
                 .build();
     }
 
