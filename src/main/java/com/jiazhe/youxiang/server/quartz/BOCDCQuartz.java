@@ -27,7 +27,7 @@ public class BOCDCQuartz extends QuartzJobBean {
     @Override
     protected void executeInternal(org.quartz.JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
-        logger.info("定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务开始执行");
+        logger.info("BOCDC定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务开始执行");
 
         /**
          * 根据不同环境，判断此定时任务是否执行
@@ -50,6 +50,6 @@ public class BOCDCQuartz extends QuartzJobBean {
             logger.error("生成生成对账信息文件失败，异常信息：" + e.getMessage());
         }
 
-        logger.info("定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务执行完成");
+        logger.info("BOCDC定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务执行完成");
     }
 }

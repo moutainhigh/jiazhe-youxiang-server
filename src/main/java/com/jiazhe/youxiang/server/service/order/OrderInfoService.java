@@ -158,9 +158,17 @@ public interface OrderInfoService {
     BigDecimal calculateORderNeedPay(OrderInfoDTO dto);
 
     /**
-     * 大家保险下单
+     * 大家保险代理人 下单
      * @param dto
      * @return
      */
     NeedPayResp djbxPlaceOrder(DJBXPlaceOrderDTO dto);
+
+    /**
+     * 大家保险代理人 取消订单
+     * @param id 订单id
+     * @param verifiCode 验证码
+     * @return
+     */
+    void djbxCancelOrder(Integer id, String verifiCode);
 }

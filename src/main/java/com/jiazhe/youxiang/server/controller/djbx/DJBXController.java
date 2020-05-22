@@ -5,23 +5,19 @@
  */
 package com.jiazhe.youxiang.server.controller.djbx;
 
-import com.jiazhe.youxiang.server.biz.djbx.DJBXBiz;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 import com.jiazhe.youxiang.base.realm.AuthToken;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.CookieUtil;
 import com.jiazhe.youxiang.server.adapter.DJBXAdapter;
+import com.jiazhe.youxiang.server.biz.djbx.DJBXBiz;
 import com.jiazhe.youxiang.server.common.annotation.AppApi;
 import com.jiazhe.youxiang.server.common.annotation.CustomLog;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
-import com.jiazhe.youxiang.server.common.enums.*;
-import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.enums.DJBXCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.LogLevelEnum;
+import com.jiazhe.youxiang.server.common.enums.LoginCodeEnum;
+import com.jiazhe.youxiang.server.common.enums.LoginType;
 import com.jiazhe.youxiang.server.common.enums.ModuleEnum;
 import com.jiazhe.youxiang.server.common.exceptions.DJBXException;
 import com.jiazhe.youxiang.server.common.exceptions.LoginException;
@@ -29,8 +25,8 @@ import com.jiazhe.youxiang.server.dto.djbx.AgentInfoDTO;
 import com.jiazhe.youxiang.server.dto.djbx.DJBXPlaceOrderDTO;
 import com.jiazhe.youxiang.server.dto.djbx.PointsQueryDTO;
 import com.jiazhe.youxiang.server.vo.ResponseFactory;
+import com.jiazhe.youxiang.server.vo.req.djbx.DJBXCancelOrderReq;
 import com.jiazhe.youxiang.server.vo.req.djbx.DJBXPlaceOrderReq;
-import com.jiazhe.youxiang.server.dto.djbx.AgentInfoDTO;
 import com.jiazhe.youxiang.server.vo.req.djbx.ExternalLoginReq;
 import com.jiazhe.youxiang.server.vo.resp.djbx.AgentInfoResp;
 import com.jiazhe.youxiang.server.vo.resp.djbx.PointsQueryResp;
@@ -40,14 +36,17 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.math.BigDecimal;
-import java.util.Date;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 在这里编写类的功能描述
@@ -144,6 +143,16 @@ public class DJBXController {
         djbxPlaceOrderDTO.setRealServiceTime(new Date(req.getServiceTime()));
         djbxPlaceOrderDTO.setComments("");
         djbxBiz.placeOrder(djbxPlaceOrderDTO);
+        return ResponseFactory.buildSuccess();
+    }
+
+    @AppApi
+    @ApiOperation(value = "取消订单", httpMethod = "POST", notes = "取消订单")
+    @RequestMapping(value = "/cancelorder")
+    @CustomLog(moduleName = ModuleEnum.DJBX, operate = "取消订单", level = LogLevelEnum.LEVEL_2)
+    public Object cancelOrder(@ModelAttribute DJBXCancelOrderReq req) {
+        CommonValidator.validateNull(req.getVerifiCode(),new DJBXException(DJBXCodeEnum.VERIFICODE_IS_NULL));
+        djbxBiz.cancelOrder(req.getId(),req.getVerifiCode());
         return ResponseFactory.buildSuccess();
     }
 
