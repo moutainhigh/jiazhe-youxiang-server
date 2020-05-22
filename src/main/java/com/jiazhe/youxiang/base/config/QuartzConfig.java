@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import java.util.Date;
+
 /**
  * @author TU
  * @description
@@ -55,32 +57,33 @@ public class QuartzConfig {
 //    }
 
     @Bean
-    @Profile({"djbx-test","djbx-online"})
+    @Profile({"djbx-test", "djbx-online"})
     public JobDetail DJBXQuartzDetail() {
         return JobBuilder.newJob(DJBXQuartz.class).withIdentity("DJBXJob").storeDurably().build();
     }
 
-    //启动的时候执行一次，然后每间隔2小时执行一次
+    //启动的时候执行一次，然后每间隔1小时执行一次
     @Bean
-    @Profile({"djbx-test","djbx-online"})
-    public CronTrigger DJBXCronTrigger() throws Exception {
-        return TriggerBuilder.newTrigger()
-                .forJob(DJBXQuartzDetail())
+    @Profile({"djbx-test", "djbx-online"})
+    public Trigger DJBXCronTrigger() throws Exception {
+        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
+                .withIntervalInHours(1)
+                .repeatForever();
+        return TriggerBuilder.newTrigger().forJob(DJBXQuartzDetail())
                 .withIdentity("DJBXTrigger")
-                .startNow()
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 */1 * * ?"))
+                .withSchedule(scheduleBuilder)
                 .build();
     }
 
     @Bean
-    @Profile({"boccc-test","boccc-online"})
+    @Profile({"boccc-test", "boccc-online"})
     public JobDetail BOCCCQuartzDetail() {
         return JobBuilder.newJob(BOCCCQuartz.class).withIdentity("BOCCCJob").storeDurably().build();
     }
 
     //每天凌晨1点执行任务
     @Bean
-    @Profile({"boccc-test","boccc-online"})
+    @Profile({"boccc-test", "boccc-online"})
     public CronTrigger BOCCCCronTrigger() throws Exception {
         return TriggerBuilder.newTrigger()
                 .forJob(BOCCCQuartzDetail())
@@ -90,14 +93,14 @@ public class QuartzConfig {
     }
 
     @Bean
-    @Profile({"test","online"})
+    @Profile({"test", "online"})
     public JobDetail BOCDCQuartzDetail() {
         return JobBuilder.newJob(BOCDCQuartz.class).withIdentity("BOCDCJob").storeDurably().build();
     }
 
     //每月一日上午9点上传储蓄卡对账信息
     @Bean
-    @Profile({"test","online"})
+    @Profile({"test", "online"})
     public CronTrigger BOCDCCronTrigger() {
         return TriggerBuilder.newTrigger()
                 .forJob(BOCDCQuartzDetail())
