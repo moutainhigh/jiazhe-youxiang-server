@@ -12,8 +12,8 @@ import com.jiazhe.youxiang.server.dto.customer.AddressDTO;
 import com.jiazhe.youxiang.server.dto.customer.AddressUpdateDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
-import com.jiazhe.youxiang.server.dto.customer.CustomerRegisterDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerUpdateDTO;
+import com.jiazhe.youxiang.server.dto.djbx.AgentInfoDTO;
 import com.jiazhe.youxiang.server.vo.req.customer.AddressAddReq;
 import com.jiazhe.youxiang.server.vo.req.customer.AddressUpdateReq;
 import com.jiazhe.youxiang.server.vo.req.customer.CustomerAddReq;
@@ -21,6 +21,7 @@ import com.jiazhe.youxiang.server.vo.req.customer.CustomerRegisterReq;
 import com.jiazhe.youxiang.server.vo.req.customer.CustomerUpdateReq;
 import com.jiazhe.youxiang.server.vo.resp.customer.AddressResp;
 import com.jiazhe.youxiang.server.vo.resp.customer.CustomerResp;
+import com.jiazhe.youxiang.server.vo.resp.djbx.GetUserInfoResp;
 
 /**
  * 在这里编写类的功能描述
@@ -206,5 +207,26 @@ public class CustomerAdapter {
         customerAddDTO.setMobile(req.getMobile());
         customerAddDTO.setName(req.getName());
         return customerAddDTO;
+    }
+
+    public static CustomerAddDTO getUserInfoResp2DTO(GetUserInfoResp resp) {
+        if (resp == null) {
+            return null;
+        }
+        CustomerAddDTO customerAddDTO = new CustomerAddDTO();
+        customerAddDTO.setName(resp.getAgentCode());//把agentCode当做用户名
+        customerAddDTO.setMobile(resp.getAgentCode());//把agentCode当做手机号
+        return customerAddDTO;
+    }
+
+    public static AgentInfoDTO customerDTO2AgentInfoDTO(CustomerDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+        AgentInfoDTO agentInfoDTO = new AgentInfoDTO();
+        agentInfoDTO.setMobile(dto.getMobile());
+        agentInfoDTO.setAgentCode(dto.getName());
+        agentInfoDTO.setCustomerId(dto.getId());
+        return agentInfoDTO;
     }
 }
