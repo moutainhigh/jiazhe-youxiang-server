@@ -90,12 +90,14 @@ public class QuartzConfig {
     }
 
     @Bean
+    @Profile({"test","online"})
     public JobDetail BOCDCQuartzDetail() {
         return JobBuilder.newJob(BOCDCQuartz.class).withIdentity("BOCDCJob").storeDurably().build();
     }
 
     //每月一日上午9点上传储蓄卡对账信息
     @Bean
+    @Profile({"test","online"})
     public CronTrigger BOCDCCronTrigger() {
         return TriggerBuilder.newTrigger()
                 .forJob(BOCDCQuartzDetail())
