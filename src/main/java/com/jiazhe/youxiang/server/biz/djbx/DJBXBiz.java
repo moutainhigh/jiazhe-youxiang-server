@@ -135,10 +135,10 @@ public class DJBXBiz {
         if (null != json.get("header")) {
             String headerStr = json.get("header").toString();
             JSONObject headerJson = JSONObject.fromObject(headerStr);
-            if ("00".equals(headerJson.get("resultCode").toString())) {
+            if ("00" .equals(headerJson.get("resultCode").toString())) {
                 return true;
             } else {
-                throw new DJBXException(DJBXCodeEnum.PLACE_ORDER_ERROR,headerJson.get("resultMessage").toString() );
+                throw new DJBXException(DJBXCodeEnum.PLACE_ORDER_ERROR, headerJson.get("resultMessage").toString());
             }
         }
         return false;
@@ -155,7 +155,7 @@ public class DJBXBiz {
         result = HttpUtil.djbxHttpPost(DJBX_API_GETPOINTSTOKEN, "", reqStr);
         LOGGER.info("HTTP调用大家保险token获取接口，返回值:{}", result);
         JSONObject json = JSONObject.fromObject(result);
-        if (null != json.get("code") && "0".equals(json.get("code").toString())) {
+        if (null != json.get("code") && "0" .equals(json.get("code").toString())) {
             String token = json.get("token").toString();
             DJBXConstant.djbxTokenMap.put(DJBXConstant.DJBX_TOKEN_DEFAULT_KEY, token);
         } else {
@@ -181,7 +181,7 @@ public class DJBXBiz {
             getPointsToken();
             throw new DJBXException(DJBXCodeEnum.TOKEN_INVALID);
         }
-        if (null != json.get("resultCode") && "1".equals(json.get("resultCode").toString())) {
+        if (null != json.get("resultCode") && "1" .equals(json.get("resultCode").toString())) {
             LOGGER.info("获取验证码失败，请稍候再试");
             throw new DJBXException(DJBXCodeEnum.TOKEN_INVALID);
         }
@@ -232,11 +232,21 @@ public class DJBXBiz {
     }
 
     /**
-     * 大家保险端下单
+     * 大家保险代理人 下单
      *
      * @param dto
      */
     public void placeOrder(DJBXPlaceOrderDTO dto) {
         orderInfoService.djbxPlaceOrder(dto);
+    }
+
+    /**
+     * 大家保险代理人 取消订单
+     *
+     * @param id         订单id
+     * @param verifiCode 验证码
+     */
+    public void cancelOrder(Integer id, String verifiCode) {
+        orderInfoService.djbxCancelOrder(id, verifiCode);
     }
 }

@@ -859,7 +859,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         String orderCode = generateOrderCode();
         //待支付金额
         BigDecimal needPay = productPriceDTO.getPrice().multiply(new BigDecimal(dto.getCount()));
-        PointsConsumeParam pointsConsumeParam = new PointsConsumeParam(dto.getAgentCode(), DJBXConstant.DJBX_ORDER_PREFIX + orderCode, DJBXConstant.DJBX_TRANSACTIONTYPE_CONSUME, DJBXConstant.DJBX_SETTLEMENTTYPE_NOTNEED, needPay, dto.getVerifiCode());
+        PointsConsumeParam pointsConsumeParam = new PointsConsumeParam(dto.getAgentCode(), DJBXConstant.DJBX_ORDER_PREFIX + orderCode, DJBXConstant.DJBX_TRANSACTIONTYPE_CONSUME, DJBXConstant.DJBX_SETTLEMENTTYPE_NEED, needPay, dto.getVerifiCode());
         boolean success = djbxBiz.consumePoints(pointsConsumeParam);
         OrderInfoPO orderInfoPO = new OrderInfoPO();
         OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
@@ -929,6 +929,29 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         needPayResp.setPayCash(Integer.valueOf(0));
         needPayResp.setOrderCode(orderInfoPO.getOrderCode());
         return needPayResp;
+    }
+
+    @Override
+    public void djbxCancelOrder(Integer id,String verifiCode) {
+        OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
+        CustomerDTO customerDTO = customerService.getById(orderInfoPO.getCustomerId());
+        //订单为待付款或待派单状态，直接走退款流程
+        if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNPAID) || orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSENT)) {
+            orderInfoPO.setStatus(CommonConstant.ORDER_CANCEL);
+            //退款功能共用，提出公共方法
+            PointsConsumeParam pointsConsumeParam = new PointsConsumeParam(customerDTO.getName(), DJBXConstant.DJBX_ORDER_PREFIX + orderInfoPO.getOrderCode(), DJBXConstant.DJBX_TRANSACTIONTYPE_BACK, DJBXConstant.DJBX_SETTLEMENTTYPE_NEED, orderInfoPO.getTotalAmount(), verifiCode);
+            boolean success = djbxBiz.consumePoints(pointsConsumeParam);
+            if(success) {
+                orderRefund(id);
+            }
+        }
+        //订单为待服务状态，直接将订单置为取消待审核状态，此时不退款
+        else if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSERVICE)) {
+            orderInfoPO.setStatus(CommonConstant.ORDER_CANCELWATINGCHECK);
+        } else {
+            throw new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CANCEL);
+        }
+        orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
     }
 
     private OrderRefundDTO paymentDto2RefundDto(OrderPaymentDTO paymentDTO) {
