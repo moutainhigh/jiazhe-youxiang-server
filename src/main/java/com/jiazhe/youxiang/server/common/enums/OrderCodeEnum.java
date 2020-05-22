@@ -57,6 +57,8 @@ public enum OrderCodeEnum {
     SERVICE_ADDRESS_IS_NULL(108048,"SERVICE_ADDRESS_IS_NULL","服务地址不能为空"),
     SERVICE_MOBILE_IS_VALID(108049,"SERVICE_MOBILE_IS_VALID","服务电话非法"),
     ORDER_STATUS_ERROR(108050, "ORDER_STATUS_ERROR", "订单状态有误"),
+    ORDER_CANCEL_ERROR(108051, "ORDER_CANCEL_ERROR", "订单取消失败"),
+    DJBX_ORDER_USER_CANCEL_ERROR(108052, "DJBX_ORDER_USER_CANCEL_ERROR", "后台不能取消大家保险订单"),
     ;
 
     OrderCodeEnum(Integer code, String type, String message) {
