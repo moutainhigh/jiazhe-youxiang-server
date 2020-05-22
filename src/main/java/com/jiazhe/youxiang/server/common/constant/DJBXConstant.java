@@ -16,6 +16,11 @@ import java.util.Map;
  */
 public class DJBXConstant {
 
+    /**
+     * 大家保险环境
+     */
+    public static String[] DJBX_ENVIRONMENT = {"djbx-test", "djbx-online"};
+
     public final static String DJBX_TOKEN_DEFAULT_KEY = "DJBX_DEFAULT_TOKEN";
     public final static String DJBX_TOKEN_DEFAULT_VALUE = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJDTVNBUFAiLCJpZCI6IjEiLCJuYW1lIjoicG9pbnRzIiwiaWF0IjoxNTg5ODY0NDIzLCJleHAiOjE1OTA0NjkyMjN9.m0TXVdT_PpcaSzhPVaDo35N_YWHLa9Q90dviXIg8moI";
 
