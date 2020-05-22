@@ -6,21 +6,18 @@
 package com.jiazhe.youxiang.server.biz.djbx;
 
 import com.jiazhe.youxiang.base.util.HttpUtil;
-import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
-import com.jiazhe.youxiang.server.biz.CustomerBiz;
-import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
-import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.RandomUtil;
+import com.jiazhe.youxiang.server.adapter.CustomerAdapter;
+import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.common.constant.DJBXConstant;
-import com.jiazhe.youxiang.server.dto.djbx.AgentInfoDTO;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.jiazhe.youxiang.server.dto.djbx.PointsQueryDTO;
 import com.jiazhe.youxiang.server.common.enums.DJBXCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.DJBXException;
+import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
+import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.djbx.AgentInfoDTO;
 import com.jiazhe.youxiang.server.dto.djbx.DJBXPlaceOrderDTO;
+import com.jiazhe.youxiang.server.dto.djbx.PointsQueryDTO;
 import com.jiazhe.youxiang.server.service.order.OrderInfoService;
 import com.jiazhe.youxiang.server.vo.req.djbx.HeaderReq;
 import com.jiazhe.youxiang.server.vo.req.djbx.PointsConsumeParam;
@@ -32,11 +29,13 @@ import com.jiazhe.youxiang.server.vo.resp.djbx.GetUserInfoResp;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
 
 /**
@@ -120,11 +119,7 @@ public class DJBXBiz {
         result = HttpUtil.djbxHttpPost(DJBX_API_POINTSINFO, token, reqStr);
         LOGGER.info("HTTP调用大家保险剩余积分接口，返回值:{}", result);
         JSONObject json = JSONObject.fromObject(result);
-        if (null != json.get("code") && DJBXConstant.TOKEN_INVALID_CODE.equals(json.get("code").toString())) {
-            LOGGER.info("token过期，立马获取新的token重试");
-            getPointsToken();
-            throw new DJBXException(DJBXCodeEnum.TOKEN_INVALID);
-        }
+        firstCheckResult(json);
         PointsQueryDTO dto = new PointsQueryDTO();
         if (null != json.get("resultInfo")) {
             String resultInfoStr = json.get("resultInfo").toString();
@@ -145,11 +140,7 @@ public class DJBXBiz {
         result = HttpUtil.djbxHttpPost(DJBX_API_POINTSDEDUCT, token, reqStr);
         LOGGER.info("HTTP调用大家保险核销积分接口，返回值:{}", result);
         JSONObject json = JSONObject.fromObject(result);
-        if (null != json.get("code") && DJBXConstant.TOKEN_INVALID_CODE.equals(json.get("code").toString())) {
-            LOGGER.info("token过期，立马获取新的token重试");
-            getPointsToken();
-            throw new DJBXException(DJBXCodeEnum.TOKEN_INVALID);
-        }
+        firstCheckResult(json);
         if (null != json.get("header")) {
             String headerStr = json.get("header").toString();
             JSONObject headerJson = JSONObject.fromObject(headerStr);
@@ -194,17 +185,21 @@ public class DJBXBiz {
         result = HttpUtil.djbxHttpPost(DJBX_API_SENDVERIFICODE, token, reqStr);
         LOGGER.info("HTTP调用大家保险发送短信接口，返回值:{}", result);
         JSONObject json = JSONObject.fromObject(result);
+        firstCheckResult(json);
+        if (null != json.get("resultCode") && "1" .equals(json.get("resultCode").toString())) {
+            LOGGER.info("获取验证码失败，请稍候再试");
+            throw new DJBXException(DJBXCodeEnum.GET_VERIFICODE_ERROR);
+        }
+    }
+
+    //初次校验返回结果，判断token是否过期
+    public void firstCheckResult(JSONObject json){
         if (null != json.get("code") && DJBXConstant.TOKEN_INVALID_CODE.equals(json.get("code").toString())) {
             LOGGER.info("token过期，立马获取新的token重试");
             getPointsToken();
             throw new DJBXException(DJBXCodeEnum.TOKEN_INVALID);
         }
-        if (null != json.get("resultCode") && "1" .equals(json.get("resultCode").toString())) {
-            LOGGER.info("获取验证码失败，请稍候再试");
-            throw new DJBXException(DJBXCodeEnum.TOKEN_INVALID);
-        }
     }
-
 
     private String createParams(String appvalue, String code) {
         return "appvalue=" + appvalue + "&code=" + code;
