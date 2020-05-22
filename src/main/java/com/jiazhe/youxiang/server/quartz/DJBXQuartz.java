@@ -27,7 +27,7 @@ public class DJBXQuartz extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
-        logger.info("定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务开始执行");
+        logger.info("DJBX定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务开始执行");
 
         /**
          * 根据不同环境，判断此定时任务是否执行
@@ -38,7 +38,7 @@ public class DJBXQuartz extends QuartzJobBean {
 
         djbxBiz.getPointsToken();
 
-        logger.info("定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务执行完成");
+        logger.info("DJBX定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务执行完成");
 
     }
 }
