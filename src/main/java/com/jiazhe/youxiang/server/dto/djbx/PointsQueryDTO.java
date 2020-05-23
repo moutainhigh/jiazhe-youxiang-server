@@ -2,6 +2,8 @@ package com.jiazhe.youxiang.server.dto.djbx;
 
 import com.jiazhe.youxiang.server.vo.BaseObject;
 
+import java.math.BigDecimal;
+
 /**
  * @author TU
  * @description
@@ -11,7 +13,7 @@ public class PointsQueryDTO extends BaseObject {
 
     private String agentCode;
 
-    private Integer points;
+    private BigDecimal points;
 
     public String getAgentCode() {
         return agentCode;
@@ -21,11 +23,11 @@ public class PointsQueryDTO extends BaseObject {
         this.agentCode = agentCode;
     }
 
-    public Integer getPoints() {
+    public BigDecimal getPoints() {
         return points;
     }
 
-    public void setPoints(Integer points) {
+    public void setPoints(BigDecimal points) {
         this.points = points;
     }
 }

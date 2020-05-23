@@ -37,6 +37,8 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 
 /**
  * 在这里编写类的功能描述
@@ -125,7 +127,7 @@ public class DJBXBiz {
             String resultInfoStr = json.get("resultInfo").toString();
             JSONObject resultInfoJson = JSONObject.fromObject(resultInfoStr);
             dto.setAgentCode(resultInfoJson.get("agentCode").toString());
-            dto.setPoints(new Integer(resultInfoJson.get("points").toString()));
+            dto.setPoints(new BigDecimal(resultInfoJson.get("points").toString()));
         }
         return dto;
     }
