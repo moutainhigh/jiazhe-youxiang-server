@@ -8,6 +8,8 @@ package com.jiazhe.youxiang.server.vo.resp.djbx;
 import com.jiazhe.youxiang.server.vo.BaseObject;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.math.BigDecimal;
+
 /**
  * @author tu
  * @version 1.0
@@ -20,7 +22,7 @@ public class PointsQueryResp extends BaseObject {
     private String agentCode;
 
     @ApiModelProperty("剩余积分数量")
-    private Integer points;
+    private BigDecimal points;
 
     public String getAgentCode() {
         return agentCode;
@@ -30,11 +32,11 @@ public class PointsQueryResp extends BaseObject {
         this.agentCode = agentCode;
     }
 
-    public Integer getPoints() {
+    public BigDecimal getPoints() {
         return points;
     }
 
-    public void setPoints(Integer points) {
+    public void setPoints(BigDecimal points) {
         this.points = points;
     }
 
