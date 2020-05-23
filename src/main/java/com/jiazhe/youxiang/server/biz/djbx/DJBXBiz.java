@@ -90,7 +90,7 @@ public class DJBXBiz {
         String respString = HttpUtil.sendPost(DJBX_API_GETUSERINFO, createParams(appvalue, code));
         GetUserInfoResp resp = createGetUserInfoResp(respString);
         LOGGER.info("Biz调用[externalLogin]方法，resp:{}", resp);
-        if (resp == null && !SUCCESS_CODE.equals(resp.getCode())) {
+        if (resp == null || !SUCCESS_CODE.equals(resp.getCode())) {
             throw new DJBXException(DJBXCodeEnum.GET_USER_INFO_ERROR, resp.getMsg());
         }
         //TODO zhaoweixin 利用代理人信息，创建自己的用户，并使该用户在登录状态
@@ -146,7 +146,7 @@ public class DJBXBiz {
         if (null != json.get("header")) {
             String headerStr = json.get("header").toString();
             JSONObject headerJson = JSONObject.fromObject(headerStr);
-            if ("00" .equals(headerJson.get("resultCode").toString())) {
+            if ("00".equals(headerJson.get("resultCode").toString())) {
                 return true;
             } else {
                 throw new DJBXException(DJBXCodeEnum.PLACE_ORDER_ERROR, headerJson.get("resultMessage").toString());
@@ -166,7 +166,7 @@ public class DJBXBiz {
         result = HttpUtil.djbxHttpPost(DJBX_API_GETPOINTSTOKEN, "", reqStr);
         LOGGER.info("HTTP调用大家保险token获取接口，返回值:{}", result);
         JSONObject json = JSONObject.fromObject(result);
-        if (null != json.get("code") && "0" .equals(json.get("code").toString())) {
+        if (null != json.get("code") && "0".equals(json.get("code").toString())) {
             String token = json.get("token").toString();
             DJBXConstant.djbxTokenMap.put(DJBXConstant.DJBX_TOKEN_DEFAULT_KEY, token);
         } else {
@@ -188,14 +188,14 @@ public class DJBXBiz {
         LOGGER.info("HTTP调用大家保险发送短信接口，返回值:{}", result);
         JSONObject json = JSONObject.fromObject(result);
         firstCheckResult(json);
-        if (null != json.get("resultCode") && "1" .equals(json.get("resultCode").toString())) {
+        if (null != json.get("resultCode") && "1".equals(json.get("resultCode").toString())) {
             LOGGER.info("获取验证码失败，请稍候再试");
             throw new DJBXException(DJBXCodeEnum.GET_VERIFICODE_ERROR);
         }
     }
 
     //初次校验返回结果，判断token是否过期
-    public void firstCheckResult(JSONObject json){
+    public void firstCheckResult(JSONObject json) {
         if (null != json.get("code") && DJBXConstant.TOKEN_INVALID_CODE.equals(json.get("code").toString())) {
             LOGGER.info("token过期，立马获取新的token重试");
             getPointsToken();
