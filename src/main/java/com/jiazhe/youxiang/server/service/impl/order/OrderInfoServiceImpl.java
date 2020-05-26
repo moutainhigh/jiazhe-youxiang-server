@@ -861,6 +861,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }else{
             dto.setCustomerAddress("");
             dto.setCustomerMobile("");
+            dto.setServiceTime(new Date());
         }
         String orderCode = generateOrderCode();
         //待支付金额
