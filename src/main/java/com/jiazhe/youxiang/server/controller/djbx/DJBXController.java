@@ -112,6 +112,7 @@ public class DJBXController {
     @RequestMapping(value = "/querypoints")
     @CustomLog(moduleName = ModuleEnum.DJBX, operate = "查询剩余积分", level = LogLevelEnum.LEVEL_2)
     public Object queryPoints(@RequestParam("agentCode") String agentCode) {
+        CommonValidator.validateNull(agentCode, new DJBXException(DJBXCodeEnum.AGENTCODE_IS_NULL));
         PointsQueryDTO dto = djbxBiz.queryPoints(agentCode);
         return ResponseFactory.buildResponse(DJBXAdapter.PointQueryDTO2Resp(dto));
     }
@@ -121,6 +122,7 @@ public class DJBXController {
     @RequestMapping(value = "/sendverficode")
     @CustomLog(moduleName = ModuleEnum.DJBX, operate = "发送验证码", level = LogLevelEnum.LEVEL_2)
     public Object sendVerifiCode(@RequestParam("agentCode") String agentCode) {
+        CommonValidator.validateNull(agentCode, new DJBXException(DJBXCodeEnum.AGENTCODE_IS_NULL));
         djbxBiz.sendVerifiCode(agentCode);
         return ResponseFactory.buildSuccess();
     }
