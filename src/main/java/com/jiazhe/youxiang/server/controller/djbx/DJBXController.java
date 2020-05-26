@@ -111,7 +111,7 @@ public class DJBXController {
     @ApiOperation(value = "查询剩余积分", httpMethod = "GET", response = PointsQueryResp.class, notes = "查询剩余积分")
     @RequestMapping(value = "/querypoints")
     @CustomLog(moduleName = ModuleEnum.DJBX, operate = "查询剩余积分", level = LogLevelEnum.LEVEL_2)
-    public Object queryPoints(@ModelAttribute("agentCode") String agentCode) {
+    public Object queryPoints(@RequestParam("agentCode") String agentCode) {
         PointsQueryDTO dto = djbxBiz.queryPoints(agentCode);
         return ResponseFactory.buildResponse(DJBXAdapter.PointQueryDTO2Resp(dto));
     }
@@ -120,7 +120,7 @@ public class DJBXController {
     @ApiOperation(value = "发送验证码", httpMethod = "GET", response = PointsQueryResp.class, notes = "发送验证码")
     @RequestMapping(value = "/sendverficode")
     @CustomLog(moduleName = ModuleEnum.DJBX, operate = "发送验证码", level = LogLevelEnum.LEVEL_2)
-    public Object sendVerifiCode(@ModelAttribute("agentCode") String agentCode) {
+    public Object sendVerifiCode(@RequestParam("agentCode") String agentCode) {
         djbxBiz.sendVerifiCode(agentCode);
         return ResponseFactory.buildSuccess();
     }
