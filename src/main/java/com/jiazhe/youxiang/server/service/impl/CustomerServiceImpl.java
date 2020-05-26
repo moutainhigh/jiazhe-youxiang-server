@@ -75,7 +75,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void add(CustomerAddDTO customerAddDTO) {
-        CommonValidator.validateMobile(customerAddDTO.getMobile(),new CustomerException(CustomerCodeEnum.CUSTOMER_MOBILE_ERROR));
+//        CommonValidator.validateMobile(customerAddDTO.getMobile(),new CustomerException(CustomerCodeEnum.CUSTOMER_MOBILE_ERROR));
         Integer count = customerPOManualMapper.count(customerAddDTO.getMobile(), null);
         if (count > 0) {
             throw new CustomerException(CustomerCodeEnum.CUSTOMER_MOBILE_REPEAT);

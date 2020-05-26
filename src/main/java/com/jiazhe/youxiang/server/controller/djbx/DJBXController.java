@@ -75,8 +75,8 @@ public class DJBXController {
      * @return
      */
     @AppApi
-    @ApiOperation(value = "大家保险企业微信登录", httpMethod = "POST", response = AgentInfoResp.class, notes = "大家保险企业微信登录")
-    @RequestMapping(value = "/externallogin", method = RequestMethod.POST)
+    @ApiOperation(value = "大家保险企业微信登录", httpMethod = "GET", response = AgentInfoResp.class, notes = "大家保险企业微信登录")
+    @RequestMapping(value = "/externallogin", method = RequestMethod.GET)
     @CustomLog(moduleName = ModuleEnum.DJBX, operate = "大家保险企业微信登录", level = LogLevelEnum.LEVEL_2)
     public Object externalLogin(@ModelAttribute ExternalLoginReq req, HttpServletResponse response) {
         LOGGER.error("HTTP调用[externalLogin]方法,参数为:{}", JSONObject.toJSON(req));
@@ -112,6 +112,7 @@ public class DJBXController {
     @RequestMapping(value = "/querypoints")
     @CustomLog(moduleName = ModuleEnum.DJBX, operate = "查询剩余积分", level = LogLevelEnum.LEVEL_2)
     public Object queryPoints(@RequestParam("agentCode") String agentCode) {
+        CommonValidator.validateNull(agentCode, new DJBXException(DJBXCodeEnum.AGENTCODE_IS_NULL));
         PointsQueryDTO dto = djbxBiz.queryPoints(agentCode);
         return ResponseFactory.buildResponse(DJBXAdapter.PointQueryDTO2Resp(dto));
     }
@@ -121,6 +122,7 @@ public class DJBXController {
     @RequestMapping(value = "/sendverficode")
     @CustomLog(moduleName = ModuleEnum.DJBX, operate = "发送验证码", level = LogLevelEnum.LEVEL_2)
     public Object sendVerifiCode(@RequestParam("agentCode") String agentCode) {
+        CommonValidator.validateNull(agentCode, new DJBXException(DJBXCodeEnum.AGENTCODE_IS_NULL));
         djbxBiz.sendVerifiCode(agentCode);
         return ResponseFactory.buildSuccess();
     }
@@ -130,8 +132,8 @@ public class DJBXController {
     @RequestMapping(value = "/placeorder")
     @CustomLog(moduleName = ModuleEnum.DJBX, operate = "下单", level = LogLevelEnum.LEVEL_2)
     public Object placeOrder(@ModelAttribute DJBXPlaceOrderReq req) {
-        CommonValidator.validateNull(req.getAgentCode(),new DJBXException(DJBXCodeEnum.AGENTCODE_IS_NULL));
-        CommonValidator.validateNull(req.getVerifiCode(),new DJBXException(DJBXCodeEnum.VERIFICODE_IS_NULL));
+        CommonValidator.validateNull(req.getAgentCode(), new DJBXException(DJBXCodeEnum.AGENTCODE_IS_NULL));
+        CommonValidator.validateNull(req.getVerifiCode(), new DJBXException(DJBXCodeEnum.VERIFICODE_IS_NULL));
         //大家保险暂不考虑支持微信支付
         req.setCashSupport("false");
         DJBXPlaceOrderDTO djbxPlaceOrderDTO = DJBXAdapter.ReqDJBXPlaceOrder2DTOPlaceOrder(req);
@@ -151,8 +153,8 @@ public class DJBXController {
     @RequestMapping(value = "/cancelorder")
     @CustomLog(moduleName = ModuleEnum.DJBX, operate = "取消订单", level = LogLevelEnum.LEVEL_2)
     public Object cancelOrder(@ModelAttribute DJBXCancelOrderReq req) {
-        CommonValidator.validateNull(req.getVerifiCode(),new DJBXException(DJBXCodeEnum.VERIFICODE_IS_NULL));
-        djbxBiz.cancelOrder(req.getId(),req.getVerifiCode());
+        CommonValidator.validateNull(req.getVerifiCode(), new DJBXException(DJBXCodeEnum.VERIFICODE_IS_NULL));
+        djbxBiz.cancelOrder(req.getId(), req.getVerifiCode());
         return ResponseFactory.buildSuccess();
     }
 
