@@ -185,7 +185,7 @@ public class DJBXBiz {
         LOGGER.info("HTTP调用大家保险发送短信接口，返回值:{}", result);
         JSONObject json = JSONObject.fromObject(result);
         firstCheckResult(json);
-        if (null == json.get("resultCode") || (null != json.get("resultCode") && "1".equals(json.get("resultCode").toString()))) {
+        if (null == json.get("resultCode") || "1".equals(json.get("resultCode").toString())) {
             LOGGER.info("获取验证码失败，请稍候再试");
             throw new DJBXException(DJBXCodeEnum.GET_VERIFICODE_ERROR);
         }
