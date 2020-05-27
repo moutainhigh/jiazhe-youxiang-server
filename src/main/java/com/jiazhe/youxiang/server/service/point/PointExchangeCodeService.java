@@ -217,4 +217,11 @@ public interface PointExchangeCodeService {
      * @return
      */
     int useExpiredCode();
+
+    /**
+     * 获取已经使用的兑换码，包括有out_order_code有值的和used = 1的
+     * @param id
+     * @return
+     */
+    Integer getUsedAmount(Integer id);
 }

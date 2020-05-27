@@ -23,6 +23,8 @@ public class PointExchangeCodeBatchDTO extends BaseObject {
 
     private Integer amount;
 
+    private Integer usedAmount;
+
     private BigDecimal faceValue;
 
     private Integer projectId;
@@ -79,6 +81,14 @@ public class PointExchangeCodeBatchDTO extends BaseObject {
 
     public void setAmount(Integer amount) {
         this.amount = amount;
+    }
+
+    public Integer getUsedAmount() {
+        return usedAmount;
+    }
+
+    public void setUsedAmount(Integer usedAmount) {
+        this.usedAmount = usedAmount;
     }
 
     public BigDecimal getFaceValue() {

@@ -27,6 +27,10 @@ public class PointExchangeCodeBatchResp extends BaseVO{
     @ApiModelProperty("批次下兑换码数量")
     private Integer amount;
 
+    //包含实时发送给中行用户的，和已经被使用的
+    @ApiModelProperty("已使用兑换码数量")
+    private Integer usedAmount;
+
     @ApiModelProperty("面额")
     private BigDecimal faceValue;
 
@@ -81,6 +85,14 @@ public class PointExchangeCodeBatchResp extends BaseVO{
 
     public void setAmount(Integer amount) {
         this.amount = amount;
+    }
+
+    public Integer getUsedAmount() {
+        return usedAmount;
+    }
+
+    public void setUsedAmount(Integer usedAmount) {
+        this.usedAmount = usedAmount;
     }
 
     public BigDecimal getFaceValue() {

@@ -139,4 +139,11 @@ public interface PointExchangeCodePOManualMapper {
      * @param id
      */
     PointExchangeCodePO findByIdForUpdate(Integer id);
+
+    /**
+     * 获取已经使用的兑换码，包括有out_order_code有值的和used = 1的
+     * @param batchId
+     * @return
+     */
+    Integer getUsedAmount(@Param("batchId")Integer batchId);
 }
