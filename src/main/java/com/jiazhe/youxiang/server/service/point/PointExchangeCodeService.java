@@ -217,4 +217,18 @@ public interface PointExchangeCodeService {
      * @return
      */
     int useExpiredCode();
+
+    /**
+     * 已经使用的兑换码
+     * @param id
+     * @return
+     */
+    Integer getUsedAmount(Integer id);
+
+    /**
+     * 已启用的兑换码
+     * @param id
+     * @return
+     */
+    Integer getStartUsingAmount(Integer id);
 }

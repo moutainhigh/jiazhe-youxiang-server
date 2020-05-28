@@ -139,4 +139,18 @@ public interface PointExchangeCodePOManualMapper {
      * @param id
      */
     PointExchangeCodePO findByIdForUpdate(Integer id);
+
+    /**
+     * 已经使用的兑换码
+     * @param batchId
+     * @return
+     */
+    Integer getUsedAmount(@Param("batchId")Integer batchId);
+
+    /**
+     * 已启用的兑换码
+     * @param batchId
+     * @return
+     */
+    Integer getStartUsingAmount(Integer batchId);
 }
