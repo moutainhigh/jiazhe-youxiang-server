@@ -91,10 +91,11 @@ public class BOCDCBiz {
             //先不判断有效期
             PointExchangeCodeDTO dto = pointExchangeCodeService.queryStock(orderNo, giftNo, null);
             //重试次数
-            int retry = 3;
-            if (dto == null && retry-- > 0) {
+            int retry = 0;
+            while (dto == null && retry++ < 5) {
                 //100ms后重试
-                TimeUnit.MILLISECONDS.sleep(100);
+                LOGGER.info("订单{}重试，当前是{}次，", req.getOrderNo(), retry);
+                TimeUnit.MILLISECONDS.sleep(100 * retry);
                 dto = pointExchangeCodeService.queryStock(orderNo, giftNo, null);
             }
             if (dto == null) {
