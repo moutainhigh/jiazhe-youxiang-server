@@ -55,7 +55,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 中行储蓄卡Biz
@@ -90,13 +89,6 @@ public class BOCDCBiz {
             Date expiryDate = new Date(DateUtil.getLastSecond(System.currentTimeMillis() + CommonConstant.ONE_DAY * Integer.valueOf(validDate)));
             //先不判断有效期
             PointExchangeCodeDTO dto = pointExchangeCodeService.queryStock(orderNo, giftNo, null);
-            //重试次数
-            int retry = 3;
-            if (dto == null && retry-- > 0) {
-                //100ms后重试
-                TimeUnit.MILLISECONDS.sleep(100);
-                dto = pointExchangeCodeService.queryStock(orderNo, giftNo, null);
-            }
             if (dto == null) {
                 //说明售卖不成功
                 resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
@@ -115,6 +107,8 @@ public class BOCDCBiz {
                 resp.setGiftCardPwd(RSAUtil.bocdcPublicEncrypt(dto.getKeyt()));
                 resp.setEbuyId(RSAUtil.bocdcPublicEncrypt(dto.getId().toString()));
                 resp.setCardExpDate(DateUtil.yyyyMMDD(expiryDate));
+                //将积分兑换码置为启用状态
+                pointExchangeCodeService.changeCodeStatus(dto.getId(), CommonConstant.CODE_START_USING);
             }
         } catch (Exception e) {
             resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());

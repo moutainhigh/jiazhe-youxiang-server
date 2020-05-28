@@ -45,7 +45,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
@@ -407,23 +406,16 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         }
     }
 
-    @Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_COMMITTED)
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public PointExchangeCodeDTO queryStock(String orderNo, String giftNo, Date expiryDate) {
         PointExchangeCodePO pointExchangeCodePO = pointExchangeCodePOManualMapper.queryStock(giftNo, expiryDate);
-        if (null == pointExchangeCodePO || pointExchangeCodePO.getId() == null) {
-            return null;
+        if (null != pointExchangeCodePO) {
+            //自动启用码
+            pointExchangeCodePO.setStatus(CommonConstant.CODE_START_USING);
+            pointExchangeCodePO.setOutOrderCode(orderNo);
+            pointExchangeCodePOMapper.updateByPrimaryKeySelective(pointExchangeCodePO);
         }
-        //加入悲观锁
-        pointExchangeCodePO = pointExchangeCodePOManualMapper.findByIdForUpdate(pointExchangeCodePO.getId());
-        if (StringUtils.isNotEmpty(pointExchangeCodePO.getOutOrderCode())) {
-            return null;
-        }
-        //说明没有被售卖
-        //自动启用码
-        pointExchangeCodePO.setStatus(CommonConstant.CODE_START_USING);
-        pointExchangeCodePO.setOutOrderCode(orderNo);
-        pointExchangeCodePOMapper.updateByPrimaryKeySelective(pointExchangeCodePO);
         return PointExchangeCodeAdapter.po2Dto(pointExchangeCodePO);
     }
 
