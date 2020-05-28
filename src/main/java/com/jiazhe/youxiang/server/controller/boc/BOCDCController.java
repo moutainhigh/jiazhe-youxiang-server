@@ -7,6 +7,7 @@ package com.jiazhe.youxiang.server.controller.boc;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.jiazhe.youxiang.base.util.JacksonUtil;
 import com.jiazhe.youxiang.base.util.RSAUtil;
 import com.jiazhe.youxiang.base.util.bocdc.BOCDCUtils;
@@ -36,6 +37,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.TimeUnit;
 
@@ -223,15 +225,19 @@ public class BOCDCController {
     public Object concurrencyQueryStockTest(@RequestParam("orderNo") String orderNo) throws InterruptedException {
         LOGGER.info("HTTP调用[concurrencyQueryStock]方法");
 
-        final int N = 10; // 线程数
+        final int N = 20; // 线程数
         CyclicBarrier cyclicBarrier = new CyclicBarrier(N);
 
         List<String> result = Lists.newArrayList();
+        Set set = Sets.newHashSet();
 
         for (int i = 0; i < N; i++) {
             new Thread(() -> {
-                String currentOrderNo = orderNo + new Random().nextInt(100);
-
+                String currentOrderNo = orderNo + new Random().nextInt(10000);
+                while (set.contains(currentOrderNo)) {
+                    currentOrderNo = orderNo + new Random().nextInt(10000);
+                }
+                set.add(currentOrderNo);
                 BOCDCQueryStockReq queryStockReq = new BOCDCQueryStockReq();
                 queryStockReq.setOrderNo(currentOrderNo);
                 queryStockReq.setGiftNo("IGI1006966309");
