@@ -27,6 +27,7 @@ public class PointExchangeCodeBatchAdapter {
         pointExchangeCodeBatchResp.setName(pointExchangeCodeBatchDTO.getName());
         pointExchangeCodeBatchResp.setPointName(pointExchangeCodeBatchDTO.getPointName());
         pointExchangeCodeBatchResp.setAmount(pointExchangeCodeBatchDTO.getAmount());
+        pointExchangeCodeBatchResp.setStartUsingAmount(pointExchangeCodeBatchDTO.getStartUsingAmount());
         pointExchangeCodeBatchResp.setUsedAmount(pointExchangeCodeBatchDTO.getUsedAmount());
         pointExchangeCodeBatchResp.setFaceValue(pointExchangeCodeBatchDTO.getFaceValue());
         pointExchangeCodeBatchResp.setExpiryTime(pointExchangeCodeBatchDTO.getExpiryTime().getTime());

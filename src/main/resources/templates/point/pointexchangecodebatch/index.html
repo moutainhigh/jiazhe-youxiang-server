@@ -414,7 +414,7 @@
         var tableOption = {
             url: "/api/pointexchangecodebatch/listpage",
             postData: transformToJson($('#batchSearchForm').serializeArray()),
-            colNames: ['', '批次名称', '积分卡名称', '批次类型', '状态', '积分', '兑换比例', '数量', '已使用','批次过期时间', '积分卡有效期', '操作'],
+            colNames: ['', '批次名称', '积分卡名称', '批次类型', '状态', '积分', '兑换比例', '数量', '已启用','已使用','批次过期时间', '积分卡有效期', '操作'],
             colModel: [
                 {name: 'id', index: 'id', sortable: false, hidden: true},
                 {name: 'name', index: 'name', width: 80, sortable: false},
@@ -461,6 +461,15 @@
                     sortable: false,
                     formatter: function (cellvalue, options, rowObject) {
                         return rowObject.isVirtual == 1 ? "--" : formatNumberWithComma(rowObject.amount);
+                    }
+                },
+                {
+                    name: 'startUsingAmount',
+                    index: 'startUsingAmount',
+                    width: 30,
+                    sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return rowObject.isVirtual == 1 ? "--" : formatNumberWithComma(rowObject.startUsingAmount);
                     }
                 },
                 {

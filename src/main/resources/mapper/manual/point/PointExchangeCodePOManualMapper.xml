@@ -199,8 +199,11 @@
     </select>
 
     <select id="getUsedAmount" resultType="java.lang.Integer">
-        SELECT count(id) FROM point_exchange_code WHERE  batch_id = #{batchId} AND (used = 1 or out_order_code != '')
+        SELECT count(id) FROM point_exchange_code WHERE  batch_id = #{batchId} AND used = 1
     </select>
 
+    <select id="getStartUsingAmount" resultType="java.lang.Integer">
+        SELECT count(id) FROM point_exchange_code WHERE  batch_id = #{batchId} AND status = 1
+    </select>
 
 </mapper>

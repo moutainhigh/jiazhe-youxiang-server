@@ -68,6 +68,7 @@ public class PointExchangeCodeBatchServiceImpl implements PointExchangeCodeBatch
             ProjectDTO projectDTO = projectService.getById(bean.getProjectId());
             bean.setProjectDTO(projectDTO);
             if(!CommonConstant.BATCH_IS_VIRTUAL.equals(bean.getIsVirtual())){
+                bean.setStartUsingAmount(pointExchangeCodeService.getStartUsingAmount(bean.getId()));
                 bean.setUsedAmount(pointExchangeCodeService.getUsedAmount(bean.getId()));
             }
         });

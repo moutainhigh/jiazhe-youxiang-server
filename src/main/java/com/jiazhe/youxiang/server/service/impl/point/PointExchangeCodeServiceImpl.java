@@ -485,6 +485,11 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     }
 
     @Override
+    public Integer getStartUsingAmount(Integer batchId) {
+        return pointExchangeCodePOManualMapper.getStartUsingAmount(batchId);
+    }
+
+    @Override
     public List<BOCCCCouponEntity> getBOCCCCoupon(List<Integer> batchIds) {
         return pointExchangeCodePOManualMapper.getBOCCCCoupon(batchIds);
     }
