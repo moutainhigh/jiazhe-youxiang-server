@@ -522,6 +522,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 CommonValidator.validateNull(dto.getCustomerMobile(), new OrderException(OrderCodeEnum.SERVICE_MOBILE_IS_VALID));
             }
             if(CommonConstant.ELE_PRODUCT.equals(productDTO.getProductType())){
+                dto.setCustomerName("");
                 dto.setCustomerAddress("");
                 dto.setCustomerMobile("");
                 dto.setServiceTime(new Date());
@@ -868,6 +869,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if(CommonConstant.ELE_PRODUCT.equals(productDTO.getProductType())){
             dto.setCustomerAddress("");
             dto.setCustomerMobile("");
+            dto.setCustomerName("");
             dto.setServiceTime(new Date());
             dto.setRealServiceTime(new Date());
         }
