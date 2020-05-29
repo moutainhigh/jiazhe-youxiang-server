@@ -512,15 +512,21 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
         //服务类商品，手机端下单才检查预约时间、服务地址，服务联系电话等信息
         if (dto.getType().equals(CommonConstant.CUSTOMER_PLACE_ORDER)) {
-            if (productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
+            if (CommonConstant.SERVICE_PRODUCT.equals(productDTO.getProductType())) {
                 Long bookStartTime = DateUtil.getFirstSecond(System.currentTimeMillis() + productDTO.getDelayDays() * CommonConstant.ONE_DAY);
                 Long bookEndTime = DateUtil.getLastSecond(System.currentTimeMillis() + (productDTO.getBookDays() + productDTO.getDelayDays()) * CommonConstant.ONE_DAY);
                 if (dto.getServiceTime().getTime() > bookEndTime || dto.getServiceTime().getTime() < bookStartTime) {
                     throw new OrderException(OrderCodeEnum.SERVICE_TIME_ERROR);
                 }
+                CommonValidator.validateNull(dto.getCustomerAddress(), new OrderException(OrderCodeEnum.SERVICE_ADDRESS_IS_NULL));
+                CommonValidator.validateNull(dto.getCustomerMobile(), new OrderException(OrderCodeEnum.SERVICE_MOBILE_IS_VALID));
             }
-            CommonValidator.validateNull(dto.getCustomerAddress(), new OrderException(OrderCodeEnum.SERVICE_ADDRESS_IS_NULL));
-            CommonValidator.validateNull(dto.getCustomerMobile(), new OrderException(OrderCodeEnum.SERVICE_MOBILE_IS_VALID));
+            if(CommonConstant.ELE_PRODUCT.equals(productDTO.getProductType())){
+                dto.setCustomerAddress("");
+                dto.setCustomerMobile("");
+                dto.setServiceTime(new Date());
+                dto.setRealServiceTime(new Date());
+            }
         }
         String orderCode = generateOrderCode();
         //待支付金额
@@ -850,7 +856,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             throw new OrderException(OrderCodeEnum.ORDER_COUNT_LESS_THAN_LAST_NUM);
         }
         //服务类商品，大家保险端下单，检查预约时间、服务地址，服务联系电话等信息
-        if (productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
+        if(CommonConstant.SERVICE_PRODUCT.equals(productDTO.getProductType())){
             Long bookStartTime = DateUtil.getFirstSecond(System.currentTimeMillis() + productDTO.getDelayDays() * CommonConstant.ONE_DAY);
             Long bookEndTime = DateUtil.getLastSecond(System.currentTimeMillis() + (productDTO.getBookDays() + productDTO.getDelayDays()) * CommonConstant.ONE_DAY);
             if (dto.getServiceTime().getTime() > bookEndTime || dto.getServiceTime().getTime() < bookStartTime) {
@@ -858,6 +864,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             }
             CommonValidator.validateNull(dto.getCustomerAddress(), new OrderException(OrderCodeEnum.SERVICE_ADDRESS_IS_NULL));
             CommonValidator.validateNull(dto.getCustomerMobile(), new OrderException(OrderCodeEnum.SERVICE_MOBILE_IS_VALID));
+        }
+        if(CommonConstant.ELE_PRODUCT.equals(productDTO.getProductType())){
+            dto.setCustomerAddress("");
+            dto.setCustomerMobile("");
+            dto.setServiceTime(new Date());
+            dto.setRealServiceTime(new Date());
         }
         String orderCode = generateOrderCode();
         //待支付金额
