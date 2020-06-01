@@ -77,7 +77,7 @@ public class BOCDCBiz {
     /**
      * 查询库存订单下发实时接口
      */
-    public BOCDCQueryStockResp queryStock(BOCDCQueryStockReq req) {
+    public synchronized BOCDCQueryStockResp queryStock(BOCDCQueryStockReq req) {
         LOGGER.info("Biz调用[queryStock]方法，入参:{}", JacksonUtil.toJSon(req));
         BOCDCQueryStockResp resp = new BOCDCQueryStockResp();
         String orderNo;
@@ -89,14 +89,14 @@ public class BOCDCBiz {
             validDate = Integer.valueOf(req.getValidDate());
             Date expiryDate = new Date(DateUtil.getLastSecond(System.currentTimeMillis() + CommonConstant.ONE_DAY * Integer.valueOf(validDate)));
             //先不判断有效期
-            PointExchangeCodeDTO dto = pointExchangeCodeService.queryStock(orderNo, giftNo, null);
+            PointExchangeCodeDTO dto = pointExchangeCodeService.concurrencyQueryStock(orderNo, giftNo, null);
             //重试次数
             int retry = 0;
-            while (dto == null && retry++ < 5) {
+            while (dto == null && retry++ < 3) {
                 //100ms后重试
                 LOGGER.info("订单{}重试，当前是{}次，", req.getOrderNo(), retry);
                 TimeUnit.MILLISECONDS.sleep(100 * retry);
-                dto = pointExchangeCodeService.queryStock(orderNo, giftNo, null);
+                dto = pointExchangeCodeService.concurrencyQueryStock(orderNo, giftNo, null);
             }
             if (dto == null) {
                 //说明售卖不成功
@@ -116,10 +116,16 @@ public class BOCDCBiz {
                 resp.setGiftCardPwd(RSAUtil.bocdcPublicEncrypt(dto.getKeyt()));
                 resp.setEbuyId(RSAUtil.bocdcPublicEncrypt(dto.getId().toString()));
                 resp.setCardExpDate(DateUtil.yyyyMMDD(expiryDate));
+
+                //TODO niexiao 删掉测试代码
+                resp.setGiftCardNo(dto.getCode());
+                resp.setGiftCardPwd(dto.getKeyt());
+                resp.setEbuyId(dto.getId().toString());
+                resp.setCardExpDate(DateUtil.yyyyMMDD(expiryDate));
             }
         } catch (Exception e) {
             resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
-            resp.setBizDesc(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getMessage());
+            resp.setBizDesc(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getMessage()+" "+e.fillInStackTrace());
         }
         LOGGER.info("Biz调用[queryStock]方法成功，入参:{},出参:{}", JacksonUtil.toJSon(req), JacksonUtil.toJSon(resp));
         return resp;

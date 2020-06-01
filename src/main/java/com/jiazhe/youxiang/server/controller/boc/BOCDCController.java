@@ -222,10 +222,10 @@ public class BOCDCController {
     @AppApi
     @ApiOperation(value = "并发测试", httpMethod = "POST", response = BOCDCQueryStockResp.class, notes = "并发测试")
     @RequestMapping(value = "/concurrencyquerystocktest", method = RequestMethod.POST)
-    public Object concurrencyQueryStockTest(@RequestParam("orderNo") String orderNo) throws InterruptedException {
+    public Object concurrencyQueryStockTest(@RequestParam("orderNo") String orderNo, @RequestParam("threadCount") Integer threadCount) throws InterruptedException {
         LOGGER.info("HTTP调用[concurrencyQueryStock]方法");
 
-        final int N = 20; // 线程数
+        final int N = threadCount == null ? 1 : threadCount; // 线程数
         CyclicBarrier cyclicBarrier = new CyclicBarrier(N);
 
         List<String> result = Lists.newArrayList();
