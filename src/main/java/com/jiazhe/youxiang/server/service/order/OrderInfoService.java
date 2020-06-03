@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.order;
 
+import com.jiazhe.youxiang.server.dto.djbx.DJBXPlaceOrderDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.AppendOrderDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.PlaceOrderDTO;
@@ -155,4 +156,19 @@ public interface OrderInfoService {
      * @return
      */
     BigDecimal calculateORderNeedPay(OrderInfoDTO dto);
+
+    /**
+     * 大家保险代理人 下单
+     * @param dto
+     * @return
+     */
+    NeedPayResp djbxPlaceOrder(DJBXPlaceOrderDTO dto);
+
+    /**
+     * 大家保险代理人 取消订单
+     * @param id 订单id
+     * @param verifiCode 验证码
+     * @return
+     */
+    void djbxCancelOrder(Integer id, String verifiCode);
 }

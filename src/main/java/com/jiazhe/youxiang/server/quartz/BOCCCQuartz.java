@@ -30,7 +30,7 @@ public class BOCCCQuartz extends QuartzJobBean {
     @Override
     protected void executeInternal(org.quartz.JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
-        logger.info("定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务开始执行");
+        logger.info("BOCCC定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务开始执行");
 
         /**
          * 根据不同环境，判断此定时任务是否执行
@@ -138,6 +138,6 @@ public class BOCCCQuartz extends QuartzJobBean {
             logger.error("定时任务：前一日商品购买数量分析失败，异常信息：" + e.getMessage());
         }
 
-        logger.info("定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务执行完成");
+        logger.info("BOCCC定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务执行完成");
     }
 }

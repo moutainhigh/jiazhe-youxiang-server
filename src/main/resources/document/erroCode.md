@@ -25,3 +25,5 @@
 |中行储蓄卡相关|122|com.jiazhe.youxiang.server.common.enums.BOCDCCodeEnum|
 |中行信用卡相关|123|com.jiazhe.youxiang.server.common.enums.BOCCCCodeEnum|
 |积分核销相关|124|com.jiazhe.youxiang.server.common.enums.ChargeOffCodeEnum|
+|积分核销相关|125|com.jiazhe.youxiang.server.common.enums.DJBXCodeEnum|
+

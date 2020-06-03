@@ -3,9 +3,10 @@ package com.jiazhe.youxiang.server.service.impl.order;
 import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
-import com.jiazhe.youxiang.server.adapter.ProductAdapter;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
+import com.jiazhe.youxiang.server.biz.djbx.DJBXBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
+import com.jiazhe.youxiang.server.common.constant.DJBXConstant;
 import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.OrderException;
 import com.jiazhe.youxiang.server.dao.mapper.OrderInfoPOMapper;
@@ -14,6 +15,7 @@ import com.jiazhe.youxiang.server.domain.po.OrderInfoPO;
 import com.jiazhe.youxiang.server.domain.po.OrderInfoPOExample;
 import com.jiazhe.youxiang.server.domain.po.OrderPaymentPO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
+import com.jiazhe.youxiang.server.dto.djbx.DJBXPlaceOrderDTO;
 import com.jiazhe.youxiang.server.dto.eleproductexcode.EleProductCodeDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.AppendOrderDTO;
 import com.jiazhe.youxiang.server.dto.order.orderinfo.OrderInfoDTO;
@@ -37,6 +39,7 @@ import com.jiazhe.youxiang.server.service.product.ProductService;
 import com.jiazhe.youxiang.server.service.rechargecard.RCService;
 import com.jiazhe.youxiang.server.service.voucher.VoucherService;
 import com.jiazhe.youxiang.server.vo.Paging;
+import com.jiazhe.youxiang.server.vo.req.djbx.PointsConsumeParam;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -44,6 +47,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -86,6 +90,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     private PointService pointService;
     @Autowired
     private EleProductCodeService eleProductCodeService;
+    @Lazy
+    @Autowired
+    private DJBXBiz djbxBiz;
 
     @Override
     public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode, Paging paging) {
@@ -216,6 +223,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Override
     public void userCancelOrder(OrderInfoDTO orderInfoDTO) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(orderInfoDTO.getId());
+        if(CommonConstant.DJBX_PLACE_ORDER.equals(orderInfoPO.getType())){
+            throw new OrderException(OrderCodeEnum.DJBX_ORDER_USER_CANCEL_ERROR);
+        }
         //订单不是已完成状态，才能取消
         if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_COMPLETE)) {
             throw new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CANCEL);
@@ -502,15 +512,22 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
         //服务类商品，手机端下单才检查预约时间、服务地址，服务联系电话等信息
         if (dto.getType().equals(CommonConstant.CUSTOMER_PLACE_ORDER)) {
-            if (productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
+            if (CommonConstant.SERVICE_PRODUCT.equals(productDTO.getProductType())) {
                 Long bookStartTime = DateUtil.getFirstSecond(System.currentTimeMillis() + productDTO.getDelayDays() * CommonConstant.ONE_DAY);
                 Long bookEndTime = DateUtil.getLastSecond(System.currentTimeMillis() + (productDTO.getBookDays() + productDTO.getDelayDays()) * CommonConstant.ONE_DAY);
                 if (dto.getServiceTime().getTime() > bookEndTime || dto.getServiceTime().getTime() < bookStartTime) {
                     throw new OrderException(OrderCodeEnum.SERVICE_TIME_ERROR);
                 }
+                CommonValidator.validateNull(dto.getCustomerAddress(), new OrderException(OrderCodeEnum.SERVICE_ADDRESS_IS_NULL));
+                CommonValidator.validateNull(dto.getCustomerMobile(), new OrderException(OrderCodeEnum.SERVICE_MOBILE_IS_VALID));
             }
-            CommonValidator.validateNull(dto.getCustomerAddress(), new OrderException(OrderCodeEnum.SERVICE_ADDRESS_IS_NULL));
-            CommonValidator.validateNull(dto.getCustomerMobile(), new OrderException(OrderCodeEnum.SERVICE_MOBILE_IS_VALID));
+            if(CommonConstant.ELE_PRODUCT.equals(productDTO.getProductType())){
+                dto.setCustomerName("");
+                dto.setCustomerAddress("");
+                dto.setCustomerMobile("");
+                dto.setServiceTime(new Date());
+                dto.setRealServiceTime(new Date());
+            }
         }
         String orderCode = generateOrderCode();
         //待支付金额
@@ -661,7 +678,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             });
             rcService.batchUpdate(rcdtoList);
         }
-        if ("false".equals(dto.getCashSupport())) {
+        if ("false" .equals(dto.getCashSupport())) {
             if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
                 throw new OrderException(OrderCodeEnum.ORDER_PAYMENT_NOT_ENOUGH);
             }
@@ -816,6 +833,146 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         BigDecimal hasPay = dto.getPayPoint().add(dto.getPayRechargeCard()).add(dto.getPayVoucher().add(dto.getPayCash()));
         BigDecimal left = needPay.subtract(hasPay);
         return left;
+    }
+
+    //大家保险下单
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public NeedPayResp djbxPlaceOrder(DJBXPlaceOrderDTO dto) {
+        List<EleProductCodeDTO> eleProductCodeDTOList = Lists.newArrayList();
+        CustomerDTO customerDTO = customerService.getById(dto.getCustomerId());
+        if (null == customerDTO) {
+            throw new OrderException(OrderCodeEnum.CUSTOMER_NOT_EXIST);
+        }
+        ProductDTO productDTO = productService.getById(dto.getProductId());
+        if (null == productDTO || productDTO.getStatus().equals(Byte.valueOf("0"))) {
+            throw new OrderException(OrderCodeEnum.PRODUCT_NOT_AVAILABLE);
+        }
+        CommonValidator.validateNull(dto.getCustomerCityCode(), new OrderException(OrderCodeEnum.CITY_INFO_ERROR));
+        ProductPriceDTO productPriceDTO = productPriceService.getPriceByCity(dto.getProductId(), dto.getCustomerCityCode());
+        if (null == productPriceDTO || productPriceDTO.getStatus().equals(Byte.valueOf("0"))) {
+            throw new OrderException(OrderCodeEnum.PRODUCT_NOT_AVAILABLE);
+        }
+        if (productDTO.getLastNum() > dto.getCount()) {
+            throw new OrderException(OrderCodeEnum.ORDER_COUNT_LESS_THAN_LAST_NUM);
+        }
+        //服务类商品，大家保险端下单，检查预约时间、服务地址，服务联系电话等信息
+        if(CommonConstant.SERVICE_PRODUCT.equals(productDTO.getProductType())){
+            Long bookStartTime = DateUtil.getFirstSecond(System.currentTimeMillis() + productDTO.getDelayDays() * CommonConstant.ONE_DAY);
+            Long bookEndTime = DateUtil.getLastSecond(System.currentTimeMillis() + (productDTO.getBookDays() + productDTO.getDelayDays()) * CommonConstant.ONE_DAY);
+            if (dto.getServiceTime().getTime() > bookEndTime || dto.getServiceTime().getTime() < bookStartTime) {
+                throw new OrderException(OrderCodeEnum.SERVICE_TIME_ERROR);
+            }
+            CommonValidator.validateNull(dto.getCustomerAddress(), new OrderException(OrderCodeEnum.SERVICE_ADDRESS_IS_NULL));
+            CommonValidator.validateNull(dto.getCustomerMobile(), new OrderException(OrderCodeEnum.SERVICE_MOBILE_IS_VALID));
+        }
+        if(CommonConstant.ELE_PRODUCT.equals(productDTO.getProductType())){
+            dto.setCustomerAddress("");
+            dto.setCustomerMobile("");
+            dto.setCustomerName("");
+            dto.setServiceTime(new Date());
+            dto.setRealServiceTime(new Date());
+        }
+        String orderCode = generateOrderCode();
+        //待支付金额
+        BigDecimal needPay = productPriceDTO.getPrice().multiply(new BigDecimal(dto.getCount()));
+        PointsConsumeParam pointsConsumeParam = new PointsConsumeParam(dto.getAgentCode(), DJBXConstant.DJBX_ORDER_PREFIX + orderCode, DJBXConstant.DJBX_TRANSACTIONTYPE_CONSUME, DJBXConstant.DJBX_SETTLEMENTTYPE_NEED, needPay, dto.getVerifiCode());
+        boolean success = djbxBiz.consumePoints(pointsConsumeParam);
+        OrderInfoPO orderInfoPO = new OrderInfoPO();
+        OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
+        if (success) {//保险积分支付成功
+            //添加订单
+            orderInfoPO.setOrderCode(orderCode);
+            orderInfoPO.setCustomerId(dto.getCustomerId());
+            orderInfoPO.setProductId(dto.getProductId());
+            orderInfoPO.setServiceProductId(dto.getServiceProductId());
+            orderInfoPO.setCustomerCityCode(dto.getCustomerCityCode());
+            orderInfoPO.setCustomerCityName(productPriceDTO.getCityName());
+            orderInfoPO.setProductPrice(productPriceDTO.getPrice());
+            orderInfoPO.setCount(dto.getCount());
+            orderInfoPO.setCustomerAddress(dto.getCustomerAddress());
+            orderInfoPO.setCustomerMobile(dto.getCustomerMobile());
+            orderInfoPO.setCustomerName(dto.getCustomerName());
+            orderInfoPO.setCustomerRemark(dto.getCustomerRemark());
+            orderInfoPO.setWorkerName(dto.getWorkerName());
+            orderInfoPO.setWorkerMobile(dto.getWorkerMobile());
+            orderInfoPO.setOrderTime(new Date());
+            orderInfoPO.setServiceTime(dto.getServiceTime());
+            orderInfoPO.setRealServiceTime(dto.getServiceTime());
+            orderInfoPO.setPayPoint(BigDecimal.ZERO);
+            orderInfoPO.setPayRechargeCard(BigDecimal.ZERO);
+            orderInfoPO.setPayVoucher(BigDecimal.ZERO);
+            orderInfoPO.setPayCash(needPay);
+            orderInfoPO.setTotalAmount(productPriceDTO.getPrice().multiply(new BigDecimal(dto.getCount())));
+            orderInfoPO.setCost(dto.getCost());
+            orderInfoPO.setComments(dto.getComments());
+            orderInfoPO.setType(dto.getType());
+            orderInfoPO.setExtInfo("");
+            //添加支付记录
+            orderPaymentPO.setOrderCode(orderCode);
+            orderPaymentPO.setPayType(CommonConstant.PAY_DJBX);
+            orderPaymentPO.setPayMoney(needPay);
+            orderPaymentPO.setSerialNumber("");
+            //如果是电子码商品
+            if (productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
+                orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
+            }
+            if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
+                orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
+                eleProductCodeDTOList = sendEleProductCode(dto.getProductId(), dto.getCount());
+                JSONArray jsonArray = new JSONArray();
+                eleProductCodeDTOList.stream().forEach(bean -> {
+                    JSONObject json = new JSONObject();
+                    json.put("code", bean.getCode());
+                    json.put("keyt", bean.getKeyt());
+                    jsonArray.add(json);
+                });
+                orderInfoPO.setExtInfo(jsonArray.toString());
+            }
+            orderInfoPOManualMapper.insert(orderInfoPO);
+        } else {
+            if ("false" .equals(dto.getCashSupport())) {
+                throw new OrderException(OrderCodeEnum.ORDER_PAYMENT_NOT_ENOUGH);
+            }
+        }
+        //支付完成并且是电子商品的话，将所选的电子码置为已发放状态，并记录相关的订单id和订单号
+        if (success && productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
+            eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderCode);
+        }
+        orderPaymentPO.setOrderId(orderInfoPO.getId());
+        orderPaymentService.insert(orderPaymentPO);
+        NeedPayResp needPayResp = new NeedPayResp();
+        needPayResp.setOrderId(orderInfoPO.getId());
+        needPayResp.setPayCash(Integer.valueOf(0));
+        needPayResp.setOrderCode(orderInfoPO.getOrderCode());
+        return needPayResp;
+    }
+
+    @Override
+    public void djbxCancelOrder(Integer id, String verifiCode) {
+        OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
+        CustomerDTO customerDTO = customerService.getById(orderInfoPO.getCustomerId());
+        //大家保险订单为待付款或待派单状态，直接走退款流程
+        if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNPAID) || orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSENT)) {
+            orderInfoPO.setStatus(CommonConstant.ORDER_CANCEL);
+            //先掉用大家保险将积分冲正
+            PointsConsumeParam pointsConsumeParam = new PointsConsumeParam(customerDTO.getName(), DJBXConstant.DJBX_ORDER_PREFIX + orderInfoPO.getOrderCode(), DJBXConstant.DJBX_TRANSACTIONTYPE_BACK, DJBXConstant.DJBX_SETTLEMENTTYPE_NEED, orderInfoPO.getTotalAmount(), verifiCode);
+            boolean success = djbxBiz.consumePoints(pointsConsumeParam);
+            if (success) {
+                //退款功能共用，提出公共方法
+                orderRefund(id);
+            } else {
+                throw new OrderException(OrderCodeEnum.ORDER_CANCEL_ERROR);
+            }
+        }
+        //大家保险订单为待服务状态，不能置为取消待审核状态，因为取消需要验证码，后台不能取消
+//        else if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSERVICE)) {
+//            orderInfoPO.setStatus(CommonConstant.ORDER_CANCELWATINGCHECK);
+//        }
+        else {
+            throw new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CANCEL);
+        }
+        orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
     }
 
     private OrderRefundDTO paymentDto2RefundDto(OrderPaymentDTO paymentDTO) {

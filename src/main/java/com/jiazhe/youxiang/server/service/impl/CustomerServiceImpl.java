@@ -85,6 +85,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public void addDJBXAgent(CustomerAddDTO customerAddDTO) {
+        Integer count = customerPOManualMapper.count(customerAddDTO.getMobile(), null);
+        if (count > 0) {
+            throw new CustomerException(CustomerCodeEnum.CUSTOMER_AGENTCODE_REPEAT);
+        }
+        CustomerPO customerPO = CustomerAdapter.customerAddDTO2PO(customerAddDTO);
+        customerPOMapper.insertSelective(customerPO);
+    }
+
+    @Override
     public CustomerDTO getById(Integer id) {
         CustomerPO customerPO = customerPOMapper.selectByPrimaryKey(id);
         if(null == customerPO){
