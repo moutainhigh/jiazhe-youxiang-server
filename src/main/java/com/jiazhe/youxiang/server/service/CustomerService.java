@@ -25,6 +25,12 @@ public interface CustomerService {
 
     void add(CustomerAddDTO customerAddDTO);
 
+    /**
+     * 添加大家保险的代理人
+     * @param customerAddDTO
+     */
+    void addDJBXAgent(CustomerAddDTO customerAddDTO);
+
     CustomerDTO getById(Integer id);
 
     /**
@@ -53,4 +59,5 @@ public interface CustomerService {
     void addAddress(AddressAddDTO addressAddDTO);
 
     AddressDTO getDefaultAddress(Integer customerId);
+
 }
