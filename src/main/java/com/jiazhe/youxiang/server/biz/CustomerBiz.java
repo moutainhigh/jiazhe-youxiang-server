@@ -131,4 +131,8 @@ public class CustomerBiz {
         customerService.setAddressDefault(id, isDefault);
 
     }
+
+    public void addDJBXAgent(CustomerAddDTO customerAddDTO) {
+        customerService.addDJBXAgent(customerAddDTO);
+    }
 }

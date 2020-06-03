@@ -101,7 +101,7 @@ public class DJBXBiz {
             //不存在则新建客户
             CustomerAddDTO customerAddDTO = CustomerAdapter.getUserInfoResp2DTO(resp);
             customerAddDTO.setRemark(respString);//把获取的全部信息当做备注，便于客户信息后续使用
-            customerBiz.add(customerAddDTO);
+            customerBiz.addDJBXAgent(customerAddDTO);
             //查询新建的客户
             customerDTO = customerBiz.getByMobile(customerAddDTO.getMobile());
         }
