@@ -80,6 +80,7 @@ public class BOCDCBiz {
     public synchronized BOCDCQueryStockResp queryStock(BOCDCQueryStockReq req) {
         LOGGER.info("Biz调用[queryStock]方法，入参:{}", JacksonUtil.toJSon(req));
         BOCDCQueryStockResp resp = new BOCDCQueryStockResp();
+        BOCDCQueryStockResp respUnencrypted = new BOCDCQueryStockResp();
         String orderNo;
         String giftNo;
         Integer validDate;
@@ -116,12 +117,17 @@ public class BOCDCBiz {
                 resp.setGiftCardPwd(RSAUtil.bocdcPublicEncrypt(dto.getKeyt()));
                 resp.setEbuyId(RSAUtil.bocdcPublicEncrypt(dto.getId().toString()));
                 resp.setCardExpDate(DateUtil.yyyyMMDD(expiryDate));
+
+                respUnencrypted.setGiftCardNo(dto.getCode());
+                respUnencrypted.setGiftCardPwd(dto.getKeyt());
+                respUnencrypted.setEbuyId(dto.getId().toString());
+                respUnencrypted.setCardExpDate(DateUtil.yyyyMMDD(expiryDate));
             }
         } catch (Exception e) {
             resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
-            resp.setBizDesc(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getMessage()+" "+e.fillInStackTrace());
+            resp.setBizDesc(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getMessage() + " " + e.fillInStackTrace());
         }
-        LOGGER.info("Biz调用[queryStock]方法成功，入参:{},出参:{}", JacksonUtil.toJSon(req), JacksonUtil.toJSon(resp));
+        LOGGER.info("Biz调用[queryStock]方法成功，入参:{},出参:{},明文出参:{}", JacksonUtil.toJSon(req), JacksonUtil.toJSon(resp), JacksonUtil.toJSon(respUnencrypted));
         return resp;
     }
 
