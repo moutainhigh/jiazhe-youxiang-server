@@ -116,12 +116,6 @@ public class BOCDCBiz {
                 resp.setGiftCardPwd(RSAUtil.bocdcPublicEncrypt(dto.getKeyt()));
                 resp.setEbuyId(RSAUtil.bocdcPublicEncrypt(dto.getId().toString()));
                 resp.setCardExpDate(DateUtil.yyyyMMDD(expiryDate));
-
-                //TODO niexiao 删掉测试代码
-                resp.setGiftCardNo(dto.getCode());
-                resp.setGiftCardPwd(dto.getKeyt());
-                resp.setEbuyId(dto.getId().toString());
-                resp.setCardExpDate(DateUtil.yyyyMMDD(expiryDate));
             }
         } catch (Exception e) {
             resp.setBizCode(BOCDCBizCodeEnum.MESSAGE_FORMAT_ERROR.getCode());
