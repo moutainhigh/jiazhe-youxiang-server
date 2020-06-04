@@ -121,7 +121,19 @@
             <if test="payeeIds != null and payeeIds != ''">
                 AND record.submitter_id in ${payeeIds}
             </if>
-            AND record.is_deleted = 0 AND record.submit_time >= date_format('2019-12-01 00:00:00', '%Y-%m-%d %H:%i:%s')
+            AND record.is_deleted = 0 AND record.status in (2,4) AND record.submit_time >= date_format('2019-12-01 00:00:00', '%Y-%m-%d %H:%i:%s')
+        </where>
+        UNION ALL
+        SELECT
+        record.submitter_id as payee_id
+        FROM charge_off record
+        <where>
+            <if test="payeeIds != null and payeeIds != ''">
+                AND record.submitter_id in ${payeeIds}
+            </if>
+            AND record.is_deleted = 0 AND record.status = 1 AND record.charge_off_type = 0 AND record.submitter_time >= date_format('2019-12-01
+            00:00:00',
+            '%Y-%m-%d %H:%i:%s')
         </where>
         ) as temp
     </select>
