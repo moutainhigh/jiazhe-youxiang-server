@@ -117,25 +117,29 @@ public interface PointExchangeCodePOManualMapper {
      * @param expiryDate
      * @return
      */
-    PointExchangeCodePO queryStock(@Param("giftNo") String giftNo, @Param("expiryDate") Date expiryDate);
+    List<PointExchangeCodePO> queryStock(@Param("giftNo") String giftNo, @Param("expiryDate") Date expiryDate, @Param("limit") Integer limit);
+
 
     /**
      * 中行信用卡专用：获取批次下兑换码信息
+     *
      * @param batchIds
      * @return
      */
     List<BOCCCCouponEntity> getBOCCCCoupon(List<Integer> batchIds);
 
     /**
-     *中行信用卡专用：获取某个时间段使用的兑换码
+     * 中行信用卡专用：获取某个时间段使用的兑换码
+     *
      * @param beginTime
      * @param endTime
      * @return
      */
-    List<BOCCCCouponUsedEntity> getBOCCCUsed(@Param("beginTime")Date beginTime, @Param("endTime")Date endTime);
+    List<BOCCCCouponUsedEntity> getBOCCCUsed(@Param("beginTime") Date beginTime, @Param("endTime") Date endTime);
 
     /**
      * 根据id查找记录，悲观锁
+     *
      * @param id
      */
     PointExchangeCodePO findByIdForUpdate(Integer id);

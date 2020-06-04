@@ -6,6 +6,7 @@ import com.jiazhe.youxiang.server.vo.BaseObject;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author tu
@@ -238,5 +239,41 @@ public class PointExchangeCodeDTO extends BaseObject {
 
     public void setPointEffectiveTime(Date pointEffectiveTime) {
         this.pointEffectiveTime = pointEffectiveTime;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        PointExchangeCodeDTO that = (PointExchangeCodeDTO) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(batchId, that.batchId) &&
+                Objects.equals(batchName, that.batchName) &&
+                Objects.equals(pointName, that.pointName) &&
+                Objects.equals(batchDescription, that.batchDescription) &&
+                Objects.equals(projectId, that.projectId) &&
+                Objects.equals(projectDTO, that.projectDTO) &&
+                Objects.equals(cityCodes, that.cityCodes) &&
+                Objects.equals(productIds, that.productIds) &&
+                Objects.equals(code, that.code) &&
+                Objects.equals(keyt, that.keyt) &&
+                Objects.equals(pointEffectiveTime, that.pointEffectiveTime) &&
+                Objects.equals(pointExpiryTime, that.pointExpiryTime) &&
+                Objects.equals(validityPeriod, that.validityPeriod) &&
+                Objects.equals(expiryType, that.expiryType) &&
+                Objects.equals(faceValue, that.faceValue) &&
+                Objects.equals(expiryTime, that.expiryTime) &&
+                Objects.equals(status, that.status) &&
+                Objects.equals(used, that.used) &&
+                Objects.equals(outOrderCode, that.outOrderCode) &&
+                Objects.equals(customerId, that.customerId) &&
+                Objects.equals(customerDTO, that.customerDTO);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), id, batchId, batchName, pointName, batchDescription, projectId, projectDTO, cityCodes, productIds, code, keyt, pointEffectiveTime, pointExpiryTime, validityPeriod, expiryType, faceValue, expiryTime, status, used, outOrderCode, customerId, customerDTO);
     }
 }

@@ -39,6 +39,7 @@ import com.jiazhe.youxiang.server.service.point.PointExchangeRecordService;
 import com.jiazhe.youxiang.server.service.point.PointService;
 import com.jiazhe.youxiang.server.vo.Paging;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -50,8 +51,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.stream.Collectors.toList;
 
@@ -84,6 +88,11 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     private BOCDCBiz bocdcBiz;
     @Autowired
     private BOCCCBiz bocccBiz;
+
+    private static ConcurrentHashMap<String, Set<PointExchangeCodeDTO>> stockMap = new ConcurrentHashMap<>();
+
+    private final static String lock = "lock";
+
 
     @Override
     public List<PointExchangeCodeDTO> getByBatchId(Integer id) {
@@ -410,12 +419,13 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     @Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_COMMITTED)
     @Override
     public PointExchangeCodeDTO queryStock(String orderNo, String giftNo, Date expiryDate) {
-        PointExchangeCodePO pointExchangeCodePO = pointExchangeCodePOManualMapper.queryStock(giftNo, expiryDate);
-        if (null == pointExchangeCodePO || pointExchangeCodePO.getId() == null) {
+        List<PointExchangeCodePO> pointExchangeCodePOList = pointExchangeCodePOManualMapper.queryStock(giftNo, expiryDate, 1);
+        if (CollectionUtils.isEmpty(pointExchangeCodePOList) || pointExchangeCodePOList.get(0).getId() == null) {
             return null;
         }
+        Integer codeId = pointExchangeCodePOList.get(0).getId();
         //加入悲观锁
-        pointExchangeCodePO = pointExchangeCodePOManualMapper.findByIdForUpdate(pointExchangeCodePO.getId());
+        PointExchangeCodePO pointExchangeCodePO = pointExchangeCodePOManualMapper.findByIdForUpdate(codeId);
         if (StringUtils.isNotEmpty(pointExchangeCodePO.getOutOrderCode())) {
             return null;
         }
@@ -425,6 +435,42 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
         pointExchangeCodePO.setOutOrderCode(orderNo);
         pointExchangeCodePOMapper.updateByPrimaryKeySelective(pointExchangeCodePO);
         return PointExchangeCodeAdapter.po2Dto(pointExchangeCodePO);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public PointExchangeCodeDTO concurrencyQueryStock(String orderNo, String giftNo, Date expiryDate) {
+        if (stockMap == null) {
+            stockMap = new ConcurrentHashMap<>();
+        }
+        if (MapUtils.isEmpty(stockMap) || !stockMap.contains(giftNo)) {
+            stockMap.put(giftNo, Collections.newSetFromMap(new ConcurrentHashMap<>()));
+        }
+        if (CollectionUtils.isEmpty(stockMap.get(giftNo))) {
+            List<PointExchangeCodePO> pointExchangeCodePOList = pointExchangeCodePOManualMapper.queryStock(giftNo, expiryDate, 10);
+            if (CollectionUtils.isNotEmpty(pointExchangeCodePOList)) {
+                pointExchangeCodePOList.forEach(item -> {
+                    stockMap.get(giftNo).add(PointExchangeCodeAdapter.po2Dto(item));
+                });
+            }
+        }
+
+        if (CollectionUtils.isNotEmpty(stockMap.get(giftNo))) {
+            Set<PointExchangeCodeDTO> codeSet = stockMap.get(giftNo);
+            //说明缓存里还有库存
+            PointExchangeCodeDTO pointExchangeCodeDTO = codeSet.iterator().next();
+            if (pointExchangeCodeDTO != null) {
+                codeSet.remove(pointExchangeCodeDTO);
+                PointExchangeCodePO pointExchangeCodePO = new PointExchangeCodePO();
+                pointExchangeCodePO.setId(pointExchangeCodeDTO.getId());
+                //自动启用码
+                pointExchangeCodePO.setStatus(CommonConstant.CODE_START_USING);
+                pointExchangeCodePO.setOutOrderCode(orderNo);
+                pointExchangeCodePOMapper.updateByPrimaryKeySelective(pointExchangeCodePO);
+                return pointExchangeCodeDTO;
+            }
+        }
+        return null;
     }
 
     @Transactional(rollbackFor = Exception.class)

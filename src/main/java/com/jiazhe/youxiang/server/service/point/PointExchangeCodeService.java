@@ -165,6 +165,15 @@ public interface PointExchangeCodeService {
     PointExchangeCodeDTO queryStock(String orderNo, String giftNo, Date expiryDate);
 
     /**
+     * 支持高并发中行储蓄卡查询库存，不成功返回null
+     *
+     * @param orderNo
+     * @param giftNo
+     * @param expiryDate
+     */
+    PointExchangeCodeDTO concurrencyQueryStock(String orderNo, String giftNo, Date expiryDate);
+
+    /**
      * 中行信用卡专用获取批次下的兑换码信息
      *
      * @param batchIds
