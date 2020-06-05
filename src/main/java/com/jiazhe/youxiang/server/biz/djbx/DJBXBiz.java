@@ -109,7 +109,7 @@ public class DJBXBiz {
     }
 
     @Retryable(value = {DJBXException.class},
-            maxAttempts = 3, backoff = @Backoff(delay = 5000L, multiplier = 2))
+            maxAttempts = 2, backoff = @Backoff(delay = 5000L, multiplier = 2))
     public PointsQueryDTO queryPoints(String agentCode) {
         HeaderReq headerReq = new HeaderReq(RandomUtil.generateNumber(12), DJBXConstant.TRANS_CODE_QUERY_POINTS, DJBXConstant.SYS_CODE);
         PointsQueryParam pointsQueryParam = new PointsQueryParam(agentCode);
@@ -128,10 +128,14 @@ public class DJBXBiz {
             JSONObject resultInfoJson = JSONObject.fromObject(resultInfoStr);
             dto.setAgentCode(resultInfoJson.get("agentCode").toString());
             dto.setPoints(new BigDecimal(resultInfoJson.get("points").toString()));
+        } else {
+            throw new DJBXException(DJBXCodeEnum.QUERY_AGENT_POINTS_ERROR);
         }
         return dto;
     }
 
+    @Retryable(value = {DJBXException.class},
+            maxAttempts = 2, backoff = @Backoff(delay = 5000L, multiplier = 2))
     public boolean consumePoints(PointsConsumeParam pointsConsumeParam) {
         HeaderReq headerReq = new HeaderReq(RandomUtil.generateNumber(12), DJBXConstant.TRANS_CODE_CONSUME_POINTS, DJBXConstant.SYS_CODE);
         PointsConsumeReq req = new PointsConsumeReq(headerReq, pointsConsumeParam);
@@ -154,9 +158,8 @@ public class DJBXBiz {
                     throw new DJBXException(DJBXCodeEnum.PLACE_ORDER_ERROR, headerJson.get("resultMessage").toString());
                 } else {
                     //如果是退分，则是退单，抛出退单失败，并给出原因
-                    throw new DJBXException(DJBXCodeEnum.PLACE_ORDER_ERROR, headerJson.get("resultMessage").toString());
+                    throw new DJBXException(DJBXCodeEnum.CANCEL_ORDER_ERROR, headerJson.get("resultMessage").toString());
                 }
-
             }
         }
         return false;
@@ -164,7 +167,7 @@ public class DJBXBiz {
 
     @Async
     @Retryable(value = {DJBXException.class},
-            maxAttempts = 3, backoff = @Backoff(delay = 5000L, multiplier = 2))
+            maxAttempts = 2, backoff = @Backoff(delay = 5000L, multiplier = 2))
     public void getPointsToken() {
         PointsTokenReq req = new PointsTokenReq(DJBX_SECRET);
         String reqStr = JacksonUtil.toJSon(req);
@@ -181,6 +184,9 @@ public class DJBXBiz {
         }
     }
 
+    @Async
+    @Retryable(value = {DJBXException.class},
+            maxAttempts = 2, backoff = @Backoff(delay = 5000L, multiplier = 2))
     public void sendVerifiCode(String agentCode) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("agentCode", agentCode);

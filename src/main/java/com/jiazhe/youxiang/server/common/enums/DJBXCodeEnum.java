@@ -21,7 +21,7 @@ public enum DJBXCodeEnum {
     GET_VERIFICODE_ERROR(125008, "GET_VERIFICODE_ERROR", "获取验证码失败"),
     PLACE_ORDER_ERROR(125009, "PLACE_ORDER_ERROR", "下单失败"),
     CANCEL_ORDER_ERROR(125010, "CANCEL_ORDER_ERROR", "取消订单失败"),
-    ;
+    QUERY_AGENT_POINTS_ERROR(125011,"QUERY_AGENT_POINTS_ERROR" ,"查询经纪人剩余积分失败" );
 
     DJBXCodeEnum(Integer code, String type, String message) {
         this.code = code;
