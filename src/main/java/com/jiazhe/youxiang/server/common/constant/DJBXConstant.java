@@ -69,7 +69,7 @@ public class DJBXConstant {
     /**
      * 大家保险订单号前缀
      */
-    public final static String DJBX_ORDER_PREFIX = "DJBX_";
+    //public final static String DJBX_ORDER_PREFIX = "DJBX_";
 
     /**
      * 交易类型 01-积分消费， 02-积分退回

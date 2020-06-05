@@ -3,6 +3,7 @@ package com.jiazhe.youxiang.server.service.impl.order;
 import com.google.common.collect.Lists;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
+import com.jiazhe.youxiang.base.util.RandomUtil;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.djbx.DJBXBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
@@ -223,7 +224,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Override
     public void userCancelOrder(OrderInfoDTO orderInfoDTO) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(orderInfoDTO.getId());
-        if(CommonConstant.DJBX_PLACE_ORDER.equals(orderInfoPO.getType())){
+        if (CommonConstant.DJBX_PLACE_ORDER.equals(orderInfoPO.getType())) {
             throw new OrderException(OrderCodeEnum.DJBX_ORDER_USER_CANCEL_ERROR);
         }
         //订单不是已完成状态，才能取消
@@ -521,7 +522,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
                 CommonValidator.validateNull(dto.getCustomerAddress(), new OrderException(OrderCodeEnum.SERVICE_ADDRESS_IS_NULL));
                 CommonValidator.validateNull(dto.getCustomerMobile(), new OrderException(OrderCodeEnum.SERVICE_MOBILE_IS_VALID));
             }
-            if(CommonConstant.ELE_PRODUCT.equals(productDTO.getProductType())){
+            if (CommonConstant.ELE_PRODUCT.equals(productDTO.getProductType())) {
                 dto.setCustomerName("");
                 dto.setCustomerAddress("");
                 dto.setCustomerMobile("");
@@ -678,7 +679,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             });
             rcService.batchUpdate(rcdtoList);
         }
-        if ("false" .equals(dto.getCashSupport())) {
+        if ("false".equals(dto.getCashSupport())) {
             if (needPay[0].compareTo(BigDecimal.ZERO) == 1) {
                 throw new OrderException(OrderCodeEnum.ORDER_PAYMENT_NOT_ENOUGH);
             }
@@ -857,7 +858,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             throw new OrderException(OrderCodeEnum.ORDER_COUNT_LESS_THAN_LAST_NUM);
         }
         //服务类商品，大家保险端下单，检查预约时间、服务地址，服务联系电话等信息
-        if(CommonConstant.SERVICE_PRODUCT.equals(productDTO.getProductType())){
+        if (CommonConstant.SERVICE_PRODUCT.equals(productDTO.getProductType())) {
             Long bookStartTime = DateUtil.getFirstSecond(System.currentTimeMillis() + productDTO.getDelayDays() * CommonConstant.ONE_DAY);
             Long bookEndTime = DateUtil.getLastSecond(System.currentTimeMillis() + (productDTO.getBookDays() + productDTO.getDelayDays()) * CommonConstant.ONE_DAY);
             if (dto.getServiceTime().getTime() > bookEndTime || dto.getServiceTime().getTime() < bookStartTime) {
@@ -866,17 +867,17 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             CommonValidator.validateNull(dto.getCustomerAddress(), new OrderException(OrderCodeEnum.SERVICE_ADDRESS_IS_NULL));
             CommonValidator.validateNull(dto.getCustomerMobile(), new OrderException(OrderCodeEnum.SERVICE_MOBILE_IS_VALID));
         }
-        if(CommonConstant.ELE_PRODUCT.equals(productDTO.getProductType())){
+        if (CommonConstant.ELE_PRODUCT.equals(productDTO.getProductType())) {
             dto.setCustomerAddress("");
             dto.setCustomerMobile("");
             dto.setCustomerName("");
             dto.setServiceTime(new Date());
             dto.setRealServiceTime(new Date());
         }
-        String orderCode = generateOrderCode();
+        String orderCode = generateDJBXOrderCode();
         //待支付金额
         BigDecimal needPay = productPriceDTO.getPrice().multiply(new BigDecimal(dto.getCount()));
-        PointsConsumeParam pointsConsumeParam = new PointsConsumeParam(dto.getAgentCode(), DJBXConstant.DJBX_ORDER_PREFIX + orderCode, DJBXConstant.DJBX_TRANSACTIONTYPE_CONSUME, DJBXConstant.DJBX_SETTLEMENTTYPE_NEED, needPay, dto.getVerifiCode());
+        PointsConsumeParam pointsConsumeParam = new PointsConsumeParam(dto.getAgentCode(), orderCode, DJBXConstant.DJBX_TRANSACTIONTYPE_CONSUME, DJBXConstant.DJBX_SETTLEMENTTYPE_NEED, needPay, dto.getVerifiCode());
         boolean success = djbxBiz.consumePoints(pointsConsumeParam);
         OrderInfoPO orderInfoPO = new OrderInfoPO();
         OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
@@ -931,7 +932,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             }
             orderInfoPOManualMapper.insert(orderInfoPO);
         } else {
-            if ("false" .equals(dto.getCashSupport())) {
+            if ("false".equals(dto.getCashSupport())) {
                 throw new OrderException(OrderCodeEnum.ORDER_PAYMENT_NOT_ENOUGH);
             }
         }
@@ -956,7 +957,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNPAID) || orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSENT)) {
             orderInfoPO.setStatus(CommonConstant.ORDER_CANCEL);
             //先掉用大家保险将积分冲正
-            PointsConsumeParam pointsConsumeParam = new PointsConsumeParam(customerDTO.getName(), DJBXConstant.DJBX_ORDER_PREFIX + orderInfoPO.getOrderCode(), DJBXConstant.DJBX_TRANSACTIONTYPE_BACK, DJBXConstant.DJBX_SETTLEMENTTYPE_NEED, orderInfoPO.getTotalAmount(), verifiCode);
+            PointsConsumeParam pointsConsumeParam = new PointsConsumeParam(customerDTO.getName(), orderInfoPO.getOrderCode(), DJBXConstant.DJBX_TRANSACTIONTYPE_BACK, DJBXConstant.DJBX_SETTLEMENTTYPE_NEED, orderInfoPO.getTotalAmount(), verifiCode);
             boolean success = djbxBiz.consumePoints(pointsConsumeParam);
             if (success) {
                 //退款功能共用，提出公共方法
@@ -1058,6 +1059,13 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         String index = String.format("%03d", count + 1);
         String prefix = DateUtil.yyyyMMDDhh();
         return prefix + index;
+    }
+
+    /**
+     * 生成大家保险订单号 : 原规则+5位随机数
+     */
+    private String generateDJBXOrderCode() {
+        return generateOrderCode() + RandomUtil.generateNumber(5);
     }
 
     /**
