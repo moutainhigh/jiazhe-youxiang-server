@@ -149,7 +149,14 @@ public class DJBXBiz {
             if ("00".equals(headerJson.get("resultCode").toString())) {
                 return true;
             } else {
-                throw new DJBXException(DJBXCodeEnum.PLACE_ORDER_ERROR, headerJson.get("resultMessage").toString());
+                if (pointsConsumeParam.getTransactionType().equals(DJBXConstant.DJBX_TRANSACTIONTYPE_CONSUME)) {
+                    //如果是扣分，则是下单，抛出下单失败，并给出原因
+                    throw new DJBXException(DJBXCodeEnum.PLACE_ORDER_ERROR, headerJson.get("resultMessage").toString());
+                } else {
+                    //如果是退分，则是退单，抛出退单失败，并给出原因
+                    throw new DJBXException(DJBXCodeEnum.PLACE_ORDER_ERROR, headerJson.get("resultMessage").toString());
+                }
+
             }
         }
         return false;

@@ -55,7 +55,7 @@
         <include refid="Base_Column_List"/>
         FROM electronic_product_exchange_code
         WHERE product_id = #{productId} and is_deleted = 0 and status = 0 and expiry_time &gt;NOW()
-        order by expiry_time asc limit #{count}
+        order by expiry_time asc limit #{count} for UPDATE
     </select>
 
     <select id="getAllBatch" resultType="com.jiazhe.youxiang.server.domain.po.ElectronicProductExchangeCodePO">

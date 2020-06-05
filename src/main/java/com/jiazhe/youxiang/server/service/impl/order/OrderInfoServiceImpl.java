@@ -8,7 +8,9 @@ import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
 import com.jiazhe.youxiang.server.biz.djbx.DJBXBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.DJBXConstant;
+import com.jiazhe.youxiang.server.common.enums.DJBXCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
+import com.jiazhe.youxiang.server.common.exceptions.DJBXException;
 import com.jiazhe.youxiang.server.common.exceptions.OrderException;
 import com.jiazhe.youxiang.server.dao.mapper.OrderInfoPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.order.OrderInfoPOManualMapper;
@@ -174,7 +176,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             }
             if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
-                eleProductCodeDTOList = sendEleProductCode(orderInfoPO.getProductId(), orderInfoPO.getCount());
+                eleProductCodeDTOList = getNEleProductCode(orderInfoPO.getProductId(), orderInfoPO.getCount());
                 eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderInfoPO.getOrderCode());
                 StringBuilder comments = new StringBuilder();
                 eleProductCodeDTOList.stream().forEach(bean -> {
@@ -722,7 +724,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             }
             if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
-                eleProductCodeDTOList = sendEleProductCode(dto.getProductId(), dto.getCount());
+                eleProductCodeDTOList = getNEleProductCode(dto.getProductId(), dto.getCount());
                 JSONArray jsonArray = new JSONArray();
                 eleProductCodeDTOList.stream().forEach(bean -> {
                     JSONObject json = new JSONObject();
@@ -791,8 +793,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         //电子码商品
         if (orderInfoDTO.getProductDTO().getProductType().equals(CommonConstant.ELE_PRODUCT)) {
             orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
-            //发放电子码
-            List<EleProductCodeDTO> eleProductCodeDTOList = sendEleProductCode(orderInfoDTO.getProductId(), orderInfoDTO.getCount());
+            //获取电子码
+            List<EleProductCodeDTO> eleProductCodeDTOList = getNEleProductCode(orderInfoDTO.getProductId(), orderInfoDTO.getCount());
             eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderInfoDTO.getOrderCode());
             StringBuilder comments = new StringBuilder();
             eleProductCodeDTOList.stream().forEach(bean -> {
@@ -874,14 +876,20 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             dto.setServiceTime(new Date());
             dto.setRealServiceTime(new Date());
         }
+        //大家保险订单号
         String orderCode = generateDJBXOrderCode();
         //待支付金额
         BigDecimal needPay = productPriceDTO.getPrice().multiply(new BigDecimal(dto.getCount()));
         PointsConsumeParam pointsConsumeParam = new PointsConsumeParam(dto.getAgentCode(), orderCode, DJBXConstant.DJBX_TRANSACTIONTYPE_CONSUME, DJBXConstant.DJBX_SETTLEMENTTYPE_NEED, needPay, dto.getVerifiCode());
+        //如果是电子商品，在扣保险积分前，判断知否有足够的电子码，否则不能执行扣分操作
+        if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
+            eleProductCodeDTOList = getNEleProductCode(dto.getProductId(), dto.getCount());
+        }
         boolean success = djbxBiz.consumePoints(pointsConsumeParam);
         OrderInfoPO orderInfoPO = new OrderInfoPO();
         OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
-        if (success) {//保险积分支付成功
+        //保险积分支付成功，这里必须是成功，否则在前面已经抛异常了
+        if (success) {
             //添加订单
             orderInfoPO.setOrderCode(orderCode);
             orderInfoPO.setCustomerId(dto.getCustomerId());
@@ -920,7 +928,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             }
             if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
-                eleProductCodeDTOList = sendEleProductCode(dto.getProductId(), dto.getCount());
                 JSONArray jsonArray = new JSONArray();
                 eleProductCodeDTOList.stream().forEach(bean -> {
                     JSONObject json = new JSONObject();
@@ -1037,7 +1044,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
      * @param count
      * @return
      */
-    private List<EleProductCodeDTO> sendEleProductCode(Integer productId, Integer count) {
+    private List<EleProductCodeDTO> getNEleProductCode(Integer productId, Integer count) {
         List<EleProductCodeDTO> eleProductCodeDTOList = eleProductCodeService.selectTopN(productId, count);
         if (eleProductCodeDTOList.size() != count) {
             throw new OrderException(OrderCodeEnum.ELE_PRODUCT_CODE_NOT_ENOUGH);
