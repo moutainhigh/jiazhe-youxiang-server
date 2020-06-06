@@ -498,7 +498,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Override
     public NeedPayResp placeOrder(PlaceOrderDTO dto) {
         List<OrderPaymentPO> orderPaymentPOList = Lists.newArrayList();
-        List<EleProductCodeDTO> eleProductCodeDTOList = Lists.newArrayList();
         CustomerDTO customerDTO = customerService.getById(dto.getCustomerId());
         if (null == customerDTO) {
             throw new OrderException(OrderCodeEnum.CUSTOMER_NOT_EXIST);
@@ -928,12 +927,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     //发放兑换码逻辑，支持并发操作，返回json格式的兑换码字符串
-    public String sendEleProductCode(Integer productId, Integer count, Integer orderId, String orderCode) {
+    public synchronized String sendEleProductCode(Integer productId, Integer count, Integer orderId, String orderCode) {
         List<Integer> ids = new ArrayList<>(count);
         if (eleProductMap == null) {
             eleProductMap = new ConcurrentHashMap<>();
         }
-        if (MapUtils.isEmpty(eleProductMap) || !eleProductMap.contains(productId)) {
+        if (MapUtils.isEmpty(eleProductMap) || !eleProductMap.containsKey(productId)) {
             eleProductMap.put(productId, Collections.newSetFromMap(new ConcurrentHashMap<>()));
         }
         if (CollectionUtils.isEmpty(eleProductMap.get(productId)) || eleProductMap.get(productId).size() < count) {
@@ -951,7 +950,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
         JSONArray jsonArray = new JSONArray();
         while (count-- > 0) {
-            Set<EleProductCodeDTO> codeSet = eleProductMap.get(String.valueOf(productId));
+            Set<EleProductCodeDTO> codeSet = eleProductMap.get(productId);
             EleProductCodeDTO eleProductCodeDTO = codeSet.iterator().next();
             if (eleProductCodeDTO != null) {
                 ids.add(eleProductCodeDTO.getId());
@@ -1046,14 +1045,14 @@ public class OrderInfoServiceImpl implements OrderInfoService {
      * @param count
      * @return
      */
-    private synchronized List<EleProductCodeDTO> getNEleProductCode(Integer productId, Integer count) {
+    private List<EleProductCodeDTO> getNEleProductCode(Integer productId, Integer count) {
         logger.info("数据库查询了商品id为{}的电子码{}个", productId, count);
         List<EleProductCodeDTO> eleProductCodeDTOList = eleProductCodeService.selectTopN(productId, count);
         return eleProductCodeDTOList;
     }
 
     /**
-     * 生成订单号 yyyyMMddHH+3位序列号
+     * 生成订单号13位： yyyyMMddHH+3位序列号
      */
     private String generateOrderCode() {
         Long beginHour = (System.currentTimeMillis() / CommonConstant.ONE_HOUR) * CommonConstant.ONE_HOUR;
@@ -1069,7 +1068,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     /**
-     * 生成大家保险订单号 : 原规则+5位随机数
+     * 生成大家保险订单号18位 : yyyyMMddHH + 3位序列号 + 5位随机数
      */
     private String generateDJBXOrderCode() {
         return generateOrderCode() + RandomUtil.generateNumber(5);
