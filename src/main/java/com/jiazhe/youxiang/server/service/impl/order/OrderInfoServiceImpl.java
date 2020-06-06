@@ -928,7 +928,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     //发放兑换码逻辑，支持并发操作，返回json格式的兑换码字符串
     public String sendEleProductCode(Integer productId, Integer count, Integer orderId, String orderCode) {
-        synchronized (productId) {
+        synchronized (String.valueOf(productId).intern()) {
             List<Integer> ids = new ArrayList<>(count);
             if (eleProductMap == null) {
                 eleProductMap = new ConcurrentHashMap<>();
