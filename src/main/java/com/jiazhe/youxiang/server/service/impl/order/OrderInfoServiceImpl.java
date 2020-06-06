@@ -881,74 +881,65 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         //待支付金额
         BigDecimal needPay = productPriceDTO.getPrice().multiply(new BigDecimal(dto.getCount()));
         PointsConsumeParam pointsConsumeParam = new PointsConsumeParam(dto.getAgentCode(), orderCode, DJBXConstant.DJBX_TRANSACTIONTYPE_CONSUME, DJBXConstant.DJBX_SETTLEMENTTYPE_NEED, needPay, dto.getVerifiCode());
-        //如果是电子商品，在扣保险积分前，判断知否有足够的电子码，否则不能执行扣分操作
-        if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
-            eleProductCodeDTOList = getNEleProductCode(dto.getProductId(), dto.getCount());
-        }
-        boolean success = djbxBiz.consumePoints(pointsConsumeParam);
         OrderInfoPO orderInfoPO = new OrderInfoPO();
         OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
-        //保险积分支付成功，这里必须是成功，否则在前面已经抛异常了
-        if (success) {
-            //添加订单
-            orderInfoPO.setOrderCode(orderCode);
-            orderInfoPO.setCustomerId(dto.getCustomerId());
-            orderInfoPO.setProductId(dto.getProductId());
-            orderInfoPO.setServiceProductId(dto.getServiceProductId());
-            orderInfoPO.setCustomerCityCode(dto.getCustomerCityCode());
-            orderInfoPO.setCustomerCityName(productPriceDTO.getCityName());
-            orderInfoPO.setProductPrice(productPriceDTO.getPrice());
-            orderInfoPO.setCount(dto.getCount());
-            orderInfoPO.setCustomerAddress(dto.getCustomerAddress());
-            orderInfoPO.setCustomerMobile(dto.getCustomerMobile());
-            orderInfoPO.setCustomerName(dto.getCustomerName());
-            orderInfoPO.setCustomerRemark(dto.getCustomerRemark());
-            orderInfoPO.setWorkerName(dto.getWorkerName());
-            orderInfoPO.setWorkerMobile(dto.getWorkerMobile());
-            orderInfoPO.setOrderTime(new Date());
-            orderInfoPO.setServiceTime(dto.getServiceTime());
-            orderInfoPO.setRealServiceTime(dto.getServiceTime());
-            orderInfoPO.setPayPoint(BigDecimal.ZERO);
-            orderInfoPO.setPayRechargeCard(BigDecimal.ZERO);
-            orderInfoPO.setPayVoucher(BigDecimal.ZERO);
-            orderInfoPO.setPayCash(needPay);
-            orderInfoPO.setTotalAmount(productPriceDTO.getPrice().multiply(new BigDecimal(dto.getCount())));
-            orderInfoPO.setCost(dto.getCost());
-            orderInfoPO.setComments(dto.getComments());
-            orderInfoPO.setType(dto.getType());
-            orderInfoPO.setExtInfo("");
-            //添加支付记录
-            orderPaymentPO.setOrderCode(orderCode);
-            orderPaymentPO.setPayType(CommonConstant.PAY_DJBX);
-            orderPaymentPO.setPayMoney(needPay);
-            orderPaymentPO.setSerialNumber("");
-            //如果是电子码商品
-            if (productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
-                orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
-            }
-            if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
-                orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
-                JSONArray jsonArray = new JSONArray();
-                eleProductCodeDTOList.stream().forEach(bean -> {
-                    JSONObject json = new JSONObject();
-                    json.put("code", bean.getCode());
-                    json.put("keyt", bean.getKeyt());
-                    jsonArray.add(json);
-                });
-                orderInfoPO.setExtInfo(jsonArray.toString());
-            }
-            orderInfoPOManualMapper.insert(orderInfoPO);
-        } else {
-            if ("false".equals(dto.getCashSupport())) {
-                throw new OrderException(OrderCodeEnum.ORDER_PAYMENT_NOT_ENOUGH);
-            }
+        //添加订单
+        orderInfoPO.setOrderCode(orderCode);
+        orderInfoPO.setCustomerId(dto.getCustomerId());
+        orderInfoPO.setProductId(dto.getProductId());
+        orderInfoPO.setServiceProductId(dto.getServiceProductId());
+        orderInfoPO.setCustomerCityCode(dto.getCustomerCityCode());
+        orderInfoPO.setCustomerCityName(productPriceDTO.getCityName());
+        orderInfoPO.setProductPrice(productPriceDTO.getPrice());
+        orderInfoPO.setCount(dto.getCount());
+        orderInfoPO.setCustomerAddress(dto.getCustomerAddress());
+        orderInfoPO.setCustomerMobile(dto.getCustomerMobile());
+        orderInfoPO.setCustomerName(dto.getCustomerName());
+        orderInfoPO.setCustomerRemark(dto.getCustomerRemark());
+        orderInfoPO.setWorkerName(dto.getWorkerName());
+        orderInfoPO.setWorkerMobile(dto.getWorkerMobile());
+        orderInfoPO.setOrderTime(new Date());
+        orderInfoPO.setServiceTime(dto.getServiceTime());
+        orderInfoPO.setRealServiceTime(dto.getServiceTime());
+        orderInfoPO.setPayPoint(BigDecimal.ZERO);
+        orderInfoPO.setPayRechargeCard(BigDecimal.ZERO);
+        orderInfoPO.setPayVoucher(BigDecimal.ZERO);
+        orderInfoPO.setPayCash(needPay);
+        orderInfoPO.setTotalAmount(productPriceDTO.getPrice().multiply(new BigDecimal(dto.getCount())));
+        orderInfoPO.setCost(dto.getCost());
+        orderInfoPO.setComments(dto.getComments());
+        orderInfoPO.setType(dto.getType());
+        orderInfoPO.setExtInfo("");
+        //添加支付记录
+        orderPaymentPO.setOrderCode(orderCode);
+        orderPaymentPO.setPayType(CommonConstant.PAY_DJBX);
+        orderPaymentPO.setPayMoney(needPay);
+        orderPaymentPO.setSerialNumber("");
+        //如果是电子码商品
+        if (productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
+            orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
         }
+        if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
+            eleProductCodeDTOList = getNEleProductCode(dto.getProductId(), dto.getCount());
+            orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
+            JSONArray jsonArray = new JSONArray();
+            eleProductCodeDTOList.stream().forEach(bean -> {
+                JSONObject json = new JSONObject();
+                json.put("code", bean.getCode());
+                json.put("keyt", bean.getKeyt());
+                jsonArray.add(json);
+            });
+            orderInfoPO.setExtInfo(jsonArray.toString());
+        }
+        orderInfoPOManualMapper.insert(orderInfoPO);
         //支付完成并且是电子商品的话，将所选的电子码置为已发放状态，并记录相关的订单id和订单号
-        if (success && productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
+        if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
             eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderCode);
         }
         orderPaymentPO.setOrderId(orderInfoPO.getId());
         orderPaymentService.insert(orderPaymentPO);
+        //扣分
+        djbxBiz.consumePoints(pointsConsumeParam);
         NeedPayResp needPayResp = new NeedPayResp();
         needPayResp.setOrderId(orderInfoPO.getId());
         needPayResp.setPayCash(Integer.valueOf(0));
