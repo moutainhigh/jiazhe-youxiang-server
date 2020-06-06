@@ -927,42 +927,44 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     //发放兑换码逻辑，支持并发操作，返回json格式的兑换码字符串
-    public synchronized String sendEleProductCode(Integer productId, Integer count, Integer orderId, String orderCode) {
-        List<Integer> ids = new ArrayList<>(count);
-        if (eleProductMap == null) {
-            eleProductMap = new ConcurrentHashMap<>();
-        }
-        if (MapUtils.isEmpty(eleProductMap) || !eleProductMap.containsKey(productId)) {
-            eleProductMap.put(productId, Collections.newSetFromMap(new ConcurrentHashMap<>()));
-        }
-        if (CollectionUtils.isEmpty(eleProductMap.get(productId)) || eleProductMap.get(productId).size() < count) {
-            //下单数量大于10，直接去获取count个，否则一次获取10个
-            List<EleProductCodeDTO> eleProductCodeDTOS = getNEleProductCode(productId, count > 10 ? count : 10);
-            if (CollectionUtils.isNotEmpty(eleProductCodeDTOS)) {
-                eleProductCodeDTOS.forEach(item -> {
-                    eleProductMap.get(productId).add(item);
-                });
+    public String sendEleProductCode(Integer productId, Integer count, Integer orderId, String orderCode) {
+        synchronized (productId) {
+            List<Integer> ids = new ArrayList<>(count);
+            if (eleProductMap == null) {
+                eleProductMap = new ConcurrentHashMap<>();
             }
-        }
-        //如果此时还是小于购买数量，抛出库存不足异常
-        if (eleProductMap.get(productId).size() < count) {
-            throw new OrderException(OrderCodeEnum.ELE_PRODUCT_CODE_NOT_ENOUGH);
-        }
-        JSONArray jsonArray = new JSONArray();
-        while (count-- > 0) {
-            Set<EleProductCodeDTO> codeSet = eleProductMap.get(productId);
-            EleProductCodeDTO eleProductCodeDTO = codeSet.iterator().next();
-            if (eleProductCodeDTO != null) {
-                ids.add(eleProductCodeDTO.getId());
-                JSONObject json = new JSONObject();
-                json.put("code", eleProductCodeDTO.getCode());
-                json.put("keyt", eleProductCodeDTO.getKeyt());
-                jsonArray.add(json);
-                codeSet.remove(eleProductCodeDTO);
+            if (MapUtils.isEmpty(eleProductMap) || !eleProductMap.containsKey(productId)) {
+                eleProductMap.put(productId, Collections.newSetFromMap(new ConcurrentHashMap<>()));
             }
+            if (CollectionUtils.isEmpty(eleProductMap.get(productId)) || eleProductMap.get(productId).size() < count) {
+                //下单数量大于10，直接去获取count个，否则一次获取10个
+                List<EleProductCodeDTO> eleProductCodeDTOS = getNEleProductCode(productId, count > 10 ? count : 10);
+                if (CollectionUtils.isNotEmpty(eleProductCodeDTOS)) {
+                    eleProductCodeDTOS.forEach(item -> {
+                        eleProductMap.get(productId).add(item);
+                    });
+                }
+            }
+            //如果此时还是小于购买数量，抛出库存不足异常
+            if (eleProductMap.get(productId).size() < count) {
+                throw new OrderException(OrderCodeEnum.ELE_PRODUCT_CODE_NOT_ENOUGH);
+            }
+            JSONArray jsonArray = new JSONArray();
+            while (count-- > 0) {
+                Set<EleProductCodeDTO> codeSet = eleProductMap.get(productId);
+                EleProductCodeDTO eleProductCodeDTO = codeSet.iterator().next();
+                if (eleProductCodeDTO != null) {
+                    ids.add(eleProductCodeDTO.getId());
+                    JSONObject json = new JSONObject();
+                    json.put("code", eleProductCodeDTO.getCode());
+                    json.put("keyt", eleProductCodeDTO.getKeyt());
+                    jsonArray.add(json);
+                    codeSet.remove(eleProductCodeDTO);
+                }
+            }
+            eleProductCodeService.batchSendOut(ids, orderId, orderCode);
+            return jsonArray.toString();
         }
-        eleProductCodeService.batchSendOut(ids, orderId, orderCode);
-        return jsonArray.toString();
     }
 
     @Transactional(rollbackFor = Exception.class)
