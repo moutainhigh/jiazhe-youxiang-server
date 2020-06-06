@@ -1047,10 +1047,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
      * @return
      */
     private synchronized List<EleProductCodeDTO> getNEleProductCode(Integer productId, Integer count) {
+        logger.info("数据库查询了商品id为{}的电子码{}个", productId, count);
         List<EleProductCodeDTO> eleProductCodeDTOList = eleProductCodeService.selectTopN(productId, count);
-//        if (eleProductCodeDTOList.size() != count) {
-//            throw new OrderException(OrderCodeEnum.ELE_PRODUCT_CODE_NOT_ENOUGH);
-//        }
         return eleProductCodeDTOList;
     }
 
