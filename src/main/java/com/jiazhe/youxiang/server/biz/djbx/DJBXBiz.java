@@ -178,7 +178,7 @@ public class DJBXBiz {
             String token = json.get("token").toString();
             DJBXConstant.djbxTokenMap.put(DJBXConstant.DJBX_TOKEN_DEFAULT_KEY, token);
         } else {
-            throw new DJBXTokenException(DJBXCodeEnum.GET_TOKEN_ERROR);
+            throw new DJBXException(DJBXCodeEnum.GET_TOKEN_ERROR);
         }
     }
 
