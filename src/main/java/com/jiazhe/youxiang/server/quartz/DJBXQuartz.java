@@ -36,7 +36,7 @@ public class DJBXQuartz extends QuartzJobBean {
             return;
         }
 
-        djbxBiz.getPointsToken();
+//        djbxBiz.getPointsToken();
 
         logger.info("DJBX定时任务：当前环境为：" + EnvironmentConstant.ENVIRONMENT + "，定时任务执行完成");
 
