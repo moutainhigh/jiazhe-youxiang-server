@@ -155,7 +155,7 @@ public interface OrderInfoService {
      * @param dto
      * @return
      */
-    BigDecimal calculateORderNeedPay(OrderInfoDTO dto);
+    BigDecimal calculateOrderNeedPay(OrderInfoDTO dto);
 
     /**
      * 大家保险代理人 下单

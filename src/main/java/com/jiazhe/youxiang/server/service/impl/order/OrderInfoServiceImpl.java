@@ -5,6 +5,7 @@ import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.RandomUtil;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
+import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.djbx.DJBXBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.DJBXConstant;
@@ -17,6 +18,7 @@ import com.jiazhe.youxiang.server.dao.mapper.manual.order.OrderInfoPOManualMappe
 import com.jiazhe.youxiang.server.domain.po.OrderInfoPO;
 import com.jiazhe.youxiang.server.domain.po.OrderInfoPOExample;
 import com.jiazhe.youxiang.server.domain.po.OrderPaymentPO;
+import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.djbx.DJBXPlaceOrderDTO;
 import com.jiazhe.youxiang.server.dto.eleproductexcode.EleProductCodeDTO;
@@ -27,6 +29,7 @@ import com.jiazhe.youxiang.server.dto.order.orderinfo.UserReservationOrderDTO;
 import com.jiazhe.youxiang.server.dto.order.orderpayment.OrderPaymentDTO;
 import com.jiazhe.youxiang.server.dto.order.orderrefund.OrderRefundDTO;
 import com.jiazhe.youxiang.server.dto.point.point.PointDTO;
+import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
@@ -46,6 +49,8 @@ import com.jiazhe.youxiang.server.vo.req.djbx.PointsConsumeParam;
 import com.jiazhe.youxiang.server.vo.resp.order.orderinfo.NeedPayResp;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,9 +61,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -96,6 +105,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Lazy
     @Autowired
     private DJBXBiz djbxBiz;
+
+    //商品id作为key，电子码集合作为value
+    private static ConcurrentHashMap<Integer, Set<EleProductCodeDTO>> eleProductMap = new ConcurrentHashMap<>();
 
     @Override
     public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode, Paging paging) {
@@ -169,23 +181,15 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderPaymentService.insert(orderPaymentPO);
         }
         //说明订单支付完成，判断商品，如果是服务类商品就置为待派单状态，如果是虚拟商品，就置为已完成状态，并发相关电子商品吗
-        if (left.compareTo(BigDecimal.ZERO) == 0 || left.compareTo(BigDecimal.ZERO) == -1) {
+        if (left.compareTo(BigDecimal.ZERO) != 1) {
             ProductDTO productDTO = productService.getById(orderInfoPO.getProductId());
             if (productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
             }
             if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
-                eleProductCodeDTOList = getNEleProductCode(orderInfoPO.getProductId(), orderInfoPO.getCount());
-                eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderInfoPO.getOrderCode());
-                StringBuilder comments = new StringBuilder();
-                eleProductCodeDTOList.stream().forEach(bean -> {
-                    if (!Strings.isBlank(bean.getCode())) {
-                        comments.append("兑换码为：" + bean.getCode());
-                    }
-                    comments.append("，兑换密钥为：" + bean.getKeyt() + "；");
-                });
-                orderInfoPO.setComments(comments.toString());
+                String extInfo = sendEleProductCode(orderInfoPO.getProductId(), orderInfoPO.getCount(), orderInfoPO.getId(), orderInfoPO.getOrderCode());
+                orderInfoPO.setExtInfo(extInfo);
             }
         }
         orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
@@ -200,7 +204,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_CANCELWATINGCHECK)) {
             orderInfoPO.setStatus(CommonConstant.ORDER_CANCEL);
             orderInfoPO.setCost(orderInfoDTO.getCost());
-            //退款功能共用，提出公共方法
             orderRefund(orderInfoDTO.getId());
         } else {
             throw new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CHECK);
@@ -235,7 +238,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         } else {
             orderInfoPO.setCost(orderInfoDTO.getCost());
             orderInfoPO.setStatus(CommonConstant.ORDER_CANCEL);
-            //退款功能共用，提出公共方法
             orderRefund(orderInfoDTO.getId());
         }
         orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
@@ -278,10 +280,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         }
         //订单改为了待派单状态
         if (CommonConstant.ORDER_UNSENT.equals(dto.getStatus()) || CommonConstant.ORDER_UNSERVICE.equals(dto.getStatus())) {
-            if (CommonConstant.ORDER_UNSENT.equals(dto.getStatus())) {
-                orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
-                orderInfoPO.setServiceTime(dto.getServiceTime());
-            }
+            orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
+            orderInfoPO.setServiceTime(dto.getServiceTime());
         } else {
             throw new OrderException(OrderCodeEnum.ORDER_STATUS_ERROR);
         }
@@ -300,6 +300,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         if (null == orderInfoPO || orderInfoPO.getIsDeleted().equals(CommonConstant.CODE_DELETED)) {
             throw new OrderException(OrderCodeEnum.ORDER_NOT_EXIST);
         }
+        //不是服务型商品，不能追加订单
         if (!orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSERVICE)) {
             throw new OrderException(OrderCodeEnum.ORDER_CAN_NOT_APPEND_ANOTHER);
         }
@@ -479,6 +480,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         return orderInfoPOManualMapper.getCountByStatus(status);
     }
 
+    //TODO
     @Override
     public void prePaymentCheck(Integer id) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
@@ -724,15 +726,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             }
             if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
                 orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
-                eleProductCodeDTOList = getNEleProductCode(dto.getProductId(), dto.getCount());
-                JSONArray jsonArray = new JSONArray();
-                eleProductCodeDTOList.stream().forEach(bean -> {
-                    JSONObject json = new JSONObject();
-                    json.put("code", bean.getCode());
-                    json.put("keyt", bean.getKeyt());
-                    jsonArray.add(json);
-                });
-                orderInfoPO.setExtInfo(jsonArray.toString());
             }
         } else { //使用代金券-->积分卡-->充值卡不足以完成支付
             orderInfoPO.setStatus(CommonConstant.ORDER_UNPAID);
@@ -740,7 +733,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoPOManualMapper.insert(orderInfoPO);
         //支付完成并且是电子商品的话，将所选的电子码置为已发放状态，并记录相关的订单id和订单号
         if (needPay[0].compareTo(BigDecimal.ZERO) == 0 && productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
-            eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderCode);
+            String extInfo = sendEleProductCode(orderInfoPO.getProductId(), orderInfoPO.getCount(), orderInfoPO.getId(), orderInfoPO.getOrderCode());
+            orderInfoPO.setExtInfo(extInfo);
+            orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
         }
         orderPaymentPOList.stream().forEach(bean -> {
             bean.setOrderId(orderInfoPO.getId());
@@ -767,7 +762,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             throw new OrderException(OrderCodeEnum.ORDER_CODE_REPEAT);
         }
         OrderInfoDTO orderInfoDTO = OrderInfoAdapter.PO2DTO(poList.get(0));
-        orderInfoDTO.setPayment(calculateORderNeedPay(orderInfoDTO));
+        orderInfoDTO.setPayment(calculateOrderNeedPay(orderInfoDTO));
         orderInfoDTO.setProductDTO(productService.getById(orderInfoDTO.getProductId()));
         return orderInfoDTO;
     }
@@ -793,17 +788,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         //电子码商品
         if (orderInfoDTO.getProductDTO().getProductType().equals(CommonConstant.ELE_PRODUCT)) {
             orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
-            //获取电子码
-            List<EleProductCodeDTO> eleProductCodeDTOList = getNEleProductCode(orderInfoDTO.getProductId(), orderInfoDTO.getCount());
-            eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderInfoDTO.getOrderCode());
-            StringBuilder comments = new StringBuilder();
-            eleProductCodeDTOList.stream().forEach(bean -> {
-                if (!Strings.isBlank(bean.getCode())) {
-                    comments.append("兑换码为：" + bean.getCode());
-                }
-                comments.append("，兑换密钥为：" + bean.getKeyt() + "；");
-            });
-            orderInfoPO.setComments(comments.toString());
+            //发放电子码
+            String extInfo = sendEleProductCode(orderInfoDTO.getProductDTO().getId(), orderInfoPO.getCount(), orderInfoPO.getId(), orderInfoPO.getOrderCode());
+            orderInfoPO.setExtInfo(extInfo);
+            orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
         }
         OrderPaymentPO orderPaymentPO = new OrderPaymentPO();
         orderPaymentPO.setPayMoney(new BigDecimal(wxPay).divide(new BigDecimal(100)));
@@ -811,7 +799,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderPaymentPO.setOrderCode(orderInfoPO.getOrderCode());
         orderPaymentPO.setSerialNumber(transactionId);
         orderPaymentService.insert(orderPaymentPO);
-        orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
     }
 
     @Override
@@ -830,7 +817,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public BigDecimal calculateORderNeedPay(OrderInfoDTO dto) {
+    public BigDecimal calculateOrderNeedPay(OrderInfoDTO dto) {
         Integer needPayCount = dto.getCount();
         BigDecimal needPay = dto.getProductPrice().multiply(new BigDecimal(needPayCount));
         BigDecimal hasPay = dto.getPayPoint().add(dto.getPayRechargeCard()).add(dto.getPayVoucher().add(dto.getPayCash()));
@@ -842,7 +829,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public NeedPayResp djbxPlaceOrder(DJBXPlaceOrderDTO dto) {
-        List<EleProductCodeDTO> eleProductCodeDTOList = Lists.newArrayList();
         CustomerDTO customerDTO = customerService.getById(dto.getCustomerId());
         if (null == customerDTO) {
             throw new OrderException(OrderCodeEnum.CUSTOMER_NOT_EXIST);
@@ -915,26 +901,20 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderPaymentPO.setPayType(CommonConstant.PAY_DJBX);
         orderPaymentPO.setPayMoney(needPay);
         orderPaymentPO.setSerialNumber("");
-        //如果是电子码商品
+        //如果是服务类型商品
         if (productDTO.getProductType().equals(CommonConstant.SERVICE_PRODUCT)) {
             orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
         }
+        //如果是电子码商品
         if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
-            eleProductCodeDTOList = getNEleProductCode(dto.getProductId(), dto.getCount());
             orderInfoPO.setStatus(CommonConstant.ORDER_COMPLETE);
-            JSONArray jsonArray = new JSONArray();
-            eleProductCodeDTOList.stream().forEach(bean -> {
-                JSONObject json = new JSONObject();
-                json.put("code", bean.getCode());
-                json.put("keyt", bean.getKeyt());
-                jsonArray.add(json);
-            });
-            orderInfoPO.setExtInfo(jsonArray.toString());
         }
         orderInfoPOManualMapper.insert(orderInfoPO);
-        //支付完成并且是电子商品的话，将所选的电子码置为已发放状态，并记录相关的订单id和订单号
+        //电子商品的话，发放电子码，并记录相关的电子码信息
         if (productDTO.getProductType().equals(CommonConstant.ELE_PRODUCT)) {
-            eleProductCodeService.batchSendOut(eleProductCodeDTOList.stream().map(EleProductCodeDTO::getId).collect(Collectors.toList()), orderInfoPO.getId(), orderCode);
+            String extInfo = sendEleProductCode(dto.getProductId(), dto.getCount(), orderInfoPO.getId(), orderInfoPO.getOrderCode());
+            orderInfoPO.setExtInfo(extInfo);
+            orderInfoPOMapper.updateByPrimaryKeySelective(orderInfoPO);
         }
         orderPaymentPO.setOrderId(orderInfoPO.getId());
         orderPaymentService.insert(orderPaymentPO);
@@ -947,6 +927,46 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         return needPayResp;
     }
 
+    //发放兑换码逻辑，支持并发操作，返回json格式的兑换码字符串
+    public String sendEleProductCode(Integer productId, Integer count, Integer orderId, String orderCode) {
+        List<Integer> ids = new ArrayList<>(count);
+        if (eleProductMap == null) {
+            eleProductMap = new ConcurrentHashMap<>();
+        }
+        if (MapUtils.isEmpty(eleProductMap) || !eleProductMap.contains(productId)) {
+            eleProductMap.put(productId, Collections.newSetFromMap(new ConcurrentHashMap<>()));
+        }
+        if (CollectionUtils.isEmpty(eleProductMap.get(productId)) || eleProductMap.get(productId).size() < count) {
+            //下单数量大于10，直接去获取count个，否则一次获取10个
+            List<EleProductCodeDTO> eleProductCodeDTOS = getNEleProductCode(productId, count > 10 ? count : 10);
+            if (CollectionUtils.isNotEmpty(eleProductCodeDTOS)) {
+                eleProductCodeDTOS.forEach(item -> {
+                    eleProductMap.get(productId).add(item);
+                });
+            }
+        }
+        //如果此时还是小于购买数量，抛出库存不足异常
+        if (eleProductMap.get(productId).size() < count) {
+            throw new OrderException(OrderCodeEnum.ELE_PRODUCT_CODE_NOT_ENOUGH);
+        }
+        JSONArray jsonArray = new JSONArray();
+        while (count-- > 0) {
+            Set<EleProductCodeDTO> codeSet = eleProductMap.get(String.valueOf(productId));
+            EleProductCodeDTO eleProductCodeDTO = codeSet.iterator().next();
+            if (eleProductCodeDTO != null) {
+                ids.add(eleProductCodeDTO.getId());
+                JSONObject json = new JSONObject();
+                json.put("code", eleProductCodeDTO.getCode());
+                json.put("keyt", eleProductCodeDTO.getKeyt());
+                jsonArray.add(json);
+                codeSet.remove(eleProductCodeDTO);
+            }
+        }
+        eleProductCodeService.batchSendOut(ids, orderId, orderCode);
+        return jsonArray.toString();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void djbxCancelOrder(Integer id, String verifiCode) {
         OrderInfoPO orderInfoPO = orderInfoPOMapper.selectByPrimaryKey(id);
@@ -954,24 +974,15 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         //大家保险订单为待付款或待派单状态，直接走退款流程
         if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNPAID) || orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSENT)) {
             orderInfoPO.setStatus(CommonConstant.ORDER_CANCEL);
-            //先掉用大家保险将积分冲正
-            PointsConsumeParam pointsConsumeParam = new PointsConsumeParam(customerDTO.getName(), orderInfoPO.getOrderCode(), DJBXConstant.DJBX_TRANSACTIONTYPE_BACK, DJBXConstant.DJBX_SETTLEMENTTYPE_NEED, orderInfoPO.getTotalAmount(), verifiCode);
-            boolean success = djbxBiz.consumePoints(pointsConsumeParam);
-            if (success) {
-                //退款功能共用，提出公共方法
-                orderRefund(id);
-            } else {
-                throw new OrderException(OrderCodeEnum.ORDER_CANCEL_ERROR);
-            }
-        }
-        //大家保险订单为待服务状态，不能置为取消待审核状态，因为取消需要验证码，后台不能取消
-//        else if (orderInfoPO.getStatus().equals(CommonConstant.ORDER_UNSERVICE)) {
-//            orderInfoPO.setStatus(CommonConstant.ORDER_CANCELWATINGCHECK);
-//        }
-        else {
+
+            orderRefund(id);
+        } else {
             throw new OrderException(OrderCodeEnum.ORDER_CAN_NOT_CANCEL);
         }
         orderInfoPOMapper.updateByPrimaryKey(orderInfoPO);
+        PointsConsumeParam pointsConsumeParam = new PointsConsumeParam(customerDTO.getName(), orderInfoPO.getOrderCode(), DJBXConstant.DJBX_TRANSACTIONTYPE_BACK, DJBXConstant.DJBX_SETTLEMENTTYPE_NEED, orderInfoPO.getTotalAmount(), verifiCode);
+        //先掉用大家保险将积分冲正
+        djbxBiz.consumePoints(pointsConsumeParam);
     }
 
     private OrderRefundDTO paymentDto2RefundDto(OrderPaymentDTO paymentDTO) {
@@ -1029,17 +1040,17 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     /**
-     * 根据电子商品id，数量获取电子码
+     * 根据电子商品id，定量获取电子码，不一定能获取到这么多
      *
      * @param productId
      * @param count
      * @return
      */
-    private List<EleProductCodeDTO> getNEleProductCode(Integer productId, Integer count) {
+    private synchronized List<EleProductCodeDTO> getNEleProductCode(Integer productId, Integer count) {
         List<EleProductCodeDTO> eleProductCodeDTOList = eleProductCodeService.selectTopN(productId, count);
-        if (eleProductCodeDTOList.size() != count) {
-            throw new OrderException(OrderCodeEnum.ELE_PRODUCT_CODE_NOT_ENOUGH);
-        }
+//        if (eleProductCodeDTOList.size() != count) {
+//            throw new OrderException(OrderCodeEnum.ELE_PRODUCT_CODE_NOT_ENOUGH);
+//        }
         return eleProductCodeDTOList;
     }
 
