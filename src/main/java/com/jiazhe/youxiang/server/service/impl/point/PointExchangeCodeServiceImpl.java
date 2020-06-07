@@ -1,5 +1,6 @@
 package com.jiazhe.youxiang.server.service.impl.point;
 
+import com.google.common.collect.Maps;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.ExchangeCodeCheckUtil;
 import com.jiazhe.youxiang.base.util.boccc.BOCCCConstant;
@@ -53,6 +54,7 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -89,7 +91,7 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     @Autowired
     private BOCCCBiz bocccBiz;
 
-    private static ConcurrentHashMap<String, Set<PointExchangeCodeDTO>> stockMap = new ConcurrentHashMap<>();
+    private static HashMap<String, Set<PointExchangeCodeDTO>> stockMap;
 
     private final static String lock = "lock";
 
@@ -441,13 +443,13 @@ public class PointExchangeCodeServiceImpl implements PointExchangeCodeService {
     @Override
     public PointExchangeCodeDTO concurrencyQueryStock(String orderNo, String giftNo, Date expiryDate) {
         if (stockMap == null) {
-            stockMap = new ConcurrentHashMap<>();
+            stockMap = Maps.newHashMap();
         }
-        if (MapUtils.isEmpty(stockMap) || !stockMap.contains(giftNo)) {
+        if (MapUtils.isEmpty(stockMap) || !stockMap.containsKey(giftNo)) {
             stockMap.put(giftNo, Collections.newSetFromMap(new ConcurrentHashMap<>()));
         }
         if (CollectionUtils.isEmpty(stockMap.get(giftNo))) {
-            List<PointExchangeCodePO> pointExchangeCodePOList = pointExchangeCodePOManualMapper.queryStock(giftNo, expiryDate, 10);
+            List<PointExchangeCodePO> pointExchangeCodePOList = pointExchangeCodePOManualMapper.queryStock(giftNo, expiryDate, 100);
             if (CollectionUtils.isNotEmpty(pointExchangeCodePOList)) {
                 pointExchangeCodePOList.forEach(item -> {
                     stockMap.get(giftNo).add(PointExchangeCodeAdapter.po2Dto(item));
