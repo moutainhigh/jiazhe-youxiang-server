@@ -77,7 +77,7 @@ public class BOCDCBiz {
     /**
      * 查询库存订单下发实时接口
      */
-    public synchronized BOCDCQueryStockResp queryStock(BOCDCQueryStockReq req) {
+    public BOCDCQueryStockResp queryStock(BOCDCQueryStockReq req) {
         LOGGER.info("Biz调用[queryStock]方法，入参:{}", JacksonUtil.toJSon(req));
         BOCDCQueryStockResp resp = new BOCDCQueryStockResp();
         BOCDCQueryStockResp respUnencrypted = new BOCDCQueryStockResp();
@@ -90,14 +90,16 @@ public class BOCDCBiz {
             validDate = Integer.valueOf(req.getValidDate());
             Date expiryDate = new Date(DateUtil.getLastSecond(System.currentTimeMillis() + CommonConstant.ONE_DAY * Integer.valueOf(validDate)));
             //先不判断有效期
-            PointExchangeCodeDTO dto = pointExchangeCodeService.concurrencyQueryStock(orderNo, giftNo, null);
-            //重试次数
-            int retry = 0;
-            while (dto == null && retry++ < 3) {
-                //100ms后重试
-                LOGGER.info("订单{}重试，当前是{}次，", req.getOrderNo(), retry);
-                TimeUnit.MILLISECONDS.sleep(100 * retry);
-                dto = pointExchangeCodeService.concurrencyQueryStock(orderNo, giftNo, null);
+            PointExchangeCodeDTO dto = null;
+            synchronized (this) {
+                //重试次数
+                int retry = 0;
+                while (dto == null && retry++ < 3) {
+                    //100ms后重试
+                    LOGGER.info("订单{}重试，当前是{}次，", req.getOrderNo(), retry);
+                    TimeUnit.MILLISECONDS.sleep(100 * retry);
+                    dto = pointExchangeCodeService.concurrencyQueryStock(orderNo, giftNo, null);
+                }
             }
             if (dto == null) {
                 //说明售卖不成功

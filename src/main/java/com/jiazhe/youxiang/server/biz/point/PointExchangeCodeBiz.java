@@ -96,6 +96,7 @@ public class PointExchangeCodeBiz {
      * @param expiryDate
      * @return
      */
+    @Deprecated
     public PointExchangeCodeDTO queryStock(String orderNo, String giftNo, Date expiryDate) {
         PointExchangeCodeDTO pointExchangeCodeDTO = pointExchangeCodeService.queryStock(orderNo, giftNo, expiryDate);
         return pointExchangeCodeDTO;
