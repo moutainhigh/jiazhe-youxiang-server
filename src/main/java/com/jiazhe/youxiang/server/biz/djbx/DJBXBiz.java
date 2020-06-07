@@ -13,6 +13,7 @@ import com.jiazhe.youxiang.server.biz.CustomerBiz;
 import com.jiazhe.youxiang.server.common.constant.DJBXConstant;
 import com.jiazhe.youxiang.server.common.enums.DJBXCodeEnum;
 import com.jiazhe.youxiang.server.common.exceptions.DJBXException;
+import com.jiazhe.youxiang.server.common.exceptions.DJBXTokenException;
 import com.jiazhe.youxiang.server.dto.customer.CustomerAddDTO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.djbx.AgentInfoDTO;
@@ -108,8 +109,8 @@ public class DJBXBiz {
         return CustomerAdapter.customerDTO2AgentInfoDTO(customerDTO);
     }
 
-    @Retryable(value = {DJBXException.class},
-            maxAttempts = 3, backoff = @Backoff(delay = 5000L, multiplier = 2))
+    @Retryable(value = {DJBXTokenException.class},
+            maxAttempts = 2, backoff = @Backoff(delay = 5000L, multiplier = 2))
     public PointsQueryDTO queryPoints(String agentCode) {
         HeaderReq headerReq = new HeaderReq(RandomUtil.generateNumber(12), DJBXConstant.TRANS_CODE_QUERY_POINTS, DJBXConstant.SYS_CODE);
         PointsQueryParam pointsQueryParam = new PointsQueryParam(agentCode);
@@ -128,10 +129,14 @@ public class DJBXBiz {
             JSONObject resultInfoJson = JSONObject.fromObject(resultInfoStr);
             dto.setAgentCode(resultInfoJson.get("agentCode").toString());
             dto.setPoints(new BigDecimal(resultInfoJson.get("points").toString()));
+        } else {
+            throw new DJBXException(DJBXCodeEnum.QUERY_AGENT_POINTS_ERROR);
         }
         return dto;
     }
 
+    @Retryable(value = {DJBXTokenException.class},
+            maxAttempts = 2, backoff = @Backoff(delay = 5000L, multiplier = 2))
     public boolean consumePoints(PointsConsumeParam pointsConsumeParam) {
         HeaderReq headerReq = new HeaderReq(RandomUtil.generateNumber(12), DJBXConstant.TRANS_CODE_CONSUME_POINTS, DJBXConstant.SYS_CODE);
         PointsConsumeReq req = new PointsConsumeReq(headerReq, pointsConsumeParam);
@@ -149,15 +154,18 @@ public class DJBXBiz {
             if ("00".equals(headerJson.get("resultCode").toString())) {
                 return true;
             } else {
-                throw new DJBXException(DJBXCodeEnum.PLACE_ORDER_ERROR, headerJson.get("resultMessage").toString());
+                if (pointsConsumeParam.getTransactionType().equals(DJBXConstant.DJBX_TRANSACTIONTYPE_CONSUME)) {
+                    //如果是扣分，则是下单，抛出下单失败，并给出原因
+                    throw new DJBXException(DJBXCodeEnum.PLACE_ORDER_ERROR, headerJson.get("resultMessage").toString());
+                } else {
+                    //如果是退分，则是退单，抛出退单失败，并给出原因
+                    throw new DJBXException(DJBXCodeEnum.CANCEL_ORDER_ERROR, headerJson.get("resultMessage").toString());
+                }
             }
         }
         return false;
     }
 
-    @Async
-    @Retryable(value = {DJBXException.class},
-            maxAttempts = 3, backoff = @Backoff(delay = 5000L, multiplier = 2))
     public void getPointsToken() {
         PointsTokenReq req = new PointsTokenReq(DJBX_SECRET);
         String reqStr = JacksonUtil.toJSon(req);
@@ -174,6 +182,8 @@ public class DJBXBiz {
         }
     }
 
+    @Retryable(value = {DJBXTokenException.class},
+            maxAttempts = 2, backoff = @Backoff(delay = 5000L, multiplier = 2))
     public void sendVerifiCode(String agentCode) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("agentCode", agentCode);
@@ -196,7 +206,7 @@ public class DJBXBiz {
         if (null != json.get("code") && DJBXConstant.TOKEN_INVALID_CODE.equals(json.get("code").toString())) {
             LOGGER.info("token过期，立马获取新的token重试");
             getPointsToken();
-            throw new DJBXException(DJBXCodeEnum.TOKEN_INVALID);
+            throw new DJBXTokenException(DJBXCodeEnum.TOKEN_INVALID);
         }
     }
 

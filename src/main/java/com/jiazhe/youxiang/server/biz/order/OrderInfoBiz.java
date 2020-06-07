@@ -170,7 +170,7 @@ public class OrderInfoBiz {
      * @return
      */
     private BigDecimal calculateOrderNeedPay(OrderInfoDTO dto) {
-        return orderInfoService.calculateORderNeedPay(dto);
+        return orderInfoService.calculateOrderNeedPay(dto);
     }
 
     public NeedPayResp userPlaceOrder(PlaceOrderDTO placeOrderDTO) {

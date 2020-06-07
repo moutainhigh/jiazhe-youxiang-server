@@ -1,9 +1,11 @@
 package com.jiazhe.youxiang.server.dto.eleproductexcode;
 
+import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
 import com.jiazhe.youxiang.server.vo.BaseObject;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author TU
@@ -92,5 +94,28 @@ public class EleProductCodeDTO extends BaseObject {
 
     public void setProductDTO(ProductDTO productDTO) {
         this.productDTO = productDTO;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        EleProductCodeDTO that = (EleProductCodeDTO) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(batchName, that.batchName) &&
+                Objects.equals(code, that.code) &&
+                Objects.equals(keyt, that.keyt) &&
+                Objects.equals(expiryTime, that.expiryTime) &&
+                Objects.equals(status, that.status);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), id, batchName, code, keyt, expiryTime, status);
     }
 }

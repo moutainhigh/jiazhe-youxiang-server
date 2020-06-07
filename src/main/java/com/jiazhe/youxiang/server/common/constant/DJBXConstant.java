@@ -21,7 +21,7 @@ public class DJBXConstant {
      */
     public static String[] DJBX_ENVIRONMENT = {"djbx-test", "djbx-online"};
 
-    public final static String DJBX_TOKEN_DEFAULT_KEY = "DJBX_DEFAULT_TOKEN";
+    public final static String DJBX_TOKEN_DEFAULT_KEY = "DJBX_TOKEN_DEFAULT_KEY";
     public final static String DJBX_TOKEN_DEFAULT_VALUE = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJDTVNBUFAiLCJpZCI6IjEiLCJuYW1lIjoicG9pbnRzIiwiaWF0IjoxNTg5ODY0NDIzLCJleHAiOjE1OTA0NjkyMjN9.m0TXVdT_PpcaSzhPVaDo35N_YWHLa9Q90dviXIg8moI";
 
     /**
@@ -65,11 +65,6 @@ public class DJBXConstant {
      */
     public final static String APP_NAME = "points";
     public final static String USER_NAME = "points";
-
-    /**
-     * 大家保险订单号前缀
-     */
-    public final static String DJBX_ORDER_PREFIX = "DJBX_";
 
     /**
      * 交易类型 01-积分消费， 02-积分退回
