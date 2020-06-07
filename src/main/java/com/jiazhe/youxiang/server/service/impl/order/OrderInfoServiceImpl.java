@@ -1,6 +1,7 @@
 package com.jiazhe.youxiang.server.service.impl.order;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.RandomUtil;
@@ -65,6 +66,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -107,7 +109,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     private DJBXBiz djbxBiz;
 
     //商品id作为key，电子码集合作为value
-    private static ConcurrentHashMap<Integer, Set<EleProductCodeDTO>> eleProductMap = new ConcurrentHashMap<>();
+    private static HashMap<Integer, Set<EleProductCodeDTO>> eleProductMap;
 
     @Override
     public List<OrderInfoDTO> getList(String status, String orderCode, String mobile, String customerMobile, Date orderStartTime, Date orderEndTime, String workerMobile, Integer productId, Integer serviceProductId, Date realServiceStartTime, Date realServiceEndTime, String customerCityCode, Paging paging) {
@@ -931,10 +933,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         synchronized (String.valueOf(productId).intern()) {
             List<Integer> ids = new ArrayList<>(count);
             if (eleProductMap == null) {
-                eleProductMap = new ConcurrentHashMap<>();
+                eleProductMap = Maps.newHashMap();
             }
             if (MapUtils.isEmpty(eleProductMap) || !eleProductMap.containsKey(productId)) {
-                eleProductMap.put(productId, Collections.newSetFromMap(new ConcurrentHashMap<>()));
+                eleProductMap.put(productId, Collections.newSetFromMap(Maps.newHashMap()));
             }
             if (CollectionUtils.isEmpty(eleProductMap.get(productId)) || eleProductMap.get(productId).size() < count) {
                 //下单数量大于10，直接去获取count个，否则一次获取10个
