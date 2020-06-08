@@ -275,8 +275,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             throw new OrderException(OrderCodeEnum.ORDER_STATUS_NOT_UNSERVICE);
         }
         //订单改为了待派单状态
-        if (CommonConstant.ORDER_UNSENT.equals(dto.getStatus())) {
-            orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
+        if (CommonConstant.ORDER_UNSENT.equals(dto.getStatus()) || CommonConstant.ORDER_UNSERVICE.equals(dto.getStatus())) {
+            orderInfoPO.setStatus(dto.getStatus());
             orderInfoPO.setServiceTime(dto.getServiceTime());
         } else {
             throw new OrderException(OrderCodeEnum.ORDER_STATUS_ERROR);
