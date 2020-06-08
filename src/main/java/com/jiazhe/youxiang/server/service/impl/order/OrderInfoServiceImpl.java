@@ -6,20 +6,16 @@ import com.jiazhe.youxiang.base.util.CommonValidator;
 import com.jiazhe.youxiang.base.util.DateUtil;
 import com.jiazhe.youxiang.base.util.RandomUtil;
 import com.jiazhe.youxiang.server.adapter.order.OrderInfoAdapter;
-import com.jiazhe.youxiang.server.adapter.point.PointExchangeCodeAdapter;
 import com.jiazhe.youxiang.server.biz.djbx.DJBXBiz;
 import com.jiazhe.youxiang.server.common.constant.CommonConstant;
 import com.jiazhe.youxiang.server.common.constant.DJBXConstant;
-import com.jiazhe.youxiang.server.common.enums.DJBXCodeEnum;
 import com.jiazhe.youxiang.server.common.enums.OrderCodeEnum;
-import com.jiazhe.youxiang.server.common.exceptions.DJBXException;
 import com.jiazhe.youxiang.server.common.exceptions.OrderException;
 import com.jiazhe.youxiang.server.dao.mapper.OrderInfoPOMapper;
 import com.jiazhe.youxiang.server.dao.mapper.manual.order.OrderInfoPOManualMapper;
 import com.jiazhe.youxiang.server.domain.po.OrderInfoPO;
 import com.jiazhe.youxiang.server.domain.po.OrderInfoPOExample;
 import com.jiazhe.youxiang.server.domain.po.OrderPaymentPO;
-import com.jiazhe.youxiang.server.domain.po.PointExchangeCodePO;
 import com.jiazhe.youxiang.server.dto.customer.CustomerDTO;
 import com.jiazhe.youxiang.server.dto.djbx.DJBXPlaceOrderDTO;
 import com.jiazhe.youxiang.server.dto.eleproductexcode.EleProductCodeDTO;
@@ -30,7 +26,6 @@ import com.jiazhe.youxiang.server.dto.order.orderinfo.UserReservationOrderDTO;
 import com.jiazhe.youxiang.server.dto.order.orderpayment.OrderPaymentDTO;
 import com.jiazhe.youxiang.server.dto.order.orderrefund.OrderRefundDTO;
 import com.jiazhe.youxiang.server.dto.point.point.PointDTO;
-import com.jiazhe.youxiang.server.dto.point.pointexchangecode.PointExchangeCodeDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductDTO;
 import com.jiazhe.youxiang.server.dto.product.ProductPriceDTO;
 import com.jiazhe.youxiang.server.dto.rechargecard.rc.RCDTO;
@@ -69,7 +64,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -281,7 +275,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             throw new OrderException(OrderCodeEnum.ORDER_STATUS_NOT_UNSERVICE);
         }
         //订单改为了待派单状态
-        if (CommonConstant.ORDER_UNSENT.equals(dto.getStatus()) || CommonConstant.ORDER_UNSERVICE.equals(dto.getStatus())) {
+        if (CommonConstant.ORDER_UNSENT.equals(dto.getStatus())) {
             orderInfoPO.setStatus(CommonConstant.ORDER_UNSENT);
             orderInfoPO.setServiceTime(dto.getServiceTime());
         } else {
